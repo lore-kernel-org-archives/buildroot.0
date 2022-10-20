@@ -1,88 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48EADC43217
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA19C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9033D41BDC;
-	Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9033D41BDC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pt2c2Tgto8Dp; Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A5D241A17;
-	Thu, 20 Oct 2022 14:14:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A5D241A17
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A3B021BF312
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FCD2841FF
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCD2841FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id E781E8432B;
+	Thu, 20 Oct 2022 14:14:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E781E8432B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aiD2Y-euJuhe for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 14:14:39 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tZjDoX5NEbkP; Thu, 20 Oct 2022 14:14:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CDF984214;
+	Thu, 20 Oct 2022 14:14:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CDF984214
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CB1FF1BF312
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3C3C6FAF2
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3C3C6FAF2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z6VTWMyNysKq for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 14:14:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 660EF8434A
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 660EF8434A
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 14:14:39 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id i21so23644933ljh.12
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 07:14:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C40C36FACA
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C40C36FACA
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 14:14:40 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id c20so26572297ljj.7
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 07:14:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=J/ECSHES7G1ii9v4LYFHbhuTcJRgv/q6iTUegg/6QvI=;
- b=HbsArYedopzkPmbDcPdZI3W1dWoKq/ERj8MDXt0sWMbCmFTA42nckanYrqvlcQA1on
- J2SZ3z3DgHTdkcRUjrn5esXwrP2rOYv6oivDDs42MzVxSBIwL6BhRPyp1fzl9t/YgNlP
- KL4l8D5YDlg7GGAUR0Ng3mZuZGuXPwE2QUM0GucYWdoqBU9w4fV1/E2M4xPNB8oeOsYT
- yAzXbQWPZAjJsW4QumEb5PUJMFc9Z9np3G3CmbnrkiLXYeW/BstUSIQbgCAFY/7y/FuY
- HryOqvMh8hxh1X621esY2yZ3gmCrRNRvLEkOTL4pEWDVpCLdDp+7Vh6r4KaH+/7ngeVv
- m/dA==
-X-Gm-Message-State: ACrzQf1BJEaBRYI9l0xKEmbzvsn3MjkpIv1foCgLHolR+8hnGFYYGCv+
- oTcGbLtpLP+VUmUhxVrmhq7LyIiI6UHD1Q==
-X-Google-Smtp-Source: AMsMyM4SD9izfcWvqOliniRS3vJVfGDQdI3jKjX4PB2SAeLfwlkzzkBzTEr31/9VgqRVunqMoR5IIA==
-X-Received: by 2002:a05:651c:114:b0:26f:a696:5a40 with SMTP id
- a20-20020a05651c011400b0026fa6965a40mr5242636ljb.350.1666275276851; 
- Thu, 20 Oct 2022 07:14:36 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=5u+lY9yj1cyA+ESZrzj9o6FoJv4l4oOmO38j3uAYJTE=;
+ b=qV0DbmL3GInu/MiXtk9GQOJi8+/ysLxieiXdgujaRmGpFxztCJgDn48kYfUBeSVroC
+ Nv75iI+aj/n0R2+KLESyXsIfe+/+iXqqD1jjCGcuJJfIxsX9owVe3nMHGa9hvsVCviAg
+ S6MlbDdJGcC/BA3xERho6ZY8EhQaBp+mU53Mie/r6FUfKBz16G51+16iR9c3dA1EPsGY
+ uKxkKnkc8wNVOBUpkHoTyvqcCgDD4iXZZ/n4IzXIa1N5NaRZ/EH0G/Z9OIy/UBZ+hQgg
+ ZGgSpHRSPE16oBgFclIn+O8UudFjdeaaPOA+hoykA3DjnQpR2ZThLNsJLVhbgXdWxc5v
+ bdQg==
+X-Gm-Message-State: ACrzQf381LX7af0Rv9jT6lUCixnJE4Ap9dXG9U9cYTScWf9ijFAh9AEI
+ 1V2MSJnSupkKLGAFi3iPqwL2eYfkDwrKQQ==
+X-Google-Smtp-Source: AMsMyM7Ipk7GlBpJyjdkl+CO2qUXLth/6hEP2ZKIaqJDtVnQPgYMZjQ3fAO4Wf+tg7/Tvm/zHAJl5w==
+X-Received: by 2002:a2e:be29:0:b0:26f:b78e:2e79 with SMTP id
+ z41-20020a2ebe29000000b0026fb78e2e79mr4914010ljq.196.1666275277880; 
+ Thu, 20 Oct 2022 07:14:37 -0700 (PDT)
 Received: from wkz-x13.addiva.ad (a120.broadband3.quicknet.se. [46.17.184.120])
  by smtp.gmail.com with ESMTPSA id
  a3-20020ac25e63000000b0048b969ac5cdsm2739975lfr.5.2022.10.20.07.14.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Oct 2022 07:14:36 -0700 (PDT)
+ Thu, 20 Oct 2022 07:14:37 -0700 (PDT)
 From: Tobias Waldekranz <tobias@waldekranz.com>
 To: buildroot@buildroot.org
-Date: Thu, 20 Oct 2022 16:14:08 +0200
-Message-Id: <20221020141412.346992-1-tobias@waldekranz.com>
+Date: Thu, 20 Oct 2022 16:14:09 +0200
+Message-Id: <20221020141412.346992-2-tobias@waldekranz.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221020141412.346992-1-tobias@waldekranz.com>
+References: <20221020141412.346992-1-tobias@waldekranz.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=J/ECSHES7G1ii9v4LYFHbhuTcJRgv/q6iTUegg/6QvI=;
- b=nKpv1SDkvXswyc8v9S8GbUKQeLf4BdCjHtRC8+eDagJJ80gTyKZLxTCukXObZI92Vv
- ivTnXNRmbFLHpYTbGnixV+xwx5zYBUkGekPaLXi4/YQ75wvuOflic3ceLwe0M6NyiTzF
- xXQKFqDRebS3IqGzCq5LLnYS5OAzqnZilHAdAMg1GrofauxG+8M1TY5cJHo2ZBJcrvMF
- xQcUK/bIP4/hCkyd6Cj1nT5AE82oOnS1RQbpTqAGRyDHx3h/hj3BbPN7StlGqO6W8vmh
- gnKTgHlyItcmTlmxM93hWXwhDV0n5fsJ+0YosgiJQzgiOhJSzPyLKjbSdrdwVCThcoWZ
- eGQQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5u+lY9yj1cyA+ESZrzj9o6FoJv4l4oOmO38j3uAYJTE=;
+ b=CQy7igvLVuZqq96cbLHn9Vn5Ab8H0WypmnIUG0fC17Q5WBasIbCvQ9IToe9FnyO/gt
+ ReXwfh4smAR0vxK1KmYLwKIWbaP5w0z6RsUOSVOOk7q0flbo4VDI5nXYfvfDawSXgvkJ
+ L6dcs9IyjBpoGn0PCFyDvblwye7FCglGHPtyagn0G12we87YmAEFF2PuETJyJorjXAJt
+ XDkuSTOtl61r50ikj9Ir1bx+rA/sr0p4YYxL8mDuYILFKoaMf+UI7fPFjWKHaro4ohlY
+ vH3nl6yiTx1ICSR6Hjrc/SVEQ2JalvK8+zRaD1dgA5sR6++OHx+mLcW7rF/JA/Qh+aDZ
+ P5lQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=waldekranz-com.20210112.gappssmtp.com
  header.i=@waldekranz-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=nKpv1SDk
-Subject: [Buildroot] [PATCH 0/4] package/kmemd: new package
+ header.s=20210112 header.b=CQy7igvL
+Subject: [Buildroot] [PATCH 1/4] package/libbpf: fix cross compilation for
+ 32-bit targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,41 +105,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-kmemd implements a GDB stub that let's you access a running kernel's
-memory. There's no way to control the flow of execution in any way,
-but you can inspect internal data structures with all the DWARF
-parsing and scripting power of GDB - without the need for any hardware
-debugger or a dedicated KGDB serial port.
+Add upstream patch that sources the library path (lib vs. lib64) from
+the compiler rather than from uname(1).
 
-I've chosen not to install any startup scripts for it, since it
-effectively provides the same service as Heartbleed, but with a much
-better UX :) The expectation is that the user will start it manually
-when needed.
-
-Before adding kmemd, 1-3/4 fixes some issues around libbpf. The
-cross-compilation fix for 32-bit targets (1/4) has been accepted
-upstream[1].
-
-[1]: https://github.com/libbpf/libbpf/commit/68e6f83f223ebf3fbf0d94c0f4592e5e6773f0c1
-
-Tobias Waldekranz (4):
-  package/libbpf: fix cross compilation for 32-bit targets
-  package/libbpf: remove architecture restrictions
-  package/libbpf: extract dependencies to separate kconfig symbol
-  package/kmemd: new package
-
- package/Config.in                             |  1 +
- package/kmemd/Config.in                       | 11 ++++++
- package/kmemd/kmemd.hash                      |  5 +++
- package/kmemd/kmemd.mk                        | 20 ++++++++++
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+---
  ...cross-compilation-for-32-bit-targets.patch | 37 +++++++++++++++++++
- package/libbpf/Config.in                      | 24 ++++--------
- 6 files changed, 81 insertions(+), 17 deletions(-)
- create mode 100644 package/kmemd/Config.in
- create mode 100644 package/kmemd/kmemd.hash
- create mode 100644 package/kmemd/kmemd.mk
+ 1 file changed, 37 insertions(+)
  create mode 100644 package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
 
+diff --git a/package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch b/package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
+new file mode 100644
+index 0000000000..3730b2fa41
+--- /dev/null
++++ b/package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
+@@ -0,0 +1,37 @@
++From 68e6f83f223ebf3fbf0d94c0f4592e5e6773f0c1 Mon Sep 17 00:00:00 2001
++From: Tobias Waldekranz <tobias@waldekranz.com>
++Date: Fri, 14 Oct 2022 21:14:14 +0200
++Subject: [PATCH] Makefile: Fix cross-compilation for 32-bit targets
++
++Determining the correct library installation path (lib vs. lib64)
++using uname(1) breaks in cross compilation scenarios where word widths
++differ between the host and target system.
++
++Instead, source the information from the compilers '-dumpmachine'
++option (supported by both GCC and Clang).
++
++We call this the "host" architecture, using the same nomenclature as
++Autotools (--host configure option).
++
++Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
++---
++ src/Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 3cd0854..d535f81 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -77,7 +77,8 @@ INSTALL = install
++ 
++ DESTDIR ?=
++ 
++-ifeq ($(filter-out %64 %64be %64eb %64le %64el s390x, $(shell uname -m)),)
+++HOSTARCH = $(firstword $(subst -, ,$(shell $(CC) -dumpmachine)))
+++ifeq ($(filter-out %64 %64be %64eb %64le %64el s390x, $(HOSTARCH)),)
++ 	LIBSUBDIR := lib64
++ else
++ 	LIBSUBDIR := lib
++-- 
++2.34.1
++
 -- 
 2.34.1
 
