@@ -4,88 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A46ACC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10B77C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 16:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47086410BC;
-	Thu, 20 Oct 2022 14:15:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47086410BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F02D410EF;
+	Thu, 20 Oct 2022 16:29:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F02D410EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k6SaM5NbGYsv; Thu, 20 Oct 2022 14:15:44 +0000 (UTC)
+	with ESMTP id RRedvVobMUsj; Thu, 20 Oct 2022 16:29:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 643DD410BB;
-	Thu, 20 Oct 2022 14:15:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 643DD410BB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CCD21BF312
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A78694112D;
+	Thu, 20 Oct 2022 16:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A78694112D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 720451BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 16:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 187736FAE7
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 187736FAE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B30A42263
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 16:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B30A42263
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V2OwlFAdWPAb for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UEiR0VwDEqNP for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 16:29:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 007C46FACA
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 007C46FACA
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 14:14:42 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id x18so26589046ljm.1
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 07:14:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 388FE4224C
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 388FE4224C
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 16:29:03 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id b4so35395625wrs.1
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 09:29:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=AJOzHjPWeTUJRIypSnDZTyWWoVRfmjJY6ksyIOckLsc=;
- b=JS/16AhzEm+zKENej8vA+9zmwDCtnPrfFYyCMlc/OlAWCyfwnvCk0Jqml5Pw0O6hWZ
- +fdYjQbCZ7tPrBqq3tyRFwyWvtKp/JJmoqcrNkIU0YMhMCqHfF5dpPD2NdbNgM71POHW
- WIZKknoVqm62D1+TVvupta+6JYAsuQRRePthuP5tC04gFQzS13nt4JxvCqDpyUjCwVos
- rxWfHSQ9MdlZ7CElKYY06rBhsX2CEe0uVf6TR92+Kp48UeTmuWfDou6VoWfx672Lln9l
- 6zVBrtmo7p8PtOXfrs86CWMV0GbGs/CH2eoXOnDbwYiQq6e+xb3+CCMu26x8TaLyT5/q
- 9eZg==
-X-Gm-Message-State: ACrzQf0qSAaT0pX0IMVWsPAZZgNzuEy34mlwEB/yh8dgbVki7tpnrWnl
- nBWKdYWzcCvmDP5GLezub7wV4VUEyiLR5Q==
-X-Google-Smtp-Source: AMsMyM7aa59g/yM8UTePlLun/1Yc3cKxaRMGKTw3Ju7TDsoSq5tzb3DKUOZ+8V3zwaH/R19NiMBr9Q==
-X-Received: by 2002:a05:651c:244:b0:26d:e2af:db15 with SMTP id
- x4-20020a05651c024400b0026de2afdb15mr5150669ljn.271.1666275280634; 
- Thu, 20 Oct 2022 07:14:40 -0700 (PDT)
-Received: from wkz-x13.addiva.ad (a120.broadband3.quicknet.se. [46.17.184.120])
- by smtp.gmail.com with ESMTPSA id
- a3-20020ac25e63000000b0048b969ac5cdsm2739975lfr.5.2022.10.20.07.14.39
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xVApL42XzYw4fEkky4214EhiYEwtypGdGED3PNvfpDk=;
+ b=BBzoWWI0ecJZxg13Fh/OB/cC/luziL95eEfkeiMLZKMh6FN6KHwrF+3a1pp1aP7rk/
+ cCM14HNhQxLniupg9tdKF5dd+vEiwTxAtkRSbCPEhkzomZPsVkkeanS2+n6n3sisZRty
+ W+QnfEByBHU9wi3fcpB+I8fJ6eTfhjeYsKF8votdbPteewdw2RtTru1aexkBOG8HE9LG
+ jz0EiWlUqzA3m+jIU156YGVRp7FDorngxm9l/P7hPoMolwj9o+m4Sdn94GNOmfhpXtpj
+ qv0vQTUk7eeuyY6+d0C8iPVPfh0V17dA7OkBIAr3hSgMGrnWajb6YQjIxIkVc5jp3vyd
+ OfcQ==
+X-Gm-Message-State: ACrzQf3nUvMYkTdf+mD8ZjAcQCJ+QSmZp3BnUKZujUNg+evN7KNDoc/q
+ evSTCusE8Zrgz1ggSBc/SL2VjFvvLFI=
+X-Google-Smtp-Source: AMsMyM6vTrgEkotOTwfCSfioDNlGmk+ecT5p4C4bP7J274D77QZ40dxjuUIlbtd8jGg/NZiFgWGFVQ==
+X-Received: by 2002:a5d:5410:0:b0:236:fe1:bb74 with SMTP id
+ g16-20020a5d5410000000b002360fe1bb74mr2456247wrv.512.1666283340930; 
+ Thu, 20 Oct 2022 09:29:00 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ r9-20020a05600c35c900b003c5571c27a1sm63464wmq.32.2022.10.20.09.29.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Oct 2022 07:14:40 -0700 (PDT)
-From: Tobias Waldekranz <tobias@waldekranz.com>
+ Thu, 20 Oct 2022 09:29:00 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 20 Oct 2022 16:14:12 +0200
-Message-Id: <20221020141412.346992-5-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221020141412.346992-1-tobias@waldekranz.com>
-References: <20221020141412.346992-1-tobias@waldekranz.com>
+Date: Thu, 20 Oct 2022 18:28:56 +0200
+Message-Id: <20221020162856.201351-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=AJOzHjPWeTUJRIypSnDZTyWWoVRfmjJY6ksyIOckLsc=;
- b=JZtUmLP6gzuss+vgfZQGsX9OtA/iNKW4kc6ldGMb1O92L4RkCe8DVB8UkEYuW7+fkM
- CbDGPt5uzRyNlmMUlzPBNIYCiRzdH2WkAlZcXHn8v3DLVWf5y8gyS6G+sg7VD1PU2Qrz
- Jvf1AiENx7bxZFecUNoRkI+Mh2Fn5KY/wzixnk6UJZY9hvw+VreqloicCkSo6evLjnun
- QN1J9289ukIKe9pcoP/bUfaNlJvZTjSsuJXGPpw36xo/g6zJlLlz1/CTENTqDi8N3VaY
- GhjVjLIwUFf3ZAbcHFx5G+HkazIkDZ1KAxKiIgtcKBrDoAGTVZMZWV4t596CL8ji/QI1
- jcGQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=waldekranz-com.20210112.gappssmtp.com
- header.i=@waldekranz-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=JZtUmLP6
-Subject: [Buildroot] [PATCH 4/4] package/kmemd: new package
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=xVApL42XzYw4fEkky4214EhiYEwtypGdGED3PNvfpDk=;
+ b=jVRjRnRylsHKa+yH6/4yGowVdjcg1rRKbhoexK1nu+isDaP+yUY+ErNtWGH49LT8px
+ mBlK94p+KIDovAAWnb7pjHXdtvTP22+pE2qCmPn1/ZwGD9i0BmvIWV80QZqjCeSUZ8R6
+ YbyccyEQ7SLp2Fkz4tRdy7MFIzYnoMWNrcCreKKLgB6xSwZHmMfm/3fsPtMz++O7S4JD
+ kttBAfZHNYhnyQNTPIJZiUEmBQ8J6La/95vPY8BuIY++a1nkhL560pTYvIbHD5j9I16I
+ 4YlzNCaJqzhI6ONlJ/Gp0NxmV8viZKxuJHWRPJWp5Xw+LG1mVUqz62AcBRZRhFncLWuo
+ TcXg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jVRjRnRy
+Subject: [Buildroot] [PATCH 1/1] package/rtl_433: add RTL_433_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,94 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-kmemd let's you inspect a live Linux kernel's memory using GDB.
+cpe:2.3:a:rtl_433_project:rtl_433 is a valid CPE identifier for this
+package:
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Artl_433_project%3Artl_433
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/Config.in        |  1 +
- package/kmemd/Config.in  | 11 +++++++++++
- package/kmemd/kmemd.hash |  5 +++++
- package/kmemd/kmemd.mk   | 20 ++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/kmemd/Config.in
- create mode 100644 package/kmemd/kmemd.hash
- create mode 100644 package/kmemd/kmemd.mk
+ package/rtl_433/rtl_433.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..ebafe11dea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -111,6 +111,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/iozone/Config.in"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
-+	source "package/kmemd/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
-diff --git a/package/kmemd/Config.in b/package/kmemd/Config.in
-new file mode 100644
-index 0000000000..2190488b0f
---- /dev/null
-+++ b/package/kmemd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_KMEMD
-+	bool "kmemd"
-+	depends on BR2_PACKAGE_LIBBPF_SUPPORTED
-+	select BR2_PACKAGE_LIBBPF
-+	help
-+	  Explore a live Linux kernel's memory using GDB
-+
-+	  https://github.com/wkz/kmemd
-+
-+comment "kmemd needs libbpf"
-+	depends on !BR2_PACKAGE_LIBBPF_SUPPORTED
-diff --git a/package/kmemd/kmemd.hash b/package/kmemd/kmemd.hash
-new file mode 100644
-index 0000000000..60b8589dd2
---- /dev/null
-+++ b/package/kmemd/kmemd.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+md5  9954bf82279eeb0da016654689f69ac2  kmemd-1.0.0.tar.gz
-+sha1  3ae3bdceb70d674f41f56cd489c7497944b9b0f0  kmemd-1.0.0.tar.gz
-+sha256  519ac3cdd367acee5090eec3b7e08400724f9b84486b191f3af534bd7cffca70  kmemd-1.0.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/kmemd/kmemd.mk b/package/kmemd/kmemd.mk
-new file mode 100644
-index 0000000000..902941b981
---- /dev/null
-+++ b/package/kmemd/kmemd.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# kmemd
-+#
-+################################################################################
-+
-+KMEMD_VERSION = 1.0.0
-+KMEMD_SITE = https://github.com/wkz/kmemd/releases/download/$(KMEMD_VERSION)
-+KMEMD_LICENSE = GPL-2.0
-+KMEMD_LICENSE_FILES = COPYING
-+KMEMD_DEPENDENCIES = libbpf
-+
-+define KMEMD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KPROBES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
-+endef
-+
-+$(eval $(autotools-package))
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+index 8326caedb2..74a0b54a3d 100644
+--- a/package/rtl_433/rtl_433.mk
++++ b/package/rtl_433/rtl_433.mk
+@@ -8,6 +8,7 @@ RTL_433_VERSION = 21.12
+ RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
+ RTL_433_LICENSE = GPL-2.0+
+ RTL_433_LICENSE_FILES = COPYING
++RTL_433_CPE_ID_VENDOR = rtl_433_project
+ 
+ # Force Release build to remove ASAN.
+ RTL_433_CONF_OPTS = \
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
