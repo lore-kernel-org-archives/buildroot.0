@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D1E7C43217
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A46ACC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80CDD6FB00;
-	Thu, 20 Oct 2022 14:15:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80CDD6FB00
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47086410BC;
+	Thu, 20 Oct 2022 14:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47086410BC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k6SaM5NbGYsv; Thu, 20 Oct 2022 14:15:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 643DD410BB;
+	Thu, 20 Oct 2022 14:15:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 643DD410BB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CCD21BF312
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 187736FAE7
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 187736FAE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ML83a0posRYo; Thu, 20 Oct 2022 14:15:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 609BD6FAF4;
-	Thu, 20 Oct 2022 14:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 609BD6FAF4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 913461BF312
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D39A8429D
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D39A8429D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rMNv9tZg0M5P for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 14:14:42 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V2OwlFAdWPAb for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67BAD84347
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67BAD84347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 007C46FACA
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 007C46FACA
  for <buildroot@buildroot.org>; Thu, 20 Oct 2022 14:14:42 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id x18so26588995ljm.1
+Received: by mail-lj1-x22e.google.com with SMTP id x18so26589046ljm.1
  for <buildroot@buildroot.org>; Thu, 20 Oct 2022 07:14:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=4kk9lzxMx6avWsa1WEy8dtK3UyQn3IBtXhvNrUJidJM=;
- b=X6m1L4InX/MoK4HYgnQdaahF78D4WNkXvxLvH+oq04PTj/pCFmhFrc/PqXd0UXDqeY
- SPvH4T6M/vYn5mNlxaEE9ZlnJybZPWAaKz+XWgSKBZJeJ8fmYBjmJCkAD7z8mXmgZPyp
- 9yU2b2IURytYBlukRnUio8UPGWoAWhywktwfbqAFZic9l1Ra0nsYrEMA8u8ttiULXAYR
- J/5Dez5zepWcQdLa8oCjrGGbQVW1LJUQJOvh32e60Sx1hyLz1hQY8kvR6izVv9yyc+/M
- 7Q+eyduIQSg6dCDZwQQGpC3oMBFIgWiShPgK5WtDX82cGaP2CWWGVb9s+Esx/E6yMCkL
- fEzw==
-X-Gm-Message-State: ACrzQf3Z81M6RfM6GS/uXVuN9WJoxFqr9hvEw15tAUQip7HQ0XcuwG8z
- F73SGb5Ojj6xo3mL3heOWn6KcJEtjCX1kg==
-X-Google-Smtp-Source: AMsMyM6gxyqp0y6mcrQqeWtqUdQ3L/dFBF+FpYnTSp1aSL6SZmRvohYAekdW3R9+rH/4v6VayA4nGw==
-X-Received: by 2002:a05:651c:b2b:b0:26f:cf40:a560 with SMTP id
- b43-20020a05651c0b2b00b0026fcf40a560mr5181671ljr.516.1666275278658; 
- Thu, 20 Oct 2022 07:14:38 -0700 (PDT)
+ bh=AJOzHjPWeTUJRIypSnDZTyWWoVRfmjJY6ksyIOckLsc=;
+ b=JS/16AhzEm+zKENej8vA+9zmwDCtnPrfFYyCMlc/OlAWCyfwnvCk0Jqml5Pw0O6hWZ
+ +fdYjQbCZ7tPrBqq3tyRFwyWvtKp/JJmoqcrNkIU0YMhMCqHfF5dpPD2NdbNgM71POHW
+ WIZKknoVqm62D1+TVvupta+6JYAsuQRRePthuP5tC04gFQzS13nt4JxvCqDpyUjCwVos
+ rxWfHSQ9MdlZ7CElKYY06rBhsX2CEe0uVf6TR92+Kp48UeTmuWfDou6VoWfx672Lln9l
+ 6zVBrtmo7p8PtOXfrs86CWMV0GbGs/CH2eoXOnDbwYiQq6e+xb3+CCMu26x8TaLyT5/q
+ 9eZg==
+X-Gm-Message-State: ACrzQf0qSAaT0pX0IMVWsPAZZgNzuEy34mlwEB/yh8dgbVki7tpnrWnl
+ nBWKdYWzcCvmDP5GLezub7wV4VUEyiLR5Q==
+X-Google-Smtp-Source: AMsMyM7aa59g/yM8UTePlLun/1Yc3cKxaRMGKTw3Ju7TDsoSq5tzb3DKUOZ+8V3zwaH/R19NiMBr9Q==
+X-Received: by 2002:a05:651c:244:b0:26d:e2af:db15 with SMTP id
+ x4-20020a05651c024400b0026de2afdb15mr5150669ljn.271.1666275280634; 
+ Thu, 20 Oct 2022 07:14:40 -0700 (PDT)
 Received: from wkz-x13.addiva.ad (a120.broadband3.quicknet.se. [46.17.184.120])
  by smtp.gmail.com with ESMTPSA id
- a3-20020ac25e63000000b0048b969ac5cdsm2739975lfr.5.2022.10.20.07.14.37
+ a3-20020ac25e63000000b0048b969ac5cdsm2739975lfr.5.2022.10.20.07.14.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Oct 2022 07:14:38 -0700 (PDT)
+ Thu, 20 Oct 2022 07:14:40 -0700 (PDT)
 From: Tobias Waldekranz <tobias@waldekranz.com>
 To: buildroot@buildroot.org
-Date: Thu, 20 Oct 2022 16:14:10 +0200
-Message-Id: <20221020141412.346992-3-tobias@waldekranz.com>
+Date: Thu, 20 Oct 2022 16:14:12 +0200
+Message-Id: <20221020141412.346992-5-tobias@waldekranz.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221020141412.346992-1-tobias@waldekranz.com>
 References: <20221020141412.346992-1-tobias@waldekranz.com>
@@ -74,19 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4kk9lzxMx6avWsa1WEy8dtK3UyQn3IBtXhvNrUJidJM=;
- b=D93sjqmn6Lkfi4ivpyO2i3//fSFaasJwXhVp/pgGMT1JTHOq4kFk21t71Zh/PC7byZ
- tNDtDy8qD3IHR6WE2lJ+ruwJR1gFgrImcXl7NoOiLMEsB3Ijodd1nMWPKlPdnEg/+bJA
- HkE4NH17yyii1EogsO5DnFLGXW2PuXbUC2N3UG+nvs99A15eTwsU/d2I+GAucHrvrCLl
- xV7X+Wlr4qXA9rK9YDGEW8jd2sChn3UAWt/gh3NiVBTyHa39Toit9DAHz02L+JuhHUUz
- 2eyAxT1sjeTHRI4DLsss84Ttlr5pqzeX7iZN5hSqRjpP5TiIYgQSFM2+G81OqimNHqpF
- jBEg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=AJOzHjPWeTUJRIypSnDZTyWWoVRfmjJY6ksyIOckLsc=;
+ b=JZtUmLP6gzuss+vgfZQGsX9OtA/iNKW4kc6ldGMb1O92L4RkCe8DVB8UkEYuW7+fkM
+ CbDGPt5uzRyNlmMUlzPBNIYCiRzdH2WkAlZcXHn8v3DLVWf5y8gyS6G+sg7VD1PU2Qrz
+ Jvf1AiENx7bxZFecUNoRkI+Mh2Fn5KY/wzixnk6UJZY9hvw+VreqloicCkSo6evLjnun
+ QN1J9289ukIKe9pcoP/bUfaNlJvZTjSsuJXGPpw36xo/g6zJlLlz1/CTENTqDi8N3VaY
+ GhjVjLIwUFf3ZAbcHFx5G+HkazIkDZ1KAxKiIgtcKBrDoAGTVZMZWV4t596CL8ji/QI1
+ jcGQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=waldekranz-com.20210112.gappssmtp.com
  header.i=@waldekranz-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=D93sjqmn
-Subject: [Buildroot] [PATCH 2/4] package/libbpf: remove architecture
- restrictions
+ header.s=20210112 header.b=JZtUmLP6
+Subject: [Buildroot] [PATCH 4/4] package/kmemd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,47 +104,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since 3145adfb69ba, libbpf depends on Linux headers >= 4.13. This
-requirement renders the explicit list of supported architectures,
-previously added in f693354c30bd overly restrictive, as the syscall
-number for bpf(2) has been defined since Linux 3.18.
-
-f693354c30bd was introduced to fix a build issue where a toolchain
-using very old kernel headers (3.13) failed to build libbpf for ARM.
+kmemd let's you inspect a live Linux kernel's memory using GDB.
 
 Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- package/libbpf/Config.in | 11 -----------
- 1 file changed, 11 deletions(-)
+ package/Config.in        |  1 +
+ package/kmemd/Config.in  | 11 +++++++++++
+ package/kmemd/kmemd.hash |  5 +++++
+ package/kmemd/kmemd.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/kmemd/Config.in
+ create mode 100644 package/kmemd/kmemd.hash
+ create mode 100644 package/kmemd/kmemd.mk
 
-diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-index b3d6e44c6a..1465366c9e 100644
---- a/package/libbpf/Config.in
-+++ b/package/libbpf/Config.in
-@@ -1,15 +1,5 @@
--config BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
--	bool
--	# see src/bpf.c
--	default y if BR2_arc
--	default y if BR2_aarch64 || BR2_aarch64_be
--	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_sparc || BR2_sparc64
--	default y if BR2_s390x
--
- config BR2_PACKAGE_LIBBPF
- 	bool "libbpf"
--	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
-@@ -27,7 +17,6 @@ config BR2_PACKAGE_LIBBPF
- 	  https://github.com/libbpf/libbpf
- 
- comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
--	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+diff --git a/package/Config.in b/package/Config.in
+index e3a34d6e97..ebafe11dea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -111,6 +111,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/iozone/Config.in"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
++	source "package/kmemd/Config.in"
+ 	source "package/kvm-unit-tests/Config.in"
+ 	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
+diff --git a/package/kmemd/Config.in b/package/kmemd/Config.in
+new file mode 100644
+index 0000000000..2190488b0f
+--- /dev/null
++++ b/package/kmemd/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KMEMD
++	bool "kmemd"
++	depends on BR2_PACKAGE_LIBBPF_SUPPORTED
++	select BR2_PACKAGE_LIBBPF
++	help
++	  Explore a live Linux kernel's memory using GDB
++
++	  https://github.com/wkz/kmemd
++
++comment "kmemd needs libbpf"
++	depends on !BR2_PACKAGE_LIBBPF_SUPPORTED
+diff --git a/package/kmemd/kmemd.hash b/package/kmemd/kmemd.hash
+new file mode 100644
+index 0000000000..60b8589dd2
+--- /dev/null
++++ b/package/kmemd/kmemd.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++md5  9954bf82279eeb0da016654689f69ac2  kmemd-1.0.0.tar.gz
++sha1  3ae3bdceb70d674f41f56cd489c7497944b9b0f0  kmemd-1.0.0.tar.gz
++sha256  519ac3cdd367acee5090eec3b7e08400724f9b84486b191f3af534bd7cffca70  kmemd-1.0.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/kmemd/kmemd.mk b/package/kmemd/kmemd.mk
+new file mode 100644
+index 0000000000..902941b981
+--- /dev/null
++++ b/package/kmemd/kmemd.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# kmemd
++#
++################################################################################
++
++KMEMD_VERSION = 1.0.0
++KMEMD_SITE = https://github.com/wkz/kmemd/releases/download/$(KMEMD_VERSION)
++KMEMD_LICENSE = GPL-2.0
++KMEMD_LICENSE_FILES = COPYING
++KMEMD_DEPENDENCIES = libbpf
++
++define KMEMD_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_KPROBES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
++endef
++
++$(eval $(autotools-package))
 -- 
 2.34.1
 
