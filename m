@@ -4,138 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96F29C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 18:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 242A1C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 18:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F379B8436C;
-	Thu, 20 Oct 2022 18:16:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F379B8436C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8658F8437E;
+	Thu, 20 Oct 2022 18:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8658F8437E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iEXEpqM5WCwE; Thu, 20 Oct 2022 18:16:50 +0000 (UTC)
+	with ESMTP id BX1MKxGd1irm; Thu, 20 Oct 2022 18:55:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0100984360;
-	Thu, 20 Oct 2022 18:16:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0100984360
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03D621BF2A5
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 18:16:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FAFA8437B;
+	Thu, 20 Oct 2022 18:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FAFA8437B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8937C1BF2A5
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 18:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CED6484360
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 18:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CED6484360
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6300B419C9
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 18:55:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6300B419C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5j4n9mKZkOoS for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 18:16:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBF808431F
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com
- (mail-eopbgr140084.outbound.protection.outlook.com [40.107.14.84])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DBF808431F
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 18:16:44 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SB+w2g2y9iAB4QdcunzReFc/s6zRkhr9VRwhXKXk1/Dds82vJHqkzptKmwZkDJ4Q7eMKRZED1YsrtTYFjZY8sYnaePyEghL3k/DHG3WEJUVTQDLqFHjElxntkjLVDauswit+i6AptwpkhtCeOSIS71r1eOKRwlsGcMZSgAiJtW15mm8WuajprEqgYWEER1usBIIsGO60drjQ00i/2HTVU8s3yRIActBE2Yj5nmqPVelSQd6FtEx41MwHVStFh+Lde36ZNaONegI8AHNhuvIL3AAxv23cNPqvYVo1tEs1c//n2L+DsJUYJypZUVD4jL7HFkzWNqgjarswUjcFUitZgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5ja1N9tSi6u7hKxgJwl/YT5l4MrXV9Azf4Yj53irNkM=;
- b=BkCFCQqvca52yASUTcBDJg7rmqN0V3UXfjOz/MwfmPiXMG3PLGDo6jT6ByCEcbpluY+S23ZfHFwq/wjWlHtjF/XIvpSsuA2hKQsyH9Q6nlWJVbk6K6gnDbagR6UaS7eeetrtd2c/AU96fomqtdAUtD4ouyu8ybh6keyVHnggQ25+xsNKJpbhkRDnioDxVlO8puxtsNMnfGknAJgi9IZ+jiOMPK8cU4paui5ksK/dSD8fENu6thSiGWZ+mFoLUCI3TZUfjAxDVA7BTxubnGtTu5RjjoJumcAxC020dT5QcI6WbjvCJSlF/vaFH9cW97TvCBwN9yQXv982xW3QjMzBAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ptwdosimetry.com; dmarc=pass action=none
- header.from=ptwdosimetry.com; dkim=pass header.d=ptwdosimetry.com; arc=none
-Received: from AM0PR09MB3411.eurprd09.prod.outlook.com (2603:10a6:208:173::20)
- by AS8PR09MB6292.eurprd09.prod.outlook.com (2603:10a6:20b:57f::12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Thu, 20 Oct
- 2022 18:16:39 +0000
-Received: from AM0PR09MB3411.eurprd09.prod.outlook.com
- ([fe80::2859:1493:f19c:5a96]) by AM0PR09MB3411.eurprd09.prod.outlook.com
- ([fe80::2859:1493:f19c:5a96%4]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
- 18:16:38 +0000
-From: Richter Simon <simon.richter@ptwdosimetry.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Thread-Topic: [PATCH 1/1] support/download/cargo-post-process: use cargo
- output for vendor config
-Thread-Index: AQHY49YJ5F8awvRrhkmjPbvlsdgI0q4WMcMAgAFAii4=
-Date: Thu, 20 Oct 2022 18:16:38 +0000
-Message-ID: <AM0PR09MB3411C21E0EF14DF3040DCFD38B2A9@AM0PR09MB3411.eurprd09.prod.outlook.com>
-References: <20221019161513.994988-1-simon.richter@ptwdosimetry.com>
- <20221019205236.GG3666@scaer>
-In-Reply-To: <20221019205236.GG3666@scaer>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR09MB3411:EE_|AS8PR09MB6292:EE_
-x-ms-office365-filtering-correlation-id: cf12c52b-2ede-447f-8702-08dab2c73b4d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LvCZ2/LR752jgrhsL7/vHe6V7MfEfXU3QnLhCrYV2u78mlGWBCzP7idVwhjuPFoSQC6St5BapwwX7tdhR+F8QFDyE6x+VusbpMSZgK6P/oPaJJbHZLV8+rImmUkpY8bV8cVFUQjx2l+kunfHezvH7NRLIEbwHUXzb/mhRP5V1IXLkwUNdwSEd5SQQYjs1iOO8/HoBXE+WkwxXuYdpkM1FPYRr8xjtOQWxAglzErKufTBhG5XOu4NzAYDMcNjI+SdoFjlYPqKv1NWBalkzsXKKzKzIMstBEHLEzMDktZRrWbzBwrs/EA2YR/2rI2DMfeNrMdLCwBG03bIOsA9yc1lKsR0gDQhWyoK6+IdxFX7B6XaDnuovWanNuHS3wy6rEJ3gnatSPcSF/Zto54AeFUxkyW2Yqm4WQ6RArofVVZSLpZPrm6nxMY9dGC4oYFw5enPkY1RAF3dKEA2mHXe/XG3kf2aAbGHCf+295I3vyK+fcI5UNXrj6oaVMK/DXQSAFc+oxdu5NcNN6VN9wf+oTMuBQ6AmbDQ6SmSpSqfZatIFf3RKn1oZtvOE8EzSWHYVGvBnyJfAjadxAUpGoauiY9J1A6ZWyMDAt8HY1/wbDWV+KKpIC2d2l+7WRj73Qsnj6Ebf4dwO1ViVEEJOPVIyd5JQKuW4u4nXduWh4vHlyo8wZvbpuzfcRyJ7J1MRxQ0H27+iD7NVNxm48nxMNe55xKjJIP2pus0atHxDw1ppvOtTZLyW2Aau9tHRmEaJExmFL0UOLtFdAM691AtpFKzALPdx3jvfbYmFSgKLh8exorogwhzqxyjSRHSLu2pCua2GSfnSzVtrJ/DvyAL3XCZYa34rw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM0PR09MB3411.eurprd09.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(396003)(136003)(366004)(346002)(39850400004)(376002)(451199015)(52536014)(8936002)(41300700001)(5660300002)(2906002)(66946007)(4326008)(76116006)(8676002)(71200400001)(66446008)(91956017)(64756008)(66556008)(7696005)(316002)(33656002)(6916009)(478600001)(6506007)(83380400001)(86362001)(66476007)(186003)(9686003)(122000001)(55016003)(38100700002)(38070700005)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tQjemZi7CMQccNw3eh+MYxHva1VfaKmEpCanBrNdI31TLQOJCvqsDD/Z2a?=
- =?iso-8859-1?Q?kZFBzfyB264jvjFlhVrjNmIy7KRq7ysseWzfzvzNRnM8fBpCdtnVHFZ6df?=
- =?iso-8859-1?Q?+wlZNSt818IuXg4+xdwSfFTs9hEA+nJFQjWI/CXy5RYfVeUMDBKCyVPdbI?=
- =?iso-8859-1?Q?Ege5H26In0wzRoXMzgX4br+v7Q2DMXyYaX/3iG27BJC2qskTeiWgCOxNeA?=
- =?iso-8859-1?Q?wENFPMous17RBsx8KVJKmlZJbIBx0y5v9QFBY4g18NfpAnQY+z2Ornx4uh?=
- =?iso-8859-1?Q?SOXIC0xEiyC+vdFZw1LwNbdolKzkYsUX11dYnjOk4AzJ5nbtnijR0xnPZW?=
- =?iso-8859-1?Q?GaDeiw2GMfQeeuMaQZ6VtjWe2/WbTBNsRuKhIyCx6k/kGcSdcU6hdprTJV?=
- =?iso-8859-1?Q?RtpvPgLcplGorx+A4RgYqTC18gqLCfVhZsJet98UOOxbueIIE5+AMmo+aD?=
- =?iso-8859-1?Q?CbPx4utauiDzw80XxuK3mnaSADu3kmYmbEhOBnSFAK1cKN2Grz3JzP/3jc?=
- =?iso-8859-1?Q?ynqBLnKSBxsX2+6pGLgB9JEFqCWZWVZo7NDmsiDJlB3atnss8Y9a7hQCAi?=
- =?iso-8859-1?Q?EXIqRwgjcA93BQPIEVBFMjVsc9OuhZWH1eL9dTTtIkGr32P5B5/m8Z8Rtx?=
- =?iso-8859-1?Q?R2wdcBWkfrExUue5Z3SvAx5h3Uv1O6BIUMDe3gajDaHuYvWvdyl/mF+k8R?=
- =?iso-8859-1?Q?S75c7pRljwnzuJgFnLfYtwJeeXvLoe0XMzGBF+RXlsZE6Rm4eI8Mi2sxSk?=
- =?iso-8859-1?Q?Ar+ygxE3TXE56ljkJ1hS9OQGkOeIJbssiuyrZ6DExbOkuGwtr9xv5at+yh?=
- =?iso-8859-1?Q?lx7OJopp7lX13E5KpCd5fN6+2KpP/1UlHhuchcXav27ai8pUyMltc8JQm2?=
- =?iso-8859-1?Q?iaszNIyF/m58GLODVGarC7T3c15Y9NqRJ6NMZ3pFUZruKUS+WJb64UInuP?=
- =?iso-8859-1?Q?MILBObckM0eXaVhCcSfDVV2BKqrAOt9U9NDsGw7cJ1/YAa5tUWTNmC4QIS?=
- =?iso-8859-1?Q?LdJ4eBRqZfTfkatU/xySzb4YZXdKFIrReJ7CDleBjeE7l+Ww8uOwfuD0dy?=
- =?iso-8859-1?Q?9mUsiFJekViICN+nZi25IrxKbHqlm2B220PWZucP5PvYjOHphgMyGm93mE?=
- =?iso-8859-1?Q?jna/qKEv8ZjYflNAvy2erCoCQnFV5qHvYDSTcK09MPbnXyUVblbnA0p3n8?=
- =?iso-8859-1?Q?Rbqa6g0f99iu0dkrLyOvpu5Rb2eph5C7qYAxXJCkDZ8oPNKSpe5GqEOAEI?=
- =?iso-8859-1?Q?vGtztmaDOoD28OoSH+y+FweDLZCkue+wqIjsxazDW2z2WE6l+VrjsAkfUB?=
- =?iso-8859-1?Q?Tw3RTDKw/0LEjB0Lr0bQDr6li6xx9POyWxjSpHU0ld2q+Il8TarEXl/BSD?=
- =?iso-8859-1?Q?a8Y0UWgVjHbSubsh+mDO1wlqV77pLEkkU3foi2L5soS/xhJWwlGxRLFsf8?=
- =?iso-8859-1?Q?e1yhnTHYlpEsDqlblqY9ZsD/XkkXnPD+M56aLSIPE2d+EV6Ll3lETVUVix?=
- =?iso-8859-1?Q?CQ0/xE/sbxc0esD0o9f6Uas764yI7TWSf4mIFoj483gAlZ0tJuRv1fdFLw?=
- =?iso-8859-1?Q?yUfaFkF1ZN2KoeUvf+C73UgKABTnaUzPtAJHWHfUlKcSlLuVeiOPAccYkU?=
- =?iso-8859-1?Q?AIJw6Mt3WpTMOmWhCpqhPzX2/rFQ0wtGPoaPho0n1U6QgdxiXsg9e/ot5I?=
- =?iso-8859-1?Q?qo0bDr11w+iGx0WoskfczA0kbFLXqzyV2PwlOVQPgj4uxKbwxvK1ZFnMeN?=
- =?iso-8859-1?Q?zg4Q=3D=3D?=
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MtltE_RjmVpX for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 18:55:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67E4741995
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67E4741995
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 18:55:04 +0000 (UTC)
+Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
+ by mailout03.t-online.de (Postfix) with SMTP id 57CB02380;
+ Thu, 20 Oct 2022 20:55:01 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.201.31]) by fwd89.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1olah1-0DOikT0; Thu, 20 Oct 2022 20:55:00 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52804)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1olah1-0004Oe-10;
+ Thu, 20 Oct 2022 20:54:59 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Thu, 20 Oct 2022 20:54:59 +0200
+Message-Id: <20221020185459.28407-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: ptwdosimetry.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR09MB3411.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf12c52b-2ede-447f-8702-08dab2c73b4d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 18:16:38.9050 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f4f5a489-21cd-415a-a6df-b7670e99ad80
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pa0G7tFEEaAkXItEswjaQ5kIqIw/1OW449Xm7676I3xpUXWTLvn7mwK0dqOCcqNECOQBLiMxn7kzXU9VfiU35ZeTt4Gu6ycOfkDSKnrwywU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR09MB6292
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ptwfreiburg.onmicrosoft.com; s=selector2-ptwfreiburg-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5ja1N9tSi6u7hKxgJwl/YT5l4MrXV9Azf4Yj53irNkM=;
- b=rmd2yMvswE8ECLHE6LchC2/nB7HiQbYURaUbPhlPB19+dr9nyxU/oDtb6vBxjwsxDSLYkGycX05t+Xpl/LCINPb6Hq0/v1X7NqXJ+aKwmwgDuxHpku1YcFZPHzqC3DBZq27BJxU9tMtCOpQ0ZRkSaZypHSfAWoI9iWuY5yGSIx0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=ptwfreiburg.onmicrosoft.com
- header.i=@ptwfreiburg.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-ptwfreiburg-onmicrosoft-com header.b=rmd2yMvs
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ptwdosimetry.com;
-Subject: Re: [Buildroot] [PATCH 1/1] support/download/cargo-post-process:
- use cargo output for vendor config
+X-TOI-EXPURGATEID: 150726::1666292100-F8C51742-29D281BE/0/0 CLEAN NORMAL
+X-TOI-MSGID: 460967c2-e745-44a5-bbb5-25450c6fa251
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -147,139 +66,427 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
+https://lists.freedesktop.org/archives/mesa-announce/2022-October/000688.html
+https://lists.freedesktop.org/archives/mesa-announce/2022-September/000687.html
+https://www.phoronix.com/news/Mesa-22.2-Released
 
-Am 19.10.22 um 22:52 schrieb Yann E. MORIN:
-> Could you provide a bit more details on how this works? 
+Removed patches included in upstream release, renumbered remaining
+patches.
 
-Sure.
-Currently the script generates a config file containing:
-    [source.crates-io]
-    replace-with = "vendored-sources"
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk      |   2 +-
+ ...rt-isinf-for-uclibc-based-toolchains.patch |  30 -----
+ ...-proper-value-for-LIBCLC_INCLUDEDIR.patch} |   0
+ ...ion-to-disable-optional-neon-suppor.patch} |   0
+ ...-Include-stddef.h-to-fix-build-erro.patch} |   0
+ ...uild.patch => 0004-Fix-uClibc-build.patch} |   0
+ ...-fix-build-on-32-bit-architectures-u.patch |  43 ------
+ ...emove-needless-c99-compat-h-includes.patch | 126 ------------------
+ .../0007-include-drop-c11-compat-h.patch      | 100 --------------
+ package/mesa3d/mesa3d.hash                    |   8 +-
+ package/mesa3d/mesa3d.mk                      |   2 +-
+ 11 files changed, 6 insertions(+), 305 deletions(-)
+ delete mode 100644 package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch
+ rename package/mesa3d/{0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch => 0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch} (100%)
+ rename package/mesa3d/{0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch => 0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch} (100%)
+ rename package/mesa3d/{0004-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch => 0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch} (100%)
+ rename package/mesa3d/{0008-Fix-uClibc-build.patch => 0004-Fix-uClibc-build.patch} (100%)
+ delete mode 100644 package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+ delete mode 100644 package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch
+ delete mode 100644 package/mesa3d/0007-include-drop-c11-compat-h.patch
 
-    [source.vendored-sources]
-    directory = "VENDOR"
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 7a777fb783..3712c79db0 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.1.6
++MESA3D_HEADERS_VERSION = 22.2.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch b/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch
+deleted file mode 100644
+index 5acbaa4daa..0000000000
+--- a/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 705490763fcc052defa2d49a5c5200775cd12c54 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Wed, 4 Mar 2020 08:27:24 +0100
+-Subject: [PATCH] c99_math: import isinf for uclibc based toolchains
+-
+-The same fix as for glibc >= 2.23 is needed for uclibc
+-based toolchains.
+-
+-[Upstream suggested: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4042]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- include/c99_math.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/c99_math.h b/include/c99_math.h
+-index e906c26aa54..c8a73a2d2c7 100644
+---- a/include/c99_math.h
+-+++ b/include/c99_math.h
+-@@ -190,7 +190,7 @@ fpclassify(double x)
+-  * undefines those functions, which in glibc 2.23, are defined as macros rather
+-  * than functions as in glibc 2.22.
+-  */
+--#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
+-+#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23) || defined(__UCLIBC__))
+- #include <cmath>
+- 
+- using std::fpclassify;
+--- 
+-2.25.1
+-
+diff --git a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+similarity index 100%
+rename from package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+rename to package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+diff --git a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+similarity index 100%
+rename from package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+rename to package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+diff --git a/package/mesa3d/0004-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+similarity index 100%
+rename from package/mesa3d/0004-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+rename to package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+diff --git a/package/mesa3d/0008-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+similarity index 100%
+rename from package/mesa3d/0008-Fix-uClibc-build.patch
+rename to package/mesa3d/0004-Fix-uClibc-build.patch
+diff --git a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+deleted file mode 100644
+index b01db8a4b4..0000000000
+--- a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From e501b7c17ada9c694d3f8302622b78d733485b38 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 21 Aug 2021 17:55:33 +0200
+-Subject: [PATCH] src/util/futex.h: fix build on 32-bit architectures using
+- 64-bit time_t
+-
+-Fix the following build failure on 32-bit architectures using 64-bit
+-time_t (e.g. riscv32):
+-
+-../src/util/futex.h: In function 'sys_futex':
+-../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+-   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+-      |                   ^~~~~~~~~
+-      |                   sys_futex
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12496]
+----
+- src/util/futex.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/util/futex.h b/src/util/futex.h
+-index 43097f4cd5b..221eda9db0c 100644
+---- a/src/util/futex.h
+-+++ b/src/util/futex.h
+-@@ -34,6 +34,10 @@
+- #include <sys/syscall.h>
+- #include <sys/time.h>
+- 
+-+#ifndef SYS_futex
+-+#define SYS_futex SYS_futex_time64
+-+#endif
+-+
+- static inline long sys_futex(void *addr1, int op, int val1, const struct timespec *timeout, void *addr2, int val3)
+- {
+-    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+--- 
+-2.32.0
+-
+diff --git a/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch b/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch
+deleted file mode 100644
+index cac61b351a..0000000000
+--- a/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch
++++ /dev/null
+@@ -1,126 +0,0 @@
+-From 9f717b5f23cbf24dc4c58bc688c931af91975e80 Mon Sep 17 00:00:00 2001
+-From: Erik Faye-Lund <erik.faye-lund@collabora.com>
+-Date: Wed, 1 Jun 2022 14:17:43 +0200
+-Subject: util: remove needless c99_compat.h includes
+-
+-Reviewed-by: Jesse Natalie <jenatali@microsoft.com>
+-Reviewed-by: Alyssa Rosenzweig <alyssa@collabora.com>
+-Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/16812>
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/mesa/mesa/patch/?id=9f717b5f23cbf24dc4c58bc688c931af91975e80
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/util/bitscan.h     | 2 --
+- src/util/compiler.h    | 2 --
+- src/util/format_srgb.h | 1 -
+- src/util/hash_table.h  | 1 -
+- src/util/list.h        | 1 -
+- src/util/macros.h      | 1 -
+- src/util/mesa-sha1.h   | 1 -
+- src/util/ptralloc.h    | 1 -
+- 8 files changed, 10 deletions(-)
+-
+-diff --git a/src/util/bitscan.h b/src/util/bitscan.h
+-index 726d2d2c385..53cbb91e98c 100644
+---- a/src/util/bitscan.h
+-+++ b/src/util/bitscan.h
+-@@ -42,8 +42,6 @@
+- #include <popcntintrin.h>
+- #endif
+- 
+--#include "c99_compat.h"
+--
+- #ifdef __cplusplus
+- extern "C" {
+- #endif
+-diff --git a/src/util/compiler.h b/src/util/compiler.h
+-index 83f8e346a08..d184ad455af 100644
+---- a/src/util/compiler.h
+-+++ b/src/util/compiler.h
+-@@ -38,8 +38,6 @@
+- 
+- #include "util/macros.h"
+- 
+--#include "c99_compat.h" /* inline, __func__, etc. */
+--
+- 
+- /**
+-  * Either define MESA_BIG_ENDIAN or MESA_LITTLE_ENDIAN, and CPU_TO_LE32.
+-diff --git a/src/util/format_srgb.h b/src/util/format_srgb.h
+-index 596af56f4cd..5861b238270 100644
+---- a/src/util/format_srgb.h
+-+++ b/src/util/format_srgb.h
+-@@ -39,7 +39,6 @@
+- 
+- #include <stdint.h>
+- #include <math.h>
+--#include "c99_compat.h"
+- 
+- extern const float
+- util_format_srgb_8unorm_to_linear_float_table[256];
+-diff --git a/src/util/hash_table.h b/src/util/hash_table.h
+-index c8a96b79edf..002d6c58873 100644
+---- a/src/util/hash_table.h
+-+++ b/src/util/hash_table.h
+-@@ -31,7 +31,6 @@
+- #include <stdlib.h>
+- #include <inttypes.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "macros.h"
+- 
+- #ifdef __cplusplus
+-diff --git a/src/util/list.h b/src/util/list.h
+-index 5ef49e4e955..edc596f3d2d 100644
+---- a/src/util/list.h
+-+++ b/src/util/list.h
+-@@ -41,7 +41,6 @@
+- #include <stdbool.h>
+- #include <stddef.h>
+- #include <assert.h>
+--#include "c99_compat.h"
+- 
+- #ifdef DEBUG
+- #  define list_assert(cond, msg)  assert(cond && msg)
+-diff --git a/src/util/macros.h b/src/util/macros.h
+-index 2138f5d662d..a5dc4846211 100644
+---- a/src/util/macros.h
+-+++ b/src/util/macros.h
+-@@ -27,7 +27,6 @@
+- #include <stdio.h>
+- #include <assert.h>
+- 
+--#include "c99_compat.h"
+- #include "c11_compat.h"
+- 
+- #include <stdint.h>
+-diff --git a/src/util/mesa-sha1.h b/src/util/mesa-sha1.h
+-index 9d174fd9b99..809fabc525f 100644
+---- a/src/util/mesa-sha1.h
+-+++ b/src/util/mesa-sha1.h
+-@@ -26,7 +26,6 @@
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "sha1/sha1.h"
+- 
+- #ifdef __cplusplus
+-diff --git a/src/util/ptralloc.h b/src/util/ptralloc.h
+-index f74d8c3645d..ca6ded82a2d 100644
+---- a/src/util/ptralloc.h
+-+++ b/src/util/ptralloc.h
+-@@ -29,7 +29,6 @@
+- #include <stdlib.h>
+- #include <inttypes.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "macros.h"
+- 
+- #ifdef __cplusplus
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/mesa3d/0007-include-drop-c11-compat-h.patch b/package/mesa3d/0007-include-drop-c11-compat-h.patch
+deleted file mode 100644
+index 64cdb8074b..0000000000
+--- a/package/mesa3d/0007-include-drop-c11-compat-h.patch
++++ /dev/null
+@@ -1,100 +0,0 @@
+-From df2dd474c73982e89d0ed71951ff723eb7060ce6 Mon Sep 17 00:00:00 2001
+-From: Erik Faye-Lund <erik.faye-lund@collabora.com>
+-Date: Wed, 1 Jun 2022 13:38:39 +0200
+-Subject: include: drop c11_compat.h
+-
+-We now require C11, and C++ supports static_assert just fine, which is
+-the only thing this header ever added support for. So let's get rid of
+-this needless header.
+-
+-Reviewed-by: Jesse Natalie <jenatali@microsoft.com>
+-Reviewed-by: Alyssa Rosenzweig <alyssa@collabora.com>
+-Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/16812>
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/mesa/mesa/commit/?id=df2dd474c73982e89d0ed71951ff723eb7060ce6
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- include/c11_compat.h                    | 27 ---------------------------
+- src/amd/common/ac_sqtt.h                |  1 -
+- src/imagination/vulkan/pvr_cmd_buffer.c |  1 -
+- src/util/macros.h                       |  3 ---
+- 4 files changed, 32 deletions(-)
+- delete mode 100644 include/c11_compat.h
+-
+-diff --git a/include/c11_compat.h b/include/c11_compat.h
+-deleted file mode 100644
+-index d35740f47a4..00000000000
+---- a/include/c11_compat.h
+-+++ /dev/null
+-@@ -1,27 +0,0 @@
+--/* Copyright 2019 Intel Corporation */
+--/* SPDX-License-Identifier: MIT */
+--
+--#include "no_extern_c.h"
+--
+--#ifndef _C11_COMPAT_H_
+--#define _C11_COMPAT_H_
+--
+--#if defined(__cplusplus)
+--   /* This is C++ code, not C */
+--#elif (__STDC_VERSION__ >= 201112L)
+--   /* Already C11 */
+--#else
+--
+--
+--/*
+-- * C11 static_assert() macro
+-- * assert.h only defines that name for C11 and above
+-- */
+--#ifndef static_assert
+--#define static_assert _Static_assert
+--#endif
+--
+--
+--#endif /* !C++ && !C11 */
+--
+--#endif /* _C11_COMPAT_H_ */
+-diff --git a/src/amd/common/ac_sqtt.h b/src/amd/common/ac_sqtt.h
+-index 55130aa2221..05798b7e1da 100644
+---- a/src/amd/common/ac_sqtt.h
+-+++ b/src/amd/common/ac_sqtt.h
+-@@ -30,7 +30,6 @@
+- #include <stdbool.h>
+- 
+- #include <assert.h>
+--#include "c11_compat.h"
+- #include "ac_rgp.h"
+- 
+- struct radeon_cmdbuf;
+-diff --git a/src/imagination/vulkan/pvr_cmd_buffer.c b/src/imagination/vulkan/pvr_cmd_buffer.c
+-index 0afd463e2fb..4fe224f481d 100644
+---- a/src/imagination/vulkan/pvr_cmd_buffer.c
+-+++ b/src/imagination/vulkan/pvr_cmd_buffer.c
+-@@ -29,7 +29,6 @@
+- #include <string.h>
+- #include <vulkan/vulkan.h>
+- 
+--#include "c11_compat.h"
+- #include "hwdef/rogue_hw_defs.h"
+- #include "hwdef/rogue_hw_utils.h"
+- #include "pvr_bo.h"
+-diff --git a/src/util/macros.h b/src/util/macros.h
+-index a5dc4846211..dd8af86bcf8 100644
+---- a/src/util/macros.h
+-+++ b/src/util/macros.h
+-@@ -26,9 +26,6 @@
+- 
+- #include <stdio.h>
+- #include <assert.h>
+--
+--#include "c11_compat.h"
+--
+- #include <stdint.h>
+- 
+- /* Compute the size of an array */
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index ab20063cd9..f10f8fe112 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-August/000683.html
+-sha256  22ced061eb9adab8ea35368246c1995c09723f3f71653cd5050c5cec376e671a  mesa-22.1.6.tar.xz
+-sha512  3b2a0bb781c3d540401e6f51e3cf0d87d4e22923b6a5a4ea9d8ce5c79b4a2d5e8b1c237a36325d7d7178448ae102470ebefb312644dc09818cce91fd5439cb07  mesa-22.1.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
++sha256  2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9  mesa-22.2.2.tar.xz
++sha512  a1eb67e1ae4880c79b1fdc570f4389baba0b8ba796da7e695c9af19a7d92b6c06b95570e6c796548b61355989025fb7efbf9acac74cbd695f7e297dc913b933c  mesa-22.2.2.tar.xz
+ # License
+-sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
++sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index daefd6f6d5..bac071ecb3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.1.6
++MESA3D_VERSION = 22.2.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.30.2
 
-This works for most projects since they do not use dependencies
-from other sources besides crates.io.
-
-But if a project needs dependencies from other sources, say github,
-there needs to be an extra entry for each non-crates.io dependency.
-
-As an example, here is the needed vendor config for conduit - a 
-matrix homeserver.
-(https://gitlab.com/famedly/conduit
-rev cb2b5beea8a3fb27ed514ee9e46b5729aa272179)
-
-    [source.crates-io]
-    replace-with = "vendored-sources"
-    
-    [source."https://github.com/ruma/ruma"]
-    git = "https://github.com/ruma/ruma"
-    rev = "fba6f70c2df8294f96567f56464a46e3d237a8e9"
-    replace-with = "vendored-sources"
-    
-    [source."https://github.com/timokoesters/heed.git"]
-    git = "https://github.com/timokoesters/heed.git"
-    rev = "f6f825da7fb2c758867e05ad973ef800a6fe1d5d"
-    replace-with = "vendored-sources"
-    
-    [source."https://github.com/timokoesters/reqwest"]
-    git = "https://github.com/timokoesters/reqwest"
-    rev = "57b7cf4feb921573dfafad7d34b9ac6e44ead0bd"
-    replace-with = "vendored-sources"
-    
-    [source.vendored-sources]
-    directory = "vendor"
-
-For the current script this means one has to create a patch for
-the generated .cargo/config to contain the missing lines. That is not
-nice for two reasons:
-
-1. the corresponding package must contain a patch that
-patches a file that is not part of the original sources of the package.
-
-2. every time one or more dependencies are updated, the patch has to be changed.
-
-> Also, can we have a package that uses non-crates.io dependencies, so
-> that we have a test-case to ensure we have no regression?
-
-I'm not sure if i understood that correctly. Do you mean bringing a
-package into buildroot or if we already have a package that can be used
-for a test?
-
-If the second, no, i did not find any package that has non-crates.io
-dependencies.
-
-> This means that vendoring step is then entirely silent, and there is no
-> progress report.
->
-> Since the download during the vendoring can be quite big, that means a
-> long pause without any feedback to the user that something is going on.
->
-> Also, if there is a download issue, there is no way to find what
-> happened.
-
-That's correct, did not think about that.
-
-> Can we keep the vendoring to stdout as it currently is, and re-run it
-> right after, just to generate the config.toml file? I.e. something like:
->
-> cargo vendor --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} --locked VENDOR
-> cargo vendor --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} --locked VENDOR 2>&1 \
-> |sed -ne '1,/To use vendored sources, add/!p' > .cargo/config
-
-While digging around i found the following solution:
-    cargo vendor \
-        --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
-        --locked VENDOR \
-    | tee .cargo/config
-
-Cargo seems to print all progress output to stderr but not the needed
-output for the config. This goes to stdout. So we only have to tee stdout 
-to the .cargo/config file. I will update the patch accordingly.
-
-> Finally, unrelated to your change: if the package already has a
-> .cargo/config.toml, then we irremediably override it. Is there something
-> in that file that would otherwise be required to do the build?
-
-Yes, i noticed that too. Overwriting a possibly existing project specific
-configuration is not good.
-I think this also should be changed (in a different patch, as mentioned).
-
-> Can we simply append to the file rather than overwrite it, i.e.:
-> .... >> .cargo/config.toml
-
-Unfortunately it is not that simple because of two reasons:
-
-1. cargo looks for a .cargo/config or (up from cargo 1.39) a 
-.cargo/config.toml file for configuration. If both files exist, cargo uses 
-.cargo/config and ignores the .cargo/config.toml file.
-
-2. if configuration entries for vendoring already exist in a configuration, 
-it is not allowed to add them again. Cargo will not build the project if a 
-corresponding entry exists more than once.
-
-The first case would be quiet easy to address but the second one would
-need some sort of merging.
-
-> Note that if we want to change that, this should be a different patch,
-> of course.
-
-Absolutely.
-
-
-So, speaking for this patch, i would keep the current behavior "overwrite
-every possibly existing config with the vendoring information".
-
-Regards,
-Simon
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
