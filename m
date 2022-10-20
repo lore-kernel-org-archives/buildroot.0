@@ -1,88 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4896C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 23:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D47F3C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 00:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45CCD40486;
-	Wed, 19 Oct 2022 23:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45CCD40486
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07C3141CF5;
+	Thu, 20 Oct 2022 00:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07C3141CF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tqpNpYV2l0NC; Wed, 19 Oct 2022 23:47:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3F4yaENs7ppN; Thu, 20 Oct 2022 00:23:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C8AF40390;
-	Wed, 19 Oct 2022 23:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C8AF40390
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE0331BF419
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 23:46:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56FD441C07;
+	Thu, 20 Oct 2022 00:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56FD441C07
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 002121BF2F7
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 00:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C973184058
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 23:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C973184058
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBF09611E3
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 00:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF09611E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uuYTnFV1t4eu for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 23:46:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tlxSuOsobtBP for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 00:23:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF73984007
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DF73984007
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 23:46:58 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id p16so15886008iod.6
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 16:46:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A560611AB
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
+ [IPv6:2607:f8b0:4864:20::102d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0A560611AB
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 00:23:21 +0000 (UTC)
+Received: by mail-pj1-x102d.google.com with SMTP id
+ a6-20020a17090abe0600b0020d7c0c6650so1793428pjs.0
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 17:23:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4g9hL5J9BnP9HYXUU+wPJIyyksZxT9R90vaH3JkGRa4=;
- b=4n2Hehzi8LwbDCFtgYGR7/pMG6K431DSi1Jp9OBWfJc55aarkKVuAwjTNkTNxT5HK1
- h0QaUfWqpSyPXO6TcD1mcOoCs8I/XC17xigK0MQ96qWyU/5Oc6aPouL19wwdwPZFMqT7
- ZbO/YyYq3OMuheyJ67fkO8TSV6v1pp2bdTVqOJsSy+VXvf2McUHkxGoGF0qxG1TzvqkP
- 5MVJnwPO4mNoDKChJ6HsIrX+YoKuyf8w8C0jswYbMHMwh3Sl7WyA1fnaBIoCDZsPOzvC
- mAKEGP/nrnUJC9xaGjcVLNoMjFux81l5QqyOKjlNRydU5u+BTm1kWgLAM4Lfgi56G9by
- 7Rmg==
-X-Gm-Message-State: ACrzQf0DaYSUk/yQQbk4BVRVytVhFt8BjSEmgDAOetqtA/6GjBxV6j9X
- c4AMkEqwaSvpMfcj/CoH/BEnmxnz6QZmBA==
-X-Google-Smtp-Source: AMsMyM7NILPftQeaGJhv1XF+9oaPBeSKT4zDhfQh/AGyECYDDk8jjHXtKepfDBRfg2EuOoRfguAMvw==
-X-Received: by 2002:a6b:f605:0:b0:6bb:cafc:ec27 with SMTP id
- n5-20020a6bf605000000b006bbcafcec27mr7941578ioh.194.1666223217757; 
- Wed, 19 Oct 2022 16:46:57 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- t1-20020a02cca1000000b00363e76105c8sm2605713jap.92.2022.10.19.16.46.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Oct 2022 16:46:57 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 17:46:55 -0600
-Message-Id: <20221019234655.1097686-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=xQuXHwJGuKmkTJh7bvB550hkgQoexDumOCuMvJUliqM=;
+ b=KYVe1LCKk3Hwfa5XHlxkOnxB0udaZS3hiPk2hJQWdJB3FUwe9caHJrTO26GyEhFhHp
+ oBTBE3AFv5xI2ccdSfmR+2PinsmNDZoza/4xzOCc3HoIobIj+RDPXx9wGcdBjYW9b2Zm
+ U9HwV28clXwRSRZyl7qDay7+kCQDzw9PmIajzyU7aq1LY+cFGRZZ6cZC0nlWvxv5rAEY
+ R1on/jRAVn20HG0tEgFICawwPRlPcMK7/8FZx2ldqWe/R7E9+xMqnGCDPObKxupKhIs8
+ 0UpMVb3t4Gl8v+NE0AbwCprmuNLEdU5hkSHHQDXtPuoAzPFlLBCUpIcPd5a0lU7SXQ5w
+ +rIg==
+X-Gm-Message-State: ACrzQf1LPl+iN130LlEK8gX1Z3Psq0mbLqWi/f191d+GwQqBR92nMOBe
+ /fUTozS9s980YIsziX3eKsApj4o6bU/i9FIFHyE=
+X-Google-Smtp-Source: AMsMyM7z3bfF3tyZJjASXcK7BTDizxtAzKQOMmIDFeR3NU5Z4j6nVvX+q5es8wxSuCQECK0Aw0L61gaXWuah9AhRQHw=
+X-Received: by 2002:a17:902:b598:b0:184:e49d:3042 with SMTP id
+ a24-20020a170902b59800b00184e49d3042mr11445864pls.16.1666225401393; Wed, 19
+ Oct 2022 17:23:21 -0700 (PDT)
 MIME-Version: 1.0
+References: <20221019195519.28536-1-giulio.benetti@benettiengineering.com>
+ <CADvTj4rGMHOZL4X1pkZTDYzxgyGXDLB_jmApmxNOPSK2Tdp+LQ@mail.gmail.com>
+In-Reply-To: <CADvTj4rGMHOZL4X1pkZTDYzxgyGXDLB_jmApmxNOPSK2Tdp+LQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 19 Oct 2022 20:23:08 -0400
+Message-ID: <CADvTj4qYnqsAjQMZQHBTdpxgiZ2VoLtewn9uWa1QzPjriT_VZg@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4g9hL5J9BnP9HYXUU+wPJIyyksZxT9R90vaH3JkGRa4=;
- b=HQJDh70eHlnGks6ebivWEiRHkbKJBxULnbCf51BOxWA1A6A+z1aVhorDQdzIqcod1Y
- VI/PiYH5MFyL+5c6DCYoHmBel6B+SjPrBOQ8lS3ti2Ur0PhdpbY+DwAUACK8UzaVp8s6
- I02hoLBLieeQNEjG08YWB0CiUJlsYoDEqoAEVEGux5IygMWZIq9GS3BoDfG4nr15i0v3
- 03qSydD2cvS+VMQFmB8OPth6kIfZh6biTlxAHa9OGabj3PwpYn9QYdGFwD+E+op5MqLy
- YgYiaoMYp3oLl4kTpkOZhPIqdAp97RezrVKA9NgLeLaWMrw8aVcl/E9lmeLdx9SZEGTM
- 08hw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=xQuXHwJGuKmkTJh7bvB550hkgQoexDumOCuMvJUliqM=;
+ b=hg+inkoISZGBkm4Fgu0CGs3U11Q56PBNsciLkdsZY5m5npck9C0pLSoXWxtNxlNI/i
+ YlKKf06BW2/Q7s29enR08SQWQhmArUmmBiSBC6x9l42lZc1JldWVIIgsDAYai0bsJHUc
+ nABT5b/AOClRH6QX4UnApWWUJA8bygmhAK+y/uPtFZuakzUScDqkua8LLd9VCJUp7JKg
+ PFN1yAppzWMh+M9VIve/HiGmKbv41HXriLOovzH0kOugHwApYint4E0igCsjWqW6F6Bi
+ kJnBB9EsR9IyOp5LWZL0J1HkzViHr9o9FGuGZDEq7/gdUyop8vb5kJTytlyoy6iB3jaC
+ a/9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HQJDh70e
-Subject: [Buildroot] [PATCH 1/1] package/localedef: add MAKEFLAGS fix to
- localedef as well
+ header.a=rsa-sha256 header.s=20210112 header.b=hg+inkoI
+Subject: Re: [Buildroot] [PATCH] package/libnss: disable parallel build with
+ Make 4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,32 +92,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This was fixed in glibc but also needs to be fixed in localedef.
+On Wed, Oct 19, 2022 at 7:36 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> On Wed, Oct 19, 2022 at 3:55 PM Giulio Benetti
+> <giulio.benetti@benettiengineering.com> wrote:
+> >
+> > Fixes:
+> > http://autobuild.buildroot.net/results/433/4335d0d8454035a8f74645ba8d6c2329ab2e5480/
+>
+> Hmm, this looks like a bug in the libnss makefile, what was the failure
+> seen with make 4.3 here:
+> https://lore.kernel.org/buildroot/20220101210952.2148256-1-giulio.benetti@benettiengineering.com/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...03-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch | 1 +
- 1 file changed, 1 insertion(+)
- create mode 120000 package/localedef/0003-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
+This patch also does not fix the build with make 4.4(make from master branch)
+from my testing.
 
-diff --git a/package/localedef/0003-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch b/package/localedef/0003-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
-new file mode 120000
-index 0000000000..1e41bc4e12
---- /dev/null
-+++ b/package/localedef/0003-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
-@@ -0,0 +1 @@
-+../glibc/0002-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
-\ No newline at end of file
--- 
-2.34.1
+Even without shuffle mode enabled the build appears to always fail.
 
+>
+> >
+> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> > ---
+> >  package/libnss/libnss.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+> > index 041b2cfc56..a613006f70 100644
+> > --- a/package/libnss/libnss.mk
+> > +++ b/package/libnss/libnss.mk
+> > @@ -15,8 +15,8 @@ LIBNSS_LICENSE_FILES = nss/COPYING
+> >  LIBNSS_CPE_ID_VENDOR = mozilla
+> >  LIBNSS_CPE_ID_PRODUCT = nss
+> >
+> > -# Don't parallel build if make version = 4.3
+> > -ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
+> > +# Don't parallel build if make version = 4.3 or 4.4
+> > +ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3 4.4),)
+> >  LIBNSS_MAKE = $(MAKE1)
+> >  else
+> >  LIBNSS_MAKE = $(MAKE)
+> > --
+> > 2.34.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
