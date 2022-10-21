@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 197F2C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 18:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 410DDC38A2D
+	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 18:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A20E4415A9;
-	Fri, 21 Oct 2022 18:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A20E4415A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1C7260E55;
+	Fri, 21 Oct 2022 18:58:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1C7260E55
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t-vYnJecrhp2; Fri, 21 Oct 2022 18:53:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NpDFnwdSf54D; Fri, 21 Oct 2022 18:58:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4BE6415AD;
-	Fri, 21 Oct 2022 18:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4BE6415AD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2021860A77;
+	Fri, 21 Oct 2022 18:58:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2021860A77
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A18B1BF863
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 18:52:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C2B001BF863
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 18:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4175D40104
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 18:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4175D40104
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAC0F40982
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 18:58:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAC0F40982
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hvo3aH72dxtw for <buildroot@lists.busybox.net>;
- Fri, 21 Oct 2022 18:52:21 +0000 (UTC)
+ with ESMTP id 5PYMs5rr8sKO for <buildroot@lists.busybox.net>;
+ Fri, 21 Oct 2022 18:58:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 814F84018F
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 18:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 814F84018F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E42CA40223
+ for <buildroot@buildroot.org>; Fri, 21 Oct 2022 18:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E42CA40223
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6958D86F46; Fri, 21 Oct 2022 18:52:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id CC94886F52; Fri, 21 Oct 2022 18:58:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 21 Oct 2022 20:50:05 +0200
+Date: Fri, 21 Oct 2022 20:58:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86de66e444cda40e8d65cc401229628b48fe410a
-X-Git-Newrev: 72e8471b5cf4a011cd87692719bd4f69d9cc526c
+X-Git-Oldrev: 72e8471b5cf4a011cd87692719bd4f69d9cc526c
+X-Git-Newrev: b3b962c93579f02775fbf057f317bcd58772131e
 X-Patchwork-Hint: ignore
-Message-Id: <20221021185221.6958D86F46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: security bump to version
- 3.10.8
+Message-Id: <20221021185834.CC94886F52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpsd: drop legacy cleanup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72e8471b5cf4a011cd87692719bd4f69d9cc526c
+commit: https://git.buildroot.net/buildroot/commit/?id=b3b962c93579f02775fbf057f317bcd58772131e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Since gpsd-3.22, the systemd service files no longer contain hard-coded
+paths to /usr/local/, but use @SBINDIR@ which is replaced appropriately
+at build time, and contains the correct path.
 
-- CVE-2022-40674: bundled libexpat was upgraded from 2.4.7 to 2.4.9 which
-  fixes a heap use-after-free vulnerability in function doContent
+Drop the legacy fixup now.
 
-- gh-97616: a fix for a possible buffer overflow in list *= int
-
-- gh-97612: a fix for possible shell injection in the example script
-  get-remote-certificate.py(this issue originally had a CVE assigned to it,
-  which its author withdrew)
-
-- gh-96577: a fix for a potential buffer overrun in msilib
-
-License hash changed due to links in license text being changed from
-http to https:
-https://github.com/python/cpython/commit/96f8d3619d839266491b722b943de65892bb0e81
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Peter: mark as security bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python3/python3.hash | 4 ++--
- package/python3/python3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gpsd/gpsd.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index c625e7a8ea..f9b8e2ec8d 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6eed8415b7516fb2f260906db5d48dd4c06acc0cb24a7d6cc15296a604dcdc48  Python-3.10.7.tar.xz
--sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
-+sha256  6a30ecde59c47048013eb5a658c9b5dec277203d2793667f578df7671f7f03f3  Python-3.10.8.tar.xz
-+sha256  d4a223f033419313218c9b8444167e91e87a5bebdb43fb8490df441df5220a8b  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b7df26781a..4131941e11 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 0c7018f26d..b8526c0260 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -213,14 +213,6 @@ define GPSD_INSTALL_INIT_SYSV
+ 	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+ endef
  
- PYTHON3_VERSION_MAJOR = 3.10
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).7
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-# systemd unit files are installed automatically, but need to update the
+-# /usr/local path references in the provided files to /usr.
+-define GPSD_INSTALL_INIT_SYSTEMD
+-	$(SED) 's%/usr/local%/usr%' \
+-		$(TARGET_DIR)/usr/lib/systemd/system/gpsd.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/gpsdctl@.service
+-endef
+-
+ define GPSD_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
