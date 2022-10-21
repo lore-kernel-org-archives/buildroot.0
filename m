@@ -1,87 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADAD8C38A2D
-	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 22:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC84C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 22:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2434A417B2;
-	Fri, 21 Oct 2022 22:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2434A417B2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yZ2iUU2dJ2Qz; Fri, 21 Oct 2022 22:11:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F246741774;
-	Fri, 21 Oct 2022 22:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F246741774
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 085911BF94D
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:11:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4DCC843DC
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4DCC843DC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 846B084401;
+	Fri, 21 Oct 2022 22:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 846B084401
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Q7PSTeRosEg for <buildroot@lists.busybox.net>;
- Fri, 21 Oct 2022 22:11:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEE11843D1
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DEE11843D1
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 22:11:38 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id f11so6604259wrm.6
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 15:11:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=j+8GWeITF0dGsT2OFc5fTG0eIPrFcw4EYXWqicbsKIU=;
- b=qFciAMaekKGPHIPwSwEp+bMcyY9rWw1Xx+zHf1A1vRLqOAjTrAHiortqfX2qmP9+tV
- TLFRggL7RnK+wPxeQlvzarC1nwQHOe++vdq3PfPhudLaVxilvfOTYK9yKJ6GK2P8nH2v
- lwNkHHINFQiBqjY5WIbBIgx8fgGQkbmtr7evdxozkhsZUTtJAIMHki/goN4jm63W0WA/
- 69DaYuS8rD2+jnP5OvXpdDU4VNdpcaqrK7payE7JJnyYzRvHOKq4Gd2NdOkUqpVfnnxT
- OY53zYYsFn2ynm6zgz+AUpXOoNq+mTZwcoyEhl6JIfyihQAMtB0NE6jcgpuGXNgY/g4w
- mLaw==
-X-Gm-Message-State: ACrzQf1jcCj0ZdGYfIKv1ZQRkIX0HOEDm/dyJ391ctP6nKxS2IpEMDx7
- McIxP7HcM4f+vKMoyCvGZBmge9I4YV0=
-X-Google-Smtp-Source: AMsMyM55oCEPO4uDuvv3uSrKZ9o99Vj4WVl3F/GFmsv2bMyNz4MjU4svP1Egj5L08oQkkg7UyHEG4g==
-X-Received: by 2002:a5d:4950:0:b0:230:cc5a:f6b0 with SMTP id
- r16-20020a5d4950000000b00230cc5af6b0mr13794290wrs.656.1666390296612; 
- Fri, 21 Oct 2022 15:11:36 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- u6-20020adfeb46000000b002258235bda3sm19621358wrn.61.2022.10.21.15.11.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 21 Oct 2022 15:11:36 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r_MMfbqWRACv; Fri, 21 Oct 2022 22:23:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E0E5843EB;
+	Fri, 21 Oct 2022 22:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E0E5843EB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 927921BF94D
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:23:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78ABD41793
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78ABD41793
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7hRH7DDtQXwp for <buildroot@lists.busybox.net>;
+ Fri, 21 Oct 2022 22:22:58 +0000 (UTC)
+X-Greylist: delayed 00:07:37 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 269B441780
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 269B441780
+ for <buildroot@buildroot.org>; Fri, 21 Oct 2022 22:22:57 +0000 (UTC)
+Received: from uxmal.fritz.box ([151.71.224.230]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.17.173]) with ESMTPSA (Nemesis) id
+ 1MOAmt-1oRyMm2om1-00ObBu; Sat, 22 Oct 2022 00:10:13 +0200
+From: Pedro Aguilar <paguilar@paguilar.org>
 To: buildroot@buildroot.org
-Date: Sat, 22 Oct 2022 00:11:33 +0200
-Message-Id: <20221021221133.13293-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 22 Oct 2022 00:09:56 +0200
+Message-Id: <20221021220956.699772-1-paguilar@paguilar.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=j+8GWeITF0dGsT2OFc5fTG0eIPrFcw4EYXWqicbsKIU=;
- b=TtppqkdFK1AFROHRyK9A69hwC0YYx6hFjsdry+9DBfqAIIggFhy0UaC0AjdHbyvk52
- tW+1eIKL/KG4aN5J6d4b/UqUylW3wUbF2efHAc2Jj5WPSPeR+r0xnpMFzbWbhzqV9FmI
- dYiirw/smuvrC7YLg3UorM0T7aA0zjbHiGTGTee8uwrr+XAqHN+/vOKPbyEDRhQ4MwKN
- Xrski5/OBEP0/AWrgkc5z7K1Yz/Vc5kP14dJT8SUMV5njrm1sf5IXxZmNEwIjKjbavMM
- CZzAivU8NAp2I5Kmdl5tNHA+xGOBBt7nOAhB7ApjIp/WLP9wS9XPo83P3RKgSDdN9ofC
- 4Pog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TtppqkdF
-Subject: [Buildroot] [PATCH 1/1] package/easy-rsa: bump to version 3.1.1
+X-Provags-ID: V03:K1:bkIixqUP0ghZcbjm5MOpi197NpRv87EBTRc+TvVHXvgEpBfUAjI
+ W7G02nTOVXyJd6Oi0rpFRI8boI+6BoqPqX1O3N1y3fU/sLKAhwVE7AUhYTtMEIdrQFYyVl0
+ WJMZiQdw/BBttaARR8BExCCPZrXbQOvPneYVr3Q0d+jh5v7S4nzOPLQgQkZB9j2wyjA91zO
+ mAZwM4rmEme/Lecf6VLAQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:h3fKfm/WLqc=:/ON6ziubWQ6+ZNIgw3PWsW
+ oe4SjyJSZPLuoR3JZdL2rt2JARfUlrDvL8+tNmg+oOYZiSwS1hlFpjlBgy0r91vRFifBFWkLK
+ 5Hf3ByAJJclEgukkqwXZ+HWDdR+AC416ALSVn0V8ecxX0vRByHA2xwpei0dVD1NIU3cRMIswk
+ RFffaJYx8xwV5ioThG2YWs1QP9+Xn3Orp/0LDBjNQYtVzlw9lryqSwA/vvXSuz3WMuSMhg1CB
+ 77m73q+bjs9h6/ZcHWpi3yg8q06ZhycBp0et0zvc5Jr8oXmJ3mWf3niG+zAl3nvTuOY0Gd0QW
+ K46W5DWJcMBfe1XaikP8E1YaBPVVy/0fzbdmmc3shf1qXQGoylUTAnxVlU4oQGjy6HBpKja/J
+ wAXdm6bIO6kpN53o+LcGSPtvO+YfsdW6AbT0F9XtfdPRXJdyay4MkVjROaMTe/Ns7a1JosPuH
+ XQEN2f3iaNI1Ch+uYsj23GxYGliBuMP14bzctpn+uOOF2na4RhAK+toVG/C0e3IlGHjwQroSI
+ re/GnOd5RMN93299e7VLwYRgVexUz7TkdUEtDk9/ALv1GjKvSg3mcarl3lu2eWOXxDp3B7IRb
+ H2LU+EPeRaaMlJr6/sZLPjAmQ/irWqzK9KqpO2uqbmXW5cZw10zMmA1xYstW+mGlB73AD4gYl
+ C+o/T0MuUAIYkqYB1V06ZTAFTsLfr1hRv9djkNAJAt2IC1JH+f5cqOHkgXeG5ZZIgZA6MOMam
+ sb4p9awJeFpYj1vL8l+pyCrQpfk5uQMrHYKqC+mzrdz5MyNVhrX3EDT5bfVb+dfnCcXdCBb61
+ bMSkEEuJB6nu1mak4J0XtUgVxdaIw==
+Subject: [Buildroot] [PATCH 1/1] package/libunistring: bump to version 1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +73,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Viard de Galbert <julien@vdg.name>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/OpenVPN/easy-rsa/releases/tag/v3.1.1
+https://savannah.gnu.org/projects/libunistring/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 ---
- package/easy-rsa/easy-rsa.hash | 2 +-
- package/easy-rsa/easy-rsa.mk   | 2 +-
+ package/libunistring/libunistring.hash | 2 +-
+ package/libunistring/libunistring.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
-index e304c367fa..5be651bde0 100644
---- a/package/easy-rsa/easy-rsa.hash
-+++ b/package/easy-rsa/easy-rsa.hash
-@@ -1,5 +1,5 @@
- # Locally computed: (after verifying gpg sig)
--sha512  be2dedde19eaf923622da61db34ecb2e926b3f15a60a0c3d9858d3126dbe3b4af9c0f6674f964516572b50611ffd1d254952f27dc5de867bd7a67474c89be5f0  EasyRSA-3.1.0.tgz
-+sha512  8c8d1f4baf90475d4cce334d116b7f12b82687157796b25560600b5098769226ae2f60f02982c75266b625d66b465360ffa815260ad44850923e3fbc9ba8540a  EasyRSA-3.1.1.tgz
- 
- # Hash for license files
- sha256  7c4a4fc71745d93a87278801f1bca555562ca23f21e18293add64b9e6f6b7bf1  COPYING.md
-diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
-index 7c32c1d83d..4ea45506dd 100644
---- a/package/easy-rsa/easy-rsa.mk
-+++ b/package/easy-rsa/easy-rsa.mk
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 81ffd4fb0c..8267d56327 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
+-sha256  5bab55b49f75d77ed26b257997e919b693f29fd4a1bc22e0e6e024c246c72741  libunistring-1.0.tar.xz
++sha256  827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98  libunistring-1.1.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index a69eacd676..8d5b6f54ec 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EASY_RSA_VERSION = 3.1.0
-+EASY_RSA_VERSION = 3.1.1
- EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
- EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/v$(EASY_RSA_VERSION)
- EASY_RSA_LICENSE = GPL-2.0
+-LIBUNISTRING_VERSION = 1.0
++LIBUNISTRING_VERSION = 1.1
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
