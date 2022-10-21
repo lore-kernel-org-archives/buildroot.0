@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8D9BC38A2D
-	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 19:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76CE7C38A2D
+	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 19:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 229354196C;
-	Fri, 21 Oct 2022 19:07:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 229354196C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 083E041938;
+	Fri, 21 Oct 2022 19:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 083E041938
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WvrPtGE7fyzX; Fri, 21 Oct 2022 19:07:41 +0000 (UTC)
+	with ESMTP id OcWwuF7OWa2k; Fri, 21 Oct 2022 19:08:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9CB741953;
-	Fri, 21 Oct 2022 19:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9CB741953
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 88A3C1BF846
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 19:07:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7917640993;
+	Fri, 21 Oct 2022 19:08:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7917640993
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DC8EC1BF846
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 19:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 645BB4018F
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 19:07:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 645BB4018F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B85B460A81
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 19:08:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85B460A81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HjPxev_j7Np5 for <buildroot@lists.busybox.net>;
- Fri, 21 Oct 2022 19:07:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N1_mvwISpKYp for <buildroot@lists.busybox.net>;
+ Fri, 21 Oct 2022 19:08:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AD7240104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB547605A3
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1AD7240104
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 19:07:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB547605A3
+ for <buildroot@buildroot.org>; Fri, 21 Oct 2022 19:08:45 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:e722:2033:afe6:a970])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3BB935FF7A;
- Fri, 21 Oct 2022 21:07:32 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id D9FA85FFA8;
+ Fri, 21 Oct 2022 21:08:41 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 21 Oct 2022 21:07:31 +0200
-Date: Fri, 21 Oct 2022 21:07:31 +0200
+ Fri, 21 Oct 2022 21:08:41 +0200
+Date: Fri, 21 Oct 2022 21:08:41 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: yann.morin@orange.com
-Message-ID: <20221021190731.GC2992523@scaer>
+Message-ID: <20221021190841.GD2992523@scaer>
 References: <9796_1665746309_63494585_9796_388_2_2b0b6b796ff36967c963ba90f138a03d467ee5cf.1665746266.git.yann.morin@orange.com>
+ <1138_1665746311_63494587_1138_437_1_82ab2cc49c43374ceb22a1fdd6bc5e4c72d29df2.1665746266.git.yann.morin@orange.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <9796_1665746309_63494585_9796_388_2_2b0b6b796ff36967c963ba90f138a03d467ee5cf.1665746266.git.yann.morin@orange.com>
+In-Reply-To: <1138_1665746311_63494587_1138_437_1_82ab2cc49c43374ceb22a1fdd6bc5e4c72d29df2.1665746266.git.yann.morin@orange.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1666379255;
- bh=1Wi1kg7qpjKAysrvh+CVA1ipmEl8acFvZ+cT+XvjioQ=;
+ d=free.fr; s=smtp-20201208; t=1666379324;
+ bh=iE56oogG3DGrCWD50QHvmZuPC/DDaHBWM8NMW/Qty/0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RapI6iKtB4NyhEnqS2dVGXT/ukxzBjeyZV9E8L+S8wuDsmW72vf8U3wWcerDSz6it
- M1ZCQtKT8Vi+1Uq1E0kSN3b2KRYd12LQNXYBWYjQGm9czpsfUu1KcQfPQWsn/O0uSq
- aNyi0IYmk9yHRP8Pcg1S8wXGNeq7LyMZLLq8lvgc43RMkN9GgmA05Tnl6rqF3u1VJK
- R/L1y5RRzWL7Bmrml5pS5p+Ps9PlMi+inzpeKc2zK/4xPxyQZfG4VrxmtGGmtFvmRY
- cKmldDSoi+7IE5UrsSSsCUPskX4eEd7b+x31NX5Nfh/gDhI0QyUp6XZc48q8xbcVDE
- tNgqisjKKQHTQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=HPebGaxfWn1r11GgfKiE+IZ+r0dW/1iH3eLSXP/VNzvTfvuPN0Np9tduBNEew7BiI
+ jKVcCHD8UgU2WH1TMKj3f10nEtDmd6AZwHY81ZJXd8WWsgW0C1iNGhZlMvgp5bU7Us
+ 6V5Mfky3ykpuuiza1ALF2bP4XlYpOGBv4yfguWRy+q+hD/h93AtnIIOTqqPi486T3F
+ Eudx+tyl+6lGWbiLKNq5UYzYjXe1SHtPjV1xxUOqFNIFGFi05XeCgkDm9W9da9s+6V
+ Wp8Au0N4XJ9p2tdm9GLieCr1zzZKptdLnrG/bsdMLGdYx1hKVwAzjnQ+Pm3R7MYS8Z
+ vXfRtnL5JnEyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RapI6iKt
-Subject: Re: [Buildroot] [PATCH 1/3] Makefile: really generate glibc locales
- in parallel
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HPebGaxf
+Subject: Re: [Buildroot] [PATCH 2/3] support/scripts: don't require gawk to
+ generate glibc gconv modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,7 +78,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gleb Mazovetskiy <glex.spb@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -86,43 +87,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Yann, All,
 
 On 2022-10-14 13:18 +0200, yann.morin@orange.com spake thusly:
-> To generate the glibc locale data, we call into a recursive Makefile,
-> so as to generate locales in parallel. This is done as part of a
-> target-fialize hook.
+> When a subset of the glibc gconv modules installed, we eed to generate a
 
-*finalize
+*are installed, we need
 
-> However, that hook is registered after all packages have been parsed,
-> and as such, it maye be registered after hooks defined in packages.
+> trimmed-down list of available modules. We currently use gawk for that.
 > 
-> Furthermore, the expansion of target-finalize hooks is done in a recipe,
-> so it is not easy to understand whether this generates a "simple" rule
-> or not.
+> However, we are not using any GNU extension in that awk script, and it
+> happens to work as expected when using mawk (which has no GNU
+> extension).
 > 
-> As a consequence, despite the use of $(MAKE), make may not notice that
-> the command is a recursive call, and will decide to close the jobserver
-> file-descriptors, yieldiong warnings like:
-
-*yielding
-
->     make[2]: warning: jobserver unavailable: using -j1.  Add '+' to
->     parent make rule.
+> Commit 11c1076db9a5 (toolchain: add option to copy the gconv libraries)
+> did not explain why it used gawk explicitly, and given the age for that
+> commit, we doubt we'd be able to have the involved participants recall
+> anything from that period...
 > 
-> This causes the lcoale data to not be generated in parallel, which is
-
-*locale (damn, I forgot to fix that one when applying)
-
-> initially all the fuss about using a sub-makefile...
+> Besides, gawk is not a requirement for Buildroot.
 > 
-> So, do as suggested, and prepend the hook with a '+', so that it
-> isexplicit to make that it should not close its jobserver fds.
-
-*is explicit
-
-> Fixes: 6fbdf5159607 (Makefile: Parallelize glibc locale generation)
+> Switch over to using plain awk.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Gleb Mazovetskiy <glex.spb@gmail.com>
 
 Applied to master with the typoes fixed, thanks.
 
@@ -130,22 +114,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  Makefile | 2 +-
+>  support/scripts/expunge-gconv-modules | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index ec7c034ac1..ededfa491d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -653,7 +653,7 @@ ifneq ($(GLIBC_GENERATE_LOCALES),)
->  PACKAGES += host-localedef
+> diff --git a/support/scripts/expunge-gconv-modules b/support/scripts/expunge-gconv-modules
+> index 03012c1ce3..bc60fc0ce4 100755
+> --- a/support/scripts/expunge-gconv-modules
+> +++ b/support/scripts/expunge-gconv-modules
+> @@ -19,7 +19,7 @@
+>  # we handle each with slightly different code, since the second never has
+>  # associated aliases.
 >  
->  define GENERATE_GLIBC_LOCALES
-> -	$(MAKE) -f support/misc/gen-glibc-locales.mk \
-> +	+$(MAKE) -f support/misc/gen-glibc-locales.mk \
->  		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
->  		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
->  		Q=$(Q)
+> -gawk -v files="${1}" '
+> +awk -v files="${2}" '
+>  $1 == "alias" {
+>      aliases[$3] = aliases[$3] " " $2;
+>  }
 > -- 
 > 2.25.1
 > 
