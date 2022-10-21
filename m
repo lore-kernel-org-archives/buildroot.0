@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A9DC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 22:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A5A7C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 21 Oct 2022 22:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47C3640147;
-	Fri, 21 Oct 2022 22:44:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47C3640147
+	by smtp1.osuosl.org (Postfix) with ESMTP id 445D8843EE;
+	Fri, 21 Oct 2022 22:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 445D8843EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ItXjI5qCAvRi; Fri, 21 Oct 2022 22:44:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VfsLd-Y9LH4f; Fri, 21 Oct 2022 22:45:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71B31409BC;
-	Fri, 21 Oct 2022 22:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71B31409BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F23684303;
+	Fri, 21 Oct 2022 22:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F23684303
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0E9571BF94D
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:44:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E4401BF94D
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE17683A47
- for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE17683A47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56FA084303
+ for <buildroot@lists.busybox.net>; Fri, 21 Oct 2022 22:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56FA084303
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sn_vqQoCm69B for <buildroot@lists.busybox.net>;
- Fri, 21 Oct 2022 22:44:05 +0000 (UTC)
+ with ESMTP id fNKP2Mzb09hZ for <buildroot@lists.busybox.net>;
+ Fri, 21 Oct 2022 22:45:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A25AA83478
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A25AA83478
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 22:44:04 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- fn7-20020a05600c688700b003b4fb113b86so3053994wmb.0
- for <buildroot@buildroot.org>; Fri, 21 Oct 2022 15:44:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55FA1842D0
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 55FA1842D0
+ for <buildroot@buildroot.org>; Fri, 21 Oct 2022 22:45:17 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id n73so3491282iod.13
+ for <buildroot@buildroot.org>; Fri, 21 Oct 2022 15:45:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=KBd5nUFhgdH5dpUzAg5IMTlrsTaf9hz2HP5w6d0px2w=;
- b=u7AvsZ470eipFx9ceELqLRVTCnIHiGdPFrnjzWia2qaHKMbIe3qhEZ6pCgfqrdC26r
- tsZDm9lz5ZxmoU9y2Jxe/yAfKzJ/PjVHxorZg1bA0TSb607ZxLg8tN9VgwHTQc6lAor3
- ubzghUpsfj8wLDUY/HufvsUB5OZtzB+kR0ybUh0WPnA7KOfyv9rXUMaUuph/16ujdtO7
- 4tt6JxXClVhBMQS8k4R4oh9EVN/r3zpSRabrhs7BIO3BDsHh5+/me7JQ5Y3XR2aayfLt
- Hn9CLcS4yeYa4LauE6fljygfT7achyA1Ka+G7dRsBancA6kuFepl448ymkdd650F+lRN
- /Q6A==
-X-Gm-Message-State: ACrzQf1QcOHj4GvJjkLTklm2Frm0hhVKvMv/e5TEWY4JWBs8TqymFnjL
- WFpZb2PIVDuutHib+OjR2eWMH7FjUS0=
-X-Google-Smtp-Source: AMsMyM6DJkPbX8QXh9mUVNLEewyl4ex/A5h9NRb/nC+Nsb0zqVu3nPpeMGBn+e5QZMu1YN0K5O/5+A==
-X-Received: by 2002:a05:600c:88a:b0:3c5:c9e3:15cc with SMTP id
- l10-20020a05600c088a00b003c5c9e315ccmr14716943wmp.67.1666392242349; 
- Fri, 21 Oct 2022 15:44:02 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- iv13-20020a05600c548d00b003b4fdbb6319sm844251wmb.21.2022.10.21.15.44.01
+ bh=pSnnEjm6rKDPfr/eqsPO89F8K6Flj5SSn+jBpPVCnSI=;
+ b=rGTKZd/Zf6jvLfJQeJADHq0lv4eCt1pHi7nnAL1stC/DRHbL8zYYMVHUazw1ndWz53
+ D4SjnK4viTaVu9lGalMTYgNBrAZDSDuvQziTA4BaxZ0rxRoWwdL4tja34JmZbdYEbrJQ
+ 5sRhRTz0h2mj8WMwmcAOt86/eJ8hoe8TNKt7p4jzmloU21FU9PqoUt+k8CKRNlZP92/O
+ Br2SdbNTGFwK0k5k/iMHUPkAHbfqWtr629ZKWdk/RUzPiI8vBOVMZfmttKVmILy9mNsA
+ cd4kD6qELfQrR4lpaWc8cPPGz/EVIEeCNB9mDYoBwRFjEJhnEnB4muVplSXSwtykzdt6
+ cyHQ==
+X-Gm-Message-State: ACrzQf26laI7e3DBCP/5+oBm72skdYkc6gdUN0qxVO46FdIblgz6W0Vb
+ THD653S2hKdzJaFpQkqBNyUVF9jvWvNbSg==
+X-Google-Smtp-Source: AMsMyM4QbGc9FWINBlCtys5I4Kx/TKS7UI3CWwAHs2FUChLmqnKZpqUvBI/LoBFvRNem0a5wKsVOAQ==
+X-Received: by 2002:a05:6602:27cd:b0:669:3d8d:4d77 with SMTP id
+ l13-20020a05660227cd00b006693d8d4d77mr14831841ios.216.1666392316027; 
+ Fri, 21 Oct 2022 15:45:16 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ m25-20020a026a59000000b0035a498d222asm4544432jaf.35.2022.10.21.15.45.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 21 Oct 2022 15:44:01 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fri, 21 Oct 2022 15:45:15 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Oct 2022 00:43:57 +0200
-Message-Id: <20221021224357.129675-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri, 21 Oct 2022 16:44:48 -0600
+Message-Id: <20221021224448.3502942-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KBd5nUFhgdH5dpUzAg5IMTlrsTaf9hz2HP5w6d0px2w=;
- b=gzboTTHxS9YSWIeqdUwbC96NobG6qO6D/Z7z1hJxGU+heERUe5YPi1Cys9fwrUX1SK
- e7jcJK6eJpcn1uEEW3sWLlS8+v/PJWqB09QaSBzN1+Ubrqn/ouSZz3HXN8mvjrOKj0pR
- 4bRdQ9ogfJUowUhmqxYsS8SYJIGGJSbsNcZEO7gHaV4eVuNzwgGjZE8CfcZpB2oUAP1o
- X4Zr0NfevMMeMWowzVYhfG8SXXnXPIqYuph+HRxBTYrhKDFNuFTl8yjGaKAslvX1YElF
- v/Sr46nnCLEExO4qJI6S90y2pTWrvktYEPHi001NtA+yvbmQEkHQq6xRtvze/UT76Eja
- Ufdg==
+ bh=pSnnEjm6rKDPfr/eqsPO89F8K6Flj5SSn+jBpPVCnSI=;
+ b=BF3GtcSq1iJK+sW5cZq7gIWE/DvSb4OM3u3Q7i8Wfe8xCS05hPsrcnshWg9MJHFsfC
+ cPph8G4VzBxZEQ7qK4/tejZHEzGN7uP8cbK6mlswsNsolI4Tagvyac/0NYgyqKejIgs+
+ jFhjCtLiRVbvHsb18cUh3PNNZDq/OqCun1U1gyyOdcfeptvhGpR+biYj+bbyKbiRcaAh
+ nwubg6q8m5wjA+i9c3UWQwaFVDLm2K/K5JSEqO1w8i1hTe6Smsu2Q/CHVBTzIZGmuv16
+ gfo72u9EKi3VW5RSf0Uj5EyS/wUfepc1NV8RUnmIHb2au9t/XxHvo9A5s0A/akVj7OzV
+ /zOQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gzboTTHx
-Subject: [Buildroot] [PATCH 1/1] package/libpciaccess: bump to version 0.17
+ header.a=rsa-sha256 header.s=20210112 header.b=BF3GtcSq
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo: configure cargo profiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,90 +93,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Moritz Bitsch <moritz@h6t.eu>, James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+The cargo profile flags currently only select a cargo build flag which
+does not accurately reflect the configured build settings, setting the
+cargo build flag also only works for packages using the cargo
+infrastructure directly and not with other packages using the cargo
+environment such as pyo3 based python packages(which indirectly invoke
+cargo build via the setuptools-rust and maturn python build backends).
 
-https://lists.x.org/archives/xorg-announce/2022-October/003226.html
+To ensure that cargo uses the correct profile settings for the build
+we need to set env variables for the two root profiles(dev/release)
+based on the buildroot build settings.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For reference the default cargo root profile settings are:
+https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles
+
+As applications not using cargo infrastructure do not have a standard
+way of configuring a specific build profile due to the selected
+profile being determined by the cargo command line flags, the only
+reliable way to configure profile settings is to set both root
+profiles in the environment as this will ensure that they are used
+regardless of which cargo build flag(such as --debug or --release) is
+used.
+
+Cc: Moritz Bitsch <moritz@h6t.eu>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...001-pciaccess.pc.in-add-Libs.Private.patch | 28 -------------------
- package/libpciaccess/libpciaccess.hash        |  7 ++---
- package/libpciaccess/libpciaccess.mk          |  4 +--
- 3 files changed, 4 insertions(+), 35 deletions(-)
- delete mode 100644 package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
+ package/pkg-cargo.mk | 100 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch b/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
-deleted file mode 100644
-index e520dd03d8..0000000000
---- a/package/libpciaccess/0001-pciaccess.pc.in-add-Libs.Private.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From e1f9fc0a11559c1200005c4bfe34cd217ec117b4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 25 Oct 2019 19:03:32 +0200
--Subject: [PATCH] pciaccess.pc.in: add Libs.Private
--
--Add Libs.Private in pciaccess.pc.in so applications that wants to link
--statically with pciaccess will know that they have to link with its
--dependencies such as -lz
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/xorg/lib/libpciaccess/merge_requests/10]
-----
-- pciaccess.pc.in | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/pciaccess.pc.in b/pciaccess.pc.in
--index 706c5f7..c2da3d9 100644
----- a/pciaccess.pc.in
--+++ b/pciaccess.pc.in
--@@ -8,3 +8,4 @@ Description: Library providing generic access to the PCI bus and devices.
-- Version: @PACKAGE_VERSION@
-- Cflags: -I${includedir}
-- Libs: -L${libdir} -lpciaccess
--+Libs.Private: @PCIACCESS_LIBS@
---- 
--2.23.0
--
-diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
-index 2082be7d04..27ec59a452 100644
---- a/package/libpciaccess/libpciaccess.hash
-+++ b/package/libpciaccess/libpciaccess.hash
-@@ -1,7 +1,4 @@
--# From https://lists.x.org/archives/xorg-announce/2019-July/003014.html
--md5  b34e2cbdd6aa8f9cc3fa613fd401a6d6  libpciaccess-0.16.tar.bz2
--sha1  ffaa13f2df5f822da1089b55223b217c142ef919  libpciaccess-0.16.tar.bz2
--sha256  214c9d0d884fdd7375ec8da8dcb91a8d3169f263294c9a90c575bf1938b9f489  libpciaccess-0.16.tar.bz2
--sha512  2f250048a270dfc0823d4bdd613aa272c58a80eaafd922850f56c4b6f7a45a263ed4cf521b52b49f04484ea44ebefb7407d079aa058318a5751ffb181e38fed1  libpciaccess-0.16.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003226.html
-+sha512  8484605c66ef18c8d8a3e029a6d33e26fcaa450c1263790d89ac8b0a160ffb2dfceaa6140ac9ad7d8087283ecbec8ac801f757e44890d547c3cbecd2c922ca47  libpciaccess-0.17.tar.xz
- # Hash for license file:
- sha256  47012fd746980d1712ac4f3841ab6164bda1d2b84880760e45dbe1e1dc07f608  COPYING
-diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
-index d9a3a4e481..68d46b7f50 100644
---- a/package/libpciaccess/libpciaccess.mk
-+++ b/package/libpciaccess/libpciaccess.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index f7e3f39503..4945770079 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -46,6 +46,106 @@ PKG_CARGO_ENV = \
+ 	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
+ 	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
  
--LIBPCIACCESS_VERSION = 0.16
--LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
-+LIBPCIACCESS_VERSION = 0.17
-+LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.xz
- LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- LIBPCIACCESS_LICENSE = MIT
- LIBPCIACCESS_LICENSE_FILES = COPYING
++# We always set both CARGO_PROFILE_DEV and CARGO_PROFILE_RELEASE
++# as we are unable to select a build profile using the environment.
++#
++# Other cargo profiles generally derive from these two profiles.
++
++# Disable incremental compilation to match release default.
++#
++# Set codegen-units to release default.
++#
++# Set split-debuginfo to default off for ELF platforms.
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_INCREMENTAL="false" \
++	CARGO_PROFILE_RELEASE_INCREMENTAL="false" \
++	CARGO_PROFILE_DEV_CODEGEN_UNITS="16" \
++	CARGO_PROFILE_RELEASE_CODEGEN_UNITS="16" \
++	CARGO_PROFILE_DEV_SPLIT_DEBUGINFO="off" \
++	CARGO_PROFILE_RELEASE_SPLIT_DEBUGINFO="off"
++
++# Set the optimization level with the release default as fallback.
++ifeq ($(BR2_OPTIMIZE_0),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="0" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="0"
++else ifeq ($(BR2_OPTIMIZE_1),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="1" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="1"
++else ifeq ($(BR2_OPTIMIZE_2),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="2" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="2"
++else ifeq ($(BR2_OPTIMIZE_3),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
++else ifeq ($(BR2_OPTIMIZE_G),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="0" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="0"
++else ifeq ($(BR2_OPTIMIZE_S),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="s" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="s"
++else ifeq ($(BR2_OPTIMIZE_FAST),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
++else
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
++	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
++endif
++
++ifeq ($(BR2_ENABLE_LTO),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_LTO="true" \
++	CARGO_PROFILE_RELEASE_LTO="true"
++else
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_LTO="false" \
++	CARGO_PROFILE_RELEASE_LTO="false"
++endif
++
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++ifeq ($(BR2_DEBUG_3),y)
++# full debug info
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_DEBUG="2" \
++	CARGO_PROFILE_RELEASE_DEBUG="2"
++else
++# line tables only
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_DEBUG="1" \
++	CARGO_PROFILE_RELEASE_DEBUG="1"
++endif
++else
++# no debug info
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_DEBUG="0" \
++	CARGO_PROFILE_RELEASE_DEBUG="0"
++endif
++
++# Enabling debug-assertions enables the runtime debug_assert! macro.
++#
++# Enabling overflow-checks enables runtime panic on integer overflow.
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_DEBUG_ASSERTIONS="true" \
++	CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS="true" \
++	CARGO_PROFILE_DEV_OVERFLOW_CHECKS="true" \
++	CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS="true"
++else
++PKG_CARGO_ENV += \
++	CARGO_PROFILE_DEV_DEBUG_ASSERTIONS="false" \
++	CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS="false" \
++	CARGO_PROFILE_DEV_OVERFLOW_CHECKS="false" \
++	CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS="false"
++endif
++
+ #
+ # This is a workaround for https://github.com/rust-lang/compiler-builtins/issues/420
+ # and should be removed when fixed upstream
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
