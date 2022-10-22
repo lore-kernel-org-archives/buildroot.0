@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264D7C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 22:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB74CC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 22:08:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 845B1403B4;
-	Sat, 22 Oct 2022 22:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 845B1403B4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RgQFR7JpE1Ty; Sat, 22 Oct 2022 22:08:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6479340322;
-	Sat, 22 Oct 2022 22:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6479340322
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4BD11BF328
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75DDD81CEF
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75DDD81CEF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 282EE812B6;
+	Sat, 22 Oct 2022 22:08:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 282EE812B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEvVSPbJqivL for <buildroot@lists.busybox.net>;
- Sat, 22 Oct 2022 22:08:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YgYBdQdndmNc; Sat, 22 Oct 2022 22:08:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D381D80D1B;
+	Sat, 22 Oct 2022 22:08:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D381D80D1B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B4691BF328
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 368BD400E4
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 368BD400E4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ApszSg4RMxFM for <buildroot@lists.busybox.net>;
+ Sat, 22 Oct 2022 22:08:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4118B80BBE
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4118B80BBE
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 22:08:16 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id a14so7239456wru.5
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 15:08:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 266E0400DD
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 266E0400DD
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 22:08:19 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id n14so165822wmq.3
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 15:08:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CZjxK34mM8vM5GmlK6bX+y3VjNXt+7rkxCtoxRC9AsY=;
- b=dcmBaeegyyYtv0rzgUsN1/3cnyug6kWYJLCbsP6kIw6U598Iac24EWgbODAvYM8GZK
- ppfMYRCIf/4JfQ4VsDIwaMSiZckE6pq5i49gbyyveFq4U629OimO5weDzJmha9okw6Pl
- BOW0sxZkelhLm3ZHWxTCqt3Y+ikcFEup8YNxGFv2f2nYR5pdm1980OwvGJqukMRQUxhF
- xKXrScpWrJz5qXp2KUAavY/XfOdosNA2sBmfWQSRKU8HJlMaQ4lJiXySbrNSFL0RCykI
- pX3COSuoy2Yx/U0s603LJADXPm+cKnSiFnnU9UPf5tnasr6VsnNqnMmMSgqxh4Ru3kul
- u3Xw==
-X-Gm-Message-State: ACrzQf23F5abWngzbIJH9KVPkFA2HyFtBSnh7z3RnymzWTJjq7YzHJrr
- N8BQN/Tv4zCAK8FRZJFG66Yd2HfqOw4=
-X-Google-Smtp-Source: AMsMyM687CvaPQcTfTPuYKLZQoZY7nX6OEhbuntJrGoMccw6rhQ0c4ptUDUGKSZ0vDDAFg2HdpugUg==
-X-Received: by 2002:adf:e944:0:b0:236:5fe3:c482 with SMTP id
- m4-20020adfe944000000b002365fe3c482mr2514449wrn.441.1666476493678; 
- Sat, 22 Oct 2022 15:08:13 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=4prpHf9VkZgCxP4mRW67GgxWIcyrGe488d+IGyQMJY8=;
+ b=WWXi/uoEeTylqGff36jZSCbvl6cjdv8zEIkBVb+y5aA3WRByMtCNUx/0EGXtLMk9l7
+ goNHT9QfvnDs+9RUA+Agc4NY2sQg6zw0SQ0OWb+HKbm1I639XEb7n66Az5x7vtHYYulS
+ 2bOI9boqPGjDpXlwyjD1l0fdT4HhjxlN+GdPMrdsbghQRygYs8xmnegsqtg6B4fP6OIi
+ yVplQZPv0hA+CsLkjtnf7meABcDfOrIPCHVRCBPPESEyMMkXocHl69cARHmPbbnFLVHu
+ xJv9Yq3DpSOWVorQ+saxDYIYrrgnzPz0EuwJM/TnR7Q9X8/JrI0VswuujFEFmTrN+po7
+ UJ4w==
+X-Gm-Message-State: ACrzQf3VtMrAQ3jv+6tzH/y375PJxws9v+AaLKwQzaHkxn/TZA07PlRt
+ 3uIytxFCwydPWKarkXM9rB+sHAm2y+U=
+X-Google-Smtp-Source: AMsMyM7oHnul1I10Jw4sJwwNb1IeQx6msRcn2IDehJc7HP0gk28Allt/ZrVBH9QCcqR/NwVEQvUJAw==
+X-Received: by 2002:a05:600c:a09:b0:3b5:2f6b:c7c5 with SMTP id
+ z9-20020a05600c0a0900b003b52f6bc7c5mr17400396wmp.141.1666476496836; 
+ Sat, 22 Oct 2022 15:08:16 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- z3-20020a05600c0a0300b003a682354f63sm4100899wmp.11.2022.10.22.15.08.12
+ z3-20020a05600c0a0300b003a682354f63sm4100899wmp.11.2022.10.22.15.08.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 22 Oct 2022 15:08:13 -0700 (PDT)
+ Sat, 22 Oct 2022 15:08:16 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Oct 2022 00:08:07 +0200
-Message-Id: <20221022220808.191363-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Oct 2022 00:08:08 +0200
+Message-Id: <20221022220808.191363-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221022220808.191363-1-fontaine.fabrice@gmail.com>
+References: <20221022220808.191363-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CZjxK34mM8vM5GmlK6bX+y3VjNXt+7rkxCtoxRC9AsY=;
- b=i5/UNNzA6AlEcqUJPf3ubVlPFCvf+036fkXmPCpcHJNGrLKFQBRaTgGcjJbWdnXNNt
- f/VXZB3+fo6DC/E1IBHO5g5lKPu6i6TBrPoGM7YOxE3QF2ghuc/JCZ5oVGPZn7LoC0rL
- BPBp3XISFlXtsRk120VDk+R0fe+irujApIBgVDfKXoWBm++jZj7EuKpf7IJvVBcppSpP
- lAOSTqa4QWzUc3ohg6y0C85O8+d5A9cozv6QTGKnaGVIb9r4Om3gLrukAxKGtUyRpAVE
- 22BmBWskCKfR+M9RFTcfH55LuSsmAA2ydjvvDCQ5WQ4RPdVTcf9LEewNStBKt4aFbX9D
- Us2A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4prpHf9VkZgCxP4mRW67GgxWIcyrGe488d+IGyQMJY8=;
+ b=FMXKnlTaa8ASdjcQ85AlJ/lxOsbtt/VH+17VXMQUW1vwvleAooRHK1k0UFL6zeDbw1
+ bEZCAb+gJzxooahqUVNeYhEAqm0lokBDCEdIiRWJLTYM/4eAHOab/t4rfTWbeQ4EjMiz
+ fcXVWZ7t6oSOMlMUs+uh89NCmP0MN/r6bu6YtUwMGdN9xOEjRG6NwkknEcA+0cftlabv
+ Czj0JDrRnENsKlvFXN0dgInJYF3HYBB28fx5OtZYGj98MILM13YVPGYtlnVHSLVq6S+K
+ LJFH1bFefJAnKkxboTK6FoNFIt1D5EWQaqPYFl90+sBknksao+wPIMSfdd6+YuY47YmT
+ bqBQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=i5/UNNzA
-Subject: [Buildroot] [PATCH 1/2] package/lv2: bump to version 1.18.10
+ header.a=rsa-sha256 header.s=20210112 header.b=FMXKnlTa
+Subject: [Buildroot] [PATCH 2/2] package/sratom: bump to version 0.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,66 +104,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Update hash of COPYING (standard ISC text used since
-  https://github.com/lv2/lv2/commit/0030682770cdab7069c8c96e2fdf0e99f9b42b65)
+- Update hash of COPYING (standard ISC licence used since
+  https://github.com/lv2/sratom/commit/145ed2fe9756f707d9fd5f03ada5327d04e1b972)
 - meson must be used since
-  https://github.com/lv2/lv2/commit/d4a970f6962dda28133290194832b726b566ddab
+  https://github.com/lv2/sratom/commit/75e647def0f67647ec7ba1405e26d809a87c62fc
 
-https://github.com/lv2/lv2/blob/v1.18.10/NEWS
+https://github.com/lv2/sratom/blob/v0.6.14/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lv2/lv2.hash |  6 +++---
- package/lv2/lv2.mk   | 13 ++++++-------
- 2 files changed, 9 insertions(+), 10 deletions(-)
+ package/sratom/sratom.hash |  6 +++---
+ package/sratom/sratom.mk   | 12 ++++--------
+ 2 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/package/lv2/lv2.hash b/package/lv2/lv2.hash
-index ed21620bee..0814958887 100644
---- a/package/lv2/lv2.hash
-+++ b/package/lv2/lv2.hash
+diff --git a/package/sratom/sratom.hash b/package/sratom/sratom.hash
+index 64d460b2ea..3b8fa65300 100644
+--- a/package/sratom/sratom.hash
++++ b/package/sratom/sratom.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after checking signature
--# https://lv2plug.in/spec/lv2-1.18.2.tar.bz2.asc
--sha256  4e891fbc744c05855beb5dfa82e822b14917dd66e98f82b8230dbd1c7ab2e05e  lv2-1.18.2.tar.bz2
--sha256  0b0b07d852e3ce7fa04986e141f73001bd7f260683968f0a19e02dbcc4131aa6  COPYING
-+# https://lv2plug.in/spec/lv2-1.18.10.tar.xz.sig
-+sha256  78c51bcf21b54e58bb6329accbb4dae03b2ed79b520f9a01e734bd9de530953f  lv2-1.18.10.tar.xz
-+sha256  1e6bb175e193608b767ff25a4ed68b82c4db599491cf0d2694435cf60e9a4841  COPYING
-diff --git a/package/lv2/lv2.mk b/package/lv2/lv2.mk
-index 13ffaa34b0..2dde9b907c 100644
---- a/package/lv2/lv2.mk
-+++ b/package/lv2/lv2.mk
-@@ -4,18 +4,17 @@
+-# https://download.drobilla.net/sratom-0.6.8.tar.bz2.asc
+-sha256  3acb32b1adc5a2b7facdade2e0818bcd6c71f23f84a1ebc17815bb7a0d2d02df  sratom-0.6.8.tar.bz2
+-sha256  3fc429d6b944fa20306357196a28bb4dd7c25e2d67edebec771f44de5bd7f9e8  COPYING
++# https://download.drobilla.net/sratom-0.6.14.tar.xz.sig
++sha256  9982faf40db83aedd9b3850e499fecd6852b8b4ba6dede514013655cffaca1e6  sratom-0.6.14.tar.xz
++sha256  97742aacc982d8bb10d4450e3ce71dd02a9f26ba73a0eb822ef3356a74525597  COPYING
+diff --git a/package/sratom/sratom.mk b/package/sratom/sratom.mk
+index e1e0f4e033..25e7a091b3 100644
+--- a/package/sratom/sratom.mk
++++ b/package/sratom/sratom.mk
+@@ -4,18 +4,14 @@
  #
  ################################################################################
  
--LV2_VERSION = 1.18.2
-+LV2_VERSION = 1.18.10
- LV2_SITE = https://lv2plug.in/spec
--LV2_SOURCE = lv2-$(LV2_VERSION).tar.bz2
-+LV2_SOURCE = lv2-$(LV2_VERSION).tar.xz
- LV2_LICENSE = ISC
- LV2_LICENSE_FILES = COPYING
- LV2_DEPENDENCIES = host-pkgconf
- LV2_INSTALL_STAGING = YES
+-SRATOM_VERSION = 0.6.8
++SRATOM_VERSION = 0.6.14
+ SRATOM_SITE = https://download.drobilla.net
+-SRATOM_SOURCE = sratom-$(SRATOM_VERSION).tar.bz2
++SRATOM_SOURCE = sratom-$(SRATOM_VERSION).tar.xz
+ SRATOM_LICENSE = ISC
+ SRATOM_LICENSE_FILES = COPYING
+ SRATOM_DEPENDENCIES = host-pkgconf lv2 serd sord
+ SRATOM_INSTALL_STAGING = YES
  
- LV2_CONF_OPTS += \
--	--no-coverage \
--	--no-check-links \
--	--copy-headers
-+	-Ddocs=disabled \
-+	-Dtests=disabled
+-SRATOM_CONF_OPTS += --no-coverage
++SRATOM_CONF_OPTS += -Ddocs=disabled -Dtests=disabled
  
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- LV2_DEPENDENCIES += cairo
-@@ -30,7 +29,7 @@ LV2_DEPENDENCIES += libgtk2
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--LV2_CONF_OPTS += --no-plugins
-+LV2_CONF_OPTS += -Dplugins=disabled
- endif
- 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-SRATOM_CONF_OPTS += --static --no-shared
+-endif
+-
 -$(eval $(waf-package))
 +$(eval $(meson-package))
 -- 
