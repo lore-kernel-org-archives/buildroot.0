@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C13C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 20:46:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91218C04A95
+	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 20:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BFBB607B5;
-	Sat, 22 Oct 2022 20:46:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BFBB607B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A2AB4015A;
+	Sat, 22 Oct 2022 20:53:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A2AB4015A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9CuImbD7BVxn; Sat, 22 Oct 2022 20:46:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jhnvKTDiS1MQ; Sat, 22 Oct 2022 20:53:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E62460773;
-	Sat, 22 Oct 2022 20:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E62460773
+	by smtp2.osuosl.org (Postfix) with ESMTP id 784FF4013B;
+	Sat, 22 Oct 2022 20:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 784FF4013B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 345D61BF3BD
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 20:46:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5782E1BF3BD
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 20:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1683081C44
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 20:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1683081C44
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B64781D18
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 20:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B64781D18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hBYDdckumhvw for <buildroot@lists.busybox.net>;
- Sat, 22 Oct 2022 20:46:39 +0000 (UTC)
+ with ESMTP id 52IfE2FEnWDo for <buildroot@lists.busybox.net>;
+ Sat, 22 Oct 2022 20:53:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7FE181C04
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D7FE181C04
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 20:46:38 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id a10so9405432wrm.12
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 13:46:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5EA281D16
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5EA281D16
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 20:53:16 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ r8-20020a1c4408000000b003c47d5fd475so7464188wma.3
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 13:53:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4ZLgqHmA2HspVexbQtRvEnxGl7alc+Y6pulg4jdNcss=;
- b=dBomx3FY93lQSUSl2HsOYYVA6isVsmqKhIsmmI7AS5NLM7XEQtzbZqMW+/JPUnl/l6
- 2f0x67HCtRpGua27hIv6sHAJxYLbUboPDbABzCH8i+Qz1kVzt+fltUzHF38ulpn4owJi
- jEMOEhTzdf+O3Tb6P/FxqhNYDwtR9537rD8fs50rX31Yv8wZCMZSsvxCZ3yIXcGcQPT8
- BwhOTRAMVhcTWXF9gaMA+Qwsr0+bQ2ncWqQyCqnb1XU+2bXfLPc+PW6TFMZd1YYKjgNR
- eUF1usVb56jCfLOJj4/ZxGLmx43j0knko8hBOZwy5yO3Wlo9YM4t0wEkWnT4s2cpMGXz
- UoNw==
-X-Gm-Message-State: ACrzQf1ZBL8ssd6liCk4PwgHYRUa/Dmy2VRaqbMPBhujnAdwhaRuN+cv
- 2YQn0cNRIjHplakvmdGrFEbfAgPGw4Q=
-X-Google-Smtp-Source: AMsMyM6WYLZgRNh7Bh1u+npWXuoB2FXAzqrocMOHGwqk2aOnSkwGOoJhtx+xbohEndj3rmfU022gyw==
-X-Received: by 2002:a5d:5c04:0:b0:234:88dc:3d19 with SMTP id
- cc4-20020a5d5c04000000b0023488dc3d19mr11080776wrb.681.1666471596452; 
- Sat, 22 Oct 2022 13:46:36 -0700 (PDT)
+ bh=1wD1sydAkYcGT3HszGWlaZHU21C6kLW0raZgav1VzDk=;
+ b=1j4AOZUjlGn0hY+dt14QHK3pW5lyXsIYYov9IAI0IEkn3SxTyGQEbO9TchYYkSK/7o
+ bv03rvFY+OwVZMfTqTZJsTsy4iwjhBqFP5IM55dKlH0V2xv3Cde8lwxEVGy4gjUGh4Ah
+ wCeYXBV44uaKGw0BYSa8BotWEARiuY2zsaYH//Qb2SR2nEGEHytx/+JqBjAWi1bP50bY
+ WHEhRHDghN8d7aeJhIPf1v+iH87qyHPUuHUk+CLNo8S+cevI69OY55WEwcATAL9TTx+J
+ kKer/eKs6AfblaLg+GMHRVv3jlLxD7CKIRtw3CPGlLWoH6fYyYNGQ1Ttzw6L5Z0z3nxa
+ 7cZw==
+X-Gm-Message-State: ACrzQf0CngI2xE+HEJlTzg8Uj6H6l+TOGX+pcUjfgoqw/RGSfgCTYsaI
+ V5V/PTxySCq7SAvwsSDiIGLnr/YZFh4=
+X-Google-Smtp-Source: AMsMyM7ImMnNrUv0qNpEvQjvNxw31giPDo5En9V0Wwa0mahOoZWh8VNahk/Znh3IrVHwPMjXHUtPjw==
+X-Received: by 2002:a05:600c:354d:b0:3c8:4b2d:f3fb with SMTP id
+ i13-20020a05600c354d00b003c84b2df3fbmr4672776wmq.188.1666471994642; 
+ Sat, 22 Oct 2022 13:53:14 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o13-20020a05600c4fcd00b003a8434530bbsm3941364wmq.13.2022.10.22.13.46.35
+ n4-20020a05600c3b8400b003b4a699ce8esm3879618wms.6.2022.10.22.13.53.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 22 Oct 2022 13:46:36 -0700 (PDT)
+ Sat, 22 Oct 2022 13:53:14 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Oct 2022 22:46:31 +0200
-Message-Id: <20221022204631.147518-1-fontaine.fabrice@gmail.com>
+Date: Sat, 22 Oct 2022 22:53:11 +0200
+Message-Id: <20221022205311.152019-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4ZLgqHmA2HspVexbQtRvEnxGl7alc+Y6pulg4jdNcss=;
- b=qAZuyPrdhw91MIdSoX2WeNuLumPO2LTuWSFM0dxYdUq6s/vNiYTQOSmFsb0PPi5ayD
- Bhyrg5EjIf8/JLAoaPdrQ2bLRnzo34EX9jXsx4Ht4bsJr/yS/cGwWfQBm84gip8+JlKA
- K2RVFLW++gh6fsYJka7tLuCstst33d5eQVvJozOxRi7xT1TcPxq9OHH+c3ibokj70T3a
- TJYlZ/RoqlGqgU9I/b3nnNI/ALiSXUlrXQLece5Ovfz+KiqKJ2GZvORYgf2At/O8BT8p
- rrozUpaIaCuCcUNV/vURoPLzzM+xkUyXVAPenDvGdXLDaHhQwkIz/QYBUMZGhOihEUVi
- GJFw==
+ bh=1wD1sydAkYcGT3HszGWlaZHU21C6kLW0raZgav1VzDk=;
+ b=KAEfeOXV4bXO2YssaWy6Io3nn+mUWeNJPWHnOXcnLtNI5fQvtNk944sax0FzowqsWu
+ ZHWxrU8Ljl1lV3zjO5DUjVqHuZKHqj6aJVwjCtc25O3uPNJ+LSzOVHRJaayUXkoMxLTH
+ l0poe9iQf5/GOEcpjkFfR4ES2cxvR2Qp5eLgttSXIGC4YX6VcfiNhNe4Ivv2+RLAdqPm
+ OWOFjF5Y7HxvI4xBo9iZEAmb7550alMtuFUjY4Fuh79/r5SmDLUUp4y8bc1Yem6bmBSI
+ 99aGRDNQQTGstGJBX5kGEyYFPX9jfVFX0J5TWhkUw6T5Nuj7Pl7LkOTF210tpGYOS75+
+ u1lg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qAZuyPrd
-Subject: [Buildroot] [PATCH 1/1] package/vnstat: bump to version 2.10
+ header.a=rsa-sha256 header.s=20210112 header.b=KAEfeOXV
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Rodrigo Rebello <rprebello@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/vergoh/vnstat/blob/v2.10/CHANGES
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/vnstat/vnstat.hash | 2 +-
- package/vnstat/vnstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index 191dc4ec0b..bad4325d90 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  03f858a7abf6bd85bb8cd595f3541fc3bd31f8f400ec092ef3034825ccb77c25  vnstat-2.8.tar.gz
-+sha256  a9c61744e5cd8c366e2db4d282badc74021ddb614bd65b41240937997e457d25  vnstat-2.10.tar.gz
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 3b5bbee23d..fb140fa198 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20220408T031931Z/pool/main/w/whois/whois_5.5.13.dsc
+-sha256  62e613f116d5635aea6684238db00b030a6602ffc79462e4a0a8e62cb184b5d7  whois_5.5.13.tar.xz
++# From http://snapshot.debian.org/archive/debian/20221017T031443Z/pool/main/w/whois/whois_5.5.14.dsc
++sha256  bf9c2cb307d5419b34ad401eecf2820b8f69660db41cf0762e5da71fa2df68e8  whois_5.5.14.tar.xz
+ 
+ # Hash for license file:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index 91f0233f56..3b2951b8c9 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 42a9e83954..5a85bea358 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--VNSTAT_VERSION = 2.8
-+VNSTAT_VERSION = 2.10
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
+-WHOIS_VERSION = 5.5.13
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20220408T031931Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.14
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20221017T031443Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 2.35.1
 
