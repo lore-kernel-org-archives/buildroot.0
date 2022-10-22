@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE6C7C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 21:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264D7C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 22 Oct 2022 22:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 434D94013B;
-	Sat, 22 Oct 2022 21:44:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 434D94013B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 845B1403B4;
+	Sat, 22 Oct 2022 22:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 845B1403B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0nLzU44815u8; Sat, 22 Oct 2022 21:44:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RgQFR7JpE1Ty; Sat, 22 Oct 2022 22:08:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41647400DD;
-	Sat, 22 Oct 2022 21:44:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41647400DD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49E711BF3BC
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 21:44:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6479340322;
+	Sat, 22 Oct 2022 22:08:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6479340322
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A4BD11BF328
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3040D607B4
- for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 21:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3040D607B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75DDD81CEF
+ for <buildroot@lists.busybox.net>; Sat, 22 Oct 2022 22:08:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75DDD81CEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qo14DJWjNxs2 for <buildroot@lists.busybox.net>;
- Sat, 22 Oct 2022 21:44:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AEvVSPbJqivL for <buildroot@lists.busybox.net>;
+ Sat, 22 Oct 2022 22:08:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C911A6079B
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C911A6079B
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 21:44:48 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- r8-20020a1c4408000000b003c47d5fd475so7511025wma.3
- for <buildroot@buildroot.org>; Sat, 22 Oct 2022 14:44:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4118B80BBE
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4118B80BBE
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 22:08:16 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id a14so7239456wru.5
+ for <buildroot@buildroot.org>; Sat, 22 Oct 2022 15:08:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pOimMhETlZEa9DMYCa87ORgM1lBFfep38D6PQLFy6+s=;
- b=UqT6iSKtKumsiB8DBZFro1CtnxIn/nmz0b757rkgMb3/Bc6k5gok/ggOSiQ0XJxnWt
- mbnxoWJ1t/DaIUatOJkCPGRb1Qz/LafrJaVqP4y9anZx27CJ+QiE/f/yCHEz7D7bkG8b
- yKg9VKq9fi6xMPbbn+KxY7NNtIOj6ZR3H8u/hzct4WGKH7umLJaErmUbUX1JjOeFIc3x
- lecUboczhir7S4V1HRexGMmjQvdnBSarXnlGeRjY51DvtUnDJykFu/nwtBckPd8BPscn
- UVryEoFWv+atZoPdWeqgAm5wxsESC8fCj0NH15LvSlKCBgTenh44DXaI0fs5tDeUwmki
- deFw==
-X-Gm-Message-State: ACrzQf3BrtTIXay81mwcIzbPYhKDYSgSZkF6y4/5GLbRnZ0SfijIuBBj
- d126Xk2fY38uJ9Ch3o6Hn0Lr5ZsUXyo=
-X-Google-Smtp-Source: AMsMyM4IP96UK+Ft3hQNZgCprBddVfKOhNfUfvoa9UEC1kt2GCeGDUPrYn3UYTl6GGcfDI7JM3RExw==
-X-Received: by 2002:a05:600c:214d:b0:3c7:1182:4874 with SMTP id
- v13-20020a05600c214d00b003c711824874mr9722493wml.4.1666475086491; 
- Sat, 22 Oct 2022 14:44:46 -0700 (PDT)
+ bh=CZjxK34mM8vM5GmlK6bX+y3VjNXt+7rkxCtoxRC9AsY=;
+ b=dcmBaeegyyYtv0rzgUsN1/3cnyug6kWYJLCbsP6kIw6U598Iac24EWgbODAvYM8GZK
+ ppfMYRCIf/4JfQ4VsDIwaMSiZckE6pq5i49gbyyveFq4U629OimO5weDzJmha9okw6Pl
+ BOW0sxZkelhLm3ZHWxTCqt3Y+ikcFEup8YNxGFv2f2nYR5pdm1980OwvGJqukMRQUxhF
+ xKXrScpWrJz5qXp2KUAavY/XfOdosNA2sBmfWQSRKU8HJlMaQ4lJiXySbrNSFL0RCykI
+ pX3COSuoy2Yx/U0s603LJADXPm+cKnSiFnnU9UPf5tnasr6VsnNqnMmMSgqxh4Ru3kul
+ u3Xw==
+X-Gm-Message-State: ACrzQf23F5abWngzbIJH9KVPkFA2HyFtBSnh7z3RnymzWTJjq7YzHJrr
+ N8BQN/Tv4zCAK8FRZJFG66Yd2HfqOw4=
+X-Google-Smtp-Source: AMsMyM687CvaPQcTfTPuYKLZQoZY7nX6OEhbuntJrGoMccw6rhQ0c4ptUDUGKSZ0vDDAFg2HdpugUg==
+X-Received: by 2002:adf:e944:0:b0:236:5fe3:c482 with SMTP id
+ m4-20020adfe944000000b002365fe3c482mr2514449wrn.441.1666476493678; 
+ Sat, 22 Oct 2022 15:08:13 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- l34-20020a05600c1d2200b003c6edc05159sm3893278wms.1.2022.10.22.14.44.45
+ z3-20020a05600c0a0300b003a682354f63sm4100899wmp.11.2022.10.22.15.08.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 22 Oct 2022 14:44:46 -0700 (PDT)
+ Sat, 22 Oct 2022 15:08:13 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Oct 2022 23:44:39 +0200
-Message-Id: <20221022214439.174830-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Oct 2022 00:08:07 +0200
+Message-Id: <20221022220808.191363-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pOimMhETlZEa9DMYCa87ORgM1lBFfep38D6PQLFy6+s=;
- b=JBpt5ULPCrXNI72wbK5BcTAF8UuKS2bpXfuBsUM4L8YjDsDdefIvlUqFbZw11xOYb5
- TtUYFSk40zmnPMVgBR6uI8Ks5tMyS6YxQ2cUSScgbQkwQGrQVNZbuBRsTU3D5kmybo1x
- CVk4QlF/RyM/FqiOczADKm+ZxHfXrhhABldS+UgxJssGP7J9LkTWdXDdKeWnhDwtLZw1
- 3JuIRF5SS/lYl+y0QqZKKEUudTaK8nWK6GdHCw8Q5ddQQavn+hvxhlY6a3Ue8dWbIi0Z
- GKeKTkGHr9R76oyFHva43rn3FG3JvrE/ssSbOODT7/Qnexdv4aeVtLdJGmIM/uyMRZfZ
- 0mvw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=CZjxK34mM8vM5GmlK6bX+y3VjNXt+7rkxCtoxRC9AsY=;
+ b=i5/UNNzA6AlEcqUJPf3ubVlPFCvf+036fkXmPCpcHJNGrLKFQBRaTgGcjJbWdnXNNt
+ f/VXZB3+fo6DC/E1IBHO5g5lKPu6i6TBrPoGM7YOxE3QF2ghuc/JCZ5oVGPZn7LoC0rL
+ BPBp3XISFlXtsRk120VDk+R0fe+irujApIBgVDfKXoWBm++jZj7EuKpf7IJvVBcppSpP
+ lAOSTqa4QWzUc3ohg6y0C85O8+d5A9cozv6QTGKnaGVIb9r4Om3gLrukAxKGtUyRpAVE
+ 22BmBWskCKfR+M9RFTcfH55LuSsmAA2ydjvvDCQ5WQ4RPdVTcf9LEewNStBKt4aFbX9D
+ Us2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JBpt5ULP
-Subject: [Buildroot] [PATCH v2, 1/1] package/usbredir: bump to version 0.13.0
+ header.a=rsa-sha256 header.s=20210112 header.b=i5/UNNzA
+Subject: [Buildroot] [PATCH 1/2] package/lv2: bump to version 1.18.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,134 +93,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-usbredirserver was dropped by
-https://gitlab.freedesktop.org/spice/usbredir/-/commit/f4ffdce329305da2803684776f7659083a530819
+- Update hash of COPYING (standard ISC text used since
+  https://github.com/lv2/lv2/commit/0030682770cdab7069c8c96e2fdf0e99f9b42b65)
+- meson must be used since
+  https://github.com/lv2/lv2/commit/d4a970f6962dda28133290194832b726b566ddab
 
-Add an option to enable tools (and usbredirect binary) as a replacement
-to usbredirserver
-
-https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.13.0/ChangeLog.md
+https://github.com/lv2/lv2/blob/v1.18.10/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Peter Seiderer):
- - Add an option to enable tools
+ package/lv2/lv2.hash |  6 +++---
+ package/lv2/lv2.mk   | 13 ++++++-------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
- Config.in.legacy               |  9 +++++++++
- package/usbredir/Config.in     | 11 ++++++-----
- package/usbredir/usbredir.hash |  4 ++--
- package/usbredir/usbredir.mk   | 21 +++++++--------------
- 4 files changed, 24 insertions(+), 21 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0e63d59a98..efe35fde36 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
- 
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_PACKAGE_USBREDIR_SERVER
-+	bool "usbredirserver removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_USBREDIR_TOOLS
-+	help
-+	  usbredirserver has been dropped by upstream since version
-+	  0.13.0. usbredir tools (which include usbredirect binary) has
-+	  been selected instead.
-+
- config BR2_KERNEL_HEADERS_5_17
- 	bool "kernel headers version 5.17.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
-index 8ce180a884..d546ac1025 100644
---- a/package/usbredir/Config.in
-+++ b/package/usbredir/Config.in
-@@ -15,18 +15,19 @@ config BR2_PACKAGE_USBREDIR
- 	  protocol.
- 
- 	  Note: only the library is installed, not the utilities. Say
--	  'y' below if you want the server too.
-+	  'y' below if you want the tools too.
- 
- 	  http://www.spice-space.org/page/UsbRedir
- 
- if BR2_PACKAGE_USBREDIR
- 
--config BR2_PACKAGE_USBREDIR_SERVER
--	bool "usbredirserver on target"
-+config BR2_PACKAGE_USBREDIR_TOOLS
-+	bool "Enable tools"
- 	help
- 	  If you want to serve usbredir requests on your target, say
--	  'y' here to have the usbredir server on the target.
-+	  'y' here to have the tools built and installed on the target
-+	  (including usbredirect binary).
- 
--	  Note: the server is not required to use the library.
-+	  Note: the tools are not required to use the library.
- 
- endif
-diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
-index f738c36690..577e08efba 100644
---- a/package/usbredir/usbredir.hash
-+++ b/package/usbredir/usbredir.hash
-@@ -1,5 +1,5 @@
--# https://spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz.sha256sum
--sha256  fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d  usbredir-0.12.0.tar.xz
-+# https://spice-space.org/download/usbredir/usbredir-0.13.0.tar.xz.sha256sum
-+sha256  4ba6faa02c0ae6deeb4c53883d66ab54b3a5899bead42ce4ded9568b9a7dc46e  usbredir-0.13.0.tar.xz
- 
- # Hash for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-index 6792a3e758..172f0d52a0 100644
---- a/package/usbredir/usbredir.mk
-+++ b/package/usbredir/usbredir.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lv2/lv2.hash b/package/lv2/lv2.hash
+index ed21620bee..0814958887 100644
+--- a/package/lv2/lv2.hash
++++ b/package/lv2/lv2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking signature
+-# https://lv2plug.in/spec/lv2-1.18.2.tar.bz2.asc
+-sha256  4e891fbc744c05855beb5dfa82e822b14917dd66e98f82b8230dbd1c7ab2e05e  lv2-1.18.2.tar.bz2
+-sha256  0b0b07d852e3ce7fa04986e141f73001bd7f260683968f0a19e02dbcc4131aa6  COPYING
++# https://lv2plug.in/spec/lv2-1.18.10.tar.xz.sig
++sha256  78c51bcf21b54e58bb6329accbb4dae03b2ed79b520f9a01e734bd9de530953f  lv2-1.18.10.tar.xz
++sha256  1e6bb175e193608b767ff25a4ed68b82c4db599491cf0d2694435cf60e9a4841  COPYING
+diff --git a/package/lv2/lv2.mk b/package/lv2/lv2.mk
+index 13ffaa34b0..2dde9b907c 100644
+--- a/package/lv2/lv2.mk
++++ b/package/lv2/lv2.mk
+@@ -4,18 +4,17 @@
  #
  ################################################################################
  
--USBREDIR_VERSION = 0.12.0
-+USBREDIR_VERSION = 0.13.0
- USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
- USBREDIR_SITE = http://spice-space.org/download/usbredir
- USBREDIR_LICENSE = LGPL-2.1+ (libraries)
-@@ -14,21 +14,14 @@ USBREDIR_DEPENDENCIES = host-pkgconf libusb
- USBREDIR_CONF_OPTS = \
- 	-Dgit_werror=disabled \
- 	-Dstack_protector=disabled \
--	-Dtests=disabled \
--	-Dtools=disabled
--
--ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
+-LV2_VERSION = 1.18.2
++LV2_VERSION = 1.18.10
+ LV2_SITE = https://lv2plug.in/spec
+-LV2_SOURCE = lv2-$(LV2_VERSION).tar.bz2
++LV2_SOURCE = lv2-$(LV2_VERSION).tar.xz
+ LV2_LICENSE = ISC
+ LV2_LICENSE_FILES = COPYING
+ LV2_DEPENDENCIES = host-pkgconf
+ LV2_INSTALL_STAGING = YES
+ 
+ LV2_CONF_OPTS += \
+-	--no-coverage \
+-	--no-check-links \
+-	--copy-headers
++	-Ddocs=disabled \
 +	-Dtests=disabled
  
-+ifeq ($(BR2_PACKAGE_USBREDIR_TOOLS),y)
- USBREDIR_LICENSE += , GPL-2.0+ (program)
- USBREDIR_LICENSE_FILES += COPYING
--
--else # BR2_PACKAGE_USBREDIR_SERVER != y
--
--define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
--	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
--endef
--USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
--
--endif # BR2_PACKAGE_USBREDIR_SERVER
-+USBREDIR_CONF_OPTS += -Dtools=enabled
-+else
-+USBREDIR_CONF_OPTS += -Dtools=disabled
-+endif
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+ LV2_DEPENDENCIES += cairo
+@@ -30,7 +29,7 @@ LV2_DEPENDENCIES += libgtk2
+ endif
  
- $(eval $(meson-package))
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LV2_CONF_OPTS += --no-plugins
++LV2_CONF_OPTS += -Dplugins=disabled
+ endif
+ 
+-$(eval $(waf-package))
++$(eval $(meson-package))
 -- 
 2.35.1
 
