@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20FC2C3A59D
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 16:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C368ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 16:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDA7881494;
-	Sun, 23 Oct 2022 16:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDA7881494
+	by smtp2.osuosl.org (Postfix) with ESMTP id A837B40395;
+	Sun, 23 Oct 2022 16:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A837B40395
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HM9POx7HGCSH; Sun, 23 Oct 2022 16:51:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zx7_RkVaJ3Sv; Sun, 23 Oct 2022 16:58:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93FED81490;
-	Sun, 23 Oct 2022 16:51:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93FED81490
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7D6C4038B;
+	Sun, 23 Oct 2022 16:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7D6C4038B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5E6F1BF4D5
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:51:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A1A401BF4D5
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FDC94085B
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:51:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FDC94085B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B7214081F
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B7214081F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2kYFiqlxxkET for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 16:51:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FEC4081F
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 47FEC4081F
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 16:51:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e2ae:5e11:f166:1b85])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C03C5B0052C;
- Sun, 23 Oct 2022 18:51:00 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Oct 2022 18:51:00 +0200
-Date: Sun, 23 Oct 2022 18:51:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Oguz Ozhan <oguz.ozhan@mind.be>
-Message-ID: <20221023165100.GB1058960@scaer>
-References: <20221021091531.2989489-1-oguz.ozhan@mind.be>
- <20221021091531.2989489-2-oguz.ozhan@mind.be>
+ with ESMTP id MwsmszHFXR4w for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 16:58:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25A4A4058C
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 25A4A4058C
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 16:58:06 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id v11so5235355wmd.1
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 09:58:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qzuX9kjzLag8t4TtprOOmr4eROPrdaTX+cDTQoqrGyY=;
+ b=8DFUulvqrfzKBtbRY46UKS+MP2bNFk+HrwOlOmvD+IGOw9LVf/NxPgf3LjYKdMeZjq
+ Ib8hdpOduyQUcQlPdcr9yyzL7pfDw+x1xOd2gNaTQYpwCpeC3bkso6fwRTP8r+HiVLdk
+ maVV9Fr46O0n6aWcbKNdW/zfwdDUlLzxpCub8l8jeikJuZFlf7ccrp/xG/VwUlvW9Q7/
+ 26l4lAvW/I0fQKG+HnkTZrRVSBINQpAXew7a6v6x1lQw6siVUqE0WzD8kMvG6hUvGvxj
+ NvURtx8wBWAyuYPvIfcnWfTXM9ZP6EEFejvwzXUDu0BbFECXKRVFre2AdGNnJVtM0i+I
+ nQLw==
+X-Gm-Message-State: ACrzQf19NBlU8M3sUdITctt+xxaF8b4f4HGdumF+NdPa2BhOdOE0eml8
+ kV7ghyfn+TwzEW+RBnDAmC6dWFfA3bE=
+X-Google-Smtp-Source: AMsMyM7Ip3EOSo++cBriPYHVMaZjSBDU+A1YA6bK3dZZsvw2lG5tlf1lr9x0Xvj8OAEe1OyFoU9F5w==
+X-Received: by 2002:a05:600c:4f84:b0:3c8:3424:8b1 with SMTP id
+ n4-20020a05600c4f8400b003c8342408b1mr7451370wmq.53.1666544283667; 
+ Sun, 23 Oct 2022 09:58:03 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ f18-20020adff452000000b0022584c82c80sm24015370wrp.19.2022.10.23.09.58.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Oct 2022 09:58:03 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 23 Oct 2022 18:57:58 +0200
+Message-Id: <20221023165758.24401-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221021091531.2989489-2-oguz.ozhan@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1666543865;
- bh=8XNgb7oN021K2hRbIcweZemvcnB/OwvK6LQ+LD9sZ0E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=E8m0tX7oy16qFgYRZn1X9B4DhUErA1MJJ6WOwIGYA8JFUuMmg8zORArFrzPrD4JP5
- X7P4/uTQQzQnVfK3WIyJWXRmmucnhkz3c3atnovIm3tk9AUZbqKpYTEeDi08/hj/TH
- kpmKxGdeSOWDDSsrMmas1YbAMYZpT13MdJgU8JALsvPS5q2/oSyFByn0196L0zIwQy
- zhlg2cE0mBdBJtArFWTACgV+a4hErdACRXwGAKNlEjCxjExJKDk6dhyLEbJisHAppS
- SD3M5Jzn9wSFKw3gbkQkjsj5IkfWLNV5BA7tiwsUlnZlFDOsuofiM6v8WTz4rJvRM3
- 7cGFi0wq3eYuQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qzuX9kjzLag8t4TtprOOmr4eROPrdaTX+cDTQoqrGyY=;
+ b=FE42GlBf1jNLLQ+UxSZON9gUecGGb5oVDcOjCfIZh4p5MQEtZgsXhsWkH+UOA8czhY
+ MMmgoh0aIVgoPjJlXcSMCUNQ+KdeVWBk5yjWhMNS6JbaUmyiACjeOdvO6OYTymLO6cj7
+ 6qPFEJzX8tz44Kv8l50LNBZ32tX3ez8vaZswisXLFNrbYfsU0GWSxI/6XlE5GoWPlXbr
+ b1J9cBh5sHZFIHn7FncNtE36ayLAujqcgzrtUWGUKv4922Fe0QCNbx/i6o1Sa0Tm2oZX
+ fB9S98jIaDTa86NLJ8mstT78h7Wxddn8A2uXmJyqyODYCC49B6vZY+YBlhSabiJnwlrU
+ xr5A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=E8m0tX7o
-Subject: Re: [Buildroot] [PATCH 2/3] support/testing: replace nose2 with
- pytest - run-tests
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=FE42GlBf
+Subject: [Buildroot] [PATCH 1/1] package/libxmlpp: bump to version 5.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,293 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Oguz Ozhan <oguz.ozhan@mind.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Oguz, All,
+https://github.com/libxmlplusplus/libxmlplusplus/blob/5.0.2/NEWS
 
-On 2022-10-21 11:15 +0200, Oguz Ozhan spake thusly:
-> From: Oguz Ozhan <oguz.ozhan@mind.com>
-> 
-> - From web page of nose2:
-> (https://docs.nose2.io/en/latest/)
-> nose2 vs pytest:
->   - pytest is an excellent test framework and we encourage users to consider it for new projects.
->   - It has a bigger team of maintainers and a larger community of users.
-> 
-> - pytest is more robust and has more ability compared to nose2
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libxmlpp/libxmlpp.hash | 4 ++--
+ package/libxmlpp/libxmlpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Please see my comment in patch 1 about providing a rationale for the
-switch.
-
-Please fold your commit logs at 72 chars.
-
-> - Changes in this patch:
->   - run-tests modified to use pytest instead of nose2 to call tests. A corresponding Collector class added for pytest to list the available tests
->   - nose2 plugins removed which are not required anymore
-
-Don't describe the changes, explain them.
-
-E.g. "nose2 plugins removed which are not required anymore" we can see
-they get removed, and since the change is about switching away from
-nose2, it is obvious they get removed because they are not used anymore.
-
->   - in test_iso9660.py, local test_ routine names changed to not be accepted as test_ cases via pytest
-
-This last part should be a patch by itself, coming first in the series,
-as it can be applied without doing the conversion yet.
-
-I have only had a cursory look at the changes, they look quite OK.
-
-Be sure to run "make check-flake8", I think I could spot too many lines
-at one place...
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Oguz Ozhan <oguz.ozhan@mind.be>
-> ---
->  support/testing/conf/unittest.cfg        |  3 --
->  support/testing/run-tests                | 28 ++++++++++-------
->  support/testing/tests/fs/test_iso9660.py | 40 ++++++++++++------------
->  3 files changed, 36 insertions(+), 35 deletions(-)
-> 
-> diff --git a/support/testing/conf/unittest.cfg b/support/testing/conf/unittest.cfg
-> index 4f516fb80a..0dfffcfbda 100644
-> --- a/support/testing/conf/unittest.cfg
-> +++ b/support/testing/conf/unittest.cfg
-> @@ -1,5 +1,2 @@
-> -[unittest]
-> -plugins = nose2.plugins.mp
-> -
->  [multiprocess]
->  always-on = True
-> diff --git a/support/testing/run-tests b/support/testing/run-tests
-> index bf40019362..f887bc6715 100755
-> --- a/support/testing/run-tests
-> +++ b/support/testing/run-tests
-> @@ -4,10 +4,16 @@ import multiprocessing
->  import os
->  import sys
->  
-> -import nose2
-> +import pytest
->  
->  from infra.basetest import BRConfigTest
->  
-> +class PyTestCollector:
-> +    def __init__(self):
-> +        self.collected = []
-> +    def pytest_collection_modifyitems(self, items):
-> +        for item in items:
-> +            self.collected.append(item.nodeid)
->  
->  def main():
->      parser = argparse.ArgumentParser(description='Run Buildroot tests')
-> @@ -42,12 +48,10 @@ def main():
->          BRConfigTest.logtofile = False
->  
->      if args.list:
-> -        print("List of tests")
-> -        nose2.discover(argv=[script_path,
-> -                             "-s", test_dir,
-> -                             "-v",
-> -                             "--collect-only"],
-> -                       plugins=["nose2.plugins.collect"])
-> +        collect_plugin = PyTestCollector()
-> +        pytest.main(['--collect-only', '-p', 'no:terminal', test_dir], plugins=[collect_plugin])
-> +        for nodeid in collect_plugin.collected:
-> +            print(nodeid)
->          return 0
->  
->      if args.download is None:
-> @@ -106,15 +110,15 @@ def main():
->          return 1
->      BRConfigTest.timeout_multiplier = args.timeout_multiplier
->  
-> -    nose2_args = ["-v",
-> -                  "-N", str(args.testcases),
-> -                  "-s", test_dir,
-> +    pytest_args = ["--workers", str(args.testcases),
-> +                  "--rootdir", test_dir,
->                    "-c", os.path.join(test_dir, "conf/unittest.cfg")]
->  
->      if args.testname:
-> -        nose2_args += args.testname
-> +        pytest_args += args.testname
-> +
-> +    pytest.main(pytest_args)
->  
-> -    nose2.discover(argv=nose2_args)
->  
->  
->  if __name__ == "__main__":
-> diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-> index 692291267e..d2390cccf1 100644
-> --- a/support/testing/tests/fs/test_iso9660.py
-> +++ b/support/testing/tests/fs/test_iso9660.py
-> @@ -25,7 +25,7 @@ BASIC_CONFIG = \
->      """.format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
->  
->  
-> -def test_mount_internal_external(emulator, builddir, internal=True, efi=False):
-> +def do_test_mount_internal_external(emulator, builddir, internal=True, efi=False):
->      img = os.path.join(builddir, "images", "rootfs.iso9660")
->      if efi:
->          efi_img = os.path.join(builddir, "images", "OVMF.fd")
-> @@ -43,7 +43,7 @@ def test_mount_internal_external(emulator, builddir, internal=True, efi=False):
->      return exit_code
->  
->  
-> -def test_touch_file(emulator):
-> +def do_test_touch_file(emulator):
->      _, exit_code = emulator.run("touch test")
->      return exit_code
->  
-> @@ -63,11 +63,11 @@ class TestIso9660Grub2External(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/grub2.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=False)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 1)
->  
->  
-> @@ -84,11 +84,11 @@ class TestIso9660Grub2ExternalCompress(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/grub2.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=False)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 1)
->  
->  
-> @@ -104,11 +104,11 @@ class TestIso9660Grub2Internal(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/grub2.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=True)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 0)
->  
->  
-> @@ -127,12 +127,12 @@ class TestIso9660Grub2EFI(infra.basetest.BRTest):
->                     infra.filepath("conf/grub2.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=True,
->                                                   efi=True)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 0)
->  
->  
-> @@ -155,22 +155,22 @@ class TestIso9660Grub2Hybrid(infra.basetest.BRTest):
->                     infra.filepath("conf/grub2.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=True,
->                                                   efi=False)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 0)
->  
->          self.emulator.stop()
->  
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=True,
->                                                   efi=True)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 0)
->  
->  
-> @@ -189,11 +189,11 @@ class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/isolinux.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=False)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 1)
->  
->  
-> @@ -209,11 +209,11 @@ class TestIso9660SyslinuxExternalCompress(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/isolinux.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=False)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 1)
->  
->  
-> @@ -228,9 +228,9 @@ class TestIso9660SyslinuxInternal(infra.basetest.BRTest):
->          """.format(infra.filepath("conf/isolinux.cfg"))
->  
->      def test_run(self):
-> -        exit_code = test_mount_internal_external(self.emulator,
-> +        exit_code = do_test_mount_internal_external(self.emulator,
->                                                   self.builddir, internal=True)
->          self.assertEqual(exit_code, 0)
->  
-> -        exit_code = test_touch_file(self.emulator)
-> +        exit_code = do_test_touch_file(self.emulator)
->          self.assertEqual(exit_code, 0)
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libxmlpp/libxmlpp.hash b/package/libxmlpp/libxmlpp.hash
+index 50238eff00..a974de57e3 100644
+--- a/package/libxmlpp/libxmlpp.hash
++++ b/package/libxmlpp/libxmlpp.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/5.0/libxml++-5.0.1.sha256sum
+-sha256  15c38307a964fa6199f4da6683a599eb7e63cc89198545b36349b87cf9aa0098  libxml++-5.0.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/5.0/libxml++-5.0.2.sha256sum
++sha256  7c17cc3e5a2214314dee5a1354f4b436f266ded6185232a0534f352a76240d5a  libxml++-5.0.2.tar.xz
+ 
+ # Hash for license file
+ sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/libxmlpp/libxmlpp.mk b/package/libxmlpp/libxmlpp.mk
+index 874577eb1f..3db711826e 100644
+--- a/package/libxmlpp/libxmlpp.mk
++++ b/package/libxmlpp/libxmlpp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBXMLPP_VERSION_MAJOR = 5.0
+-LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
++LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).2
+ LIBXMLPP_LICENSE = LGPL-2.1 (library), LGPL-2.0+ (examples)
+ LIBXMLPP_LICENSE_FILES = COPYING
+ LIBXMLPP_SOURCE = libxml++-$(LIBXMLPP_VERSION).tar.xz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
