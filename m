@@ -1,87 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C25B3C3A59D
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 21:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B950C3A59D
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 22:14:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74D0740180;
-	Sun, 23 Oct 2022 21:49:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74D0740180
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F38081402;
+	Sun, 23 Oct 2022 22:14:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F38081402
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RwpER9JqwzlM; Sun, 23 Oct 2022 21:49:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ki-FUpDMzZZ6; Sun, 23 Oct 2022 22:14:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9280040134;
-	Sun, 23 Oct 2022 21:49:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9280040134
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 862961BF33F
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 21:49:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 782938139A;
+	Sun, 23 Oct 2022 22:14:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 782938139A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D18001BF3F9
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 22:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6EF8F40134
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 21:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EF8F40134
+ by smtp4.osuosl.org (Postfix) with ESMTP id B8714403CC
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 22:14:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8714403CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8nGlTIVOWx19 for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 21:49:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C20C340017
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C20C340017
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 21:49:08 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id h9so2140269wrt.0
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 14:49:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2kVal6q+8+Wv/yYZ5S73wXFk6NG6z/7dYP3dR74DRjk=;
- b=7M/jqLif46sidIR/aA9UGqfn1V2QIohs7kj0oa+kq517cdQejLi2sDriMl/BDctobq
- ttcz1cHBppoHvsD4I4PrwJTFDaOAX1pbLPPeMCmC7pPN7n+WjxmHMnmvv39RplziNKdX
- LZYbHvtiEWtHbrqInQjYGmwOaNuEAH+45c7g+9/hBk88bTzwmLyYQiMwFicWmI5hC4eq
- U42/1mjT/L33scMipvBmAEOoaP5SbLN27Y4dXE95dBg7e5tlk/u/B3hDwkMUm/KQYS8V
- qkzCMuDveKnsZmJzZpF/N+A9smkxLOSeV1TUeWis/iNYZI24vNWFpoZWAcbwbQhh5zSM
- R7Pg==
-X-Gm-Message-State: ACrzQf3RPKLMRYSfQaxmHEsR/dhyGgt0U3t5FQXKjtLRzlcRHHRnIjxP
- 7Vlo94cok7Sf0xMpXOfNdLoocwAtaKA=
-X-Google-Smtp-Source: AMsMyM7EVUOhO2RPr2dq3RxQD/jZcR6om+q3jbS9xzI9xV+g4U30aNniPZFxgFUfeLln9nTdpBrw8g==
-X-Received: by 2002:a05:6000:16c9:b0:235:d203:7378 with SMTP id
- h9-20020a05600016c900b00235d2037378mr13287135wrf.353.1666561746665; 
- Sun, 23 Oct 2022 14:49:06 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- q12-20020a05600c46cc00b003c70191f267sm6454882wmo.39.2022.10.23.14.49.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Oct 2022 14:49:05 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ipWd2ktDFK65 for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 22:14:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98C294038C
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98C294038C
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 22:14:27 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.87.206])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id mjEfoYayHJpY4mjEfoOKdt; Mon, 24 Oct 2022 00:14:26 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Oct 2022 23:49:02 +0200
-Message-Id: <20221023214902.85185-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Mon, 24 Oct 2022 00:14:25 +0200
+Message-Id: <20221023221425.395087-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2kVal6q+8+Wv/yYZ5S73wXFk6NG6z/7dYP3dR74DRjk=;
- b=C//zXtHg58aUGncoAcfmtGnVJ5Ma5FPdn7EyJ5N8yNdC4dua4H8JDszOrefuWTXblq
- Vc9pjAcznr8sUhGyDhzwDyBUixEVicdkLuV8JuAgXGODEbBFaTpBE7Gt5fLXNAzMoUY6
- 7pHSL0rLnY2znTdeByjn3xuj4iGIa2pUv3KYIo6eubQMdmCyI/ba+t4nNlFl8DqOLHXX
- PwS4NdnzXPCklgisuJl7y2xMAJJO1+KhbrhdDN7O7xpWj0JBBBjLJCFIa8qeD5mShDby
- 9ranTV5JCsL1GhQtIgUzxBo5hK4OtBsGoZFmvFlD1XSG8teqCp7zpeDa5OV7uEkmIGE+
- Z+tw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=C//zXtHg
-Subject: [Buildroot] [PATCH 1/1] package/file: bump to version 5.43
+X-CMAE-Envelope: MS4xfCJG5/GiHcfj3zIHhuwgY0PwHxy/kYOS+N6ms1qfna4RyENfD+D6qp/bwLR9Rqg2+HM97vPLGFvRlq4FMHkF+lo2XLYWUaLwNehp+hcvA7BUqI4H0qh1
+ +3w4/m/7LbAOsxlcTafEDkhC6xwtzXK3EuGFS76nFNYgKrVFKOQzAyK18WFWIgP9VVrsqcdPk3cQNMvVIk30+0a3G2i+QtdT/vpEFqTbgqgSXEd9zp/dYBuO
+ 5w2Opg3V9yBcMZhtcUZgGxwX2P7+rHjgJFGU+aTy+lALbpDBvreCYX07/d3rtB+X
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1666563266; bh=H5d+D2ZudxNZo484PQInOzW1eN67KCn7AqG7Cma2nQM=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=oF90gYX/VAC1A9Q4Nd+Tmgwwd2bWBh8PvOioMEbwx7SP6QxXgSU70muz9o7MdJnEQ
+ hTB5q5kSejc6ftSbQ7A3AWgLWAlgFWnF964QVPahJcKsstorn6BDnY0IyyRATaXyzS
+ XL+Ij3B/VhE6tY21P9SDG77VUEmztkXoUtCyjD+siUG5emW8mAgWEorw8Gyveb7m1q
+ 05Tl936U0ijYbHssZmoLwpfsvGDXvdrmfviFvtFnMmm20dQXXDWlg9nA22+rFyYP4H
+ 1AZgv5GkOl8kH/inhYKARkwfGK6cCkCSRt4t1GWcZjL0P0NsDPUMa9rbT9LfJvH2eZ
+ tCMM+safJilBQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=oF90gYX/
+Subject: [Buildroot] [PATCH] package/rtl8723bu: fix build failure on PowerPc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +72,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update hash of src/vasprintf.c (typo fixed with
-https://github.com/file/file/commit/42a6724bf9a9af6b1560100282fbe95341cf7125)
+Add local patch(pending upstream[0]) to fix build failure with PowerPc due
+to a package re-defition of get_ra() that is only defined in Linux PowerPc
+implementation.
 
-https://github.com/file/file/blob/FILE5_43/ChangeLog
+[0]: https://github.com/lwfinger/rtl8723bu/pull/192
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/99571b055e6185d57f89b90821b76099ebc766ed/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/file/file.hash | 6 +++---
- package/file/file.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...uild-failure-on-PowerPc-architecture.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 33875776eb..49fa9e1e1b 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after verifying signature
--# ftp://ftp.astron.com/pub/file/file-5.41.tar.gz.asc
-+# ftp://ftp.astron.com/pub/file/file-5.43.tar.gz.asc
- # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
--sha256  13e532c7b364f7d57e23dfeea3147103150cb90593a57af86c10e4f6e411603f  file-5.41.tar.gz
-+sha256  8c8015e91ae0e8d0321d94c78239892ef9dbc70c4ade0008c0e95894abfb1991  file-5.43.tar.gz
- sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
- sha256  4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
--sha256  c4fa92d6504b88484a12140fe3e24b9b29b0112717f94b1ff4205d54828b1c70  src/vasprintf.c
-+sha256  cc3d8704489d08eaefcaee8c639cc6436c6f0f6b2b03986d3ba7521a1a1d2fc9  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index c06975460f..9b751e2696 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.41
-+FILE_VERSION = 5.43
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+diff --git a/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+new file mode 100644
+index 0000000000..2665a6d031
+--- /dev/null
++++ b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+@@ -0,0 +1,46 @@
++From dde7bddfddddb7212f2d9671391e2096d770c449 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 23 Oct 2022 22:57:41 +0200
++Subject: [PATCH] Fix build failure on PowerPc architecture
++
++In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
++that has a completely different purpose. So let's rename local get_ra()
++to wifi_get_ra() to make it different from Linux's get_ra().
++
++[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h#n49
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ hal/rtl8723bu_recv.c | 2 +-
++ include/wifi.h       | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/hal/rtl8723bu_recv.c b/hal/rtl8723bu_recv.c
++index a2fc82b..39e5044 100644
++--- a/hal/rtl8723bu_recv.c
+++++ b/hal/rtl8723bu_recv.c
++@@ -288,7 +288,7 @@ void update_recvframe_phyinfo(
++ 		!pattrib->icv_err && !pattrib->crc_err &&
++ 		_rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN));
++ 
++-	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
+++	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(wifi_get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
++ 
++ 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
++ 	sa = get_ta(wlanhdr);
++diff --git a/include/wifi.h b/include/wifi.h
++index 5dc32eb..23578cc 100644
++--- a/include/wifi.h
+++++ b/include/wifi.h
++@@ -373,7 +373,7 @@ __inline static int IS_MCAST(unsigned char *da)
++ 		return _FALSE;
++ }
++ 
++-__inline static unsigned char * get_ra(unsigned char *pframe)
+++__inline static unsigned char * wifi_get_ra(unsigned char *pframe)
++ {
++ 	unsigned char	*ra;
++ 	ra = GetAddr1Ptr(pframe);
++-- 
++2.34.1
++
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
