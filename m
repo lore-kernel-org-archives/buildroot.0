@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7624BC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 07:04:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86139ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 07:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF630819F6;
-	Sun, 23 Oct 2022 07:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF630819F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A10560BBD;
+	Sun, 23 Oct 2022 07:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A10560BBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id REmOQl8WS0o1; Sun, 23 Oct 2022 07:04:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B8DblQQb1Vo8; Sun, 23 Oct 2022 07:20:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06AF9819D6;
-	Sun, 23 Oct 2022 07:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06AF9819D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 475DA605EC;
+	Sun, 23 Oct 2022 07:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 475DA605EC
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19A361BF356
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 07:04:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2455C1BF356
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 07:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8497819D6
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 07:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8497819D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3A4081AAB
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 07:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A4081AAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7SMmkOQOWGKk for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 07:04:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18E9A819D1
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch
- [185.70.40.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 18E9A819D1
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 07:04:41 +0000 (UTC)
-Date: Sun, 23 Oct 2022 07:04:28 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <lY8yl97I8zmKInD6JUak95yumYNlqBm_os7CmKyW0KbBQLgqRfV_OAobCkbkYk-UU-fX62yqO-A7zDnwy5rJZzAUvk1U_Xjh4942ofJWB3w=@protonmail.com>
-Feedback-ID: 6956783:user:proton
+ with ESMTP id IL9fZ7WpPBTO for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 07:19:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37D8B81AA7
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 37D8B81AA7
+ for <buildroot@busybox.net>; Sun, 23 Oct 2022 07:19:59 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id a3so11120782wrt.0
+ for <buildroot@busybox.net>; Sun, 23 Oct 2022 00:19:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FjyDQ0zMY8I7DTKl8BYfMY2gVreO5IYevWyba1r4s8w=;
+ b=A+V2ISg6uGJUs2VMeq4xJESP8fgSd2++S6chCA1KWktCop9cCYtQcAUYal8kH1VgVJ
+ 36ypyHAe7AsRixsAuf7by6HA8gVjp0FXoGl3i/WyLGrtwbrLFlEcTRUn39oalzajPp9+
+ Zt/0+6+FfrMF7f3eUjEW1Klam5mhcsTdS3KHWfBatzBcZ6hbBG76hFLIvTV9zKzcv7l6
+ sFQwZfgbEIfs59QSPbRS9OMVK7lryUbvo4EoX9UdUub7JX/kwCzEwXi5DiAroJJlvdCn
+ OgXT+UfEVjcYS2QPiFRxU9g1JW0J4BEUDjE7SsNDk7jvnmTSY79rnG88pQwIrIeljNGf
+ Xekw==
+X-Gm-Message-State: ACrzQf0HDou2uM81JgPa53afLAqB2IOjzFZa/2Z/SX2rkVoW+t1+EdCO
+ XlJ3DT6BW6NUxJT7EJ9ICETfhyqhIQQ=
+X-Google-Smtp-Source: AMsMyM4k/gyv4LiSXoWL5RhPjktGsPXlWOD+hG7u/H3pDwXThIJPLOtVvegJMaJQl2gYmklJp3YTlA==
+X-Received: by 2002:a05:6000:2c1:b0:22e:7b7e:de28 with SMTP id
+ o1-20020a05600002c100b0022e7b7ede28mr16863680wry.123.1666509597105; 
+ Sun, 23 Oct 2022 00:19:57 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ z3-20020a05600c0a0300b003a682354f63sm4974781wmp.11.2022.10.23.00.19.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Oct 2022 00:19:56 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun, 23 Oct 2022 09:19:46 +0200
+Message-Id: <20221023071946.433502-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=protonmail.com; 
- s=protonmail3; t=1666508679; x=1666767879;
- bh=DYCCp1up4EOCENOW1iDBeEfXGV8qbiSr8HrJ0E/LxOk=;
- h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
- Subject:Reply-To:Feedback-ID:Message-ID;
- b=uWLDpOmwmL0vNzEsM9yUpgmFedBM3u2QHfFsYiSw5sCDM+5xOm/rsAkOKbEy6bcyg
- TKnh6ZZgVtW3YsEb3pxPnREt/EIM9SkSIAKIFaWhmnx9sAti9hz7xqGSIoytGvoc+V
- wmgNQthY6BUlD8o2LlGYpI6y9M1GLzvDtLziHCyQOKUs0p1UrQcL0O/Fxu37dAyk6E
- u2gXR5976asqCuwvgn72jwkKNsuTNnx/C4vqxeXDdFy+e3fZ4NZxw2PoncTXwdK9NA
- QfC2llBrpRHxlONlc1yp0eWODzZ/iXy3YdfGb1GKOpC63s24oseZJ8kD5L2IkFjp1C
- fSbCNVAbaqlFQ==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=FjyDQ0zMY8I7DTKl8BYfMY2gVreO5IYevWyba1r4s8w=;
+ b=pLP/+h1X0HqRymS45UrC3pZnB9qIs0Fw9Xq5DHRSYZigDYVmPPON2qoNvaXaNiUdoq
+ CTvNAZf8I3UFnOYhRdhXBXoOmyOxa4/hjkUN7InLmESIvmHfN9ueLB6KiWF3SmDeQVK/
+ 9nSvA3PMrJm9NemNUd5g5o6DGLb3e6A8ACjVT22MMV6YjB7de7h2+vuJyllODL+NIIrJ
+ T0Bu05b+daK7oW3+Gfcj54SUsm50bn//UCU20RCQJUUmfjYVaqskmSMepzQg1VsDsYN0
+ vbbaQetcGHSukaI0YTFiEPPmAOMXoigEbQakWfMnp0hoxuwNfzzFbtu/CSQ4bgTHeDwR
+ 012Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com
- header.a=rsa-sha256 header.s=protonmail3 header.b=uWLDpOmw
-Subject: [Buildroot] [PATCH 1/1] package/casync: bump to latest git commit
- (0efa7abffe5f)
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=pLP/+h1X
+Subject: [Buildroot] [PATCH] package/lua-lyaml: bump to version 6.2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,149 +94,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yair Ben-Avraham via buildroot <buildroot@buildroot.org>
-Reply-To: Yair Ben-Avraham <yairba@protonmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patches (merged to main)
+diff LICENCE:
+-Copyright (C) 2013-2020 Gary V. Vaughan
++Copyright (C) 2013-2022 Gary V. Vaughan
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...castore-fix-build-without-lzma-or-xz.patch | 35 ------------
- ...tall-udev-rules-without-udev-support.patch | 53 -------------------
- package/casync/casync.hash                    |  2 +-
- package/casync/casync.mk                      |  2 +-
- 4 files changed, 2 insertions(+), 90 deletions(-)
- delete mode 100644 package/casync/0001-castore-fix-build-without-lzma-or-xz.patch
- delete mode 100644 package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch
+ package/lua-lyaml/lua-lyaml.hash | 4 ++--
+ package/lua-lyaml/lua-lyaml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch b/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch
-deleted file mode 100644
-index a528b1244c..0000000000
---- a/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 06b667de02df34e3efa1864b4031853bd4ee010d Mon Sep 17 00:00:00 2001
--From: Yair Ben-Avraham <yairba@protonmail.com>
--Date: Sun, 10 Jan 2021 06:34:58 +0100
--Subject: [PATCH] castore: fix build without lzma or xz
--
--castore.c unconditioanlly includes lzma.h, but lzma support if optional.
--Furthermore, castore.c does not need anything from lzma.h.
--
--Drop the include altogether.
--
--Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
--[yann.morin.1998@free.fr:
--  - lzma.h is not needed at all
--  - rewrite commit log accordingly
--]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- src/castore.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/castore.c b/src/castore.c
--index c290dfd..b2e5320 100644
----- a/src/castore.c
--+++ b/src/castore.c
--@@ -2,7 +2,6 @@
-- 
-- #include <dirent.h>
-- #include <fcntl.h>
---#include <lzma.h>
-- #include <sys/stat.h>
-- #include <unistd.h>
-- 
---- 
--2.25.1
--
-diff --git a/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch b/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch
-deleted file mode 100644
-index 838b065571..0000000000
---- a/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From e3f683dc3013d14bddb9f9ec5bdc31367dc51a1c Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 10 Jan 2021 10:44:39 +0100
--Subject: [PATCH] build: don't install udev rules without udev support
--
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- meson.build | 15 ++++++++-------
-- 1 file changed, 8 insertions(+), 7 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index aac7727..92be1ea 100644
----- a/meson.build
--+++ b/meson.build
--@@ -151,6 +151,11 @@ conf.set10('HAVE_SELINUX', get_option('selinux'))
-- 
-- if get_option('udev')
--         libudev = dependency('libudev')
--+        udevrulesdir = get_option('udevrulesdir')
--+        if udevrulesdir == ''
--+                udev = dependency('udev', required : false)
--+                udevrulesdir = join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
--+        endif
-- else
--         libudev = []
-- endif
--@@ -175,12 +180,6 @@ subdir('test')
-- 
-- includes = include_directories('src')
-- 
---udevrulesdir = get_option('udevrulesdir')
---if udevrulesdir == ''
---        udev = dependency('udev', required : false)
---        udevrulesdir = join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
---endif
---
-- subdir('shell-completion/bash')
-- subdir('doc')
-- 
--@@ -318,7 +317,9 @@ udev_rule = configure_file(
--           input : 'src/75-casync.rules.in',
--           configuration : substs)
-- 
---install_data(udev_rule, install_dir : udevrulesdir)
--+if get_option('udev')
--+        install_data(udev_rule, install_dir : udevrulesdir)
--+endif
-- 
-- ############################################################
-- 
---- 
--2.25.1
--
-diff --git a/package/casync/casync.hash b/package/casync/casync.hash
-index dbb85520de..469beb5b6c 100644
---- a/package/casync/casync.hash
-+++ b/package/casync/casync.hash
+diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
+index af3d0ae6d..a8599bc3d 100644
+--- a/package/lua-lyaml/lua-lyaml.hash
++++ b/package/lua-lyaml/lua-lyaml.hash
 @@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  d07f43e70e3c466152033da4c55c065f815d3025234a046c2bce1cfe4ac7d273  casync-4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc.tar.gz
-+sha256  5d58def4c5ca902b35a97178d4619b9298a35b27d5748a2cc346bd36c2e38e9c  casync-0efa7abffe5fffbde8c457d3c8fafbdde0bb6e4f.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/casync/casync.mk b/package/casync/casync.mk
-index bb9bd8ccac..af010a7ece 100644
---- a/package/casync/casync.mk
-+++ b/package/casync/casync.mk
+ # locally computed
+-sha256  9bb489cefae48b150d66f6bab4141d8d5831fcb7465bfc52a9845fa01efc63b0  lua-lyaml-6.2.7.tar.gz
+-sha256  81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
++sha256  c6169f516ff2a8da96d55aa3a087e718edf7bceb2f1cae2def4e65cd2b41ac2d  lua-lyaml-6.2.8.tar.gz
++sha256  796d267e51d61652c55694d21108e7352e98b1ed489ab7516acc07102157e08d  LICENSE
+diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
+index 77980f531..00a868ec2 100644
+--- a/package/lua-lyaml/lua-lyaml.mk
++++ b/package/lua-lyaml/lua-lyaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
-+CASYNC_VERSION = 0efa7abffe5fffbde8c457d3c8fafbdde0bb6e4f
- CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
- CASYNC_LICENSE = LGPL-2.1+
- CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
+-LUA_LYAML_VERSION = 6.2.7
++LUA_LYAML_VERSION = 6.2.8
+ LUA_LYAML_NAME_UPSTREAM = lyaml
+ LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
+ LUA_LYAML_LICENSE = MIT
 -- 
-2.30.2
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
