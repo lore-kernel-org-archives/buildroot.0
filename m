@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DF9AECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 20:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1A22C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 20:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11DD7606E6;
-	Sun, 23 Oct 2022 20:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11DD7606E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 976EB606E6;
+	Sun, 23 Oct 2022 20:29:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 976EB606E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zbV_FF4gtW3u; Sun, 23 Oct 2022 20:29:32 +0000 (UTC)
+	with ESMTP id LpWztax2aZNv; Sun, 23 Oct 2022 20:29:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40AB16066D;
-	Sun, 23 Oct 2022 20:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40AB16066D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D3EF31BF38D
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:29:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0F6D60768;
+	Sun, 23 Oct 2022 20:29:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0F6D60768
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DAE31BF38D
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCF3B813A2
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:29:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCF3B813A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 186844034A
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:29:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 186844034A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GrjZxrKdQV7k for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E0Ie8keCTrH9 for <buildroot@lists.busybox.net>;
  Sun, 23 Oct 2022 20:29:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04A238139E
+ by smtp4.osuosl.org (Postfix) with ESMTP id F161E40334
  for <buildroot@buildroot.org>; Sun, 23 Oct 2022 20:29:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04A238139E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F161E40334
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E31AC86F54; Sun, 23 Oct 2022 20:29:23 +0000 (UTC)
+ id D759386FA4; Sun, 23 Oct 2022 20:29:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Oct 2022 22:28:23 +0200
+Date: Sun, 23 Oct 2022 22:28:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e78c580e2361f1d1055bc81e1a822d29c021b1b0
-X-Git-Newrev: 8a08b862c6c22e7a7323efb82c8f3b3a662498f6
+X-Git-Oldrev: cd0916bf80b7e4a5369354c1e428bf78937d64f8
+X-Git-Newrev: e78c580e2361f1d1055bc81e1a822d29c021b1b0
 X-Patchwork-Hint: ignore
-Message-Id: <20221023202923.E31AC86F54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdmtx: bump to version 0.7.7
+Message-Id: <20221023202923.D759386FA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libunistring: bump to version 1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a08b862c6c22e7a7323efb82c8f3b3a662498f6
+commit: https://git.buildroot.net/buildroot/commit/?id=e78c580e2361f1d1055bc81e1a822d29c021b1b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/dmtx/libdmtx/compare/v0.7.5...v0.7.7
+https://savannah.gnu.org/projects/libunistring/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdmtx/libdmtx.hash | 2 +-
- package/libdmtx/libdmtx.mk   | 2 +-
+ package/libunistring/libunistring.hash | 2 +-
+ package/libunistring/libunistring.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdmtx/libdmtx.hash b/package/libdmtx/libdmtx.hash
-index 98eef9aeeb..8b176d737a 100644
---- a/package/libdmtx/libdmtx.hash
-+++ b/package/libdmtx/libdmtx.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  be0c5275695a732a5f434ded1fcc232aa63b1a6015c00044fe87f3a689b75f2e  libdmtx-0.7.5.tar.gz
-+sha256  7aa62adcefdd6e24bdabeb82b3ce41a8d35f4a0c95ab0c4438206aecafd6e1a1  libdmtx-0.7.7.tar.gz
- sha256  fcc277b7302645322c63de22b9b0bdae2df3dfa7d6cbc0d5bed7a4d3f1a9af79  LICENSE
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-index 04e089f1f7..00d37fb94e 100644
---- a/package/libdmtx/libdmtx.mk
-+++ b/package/libdmtx/libdmtx.mk
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 81ffd4fb0c..8267d56327 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
+-sha256  5bab55b49f75d77ed26b257997e919b693f29fd4a1bc22e0e6e024c246c72741  libunistring-1.0.tar.xz
++sha256  827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98  libunistring-1.1.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index a69eacd676..8d5b6f54ec 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDMTX_VERSION = 0.7.5
-+LIBDMTX_VERSION = 0.7.7
- LIBDMTX_SITE = $(call github,dmtx,libdmtx,v$(LIBDMTX_VERSION))
- LIBDMTX_LICENSE = BSD-2-Clause or Special Permission
- LIBDMTX_LICENSE_FILES = LICENSE
+-LIBUNISTRING_VERSION = 1.0
++LIBUNISTRING_VERSION = 1.1
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
