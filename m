@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B946ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 16:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BEB0ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 16:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B62D681494;
-	Sun, 23 Oct 2022 16:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B62D681494
+	by smtp4.osuosl.org (Postfix) with ESMTP id 199D04081F;
+	Sun, 23 Oct 2022 16:50:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 199D04081F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9VYQddrsRYhA; Sun, 23 Oct 2022 16:44:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cTAksSseblu2; Sun, 23 Oct 2022 16:50:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7F2381491;
-	Sun, 23 Oct 2022 16:44:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7F2381491
+	by smtp4.osuosl.org (Postfix) with ESMTP id CECFA4085B;
+	Sun, 23 Oct 2022 16:50:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CECFA4085B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C75291BF4D5
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:44:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 836281BF4D5
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A02C2404B9
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:44:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A02C2404B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C8C64085B
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 16:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C8C64085B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S-W8PMzEdlAC for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 16:44:53 +0000 (UTC)
+ with ESMTP id hAe5bZELK8Ij for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 16:50:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A181B403EC
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A181B403EC
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 16:44:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e2ae:5e11:f166:1b85])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5752BB00535;
- Sun, 23 Oct 2022 18:44:44 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Oct 2022 18:44:44 +0200
-Date: Sun, 23 Oct 2022 18:44:44 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Oguz Ozhan <oguz.ozhan@mind.be>
-Message-ID: <20221023164444.GA1058960@scaer>
-References: <20221021091531.2989489-1-oguz.ozhan@mind.be>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 839DC4081F
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 839DC4081F
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 16:50:36 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id v1so12168601wrt.11
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 09:50:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=A1rtFoAqrbkireQfPcd6jpaanRRtNYEv703ncCX0DQ0=;
+ b=GaRm2BqKa1zpsc6ZvH+y8wuzadH8HkQ4DAPd75T05PvzZOhHQi8F3IdOKBf7eorGd/
+ VzkM6L5A8qcwysPJXw9DrmXdemlDML09+GnUcFJSw/aQ40aVcXhk5mD+zZ0FxFmFI+y6
+ JeUxKfoCPZGkRQDH6yQWqY7LxNAG3E530upa42/YVeIBfmeSdq+9hSV8di4XVlHFjce0
+ TLtvcScs+lWPe+SfSgI30PMHeXu4FsCvqTXVzIFmEvncRyPVyqT0eVzVmNmWXP3P5aQW
+ +H8uSPqK+Ec85dvTDY7Xck5+nnGaSR8OgQum9Omm98E8VgyKV7XAYUA+Wucu3QQgOONC
+ oJJw==
+X-Gm-Message-State: ACrzQf3Ic4ftAPh3svAHKQB4tR/nPl1B14e2zUvNCR2rNF1qczlrIgOd
+ BWjFIpRpiTaD0PkMkjtVODYV57ewpyY=
+X-Google-Smtp-Source: AMsMyM66etbOiyQUaiwdaKsavZpv2hrWNHYZ1mLPBsaHdlafgkvhi7AluuTbdq2BQ+EyFT8HXFeOfw==
+X-Received: by 2002:a5d:5149:0:b0:22e:8b85:3d7d with SMTP id
+ u9-20020a5d5149000000b0022e8b853d7dmr19060430wrt.55.1666543834120; 
+ Sun, 23 Oct 2022 09:50:34 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ f22-20020a05600c491600b003b492753826sm8468826wmp.43.2022.10.23.09.50.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Oct 2022 09:50:33 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 23 Oct 2022 18:50:26 +0200
+Message-Id: <20221023165026.13707-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221021091531.2989489-1-oguz.ozhan@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1666543489;
- bh=OtGiKM41r+eBJxLVxftwTAOyVJ93A4a9x2j5Q3aZ/iw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UdcyFJ8OewmZNU5c0QX2T2pPyQBhNAtn9UnxYq90uhIuI7u1SiwJIRq+JHBDN9xdc
- mAxX4ovYHFq2HNs8PqO9lUt0/U4IMDl60msvwGvrvf/pQYtb9zodbGhSV0BziL9q7K
- isHwkyfpClv152vQj0i6rs8WLBUnZ/otyFpqkyAdrSSqBeGjGZZArbSeWgezZZvSdZ
- tG+ibI8Dg2ezxZFJQe1ng0RUCgYDM0wJDkS96fT6VrRyjKMrSiVacFKLaNI5DgZc+r
- m1/BiaSIGWseP8hStvcDbijsSHo7NiJJ1QfEewoNzSlh+2/vtZsDZSq9jOR7ZFjJIM
- WZo7sasYDInRQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=A1rtFoAqrbkireQfPcd6jpaanRRtNYEv703ncCX0DQ0=;
+ b=WFb2SDIT++vscL9PwpANs/qv47pteS6kVOuW2q9RrUo4mpRkUWx42kaGLrLdh93bs/
+ jILJJI/RGhOJtHeAwHVtmrK+2YImAc+t/asrRBb5SYAXhDjM4GJ/4FWMs6DngB4ytMfx
+ uXS3+6SbCjOBuez2d9fQCQXi9w0ghQBb5R6Ptobr3VtQdXL+nAIExeGLUxGkd0jAcP1c
+ AIS6i4Cg+h4uMSK5dRmRSCedzwr8z316D1OCNRv+NtZeilEs8NFZsox9VnIY8/1sHNvB
+ hLJB0IXW5gb/sxW7E3WjNge6KEG18kIE90E68Ei8dry82PKPBlGZNLYMKKwxdLpTuSUG
+ zBgg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UdcyFJ8O
-Subject: Re: [Buildroot] [PATCH 1/3] support/testing: replace nose2 with
- pytest - Dockerfile
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=WFb2SDIT
+Subject: [Buildroot] [PATCH 1/1] package/libzlib: bump to version 1.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,114 +93,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Oguz Ozhan <oguz.ozhan@mind.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Oguz, All,
+- Drop all patches (already in version)
+- Replace README by LICENSE file added with
+  https://github.com/madler/zlib/commit/352cb28d12baf02863ff5d4d96be0587ced419a1
 
-On 2022-10-21 11:15 +0200, Oguz Ozhan spake thusly:
-> From: Oguz Ozhan <oguz.ozhan@mind.com>
-> 
-> - From web page of nose2:
-> (https://docs.nose2.io/en/latest/)
-> nose2 vs pytest:
->   - pytest is an excellent test framework and we encourage users to consider it for new projects.
->   - It has a bigger team of maintainers and a larger community of users.
+https://github.com/madler/zlib/releases/tag/v1.2.13
 
-This clearly states "for new projects", but we are not new! ;-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...hat-discarded-provided-CC-definition.patch | 28 ---------------
+ package/libzlib/0002-fix-CVE-2022-37434.patch | 35 -------------------
+ .../0003-fix-CVE-2022-37434-regression.patch  | 32 -----------------
+ package/libzlib/libzlib.hash                  |  4 +--
+ package/libzlib/libzlib.mk                    |  7 ++--
+ 5 files changed, 4 insertions(+), 102 deletions(-)
+ delete mode 100644 package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
+ delete mode 100644 package/libzlib/0002-fix-CVE-2022-37434.patch
+ delete mode 100644 package/libzlib/0003-fix-CVE-2022-37434-regression.patch
 
-Why do we need to switch to pytest, and what does that bring us? (see
-below too)
-
-> - pytest is more robust and has more ability compared to nose2
-
-You provide robustness and more abilities to advocate for switching to
-pytest, however, you do not explain what is currently broken that would
-be fixed by the pytest robustness, or what new features from pytest we
-could leverage, and how.
-
-Note that I am not opposed to switching, but we need a good rationale
-for switching.
-
-This commit should also come after we actually did the switch, i.e. we
-should first convert support/testing/ over to pytest, then modify the
-dockerfile accordingly, which allows to write a better coomit log.
-
-Also, please organise your commit logs as (first line is the title):
-
-    support/docker: install pytest instead of nose2
-
-    Now that the tuntime test infra has switched to using pytest instead
-    of nose2, install the appropriate packages in the Dockerfile for our
-    reference build environment.
-
-    Note that pytest-parallel is not available i Debian Bullseye, so we
-    install it (and its depenencies) from Pypi instead.
-
-    Signed-off-by: You
-
-See more below...
-
-> Signed-off-by: Oguz Ozhan <oguz.ozhan@mind.be>
-> ---
->  support/docker/Dockerfile | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> index f54c31b54a..fd1527b1f9 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile
-> @@ -38,8 +38,8 @@ RUN apt-get install -y --no-install-recommends \
->          mercurial \
->          openssh-server \
->          python3 \
-> +        python3-pip \
->          python3-flake8 \
-> -        python3-nose2 \
->          python3-pexpect \
->          python3-pytest \
->          qemu-system-arm \
-> @@ -53,6 +53,9 @@ RUN apt-get install -y --no-install-recommends \
->      apt-get -y autoremove && \
->      apt-get -y clean
->  
-> +# To be able to run tests in parallel
-> +RUN pip install pytest-parallel
-
-Please, pin the version so that the image is reproducible.
-
-Also, if pytest-parallel has dependencies, explicitly install those at
-pinned versions too.
-
-Also note in the commit log that pytest-parallel is not available in
-bullseye, so we need to get it from Pypi instead (as in my suggestion).
-
-Regards,
-Yann E. MORIN.
-
->  # To be able to generate a toolchain with locales, enable one UTF-8 locale
->  RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
->      /usr/sbin/locale-gen
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch b/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
+deleted file mode 100644
+index 398e1c9481..0000000000
+--- a/package/libzlib/0001-Fix-configure-issue-that-discarded-provided-CC-definition.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 05796d3d8d5546cf1b4dfe2cd72ab746afae505d Mon Sep 17 00:00:00 2001
+-From: Mark Adler <madler@alumni.caltech.edu>
+-Date: Mon, 28 Mar 2022 18:34:10 -0700
+-Subject: [PATCH] Fix configure issue that discarded provided CC definition.
+-
+-Downloaded from upstream commit:
+-https://github.com/madler/zlib/commit/05796d3d8d5546cf1b4dfe2cd72ab746afae505d
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/configure b/configure
+-index 52ff4a04e..3fa3e8618 100755
+---- a/configure
+-+++ b/configure
+-@@ -174,7 +174,10 @@ if test -z "$CC"; then
+-   else
+-     cc=${CROSS_PREFIX}cc
+-   fi
+-+else
+-+  cc=${CC}
+- fi
+-+
+- cflags=${CFLAGS-"-O3"}
+- # to force the asm version use: CFLAGS="-O3 -DASMV" ./configure
+- case "$cc" in
+diff --git a/package/libzlib/0002-fix-CVE-2022-37434.patch b/package/libzlib/0002-fix-CVE-2022-37434.patch
+deleted file mode 100644
+index a61be48536..0000000000
+--- a/package/libzlib/0002-fix-CVE-2022-37434.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From eff308af425b67093bab25f80f1ae950166bece1 Mon Sep 17 00:00:00 2001
+-From: Mark Adler <fork@madler.net>
+-Date: Sat, 30 Jul 2022 15:51:11 -0700
+-Subject: [PATCH] Fix a bug when getting a gzip header extra field with
+- inflate().
+-
+-If the extra field was larger than the space the user provided with
+-inflateGetHeader(), and if multiple calls of inflate() delivered
+-the extra header data, then there could be a buffer overflow of the
+-provided space. This commit assures that provided space is not
+-exceeded.
+-
+-Backported from: eff308af425b67093bab25f80f1ae950166bece1
+-Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+----
+- inflate.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/inflate.c b/inflate.c
+-index 7be8c6366..7a7289749 100644
+---- a/inflate.c
+-+++ b/inflate.c
+-@@ -763,9 +763,10 @@ int flush;
+-                 copy = state->length;
+-                 if (copy > have) copy = have;
+-                 if (copy) {
+-+                    len = state->head->extra_len - state->length;
+-                     if (state->head != Z_NULL &&
+--                        state->head->extra != Z_NULL) {
+--                        len = state->head->extra_len - state->length;
+-+                        state->head->extra != Z_NULL &&
+-+                        len < state->head->extra_max) {
+-                         zmemcpy(state->head->extra + len, next,
+-                                 len + copy > state->head->extra_max ?
+-                                 state->head->extra_max - len : copy);
+diff --git a/package/libzlib/0003-fix-CVE-2022-37434-regression.patch b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
+deleted file mode 100644
+index 46a58710d2..0000000000
+--- a/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d Mon Sep 17 00:00:00 2001
+-From: Mark Adler <fork@madler.net>
+-Date: Mon, 8 Aug 2022 10:50:09 -0700
+-Subject: [PATCH] Fix extra field processing bug that dereferences NULL
+- state->head.
+-
+-The recent commit to fix a gzip header extra field processing bug
+-introduced the new bug fixed here.
+-
+-Backported from: 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d
+-Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+----
+- inflate.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/inflate.c b/inflate.c
+-index 7a7289749..2a3c4fe98 100644
+---- a/inflate.c
+-+++ b/inflate.c
+-@@ -763,10 +763,10 @@ int flush;
+-                 copy = state->length;
+-                 if (copy > have) copy = have;
+-                 if (copy) {
+--                    len = state->head->extra_len - state->length;
+-                     if (state->head != Z_NULL &&
+-                         state->head->extra != Z_NULL &&
+--                        len < state->head->extra_max) {
+-+                        (len = state->head->extra_len - state->length) <
+-+                            state->head->extra_max) {
+-                         zmemcpy(state->head->extra + len, next,
+-                                 len + copy > state->head->extra_max ?
+-                                 state->head->extra_max - len : copy);
+diff --git a/package/libzlib/libzlib.hash b/package/libzlib/libzlib.hash
+index e6ca974e2f..df5e8d723a 100644
+--- a/package/libzlib/libzlib.hash
++++ b/package/libzlib/libzlib.hash
+@@ -1,4 +1,4 @@
+ # From http://www.zlib.net/
+-sha256  7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18  zlib-1.2.12.tar.xz
++sha256  d14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98  zlib-1.2.13.tar.xz
+ # License files, locally calculated
+-sha256  fc2c3368901700f0acdeb1d8afeaca5923296768ec6824ecdf627aac396001fd  README
++sha256  845efc77857d485d91fb3e0b884aaa929368c717ae8186b66fe1ed2495753243  LICENSE
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+index f75502326b..e344cc7ad9 100644
+--- a/package/libzlib/libzlib.mk
++++ b/package/libzlib/libzlib.mk
+@@ -4,19 +4,16 @@
+ #
+ ################################################################################
+ 
+-LIBZLIB_VERSION = 1.2.12
++LIBZLIB_VERSION = 1.2.13
+ LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
+ LIBZLIB_SITE = http://www.zlib.net
+ LIBZLIB_LICENSE = Zlib
+-LIBZLIB_LICENSE_FILES = README
++LIBZLIB_LICENSE_FILES = LICENSE
+ LIBZLIB_INSTALL_STAGING = YES
+ LIBZLIB_PROVIDES = zlib
+ LIBZLIB_CPE_ID_VENDOR = zlib
+ LIBZLIB_CPE_ID_PRODUCT = zlib
+ 
+-# 0002-fix-CVE-2022-37434.patch
+-LIBZLIB_IGNORE_CVES = CVE-2022-37434
+-
+ # It is not possible to build only a shared version of zlib, so we build both
+ # shared and static, unless we only want the static libs, and we eventually
+ # selectively remove what we do not want
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
