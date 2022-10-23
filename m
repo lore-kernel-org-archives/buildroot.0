@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A42D8C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 09:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A5BC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 11:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 428D3401F8;
-	Sun, 23 Oct 2022 09:10:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 428D3401F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9ADC817AC;
+	Sun, 23 Oct 2022 11:49:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9ADC817AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pck7tC9hj3G1; Sun, 23 Oct 2022 09:10:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zc3Z_SLK2Z2Z; Sun, 23 Oct 2022 11:49:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 588414016A;
-	Sun, 23 Oct 2022 09:10:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 588414016A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2108F1BF3CB
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 09:10:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2715781772;
+	Sun, 23 Oct 2022 11:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2715781772
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42F961BF951
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 11:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09B014016A
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 09:10:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09B014016A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BE6381772
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 11:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BE6381772
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9D4k63KNAz7b for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 09:10:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L_J3eLXNO3uJ for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 11:49:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8CC44013D
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E8CC44013D
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 09:10:20 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id h9so44218wrt.0
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 02:10:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D33C681771
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D33C681771
+ for <buildroot@busybox.net>; Sun, 23 Oct 2022 11:49:02 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ bh7-20020a05600c3d0700b003c6fb3b2052so4886655wmb.2
+ for <buildroot@busybox.net>; Sun, 23 Oct 2022 04:49:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=N5oc5QAH+gREX1yl7eggYUTd7BibifZS9SpLJlg/eNs=;
- b=HRVvvgWThDTSog8BbeNd8nveIbMuyvPuhOpPypBijx/YOC6e1PDgiCHR80aOi+SodE
- Ki5oUifjmGLos2MffVf+40hks+iiVZa8V19KlUd9RyzbpwkxrlOPdq5X9dO60I5Q2pxb
- hDZ6g5QJBVW4riYcqLqoC/KyK3zUZTT6cMnAZiRfqxRR1MnECeIsva3H5+0GKzubjewf
- r0vR/oH8j5Pg7gBwGeRUYpq11aO3lMlvFjH4nFhiFEOHJlVUj6flZGF9dKaEPXFzgV6W
- 3hf0SgPjpUvChajSYAqjgV33RZJ1TSsszDr7m8bszX2DnvadI1mr+BU4jiGZlEOStNlt
- Nkkw==
-X-Gm-Message-State: ACrzQf1frQMryJqG7VCxnweOwcMmToURNgqg7o9biZBlULI+PtjYGs9b
- 6CjAjFB8yE93OsWPknENeAxVlcvyIyE=
-X-Google-Smtp-Source: AMsMyM4tIyKrQdUsHGg6589yzUucCZejJhfSqCV47CxC9+4WVnwjY7RwRUbCFns2q1mSf1mlS/9NPg==
-X-Received: by 2002:a05:6000:22f:b0:236:4f8e:a913 with SMTP id
- l15-20020a056000022f00b002364f8ea913mr8824967wrz.240.1666516218804; 
- Sun, 23 Oct 2022 02:10:18 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- t9-20020adff049000000b002366824c230sm1707406wro.107.2022.10.23.02.10.18
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=p6exrdu4i50N7y19g5eT1h2/FszVWB3zlHP9nJqOkE0=;
+ b=4zcRR4q5BOPxfXgMH9Xjtl7d+C4mkPFyOaiD4JItLX2HW6snbXaSXh770ohFm1R4Ek
+ WCyaD8+nNVcSk7nAKDRHk279viH5A6m0hz3FHzFn+6egx0DXXmluZbSJfB6ZHHN2gAra
+ vuo7ehrjrxpklfnRwHU6tCIeQFpYmx8Xcti+LN5swGfA/X8/BvOgGThWQPZESIRSK5I/
+ NypaJP08h5z54LwUo3xgUpNBxB0aPlUTkWU706pkctTxHpDlNBwQY+FDqCXFan6gZXMI
+ ZEjuTh9XxdaUe46K4Znaxx/t4aD1O1b/1TmNCi4rJMk+h8GYdxKDpNp4pSKnWajGDB4N
+ loqQ==
+X-Gm-Message-State: ACrzQf2254C3U5mf+IQlEvqblcUvodGKmymA3bZh76PQRg8CtIPAI8Z2
+ 3MJfpKzvCQiYcIzpnhSBF+lFVhnsbqo=
+X-Google-Smtp-Source: AMsMyM70UeSFIHL6xyDqKZIYrHAqhoqYaVX2QAR7p60IdCkAdKE8cheg6wYiNkBthj0iusgSG7I7qg==
+X-Received: by 2002:a7b:c7d5:0:b0:3c6:b874:a0d9 with SMTP id
+ z21-20020a7bc7d5000000b003c6b874a0d9mr18785944wmk.157.1666525740642; 
+ Sun, 23 Oct 2022 04:49:00 -0700 (PDT)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ q10-20020a056000136a00b002366c3eefccsm1279553wrz.109.2022.10.23.04.48.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Oct 2022 02:10:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 23 Oct 2022 11:10:09 +0200
-Message-Id: <20221023091009.18544-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221023091009.18544-1-fontaine.fabrice@gmail.com>
-References: <20221023091009.18544-1-fontaine.fabrice@gmail.com>
+ Sun, 23 Oct 2022 04:49:00 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun, 23 Oct 2022 13:48:41 +0200
+Message-Id: <20221023114841.505480-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=N5oc5QAH+gREX1yl7eggYUTd7BibifZS9SpLJlg/eNs=;
- b=W2dT4CzdnGKV3GtHPiSUJnpKjxs+r58sIbEBI4cCMBoL0q+bzG6jdqSvrA0ePrxguU
- zbvnrNhUyiM+dVAjivZQBOypM+GbR3S2TdYvGPjByGDQc9jj5JquoY4pvLt/DOZWdZx+
- 7vIkL1Jp4U3X6fBAbGjle05XY00vAX/lgZKxS8b9Sn+j+Zkqlac9BI5oSjhT2eh0ogj6
- RdtClPZhl2oFi4IRL3FIuCzFR2/qyqa22M+LFUiIbzomTmbG0zc7VnerJc0X4xqCZx0E
- Z7/+toDWWKmu1fV7H6LZB5TZKo5/RhGwIdhuFJDNozEZgzvajXJYJLdp71WSycH9Kd2a
- 4X3w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=p6exrdu4i50N7y19g5eT1h2/FszVWB3zlHP9nJqOkE0=;
+ b=j/43glCPA/twCtgMKQMZux7jKqukT8s0S0Jj5EeoVd28WcossTQxGHayLTmqQPHcv+
+ 3diddnQnmAie+cvcbPLowL7V15WSdlkHk55NJ11zSwL+EMKiD33JTNn+bjYUOcRWRuHf
+ RPlkVjZZP9DKJKuFel+IbjFkFta4vPBnDrXtbEGM51GGkUvf5YN7InLn3xGyU+ozI33d
+ HHtSVZhC78pqSkg5rH5KtAhI1dIOHx0Rt+rvDvx90uWR8a/Vi+wvJPDIs+PuHsqibwNZ
+ Le21RqlKXqUuQYWB9VxsTrxCV9MhOwj8DE/4I/+rS/DsTDefBy+OOJP+qTQUjqqwEMHi
+ N48w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=W2dT4Czd
-Subject: [Buildroot] [PATCH 2/2] package/lz4: bump to version 1.9.4
+ header.a=rsa-sha256 header.s=20210112 header.b=j/43glCP
+Subject: [Buildroot] [PATCH] package/janet: bump to version 1.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,98 +95,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LZ4 v1.9.4 is a maintenance release, featuring a substantial amount
-(~350 commits) of minor fixes and improvements, making it a recommended
-upgrade. The stable portion of liblz4 API is unmodified, making this
-release a drop-in replacement for existing features.
-
-- Drop patch (already in version)
-- Update hash of lib/LICENSE (update in year with
-  https://github.com/lz4/lz4/commit/87a80acbe7872b9da7d56f7005ffd1b715e87c93)
-
-https://github.com/lz4/lz4/releases/tag/v1.9.4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...mory-corruption-with-negative-memmov.patch | 26 -------------------
- package/lz4/lz4.hash                          |  4 +--
- package/lz4/lz4.mk                            |  5 +---
- 3 files changed, 3 insertions(+), 32 deletions(-)
- delete mode 100644 package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+ package/janet/janet.hash | 2 +-
+ package/janet/janet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch b/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
-deleted file mode 100644
-index 57e4e38f84..0000000000
---- a/package/lz4/0001-Fix-potential-memory-corruption-with-negative-memmov.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 8301a21773ef61656225e264f4f06ae14462bca7 Mon Sep 17 00:00:00 2001
--From: Jasper Lievisse Adriaanse <j@jasper.la>
--Date: Fri, 26 Feb 2021 15:21:20 +0100
--Subject: [PATCH] Fix potential memory corruption with negative memmove() size
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- lib/lz4.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/lz4.c b/lib/lz4.c
--index 5f524d0..c2f504e 100644
----- a/lib/lz4.c
--+++ b/lib/lz4.c
--@@ -1749,7 +1749,7 @@ LZ4_decompress_generic(
--                  const size_t dictSize         /* note : = 0 if noDict */
--                  )
-- {
---    if (src == NULL) { return -1; }
--+    if ((src == NULL) || (outputSize < 0)) { return -1; }
-- 
--     {   const BYTE* ip = (const BYTE*) src;
--         const BYTE* const iend = ip + srcSize;
---- 
--2.20.1
--
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-index 0b03089ecd..04bd118cfe 100644
---- a/package/lz4/lz4.hash
-+++ b/package/lz4/lz4.hash
-@@ -1,4 +1,4 @@
- # sha256 locally computed
--sha256  030644df4611007ff7dc962d981f390361e6c97a34e5cbc393ddfbe019ffe2c1  lz4-1.9.3.tar.gz
--sha256  d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
-+sha256  0b0e3aa07c8c063ddf40b082bdf7e37a1562bda40a0ff5272957f3e987e0e54b  lz4-1.9.4.tar.gz
-+sha256  8b58c446121a109ccf32edc094bba3010a3d85e4ee3702950db55e4d3e87736c  lib/LICENSE
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 541a03473a..5da1ae2703 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,16 +4,13 @@
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index 473955e39..5cd3db1c2 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  0b4d5d3632e0d376d9512ea8ea262f31f75c132b488dd7870f472acae709a865  janet-1.23.0.tar.gz
++sha256  5bf9b680adbc5511835aec3787117df37032eef796e1664edbbcfd540b6acaf3  janet-1.25.0.tar.gz
+ 
+ # Locally calculated
+ sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 070eae1cf..284e6c264 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LZ4_VERSION = 1.9.3
-+LZ4_VERSION = 1.9.4
- LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
- LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
- LZ4_CPE_ID_VENDOR = lz4_project
- 
--# 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
--LZ4_IGNORE_CVES += CVE-2021-3520
--
- ifeq ($(BR2_STATIC_LIBS),y)
- LZ4_MAKE_OPTS += BUILD_SHARED=no
- else ifeq ($(BR2_SHARED_LIBS),y)
+-JANET_VERSION = 1.23.0
++JANET_VERSION = 1.25.0
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 -- 
-2.35.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
