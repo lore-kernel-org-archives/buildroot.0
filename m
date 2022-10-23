@@ -1,123 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E5AECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 08:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D0BEC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 08:37:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75C80410C2;
-	Sun, 23 Oct 2022 08:04:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75C80410C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF98D401CC;
+	Sun, 23 Oct 2022 08:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF98D401CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TCcYrdmH7Yml; Sun, 23 Oct 2022 08:04:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RUGDKFoJmeTt; Sun, 23 Oct 2022 08:37:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92018410BE;
-	Sun, 23 Oct 2022 08:04:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92018410BE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C28581BF356
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 08:04:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3FE74013D;
+	Sun, 23 Oct 2022 08:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FE74013D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E3C5D1BF5B3
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 08:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AC5C60AF4
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 08:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AC5C60AF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBFE64013D
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 08:37:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBFE64013D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z-0mH7sccx0S for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 08:04:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF28160864
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com
- (mail-sy4aus01olkn2180.outbound.protection.outlook.com [40.92.62.180])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DF28160864
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 08:04:07 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nzh/8d4rwzGPTaaTmV8c8zM/qjrKzabUNcbiAViNAskhTfEd8HBPOEUQPU8EP7g4T5Q5LH1oG00CPykqwcLjIxWcHsTOpUBBEOfDS48Qf5B+teMQoC0MLJmuDxMmZCyB0P55ZJSHR84nseOGpWaedIb+Mss3t+/55ChWWoUPeFeJXR2nLK6vYis9aMVXVR+PXG1eCkeIzK4fCePnMjNG5qooG58fmu4Ano1s+71evK3t6EfOWT1AnB6+fRJutp6blwezSOA7FSNNDbTLCi/9feqVCmKIs5u/YPGSSTludtIBnTbRyPcgVfaM59/9hwVEA8J59WPJsue1u7fG4r/RMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/gac4dvmonRFEzI+jfn6qrWKA1J2X5+OC2sno+4XSSo=;
- b=bNxrHnEQwfXLmJvGVp2HkSY1JNXIz5f64AIaqXCwoN45ublCKndCaxcaOC5mUt5lyXS8rX2hzanRKUU2BxniseB8NwAvxoRieEsI9yP1Nhq2wJp7+v36Nm68Hdr5+al5xnHD/eqUV3imM2lw+YR8CdIVfQ/Lm0WD1dobl4VpY91rVSrHdYGYErcNYQ8rjymr/tw56B0E4TmptAgaXKme3XtZ/z0VgTNQSH8u/HcLVS2cR+H24J58jzz09oy8PkORaUBIgXFarx4J9acPRPFiDDnF7kYpaE0SI4IIE8daaMTIEtUaLtDe+u0YH9119qF2Q7riE7qBw+9v9tuzG8Tvsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:161::6) by
- SY4P282MB2507.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:125::8) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.22; Sun, 23 Oct 2022 08:04:01 +0000
-Received: from SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
- ([fe80::e2f7:fbb1:e3a0:f1af]) by SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
- ([fe80::e2f7:fbb1:e3a0:f1af%9]) with mapi id 15.20.5746.023; Sun, 23 Oct 2022
- 08:04:01 +0000
-From: Bassem Fahmy <t_fahmy_bassem@hotmail.com>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: defconfig fragments
-Thread-Index: AQHY5rVyhVjCy2lYZk2IZpVikJ29cQ==
-Date: Sun, 23 Oct 2022 08:04:01 +0000
-Message-ID: <SY4P282MB30149AA46B4BC3EF0C01C47FCB2F9@SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn: [/OCDm84RJP1RFkgbjCde89f6762uAm/kXZxj4XGoFRfPwL1QfZwekozQc7x60DXL4wK7kRKKvec=]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SY4P282MB3014:EE_|SY4P282MB2507:EE_
-x-ms-office365-filtering-correlation-id: ee6843d3-9732-4205-ba03-08dab4cd257e
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 34fyDn2SkRN0HNnMr9D+d2wgLyzUhI90WdsLpsVJFPB0qYZ5DaV7cF6HAtqieMxEYiMtmpXQZJzsaeNv+2aPziBM4Hsm/2LVeSYNNZbEAR2mVo2gkkMnrDmCu+FUiUKfRpndTYbhKqzwDecB5IfVHXwRvifPKD9R9pPJ0zq99nGx4pXR/Fr5bkUbESOqVURwyKHjg6X8gH5F8p7GtvDroMfXa5Hf6BnVvBCDL8t+1ArD/0Fz410rlpq+t6K9O1l5yUrXPYqQ2pkxFzosivh3FRRsOlam/2GHWca77NPLe90nKFofSBu5mWYrCBCpr7Y1tI9BatJJIN16Dtra8g6sx4jBKR7NI1VwQ291YIukZ08KHL10i6UMSyQPJE7HQBMyIuuQ8TeFO1ZQ0arkxTc1PUDpCipUzXV6u0HsU069lb/uB4PD5r2RCmMlQOQK3TyfZplRDvK9Kg0a4mjeJ/jPwQmsCp61v4jxlS2s8gkGRbEi73GQwcZRSUlMxZRPtbQ5imQfeVoSJNx7ds8V4FKAnZgCKnUeImcllOqUS8WH0SCkt0cY+tGbbISgp3QzGEZwo5SgpNUcEnfsGNnztXVx8WeJGXDwn8/t9+U6uQh6J9XuJeQzMND43w0/kH60+hMiwQGY6mn4D2Ze5OTjKxBCsQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?c/dm2HZm+sYbTElV1kGqDk074yfGJ8bY9+hW6luMH6GAbWHg3ejsz25+7o?=
- =?iso-8859-1?Q?s5OOf/Uw5BYAuen1yIkTkdx6+bUNx3ox4LJz6n2V0/2R7u5sHq3GVD5wUK?=
- =?iso-8859-1?Q?FgbT1QX4A8G2fcDAfRjZ0/5kNyg23FnXIxkWsqAeG6IBbzwDAbM15SoZGT?=
- =?iso-8859-1?Q?/BrvN3Oo+AkaBOwfoBuIpI3WlZwvqXmyGa/VuBJdvvo2u1rxMaOq+y3j29?=
- =?iso-8859-1?Q?p4eIZR9rprFjPlRI3MR2VocS9nNTmlwBlC2Qw2yjbqKK2NsiZO6awjHUkn?=
- =?iso-8859-1?Q?Xk0Ha+VVyFqu6DlA5npR0nSobPY7unAEJiHL88Q5zSawE9xOSLrAbc8JYb?=
- =?iso-8859-1?Q?jvbCXItG4ONe1WRxQhQWRXNaN7if+kp+RmZ7cTTcCe7A8/EbByJbfhug/V?=
- =?iso-8859-1?Q?DUhFwQ0RQByN5Epl0gSQigZB9XzO303nQ9pDXG0ki9SYJBzLrSyJH44Lfu?=
- =?iso-8859-1?Q?xM+9NzRHuk+eqgJg7WbEp9qO5cfGOBpOBxOZrSwvRUaYW3UQJFCMb44m/Z?=
- =?iso-8859-1?Q?TC5oNLyDMzry4QZWrVDiCMqpgBSUXZ3HsQ+ZP8zoBtvLRZORoLtmTMMGY7?=
- =?iso-8859-1?Q?SnwMDmkVjTLU6M0AhyKYpnghP6WRsqp0g6PYsaef58y3Og0P0HAr2omGeV?=
- =?iso-8859-1?Q?SbA/iqe7w7FPkvrv+IY708c5dejxi1vqfL+GAoZOhfQvLH/AhdbLqi4Gtv?=
- =?iso-8859-1?Q?6r4ZWwqv4GD/DNKGZt9NQt69VFqxITUGd0/fxYWW2r0qA4vzug1LM7qVkw?=
- =?iso-8859-1?Q?M/VpjvBiBKBBVMUxT8Gxed/aREhqH/rZ8mDPfGErPZZxi3xD4XdMVR6GIZ?=
- =?iso-8859-1?Q?ysTPZMu8i//9FQzPTuIwlFhIbmQrYPWm3XHXMWcCiyd/yzv9nA6JrIM2Bg?=
- =?iso-8859-1?Q?B2lZ09IB+dZIaPvJr2fR+0BmWP9ziKulQZxGgaY3PlZMCvWzShB/YZUT5x?=
- =?iso-8859-1?Q?b+ES4sJTbnsZhNvHAzJSIpe2d9r/jrzLwtZid3jKyFKSb6qY9HR1rWwG2Z?=
- =?iso-8859-1?Q?jNyN8frUphvV3NDe9a2HGN6Rnp8xGdCFRT0bR2x/MKWK3fmag3Pk9RrGFS?=
- =?iso-8859-1?Q?FIxM/DuwL8/nFB9chejUJwMhchemeGcLWiBvbFeIGCzPEEg/rMHhfKjzjg?=
- =?iso-8859-1?Q?BfCXul1nOtwGe/tNvbpcDYZ/UndvXEaQBbShNqElRkM+cbpptEKFJ3lb+0?=
- =?iso-8859-1?Q?Xaqw7FwK0VrlFpev00kCrY8pkgnZ7LAo1nXIjOpBL3St33t9WhWMJ5aQYa?=
- =?iso-8859-1?Q?IuLxU//SYxY0LvopL4od/PW/06+vfpXVfb3RMHkwVp89a6EfTp/f5CRCie?=
- =?iso-8859-1?Q?AGPmjq1+Y+O4DQRx5NonhsmRXUBz/DMpUlDsHpKkqJrEuaWnHuj3EzQQ14?=
- =?iso-8859-1?Q?5K1R0mRnf7lNVnEedgpiedc1OeXZnp1A=3D=3D?=
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zgg90OQusWDe for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 08:37:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFD7840012
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFD7840012
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 08:37:07 +0000 (UTC)
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.79]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXp5Q-1oaI4i2vRU-00YBEZ; Sun, 23
+ Oct 2022 10:37:04 +0200
+Date: Sun, 23 Oct 2022 10:37:03 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221023103703.0f0335bc@gmx.net>
+In-Reply-To: <20221022214439.174830-1-fontaine.fabrice@gmail.com>
+References: <20221022214439.174830-1-fontaine.fabrice@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee6843d3-9732-4205-ba03-08dab4cd257e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2022 08:04:01.6390 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4P282MB2507
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=hotmail.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/gac4dvmonRFEzI+jfn6qrWKA1J2X5+OC2sno+4XSSo=;
- b=ImQSuVFSFrTuc3JQZC/mh9+5OdYB7HxFHL3RACg/HdBKQM1afgIA0K5Aplo3M+hPBKaYJ3YUc2MHq7DaXoGgYDu5qXQK36ZEU/Gn4vdD/obiDp3MkkM89qh3eqEkoSQfBOt9Wfb4Vv6Gs1gHL02Z8RoeTdSwv+gJekHLRZFHJRSos7Zq/BvMURRxiO8x1KLk6dc9DZjeowyhAYJVpyFQj6AR9rVWzpYkvmMGkugLc3egBVHL0ammBUREoQBiRT51QML6FGOpnHtIJtfqahqbxitOOY8gM7/k/yCaaieq5zQnTAdpnlfqKFqPwLKL0ZBq+f0PkVm8Q9ZIErv85KvybA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=hotmail.com header.i=@hotmail.com header.a=rsa-sha256
- header.s=selector1 header.b=ImQSuVFS
-Subject: [Buildroot] defconfig fragments
+X-Provags-ID: V03:K1:mmmAddCbpkb+H4YJyLicPHchwj+pVpVWAsac5aeu16z4WDHdABn
+ AAfEq20OWqU2fbw5rYZlEc9zaAdEqY36fpk4IPE3pKvvSyTRpa5w+NV1EHbNHlm4U1J0KdQ
+ NxpvVSWtJfi072E5EV/iCOeyHPLqcdqFlgwRiJXesiOdhuQelDvSlMH8iZpXt1BceTP96El
+ wZLCDwIfDFiPXXtLUmufg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O2WQpvNffxU=:922CpLumODvQwZlqPj80vF
+ AczWnEj2y9nkDYqiGg0/9WaCe7tmPZjuOVjeAZxDqBmFgH3udGRuO5ozflHYAS9ZRLLKZmt9E
+ Oubeuo0tEoaV4ghBksJMUxoNE4f78tJEGhWSNql0dyXiu+Q97u3veWCzPyVPNEbHLSJxT3dhk
+ dnLptY7ElXdKUlACv78aY7d/jgL2uNp4lusb+9svpS07EtFLqIgyyR1PIdBDVkpWqBDctyQZD
+ K50kiFrLnpTbfaVueENVLg/uZFHsgsNtFZjlta17qfWkN+TwSOlCnQ6Kvp8FI1IxIp15Nw24L
+ JHZmt4irOwXSDtmXbxktfufH0pTJVyk0oaTXmTHAJU6e0vvGo0pzLBETwIP6t80qXrPJzsJ7m
+ aQXsOweAJEPFRBhgR6k/UqB2TbrhnZdeAPNn5TGoKPvfV267sWBsWiKTQukeo+UUvCdRqkoW5
+ vVVnXv1wxhgH6v/UosZFKvCCpWaVIsedTGOnQTk7mgfprOy9OvmekfCDM9U35qqWwiC7jP1UN
+ uu+JZdsBmS6VJf6hsnK6tA+XIN3wAglsfaOfcaH4W748t1K/q5C6L6v9jWCIzUpBs0mYVLkK9
+ LyDAkDaBvQOP9XbGbq66Ao7pwGeCK+NquPYZks2KY0eanS1J+KuANyeSRyesTKELcG8mYL/VL
+ gksLUGCiUOKChEqV6olrRFdqXucDyj50ycnfh//sXQmF5h/nxkDA3/fgZRnKKMOLveqsB6Mmb
+ Mq0Iodsub2nQhFeYHCbIoYyIzbH9zNQcpRfcg4yzm0P7qblB6d/T7XsKBnAjRrMlNuSbKSPqL
+ v6qHSlhPzELMv1nqZyv8mMVrkQg7mqwlsNvYaQ6DCYtpcdEouoUBnscqiPnaid8EkR06JyChX
+ 51R+OZ3rgi9babV0D+Yq8FVzPgXz4W0KHKNZwvVy04xH7QgFnBozt9YpSGundErgOvC0k2LlM
+ GHFFyxfeF3zqeGu2iqqUfHOv11UyArvUyxmR/3+hkiS7w/EL4mDdrk7qHan5VlfuJ8bYhx8a5
+ 6z/soepPt9FqYS8J3gBd2N62NX3sde6KVl5OgQG8x11t50+CGI1DlYe3DzNPXaNikaXok1qzJ
+ KoS4LCzh6HwJTGaDCvexkBWnw0W7PFROnk+I3cgoWL3UoAZ0AEL3i4E5wT/6lGm/7ILqrt/bb
+ CXtyNR67sI/sTN4CYz4vgcyO25FryhjGdB3yUersZ8HWV8v2gFurm1tqaHxBVlJVRvYhQDFF8
+ UcIw+u89wQEau5Tk+4p15YPrGgBIixFFygyLaup/YoMt1n8l9TV//wbPln2QC7YOMXiQe4zR0
+ TbNDmtd0NRYgjO6kRgSlJQ+qWhYzJ3Jn/MANs2KoRMBsG+58BB3btP9fs4wxukIKOz5wNeqjk
+ aicPiZaI/N5r0Dv33RFhm994YzLR7GRiYAW6ObQS9pk3+cg6SAavvIXbAdjlGf5mS2cyi6pbj
+ 7fNLb24ueM0ixDBf9Y34cstwOaPhIcCIpQORRJgmdzTmnovPYZ82CxNXUqnTlm7mObHf2zbxo
+ lA8tI8sBlaqn2Lry2ud1RR2J2PeKvnrWseNKnvB8BNU0p
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=badeba3b8450; t=1666514224;
+ bh=DCTmRelk5oPQwA3IiEFHo7V7xDDi6/JmZkT+Mb267zk=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=Zha+iSaEWOoj+rj1BDavA1dit7Pcx81bPAeJSgmq0IV+NK2H8Jw565OsGlVRdwWGj
+ jRX6jV4N2iW28pC5bEOsg993h9Lb46jc2+Vz+Gg1tsVPs1gq9an6kV4yGVmSkQEkem
+ 9ZLTkx7AOwCFGayBg9WLYRitm/sp1II+Ra2nB4/8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net
+ header.a=rsa-sha256 header.s=badeba3b8450 header.b=Zha+iSaE
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/usbredir: bump to version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -129,27 +97,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Fabrice,
 
-Hello,
+On Sat, 22 Oct 2022 23:44:39 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-I understand that buildroot supports config fragments for packages (that su=
-pport defconfig).
+> usbredirserver was dropped by
+> https://gitlab.freedesktop.org/spice/usbredir/-/commit/f4ffdce329305da2803684776f7659083a530819
+>
+> Add an option to enable tools (and usbredirect binary) as a replacement
+> to usbredirserver
+>
+> https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.13.0/ChangeLog.md
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Peter Seiderer):
+>  - Add an option to enable tools
+>
+>  Config.in.legacy               |  9 +++++++++
+>  package/usbredir/Config.in     | 11 ++++++-----
+>  package/usbredir/usbredir.hash |  4 ++--
+>  package/usbredir/usbredir.mk   | 21 +++++++--------------
+>  4 files changed, 24 insertions(+), 21 deletions(-)
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 0e63d59a98..efe35fde36 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,15 @@ endif
+>
+>  comment "Legacy options removed in 2022.11"
+>
+> +config BR2_PACKAGE_USBREDIR_SERVER
+> +	bool "usbredirserver removed"
+> +	select BR2_LEGACY
+> +	select BR2_PACKAGE_USBREDIR_TOOLS
+> +	help
+> +	  usbredirserver has been dropped by upstream since version
+> +	  0.13.0. usbredir tools (which include usbredirect binary) has
+> +	  been selected instead.
+> +
+>  config BR2_KERNEL_HEADERS_5_17
+>  	bool "kernel headers version 5.17.x are no longer supported"
+>  	select BR2_LEGACY
+> diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+> index 8ce180a884..d546ac1025 100644
+> --- a/package/usbredir/Config.in
+> +++ b/package/usbredir/Config.in
+> @@ -15,18 +15,19 @@ config BR2_PACKAGE_USBREDIR
+>  	  protocol.
+>
+>  	  Note: only the library is installed, not the utilities. Say
+> -	  'y' below if you want the server too.
+> +	  'y' below if you want the tools too.
+>
+>  	  http://www.spice-space.org/page/UsbRedir
+>
+>  if BR2_PACKAGE_USBREDIR
+>
+> -config BR2_PACKAGE_USBREDIR_SERVER
+> -	bool "usbredirserver on target"
+> +config BR2_PACKAGE_USBREDIR_TOOLS
+> +	bool "Enable tools"
+>  	help
+>  	  If you want to serve usbredir requests on your target, say
+> -	  'y' here to have the usbredir server on the target.
+> +	  'y' here to have the tools built and installed on the target
+> +	  (including usbredirect binary).
+>
+> -	  Note: the server is not required to use the library.
+> +	  Note: the tools are not required to use the library.
+>
+>  endif
+> diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+> index f738c36690..577e08efba 100644
+> --- a/package/usbredir/usbredir.hash
+> +++ b/package/usbredir/usbredir.hash
+> @@ -1,5 +1,5 @@
+> -# https://spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz.sha256sum
+> -sha256  fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d  usbredir-0.12.0.tar.xz
+> +# https://spice-space.org/download/usbredir/usbredir-0.13.0.tar.xz.sha256sum
+> +sha256  4ba6faa02c0ae6deeb4c53883d66ab54b3a5899bead42ce4ded9568b9a7dc46e  usbredir-0.13.0.tar.xz
+>
+>  # Hash for license files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+> index 6792a3e758..172f0d52a0 100644
+> --- a/package/usbredir/usbredir.mk
+> +++ b/package/usbredir/usbredir.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -USBREDIR_VERSION = 0.12.0
+> +USBREDIR_VERSION = 0.13.0
+>  USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
+>  USBREDIR_SITE = http://spice-space.org/download/usbredir
+>  USBREDIR_LICENSE = LGPL-2.1+ (libraries)
+> @@ -14,21 +14,14 @@ USBREDIR_DEPENDENCIES = host-pkgconf libusb
+>  USBREDIR_CONF_OPTS = \
+>  	-Dgit_werror=disabled \
+>  	-Dstack_protector=disabled \
+> -	-Dtests=disabled \
+> -	-Dtools=disabled
+> -
+> -ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
+> +	-Dtests=disabled
+>
+> +ifeq ($(BR2_PACKAGE_USBREDIR_TOOLS),y)
+>  USBREDIR_LICENSE += , GPL-2.0+ (program)
+>  USBREDIR_LICENSE_FILES += COPYING
+> -
+> -else # BR2_PACKAGE_USBREDIR_SERVER != y
+> -
+> -define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
+> -	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
+> -endef
+> -USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
+> -
+> -endif # BR2_PACKAGE_USBREDIR_SERVER
+> +USBREDIR_CONF_OPTS += -Dtools=enabled
 
-But to patch the buildroot defconfig itself, the only way I could do it, is=
- by calling =
+Build failed with:
 
-> support/kconfig/merge_config.h xxxx_defconfig xxxx.config
+  Found pkg-config: .../host/bin/pkgconf (1.6.3)
+  Run-time dependency libusb-1.0 found: YES 1.0.26
+  Found CMake: /usr/bin/cmake (3.24.2)
+  Run-time dependency glib-2.0 found: NO (tried pkgconfig and cmake)
 
-Is this the correct way? Is there a more standard way to patch a buildroot =
-defconfig?
+  .../build/usbredir-0.13.0/tools/meson.build:17:4: ERROR: Dependency "glib-2.0" not found, tried pkgconfig and cmake
 
 Regards,
-Bassem=A0
+Peter
+
+
+> +else
+> +USBREDIR_CONF_OPTS += -Dtools=disabled
+> +endif
+>
+>  $(eval $(meson-package))
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
