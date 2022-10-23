@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC7E8C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 20:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90292ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 23 Oct 2022 20:54:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 300C040180;
-	Sun, 23 Oct 2022 20:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 300C040180
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11C0A404BE;
+	Sun, 23 Oct 2022 20:54:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11C0A404BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JaGZuWG5n9NK; Sun, 23 Oct 2022 20:47:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ourKyeCuIf6m; Sun, 23 Oct 2022 20:54:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C7C740112;
-	Sun, 23 Oct 2022 20:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C7C740112
+	by smtp4.osuosl.org (Postfix) with ESMTP id C857A4049C;
+	Sun, 23 Oct 2022 20:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C857A4049C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12B891BF38D
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:47:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA9EB1BF38D
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCCF14031E
- for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCCF14031E
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD69A4043A
+ for <buildroot@lists.busybox.net>; Sun, 23 Oct 2022 20:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD69A4043A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zZJqFzPgKgPI for <buildroot@lists.busybox.net>;
- Sun, 23 Oct 2022 20:47:24 +0000 (UTC)
+ with ESMTP id PXRUGWQq_U29 for <buildroot@lists.busybox.net>;
+ Sun, 23 Oct 2022 20:54:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 808FC4030F
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 808FC4030F
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 20:47:24 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id v1so12995534wrt.11
- for <buildroot@buildroot.org>; Sun, 23 Oct 2022 13:47:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C2514042F
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4C2514042F
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 20:54:45 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ m29-20020a05600c3b1d00b003c6bf423c71so8806105wms.0
+ for <buildroot@buildroot.org>; Sun, 23 Oct 2022 13:54:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zwkzbzFuPtdDu2dLnigZUF3s59QYl9devpSLj6yD1SA=;
- b=WruWMBTHex/0m9xNLafrcAJroEDwU1adv0QwiJXgWPiM5croP4VFIgQMk8A2mnqtpg
- 2nhusLuBbkiY89Mtu4fDOAZGef7UXBQ2G/bi+EMfolkFmplg/isf2MC949SoX5Ty+fXr
- xpVqeViJqqt7CJh8wldwOk8CP9g3BV9pIwTQnHmGxPkRsLLQLYG5KAZVe1zfSUjxKtYz
- UoiJHBkh+qVE8Ho4FAkl9NyN2doh5dxTLolACarQmxATS42X/HfwTW3JavAji8he4whT
- Nu50i1x0n60TwPkNrCD1FEr+A77jqxVxMDvrIr8Z/cFE1rui+SlVmLR31nBWkublg3Ft
- rHAA==
-X-Gm-Message-State: ACrzQf1siSLGqx7yohdCYS6BnDyFcCmguwXLVzuA6tUf7peiq7CjtItQ
- rZuTUgozElD7fYtv8BUh0dadBn2O3Dw=
-X-Google-Smtp-Source: AMsMyM4oSJFZBBhmfse706L73IvhZGZIGEhH1IK8m191SRM7EfWQryhJrdhOplLArYJL2ug6tLmuLg==
-X-Received: by 2002:a05:6000:144d:b0:231:5786:f763 with SMTP id
- v13-20020a056000144d00b002315786f763mr18983829wrx.313.1666558042339; 
- Sun, 23 Oct 2022 13:47:22 -0700 (PDT)
+ bh=3aE8FUbVUxFm6Mwg/nELjF1IqwwXlc+xeSsWBve6f5Y=;
+ b=zl/6lALmOw06Kj80d90Re6h6aRlfjixqylpxxzqdeFr7me5xTTVF2se9p6ozqva0Bd
+ mujzkqVzZ+aMp4Z7AO//nJ3SVjKmRlTvHDc9EHg8ARitfyR3YF52s5gQ9RbZh2W0ULmf
+ r4CxE3VZSyRxvv8d/dS5Z86jBHkY8eGUxdEowseR1xkzpodi9OA9KIlNvswtcFmQEd+f
+ UBAbggE7aB7qPWGdnitYUabVn3omNxWx4DSbN/xmrXBA8uo5uY+CJYdLTE2+mdqhkTwz
+ O/B+wwNn2s8RmSed/2HGbVeH1+tyRJ+VSjx/DbLevw2KmSbav3aBIzO98UVPTnuJ1iwn
+ Ecig==
+X-Gm-Message-State: ACrzQf3Y183wcEZB2RS2UHnEhOYuQpnrOXn4RdUV972kOqiXP5hvSEnt
+ tPw+CM2xc+bYYRKd1di4zRpJKXLnDOA=
+X-Google-Smtp-Source: AMsMyM6nVGnAyhglnBPLv6EvwAKbpuuEryLJnq4K+unnXDRbgp/1F+aN9vQ1KmVFTC38/BW109+5nw==
+X-Received: by 2002:a05:600c:418b:b0:3c6:c1e6:b01c with SMTP id
+ p11-20020a05600c418b00b003c6c1e6b01cmr20593691wmh.118.1666558482935; 
+ Sun, 23 Oct 2022 13:54:42 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- n18-20020a7bc5d2000000b003c6c3fb3cf6sm8847682wmk.18.2022.10.23.13.47.21
+ b13-20020a5d45cd000000b0023657e1b97esm6762182wrs.11.2022.10.23.13.54.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Oct 2022 13:47:21 -0700 (PDT)
+ Sun, 23 Oct 2022 13:54:42 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Oct 2022 22:47:19 +0200
-Message-Id: <20221023204719.31316-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Oct 2022 22:54:40 +0200
+Message-Id: <20221023205440.36753-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zwkzbzFuPtdDu2dLnigZUF3s59QYl9devpSLj6yD1SA=;
- b=PeXOtesHJtBWqTQgUfplNAcYYnxycja4Vh+hMVZ25A5SQy+0p1PNavyiyA9jOXGJHr
- tc/mIvn9oeIsi0gsXzu0LAdGY8umKKKsdpb7USbf7bjfDUy35Srrq5OsigMWxv4Arekk
- /e2WFjI6Sj8kJM4xDKkHEHbtb0VDSO84oy0bmqOmhktN9E5WI+1PvRj3Pk6GQLi/FOM2
- 9hy8B3qXJgKt23ElaHQM1Ohevk2cJ523rJ493XTdRLcV/7v0AmjpjF0fWRBPRh/eJFH2
- JldjeNkbVYG68YBxK+bCJ0Ec1qp81ykX6jtByw3QYpL9oFEUaw6QtctP9JAmfrdf9PJy
- 32aA==
+ bh=3aE8FUbVUxFm6Mwg/nELjF1IqwwXlc+xeSsWBve6f5Y=;
+ b=eWsUVpStSIl4AqPShi5XBJLMWph3MCBtkVva+sBcTmhC3/+RnB1nkrpQrrXLkmaZoh
+ grYqigRNLFkFRghXeu3qUgZkqp7oZpqLkTPzD1CoXya64N6o2ug4kfOhPYomsF+DXOxG
+ FJzWXHDBQaaPPPhs5uIpfWSPlAN5JcsGezxOJizjeXs7FT3b7VsHEoBeT3Tea2pA4jEC
+ 76UNX1ApfNDlditnF7GnDygl0KFlaTMTvAlEIZ2tete5y1MfqWsTIigutYnN9K1W7h3h
+ gpvHkMfJfTjyWbyw7hOoh85jCHXwuf4bgsJjXIWcZYoe/8zZb0HBukzTm8U1Iqecss0m
+ GQ7g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PeXOtesH
-Subject: [Buildroot] [PATCH 1/1] package/libpng: bump to version 1.6.38
+ header.a=rsa-sha256 header.s=20210112 header.b=eWsUVpSt
+Subject: [Buildroot] [PATCH 1/1] package/libminiupnpc: bump to version 2.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,52 +101,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 1.6.38 [September 14, 2022]
-  Added configurations and scripts for continuous integration.
-  Fixed various errors in the handling of tRNS, hIST and eXIf.
-  Implemented many stability improvements across all platforms.
-  Updated the internal documentation.
+2022/02/20:
+  upnpc: use of @ to replace local lan address
 
-Update hash of LICENSE file (update in year with
-https://sourceforge.net/p/libpng/code/ci/723b2d9f2e2bb65c605274ee052f9773e594a5aa)
+2021/11/09:
+  python module : Allow to specify the root description url
 
-https://sourceforge.net/p/libpng/code/ci/v1.6.38/tree/CHANGES
+- Drop patch (already in version)
+- Update hash of LICENSE file (license "refined" for github with
+  https://github.com/miniupnp/miniupnp/commit/af812c877532f2432b0566633e1e539797ef9c13)
+
+http://miniupnp.free.fr/files/changelog.php?file=miniupnpc-2.2.4.tar.gz
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpng/libpng.hash | 10 +++++-----
- package/libpng/libpng.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...akeLists-txt-fix-install-for-headers.patch | 43 -------------------
+ package/libminiupnpc/libminiupnpc.hash        |  4 +-
+ package/libminiupnpc/libminiupnpc.mk          |  2 +-
+ 3 files changed, 3 insertions(+), 46 deletions(-)
+ delete mode 100644 package/libminiupnpc/0001-miniupnpc-CMakeLists-txt-fix-install-for-headers.patch
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index b57b1251a0..34b0a8a8b6 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/
--md5  015e8e15db1eecde5f2eb9eb5b6e59e9  libpng-1.6.37.tar.xz
--sha1  3ab93fabbf4c27e1c4724371df408d9a1bd3f656  libpng-1.6.37.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.38/
-+md5  122e6b7837811698563083b352bc8ca2  libpng-1.6.38.tar.xz
-+sha1  60960ed110094843e5efa221df6a7d21614a4dba  libpng-1.6.38.tar.xz
- # Locally computed:
--sha256  505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca  libpng-1.6.37.tar.xz
--sha256  bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b  LICENSE
-+sha256  b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be  libpng-1.6.38.tar.xz
-+sha256  dfe5a536b0e5a531f844fb9c101a3089aca60772a503893b8e15f9457e369960  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index e4e629bbb5..43b4f373f1 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
+diff --git a/package/libminiupnpc/0001-miniupnpc-CMakeLists-txt-fix-install-for-headers.patch b/package/libminiupnpc/0001-miniupnpc-CMakeLists-txt-fix-install-for-headers.patch
+deleted file mode 100644
+index 2e4c8a69e6..0000000000
+--- a/package/libminiupnpc/0001-miniupnpc-CMakeLists-txt-fix-install-for-headers.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From f82b0563a72e33800f5918ead68c41bcda1fd4c1 Mon Sep 17 00:00:00 2001
+-From: heitbaum <rudi@heitbaum.com>
+-Date: Fri, 1 Oct 2021 00:00:27 +1000
+-Subject: [PATCH] miniupnpc/CMakeLists.txt: fix install for headers
+-
+-[Retrieved from:
+-https://github.com/miniupnp/miniupnp/commit/f82b0563a72e33800f5918ead68c41bcda1fd4c1]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- miniupnpc/CMakeLists.txt | 20 ++++++++++----------
+- 1 file changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 0553eeb3..6b0904c0 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -221,16 +221,16 @@ endif ()
+- 
+- if (NOT UPNPC_NO_INSTALL)
+-   install (FILES
+--    miniupnpc.h
+--    miniwget.h
+--    upnpcommands.h
+--    igd_desc_parse.h
+--    upnpreplyparse.h
+--    upnperrors.h
+--    upnpdev.h
+--    miniupnpctypes.h
+--    portlistingparse.h
+--    miniupnpc_declspec.h
+-+    include/miniupnpc.h
+-+    include/miniwget.h
+-+    include/upnpcommands.h
+-+    include/igd_desc_parse.h
+-+    include/upnpreplyparse.h
+-+    include/upnperrors.h
+-+    include/upnpdev.h
+-+    include/miniupnpctypes.h
+-+    include/portlistingparse.h
+-+    include/miniupnpc_declspec.h
+-     DESTINATION include/miniupnpc
+-   )
+- 
+diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
+index 4714dd6f48..5dca8dd6cf 100644
+--- a/package/libminiupnpc/libminiupnpc.hash
++++ b/package/libminiupnpc/libminiupnpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dce41b4a4f08521c53a0ab163ad2007d18b5e1aa173ea5803bd47a1be3159c24  miniupnpc-2.2.3.tar.gz
+-sha256  90bb92bf524970569296022fea562c85a4ec4d99a16f3aef2144d13d7087b631  LICENSE
++sha256  481a5e4aede64e9ef29895b218836c3608d973e77a35b4f228ab1f3629412c4b  miniupnpc-2.2.4.tar.gz
++sha256  a0f853256954f388ce4fab5faaef6a1f5bcd5e682c3c7c70b07b7130e932a021  LICENSE
+diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
+index f3661396ca..9dc5c719a9 100644
+--- a/package/libminiupnpc/libminiupnpc.mk
++++ b/package/libminiupnpc/libminiupnpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.37
-+LIBPNG_VERSION = 1.6.38
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+-LIBMINIUPNPC_VERSION = 2.2.3
++LIBMINIUPNPC_VERSION = 2.2.4
+ LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
+ LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
+ LIBMINIUPNPC_INSTALL_STAGING = YES
 -- 
 2.35.1
 
