@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0906C38A2D
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F12CEFA373F
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42CBA40121;
-	Mon, 24 Oct 2022 21:01:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42CBA40121
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9487160B10;
+	Mon, 24 Oct 2022 21:01:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9487160B10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6b_kOu6NDYrb; Mon, 24 Oct 2022 21:01:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XnpBqieSbp1y; Mon, 24 Oct 2022 21:01:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F63A400D6;
-	Mon, 24 Oct 2022 21:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F63A400D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id C786260ACD;
+	Mon, 24 Oct 2022 21:01:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C786260ACD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F01C51BF338
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:01:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 940001BF338
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7F324033A
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7F324033A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DEB34033A
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:01:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DEB34033A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IKhzjsrl5zbO for <buildroot@lists.busybox.net>;
- Mon, 24 Oct 2022 21:01:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A875C40339
- for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A875C40339
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 949BF86FD5; Mon, 24 Oct 2022 21:01:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 24 Oct 2022 23:00:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0465ad54f290635f599361d00a9f601ace19416e
-X-Git-Newrev: 325a354234594fdcf557c6fa3db75976acfde4bd
-X-Patchwork-Hint: ignore
-Message-Id: <20221024210131.949BF86FD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-distro: bump to version
+ with ESMTP id 4mrmAny-4Qgk for <buildroot@lists.busybox.net>;
+ Mon, 24 Oct 2022 21:01:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 163AE40339
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 163AE40339
+ for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:01:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CAB6E60006;
+ Mon, 24 Oct 2022 21:01:36 +0000 (UTC)
+Date: Mon, 24 Oct 2022 23:01:35 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20221024230135.2df13e3d@windsurf>
+In-Reply-To: <20221024195436.409490-1-ju.o@free.fr>
+References: <20221024195436.409490-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666645297;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=y6WMaXXPw7D7DHqPrsyxDFCvWSMzZIedQSrrS9y9pY4=;
+ b=lW/gdp7aprUsadZV5ySEVKkkytW303CfEjGkJVD5qqwigVZlyD8tocsR8ZuakCEaw19KLM
+ 1XPM4qunTVYJfrAhFNfYjZdB+SvHGM4PGKyOHcb2bqnoaHDhxCoYly2o+NMHO0+0YpOd85
+ UjQ4lpVgFqVmI0GmNoJ4xcebCAcUksR7Uaw3/0jooThgso3oYOl0ns5WY0bPB0qSifdSak
+ 5h3LSqq0yO2ketEeGorPD+uVNqBoMl3XeDAGj9tvxU397qbiWffWOenibldNaQlPOn2I8C
+ 8tfxk8iY1wQOz61wMuKKHQivsggDGIkqNgIyku4znt1KOs44YEpDTdTWwREwTQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lW/gdp7a
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-distro: bump to version
  1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,57 +78,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325a354234594fdcf557c6fa3db75976acfde4bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 24 Oct 2022 21:54:36 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Also adds md5 file hash published on:
-https://pypi.org/pypi/distro/json
+> Also adds md5 file hash published on:
+> https://pypi.org/pypi/distro/json
+> 
+> For change log since 1.7.0, see:
+> https://github.com/python-distro/distro/releases/tag/v1.8.0
+> 
+> Most notable change is the upstream support for Buildroot
+> (included in python module docs and tests).
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Tested on commit bd6e792 with commands:
 
-For change log since 1.7.0, see:
-https://github.com/python-distro/distro/releases/tag/v1.8.0
+Applied to master, thanks.
 
-Most notable change is the upstream support for Buildroot
-(included in python module docs and tests).
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-distro/python-distro.hash | 4 +++-
- package/python-distro/python-distro.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/python-distro/python-distro.hash b/package/python-distro/python-distro.hash
-index 8f09197156..3d3e4258de 100644
---- a/package/python-distro/python-distro.hash
-+++ b/package/python-distro/python-distro.hash
-@@ -1,3 +1,5 @@
-+# From https://pypi.org/pypi/distro/json
-+md5  a1e81972bbcfc0dc77dd0cde590c22a6  distro-1.8.0.tar.gz
-+sha256  02e111d1dc6a50abb8eed6bf31c3e48ed8b0830d1ea2a1b78c61765c2513fdd8  distro-1.8.0.tar.gz
- # Locally computed
--sha256  151aeccf60c216402932b52e40ee477a939f8d58898927378a02abbe852c1c39  distro-1.7.0.tar.gz
- sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-distro/python-distro.mk b/package/python-distro/python-distro.mk
-index c69849b7ac..e079d8e265 100644
---- a/package/python-distro/python-distro.mk
-+++ b/package/python-distro/python-distro.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_DISTRO_VERSION = 1.7.0
--PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/b5/7e/ddfbd640ac9a82e60718558a3de7d5988a7d4648385cf00318f60a8b073a
-+PYTHON_DISTRO_VERSION = 1.8.0
-+PYTHON_DISTRO_SITE = https://files.pythonhosted.org/packages/4b/89/eaa3a3587ebf8bed93e45aa79be8c2af77d50790d15b53f6dfc85b57f398
- PYTHON_DISTRO_SOURCE = distro-$(PYTHON_DISTRO_VERSION).tar.gz
- PYTHON_DISTRO_LICENSE = Apache-2.0
- PYTHON_DISTRO_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
