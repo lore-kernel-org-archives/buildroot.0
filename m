@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1210C38A2D
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:43:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DEFC38A2D
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 481D840334;
-	Mon, 24 Oct 2022 21:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 481D840334
+	by smtp4.osuosl.org (Postfix) with ESMTP id E746840357;
+	Mon, 24 Oct 2022 21:43:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E746840357
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KkSeZpe4v9JZ; Mon, 24 Oct 2022 21:43:20 +0000 (UTC)
+	with ESMTP id STTrkb6FQWrP; Mon, 24 Oct 2022 21:43:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5ED8402B9;
-	Mon, 24 Oct 2022 21:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5ED8402B9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFE9D1BF966
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 923B44031E;
+	Mon, 24 Oct 2022 21:43:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 923B44031E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3085B1BF30C
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB9F28132A
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB9F28132A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B40040334
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B40040334
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yRzmMS-b7-qJ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8_b8EEKAlQlG for <buildroot@lists.busybox.net>;
  Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B438F81328
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2A7C402DD
  for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B438F81328
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2A7C402DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D2828704B; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
+ id B013987048; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Oct 2022 23:27:28 +0200
+Date: Mon, 24 Oct 2022 23:27:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07197baadb40303afd543a0ed915cbdfb87e9e08
-X-Git-Newrev: 13596db789ead1ae68d3d53c298cbdb73e55cdfc
+X-Git-Oldrev: 54a8261e6f0f80fe8eaa3ad48e0f3936015466e1
+X-Git-Newrev: 6fa63bce3f95105220474c1bc6b940e8f2340546
 X-Patchwork-Hint: ignore
-Message-Id: <20221024214302.9D2828704B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libssh: bump to version 0.10.4
+Message-Id: <20221024214302.B013987048@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpng: bump to version 1.6.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13596db789ead1ae68d3d53c298cbdb73e55cdfc
+commit: https://git.buildroot.net/buildroot/commit/?id=6fa63bce3f95105220474c1bc6b940e8f2340546
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://git.libssh.org/projects/libssh.git/tree/CHANGELOG?h=libssh-0.10.4
+Version 1.6.38 [September 14, 2022]
+  Added configurations and scripts for continuous integration.
+  Fixed various errors in the handling of tRNS, hIST and eXIf.
+  Implemented many stability improvements across all platforms.
+  Updated the internal documentation.
+
+Update hash of LICENSE file (update in year with
+https://sourceforge.net/p/libpng/code/ci/723b2d9f2e2bb65c605274ee052f9773e594a5aa)
+
+https://sourceforge.net/p/libpng/code/ci/v1.6.38/tree/CHANGES
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.hash | 4 ++--
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libpng/libpng.hash | 10 +++++-----
+ package/libpng/libpng.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 4dbab11374..90bc4c82d8 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.9/libssh-0.9.6.tar.xz.asc
-+# https://www.libssh.org/files/0.10/libssh-0.10.4.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256  86bcf885bd9b80466fe0e05453c58b877df61afa8ba947a58c356d7f0fab829b  libssh-0.9.6.tar.xz
-+sha256  07392c54ab61476288d1c1f0a7c557b50211797ad00c34c3af2bbc4dbc4bd97d  libssh-0.10.4.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 4cadf83aee..5deb64b82e 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index b57b1251a0..34b0a8a8b6 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/
+-md5  015e8e15db1eecde5f2eb9eb5b6e59e9  libpng-1.6.37.tar.xz
+-sha1  3ab93fabbf4c27e1c4724371df408d9a1bd3f656  libpng-1.6.37.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.38/
++md5  122e6b7837811698563083b352bc8ca2  libpng-1.6.38.tar.xz
++sha1  60960ed110094843e5efa221df6a7d21614a4dba  libpng-1.6.38.tar.xz
+ # Locally computed:
+-sha256  505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca  libpng-1.6.37.tar.xz
+-sha256  bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b  LICENSE
++sha256  b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be  libpng-1.6.38.tar.xz
++sha256  dfe5a536b0e5a531f844fb9c101a3089aca60772a503893b8e15f9457e369960  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index e4e629bbb5..43b4f373f1 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSSH_VERSION_MAJOR = 0.9
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).6
-+LIBSSH_VERSION_MAJOR = 0.10
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+-LIBPNG_VERSION = 1.6.37
++LIBPNG_VERSION = 1.6.38
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
