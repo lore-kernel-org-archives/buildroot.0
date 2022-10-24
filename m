@@ -4,117 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3780ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 14:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CF27C38A2D
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 14:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20755400B6;
-	Mon, 24 Oct 2022 14:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20755400B6
+	by smtp4.osuosl.org (Postfix) with ESMTP id B69B24088F;
+	Mon, 24 Oct 2022 14:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B69B24088F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VZUbl-J2m2og; Mon, 24 Oct 2022 14:22:29 +0000 (UTC)
+	with ESMTP id NDxCQFLNmoFP; Mon, 24 Oct 2022 14:22:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03C1640106;
-	Mon, 24 Oct 2022 14:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C1640106
+	by smtp4.osuosl.org (Postfix) with ESMTP id E72B340070;
+	Mon, 24 Oct 2022 14:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E72B340070
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 307591BF2C8
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 14:22:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BFE61BF2C8
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 14:22:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D916260B60
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 14:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D916260B60
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB2EF60B55
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 14:22:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB2EF60B55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mMGtF6g9OEUj for <buildroot@lists.busybox.net>;
- Mon, 24 Oct 2022 14:22:24 +0000 (UTC)
+ with ESMTP id 4egDfUWWdqbt for <buildroot@lists.busybox.net>;
+ Mon, 24 Oct 2022 14:22:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2744D60AF6
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2744D60AF6
- for <buildroot@buildroot.org>; Mon, 24 Oct 2022 14:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C485F60AF6
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on2042.outbound.protection.outlook.com [40.107.94.42])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C485F60AF6
+ for <buildroot@buildroot.org>; Mon, 24 Oct 2022 14:22:28 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ifpJaR4XkJKpDZzkwDnxRVrqrwi/g9HeuFrRL0Y4ARi7rvWK+rU1pNPXCQ7KvwP1OE30QFyHKi6jbuFGXfODuc0YeP9iMfdMs0zIr/yysIjyQk/mqlvdDUJ8RCt9hQ5gHLkb71HHwqLlFvfpQOhgq0QjKcocv7ZNIRrAG8YyZkJQvcXUaw8kNrjTImfmfEW5AsX+qMCPYKcKqxWAquwYzSUIvtpaIbXJczcyGk3LAyZb83kWJ2DUdcSWzgltKxKnPSMmf1MxWdd0m3awKYqCC651Vt1ZLJASWgVqBZUnEHcSqMqVo4tWO4xbWdN/+B3zQ/9KJpaSMuYx2CCzYgyfhQ==
+ b=DJuOhwfCypIp7x4OWWbXORE65PseP4dP9K4N8p6uJIT58f8480nPXDbgN8pe1NKZYyNrN6NQi81OkKOvSpofXCe+WDOzDfAk9cYWZUVdsfwukt085wbgZDGC14LaaLNaeSIq+eoSYrcOONvI+2GpzqPuI1DmfuFT+TyRtzhJ2m849x+8kNUAcEQg043/g4avT2PHkCwxnU+Bqlh/l3knFvFeqsXI6UD/6w+5/EDILnfsN6JrUX6lTbnBzsEMG0aYriHGQzoH9/ow0i7PMc2A4cC1zO98vCUDmy2jI4jiNfAuNE2jG4VvOd4ZOLrRp/EmcVJgI5qto4XxI8QEte6jrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+VA46RGudF/VFORGQINmcnxt2HfMXSWnWV1PMgNVuJ0=;
- b=YEH02bRkECiYNqOgvkUP5TKd9znVamvLsqDHApLb4nJU34XaMiXYwRpc/YxhS0Xpbq4giMh+5ZUFEuePv930nK+NeKK9AmvLr/CPlE0+FUCYh0dkpvO1kdprQQCLe9fiOkkjGTp5joWi9er5E5WOo28A0s0fX2IuCjvGkd2N0HwqCdJjDuQlbvY6prfCjGQcBbffpm7rD3UzutepqDPS0kEDCTjEECzSRUPjTi4ChOG3P9/bhk3qsmkgbVDj+TwhkTlIAoM4tGT9gKPzs43h0Wbw+oD6VXFkGb7xare8bHkHpV0z9O/bXzG68JaxasLzcNaotofkYtNb1nGbxbv6eQ==
+ bh=ms84bLHsKshyGkXUseFlB/x1M8va4EJ279/VUGsS6ZM=;
+ b=e5pFCDqIbWnzWUIEs7UxR8i74L+9u55jXQOB+7eaw9ZXorH4xw70Tq9yqcVZKQQaqBC1Cp5yJwgok3k4FAykAcNxoGuz/XTYfnnjB3g3K3GLlbMpJg4vpGAy37ACdl0a7US1q236+GtSGokcG1ASt540oNSm0eX+19/wyuUU9XrEW0o83GZnjkQRVcEivoHYOma0frjHce9Ki+om7OdUqhbEVxy58FB6LEXjqST+Q1MUmrmA1a8ZZd1IcsMWh2RcHf6SVfTFbqH6kjbGHLvG9liIBeyy93oC7T3zns/WuCImEElog52wE5z6+4s4vL+hWK7HMczPLxQV0hwM9CA36Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from BN8PR15CA0049.namprd15.prod.outlook.com (2603:10b6:408:80::26)
- by BL1PR12MB5319.namprd12.prod.outlook.com (2603:10b6:208:317::24)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Mon, 24 Oct
- 2022 14:22:20 +0000
-Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:80:cafe::1a) by BN8PR15CA0049.outlook.office365.com
- (2603:10b6:408:80::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21 via Frontend
- Transport; Mon, 24 Oct 2022 14:22:20 +0000
+Received: from MW4PR03CA0055.namprd03.prod.outlook.com (2603:10b6:303:8e::30)
+ by DM8PR12MB5432.namprd12.prod.outlook.com (2603:10b6:8:32::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
+ 2022 14:22:24 +0000
+Received: from CO1NAM11FT044.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8e:cafe::16) by MW4PR03CA0055.outlook.office365.com
+ (2603:10b6:303:8e::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26 via Frontend
+ Transport; Mon, 24 Oct 2022 14:22:24 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT044.mail.protection.outlook.com (10.13.175.188) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 14:22:20 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 14:22:24 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 09:22:20 -0500
+ 2022 09:22:23 -0500
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
  (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 07:22:20 -0700
+ 2022 07:22:23 -0700
 Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Mon, 24 Oct 2022 09:22:19 -0500
+ Transport; Mon, 24 Oct 2022 09:22:22 -0500
 To: <buildroot@buildroot.org>
-Date: Mon, 24 Oct 2022 08:22:14 -0600
-Message-ID: <20221024142216.31273-1-neal.frager@amd.com>
+Date: Mon, 24 Oct 2022 08:22:15 -0600
+Message-ID: <20221024142216.31273-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221024142216.31273-1-neal.frager@amd.com>
+References: <20221024142216.31273-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT068:EE_|BL1PR12MB5319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 436692b1-312b-4172-454b-08dab5cb29a0
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT044:EE_|DM8PR12MB5432:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2cd4cc4-e555-4403-a9da-08dab5cb2bc3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z49BDNvdiH0YXdynRFWBhN3H2jKXu1Dgwu/FY5fA8cKQbaF2JhsRUXtSD8pvDkME/2dtK36CCKMQ/Y9pa+PhfN5oTmZqWpxYYqX8dZZQYgUCyeQ6ezG9udi56g7DqMLkD8n1tsIuNkf2Hhl6iJ35cmewkq6CyAIC/Awr3ZRAZih1ImbWmVc05gYfZfF89L17jHsDFEb89IfM4c+GFO9juP2NgSjxAqebAzY5W2JMMmaUPDC0U9B+FNwE0UFtw2rbipmZrSEXbKUC4VkjRTR796WaZttBPQf3xIREJpHU30WuC7XcAy2swJN8hblzqPH+FyTS3zL5eWl8qbJqk4QNi8oIDtqz1XH2WOW9DVfjxq83/xUh5WzbHtHc5dCjSw3Vr8RkjuDEyVNCKiKrfigPlV5zu72D8E1JHzkZey7AG9froPlu6YMxiHumojX1fp3bO5xE0wqYQP/vXaPOphrZFLWZXCAt+0QtlQc0no4BQWA0b1ryevYneTDOEqwi8e2ixeMno+mewVjmYgzxHvO+1rrfGARaMccKsvNSKftegXAicCO1KF7NudyutGARK6LRahotTgrPIsvGFUfsVY9kw+DU+pzVcwCQ/7NgB0LZ12/H1zsv/P6kK+jpJgleKV4OoiWEN3R2dohUgJf31qnd4BxzFscHfHKiuRere0zbvVmtxTjk+fKJnE4OYrK5GVMTs59K4Xa5CYYT54ZR/J71dZ84Dtm0Vvmmq0SK6g2+sKXqFrDgbGiROPdYj0JjMGpEFsHTHbIvs8KUAXm9yBLP00b5Lh6beEmsTdWejEnuVX8jhdghB5Cx+wuWwSFzirwRUB5qhxo6w/Jgu3aHt24zsQ==
+X-Microsoft-Antispam-Message-Info: hLWuHb3qyBrSfhcKD7MUevY+R6j0RS4SzXAkyKWdLjfLSDlnHdzUl3j1ypR2JQBAtoS5Ve7GJ7B8nnSf7qnD7swF0VK7C1Si2qdymFWgNIlFp3PcD2uhLQnF+ssOgJl4kD8ZhPPgjGIc2UoIKstE9hDufKdg4SxfJEMtcbqzi/pGko6zRu0kVYIJEBQE+yoQtSNdoUu/7abcKMAXQF/SZ3qFR9ck/SgvOYPwNYFGjXp9o55PIZIe7F/iXrc6fAXlbGzaUx4R4j1bOYqfTfLdxKLbsbLtbWHQyyufZGneZ2APGiiyBMws5obNt4IcgY1PISKR9+qXToz116PyKGub4jdl13FZ7Vw0FpQ9M448I/QDXaiaRIgzbZ3RjkDpCOtqz02CB1KFxIdiWZNES1R+tkZhUHHgZXmifkslU2sb4/d8Z7fLhWSWKvwarrI3BU+P4eALUaFGXDmo0JK9XM0PbeXxyHmrZO26S18qDIMOwqHz8AZabgfhO0iRKgHeKfrCy9VVxDu4/+fyji8y0bKZwFKFyRNQdZBWr5bBYcMISpzYnYp5QIvQyAyWoDHu8xd66UD2xsdVUMd4sSAfNvkfKo6lt/w5/yR1Dxth8PR9gNoljR/3YaUtofAMCzwYWpCWIEK9/ZlCJMRn0336vrpmvVxcHKpbJ8gSAFNmqFssYk2CKewasuQZTmbXO82WjNjRy/KRcb5rKb12YiWTXf2SuoA1X+sLekT/mqzT/D5upeRqpFpB76kcU8w3pcKZ6z5gJk/8MA0UrFfMcmI25gnnE6XG7XrnKjAY1/n1WbjZdAHS81xhpyBTLMyZhW7+9C7s4frnMar++IiuTuYAOV0APQ==
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(41300700001)(426003)(1076003)(6916009)(478600001)(47076005)(82740400003)(316002)(2906002)(6666004)(186003)(54906003)(81166007)(40460700003)(356005)(36756003)(70206006)(70586007)(8676002)(966005)(2616005)(26005)(40480700001)(4326008)(5660300002)(82310400005)(336012)(86362001)(83380400001)(8936002)(44832011)(36860700001)(36900700001);
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230022)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199015)(36840700001)(46966006)(40470700004)(41300700001)(36860700001)(6666004)(44832011)(4326008)(81166007)(40480700001)(8936002)(356005)(86362001)(8676002)(54906003)(6916009)(83380400001)(26005)(2906002)(426003)(82310400005)(47076005)(5660300002)(478600001)(186003)(1076003)(336012)(40460700003)(36756003)(316002)(70206006)(70586007)(82740400003)(2616005)(36900700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 14:22:20.7235 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 436692b1-312b-4172-454b-08dab5cb29a0
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 14:22:24.1859 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2cd4cc4-e555-4403-a9da-08dab5cb2bc3
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT044.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5319
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5432
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+VA46RGudF/VFORGQINmcnxt2HfMXSWnWV1PMgNVuJ0=;
- b=XvT31lSaHryesQnN1lzM8Vsf1t7jgNX1I8sPhT3903ov3Zrhk8/QCYPY0V/l1vitzp61DRv33EFLgQUiRBpsfZn/A04U+Q9Ll/qta9zLMsCUdBYJpa1K0kJVtBrWiA2lVTBsy3ONOiEU9E6mXRyUh23JkmVuRUQxddZuHEOTZOo=
+ bh=ms84bLHsKshyGkXUseFlB/x1M8va4EJ279/VUGsS6ZM=;
+ b=RccXTkXBwc5zcJD9JE97iEYcMOkFadJ3K3lTvD7OnqMhvXeqKKGMKv8P5s56RCC3+MO8qdX8fF3JKWwgwm1MVA/ymK8tStHupgIaKF5aKWml5/19Lru3X+4zZPC4Gi7QuIVRIjgULMI6nbgR7Y/DdfI/Uh02CcOX2qxgaM7FGCM=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=XvT31lSa
-Subject: [Buildroot] [PATCH v1 1/3] add package/versal-firmware
+ header.s=selector1 header.b=RccXTkXB
+Subject: [Buildroot] [PATCH v1 2/3] add board/versal
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,119 +138,201 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support for downloading versal microblaze firmware binaries.
-These are necessary for booting Xilinx versal devices.
-
-The location of these binaries is temporary, and will soon be added to the
-Xilinx firmware repository.  The temporary location is using the same free
-distribution license as the Xilinx firmware repository.
-
-Once these files are available on the Xilinx repository, this package will
-be updated to the new location.
+This patch adds board support for generating images for versal boards.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/versal-firmware/Config.in            | 22 ++++++++++++++++++
- package/versal-firmware/versal-firmware.hash |  3 +++
- package/versal-firmware/versal-firmware.mk   | 24 ++++++++++++++++++++
- 5 files changed, 51 insertions(+)
- create mode 100644 package/versal-firmware/Config.in
- create mode 100644 package/versal-firmware/versal-firmware.hash
- create mode 100644 package/versal-firmware/versal-firmware.mk
+ DEVELOPERS                         |  1 +
+ board/versal/genimage.cfg          | 30 +++++++++++++++++
+ board/versal/post-build.sh         | 16 +++++++++
+ board/versal/post-image.sh         | 35 +++++++++++++++++++
+ board/versal/readme.txt            | 54 ++++++++++++++++++++++++++++++
+ board/versal/vck190/uboot.fragment |  1 +
+ 6 files changed, 137 insertions(+)
+ create mode 100644 board/versal/genimage.cfg
+ create mode 100755 board/versal/post-build.sh
+ create mode 100755 board/versal/post-image.sh
+ create mode 100644 board/versal/readme.txt
+ create mode 100644 board/versal/vck190/uboot.fragment
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c8183b2290..ed696f4cd0 100644
+index ed696f4cd0..08095c9702 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2176,6 +2176,7 @@ F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
- F:	configs/zynqmp_kria_kv260_defconfig
- F:	package/bootgen
-+F:	package/versal-firmware
+@@ -2168,6 +2168,7 @@ F:	package/pkg-qmake.mk
+ F:	package/qt5/qt5opcua/
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..0abf233940 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -441,6 +441,7 @@ menu "Firmware"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-+	source "package/versal-firmware/Config.in"
- 	source "package/wilc-firmware/Config.in"
- 	source "package/wilink-bt-firmware/Config.in"
- 	source "package/zd1211-firmware/Config.in"
-diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
+ N:	Neal Frager <neal.frager@amd.com>
++F:	board/versal/
+ F:	board/zynq/
+ F:	board/zynqmp/
+ F:	board/zynqmp/kria/
+diff --git a/board/versal/genimage.cfg b/board/versal/genimage.cfg
 new file mode 100644
-index 0000000000..e184ba1925
+index 0000000000..d994d3a2bf
 --- /dev/null
-+++ b/package/versal-firmware/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_VERSAL_FIRMWARE
-+	bool "versal-firmware"
-+	depends on BR2_aarch64
-+	help
-+	  Pre-built firmware files for Xilinx Versal boards.
++++ b/board/versal/genimage.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"boot.bin",
++			"system.dtb",
++			"Image"
++		}
++		file extlinux/extlinux.conf {
++			image = extlinux.conf
++		}
++	}
 +
-+	  https://github.com/nealfrager/buildroot-firmware
++	size = 32M
++}
 +
-+if BR2_PACKAGE_VERSAL_FIRMWARE
++image sdcard.img {
++	hdimage {
++	}
 +
-+config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
-+	string "versal firmware version"
-+	help
-+	  Release version of Versal firmware.
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
-+config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
-+	string "versal board name"
-+	help
-+	  Name of Versal target board.
-+	  Used for installing the appropriate firmware boot.bin.
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
+new file mode 100755
+index 0000000000..0713bd1b05
+--- /dev/null
++++ b/board/versal/post-build.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
 +
-+endif # BR2_PACKAGE_VERSAL_FIRMWARE
-diff --git a/package/versal-firmware/versal-firmware.hash b/package/versal-firmware/versal-firmware.hash
++# genimage will need to find the extlinux.conf
++# in the binaries directory
++
++BOARD_DIR="$(dirname $0)"
++CONSOLE=$2
++ROOT=$3
++
++mkdir -p "${BINARIES_DIR}"
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
++	label linux
++	  kernel /Image
++	  devicetree /system.dtb
++	  append console=${CONSOLE} root=/dev/${ROOT} rw rootwait
++	__HEADER_EOF
+diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
+new file mode 100755
+index 0000000000..aad6813052
+--- /dev/null
++++ b/board/versal/post-image.sh
+@@ -0,0 +1,35 @@
++#!/bin/sh
++
++# By default U-Boot loads DTB from a file named "system.dtb", so
++# let's use a symlink with that name that points to the *first*
++# devicetree listed in the config.
++
++FIRST_DT=$(sed -nr \
++               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
++               ${BR2_CONFIG})
++
++[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME=$4
++
++mkdir -p "${BINARIES_DIR}"
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
++	the_ROM_image:
++	{
++	image {
++		{ type=bootimage, file=${BINARIES_DIR}/${BOARD_NAME}_vpl_gen_fixed.pdi }
++		{ type=bootloader, file=${BINARIES_DIR}/${BOARD_NAME}_plm.elf }
++		{ core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
++	}
++	image {
++		id = 0x1c000000, name=apu_subsystem 
++		{ type=raw, load=0x00001000, file=${BINARIES_DIR}/system.dtb }
++		{ core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
++		{ core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot }
++	}
++	}
++	__HEADER_EOF
++
++${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
++support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
+diff --git a/board/versal/readme.txt b/board/versal/readme.txt
 new file mode 100644
-index 0000000000..7a8ea04c91
+index 0000000000..9f234be620
 --- /dev/null
-+++ b/package/versal-firmware/versal-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  14c505cac0216637ab2d08590acffb4861446e480bdbf7417e699816048ab39b  versal-firmware-v2022.2.tar.gz
-+sha256  f9796efcd98f47fb3e1d5d4c23e224613e91c70207b759a2087de368be50c315  LICENSE
-diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
++++ b/board/versal/readme.txt
+@@ -0,0 +1,54 @@
++******************************************
++Xilinx VCK190 board - Versal
++******************************************
++
++This document describes the Buildroot support for the VCK190
++board by Xilinx, based on Versal.  It has been tested with the 
++VCK190 production board.
++
++Evaluation board features can be found here with the link below.
++
++VCK190:
++https://www.xilinx.com/products/boards-and-kits/vck190.html
++
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make versal_vck190_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- boot.bin
++    +-- boot.vfat
++    +-- Image
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- system.dtb -> versal-vck190-rev1.1.dtb
++    `-- versal-vck190-rev1.1.dtb
++
++How to write the SD card
++========================
++
++WARNING! This will destroy all the card content. Use with care!
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to an SD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the SD.
++
++Eject the SD card, insert it in the board, and power it up.
+diff --git a/board/versal/vck190/uboot.fragment b/board/versal/vck190/uboot.fragment
 new file mode 100644
-index 0000000000..35dfbaa512
+index 0000000000..961c4239bd
 --- /dev/null
-+++ b/package/versal-firmware/versal-firmware.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# versal-firmware
-+#
-+################################################################################
-+
-+VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_SITE = $(call github,nealfrager,buildroot-firmware,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_LICENSE = Xilinx-Binary-Only
-+VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
-+
-+VERSAL_FIRMWARE_INSTALL_TARGET = NO
-+VERSAL_FIRMWARE_INSTALL_IMAGES = YES
-+
-+define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_plm.elf \
-+	$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_plm.elf
-+	$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_psmfw.elf \
-+	$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_psmfw.elf
-+	$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_vpl_gen_fixed.pdi \
-+	$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_vpl_gen_fixed.pdi
-+endef
-+
-+$(eval $(generic-package))
++++ b/board/versal/vck190/uboot.fragment
+@@ -0,0 +1 @@
++CONFIG_DEFAULT_DEVICE_TREE="versal-vck190-rev1.1"
 -- 
 2.17.1
 
