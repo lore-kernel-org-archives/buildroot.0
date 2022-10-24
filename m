@@ -4,64 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D79C38A2D
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 17:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D21AECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 17:49:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 855B340235;
-	Mon, 24 Oct 2022 17:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 855B340235
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF0F04037A;
+	Mon, 24 Oct 2022 17:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF0F04037A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6TJHiaAtp2-0; Mon, 24 Oct 2022 17:43:20 +0000 (UTC)
+	with ESMTP id vwIT56q72ils; Mon, 24 Oct 2022 17:49:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3026D401F0;
-	Mon, 24 Oct 2022 17:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3026D401F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 902004035D;
+	Mon, 24 Oct 2022 17:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 902004035D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 500E61BF391
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 17:43:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D44BA1BF391
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 17:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36FE7401F0
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 17:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36FE7401F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD35B4035B
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 17:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD35B4035B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KX0hwp9fIz57 for <buildroot@lists.busybox.net>;
- Mon, 24 Oct 2022 17:43:16 +0000 (UTC)
+ with ESMTP id rcNR_04QoQHY for <buildroot@lists.busybox.net>;
+ Mon, 24 Oct 2022 17:49:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB0F8400F6
-Received: from mail.h6t.eu (cloud.h6t.eu [IPv6:2a01:4f8:1c1e:8216::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DB0F8400F6
- for <buildroot@buildroot.org>; Mon, 24 Oct 2022 17:43:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 77228214733; Mon, 24 Oct 2022 19:43:10 +0200 (CEST)
-Message-ID: <4441102a-7b71-a4cf-9a9f-8122ebeaeb9b@h6t.eu>
-Date: Mon, 24 Oct 2022 19:43:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20221021224448.3502942-1-james.hilliard1@gmail.com>
-In-Reply-To: <20221021224448.3502942-1-james.hilliard1@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE0954035D
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com
+ [148.163.156.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE0954035D
+ for <buildroot@buildroot.org>; Mon, 24 Oct 2022 17:49:29 +0000 (UTC)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+ by mx0a-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OH9vms008728;
+ Mon, 24 Oct 2022 10:49:29 -0700
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.87.133])
+ by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3kcfs79tmg-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 24 Oct 2022 10:49:28 -0700
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com
+ [10.225.0.209])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B10AFC00F4;
+ Mon, 24 Oct 2022 17:49:26 +0000 (UTC)
+Received: from de02arcdev2.internal.synopsys.com
+ (de02arcdev2.internal.synopsys.com [10.225.41.245])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id 19D09A005D;
+ Mon, 24 Oct 2022 17:49:24 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+To: buildroot@buildroot.org
+Date: Mon, 24 Oct 2022 19:49:11 +0200
+Message-Id: <20221024174911.75444-1-abrodkin@synopsys.com>
+X-Mailer: git-send-email 2.16.2
+X-Proofpoint-GUID: BaOkTX_PlUqN4U9rhV-6flouuBPkRuic
+X-Proofpoint-ORIG-GUID: BaOkTX_PlUqN4U9rhV-6flouuBPkRuic
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_05,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
+ policy=outbound_active_cloned score=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0
+ adultscore=0 mlxlogscore=579 spamscore=0 clxscore=1011 suspectscore=0
+ bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210240108
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=h6t.eu; s=dkim; 
- t=1666633391; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=LLFNv2VYe6GO0A85uDFdtPaDs/NAiRK+rs9DZHLxzbc=;
- b=mOdsWFTFMkiii5fHUrNoNrVXlxED4k3s3rvBRnvtBtHNsABpkVPocAABGrQ/pWuHILHdH+
- WVZLKyJpFbDnH9ZH+EtqB7Pw2ywyMPkjOB5NF+R/SZqWw/jzna4XQKXRfGJzsmI6ccJm0T
- YgGcrVDp9N2gxga8MP962yq+VKdabOwNn2T24ig1fExpF1gaim74nV9AyyGdjIYlmlVyhp
- EBHS7wDOXmGiAlh66CfEMob507zOBhQodEwTDP1ivjpEiMPF/Kj61hHCK+Cd2pJllYjraY
- 8qQdMffocuCqpVWRQ8uttaC8A5JOFPsFR9SWxJIpJA77yXjfRRYb62o9P/J5Aw==
+ d=synopsys.com; h=from : to : cc :
+ subject : date : message-id; s=pfptdkimsnps;
+ bh=4JYGw+sWCImrE461LfPgU5Ii7xCjecKccrUcJfrO6Ac=;
+ b=V0A4bFkG5IsBysUWlJXs4FYiRC9HYSA9gwCMed1ZPobzBN6kKQVi0iiuo8fnPZsWHwQB
+ yegoeN0OO2P1Wrcg44B2eP98W0AwbYQdSGGvC0PW9zP26oNVLphBP5aY0musLuarPQhL
+ LaRFbLvnlJ3d1gpLmbFuwmRqZkNZtKHa+AQhMpf365KbGoQK5KoeqDiAs8OZxAnGqcmX
+ 2dEVv8cVcG3bbb/FVjZuP9TpSvf9f5bxZ9RxEvqI2pgL2IIeXLAqSUDVNyouFTN0TP/P
+ DWCpG7FKVVNMIWB/v/eZVyRVPgz5ZnvUW5gAJ/vhrTaG8e3cnwxVE9+cZwtSl2Vitqyd 8g== 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=synopsys.com; s=mail; 
+ t=1666633768; bh=8kIOV2KewVB1mtino14rX6gs9EUs5Nk9JotZnxprck4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=jYeZX0BMsDNo/7w3lInWPbqBMat9/3iLmhwoFotED9xsdZoYj66eQmweL5/LXduE5
+ fZUPnImwAbPBcKXEI+c2BpgGaMwpdne2j2YiIs0sv5YdCiGdgwUQ50WMYme3Lk/SQu
+ ranMGlseAVctD5O3N2MLY5OzVnyGEL7n/sIM4j5qvjB/kkMCfq/3fiIRMsEG1ebFef
+ GenzmL1dcuTMNhSvIHCh5I9hPU0clPZU4ntInRczLMJSp96+hs7DhtvsN/r1wsMLus
+ 5oUAK9j5BeArDtaI7jOISnC5n3P8FYPeDu6tS6cXyRto3kk8zPSMW9DCqtQAyIcuFw
+ vV2JvIUbKtofQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=h6t.eu header.i=@h6t.eu header.a=rsa-sha256
- header.s=dkim header.b=mOdsWFTF
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cargo: configure cargo
- profiles
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=V0A4bFkG; 
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=mail header.b=jYeZX0BM
+Subject: [Buildroot] [PATCH] package/numactl: point to target libs via
+ LDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,156 +109,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Moritz Bitsch via buildroot <buildroot@buildroot.org>
-Reply-To: Moritz Bitsch <moritz@h6t.eu>
+From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 22.10.22 um 00:44 schrieb James Hilliard:
-> The cargo profile flags currently only select a cargo build flag which
-> does not accurately reflect the configured build settings, setting the
-> cargo build flag also only works for packages using the cargo
-> infrastructure directly and not with other packages using the cargo
-> environment such as pyo3 based python packages(which indirectly invoke
-> cargo build via the setuptools-rust and maturn python build backends).
-> 
-> To ensure that cargo uses the correct profile settings for the build
-> we need to set env variables for the two root profiles(dev/release)
-> based on the buildroot build settings.
-> 
-> For reference the default cargo root profile settings are:
-> https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles
-> 
-> As applications not using cargo infrastructure do not have a standard
-> way of configuring a specific build profile due to the selected
-> profile being determined by the cargo command line flags, the only
-> reliable way to configure profile settings is to set both root
-> profiles in the environment as this will ensure that they are used
-> regardless of which cargo build flag(such as --debug or --release) is
-> used.
-> 
-> Cc: Moritz Bitsch <moritz@h6t.eu>
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+In the commit a699a667bd64 ("package/numactl: add -latomic to numa.pc")
+we opted-out from unconditional linking with "-latomic" and made it
+a conditional based on real availability of __atomic_fetch_and_1()
+in the toolchain. I.e. for many targets "-latomic" was not used
+any longer.
 
-Tested-by: Moritz Bitsch <moritz@h6t.eu>
+And in those supposedly rare cases when libatomic was required it was
+all OK until there's a LD_LIBRARY_PATH set with something where yet
+another libatomic.so instance exists, especially if that's the one from
+host (in my case I used a separately built host toolchain). Then we see:
+---------------------->8-----------------------
+/bin/sh ./libtool  --tag=CC   --mode=link .../buildroot/output/host/bin/arc32-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -Wl,-z,max-page-size=4096 -fPIC -std=gnu99    -o numastat numastat-numastat.o  -latomic
 
-> ---
->   package/pkg-cargo.mk | 100 +++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 100 insertions(+)
-> 
-> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-> index f7e3f39503..4945770079 100644
-> --- a/package/pkg-cargo.mk
-> +++ b/package/pkg-cargo.mk
-> @@ -46,6 +46,106 @@ PKG_CARGO_ENV = \
->   	CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
->   	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(notdir $(TARGET_CROSS))gcc
->   
-> +# We always set both CARGO_PROFILE_DEV and CARGO_PROFILE_RELEASE
-> +# as we are unable to select a build profile using the environment.
-> +#
-> +# Other cargo profiles generally derive from these two profiles.
-> +
-> +# Disable incremental compilation to match release default.
-> +#
-> +# Set codegen-units to release default.
-> +#
-> +# Set split-debuginfo to default off for ELF platforms.
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_INCREMENTAL="false" \
-> +	CARGO_PROFILE_RELEASE_INCREMENTAL="false" \
-> +	CARGO_PROFILE_DEV_CODEGEN_UNITS="16" \
-> +	CARGO_PROFILE_RELEASE_CODEGEN_UNITS="16" \
-> +	CARGO_PROFILE_DEV_SPLIT_DEBUGINFO="off" \
-> +	CARGO_PROFILE_RELEASE_SPLIT_DEBUGINFO="off"
-> +
-> +# Set the optimization level with the release default as fallback.
-> +ifeq ($(BR2_OPTIMIZE_0),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="0" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="0"
-> +else ifeq ($(BR2_OPTIMIZE_1),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="1" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="1"
-> +else ifeq ($(BR2_OPTIMIZE_2),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="2" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="2"
-> +else ifeq ($(BR2_OPTIMIZE_3),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
-> +else ifeq ($(BR2_OPTIMIZE_G),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="0" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="0"
-> +else ifeq ($(BR2_OPTIMIZE_S),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="s" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="s"
-> +else ifeq ($(BR2_OPTIMIZE_FAST),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
-> +else
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_OPT_LEVEL="3" \
-> +	CARGO_PROFILE_RELEASE_OPT_LEVEL="3"
-> +endif
-> +
-> +ifeq ($(BR2_ENABLE_LTO),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_LTO="true" \
-> +	CARGO_PROFILE_RELEASE_LTO="true"
-> +else
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_LTO="false" \
-> +	CARGO_PROFILE_RELEASE_LTO="false"
-> +endif
-> +
-> +
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +ifeq ($(BR2_DEBUG_3),y)
-> +# full debug info
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_DEBUG="2" \
-> +	CARGO_PROFILE_RELEASE_DEBUG="2"
-> +else
-> +# line tables only
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_DEBUG="1" \
-> +	CARGO_PROFILE_RELEASE_DEBUG="1"
-> +endif
-> +else
-> +# no debug info
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_DEBUG="0" \
-> +	CARGO_PROFILE_RELEASE_DEBUG="0"
-> +endif
-> +
-> +# Enabling debug-assertions enables the runtime debug_assert! macro.
-> +#
-> +# Enabling overflow-checks enables runtime panic on integer overflow.
-> +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_DEBUG_ASSERTIONS="true" \
-> +	CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS="true" \
-> +	CARGO_PROFILE_DEV_OVERFLOW_CHECKS="true" \
-> +	CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS="true"
-> +else
-> +PKG_CARGO_ENV += \
-> +	CARGO_PROFILE_DEV_DEBUG_ASSERTIONS="false" \
-> +	CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS="false" \
-> +	CARGO_PROFILE_DEV_OVERFLOW_CHECKS="false" \
-> +	CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS="false"
-> +endif
-> +
->   #
->   # This is a workaround for https://github.com/rust-lang/compiler-builtins/issues/420
->   # and should be removed when fixed upstream
+libtool: link: .../buildroot/output/host/bin/arc32-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wl,-z -Wl,max-page-size=4096 -fPIC -std=gnu99 -o numastat numastat-numastat.o  .../gcc-5.2.0/lib/../lib64/libatomic.so -pthread -Wl,-rpath -Wl,.../gcc-5.2.0/lib/../lib64 -Wl,-rpath -Wl,.../gcc-5.2.0/lib/../lib64
+.../buildroot/output/host/lib/gcc/arc32-buildroot-linux-uclibc/12.2.1/../../../../arc32-buildroot-linux-uclibc/bin/ld: .../gcc-5.2.0/lib/../lib64/libatomic.so: error adding symbols: file in wrong format
+collect2: error: ld returned 1 exit status
+---------------------->8-----------------------
+
+That happens because libtool of numactl adds contents of the aforementioned
+LD_LIBRARY_PATH to its "$searchdirs" and then the first libatomic.so it
+finds becomes the one used for linking. What's more our precios cross-built
+libatomic.so never even gets considered because that first found libatomic.so
+is used with full path, not as "-latomic" as otherwise it would have been used
+without helpful libtool.
+
+But with paths pointing to the staging location, these paths get added to
+"$searchdirs" and so the right libatomic.so gets found, which solves our problem.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+---
+ package/numactl/numactl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..58b304d6e1 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -10,6 +10,7 @@ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+ NUMACTL_LICENSE_FILES = README.md
+ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+-NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
++NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++		   LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib"
+ 
+ $(eval $(autotools-package))
+-- 
+2.16.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
