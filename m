@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EF4C38A2D
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2333C67871
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DD8960B1D;
-	Mon, 24 Oct 2022 21:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD8960B1D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51ACA60BE4;
+	Mon, 24 Oct 2022 21:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51ACA60BE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4E2QkZ39VGTe; Mon, 24 Oct 2022 21:05:41 +0000 (UTC)
+	with ESMTP id qrwhv65HjeO4; Mon, 24 Oct 2022 21:11:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35FED60ABD;
-	Mon, 24 Oct 2022 21:05:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35FED60ABD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 65CA91BF30C
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:05:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81DA060B10;
+	Mon, 24 Oct 2022 21:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81DA060B10
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 238B71BF30C
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:11:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40EE160ABD
- for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40EE160ABD
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1E7D40345
+ for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:11:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1E7D40345
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dtIhjXHnoA0q for <buildroot@lists.busybox.net>;
- Mon, 24 Oct 2022 21:05:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0656A60597
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0656A60597
- for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:05:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CAEBE1BF204;
- Mon, 24 Oct 2022 21:05:35 +0000 (UTC)
-Date: Mon, 24 Oct 2022 23:05:32 +0200
-To: =?UTF-8?B?U8OpYmFzdGllbg==?= Szymanski <sebastien.szymanski@armadeus.com>
-Message-ID: <20221024230532.438bb514@windsurf>
-In-Reply-To: <20221024082719.6213-1-sebastien.szymanski@armadeus.com>
-References: <20221024082719.6213-1-sebastien.szymanski@armadeus.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666645536;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pm36KVZXDPZzVtneO8F76QP/jspIJ9L6uXpGCVLsC60=;
- b=C/UDx0PCay2vfh5+OTybwgpzXqSAgN7TmTZN4mI1IoHSoJxXkvHeMuo8jOE9PtUQXdFYYF
- 37QU008ajLs4fhF0NWdgIFMAnESVJRgpWxht401UtkHhvKgNjxT0kwLMIBDb2S6ACjkhuq
- nZDPnh2oSGxlEvvXstS0NYsSAhRyYhbVuFNWl6XBrOXHHhpShGG7Yqf8hHN/NHE9PTtQ2x
- oYOQfs1xvKLsgSeoN3tkDSHjhI2OLa9L2xoLnpYhnA9bacffn9Di2gLL/SrL4jXf5bu+iT
- JhPG1H4Gq1iPDEJAzQleaLAra5AdSmQzPbbIRxaL6JdC9Exayxd1rOLN4EAW7A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C/UDx0PC
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask-jsonrpc: bump to
- version 2.2.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6T0LAg6pFBHs for <buildroot@lists.busybox.net>;
+ Mon, 24 Oct 2022 21:11:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6B1F40343
+ for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6B1F40343
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AF28886FEB; Mon, 24 Oct 2022 21:11:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 24 Oct 2022 23:11:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fe56cf24b649b5e87d7a9e5a1c3c23d7740fa3f6
+X-Git-Newrev: 9833f110bb7e2b85a362f8c49246ea7349a36bcb
+X-Patchwork-Hint: ignore
+Message-Id: <20221024211145.AF28886FEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8723bu: fix build failure on
+ PowerPC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,33 +58,84 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAyNCBPY3QgMjAyMiAxMDoyNzoxOSArMDIwMApTw6liYXN0aWVuIFN6eW1hbnNraSA8
-c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+IHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5
-OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+
-Cj4gLS0tCj4gIHBhY2thZ2UvcHl0aG9uLWZsYXNrLWpzb25ycGMvcHl0aG9uLWZsYXNrLWpzb25y
-cGMuaGFzaCB8IDQgKystLQo+ICBwYWNrYWdlL3B5dGhvbi1mbGFzay1qc29ucnBjL3B5dGhvbi1m
-bGFzay1qc29ucnBjLm1rICAgfCA0ICsrLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlv
-bnMoKyksIDQgZGVsZXRpb25zKC0pCgpUaGFua3MgZm9yIHRoZSBwYXRjaCwgYnV0IGRpZCB5b3Ug
-dGVzdCBpdD8gVGhlCjAwMDEtTW92ZS1weXRlc3QtcnVubmVyLXRvLXRlc3RzX3JlcXVpcmUucGF0
-Y2ggcGF0Y2ggbm8gbG9uZ2VyIGFwcGxpZXM6Cgo+Pj4gcHl0aG9uLWZsYXNrLWpzb25ycGMgMi4y
-LjIgRXh0cmFjdGluZwpnemlwIC1kIC1jIC9ob21lL3Rob21hcy9kbC9weXRob24tZmxhc2stanNv
-bnJwYy9GbGFzay1KU09OUlBDLTIuMi4yLnRhci5neiB8IHRhciAtLXN0cmlwLWNvbXBvbmVudHM9
-MSAtQyAvaG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3B5dGhvbi1m
-bGFzay1qc29ucnBjLTIuMi4yICAgLXhmIC0KPj4+IHB5dGhvbi1mbGFzay1qc29ucnBjIDIuMi4y
-IFBhdGNoaW5nCgpBcHBseWluZyAwMDAxLU1vdmUtcHl0ZXN0LXJ1bm5lci10by10ZXN0c19yZXF1
-aXJlLnBhdGNoIHVzaW5nIHBhdGNoOiAKcGF0Y2hpbmcgZmlsZSBzZXR1cC5weQpIdW5rICMxIEZB
-SUxFRCBhdCA0Mi4KMSBvdXQgb2YgMSBodW5rIEZBSUxFRCAtLSBzYXZpbmcgcmVqZWN0cyB0byBm
-aWxlIHNldHVwLnB5LnJlagptYWtlOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjUxOiAv
-aG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3B5dGhvbi1mbGFzay1q
-c29ucnBjLTIuMi4yLy5zdGFtcF9wYXRjaGVkXSBFcnJvciAxCgpDb3VsZCB5b3UgaGF2ZSBhIGxv
-b2s/CgpUaGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxpbgpF
-bWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=9833f110bb7e2b85a362f8c49246ea7349a36bcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add local patch(pending upstream[0]) to fix build failure with PowerPC due
+to a package re-defition of get_ra() that is only defined in Linux PowerPC
+implementation.
+
+[0]: https://github.com/lwfinger/rtl8723bu/pull/192
+
+Fixes:
+http://autobuild.buildroot.net/results/99571b055e6185d57f89b90821b76099ebc766ed/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...Fix-build-failure-on-PowerPc-architecture.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+new file mode 100644
+index 0000000000..06cf2d64c1
+--- /dev/null
++++ b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+@@ -0,0 +1,47 @@
++From dde7bddfddddb7212f2d9671391e2096d770c449 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 23 Oct 2022 22:57:41 +0200
++Subject: [PATCH] Fix build failure on PowerPc architecture
++
++In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
++that has a completely different purpose. So let's rename local get_ra()
++to wifi_get_ra() to make it different from Linux's get_ra().
++
++[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h#n49
++
++Upstream: https://github.com/lwfinger/rtl8723bu/pull/192
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ hal/rtl8723bu_recv.c | 2 +-
++ include/wifi.h       | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/hal/rtl8723bu_recv.c b/hal/rtl8723bu_recv.c
++index a2fc82b..39e5044 100644
++--- a/hal/rtl8723bu_recv.c
+++++ b/hal/rtl8723bu_recv.c
++@@ -288,7 +288,7 @@ void update_recvframe_phyinfo(
++ 		!pattrib->icv_err && !pattrib->crc_err &&
++ 		_rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN));
++ 
++-	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
+++	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(wifi_get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
++ 
++ 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
++ 	sa = get_ta(wlanhdr);
++diff --git a/include/wifi.h b/include/wifi.h
++index 5dc32eb..23578cc 100644
++--- a/include/wifi.h
+++++ b/include/wifi.h
++@@ -373,7 +373,7 @@ __inline static int IS_MCAST(unsigned char *da)
++ 		return _FALSE;
++ }
++ 
++-__inline static unsigned char * get_ra(unsigned char *pframe)
+++__inline static unsigned char * wifi_get_ra(unsigned char *pframe)
++ {
++ 	unsigned char	*ra;
++ 	ra = GetAddr1Ptr(pframe);
++-- 
++2.34.1
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
