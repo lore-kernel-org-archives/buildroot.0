@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A1AC67871
-	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D836C67871
+	for <buildroot@archiver.kernel.org>; Mon, 24 Oct 2022 21:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A8B240499;
-	Mon, 24 Oct 2022 21:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A8B240499
+	by smtp4.osuosl.org (Postfix) with ESMTP id 007EE404F9;
+	Mon, 24 Oct 2022 21:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 007EE404F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qx-88vTgEyh5; Mon, 24 Oct 2022 21:44:26 +0000 (UTC)
+	with ESMTP id P1cySWbbtJOL; Mon, 24 Oct 2022 21:44:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23406403AC;
-	Mon, 24 Oct 2022 21:44:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23406403AC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C2291BF966
+	by smtp4.osuosl.org (Postfix) with ESMTP id D242E40438;
+	Mon, 24 Oct 2022 21:44:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D242E40438
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E5411BF973
  for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC34A60A74
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEBDA81328
  for <buildroot@lists.busybox.net>; Mon, 24 Oct 2022 21:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC34A60A74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEBDA81328
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FT7xW_Si6ftk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PdvsSiiCHt_8 for <buildroot@lists.busybox.net>;
  Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC34760A7D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 948D481326
  for <buildroot@buildroot.org>; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC34760A7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 948D481326
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC6FF8704B; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
+ id 807C887048; Mon, 24 Oct 2022 21:43:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Oct 2022 23:27:36 +0200
+Date: Mon, 24 Oct 2022 23:27:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf8e0288c003b39ebc852cb3876c3b78608296ff
-X-Git-Newrev: ede944f53509f825aa983de19d34fc30259b812c
+X-Git-Oldrev: 3583e3f4013aca98e6360749c9d2154f6d699639
+X-Git-Newrev: 58cc3977e83487bdaa1df232cf7adf6383d49cd7
 X-Patchwork-Hint: ignore
-Message-Id: <20221024214302.CC6FF8704B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf: bump to version 2.1.8
+Message-Id: <20221024214302.807C887048@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lirc-tools: bump to version 0.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,196 +58,302 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7726428156267533311=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7726428156267533311==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ede944f53509f825aa983de19d34fc30259b812c
+commit: https://git.buildroot.net/buildroot/commit/?id=58cc3977e83487bdaa1df232cf7adf6383d49cd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2.1.8 (as of August 5th, 2022)
-------------------------------
-- Add support for --bounceback to perform a repsonsiveness test (see man
-  page for other options)
-- add support for working loads with --bounceback
-- Fix to wait_tick with Mac OS X
-- Various python pyflows commits
-- add support for client side tcp-write-time histograms and mean/min/max
-- add support for human readable dscp or -T values (see man page)
-- udp_accept no longer accepts packets from a previous run as a new
-  connection, this can occur with long network delays
-- multiple isoch bug fixes for both UDP and TCP
-- isoch server provides mean/min/max/stdev for both frames and packets
-- UDP max MTU discovery, requires configure.ac will support
-  --enable-discover-defaultlen prior to compile
+- Drop first to third patches (already in version)
+- Add a patch to disable documentation and avoid a build failure without
+  doxygen
 
-- Drop first patch (already in version)
-- Drop second patch (not needed since
-  https://sourceforge.net/p/iperf2/code/ci/de5cb9954617309eecb8ae7d24b14e6b1e0c11eb)
-
-https://sourceforge.net/projects/iperf2/files/
+https://sourceforge.net/p/lirc/git/ci/lirc-0.10.2/tree/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf/0001-Fix-build-with-musl-libc.patch  | 67 ----------------------
- .../iperf/0002-compat-gettcpinfo.c-fix-build.patch | 34 -----------
- package/iperf/iperf.hash                           |  4 +-
- package/iperf/iperf.mk                             |  2 +-
- 4 files changed, 3 insertions(+), 104 deletions(-)
+ .../lirc-tools/0001-Fix-build-without-Python.patch | 63 ----------------------
+ ...ins-devinput.c-fix-build-with-musl-1.2.0.patch} |  0
+ .../0002-Fix-python-client-cross-compile.patch     | 47 ----------------
+ .../0002-configure-add-disable-doc-option.patch    | 52 ++++++++++++++++++
+ ...Fix-lirc-version-detection-when-cross-com.patch | 51 ------------------
+ package/lirc-tools/lirc-tools.hash                 |  8 +--
+ package/lirc-tools/lirc-tools.mk                   |  2 +-
+ 7 files changed, 57 insertions(+), 166 deletions(-)
 
-diff --git a/package/iperf/0001-Fix-build-with-musl-libc.patch b/package/iperf/0001-Fix-build-with-musl-libc.patch
+diff --git a/package/lirc-tools/0001-Fix-build-without-Python.patch b/package/lirc-tools/0001-Fix-build-without-Python.patch
 deleted file mode 100644
-index 269079ee1e..0000000000
---- a/package/iperf/0001-Fix-build-with-musl-libc.patch
+index b1940eac0d..0000000000
+--- a/package/lirc-tools/0001-Fix-build-without-Python.patch
 +++ /dev/null
-@@ -1,67 +0,0 @@
--From 6766ab322a9eb8c73f8276be9cdea356eb124de0 Mon Sep 17 00:00:00 2001
+@@ -1,63 +0,0 @@
+-From 71f329d997d949d3c12d62d2f1473a1c99ee49b0 Mon Sep 17 00:00:00 2001
 -From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 11 Nov 2021 07:58:10 +0200
--Subject: [PATCH] Fix build with musl libc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+-Date: Sun, 27 Aug 2017 21:30:37 +0300
+-Subject: [PATCH] Fix build without Python
 -
--musl libc defines its own struct ethhdr that conflicts with the kernel
--define one. The kernel headers provide a way to suppress its struct
--ethhdr. For that to work the libc headers must precede the kernel. Move
--the kernel linux/if_tun.h include below libc net/ethernet.h. That fixes
--the following build failure:
+-Don't define HAVE_PYTHON35 when PYTHON_LIBS is empty.
 -
--In file included from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/net/ethernet.h:10,
--                 from ../include/headers.h:117,
--                 from Thread.c:72:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of ‘struct ethhdr’
--  116 | struct ethhdr {
--      |        ^~~~~~
--In file included from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/if_tun.h:20,
--                 from ../include/headers.h:110,
--                 from Thread.c:72:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/if_ether.h:148:8: note: originally defined here
--  148 | struct ethhdr {
--      |        ^~~~~~
+-Also, don't build Python dependent code when HAVE_PYTHON35 is not
+-defined.
 -
--Fixes bug #157.
+-This fixes build failures like:
+-
+-Makefile:1616: recipe for target 'python-pkg/dist/lirc-0.10.0.tar.gz' failed
+-make[3]: *** [python-pkg/dist/lirc-0.10.0.tar.gz] Error 1
+-python-pkg/lirc/_client.c:1:20: fatal error: Python.h: No such file or directory
+- #include <Python.h>
+-                    ^
 -
 -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
--Upstream status: sent to Robert McMahon <rjmcmahon@rjmcmahon.com>
+-Upstream status: commit 74a2bcab6b
 -
-- include/headers.h | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
+- Makefile.am  | 2 ++
+- configure.ac | 3 ++-
+- 2 files changed, 4 insertions(+), 1 deletion(-)
 -
--diff --git a/include/headers.h b/include/headers.h
--index 00e0ea0dba42..887490475381 100644
----- a/include/headers.h
--+++ b/include/headers.h
--@@ -106,11 +106,6 @@ typedef bool _Bool;
-- #include <net/if.h>
-- #endif
+-diff --git a/Makefile.am b/Makefile.am
+-index 9f3dd14340cc..d8164fcd44cf 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -104,6 +104,7 @@ dist_py_pkg_doc_DATA    = python-pkg/doc/Doxyfile \
 - 
---#if ((HAVE_TUNTAP_TAP) || (HAVE_TUNTAP_TUN))
---#include <linux/if_tun.h>
---#include <sys/ioctl.h>
---#endif
---
+- libpython               = $(libdir)/python$(PYTHON_VERSION)
+- pydir                   = $(libpython)/site-packages/lirc
+-+if HAVE_PYTHON35
+- py_LTLIBRARIES          = python-pkg/lib/_client.la
+- python_pkg_lib__client_la_SOURCES = \
+-                           python-pkg/lirc/_client.c
+-@@ -116,6 +117,7 @@ python_pkg_lib__client_la_LDFLAGS  = \
+-                           $(PYTHON_LIBS)
+- python_pkg_lib__client_la_LIBADD = \
+-                           lib/liblirc_client.la
+-+endif
 - 
-- // AF_PACKET HEADERS
-- #if defined(HAVE_LINUX_FILTER_H) && defined(HAVE_AF_PACKET)
--@@ -146,6 +141,11 @@ typedef bool _Bool;
-- #define  IPV6HDRLEN 40
-- #endif // HAVE_AF_PACKET
+- pylint: .phony
+- 	$(MAKE) -C tools pylint
+-diff --git a/configure.ac b/configure.ac
+-index 4108688433f8..07d901deafdf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -50,7 +50,8 @@ test -z "$PYTHON_LIBS" && \
+- test -n "$PYTHON_LIBS" || \
+-     AC_MSG_WARN([No python package found (missing devel package?)])
+- python_version_nodots=$(echo $PYTHON_VERSION | tr -d '.')
+--AM_CONDITIONAL(HAVE_PYTHON35, [test $python_version_nodots -ge 35])
+-+AM_CONDITIONAL(HAVE_PYTHON35, [test -n "$PYTHON_LIBS" && \
+-+			       test $python_version_nodots -ge 35])
+- CFLAGS="$CFLAGS $PYTHON_CFLAGS"
 - 
--+#if ((HAVE_TUNTAP_TAP) || (HAVE_TUNTAP_TUN))
--+#include <linux/if_tun.h>
--+#include <sys/ioctl.h>
--+#endif
--+
-- #ifdef WIN32
 - 
-- /* Windows config file */
 --- 
--2.33.0
+-2.14.1
 -
-diff --git a/package/iperf/0002-compat-gettcpinfo.c-fix-build.patch b/package/iperf/0002-compat-gettcpinfo.c-fix-build.patch
+diff --git a/package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch b/package/lirc-tools/0001-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
+similarity index 100%
+rename from package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
+rename to package/lirc-tools/0001-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
+diff --git a/package/lirc-tools/0002-Fix-python-client-cross-compile.patch b/package/lirc-tools/0002-Fix-python-client-cross-compile.patch
 deleted file mode 100644
-index 786c7d1873..0000000000
---- a/package/iperf/0002-compat-gettcpinfo.c-fix-build.patch
+index 02deefaf98..0000000000
+--- a/package/lirc-tools/0002-Fix-python-client-cross-compile.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From a3339604bafa99f66e12687efc2c50d2e2df1276 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 Dec 2021 20:03:04 +0100
--Subject: [PATCH] compat/gettcpinfo.c: fix build
+@@ -1,47 +0,0 @@
+-From 13c4ffcfde07f659a836fba4a604dc1c5024bb90 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 29 Aug 2017 11:37:36 +0300
+-Subject: [PATCH] Fix python client cross compile
 -
--Fix the following build failure raised since commit
--c8f861a0a07b0606a581f2658c71959ad9417923:
+-The setup.py setuptools wrapper needs to use a version of python built
+-specifically for cross compiling to cross compile successfully. Allow
+-setting that in the environment using the SETUPTOOLS_ENV variable.
 -
--gettcpinfo.c: In function 'gettcpinfo':
--gettcpinfo.c:101:42: error: expected declaration or statement at end of input
--  101 | inline void gettcpinfo (int sock, struct ReportStruct *sample) {
--      |                                          ^~~~~~~~~~~~
+-Fixes the following build failure:
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/073e070478f0cda34784af96bb3a802c3aac8f72
+-/usr/bin/ld: skipping incompatible .../lirc-tools-0.10.0/lib/.libs/liblirc_client.so when searching for -llirc_client
+-/usr/bin/ld: cannot find -llirc_client
+-collect2: error: ld returned 1 exit status
+-error: command '/usr/bin/gcc' failed with exit status 1
+-Makefile:1578: recipe for target 'all-local' failed
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- compat/gettcpinfo.c | 1 +
-- 1 file changed, 1 insertion(+)
+-Upstream status: https://sourceforge.net/p/lirc/tickets/308/
 -
--diff --git a/compat/gettcpinfo.c b/compat/gettcpinfo.c
--index 4e11e2a..1d3791a 100644
----- a/compat/gettcpinfo.c
--+++ b/compat/gettcpinfo.c
--@@ -99,4 +99,5 @@ inline void gettcpinfo (SOCKET sock, struct ReportStruct *sample) {
-- };
-- #else
-- inline void gettcpinfo (int sock, struct ReportStruct *sample) {
--+};
-- #endif
+- Makefile.am | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index d8164fcd44cf..a16be4278ae2 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -131,6 +131,7 @@ pep8: $(py_PYTHON)
+- if HAVE_PYTHON35
+- all-local:
+- 	cd python-pkg; \
+-+	    $(SETUPTOOLS_ENV) \
+- 	    CFLAGS="-I$(abs_top_srcdir)/lib -I$(abs_builddir)/lib" \
+- 	    LDFLAGS=-L$(abs_builddir)/lib/.libs $(PYTHON) setup.py \
+- 	    $(if $(VERBOSE),,-q) build
+-@@ -179,6 +180,7 @@ $(abs_builddir)/python-pkg/setup.py:
+- $(PYTHON_TARBALL): $(abs_builddir)/python-pkg/setup.py
+- 	cp $(top_builddir)/VERSION $(abs_builddir)/python-pkg
+- 	cd $(abs_builddir)/python-pkg; CFLAGS=-I$(abs_top_srcdir)/lib \
+-+	    $(SETUPTOOLS_ENV) \
+- 	    LDFLAGS=-L$(abs_builddir)/lib/.libs $(PYTHON) setup.py -q sdist
+- 
+- $(top_builddir)/python-pkg/VERSION: VERSION
 --- 
--2.33.0
+-2.14.1
 -
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 2e1f433dc7..34218bcf3b 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
+diff --git a/package/lirc-tools/0002-configure-add-disable-doc-option.patch b/package/lirc-tools/0002-configure-add-disable-doc-option.patch
+new file mode 100644
+index 0000000000..fab485ffef
+--- /dev/null
++++ b/package/lirc-tools/0002-configure-add-disable-doc-option.patch
+@@ -0,0 +1,52 @@
++From e9d5cbc01e3c0d6a31e2dba2f224b7f3dd21db37 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 23 Oct 2022 16:10:50 +0200
++Subject: [PATCH] configure: add --disable-doc option
++
++Allow the user to disable documentation through --disable-doc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 8 ++++++++
++ 2 files changed, 13 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 6718af13..58a321d8 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -45,7 +45,11 @@ if WITH_SYSTEMDSYSTEMUNITDIR
++     SYSTEMD_DIR         = systemd
++ endif
++ 
++-SUBDIRS                 = lib daemons tools plugins configs doc $(SYSTEMD_DIR)
+++if HAVE_DOC
+++    DOC_DIR             = doc
+++endif
+++
+++SUBDIRS                 = lib daemons tools plugins configs $(DOC_DIR) $(SYSTEMD_DIR)
++ 
++ if INSTALL_ETC
++ 
++diff --git a/configure.ac b/configure.ac
++index d28c6732..f3384c95 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -486,6 +486,14 @@ AC_ARG_VAR(SETUPTOOLS_ENV,
++ )
++ 
++ 
+++AC_ARG_ENABLE(doc,
+++  [  --enable-doc       Build and install documentation (default=yes)],
+++  [ enable_doc="${enableval}" ],
+++  [ enable_doc=yes]
+++)
+++AM_CONDITIONAL([HAVE_DOC], [test x$enable_doc = xyes])
+++
+++
++ suffix=$(echo "$VERSION" | sed 's/.*-//')
++ AM_CONDITIONAL(DEVEL, [test x$suffix = xdevel])
++ 
++-- 
++2.35.1
++
+diff --git a/package/lirc-tools/0003-python-pkg-Fix-lirc-version-detection-when-cross-com.patch b/package/lirc-tools/0003-python-pkg-Fix-lirc-version-detection-when-cross-com.patch
+deleted file mode 100644
+index 04fbfe6ea2..0000000000
+--- a/package/lirc-tools/0003-python-pkg-Fix-lirc-version-detection-when-cross-com.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 732fd31610a6790a927ea9ed6d660796a1641254 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 7 Sep 2017 08:12:01 +0200
+-Subject: [PATCH] build: Fix lirc version detection when cross compiling.
+-
+-The setup.py script that runs on the host can't use the client library
+-built for target. So setup.py falls back to a wrong hard-coded VERSION
+-value.
+-
+-Instead of importing the target library, use exec() to read
+-lirc/config.py directly for its VERSION value.
+-
+-Fixes build failure:
+-
+-/usr/bin/install -c -m 644 ./python-pkg/dist/lirc-0.10.0.tar.gz \
+-    '.../output/host/arm-buildroot-linux-musleabihf/sysroot/usr/share/lirc'
+-/usr/bin/install: cannot stat './python-pkg/dist/lirc-0.10.0.tar.gz': \
+-    No such file or directory
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 732fd31610a6
+-
+- python-pkg/setup.py | 9 +++------
+- 1 file changed, 3 insertions(+), 6 deletions(-)
+-
+-diff --git a/python-pkg/setup.py b/python-pkg/setup.py
+-index e9b33690f828..a2d92e0432aa 100644
+---- a/python-pkg/setup.py
+-+++ b/python-pkg/setup.py
+-@@ -6,14 +6,11 @@ import subprocess
+- import os.path
+- import os
+- 
+--try:
+--    import lirc.config
+--    VERSION = lirc.config.VERSION.replace('-devel','')
+--except ImportError:
+--    VERSION='0.0.0'
+--
+- from setuptools import setup, Extension
+- 
+-+exec(open("lirc/config.py").read())
+-+VERSION = VERSION.replace('-devel','')
+-+
+- if 'CFLAGS' in os.environ:
+-     cflags = os.environ['CFLAGS'].split()
+-     if 'LDFLAGS' in os.environ:
+--- 
+-2.14.1
+-
+diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
+index 187768db47..4808508cca 100644
+--- a/package/lirc-tools/lirc-tools.hash
++++ b/package/lirc-tools/lirc-tools.hash
 @@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1  41bd049625cbecda2bf5b6a6cc12a6c5baec549b  iperf-2.1.6.tar.gz
-+sha1  7725efffc6ef46fe5247ee326c39e5fa2eadf1eb  iperf-2.1.8.tar.gz
- 
- # Locally computed:
--sha256  4a43e44439b95622aebeee55754a17d1c94076032e90620dfc1ab9908cb9e080  iperf-2.1.6.tar.gz
-+sha256  8e2cf2fbc9d0d4d1cf9d109b1e328459f9622993dc9a4c5a7dc8a2088fb7beaf  iperf-2.1.8.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index f999ff4ac2..47944880a3 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
+-# hash from https://sourceforge.net/projects/lirc/files/LIRC/0.10.1/
+-sha1  9d6f6d18ac566a96ef4ca1d6909a4e8bc517d48a  lirc-0.10.1.tar.bz2
+-md5  86c3f8e4efaba10571addb8313d1e040  lirc-0.10.1.tar.bz2
++# hash from https://sourceforge.net/projects/lirc/files/LIRC/0.10.2/
++sha1  02092890205891b6de5a699294485a1eedba46c5  lirc-0.10.2.tar.bz2
++md5  cb96cfb0af8067c0062e2f5a100f426a  lirc-0.10.2.tar.bz2
+ # Locally computed
+-sha256  8b753c60df2a7f5dcda2db72c38e448ca300c3b4f6000c1501fcb0bd5df414f2  lirc-0.10.1.tar.bz2
++sha256  3d44ec8274881cf262f160805641f0827ffcc20ade0d85e7e6f3b90e0d3d222a  lirc-0.10.2.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 05f20f5726..5263330741 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF_VERSION = 2.1.6
-+IPERF_VERSION = 2.1.8
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
-
---===============7726428156267533311==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LIRC_TOOLS_VERSION = 0.10.1
++LIRC_TOOLS_VERSION = 0.10.2
+ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
+ LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
+ LIRC_TOOLS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7726428156267533311==--
