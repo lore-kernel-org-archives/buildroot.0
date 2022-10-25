@@ -1,79 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EACE2C04A95
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 08:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE6EFC38A2D
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 08:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75A98403BF;
-	Tue, 25 Oct 2022 08:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75A98403BF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46AB0812D4;
+	Tue, 25 Oct 2022 08:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46AB0812D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uyVVN-WgfUyr; Tue, 25 Oct 2022 08:08:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KIbLgoc1w8Xn; Tue, 25 Oct 2022 08:14:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C318403A2;
-	Tue, 25 Oct 2022 08:08:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C318403A2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 843771BF2FC
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 08:08:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D79CA812DB;
+	Tue, 25 Oct 2022 08:14:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D79CA812DB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E9211BF2FC
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 08:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 624924044D
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 08:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 624924044D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69CD4607FE
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 08:14:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69CD4607FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RJTWr8FoH2hA for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 08:08:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A13B4403C4
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A13B4403C4
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 08:08:10 +0000 (UTC)
-Received: from opfedar00.francetelecom.fr (unknown [xx.xx.xx.11])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar20.francetelecom.fr (ESMTP service) with ESMTPS id 4MxPh81TfBz8tX1; 
- Tue, 25 Oct 2022 10:08:08 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Tue, 25 Oct 2022 10:08:06 +0200
-Date: Tue, 25 Oct 2022 10:08:06 +0200
-From: <yann.morin@orange.com>
-To: Norbert Lange <nolange79@gmail.com>
-Message-ID: <18023_1666685288_63579968_18023_321_4_20221025080806.GC1657509@tl-lnx-nyma7486>
-References: <cover.1666122184.git.yann.morin@orange.com>
- <14736_1666122204_634F01DB_14736_494_1_b3efa290e26b85b54ab27728bf190316cf2ab1ee.1666122184.git.yann.morin@orange.com>
- <CADYdroP4fHRxFyt6JSz6zOHgUxtjtKh0Eik_8C3r5wPoiLRupg@mail.gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PB9UEtjaWIcv for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 08:14:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EE7E607F9
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
+ [IPv6:2607:f8b0:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2EE7E607F9
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 08:14:13 +0000 (UTC)
+Received: by mail-pf1-x42c.google.com with SMTP id b185so4933219pfb.9
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 01:14:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=U6ptcfgZmNq/bicyRI68z2WSDtQvMkBe25oNxOqCCWQ=;
+ b=F6pVgcMr1cqr5mOBmWy1Z5g5HNnNp7g6cNmN0cYL+hwy1edE09WdpuDgM1fSKmi2GA
+ uxsiyJBKqojOsd1JCuFLVGwC30b9+4e1bRd8I/dcFol1+QU/BeriGO7IN+uDIYsN74mo
+ sfNB/+y8S9WnOiha2foP3ysnhebsNt32zXRvepalk1tEV7qDEo2TjoN7/4PKNQkAcAM4
+ 7qTer5m0POl8apIsBHEwikzOtQEeS481PHXNAAWDIBvTGn5JPyABXG3OlfPONd3oM591
+ p9Xf3VBdGtoNDsP2zNo10zxKKbgGX82cW31LI4HCt+jFcHDOu5G29VFdAqGjUbG+tTza
+ RWow==
+X-Gm-Message-State: ACrzQf2n9xwnf2TP98ZtVSeAQMFQS93KMXSA5klrZkjDsIADAoGH2DR7
+ Q1kBfm4F2e8lopxi9MZxvgZfzLPo2a7pgLGkM/PH0qamRpcNTg==
+X-Google-Smtp-Source: AMsMyM6xmMLxubcpzKCu73byddNeKAesF/SX1tCEog6Vgj5gaPGT3MgQsvQx67VVkgbKZVDtVRXft0R0HjL1Opc/PP0=
+X-Received: by 2002:a05:6a00:1d06:b0:56b:ec38:27e9 with SMTP id
+ a6-20020a056a001d0600b0056bec3827e9mr7109113pfx.71.1666685652463; Tue, 25 Oct
+ 2022 01:14:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADYdroP4fHRxFyt6JSz6zOHgUxtjtKh0Eik_8C3r5wPoiLRupg@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+References: <CA+_SqVb8PiTaw9o5KSTohDQ_Ym5aT4o8u8s_KiFZZ9M_nv8tNg@mail.gmail.com>
+In-Reply-To: <CA+_SqVb8PiTaw9o5KSTohDQ_Ym5aT4o8u8s_KiFZZ9M_nv8tNg@mail.gmail.com>
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Tue, 25 Oct 2022 10:14:01 +0200
+Message-ID: <CAMdwsN-Z81fu9G9ACu2HsRV4RtpRGvn+7tonvVRC4ntdL=-U9Q@mail.gmail.com>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1666685288;
- bh=Dc1N3SRHKp5rpAcL+huXJLptYk/PTQWPcUjg05WA/RM=;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding;
- b=MNim6KGDZa5Bijtg+EO13JXNuW3Kq6FPCMHN19uL9AHs/ffy8Lf7oCKJ359a7Zpsn
- DNHR8EKz+59iewkZrIB1oiyZsA+M/uK6toa//vJXMkr+y99yhy8ic637Jix1UqYwPk
- RNMtNHLpJRxkM1upmQO3Ykdn66G3qf8L3fY5Sz4ucVpFP+l4HYH68O3dyzREBGsiXB
- WLBGbmLlC6mKLKZAN70bImNI+Qt5inaI0rlXELKQCNs9L+Nko9+Qj7rJRy9e7Rj1Nw
- RY2+ejPENA+6aaJKWsvn9ldVFKlWF++pT64CZLFEdwFrzqH+BesrVlQ/244GKCqq3I
- KskdJXaERfihw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=MNim6KGD
-Subject: Re: [Buildroot] [PATCH 6/6 v3] system: add option to use an
- overlayfs on /var on a r/o root w/ systemd
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=U6ptcfgZmNq/bicyRI68z2WSDtQvMkBe25oNxOqCCWQ=;
+ b=H+V5mlBW0gNeWtgLr0ZGShxdxYlJakACbZL8/fmpMillIZCJEylepgFfyomV3r+4v2
+ m51jWi+mVCRrgID7nLkqmf1FY3Hr1j7gXn2PAmyk8KaE+dKajmUMhPd1pbazFFwS87Qp
+ IpY4WKtAsqeZQ8DZTS6FMKNEpwmjF5WdT2pYShUNXSyUvQEmf16WW2ypLPhn0hbiaZax
+ 5nDBYULvBax8stC9ezgXa7iDyrQ0PNAhEYJv1oUMwd4B0OPWgQDbeiUKKd55qfqw7TWT
+ AIMc43prhtspdRTSMe+U+QSOOUNOu4DQVMp7etqJyrn6pefLzt1Xi/2aqhj9s9dm3qyj
+ 5V5w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=H+V5mlBW
+Subject: Re: [Buildroot] QT6 Qmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,178 +89,365 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?utf-8?B?SmXMgXJlzIFteQ==?= Rosen <jeremy.rosen@smile.fr>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4109338215174513160=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tm9yYmVydCwgQWxsLAoKVGhhbmsgeW91IGZvciB5b3VyIGZlZWRiYWNrISA6LSkKCk9uIDIwMjIt
-MTAtMjMgMjM6NDcgKzAyMDAsIE5vcmJlcnQgTGFuZ2Ugc3Bha2UgdGh1c2x5Ogo+IEFtIERpLiwg
-MTguIE9rdC4gMjAyMiB1bSAyMTo0MyBVaHIgc2NocmllYiA8eWFubi5tb3JpbkBvcmFuZ2UuY29t
-PjoKPiA+IFdoaWxlIHRoZSAvdmFyIGZhY3Rvcnkgc2VlbXMgdG8gYmUgd29ya2luZyBpbiBtb3N0
-IGNhc2VzLCB0aGVyZSBoYXZlCj4gPiBiZWVuIHN1Z2dlc3Rpb25zIHRoYXQgaXQgbWF5IGJlIHNs
-aWdodGx5IGFuZCBzdWJ0ZWx5IGJvcmtlbiBpbiBzb21lCj4gPiAocmFyZT8gZWRnZT8pIGNhc2Vz
-LCBlc3BlY2lhbGx5IGFib3V0IHN5bWxpbmtzLgo+IAo+IEhhZCB0byBkaWcgdXAgYW4gb2xkIHBv
-c3Qgb2YgbWluZSAobm90IHRoZSBvbmx5IG9uZSB0b3VjaGluZyBvbiB0aGF0KSwKPiBzb21lIGlz
-c3VlcyBhcmU6Cj4gCj4gLSAgIGl0IGtpbGxzIHByZXZpb3VzIGZpbGVzIGluIC91c3Ivc2hhcmUv
-ZmFjdG9yeS92YXIKPiAtICAgaXQgZG9lc24ndCBoYW5kbGUgc3ltbGlua3MgKGp1c3QgdGhpbmsg
-b2YgL3ZhciBhbHJlYWR5IGNvbnRhaW5pbmcKPiBhIHN5bWxpbmsgaW50byB0aGF0IGZhY3Rvcnkp
-LAo+ICAgICBlc3BlY2lhbGx5IHJlbGF0aXZlIG9uZXMuCj4gLSAgIGl0IGhhcyBzaWRlZWZmZWN0
-cyB3aXRoIHRtcGZpbGUgLmNvbmZzIHRoYXQgYXJlIG9yZGVyZWQgYmVmb3JlIGFuZAo+IHRvdWNo
-IC92YXIKPiAtICAgaXQgaGFzIHNpZGVlZmZlY3RzIHdpdGggb3RoZXIgUFJFX0NNRF9IT09LUyB0
-b3VjaGluZyAvdmFyCj4gCj4gKFBvc3QgaXMgZnJvbSBtaWQgMjAyMCwgc28gZm9yZ2l2ZSBtZSBp
-ZiBteSBtZW1vcnkgaXMgZnV6enksCj4gYnV0IEkgaGFkIGFscmVhZHkgcHJhY3RpY2FsIHByb2Js
-ZW1zIHdpdGggYXRsZWFzdCB0aGUgbGFzdCAyIG9mIHRob3NlKS4KCkZvcmdpdmUgbWUgaWYgbXkg
-bWVtb3J5IGlzIGZ1enp5LCBidXQgSSBkb24ndCByZWNhbGwgc2VlaW5nIGFueSBwYXRjaCB0bwpm
-aXggdGhvc2UgaXNzdWVzIHdpdGggdGhlIGZhY3RvcnkuLi4gOy0pCgo+IFRvIG1lIHRoaXMgaXMg
-anVzdCBub3QgYSByb2J1c3Qgc29sdXRpb24KCllldCwgdGhlcmUgYXJlIHNvbWUgcGVvcGxlIGZv
-ciB3aG9tIHRoZSBmYWN0b3J5IGRvZXMgd29yayBqdXN0IGZpbmUKKGZpcnN0LWhhbmQgZXhwZXJp
-ZW5jZSBoZXJlLCBhbmQgYmVzaWRlcyB5b3VyIGNvbW1lbnRzLCB3ZSBoYXZlIGhhZApub29uZSBy
-ZXBvcnRpbmcgYWN0dWFsIGlzc3VlcyBpbiB0aGUgNSsgeWVhcnMgd2UndmUgaW1wbGVtZW50ZWQg
-dGhlCmZhY3RvcnksIEFGQUlDUikuIFNvLCB3ZSBkbyBub3Qgd2FudCB0byBicmVhayB0aGUgc2l0
-dWF0aW9uIGZvciB0aGVtLgoKT25jZSB0aGUgb3ZlcmxheWZzIHNjaGVtZSBoYXMgYmVlbiBpbiBw
-bGFjZSBmb3Igc29tZSB0aW1lIGFuZCBpdCBnb3QKZXhlcmNpc2VkLCB3ZSBjYW4gY29uc2lkZXIg
-c3dpdGNoaW5nIHRoZSBkZWZhdWx0LCBhbmQgZXZlbnR1YWx5IHdlIGNhbgpnZXQgcmlkIG9mIHRo
-ZSBmYWN0b3J5IGlmIGl0IHByb3ZlcyB0byBiZSB1bmZpeGFibGUgKGFnYWluLCB3aXRob3V0CmNv
-bmNyZXRlIGV4YW1wbGVzIHRoYXQgZG8gYnJlYWsgaXQsIHdlIGNhbiBkZXZpc2UgYSBmaXgpLgoK
-SWYgd2UgY2FuJ3QgeWV0IGFncmVlIG9uIGhvdyB0byBpbnRlZ3JhdGUgdGhlIG92ZXJsYXlmcyBi
-YXNlZCBzY2hlbWUsIHdlCm5lZWQgYSB3YXkgdG8gc29ydCBvdXQgdGhlIGNvbmZsaWN0IGJldHdl
-ZW4gdGhlIGZhY3RvcnkgYW5kIHJ1bm5pbmcKdG1wZmlsZXMgYXQgYnVpbGQgdGltZSwgd2hpY2gg
-aXMgd2hhdCBwYXRjaGVzIDEtNCBhcmUgZm9yLCBzaW5jZSB0aGV5IGRvCm5vdCBjaGFuZ2UgdGhl
-IGN1cnJlbnQgYmVoYXZpb3VyLCBidXQgY2xhcmlmaWVzIHRoZSBjdXJyZW50IHNpdHVhdGlvbi4K
-ClNvLCB0aG9zZSBhcmUgdGhlIHBhdGNoZXMgd2hlcmUgd2Ugc2hvdWxkIGNvbmNlbnRyYXRlIGZv
-ciBub3cuCgpQYXRjaGVzIDUtNiBpbnRyb2R1Y2UgdGhlIG5ldyBvdmVybGF5ZnMgc2NoZW1lIGFz
-IGFuIGFsdGVybmF0aXZlIHRvIHRoZQpmYWN0b3J5LCBhIG5ldyBmZWF0dXJlLCBzbyB0aGV5IGNh
-biBnbyBpbiBsYXRlci4uLgoKQW5kIHllcywgSSBkaWQgdGVzdCB0aGUgb3ZlcmxheWZzIHNjaGVt
-ZSBpbiBvdXIgdXNlLWNhc2UgaGVyZSwgYW5kIHllcwppdCBkb2VzIHdvcmsgYXMgYWR2ZXJ0aXNl
-ZCwgc28geWVzLCB0aGlzIGlzIGEgZ29vZCBmZWF0dXJlIQoKPiA+IEFuIG90aGVyIHNvbHV0aW9u
-IGlzIHRvIHByZS1wb3B1bGF0ZSAvdmFyIGF0IGJ1aWxkIHRpbWUsIGJ5IHdheSBvZgo+ID4gY2Fs
-bGluZyBzeXN0ZW1kLXRtcGZpbGVzLCBhbmQgbW91bnRpbmcgYW4gb3ZlcmxheWZzIG9uLXRvcCBv
-ZiBpdCBhdAo+ID4gcnVudGltZS4KPiA+Cj4gPiBUaGlzIGlzIHNsaWdodGx5IGFjY3JvYmF0aWMs
-IHRob3VnaCwgYW5kIHJlcXVpcmVzIGEgZmV3IGhvb3BzOgo+ID4gICAtIGZpcnN0LCB3ZSBjcmVh
-dGUgYSB0bXBmcwo+ID4gICAtIHRoZXJlLCB3ZSBjcmVhdGUgdGhyZWUgZGlyZWN0b3JpZXM6Cj4g
-PiAgICAgLSB0aGUgZmlyc3QgdG8gYmluZC1tb3VudCAvdmFyIGFzIGl0IGlzLCBpLmUuIHJlYWQt
-b25seQo+ID4gICAgIC0gdGhlIHNlY29uZCBhcyB0aGUgcmVhZC13cml0ZSB1cHBlciBmb3IgdGhl
-IG92ZXJsYXlmcwo+ID4gICAgIC0gdGhlIHRoaXJkIGFzIHRoZSAid29ya2luZyBhcmVhIiBmb3Ig
-dGhlIG92ZXJsYXlzCj4gLi5hbmQgd2UgZGVwZW5kIG9uIG92ZXJsYXlmcwoKSSBqdXN0IGhhZCB0
-byBlbmFibGUgb3ZlcmxheWZzIGluIHRoZSBrZXJuZWwsIGFuZCBpdCB3b3JrZWQgd2l0aG91dCBh
-bnkKb3RoZXIgcGFja2FnZS4KCkZUUiwgSSBoYXZlIGFkZGVkIG5ldyBydW50aW1lIHRlc3RzIHRv
-IHZhbGlkYXRlIGJvdGggdGhlIGZhY3RvcnkgYW5kCnRoZSBvdmVybGF5ZnMgc2NlbmFyaWkuIEkg
-d2lsbCBwb3N0IHRoZW0gaW4gdGhlIGNvbWluZyBkYXlzIHdoZW4gSSd2ZQpjbGVhbmVkIHRoZW0g
-dXAgKGhhdmUgdG8gcnVuIGxvY2FsbHksIGFzIG15IGd0aWxhYiBmcmVlIG1pbnV0ZXMgYXJlCmV4
-aGF1c3RlZCk6CgogICAgaHR0cHM6Ly9naXRsYWIuY29tL3ltb3Jpbi9idWlsZHJvb3QvLS90cmVl
-L3N5c3RlbWRpZnktdmFyCgpbLS1TTklQLS1dCj4gPiBTeXN0ZW1kIHVuaXRzIGNvdXJ0ZXN5IE5v
-cmJlcnQsIHdpdGggc2xpZ2h0IHR3ZWFrcyBhbmQgY2xlYW51cHMuCj4gCj4gWWVhaCwgSW0gbm90
-IGZpbmUgd2l0aCB0aGUgdHdlYWtzIHRvIGRyb3AgdGhlIHN5bWxpbmsKPiAvdXNyL2xpYi9zeXN0
-ZW1kL3N5c3RlbS92YXIubW91bnQgLT4gLi4vdmFyLm1vdW50Cj4gKGFuZCB0aGUgYWRkZWQgaW50
-c3RhbGwgc2VjdGlvbikKPiAKPiBGaXJzdCBpbiB0aGUgc2FtZSBsb2NhbC1mcyAidGFyZ2V0IiB5
-b3UgY291bGQgbW91bnQgL2V0YywKPiBtYWtpbmcgdGhpcyBhIGNvbXBsaWNhdGVkIGhpZGRlbiBp
-c3N1ZSwgSSBkb24ndCBrbm93Cj4gd2hlbiBzeXN0ZW1kIHJlbG9hZHMsIEkgYmVsaWV2ZSBvbmx5
-IGFmdGVyIHRoYXQgdGFyZ2V0Lgo+IAo+IFNlY29uZCwgdGhpcyBzaG91bGQgYmUgZW5hYmxlZCBi
-eSBkZWZhdWx0LCBhbmQKPiBpbiBhIHdheSBldmVuIHdoZW4gL2V0YyBpcyBib3JrZWQvbm90IHJl
-YWR5LgoKU28sIGN1cnJlbnRseSwgQnVpbGRyb290IGRvZXMgbm90IHdvcmsgKGRvZXMgbm90aGlu
-ZyB0byBvZmZpY2lhbHkgd29yaykKc2VlbWxlc3NseSB3aXRoIGFuIGVtcHR5IC9ldGMsIGJlY2F1
-c2Ugd2UgZXhwbGljaXRseSBydW4gInN5c3RlbWN0bApwcmVzZXQtYWxsIiBhdCB0aGUgZW5kIG9m
-IHRoZSBidWlsZCAoYXMgYSBwcmVmc19jbWQpLCBhbmQgdGhhdCBmaWxscyBpbgovZXRjL3N5c3Rl
-bWQvc3lzdGVtLy4KCkFzIHlvdSBzYWlkLCBzdXBwb3J0aW5nIGFuIGVtcHR5IC9ldGMgd2lsbCBy
-ZXF1aXJlICp3YXkqIG1vcmUgZXhwbGljaXQKc3VwcG9ydCBpbiBCdWlsZHJvb3QKCj4gSWYgYSB1
-c2VyIHJlYWxseSB3YW50cyB0byBkaXNhYmxlIHRoZSBtb3VudCwgaGUgY2FuIG1hc2sgaXQuCgpU
-aGF0IGlzIHRydWUgaWYgdXNpbmcgZWl0aGVyIHRoZSBzeW1saW5rIG9yIHRoZSBpbnN0YWxsIHNl
-Y3Rpb24sIG5vPwpJLmUuIHRoZXknZCBqdXN0IHByb3ZpZGUgYSBwcmVzZXQgdGhhdCByZWFkczoK
-CiAgICBkaXNhYmxlIHJvb3Rmcy1iaW5kb3VudC12YXIuc2VydmljZQogICAgZGlzYWJsZSB2YXIu
-bW91bnQKCj4gPiBTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5n
-ZS5jb20+Cj4gPiBDYzogTm9yYmVydCBMYW5nZSA8bm9sYW5nZTc5QGdtYWlsLmNvbT4KPiA+IENj
-OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4KPiA+IENjOiBKZcyBcmXMgW15
-IFJvc2VuIDxqZXJlbXkucm9zZW5Ac21pbGUuZnI+ClstLVNOSVAtLV0KPiA+IC0tLSAvZGV2L251
-bGwKPiA+ICsrKyBiL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL292ZXJsYXlmcy9yb290
-ZnMtYmluZG1vdW50LXZhci5zZXJ2aWNlCj4gPiBAQCAtMCwwICsxLDIxIEBACj4gPiArW1VuaXRd
-Cj4gPiArRGVzY3JpcHRpb249QmluZC1tb3VudCB2YXJpYWJsZSBzdG9yYWdlICgvdmFyKQo+ID4g
-K0RvY3VtZW50YXRpb249bWFuOmZpbGUtaGllcmFyY2h5KDcpCj4gPiArQ29uZGl0aW9uUGF0aElz
-U3ltYm9saWNMaW5rPSEvdmFyCj4gPiArIyBDb25kaXRpb25QYXRoSXNSZWFkV3JpdGU9IS92YXIK
-PiA+ICtEZWZhdWx0RGVwZW5kZW5jaWVzPW5vCj4gPiArQ29uZmxpY3RzPXVtb3VudC50YXJnZXQK
-PiA+ICtCZWZvcmU9bG9jYWwtZnMudGFyZ2V0IHVtb3VudC50YXJnZXQKPiA+ICtBZnRlcj1sb2Nh
-bC1mcy1wcmUudGFyZ2V0Cj4gCj4gQSBhbSBhY3R1YWxseSBjb25zaWRlcmluZyBjaGFuZ2luZyB0
-aGF0IHRvOgo+IAo+IEJlZm9yZT1sb2NhbC1mcy1wcmUudGFyZ2V0IHVtb3VudC50YXJnZXQKPiAj
-IEFmdGVyPWxvY2FsLWZzLXByZS50YXJnZXQKCk5vIHJlYXNvbiB0byBrZWVwIGNvbW1lbnQgaW4g
-dW5pdHMuCgo+IEl0IGRvZXMgbm90IGRlcGVuZCBhbiBhbnl0aGluZywKCkl0IGRvZXMgZGVwZW5k
-IG9uIC9ydW4gYmVpbmcgbW91bnRlZC4KCj4gc28gbm8gdGVjaG5pY2FsIHJlYXNvbiB0byBvcmRl
-cgo+IGl0IGFmdGVyIGFueXRoaW5nLiBBbmQgaXQgaXMgdGVjaG5pY2FsbHkgYSBwcmVwYXJhdGlv
-biBmb3IgdGhlCj4gYWN0dWFsIGxvY2FsLWZzLnRhcmdldC4KClRoaXMuCgpXZSBkbyBub3QgaGF2
-ZSBhIHZpc2lvbiBvZiB0aGUgZ3JhbmQgc2NoZW1lIG9mIGhvdyBzeXN0ZW1kIG9yZ2FuaXNlcwpz
-dHVmZiwgd2hhdCBlYWNoIC50YXJnZXQgbWVhbnMgYW5kIGhvdyB0aGV5IGRlcGVuZCBvbiBlYWNo
-IG90aGVycy4gTWF5YmUKbXkgc2VhcmNoIHNraWxscyBhcmUgZ2V0dGluZyBydXN0ZWQgYXMgdGlt
-ZSBwYXNzZXMsIGJ1dCBJIGNvdWxkIG5ldmVyCmZpbmQgc3VjaCBhIGRlc2lnbiBkb2MsIGFuZCBp
-dCBsYWNrcyBzb3JlbHkuIE1hbnBhZ2VzIGFyZSBvbmx5IHNvIGdvb2QKYXMgdG8gZXhwbGFpbiBl
-YWNoIGRldGFpbHMsIGJ1dCB0aGV5IGRvIG5vdCBwcm92aWRlIGEgZ2xvYmFsIG92ZXJ2aWV3Li4u
-CgpbLS1TTklQLS1dCj4gPiArY29uZmlnIEJSMl9JTklUX1NZU1RFTURfVkFSX09WRVJMQVlGUwo+
-ID4gKyAgICAgICBib29sICJtb3VudCBhbiBvdmVybGF5ZnMgYmFja2VkIGJ5IGEgdG1wZnMiCj4g
-PiArICAgICAgIGhlbHAKPiA+ICsgICAgICAgICBNb3VudCBhbiBvdmVybGF5ZnMgb24gL3Zhciwg
-d2l0aCB0aGUgdXBwZXIgYXMgYSB0bXBmcy4KPiA+ICsKPiA+ICsgICAgICAgICBUbyB1c2UgYSBw
-ZXJzaXN0ZW50IHN0b3JhZ2UsIHByb3ZpZGUgeW91ciBvd24gc3lzdGVtZCB1bml0KHMpCj4gPiAr
-ICAgICAgICAgdGhhdCBldmVudHVhbGx5IG1vdW50IHRoYXQgcGVyc2lzdGVudCBzdG9yYWdlIG9u
-Cj4gPiArICAgICAgICAgL3J1bi92YXJvdmVybGF5L3VwcGVyLwo+IHBlcmhhcHMgcHVsbCBpbiBv
-ciBkZXBlbmQgb24gb3ZlcmxheWZzIGhlcmUKCkkgZGlkIG5vdCBuZWVkIGFueXRoaW5nIGJlc2lk
-ZSBlbmFibGluZyBvdmVybGF5ZnMgaW4gdGhlIGtlcm5lbCAoc2VlIHRoZQpydW50aW1lIHRlc3Rz
-IGJyYW5jaCBJIHBvaW50ZWQgdG8gYWJvdmUpLgoKPiBHZW5lcmFsbHkgdGhlIHVuaXQgYW5kIGRp
-cmVjdG9yeSBuYW1lcyBjb3VsZCBiZSBtb3JlIGxvZ2ljYWwsCgpZZXMsIEkgYWdyZWUgdGhhdCB3
-ZSBzaG91bGQgaGF2ZSBhIGtpbmQgb2YgbmFtaW5nIHNjaGVtZSBmb3IgdGhpcy4gQnV0IEkKaGF2
-ZSBubyBnb29kIGlkZWEuLi4KCldoYXQgSSB3YXMgdGhpbmtpbmcsIHRob3VnaCwgaXMgdGhhdCB3
-ZSBtYXliZSBzaG91bGQgbWFrZSBkb3R0ZWQKZGlyZWN0b3JpZXMsIGkuZS4gL3J1bi8udmFyb3Zl
-cmxheS97bG93ZXIsdXBwZXIsd29ya30KCj4gYW5kIGZvciBhbGxvd2luZyB0aGUgdXNlciB0byBz
-cGVjaWZ5IGEgY3VzdG9tIG1vdW50Cj4gYnkgcmVhZGluZyBhbiBFbnZpcm9ubWVudEZpbGUgaW4g
-dGhlIHJvb3Rmcy1iaW5kbW91bnQtdmFyIHVuaXQuCgpJdCB3YXMgbXkgdW5kZXJzdGFuZGluZyB0
-aGF0IHVzZXJzIGNvdWxkIHByb3ZpZGUgdGhlaXIgb3duIHVuaXQocyksCnNvbWV0aGluZyB0aGF0
-IHdvdWxkIHVsdGltYXRlbHkgZW5kIHVwIHdpdGggYSBtb3VudCB1bml0IGxpa2U6CgogICAgIyBj
-YXQgcnVuX3Zhcm92ZXJsYXlfdXBwZXIubW91bnQKICAgIFtVbml0XQogICAgQWZ0ZXI9cm9vdGZz
-LWJpbmRtb3VudC12YXIuc2VydmljZQogICAgQmluZHNUbz1yb290ZnMtYmluZG1vdW50LXZhci5z
-ZXJ2aWNlCgogICAgW01vdW50XQogICAgV2hhdD0vZGV2L3NvbWV0aGluZwogICAgV2hlcmU9L3J1
-bi92YXJvdmVybGF5L3VwcGVyCiAgICBUeXBlPWV4dDQtb3Itd2hhdGV2ZXIKCiAgICBbSW5zdGFs
-bF0KICAgIEJvdW5kQnk9dmFyLm1vdW50CiAgICBXYW50ZWRCeT12YXIubW91bnQKClRoYXQgd2F5
-LCB0aGV5IGRvIG5vdCBoYXZlIHRvIG92ZXJyaWRlIGFueSBvZiBvdXIgdW5pdHM7IHRoZXkgd291
-bGQganVzdAppbnRlcnNwZXJzZSB0aGVpciB1bml0IGluIHRoZSBleGlzdGluZyBkZXBlbmRlbmN5
-IGdyYXBoLCBiZXR3ZWVuIHRoZQpyb290ZnMtYmluZG1vdW50LXZhci5zZXJ2aWNlIGFuZCB0aGUg
-dmFyLm1vdW50LgoKQW5kIHRoZSBjb250ZW50IG9mIHRoZSBmaWxlc3lzdGVtIG9uIC9kZXYvc29t
-ZXRoaW5nIHdvdWxkIG9ubHkgZ2V0IHRoZQpjb250ZW50IG9mIC92YXIsIG5vdCB0aGUge2xvd2Vy
-LHVwcGVyLHdvcmt9IGRpcmVjdG9yaWVzLCB3aGljaCBjb3VsZCBiZQphIGJpdCBjb25mdXNpbmcu
-Cgo+IFBsYW5uaW5nIHRvIGFkZCBzb21lIG1vcmUgY29tbWVudHMgbmV4dCB3ZWVrLCBzaG91bGQg
-ZmluZCBkb21lIHRpbWUgaGVyZSwKPiBodWdlIGNvbW1pdCBtc2dzIHRvIGdldCB0aHJvdWdoLgoK
-Q29tbWl0IG1lc3NhZ2VzIGFyZSBpbXBvcnRhbnQsIGJlY2F1c2UgdGhleSBkbyBwcm92aWRlIGFs
-bCB0aGUgcmF0aW9uYWxlCmFuZCByZWFzb25pbmcgYmVoaW5kIGEgY2hhbmdlLiBUaGV5IHdpbGwg
-YmUgdGhlcmUgZm9yZXZlciwgYW5kIGluIHRoZQpmdXR1cmUsIHdlIGNhbiByZWZlciB0byB0aGVt
-IHRvIHVuZGVyc3RhbmQgd2h5IHRoZSBjb2RlIGVuZWRlZCB1cCBsaWtlCml0IGlzLCBhbmQgd2l0
-aCBuZXcgaW5zaWdodCB0aGVuLCB3ZSBjYW4gdW5kZXJzdGFuZCB3aGVyZSBvdXIgcmVhc29uaW5n
-CndhcyBmbGF3ZWQsIG9yIGlmIGl0IHdhcyBjb3JyZWN0LCBob3cgdGhlIGVudmlyb25tZW50IGFy
-b3VuZCBoYXMKY2hhbmdlZC4KCkkgY29uc2lkZXIgYSBnb29kIGNvbW1pdCBsb2cgbW9yZSBpbXBv
-cnRhbnQgdGhhbiB0aGUgYWN0dWFsIGNoYW5nZS4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgot
-LSAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF9fX19fX19fX19fXwou
-LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06ICAgICAgIF8gICAgOi0tLS0t
-LS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAg
-ICBfXy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJPTiB8CnwgICAgICAgICAgICAgICAgIHwgU29mdHdh
-cmUgIERlc2lnbmVyIHwgIF8vIC0gLycgICB8IFwgLyBDQU1QQUlHTiAgICAgfAp8ICszMyA2Mzgu
-NDExLjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0tLS06IChfICAgIGAtLSwgfCAgWCAgQUdBSU5TVCAg
-ICAgIHwKfCB5YW5uLm1vcmluIChhdCkgb3JhbmdlLmNvbSAgICAgICAgICAgfF89IiAgICAsLS0n
-IHwgLyBcIEhUTUwgTUFJTCAgICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLTpfX19fX18vX19fX186LS0tLS0tLS0tLS0tLS0tLS0tJwoKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KCkNlIG1lc3Nh
-Z2UgZXQgc2VzIHBpZWNlcyBqb2ludGVzIHBldXZlbnQgY29udGVuaXIgZGVzIGluZm9ybWF0aW9u
-cyBjb25maWRlbnRpZWxsZXMgb3UgcHJpdmlsZWdpZWVzIGV0IG5lIGRvaXZlbnQgZG9uYwpwYXMg
-ZXRyZSBkaWZmdXNlcywgZXhwbG9pdGVzIG91IGNvcGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kg
-dm91cyBhdmV6IHJlY3UgY2UgbWVzc2FnZSBwYXIgZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxl
-cgphIGwnZXhwZWRpdGV1ciBldCBsZSBkZXRydWlyZSBhaW5zaSBxdWUgbGVzIHBpZWNlcyBqb2lu
-dGVzLiBMZXMgbWVzc2FnZXMgZWxlY3Ryb25pcXVlcyBldGFudCBzdXNjZXB0aWJsZXMgZCdhbHRl
-cmF0aW9uLApPcmFuZ2UgZGVjbGluZSB0b3V0ZSByZXNwb25zYWJpbGl0ZSBzaSBjZSBtZXNzYWdl
-IGEgZXRlIGFsdGVyZSwgZGVmb3JtZSBvdSBmYWxzaWZpZS4gTWVyY2kuCgpUaGlzIG1lc3NhZ2Ug
-YW5kIGl0cyBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgb3IgcHJpdmlsZWdl
-ZCBpbmZvcm1hdGlvbiB0aGF0IG1heSBiZSBwcm90ZWN0ZWQgYnkgbGF3Owp0aGV5IHNob3VsZCBu
-b3QgYmUgZGlzdHJpYnV0ZWQsIHVzZWQgb3IgY29waWVkIHdpdGhvdXQgYXV0aG9yaXNhdGlvbi4K
-SWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0
-aGUgc2VuZGVyIGFuZCBkZWxldGUgdGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMuCkFz
-IGVtYWlscyBtYXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlzIG5vdCBsaWFibGUgZm9yIG1lc3NhZ2Vz
-IHRoYXQgaGF2ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2VkIG9yIGZhbHNpZmllZC4KVGhhbmsgeW91
-LgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============4109338215174513160==
+Content-Type: multipart/alternative; boundary="00000000000044734605ebd77e95"
+
+--00000000000044734605ebd77e95
+Content-Type: text/plain; charset="UTF-8"
+
+ Op di 25 okt. 2022 om 09:33 schreef Angelo Compagnucci <
+angelo@amarulasolutions.com>:
+>
+> Hello Jesse,
+>
+> I was trying to port qt6knx to qt6, the project is not converted to cmake
+but still based on qmake.
+> I was able to compile it on x86 using qt6 but qmake in buildroot QT6 is
+somewhat broken, the following snip shows the differences between qmake for
+QT5 and QT6:
+>
+> angelo@angeloc:~/DEV/BUILDROOT/br_qemu_arm$
+/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/bin/qmake
+-query
+>
+QT_SYSROOT:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot
+>
+QT_INSTALL_PREFIX:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr
+> QT_INSTALL_PREFIX/raw:/usr
+>
+QT_INSTALL_ARCHDATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr
+> QT_INSTALL_ARCHDATA/raw:/usr
+>
+QT_INSTALL_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr
+> QT_INSTALL_DATA/raw:/usr
+>
+QT_INSTALL_DOCS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/doc
+> QT_INSTALL_DOCS/raw:/usr/doc
+>
+QT_INSTALL_HEADERS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/qt5
+> QT_INSTALL_HEADERS/raw:/usr/include/qt5
+>
+QT_INSTALL_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib
+> QT_INSTALL_LIBS/raw:/usr/lib
+>
+QT_INSTALL_LIBEXECS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/libexec
+> QT_INSTALL_LIBEXECS/raw:/usr/libexec
+>
+QT_INSTALL_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin
+> QT_INSTALL_BINS/raw:/usr/bin
+>
+QT_INSTALL_TESTS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/tests
+> QT_INSTALL_TESTS/raw:/usr/tests
+>
+QT_INSTALL_PLUGINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/qt/plugins
+> QT_INSTALL_PLUGINS/raw:/usr/lib/qt/plugins
+>
+QT_INSTALL_IMPORTS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/imports
+> QT_INSTALL_IMPORTS/raw:/usr/imports
+>
+QT_INSTALL_QML:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/qml
+> QT_INSTALL_QML/raw:/usr/qml
+>
+QT_INSTALL_TRANSLATIONS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/translations
+> QT_INSTALL_TRANSLATIONS/raw:/usr/translations
+>
+QT_INSTALL_CONFIGURATION:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr
+> QT_INSTALL_CONFIGURATION/raw:/usr
+>
+QT_INSTALL_EXAMPLES:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/qt/examples
+> QT_INSTALL_EXAMPLES/raw:/usr/lib/qt/examples
+>
+QT_INSTALL_DEMOS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/qt/examples
+> QT_INSTALL_DEMOS/raw:/usr/lib/qt/examples
+>
+QT_HOST_PREFIX:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host
+>
+QT_HOST_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host
+>
+QT_HOST_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/bin
+>
+QT_HOST_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/lib
+> QMAKE_SPEC:linux-g++
+> QMAKE_XSPEC:devices/linux-buildroot-g++
+> QMAKE_VERSION:3.1
+> QT_VERSION:5.15.8
+> angelo@angeloc:~/DEV/BUILDROOT/br_qemu_arm$
+> angelo@angeloc:~/DEV/BUILDROOT/br_qemu_arm$
+/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt6base/host/bin/qmake
+-query
+> QT_SYSROOT:
+>
+QT_INSTALL_PREFIX:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host
+>
+QT_INSTALL_ARCHDATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host
+>
+QT_INSTALL_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host
+>
+QT_INSTALL_DOCS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/doc
+>
+QT_INSTALL_HEADERS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/include
+>
+QT_INSTALL_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/lib
+>
+QT_INSTALL_LIBEXECS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/libexec
+>
+QT_INSTALL_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/bin
+>
+QT_INSTALL_TESTS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/tests
+>
+QT_INSTALL_PLUGINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/plugins
+>
+QT_INSTALL_QML:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/qml
+>
+QT_INSTALL_TRANSLATIONS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/translations
+> QT_INSTALL_CONFIGURATION:
+>
+QT_INSTALL_EXAMPLES:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/examples
+>
+QT_INSTALL_DEMOS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/examples
+>
+QT_HOST_PREFIX:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host
+>
+QT_HOST_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host
+>
+QT_HOST_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/bin
+>
+QT_HOST_LIBEXECS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/libexec
+>
+QT_HOST_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/lib
+> QMAKE_SPEC:linux-g++
+> QMAKE_XSPEC:linux-g++
+> QMAKE_VERSION:3.1
+> QT_VERSION:6.4.0
+>
+>
+> Any clue?
+>
+> I'm looking into fixing qmake for QT6 anyway
+>
+> Thanks!
+> --
+>
+> Angelo Compagnucci
+>
+> Software Engineer
+>
+> angelo@amarulasolutions.com
+> __________________________________
+> Amarula Solutions SRL
+>
+> Via le Canevare 30, 31100 Treviso, Veneto, IT
+>
+> T. +39 (0)42 243 5310
+> info@amarulasolutions.com
+>
+> www.amarulasolutions.com
+>
+> [`as] https://www.amarulasolutions.com|
+Hello Angelo,
+
+Yes this was one of the parts I couldn't get working initially for which I
+opted to set it aside for the time being, I dreaded the day this would come
+as it was a bit of a PITA!
+As for why it doesn't work, you'll see that the qmake_xspec is linux-g++ in
+qt6 and devices/linux-buildroot-g++ in your qt5 build, what was done in qt5
+was that our own qmake device spec was made to work with the BR
+compiler/flags, you'll see this in qt5.mk where the qmake command is
+defined as
+
+QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
+
+As for how to do it properly, some good reference here is
+https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi as this shows how
+cross-compiling is now generally done and how they pass the device spec
+during building for the target.
+You can also look under the qt5base folder for qt.conf.in, qmake.conf.in
+qplatformdefs.h, that together with QT5_INSTALL_QT_CONF in qt5.mk and
+QT5BASE_CONFIGURE_CMDS in qt5base.mk (more specifically line 335-345)
+This from what I remember is most if not all that is involved in building
+the buildroot specific device spec to get qmake working, I hope that at
+least gives you somewhere to start looking.
+
+As for why I couldn't get it working myself at the time, I tried to
+implement all of the things mentioned above, I had a device spec and the
+files looked good, I passed it to the qt6 target building with
+-DQT_QMAKE_TARGET_MKSPEC=devices/linux-buildroot-g++ and everything done in
+qt5 to get it working was there (or so I thought at least), but in the end
+there seemed to be some path issues where qmake was looking at the host qt6
+instead of the target qt6 and I never really figured it out, the whole
+host/target building of qt6 was quite the PITA in and of itself, but I'll
+give it another crack since there's some interest, good to see someone
+wants to pick it up too!
+
+I do think I have some work related to this from previous attempts on one
+of my dev branches, I'll keep in touch if I find something to send your
+way, maybe it helps you to have some starting point.
+
+Best regards,
+Jesse
+
+--00000000000044734605ebd77e95
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">=C2=A0Op di 25 okt. 2022 om 09:33 schreef Angelo Compagnuc=
+ci &lt;<a href=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank">ang=
+elo@amarulasolutions.com</a>&gt;:<br>&gt;<br>&gt; Hello Jesse,<br>&gt;<br>&=
+gt; I was trying to port qt6knx to qt6, the project is not converted to cma=
+ke but still based on qmake.<br>&gt; I was able to compile it on x86 using =
+qt6 but qmake in buildroot QT6 is somewhat broken, the following snip shows=
+ the differences between qmake for QT5 and QT6:<br>&gt;<br>&gt; angelo@ange=
+loc:~/DEV/BUILDROOT/br_qemu_arm$ /home/angelo/DEV/BUILDROOT/br_qemu_arm/per=
+-package/qt5base/host/bin/qmake -query<br>&gt; QT_SYSROOT:/home/angelo/DEV/=
+BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgn=
+ueabihf/sysroot<br>&gt; QT_INSTALL_PREFIX:/home/angelo/DEV/BUILDROOT/br_qem=
+u_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/=
+usr<br>&gt; QT_INSTALL_PREFIX/raw:/usr<br>&gt; QT_INSTALL_ARCHDATA:/home/an=
+gelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux=
+-uclibcgnueabihf/sysroot/usr<br>&gt; QT_INSTALL_ARCHDATA/raw:/usr<br>&gt; Q=
+T_INSTALL_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/h=
+ost/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr<br>&gt; QT_INSTALL_DATA=
+/raw:/usr<br>&gt; QT_INSTALL_DOCS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/pe=
+r-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/doc<=
+br>&gt; QT_INSTALL_DOCS/raw:/usr/doc<br>&gt; QT_INSTALL_HEADERS:/home/angel=
+o/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uc=
+libcgnueabihf/sysroot/usr/include/qt5<br>&gt; QT_INSTALL_HEADERS/raw:/usr/i=
+nclude/qt5<br>&gt; QT_INSTALL_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/p=
+er-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib=
+<br>&gt; QT_INSTALL_LIBS/raw:/usr/lib<br>&gt; QT_INSTALL_LIBEXECS:/home/ang=
+elo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-=
+uclibcgnueabihf/sysroot/usr/libexec<br>&gt; QT_INSTALL_LIBEXECS/raw:/usr/li=
+bexec<br>&gt; QT_INSTALL_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-pa=
+ckage/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin<br>&=
+gt; QT_INSTALL_BINS/raw:/usr/bin<br>&gt; QT_INSTALL_TESTS:/home/angelo/DEV/=
+BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgn=
+ueabihf/sysroot/usr/tests<br>&gt; QT_INSTALL_TESTS/raw:/usr/tests<br>&gt; Q=
+T_INSTALL_PLUGINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5bas=
+e/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/qt/plugins<br>&g=
+t; QT_INSTALL_PLUGINS/raw:/usr/lib/qt/plugins<br>&gt; QT_INSTALL_IMPORTS:/h=
+ome/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot=
+-linux-uclibcgnueabihf/sysroot/usr/imports<br>&gt; QT_INSTALL_IMPORTS/raw:/=
+usr/imports<br>&gt; QT_INSTALL_QML:/home/angelo/DEV/BUILDROOT/br_qemu_arm/p=
+er-package/qt5base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/qml=
+<br>&gt; QT_INSTALL_QML/raw:/usr/qml<br>&gt; QT_INSTALL_TRANSLATIONS:/home/=
+angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-lin=
+ux-uclibcgnueabihf/sysroot/usr/translations<br>&gt; QT_INSTALL_TRANSLATIONS=
+/raw:/usr/translations<br>&gt; QT_INSTALL_CONFIGURATION:/home/angelo/DEV/BU=
+ILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-linux-uclibcgnue=
+abihf/sysroot/usr<br>&gt; QT_INSTALL_CONFIGURATION/raw:/usr<br>&gt; QT_INST=
+ALL_EXAMPLES:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/hos=
+t/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/qt/examples<br>&gt; Q=
+T_INSTALL_EXAMPLES/raw:/usr/lib/qt/examples<br>&gt; QT_INSTALL_DEMOS:/home/=
+angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/arm-buildroot-lin=
+ux-uclibcgnueabihf/sysroot/usr/lib/qt/examples<br>&gt; QT_INSTALL_DEMOS/raw=
+:/usr/lib/qt/examples<br>&gt; QT_HOST_PREFIX:/home/angelo/DEV/BUILDROOT/br_=
+qemu_arm/per-package/qt5base/host<br>&gt; QT_HOST_DATA:/home/angelo/DEV/BUI=
+LDROOT/br_qemu_arm/per-package/qt5base/host<br>&gt; QT_HOST_BINS:/home/ange=
+lo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/bin<br>&gt; QT_HOST_L=
+IBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt5base/host/lib<br>=
+&gt; QMAKE_SPEC:linux-g++<br>&gt; QMAKE_XSPEC:devices/linux-buildroot-g++<b=
+r>&gt; QMAKE_VERSION:3.1<br>&gt; QT_VERSION:5.15.8<br>&gt; angelo@angeloc:~=
+/DEV/BUILDROOT/br_qemu_arm$<br>&gt; angelo@angeloc:~/DEV/BUILDROOT/br_qemu_=
+arm$ /home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/qt6base/host/bin/qm=
+ake -query<br>&gt; QT_SYSROOT:<br>&gt; QT_INSTALL_PREFIX:/home/angelo/DEV/B=
+UILDROOT/br_qemu_arm/per-package/host-qt6base/host<br>&gt; QT_INSTALL_ARCHD=
+ATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host<br=
+>&gt; QT_INSTALL_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/ho=
+st-qt6base/host<br>&gt; QT_INSTALL_DOCS:/home/angelo/DEV/BUILDROOT/br_qemu_=
+arm/per-package/host-qt6base/host/doc<br>&gt; QT_INSTALL_HEADERS:/home/ange=
+lo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/include<br>&gt; =
+QT_INSTALL_LIBS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6=
+base/host/lib<br>&gt; QT_INSTALL_LIBEXECS:/home/angelo/DEV/BUILDROOT/br_qem=
+u_arm/per-package/host-qt6base/host/libexec<br>&gt; QT_INSTALL_BINS:/home/a=
+ngelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/bin<br>&gt; Q=
+T_INSTALL_TESTS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6=
+base/host/tests<br>&gt; QT_INSTALL_PLUGINS:/home/angelo/DEV/BUILDROOT/br_qe=
+mu_arm/per-package/host-qt6base/host/plugins<br>&gt; QT_INSTALL_QML:/home/a=
+ngelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/qml<br>&gt; Q=
+T_INSTALL_TRANSLATIONS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/h=
+ost-qt6base/host/translations<br>&gt; QT_INSTALL_CONFIGURATION:<br>&gt; QT_=
+INSTALL_EXAMPLES:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt=
+6base/host/examples<br>&gt; QT_INSTALL_DEMOS:/home/angelo/DEV/BUILDROOT/br_=
+qemu_arm/per-package/host-qt6base/host/examples<br>&gt; QT_HOST_PREFIX:/hom=
+e/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host<br>&gt; QT=
+_HOST_DATA:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/=
+host<br>&gt; QT_HOST_BINS:/home/angelo/DEV/BUILDROOT/br_qemu_arm/per-packag=
+e/host-qt6base/host/bin<br>&gt; QT_HOST_LIBEXECS:/home/angelo/DEV/BUILDROOT=
+/br_qemu_arm/per-package/host-qt6base/host/libexec<br>&gt; QT_HOST_LIBS:/ho=
+me/angelo/DEV/BUILDROOT/br_qemu_arm/per-package/host-qt6base/host/lib<br>&g=
+t; QMAKE_SPEC:linux-g++<br>&gt; QMAKE_XSPEC:linux-g++<br>&gt; QMAKE_VERSION=
+:3.1<br>&gt; QT_VERSION:6.4.0<br>&gt;<br>&gt;<br>&gt; Any clue?<br>&gt;<br>=
+&gt; I&#39;m looking into fixing qmake for QT6 anyway<br>&gt;<br>&gt; Thank=
+s!<br>&gt; --<br>&gt;<br>&gt; Angelo Compagnucci<br>&gt;<br>&gt; Software E=
+ngineer<br>&gt;<br>&gt; <a href=3D"mailto:angelo@amarulasolutions.com" targ=
+et=3D"_blank">angelo@amarulasolutions.com</a><br>&gt; _____________________=
+_____________<br>&gt; Amarula Solutions SRL<br>&gt;<br>&gt; Via le Canevare=
+ 30, 31100 Treviso, Veneto, IT<br>&gt;<br>&gt; T. +39 (0)42 243 5310<br>&gt=
+; <a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@amaru=
+lasolutions.com</a><br>&gt;<br>&gt; <a href=3D"http://www.amarulasolutions.=
+com" target=3D"_blank">www.amarulasolutions.com</a><br>&gt;<br>&gt; [`as] <=
+a href=3D"https://www.amarulasolutions.com" target=3D"_blank">https://www.a=
+marulasolutions.com</a>|<br>Hello Angelo,<br><br>Yes this was one of the pa=
+rts I couldn&#39;t get working initially for which I opted to set it aside =
+for the time being, I dreaded the day this would come as it was a bit of a =
+PITA!<br>As for why it doesn&#39;t work, you&#39;ll see that the qmake_xspe=
+c is linux-g++ in qt6 and devices/linux-buildroot-g++ in your qt5 build, wh=
+at was done in qt5 was that our own qmake device spec was made to work with=
+ the BR compiler/flags, you&#39;ll see this in <a href=3D"http://qt5.mk">qt=
+5.mk</a> where the qmake command is defined as=20
+<table cellspacing=3D"0" cellpadding=3D"0"><tbody><tr class=3D"gmail-vc_row=
+_odd" id=3D"gmail-l29"><td class=3D"gmail-vc_file_line_number"><br></td>
+
+<td class=3D"gmail-vc_file_line_text">QT5_QMAKE =3D $(HOST_DIR)/bin/qmake -=
+spec devices/linux-buildroot-g++</td></tr></tbody></table>
+
+<div><br></div><div>As for how to do it properly, some good reference here =
+is <a href=3D"https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi" targe=
+t=3D"_blank">https://wiki.qt.io/Cross-Compile_Qt_6_for_Raspberry_Pi</a> as =
+this shows how cross-compiling is now generally done and how they pass the =
+device spec during building for the target.<br></div><div>You can also look=
+ under the qt5base folder for <a href=3D"http://qt.conf.in">qt.conf.in</a>,=
+ <a href=3D"http://qmake.conf.in">qmake.conf.in</a> qplatformdefs.h, that t=
+ogether with=20
+<span class=3D"gmail-pl-smi">QT5_INSTALL_QT_CONF</span> in <a href=3D"http:=
+//qt5.mk">qt5.mk</a> and QT5BASE_CONFIGURE_CMDS in <a href=3D"http://qt5bas=
+e.mk">qt5base.mk</a> (more specifically line 335-345) <br></div><div>This f=
+rom what I remember is most if not all that is involved in building the bui=
+ldroot specific device spec to get qmake working, I hope that at least give=
+s you somewhere to start looking.</div><div><br></div><div>As for why I cou=
+ldn&#39;t get it working myself at the time, I tried to implement all of th=
+e things mentioned above, I had a device spec and the files looked good, I =
+passed it to the qt6 target building with -DQT_QMAKE_TARGET_MKSPEC=3Ddevice=
+s/linux-buildroot-g++
+
+
+ and everything done in qt5 to get it working was there (or so I thought at=
+ least), but in the end there seemed to be some path issues where qmake was=
+ looking at the host qt6 instead of the target qt6 and I never really figur=
+ed it out, the whole host/target building of qt6 was quite the PITA in and =
+of itself, but I&#39;ll give it another crack since there&#39;s some intere=
+st, good to see someone wants to pick it up too!</div><div><br></div><div>I=
+ do think I have some work related to this from previous attempts on one of=
+ my dev branches, I&#39;ll keep in touch if I find something to send your w=
+ay, maybe it helps you to have some starting point.<br></div><div><br></div=
+><div>Best regards,</div><div>Jesse<br></div></div>
+
+--00000000000044734605ebd77e95--
+
+--===============4109338215174513160==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4109338215174513160==--
