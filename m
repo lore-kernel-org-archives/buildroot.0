@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84389C38A2D
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 06:09:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87D1C38A2D
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 06:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15F2E80D37;
-	Tue, 25 Oct 2022 06:09:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15F2E80D37
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EoW2aihwM4v8; Tue, 25 Oct 2022 06:09:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 435A880BCE;
-	Tue, 25 Oct 2022 06:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 435A880BCE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB9A31BF2BB
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 06:09:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4BBD402C2
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 06:09:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4BBD402C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6156F40333;
+	Tue, 25 Oct 2022 06:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6156F40333
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PNNFiKXK17BH for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 06:09:19 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GJXXQjcZQVdx; Tue, 25 Oct 2022 06:10:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D634A402C2;
+	Tue, 25 Oct 2022 06:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D634A402C2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DE5D1BF2BB
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 06:10:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A49580BD7
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 06:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A49580BD7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 471hiSe2x08f for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 06:10:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9915C40290
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3575E80B98
 Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05on2068.outbound.protection.outlook.com [40.107.20.68])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9915C40290
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 06:09:19 +0000 (UTC)
+ (mail-db8eur05on2052.outbound.protection.outlook.com [40.107.20.52])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3575E80B98
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 06:10:19 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VODlqMb6QmQTLBrGiryT0eBWZSySJoMsCtP720hOHmft3SUjIdJ+h0MJ5cOodzOUvIUbzXowBUfECwudtE86+dcorU1aMo+9kasojQNvrdVDsiIhn4MUqvnU/DOinlJXH242tMpN5flvehdfALzOKfrZWOaMM/W25NkHxcJwUpHqtD+rqRrnO1SIlRTO+yDnXhLk7ziXN/g372TSSJO6Sv1kE4nC+30Ng+bZ5O/SyHIuBLDVOmtkxEe2nZVL7oXrrTn2EB44TA2m8uvrIk+4wfXZId46EqHYX6lk76VUd7lieDvauHAu4mphjBr5/mnZgDIatV2t4d44l5IcFQE9tw==
+ b=mH7s51naqodTzp+GeIFAr5ytVu6UxfLzq4g3vObwyFSW8TqOLiDqVjuthNO8GoPrFW/RDuI7Zjf/qvI4cvehjXHM2ZCNGPXU6QEvDMha2jxzXMbRDBK1mwl/34RDT7w/BUD+TzuB08r+ITePPtaMVEAeE5UToawY41DrXhCTEEPAY6AqgNw5TOpMbG0H/ZFjakJrvOCEncZ8DhUv3nkR41JyeaskbVx9H8Gap2cpqQKMM+LjUPjcZJi3rbKgYB7q4WXF6cEPDEccsrOb8TalXvRGi+d38RfY3ofc3JN4ZFBPqHVMX5teUTdQVBGAH3fa56Os30LimZANkvG6bkIM1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LRGi1Z+HKtYVr5hFIevOGP4BgzjTekwSP7FS9lgJ6Pg=;
- b=hcNubmpVJV6n5sSNr1OuRe94Ax0dhfCrHXKl+6hpV1u0f2ySLgVDTNd/HrE9SwkstGGgE8Zk6UErZFeqzUwP45Ywc7DRFm9cdBbpI1c/lsTmhOwHH3Tos8Y8t4PLs4/5gvIxqt2DdgtJEshHnR3w7vUqMvatpy/jFmn3xY5v3fZJK4kM64LoeUsPx9lQNvNAJ+Vu0jjdypnHM/jSiCSQohXMBnjeG32uGYzurusYsHWUjkswJuRAyqaSIkcwTEBfzygB6GXp0sszdyj08eRpXttM4gcP8fKv+NTVy6LDSxifOUXw4neBIZBEVLhR6TpQNWu3a6z3Vg2Hfkb3hJF3XA==
+ bh=bAKDWXC6hQ3gW5NSRbLMUrTUPxKTJoMk59wfzVeu/As=;
+ b=HVzfMcPz+AES2DzUI8usGD8EMkwm/n+/WnaAq0cVZzl9ygfpeDefO/OLdt+96eJCu7eNA6FYXzvBWRIff7Osqc548J9G9S9SQyTUmSgnMfjfrprcTG4tYQ5Y9x5/TiMFbZjvTRW+pQ8UxKjodMxsYx112AVgFTsoJaZ7FFetmTZ1Mbvde1RntexoHDPMuJBB9SPmm1nwxO1IVcU301rV75Wt0h1ia5djACDhHqV2+Oh4vsMIQUxEnUSr4D6vCSM8dSuFMwdKNvqqjm3NlTfQiR5RmU0ePl7xdMISbflnb3kDkdMv8qdccPzCKg+Qr3KTqTBbfrkJzYeRbh9KzB9nyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
@@ -50,16 +50,16 @@ Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
  by DU0P190MB1803.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:34b::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Tue, 25 Oct
- 2022 06:09:17 +0000
+ 2022 06:10:16 +0000
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::a8f8:8606:d464:52a1]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::a8f8:8606:d464:52a1%7]) with mapi id 15.20.5746.026; Tue, 25 Oct 2022
- 06:09:17 +0000
+ 06:10:16 +0000
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH v2 06/11] package/llvm-project/llvm-cmake: new package
-Thread-Index: AQHY6DegS4J2W3ltjUWy6GqWf6gYKA==
-Date: Tue, 25 Oct 2022 06:09:17 +0000
-Message-ID: <VI1P190MB0493D84A675F9D98209AE5229F319@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH v2 07/11] package/llvm-project/llvm-libunwind: new package
+Thread-Index: AQHY6DgYiJtr+w5KjEK2dNO77pkWaQ==
+Date: Tue, 25 Oct 2022 06:10:16 +0000
+Message-ID: <VI1P190MB049330FC63A2E74B7886D2A59F319@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
@@ -67,68 +67,68 @@ X-MS-TNEF-Correlator:
 msip_labels: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DU0P190MB1803:EE_
-x-ms-office365-filtering-correlation-id: fe8a1aab-fd02-424c-8a83-08dab64f72c5
+x-ms-office365-filtering-correlation-id: 26c19157-162f-41e1-b640-08dab64f95f6
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 707NXHjQKA6KjLb5kFs4TTjo7Jc++jUc0X8lfsOVA/OzQKl3hM87pGqnyqDeCX/8WpvhQgSsRhcjM9jRQ10GMi+HdCFemLLW3vnzoFpjE24cb2NYKsYhXFohSCg3H4R+rAUw3Q1tv8uYOoe7sv4dh2GVPKbKmbYkgqfrQa8e5JQowtkA0Ei1GiEg4/61q1DnGrNJLdA03X5pYs9+g2A4OdN4eQ/9/B+gBTy792rhLee+Jv7JZUBEFLOJeDbmWJuOFd2XXhNl0HidNeFmWxBHO2j8XXr29+krmL9RcggWHbrcFyzJCLnqHeQmgnLeN+eKvIgVqaLf7ze6li2d8hHJu+LZGRGjCNbSu9egnhzZr3Z3ygnwdWdyYe9Cgm5iho1gc1c3/5SXXYEUMgHwPA7GoubYHGyq9MhO3tuGNY71iHSRx5KpIff1ydR9KzZE2ut8PQFpXqPkz5TmB7GJZKKp9AVPC1Jzsqm1DKrYE5q73VUueL94RRKZk8rzVYnilc/fCqgf+BtlOCOihmG1CbZc3KNd9aFSaAWB3JRtz1Sc2jcAztBzhq9uv4MRwY0UKQFdwtCWt3amSVovNi8CBWtUuX21oBkvUG3k+ZyD7hxqwuk1gWnWppkQRmuQWT+zMnXoPqAKRKArgRqWsqSo7snOg4XpYcN5eauKm1BXfTO4IG9GNDkUGpssRwDn4oHSHhP7PpYZGsmbKZg2magu0dB4X/dDJRwDG/5fk0WDNNK+CSBxW05PTAZElata8A6q6ggLzWStkLYEqueZm60G5IoYFQ==
+x-microsoft-antispam-message-info: vkVALy9eGqe+Rhau6j2xPith/XZd9SIb12yCGR+mL2CDGkwnLDaHx5WZlN6p/dUptdCvoKxgJlWOqs5gJXvbcqaL3TG3RyIUf8Ap9oNSOCq4kQSmtolxzJVfZ63U2PyxgsX/0HDhSmnnb9tO86BkZ+y2rA149ghZwEaBRejHl/TcOpfkuaXTU0cHTbaTxOSPWA2zxs8JeDnG2rRdfE7+wVQLcJ3QxsJP8WYCfUFj/GAOPIdtMAwbfE3kQMVOfvlXvUe5dxTf3PLk5ty5BtkNMRNwCqRnBpf0zpGaj4lqy8JJUa5sBCOSvy6Hkvdy543StO6iCCylfb7lUUPlkitIJstvAMhP1wSfQff4Y9ATlbXCQ0/tqX8Joiri9aBVwBvls+WW/DIoD38YanMPLcYiQ8veD0uS5McRGxNc52WPyaodFusLZl8DO1qMTyRqFWLeAiS+i+cwuPIW4To4bIihwOQ8gNge8m24cfIQc7RXWX28OAlIEZlx+hpx3HMCS9kY5CVusEf0gcV1a5pUfUUw7iYEVco/8DBRxFzlrCQAE1thGk5fFaUpAg3x6w8z7QxIZ6k5C9Khc9JIuNp5s74qhmBpZZnKCndCrDxACDHsyDW7hCZjmOpmMsE9fI2mFsYkCZCWXLW5zG7ujxxumb3LW2iK+yc9A731H81JGlGkAeS8rAzJvz4iAgCteZhqfpwwTNsEuZ5x34d4r38/4lcYx28aX1ZoudeooOf/miwvKABsEtZ8blcgW8kK9rNBflHJDx+coDbuDr+4t3WkMDCSJw==
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
  SFS:(13230022)(4636009)(366004)(136003)(39840400004)(376002)(396003)(346002)(451199015)(8936002)(41300700001)(52536014)(5660300002)(9686003)(6916009)(66476007)(26005)(76116006)(66556008)(8676002)(64756008)(66446008)(54906003)(4326008)(6506007)(7696005)(316002)(38070700005)(2906002)(66946007)(33656002)(186003)(55016003)(38100700002)(122000001)(86362001)(478600001)(71200400001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Jqx5pARMTtzdtBA/S/TbDgvvdYUERJ7FUtAI0FaBTbLQF0VUmhLPqWH5J/?=
- =?iso-8859-1?Q?xaerJFcgd1lk9tmZqLS5wQSK7em7joZMtWFeT9DzrzmHEJtQfFpZ2U8ahh?=
- =?iso-8859-1?Q?tzCOkLH61QpkkViEFz4AX7iZ98UiaotYfYuMMxbzilnuS9eqNkwjcl1sFB?=
- =?iso-8859-1?Q?+jwv65mIACsuA/SvyUw866tm63f8ju8wsMiVJIHbcwvUdVMzXUtDmZhIgy?=
- =?iso-8859-1?Q?Fii6S6oTMRgVot9jjBzm2VZ0iYd/ZmKR1KFCaokDLwhLhPvoJmcCspZvIB?=
- =?iso-8859-1?Q?dtsLV9ip8xSFRjG05Si+6VDwVHC282DZo+57k4/v98JeWxgFRre8OlhWu4?=
- =?iso-8859-1?Q?jAE1YFI8upRmUhKVL9pqstY0a38TUkaw6sHmLngQp5Ok7mY6bsqavZXJkt?=
- =?iso-8859-1?Q?QCGq8lkoCGs3Ph//Tjx6ndZtibmxJhgD/G8MQcUktVl3uV5PJ4+K/szx6O?=
- =?iso-8859-1?Q?JzDb+2oNrQHjszzjWPpOcO0iW1XbJsjx27A7q/nsnpnf0+iWfdvE8HXIOT?=
- =?iso-8859-1?Q?OJrwp1uhwiBRa9PpPmbghfFFmpN//A1USsGOKDv/agrqELhQa18S6Y7zPm?=
- =?iso-8859-1?Q?Wu87dI8VP7LQG8FNxkmxigoIx+8BNmTHv5vW4QsEtwEKluXXpx1JI9xbLG?=
- =?iso-8859-1?Q?5lBG4rBaRddK8mj/FFSTFEVfzhaLI6dGHObBAy3Opnvt2iEkENSXAZ/3Gs?=
- =?iso-8859-1?Q?yiZsS3QGp6LKlGdWYYAIUtZ3SbtgP4V5mvPRpmJ8/o3slUSQc19+LBl7tv?=
- =?iso-8859-1?Q?XkB77XaRztEF5W6BgDkryNeQl07rw8nufHw1wIiV2tei0T1QKnyd12E0ys?=
- =?iso-8859-1?Q?ChJPb9ed3UzcbARGNfDj/WoOz7Fo6w/HPPXKqSkE6Y/KfWiH8ABFQ1sDsy?=
- =?iso-8859-1?Q?Fjwz3hm4uw/ALPxc18nJUOiSdUbTWuJVm03cHRnZcnjq8ewItdiPVzfr1p?=
- =?iso-8859-1?Q?9iQ2P7WjBOLIHrVxZ4EylECQbmhCEeCetVSNXlNR2VAiHq6Jk/fMX1zUCl?=
- =?iso-8859-1?Q?R5pmYFCM5di/Pk9pDk90VQ1A8VGYAbiZxVqq30Is3B8dvccimn4qj4PrWw?=
- =?iso-8859-1?Q?FMULqJf73uvdEliKWFmsMwJIPJ/gfzWrh2jUYeUf8CxFaLyskvq0kvajVK?=
- =?iso-8859-1?Q?Wfl+/gf31ffYSsFLysy4vKu8bTSY+0TtrH6uvfFXatUnKKSIdaWtn0ZeQu?=
- =?iso-8859-1?Q?WXhockoJpzSsK4ShXZld5KD97CvyDaNWKQugCt8dUyJI7NqVye/ztr6ges?=
- =?iso-8859-1?Q?k4q69kGO1OxuDxtrF+kAHszjuXNipaCbUUMixbPXAwNKBHyvLnCGsVV+eb?=
- =?iso-8859-1?Q?5t+eptp6pK11BI0Eh7mqByx/h1iiIXCasmjoFGN7Oha7h0NY3YhnOSDZ+T?=
- =?iso-8859-1?Q?OvEuS2I75TueHoGWpDy9DfSM5M8mzA/TVoBTTzKKD3Ks78ai2pOaHVbaed?=
- =?iso-8859-1?Q?oAefu/k92SM0cGyBWXijXxWpt9Q5q7a4QM5FsUxzbUsJ2JvhG866Acws2K?=
- =?iso-8859-1?Q?2X1BneSJju5EliA8FQ+pIOkYOiB3i528oiLCNfCUYDSsqJEfoVXj13Vxfs?=
- =?iso-8859-1?Q?00ByLToPose9C4ezYESz/8efsV0frWysEeC3aMoJWXiRFCOBjJaLI7PJ/8?=
- =?iso-8859-1?Q?h1dvAWqv123RM=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?0G2Q2/mgbLNhcQ/+DjeZlY5VQ5MiUoPjilfVQXQXdu3WCdQzABj8vEG0Ac?=
+ =?iso-8859-1?Q?J99KDCzwtPt+SidICp43ecNDwv95OzNWrEVt4nWR5IC0l1Z8/0SGuROaDB?=
+ =?iso-8859-1?Q?83ftNz52Rj5a+f1YxeJRBmz+CDM821jr3JPvvcd2VFk6ktcPqxxy9ojE97?=
+ =?iso-8859-1?Q?CIKIJVIhw82GwhDY6mQXQMbi+9ieu/621gN2x6A3hZwXXDkuHVw98KjwoD?=
+ =?iso-8859-1?Q?eKTTqmotqOhMh10t8cH/iLvxjBRnnekw8Z7rEqUI0xH0sMcreGi2UGKl14?=
+ =?iso-8859-1?Q?3m7+kfCCV4itSHHXKjDuKfzQ9XxdAv4q43gPYOuCszxbBhux3Ne///fo1W?=
+ =?iso-8859-1?Q?GUqTvVpBOnXSU+UU0QLGGw5gnoaDa6mHhv3x1NkkmREpzzWe7z73xaL83r?=
+ =?iso-8859-1?Q?mNFgL+QzuSTmADBZHXP/eCLAzm8lxmvgaPfXZez1s2FEwpL5V80wRTcq1q?=
+ =?iso-8859-1?Q?zG+dsGwSl6RFS3o15ZL6jrfhIpSX47P7O/3jhNcXvEbsYs8E6nTxCxlHLS?=
+ =?iso-8859-1?Q?Zu2YSIdulDzqxBsmmNR1w6D9fWh8mAMN+mZxw8F/KJuzbm3KXwjoj91+y7?=
+ =?iso-8859-1?Q?7ATImhgsh1VTan15dfUR8Bw/Rgxze8EKzOXOqHppeNjQJQwT1pFfhgD8qB?=
+ =?iso-8859-1?Q?cjQ28ZdBGUi3gKa1qWBMv0yZGQQM3RCc2BVq1RuUugy7R4oO5eVZSoN0pl?=
+ =?iso-8859-1?Q?ksDXNx+NvfenNOiR5yOGeyeDZpKaEDSjutBy0cMq1cl9nGPwxgSvx2LsGw?=
+ =?iso-8859-1?Q?8tGjOPid0U1KkqsmZ+QDDF0fxW/5RvQOKX79blKcxnmOeMCcidqAiFBSkF?=
+ =?iso-8859-1?Q?Km+JddVhG2Bvcqof6efnv7YmAy7eVcEQifmilkcnWiMZZ+yY6R1qhPpcYu?=
+ =?iso-8859-1?Q?KFTdiUS28/NoSJJp4Iq20Z2H1JisLWBHeSdLI2I2GrXRT6F29BFyF8QF1O?=
+ =?iso-8859-1?Q?sUYeJm9IWAcPjL6PX/bs2xC7OZWM4oCWYB6IzBGlRSeMsbhKQePLkxS7j5?=
+ =?iso-8859-1?Q?DcT3Nki2Q5kiADpMISRV6qM2RrNOJBQAudDShWshozCZnGPFWWrh/RwCBO?=
+ =?iso-8859-1?Q?yQIMwRMTiM3Ste62UbYzgEo2vkPqlcWAST937BmQOOvs2Xkv4tv3mFSj42?=
+ =?iso-8859-1?Q?PN7O8pyrMh5Ls30tyWiQ1BwKNSCt+fcp3QmeyqwOmCWIyWtHjdYLHNhwfZ?=
+ =?iso-8859-1?Q?+iyfo4nvQA05HrvzjcGLhqkPYTFPdcmzdTayo3Aw2HOQtI2lDElT8v72LT?=
+ =?iso-8859-1?Q?wFPRzcz7JMmyoF8Cc76c7ck9g37Zl6GrzSCZVlhfOM0TAFxdRvvM/7/HaS?=
+ =?iso-8859-1?Q?Sw3RQeyJ61TRIu6blHRGRt/wYDYOUz/KtaJKfFNbgtRC8qKDwgkJv/LwlJ?=
+ =?iso-8859-1?Q?CoBPco4DswBc7kePVvZCUolvXFYKFGVXhPrsiiGxcROpvxq/mCF1BCn3kE?=
+ =?iso-8859-1?Q?AVXolsB76F7mOj4xip2S5zfiqjB2elIsfuBxUAmbF4YrcnmsKi2FQRmqth?=
+ =?iso-8859-1?Q?MgZ+oFxECEuMppdUhx0LzPtsU/dzerxY+uOwBBa7oyeI5naeTJTFt+wqkK?=
+ =?iso-8859-1?Q?kK15h5sasLBX6B6Ph/ITKjyJk2e3OmSvDOjRHee8jH2wZ5mBiSLW9wvx2q?=
+ =?iso-8859-1?Q?d0C+uxIw6Un7k=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe8a1aab-fd02-424c-8a83-08dab64f72c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 06:09:17.0254 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26c19157-162f-41e1-b640-08dab64f95f6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 06:10:16.0366 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cLy9CXUO/oRtU2D9BN5OXdSxE2CtidGPFMybVzC/ZYb0IWtj5zxo8dj071oormZ1j01er2DoH4rPb1DJfP+xqQ==
+X-MS-Exchange-CrossTenant-userprincipalname: ZpyJoMNcLs0F8loRdkpNQQRUbDffpzLu+QwAtA+wUyM6Wt3X9amYDgDbu0EL/qXXhLkqzP8EYS8ddjTqm45c9Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P190MB1803
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LRGi1Z+HKtYVr5hFIevOGP4BgzjTekwSP7FS9lgJ6Pg=;
- b=eJbmXFgxSvL18akc3ZXep0fY/+DJxdEK7EYhWyDuR7XhSVXIn81kiex3qQCmKLwO9cfm3rzhBhdO7iz+6Li9SAR7NFeZJRL3Ec6YozRzRWdAgLul5YUpaFJfBTusA9xY8bKzI3BlwVhRrShroWxB3jRx/KxqyYLo9VnfavbwkA4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=bAKDWXC6hQ3gW5NSRbLMUrTUPxKTJoMk59wfzVeu/As=;
+ b=Dyr92TChLVR5m5sVPY1mLoiQzq4cNEDSMdei10PeLnj2JQoEIb++73tXBsSXRC77f0J5AGPxB75Tmb2fixJkYwTG7v2uHdbw5d4e3sNsd95899VEMeGkIkl/I92oQIyClEZArho+AWW9VWFLUxBxATi1kWGUDTwwfxxp5ybEgXg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=eJbmXFgx
+ header.s=selector1 header.b=Dyr92TCh
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH v2 06/11] package/llvm-project/llvm-cmake: new
- package
+Subject: [Buildroot] [PATCH v2 07/11] package/llvm-project/llvm-libunwind:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -151,48 +151,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a small host package containing shared cmake modules
-that are needed by various projects during configuration.
-For example llvm 15 needs it.
+Starting with version 15, lld needs the llvm implementation
+of libunwind, therefore it is added as a host package.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 ---
- package/llvm-project/llvm-cmake/llvm-cmake.hash |  2 ++
- package/llvm-project/llvm-cmake/llvm-cmake.mk   | 16 ++++++++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.hash
- create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.mk
+ .../llvm-libunwind/llvm-libunwind.hash         |  3 +++
+ .../llvm-libunwind/llvm-libunwind.mk           | 18 ++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+ create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.mk
 
-diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
 new file mode 100644
-index 0000000000..b76013e810
+index 0000000000..2d6286a40e
 --- /dev/null
-+++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
-@@ -0,0 +1,2 @@
-+# locally calculated
-+sha256  21cf3f52c53dc8b8972122ae35a5c18de09c7df693b48b5cd8553c3e3fed090d  cmake-15.0.3.src.tar.xz
-diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.mk b/package/llvm-project/llvm-cmake/llvm-cmake.mk
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  0ab6e07bf05359e242e9ea80e4089b819914867fa997a715e324e584bcfdf114  libunwind-15.0.3.src.tar.xz
++sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.mk b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
 new file mode 100644
-index 0000000000..2527b95063
+index 0000000000..be9965a49a
 --- /dev/null
-+++ b/package/llvm-project/llvm-cmake/llvm-cmake.mk
-@@ -0,0 +1,16 @@
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# llvm-cmake
++# llvm-libunwind
 +#
 +################################################################################
 +
-+LLVM_CMAKE_VERSION = $(LLVM_PROJECT_VERSION)
-+LLVM_CMAKE_SITE = $(LLVM_PROJECT_SITE)
-+LLVM_CMAKE_SOURCE = cmake-$(LLVM_CMAKE_VERSION).src.tar.xz
++LLVM_LIBUNWIND_VERSION = $(LLVM_PROJECT_VERSION)
++LLVM_LIBUNWIND_SITE = $(LLVM_PROJECT_SITE)
++LLVM_LIBUNWIND_SOURCE = libunwind-$(LLVM_LIBUNWIND_VERSION).src.tar.xz
++LLVM_LIBUNWIND_LICENSE = Apache-2.0 with exceptions
++LLVM_LIBUNWIND_LICENSE_FILES = LICENSE.TXT
++LLVM_LIBUNWIND_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+define HOST_LLVM_CMAKE_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/lib/cmake/llvm
-+	cp -Rv $(@D)/Modules/* $(HOST_DIR)/lib/cmake/llvm
-+endef
++HOST_LLVM_LIBUNWIND_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH="$(HOST_DIR)/lib/cmake/llvm" \
++	-DLIBUNWIND_INSTALL_HEADERS=ON
 +
-+$(eval $(host-generic-package))
++$(eval $(host-cmake-package))
 -- 
 2.25.1
 _______________________________________________
