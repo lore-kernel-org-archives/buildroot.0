@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B0AC38A2D
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1128FA373E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5020460B6F;
-	Tue, 25 Oct 2022 20:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5020460B6F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B0C440268;
+	Tue, 25 Oct 2022 20:59:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B0C440268
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dkwLVcX92kDG; Tue, 25 Oct 2022 20:59:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Li6KZGXGrR-T; Tue, 25 Oct 2022 20:59:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71DF660BA6;
-	Tue, 25 Oct 2022 20:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71DF660BA6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5598740265;
+	Tue, 25 Oct 2022 20:59:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5598740265
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 077961BF977
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:58:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 52C041BF23C
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D64E84025F
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:58:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D64E84025F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E8644025F
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:59:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E8644025F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r9f33IBVcuOp for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6A9E4025A
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6A9E4025A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5DB687094; Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 22:58:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9f5a9926f089bf0c7943049751fefa6035ce469
-X-Git-Newrev: 13a8417f0de1649ebb51fcd2e02862310b7b3d43
-X-Patchwork-Hint: ignore
-Message-Id: <20221025205852.B5DB687094@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
+ with ESMTP id JyViKWE4S4M9 for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 20:59:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56A24025A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B56A24025A
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 20:58:59 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A3B62240002;
+ Tue, 25 Oct 2022 20:58:56 +0000 (UTC)
+Date: Tue, 25 Oct 2022 22:58:55 +0200
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Message-ID: <20221025225855.3cdfc398@windsurf>
+In-Reply-To: <20221025185040.317759-1-buildroot@heine.tech>
+References: <20221025185040.317759-1-buildroot@heine.tech>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666731537;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=oCg5QjOql01R+NhOAF7FVMCNr8wtcaZq/igvgUO7wfw=;
+ b=C11gU0eHWz31MLozEyOU4yoQ29mwDWI+c24LYgOMWVl3XxhTT9sEEXD7737rvsgPKcOFVR
+ LP7EY3diSx8SO2Znh8x2tDu+H4UhfiGJptmcyzY1z9E8+z21Z+Mekm0ZQ+XHbgIICq4GhQ
+ RLYxZnuU5mF/yNXC/LHcyDdUPfLmhshAxa650BQxIX8ggdLIoNT5HuQuRWmxhOXjX2FZia
+ VVtgYKL2dIVDjKPrPZry2RoaZdcwH+AQ8odqHETk/b5A9W9qrc6j7Wlnwcm2SpMVsye5o8
+ kFi+6xXyJ2t10kem17w5O7LHeZILKZ0q17TqMtHba+21el0FE01+OnSOH7Thnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=C11gU0eH
+Subject: Re: [Buildroot] [PATCH] package/{python-}protobuf: bump to version
  21.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,54 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13a8417f0de1649ebb51fcd2e02862310b7b3d43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 25 Oct 2022 20:50:39 +0200
+Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/protobuf/protobuf.hash               | 2 +-
+>  package/protobuf/protobuf.mk                 | 2 +-
+>  package/python-protobuf/python-protobuf.hash | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 03138a59e7..24dbc0f1a1 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  a3c4c104b98a21a577ce5ecc0d9b9f43a359b917d0bcf69467b70dc27416dfdc  protobuf-cpp-3.21.6.tar.gz
-+sha256  f6251f2d00aad41b34c1dfa3d752713cb1bb1b7020108168a4deaa206ba8ed42  protobuf-cpp-3.21.8.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index fbc495c438..88f359f24c 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 21.6
-+PROTOBUF_VERSION = 21.8
- PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index b0662124a9..a12c199663 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a014a0108e18c06a0c0308d92cdcae6ee106e4b02dd2ab1ff7073c4c80153aea  protobuf-python-4.21.6.tar.gz
-+sha256  d81ebc20030fe8d03bceb38f06aba2797c40852e5aab6819481ce808fb305fae  protobuf-python-4.21.8.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
