@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BF5C38A2D
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 21:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DFCFA373E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 21:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5379E40268;
-	Tue, 25 Oct 2022 21:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5379E40268
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1e4-_gIFpCJK; Tue, 25 Oct 2022 21:00:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E29A40264;
-	Tue, 25 Oct 2022 21:00:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E29A40264
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EA7821BF33A
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4A3060AEB
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A3060AEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2596960BAB;
+	Tue, 25 Oct 2022 21:01:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2596960BAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qb2h-FFRg_dE for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 21:00:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0E5560B6C
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0E5560B6C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEB28870A8; Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 23:00:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17065693f23996097d46e350b40c46795b7ffeac
-X-Git-Newrev: e3f25de3e81341de041879fb3dd458d8484c9d61
-X-Patchwork-Hint: ignore
-Message-Id: <20221025210022.CEB28870A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zbar: fix python 3.11 compatibility
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id feH7mPyIy2ua; Tue, 25 Oct 2022 21:01:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 524FF60B73;
+	Tue, 25 Oct 2022 21:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 524FF60B73
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FB241BF33A
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86C7B40264
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86C7B40264
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g8f4H7TNCbYO for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 21:00:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2599D40263
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2599D40263
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 21:00:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F04371BF207;
+ Tue, 25 Oct 2022 21:00:25 +0000 (UTC)
+Date: Tue, 25 Oct 2022 23:00:24 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221025230024.3ab84f31@windsurf>
+In-Reply-To: <20221025180603.886122-1-james.hilliard1@gmail.com>
+References: <20221025180603.886122-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666731626;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uYptKG4yrwrKUO+ZSMGr25sF0SM5cb56ibv3HxbEm0I=;
+ b=PyL0fjERp1tlEiVWIqkt1vwvJC8haEAZTG14nbHqv4UEf8S3Kcm61A+f9SnaFzljcBSPjO
+ d6ntzpTIxfOs8XeZjbkierk8oEL3GIHidzyEczjXGiQxixOGv2bV0QUM93xxjVdxxEWAXZ
+ wkoqI+rL+m8Fcsa1AojWt9VcbmUGTrxdRZbxim6rgzpMEytX2ZG7vD6L8Q0q4t2Ag6yGTo
+ mKNpKmrhEjuPSgRUbAeFyhx/5s1kRPYosW9vIDmEhf6RyPmfw2vwnbWbUp5gIu41d2In3x
+ GyPGVqxz4AXdBP5bGe6FNfACmwMPmWV1Pn4QDEZ+boUoSVL14bE9UGNSLnQdlA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PyL0fjER
+Subject: Re: [Buildroot] [PATCH 1/1] package/zbar: fix python 3.11
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,113 +78,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5785700959168008799=="
+Cc: Volkov Viacheslav <sv99@inbox.ru>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5785700959168008799==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e3f25de3e81341de041879fb3dd458d8484c9d61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a patch from upstream pull request to fix build with python 3.11.
-
-Fixes:
-python/enum.c: In function ‘enumitem_new’:
-python/enum.c:55:25: error: lvalue required as left operand of assignment
-   55 |     Py_SIZE(&self->val) = Py_SIZE(longval);
-      |                         ^
-python/enum.c: In function ‘zbarEnumItem_New’:
-python/enum.c:146:25: error: lvalue required as left operand of assignment
-  146 |     Py_SIZE(&self->val) = Py_SIZE(longval);
-      |                         ^
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...001-python-enum-fix-build-for-Python-3.11.patch | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
-
-diff --git a/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch b/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch
-new file mode 100644
-index 0000000000..f525b62184
---- /dev/null
-+++ b/package/zbar/0001-python-enum-fix-build-for-Python-3.11.patch
-@@ -0,0 +1,62 @@
-+From fbaec4b4e6fe735efe6916fe5b92805a0d96bf8a Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=C4=90o=C3=A0n=20Tr=E1=BA=A7n=20C=C3=B4ng=20Danh?=
-+ <congdanhqx@gmail.com>
-+Date: Wed, 21 Sep 2022 10:32:11 +0700
-+Subject: [PATCH] python: enum: fix build for Python 3.11
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Python 3.9 introduced Py_SET_SIZE function to set size instead of
-+relying on Py_SIZE() as a macro [3.9].
-+
-+Python 3.10 started to encourage to use Py_SET_SIZE instead of
-+assigning into return value of Py_SIZE [3.10].
-+
-+Python 3.11 flips the switch, turn Py_SIZE into a function [3.11],
-+thus Py_SIZE(obj) will be a rvalue. We need to use Py_SET_SIZE
-+to set size now.
-+
-+[3.9]: https://docs.python.org/3.9/c-api/structures.html#c.Py_SET_SIZE
-+[3.10]: https://docs.python.org/3.10/c-api/structures.html#c.Py_SIZE
-+[3.11]: https://docs.python.org/3.11/c-api/structures.html#c.Py_SIZE
-+
-+Signed-off-by: Đoàn Trần Công Danh <congdanhqx@gmail.com>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/mchehab/zbar/pull/231]
-+---
-+ python/enum.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/python/enum.c b/python/enum.c
-+index dfe1b1e..946344f 100644
-+--- a/python/enum.c
-++++ b/python/enum.c
-+@@ -52,7 +52,11 @@ enumitem_new (PyTypeObject *type,
-+ 
-+     /* we assume the "fast path" for a single-digit ints (see longobject.c) */
-+     /* this also holds if we get a small_int preallocated long */
-++#if PY_VERSION_HEX >= 0x03090000
-++    Py_SET_SIZE(&self->val, Py_SIZE(longval));
-++#else
-+     Py_SIZE(&self->val) = Py_SIZE(longval);
-++#endif
-+     self->val.ob_digit[0] = longval->ob_digit[0];
-+     Py_DECREF(longval);
-+ #else
-+@@ -143,7 +147,11 @@ zbarEnumItem_New (PyObject *byname,
-+ 
-+     /* we assume the "fast path" for a single-digit ints (see longobject.c) */
-+     /* this also holds if we get a small_int preallocated long */
-++#if PY_VERSION_HEX >= 0x03090000
-++    Py_SET_SIZE(&self->val, Py_SIZE(longval));
-++#else
-+     Py_SIZE(&self->val) = Py_SIZE(longval);
-++#endif
-+     self->val.ob_digit[0] = longval->ob_digit[0];
-+     Py_DECREF(longval);
-+ 
-+-- 
-+2.34.1
-+
-
---===============5785700959168008799==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5785700959168008799==--
+T24gVHVlLCAyNSBPY3QgMjAyMiAxMjowNjowMyAtMDYwMApKYW1lcyBIaWxsaWFyZCA8amFtZXMu
+aGlsbGlhcmQxQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IEFkZCBhIHBhdGNoIGZyb20gdXBzdHJlYW0g
+cHVsbCByZXF1ZXN0IHRvIGZpeCBidWlsZCB3aXRoIHB5dGhvbiAzLjExLgo+IAo+IEZpeGVzOgo+
+IHB5dGhvbi9lbnVtLmM6IEluIGZ1bmN0aW9uIOKAmGVudW1pdGVtX25ld+KAmToKPiBweXRob24v
+ZW51bS5jOjU1OjI1OiBlcnJvcjogbHZhbHVlIHJlcXVpcmVkIGFzIGxlZnQgb3BlcmFuZCBvZiBh
+c3NpZ25tZW50Cj4gICAgNTUgfCAgICAgUHlfU0laRSgmc2VsZi0+dmFsKSA9IFB5X1NJWkUobG9u
+Z3ZhbCk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gcHl0aG9uL2VudW0u
+YzogSW4gZnVuY3Rpb24g4oCYemJhckVudW1JdGVtX05ld+KAmToKPiBweXRob24vZW51bS5jOjE0
+NjoyNTogZXJyb3I6IGx2YWx1ZSByZXF1aXJlZCBhcyBsZWZ0IG9wZXJhbmQgb2YgYXNzaWdubWVu
+dAo+ICAgMTQ2IHwgICAgIFB5X1NJWkUoJnNlbGYtPnZhbCkgPSBQeV9TSVpFKGxvbmd2YWwpOwo+
+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgXgo+IAo+IFNpZ25lZC1vZmYtYnk6IEph
+bWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+IC0tLQo+ICAuLi55dGhv
+bi1lbnVtLWZpeC1idWlsZC1mb3ItUHl0aG9uLTMuMTEucGF0Y2ggfCA2MiArKysrKysrKysrKysr
+KysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBwYWNrYWdlL3piYXIvMDAwMS1weXRob24tZW51bS1maXgtYnVpbGQtZm9yLVB5dGhv
+bi0zLjExLnBhdGNoCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9t
+YXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdp
+bmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
