@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00F0AFA373E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 18:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D829CC38A2D
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 18:24:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77F4A40200;
-	Tue, 25 Oct 2022 18:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F4A40200
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9340760B00;
+	Tue, 25 Oct 2022 18:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9340760B00
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EYglQSpR1-Rd; Tue, 25 Oct 2022 18:24:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eum907r2N9C3; Tue, 25 Oct 2022 18:24:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 019A0402E7;
-	Tue, 25 Oct 2022 18:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 019A0402E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF4F760A70;
+	Tue, 25 Oct 2022 18:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF4F760A70
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF2E31BF290
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 18:23:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BFDF01BF290
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 18:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97C464012B
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 18:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97C464012B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E2AA4012B
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 18:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E2AA4012B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PcAliS4Exx-U for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 18:23:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C1114010C
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C1114010C
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 18:23:28 +0000 (UTC)
+ with ESMTP id iSBiAIVzJQL3 for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 18:23:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C2484010C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9C2484010C
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 18:23:33 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 394911C0006;
- Tue, 25 Oct 2022 18:23:27 +0000 (UTC)
-Date: Tue, 25 Oct 2022 20:23:26 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id A25BA60007;
+ Tue, 25 Oct 2022 18:23:31 +0000 (UTC)
+Date: Tue, 25 Oct 2022 20:23:30 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221025202326.30dd4283@windsurf>
-In-Reply-To: <20221023212956.60845-1-fontaine.fabrice@gmail.com>
-References: <20221023212956.60845-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221025202330.64f8e443@windsurf>
+In-Reply-To: <20221023214220.70941-1-fontaine.fabrice@gmail.com>
+References: <20221023214220.70941-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666722207;
+ d=bootlin.com; s=gm1; t=1666722212;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cJgPzGnlVPaqTTVIBvi0C1DvHP8oAhTsP9g109TmXHo=;
- b=gXcaYy0H5B3Y1i3paqV5MyC+2bE80yuaz1vUi6PVAEPdEsPDS7o/hx4toTkaVD49yKWXPi
- IiGnLVPyvLLRgBH79fkPfTAr7spLtNvo1Kg5pyL840Ku22ehXXWoZhww9QzsYGk16uH9m3
- X7mZtWZJHIUcQHBZLjlQtUBEdVSp0zMLfN4FQ7MSizHBZnkefzNfZMb32xRLgrrfp65Mok
- n8svXRRXm466sq/aSAS9NIMYniuFXao/B2Hn0hyHs0PH4YL+j6OvfUALbKaiuye7ihsxKE
- J09VZFQGvfES0POLhCwns4Ubrbp6KKHmWqWmzglKdPFA1hiJfBu8qYyllMP88A==
+ bh=9nBpWSPY5cFe6/ofOlLqbUELEqKI6fPvCWgsvGVlspk=;
+ b=Otm35QvQvKQVdBRffRp/gP/3ugj4HwqrEN9bLmP2ERpUkMNT/unU3KFaV71E1enFYBGIWI
+ S+xwu8ghFIWcfNsXoQws4tPPEJr/2NTG+tWy6dFF6+zzjnBL1VhywzI/fkXNrYUrgeCFvP
+ 30c8ImY6WWWy9rqeLyHd9KnRNlqNCYBooVkw3e+mofW11QSrQeZJ5UCu5e9zfkxAyyUFZo
+ XDO8bUszLE441ZRTBdYXI3QiOGCtUmjNqQMlM0dSmxQ3vq8mt972QFAVz0proFMtpWGMQb
+ 9h06aFisLioZ6HLo2z+fvOcb9Fs7Da1XqmpVJ1Jl8Mvk1KfSLiHvcBk9Pqn4VA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gXcaYy0H
-Subject: Re: [Buildroot] [PATCH 1/1] package/iperf: bump to version 2.1.8
+ header.s=gm1 header.b=Otm35QvQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/iperf3: bump to version 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,24 +83,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 23 Oct 2022 23:29:56 +0200
+On Sun, 23 Oct 2022 23:42:20 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> 2.1.8 (as of August 5th, 2022)
-> ------------------------------
-> - Add support for --bounceback to perform a repsonsiveness test (see man
->   page for other options)
-> - add support for working loads with --bounceback
-> - Fix to wait_tick with Mac OS X
-> - Various python pyflows commits
-> - add support for client side tcp-write-time histograms and mean/min/max
-> - add support for human readable dscp or -T values (see man page)
-> - udp_accept no longer accepts packets from a previous run as a new
->   connection, this can occur with long network delays
-> - multiple isoch bug fixes for both UDP and TCP
-> - isoch server provides mean/min/max/stdev for both frames and packets
-> - UDP max MTU discovery, requires configure.ac will support
->   --enable-discover-defaultlen prior to compile
+> Update hash of LICENSE file (update in year with
+> https://github.com/esnet/iperf/commit/76bd67f6e90e239a7686202d2b1b595159826d24)
+> 
+> https://github.com/esnet/iperf/blob/3.12/RELNOTES.md
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/iperf3/iperf3.hash | 6 +++---
+>  package/iperf3/iperf3.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
