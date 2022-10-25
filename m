@@ -1,66 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B32DFA373E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E71CC38A2D
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D95760A9C;
-	Tue, 25 Oct 2022 20:14:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D95760A9C
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC90A40261;
+	Tue, 25 Oct 2022 20:55:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC90A40261
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H6VWic5Tnrqy; Tue, 25 Oct 2022 20:14:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PYmiwdait_T4; Tue, 25 Oct 2022 20:55:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B831B60AEB;
-	Tue, 25 Oct 2022 20:14:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B831B60AEB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9CBF11BF3E3
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:14:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FB3740259;
+	Tue, 25 Oct 2022 20:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB3740259
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6EC1BF33A
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 624E240102
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:14:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 624E240102
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4354B40259
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4354B40259
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ISgq2tMs5IR4 for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 20:14:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B300400CE
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B300400CE
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 20:14:07 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id C34831BF209;
- Tue, 25 Oct 2022 20:14:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SO9DZ_clgJE2 for <buildroot@lists.busybox.net>;
+ Tue, 25 Oct 2022 20:55:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5824540258
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 20:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5824540258
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 41CFC87076; Tue, 25 Oct 2022 20:55:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 22:13:59 +0200
-Message-Id: <20221025201400.3816183-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666728844;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=2vSLLmjLe0A4CywzdT/Ybt5Dhj4A6aO5OzTs5nLBRKo=;
- b=Ilrlzc7gAElIA5ztsFL9c8Gsf6qjRiKl7tXa9XciZ8MzcwHra5nVjexPzSVDf5fCBzCWBD
- Ft3GnxQI4G13dJ86EPaNIb3Ns8Q5/In9V0gvxLjeqEDBq9CElVOf1NEbRcrCeKcJ3ELEH0
- DpBFy0PMtd3s/OdLK4+V1Wv8swpHPTsKb6Re/4GxRSVqbajDxEuqediiUQRkPngxb7uAYt
- K35hBo6oFV0F43HMIl5UT7A/ev4wXy2pJffHKA45a1mGEkesIV5CprpXx6is44EGRc2z2m
- diXdwuhBnWuuDoNxQswKfofx+p+bB1Qm1jZrQmCsjkfStVZSCp6wWTsmgd5bWg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ilrlzc7g
-Subject: [Buildroot] [PATCH] package/gcc: add patch to fix glibc header
- conflict
+Date: Tue, 25 Oct 2022 22:38:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eab2203476a9d57ef647ebaba360b50d6718d73e
+X-Git-Newrev: 196cbd98010ae0145cfe555fa835e761b40b23fd
+X-Patchwork-Hint: ignore
+Message-Id: <20221025205532.41CFC87076@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,476 +58,419 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit backports the patch "fixinc: don't "fix" machine names in
-__has_include(...)" from upstream GCC, which is needed to resolve a
-header conflict between glibc headers and kernel headers, which has
-appeared since we bumped glibc to version 2.36 in commit
-80c8c15c8534a24382b900a07082a289a368f736.
+commit: https://git.buildroot.net/buildroot/commit/?id=196cbd98010ae0145cfe555fa835e761b40b23fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The problem comes from the "fixinc" logic used by gcc to fixup some
-headers files, generated inside an include-fixed/ folder. This logic
-ended up replacing "linux/mount.h" by "__linux__/mount.h" in
-__has_include() invocation, like this:
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
+https://lists.freedesktop.org/archives/mesa-announce/2022-October/000688.html
+https://lists.freedesktop.org/archives/mesa-announce/2022-September/000687.html
+https://www.phoronix.com/news/Mesa-22.2-Released
 
- #ifdef __has_include
- # if __has_include ("__linux__/mount.h")
- #  include "linux/mount.h"
- # endif
- #endif
+Removed patches included in upstream release, renumbered remaining
+patches.
 
-in
-build/host-gcc-final-11.3.0/build/gcc/include-fixed/sys/mount.h. With
-this fix in place, this "include-fixed" header is no longer generated,
-avoiding the problem.
-
-This issue was visible in two different ways in glibc configurations:
-
- - As a build failure during the gcc build itself, for architectures
-   that support libsanitizer, as libsanitizer includes mount.h, and
-   would therefore encounter the header conflict.
-
- - As a build failure during another user-space package (such as
-   sysvinit for example), on architectures when libsanitizer isn't
-   used, and therefore for which the gcc build was successful, but the
-   header conflict shows up when building some "random" user-space
-   package.
-
-The problem is already fixed in GCC 12.2.0, so no patch is
-required. The problem did not exist back in GCC 8.4.0, so this version
-does not need patching. Consequently, the patch is only needed for GCC
-10.4.0, GCC 11.3.0 and the special ARC 2020.09-release version.
-
-Fixes:
-
-  (gcc build issue, on architecture that supports libsanitizer)
-  http://autobuild.buildroot.net/results/90fe4c3b8b72a2c28555674383de9bbd9e8ae09a/
-
-  (sysvinit build issue, on architecture that does not support libsanitizer)
-  http://autobuild.buildroot.net/results/d7bf5795b7621a92be32f18794e3e67944fb96db/
-
-  (crun)
-  http://autobuild.buildroot.net/results/e3e8da4f797dced48aedf8c636db983d36849850/
-
-  (libarchive)
-  http://autobuild.buildroot.net/results/9fcbf0c036a97b2e9a4fcc6e173bcfa09e1b3dac/
-
-Thanks a lot to Peter Seiderer for pointing the relevant GCC commit.
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=15021
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-machine-names-in-__has_include-.-PR.patch | 124 ++++++++++++++++++
- ...-machine-names-in-__has_include-.-PR.patch | 124 ++++++++++++++++++
- ...-machine-names-in-__has_include-.-PR.patch | 124 ++++++++++++++++++
- 3 files changed, 372 insertions(+)
- create mode 100644 package/gcc/10.4.0/0006-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
- create mode 100644 package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
- create mode 100644 package/gcc/arc-2020.09-release/0003-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
+ package/mesa3d-headers/mesa3d-headers.mk           |   2 +-
+ ...-import-isinf-for-uclibc-based-toolchains.patch |  30 -----
+ ...n-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch} |   0
+ ...n-option-to-disable-optional-neon-suppor.patch} |   0
+ ...d_xor-Include-stddef.h-to-fix-build-erro.patch} |   0
+ ...ibc-build.patch => 0004-Fix-uClibc-build.patch} |   0
+ ...tex.h-fix-build-on-32-bit-architectures-u.patch |  43 -------
+ ...til-remove-needless-c99-compat-h-includes.patch | 126 ---------------------
+ .../mesa3d/0007-include-drop-c11-compat-h.patch    | 100 ----------------
+ package/mesa3d/mesa3d.hash                         |   8 +-
+ package/mesa3d/mesa3d.mk                           |   2 +-
+ 11 files changed, 6 insertions(+), 305 deletions(-)
 
-diff --git a/package/gcc/10.4.0/0006-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch b/package/gcc/10.4.0/0006-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-new file mode 100644
-index 0000000000..8614537794
---- /dev/null
-+++ b/package/gcc/10.4.0/0006-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-@@ -0,0 +1,124 @@
-+From a6eedb593ca068d0ad8655dbb97fcd6371cba682 Mon Sep 17 00:00:00 2001
-+From: Xi Ruoyao <xry111@mengyan1223.wang>
-+Date: Mon, 28 Jun 2021 13:54:58 +0800
-+Subject: [PATCH] fixinc: don't "fix" machine names in __has_include(...)
-+ [PR91085]
-+
-+fixincludes/
-+
-+	PR other/91085
-+	* fixfixes.c (check_has_inc): New static function.
-+	  (machine_name_fix): Don't replace header names in
-+	  __has_include(...).
-+	* inclhack.def (machine_name): Adjust test.
-+	* tests/base/testing.h: Update.
-+
-+Upstream: 6bf383c37e6131a8e247e8a0997d55d65c830b6d
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ fixincludes/fixfixes.c           | 45 ++++++++++++++++++++++++++++++--
-+ fixincludes/inclhack.def         |  3 ++-
-+ fixincludes/tests/base/testing.h |  2 +-
-+ 3 files changed, 46 insertions(+), 4 deletions(-)
-+
-+diff --git a/fixincludes/fixfixes.c b/fixincludes/fixfixes.c
-+index 034e15d9985..3ff87812036 100644
-+--- a/fixincludes/fixfixes.c
-++++ b/fixincludes/fixfixes.c
-+@@ -477,6 +477,39 @@ FIX_PROC_HEAD( char_macro_def_fix )
-+   fputs (text, stdout);
-+ }
-+ 
-++/* Check if the pattern at pos is actually in a "__has_include(...)"
-++   directive.  Return the pointer to the ')' of this
-++   "__has_include(...)" if it is, NULL otherwise.  */
-++static const char *
-++check_has_inc (const char *begin, const char *pos, const char *end)
-++{
-++  static const char has_inc[] = "__has_include";
-++  const size_t has_inc_len = sizeof (has_inc) - 1;
-++  const char *p;
-++
-++  for (p = memmem (begin, pos - begin, has_inc, has_inc_len);
-++       p != NULL;
-++       p = memmem (p, pos - p, has_inc, has_inc_len))
-++    {
-++      p += has_inc_len;
-++      while (p < end && ISSPACE (*p))
-++        p++;
-++
-++      /* "__has_include" may appear as "defined(__has_include)",
-++         search for the next appearance then.  */
-++      if (*p != '(')
-++        continue;
-++
-++      /* To avoid too much complexity, just hope there is never a
-++         ')' in a header name.  */
-++      p = memchr (p, ')', end - p);
-++      if (p == NULL || p > pos)
-++        return p;
-++    }
-++
-++  return NULL;
-++}
-++
-+ /* Fix for machine name #ifdefs that are not in the namespace reserved
-+    by the C standard.  They won't be defined if compiling with -ansi,
-+    and the headers will break.  We go to some trouble to only change
-+@@ -524,7 +557,7 @@ FIX_PROC_HEAD( machine_name_fix )
-+       /* If the 'name_pat' matches in between base and limit, we have
-+          a bogon.  It is not worth the hassle of excluding comments
-+          because comments on #if/#ifdef lines are rare, and strings on
-+-         such lines are illegal.
-++         such lines are only legal in a "__has_include" directive.
-+ 
-+          REG_NOTBOL means 'base' is not at the beginning of a line, which
-+          shouldn't matter since the name_re has no ^ anchor, but let's
-+@@ -544,8 +577,16 @@ FIX_PROC_HEAD( machine_name_fix )
-+             break;
-+ 
-+           p = base + match[0].rm_so;
-+-          base += match[0].rm_eo;
-+ 
-++          /* Check if the match is in __has_include(...) (PR 91085). */
-++          q = check_has_inc (base, p, limit);
-++          if (q) 
-++            {
-++              base = q + 1;
-++              goto again;
-++            }
-++
-++          base += match[0].rm_eo;
-+           /* One more test: if on the same line we have the same string
-+              with the appropriate underscores, then leave it alone.
-+              We want exactly two leading and trailing underscores.  */
-+diff --git a/fixincludes/inclhack.def b/fixincludes/inclhack.def
-+index f58e7771e1c..71bd717c233 100644
-+--- a/fixincludes/inclhack.def
-++++ b/fixincludes/inclhack.def
-+@@ -3114,7 +3114,8 @@ fix = {
-+     c_fix     = machine_name;
-+ 
-+     test_text = "/* MACH_DIFF: */\n"
-+-    "#if defined( i386 ) || defined( sparc ) || defined( vax )"
-++    "#if defined( i386 ) || defined( sparc ) || defined( vax ) || "
-++    "defined( linux ) || __has_include ( <linux.h> )"
-+     "\n/* no uniform test, so be careful  :-) */";
-+ };
-+ 
-+diff --git a/fixincludes/tests/base/testing.h b/fixincludes/tests/base/testing.h
-+index cf95321fb86..8b3accaf04e 100644
-+--- a/fixincludes/tests/base/testing.h
-++++ b/fixincludes/tests/base/testing.h
-+@@ -64,7 +64,7 @@ BSD43__IOWR('T', 1) /* Some are multi-line */
-+ 
-+ #if defined( MACHINE_NAME_CHECK )
-+ /* MACH_DIFF: */
-+-#if defined( i386 ) || defined( sparc ) || defined( vax )
-++#if defined( i386 ) || defined( sparc ) || defined( vax ) || defined( linux ) || __has_include ( <linux.h> )
-+ /* no uniform test, so be careful  :-) */
-+ #endif  /* MACHINE_NAME_CHECK */
-+ 
-+-- 
-+2.37.3
-+
-diff --git a/package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch b/package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-new file mode 100644
-index 0000000000..4e93f6ab96
---- /dev/null
-+++ b/package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-@@ -0,0 +1,124 @@
-+From de3f4ee9a5bd2adcb5ff2e1690db2567fda1473c Mon Sep 17 00:00:00 2001
-+From: Xi Ruoyao <xry111@mengyan1223.wang>
-+Date: Mon, 28 Jun 2021 13:54:58 +0800
-+Subject: [PATCH] fixinc: don't "fix" machine names in __has_include(...)
-+ [PR91085]
-+
-+fixincludes/
-+
-+	PR other/91085
-+	* fixfixes.c (check_has_inc): New static function.
-+	  (machine_name_fix): Don't replace header names in
-+	  __has_include(...).
-+	* inclhack.def (machine_name): Adjust test.
-+	* tests/base/testing.h: Update.
-+
-+Upstream: 6bf383c37e6131a8e247e8a0997d55d65c830b6d
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ fixincludes/fixfixes.c           | 45 ++++++++++++++++++++++++++++++--
-+ fixincludes/inclhack.def         |  3 ++-
-+ fixincludes/tests/base/testing.h |  2 +-
-+ 3 files changed, 46 insertions(+), 4 deletions(-)
-+
-+diff --git a/fixincludes/fixfixes.c b/fixincludes/fixfixes.c
-+index 5b23a8b640d..404b420f302 100644
-+--- a/fixincludes/fixfixes.c
-++++ b/fixincludes/fixfixes.c
-+@@ -477,6 +477,39 @@ FIX_PROC_HEAD( char_macro_def_fix )
-+   fputs (text, stdout);
-+ }
-+ 
-++/* Check if the pattern at pos is actually in a "__has_include(...)"
-++   directive.  Return the pointer to the ')' of this
-++   "__has_include(...)" if it is, NULL otherwise.  */
-++static const char *
-++check_has_inc (const char *begin, const char *pos, const char *end)
-++{
-++  static const char has_inc[] = "__has_include";
-++  const size_t has_inc_len = sizeof (has_inc) - 1;
-++  const char *p;
-++
-++  for (p = memmem (begin, pos - begin, has_inc, has_inc_len);
-++       p != NULL;
-++       p = memmem (p, pos - p, has_inc, has_inc_len))
-++    {
-++      p += has_inc_len;
-++      while (p < end && ISSPACE (*p))
-++        p++;
-++
-++      /* "__has_include" may appear as "defined(__has_include)",
-++         search for the next appearance then.  */
-++      if (*p != '(')
-++        continue;
-++
-++      /* To avoid too much complexity, just hope there is never a
-++         ')' in a header name.  */
-++      p = memchr (p, ')', end - p);
-++      if (p == NULL || p > pos)
-++        return p;
-++    }
-++
-++  return NULL;
-++}
-++
-+ /* Fix for machine name #ifdefs that are not in the namespace reserved
-+    by the C standard.  They won't be defined if compiling with -ansi,
-+    and the headers will break.  We go to some trouble to only change
-+@@ -524,7 +557,7 @@ FIX_PROC_HEAD( machine_name_fix )
-+       /* If the 'name_pat' matches in between base and limit, we have
-+          a bogon.  It is not worth the hassle of excluding comments
-+          because comments on #if/#ifdef lines are rare, and strings on
-+-         such lines are illegal.
-++         such lines are only legal in a "__has_include" directive.
-+ 
-+          REG_NOTBOL means 'base' is not at the beginning of a line, which
-+          shouldn't matter since the name_re has no ^ anchor, but let's
-+@@ -544,8 +577,16 @@ FIX_PROC_HEAD( machine_name_fix )
-+             break;
-+ 
-+           p = base + match[0].rm_so;
-+-          base += match[0].rm_eo;
-+ 
-++          /* Check if the match is in __has_include(...) (PR 91085). */
-++          q = check_has_inc (base, p, limit);
-++          if (q) 
-++            {
-++              base = q + 1;
-++              goto again;
-++            }
-++
-++          base += match[0].rm_eo;
-+           /* One more test: if on the same line we have the same string
-+              with the appropriate underscores, then leave it alone.
-+              We want exactly two leading and trailing underscores.  */
-+diff --git a/fixincludes/inclhack.def b/fixincludes/inclhack.def
-+index 066bef99162..b7ad6982e96 100644
-+--- a/fixincludes/inclhack.def
-++++ b/fixincludes/inclhack.def
-+@@ -3154,7 +3154,8 @@ fix = {
-+     c_fix     = machine_name;
-+ 
-+     test_text = "/* MACH_DIFF: */\n"
-+-    "#if defined( i386 ) || defined( sparc ) || defined( vax )"
-++    "#if defined( i386 ) || defined( sparc ) || defined( vax ) || "
-++    "defined( linux ) || __has_include ( <linux.h> )"
-+     "\n/* no uniform test, so be careful  :-) */";
-+ };
-+ 
-+diff --git a/fixincludes/tests/base/testing.h b/fixincludes/tests/base/testing.h
-+index cf95321fb86..8b3accaf04e 100644
-+--- a/fixincludes/tests/base/testing.h
-++++ b/fixincludes/tests/base/testing.h
-+@@ -64,7 +64,7 @@ BSD43__IOWR('T', 1) /* Some are multi-line */
-+ 
-+ #if defined( MACHINE_NAME_CHECK )
-+ /* MACH_DIFF: */
-+-#if defined( i386 ) || defined( sparc ) || defined( vax )
-++#if defined( i386 ) || defined( sparc ) || defined( vax ) || defined( linux ) || __has_include ( <linux.h> )
-+ /* no uniform test, so be careful  :-) */
-+ #endif  /* MACHINE_NAME_CHECK */
-+ 
-+-- 
-+2.37.3
-+
-diff --git a/package/gcc/arc-2020.09-release/0003-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch b/package/gcc/arc-2020.09-release/0003-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-new file mode 100644
-index 0000000000..8b6be49e68
---- /dev/null
-+++ b/package/gcc/arc-2020.09-release/0003-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
-@@ -0,0 +1,124 @@
-+From 65754c50a57e5a891cee75bb744eb93fdb3c443e Mon Sep 17 00:00:00 2001
-+From: Xi Ruoyao <xry111@mengyan1223.wang>
-+Date: Mon, 28 Jun 2021 13:54:58 +0800
-+Subject: [PATCH] fixinc: don't "fix" machine names in __has_include(...)
-+ [PR91085]
-+
-+fixincludes/
-+
-+	PR other/91085
-+	* fixfixes.c (check_has_inc): New static function.
-+	  (machine_name_fix): Don't replace header names in
-+	  __has_include(...).
-+	* inclhack.def (machine_name): Adjust test.
-+	* tests/base/testing.h: Update.
-+
-+Upstream: 6bf383c37e6131a8e247e8a0997d55d65c830b6d
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ fixincludes/fixfixes.c           | 45 ++++++++++++++++++++++++++++++--
-+ fixincludes/inclhack.def         |  3 ++-
-+ fixincludes/tests/base/testing.h |  2 +-
-+ 3 files changed, 46 insertions(+), 4 deletions(-)
-+
-+diff --git a/fixincludes/fixfixes.c b/fixincludes/fixfixes.c
-+index 034e15d9985..3ff87812036 100644
-+--- a/fixincludes/fixfixes.c
-++++ b/fixincludes/fixfixes.c
-+@@ -477,6 +477,39 @@ FIX_PROC_HEAD( char_macro_def_fix )
-+   fputs (text, stdout);
-+ }
-+ 
-++/* Check if the pattern at pos is actually in a "__has_include(...)"
-++   directive.  Return the pointer to the ')' of this
-++   "__has_include(...)" if it is, NULL otherwise.  */
-++static const char *
-++check_has_inc (const char *begin, const char *pos, const char *end)
-++{
-++  static const char has_inc[] = "__has_include";
-++  const size_t has_inc_len = sizeof (has_inc) - 1;
-++  const char *p;
-++
-++  for (p = memmem (begin, pos - begin, has_inc, has_inc_len);
-++       p != NULL;
-++       p = memmem (p, pos - p, has_inc, has_inc_len))
-++    {
-++      p += has_inc_len;
-++      while (p < end && ISSPACE (*p))
-++        p++;
-++
-++      /* "__has_include" may appear as "defined(__has_include)",
-++         search for the next appearance then.  */
-++      if (*p != '(')
-++        continue;
-++
-++      /* To avoid too much complexity, just hope there is never a
-++         ')' in a header name.  */
-++      p = memchr (p, ')', end - p);
-++      if (p == NULL || p > pos)
-++        return p;
-++    }
-++
-++  return NULL;
-++}
-++
-+ /* Fix for machine name #ifdefs that are not in the namespace reserved
-+    by the C standard.  They won't be defined if compiling with -ansi,
-+    and the headers will break.  We go to some trouble to only change
-+@@ -524,7 +557,7 @@ FIX_PROC_HEAD( machine_name_fix )
-+       /* If the 'name_pat' matches in between base and limit, we have
-+          a bogon.  It is not worth the hassle of excluding comments
-+          because comments on #if/#ifdef lines are rare, and strings on
-+-         such lines are illegal.
-++         such lines are only legal in a "__has_include" directive.
-+ 
-+          REG_NOTBOL means 'base' is not at the beginning of a line, which
-+          shouldn't matter since the name_re has no ^ anchor, but let's
-+@@ -544,8 +577,16 @@ FIX_PROC_HEAD( machine_name_fix )
-+             break;
-+ 
-+           p = base + match[0].rm_so;
-+-          base += match[0].rm_eo;
-+ 
-++          /* Check if the match is in __has_include(...) (PR 91085). */
-++          q = check_has_inc (base, p, limit);
-++          if (q) 
-++            {
-++              base = q + 1;
-++              goto again;
-++            }
-++
-++          base += match[0].rm_eo;
-+           /* One more test: if on the same line we have the same string
-+              with the appropriate underscores, then leave it alone.
-+              We want exactly two leading and trailing underscores.  */
-+diff --git a/fixincludes/inclhack.def b/fixincludes/inclhack.def
-+index f58e7771e1c..71bd717c233 100644
-+--- a/fixincludes/inclhack.def
-++++ b/fixincludes/inclhack.def
-+@@ -3114,7 +3114,8 @@ fix = {
-+     c_fix     = machine_name;
-+ 
-+     test_text = "/* MACH_DIFF: */\n"
-+-    "#if defined( i386 ) || defined( sparc ) || defined( vax )"
-++    "#if defined( i386 ) || defined( sparc ) || defined( vax ) || "
-++    "defined( linux ) || __has_include ( <linux.h> )"
-+     "\n/* no uniform test, so be careful  :-) */";
-+ };
-+ 
-+diff --git a/fixincludes/tests/base/testing.h b/fixincludes/tests/base/testing.h
-+index cf95321fb86..8b3accaf04e 100644
-+--- a/fixincludes/tests/base/testing.h
-++++ b/fixincludes/tests/base/testing.h
-+@@ -64,7 +64,7 @@ BSD43__IOWR('T', 1) /* Some are multi-line */
-+ 
-+ #if defined( MACHINE_NAME_CHECK )
-+ /* MACH_DIFF: */
-+-#if defined( i386 ) || defined( sparc ) || defined( vax )
-++#if defined( i386 ) || defined( sparc ) || defined( vax ) || defined( linux ) || __has_include ( <linux.h> )
-+ /* no uniform test, so be careful  :-) */
-+ #endif  /* MACHINE_NAME_CHECK */
-+ 
-+-- 
-+2.37.3
-+
--- 
-2.37.3
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 7a777fb783..3712c79db0 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.1.6
++MESA3D_HEADERS_VERSION = 22.2.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch b/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch
+deleted file mode 100644
+index 5acbaa4daa..0000000000
+--- a/package/mesa3d/0001-c99_math-import-isinf-for-uclibc-based-toolchains.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 705490763fcc052defa2d49a5c5200775cd12c54 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Wed, 4 Mar 2020 08:27:24 +0100
+-Subject: [PATCH] c99_math: import isinf for uclibc based toolchains
+-
+-The same fix as for glibc >= 2.23 is needed for uclibc
+-based toolchains.
+-
+-[Upstream suggested: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4042]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- include/c99_math.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/c99_math.h b/include/c99_math.h
+-index e906c26aa54..c8a73a2d2c7 100644
+---- a/include/c99_math.h
+-+++ b/include/c99_math.h
+-@@ -190,7 +190,7 @@ fpclassify(double x)
+-  * undefines those functions, which in glibc 2.23, are defined as macros rather
+-  * than functions as in glibc 2.22.
+-  */
+--#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
+-+#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23) || defined(__UCLIBC__))
+- #include <cmath>
+- 
+- using std::fpclassify;
+--- 
+-2.25.1
+-
+diff --git a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+similarity index 100%
+rename from package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+rename to package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+diff --git a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+similarity index 100%
+rename from package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+rename to package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+diff --git a/package/mesa3d/0004-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch b/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+similarity index 100%
+rename from package/mesa3d/0004-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+rename to package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+diff --git a/package/mesa3d/0008-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+similarity index 100%
+rename from package/mesa3d/0008-Fix-uClibc-build.patch
+rename to package/mesa3d/0004-Fix-uClibc-build.patch
+diff --git a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+deleted file mode 100644
+index b01db8a4b4..0000000000
+--- a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From e501b7c17ada9c694d3f8302622b78d733485b38 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 21 Aug 2021 17:55:33 +0200
+-Subject: [PATCH] src/util/futex.h: fix build on 32-bit architectures using
+- 64-bit time_t
+-
+-Fix the following build failure on 32-bit architectures using 64-bit
+-time_t (e.g. riscv32):
+-
+-../src/util/futex.h: In function 'sys_futex':
+-../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+-   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+-      |                   ^~~~~~~~~
+-      |                   sys_futex
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12496]
+----
+- src/util/futex.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/util/futex.h b/src/util/futex.h
+-index 43097f4cd5b..221eda9db0c 100644
+---- a/src/util/futex.h
+-+++ b/src/util/futex.h
+-@@ -34,6 +34,10 @@
+- #include <sys/syscall.h>
+- #include <sys/time.h>
+- 
+-+#ifndef SYS_futex
+-+#define SYS_futex SYS_futex_time64
+-+#endif
+-+
+- static inline long sys_futex(void *addr1, int op, int val1, const struct timespec *timeout, void *addr2, int val3)
+- {
+-    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+--- 
+-2.32.0
+-
+diff --git a/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch b/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch
+deleted file mode 100644
+index cac61b351a..0000000000
+--- a/package/mesa3d/0006-util-remove-needless-c99-compat-h-includes.patch
++++ /dev/null
+@@ -1,126 +0,0 @@
+-From 9f717b5f23cbf24dc4c58bc688c931af91975e80 Mon Sep 17 00:00:00 2001
+-From: Erik Faye-Lund <erik.faye-lund@collabora.com>
+-Date: Wed, 1 Jun 2022 14:17:43 +0200
+-Subject: util: remove needless c99_compat.h includes
+-
+-Reviewed-by: Jesse Natalie <jenatali@microsoft.com>
+-Reviewed-by: Alyssa Rosenzweig <alyssa@collabora.com>
+-Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/16812>
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/mesa/mesa/patch/?id=9f717b5f23cbf24dc4c58bc688c931af91975e80
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/util/bitscan.h     | 2 --
+- src/util/compiler.h    | 2 --
+- src/util/format_srgb.h | 1 -
+- src/util/hash_table.h  | 1 -
+- src/util/list.h        | 1 -
+- src/util/macros.h      | 1 -
+- src/util/mesa-sha1.h   | 1 -
+- src/util/ptralloc.h    | 1 -
+- 8 files changed, 10 deletions(-)
+-
+-diff --git a/src/util/bitscan.h b/src/util/bitscan.h
+-index 726d2d2c385..53cbb91e98c 100644
+---- a/src/util/bitscan.h
+-+++ b/src/util/bitscan.h
+-@@ -42,8 +42,6 @@
+- #include <popcntintrin.h>
+- #endif
+- 
+--#include "c99_compat.h"
+--
+- #ifdef __cplusplus
+- extern "C" {
+- #endif
+-diff --git a/src/util/compiler.h b/src/util/compiler.h
+-index 83f8e346a08..d184ad455af 100644
+---- a/src/util/compiler.h
+-+++ b/src/util/compiler.h
+-@@ -38,8 +38,6 @@
+- 
+- #include "util/macros.h"
+- 
+--#include "c99_compat.h" /* inline, __func__, etc. */
+--
+- 
+- /**
+-  * Either define MESA_BIG_ENDIAN or MESA_LITTLE_ENDIAN, and CPU_TO_LE32.
+-diff --git a/src/util/format_srgb.h b/src/util/format_srgb.h
+-index 596af56f4cd..5861b238270 100644
+---- a/src/util/format_srgb.h
+-+++ b/src/util/format_srgb.h
+-@@ -39,7 +39,6 @@
+- 
+- #include <stdint.h>
+- #include <math.h>
+--#include "c99_compat.h"
+- 
+- extern const float
+- util_format_srgb_8unorm_to_linear_float_table[256];
+-diff --git a/src/util/hash_table.h b/src/util/hash_table.h
+-index c8a96b79edf..002d6c58873 100644
+---- a/src/util/hash_table.h
+-+++ b/src/util/hash_table.h
+-@@ -31,7 +31,6 @@
+- #include <stdlib.h>
+- #include <inttypes.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "macros.h"
+- 
+- #ifdef __cplusplus
+-diff --git a/src/util/list.h b/src/util/list.h
+-index 5ef49e4e955..edc596f3d2d 100644
+---- a/src/util/list.h
+-+++ b/src/util/list.h
+-@@ -41,7 +41,6 @@
+- #include <stdbool.h>
+- #include <stddef.h>
+- #include <assert.h>
+--#include "c99_compat.h"
+- 
+- #ifdef DEBUG
+- #  define list_assert(cond, msg)  assert(cond && msg)
+-diff --git a/src/util/macros.h b/src/util/macros.h
+-index 2138f5d662d..a5dc4846211 100644
+---- a/src/util/macros.h
+-+++ b/src/util/macros.h
+-@@ -27,7 +27,6 @@
+- #include <stdio.h>
+- #include <assert.h>
+- 
+--#include "c99_compat.h"
+- #include "c11_compat.h"
+- 
+- #include <stdint.h>
+-diff --git a/src/util/mesa-sha1.h b/src/util/mesa-sha1.h
+-index 9d174fd9b99..809fabc525f 100644
+---- a/src/util/mesa-sha1.h
+-+++ b/src/util/mesa-sha1.h
+-@@ -26,7 +26,6 @@
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "sha1/sha1.h"
+- 
+- #ifdef __cplusplus
+-diff --git a/src/util/ptralloc.h b/src/util/ptralloc.h
+-index f74d8c3645d..ca6ded82a2d 100644
+---- a/src/util/ptralloc.h
+-+++ b/src/util/ptralloc.h
+-@@ -29,7 +29,6 @@
+- #include <stdlib.h>
+- #include <inttypes.h>
+- #include <stdbool.h>
+--#include "c99_compat.h"
+- #include "macros.h"
+- 
+- #ifdef __cplusplus
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/mesa3d/0007-include-drop-c11-compat-h.patch b/package/mesa3d/0007-include-drop-c11-compat-h.patch
+deleted file mode 100644
+index 64cdb8074b..0000000000
+--- a/package/mesa3d/0007-include-drop-c11-compat-h.patch
++++ /dev/null
+@@ -1,100 +0,0 @@
+-From df2dd474c73982e89d0ed71951ff723eb7060ce6 Mon Sep 17 00:00:00 2001
+-From: Erik Faye-Lund <erik.faye-lund@collabora.com>
+-Date: Wed, 1 Jun 2022 13:38:39 +0200
+-Subject: include: drop c11_compat.h
+-
+-We now require C11, and C++ supports static_assert just fine, which is
+-the only thing this header ever added support for. So let's get rid of
+-this needless header.
+-
+-Reviewed-by: Jesse Natalie <jenatali@microsoft.com>
+-Reviewed-by: Alyssa Rosenzweig <alyssa@collabora.com>
+-Reviewed-by: Eric Engestrom <eric@engestrom.ch>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/16812>
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/mesa/mesa/commit/?id=df2dd474c73982e89d0ed71951ff723eb7060ce6
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- include/c11_compat.h                    | 27 ---------------------------
+- src/amd/common/ac_sqtt.h                |  1 -
+- src/imagination/vulkan/pvr_cmd_buffer.c |  1 -
+- src/util/macros.h                       |  3 ---
+- 4 files changed, 32 deletions(-)
+- delete mode 100644 include/c11_compat.h
+-
+-diff --git a/include/c11_compat.h b/include/c11_compat.h
+-deleted file mode 100644
+-index d35740f47a4..00000000000
+---- a/include/c11_compat.h
+-+++ /dev/null
+-@@ -1,27 +0,0 @@
+--/* Copyright 2019 Intel Corporation */
+--/* SPDX-License-Identifier: MIT */
+--
+--#include "no_extern_c.h"
+--
+--#ifndef _C11_COMPAT_H_
+--#define _C11_COMPAT_H_
+--
+--#if defined(__cplusplus)
+--   /* This is C++ code, not C */
+--#elif (__STDC_VERSION__ >= 201112L)
+--   /* Already C11 */
+--#else
+--
+--
+--/*
+-- * C11 static_assert() macro
+-- * assert.h only defines that name for C11 and above
+-- */
+--#ifndef static_assert
+--#define static_assert _Static_assert
+--#endif
+--
+--
+--#endif /* !C++ && !C11 */
+--
+--#endif /* _C11_COMPAT_H_ */
+-diff --git a/src/amd/common/ac_sqtt.h b/src/amd/common/ac_sqtt.h
+-index 55130aa2221..05798b7e1da 100644
+---- a/src/amd/common/ac_sqtt.h
+-+++ b/src/amd/common/ac_sqtt.h
+-@@ -30,7 +30,6 @@
+- #include <stdbool.h>
+- 
+- #include <assert.h>
+--#include "c11_compat.h"
+- #include "ac_rgp.h"
+- 
+- struct radeon_cmdbuf;
+-diff --git a/src/imagination/vulkan/pvr_cmd_buffer.c b/src/imagination/vulkan/pvr_cmd_buffer.c
+-index 0afd463e2fb..4fe224f481d 100644
+---- a/src/imagination/vulkan/pvr_cmd_buffer.c
+-+++ b/src/imagination/vulkan/pvr_cmd_buffer.c
+-@@ -29,7 +29,6 @@
+- #include <string.h>
+- #include <vulkan/vulkan.h>
+- 
+--#include "c11_compat.h"
+- #include "hwdef/rogue_hw_defs.h"
+- #include "hwdef/rogue_hw_utils.h"
+- #include "pvr_bo.h"
+-diff --git a/src/util/macros.h b/src/util/macros.h
+-index a5dc4846211..dd8af86bcf8 100644
+---- a/src/util/macros.h
+-+++ b/src/util/macros.h
+-@@ -26,9 +26,6 @@
+- 
+- #include <stdio.h>
+- #include <assert.h>
+--
+--#include "c11_compat.h"
+--
+- #include <stdint.h>
+- 
+- /* Compute the size of an array */
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index ab20063cd9..f10f8fe112 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-August/000683.html
+-sha256  22ced061eb9adab8ea35368246c1995c09723f3f71653cd5050c5cec376e671a  mesa-22.1.6.tar.xz
+-sha512  3b2a0bb781c3d540401e6f51e3cf0d87d4e22923b6a5a4ea9d8ce5c79b4a2d5e8b1c237a36325d7d7178448ae102470ebefb312644dc09818cce91fd5439cb07  mesa-22.1.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
++sha256  2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9  mesa-22.2.2.tar.xz
++sha512  a1eb67e1ae4880c79b1fdc570f4389baba0b8ba796da7e695c9af19a7d92b6c06b95570e6c796548b61355989025fb7efbf9acac74cbd695f7e297dc913b933c  mesa-22.2.2.tar.xz
+ # License
+-sha256  4bc15d14dcc134b024cbdca3b5330010136ce8a427b6f8353440ce2ad7aab037  docs/license.rst
++sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index daefd6f6d5..bac071ecb3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.1.6
++MESA3D_VERSION = 22.2.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
