@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44CADFA373E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B0AC38A2D
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 20:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE6E360B79;
-	Tue, 25 Oct 2022 20:59:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE6E360B79
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5020460B6F;
+	Tue, 25 Oct 2022 20:59:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5020460B6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ysDB4GgLN1Q; Tue, 25 Oct 2022 20:59:00 +0000 (UTC)
+	with ESMTP id dkwLVcX92kDG; Tue, 25 Oct 2022 20:59:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 136C760B01;
-	Tue, 25 Oct 2022 20:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136C760B01
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D49271BF33A
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:58:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71DF660BA6;
+	Tue, 25 Oct 2022 20:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71DF660BA6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 077961BF977
+ for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE1F860ACD
+ by smtp4.osuosl.org (Postfix) with ESMTP id D64E84025F
  for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 20:58:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE1F860ACD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D64E84025F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NsNR8L6J8rtP for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r9f33IBVcuOp for <buildroot@lists.busybox.net>;
  Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC4616059C
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6A9E4025A
  for <buildroot@buildroot.org>; Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC4616059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6A9E4025A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC28487093; Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
+ id B5DB687094; Tue, 25 Oct 2022 20:58:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 22:58:00 +0200
+Date: Tue, 25 Oct 2022 22:58:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6833dd5079b8017bde37b7d3ef201d35450a12e6
-X-Git-Newrev: a9f5a9926f089bf0c7943049751fefa6035ce469
+X-Git-Oldrev: a9f5a9926f089bf0c7943049751fefa6035ce469
+X-Git-Newrev: 13a8417f0de1649ebb51fcd2e02862310b7b3d43
 X-Patchwork-Hint: ignore
-Message-Id: <20221025205852.AC28487093@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/grpc: bump to version 1.50.0
+Message-Id: <20221025205852.B5DB687094@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
+ 21.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,95 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9f5a9926f089bf0c7943049751fefa6035ce469
+commit: https://git.buildroot.net/buildroot/commit/?id=13a8417f0de1649ebb51fcd2e02862310b7b3d43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-drop cross-compile patch which is now upstream (again).
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...le-unconditionally-downloading-api-repos.patch} |  0
- .../grpc/0004-fix-grpc-plugin-cross-compile.patch  | 43 ----------------------
- package/grpc/grpc.hash                             |  2 +-
- package/grpc/grpc.mk                               |  2 +-
- 4 files changed, 2 insertions(+), 45 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grpc/0005-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-similarity index 100%
-rename from package/grpc/0005-disable-unconditionally-downloading-api-repos.patch
-rename to package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-diff --git a/package/grpc/0004-fix-grpc-plugin-cross-compile.patch b/package/grpc/0004-fix-grpc-plugin-cross-compile.patch
-deleted file mode 100644
-index d4e18a7853..0000000000
---- a/package/grpc/0004-fix-grpc-plugin-cross-compile.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 6798193f062676fddf7fee6d0c928f8ce6d92894 Mon Sep 17 00:00:00 2001
--From: Michael Nosthoff <buildroot@heine.tech>
--Date: Thu, 21 Jul 2022 22:14:32 +0200
--Subject: [PATCH] cmake: fix cross-compilation with
-- gRPC_BUILD_GRPC_CPP_PLUGIN=OFF
--
--commit 99752b173cfa reintroduced the cross-compilation issue which was fixed by da10b795e177
--
--upstream PR: https://github.com/grpc/grpc/pull/30378
--
--Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
--
-----
-- CMakeLists.txt                    | 2 +-
-- templates/CMakeLists.txt.template | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 9cad96a12f95..11e7ae2b67df 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -514,7 +514,7 @@ function(protobuf_generate_grpc_cpp_with_import_path_correction FILE_LOCATION IM
--          --plugin=protoc-gen-grpc=${_gRPC_CPP_PLUGIN}
--          ${_protobuf_include_path}
--          ${REL_FIL}
---    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION} ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} grpc_cpp_plugin
--+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION} ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} ${_gRPC_CPP_PLUGIN}
--     WORKING_DIRECTORY ${_gRPC_PROTO_SRCS_DIR}
--     COMMENT "Running gRPC C++ protocol buffer compiler for ${IMPORT_PATH}"
--     VERBATIM)
--diff --git a/templates/CMakeLists.txt.template b/templates/CMakeLists.txt.template
--index 161cf46798f1..82fe4217913a 100644
----- a/templates/CMakeLists.txt.template
--+++ b/templates/CMakeLists.txt.template
--@@ -498,7 +498,7 @@
--            --plugin=protoc-gen-grpc=<%text>${_gRPC_CPP_PLUGIN}</%text>
--            <%text>${_protobuf_include_path}</%text>
--            <%text>${REL_FIL}</%text>
---      DEPENDS <%text>${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION}</%text> <%text>${ABS_FIL}</%text> <%text>${_gRPC_PROTOBUF_PROTOC}</%text> grpc_cpp_plugin
--+      DEPENDS <%text>${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION}</%text> <%text>${ABS_FIL}</%text> <%text>${_gRPC_PROTOBUF_PROTOC}</%text> <%text>${_gRPC_CPP_PLUGIN}</%text>
--       WORKING_DIRECTORY <%text>${_gRPC_PROTO_SRCS_DIR}</%text>
--       COMMENT "Running gRPC C++ protocol buffer compiler for <%text>${IMPORT_PATH}</%text>"
--       VERBATIM)
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 9ef976a60a..4d838703cc 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 03138a59e7..24dbc0f1a1 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  5071b630e2a14707ad060636990f1b25b0984bd168c7ea1ab95e48a3bdc0081f  grpc-1.49.1.tar.gz
-+sha256  76900ab068da86378395a8e125b5cc43dfae671e09ff6462ddfef18676e2165a  grpc-1.50.0.tar.gz
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 5f28e86113..9aac241e47 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.49.1
-+GRPC_VERSION = 1.50.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  a3c4c104b98a21a577ce5ecc0d9b9f43a359b917d0bcf69467b70dc27416dfdc  protobuf-cpp-3.21.6.tar.gz
++sha256  f6251f2d00aad41b34c1dfa3d752713cb1bb1b7020108168a4deaa206ba8ed42  protobuf-cpp-3.21.8.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index fbc495c438..88f359f24c 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.6
++PROTOBUF_VERSION = 21.8
+ PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index b0662124a9..a12c199663 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a014a0108e18c06a0c0308d92cdcae6ee106e4b02dd2ab1ff7073c4c80153aea  protobuf-python-4.21.6.tar.gz
++sha256  d81ebc20030fe8d03bceb38f06aba2797c40852e5aab6819481ce808fb305fae  protobuf-python-4.21.8.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
