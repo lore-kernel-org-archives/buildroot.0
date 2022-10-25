@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13C1FC38A2D
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 21:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24919FA373E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 21:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC1E080E46;
-	Tue, 25 Oct 2022 21:00:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC1E080E46
+	by smtp1.osuosl.org (Postfix) with ESMTP id B467981076;
+	Tue, 25 Oct 2022 21:00:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B467981076
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Q6oaAAT43ld; Tue, 25 Oct 2022 21:00:27 +0000 (UTC)
+	with ESMTP id 13BXCYM4HLth; Tue, 25 Oct 2022 21:00:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECAE280B53;
-	Tue, 25 Oct 2022 21:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECAE280B53
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CDAE61BF33A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75AFF80BDE;
+	Tue, 25 Oct 2022 21:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75AFF80BDE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EFA5F1BF977
  for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA01660B6F
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA2BC40265
  for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 21:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA01660B6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA2BC40265
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fs2MBBqUjmZU for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F6ic7MJE7Pef for <buildroot@lists.busybox.net>;
  Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1FEA60AEB
+ by smtp4.osuosl.org (Postfix) with ESMTP id C854440264
  for <buildroot@buildroot.org>; Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1FEA60AEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C854440264
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1DFF870A7; Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
+ id B761B870A6; Tue, 25 Oct 2022 21:00:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 22:59:43 +0200
+Date: Tue, 25 Oct 2022 22:59:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0861fed2f0ede61f45c7279028f7341519343913
-X-Git-Newrev: 17065693f23996097d46e350b40c46795b7ffeac
+X-Git-Oldrev: 13a8417f0de1649ebb51fcd2e02862310b7b3d43
+X-Git-Newrev: 0861fed2f0ede61f45c7279028f7341519343913
 X-Patchwork-Hint: ignore
-Message-Id: <20221025210022.C1DFF870A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpciaccess: add new host-pkgconf
- dependency
+Message-Id: <20221025210022.B761B870A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kmod: bump to version 30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17065693f23996097d46e350b40c46795b7ffeac
+commit: https://git.buildroot.net/buildroot/commit/?id=0861fed2f0ede61f45c7279028f7341519343913
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-After updating to version 0.17 we need host-pkgconf.
-
-Fixes:
- - http://autobuild.buildroot.net/results/d41/d41509feaa889979668fa5105ca1defca71567a6
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpciaccess/libpciaccess.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
-index 68d46b7f50..525a3bcd02 100644
---- a/package/libpciaccess/libpciaccess.mk
-+++ b/package/libpciaccess/libpciaccess.mk
-@@ -10,6 +10,7 @@ LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- LIBPCIACCESS_LICENSE = MIT
- LIBPCIACCESS_LICENSE_FILES = COPYING
- LIBPCIACCESS_INSTALL_STAGING = YES
-+LIBPCIACCESS_DEPENDENCIES = host-pkgconf
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index c68e41f1b6..b181f73e9b 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  0b80eea7aa184ac6fd20cafa2a1fdf290ffecc70869a797079e2cc5c6225a52a  kmod-29.tar.xz
++sha256  f897dd72698dc6ac1ef03255cd0a5734ad932318e4adbaebc7338ef2f5202f9f  kmod-30.tar.xz
  
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBPCIACCESS_CONF_OPTS += --with-zlib
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 82e8597759..5d6d4408f9 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 29
++KMOD_VERSION = 30
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
