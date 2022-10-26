@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5D7C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 19:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1ECC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 19:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DED2340914;
-	Wed, 26 Oct 2022 19:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DED2340914
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD02180CCE;
+	Wed, 26 Oct 2022 19:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD02180CCE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0LPSeUuxiXX2; Wed, 26 Oct 2022 19:52:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TjOCArCiGdiK; Wed, 26 Oct 2022 19:53:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0B2540905;
-	Wed, 26 Oct 2022 19:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0B2540905
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F1CA1BF982
+	by smtp1.osuosl.org (Postfix) with ESMTP id 229C680C08;
+	Wed, 26 Oct 2022 19:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 229C680C08
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A8E341BF57C
  for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 189D860D7B
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189D860D7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8281F40547
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8281F40547
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LAOfva3NtIMv for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7pNc2_2XnEuz for <buildroot@lists.busybox.net>;
  Wed, 26 Oct 2022 19:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1CCC60BF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1E6F405E8
  for <buildroot@buildroot.org>; Wed, 26 Oct 2022 19:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1CCC60BF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1E6F405E8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9166587166; Wed, 26 Oct 2022 19:51:54 +0000 (UTC)
+ id B0B3F87165; Wed, 26 Oct 2022 19:51:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Oct 2022 21:51:19 +0200
+Date: Wed, 26 Oct 2022 21:51:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 682224d6f6e80e78ff61f3545a7ae5d7a15ba887
-X-Git-Newrev: 33400378d05cf078314ed0fa9612fa5ab13f7fa6
+X-Git-Oldrev: 5835a64d3648b4f3a012d57a01775e7eeb1418b1
+X-Git-Newrev: 895692594f9aac04dfede06067eca794533869d8
 X-Patchwork-Hint: ignore
-Message-Id: <20221026195154.9166587166@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8189fs: disable package for
- s390x architecture
+Message-Id: <20221026195154.B0B3F87165@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8812au-aircrack-ng: disable
+ package for s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33400378d05cf078314ed0fa9612fa5ab13f7fa6
+commit: https://git.buildroot.net/buildroot/commit/?id=895692594f9aac04dfede06067eca794533869d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 s390x doesn't support CONFIG_WIRELESS in Linux so let's disable this
@@ -73,26 +73,24 @@ package for this architecture.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rtl8189fs/Config.in | 2 ++
+ package/rtl8812au-aircrack-ng/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl8189fs/Config.in b/package/rtl8189fs/Config.in
-index ae69b79235..78eeed1a4f 100644
---- a/package/rtl8189fs/Config.in
-+++ b/package/rtl8189fs/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RTL8189FS
- 	bool "rtl8189fs"
+diff --git a/package/rtl8812au-aircrack-ng/Config.in b/package/rtl8812au-aircrack-ng/Config.in
+index 70cbd15221..d903ab2b3f 100644
+--- a/package/rtl8812au-aircrack-ng/Config.in
++++ b/package/rtl8812au-aircrack-ng/Config.in
+@@ -1,8 +1,10 @@
+ comment "rtl8812au-aircrack-ng needs a Linux kernel to be built"
++	depends on !BR2_s390x
+ 	depends on !BR2_LINUX_KERNEL
+ 
+ config BR2_PACKAGE_RTL8812AU_AIRCRACK_NG
+ 	bool "rtl8812au-aircrack-ng"
 +	depends on !BR2_s390x
  	depends on BR2_LINUX_KERNEL
  	help
- 	  Wireless driver rtl8189fs.
-@@ -7,4 +8,5 @@ config BR2_PACKAGE_RTL8189FS
- 	  https://github.com/jwrdegoede/rtl8189ES_linux.git
- 
- comment "rtl8189fs needs a Linux kernel to be built"
-+	depends on !BR2_s390x
- 	depends on !BR2_LINUX_KERNEL
+ 	  rtl8812au wifi driver (aircrack-ng repository)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
