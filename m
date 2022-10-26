@@ -4,63 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB48C38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 18:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 019CDC38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 18:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B645540571;
-	Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B645540571
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EBC4405F7;
+	Wed, 26 Oct 2022 18:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EBC4405F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jmn59H7pLFIx; Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
+	with ESMTP id RiCS02M6T2G8; Wed, 26 Oct 2022 18:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF3FA40136;
-	Wed, 26 Oct 2022 18:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF3FA40136
+	by smtp2.osuosl.org (Postfix) with ESMTP id 854EF405E8;
+	Wed, 26 Oct 2022 18:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 854EF405E8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F41731BF279
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A39981BF279
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC0D060D7F
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC0D060D7F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F54060D78
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F54060D78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6OtVn8xT8DVE for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 18:34:35 +0000 (UTC)
+ with ESMTP id ITqmabj0rhDs for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 18:34:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D8EE60D78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B1F260D7B
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D8EE60D78
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 18:34:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9B1F260D7B
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 18:34:35 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 9AB6EE0008;
- Wed, 26 Oct 2022 18:34:31 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 5AD03E000A;
+ Wed, 26 Oct 2022 18:34:33 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
-Date: Wed, 26 Oct 2022 20:34:26 +0200
-Message-Id: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Oct 2022 20:34:27 +0200
+Message-Id: <20221026183427.3933387-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
+References: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666809272;
+ d=bootlin.com; s=gm1; t=1666809274;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=KQwAf066rauTWNFqp8vAI79wNvgkILJoRe8umW5/c/c=;
- b=QCWkEpq6iXVh0Wwy90OwZoEZFfn7E2IRHLn/rVASLfGwcvtHmRrInhIEdcE9sBuVzRzI0L
- qiCjGN3+KLK7XUPuzlJ74IluNTv7eJnafkfi7l0wu78y+XhV2LHPowS8/Jan0kYWqVD9wI
- OfU0r4WWymHkQltXkY5E9JMdXoG1QhS5ZMqQlIeGfnMQcpt0jECCbZOTKdNP/3RiQNaH6I
- MEExibm1sDbiw8C134r3EWJIan57CLF9ZLaJ2OOURvDrRA8x5ZSFFYNIpKscvFD4GDpgkf
- xOYIeELyaLqVf99MHqVkvVECqO7IARQTsx8f2XbknjE7oq6bsdw5eorM0sDm9g==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LkZ+lXtt+hDJfhNQAYNw1/MaLTO4e5jzHirjvq1I09w=;
+ b=Yyxdmwl1QVr+wKxEby2RKwSYbwwong1MZRRT2p869b1pGt+FIl0Pslop3/M/qWSdr5Kg0Q
+ yON5hpY89T73SPigT1364Z7isbUUB2OvyQj79o4qWadWHDQUjIDXKOr7RXQCnzFsuav4eh
+ WOQMQ/dSKF+wNOdKbfqIL96RsHWOoiRmyfHRiCFmJNrD2dVN8O+TXcGLRKNH6XGLqYgSSG
+ SczGg5TfoGz9UPBWPUg8XMeIIcqmNgrOJebQYnt8CXmQM+ZWfltKvKBOTC+DVou7Bi6BuU
+ LYB6ljZ+cGEv6rQ+h0SaFDOBne9rgtjerVgdWnDnOJ4JldKSSIvpiViWhVsHxQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QCWkEpq6
-Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: introduce
- BR2_TOOLCHAIN_BUILDROOT_NONE
+ header.s=gm1 header.b=Yyxdmwl1
+Subject: [Buildroot] [PATCH 2/2] package/glibc: headers >= 5.4 needed on
+ RISC-V 32-bit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,69 +87,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In the internal toolchain backend, we have a choice..endchoice block
-to allow the user to select the C library, between glibc, uClibc and
-musl.
+Since glibc 2.33 (upstream commit
+7a55dd3fb6d2c307a002a16776be84310b9c8989), headers >= 5.4.0 are needed
+to build glibc for RISC-V 32-bit. Indeed
+sysdeps/unix/sysv/linux/riscv/configure.ac contains:
 
-However, there are situations were no C library at all is
-supported. In this case, the choice does not appear, and does not
-allow to see the Config.in comments that are within the
-choice..endchoice block and that may explain why no C library is
-available.
+if test $libc_cv_riscv_int_abi = ilp32; then
+  arch_minimum_kernel=5.4.0
+fi
 
-For example, on RISC-V 32-bit, the only C library supported is glibc,
-and the minimum kernel header version required by glibc on this
-architecture is 5.4.0. In a future commit, we are going to add this
-dependency on glibc (to fix build issues on configurations that have
-headers < 5.4.0). But since glibc is the only supported C library on
-RISC-V 32-bit, it means that the choice..endchoice for the C library
-contains no entry, preventing from seeing the Config.in comment.
+In order to take into account this dependency, we add the appropriate
+logic in package/glibc/Config.in and
+toolchain/toolchain-buildroot/Config.in.
 
-To address this issue, this commit adds a "dummy"
-BR2_TOOLCHAIN_BUILDROOT_NONE option that shows up in the
-choice..endchoice only when no C library is available. Thanks to this,
-the choice..endchoice is never empty, and the Config.in comments can
-be seen.
+This change means that if headers < 5.4.0 are selected, then no C
+library at all will be available for RISC-V 32-bit, as glibc is the
+only C library supporting RISC-V 32-bit currently. However, thanks to
+the recent addition of BR2_TOOLCHAIN_BUILDROOT_NONE, the
+choice...endchoice for the C library selection will not be empty,
+allowing the user to see the Config.in comment explaining why glibc
+can't be selected.
 
-If the user keeps BR2_TOOLCHAIN_BUILDROOT_NONE selected, then the
-build will anyway abort early because package/Makefile.in has a check
-to verify that a C library is selected, and aborts the build if not.
+Therefore, technically this commit does prevent from creating a
+configuration with RISC-V 32-bit and headers < 5.4.0, but it will have
+BR2_TOOLCHAIN_BUILDROOT_NONE=y, which is catched by
+package/Makefile.in, which aborts the build early on pointing out that
+the configuration is invalid.
 
-Some could say that the problem should be resolved by instead
-preventing the selection of headers < 5.4.0 on RISC-V 32-bit, but that
-is difficult to do as the user can choose a custom header version, or
-simply specific that (s)he wants to use the headers of the kernel
-being built. In those situations, it's difficult to prevent selecting
-headers < 5.4.0.
+Fixes:
+
+  http://autobuild.buildroot.net/results/5ca49b2732f68eccb5276e7112f7f496dcc514ee/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/glibc/Config.in                 | 1 +
+ toolchain/toolchain-buildroot/Config.in | 4 ++++
+ 2 files changed, 5 insertions(+)
 
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index b63f99b0b4..71c50504ac 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -34,6 +34,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
 diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 6d55f87435..26d731d976 100644
+index 26d731d976..64f7892f98 100644
 --- a/toolchain/toolchain-buildroot/Config.in
 +++ b/toolchain/toolchain-buildroot/Config.in
-@@ -80,6 +80,18 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+@@ -62,6 +62,10 @@ comment "glibc on RISC-V 64-bit needs a toolchain w/ headers >= 5.0"
+ 	depends on BR2_RISCV_64
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
  
- 	  https://www.musl-libc.org/
- 
-+config BR2_TOOLCHAIN_BUILDROOT_NONE
-+	bool "none"
-+	depends on !BR2_PACKAGE_UCLIBC_SUPPORTS && \
-+		!BR2_PACKAGE_GLIBC_SUPPORTS && \
-+		!BR2_PACKAGE_MUSL_SUPPORTS
-+	help
-+	  This option is visible if no C library is available for the
-+	  currently selected configuration. If you select this option,
-+	  the build will refuse to start as Buildroot needs a C
-+	  library to build a toolchain. Change your configuration
-+	  settings to make sure one of the C libraries is selected.
++comment "glibc on RISC-V 32-bit needs a toolchain w/ headers >= 5.4"
++	depends on BR2_RISCV_32
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
 +
- endchoice
- 
- config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
+ 	depends on BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
 -- 
 2.37.3
 
