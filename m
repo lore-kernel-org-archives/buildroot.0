@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C7BC38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 01:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C010C38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 02:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA00260BAA;
-	Wed, 26 Oct 2022 01:41:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA00260BAA
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6484402EB;
+	Wed, 26 Oct 2022 02:35:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6484402EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wXifIbLFa_hQ; Wed, 26 Oct 2022 01:41:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iFQZNF7J8Bnq; Wed, 26 Oct 2022 02:35:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4C8F60A64;
-	Wed, 26 Oct 2022 01:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4C8F60A64
+	by smtp2.osuosl.org (Postfix) with ESMTP id C333740260;
+	Wed, 26 Oct 2022 02:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C333740260
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A97601BF2FE
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 01:40:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDA601BF2CF
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 02:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8520560A64
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 01:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8520560A64
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5D9660BAB
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 02:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5D9660BAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qF8KRwRLjR4U for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 01:40:56 +0000 (UTC)
+ with ESMTP id AceyYpt1R7c9 for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 02:35:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6424C6059F
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6424C6059F
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 01:40:56 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id 63so2541036iov.8
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 18:40:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B18C060BAA
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B18C060BAA
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 02:35:38 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id r1so1767592ilg.6
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 19:35:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=X9BWqbRX2LgjvBkVVl4ChltbIJDd+diX0DjpQVThpx4=;
- b=ttYD3jUtQYzFR4S3p6GutD+KE9SvRbRVK6nyBMtV99U6pFVe6GdOJh+qGKzz5iL6VF
- qvkqi0MtFGV+1/snkRiBVb7avjKKaxLdPdZMjpCX58L74vGMB1OA2lb3zmykJucfqlT9
- u/e9eJDcIJHcyV02IGeRfD6khKgpMbphmLpxyI8kZkZJtno4qxb9sYx6cjsz+B5jXQIz
- 8GVBR4bXd1wc2bkm+nyjJkyruHuOUCCbybnuxUMI3jYDmdjhhKcKAVY01PtTKbGa5qi9
- xlQK/I2nk6tUoTcsEgBBHKIPc+WYA+e7gYXJwIGOppNlwV/nopqXPgpvrrY9SuLC3z8G
- vTmA==
-X-Gm-Message-State: ACrzQf0Xokgz9qm6V7XwxntN3i6cbhRy0jcI8vra9k1r+krXu1wr4vhX
- IZmlMTft5+i9+L4z8BflcynSXP/tO/deVA==
-X-Google-Smtp-Source: AMsMyM7J20YpQikFq61siOvoKnlx+MIfdCLKJ3SXqU9XgeHUPK9wMCpmFOprfHzPlbU+CjpXBfZHOg==
-X-Received: by 2002:a02:ab86:0:b0:374:2da8:ed19 with SMTP id
- t6-20020a02ab86000000b003742da8ed19mr7042609jan.213.1666748454896; 
- Tue, 25 Oct 2022 18:40:54 -0700 (PDT)
+ bh=oJdF9ofci+8CoiifBi1xVAwlLA/1hK5wLeede6Rq+Ps=;
+ b=o9Fnr7uhQjrsodSowbnzBGKvyH4qwbi6U9+/m216hMNyuLH9g6qsoK//Osbb3FVPi3
+ GkvkXnNemQeYnII2sLuSpcSUnvwSziYdwgV/FHS/kDlVIa0Y0C/B7iJrDbq/lR4vmICc
+ rBYdj6yj0xPE+bpgeoypXi7Y2BMIup3VNcS8wWFItM8WyGLokfpQaUd5wy2HlA3SzDVl
+ W3UxaNl2u7leJ/9YgEv0kgwXbhzPCjf7JaqX8G/1Kz38Ci/DitxoN0QsOIEBQVu9KX52
+ UIyFlsS6/nz+Rp7c8D6WFVQWbRZl5erU0hPy8/YeWcgwu7eziiS+dZfuY7FEWtF6lsbg
+ FAEg==
+X-Gm-Message-State: ACrzQf07RLv0VZyaGnkW0KenhixAiE71KtdGGPc121ZuAOKngAdgb/Pu
+ QBRH9CfbCQjA27LOdCYnnKn6DXN78uzfKg==
+X-Google-Smtp-Source: AMsMyM7THlIbrd7uP+wvaQJPxGBRNeBwgQ2hitQBQgBuZM01GGus/2IE7hDrCdlzYxtOtMu4Px/xDw==
+X-Received: by 2002:a92:d685:0:b0:2ff:9abf:de49 with SMTP id
+ p5-20020a92d685000000b002ff9abfde49mr11742595iln.42.1666751737402; 
+ Tue, 25 Oct 2022 19:35:37 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- cp15-20020a056638480f00b00375147442f3sm264050jab.16.2022.10.25.18.40.54
+ 18-20020a92c652000000b002f66aacb98asm1594151ill.70.2022.10.25.19.35.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Oct 2022 18:40:54 -0700 (PDT)
+ Tue, 25 Oct 2022 19:35:36 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Oct 2022 19:40:52 -0600
-Message-Id: <20221026014052.587418-1-james.hilliard1@gmail.com>
+Date: Tue, 25 Oct 2022 20:35:05 -0600
+Message-Id: <20221026023505.616591-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=X9BWqbRX2LgjvBkVVl4ChltbIJDd+diX0DjpQVThpx4=;
- b=aK+1bKg7LgHKUzCofEmkjySQWYGKMHvw6f/76vW7gipxbQblK0FtdTX6y8CW9Pq4oK
- CDvU0+v7r1Hg6t/XzrQk9lxBB2ukkJyHhjUSQ0Qi/6COt2iMW34+VhACXQCKPHTa+QHj
- 25m0WMLa83XsoGsfsYpq6so6olgiJmThA73JQ4QQc4htTktJ5hDgfqxpLZA7RdWUe9aJ
- +F4sbjQbqixMcRnBVp6hhlRc6OQ+JND/Z6vBuMlu6CmBUTJ1jWcwV1WS/1syh01A11AH
- VPFJWfBJiA4+YiQTxykGtzgGWjAY1gOI14y/jSe4U5X9L89ASq4sJVWIuVDAI3nbYZrZ
- 0bWw==
+ bh=oJdF9ofci+8CoiifBi1xVAwlLA/1hK5wLeede6Rq+Ps=;
+ b=GU75GQKbZy0EhUsJICb0W8dh+psBFMZcaxPJc6xwsNvgAnylTiMscl+j84nJytTxKT
+ ZbXwGGgt0Zl2JLOk1qXMCm2TV87Hv2GO6RQACa/Si2H11MNlq8kuQCgo5Cc2MwNNBHmT
+ 1rpjsYbTeA29nWB4nIprC3wdUZ+nyVOVxCHWJ3293pkMYzyL6R6NM7AQYlY2spu0jLCW
+ uxY77/RzMXBa+R9QCPVZwRS7kopdQ7AsgAhY2GoP8K8dCN7fL0siQaWPbNVelYLzqSpF
+ aQh+ajOZ3yuOETlzdfuMofsKf2JPPdyPie5ogrw24zmgtgzjaEqKUThDftt7JXO8V6oN
+ PxqA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=aK+1bKg7
-Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
- 1.1.3.post0
+ header.a=rsa-sha256 header.s=20210112 header.b=GU75GQKb
+Subject: [Buildroot] [PATCH 1/1] package/python-numpy: bump to version 1.23.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +93,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to date update:
+https://github.com/numpy/numpy/commit/4fc42f99b7f96b1000c777a478f58e2744bb3656
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-numpy/python-numpy.hash | 8 ++++----
+ package/python-numpy/python-numpy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index c1870c886d..8e2a95b03e 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  f424fbd9afeed575dd2ba5f0ac66e30b  greenlet-1.1.2.tar.gz
--sha256  e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a  greenlet-1.1.2.tar.gz
-+md5  b3e86eb9ab0908e6e3ef542e9b94d7e1  greenlet-1.1.3.post0.tar.gz
-+sha256  f5e09dc5c6e1796969fd4b775ea1417d70e49a5df29aaa8e5d10675d9e11872c  greenlet-1.1.3.post0.tar.gz
- # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 72d2747970..b4a0e5af08 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index c0dcc5d27f..2a2dec44da 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,8 +1,8 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.21.2
+-sha256  76af194fbc117934ec5bbe2ff15177adbd05aeed23f18ee209ed88edcd777e05  numpy-1.21.2.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.4
++sha256  ed2cc92af0efad20198638c69bb0fc2870a58dabfba6eb722c933b48556c686c  numpy-1.23.4.tar.gz
+ # License files, locally calculated
+-sha256  bc1b0af15cdc9415ea26c5f1df352c226ac86425ec0fb9ab38d111018bf1c6f2  LICENSE.txt
+-sha256  2be6947e0432ecf7950ee8fe38681316749dd06d1de17c9ec4de6d2f55adb3a1  numpy/core/src/multiarray/dragon4.c
++sha256  0f88787955e7131224f53a8c3f3e859dc502408e3a539a4dcf61fb7888b5b984  LICENSE.txt
++sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
+ sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/core/include/numpy/libdivide/LICENSE.txt
+ sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55  numpy/linalg/lapack_lite/LICENSE.txt
+ sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e  tools/npy_tempita/license.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 417fe81f57..4f4848c4ba 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 1.1.2
-+PYTHON_GREENLET_VERSION = 1.1.3.post0
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/0c/10/754e21b5bea89d0e73f99d60c83754df7cc64db74f47d98ab187669ce341
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/ea/37/e54ce453b298e890f59dba3db32461579328a07d5b65e3eabf80f971c099
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+-PYTHON_NUMPY_VERSION = 1.21.2
++PYTHON_NUMPY_VERSION = 1.23.4
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
 -- 
 2.34.1
 
