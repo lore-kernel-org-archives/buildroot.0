@@ -1,74 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31EA5C38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 18:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB48C38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 18:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7E4B408C1;
-	Wed, 26 Oct 2022 18:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E4B408C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id B645540571;
+	Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B645540571
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lH6M4i10pKDA; Wed, 26 Oct 2022 18:11:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jmn59H7pLFIx; Wed, 26 Oct 2022 18:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A59A6408B6;
-	Wed, 26 Oct 2022 18:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A59A6408B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF3FA40136;
+	Wed, 26 Oct 2022 18:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF3FA40136
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BC1A1BF580
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:11:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F41731BF279
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14A2460D78
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:11:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14A2460D78
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC0D060D7F
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC0D060D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NZGEIapW8JrI for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 18:11:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 980CA60D77
-Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
- by smtp3.osuosl.org (Postfix) with ESMTP id 980CA60D77
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 18:11:29 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.83.94])
- by Aruba Outgoing Smtp  with ESMTPSA
- id nksBoodbLuz2mnksBouLpH; Wed, 26 Oct 2022 20:11:28 +0200
-Message-ID: <15ee7ca2-eb3b-3a5a-549a-de372f7c9810@benettiengineering.com>
-Date: Wed, 26 Oct 2022 20:11:26 +0200
+ with ESMTP id 6OtVn8xT8DVE for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 18:34:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D8EE60D78
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D8EE60D78
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 18:34:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 9AB6EE0008;
+ Wed, 26 Oct 2022 18:34:31 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Wed, 26 Oct 2022 20:34:26 +0200
+Message-Id: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-To: kris@embeddedTS.com, buildroot@buildroot.org
-References: <20221026132634.999254-1-giulio.benetti@benettiengineering.com>
- <20221026132634.999254-8-giulio.benetti@benettiengineering.com>
- <1666805548.3174.1.camel@embeddedTS.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <1666805548.3174.1.camel@embeddedTS.com>
-X-CMAE-Envelope: MS4xfDAdsmBJPPmE2UjrcTkX1hWSqhD0goEmQW/NUU8l2fIvu3wQYoLVg6rayhh+LCW1uK9404CahLebpP1anoVZ4R4ri4be3elMza3P68HhSVCW/5YxtUwf
- zbPT6l/I5RxcGnMHHQhO3GWkrtv65iqYHc0I6FH5o8ZacIVv/qGSbe8NrzaRvhKSgL67ZfUePZ2+si4WEZO8nQ5ESizfI97GO+I8heerJLwIgw4glc7CPGTN
- ae5nsWtYv2oTrBCfxuKON5boQSjrgHN+6Mbt2UItgi7PElEWVIEMLv/XLVYrhGDdHQ0b2YHPrFlGnJLbRSzlZtX7mnhkp0oGtD9aJaq//L8lSGCJUxlPn+jW
- Uqnos5ut
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1666807888; bh=hPD3inRhpK9hAZsXV2axDK0+v0BviO6McgqCmItE1G4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Nk2GWwM4s2zD5fBqEfIg/krA7yslJiADNgjToo9iPSSVJT782HXkEqoPLYQ4aupC5
- 7E3mbllDVnBiZFZmdMGuhzEtwqz80vIQ5qP6Qsg1aGr0bVY287u9v7iHa3052yHkiH
- INpyH6AC/eC99sGxHATcWMGHY7CKCjJyibR8CXyYxv/yW7SXmCfLHU8OA11wsZ9VCF
- QFT8jROchl098HUeHPTkrXSlD6bDdTfOth0CTNDIm4Ih7vsWP+zcPUf8NzWr4LAflc
- WvqM6A71kb5itbktu1Pe/Av6TNvNiBbZhh2t55UEL0bMseMFvFXHn3SuVNMBDSdGhB
- JvZSSNNiZUdKw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666809272;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=KQwAf066rauTWNFqp8vAI79wNvgkILJoRe8umW5/c/c=;
+ b=QCWkEpq6iXVh0Wwy90OwZoEZFfn7E2IRHLn/rVASLfGwcvtHmRrInhIEdcE9sBuVzRzI0L
+ qiCjGN3+KLK7XUPuzlJ74IluNTv7eJnafkfi7l0wu78y+XhV2LHPowS8/Jan0kYWqVD9wI
+ OfU0r4WWymHkQltXkY5E9JMdXoG1QhS5ZMqQlIeGfnMQcpt0jECCbZOTKdNP/3RiQNaH6I
+ MEExibm1sDbiw8C134r3EWJIan57CLF9ZLaJ2OOURvDrRA8x5ZSFFYNIpKscvFD4GDpgkf
+ xOYIeELyaLqVf99MHqVkvVECqO7IARQTsx8f2XbknjE7oq6bsdw5eorM0sDm9g==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Nk2GWwM4
-Subject: Re: [Buildroot] [PATCH 7/7] package/wilc-driver: disable package
- for s390x architecture
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QCWkEpq6
+Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: introduce
+ BR2_TOOLCHAIN_BUILDROOT_NONE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,68 +72,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Kris, All,
+In the internal toolchain backend, we have a choice..endchoice block
+to allow the user to select the C library, between glibc, uClibc and
+musl.
 
-sorry for my previous HTML e-mail,
+However, there are situations were no C library at all is
+supported. In this case, the choice does not appear, and does not
+allow to see the Config.in comments that are within the
+choice..endchoice block and that may explain why no C library is
+available.
 
-On 26/10/22 19:32, Kris Bahnsen via buildroot wrote:
-> On Wed, 2022-10-26 at 15:26 +0200, Giulio Benetti wrote:
->> s390x doesn't support CONFIG_WIRELESS in Linux so let's disable this
->> package for this architecture.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   package/wilc-driver/Config.in | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
->> index 7ed062bb66..7f970bd38b 100644
->> --- a/package/wilc-driver/Config.in
->> +++ b/package/wilc-driver/Config.in
->> @@ -1,5 +1,6 @@
->>   config BR2_PACKAGE_WILC_DRIVER
->>   	bool "wilc kernel module"
->> +	depends on !BR2_s390x
->>   	depends on BR2_LINUX_KERNEL
->>   	help
->>   	  External kernel module for WILC1000/3000 devices.
->> @@ -59,4 +60,5 @@ endif
->>   endif
->>   
->>   comment "wilc kernel module needs a Linux kernel to be built"
->> +	depends on !BR2_s390x
->>   	depends on !BR2_LINUX_KERNEL
-> 
-> I don't know much on the s390x arch, nor Buildroot paradigms for disabling packages
-> per-architecture, however the change itself looks good to me.
+For example, on RISC-V 32-bit, the only C library supported is glibc,
+and the minimum kernel header version required by glibc on this
+architecture is 5.4.0. In a future commit, we are going to add this
+dependency on glibc (to fix build issues on configurations that have
+headers < 5.4.0). But since glibc is the only supported C library on
+RISC-V 32-bit, it means that the choice..endchoice for the C library
+contains no entry, preventing from seeing the Config.in comment.
 
-If you check here:
-https://elixir.bootlin.com/linux/latest/source/net/Kconfig#L371
+To address this issue, this commit adds a "dummy"
+BR2_TOOLCHAIN_BUILDROOT_NONE option that shows up in the
+choice..endchoice only when no C library is available. Thanks to this,
+the choice..endchoice is never empty, and the Config.in comments can
+be seen.
 
-You will see that Linux Wireless subsystem is activated only when s390x 
-is not enabled.
+If the user keeps BR2_TOOLCHAIN_BUILDROOT_NONE selected, then the
+build will anyway abort early because package/Makefile.in has a check
+to verify that a C library is selected, and aborts the build if not.
 
-This also created a build failure with another rtlxxxx driver due to that:
-http://autobuild.buildroot.net/results/693053491ba61edcff0f75a4f30c13958e7e12ce/
+Some could say that the problem should be resolved by instead
+preventing the selection of headers < 5.4.0 on RISC-V 32-bit, but that
+is difficult to do as the user can choose a custom header version, or
+simply specific that (s)he wants to use the headers of the kernel
+being built. In those situations, it's difficult to prevent selecting
+headers < 5.4.0.
 
-This is why I came in with this patchset that prevents that kind of 
-build failure.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/toolchain-buildroot/Config.in | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-> Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
-
-Thank you
-Best regards
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 6d55f87435..26d731d976 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -80,6 +80,18 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 
+ 	  https://www.musl-libc.org/
+ 
++config BR2_TOOLCHAIN_BUILDROOT_NONE
++	bool "none"
++	depends on !BR2_PACKAGE_UCLIBC_SUPPORTS && \
++		!BR2_PACKAGE_GLIBC_SUPPORTS && \
++		!BR2_PACKAGE_MUSL_SUPPORTS
++	help
++	  This option is visible if no C library is available for the
++	  currently selected configuration. If you select this option,
++	  the build will refuse to start as Buildroot needs a C
++	  library to build a toolchain. Change your configuration
++	  settings to make sure one of the C libraries is selected.
++
+ endchoice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.37.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
