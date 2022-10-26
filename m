@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C91BAECDFA1
-	for <buildroot@archiver.kernel.org>; Tue, 25 Oct 2022 22:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C7BC38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 01:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62A8380D3D;
-	Tue, 25 Oct 2022 22:38:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62A8380D3D
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA00260BAA;
+	Wed, 26 Oct 2022 01:41:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA00260BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YtDpYg7ZXgR6; Tue, 25 Oct 2022 22:38:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wXifIbLFa_hQ; Wed, 26 Oct 2022 01:41:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DDB780D0F;
-	Tue, 25 Oct 2022 22:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DDB780D0F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D9A6C1BF5DD
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 22:38:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4C8F60A64;
+	Wed, 26 Oct 2022 01:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4C8F60A64
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A97601BF2FE
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 01:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B498C80D0F
- for <buildroot@lists.busybox.net>; Tue, 25 Oct 2022 22:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B498C80D0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8520560A64
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 01:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8520560A64
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gDJt0v0A3FKt for <buildroot@lists.busybox.net>;
- Tue, 25 Oct 2022 22:38:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qF8KRwRLjR4U for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 01:40:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8644780CE0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8644780CE0
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 22:38:09 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- v130-20020a1cac88000000b003bcde03bd44so206101wme.5
- for <buildroot@buildroot.org>; Tue, 25 Oct 2022 15:38:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6424C6059F
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6424C6059F
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 01:40:56 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id 63so2541036iov.8
+ for <buildroot@buildroot.org>; Tue, 25 Oct 2022 18:40:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=gR2iKuBkAhSFHWzmLGS/7b6D9D6Zq8UwFESjZblUaS4=;
- b=QbnbOoMOo58N4qhh9q7MAAV4egkYIg7pZjbYsOQcJTg9CWk9a60fBbLaWRL6qTER46
- XgYZ3bqsD7DyHmHH+/Aev5rsUWjxBon1jUQs9BZAnbYQ8zSUrAjFkenqHyqCIKnHqgw8
- sA+Hs5vBNLTB3xlxRdWpzepeYeJivZSC+Ux8rCzw2ar4euOG+el+XarIn0/22Hk9jRRr
- Xq5PpS0T840rfD1foQ+udxTAih6Pwry18Ga4ru++9U65xHuHWhyjW93swXV7v+l1KUW4
- giMPlNi9uZcCgh7o2ga0TBo9xjmpXF5Tg/XmPFAHj9wrCXwVoiGyvs/w9p4eXYzqvQYK
- 2r3Q==
-X-Gm-Message-State: ACrzQf2y/0J6KH/5dU53rC54TVHVmWrA7KvFw/d/6TRf3ISpxwiEc6/c
- +f6q339POUa57/AYgkmA/4kdUUslcUo=
-X-Google-Smtp-Source: AMsMyM7D6DgBt/Pl9ciZAfbeDw/uYMAs+XrL5mGcZi/ELT4igLy2WCLbci6qQzJORbGujBLx8CIB5A==
-X-Received: by 2002:a05:600c:1e2a:b0:3c8:353b:253f with SMTP id
- ay42-20020a05600c1e2a00b003c8353b253fmr310609wmb.51.1666737487360; 
- Tue, 25 Oct 2022 15:38:07 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j9-20020adfe509000000b0023647841c5bsm3722080wrm.60.2022.10.25.15.38.06
+ bh=X9BWqbRX2LgjvBkVVl4ChltbIJDd+diX0DjpQVThpx4=;
+ b=ttYD3jUtQYzFR4S3p6GutD+KE9SvRbRVK6nyBMtV99U6pFVe6GdOJh+qGKzz5iL6VF
+ qvkqi0MtFGV+1/snkRiBVb7avjKKaxLdPdZMjpCX58L74vGMB1OA2lb3zmykJucfqlT9
+ u/e9eJDcIJHcyV02IGeRfD6khKgpMbphmLpxyI8kZkZJtno4qxb9sYx6cjsz+B5jXQIz
+ 8GVBR4bXd1wc2bkm+nyjJkyruHuOUCCbybnuxUMI3jYDmdjhhKcKAVY01PtTKbGa5qi9
+ xlQK/I2nk6tUoTcsEgBBHKIPc+WYA+e7gYXJwIGOppNlwV/nopqXPgpvrrY9SuLC3z8G
+ vTmA==
+X-Gm-Message-State: ACrzQf0Xokgz9qm6V7XwxntN3i6cbhRy0jcI8vra9k1r+krXu1wr4vhX
+ IZmlMTft5+i9+L4z8BflcynSXP/tO/deVA==
+X-Google-Smtp-Source: AMsMyM7J20YpQikFq61siOvoKnlx+MIfdCLKJ3SXqU9XgeHUPK9wMCpmFOprfHzPlbU+CjpXBfZHOg==
+X-Received: by 2002:a02:ab86:0:b0:374:2da8:ed19 with SMTP id
+ t6-20020a02ab86000000b003742da8ed19mr7042609jan.213.1666748454896; 
+ Tue, 25 Oct 2022 18:40:54 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ cp15-20020a056638480f00b00375147442f3sm264050jab.16.2022.10.25.18.40.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Oct 2022 15:38:06 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 25 Oct 2022 18:40:54 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Oct 2022 00:38:04 +0200
-Message-Id: <20221025223804.583594-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Tue, 25 Oct 2022 19:40:52 -0600
+Message-Id: <20221026014052.587418-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gR2iKuBkAhSFHWzmLGS/7b6D9D6Zq8UwFESjZblUaS4=;
- b=BJwMNwVcIFNJnYGpxSizRFNa2Vcx0PJrEgtV5M6nF3v3stAr5U0MXol1SQ3FZxn/MW
- rKx7jrBFQXPPU78lxxhwnyHAcW9aWHgD3Ho4JsYF32VKyjh+BMg59GAiD5qKA0M0Iyog
- viYfA6+XeF1261VfeajQFIyp8kd8fDsnlD0c6oWG4Nrv63BDwmC46yDz8BacNGunMe1p
- jQqbe8h9WIsIPwWAGEIMK16QImq+n7PRKYjhnnCjU/WTDa4/wmmykm5JUWvJNp6W1jQT
- X4UX6btJVt/qOgrHgCHBli83HOQz9zMSqOBubTG7Mph9GPGnbEEYl/duJKyw9bGHh2cb
- NKSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=X9BWqbRX2LgjvBkVVl4ChltbIJDd+diX0DjpQVThpx4=;
+ b=aK+1bKg7LgHKUzCofEmkjySQWYGKMHvw6f/76vW7gipxbQblK0FtdTX6y8CW9Pq4oK
+ CDvU0+v7r1Hg6t/XzrQk9lxBB2ukkJyHhjUSQ0Qi/6COt2iMW34+VhACXQCKPHTa+QHj
+ 25m0WMLa83XsoGsfsYpq6so6olgiJmThA73JQ4QQc4htTktJ5hDgfqxpLZA7RdWUe9aJ
+ +F4sbjQbqixMcRnBVp6hhlRc6OQ+JND/Z6vBuMlu6CmBUTJ1jWcwV1WS/1syh01A11AH
+ VPFJWfBJiA4+YiQTxykGtzgGWjAY1gOI14y/jSe4U5X9L89ASq4sJVWIuVDAI3nbYZrZ
+ 0bWw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BJwMNwVc
-Subject: [Buildroot] [PATCH 1/1] package/file: fix uclibc build
+ header.a=rsa-sha256 header.s=20210112 header.b=aK+1bKg7
+Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
+ 1.1.3.post0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,77 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following uclibc build failure raised since bump to version 5.43
-in commit f17b56f1aa43361eff4a81538a61e34c509ebb70 and
-https://github.com/file/file/commit/c80065fe6900be5e794941e29b32440e9969b1c3:
-
-file.c: In function 'fname_print':
-file.c:605:10: error: macro "putc" requires 2 arguments, but only 1 given
-  605 |    putc(c);
-      |          ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/7ff1dd9f79408d2e6286c005302b6f3c505ab259
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...ile.c-fix-build-without-wide-support.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/file/0001-src-file.c-fix-build-without-wide-support.patch
+ package/python-greenlet/python-greenlet.hash | 4 ++--
+ package/python-greenlet/python-greenlet.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/file/0001-src-file.c-fix-build-without-wide-support.patch b/package/file/0001-src-file.c-fix-build-without-wide-support.patch
-new file mode 100644
-index 0000000000..29be9fa2cd
---- /dev/null
-+++ b/package/file/0001-src-file.c-fix-build-without-wide-support.patch
-@@ -0,0 +1,39 @@
-+From f2ab09d0e1388657f6b7e62bacc383ebea91f5b9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 26 Oct 2022 00:23:32 +0200
-+Subject: [PATCH] src/file.c: fix build without wide support
-+
-+Fix the following build failure without wide support (e.g. on uclibc)
-+raised since version 5.43 and
-+https://github.com/file/file/commit/c80065fe6900be5e794941e29b32440e9969b1c3:
-+
-+file.c: In function 'fname_print':
-+file.c:605:10: error: macro "putc" requires 2 arguments, but only 1 given
-+  605 |    putc(c);
-+      |          ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7ff1dd9f79408d2e6286c005302b6f3c505ab259
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugs.astron.com/view.php?id=398]
-+---
-+ src/file.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/file.c b/src/file.c
-+index f5f46524..1c23defc 100644
-+--- a/src/file.c
-++++ b/src/file.c
-+@@ -615,7 +615,7 @@ fname_print(const char *inname)
-+ 	for (i = 0; i < n; i++) {
-+ 		unsigned char c = CAST(unsigned char, inname[i]);
-+ 		if (isprint(c)) {
-+-			putc(c);
-++			putc(c, stdout);
-+ 			continue;
-+ 		}
-+ 		file_octal(c);
-+-- 
-+2.35.1
-+
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+index c1870c886d..8e2a95b03e 100644
+--- a/package/python-greenlet/python-greenlet.hash
++++ b/package/python-greenlet/python-greenlet.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/greenlet/json
+-md5  f424fbd9afeed575dd2ba5f0ac66e30b  greenlet-1.1.2.tar.gz
+-sha256  e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a  greenlet-1.1.2.tar.gz
++md5  b3e86eb9ab0908e6e3ef542e9b94d7e1  greenlet-1.1.3.post0.tar.gz
++sha256  f5e09dc5c6e1796969fd4b775ea1417d70e49a5df29aaa8e5d10675d9e11872c  greenlet-1.1.3.post0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
+ sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+index 72d2747970..b4a0e5af08 100644
+--- a/package/python-greenlet/python-greenlet.mk
++++ b/package/python-greenlet/python-greenlet.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GREENLET_VERSION = 1.1.2
++PYTHON_GREENLET_VERSION = 1.1.3.post0
+ PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
+-PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/0c/10/754e21b5bea89d0e73f99d60c83754df7cc64db74f47d98ab187669ce341
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/ea/37/e54ce453b298e890f59dba3db32461579328a07d5b65e3eabf80f971c099
+ PYTHON_GREENLET_SETUP_TYPE = setuptools
+ PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
+ PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
