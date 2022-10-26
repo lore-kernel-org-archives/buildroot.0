@@ -1,91 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DACC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 922A1C38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C50081327;
-	Wed, 26 Oct 2022 21:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C50081327
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B95260E00;
+	Wed, 26 Oct 2022 21:15:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B95260E00
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cFjmuDdxhcfI; Wed, 26 Oct 2022 21:15:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73E7B60DFC;
+	Wed, 26 Oct 2022 21:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73E7B60DFC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 363D11BF31D
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:15:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 106248132C
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 106248132C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9aXW2PCkbBDm; Wed, 26 Oct 2022 21:14:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBBBA8131D;
-	Wed, 26 Oct 2022 21:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBBBA8131D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 284041BF31D
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:14:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02C274023B
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:14:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02C274023B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FT2-NIlnDU1D for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 21:14:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D3C840219
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
- [IPv6:2a00:1450:4864:20::234])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5D3C840219
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:14:12 +0000 (UTC)
-Received: by mail-lj1-x234.google.com with SMTP id j14so24133322ljh.12
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 14:14:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=/P1TajJbGKUeLENOVgHmUZtj778O3WDgrv0kA1t/Gk8=;
- b=WXbPcJEwSrP11Kx6rnAME3KgCj6NuB0UgmcLZ7kCt26PrmdQIsQ9AElT9U1ANuYOzD
- 03IYA/7TOb3gv/4YWLPcHlTZ9EGwjFn+Zff1fz1qO3wl9cVYwdCzb8rWnh02nTshdJXH
- CAw3haNbqvEZpRKp5ySMSw1oxxZoxRS9YdujKS3kF5+SdpPnn9ONryLg3Mqj9IWaQozk
- R0NJEHb5QZNcWjrYWzTbvozJ9wTZ2emzCbHzHrUjSwA6Sz1MERu79VD+EZWuLV4bVF3V
- 0Xa87gyzPBhtS28/hbW66/hWIaWAIs7VtuwqH5V7YMu1G3/OqEibPwBTVWFlwKk8W0Tj
- s9OQ==
-X-Gm-Message-State: ACrzQf1iWSP96nbLQuW8dFSc74c7ImI28Uv3IeJAcwe2ri02sqqgAi1l
- FIW8SR1W+ya0KBU0+e3qciAu4yOsJ/ZZ/Q==
-X-Google-Smtp-Source: AMsMyM4Y0Fxesn9tttJ7noxHBO7HDSvPnO/wiT4DWuIbsfCehU3Zb1LTdOtW3C91feqYNguDczf3ng==
-X-Received: by 2002:a2e:a9a9:0:b0:261:bf5a:8ff3 with SMTP id
- x41-20020a2ea9a9000000b00261bf5a8ff3mr17067049ljq.252.1666818849663; 
- Wed, 26 Oct 2022 14:14:09 -0700 (PDT)
-Received: from wkz-x13 (h-98-128-229-186.NA.cust.bahnhof.se. [98.128.229.186])
- by smtp.gmail.com with ESMTPSA id
- k16-20020a05651c10b000b0026dcac60624sm831465ljn.108.2022.10.26.14.14.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Oct 2022 14:14:08 -0700 (PDT)
-From: Tobias Waldekranz <tobias@waldekranz.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20221026221528.393a1d39@windsurf>
-References: <20221020141412.346992-1-tobias@waldekranz.com>
- <20221020141412.346992-4-tobias@waldekranz.com>
- <20221026221528.393a1d39@windsurf>
-Date: Wed, 26 Oct 2022 23:14:08 +0200
-Message-ID: <875yg69tjz.fsf@waldekranz.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BpgT_tNT4qqn for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 21:15:52 +0000 (UTC)
+X-Greylist: delayed 00:06:01 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE6A181326
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com
+ [64.147.123.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE6A181326
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:15:51 +0000 (UTC)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+ by mailout.west.internal (Postfix) with ESMTP id D330B3200950
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:09:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+ by compute1.internal (MEProxy); Wed, 26 Oct 2022 17:09:44 -0400
+X-ME-Sender: <xms:GKJZY9wHLDAW27qBGYppGxpgWAA_4ZsbpOhRxxwzY78DHdoQk98tCA>
+ <xme:GKJZY9QclWDEVYRy-YhCIlUMT4-zWpKgHCRYt9kkORDVSDHa_tuvRwWqpDRLDfC1f
+ B4x4--HhVjtERna>
+X-ME-Received: <xmr:GKJZY3UWNHqrVNfCLAjZJXelXhJ3-nhZV_Wveqh4j5wSC9LP1NXRgktanihr7BCCupWiw1RiLg7d7AtTpNazlg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdduheejucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkofggtgfgsehtjeertd
+ ertddvnecuhfhrohhmpeffrghnihhlohcuoehmrghilhesuggsrhhgnhdrtghhqeenucgg
+ tffrrghtthgvrhhnpeetueekgfetheeileekiedtveeiieefgfevgfegjeekuefffedvve
+ fhkeetlefggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+ ohhmpehmrghilhesuggsrhhgnhdrtghh
+X-ME-Proxy: <xmx:GKJZY_gZGkMQB87lArX7hD_6X06r0p3jKswKHCsOs76jltncOQNwww>
+ <xmx:GKJZY_CiVUJvZjxtwskU6urpOlzbetJoRfA8eMzP28RQiQxQZ3f_Sg>
+ <xmx:GKJZY4KcAAUWu9UP4ILCMJRxgRMVejoA0S35tgwdToC-Cbl_OYdVcw>
+ <xmx:GKJZYyMSq-HAX5EOgo_xstL0vySNmExLJx6K2jCZLATQmQRpDL151A>
+Feedback-ID: i85804083:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:09:43 -0400 (EDT)
+Date: Wed, 26 Oct 2022 23:09:17 +0200
+From: Danilo <mail@dbrgn.ch>
+To: buildroot@buildroot.org
+Message-ID: <20221026230917.5092886c@c3po>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=/P1TajJbGKUeLENOVgHmUZtj778O3WDgrv0kA1t/Gk8=;
- b=2TWpMmMQif3en1g0pBQ+lFxxZSBtqobqhZwC/5CoJvknCY155Mnaj837L4HyDd+VS3
- ejVAZAzAW5eBrKNlueKKffe0aFYjgxut+iZG1FY74kHsGplzHdIze2ytnLP4BYPB3kZI
- 2yZuFAa4k0wwMw45vnQ7nm76vP6poIr0wd63+RBbSB0W8piou+iIYZls+NtuQM3/DsLq
- ZvB5mOSSUjszShyMLX3Z9ZtRaWeqwaQgPhy1UxRL8jqWsN1Y+HVf6UUkFPDhsXK50gGO
- aljrCLyu9M8VFt16+eVYcHDHu98zkrGP9c/zLmQ7bMkHrVxSNn9Xez1oC5HYjpS/aFFh
- YM4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=waldekranz-com.20210112.gappssmtp.com
- header.i=@waldekranz-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=2TWpMmMQ
-Subject: Re: [Buildroot] [PATCH 3/4] package/libbpf: extract dependencies to
- separate kconfig symbol
+ d=dbrgn.ch; h=cc
+ :content-transfer-encoding:content-type:date:date:from:from
+ :in-reply-to:message-id:mime-version:reply-to:sender:subject
+ :subject:to:to; s=fm1; t=1666818584; x=1666904984; bh=16LiSmWCqp
+ gxzR+FW+a9BcBLi8XwbeHGSAoJT0IW5DI=; b=1MnH27iupu4bTsHJ9L+eXG7jnz
+ jAi24447uPjkflu2jcXIBgV9MsFOdXqusMbYDsWEl2Ym/cZGL9VFlhQDqaanOLX/
+ CoZnMzJVEBT3borChiqXH0w1tH1MGKnJu2A947/6C2teYuQLcCjD/UFZQvkmid2b
+ NDGo0pwV/7c76dRH/gbIItBc/Ky4+vO+s+kUGmEUOJGK1AQNRYM4uYODb0WGV2qb
+ ZydifmSDTpTD8C7K4aZHCz4wo9MzLm2Xju/M8Cav+wsV/LTwhjH/tlvJk0rqbDef
+ 2mpc072l03P7l0DD1QKo9yCi4dbRAYjZEznKlt93g724Jvxqq+4KEd2D8EgA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=cc:content-transfer-encoding:content-type
+ :date:date:feedback-id:feedback-id:from:from:in-reply-to
+ :message-id:mime-version:reply-to:sender:subject:subject:to:to
+ :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+ fm3; t=1666818584; x=1666904984; bh=16LiSmWCqpgxzR+FW+a9BcBLi8Xw
+ beHGSAoJT0IW5DI=; b=WvwYTNbQH6DMLV9QQtoKg2kGK45HA798r2LvHUdggx4r
+ zLL/09jfwXR1AHCQsUUbJ2nIBBN8KysrHv1ULQaMkv4USk8tJ+KfuEMOr5wWGHBj
+ 3C+Zr8aqALjSCr2en0/xHTiSG1D45T9zW8gahA4YZNkWDDCeiV0FXzC5WlU34FQo
+ IqbVSeAf4a4UCKOQZTByNdWqiD6tkuNOYs2M2XzLQ1jAqgmBiTu4O9MO1TZZB1Bz
+ qLvD9qdsTgoSKfW7E5brzt2KD7UyYN9n6yd+R9hTM2nwEj8VztRFzYs2ql9++H+m
+ mOf9oWnFCBXwGTh0drslgFLtxd/MnxDftlMlcYPn2w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=dbrgn.ch header.i=@dbrgn.ch
+ header.a=rsa-sha256 header.s=fm1 header.b=1MnH27iu; 
+ dkim=pass (2048-bit key,
+ unprotected) header.d=messagingengine.com header.i=@messagingengine.com
+ header.a=rsa-sha256 header.s=fm3 header.b=WvwYTNbQ
+Subject: [Buildroot] [PATCH 1/1] package/tealdeer: bump version to 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,79 +106,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On ons, okt 26, 2022 at 22:15, Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
-> Hello Tobias,
->
-> On Thu, 20 Oct 2022 16:14:11 +0200
-> Tobias Waldekranz <tobias@waldekranz.com> wrote:
->
->> This makes it obvious that the comment is just the negation of the
->> dependency requirements. It also makes it easier for other packages to
->> depend on libbpf.
->> 
->> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->> ---
->>  package/libbpf/Config.in | 15 ++++++++-------
->>  1 file changed, 8 insertions(+), 7 deletions(-)
->> 
->> diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
->> index 1465366c9e..7e816c193d 100644
->> --- a/package/libbpf/Config.in
->> +++ b/package/libbpf/Config.in
->> @@ -1,11 +1,16 @@
->> -config BR2_PACKAGE_LIBBPF
->> -	bool "libbpf"
->> +config BR2_PACKAGE_LIBBPF_SUPPORTED
->> +	bool
->>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->>  	depends on BR2_USE_WCHAR # elfutils
->>  	depends on !BR2_STATIC_LIBS # elfutils
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
->>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
->>  	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
->
-> I'm afraid, but we don't do this in Buildroot, in none of our packages.
-> I think our rationale is that by duplicating these dependencies, it is
-> easier to maintain the Config.in comment in the packages that select
-> BR2_PACKAGE_LIBBPF.
+Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+---
+ package/tealdeer/tealdeer.hash | 2 +-
+ package/tealdeer/tealdeer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fair enough, I will drop this change in v2 and copy the information to
-kmemd.mk instead. Is there a convention for how to comment dependencies
-that stem from grandparent packages? E.g. v2, kmemd.mk will declare:
+diff --git a/package/tealdeer/tealdeer.hash b/package/tealdeer/tealdeer.hash
+index 0e53174841..1d9eb7bf25 100644
+--- a/package/tealdeer/tealdeer.hash
++++ b/package/tealdeer/tealdeer.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  42febf9ee84721b9230077d62e2fc51201fd59624d3c776ccc1a634788768a60  tealdeer-1.5.0.tar.gz
++sha256  90690d3a6e2f6c7444c281865bd5b0787e0afa599f06b52b4283bea4541e1e77  tealdeer-1.6.1.tar.gz
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  a313b5e62b80a08f3aae0fa62ff3de8482ef55247299eb352ab44f87ef456b1b  LICENSE-MIT
+diff --git a/package/tealdeer/tealdeer.mk b/package/tealdeer/tealdeer.mk
+index c396225098..aabfe2983c 100644
+--- a/package/tealdeer/tealdeer.mk
++++ b/package/tealdeer/tealdeer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-   depends on BR2_USE_WCHAR # <comment>
-
-as libbpf requires it, but only because of its dependency on
-elfutils. So what is the proper <comment> in this case?
-
-"elfutils" or "libbpf"? Or maybe something like "elfutils->libbpf"?
-
-> I agree it's a very arbitrary choice, but we really strongly want
-> things to be consistent between all Buildroot packages, so we cannot
-> change this for just one package. If we want to change this, it needs
-> to be discussed (advantages vs. drawbacks), then the documentation
-> needs to be updated, and all packages changed.
-
-Completely understand. As a Buildroot user, I really appreciate that
-consistency!
-
-> Best regards,
->
-> Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+-TEALDEER_VERSION = 1.5.0
++TEALDEER_VERSION = 1.6.1
+ TEALDEER_SITE = $(call github,dbrgn,tealdeer,v$(TEALDEER_VERSION))
+ TEALDEER_LICENSE = Apache-2.0 or MIT
+ TEALDEER_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+--
+2.38.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
