@@ -4,97 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 922A1C38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 863F2C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B95260E00;
-	Wed, 26 Oct 2022 21:15:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B95260E00
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1ED9560E07;
+	Wed, 26 Oct 2022 21:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ED9560E07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cFjmuDdxhcfI; Wed, 26 Oct 2022 21:15:56 +0000 (UTC)
+	with ESMTP id 88A7UxaSuTQG; Wed, 26 Oct 2022 21:20:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73E7B60DFC;
-	Wed, 26 Oct 2022 21:15:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73E7B60DFC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 363D11BF31D
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:15:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DBB060E03;
+	Wed, 26 Oct 2022 21:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DBB060E03
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A43951BF31D
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 106248132C
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:15:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 106248132C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F72460E03
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F72460E03
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BpgT_tNT4qqn for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 21:15:52 +0000 (UTC)
-X-Greylist: delayed 00:06:01 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE6A181326
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 64EvKB4V4SfT for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 21:20:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF4CA60E02
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com
  [64.147.123.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE6A181326
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:15:51 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
- by mailout.west.internal (Postfix) with ESMTP id D330B3200950
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:09:44 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
- by compute1.internal (MEProxy); Wed, 26 Oct 2022 17:09:44 -0400
-X-ME-Sender: <xms:GKJZY9wHLDAW27qBGYppGxpgWAA_4ZsbpOhRxxwzY78DHdoQk98tCA>
- <xme:GKJZY9QclWDEVYRy-YhCIlUMT4-zWpKgHCRYt9kkORDVSDHa_tuvRwWqpDRLDfC1f
- B4x4--HhVjtERna>
-X-ME-Received: <xmr:GKJZY3UWNHqrVNfCLAjZJXelXhJ3-nhZV_Wveqh4j5wSC9LP1NXRgktanihr7BCCupWiw1RiLg7d7AtTpNazlg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdduheejucetufdoteggodetrfdotf
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF4CA60E02
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:20:51 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.west.internal (Postfix) with ESMTP id 14C3E320015C
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:11:13 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+ by compute3.internal (MEProxy); Wed, 26 Oct 2022 17:11:13 -0400
+X-ME-Sender: <xms:cKJZY90VhYY86frzKhziJyLM4UYtPfLj0Wb1mlv0Y67Bepnql5RHXg>
+ <xme:cKJZY0H5AO5JtMaaJg8CKk0dF4rr-RyaEvdAvFyCnvljWsbczlgUDe64XpSjGpM4Y
+ EZiG_OeDP78-H3Z>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdduheekucetufdoteggodetrfdotf
  fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkofggtgfgsehtjeertd
- ertddvnecuhfhrohhmpeffrghnihhlohcuoehmrghilhesuggsrhhgnhdrtghhqeenucgg
- tffrrghtthgvrhhnpeetueekgfetheeileekiedtveeiieefgfevgfegjeekuefffedvve
- fhkeetlefggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
- ohhmpehmrghilhesuggsrhhgnhdrtghh
-X-ME-Proxy: <xmx:GKJZY_gZGkMQB87lArX7hD_6X06r0p3jKswKHCsOs76jltncOQNwww>
- <xmx:GKJZY_CiVUJvZjxtwskU6urpOlzbetJoRfA8eMzP28RQiQxQZ3f_Sg>
- <xmx:GKJZY4KcAAUWu9UP4ILCMJRxgRMVejoA0S35tgwdToC-Cbl_OYdVcw>
- <xmx:GKJZYyMSq-HAX5EOgo_xstL0vySNmExLJx6K2jCZLATQmQRpDL151A>
+ uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
+ ertderredtnecuhfhrohhmpeffrghnihhlohcuoehmrghilhesuggsrhhgnhdrtghhqeen
+ ucggtffrrghtthgvrhhnpeelffelffetieelhfeugfegjeegledvtdehvdevueeugffgge
+ ejteekjedtjeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+ fhhrohhmpehmrghilhesuggsrhhgnhdrtghh
+X-ME-Proxy: <xmx:cKJZY97eplP43L0-5vobJiRMt0fCho2fx8xncChgUClSK3xt7sA_Vg>
+ <xmx:cKJZY63E08fcDe3MaCBrLf-P6DYEkZel7wKrCO23yWHFDps3qkHJvw>
+ <xmx:cKJZYwHwnemSs4uAl5PcnZTyhjyZqNbP63KYXlB3kyhxqmXWEF20NQ>
+ <xmx:cKJZY0Ht9B4atefMnbKK7GMkQYDXZi2Oj_o7ACJthPVMkJNcmeSAyA>
 Feedback-ID: i85804083:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA for
- <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:09:43 -0400 (EDT)
-Date: Wed, 26 Oct 2022 23:09:17 +0200
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+ id 7D01931A0062; Wed, 26 Oct 2022 17:11:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <5ed339df-22c9-4d89-917b-87f7605a084e@app.fastmail.com>
+In-Reply-To: <20221012002101.02c1f4bf@c3po>
+References: <20221012002101.02c1f4bf@c3po>
+Date: Wed, 26 Oct 2022 23:10:51 +0200
 From: Danilo <mail@dbrgn.ch>
-To: buildroot@buildroot.org
-Message-ID: <20221026230917.5092886c@c3po>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+To: Buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=dbrgn.ch; h=cc
- :content-transfer-encoding:content-type:date:date:from:from
- :in-reply-to:message-id:mime-version:reply-to:sender:subject
- :subject:to:to; s=fm1; t=1666818584; x=1666904984; bh=16LiSmWCqp
- gxzR+FW+a9BcBLi8XwbeHGSAoJT0IW5DI=; b=1MnH27iupu4bTsHJ9L+eXG7jnz
- jAi24447uPjkflu2jcXIBgV9MsFOdXqusMbYDsWEl2Ym/cZGL9VFlhQDqaanOLX/
- CoZnMzJVEBT3borChiqXH0w1tH1MGKnJu2A947/6C2teYuQLcCjD/UFZQvkmid2b
- NDGo0pwV/7c76dRH/gbIItBc/Ky4+vO+s+kUGmEUOJGK1AQNRYM4uYODb0WGV2qb
- ZydifmSDTpTD8C7K4aZHCz4wo9MzLm2Xju/M8Cav+wsV/LTwhjH/tlvJk0rqbDef
- 2mpc072l03P7l0DD1QKo9yCi4dbRAYjZEznKlt93g724Jvxqq+4KEd2D8EgA==
+ :content-type:date:date:from:from:in-reply-to:in-reply-to
+ :message-id:mime-version:references:reply-to:sender:subject
+ :subject:to:to; s=fm1; t=1666818672; x=1666905072; bh=N61SaJ42LV
+ KU7+1VI4C/kwnCJIu5E3lwx0/rN1SCm14=; b=ctgiyPBaMVZ7c+5hMU/LUB7RtF
+ ixtU8g4PqgA4ilJbBPpXtSwU9kNC+XM/AiJzJjs2JW//8ljKIbOOmPyDQogtNkPk
+ dSNl7jyO9I3EbSoHMtnt/R6VvyvUmgncZAv+k8oFOJLrYO9Cdbe/X1HEqu3UFX53
+ /cQdlpbac4Bx4qrDj7vVTuTfzxauteGwWzsTAqtG2FVEz3Da+pbmtJVSRoCLyEqs
+ 3pjxGPYll0ImIR9rzoGXlWAtdXTUdRRYIW2gJ+E0nWn3KJFW8rMWyR+9O3sU44Ma
+ dSIY7p5oTy3RIJ9ewwUANcGLFTwCkzId3Vs15wI14yoUpjpsoroAkrs6Mrkw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:content-transfer-encoding:content-type
- :date:date:feedback-id:feedback-id:from:from:in-reply-to
- :message-id:mime-version:reply-to:sender:subject:subject:to:to
+ messagingengine.com; h=cc:content-type:date:date:feedback-id
+ :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+ :mime-version:references:reply-to:sender:subject:subject:to:to
  :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
- fm3; t=1666818584; x=1666904984; bh=16LiSmWCqpgxzR+FW+a9BcBLi8Xw
- beHGSAoJT0IW5DI=; b=WvwYTNbQH6DMLV9QQtoKg2kGK45HA798r2LvHUdggx4r
- zLL/09jfwXR1AHCQsUUbJ2nIBBN8KysrHv1ULQaMkv4USk8tJ+KfuEMOr5wWGHBj
- 3C+Zr8aqALjSCr2en0/xHTiSG1D45T9zW8gahA4YZNkWDDCeiV0FXzC5WlU34FQo
- IqbVSeAf4a4UCKOQZTByNdWqiD6tkuNOYs2M2XzLQ1jAqgmBiTu4O9MO1TZZB1Bz
- qLvD9qdsTgoSKfW7E5brzt2KD7UyYN9n6yd+R9hTM2nwEj8VztRFzYs2ql9++H+m
- mOf9oWnFCBXwGTh0drslgFLtxd/MnxDftlMlcYPn2w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ fm3; t=1666818672; x=1666905072; bh=N61SaJ42LVKU7+1VI4C/kwnCJIu5
+ E3lwx0/rN1SCm14=; b=obXrPnZtVE18DA2oEBclnKdcS2dan78bhK4C4GhgQGUo
+ MZ9yEd4FkIesEi4tBjyJQKKMRhmAwMLuQM9jrVQj0DPoEhS7GT297LtyHFSMPY3N
+ Nr04ZPeVkCbOatEYkIKr/PCK3/uWCusf1N2Fsf98SKiL8i0A/Wv5gERHdL/8ko0F
+ c/B0WI9y+cOwIjEGRYwmyTXT9U2KBz/fQaWprszlQzFVcvFZC+kbJk2twlPlT4kf
+ AyZF/rUN9PYQHvan7fpocR4c/aw2WJ4kSbpgnk3dgLcJMdnsIpwiUxCEs1cYmY9D
+ JvrKEkwbCvsE1kEmhjewUBszBGwQm6eOqdTH0IY+7A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=dbrgn.ch header.i=@dbrgn.ch
- header.a=rsa-sha256 header.s=fm1 header.b=1MnH27iu; 
+ header.a=rsa-sha256 header.s=fm1 header.b=ctgiyPBa; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm3 header.b=WvwYTNbQ
-Subject: [Buildroot] [PATCH 1/1] package/tealdeer: bump version to 1.6.1
+ header.a=rsa-sha256 header.s=fm3 header.b=obXrPnZt
+Subject: Re: [Buildroot] [PATCH 1/1] package/tealdeer: bump version to 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,37 +113,9 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
----
- package/tealdeer/tealdeer.hash | 2 +-
- package/tealdeer/tealdeer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This patch can be ignored, it has been superseded by the patch that bumps to version 1.6.1.
 
-diff --git a/package/tealdeer/tealdeer.hash b/package/tealdeer/tealdeer.hash
-index 0e53174841..1d9eb7bf25 100644
---- a/package/tealdeer/tealdeer.hash
-+++ b/package/tealdeer/tealdeer.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  42febf9ee84721b9230077d62e2fc51201fd59624d3c776ccc1a634788768a60  tealdeer-1.5.0.tar.gz
-+sha256  90690d3a6e2f6c7444c281865bd5b0787e0afa599f06b52b4283bea4541e1e77  tealdeer-1.6.1.tar.gz
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  a313b5e62b80a08f3aae0fa62ff3de8482ef55247299eb352ab44f87ef456b1b  LICENSE-MIT
-diff --git a/package/tealdeer/tealdeer.mk b/package/tealdeer/tealdeer.mk
-index c396225098..aabfe2983c 100644
---- a/package/tealdeer/tealdeer.mk
-+++ b/package/tealdeer/tealdeer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--TEALDEER_VERSION = 1.5.0
-+TEALDEER_VERSION = 1.6.1
- TEALDEER_SITE = $(call github,dbrgn,tealdeer,v$(TEALDEER_VERSION))
- TEALDEER_LICENSE = Apache-2.0 or MIT
- TEALDEER_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
---
-2.38.1
+Danilo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
