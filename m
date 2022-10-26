@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D5DCC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 19:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 462D1C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 19:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 154CA80FA2;
-	Wed, 26 Oct 2022 19:50:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 154CA80FA2
+	by smtp2.osuosl.org (Postfix) with ESMTP id D93D2405EB;
+	Wed, 26 Oct 2022 19:50:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D93D2405EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VaYwXTM8328A; Wed, 26 Oct 2022 19:50:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d9pB4eR-yD-O; Wed, 26 Oct 2022 19:50:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A676681277;
-	Wed, 26 Oct 2022 19:50:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A676681277
+	by smtp2.osuosl.org (Postfix) with ESMTP id 162DB40547;
+	Wed, 26 Oct 2022 19:50:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 162DB40547
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12FCE1BF982
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:50:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4E1C41BF57C
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:50:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E36F580CCE
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E36F580CCE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35D9181282
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:50:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35D9181282
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DmHA2bCSMdrS for <buildroot@lists.busybox.net>;
+ with ESMTP id xx8YlfqMiyfI for <buildroot@lists.busybox.net>;
  Wed, 26 Oct 2022 19:50:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4A1381277
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7E8181275
  for <buildroot@buildroot.org>; Wed, 26 Oct 2022 19:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4A1381277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E8181275
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C073687132; Wed, 26 Oct 2022 19:50:17 +0000 (UTC)
+ id B082687131; Wed, 26 Oct 2022 19:50:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Oct 2022 21:49:56 +0200
+Date: Wed, 26 Oct 2022 21:49:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba57ca36b90371d35cd1421aec16e63aa3f43dbf
-X-Git-Newrev: 26ec7c4d029d281fc4f0d61e18fc83b91142d9a1
+X-Git-Oldrev: e548b7642ac14f2440427cb6ae11242680d3d935
+X-Git-Newrev: ba57ca36b90371d35cd1421aec16e63aa3f43dbf
 X-Patchwork-Hint: ignore
-Message-Id: <20221026195017.C073687132@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: security bump to version
- 2.5.0
+Message-Id: <20221026195017.B082687131@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to 1.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26ec7c4d029d281fc4f0d61e18fc83b91142d9a1
+commit: https://git.buildroot.net/buildroot/commit/?id=ba57ca36b90371d35cd1421aec16e63aa3f43dbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Expat 2.5.0 has been released earlier today. Most importantly, this
-release fixes CVE-2022-43680: a heap use-after-free vulnerability after
-overeager destruction of a shared DTD in function
-XML_ExternalEntityParserCreate in out-of-memory situations, with
-expected impact of denial of service or potentially arbitrary code
-execution.
+go1.19.2 includes security fixes to the archive/tar, net/http/httputil, and
+regexp packages, as well as bug fixes to the compiler, the linker, the runtime,
+and the go/types package.
 
-https://blog.hartwork.org/posts/expat-2-5-0-released
-https://github.com/libexpat/libexpat/blob/R_2_5_0/expat/Changes
+https://go.dev/doc/devel/release#go1.19
+https://github.com/golang/go/issues?q=milestone%3AGo1.19.2+label%3ACherryPickApproved
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 15e64a4dc8..c6c25aa3e0 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.4.9/
--md5  8d7fcf7d02d08bf79d9ae5c21cc72c03  expat-2.4.9.tar.xz
--sha1  be91118bc495ce49b04a3fd0f27df2fb5a843e9b  expat-2.4.9.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.5.0/
-+md5  ac6677b6d1b95d209ab697ce8b688704  expat-2.5.0.tar.xz
-+sha1  5178e13c1e34f4643d5118d5758babfe0e836fe2  expat-2.5.0.tar.xz
- 
- # Locally calculated
--sha256  6e8c0728fe5c7cd3f93a6acce43046c5e4736c7b4b68e032e9350daa0efc0354  expat-2.4.9.tar.xz
-+sha256  ef2420f0232c087801abf705e89ae65f6257df6b7931d37846a193ef2e8cdcbe  expat-2.5.0.tar.xz
- sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 59854d0ee8..6f22024cc0 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 657475adef..f944bd5304 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  27871baa490f3401414ad793fba49086f6c855b1c584385ed7771e1204c7e179  go1.19.1.src.tar.gz
++sha256  2ce930d70a931de660fdaf271d70192793b1b240272645bf0275779f6704df6b  go1.19.2.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9f0fbbde00..fe4d3a29a9 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.4.9
-+EXPAT_VERSION = 2.5.0
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+-GO_VERSION = 1.19.1
++GO_VERSION = 1.19.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
