@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 776D3C38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 20:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E4AEECDFA1
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 20:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7F608129F;
-	Wed, 26 Oct 2022 20:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7F608129F
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC89C405F3;
+	Wed, 26 Oct 2022 20:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC89C405F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8fOOHGgZQPFT; Wed, 26 Oct 2022 20:15:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nteQ--Xu6kLh; Wed, 26 Oct 2022 20:17:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1537D8126C;
-	Wed, 26 Oct 2022 20:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1537D8126C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13D44405F4;
+	Wed, 26 Oct 2022 20:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13D44405F4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E04D1BF2C2
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 20:15:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D152D1BF2C2
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 20:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 242EC60B99
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 20:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 242EC60B99
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACD1060D89
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 20:17:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD1060D89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mYZN-Q00P1er for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 20:15:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB193605A5
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CB193605A5
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 20:15:31 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A8A451BF203;
- Wed, 26 Oct 2022 20:15:29 +0000 (UTC)
-Date: Wed, 26 Oct 2022 22:15:28 +0200
-To: Tobias Waldekranz <tobias@waldekranz.com>
-Message-ID: <20221026221528.393a1d39@windsurf>
-In-Reply-To: <20221020141412.346992-4-tobias@waldekranz.com>
-References: <20221020141412.346992-1-tobias@waldekranz.com>
- <20221020141412.346992-4-tobias@waldekranz.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id nOoHz8URZ-Fs for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 20:17:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B4E360B99
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8B4E360B99
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 20:17:42 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ bg9-20020a05600c3c8900b003bf249616b0so2532747wmb.3
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 13:17:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fbJVK6fVOmH4mQPAyKFHZ0skCRuISd/SZNngHqhaTlg=;
+ b=iSylrOzc1INxinWTIY0IJn4du1YmnMButlKdClNdzTq1Wv+orOahF+Kt3wj4TTg3sA
+ SGguXEVUtOzE8saR5Wcv7WosBSOFVbaT1dOqgDGPqeeR37aOrs4TJu9T0C0rrKLoX7ml
+ z8tcIBgrgiNsn1P+S3/t5mI3d8O2ChaHiAr2UNDukAo00OXbTeuU4dk8oI//azfGPkUZ
+ uWQQ4u4AT8K/N/sr2hk6FfeHonN/gVSIxxGFtRdZVl4Tr4xZ0v4N7reEwSZvKFVdqahd
+ 349MjX3H3dj0f+zcpryynGaKqm0fTKUTzEgifmLx6+8mngsZbEH2ylv4n7JW18w0URAY
+ VeCg==
+X-Gm-Message-State: ACrzQf0E7l3ZBFy3tJDYlAXmhoyFNIlDlnQ3hq+rooO3lWqPzK3LykyR
+ 7pjYzyhuSDiTCzpZAR0FZI7Zx/XXhkw=
+X-Google-Smtp-Source: AMsMyM5ezELyYVxDwKqutC5Sd9f4+AZF7GsPaDM9ylI06nCC1H/KjHqAwbpX9nsX+ExBTck9M+M8UQ==
+X-Received: by 2002:a05:600c:5398:b0:3c3:dccf:2362 with SMTP id
+ hg24-20020a05600c539800b003c3dccf2362mr3775867wmb.89.1666815460262; 
+ Wed, 26 Oct 2022 13:17:40 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ j11-20020adfe50b000000b0022e6178bd84sm6317188wrm.8.2022.10.26.13.17.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Oct 2022 13:17:39 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 26 Oct 2022 22:17:36 +0200
+Message-Id: <20221026201736.327835-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666815330;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3f7HMRT80LJRMqUhGcDG9tXAkOd2lAfHwjQhK7ZUuXY=;
- b=jDHgKgK86KWZuB3U8mfdmJdOl/GhEKYXmWRqS5w1oK+UJQYSFyNxaCNauDXilXhSF286h9
- WLmic9lDbw45co3D6FWVgV+hy3ew0jrSEKFr9Yixau/BhAK+oeiBG7tuJHKWg2r1GK/Pma
- +CzjJNRvcT55oExAH2kgPxfZRcjRsvexecRYS5BQDfQmcMbOYbwN/s3hdXlqBYgf+FmiPX
- cEGRutQmvQOoPsGePKqVXJU4TRLTkkiZuyz3efwZue2itIc0SDKwGs1sPf+S7ApgWgrNes
- 0Rsm2AoSYOJ8JRArRdN2y9TQK4bFF1pyq84/5goK+Sv69YPFszghZfuIrRj/xw==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fbJVK6fVOmH4mQPAyKFHZ0skCRuISd/SZNngHqhaTlg=;
+ b=BPDamTzIHBlHap6DtJvxaWBlIqNR1xpc4q5AUNbGBp0T2JJ4S6uL5sOetlk2ko+ZGe
+ rBvYOnmvUSyPSartTfl0UHNOSPdD3zL9q5sLTfqyvG01MmOzJE3J9dvyV6Hwki1Zr24E
+ C+glKO9cBY8nb8FnwN7xOzStYNfSc4OvK9OkmK01rKisoQ/I2Pw3cRp/0HaXHxCmneA+
+ BgDDZmogj/4+NPE3Ar3pBfRrljtnSeN+jY1RNERRWIdCKwwG/OMEpm4gSLyYsEqDuDyr
+ TxSc2+m/iih3fE73AfUTKrxCgSs57o7sbySom2gkIM6uhtsi3Djn9jr7Jsr7ZlrxBXtN
+ xEcg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jDHgKgK8
-Subject: Re: [Buildroot] [PATCH 3/4] package/libbpf: extract dependencies to
- separate kconfig symbol
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=BPDamTzI
+Subject: [Buildroot] [PATCH 1/1] package/usbguard: fix build without asciidoc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,62 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Tobias,
+Set ac_cv_prog_A2X to disable build of documentation and avoid the
+following build failure without a working a2x raised since at least bump
+to version 1.1.1 in commit ad21d84a589458fd4542993912891daa503d72dd:
 
-On Thu, 20 Oct 2022 16:14:11 +0200
-Tobias Waldekranz <tobias@waldekranz.com> wrote:
+a2x -v -f manpage doc/man/usbguard.1.adoc -D ./$(dirname doc/man/usbguard.1.roff)
+a2x -v -f manpage doc/man/usbguard-dbus.8.adoc -D ./$(dirname doc/man/usbguard-dbus.8.roff)
+/nvmedata/autobuild/instance-5/output-1/host/bin/python3: Error while finding module specification for 'asciidoc.a2x' (ModuleNotFoundError: No module named 'asciidoc')
 
-> This makes it obvious that the comment is just the negation of the
-> dependency requirements. It also makes it easier for other packages to
-> depend on libbpf.
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  package/libbpf/Config.in | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-> index 1465366c9e..7e816c193d 100644
-> --- a/package/libbpf/Config.in
-> +++ b/package/libbpf/Config.in
-> @@ -1,11 +1,16 @@
-> -config BR2_PACKAGE_LIBBPF
-> -	bool "libbpf"
-> +config BR2_PACKAGE_LIBBPF_SUPPORTED
-> +	bool
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_USE_WCHAR # elfutils
->  	depends on !BR2_STATIC_LIBS # elfutils
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
->  	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+Fixes:
+ - http://autobuild.buildroot.org/results/e41950f3cd4bd83d9b067af498757cb9d2f207ef
 
-I'm afraid, but we don't do this in Buildroot, in none of our packages.
-I think our rationale is that by duplicating these dependencies, it is
-easier to maintain the Config.in comment in the packages that select
-BR2_PACKAGE_LIBBPF.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/usbguard/usbguard.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I agree it's a very arbitrary choice, but we really strongly want
-things to be consistent between all Buildroot packages, so we cannot
-change this for just one package. If we want to change this, it needs
-to be discussed (advantages vs. drawbacks), then the documentation
-needs to be updated, and all packages changed.
-
-Best regards,
-
-Thomas
+diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
+index ca539a55f5..4e906e8b87 100644
+--- a/package/usbguard/usbguard.mk
++++ b/package/usbguard/usbguard.mk
+@@ -10,6 +10,7 @@ USBGUARD_LICENSE = GPL-2.0+
+ USBGUARD_LICENSE_FILES = LICENSE
+ USBGUARD_CPE_ID_VENDOR = usbguard_project
+ USBGUARD_SELINUX_MODULES = usbguard
++USBGUARD_CONF_ENV = ac_cv_prog_A2X=""
+ USBGUARD_CONF_OPTS = \
+ 	--with-bundled-catch \
+ 	--with-bundled-pegtl \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
