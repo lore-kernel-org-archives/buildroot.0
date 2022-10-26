@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEC37C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8E6C38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 21:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D10C40629;
-	Wed, 26 Oct 2022 21:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D10C40629
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3858140913;
+	Wed, 26 Oct 2022 21:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3858140913
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SCPQFu9WO6Is; Wed, 26 Oct 2022 21:04:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1RXqit0Y9i59; Wed, 26 Oct 2022 21:04:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 78C894061C;
-	Wed, 26 Oct 2022 21:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78C894061C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 795D11BF2C2
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:03:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFD7340910;
+	Wed, 26 Oct 2022 21:04:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFD7340910
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B3CF61BF2C2
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:04:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 529B7405FB
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529B7405FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F57660DF0
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 21:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F57660DF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W8kNIX1ocKbk for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 21:03:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id inMMdP5MA3FG for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 21:04:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48230405F6
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 48230405F6
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:03:54 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id bs21so12655090wrb.4
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 14:03:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0678F60DF4
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0678F60DF4
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 21:04:06 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id v1so28526458wrt.11
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 14:04:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=V6NgTUJaQJfP4Lk0Trl3vjkAGqzfWxUc6spB9I+u8sY=;
- b=75NpD6J/2AJ09BcbkPxpoRO+0kMRDzYtW7r7ap7AycKk6//Tk9+fpv95p4Ztapc8z3
- iHXdSTemhOkucvNk2SkpC25EMma10tngsHMcvviUD84gce81mOWxK9ktUplOTYQ4R4xy
- N00z3cimGEyOF2zaPLFAFjYPuxTNbU1oxLhLIugEXQgdjv5anNVplU+fcnJx5GNM25Q/
- mjaglq5bhFC+TiW0fgDqfLBrTo5hq+ehccdI/yS/mdnoID+MB+K2gZUAfd66z4d19P5g
- +auJxgLgo9v17/xMzkcBrKlDJhCKnQBch0lOSJK1wZgzpWauXiK+WIHgin38cGkMXY7I
- Kbqw==
-X-Gm-Message-State: ACrzQf1SRjU+qFYMdALluiAg3vQpzyidVN+TAYj2MNfDOdl+o/5UwhVn
- mcT45d4IrW5I+Ka+EBjucLgQA2QxunQ=
-X-Google-Smtp-Source: AMsMyM6LxQYhkRwUIKD5BDzcJTlB3+BxPbPGyRMNV4RsADS1KuePKQmB+TUrhx3LabTVgkn2bShUGg==
-X-Received: by 2002:a5d:6c6c:0:b0:22e:409c:90b3 with SMTP id
- r12-20020a5d6c6c000000b0022e409c90b3mr29148536wrz.146.1666818232081; 
- Wed, 26 Oct 2022 14:03:52 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- u17-20020a05600c19d100b003a3442f1229sm2881718wmq.29.2022.10.26.14.03.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Oct 2022 14:03:51 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 26 Oct 2022 23:03:34 +0200
-Message-Id: <20221026210334.565454-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221026210334.565454-1-fontaine.fabrice@gmail.com>
-References: <20221026210334.565454-1-fontaine.fabrice@gmail.com>
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=L0cq188/9QHSdUs0upKbJbsmye4AkPNgLtrmDvJ1vLc=;
+ b=pYa9xzt2jgP3ODc/ihhsBeVTh8QhfLFKI2GcpDDjCGk7iT7kyUSt4F/AirftiKzKig
+ JicSNe8gReiU9eJPamf/4mroIQiLHu0ExCdnojdTv4jGj+aZr02H4rNqUAhz9OyJ1iSo
+ g26u9ofdsX8wa1+ivI6gvkVT4MRJzn2LkpvJMNRc+xMdqUruj95t4xkwL6lZbVfozo1W
+ DxODBl/Pj3o8Y5FD4vSr6zkltXgeOb42cwswKFg9MgzqfZJn6ygmtTvKTtHjc6h/jV/X
+ SidpoSLbWjf9uMG+K2akoEsF3DCLwC2ckCx3g3jCmrxHXAs3vX3HE3zLUQkHGARjh62i
+ 5Szw==
+X-Gm-Message-State: ACrzQf0DbGG1PW9YL4vGwNzrpM404DW95V6AG3N4YS8rRjXortfY296x
+ lP00XUj5eVuUYQ+vGCz3OF8+v+lpRTmqMSeVQL8=
+X-Google-Smtp-Source: AMsMyM4GMOShPjcZPw3brePagYrh+EFPX8X7EUwzwz+X7rzyEdGi2j2F8u69FdMrvy21zA6PKSpzBWmi0PjAcPWBqCs=
+X-Received: by 2002:a05:6000:1ac7:b0:232:8c6c:6c4a with SMTP id
+ i7-20020a0560001ac700b002328c6c6c4amr30200465wry.455.1666818245149; Wed, 26
+ Oct 2022 14:04:05 -0700 (PDT)
 MIME-Version: 1.0
+References: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
+ <20221026183427.3933387-2-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20221026183427.3933387-2-thomas.petazzoni@bootlin.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 27 Oct 2022 07:03:36 +1000
+Message-ID: <CAKmqyKP-BghA6gVBe3Vi1acxjFZMZZsu2nPZ7MPsqk29MYTavg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=V6NgTUJaQJfP4Lk0Trl3vjkAGqzfWxUc6spB9I+u8sY=;
- b=Yc5vF9u1NbX1pPjSn2MUJh1/RdVEs7ZdGPnOdGOTC+LbLaEVkJBxptp+kwrIppEMTS
- n3w/XNT7tzZ213AOA5zNTtWpu9R6x6OYeEy6GkBOzLZjuPE8HCWLhl67SEruaSzw8wNB
- EgeI+W8DHCdW/lqXxjHXlWbww9ekGYPj1wHzB+323/GbjNGswRqCOnfCENHybP86xYI4
- vgHPcYA3EjDS4xjiH0BzBKXNQGLRbm4O/SGdgeMcdVAxVMzQCewUAZIXqfaa7DZvKBUu
- FflBy4tfmQwfBzbq2P7xQ03q7Nf9o22/awK+HhxHau2rZIqsksGDeY01ui10IXES5g45
- FVXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=L0cq188/9QHSdUs0upKbJbsmye4AkPNgLtrmDvJ1vLc=;
+ b=QMpymW3fk4f6dhdxkqUCRuUwXcRnB7BnHoq9qbP9Qd95mwsEc1p7OgxKuxMdcKYUVf
+ N7i0RH5Lsudi2Q2e5sqhegg+hooWmx7ffPWCCPI2cBh7/fqJASrlIMj4vKBmuZm/kaX1
+ WvxUFMEek1sGUhsfAFMeGpIQB/C+2Qrts/GykOrwjLsj59yJHOxt3kv0865wbE0+nPna
+ rDC0C1XI4hQ63hIZueuMUfxrutTp+FVmxJpWfvQvTbsyNLbx9dD1M49g8d/oe30GWxiz
+ dG/l7s+LcNsW7YxhfispJWycw1xWVltXJoGKk9JoHbLiq+fSwXkWY4zEA+Sw6aXVvH2x
+ II2A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Yc5vF9u1
-Subject: [Buildroot] [PATCH 2/2] package/shapelib: fix CVE-2022-0699
+ header.a=rsa-sha256 header.s=20210112 header.b=QMpymW3f
+Subject: Re: [Buildroot] [PATCH 2/2] package/glibc: headers >= 5.4 needed on
+ RISC-V 32-bit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,71 +91,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-A double-free condition exists in contrib/shpsort.c of shapelib 1.5.0
-and older releases. This issue may allow an attacker to cause a denial
-of service or have other unspecified impact via control over malloc.
+On Thu, Oct 27, 2022 at 4:35 AM Thomas Petazzoni via buildroot
+<buildroot@buildroot.org> wrote:
+>
+> Since glibc 2.33 (upstream commit
+> 7a55dd3fb6d2c307a002a16776be84310b9c8989), headers >= 5.4.0 are needed
+> to build glibc for RISC-V 32-bit. Indeed
+> sysdeps/unix/sysv/linux/riscv/configure.ac contains:
+>
+> if test $libc_cv_riscv_int_abi = ilp32; then
+>   arch_minimum_kernel=5.4.0
+> fi
+>
+> In order to take into account this dependency, we add the appropriate
+> logic in package/glibc/Config.in and
+> toolchain/toolchain-buildroot/Config.in.
+>
+> This change means that if headers < 5.4.0 are selected, then no C
+> library at all will be available for RISC-V 32-bit, as glibc is the
+> only C library supporting RISC-V 32-bit currently. However, thanks to
+> the recent addition of BR2_TOOLCHAIN_BUILDROOT_NONE, the
+> choice...endchoice for the C library selection will not be empty,
+> allowing the user to see the Config.in comment explaining why glibc
+> can't be selected.
+>
+> Therefore, technically this commit does prevent from creating a
+> configuration with RISC-V 32-bit and headers < 5.4.0, but it will have
+> BR2_TOOLCHAIN_BUILDROOT_NONE=y, which is catched by
+> package/Makefile.in, which aborts the build early on pointing out that
+> the configuration is invalid.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/5ca49b2732f68eccb5276e7112f7f496dcc514ee/
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...Remove-double-free-in-contrib-shpsrt.patch | 26 +++++++++++++++++++
- package/shapelib/shapelib.mk                  |  3 +++
- 2 files changed, 29 insertions(+)
- create mode 100644 package/shapelib/0001-Remove-double-free-in-contrib-shpsrt.patch
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-diff --git a/package/shapelib/0001-Remove-double-free-in-contrib-shpsrt.patch b/package/shapelib/0001-Remove-double-free-in-contrib-shpsrt.patch
-new file mode 100644
-index 0000000000..a565874b8c
---- /dev/null
-+++ b/package/shapelib/0001-Remove-double-free-in-contrib-shpsrt.patch
-@@ -0,0 +1,26 @@
-+From c75b9281a5b9452d92e1682bdfe6019a13ed819f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Albin=20Eldst=C3=A5l-Ahrens?= <laeder.keps@gmail.com>
-+Date: Mon, 3 Jan 2022 12:34:41 +0100
-+Subject: [PATCH] Remove double free() in contrib/shpsrt, issue #39
-+
-+This fixes issue #39
-+
-+[Retrieved from:
-+https://github.com/OSGeo/shapelib/commit/c75b9281a5b9452d92e1682bdfe6019a13ed819f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ contrib/shpsort.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/contrib/shpsort.c b/contrib/shpsort.c
-+index e21e9e0..920cd8c 100644
-+--- a/contrib/shpsort.c
-++++ b/contrib/shpsort.c
-+@@ -113,7 +113,6 @@ static char ** split(const char *arg, const char *delim) {
-+ 	free(result[--i]);
-+       }
-+       free(result);
-+-      free(copy);
-+       return NULL;
-+     }
-+     result = tmp;
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index 52f9584e19..37d2d9ae64 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -11,4 +11,7 @@ SHAPELIB_LICENSE_FILES = web/license.html COPYING
- SHAPELIB_CPE_ID_VENDOR = osgeo
- SHAPELIB_INSTALL_STAGING = YES
- 
-+# 0001-Remove-double-free-in-contrib-shpsrt.patch
-+SHAPELIB_IGNORE_CVES += CVE-2022-0699
-+
- $(eval $(autotools-package))
--- 
-2.35.1
+Alistair
 
+> ---
+>  package/glibc/Config.in                 | 1 +
+>  toolchain/toolchain-buildroot/Config.in | 4 ++++
+>  2 files changed, 5 insertions(+)
+>
+> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> index b63f99b0b4..71c50504ac 100644
+> --- a/package/glibc/Config.in
+> +++ b/package/glibc/Config.in
+> @@ -34,6 +34,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+> +       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_RISCV_32
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 26d731d976..64f7892f98 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -62,6 +62,10 @@ comment "glibc on RISC-V 64-bit needs a toolchain w/ headers >= 5.0"
+>         depends on BR2_RISCV_64
+>         depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+>
+> +comment "glibc on RISC-V 32-bit needs a toolchain w/ headers >= 5.4"
+> +       depends on BR2_RISCV_32
+> +       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> +
+>  comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
+>         depends on BR2_arc
+>         depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+> --
+> 2.37.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
