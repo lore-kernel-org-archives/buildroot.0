@@ -1,69 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A0E8C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 13:51:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F14D8C38A2D
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 17:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B067740543;
-	Wed, 26 Oct 2022 13:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B067740543
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sty5dZ3L_CyE; Wed, 26 Oct 2022 13:51:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD1134052E;
-	Wed, 26 Oct 2022 13:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD1134052E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 508BC1BF5B4
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 13:51:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F339E81263
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 13:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F339E81263
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F86880FAF;
+	Wed, 26 Oct 2022 17:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F86880FAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sMkteLSLtFQs for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 13:51:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C68C381251
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C68C381251
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 13:51:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 03F001C000E;
- Wed, 26 Oct 2022 13:51:29 +0000 (UTC)
-Date: Wed, 26 Oct 2022 15:51:28 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20221026155128.104059e2@windsurf>
-In-Reply-To: <20221009153521.12444-1-romain.naour@gmail.com>
-References: <20221009153521.12444-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666792290;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1vMlu+pCAvZHZGkeC81SqbUCtWovY5gNXaFTn9O+bYk=;
- b=hbydrTVuVF6RW8PPelbQEY+WzrlgA+1LCaOZ3X0HfttPvGnT/ANfmxxCaiTHtActQeBzPf
- DPl8eBnpRncdIXzThLLGuXBn7W8KMOJHQug70FSKZ747EUbp3nNnp/D+HsQumJY9uSN4kI
- nvgBZi++TEWqM1rMBIiY3Dk/eqSsTqVMCxjlSUGkKOlh0hpkCPp5slwovhE1/W2TQUYDBr
- ewiVxpg5XVsnTeTW68CDfQ8hUcY7p3fNedSGuaJqTlTJVSgssuXdvi8LBiNxFBw8fEjvxF
- 62m3YV/0Ju0GDQr05EYqR6cKLUjYwF07PPfJIap9XATdk6xNHJhdbfyiIxCMAw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hbydrTVu
-Subject: Re: [Buildroot] [PATCH] package/glibc: Fix x86_64 builds with -Os
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IECKOm3hRc61; Wed, 26 Oct 2022 17:32:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AB9E80C3D;
+	Wed, 26 Oct 2022 17:32:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB9E80C3D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CA2601BF36F
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 17:32:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A534D60D74
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 17:32:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A534D60D74
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qSasQxhq-p0t for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 17:32:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2544605A1
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.177])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B2544605A1
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 17:32:44 +0000 (UTC)
+Received: from 1onkGc-000BnV-U8 by out3a.electric.net with emc1-ok (Exim
+ 4.94.2) (envelope-from <kris@embeddedTS.com>)
+ id 1onkGh-000Bvx-T8; Wed, 26 Oct 2022 10:32:43 -0700
+Received: by emcmailer; Wed, 26 Oct 2022 10:32:43 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+ by out3a.electric.net with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <kris@embeddedTS.com>)
+ id 1onkGc-000BnV-U8; Wed, 26 Oct 2022 10:32:38 -0700
+Received: from tsdebian (unknown [75.164.57.7])
+ by mail.embeddedts.com (Postfix) with ESMTPSA id 863F996E2;
+ Wed, 26 Oct 2022 10:32:37 -0700 (MST)
+Message-ID: <1666805548.3174.1.camel@embeddedTS.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>, 
+ buildroot@buildroot.org
+Date: Wed, 26 Oct 2022 10:32:28 -0700
+In-Reply-To: <20221026132634.999254-8-giulio.benetti@benettiengineering.com>
+References: <20221026132634.999254-1-giulio.benetti@benettiengineering.com>
+ <20221026132634.999254-8-giulio.benetti@benettiengineering.com>
+Organization: embeddedTS
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;
+ h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID;
+ bh=cGaW4Cw310skXxIwHnHn/j4qPwoxzh8EZu3EdwHS3rk=;
+ b=eROcPYqBjFG6JcVtN/3t2dJc/NMkKKogtgv92wSSu1p54C/5GX2eA1tDL0nSFd3fwHN10qfFeaq/nf03Bv0lycBxI28A6s+HmaJ+wxhD1T5Ae5Cep6PFWHo2hvu9m2DeH/Osa8HSWLnxFL1rWc/XOLkGpgI3KB2lFyalKtHyVyJNFqnK/63Pq0mR0gWtksuzwBg/2WSzC/UhgsJKy+JFCyr3o81UmQWb2k+1aZMBowbiaclRS3WNrLrid+PIvyy3UwsxuM/BUJC02jEHopSzoDf7y+IegBtKM/o4zRYB1Mq6V7prus5Ssj+jGbf3FArHCmySbfXyp3B3INrbLimLDQ==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=embeddedTS.com header.i=@embeddedTS.com
+ header.a=rsa-sha256 header.s=mailanyone20220121 header.b=eROcPYqB
+Subject: Re: [Buildroot] [PATCH 7/7] package/wilc-driver: disable package
+ for s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,38 +97,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: kris@embeddedTS.com
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Oct 2022 17:35:21 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
-
-> Backport upstream commit for x86_64 builds with -Os reported by [1].
+On Wed, 2022-10-26 at 15:26 +0200, Giulio Benetti wrote:
+> s390x doesn't support CONFIG_WIRELESS in Linux so let's disable this
+> package for this architecture.
 > 
-> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=29576
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229902
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229956
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  .../0002-x86-Fix-Os-build-BZ-29576.patch      | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
+>  package/wilc-driver/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+> index 7ed062bb66..7f970bd38b 100644
+> --- a/package/wilc-driver/Config.in
+> +++ b/package/wilc-driver/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_WILC_DRIVER
+>  	bool "wilc kernel module"
+> +	depends on !BR2_s390x
+>  	depends on BR2_LINUX_KERNEL
+>  	help
+>  	  External kernel module for WILC1000/3000 devices.
+> @@ -59,4 +60,5 @@ endif
+>  endif
+>  
+>  comment "wilc kernel module needs a Linux kernel to be built"
+> +	depends on !BR2_s390x
+>  	depends on !BR2_LINUX_KERNEL
 
-Applied to master, thanks.
+I don't know much on the s390x arch, nor Buildroot paradigms for disabling packages
+per-architecture, however the change itself looks good to me.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
