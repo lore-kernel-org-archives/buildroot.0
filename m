@@ -4,67 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB89C38A2D
-	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 18:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77878C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Oct 2022 19:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58D1540571;
-	Wed, 26 Oct 2022 18:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58D1540571
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDD624045C;
+	Wed, 26 Oct 2022 19:35:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD624045C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UFQ_XDHSoU6q; Wed, 26 Oct 2022 18:53:24 +0000 (UTC)
+	with ESMTP id 15qCjoxvur8t; Wed, 26 Oct 2022 19:35:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E787400CF;
-	Wed, 26 Oct 2022 18:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E787400CF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 761DE1BF279
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:53:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A39F40571;
+	Wed, 26 Oct 2022 19:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A39F40571
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D6D841BF57C
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F93A408DA
- for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 18:53:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F93A408DA
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2A1D80BB5
+ for <buildroot@lists.busybox.net>; Wed, 26 Oct 2022 19:35:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2A1D80BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2qnoB3onP2Sf for <buildroot@lists.busybox.net>;
- Wed, 26 Oct 2022 18:53:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7F3C408D8
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D7F3C408D8
- for <buildroot@buildroot.org>; Wed, 26 Oct 2022 18:53:18 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8592A240005;
- Wed, 26 Oct 2022 18:53:15 +0000 (UTC)
-Date: Wed, 26 Oct 2022 20:53:12 +0200
-To: <yann.morin@orange.com>
-Message-ID: <20221026205312.3f729eb8@windsurf>
-In-Reply-To: <7333_1666791084_635936AC_7333_90_1_20221026133122.GF1657509@tl-lnx-nyma7486>
-References: <20221026125836.3910730-1-thomas.petazzoni@bootlin.com>
- <7333_1666791084_635936AC_7333_90_1_20221026133122.GF1657509@tl-lnx-nyma7486>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BF3Ub03y_VzX for <buildroot@lists.busybox.net>;
+ Wed, 26 Oct 2022 19:35:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A08B480B98
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com
+ [209.85.215.176])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A08B480B98
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 19:35:13 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id f9so11526404pgj.2
+ for <buildroot@buildroot.org>; Wed, 26 Oct 2022 12:35:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=eUuXw8PkVm9OX50Nj2Z9m5KQ5rIbZuVcXL0W+kQikAw=;
+ b=FjzeheCi2JaB4EBB3uyX3XOrdhgxP/lh9bobYyXeTl9ap+RhVGNTJaYMXYkmrznJtq
+ GR1Y7oysbO9L1p+aXyh1wd1c/fkUzMjJyzSjyh9B4Yf99aGrd/PjxufPGvBvXUqzHKRv
+ 9/j5D/nz/K0+izw2NrFXf3b0/TkiX00dqzTD0bYrNBiuGYICN1sI5vY/iGrv04xnBDKF
+ +PNcK1ivl1PifpD3Pe4rrdFKcldTqf+1OkMyLi2Am4HcQwYSw4VXm4n3okiQNWufJd9u
+ HP05FpkzoiIjwxPtPxwWiVYM3kgRbRunPUt/wxAVLTrdatzKh+S0fyP/0/mnR24W3mUC
+ 7w1Q==
+X-Gm-Message-State: ACrzQf3RxkHjuiRWBGiL48pEIv+c7fzccA5YkfkDWzoDV2weqDmvrl24
+ aOso6wqp9d3oUe+A0vJdIUEfjKcDe89fMQ==
+X-Google-Smtp-Source: AMsMyM6lMdugpVnmBj7wCFMRf+cufk4rsjWkGiSwwMPl9BhgE3eIu4p9sxiuOQk3XhsQZmXUeUpBww==
+X-Received: by 2002:aa7:810a:0:b0:55b:674d:d123 with SMTP id
+ b10-20020aa7810a000000b0055b674dd123mr46607268pfi.52.1666812912122; 
+ Wed, 26 Oct 2022 12:35:12 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ e2-20020a170902784200b0017a0f40fa19sm3240331pln.191.2022.10.26.12.35.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Oct 2022 12:35:11 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed, 26 Oct 2022 12:35:08 -0700
+Message-Id: <20221026193508.482276-1-christian@paral.in>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666810396;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=iBwSsz6QOTvtE5I/yJaf+HyYisByYxglOvjk+hgjlwI=;
- b=gehfPWzCX6Ah0uGFVopAMOQW79PnqbzPEgjqNzyVEE8XS43a+5pq5ONOWoDgdxfKpyndCh
- WEHtE2dHs3vGIYLD7z8vAd56a16U+eDZ6la2pmo/z+n1xwotl7CSQS0JecExJuusz8PFzL
- Pcj3ljdy1lfQTrtbsxxgWTcljfVa2kQfcRrxwdPeM2WxcCgn5enpQx9sXNwmSvkPDpnA4E
- E+gGm2nAMNRljX9D2Yxb0SAnHYu2grqUzW59fAe+3ReLOnM+D7mVktivd8sfEZF3swtDcp
- bDJhwLCJb3ei7RaOB7OhTua3DtZh/rtsJJb2LCIjDHl6gys/El0LX+KyrypwUg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gehfPWzC
-Subject: Re: [Buildroot] [PATCH] package/musl: fixup the dynamic loader
- symlink
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to 1.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +78,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: hello.skyclo@gmail.com, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
+go1.19.2 includes security fixes to the archive/tar, net/http/httputil, and
+regexp packages, as well as bug fixes to the compiler, the linker, the runtime,
+and the go/types package.
 
-On Wed, 26 Oct 2022 15:31:22 +0200
-<yann.morin@orange.com> wrote:
+https://go.dev/doc/devel/release#go1.19
+https://github.com/golang/go/issues?q=milestone%3AGo1.19.2+label%3ACherryPickApproved
 
-> What about external toolchains?
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-That's a very good question, which I had not looked into, so I did some
-research.
-
-External toolchains are not affected because when we copy the sysroot
-from the toolchain into STAGING_DIR, we do this:
-
-        for link in $$(find $(STAGING_DIR) -type l); do \
-                target=$$(readlink $${link}) ; \
-                if [ "$${target}" == "$${target$(SHARP_SIGN)/}" ] ; then \
-                        continue ; \
-                fi ; \
-                relpath="$(call relpath_prefix,$${target$(SHARP_SIGN)/})" ; \
-                echo "Fixing symlink $${link} from $${target} to $${relpath}$${target$(SHARP_SIGN)/}" ; \
-                ln -sf $${relpath}$${target$(SHARP_SIGN)/} $${link} ; \
-        done ; \
-
-(from toolchain/helpers.mk:copy_toolchain_sysroot)
-
-This causes this to happen:
-
->>> toolchain-external-bootlin 2021.11-1 Copying external toolchain sysroot to staging...
-Fixing symlink /home/thomas/projets/buildroot/output/host/x86_64-buildroot-linux-musl/sysroot/lib/ld-musl-x86_64.so.1 from /lib/libc.so to ../lib/libc.so
-
-So in the external toolchain, even if the symlink is broken, it gets
-fixed when we import the toolchain into STAGING_DIR.
-
-(Note: the external toolchain used here is a Bootlin toolchain,
-produced by Buildroot, but without the musl.mk fix, so it does have the
-bogus ld-musl-x86-64.so.1 -> /lib/libc.so link, but that gets fixed
-when we import the toolchain, as described above)
-
-Does that this seem like a good enough answer for the external
-toolchain case? If so, I can submit a v2 with an amended commit log.
-
-Thanks!
-
-Thomas
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 657475adef..f944bd5304 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  27871baa490f3401414ad793fba49086f6c855b1c584385ed7771e1204c7e179  go1.19.1.src.tar.gz
++sha256  2ce930d70a931de660fdaf271d70192793b1b240272645bf0275779f6704df6b  go1.19.2.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9f0fbbde00..fe4d3a29a9 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.19.1
++GO_VERSION = 1.19.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.38.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
