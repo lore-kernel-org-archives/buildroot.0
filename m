@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76E38C67871
-	for <buildroot@archiver.kernel.org>; Thu, 27 Oct 2022 06:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 103CFC67871
+	for <buildroot@archiver.kernel.org>; Thu, 27 Oct 2022 06:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB0A181371;
-	Thu, 27 Oct 2022 06:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0A181371
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZVShSljW8yT7; Thu, 27 Oct 2022 06:45:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08B5F8135C;
-	Thu, 27 Oct 2022 06:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B5F8135C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 61CA61BF990
- for <buildroot@lists.busybox.net>; Thu, 27 Oct 2022 06:45:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C90B4090B
- for <buildroot@lists.busybox.net>; Thu, 27 Oct 2022 06:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C90B4090B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BE3940918;
+	Thu, 27 Oct 2022 06:46:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BE3940918
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AZw7RsWQIlcm for <buildroot@lists.busybox.net>;
- Thu, 27 Oct 2022 06:45:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 13B1740904
- for <buildroot@buildroot.org>; Thu, 27 Oct 2022 06:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13B1740904
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3B3E872B2; Thu, 27 Oct 2022 06:45:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 26 Oct 2022 23:30:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c86b69a16dee0281d75890118110be934367430e
-X-Git-Newrev: b3f915c6561bcb2f7952faca3bedf1766f299538
-X-Patchwork-Hint: ignore
-Message-Id: <20221027064525.F3B3E872B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmemd: new package
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5gXr5pgnVcMZ; Thu, 27 Oct 2022 06:46:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EE204090B;
+	Thu, 27 Oct 2022 06:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EE204090B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A7801BF47E
+ for <buildroot@lists.busybox.net>; Thu, 27 Oct 2022 06:46:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72B7E81358
+ for <buildroot@lists.busybox.net>; Thu, 27 Oct 2022 06:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72B7E81358
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zbj3BJBB4gbD for <buildroot@lists.busybox.net>;
+ Thu, 27 Oct 2022 06:46:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE62281347
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE62281347
+ for <buildroot@buildroot.org>; Thu, 27 Oct 2022 06:46:23 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E773110000F;
+ Thu, 27 Oct 2022 06:46:20 +0000 (UTC)
+Date: Thu, 27 Oct 2022 08:46:19 +0200
+To: Tobias Waldekranz <tobias@waldekranz.com>
+Message-ID: <20221027084619.67b393b2@windsurf>
+In-Reply-To: <20221020141412.346992-2-tobias@waldekranz.com>
+References: <20221020141412.346992-1-tobias@waldekranz.com>
+ <20221020141412.346992-2-tobias@waldekranz.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666853181;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0R6bE6KqkMlKS9n1hcmoJH2ZkbtHhW2vwsRg83ggZ5k=;
+ b=SiLMA/B1NJ4Xj5Twv25yGGiuHp4z2eVN3LrzZTx30ghRAmHOnv8aGUw5Gk27lBW3LqqH4U
+ DkZNmImW3rHYgOBWARCPXYD6jTB93E2lxxLIBaeORzRiu3vvE1d5Bbe4Ij8PwlLF2Q9rqr
+ XqoS4rXTJ+TjE8ofr47p+yehga+sKKEqVm615t6JJLOLArIgnkUWNJXnx90rwzHfqOjRIc
+ IlzO35UJh/zkgJMDct1ijC2fcec+oLJtH8aZlBV9v2BDpTVX554vR2Nolb5yF7pCE7YO3m
+ AHA5TLKPpcGr3HFkOpOqJjj04PiSRavqXGo282i2nGMuYWXJncNe5ZcRXrVyDg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SiLMA/B1
+Subject: Re: [Buildroot] [PATCH 1/4] package/libbpf: fix cross compilation
+ for 32-bit targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,114 +78,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3f915c6561bcb2f7952faca3bedf1766f299538
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 20 Oct 2022 16:14:09 +0200
+Tobias Waldekranz <tobias@waldekranz.com> wrote:
 
-kmemd let's you inspect a live Linux kernel's memory using GDB.
+> Add upstream patch that sources the library path (lib vs. lib64) from
+> the compiler rather than from uname(1).
+> 
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  ...cross-compilation-for-32-bit-targets.patch | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/kmemd/Config.in  | 20 ++++++++++++++++++++
- package/kmemd/kmemd.hash |  3 +++
- package/kmemd/kmemd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 47 insertions(+)
+Thanks, applied with a rework commit log:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6e0b765ba1..bc4640685a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2936,6 +2936,9 @@ F:	package/waf/
- F:	support/testing/tests/package/test_crudini.py
- F:	support/testing/tests/package/test_redis.py
- 
-+N:	Tobias Waldekranz <tobias@waldekranz.com>
-+F:	package/kmemd/
-+
- N:	Tudor Holton <buildroot@tudorholton.com>
- F:	package/openjdk/
- 
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..ebafe11dea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -111,6 +111,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/iozone/Config.in"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
-+	source "package/kmemd/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
-diff --git a/package/kmemd/Config.in b/package/kmemd/Config.in
-new file mode 100644
-index 0000000000..902e636947
---- /dev/null
-+++ b/package/kmemd/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_KMEMD
-+	bool "kmemd"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libbpf
-+	depends on BR2_USE_WCHAR # libbpf
-+	depends on !BR2_STATIC_LIBS # libbpf
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libbpf
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 # libbpf
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # libbpf
-+	select BR2_PACKAGE_LIBBPF
-+	help
-+	  Explore a live Linux kernel's memory using GDB
-+
-+	  https://github.com/wkz/kmemd
-+
-+comment "kmemd needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/kmemd/kmemd.hash b/package/kmemd/kmemd.hash
-new file mode 100644
-index 0000000000..aecfea57f8
---- /dev/null
-+++ b/package/kmemd/kmemd.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  519ac3cdd367acee5090eec3b7e08400724f9b84486b191f3af534bd7cffca70  kmemd-1.0.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/kmemd/kmemd.mk b/package/kmemd/kmemd.mk
-new file mode 100644
-index 0000000000..902941b981
---- /dev/null
-+++ b/package/kmemd/kmemd.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# kmemd
-+#
-+################################################################################
-+
-+KMEMD_VERSION = 1.0.0
-+KMEMD_SITE = https://github.com/wkz/kmemd/releases/download/$(KMEMD_VERSION)
-+KMEMD_LICENSE = GPL-2.0
-+KMEMD_LICENSE_FILES = COPYING
-+KMEMD_DEPENDENCIES = libbpf
-+
-+define KMEMD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KPROBES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
-+endef
-+
-+$(eval $(autotools-package))
+    package/libbpf: install in the correct lib directory
+    
+    The libbpf build system currently uses the output of "uname -m" to
+    determine if the library should be installed in "lib" or
+    "lib64". However, uname -m returns the architecture of the build
+    machine, which often has nothing to do with the target CPU
+    architecture.
+    
+    A patch has been submitted and accepted upstream to address this
+    issue, by using the $(CC) -dumpmachine output instead. This ensures
+    libbpf is installed in either "lib" or "lib64" depending on the
+    bitness of the target CPU architecture.
+    
+    Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+The patch was also moved away from the version-specific directory, and
+the upstream status of the patch was added in the patch itself.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
