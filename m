@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBA86FA3742
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:52:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33694C38A02
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B6A8410C9;
-	Fri, 28 Oct 2022 06:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B6A8410C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8D7B400A4;
+	Fri, 28 Oct 2022 06:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8D7B400A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dok69JHBGW-m; Fri, 28 Oct 2022 06:52:19 +0000 (UTC)
+	with ESMTP id dXnZNUuTFFOr; Fri, 28 Oct 2022 06:52:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1859140448;
-	Fri, 28 Oct 2022 06:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1859140448
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B341410C8;
+	Fri, 28 Oct 2022 06:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B341410C8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13FF71BF860
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:51:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C5B21BF860
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1AD0400D0
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1AD0400D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11A5B40133
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11A5B40133
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Ww4w7nqF2_N for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 06:51:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFD8240133
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFD8240133
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE089873BB; Fri, 28 Oct 2022 06:51:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 28 Oct 2022 08:49:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 671af464266326fd3d2dcbfb722bf57a96b692b6
-X-Git-Newrev: 32d8e23b977a5bba1f23e3821709c6aa9ff3bc55
-X-Patchwork-Hint: ignore
-Message-Id: <20221028065137.DE089873BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-numpy: bump to version
- 1.23.4
+ with ESMTP id F7yhopglq6Tx for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 06:51:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B96F408AC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B96F408AC
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:51:53 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0EC1C240003;
+ Fri, 28 Oct 2022 06:51:50 +0000 (UTC)
+Date: Fri, 28 Oct 2022 08:51:50 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221028085150.7aa26fdb@windsurf>
+In-Reply-To: <20221025223639.550839-1-james.hilliard1@gmail.com>
+References: <20221025223639.550839-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1666939911;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=OV1teiBUlKusAoqm+bqxeFwSMs7XeQRGzUKAuPoX8tU=;
+ b=dbUdukXugDYHswOnXntYXJdhKG/oXPvcXZmm8JTo+DrNg2grrlVHGwGouOhkuPmoXLUjwx
+ s4PgSbMFnThaB/ZwtPcEZe+mfZugMBLopg8JeM4h1Aw3uBSL493a0hsyokn4VzZ4eAj16Y
+ dzfsaBZSffSSAsDQzkKV6Nl0nc29zQ3nVRGFKisqiGXa+lA4YCIeGq2t7vk4k4LS0vHBJ/
+ o2kTOL7j4dCCmKyjhWV5zqjQCxL9dX12igwgmciSM+yxB3emix5qCtHYDVb5eu6ZXQse1c
+ n95z6TNoXQgqOzRu+63Pye3e/xx74bbcp902PW6i5sZJzeWSGdj08CLxXkV90g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dbUdukXu
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-bottle: bump to version
+ 0.12.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32d8e23b977a5bba1f23e3821709c6aa9ff3bc55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 25 Oct 2022 16:36:39 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-License hash changed due to date update:
-https://github.com/numpy/numpy/commit/4fc42f99b7f96b1000c777a478f58e2744bb3656
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-bottle/python-bottle.hash | 4 ++--
+>  package/python-bottle/python-bottle.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-numpy/python-numpy.hash | 8 ++++----
- package/python-numpy/python-numpy.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index c0dcc5d27f..2a2dec44da 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
-@@ -1,8 +1,8 @@
--# Copied from https://github.com/numpy/numpy/releases/tag/v1.21.2
--sha256  76af194fbc117934ec5bbe2ff15177adbd05aeed23f18ee209ed88edcd777e05  numpy-1.21.2.tar.gz
-+# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.4
-+sha256  ed2cc92af0efad20198638c69bb0fc2870a58dabfba6eb722c933b48556c686c  numpy-1.23.4.tar.gz
- # License files, locally calculated
--sha256  bc1b0af15cdc9415ea26c5f1df352c226ac86425ec0fb9ab38d111018bf1c6f2  LICENSE.txt
--sha256  2be6947e0432ecf7950ee8fe38681316749dd06d1de17c9ec4de6d2f55adb3a1  numpy/core/src/multiarray/dragon4.c
-+sha256  0f88787955e7131224f53a8c3f3e859dc502408e3a539a4dcf61fb7888b5b984  LICENSE.txt
-+sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
- sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/core/include/numpy/libdivide/LICENSE.txt
- sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55  numpy/linalg/lapack_lite/LICENSE.txt
- sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e  tools/npy_tempita/license.txt
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 417fe81f57..4f4848c4ba 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_NUMPY_VERSION = 1.21.2
-+PYTHON_NUMPY_VERSION = 1.23.4
- PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
- PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
- PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
