@@ -4,56 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64002ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 18:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DA6FC38A02
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 19:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE1EB81911;
-	Fri, 28 Oct 2022 18:43:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE1EB81911
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0B3481765;
+	Fri, 28 Oct 2022 19:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0B3481765
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qP5wgK5G2T1e; Fri, 28 Oct 2022 18:43:36 +0000 (UTC)
+	with ESMTP id yQa5UpU3msla; Fri, 28 Oct 2022 19:15:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50BEC818C9;
-	Fri, 28 Oct 2022 18:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50BEC818C9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2DD11BF85D
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 18:43:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6DCC81760;
+	Fri, 28 Oct 2022 19:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6DCC81760
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B60A1BF859
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 19:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADAFF402D4
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 18:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADAFF402D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6AB241499
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 19:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6AB241499
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rlQ8x10qOtm1 for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 18:43:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2216Bp33yY6P for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 19:15:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF724026E
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CF724026E
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 18:43:30 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout11.t-online.de (Postfix) with SMTP id 232F6D37B
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 20:43:26 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.199.226]) by fwd72.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9375A41296
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9375A41296
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 19:15:43 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout05.t-online.de (Postfix) with SMTP id B21B08341;
+ Fri, 28 Oct 2022 21:15:40 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.199.226]) by fwd84.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1ooUKB-2NXYx70; Fri, 28 Oct 2022 20:43:23 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38956)
+ esmtp id 1ooUpC-1vu9D70; Fri, 28 Oct 2022 21:15:26 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52200)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1ooUKA-00067v-38
- for buildroot@buildroot.org; Fri, 28 Oct 2022 20:43:23 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1ooUpC-0003Fh-1f;
+ Fri, 28 Oct 2022 21:15:26 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 28 Oct 2022 20:43:22 +0200
-Message-Id: <20221028184322.8908-1-bernd.kuhls@t-online.de>
+Date: Fri, 28 Oct 2022 21:15:24 +0200
+Message-Id: <20221028191526.122405-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221028191526.122405-1-bernd.kuhls@t-online.de>
+References: <20221028191526.122405-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1666982603-01449CE0-AAF9FFE9/0/0 CLEAN NORMAL
-X-TOI-MSGID: a5df2897-be8b-48f1-b9a2-0f2ac30d6a27
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 8.1.12
+X-TOI-EXPURGATEID: 150726::1666984526-4D45FB8C-F24AE57E/0/0 CLEAN NORMAL
+X-TOI-MSGID: a70e26c3-4702-4b8b-b9ca-6e87f4af4b1f
+Subject: [Buildroot] [PATCH 2/4] package/alsa-plugins: bump version to
+ 1.2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +68,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Charles Hardin <ckhardin@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.1.12
-
-Fixes:
-- CVE-2022-31630: http://bugs.php.net/81739
-- CVE-2022-37454: http://bugs.php.net/81738
+Changelog:
+https://www.alsa-project.org/wiki/Changes_v1.2.7_v1.2.7.1#alsa-plugins
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/alsa-plugins/alsa-plugins.hash | 2 +-
+ package/alsa-plugins/alsa-plugins.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c4c42a2c7d..bf81ebf3e8 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  3005198d7303f87ab31bc30695de76e8ad62783f806b6ab9744da59fe41cc5bd  php-8.1.11.tar.xz
-+sha256  08243359e2204d842082269eedc15f08d2eca726d0e65b93fb11f4bfc51bbbab  php-8.1.12.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7136fd9744..a400a38af7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/alsa-plugins/alsa-plugins.hash b/package/alsa-plugins/alsa-plugins.hash
+index 2582a0d639..5d190e4d7b 100644
+--- a/package/alsa-plugins/alsa-plugins.hash
++++ b/package/alsa-plugins/alsa-plugins.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  068818a4b55d8c029daa00015d853d45113f56b224b7c64e1e117988c825b2a0  alsa-plugins-1.2.6.tar.bz2
++sha256  8c337814954bb7c167456733a6046142a2931f12eccba3ec2a4ae618a3432511  alsa-plugins-1.2.7.1.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING.GPL
+diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
+index b8819151ef..5728ebfe37 100644
+--- a/package/alsa-plugins/alsa-plugins.mk
++++ b/package/alsa-plugins/alsa-plugins.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.1.11
-+PHP_VERSION = 8.1.12
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-ALSA_PLUGINS_VERSION = 1.2.6
++ALSA_PLUGINS_VERSION = 1.2.7.1
+ ALSA_PLUGINS_SOURCE = alsa-plugins-$(ALSA_PLUGINS_VERSION).tar.bz2
+ ALSA_PLUGINS_SITE = https://www.alsa-project.org/files/pub/plugins
+ ALSA_PLUGINS_LICENSE = LGPL-2.1+
 -- 
 2.34.1
 
