@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB475ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8247AECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5238D60AA0;
-	Fri, 28 Oct 2022 06:53:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5238D60AA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 286F160AAF;
+	Fri, 28 Oct 2022 06:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 286F160AAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RnbiCzaxMbBw; Fri, 28 Oct 2022 06:53:25 +0000 (UTC)
+	with ESMTP id H0FP7EXY2GVn; Fri, 28 Oct 2022 06:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDFBF60A91;
-	Fri, 28 Oct 2022 06:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDFBF60A91
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B48B1BF9AC
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:52:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F67D60A92;
+	Fri, 28 Oct 2022 06:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F67D60A92
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EDBE71BF860
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 570B780E36
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 570B780E36
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2EFF40170
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2EFF40170
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E3_MznTllrwD for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 06:52:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F66180BCF
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4F66180BCF
- for <buildroot@busybox.net>; Fri, 28 Oct 2022 06:52:50 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 922084000C;
- Fri, 28 Oct 2022 06:52:48 +0000 (UTC)
-Date: Fri, 28 Oct 2022 08:52:47 +0200
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20221028085247.09d8c862@windsurf>
-In-Reply-To: <20221023114908.505511-1-francois.perrad@gadz.org>
-References: <20221023114908.505511-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666939968;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mnkrCNM7Ybh3IWuXHS5vQyklyq7l67x1xBu6d/IrGp0=;
- b=OjKNBWfBa7mV2HN6I8sVxgNPh+p6JxCbhtiAw9m0L3lenHaBOjxpojGu7v54tZhsMMX1ih
- ANMrF+SWq3JigB+wBW/UZnIDaXDNCplDqM5zUyDj4Q3sosWVFH8gPAZFNC/sy4vxWmNeaT
- Mi+VBfSGQuxjHeAheQLtLxqzf1onZFEcx4Ij2f6iDIQfOL+GGeTr1YHZYknk+Ta8ssDFWJ
- 0E1ZJQ+PfCHVyPY7uIx0DARfRztvaKlObMBQYUzbqBqShAJigB5Ghp7rQ7rA+q1GifiB4i
- QP686JuL+cjrD/K3PovdDTe8e4KSccS9JnQySUtyLKKc2Dk84ID2jdWmS1bYMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OjKNBWfB
-Subject: Re: [Buildroot] [PATCH] package/luajit: bump to
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zzh0y08U_ZNI for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 06:53:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C623D400F8
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C623D400F8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B14C2873C2; Fri, 28 Oct 2022 06:53:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 28 Oct 2022 08:52:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 488055eb58ce23e28e08b9c9a0ed72c5de9ce47e
+X-Git-Newrev: 8ab39ac65eab0e22e82b9b56a198a9abc83b5a9f
+X-Patchwork-Hint: ignore
+Message-Id: <20221028065344.B14C2873C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: bump to
  6c4826f12c4d33b8b978004bc681eb1eef2be977
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,30 +58,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 23 Oct 2022 13:49:08 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ab39ac65eab0e22e82b9b56a198a9abc83b5a9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luajit/0001-no-bin-symlink.patch | 4 ++--
->  package/luajit/0002-install-inc.patch    | 6 +++---
->  package/luajit/luajit.hash               | 2 +-
->  package/luajit/luajit.mk                 | 2 +-
->  4 files changed, 7 insertions(+), 7 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luajit/0001-no-bin-symlink.patch | 4 ++--
+ package/luajit/0002-install-inc.patch    | 6 +++---
+ package/luajit/luajit.hash               | 2 +-
+ package/luajit/luajit.mk                 | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
+index d32ec5ad60..dc36fa58d6 100644
+--- a/package/luajit/0001-no-bin-symlink.patch
++++ b/package/luajit/0001-no-bin-symlink.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -44,8 +44,7 @@
++@@ -45,8 +45,7 @@
+  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
+  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
+  
+@@ -16,7 +16,7 @@ Index: b/Makefile
+  INSTALL_ANAME= libluajit-$(ABIVER).a
+  INSTALL_SOSHORT1= libluajit-$(ABIVER).so
+  INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
+-@@ -60,7 +59,6 @@
++@@ -61,7 +60,6 @@
+  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
+  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
+  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
+diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
+index 5f6547fc3f..8de777dce2 100644
+--- a/package/luajit/0002-install-inc.patch
++++ b/package/luajit/0002-install-inc.patch
+@@ -10,8 +10,8 @@ Index: b/Makefile
+  INSTALL_BIN=   $(DPREFIX)/bin
+  INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
+  INSTALL_SHARE= $(DPREFIX)/share
+--INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
+-+INSTALL_INC=   $(DPREFIX)/include
++-INSTALL_DEFINC= $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
+++INSTALL_DEFINC= $(DPREFIX)/include
++ INSTALL_INC=   $(INSTALL_DEFINC)
+  
+  INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(VERSION)
+- INSTALL_JITLIB= $(INSTALL_LJLIBD)/jit
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 648d6eb181..d00cea4ee0 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e0389c7669f8e455383d8f0c9d9354d44cdd1885bbf8fd0d4bcdb8fc6f794063  luajit-5677985dc1f19cf0a67112f4365c7fb79237fa16.tar.gz
++sha256  19a911fdd77af69e48fa50749606a9009696f543cc88e898b4480d8d3c8828f5  luajit-6c4826f12c4d33b8b978004bc681eb1eef2be977.tar.gz
+ 
+ # Locally calculated
+ sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 2c1e3216e1..c79f18bf62 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAJIT_VERSION = 5677985dc1f19cf0a67112f4365c7fb79237fa16
++LUAJIT_VERSION = 6c4826f12c4d33b8b978004bc681eb1eef2be977
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
