@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC25C38A02
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31ACEC38A02
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AC3C401B2;
-	Fri, 28 Oct 2022 06:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AC3C401B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1DF580C1C;
+	Fri, 28 Oct 2022 06:57:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1DF580C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LuFz8YmVZd1u; Fri, 28 Oct 2022 06:56:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b2hUJjDpW4YC; Fri, 28 Oct 2022 06:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B242640133;
-	Fri, 28 Oct 2022 06:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B242640133
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DB681BF860
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:56:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5099E80BC5;
+	Fri, 28 Oct 2022 06:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5099E80BC5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 860431BF860
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:57:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0632240133
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:56:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0632240133
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E60360AB5
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:57:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E60360AB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iSoPU6lYb42X for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 06:56:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3acW62QSYzye for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 06:57:14 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04C4D400D0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04C4D400D0
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ADC960A92
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5ADC960A92
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:57:14 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6BAF9E0008;
- Fri, 28 Oct 2022 06:56:20 +0000 (UTC)
-Date: Fri, 28 Oct 2022 08:56:19 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 523A2FF807;
+ Fri, 28 Oct 2022 06:57:12 +0000 (UTC)
+Date: Fri, 28 Oct 2022 08:57:11 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221028085619.2acac723@windsurf>
-In-Reply-To: <20221025221445.352620-1-fontaine.fabrice@gmail.com>
-References: <20221025221445.352620-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221028085711.03c25f54@windsurf>
+In-Reply-To: <20221021220800.10420-1-fontaine.fabrice@gmail.com>
+References: <20221021220800.10420-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666940180;
+ d=bootlin.com; s=gm1; t=1666940232;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=sjg3XrtLDUYe3cX+Gwcfun7jaFhhRMpJ8UTtC9tAyy4=;
- b=KwPAt4ZHKqlUYOZn98gokhMbc6iVaNhTobLcMvwzhY7m132peDUN3ho5xir3eG922Kjma4
- fnFffJi23Szus9n5iHu5zTAEOHZwOmavUmrlToq3mTp98q/iDw1GNaVjpXsR6t5KM3BJMP
- 1F0BMRaGU3N8UxJZdiK9n1hkxZCsviklAc9dC6w7r3tNIrFohmysu3FZgStdIxncGZxrY2
- bbCF22HsCRRpkaHK8jVaQ7nRj3skQos4AvMDaGYt9KkG1FBL2KB9/8p3Wgno3jxfgR53WG
- NZTCWQ882PK4n+m//NHMkms3wC9hOdx7Au1EcCEzYFoq+lz2MK/sT5SKC0XNkw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=sSMOtSwihGQldoU5akwvdw65vPHfuMQqUbW5bF+oniU=;
+ b=AP6P225wkzCttpCDbyyVRu9Wv06JVBanMhkWsrA5AKq+Wl1KVK4tZBvMYJhjpnpKBzpKqP
+ S/21aY39fWkxsK0hYlQ2DAufsC2U7tOTKyfjXgaZ2zHaGzipCu9e7sMjKjYZfp+wjAVyU/
+ cBUP1aZ8hf4OH+ptmMrOoCcOpfgTPxh3M77ORki+ANLYkQJxo+Tl9cEmLLP+81p1un97Ok
+ MF1S+x6/pe7h7py0uyZc81c8U+xGrGnaZryYCtxkg4WPfI7+Pbm3kgX42CRvWxnAAj++ej
+ pRZ2paXx0gk/cEHkzXOedBvvPOQK9pFr8w8NbMaO11wcY9MQa+I0iN2/DBcmSw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KwPAt4ZH
-Subject: Re: [Buildroot] [PATCH 1/1] package/libffi: bump to version 3.4.4
+ header.s=gm1 header.b=AP6P225w
+Subject: Re: [Buildroot] [PATCH 1/1] package/empty: bump to version 0.6.22b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +83,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 26 Oct 2022 00:14:45 +0200
+On Sat, 22 Oct 2022 00:08:00 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> 3.4.4 Oct-23-2022
->     Important aarch64 fixes, including support for linux builds
->       with Link Time Optimization (-flto).
->     Fix x86 stdcall stack alignment.
->     Fix x86 Windows msvc assembler compatibility.
->     Fix moxie and or1k small structure args.
+> - Drop EMPTY_STRIP_COMPONENTS (not needed anymore)
+> - Update hash of COPYRIGHT (update in year with
+>   https://sourceforge.net/p/empty/code/ci/c308663530aba4f808b76ee6b4a4b144be9f8a84)
 > 
-> https://github.com/libffi/libffi/releases/tag/v3.4.4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libffi/libffi.hash | 2 +-
->  package/libffi/libffi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> 10.08.2022 0.6.22b
+> --------------------------------------------------------------------------------
+> * Man pages directory parameterization
+> * Tarball clenup, repacking
 
 Applied to master, thanks.
 
