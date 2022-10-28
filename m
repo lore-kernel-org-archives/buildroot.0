@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00ECAECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 21:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD9EFA3745
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 21:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82D9960C07;
-	Fri, 28 Oct 2022 21:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82D9960C07
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0578B40017;
+	Fri, 28 Oct 2022 21:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0578B40017
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ivGVXYvV2qJh; Fri, 28 Oct 2022 21:31:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iDjgmIQKW9Jz; Fri, 28 Oct 2022 21:48:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 998F660BCB;
-	Fri, 28 Oct 2022 21:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 998F660BCB
+	by smtp4.osuosl.org (Postfix) with ESMTP id C66A740037;
+	Fri, 28 Oct 2022 21:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C66A740037
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 231A21BF855
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 21:31:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BEF551BF855
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 21:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB74A40112
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 21:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB74A40112
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7F654010E
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 21:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F654010E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gahf2_gJsWG1 for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 21:31:33 +0000 (UTC)
+ with ESMTP id uxcYKPdY66Zo for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 21:48:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A62040104
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A62040104
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 21:31:33 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id w14so8145879wru.8
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 14:31:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77E3940104
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77E3940104
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 21:48:19 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id o4so8204366wrq.6
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 14:48:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pM9yTln9vMlgkECkZlrM5gTA0WwPMmy0oGJihX5/Ef4=;
- b=mTsQcviPwL2fSxl/0rgWasDxSPMiMbTqAUYIFUvFAwkiIduUG0Z3F8e91mptamce60
- 3tGvjBxdgxxRC3Y5e+lCQY/cg2pGf+Df9YZ2oo3hdj9xUWm7z5GkEcNSwwckQ6CuaIGf
- 8qKK/222DU+qKOZalzr7ueOiycwZC2n41bCDZt4toVI6mTaqraS3cyBWSDb8Uz8H9atQ
- V6jEXFIXHCBbN/tDeMQ4IAhpcQK4BgCs/R2vYN7/qhlbdXW6SXN40+pt+5PVGq/79tc2
- JKVoJoS36S0Zu3ol61T76tYXi85NEuSVNnvwlxk6VlPuzP/LAy7n7BrOzM3EGygLtLIT
- cxsw==
-X-Gm-Message-State: ACrzQf0Ae6EWdBnsiGoGyPjejfCDAh46dcZ3O6SR/XqT5fzV5URQXxhn
- L6Hg1kR3z9rddx0AIISutJP4/EwjuaI=
-X-Google-Smtp-Source: AMsMyM5sNw2KL7iS0wNy/lsnXF3cqIuyoKw6mKQCgbLB1C7ov/3oug2b5rJx68bMOsHuVccbZ3CCQw==
-X-Received: by 2002:adf:dec3:0:b0:236:61ff:e107 with SMTP id
- i3-20020adfdec3000000b0023661ffe107mr752340wrn.39.1666992690820; 
- Fri, 28 Oct 2022 14:31:30 -0700 (PDT)
+ bh=ip3YVZwxKhT8+0bTis6PwV5cQ/KX8aJIQZ7uzqI8XHQ=;
+ b=gQwdrGUEShH90/LBmYajDrOqCuioLkrJPZmbNJbxq3+TJIrnj3yBr5TfXjMg+Wxcnh
+ Gc9q4UBeb5NdCarpmEeD6rzRq1L6cELjrtTwjRH7AMELUlZTGwoS4hB2l6hxHsG+G1TE
+ StTOlpre5fanykM+AKw19qyN7ggKwDRSBvY8/zcy9+imyrmk9k9JKCFZZElfFjKfbnGP
+ 2E9Z3JBjSzcbAnkkpkhWU48o5N0SQCA5vjeTV0vDliIs2U5pbbf+Y5h0R7CwVaV+XUdq
+ 3sROxOrOydG9nxugJAJWMD5hId53OWn7B0ITnOO/8U2P6RXz06DuRQSzCUHtNNVb9KkW
+ SgFw==
+X-Gm-Message-State: ACrzQf1crUpavOoaueaSxVjvFgGs6KiSMu3kiDIUnUMlwrJSN2pPanyY
+ RRsBKJggJu2df7K/SsAZExkRKoan89A=
+X-Google-Smtp-Source: AMsMyM4sLQd9WZ4RxjOJYXXCuDVnppj/X8OmZjb9mJ2py4VXc1KaVLaVcF+09RxdY3V5t7Q23gQOow==
+X-Received: by 2002:a5d:6a90:0:b0:236:4835:ca94 with SMTP id
+ s16-20020a5d6a90000000b002364835ca94mr733439wru.187.1666993697265; 
+ Fri, 28 Oct 2022 14:48:17 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- u3-20020adfdd43000000b002364c77bc96sm4510107wrm.33.2022.10.28.14.31.30
+ j36-20020a05600c1c2400b003c6c2ff7f25sm5836524wms.15.2022.10.28.14.48.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Oct 2022 14:31:30 -0700 (PDT)
+ Fri, 28 Oct 2022 14:48:16 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Oct 2022 23:31:27 +0200
-Message-Id: <20221028213127.243377-1-fontaine.fabrice@gmail.com>
+Date: Fri, 28 Oct 2022 23:48:11 +0200
+Message-Id: <20221028214811.273143-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pM9yTln9vMlgkECkZlrM5gTA0WwPMmy0oGJihX5/Ef4=;
- b=HeSzd3uYqFbc1tBD9km8QbG02vqN3uiqmMcxX7LpqGVeGIxwzFpsE+Ex9bWgCxjTEY
- VCnI7vlqh6wQi/gXPXJhYjHKBSmnv8wAA4jmEYVjlqF4cBXoXWlHk8CYDFko3ALvcdwt
- j8MSE0BI87wD3VNQ2e8TdUGpVAVuBoqgtGBZ0ilKMuApoKZixHGCqrBAnq8fOt5cynMa
- Udl9v0pwbgn0rbDNXqtJts89L2UT5QndBlXf2qAcNhpp4DB85sMeJ1+CVHZlKysWfjEv
- CLHki0UWqQfg2D+St1R59x0Uf4fO37uMFkfWJbs2rplc66dON5uMUUzmkjfQGAf4r8Yr
- 0aTQ==
+ bh=ip3YVZwxKhT8+0bTis6PwV5cQ/KX8aJIQZ7uzqI8XHQ=;
+ b=cpMeWL7DTfJ5VW3cYHoHt+o5dEFSmqANIOAm7Pte96SwztSL5dzJNyiu+BTGxVW9R7
+ bqgvUS0RNJCSHK/Knsml0Smru0XcT4Dbh8Zsnji4rj9eNDF8dWQsU6loawmxKQfD2hC9
+ J3mEewYEMYEVVQbhgy1O3OvPj4n4RB1cVzKOHlB4fdiO2rgD5ipc1A23R/wnCwHZZzlh
+ sJPVJbi8Ok2RIbbidEoANeHDgthLGHk3rzEwfiK1Kj+ufC4NgIGz3aYXfGNPrqktWUZx
+ 7XcsJjKTfC3krsznnsCAIGAWkpMYFvy2mTQDYEQUd75VmFz6FXjoZZKYIGb1t+ya5EFT
+ hZbg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HeSzd3uY
-Subject: [Buildroot] [PATCH 1/1] package/slang: bump to version 2.3.3
+ header.a=rsa-sha256 header.s=20210112 header.b=cpMeWL7D
+Subject: [Buildroot] [PATCH 1/1] package/sngrep: bump to version 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,63 +94,132 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVmcmVzaCBwYXRjaAoKaHR0cDovL2xpc3RzLmplZHNvZnQub3JnL2xpc3RzL3NsYW5nLXVzZXJz
-LzIwMjIvMDAwMDAwNS5odG1sCgpTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0tCiBwYWNrYWdlL3NsYW5nLzAwMDEtc2xzaC1saWJz
-LnBhdGNoIHwgNiArKysrLS0KIHBhY2thZ2Uvc2xhbmcvc2xhbmcuaGFzaCAgICAgICAgICAgfCA0
-ICsrLS0KIHBhY2thZ2Uvc2xhbmcvc2xhbmcubWsgICAgICAgICAgICAgfCAyICstCiAzIGZpbGVz
-IGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL3NsYW5nLzAwMDEtc2xzaC1saWJzLnBhdGNoIGIvcGFja2FnZS9zbGFuZy8wMDAxLXNs
-c2gtbGlicy5wYXRjaAppbmRleCAyMTFjYjRhMGUwLi5mYWQxNmQxYjJmIDEwMDY0NAotLS0gYS9w
-YWNrYWdlL3NsYW5nLzAwMDEtc2xzaC1saWJzLnBhdGNoCisrKyBiL3BhY2thZ2Uvc2xhbmcvMDAw
-MS1zbHNoLWxpYnMucGF0Y2gKQEAgLTUsNiArNSw4IEBAIHByb2JhYmx5IERpZWdvIFBldHRlbsOy
-LgogU2lnbmVkLW9mZi1ieTogR3VzdGF2byBaYWNhcmlhcyA8Z3VzdGF2b0B6YWNhcmlhcy5jb20u
-YXI+CiBbQmVybmQ6IHJlYmFzZWQgYWdhaW5zdCAyLjMuMWFdCiBTaWduZWQtb2ZmLWJ5OiBCZXJu
-ZCBLdWhscyA8YmVybmQua3VobHNAdC1vbmxpbmUuZGU+CitbRmFicmljZTogcmViYXNlZCBhZ2Fp
-bnN0IDIuMy4zXQorU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFi
-cmljZUBnbWFpbC5jb20+CiAKIC0tLSBhL3Nsc2gvTWFrZWZpbGUuaW4KICsrKyBiL3Nsc2gvTWFr
-ZWZpbGUuaW4KQEAgLTEyLDggKzE0LDggQEAgU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJl
-cm5kLmt1aGxzQHQtb25saW5lLmRlPgogICQoT0JKRElSKS9zbHNoX2V4ZTogJChPQkpESVIpL3Ns
-c2gubyAkKE9CSkRJUikvcmVhZGxpbmUubwogICAgICQoQ0MpICQoQ0ZMQUdTKSAkKE9CSkRJUikv
-c2xzaC5vICQoT0JKRElSKS9yZWFkbGluZS5vIC1vICQoT0JKRElSKS9zbHNoX2V4ZSAkKExERkxB
-R1MpICQoRExJTktfRkxBR1MpICQoU1JDX0xJQlMpCiAgJChPQkpESVIpL3Nsc2g6ICQoT0JKRElS
-KS9zbHNoLm8gJChPQkpESVIpL3JlYWRsaW5lLm8KLS0JJChDQykgJChDRkxBR1MpICQoT0JKRElS
-KS9zbHNoLm8gJChPQkpESVIpL3JlYWRsaW5lLm8gLW8gJChPQkpESVIpL3Nsc2ggJChMREZMQUdT
-KSAkKERMSU5LX0ZMQUdTKSAkKElOU1RfTElCUykKLSsJJChDQykgJChDRkxBR1MpICQoT0JKRElS
-KS9zbHNoLm8gJChPQkpESVIpL3JlYWRsaW5lLm8gLW8gJChPQkpESVIpL3Nsc2ggJChMREZMQUdT
-KSAkKERMSU5LX0ZMQUdTKSAkKFNSQ19MSUJTKQorLQkkKENDKSAkKE9CSkRJUikvc2xzaC5vICQo
-T0JKRElSKS9yZWFkbGluZS5vIC1vICQoT0JKRElSKS9zbHNoICQoTERGTEFHUykgJChETElOS19G
-TEFHUykgJChJTlNUX0xJQlMpCisrCSQoQ0MpICQoT0JKRElSKS9zbHNoLm8gJChPQkpESVIpL3Jl
-YWRsaW5lLm8gLW8gJChPQkpESVIpL3Nsc2ggJChMREZMQUdTKSAkKERMSU5LX0ZMQUdTKSAkKFNS
-Q19MSUJTKQogICQoT0JKRElSKS9zbHNoLm86ICQoT0JKRElSX1RTVEFNUCkgc2xzaC5jIHNsc2gu
-aCBjb25maWcuaCBNYWtlZmlsZQogICAgIGNkICQoT0JKRElSKSAmJiAkKENDKSAkKFNMQU5HX1NS
-Q0lOQykgJChDRkxBR1MpIC1jICQoREVGUykgJChTUkNESVIpL3Nsc2guYwogICQoT0JKRElSKS9y
-ZWFkbGluZS5vOiAkKE9CSkRJUl9UU1RBTVApIHJlYWRsaW5lLmMgc2xzaC5oIGNvbmZpZy5oIE1h
-a2VmaWxlCmRpZmYgLS1naXQgYS9wYWNrYWdlL3NsYW5nL3NsYW5nLmhhc2ggYi9wYWNrYWdlL3Ns
-YW5nL3NsYW5nLmhhc2gKaW5kZXggM2UyMTFhYjU0OC4uNTYzMTE3YjQ4YSAxMDA2NDQKLS0tIGEv
-cGFja2FnZS9zbGFuZy9zbGFuZy5oYXNoCisrKyBiL3BhY2thZ2Uvc2xhbmcvc2xhbmcuaGFzaApA
-QCAtMSw2ICsxLDYgQEAKICMgc2hhMSBmcm9tIGh0dHA6Ly93d3cuamVkc29mdC5vcmcvcmVsZWFz
-ZXMvc2xhbmcvLCBzaGEyNTYgbG9jYWxseSBjb21wdXRlZAotc2hhMSAgYmJmN2YyZGNjMTRlN2M3
-ZmNhNDA4NjhmZDRiNDExYTJiZDllMjY1NSAgc2xhbmctMi4zLjIudGFyLmJ6Mgotc2hhMjU2ICBm
-YzllM2IwZmM0ZjY3YzNjMWY2ZDQzYzkwYzE2YTVjNDJkMTE3YjhlMjg0NTdjNWI0NjgzMWI4YjVk
-M2FlMzFhICBzbGFuZy0yLjMuMi50YXIuYnoyCitzaGExICAzOGQ5YjhlODBlNDMzNmY3NmRmZjNl
-MWQ4NTc2MWQyZDBmNzEzNTk1ICBzbGFuZy0yLjMuMy50YXIuYnoyCitzaGEyNTYgIGY5MTQ1MDU0
-YWUxMzE5NzNjNjEyMDhlYTgyNDg2ZDVkZDEwZTNjNWNkYWQyM2I3YzRhMDYxNzc0M2M4ZjVhMTgg
-IHNsYW5nLTIuMy4zLnRhci5iejIKIAogIyBMaWNlbnNlIGZpbGUsIGxvY2FsbHkgY29tcHV0ZWQK
-IHNoYTI1NiAgZmYwNWE5MDk2MmU3NzczZjhiZGM0N2IyYTk1ODUxMzA1MjYwMzkxMDI3NTliNTI0
-YzFkZmZiZDU3Y2ZlNDY5YiAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9zbGFuZy9zbGFu
-Zy5tayBiL3BhY2thZ2Uvc2xhbmcvc2xhbmcubWsKaW5kZXggNDRhMDE0ODA4OC4uZTBmNTk2OGI0
-NiAxMDA2NDQKLS0tIGEvcGFja2FnZS9zbGFuZy9zbGFuZy5taworKysgYi9wYWNrYWdlL3NsYW5n
-L3NsYW5nLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAot
-U0xBTkdfVkVSU0lPTiA9IDIuMy4yCitTTEFOR19WRVJTSU9OID0gMi4zLjMKIFNMQU5HX1NPVVJD
-RSA9IHNsYW5nLSQoU0xBTkdfVkVSU0lPTikudGFyLmJ6MgogU0xBTkdfU0lURSA9IGh0dHA6Ly93
-d3cuamVkc29mdC5vcmcvcmVsZWFzZXMvc2xhbmcKIFNMQU5HX0xJQ0VOU0UgPSBHUEwtMi4wKwot
-LSAKMi4zNS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+- Drop patch (already in version)
+- pcre2 is an optional dependency since
+  https://github.com/irontec/sngrep/commit/cac42deab5e94661e2495399bc40eaf75e0b46bc
+- zlib is an optional dependency since
+  https://github.com/irontec/sngrep/commit/c02f439d73f33c727909131cb4d9d01029d7492f
+
+https://github.com/irontec/sngrep/blob/v1.6.0/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...nssl.h-fix-build-with-libressl-3.5.0.patch | 40 -------------------
+ package/sngrep/sngrep.hash                    |  6 +--
+ package/sngrep/sngrep.mk                      | 21 +++++++---
+ 3 files changed, 19 insertions(+), 48 deletions(-)
+ delete mode 100644 package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+
+diff --git a/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch b/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
+deleted file mode 100644
+index 7dbb29ab00..0000000000
+--- a/package/sngrep/0001-src-capture_openssl.h-fix-build-with-libressl-3.5.0.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 29 Apr 2022 18:53:45 +0200
+-Subject: [PATCH] src/capture_openssl.h: fix build with libressl >= 3.5.0
+-
+-Fix the following build failure with libressl >= 3.5.0:
+-
+-capture_openssl.c: In function 'P_hash':
+-capture_openssl.c:101:18: error: storage size of 'hm' isn't known
+-  101 |         HMAC_CTX hm;
+-      |                  ^~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/f1e8cdb3ac35a30055ab79d41e6cc038e5339c37
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/irontec/sngrep/commit/4e1406ad0df370ff8bf1d3a81aaadbb1cad2d761]
+----
+- src/capture_openssl.h | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/capture_openssl.h b/src/capture_openssl.h
+-index 780de494..1f87a5cd 100644
+---- a/src/capture_openssl.h
+-+++ b/src/capture_openssl.h
+-@@ -67,10 +67,11 @@
+- #endif
+- 
+- /* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
+-- * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
+-+ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...) until
+-+ * version 3.5.0
+-  */
+- #if defined(LIBRESSL_VERSION_NUMBER)
+--#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
+-+#define MODSSL_USE_OPENSSL_PRE_1_1_API (LIBRESSL_VERSION_NUMBER < 0x30500000L)
+- #else
+- #define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
+- #endif
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index 33fa91ef5e..60a32022e6 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/irontec/sngrep/releases/download/v1.4.7/sngrep-1.4.7.tar.gz.md5sum
+-md5  78fe753e24f36ddaf627bc2b734f45ba  sngrep-1.4.7.tar.gz
++# From https://github.com/irontec/sngrep/releases/download/v1.6.0/sngrep-1.6.0.tar.gz.md5sum
++md5  1519ca6cd1167c0722debfb96e2ac173  sngrep-1.6.0.tar.gz
+ 
+ # Locally computed
+-sha256  3c96aadd8b8c6b7adb5552d6fb4234f2000f15109b0f6c5feb632c81306cc49b  sngrep-1.4.7.tar.gz
++sha256  fd80964d6560f2ff57b4f5bef2353d1a6f7c48d2f1a5f0a167c854bd2e801999  sngrep-1.6.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 841a7bb991..7b614f1770 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-SNGREP_VERSION = 1.4.7
+-SNGREP_SITE = $(call github,irontec,sngrep,v$(SNGREP_VERSION))
++SNGREP_VERSION = 1.6.0
++SNGREP_SITE = \
++	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
+ SNGREP_AUTORECONF = YES
+@@ -29,11 +30,21 @@ else
+ SNGREP_CONF_OPTS += --without-gnutls --without-openssl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PCRE),y)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++SNGREP_DEPENDENCIES += pcre2
++SNGREP_CONF_OPTS += --without-pcre --with-pcre2 
++else ifeq ($(BR2_PACKAGE_PCRE),y)
+ SNGREP_DEPENDENCIES += pcre
+-SNGREP_CONF_OPTS += --with-pcre
++SNGREP_CONF_OPTS += --with-pcre --without-pcre2
+ else
+-SNGREP_CONF_OPTS += --without-pcre
++SNGREP_CONF_OPTS += --without-pcre --without-pcre2
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++SNGREP_DEPENDENCIES += zlib
++SNGREP_CONF_OPTS += --with-zlib 
++else
++SNGREP_CONF_OPTS += --without-zlib
+ endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
