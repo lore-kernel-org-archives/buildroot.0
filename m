@@ -4,142 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB71DC38A02
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 12:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94976ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 16:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F394414EA;
-	Fri, 28 Oct 2022 12:59:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F394414EA
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3E4A4151E;
+	Fri, 28 Oct 2022 16:48:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3E4A4151E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V5vXy65lA4Em; Fri, 28 Oct 2022 12:59:29 +0000 (UTC)
+	with ESMTP id 2SJKyW-sQfgQ; Fri, 28 Oct 2022 16:48:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A5BE4094D;
-	Fri, 28 Oct 2022 12:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A5BE4094D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F7BF1BF32B
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 12:59:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F71341516;
+	Fri, 28 Oct 2022 16:48:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F71341516
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 21FE31BF299
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 16:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0E5E40911
- for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 12:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0E5E40911
+ by smtp1.osuosl.org (Postfix) with ESMTP id F148B81819
+ for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 16:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F148B81819
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zI7yShqMUNDG for <buildroot@lists.busybox.net>;
- Fri, 28 Oct 2022 12:59:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7MgKteDDxvHx for <buildroot@lists.busybox.net>;
+ Fri, 28 Oct 2022 16:48:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADC35402E7
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-eopbgr60045.outbound.protection.outlook.com [40.107.6.45])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ADC35402E7
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 12:59:08 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HtnOcHy6l7wBIsuGft41cddrOf7kuRdM31LQ2Kt9SFaQFP37eWZsWkl9prKBSlxsbXOCjQYAhmSO2ZX+fxPOXoJSK8mzXgbDhAzT0p26+VjVszj8GsJMyqNfaby81nupsdXVhic6IsFtENdRbfpur/8VQbsjq+UYFl2KQDh4uFjeQoFqJXFM3aqqL6T+IHaLuI/66TCGF7YmhyCkpN/rLH7KDtpmal0E1pcQOn5sOXHUocqcqSmAkB2bcerBN7+CWRPjXK2uxcBNxOcQCKgc2eKecSu2xSMbFyEugXsPjllDV1E4/HT2iPrxK1DL3gbgZ7mmlbTjZBHpA972hvA2Fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yOF8AMdDvig2Ona+wazr/a7VKoB5b3y/tnyYWbnHCRE=;
- b=ikNJQZnmVrFlU0Yx4lk0HP/Y0T/l6cD8sni3u0boUTmen9Vd6kTRI7Y0rG9dYzq7L5CVRPTOMSKNbkVhSpL2E0KEC8a7iCa1SsU5V4ohpNElhoAP7JYyRrmfemmunGnSqKtbenawh5Wr9oP5ZhQ3TNXhTcld4mw3Wf5wrvYd46e9GrW9SEyJzJca/3NT3VJfOEI68UcbLrbOT3QWqx+riTf8adi8+dL+mZKT4itq0xgs7olj/0ZZyZFPyJHmQQ7FJEMTrVmQJc9Wbq/QuLSJmFF9HoFRS0/TIlFlQmIM0filJHlkau8B1KBZsPIKyXYZEjDnHFP5Q68zWUdaGKpFXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
- dkim=pass header.d=vaisala.com; arc=none
-Received: from HE1PR0601MB2361.eurprd06.prod.outlook.com (2603:10a6:3:97::9)
- by AM0PR06MB5171.eurprd06.prod.outlook.com (2603:10a6:208:e8::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
- 2022 12:59:04 +0000
-Received: from HE1PR0601MB2361.eurprd06.prod.outlook.com
- ([fe80::b98d:390e:3a17:e9f9]) by HE1PR0601MB2361.eurprd06.prod.outlook.com
- ([fe80::b98d:390e:3a17:e9f9%10]) with mapi id 15.20.5746.028; Fri, 28 Oct
- 2022 12:59:03 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "fontaine.fabrice@gmail.com" <fontaine.fabrice@gmail.com>
-Thread-Topic: [Buildroot] [PATCH 1/1] package/valijson: bump to version 0.7
-Thread-Index: AQHY5lbCBpiqfJo8PE+9jVKTfMXcE64jzWuA
-Date: Fri, 28 Oct 2022 12:59:03 +0000
-Message-ID: <88f2cc785e1694565cb19f530036a85ef847dc0a.camel@vaisala.com>
-References: <20221022204144.137169-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20221022204144.137169-1-fontaine.fabrice@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0601MB2361:EE_|AM0PR06MB5171:EE_
-x-ms-office365-filtering-correlation-id: 47400cb3-4adc-4838-b1f3-08dab8e430c8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: K3UlW/ueWg85LsQ5LViKRntvWKacZZjrT8pCbAoGlzaPy4cCpcmIxClyqza7CXcgusaU5sOzNuT2BTpRvzZlghOPxSymaEDrJ/C1De74H+0vf6OUF9EITBgI/D46U+lYMUS1GciZ8BfxiHebD7RY5DLi65+ICoAxYRvsDxxgiII9Km4Cj93+sr6ifMtEUjg5J8VUIYdkKZzl+JjtZkN02P+0ivupL6oXa8IdtKd0rS+IVI5FDtizjIzY/sgrozBPT0QFGw+yxiGIHbObETqxH9bTv8rVmhl/zpgsXIUkfyswDKyWv3sz1qrEB8pp7pVqTYAEoS8lUHjZoCePtrM4hWV0+vdhjDCXlIPfFeGoW9VhcokqDE5JpxoG/APCn4qtgsgIcOfNCcvMcb/YuLzL/9zjMtnIj4MXjFYFJhqmHHfPtMXF/b5p95+NDGb/M2htI3mv54xOaBjiTNaD/FXnim68cgzRKspNiKtR6ArVzBuZBYuzJi69nAdT20AGhnEwPA7BhtMYNFaSrJvr9c3dSHCXvV4o0sL+2b5XJ6CtxG1ErXc/wkWD+G+gCWFXznJbP3LldYBYsGOyt+Tux90g7KUAxh+YBD95uo5xtZsyHRrZipghVTc6Q1YDNuSWliNrhSPSP3ICsqRMsQrNGvpiSUGldbLQL4hMmxhRclM9RfnJx2IVUlFcHM8vYBRWOjoOY3ZPpRt6gkqQ8xWQZkUNJ2VVTjh23WD8+HTCaa3UTGs926ATH7QFAzAZMk4RpRL0nR8H13V7jQqqlI4ezqR2l6ei9GkEz32FsPzlNBrN4Uk=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:HE1PR0601MB2361.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(366004)(136003)(396003)(346002)(39860400002)(376002)(451199015)(36756003)(4744005)(4001150100001)(122000001)(5660300002)(2906002)(38100700002)(86362001)(38070700005)(2616005)(186003)(6512007)(26005)(966005)(6486002)(91956017)(71200400001)(478600001)(316002)(110136005)(41300700001)(8936002)(66946007)(4326008)(8676002)(66446008)(66476007)(66556008)(64756008)(76116006)(6506007);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Zm9OWFpiaC84am9yQ3Nod3FsRFF1MWVvNjFxNEdvUEZxQW11aStBdG5CcGgx?=
- =?utf-8?B?K254eWZzcVAvTU05VnRUOGxGeGNrdHgzV0o0cnJJcDFML1FoQVJjdVdGTjZT?=
- =?utf-8?B?VmJiYVZLWWxadUdCM3YrMFdzSy84NXY0NTBvUWFHZWJ1S3lJUlpTY0hzMTNm?=
- =?utf-8?B?NkdmL0xLZSszaXV0dXJ5Y1BFTWpra3FlU1dCbzBQYTBoWDdhbXFvQnNpWE5L?=
- =?utf-8?B?THJrU3NCeTMydStpZkp5TEF2K2wwc2JmekcvYnoyZUR0NmJ4V3AyVDR1cTU3?=
- =?utf-8?B?NUJINExCeFZNQnh5eS9rZkNvbVpRSWE3akw1dTlhWFd5MTJSa2MwL0lhU3NG?=
- =?utf-8?B?NnhHenBHK29HUDVEVVdGRFkyQllTeEwrWTdiQm9WU3h0cU44ZVJpcm5leTZo?=
- =?utf-8?B?UGpsQkZVTnVNcWNndFFsOU9Sb3NWWDlncGJKWUZ0aXRzb2ZRb0R0NGNQdjF2?=
- =?utf-8?B?UlZneG9LRnA2WjB0YlJYbC9QWEI2VFJLajNEN1VyS2pyZ2xYbHhlT1JKN0FG?=
- =?utf-8?B?cndLZ3c3dFJkQWFyT2cyT1NxbUJERXlqeUp2VlFNVVRTU3VRMkNOSTBoc2p5?=
- =?utf-8?B?OFlsZTBMTGVjSkIvRnAwRmUrTU5MYmJDd3JEMDBvM3VaNDI1YVArMkczTVh0?=
- =?utf-8?B?R20xUWFhNXJVZTM5QnhwTWMzc0tSSlE1c2Z0ZGVyOFpZRXd0cFplcDJEV0JN?=
- =?utf-8?B?YytOemx6Wjg1eXBFOWEzU1B4OGxLcjBBVzFHUG5vUTJlRlMrYUxaSzVYVTBX?=
- =?utf-8?B?RTA0UUV6Q2tIZy9PQWU0MS9zeG1RTnZNVVl0Sm1SWGVCQURVRi9kSndVS2th?=
- =?utf-8?B?ZjV2VExtVmI4Zm0vWTFOcTVvVnBHaWY2U2ZGREpXZU1BRm9ZKytOaHE4empk?=
- =?utf-8?B?MEdzbktkNm5yaUNVM1AzUG1nMWdCR2JEaTB3U2dVbVMvZlFXN3BOVTBmTlU1?=
- =?utf-8?B?RG40bTQ4TGJ5YldqNVdWVlF6Si81TWhQMDdyY0txMCtQTzlqbXZlRSttRDk1?=
- =?utf-8?B?UVRwalhkQWVBeFBOSGtjc25tWXdIdGZRL0tkWUs5Smh2NmZWeWVQczg0Z3Jv?=
- =?utf-8?B?NGpDZUZXM1JXSHZrbXl0NDRBOXpPSjhVNFlZM2lGNldnRW83UzgzanFPeXdX?=
- =?utf-8?B?ODJxQU5wVkhkb3ZFS1cxOVVhNTd5a1pnSFVUWjJzWlNiaXU4ZkpFTXJUaW1U?=
- =?utf-8?B?VnQ5L3FmNnltVXI5bURnU1Jab29tSmtMVGNRMytNaGhqb2tuek5TcFJKeEdM?=
- =?utf-8?B?REtvMkpCcHNIV3IzZWN6aHJ0Ykhla1g3dW9TRzVtbXU1dGNJK3pWbitsSmVQ?=
- =?utf-8?B?STF2VTVSczFqbEdyMGVmOUI2cFBzelRXY0VYbXNydzBKc2tDQWZGUWp2bFlS?=
- =?utf-8?B?bUtUUHBNVFNGUWFMeXozbnkvcDJrM01MRFoyRnVrLzMyQ09wcUJKd2M3Y3Vs?=
- =?utf-8?B?N3JtUWJuWlZ3b25zR2l6c3dwSVpUczZPb3hhTDdIYXBWVnRFK2ZGaFpIaW91?=
- =?utf-8?B?SnY1ZUIzUXRxZnNsOWZnVW1jNmlMQ0FsTDNuNllrWUFub2xlNlJGanlHQjIz?=
- =?utf-8?B?VDlaVFBRNUdOT0pWV2VRNlBoc2Q4TkxkckZrd1pVaUZTQkJkZGNJQkFwejRS?=
- =?utf-8?B?VEpuMDd3WDhxazlzVkgrRjZYRDNwUDlWL0hPUzhtbkRVRW5UNWsyMi94UGVv?=
- =?utf-8?B?ZFdsRG9iRVNLaFZWWmRXR0c2MjJDKzFSS0ZZOCtoWTNFaGMvQ0xFeVBJVFk4?=
- =?utf-8?B?dlVXODdsdlJWakdNeCtzbW5oamFob0ZYQVliQm9uYThJL0F6QXF6YzJXeEp0?=
- =?utf-8?B?ZFViSStvS2xTcVl6QTc1aW8rSWNqK0pjQTBXSXRBN3pERU1uTHhRSTRJenpK?=
- =?utf-8?B?QmNUaWxyandUdUsyUkxIV0w5RFR4TjJ4Y09EaXI2OXRsd3JVVGdMc2xRMVZC?=
- =?utf-8?B?QjRsQUJ6NnlSek05VHR1Q1NuN2lCemZoalpzcUs0MXhtSWtQc2EzWkNVbVk4?=
- =?utf-8?B?UnlwV09jWkp2VU5UNGdKMk9EREV0dHlabUgrOEg1MFcxaWRLVzNlM2g1aCtu?=
- =?utf-8?B?aFFzZkpieXBqRmxreEdkM1ZBczZVbnE2aHJKV1NnUm5heVd2TlFNYlBJVFhV?=
- =?utf-8?B?dld3dTNlN2xNYTNvK2xoVis3ZmRwN0E2T3RNdWRqMm5nUGxiOXZaeVFjOHJn?=
- =?utf-8?Q?CJSKkOiXUzvfsrhH0xZ/Dno=3D?=
-Content-ID: <2773E6D6C1AB5D4F91BCB41E16977AEF@eurprd06.prod.outlook.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4989B8174A
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4989B8174A
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 16:48:05 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id o4so7373688wrq.6
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 09:48:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7sBQJQRzogvLdqmNt0kUZZSs1nD6vfDQ7oVfLbi3Kmc=;
+ b=wwkC2BTD+Y1tFopDyaXhjeJAa14je4HH2TpQ+L75uNr8nKtubi/Gao7O2E0dBdXJg1
+ l/PdhBMrI+gFVKbk3xzrXqwfD/zkbq2+LtzCXIqugPcslFZGdNjzD/l8AQ5DW0vfVdXd
+ 4rOCxrn8J6R6E4EP7CG5aMkIV7p/nyQUIe7rdBRSJUrC+hL5OTlCxn1Nw6gEk1ammWYQ
+ uII09lnbXDtYSRLIAGpzrYgSX7Nk10dUGqdDJseWPfuCa/RkrspgHbN50IzvKHhMmgZF
+ z3OWPIIvgN0gEkiGgqYwAOqjiPhE81xCht+bJ5SDnoatTXcpbQjVdgTxG41AjY3BylMI
+ 4R+w==
+X-Gm-Message-State: ACrzQf0lRQMhEnR6Sx60syyo6iCaMRW0ZJo/PfloVEgZ4COxoIiRLEfq
+ rRqShDqmWFOoGtuswldsEhRqrJlzSjo=
+X-Google-Smtp-Source: AMsMyM4J0CixtVKmDfDKbwrh2+hfqvTULqnn4vh4w1JrmEYUwytCGGV10sOfuEcpa8AuCvdeNpbPBA==
+X-Received: by 2002:adf:dd91:0:b0:236:a261:6930 with SMTP id
+ x17-20020adfdd91000000b00236a2616930mr143078wrl.551.1666975682988; 
+ Fri, 28 Oct 2022 09:48:02 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ z17-20020a1c4c11000000b003b3365b38f9sm4575613wmf.10.2022.10.28.09.48.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Oct 2022 09:48:02 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 28 Oct 2022 18:48:00 +0200
+Message-Id: <20221028164800.16655-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0601MB2361.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47400cb3-4adc-4838-b1f3-08dab8e430c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 12:59:03.6234 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: g6+RHEkJL71Zd261V8gTTnitz/3/c3QtWXxRZipLPUZ6RR8a3Cyp+xHjPPfQSLqjuXxmxrzocM/XJShIRlwLgOAMe9h2H2HPnFJ1Ll14oDs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB5171
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vaisala.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yOF8AMdDvig2Ona+wazr/a7VKoB5b3y/tnyYWbnHCRE=;
- b=XTciUX/eSmoDxZOSuuYVVMT5V9nSSKbuZProfav4+K+AJZWL0XfI//PkgTwbwgBfJvuKElN9Xl6aHM+DtbfU5UDagTeE8Haj4mccWvTxDsspSA6BN0zHvwGIzMsov7UakHhgpsRMVAlU7KRdTAmJ2YVANvsJdGkH7iRD3AIwwbKligAiaVITfEeCRJ3f6w2vU1ajABbNKttQiWlXk6QpROYBttTzb1WQ1htLMsl7ubuTGoZLGv6AfsStYlA08RiImHCGAMUjrKIhy3b3TK7H+OJ7IHrQwBFT/6kZZDmgM4/sBL2tz5o/Wu25yhv0sh4bKfMSPul8pGt8dU4juJJSxw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=vaisala.com header.i=@vaisala.com header.a=rsa-sha256
- header.s=selector1 header.b=XTciUX/e
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vaisala.com;
-Subject: Re: [Buildroot] [PATCH 1/1] package/valijson: bump to version 0.7
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7sBQJQRzogvLdqmNt0kUZZSs1nD6vfDQ7oVfLbi3Kmc=;
+ b=CxuTlKORv4GPyi5YN0usigt81/3MYU5qe6nr4YaBC0gB1aLCTES+DDcp6HasDSFQJo
+ pDD4DciMRWozVK1bKVUFutKIaLIIKqpqBTzdxodsPkxNecY4tKs+c1wqHb9/K+OgaxU0
+ /qGOQV3O+SV9kFz1Wz1y/cb8GYQ2MDdBNVR7VvuDGg9onAeIt3iElZX2VJlAgITbBvRc
+ WME7amVmLJu/cCzo2PcwqfNC8yDjsgCe/BwyPyxBOabwGwSShwJDyuHmldCVtG8B2I9X
+ UX4/kR0Znr56qROlbHnlwot490UdTX6rR2EmybOyi62dqnFt4ZKMKjEA3cdmvITCG/qY
+ Ai/Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=CxuTlKOR
+Subject: [Buildroot] [PATCH 1/1] package/lz4: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -151,36 +93,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Aaltonen Eero via buildroot <buildroot@buildroot.org>
-Reply-To: Aaltonen Eero <eero.aaltonen@vaisala.com>
-Cc: "matthew.weber@collins.com" <matthew.weber@collins.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 2022-10-22 at 22:41 +0200, Fabrice Fontaine wrote:
-> 
-> https://github.com/tristanpenman/valijson/releases/tag/v0.7
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix the following static build failure raised since bump to version
+1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
 
-Reviewed-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
-Tested-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
+compiling dynamic library 1.9.4
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/crt1.o: in function `_start':
+(.text+0x1c): undefined reference to `main'
 
-Good to me.
- 
-Testing:
-* check-package
-* check tar.gz hash
-* make
-   * checked sysroot/usr/include/valijson/ headers are there
-   * checked sysroot/usr/lib/cmake/valijson/valijsonConfig.cmake is
-there.
+Fixes:
+ - http://autobuild.buildroot.org/results/9187852fb7a869bf5595275d47929632659a4407
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-build-Support-BUILD_SHARED-no.patch  | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/lz4/0001-build-Support-BUILD_SHARED-no.patch
+
+diff --git a/package/lz4/0001-build-Support-BUILD_SHARED-no.patch b/package/lz4/0001-build-Support-BUILD_SHARED-no.patch
+new file mode 100644
+index 0000000000..d2d8639a3b
+--- /dev/null
++++ b/package/lz4/0001-build-Support-BUILD_SHARED-no.patch
+@@ -0,0 +1,42 @@
++From 5ccbd38277989ae6a728171d59ae03bad6f2f4d5 Mon Sep 17 00:00:00 2001
++From: Fotis Xenakis <foxen@windowslive.com>
++Date: Tue, 13 Sep 2022 20:09:36 +0300
++Subject: [PATCH] build: Support BUILD_SHARED=no
++
++Since e585a438c714652e866a59371b287f52aa4d2dc3, the BUILD_SHARED
++Makefile variable only takes effect for the install target (i.e. the
++shared libraries always built). This restores the original behaviour.
++
++[Retrieved from:
++https://github.com/lz4/lz4/commit/5ccbd38277989ae6a728171d59ae03bad6f2f4d5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/lib/Makefile b/lib/Makefile
++index 06503cb2a..ee262c0df 100644
++--- a/lib/Makefile
+++++ b/lib/Makefile
++@@ -112,17 +112,21 @@ liblz4-dll.o: liblz4-dll.rc
++ 	$(WINDRES) -i liblz4-dll.rc -o liblz4-dll.o
++ 
++ $(LIBLZ4): $(SRCFILES) liblz4-dll.o
+++ifeq ($(BUILD_SHARED),yes)
++ 	@echo compiling dynamic library $(LIBVER)
++ 	$(CC) $(FLAGS) -DLZ4_DLL_EXPORT=1 -shared $^ -o dll/$@.dll -Wl,--out-implib,dll/$(LIBLZ4_EXP)
+++endif
++ 
++ else   # not windows
++ 
++ $(LIBLZ4): $(SRCFILES)
+++ifeq ($(BUILD_SHARED),yes)
++ 	@echo compiling dynamic library $(LIBVER)
++ 	$(CC) $(FLAGS) -shared $^ -fPIC -fvisibility=hidden $(SONAME_FLAGS) -o $@
++ 	@echo creating versioned links
++ 	$(LN_SF) $@ liblz4.$(SHARED_EXT_MAJOR)
++ 	$(LN_SF) $@ liblz4.$(SHARED_EXT)
+++endif
++ 
++ endif
++ 
 -- 
-Eero Aaltonen
-eero.aaltonen@vaisala.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
