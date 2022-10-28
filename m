@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19B0FC38A02
-	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2D10C38A02
+	for <buildroot@archiver.kernel.org>; Fri, 28 Oct 2022 06:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9A8941477;
-	Fri, 28 Oct 2022 06:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9A8941477
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CFB381759;
+	Fri, 28 Oct 2022 06:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CFB381759
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kPkkemU19EpY; Fri, 28 Oct 2022 06:56:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vs5bhznPHM9n; Fri, 28 Oct 2022 06:56:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A7074018C;
-	Fri, 28 Oct 2022 06:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A7074018C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AA9791BF860
+	by smtp1.osuosl.org (Postfix) with ESMTP id D581781493;
+	Fri, 28 Oct 2022 06:56:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D581781493
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC82B1BF9AC
  for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90D0B40133
+ by smtp1.osuosl.org (Postfix) with ESMTP id A60D88174C
  for <buildroot@lists.busybox.net>; Fri, 28 Oct 2022 06:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90D0B40133
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A60D88174C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pPiy5qcy2qBR for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id elLTJnj-_11w for <buildroot@lists.busybox.net>;
  Fri, 28 Oct 2022 06:56:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BACE9400D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id C594A81312
  for <buildroot@buildroot.org>; Fri, 28 Oct 2022 06:56:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BACE9400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C594A81312
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA11D873E8; Fri, 28 Oct 2022 06:56:11 +0000 (UTC)
+ id B3EDE873E9; Fri, 28 Oct 2022 06:56:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Oct 2022 08:55:15 +0200
+Date: Fri, 28 Oct 2022 08:56:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fe9ae335f8cfa5140ef5309ac931cbd3e4cf3fb
-X-Git-Newrev: a30e31a05e21461e73175c814ba858edb23a363e
+X-Git-Oldrev: a30e31a05e21461e73175c814ba858edb23a363e
+X-Git-Newrev: 123fa2d801ab0b9a5dd025a083c6264271d79aaf
 X-Patchwork-Hint: ignore
-Message-Id: <20221028065611.AA11D873E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sratom: bump to version 0.6.14
+Message-Id: <20221028065611.B3EDE873E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libffi: bump to version 3.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a30e31a05e21461e73175c814ba858edb23a363e
+commit: https://git.buildroot.net/buildroot/commit/?id=123fa2d801ab0b9a5dd025a083c6264271d79aaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update hash of COPYING (standard ISC licence used since
-  https://github.com/lv2/sratom/commit/145ed2fe9756f707d9fd5f03ada5327d04e1b972)
-- meson must be used since
-  https://github.com/lv2/sratom/commit/75e647def0f67647ec7ba1405e26d809a87c62fc
+3.4.4 Oct-23-2022
+    Important aarch64 fixes, including support for linux builds
+      with Link Time Optimization (-flto).
+    Fix x86 stdcall stack alignment.
+    Fix x86 Windows msvc assembler compatibility.
+    Fix moxie and or1k small structure args.
 
-https://github.com/lv2/sratom/blob/v0.6.14/NEWS
+https://github.com/libffi/libffi/releases/tag/v3.4.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sratom/sratom.hash |  6 +++---
- package/sratom/sratom.mk   | 12 ++++--------
- 2 files changed, 7 insertions(+), 11 deletions(-)
+ package/libffi/libffi.hash | 2 +-
+ package/libffi/libffi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sratom/sratom.hash b/package/sratom/sratom.hash
-index 64d460b2ea..3b8fa65300 100644
---- a/package/sratom/sratom.hash
-+++ b/package/sratom/sratom.hash
+diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
+index 689b5da4f1..8d2349ec21 100644
+--- a/package/libffi/libffi.hash
++++ b/package/libffi/libffi.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--# https://download.drobilla.net/sratom-0.6.8.tar.bz2.asc
--sha256  3acb32b1adc5a2b7facdade2e0818bcd6c71f23f84a1ebc17815bb7a0d2d02df  sratom-0.6.8.tar.bz2
--sha256  3fc429d6b944fa20306357196a28bb4dd7c25e2d67edebec771f44de5bd7f9e8  COPYING
-+# https://download.drobilla.net/sratom-0.6.14.tar.xz.sig
-+sha256  9982faf40db83aedd9b3850e499fecd6852b8b4ba6dede514013655cffaca1e6  sratom-0.6.14.tar.xz
-+sha256  97742aacc982d8bb10d4450e3ce71dd02a9f26ba73a0eb822ef3356a74525597  COPYING
-diff --git a/package/sratom/sratom.mk b/package/sratom/sratom.mk
-index e1e0f4e033..25e7a091b3 100644
---- a/package/sratom/sratom.mk
-+++ b/package/sratom/sratom.mk
-@@ -4,18 +4,14 @@
+ # Locally calculated
+-sha256  4416dd92b6ae8fcb5b10421e711c4d3cb31203d77521a77d85d0102311e6c3b8  libffi-3.4.3.tar.gz
++sha256  d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676  libffi-3.4.4.tar.gz
+ # License files, locally calculated
+ sha256  2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388  LICENSE
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index ecfa120c7a..8f6844113c 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SRATOM_VERSION = 0.6.8
-+SRATOM_VERSION = 0.6.14
- SRATOM_SITE = https://download.drobilla.net
--SRATOM_SOURCE = sratom-$(SRATOM_VERSION).tar.bz2
-+SRATOM_SOURCE = sratom-$(SRATOM_VERSION).tar.xz
- SRATOM_LICENSE = ISC
- SRATOM_LICENSE_FILES = COPYING
- SRATOM_DEPENDENCIES = host-pkgconf lv2 serd sord
- SRATOM_INSTALL_STAGING = YES
- 
--SRATOM_CONF_OPTS += --no-coverage
-+SRATOM_CONF_OPTS += -Ddocs=disabled -Dtests=disabled
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--SRATOM_CONF_OPTS += --static --no-shared
--endif
--
--$(eval $(waf-package))
-+$(eval $(meson-package))
+-LIBFFI_VERSION = 3.4.3
++LIBFFI_VERSION = 3.4.4
+ LIBFFI_SITE = \
+ 	https://github.com/libffi/libffi/releases/download/v$(LIBFFI_VERSION)
+ LIBFFI_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
