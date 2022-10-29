@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B1FEC38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 17:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D01C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 18:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A39760B28;
-	Sat, 29 Oct 2022 17:26:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A39760B28
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9BA64088A;
+	Sat, 29 Oct 2022 18:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9BA64088A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f0IhxuqGBR6G; Sat, 29 Oct 2022 17:26:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3H9MkcWsyYqf; Sat, 29 Oct 2022 18:47:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62A1760A8A;
-	Sat, 29 Oct 2022 17:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62A1760A8A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 99DAC1BF255
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:26:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A32D740888;
+	Sat, 29 Oct 2022 18:47:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A32D740888
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4571E1BF5A9
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 18:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 821A2813DD
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 821A2813DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20C7440882
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 18:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20C7440882
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obyfnBS4ho_g for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 17:26:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XwC7F1hQo8FF for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 18:47:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DB40813B5
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2DB40813B5
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 17:26:17 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id v1so10402678wrt.11
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 10:26:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A2E940761
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9A2E940761
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 18:47:47 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id 5so4986538wmo.1
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 11:47:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0PGeycTUwwuP2MBHIXvRDT09e3NK0w97U4tTIfrL+3E=;
- b=sJRv+GxPyixql95MTO6jdxeiK7y0DL8DgjnJ0wj1ZbqGkkDM4oPqXPXrGBUzWkIvZ1
- k3DhP1BT+hVXka9Up2BgUBJfCLaL8fTyLewAFivKSn7NXPu1FGn0BfPt3SPvSKstiQKS
- NzZVULGtHqBYCuB1VHs+DA05PNx4QopoJ6u61eYiNKWr2fDnI0X+K1+i6iTYC4+d52rL
- 6hXcr3MVsXgP6fMb6Jwo/exaq0AvNHUBIt+XXEenzwB/7ePyeglNly741aDZRgLKmUT2
- Gz8tPLyomQaxyQAFrRIMs9kO5VcWMm6X2f8kYHkKe/+K0lTPE8mbVVMbsXxdBbqdy30v
- lEmg==
-X-Gm-Message-State: ACrzQf0pd/OMRbBQ4RvBfBqTFSfscHlBAZ9V5uD69sQMbLPGGS5nzpzF
- uJew8zN5ukNpscjk413tYPh0yW9LP4I=
-X-Google-Smtp-Source: AMsMyM5BI56dUIGgHklyjQhfSHCrh9vy3/F29T8SY2upkFxn3Grq981JaxAzWpWjMiUt1+8mM4yIag==
-X-Received: by 2002:adf:cd09:0:b0:236:659a:6902 with SMTP id
- w9-20020adfcd09000000b00236659a6902mr2925528wrm.574.1667064375069; 
- Sat, 29 Oct 2022 10:26:15 -0700 (PDT)
+ bh=v0aHrhCfCGBUz2lmHRBZ1061l8nEUH3IzKuWM7UVJG0=;
+ b=XB3hQdWDMHEqwKUUaJ+6/s8nEmHc7FopOsCJ8zXo4t3ksOQ/ZXjZS9P8M52a0tN0FA
+ HjocZCF9BoS2SUQ05u8XFp4nsQL2ZG/1jvKVuEFRX9FT8TPBi9mU7F3LCj+0Ve2GZQIH
+ moDwYWgz13xvatIdvr/mIeFbaBaTjPtu5MglTwzxQtYgQ+K2/hFeLgNH7nTzFckku0mu
+ eyXRN4yYwY9nthTfZIMUnrqKSas8O3tJEw3OxFB35nsFqHCzDFsRA4nMtnt/AmfmDczN
+ 1IeWNWOYtIQ88esjopULZjPoX3LCU69aWrVV6lYdOIuVgY1PtCysW7wWHVavHHfcuN7x
+ gJ3g==
+X-Gm-Message-State: ACrzQf3/TaU1TC5JnzeFiJgMSjAVjcKu6D7WN4ibrOnOGDuJFFswR7qR
+ KG5JWkhzzFoPWLpWGBHWwlcOwCYkFcE=
+X-Google-Smtp-Source: AMsMyM4W+HQxVLEfPW8/mMqI7f/IGyybNpQxwhqDP+jUJKZ8CNvaWCBxFhxldAyZkZuEJ/9+Glx7nQ==
+X-Received: by 2002:a05:600c:1819:b0:3cf:63fe:944a with SMTP id
+ n25-20020a05600c181900b003cf63fe944amr2634698wmp.17.1667069265254; 
+ Sat, 29 Oct 2022 11:47:45 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- k6-20020a05600c1c8600b003b4e009deb2sm2542011wms.41.2022.10.29.10.26.14
+ p1-20020a05600c358100b003c6237e867esm2785391wmq.0.2022.10.29.11.47.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 10:26:14 -0700 (PDT)
+ Sat, 29 Oct 2022 11:47:44 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 19:26:13 +0200
-Message-Id: <20221029172613.255025-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Oct 2022 20:47:42 +0200
+Message-Id: <20221029184742.17565-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0PGeycTUwwuP2MBHIXvRDT09e3NK0w97U4tTIfrL+3E=;
- b=UmSJL3pUJCFGSpjMLAiuiA/X60KPmKmHsyR0UCPh0hxq7l/7Ejlln9zd1HOCx6Gs2p
- RKBMMeM9Zq+CeCuQLhranF7AdUI1S1Tlt4Bmu9gwhaaGDdRv9wchMFXeaQdP2nmWIJnJ
- ZLKEr0myEQZoro2xUzVL/FmE9md+TEU1D4CwQij4rmGMIAcugl2V+dFZJfb6YjnI2KiC
- WnnTpqQQobUjrIEWOR5O8eiDNG1RlyYSUNkRbrafW/68iFtqV8R7MIp8+AZOGDYBWz+X
- gogtBtJ2q2W6sKs8AtN78BJWp6b+heCl8N5wH4fo6TJeR2BRtXH/AMLR251Srhk1ozRR
- qI2Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=v0aHrhCfCGBUz2lmHRBZ1061l8nEUH3IzKuWM7UVJG0=;
+ b=f7dE3QmAIiWNxKcnR/vDwy8QkAguUM8Jad8vZxGuYnD3z5T0DHgVC3oLwEP4eZdDQw
+ waC7VPoGR7V8UEIv38EpLyY5jgYMV4/jQ/2URMEU9hRUOxChMds4frcZQf85dFooWFKa
+ nPg+B6eGLq1feMj5cQluGYBsRknhr7y3IZsWBfyX43dnrtAaWRnP0TBsH2nXhTAP0QYk
+ kBQFcGdXY5l0ekgH2hKen4yrJd1NqPYadznnCr9FwAcdNJHDe1csDYIoDSuxMmVISOyo
+ LvhJ2nPsrj0MWIRyj2NF0KUk/6HcnWhfZSundddLlYgWSyekyq3+FK8X0P3MzbDBEbm5
+ wIwg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UmSJL3pU
-Subject: [Buildroot] [PATCH 1/1] package/sedutil: bump to version 1.20.0
+ header.a=rsa-sha256 header.s=20210112 header.b=f7dE3QmA
+Subject: [Buildroot] [PATCH 1/1] package/gawk: bump to version 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,36 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/Drive-Trust-Alliance/sedutil/compare/1.15.1...1.20.0
+https://git.savannah.gnu.org/cgit/gawk.git/tree/NEWS?h=gawk-5.2.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sedutil/sedutil.hash | 2 +-
- package/sedutil/sedutil.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gawk/gawk.hash | 4 ++--
+ package/gawk/gawk.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sedutil/sedutil.hash b/package/sedutil/sedutil.hash
-index 26643ef684..2ceb5db659 100644
---- a/package/sedutil/sedutil.hash
-+++ b/package/sedutil/sedutil.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 894c939c5b..3ab0cfdbb3 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/gawk/gawk-5.1.1.tar.xz.sig
++# https://ftp.gnu.org/gnu/gawk/gawk-5.2.0.tar.xz.sig
+ # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
+-sha256  d87629386e894bbea11a5e00515fc909dc9b7249529dad9e6a3a2c77085f7ea2  gawk-5.1.1.tar.xz
++sha256  e4ddbad1c2ef10e8e815ca80208d0162d4c983e6cca16f925e8418632d639018  gawk-5.2.0.tar.xz
  # Locally calculated
--sha256  9259466b4f73af276153c5245834a56f48f8721ea7263611b5d5e8326bc43d9e  sedutil-1.15.1.tar.gz
-+sha256  88016b93cbbef98fa6f5c4e6f58e6c871662b6a7f1fc8dc788c8599fa37a44f3  sedutil-1.20.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  Common/LICENSE.txt
-diff --git a/package/sedutil/sedutil.mk b/package/sedutil/sedutil.mk
-index c80e43448d..566ed4fae8 100644
---- a/package/sedutil/sedutil.mk
-+++ b/package/sedutil/sedutil.mk
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 3a1cec4969..47f681339d 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SEDUTIL_VERSION = 1.15.1
-+SEDUTIL_VERSION = 1.20.0
- SEDUTIL_SITE = $(call github,Drive-Trust-Alliance,sedutil,$(SEDUTIL_VERSION))
- SEDUTIL_LICENSE = GPL-3.0+
- SEDUTIL_LICENSE_FILES = Common/LICENSE.txt
+-GAWK_VERSION = 5.1.1
++GAWK_VERSION = 5.2.0
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
 -- 
 2.35.1
 
