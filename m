@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (unknown [140.211.166.136])
+Received: from smtp2.osuosl.org (unknown [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51015FA3741
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 00:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C6EC38A02
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 00:19:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1513460774;
-	Sat, 29 Oct 2022 00:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1513460774
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B2714017E;
+	Sat, 29 Oct 2022 00:19:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B2714017E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o4zRsF5vvkgs; Sat, 29 Oct 2022 00:04:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XUWtN1GFKPdP; Sat, 29 Oct 2022 00:19:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBC0E606C0;
-	Sat, 29 Oct 2022 00:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBC0E606C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 328241BF239
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 00:04:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D395400F8;
+	Sat, 29 Oct 2022 00:19:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D395400F8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5663C1BF239
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 00:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1896E606C0
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 00:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1896E606C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C76940104
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 00:19:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C76940104
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYrd90HAq2Ul for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 00:04:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gELd1FlrCujj for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 00:19:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 378C4606A9
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 378C4606A9
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 00:04:41 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id g13so3782508ile.0
- for <buildroot@buildroot.org>; Fri, 28 Oct 2022 17:04:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6287640017
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6287640017
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 00:19:27 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id z3so5923571iof.3
+ for <buildroot@buildroot.org>; Fri, 28 Oct 2022 17:19:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+GOd05CLCiLA5CllEDY6QKLgBEnNx6EZotkkKEUAeu8=;
- b=KV7d0mszO1ndr27BIVEJ4NopjCQLGnrgm9/HaZuLSlx9g/vs5Lk+uNvVDHuFphdEgE
- GnPEabXcw9A9ZehjjiHZGq/0KdJ6U1vccw2/9QLfiUEDoyALOsZrue0pz3zDGGi4MGgV
- B8JmGd+irigkrF/8eTlDPhZGdJZyECcskedJOqVSqqbEAuf5Mj+VipFcjgu7O2tOrO+Q
- Bt3KiZibgUCt0peQmngeIP2a4MLQ9AtbBBA6bosCtPVqIybp+ZDkgc48bKUBmzDR/Nqu
- pxIQSYMp7Ww3McGcexCHYPPfcLT6yAcAnuggAUty5nCooCa0+qbA2JnfAjXOi14QpFwh
- AAKQ==
-X-Gm-Message-State: ACrzQf1cEWYMES0DXnJpsMJshqZpoF9dubXklY/FAF6+GHi9ofwQLQMZ
- kqzK89OooE9d8rLGkmj2wJORLrXtoSU29A==
-X-Google-Smtp-Source: AMsMyM7vaYZJw0EUEsD3Z4/2DOMlFCN1tZQrFWaSmS8uWzG1cGAU0m4Y+Y66ndwZSQVUVez5CgoXxA==
-X-Received: by 2002:a92:ce8e:0:b0:300:8bd3:879d with SMTP id
- r14-20020a92ce8e000000b003008bd3879dmr884303ilo.285.1667001880057; 
- Fri, 28 Oct 2022 17:04:40 -0700 (PDT)
+ bh=bM7i/p8zW1G6ifkJDXSZNz2eKdlIqlHCB9IvaG5xCyU=;
+ b=onL5JPTAfEPi2YgG5u6PbMwMQ6kI2IdSesYBH1d6EikfgfkMNS/tdlyudmME7l4Ox8
+ 3DIohNWcfMVBHTqRWvWFQi6cEEOW71ROI4vVCg2owOOHUNd2JvqHXInRpP8yVCU25k2N
+ Ye+ekeI7ApTWZoL7jQD+uZOgyRLREs7o0ZKf5+uq5+38UBOPGS++j6snxR4H2LUuqqyG
+ D7Ov/8OkrK/Gcw5WitQk4JSL2dPT1+fZT4f2uQWlZmO3lDwIKW2hPmF0Hu7bq6mXtejy
+ plg9mmzcCwy38zfxZtp1H3YYMug/m4W4zbY+WLqVSPOVsvwZ9L8MUuuEtKh8XXysmF6n
+ FF9w==
+X-Gm-Message-State: ACrzQf0LAaH8020mW//esyANDfjYyYa7JLUJ5RBFa86S8be4RQBqf7WI
+ S7CLnWX4+4J5yN0DI4hZ2aWLuyRmHqrRqA==
+X-Google-Smtp-Source: AMsMyM7bs2X3jwh+kGSmvmIOXN0tiY0jqsmqVvJcwUen966oLoFsnL15iBP7ozhSzF1ymmcfbZK0Gw==
+X-Received: by 2002:a05:6602:26d5:b0:68a:db5d:2923 with SMTP id
+ g21-20020a05660226d500b0068adb5d2923mr1024248ioo.175.1667002764463; 
+ Fri, 28 Oct 2022 17:19:24 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- f9-20020a05660215c900b006afe1d84207sm37859iow.25.2022.10.28.17.04.39
+ m17-20020a6bf311000000b006bbf0466587sm35894ioh.49.2022.10.28.17.19.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Oct 2022 17:04:39 -0700 (PDT)
+ Fri, 28 Oct 2022 17:19:23 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Oct 2022 18:04:37 -0600
-Message-Id: <20221029000437.1305667-1-james.hilliard1@gmail.com>
+Date: Fri, 28 Oct 2022 18:19:17 -0600
+Message-Id: <20221029001917.1312839-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+GOd05CLCiLA5CllEDY6QKLgBEnNx6EZotkkKEUAeu8=;
- b=Z5bl5GF+p0alKSSVNPxcEWjS/DuO3M6LlmKnn59VZ8c2MCdL/gOFk0gl4GDwY5/OU0
- 3rKjRroJvPsAuW3bmu5axe8C4vAnz2W65odWpdicp7PH58g50MnJVF/7GXH9nUTRKL4v
- P/WqqO3wZlsS2PQNCycmisLcc4fdpxVMMF+w3Hvq7gwBnVust6QeEGDAmMGRXlcPlK5U
- z78Y06EOKZcnrO7f+pZkNnPYnHQ9O9u6TaeuDc5gfhnbLfvA0CBKT7o3SZyXB0NMEz2a
- orKhh7lTEvCO/930h7JT+22GjIATolNWZ7KzO2GhV8eKB4coJUUcH4oh1MAdCNptlwHJ
- Hgkg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=bM7i/p8zW1G6ifkJDXSZNz2eKdlIqlHCB9IvaG5xCyU=;
+ b=iQx6sIDyXYNhaVvxFZjxdpCLzwl5vBFAf5SHcSMPTTw4D58LDqFanveDExTcgM0wPK
+ qdFmjOZK22S4Q8g05Ucs73TGek76BmxWoxZoy7IU7ZzpR8JIYPnUx/33foDiK4wfIAqe
+ BFau7Ln5E8zxKauaQaoNQK8tHJPegSt0aTwvIDFZFSaPF9E+CKipjpCPizWQkf7de7ei
+ +RHQmE+Ep35rclTJjfSgOgYIOz6MeP3fxjXzyBI0vgfHK0cEKvf3+0hd8OZt6gK4i1zp
+ Bmihm1PxPeKa4+PQDGwq9ne83AaQKOvv/w9lyPU5gGaM7UtpTjeeuWF3QgC0VCBafSMn
+ /9qQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Z5bl5GF+
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-session: bump to
- version 2.12.0
+ header.a=rsa-sha256 header.s=20210112 header.b=iQx6sIDy
+Subject: [Buildroot] [PATCH 1/1] package/python-typing-extensions: bump to
+ version 4.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to date/formatting updates:
+https://github.com/python/typing_extensions/commit/fb77519b198f9d610ee8f674e27b8ce1da00f61f
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
- package/python-aiohttp-session/python-aiohttp-session.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../python-typing-extensions/python-typing-extensions.hash  | 6 +++---
+ .../python-typing-extensions/python-typing-extensions.mk    | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
-index 8b44318307..efdac39007 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.hash
-+++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
+index 2512ed042d..249bb63a42 100644
+--- a/package/python-typing-extensions/python-typing-extensions.hash
++++ b/package/python-typing-extensions/python-typing-extensions.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
--md5  797273eb5f0ef9e95fa92c6a933cf4ad  aiohttp-session-2.11.0.tar.gz
--sha256  0fdf39600f6a05c4943ef6c7b099071ca9854413111a26761626244be5015dc4  aiohttp-session-2.11.0.tar.gz
-+md5  b89bde69f6f3c61a991ff408d2733838  aiohttp-session-2.12.0.tar.gz
-+sha256  0ccd11a7c77cb9e5a61f4daacdc9170d561112f9cfaf9e9a2d9867c0587d1950  aiohttp-session-2.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
+-md5  30ff8c89459dd93970a92a90b0386aba  typing_extensions-4.3.0.tar.gz
+-sha256  e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6  typing_extensions-4.3.0.tar.gz
++md5  5cfcb56ea6fc4972c3600c0030f4d136  typing_extensions-4.4.0.tar.gz
++sha256  1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa  typing_extensions-4.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  7bc5dd2f229a6b922befb1427fd4ad2c0b255f12c1b1869370ba77520dc22bc7  LICENSE
-diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
-index 3d59b75e3d..55bf0e87f3 100644
---- a/package/python-aiohttp-session/python-aiohttp-session.mk
-+++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+-sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
++sha256  c7afb65e755707b9fb90487389a176d3ed3d0031d5131afde45c23715ff5e891  LICENSE
+diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
+index 2b8c23f354..fd7d0bd93a 100644
+--- a/package/python-typing-extensions/python-typing-extensions.mk
++++ b/package/python-typing-extensions/python-typing-extensions.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_SESSION_VERSION = 2.11.0
-+PYTHON_AIOHTTP_SESSION_VERSION = 2.12.0
- PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
--PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/3b/a7/0b97b9a2e3a553a86a6703f86b0e9b1afb2b262849700e8f80015c0f643f
-+PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/34/87/8dbc1385c875497d6bc16c9d94e25dbd8ff62599843b73fb4048ba74c867
- PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
+-PYTHON_TYPING_EXTENSIONS_VERSION = 4.3.0
++PYTHON_TYPING_EXTENSIONS_VERSION = 4.4.0
+ PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
+-PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/9e/1d/d128169ff58c501059330f1ad96ed62b79114a2eb30b8238af63a2e27f70
++PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/e3/a7/8f4e456ef0adac43f452efc2d0e4b242ab831297f1bac60ac815d37eb9cf
+ PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
+ PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
+ PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
