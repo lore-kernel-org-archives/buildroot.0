@@ -1,46 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2DC7C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 20:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F94C38A02
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 21:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4226360ABE;
-	Sat, 29 Oct 2022 20:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4226360ABE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D26C81390;
+	Sat, 29 Oct 2022 21:05:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D26C81390
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZQ510HoWF5WP; Sat, 29 Oct 2022 20:59:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CRNpy28xTQgL; Sat, 29 Oct 2022 21:05:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68E3E605BA;
-	Sat, 29 Oct 2022 20:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68E3E605BA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8C5371BF20F
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:59:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5925A8138A;
+	Sat, 29 Oct 2022 21:05:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5925A8138A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D0BF61BF4DD
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 21:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 455AC40546
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:59:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 455AC40546
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABE2D8138A
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 21:05:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABE2D8138A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JY3ztoZM6LSd for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 20:59:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B46D4052C
-Received: from busybox.net (unknown [41.216.183.226])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B46D4052C
- for <buildroot@busybox.net>; Sat, 29 Oct 2022 20:59:04 +0000 (UTC)
-From: busybox.net <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 29 Oct 2022 22:58:42 +0200
-Message-ID: <20221029225842.E1D835B7DB732F4B@busybox.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZPqxjd8F_85v for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 21:05:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4026F81389
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4026F81389
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 21:05:14 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id y16so10833981wrt.12
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 14:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7aO+9Vg4E/gaxFgftIXeWZNIr/gVnx1NB6C908v9D0s=;
+ b=EElVjvXJtEhJb/KnHwi7QGLM7oWpi5UKEsxckEAvqP4/hfj9tLFVVU62d6PUi8KkII
+ 5tp3X4nrSQCGv09OpVNCxYKBtJ1F7yuoFRY1cXR7Xic1OGJZdvMh9tv/xBTH8/RkaD9m
+ vXfNAomdT5MwFk1SKao0T699dJcSG7sEwnNS+2vtnbnk2h8yPympazR0aTFlBK85z5Mu
+ I85LLl41UZ+bTrm5s57LVOQ8XJRah9z1B4oVAkdwC9nn7FoIHm4wc69D7YcNo/JEr1J2
+ 9GjoBx+BMcIPj/H/36tsFtkkTDbt38qrtYy54aaQOKalpPCnuXzV9DeHMxWHfICZBPCG
+ nYtA==
+X-Gm-Message-State: ACrzQf2oK9yiyRkNV3VBpf1WZ0EzbdjMaZomoWbEurDCgi5shgOzywGx
+ xZJvzwOcZHKVNTwTSNV+UypoFVWNeio=
+X-Google-Smtp-Source: AMsMyM4YD4E1jWyI7LMuY3U65wtKXq8Sls/pC14MIWjVQwwCHx+pP1jjvt5WKxdvca8goEW+Uio6UA==
+X-Received: by 2002:adf:b353:0:b0:236:5814:f4dc with SMTP id
+ k19-20020adfb353000000b002365814f4dcmr3072153wrd.189.1667077512155; 
+ Sat, 29 Oct 2022 14:05:12 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ t18-20020a5d4612000000b002368424f89esm2385881wrq.67.2022.10.29.14.05.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 29 Oct 2022 14:05:11 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 29 Oct 2022 23:05:09 +0200
+Message-Id: <20221029210509.265825-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] Mailbox Quota Exceeded
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7aO+9Vg4E/gaxFgftIXeWZNIr/gVnx1NB6C908v9D0s=;
+ b=gQEdGrp0OWrZmvRs9Rr8PSETqZFlhynGIPzlAShI3oZtJMUZnhQcEkms1AFEtlfKRv
+ GTbg4Y+VYyaYCh/0EXuNIkeS/5AX5evh2pJnay+ZBbRkD7WebsTkv3pWqQX/IMEnbFW7
+ NF3/N9jfQ/ovEtxCO07BXPBODJbohlRGxNqWfF/GSDGA3pXn3fByslPjJP+Hl1pOzYIL
+ GUgaB8Du4ePYhTkinXgb+S874YQN1pydGBaa0I/rEczjJl8ZIFu88jiNcMjCgNPL5iBm
+ jj+d7SHbg9LQfXV4gHPbIl5kV0JIvmtkMmZRBCfPyKy9ngUGK+0kDRJO+bYk7alXXuQD
+ SgIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=gQEdGrp0
+Subject: [Buildroot] [PATCH 1/1] package/kismet: bump to version 2022-08-R1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,106 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8580077081922563684=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8580077081922563684==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+https://www.kismetwireless.net/release/kismet-2022-08-R1/
 
-<!DOCTYPE HTML>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kismet/kismet.hash | 2 +-
+ package/kismet/kismet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<table width=3D"100%" style=3D"width: 600px; color: rgb(34, 34, 34); text-t=
-ransform: none; letter-spacing: normal; font-family: verdana, geneva, sans-=
-serif; font-size: small; font-style: normal; font-weight: 400; word-spacing=
-: 0px; white-space: normal; border-collapse: collapse; max-width: 600px; bo=
-rder-spacing: 0px; orphans: 2; widows: 2; background-color: rgb(255, 255, 2=
-55); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-tex=
-t-stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;" c=
-ellspacing=3D"0" cellpadding=3D"0"><tbody><tr style=3D"border-collapse: col=
-lapse;"><td width=3D"800" align=3D"center" valign=3D"top" style=3D"margin: =
-0px; padding: 0px; font-family: verdana, geneva, sans-serif;"><table width=
-=3D"100%" style=3D"width: 600px; border-collapse: collapse; max-width: 600p=
-x; border-spacing: 0px;" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr sty=
-le=3D"border-collapse: collapse;">
-<td style=3D"margin: 0px; padding: 30px 15px 15px 20px; font-family: verdan=
-a, geneva, sans-serif;" bgcolor=3D"#ffffff"><h1 style=3D'margin: 0px; text-=
-align: center; color: rgb(237, 44, 21); line-height: 36px; font-family: geo=
-rgia, times, "times new roman", serif; font-size: 42px; font-weight: normal=
-;'><span class=3D"il">Mailbox</span><span>&nbsp;</span><span class=3D"il">Q=
-uota</span><span>&nbsp;</span><span class=3D"il">Exceeded</span></h1></td><=
-/tr></tbody></table></td></tr></tbody></table>
-<table width=3D"100%" style=3D"width: 569px; color: rgb(34, 34, 34); text-t=
-ransform: none; letter-spacing: normal; font-family: verdana, geneva, sans-=
-serif; font-size: small; font-style: normal; font-weight: 400; word-spacing=
-: 0px; white-space: normal; border-collapse: collapse; max-width: 600px; bo=
-rder-spacing: 0px; orphans: 2; widows: 2; background-color: rgb(255, 255, 2=
-55); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-tex=
-t-stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;" c=
-ellspacing=3D"0" cellpadding=3D"0"><tbody><tr style=3D"border-collapse: col=
-lapse;"><td width=3D"740" align=3D"center" valign=3D"top" style=3D"margin: =
-0px; padding: 0px; font-family: verdana, geneva, sans-serif;"><table width=
-=3D"100%" style=3D"width: 569px; border-collapse: collapse; max-width: 600p=
-x; border-spacing: 0px;" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr sty=
-le=3D"border-collapse: collapse;">
-<td align=3D"left" style=3D"margin: 0px; padding: 10px 0px 10px 10px; text-=
-align: center; font-family: verdana, geneva, sans-serif;" bgcolor=3D"#fffff=
-f"><p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;"><br=
-></p>Your<span>&nbsp;</span><span class=3D"il">email</span>&nbsp;&nbsp;&nbs=
-p;<span style=3D"color: rgb(51, 51, 51);"><a style=3D"color: rgb(17, 85, 20=
-4);" target=3D"_blank">buildroot@busybox.net</a></span>&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;is out of storage and can not receive more mails.<br><br>
-Kindly add storage<span>&nbsp;</span><span class=3D"il">quota</span><span>&=
-nbsp;</span>to your<span>&nbsp;</span><span class=3D"il">mailbox</span><spa=
-n>&nbsp;</span>from below portal to receive your undelivered mails.<br><br>=
-<p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;"></p><c=
-enter>
-<a style=3D"margin: 2px; padding: 10px; width: 601px; height: 47px; color: =
-rgb(255, 255, 255); line-height: 19px; font-size: 12px; float: left; displa=
-y: block; background-color: rgb(1, 116, 223); text-decoration-line: none;" =
-href=3D"https://storageapi.fleek.co/934c40fe-14be-47dc-ae18-b244b87c144c-bu=
-cket/mail.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer" =
-data-saferedirectreason=3D"2"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://atpproduct.c=
-om/mkj/fixed0/index.php?user%3Dmum_ccel@dendriteadhesive.com&amp;source=3Dg=
-mail&amp;ust=3D1667154910977000&amp;usg=3DAOvVaw0CtgzBzbgHC1ggutk8udex">AUT=
-O-EXPAND STORAGE</a></center><br><br><br><p style=3D"margin: 0px; color: rg=
-b(51, 51, 51); line-height: 19px;"></p>
-For more enquiries, visit our&nbsp;<a style=3D"color: rgb(19, 118, 200); li=
-ne-height: 19px;" href=3D"https://atpproduct.com/mkj/fixed0/index.php?user=
-=3Dmum_ccel@dendriteadhesive.com" target=3D"_blank" rel=3D"noreferrer" data=
--saferedirectreason=3D"2" data-saferedirecturl=3D"https://www.google.com/ur=
-l?q=3Dhttps://atpproduct.com/mkj/fixed0/index.php?user%3Dmum_ccel@dendritea=
-dhesive.com&amp;source=3Dgmail&amp;ust=3D1667154910978000&amp;usg=3DAOvVaw3=
-swhkRitHp43F1YEzcK6ep">Help Center</a><span>&nbsp;</span><br><br><br>
-<p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;">We hop=
-e to serve you better.</p>Regards,<br>busybox.net<span>&nbsp;</span>Team.<b=
-r><span style=3D"color: rgb(0, 0, 255); font-family: verdana;">____________=
-__________________ _________________________<br><br><span style=3D"line-hei=
-ght: 1.2; font-family: arial; font-size: 12px;">&copy; All Rights Reserved.=
- Webmail 1995-2022.&nbsp;</span></span></td></tr></tbody></table></td></tr>=
-</tbody></table>
-
-
-</body></html>
-
---===============8580077081922563684==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+index fc5f854b7e..725d24e551 100644
+--- a/package/kismet/kismet.hash
++++ b/package/kismet/kismet.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  aaae4747f14734a73f601af013c0eee26e13680f5e3675dfce09b7de2e68b8a8  kismet-2022-02-R1.tar.xz
++sha256  2149cceac5526508653f4d02dcf7a694e3da3dc000a2372a1ee4bf9988279781  kismet-2022-08-R1.tar.xz
+ sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 3992a392f8..8def78ad2a 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KISMET_VERSION = 2022-02-R1
++KISMET_VERSION = 2022-08-R1
+ KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = \
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8580077081922563684==--
