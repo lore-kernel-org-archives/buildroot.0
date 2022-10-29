@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A5CC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 17:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B1FEC38A02
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 17:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B09F860B32;
-	Sat, 29 Oct 2022 17:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B09F860B32
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A39760B28;
+	Sat, 29 Oct 2022 17:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A39760B28
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LUKC51Ta_2QT; Sat, 29 Oct 2022 17:22:23 +0000 (UTC)
+	with ESMTP id f0IhxuqGBR6G; Sat, 29 Oct 2022 17:26:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBB5E60A8A;
-	Sat, 29 Oct 2022 17:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB5E60A8A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 90CE31BF255
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:22:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62A1760A8A;
+	Sat, 29 Oct 2022 17:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62A1760A8A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 99DAC1BF255
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 663DD60A8A
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 663DD60A8A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 821A2813DD
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 17:26:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 821A2813DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S5-vXqqjB0l4 for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 17:22:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id obyfnBS4ho_g for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 17:26:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7824260671
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7824260671
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 17:22:19 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id x16so4432691ilm.5
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 10:22:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DB40813B5
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DB40813B5
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 17:26:17 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id v1so10402678wrt.11
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 10:26:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qpf8qcWv9AUc/GKWP2oPnS/2cu0Y5sEZ0qT0yfNvi3U=;
- b=b4lNX52wKZgto7it0fdH0ns1M8wg3euH4iUK9cPXiNwJ61xf7tnctQYaLmeY3WX0RJ
- BzXzUPAUu48F69QiA0d1Vna+4qAoD01HKXWuySTPQ0TAGeCVEEdzIAyk8zChzRQGNylw
- i0PAuC7hvITv5VlCFz/4PIeWQ4SoHsiXku86VB7SlixXNeHGQvFzzC0PknWXtBGrfzNZ
- onAfLpV5bXRnbu891bS2x9f2UD7fTaapWhZHttRCIngXDuO3hO+69FpJGKA6pBk0eTFM
- 7ptKN5QVAm/oDt8WSU0FXYBVQPGZnySEYyI95eiAH4McKoxNlDRSVSWGciuMTYW6RKng
- VMiA==
-X-Gm-Message-State: ACrzQf0laTbfPZ+wzerhdaNPShhew8lf/rVLmxNSDd6uA5px8F+lortf
- McjyjzQf5Vr3AgVigq0NtqEdFxbdsBQ7+w==
-X-Google-Smtp-Source: AMsMyM6Y2VfDfXB8gXcTaZImlzj06JSWf7c5yCpop75gsX9ow8GbYg55di4OzH/2q6PwxUP1fqmVlA==
-X-Received: by 2002:a92:dc8a:0:b0:2f9:9675:42ef with SMTP id
- c10-20020a92dc8a000000b002f9967542efmr2483801iln.130.1667064138113; 
- Sat, 29 Oct 2022 10:22:18 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- v12-20020a02b08c000000b0036c8a246f54sm787326jah.142.2022.10.29.10.22.17
+ bh=0PGeycTUwwuP2MBHIXvRDT09e3NK0w97U4tTIfrL+3E=;
+ b=sJRv+GxPyixql95MTO6jdxeiK7y0DL8DgjnJ0wj1ZbqGkkDM4oPqXPXrGBUzWkIvZ1
+ k3DhP1BT+hVXka9Up2BgUBJfCLaL8fTyLewAFivKSn7NXPu1FGn0BfPt3SPvSKstiQKS
+ NzZVULGtHqBYCuB1VHs+DA05PNx4QopoJ6u61eYiNKWr2fDnI0X+K1+i6iTYC4+d52rL
+ 6hXcr3MVsXgP6fMb6Jwo/exaq0AvNHUBIt+XXEenzwB/7ePyeglNly741aDZRgLKmUT2
+ Gz8tPLyomQaxyQAFrRIMs9kO5VcWMm6X2f8kYHkKe/+K0lTPE8mbVVMbsXxdBbqdy30v
+ lEmg==
+X-Gm-Message-State: ACrzQf0pd/OMRbBQ4RvBfBqTFSfscHlBAZ9V5uD69sQMbLPGGS5nzpzF
+ uJew8zN5ukNpscjk413tYPh0yW9LP4I=
+X-Google-Smtp-Source: AMsMyM5BI56dUIGgHklyjQhfSHCrh9vy3/F29T8SY2upkFxn3Grq981JaxAzWpWjMiUt1+8mM4yIag==
+X-Received: by 2002:adf:cd09:0:b0:236:659a:6902 with SMTP id
+ w9-20020adfcd09000000b00236659a6902mr2925528wrm.574.1667064375069; 
+ Sat, 29 Oct 2022 10:26:15 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ k6-20020a05600c1c8600b003b4e009deb2sm2542011wms.41.2022.10.29.10.26.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 10:22:17 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 29 Oct 2022 10:26:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 11:22:15 -0600
-Message-Id: <20221029172215.1437796-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 29 Oct 2022 19:26:13 +0200
+Message-Id: <20221029172613.255025-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qpf8qcWv9AUc/GKWP2oPnS/2cu0Y5sEZ0qT0yfNvi3U=;
- b=ZA56GiDCj+jC4cwhsJMwsgCvbSvhvtzZpyw9MZL+Mhkn8y1ypOJwlb2AM4NmY/e8N0
- KbvSJi8E/2aR6TnV+eQnB/oAvCCoQ7owD7OH/qu4+ZL//L9ed3aEjrn7EBxBBwihMHSs
- mjDXtJiHVmrTm89vxHR6SXO7UTdOK9YExhBlFfe+OYJBMpsFVhYakA649eg03qaZOD7C
- h/4o9j8i+ZLhzWN/+vlDunUXADD3msKNg0lWgGcd+ARm2vGqyxrGGMhTOe08smfBu/VM
- 2jU3qPK3NoyW+F1eXk4GTyD29cV/1eoUuNJVSrxLsylBuUOp5yDi069DuKtnedhvsLIE
- JLqA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=0PGeycTUwwuP2MBHIXvRDT09e3NK0w97U4tTIfrL+3E=;
+ b=UmSJL3pUJCFGSpjMLAiuiA/X60KPmKmHsyR0UCPh0hxq7l/7Ejlln9zd1HOCx6Gs2p
+ RKBMMeM9Zq+CeCuQLhranF7AdUI1S1Tlt4Bmu9gwhaaGDdRv9wchMFXeaQdP2nmWIJnJ
+ ZLKEr0myEQZoro2xUzVL/FmE9md+TEU1D4CwQij4rmGMIAcugl2V+dFZJfb6YjnI2KiC
+ WnnTpqQQobUjrIEWOR5O8eiDNG1RlyYSUNkRbrafW/68iFtqV8R7MIp8+AZOGDYBWz+X
+ gogtBtJ2q2W6sKs8AtN78BJWp6b+heCl8N5wH4fo6TJeR2BRtXH/AMLR251Srhk1ozRR
+ qI2Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZA56GiDC
-Subject: [Buildroot] [PATCH 1/1] package/python-wsaccel: bump to version
- 0.6.4
+ header.a=rsa-sha256 header.s=20210112 header.b=UmSJL3pU
+Subject: [Buildroot] [PATCH 1/1] package/sedutil: bump to version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-wsaccel/python-wsaccel.hash | 4 ++--
- package/python-wsaccel/python-wsaccel.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+https://github.com/Drive-Trust-Alliance/sedutil/compare/1.15.1...1.20.0
 
-diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
-index 9d0002d41d..b388c3cc7c 100644
---- a/package/python-wsaccel/python-wsaccel.hash
-+++ b/package/python-wsaccel/python-wsaccel.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wsaccel/json
--md5  973168711818dd98b8b28a4c2db77a27  wsaccel-0.6.3.tar.gz
--sha256  fdb27866bb6b6e7a29e45222778ff97938782a0ce92eff07dfb20af8fb9301c4  wsaccel-0.6.3.tar.gz
-+md5  73bdc70035813ded14f9a4b81e82622a  wsaccel-0.6.4.tar.gz
-+sha256  cbf66a88bcaf6c6ad16d50ea29215891526b6e993c4bc7ed44b044ee6fe3ad3d  wsaccel-0.6.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b6982974cb838b985b54b663d1780d280735086249c2e28015f25dd455df25da  LICENSE
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
-index 7c78951f2f..ce41d431ff 100644
---- a/package/python-wsaccel/python-wsaccel.mk
-+++ b/package/python-wsaccel/python-wsaccel.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sedutil/sedutil.hash | 2 +-
+ package/sedutil/sedutil.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sedutil/sedutil.hash b/package/sedutil/sedutil.hash
+index 26643ef684..2ceb5db659 100644
+--- a/package/sedutil/sedutil.hash
++++ b/package/sedutil/sedutil.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9259466b4f73af276153c5245834a56f48f8721ea7263611b5d5e8326bc43d9e  sedutil-1.15.1.tar.gz
++sha256  88016b93cbbef98fa6f5c4e6f58e6c871662b6a7f1fc8dc788c8599fa37a44f3  sedutil-1.20.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  Common/LICENSE.txt
+diff --git a/package/sedutil/sedutil.mk b/package/sedutil/sedutil.mk
+index c80e43448d..566ed4fae8 100644
+--- a/package/sedutil/sedutil.mk
++++ b/package/sedutil/sedutil.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WSACCEL_VERSION = 0.6.3
-+PYTHON_WSACCEL_VERSION = 0.6.4
- PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
--PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/f5/d1/3e99875a764d0d6ec94a74977ed72dd3022a7f31d036622da9cff8fc072f
-+PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/77/0b/a44df15382a76b6768184630d483b8363d65b9f70d1aacf76153d496bbb9
- PYTHON_WSACCEL_LICENSE = Apache-2.0
- PYTHON_WSACCEL_LICENSE_FILES = LICENSE
- PYTHON_WSACCEL_SETUP_TYPE = setuptools
+-SEDUTIL_VERSION = 1.15.1
++SEDUTIL_VERSION = 1.20.0
+ SEDUTIL_SITE = $(call github,Drive-Trust-Alliance,sedutil,$(SEDUTIL_VERSION))
+ SEDUTIL_LICENSE = GPL-3.0+
+ SEDUTIL_LICENSE_FILES = Common/LICENSE.txt
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
