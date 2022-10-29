@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A25C7C38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 09:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96355C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 11:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E41D410D0;
-	Sat, 29 Oct 2022 09:45:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E41D410D0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 062AA813EC;
+	Sat, 29 Oct 2022 11:09:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 062AA813EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Brcf1CNKGkU; Sat, 29 Oct 2022 09:45:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6w4F0rYpfxKJ; Sat, 29 Oct 2022 11:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9A244098A;
-	Sat, 29 Oct 2022 09:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9A244098A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 414FA813E0;
+	Sat, 29 Oct 2022 11:09:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 414FA813E0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05E391BF319
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 09:45:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B6A951BF3B8
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6D3D60AFE
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 09:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6D3D60AFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88836606E6
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:09:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88836606E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xvRVgrWUrewE for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 09:45:40 +0000 (UTC)
+ with ESMTP id VmrwrJ8v3TxF for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 11:09:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A4BC60AA5
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8A4BC60AA5
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 09:45:40 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id z14so9441763wrn.7
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 02:45:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEF1060672
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AEF1060672
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 11:09:51 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id v1so9595200wrt.11
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 04:09:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=wLFnuTtdlIcjL1eM81NTNnIBVubrrEmZ4WoLY62iRXE=;
- b=VYNuZjTQLMX66W0Fd9GoTmfzxY7pIKs88HowCftqEucTyYGKyefRo2jHNSIwrMKHIq
- DimJh+EPTtY22PaVwosP/EuC6dj+A5SMtsfilsuEAstcyPZtNYpEKNBZ23RCGdLMWkGP
- 183Zah0NiCwsTka6WFFUuts8UFHEpwN9AQoPR/QMZeOg23nN6aZDI8IdTJ5J5JE03reK
- P8Nt7Qbw84Bu3cs8CwedJT8B0YRqLOa6DaMD4n4GveARvPMucjYqiQiL1e3sWFKuLJzC
- HXWI1RyYi4kZKgKvYehcKOxpeQg7m212kvyHWCeNe2cPkRNYJGISs1f9v8wuiHQMlPd/
- PnFg==
-X-Gm-Message-State: ACrzQf1VsyYjNIH+50qqweBGQdpxS/tUMf3gV6DMC0ioRRL8MM3dLG5n
- 0b8OAmM6+hLFJpXK6s/6Tp2dwdZ8ORw=
-X-Google-Smtp-Source: AMsMyM4JIxqHSYqlXEf+hadt9wsBIr1TVNSo53eYqXiNtVKcC9CgzXYcQJQm6nKpPSBPK/Dp7n+HcQ==
-X-Received: by 2002:a5d:648c:0:b0:22e:6417:751a with SMTP id
- o12-20020a5d648c000000b0022e6417751amr1901561wri.261.1667036738441; 
- Sat, 29 Oct 2022 02:45:38 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- m8-20020a7bcb88000000b003c6d21a19a0sm1101646wmi.29.2022.10.29.02.45.37
+ bh=yVLwOTZt9qCzCUleIiR9EyrHrdQe7nQ3VYeZb1asH08=;
+ b=fBFFswSQRG2vZPi7Utxr8oYNmt8cuCswx0Z0hWm4zSlPLE1e8/2E2g8wk8NkfmiVAq
+ l71V9/2MyfcQooCI5AzezUyxs3+8VRa/U2+CZseA/SI86sKy5K4Z36tuYHeRMtYrCMk/
+ K4K08mmWehY4zeWm8BkW7ImSfvKyHWF3uouSCbRf68d7LAHrVSBbq2ubKgFqMjTe5Y4f
+ KwPr/DlkbWn/ikCWZuDhbWgDzaOsf/a55ysJoDTF5sedFFGrCrjhUK+brHP/3QJaV482
+ SLmwKrxINBbTIOOOiF5Ue1Z8U69lehtp9NdllSv2YNuE3K1eIvNN7R09e7l3aL8b5mDL
+ xKqw==
+X-Gm-Message-State: ACrzQf1VAqgtduTML4VXA5zODbJHbUAoS+g0E0NV2PGSrLjnp35Nw9xt
+ QKY8OQqRq+01n5y8K8jtXHJHWVRYSWMU/qfB
+X-Google-Smtp-Source: AMsMyM7t/7QHWYMcKFBw4iuIwuJdWDBcIn2b6/lflk3viBmJ6UxHrX8TBiTKBlpxacpbIiwVc7hTXw==
+X-Received: by 2002:adf:f911:0:b0:21e:c0f6:fd26 with SMTP id
+ b17-20020adff911000000b0021ec0f6fd26mr2076380wrr.361.1667041789423; 
+ Sat, 29 Oct 2022 04:09:49 -0700 (PDT)
+Received: from gleb-linux..
+ (cpc76906-dals22-2-0-cust400.20-2.cable.virginm.net. [81.106.81.145])
+ by smtp.gmail.com with ESMTPSA id
+ j31-20020a05600c1c1f00b003c64c186206sm1376054wms.16.2022.10.29.04.09.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 02:45:37 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 29 Oct 2022 04:09:48 -0700 (PDT)
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 11:45:35 +0200
-Message-Id: <20221029094535.133025-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 29 Oct 2022 12:09:42 +0100
+Message-Id: <20221029110943.155259-1-glex.spb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wLFnuTtdlIcjL1eM81NTNnIBVubrrEmZ4WoLY62iRXE=;
- b=DcnYNSjh4z4qLMJSIy23iuC/5ik9G9mfAaf5z0koKm399GF5tZm5VyxikUgQPmgc7z
- ZcBx2atESGRCPkMG1XBDN81QQjWBUbEsTvae0EdqQJeHsh2MKQvKVMwl7mRy620J1+T1
- 0cukKiDuXT5U6L1VBJJBeMTNnJfywXSsYS53UaUSXWGiGCsh/eGr9Fjbp1GlCakrVjbf
- k9/twDkHDRvaBmuXdNsFtF1Vfno9+0zFHx3j2i6A45eJa0W9N64JzagdCWJvsdCHtac1
- mVxykLKF5JHi0rEN6pnFRbqoay90+0RbnRsX7Wd9RRkx8NrXY9uPaU3iORnK5FKWAAC+
- 7gVg==
+ bh=yVLwOTZt9qCzCUleIiR9EyrHrdQe7nQ3VYeZb1asH08=;
+ b=aoPro+FZKfBKFCz/Bo609MNr4imTCKdYrU5ogGJr61Tk46mlW2PxA95DwJ4D8mqozm
+ u5c/ejbLrNCwSlqOa5B8QFgd3EU2MWzQaJgK2A2eyAMcPiWXA6r23e2STGkSxLod6C9g
+ 5NOqbdtKnKYrLu3ypQKCiwLHAqvB8E4JY/rMV6VOrRdlYzHmpCIJqLgit5s0WPFw2sqL
+ k2jCkSWtO1QNGHTPJWvm8jnnupucDrGIIx23lFlko+GrT0KeOY1svcShYeQUvr+fkUv5
+ O5jg/sV//nx7IpFlgLsY3blt0YDY7SgbDvg86dwrbLoWTZyWUq/AIqJ6XvtnzEG8OyVY
+ /d2Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=DcnYNSjh
-Subject: [Buildroot] [PATCH 1/1] package/mtd: bump to version 2.1.5
+ header.a=rsa-sha256 header.s=20210112 header.b=aoPro+FZ
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake.mk: unset CMAKE_GENERATOR
+ vars
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +95,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>, Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.infradead.org/pipermail/linux-mtd/2022-October/095383.html
-https://lists.infradead.org/pipermail/linux-mtd/2022-January/090742.html
+If the user environment defines `CMAKE_GENERATOR` (e.g.
+`CMAKE_GENERATOR=Ninja`), buildroot would previously fail to build cmake
+packages because buildroot uses `make` explicitly (as opposed to
+`cmake --build`).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Unsets all the `CMAKE_GENERATOR*` variables before configuring a cmake
+package.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/mtd/mtd.hash | 4 ++--
- package/mtd/mtd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index 481788f844..a2133e3ce2 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.3.tar.bz2.asc
--sha256  11305a5daf6fc6ed85120695c8593290b577effb039adbfa63d35b4418ff5630  mtd-utils-2.1.3.tar.bz2
-+# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.5.tar.bz2.asc
-+sha256  386e27fd121699b6b729bc2e8e04dda987b31cca6b16e12fb6cc6dcf26449f46  mtd-utils-2.1.5.tar.bz2
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 45e7c0c61c..6e266a8760 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTD_VERSION = 2.1.3
-+MTD_VERSION = 2.1.5
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 081960b5bf..96b2579cc5 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -86,6 +86,7 @@ define $(2)_CONFIGURE_CMDS
+ 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
++	unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM CMAKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+@@ -111,6 +112,7 @@ define $(2)_CONFIGURE_CMDS
+ 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
++	unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM CMAKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE && \
+ 	PATH=$$(BR_PATH) \
+ 	PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
+ 	PKG_CONFIG_SYSROOT_DIR="/" \
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
