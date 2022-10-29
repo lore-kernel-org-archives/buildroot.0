@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBBA0C38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 11:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A91C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 11:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B71C408B3;
-	Sat, 29 Oct 2022 11:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B71C408B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70988408EB;
+	Sat, 29 Oct 2022 11:56:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70988408EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bXsV1Is_ytRr; Sat, 29 Oct 2022 11:56:09 +0000 (UTC)
+	with ESMTP id jcndUk3Sw5tb; Sat, 29 Oct 2022 11:56:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70007408B0;
-	Sat, 29 Oct 2022 11:56:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70007408B0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B93C1BF3B8
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:56:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EB3E408C1;
+	Sat, 29 Oct 2022 11:56:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EB3E408C1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 210C11BF3B8
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2801660675
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:56:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2801660675
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09802408B2
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 11:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09802408B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P-T59aLriZFT for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 11:56:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LXmolyyFYBbw for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 11:56:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ECA4605EE
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9ECA4605EE
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 11:56:02 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id bs21so9703059wrb.4
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 04:56:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86B7D408B3
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 86B7D408B3
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 11:56:04 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id j15so9713600wrq.3
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 04:56:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=yEnaNf/AMKKafGbnPpGGckYV6pU/hdhe114U1y84GDI=;
- b=L8BdQHB9LgkkpAHf2VQVrX5FCoSRzQjJrUk2ljJ1rGHqkK+HhNweQMN//fo1ePHDMc
- LjUYyqdKG8B+BK1W+BjSTzPOM7uLU8NDNhbZbHU5otNE3eUVVSvn/0eJkp3R//X0X2+B
- 4bwnG16SV+4S8X/8Q37HjWm1xWVZ7luA/w9GZKjOkN1V7tooWEQzjwC8sXNNhX1CHVuT
- tcwpx6uZ+n6s4kyejy+9Dody+hXEvN5Fa6vVLwx6aIcwwnGXnaJqOoEPX7yFix+a5/el
- Q98WQhSubtwV0VBjPxeLk27m8m/FvoP0o8hpQiaCoc+N+dTZkzqHmLInfJitTSLqwk1E
- tM/A==
-X-Gm-Message-State: ACrzQf3Vz4gn1K2HyYT0r6zdMH/S8DVVpvlf8N2bY5GTc7HlJkHbZRAB
- KRtf92qtk+JvjIpiJELklRKYMgQXeyM=
-X-Google-Smtp-Source: AMsMyM62OxwV053gpVzMvHFAG6rHgr+ZbdILf7dJpAwivCvyEYt0Cz1SPL4EdHVQ0SJaEn48AQTWiQ==
-X-Received: by 2002:a5d:66c3:0:b0:236:aa03:aa3c with SMTP id
- k3-20020a5d66c3000000b00236aa03aa3cmr2074237wrw.243.1667044560382; 
- Sat, 29 Oct 2022 04:56:00 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=87KhheZM1rSzQ05ITn3RGTXLe+qFrhP00+2YNswhOKw=;
+ b=kS1xEFPe7t06oRSfqdl5ElNuHAbZ3kc+gIQbjzJ2tTCyyjZXJqUMoUQ/MIN8hLMfNc
+ 05SFQB/+uYogCzwiXLsdPUbskyLF2gLNucg8pBXhUgotS/AYnzF1hjbi7D7xP2JXvtdS
+ g0nv1tK+Um4c6QTwTB2ai7bo3lTixzSFAFjBEFcNMP/T4snVwriTl5IHWzIn+ncjRFXn
+ 8osWuaWwrnBO64P+KXND1BCfVyPOk/INYJdyzwfe5OMaHXzUMf3ZrEoxvc/th/TpUtQP
+ GSNmw2DNe8gy4NzC9SWJauZUp2sFZm3W0QNJj6aWy7gqS82F36sIw0/t8bA1iwBhuj2r
+ 5eqg==
+X-Gm-Message-State: ACrzQf2lz/1FYUoIVGFWqk6OD3ang13BzTkrSFCNfJeJauGxoMihCzpk
+ HonsRGwT4hWaFoygZDvwErCf3q3j4fI=
+X-Google-Smtp-Source: AMsMyM5inCbiSSlaXc0UG+acRP8PfcSwuHM58MD6oHq74JjisvOPEJQD4qCfUvVTqjRUf3pi251d9Q==
+X-Received: by 2002:a5d:47c5:0:b0:22e:655e:f258 with SMTP id
+ o5-20020a5d47c5000000b0022e655ef258mr2084464wrc.569.1667044562337; 
+ Sat, 29 Oct 2022 04:56:02 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j31-20020a05600c1c1f00b003a8434530bbsm1497961wms.13.2022.10.29.04.55.59
+ j31-20020a05600c1c1f00b003a8434530bbsm1497961wms.13.2022.10.29.04.56.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 04:55:59 -0700 (PDT)
+ Sat, 29 Oct 2022 04:56:01 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 13:55:54 +0200
-Message-Id: <20221029115555.789814-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Oct 2022 13:55:55 +0200
+Message-Id: <20221029115555.789814-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221029115555.789814-1-fontaine.fabrice@gmail.com>
+References: <20221029115555.789814-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=yEnaNf/AMKKafGbnPpGGckYV6pU/hdhe114U1y84GDI=;
- b=Be2NIAV/mWcgJDJtNMVr7rbvh2s1Nw2HcwhpN9iychXZaOsV7d451xVdzpJ3w8DRJc
- s68eRup7B3I06W3aLTNyJKla24TUQ6ug9NhSQbpXnzXcdM5hDwycBdQPZO6ympMLo/ZY
- z30Yj/ZRASPlGTkR92a+QSNXfk9A2yMTsUxEL6AOvwj5fQtMyqT0jIdtEpXZ5+A9K2pB
- Tc0b8QF8Wvzk8syecrmW894EWkiK9CtF42pAQUwOThyouqVTD9KsHRYQoDlJFvkOEhoP
- 0KCXTL4pe3qTV+1YJCCY2g5cWieb7FhcDzSuyTA1NTvZr+I4A0pNj83kKnGIhH8GK1+G
- 12iA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=87KhheZM1rSzQ05ITn3RGTXLe+qFrhP00+2YNswhOKw=;
+ b=qOJs7wPDb1H/ZCIZTd9BtLR++jNB/szPLI44tZ4jLilBHOZrOYgGV+VwWFT59eleBG
+ KwNQRwT5/WXJ6YQ9NDzbuT5+v/7ICJ6ipnI6EAYy1PsieaNQgTAIJmuLWEgAgCA8zi2/
+ uR0VFkszKP1SaGGrUmda2SqyoMQZyeFchLD9oV8ANkS0KyuwDh+WarxsNkaCmNaA0FCk
+ DSkQvBxhGQS0C/R0euY3fIneIvv9ZB7EHrwukAsIf4anPzS27c6ibu7kqV67SmdqGj8L
+ LDpE+HpiY4aCdNQa8a4bMvANcuhwwhKuEXCWmgBxFFG0IJqlktuJnY++sfeEndhi1MRu
+ 4FnA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Be2NIAV/
-Subject: [Buildroot] [PATCH 1/2] package/dahdi-linux: bump to version 3.2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=qOJs7wPD
+Subject: [Buildroot] [PATCH 2/2] package/dahdi-tools: bump to version 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,61 +98,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBVc2Ugb2ZmaWNpYWwgdGFyYmFsbAotIFRoaXMgYnVtcCB3aWxsIGZpeCB0aGUgZm9sbG93aW5n
-IGJ1aWxkIGZhaWx1cmVzIHdpdGgga2VybmVsID49IDUuMTY6CgovaG9tZS9hdXRvYnVpbGQvYXV0
-b2J1aWxkL2luc3RhbmNlLTYvb3V0cHV0LTEvYnVpbGQvZGFoZGktbGludXgtNWM4NDBjZjQzODM4
-ZTA2OTA4NzNlNzM0MDk0OTFjMzkyMzMzYjNiOC9kcml2ZXJzL2RhaGRpL3djdDR4eHAvYmFzZS5j
-OjQ1OjEwOiBmYXRhbCBlcnJvcjogc3RkYm9vbC5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5
-CiAgIDQ1IHwgI2luY2x1ZGUgPHN0ZGJvb2wuaD4KICAgICAgfCAgICAgICAgICBefn5+fn5+fn5+
-fgoKWy4uLl0KCi4uL2RhaGRpLWxpbnV4LTVjODQwY2Y0MzgzOGUwNjkwODczZTczNDA5NDkxYzM5
-MjMzM2IzYjgvZHJpdmVycy9kYWhkaS94cHAveGJ1cy1jb3JlLmM6IEluIGZ1bmN0aW9uIOKAmHhi
-dXNfcmVhZF9wcm9jX29wZW7igJk6Ci4uL2RhaGRpLWxpbnV4LTVjODQwY2Y0MzgzOGUwNjkwODcz
-ZTczNDA5NDkxYzM5MjMzM2IzYjgvZHJpdmVycy9kYWhkaS94cHAveGJ1cy1jb3JlLmM6MTg0NTo0
-MzogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIOKAmFBERV9EQVRB4oCZ
-OyBkaWQgeW91IG1lYW4g4oCYTk9ERV9EQVRB4oCZPyBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlv
-bi1kZWNsYXJhdGlvbl0KIDE4NDUgfCAgcmV0dXJuIHNpbmdsZV9vcGVuKGZpbGUsIHhidXNfcHJv
-Y19zaG93LCBQREVfREFUQShpbm9kZSkpOwogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+CiAgICAgIHwgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgTk9ERV9EQVRBCgpodHRwczovL2dpdGh1Yi5jb20vYXN0ZXJp
-c2svZGFoZGktbGludXgvY29tcGFyZS81Yzg0MGNmNDM4MzhlMDY5MDg3M2U3MzQwOTQ5MWMzOTIz
-MzNiM2I4Li4udjMuMi4wCgpGaXhlczoKIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3Jn
-L3Jlc3VsdHMvM2YyMzU1OWYwMWE3NzgzZDgyYWQ0ZTBiMmQ2NzkyMTcxZTZmMmI3OQogLSBodHRw
-Oi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9mM2YyMjZmYjY2MWE2YjE5OTgzODFm
-NWZiN2NiMzA2NzcxYzJlY2MwCgpTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0tCiBwYWNrYWdlL2RhaGRpLWxpbnV4L2RhaGRpLWxp
-bnV4Lmhhc2ggfCA0ICsrLS0KIHBhY2thZ2UvZGFoZGktbGludXgvZGFoZGktbGludXgubWsgICB8
-IDYgKysrLS0tCiAyIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMo
-LSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2RhaGRpLWxpbnV4L2RhaGRpLWxpbnV4Lmhhc2ggYi9w
-YWNrYWdlL2RhaGRpLWxpbnV4L2RhaGRpLWxpbnV4Lmhhc2gKaW5kZXggN2E0YzY4ODA2MS4uMmQz
-ZjMzNjc3NyAxMDA2NDQKLS0tIGEvcGFja2FnZS9kYWhkaS1saW51eC9kYWhkaS1saW51eC5oYXNo
-CisrKyBiL3BhY2thZ2UvZGFoZGktbGludXgvZGFoZGktbGludXguaGFzaApAQCAtMSw1ICsxLDUg
-QEAKLSMgTG9jYWxseSBjb21wdXRlZAotc2hhMjU2ICAzZmFmMTI3ZWUzZjFmYWQwMTk1YzU2ZDAw
-YjdiZjI3MDhlYzhhNTRiZjNjMzFlZGQ4MjdmZDliZWI0N2UwYTUxICBkYWhkaS1saW51eC01Yzg0
-MGNmNDM4MzhlMDY5MDg3M2U3MzQwOTQ5MWMzOTIzMzNiM2I4LWJyMS50YXIuZ3oKKyMgRnJvbSBo
-dHRwOi8vZG93bmxvYWRzLmFzdGVyaXNrLm9yZy9wdWIvdGVsZXBob255L2RhaGRpLWxpbnV4L3Jl
-bGVhc2VzL2RhaGRpLWxpbnV4LTMuMi4wLnNoYTI1Ngorc2hhMjU2ICBlMmVmOWIzZjY3NjlmNjBm
-NDMyY2ZhMDljMzljOWEwZDdhYjViZGRmZjU5MjI5ZjM4NTA1NjkxNWM2NWY5ZjEzICBkYWhkaS1s
-aW51eC0zLjIuMC50YXIuZ3oKIAogIyBGaXJtd2FyZSBmaWxlcyBoYXZlIG5vIHVwc3RyZWFtIGhh
-c2gsIHNvIHNoYTU2IGxvY2FsbHkgY29tcHV0ZWQKIHNoYTI1NiAgM2ZmMjZjZjgwNTU1ZmQ3NDcw
-YjQzYTg3YzUxZDAzYzFkYjJhNzVhYmNkNDU2MWQ3OWY2OWI2YzQ4Mjk4ZTRhMSAgZGFoZGktZnds
-b2FkLXZwbWFkdDAzMi0xLjI1LjAudGFyLmd6CmRpZmYgLS1naXQgYS9wYWNrYWdlL2RhaGRpLWxp
-bnV4L2RhaGRpLWxpbnV4Lm1rIGIvcGFja2FnZS9kYWhkaS1saW51eC9kYWhkaS1saW51eC5tawpp
-bmRleCA5MzEyNGYwZTAyLi44ODUxOWI1MTA2IDEwMDY0NAotLS0gYS9wYWNrYWdlL2RhaGRpLWxp
-bnV4L2RhaGRpLWxpbnV4Lm1rCisrKyBiL3BhY2thZ2UvZGFoZGktbGludXgvZGFoZGktbGludXgu
-bWsKQEAgLTQsOSArNCw5IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1EQUhESV9M
-SU5VWF9WRVJTSU9OID0gNWM4NDBjZjQzODM4ZTA2OTA4NzNlNzM0MDk0OTFjMzkyMzMzYjNiOAot
-REFIRElfTElOVVhfU0lURSA9IGh0dHBzOi8vZ2Vycml0LmFzdGVyaXNrLm9yZy9kYWhkaS1saW51
-eAotREFIRElfTElOVVhfU0lURV9NRVRIT0QgPSBnaXQKK0RBSERJX0xJTlVYX1ZFUlNJT04gPSAz
-LjIuMAorREFIRElfTElOVVhfU0lURSA9IFwKKwlodHRwOi8vZG93bmxvYWRzLmFzdGVyaXNrLm9y
-Zy9wdWIvdGVsZXBob255L2RhaGRpLWxpbnV4L3JlbGVhc2VzCiAKICMgV2UgbmVlZCB0byBkb3du
-bG9hZCBhbGwgdGhvc2UgZmlybXdhcmUgYmxvYnMgb3Vyc2VsdmVzLCBvdGhlcndpc2UKICMgZGFo
-ZGktbGludXggd2lsbCB0cnkgdG8gZG93bmxvYWQgdGhlbSBhdCBpbnN0YWxsIHRpbWUuCi0tIAoy
-LjM1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+https://github.com/asterisk/dahdi-tools/compare/v3.1.0...v3.2.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dahdi-tools/dahdi-tools.hash | 6 ++----
+ package/dahdi-tools/dahdi-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/package/dahdi-tools/dahdi-tools.hash b/package/dahdi-tools/dahdi-tools.hash
+index 72fa995c84..c119ff4ee1 100644
+--- a/package/dahdi-tools/dahdi-tools.hash
++++ b/package/dahdi-tools/dahdi-tools.hash
+@@ -1,7 +1,5 @@
+-# sha1 from http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
+-# sha256 locally computed
+-sha1  fff6c8fdc72a66f81768e4f50bf55156f7cebbc4  dahdi-tools-3.1.0.tar.gz
+-sha256  ea852ebd274ee1cc90ff5e4ac84261b0b787b1a74e8b76ad659bc9ec4f77e67e  dahdi-tools-3.1.0.tar.gz
++# From http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases/dahdi-tools-3.2.0.sha256
++sha256  2bc269887fcd42d2486572611934d713e603734cc658b3b517fc9f3bdea7262f  dahdi-tools-3.2.0.tar.gz
+ 
+ # License files, locally computed
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  LICENSE
+diff --git a/package/dahdi-tools/dahdi-tools.mk b/package/dahdi-tools/dahdi-tools.mk
+index fc0c591ca8..7d4de645a2 100644
+--- a/package/dahdi-tools/dahdi-tools.mk
++++ b/package/dahdi-tools/dahdi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAHDI_TOOLS_VERSION = 3.1.0
++DAHDI_TOOLS_VERSION = 3.2.0
+ DAHDI_TOOLS_SITE = http://downloads.asterisk.org/pub/telephony/dahdi-tools/releases
+ 
+ DAHDI_TOOLS_LICENSE = GPLv2, LGPLv2.1
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
