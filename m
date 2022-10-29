@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40C5CC38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B5A8C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D683A813C1;
-	Sat, 29 Oct 2022 16:11:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D683A813C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFD8D605A6;
+	Sat, 29 Oct 2022 16:16:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFD8D605A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PcuE07ADLwnL; Sat, 29 Oct 2022 16:11:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id guwTqGpQy2Ve; Sat, 29 Oct 2022 16:16:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BADA813B6;
-	Sat, 29 Oct 2022 16:11:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BADA813B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2159060601;
+	Sat, 29 Oct 2022 16:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2159060601
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9A8941BF5DC
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:11:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24ACD1BF5DC
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7363C404C8
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7363C404C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D5F7404C8
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D5F7404C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V-qmVvyL1VGR for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
+ with ESMTP id 8J2dWZ2tPdkI for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 16:16:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46D174047C
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D174047C
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE6374047C
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 16:16:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE6374047C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3447686FAB; Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
+ id BB01F8738D; Sat, 29 Oct 2022 16:16:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 18:09:43 +0200
+Date: Sat, 29 Oct 2022 18:15:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66c05c24baf17b98b7168bd950fbf40d25223247
-X-Git-Newrev: 96db6a8ac96742cb817f87ce4c869677c6a6cfda
+X-Git-Oldrev: 098db8b4d5649345f983e7601d60a1fc30836e1d
+X-Git-Newrev: 5f779a2071509dbb11e9bb8662e9ae4b33d39ce3
 X-Patchwork-Hint: ignore
-Message-Id: <20221029161122.3447686FAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsync: bump version to 3.2.7
+Message-Id: <20221029161619.BB01F8738D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bats-core: bump to version 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,58 +62,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96db6a8ac96742cb817f87ce4c869677c6a6cfda
+commit: https://git.buildroot.net/buildroot/commit/?id=5f779a2071509dbb11e9bb8662e9ae4b33d39ce3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://download.samba.org/pub/rsync/NEWS
+https://github.com/bats-core/bats-core/releases/tag/v1.5.0
+https://github.com/bats-core/bats-core/releases/tag/v1.6.0
+https://github.com/bats-core/bats-core/releases/tag/v1.6.1
+https://github.com/bats-core/bats-core/releases/tag/v1.7.0
+https://github.com/bats-core/bats-core/releases/tag/v1.8.0
+https://github.com/bats-core/bats-core/releases/tag/v1.8.1
+https://github.com/bats-core/bats-core/releases/tag/v1.8.2
 
-Switched _SITE and package URL to https.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/Config.in  | 2 +-
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/bats-core/bats-core.hash | 2 +-
+ package/bats-core/bats-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsync/Config.in b/package/rsync/Config.in
-index b952974efb..b572c701ec 100644
---- a/package/rsync/Config.in
-+++ b/package/rsync/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_RSYNC
- 	help
- 	  File transfer program to keep remote files in sync.
- 
--	  http://rsync.samba.org/
-+	  https://rsync.samba.org/
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index f0ba4d321d..842b5c099f 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
+diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
+index 369cc703d4..81c0229af4 100644
+--- a/package/bats-core/bats-core.hash
++++ b/package/bats-core/bats-core.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/rsync/src/rsync-3.2.5.tar.gz.asc
--sha256  2ac4d21635cdf791867bc377c35ca6dda7f50d919a58be45057fd51600c69aba  rsync-3.2.5.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.2.7.tar.gz.asc
-+sha256  4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb  rsync-3.2.7.tar.gz
  # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index e288033b98..81ad4b9291 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,8 +4,8 @@
+-sha256  bff517da043ae24440ec8272039f396c2a7907076ac67693c0f18d4a17c08f7d  bats-core-1.4.1.tar.gz
++sha256  0f2df311a536e625a72bff64c838e67c7b5032e6ea9edcdf32758303062b2f3b  bats-core-1.8.2.tar.gz
+ 
+ # License files
+ sha256  55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
+diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
+index 181d4eb033..e172445930 100644
+--- a/package/bats-core/bats-core.mk
++++ b/package/bats-core/bats-core.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYNC_VERSION = 3.2.5
--RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
-+RSYNC_VERSION = 3.2.7
-+RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
- RSYNC_CPE_ID_VENDOR = samba
+-BATS_CORE_VERSION = 1.4.1
++BATS_CORE_VERSION = 1.8.2
+ BATS_CORE_SITE = $(call github,bats-core,bats-core,v$(BATS_CORE_VERSION))
+ BATS_CORE_LICENSE = MIT
+ BATS_CORE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
