@@ -1,88 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E640EC38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 20:40:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2DC7C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 20:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A23040549;
-	Sat, 29 Oct 2022 20:40:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A23040549
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4226360ABE;
+	Sat, 29 Oct 2022 20:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4226360ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id npEMCoGQLAms; Sat, 29 Oct 2022 20:40:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZQ510HoWF5WP; Sat, 29 Oct 2022 20:59:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A50C4052C;
-	Sat, 29 Oct 2022 20:40:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A50C4052C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68E3E605BA;
+	Sat, 29 Oct 2022 20:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68E3E605BA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97FD11BF5A8
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:40:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8C5371BF20F
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 742C34052C
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 742C34052C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 455AC40546
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 20:59:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 455AC40546
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XcHrApSizOnx for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 20:40:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52471400DA
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 52471400DA
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 20:40:29 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id g12so10809890wrs.10
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 13:40:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=sBuYw9dBW166+oMiVCB0FR/84TBY6LlAjMTQSxKOvXc=;
- b=m3/YM3Q9LB02PAnj1zx7BPiWsp5bk3D4eB8KoYZg0MnBNIdnw3tPz+ZwbmH82xFkcP
- athZejYmM7FBkkdqQet0s392Xo7jz2FUKotLXNLs5Q9xiHf0/lhxd83qfz8fMc651QFZ
- MjzBSKju+coqPBsQUKJir/l5V2RjVlTu3ZMspgAySyGug2IvdY12oc856XiHRHiAA5U5
- t7KXD6/tmPXPxHRZOGeFDSJvKHpN5VAJ3l1Xh/reIuIvzJ4KBlkr5ZzToGuvwBr30t8Z
- GWkWUcbfa0BBvxBjm5EODrViF8WTwnLcs0QD0AxPe5l1xndmcfRu3i3oDmF84evrz4sQ
- c7cw==
-X-Gm-Message-State: ACrzQf1SEVl5dMefUkOgCtvSHuXCD3KD68xZ/VhhyExXvtqGbvIQnYfl
- cXmkC4OXzJSU3vIR5T4qiIo/Wj4vLOI=
-X-Google-Smtp-Source: AMsMyM5I2uku/y9B96Jc2pAc5lA138uH+Bh/j58pcED7BD3PmMoofTLZdtA8UlbK4TlLrAC1p8VirA==
-X-Received: by 2002:a05:6000:1885:b0:22e:7869:d43f with SMTP id
- a5-20020a056000188500b0022e7869d43fmr3172879wri.249.1667076027246; 
- Sat, 29 Oct 2022 13:40:27 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- u7-20020a05600c19c700b003c6c2ff7f25sm2673486wmq.15.2022.10.29.13.40.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 13:40:26 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 22:40:23 +0200
-Message-Id: <20221029204023.162302-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id JY3ztoZM6LSd for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 20:59:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B46D4052C
+Received: from busybox.net (unknown [41.216.183.226])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B46D4052C
+ for <buildroot@busybox.net>; Sat, 29 Oct 2022 20:59:04 +0000 (UTC)
+From: busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 29 Oct 2022 22:58:42 +0200
+Message-ID: <20221029225842.E1D835B7DB732F4B@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sBuYw9dBW166+oMiVCB0FR/84TBY6LlAjMTQSxKOvXc=;
- b=m5QeDws4Fa2GSeMn2E/LOLdAN3bjxE32OuxvkdleMrnxfGx84D5mNVtI0hbkhcsQvS
- tYRC9jdoP34XgqN5mvEJkUgLlti+VLM6S81aHWlC1vIxHIJnfXpQXawj3tlF1m8eYTtO
- FicHyB4qklU70kUayMlvXuDbOqisDQplBSJD0V6IQ2A2mJn0sTk8VUp2iFilm/VmqhRU
- 1G1SbgsNCkl0X2Geb8TJruVW5qixT3udX9rVNyS4IKi2HS3ixPaaO1AXuR4D1HgPLa9p
- Yf0Oe2o18azM3sr7xuwgZk41IRUa4J7oS40lhH3cCVQABPR/RC5gIG0NAcfFdYlJlwyd
- WdSQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=m5QeDws4
-Subject: [Buildroot] [PATCH 1/1] package/lldpd: security bump to version
- 1.0.15
+Subject: [Buildroot] Mailbox Quota Exceeded
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,67 +52,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8580077081922563684=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix heap overflow when reading SONMP. CVE-2021-43612.
-- https://vincentbernat.github.io/lldpd/ is redirecting to
-  https://lldpd.github.io/
+--===============8580077081922563684==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-https://github.com/lldpd/lldpd/blob/1.0.15/NEWS
+<!DOCTYPE HTML>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lldpd/Config.in  | 2 +-
- package/lldpd/lldpd.hash | 4 ++--
- package/lldpd/lldpd.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<table width=3D"100%" style=3D"width: 600px; color: rgb(34, 34, 34); text-t=
+ransform: none; letter-spacing: normal; font-family: verdana, geneva, sans-=
+serif; font-size: small; font-style: normal; font-weight: 400; word-spacing=
+: 0px; white-space: normal; border-collapse: collapse; max-width: 600px; bo=
+rder-spacing: 0px; orphans: 2; widows: 2; background-color: rgb(255, 255, 2=
+55); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;" c=
+ellspacing=3D"0" cellpadding=3D"0"><tbody><tr style=3D"border-collapse: col=
+lapse;"><td width=3D"800" align=3D"center" valign=3D"top" style=3D"margin: =
+0px; padding: 0px; font-family: verdana, geneva, sans-serif;"><table width=
+=3D"100%" style=3D"width: 600px; border-collapse: collapse; max-width: 600p=
+x; border-spacing: 0px;" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr sty=
+le=3D"border-collapse: collapse;">
+<td style=3D"margin: 0px; padding: 30px 15px 15px 20px; font-family: verdan=
+a, geneva, sans-serif;" bgcolor=3D"#ffffff"><h1 style=3D'margin: 0px; text-=
+align: center; color: rgb(237, 44, 21); line-height: 36px; font-family: geo=
+rgia, times, "times new roman", serif; font-size: 42px; font-weight: normal=
+;'><span class=3D"il">Mailbox</span><span>&nbsp;</span><span class=3D"il">Q=
+uota</span><span>&nbsp;</span><span class=3D"il">Exceeded</span></h1></td><=
+/tr></tbody></table></td></tr></tbody></table>
+<table width=3D"100%" style=3D"width: 569px; color: rgb(34, 34, 34); text-t=
+ransform: none; letter-spacing: normal; font-family: verdana, geneva, sans-=
+serif; font-size: small; font-style: normal; font-weight: 400; word-spacing=
+: 0px; white-space: normal; border-collapse: collapse; max-width: 600px; bo=
+rder-spacing: 0px; orphans: 2; widows: 2; background-color: rgb(255, 255, 2=
+55); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-tex=
+t-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;" c=
+ellspacing=3D"0" cellpadding=3D"0"><tbody><tr style=3D"border-collapse: col=
+lapse;"><td width=3D"740" align=3D"center" valign=3D"top" style=3D"margin: =
+0px; padding: 0px; font-family: verdana, geneva, sans-serif;"><table width=
+=3D"100%" style=3D"width: 569px; border-collapse: collapse; max-width: 600p=
+x; border-spacing: 0px;" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr sty=
+le=3D"border-collapse: collapse;">
+<td align=3D"left" style=3D"margin: 0px; padding: 10px 0px 10px 10px; text-=
+align: center; font-family: verdana, geneva, sans-serif;" bgcolor=3D"#fffff=
+f"><p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;"><br=
+></p>Your<span>&nbsp;</span><span class=3D"il">email</span>&nbsp;&nbsp;&nbs=
+p;<span style=3D"color: rgb(51, 51, 51);"><a style=3D"color: rgb(17, 85, 20=
+4);" target=3D"_blank">buildroot@busybox.net</a></span>&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;is out of storage and can not receive more mails.<br><br>
+Kindly add storage<span>&nbsp;</span><span class=3D"il">quota</span><span>&=
+nbsp;</span>to your<span>&nbsp;</span><span class=3D"il">mailbox</span><spa=
+n>&nbsp;</span>from below portal to receive your undelivered mails.<br><br>=
+<p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;"></p><c=
+enter>
+<a style=3D"margin: 2px; padding: 10px; width: 601px; height: 47px; color: =
+rgb(255, 255, 255); line-height: 19px; font-size: 12px; float: left; displa=
+y: block; background-color: rgb(1, 116, 223); text-decoration-line: none;" =
+href=3D"https://storageapi.fleek.co/934c40fe-14be-47dc-ae18-b244b87c144c-bu=
+cket/mail.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer" =
+data-saferedirectreason=3D"2"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://atpproduct.c=
+om/mkj/fixed0/index.php?user%3Dmum_ccel@dendriteadhesive.com&amp;source=3Dg=
+mail&amp;ust=3D1667154910977000&amp;usg=3DAOvVaw0CtgzBzbgHC1ggutk8udex">AUT=
+O-EXPAND STORAGE</a></center><br><br><br><p style=3D"margin: 0px; color: rg=
+b(51, 51, 51); line-height: 19px;"></p>
+For more enquiries, visit our&nbsp;<a style=3D"color: rgb(19, 118, 200); li=
+ne-height: 19px;" href=3D"https://atpproduct.com/mkj/fixed0/index.php?user=
+=3Dmum_ccel@dendriteadhesive.com" target=3D"_blank" rel=3D"noreferrer" data=
+-saferedirectreason=3D"2" data-saferedirecturl=3D"https://www.google.com/ur=
+l?q=3Dhttps://atpproduct.com/mkj/fixed0/index.php?user%3Dmum_ccel@dendritea=
+dhesive.com&amp;source=3Dgmail&amp;ust=3D1667154910978000&amp;usg=3DAOvVaw3=
+swhkRitHp43F1YEzcK6ep">Help Center</a><span>&nbsp;</span><br><br><br>
+<p style=3D"margin: 0px; color: rgb(51, 51, 51); line-height: 19px;">We hop=
+e to serve you better.</p>Regards,<br>busybox.net<span>&nbsp;</span>Team.<b=
+r><span style=3D"color: rgb(0, 0, 255); font-family: verdana;">____________=
+__________________ _________________________<br><br><span style=3D"line-hei=
+ght: 1.2; font-family: arial; font-size: 12px;">&copy; All Rights Reserved.=
+ Webmail 1995-2022.&nbsp;</span></span></td></tr></tbody></table></td></tr>=
+</tbody></table>
 
-diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
-index 9a9517b5b0..3e0446986f 100644
---- a/package/lldpd/Config.in
-+++ b/package/lldpd/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LLDPD
- 	  lldpd is an ISC-licensed implementation of LLDP for various
- 	  Unixes. It also supports some proprietary protocols.
- 
--	  https://vincentbernat.github.io/lldpd/
-+	  https://lldpd.github.io/
- 
- if BR2_PACKAGE_LLDPD
- 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 6e809b2796..6db5ca98f1 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.9.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.15.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  6b64eb3125952b1e33472198b054e8aa0dee45f45d3d4be22789090a474949f5  lldpd-1.0.9.tar.gz
-+sha256  f7fe3a130be98a19c491479ef60f36b8ee41a9e6bc4d7f2c41033f63956a3126  lldpd-1.0.15.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index b88dd002e4..dd6f8dcf5d 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LLDPD_VERSION = 1.0.9
-+LLDPD_VERSION = 1.0.15
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
--- 
-2.35.1
+
+</body></html>
+
+--===============8580077081922563684==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8580077081922563684==--
