@@ -1,94 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E79E3C38A02
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 08:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE29C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 08:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80C51813D7;
-	Sat, 29 Oct 2022 08:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80C51813D7
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6C07606DC;
+	Sat, 29 Oct 2022 08:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6C07606DC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AmeB2zwbmdLB; Sat, 29 Oct 2022 08:08:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95DA960792;
+	Sat, 29 Oct 2022 08:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95DA960792
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2610C1BF348
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:08:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1DE381415
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:08:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1DE381415
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id txjnSUkpTXsR; Sat, 29 Oct 2022 08:02:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EEE581399;
-	Sat, 29 Oct 2022 08:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EEE581399
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB67C1BF59E
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:02:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9693E40297
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9693E40297
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lA7a7TPeqdDC for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 08:02:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02BCA40017
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02BCA40017
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 08:02:36 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id g12so9253030wrs.10
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 01:02:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qzf+/CZmmPPGf1aTM6LxEa20is0SAXpDe81ZW/+lmyc=;
- b=QxFgRGbV3VQjril1iICsrwCQnAAOzZd+q2iQxdLSsLpKAnuZL3F9gbDOmcinkZAhRo
- aTG8WggUDGrEUAK3ehaNB8yxWDHJ18VSz8/j6XFvAFyX8SlpsNGkpsKBjN8RtEcrGitK
- hw/9dlZiLuwbVuHn7L9ab6buKXLOiLP23A8KoBvSDNRakmaunExcZxnQF5h/LoKpuUj5
- uqZeGnu1eNItgnfJ7w1P69LE+wLDC7ahw9awRlw/cMOdgpLZIoiwOUtoGbQUrcK+J+Bo
- LwnSvNqrzKuhzXmYC6pOf5Wfn4lBoNI3RXFYq7cOEFLIFLuB5knFtaD2A2cmaW7L+ruE
- Jkwg==
-X-Gm-Message-State: ACrzQf1ck/+qsq/tbt5dH1MThQtDd28Y0YN6U99gd5x87IuY5VY1rf49
- YcGV9QZfF34L5+PpyESjupTMGDdmKPoyWZVV
-X-Google-Smtp-Source: AMsMyM6MpAIgtbHhMmpT96FndtkEDWG1hTP5ELNn4HPORT9t6jflz6UpxTtBPYnZytgOa5blLaCzGA==
-X-Received: by 2002:a5d:68ce:0:b0:236:9981:d216 with SMTP id
- p14-20020a5d68ce000000b002369981d216mr1708220wrw.384.1667030554805; 
- Sat, 29 Oct 2022 01:02:34 -0700 (PDT)
-Received: from smart-All-Series (ip34.ip-145-239-104.eu. [145.239.104.34])
- by smtp.gmail.com with ESMTPSA id
- m9-20020adff389000000b002366e8eee11sm802421wro.101.2022.10.29.01.02.33
- (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
- Sat, 29 Oct 2022 01:02:34 -0700 (PDT)
-Date: Sat, 29 Oct 2022 11:32:29 +0330
-From: Nasser Afshin <afshin.nasser@gmail.com>
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Message-ID: <20221029080229.GA24217@smart-All-Series>
-References: <20221025065539.4646-1-afshin.nasser@gmail.com>
- <CAGm1_ku8QUbDtT+Bt=5jmD46Vws_go6r2dK9oD95i_bgJynLbg@mail.gmail.com>
- <20221026102255.GA602@smart-All-Series>
- <CAGm1_ktx6UuANUZ=Eqbh_wr7JrJNaHz=ou9zg9mSvGP+ivnzmA@mail.gmail.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dsIcNZdWbJN2 for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 08:08:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 682F581413
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 682F581413
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 08:08:34 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout05.t-online.de (Postfix) with SMTP id 6DD0020D04
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 10:08:31 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.197.145]) by fwd83.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1oogtB-2FfC5p0; Sat, 29 Oct 2022 10:08:22 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59658)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oogtB-0000jr-1e
+ for buildroot@buildroot.org; Sat, 29 Oct 2022 10:08:21 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat, 29 Oct 2022 10:08:21 +0200
+Message-Id: <20221029080821.1334194-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAGm1_ktx6UuANUZ=Eqbh_wr7JrJNaHz=ou9zg9mSvGP+ivnzmA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qzf+/CZmmPPGf1aTM6LxEa20is0SAXpDe81ZW/+lmyc=;
- b=PSQDgCTgWqCvEyt1ZT3t5dwoKGYssy0bKeEhEq3PeL9FTpZ+IqyibdPRBGYcqHEpst
- u+A0TGznMTaIIuswPY/I1hlLTZGhGU6UJ7V4b/VK+0p01+01LWSycX7oTgxEdzYig2BG
- A3NLQkfo/FBMEGVuqwDhOa+TxcE5fm/zImXSN8kKjS7lLcIRrJ+ynWTh7k8zMUw12ezH
- bM4KIte8pTMDpvsxzx5cQVtvXxaRWwSjzlMZynKKinWzqsI9AY3RnKd7fZ43o6gPl4/O
- 45Jto6R8q2khIzkrI/EmM+o3tRTLHpJHvU3WvZ3WFkKc9/ryWf+91TaDnzMGvRsKEgcs
- 9QHg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PSQDgCTg
-Subject: Re: [Buildroot] [PATCH] python-pycrate: new package
+X-TOI-EXPURGATEID: 150726::1667030902-60A0E2DC-461FC5B0/0/0 CLEAN NORMAL
+X-TOI-MSGID: 283befcd-528c-47d4-afae-c3d637da274b
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,307 +65,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yegor,
+Switched _SITE to https.
 
-On Wed, Oct 26, 2022 at 08:21:30PM +0200, Yegor Yefremov wrote:
-> Hi Nasser,
-> 
-> On Wed, Oct 26, 2022 at 12:23 PM Nasser Afshin <afshin.nasser@gmail.com> wrote:
-> >
-> > Hi Yegor,
-> >
-> > Thankyou for taking time to review my patch.
-> >
-> > On Tue, Oct 25, 2022 at 10:33:19AM +0200, Yegor Yefremov wrote:
-> > > Hi Nasser,
-> > >
-> > > On Tue, Oct 25, 2022 at 8:55 AM Nasser Afshin <afshin.nasser@gmail.com> wrote:
-> > > >
-> > > > Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
-> > > > ---
-> > > >  package/Config.in                          |  1 +
-> > > >  package/python-pycrate/Config.in           |  8 ++++++++
-> > > >  package/python-pycrate/python-pycrate.hash |  4 ++++
-> > > >  package/python-pycrate/python-pycrate.mk   | 13 +++++++++++++
-> > >
-> > > An entry to the DEVELOPERS file is missing.
-> >
-> > May you help me to whome this entry should refer?
-> 
-> You should add yourself as a "maintainer" of the package you add. Just
-> look at other entries.
-> 
-I have added myself as a maintainer of this package. Thankyou.
+Removed patch which was applied upstream:
+https://gitlab.com/fetchmail/fetchmail/-/commit/28c476ec453fb445bf3eceeec8cce1e9822eabd2
 
-> >
-> > >
-> > > >  4 files changed, 26 insertions(+)
-> > > >  create mode 100644 package/python-pycrate/Config.in
-> > > >  create mode 100644 package/python-pycrate/python-pycrate.hash
-> > > >  create mode 100644 package/python-pycrate/python-pycrate.mk
-> > > >
-> > > > diff --git a/package/Config.in b/package/Config.in
-> > > > index 56b1a08d8b..2443b7bb27 100644
-> > > > --- a/package/Config.in
-> > > > +++ b/package/Config.in
-> > > > @@ -951,6 +951,7 @@ menu "External python modules"
-> > > >         source "package/python-pyasn1-modules/Config.in"
-> > > >         source "package/python-pycli/Config.in"
-> > > >         source "package/python-pycparser/Config.in"
-> > > > +       source "package/python-pycrate/Config.in"
-> > > >         source "package/python-pycrypto/Config.in"
-> > > >         source "package/python-pycryptodomex/Config.in"
-> > > >         source "package/python-pydal/Config.in"
-> > > > diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> > > > new file mode 100644
-> > > > index 0000000000..9e2123d4dd
-> > > > --- /dev/null
-> > > > +++ b/package/python-pycrate/Config.in
-> > > > @@ -0,0 +1,8 @@
-> > > > +config BR2_PACKAGE_PYTHON_PYCRATE
-> > > > +       bool "python-pycrate"
-> > > > +       help
-> > > > +        It provides basically a runtime for encoding and decoding data structures,
-> > > > +        including CSN.1 and ASN.1. Additionally, it features a 3G and LTE mobile core
-> > > > +        network.
-> > > > +
-> > > > +        https://github.com/P1sec/pycrate/
-> > > > diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> > > > new file mode 100644
-> > > > index 0000000000..24aa51d8e4
-> > > > --- /dev/null
-> > > > +++ b/package/python-pycrate/python-pycrate.hash
-> > > > @@ -0,0 +1,4 @@
-> > > > +# md5 from https://pypi.python.org/pypi/pycrate/json
-> > > > +md5    075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> > > > +# Locally computed
-> > > > +sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> > > > diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> > > > new file mode 100644
-> > > > index 0000000000..41ce6c18f2
-> > > > --- /dev/null
-> > > > +++ b/package/python-pycrate/python-pycrate.mk
-> > > > @@ -0,0 +1,13 @@
-> > > > +################################################################################
-> > > > +#
-> > > > +# python-pycrate
-> > > > +#
-> > > > +################################################################################
-> > > > +
-> > > > +PYTHON_PYCRATE_VERSION = 0.5.5
-> > > > +PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> > > > +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> > > > +PYTHON_PYCRATE_SETUP_TYPE = distutils
-> > >
-> > > SETUP_TYPE is setuptools.
-> > >
-> > > Have you tried this command?
-> > >
-> > > ./utils/scanpypi pycrate
-> > >
-> > > It will do almost everything you need. The thing that is missing is
-> > > licensing info because there is no license file in the source archive.
-> >
-> > Thankyou for pointing this out. Now I send a new version, using this
-> > command and also adding licensing info.
-> > >
-> > > Best regards,
-> > > Yegor
-> > >
-> > > > +PYTHON_PYCRATE_LICENSE = LGPL-2.1-or-later
-> > > > +
-> > > > +$(eval $(python-package))
-> > > > --
-> > > > 2.17.1
-> > > >
-> >
-> > This is the second version of my patch.
-> >
-> > From 979beabd86f1c15d159e37136bc9591fb39b844e Mon Sep 17 00:00:00 2001
-> > From: Nasser Afshin <Afshin.Nasser@gmail.com>
-> > Date: Tue, 25 Oct 2022 16:06:53 +0330
-> > Subject: [PATCH v2] python-pycrate: new package
-> >
-> > Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-> > ---
-> > v1 -> v2: Added licence file and its checksum
-> >                  Used ./utils/scanpypi pycrate tool to be consistent with
-> >                  others
-> >
-> >  package/Config.in                          |  1 +
-> >  package/python-pycrate/Config.in           |  6 ++++++
-> >  package/python-pycrate/python-pycrate.hash |  6 ++++++
-> >  package/python-pycrate/python-pycrate.mk   | 14 ++++++++++++++
-> >  4 files changed, 27 insertions(+)
-> >  create mode 100644 package/python-pycrate/Config.in
-> >  create mode 100644 package/python-pycrate/python-pycrate.hash
-> >  create mode 100644 package/python-pycrate/python-pycrate.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index e3a34d6e97..a6fcc72cc8 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1168,6 +1168,7 @@ menu "External python modules"
-> >         source "package/python-pycairo/Config.in"
-> >         source "package/python-pycares/Config.in"
-> >         source "package/python-pycparser/Config.in"
-> > +       source "package/python-pycrate/Config.in"
-> >         source "package/python-pycryptodomex/Config.in"
-> >         source "package/python-pycups/Config.in"
-> >         source "package/python-pydal/Config.in"
-> > diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> > new file mode 100644
-> > index 0000000000..193a973f7e
-> > --- /dev/null
-> > +++ b/package/python-pycrate/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_PYTHON_PYCRATE
-> > +       bool "python-pycrate"
-> > +       help
-> > +         A software suite to handle various data formats.
-> > +
-> > +         https://github.com/P1sec/pycrate/
-> > diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> > new file mode 100644
-> > index 0000000000..8ad33370b4
-> > --- /dev/null
-> > +++ b/package/python-pycrate/python-pycrate.hash
-> > @@ -0,0 +1,6 @@
-> > +# md5, sha256 from https://pypi.org/pypi/pycrate/json
-> > +md5  075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> > +sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> > +# Locally computed
-> > +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  license.txt
-> > +
-> > diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> > new file mode 100644
-> > index 0000000000..c0da152656
-> > --- /dev/null
-> > +++ b/package/python-pycrate/python-pycrate.mk
-> > @@ -0,0 +1,14 @@
-> > +################################################################################
-> > +#
-> > +# python-pycrate
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_PYCRATE_VERSION = 0.5.5
-> > +PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> > +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> > +PYTHON_PYCRATE_SETUP_TYPE = setuptools
-> > +PYTHON_PYCRATE_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/P1sec/pycrate/master/license.txt
-> > +PYTHON_PYCRATE_LICENSE = LGPL-2.1+
-> > +
-> > +$(eval $(python-package))
-> 
-> The patch looks good now. Thanks.
-> 
-> Best regards,
-> Yegor
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37721221/
+https://sourceforge.net/p/fetchmail/mailman/message/37699234/
+https://sourceforge.net/p/fetchmail/mailman/message/37687601/
+https://sourceforge.net/p/fetchmail/mailman/message/37681775/
+https://sourceforge.net/p/fetchmail/mailman/message/37645690/
 
-This is the third version of the patch:
-
-From de6e28885836a6d9a5347a083a68055098508583 Mon Sep 17 00:00:00 2001
-From: Nasser Afshin <Afshin.Nasser@gmail.com>
-Date: Tue, 25 Oct 2022 16:06:53 +0330
-Subject: [PATCH v3] python-pycrate: new package
-
-Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v1 -> v2: Added licence file and its checksum
-		Used ./utils/scanpypi pycrate tool to be consistent with
-		others
-v2 -> v3: Added myself as the maintainer of this package
+ ...c-fix-cross-compilation-with-openssl.patch | 56 -------------------
+ package/fetchmail/fetchmail.hash              |  4 +-
+ package/fetchmail/fetchmail.mk                |  6 +-
+ 3 files changed, 4 insertions(+), 62 deletions(-)
+ delete mode 100644 package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
 
- DEVELOPERS                                 |  3 +++
- package/Config.in                          |  1 +
- package/python-pycrate/Config.in           |  6 ++++++
- package/python-pycrate/python-pycrate.hash |  6 ++++++
- package/python-pycrate/python-pycrate.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/python-pycrate/Config.in
- create mode 100644 package/python-pycrate/python-pycrate.hash
- create mode 100644 package/python-pycrate/python-pycrate.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6e0b765ba1..a1b48fd45c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2157,6 +2157,9 @@ N:	Murat Demirten <mdemirten@yh.com.tr>
- F:	package/jpeg-turbo/
- F:	package/libgeotiff/
+diff --git a/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch b/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
+deleted file mode 100644
+index fff848196a..0000000000
+--- a/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 262aa59c1a7a7100e1dd4e73a6d0112d9becc701 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 1 Apr 2022 19:23:06 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation with openssl
+-
+-Don't call AC_LIB_LINKFLAGS when the libraries are retrieved through
+-pkg-config to avoid the following build failure when cross-compiling
+-raised since commit 77503f545d2806d07ab83c59ed9a96f435d281da:
+-
+-/home/autobuild/autobuild/instance-5/output-1/host/bin/arc-buildroot-linux-gnu-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -I/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include -I/usr/kerberos/include  -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib -o fetchmail socket.o getpass.o fetchmail.o env.o idle.o options.o daemon.o driver.o transact.o sink.o smtp.o idlist.o uid.o mxget.o md5ify.o cram.o gssapi.o opie.o interface.o netrc.o unmime.o conf.o checkalias.o uid_db.o lock.o rcfile_l.o rcfile_y.o ucs/norm_charmap.o fm_realpath.o  pop3.o imap.o etrn.o odmr.o     libfm.a  strlcpy.o strlcat.o  /usr/lib/libssl.so /usr/lib/libcrypto.so
+-/usr/lib/libssl.so: file not recognized: file format not recognized
+-
+-This build failure is raised because AC_LIB_LINKFLAGS will override the
+-pkg-config target libraries by the host openssl libraries:
+-
+-configure: Enabling OpenSSL support in /home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr.
+-configure: SSL-check: trying pkg-config for openssl
+-checking for SSL... yes
+-checking how to link with libssl... /usr/lib/libssl.so /usr/lib/libcrypto.so
+-configure: From pkg-config: Adding /usr/lib/libssl.so /usr/lib/libcrypto.so to LIBS. LDFLAGS= -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/815f18f25017be178d478458c48712d9a8570d5a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.com/fetchmail/fetchmail/-/merge_requests/42]
+----
+- configure.ac | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index bd042d51..80e5bf91 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -838,15 +838,13 @@ else
+-     PKG_CHECK_MODULES([SSL],[$i],[
+- 	  set -- $SSL_LIBS
+- 	  while test $# -ge 1 ; do
+--		  case $1 in -l*|lib*) :                     ;;
+-+		  case $1 in -l*|lib*) LIBS="$LIBS $1"       ;;
+- 				    *) LDFLAGS="$LDFLAGS $1" ;;
+- 		  esac
+- 		  shift
+- 	  done
+- 	  CPPFLAGS="$SSL_CFLAGS $CPPFLAGS"
+--	  AC_LIB_LINKFLAGS([ssl], [crypto])
+--	  AS_MESSAGE([From pkg-config: Adding $LIBSSL to LIBS. LDFLAGS=$LDFLAGS])
+--	  LIBS="$LIBS $LIBSSL"
+-+	  AS_MESSAGE([From pkg-config: $SSL_LIBS])
+- 	  found=1
+- 	  break],[: ignore-error])
+-     done
+--- 
+-2.35.1
+-
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 5ff129b9a8..4b2cf90ed8 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37628013/
+-sha256  397df984082abae51edec6831700d68636f0e117cfaffcbdd3eed66d04b97321  fetchmail-6.4.29.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37721221/
++sha256  c3bdded1b5ce236960bd1ceeee3f3257220ed99c3eec84a5d76bb5618e3258d4  fetchmail-6.4.34.tar.xz
+ # Locally computed:
+ sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 25dfcae87b..063e41b2e1 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,15 +5,13 @@
+ ################################################################################
  
-+N:	Nasser Afshin <afshin.nasser@gmail.com>
-+F:	package/python-pycrate/
-+
- N:	Nathaniel Roach <nroach44@gmail.com>
- F:	package/bandwidthd/
- F:	package/libgudev/
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..a6fcc72cc8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1168,6 +1168,7 @@ menu "External python modules"
- 	source "package/python-pycairo/Config.in"
- 	source "package/python-pycares/Config.in"
- 	source "package/python-pycparser/Config.in"
-+	source "package/python-pycrate/Config.in"
- 	source "package/python-pycryptodomex/Config.in"
- 	source "package/python-pycups/Config.in"
- 	source "package/python-pydal/Config.in"
-diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-new file mode 100644
-index 0000000000..193a973f7e
---- /dev/null
-+++ b/package/python-pycrate/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYCRATE
-+	bool "python-pycrate"
-+	help
-+	  A software suite to handle various data formats.
-+
-+	  https://github.com/P1sec/pycrate/
-diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-new file mode 100644
-index 0000000000..8ad33370b4
---- /dev/null
-+++ b/package/python-pycrate/python-pycrate.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/pycrate/json
-+md5  075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-+sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-+# Locally computed
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  license.txt
-+
-diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-new file mode 100644
-index 0000000000..c0da152656
---- /dev/null
-+++ b/package/python-pycrate/python-pycrate.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pycrate
-+#
-+################################################################################
-+
-+PYTHON_PYCRATE_VERSION = 0.5.5
-+PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-+PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-+PYTHON_PYCRATE_SETUP_TYPE = setuptools
-+PYTHON_PYCRATE_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/P1sec/pycrate/master/license.txt
-+PYTHON_PYCRATE_LICENSE = LGPL-2.1+
-+
-+$(eval $(python-package))
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).29
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).34
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+-FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
++FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+ FETCHMAIL_LICENSE_FILES = COPYING
+ FETCHMAIL_CPE_ID_VENDOR = fetchmail
+ FETCHMAIL_SELINUX_MODULES = fetchmail mta
+-# We're patching configure.ac
+-FETCHMAIL_AUTORECONF = YES
+ 
+ FETCHMAIL_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr
 -- 
-2.17.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
