@@ -1,87 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2127AC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 07:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EF60C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 07:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82E1E4040D;
-	Sat, 29 Oct 2022 07:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E1E4040D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NtZV0alM45QT; Sat, 29 Oct 2022 07:55:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9C1C40297;
-	Sat, 29 Oct 2022 07:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9C1C40297
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F46A1BF59E
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 07:55:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09E38813B1
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 07:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E38813B1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FD1B813F0;
+	Sat, 29 Oct 2022 07:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FD1B813F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rOZ1R6jd2yc0 for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 07:55:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD222813AB
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DD222813AB
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 07:55:16 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id w14so9229998wru.8
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 00:55:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=K7TojRUhgpPpLrLjedhe+oRnnrKETi1Eh3aYmDa5y+A=;
- b=wdBWA4DrWSNGIOkB8R/bDSlyPyNmOTfzou77wyYN/88NWHYHkTdWDnPxiQJ1m4i/wC
- umXBcUx0j/qRMYixryPVuXqZdLFBfSIAShRwVPJaVMDTp2QtD+WwJTIW+W5A89GW/bf1
- Wz20oE07QTcH7oaDsxTVLruqegY/XBiS8SC4TMd9HtG5mFfWDm0qJjn9giNxzRLZ9GWm
- MyVnghhMabVDE86IOBgaUXU3M0HhBhlp1GUy2qlOukdWV7Qa4+Jq0ou0VOSaYZ6jKYMb
- 1FhGRvFgA3IVmXrVQ3kC4zVL1g+n1anYsQMIz379wHFZwr8O8aWdkgkd9QaMY0xCjlyx
- WSpA==
-X-Gm-Message-State: ACrzQf3FxFp/9TyDGNWTIhT4odjzplJZnqmtDjKwNF7P+lGUicQwxnRp
- pIDJmcq0Xv1i0ke4hNxPABlGhwXTnos=
-X-Google-Smtp-Source: AMsMyM4YJK1gxx2dN5/xSaJavbFA4rWhp5qCZu0aWLsyroa8iOtYIyg4tOpw122uCDmsm+uCTP4pyQ==
-X-Received: by 2002:a5d:5c13:0:b0:236:5575:a3fd with SMTP id
- cc19-20020a5d5c13000000b002365575a3fdmr1690783wrb.475.1667030114608; 
- Sat, 29 Oct 2022 00:55:14 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- cc6-20020a5d5c06000000b002364835caacsm791447wrb.112.2022.10.29.00.55.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 00:55:14 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TIAA6jsoLoES; Sat, 29 Oct 2022 07:59:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CB1F813E7;
+	Sat, 29 Oct 2022 07:59:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CB1F813E7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C45101BF228
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 07:59:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A063C40297
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 07:59:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A063C40297
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A0F-SoAZSyZ8 for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 07:59:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36A6740017
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 36A6740017
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 07:59:01 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout09.t-online.de (Postfix) with SMTP id 0DB891DD00
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 09:58:59 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.197.145]) by fwd83.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1oogk3-4G1yVN0; Sat, 29 Oct 2022 09:58:55 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53328)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oogk3-0007Z7-1T
+ for buildroot@buildroot.org; Sat, 29 Oct 2022 09:58:55 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 09:55:11 +0200
-Message-Id: <20221029075511.6599-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 29 Oct 2022 09:58:55 +0200
+Message-Id: <20221029075855.1236307-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=K7TojRUhgpPpLrLjedhe+oRnnrKETi1Eh3aYmDa5y+A=;
- b=JnATTpvlBmn0LlZln2ovZqVpxNKX9tgXwvxpQUIA4p/M8iKO5FSFohrz5dFhkkRCKw
- 2hCrXJc+0lAeaQS3poYZqKaSsL9ZmV/ypkFavrOsi5ha1dmCav6ID3sZHYIw3NVJWO8a
- sPBTxWqa5h8rlwTIMe//OaIzZaSKd/mRr8YtxCF+Skcx5rxEcAmCpmS4OBYJj+DxTdfF
- a3teoWm+ptkwmJmihTWYcf96fS6ZVnCY+izqcjCoTu5lx6oWXXAR0FHrN7hlqK7M/+Iw
- WlNXK3ZZpt+fB9KP7hpVRsHbFflzsaqhz6dyb1B9hZHG67kd3nmabYb+xO8A2cgXeRqJ
- xRog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JnATTpvl
-Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.7
+X-TOI-EXPURGATEID: 150726::1667030335-60A0E2DC-AE889C98/0/0 CLEAN NORMAL
+X-TOI-MSGID: 4c580652-30e1-4a85-a8a4-28b258b052f1
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.15.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +66,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/wolkykim/qlibc/releases/tag/v2.4.7
+Added patch from Gentoo to fix uClibc build:
+access.c:(.text+0x1e8): undefined reference to `innetgr'
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+https://www.samba.org/samba/history/samba-4.15.8.html
+
+https://www.samba.org/samba/history/samba-4.15.9.html
+o CVE-2022-2031:  Samba AD users can bypass certain restrictions associated with
+                  changing passwords.
+                  https://www.samba.org/samba/security/CVE-2022-2031.html
+
+o CVE-2022-32744: Samba AD users can forge password change requests for any user.
+                  https://www.samba.org/samba/security/CVE-2022-32744.html
+
+o CVE-2022-32745: Samba AD users can crash the server process with an LDAP add
+                  or modify request.
+                  https://www.samba.org/samba/security/CVE-2022-32745.html
+
+o CVE-2022-32746: Samba AD users can induce a use-after-free in the server
+                  process with an LDAP add or modify request.
+                  https://www.samba.org/samba/security/CVE-2022-32746.html
+
+o CVE-2022-32742: Server memory information leak via SMB1.
+                  https://www.samba.org/samba/security/CVE-2022-32742.html
+
+https://www.samba.org/samba/history/samba-4.15.10.html
+
+https://www.samba.org/samba/history/samba-4.15.11.html
+o CVE-2022-3437:  There is a limited write heap buffer overflow in the GSSAPI
+                  unwrap_des() and unwrap_des3() routines of Heimdal (included
+                  in Samba).
+                  https://www.samba.org/samba/security/CVE-2022-3437.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/qlibc/qlibc.hash | 2 +-
- package/qlibc/qlibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...mba-4.16.2-fix-build-without-innetgr.patch | 34 +++++++++++++++++++
+ package/samba4/samba4.hash                    |  4 +--
+ package/samba4/samba4.mk                      |  2 +-
+ 3 files changed, 37 insertions(+), 3 deletions(-)
+ create mode 100644 package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch
 
-diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
-index 5cd6e1860f..9b2af1a4e3 100644
---- a/package/qlibc/qlibc.hash
-+++ b/package/qlibc/qlibc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bd98c19f96c0d374adb69c99627c80cf967b5e860c8a4f28c13fa1b0d652a06e  qlibc-2.4.6.tar.gz
-+sha256  ddb27da8ee6f3bf558e5d1d21d3d392c8a6f12d25767c5f70f4e757d814900c9  qlibc-2.4.7.tar.gz
- sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
-diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
-index 3996bb3706..838ba68746 100644
---- a/package/qlibc/qlibc.mk
-+++ b/package/qlibc/qlibc.mk
+diff --git a/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch b/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch
+new file mode 100644
+index 0000000000..b338596d7a
+--- /dev/null
++++ b/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch
+@@ -0,0 +1,34 @@
++# Gentoo bug 855047
++
++Fixes uClibc build when uClibc was build without netgroup support.
++Upstream enables netgroup support based on getdomainname() being
++present:
++https://github.com/samba-team/samba/commit/f179184a2be2ddd38f463fcc12252f8d24e529f8#diff-b8d1bc25b89846e70ecb61cb296a8f5c50c9a0a1b62e46790fae81aa9d5bfaaeR632
++
++Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/net-fs/samba/files/samba-4.16.2-fix-musl-without-innetgr.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/lib/util/access.c
+++++ b/lib/util/access.c
++@@ -115,7 +115,7 @@ static bool string_match(const char *tok,const char *s)
++ 			return true;
++ 		}
++ 	} else if (tok[0] == '@') { /* netgroup: look it up */
++-#ifdef HAVE_NETGROUP
+++#if defined(HAVE_NETGROUP) && defined(HAVE_INNETGR)
++ 		DATA_BLOB tmp;
++ 		char *mydomain = NULL;
++ 		char *hostname = NULL;
++--- a/source3/auth/user_util.c
+++++ b/source3/auth/user_util.c
++@@ -135,7 +135,7 @@ static void store_map_in_gencache(TALLOC_CTX *ctx, const char *from, const char
++
++ bool user_in_netgroup(TALLOC_CTX *ctx, const char *user, const char *ngname)
++ {
++-#ifdef HAVE_NETGROUP
+++#if defined(HAVE_NETGROUP) && defined(HAVE_INNETGR)
++ 	char nis_domain_buf[256];
++ 	const char *nis_domain = NULL;
++ 	char *lowercase_user = NULL;
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index ac28c35614..f845a31290 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.7.tar.asc
+-sha256  76d0096c16ed0265b337d5731f3c0b32eed3adab6fa8b7585c055b287cd05d6b  samba-4.15.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.11.tar.asc
++sha256  2f305980d49c7723cbef281fff2b81a2eeafae51e58b5172bb43d9693ef8953b  samba-4.15.11.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c90fdd006c..814bf0bbaa 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QLIBC_VERSION = 2.4.6
-+QLIBC_VERSION = 2.4.7
- QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
- QLIBC_LICENSE = BSD-2-Clause
- QLIBC_LICENSE_FILES = LICENSE
+-SAMBA4_VERSION = 4.15.7
++SAMBA4_VERSION = 4.15.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
