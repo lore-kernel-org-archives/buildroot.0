@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B56CAC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3621FC38A02
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58F2B408AE;
-	Sat, 29 Oct 2022 16:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58F2B408AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF48360B1C;
+	Sat, 29 Oct 2022 16:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF48360B1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 68SsL3PDgLYL; Sat, 29 Oct 2022 16:10:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IZ1KBZsHmXsf; Sat, 29 Oct 2022 16:10:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28F30404ED;
-	Sat, 29 Oct 2022 16:10:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28F30404ED
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3D8A60672;
+	Sat, 29 Oct 2022 16:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D8A60672
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42E7A1BF5DC
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:09:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11E861BF5DC
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14B93813B6
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:09:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14B93813B6
+ by smtp1.osuosl.org (Postfix) with ESMTP id E154D813B6
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E154D813B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qAa8p2RBUGMu for <buildroot@lists.busybox.net>;
+ with ESMTP id yo0JeVpUTtL1 for <buildroot@lists.busybox.net>;
  Sat, 29 Oct 2022 16:09:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A8E3813B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BBC3813B5
  for <buildroot@buildroot.org>; Sat, 29 Oct 2022 16:09:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A8E3813B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BBC3813B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A7D986FBA; Sat, 29 Oct 2022 16:09:20 +0000 (UTC)
+ id 5A4E58704C; Sat, 29 Oct 2022 16:09:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 18:08:18 +0200
+Date: Sat, 29 Oct 2022 18:06:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c7b4f88bca9b1ceba6478c5c03797675b1f10e8
-X-Git-Newrev: 6cbfed0dbf43c5e04e3cc543b642e3c996bfed97
+X-Git-Oldrev: 18b5d6205db7547d633d6ac4ea8ba4fdd81ecc35
+X-Git-Newrev: 3383613ad3d697001173b832c0a13257d6f7713a
 X-Patchwork-Hint: ignore
-Message-Id: <20221029160920.7A7D986FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dahdi-linux: bump to version 3.2.0
+Message-Id: <20221029160920.5A4E58704C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.4.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,83 +57,130 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7505726391526069401=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7505726391526069401==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6cbfed0dbf43c5e04e3cc543b642e3c996bfed97
+commit: https://git.buildroot.net/buildroot/commit/?id=3383613ad3d697001173b832c0a13257d6f7713a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Use official tarball
-- This bump will fix the following build failures with kernel >= 5.16:
+Switched _SITE to https.
 
-/home/autobuild/autobuild/instance-6/output-1/build/dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/wct4xxp/base.c:45:10: fatal error: stdbool.h: No such file or directory
-   45 | #include <stdbool.h>
-      |          ^~~~~~~~~~~
+Removed patch which was applied upstream:
+https://gitlab.com/fetchmail/fetchmail/-/commit/28c476ec453fb445bf3eceeec8cce1e9822eabd2
 
-[...]
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37721221/
+https://sourceforge.net/p/fetchmail/mailman/message/37699234/
+https://sourceforge.net/p/fetchmail/mailman/message/37687601/
+https://sourceforge.net/p/fetchmail/mailman/message/37681775/
+https://sourceforge.net/p/fetchmail/mailman/message/37645690/
 
-../dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/xpp/xbus-core.c: In function ‘xbus_read_proc_open’:
-../dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8/drivers/dahdi/xpp/xbus-core.c:1845:43: error: implicit declaration of function ‘PDE_DATA’; did you mean ‘NODE_DATA’? [-Werror=implicit-function-declaration]
- 1845 |  return single_open(file, xbus_proc_show, PDE_DATA(inode));
-      |                                           ^~~~~~~~
-      |                                           NODE_DATA
-
-https://github.com/asterisk/dahdi-linux/compare/5c840cf43838e0690873e73409491c392333b3b8...v3.2.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/3f23559f01a7783d82ad4e0b2d6792171e6f2b79
- - http://autobuild.buildroot.org/results/f3f226fb661a6b1998381f5fb7cb306771c2ecc0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dahdi-linux/dahdi-linux.hash | 4 ++--
- package/dahdi-linux/dahdi-linux.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...ure.ac-fix-cross-compilation-with-openssl.patch | 56 ----------------------
+ package/fetchmail/fetchmail.hash                   |  4 +-
+ package/fetchmail/fetchmail.mk                     |  6 +--
+ 3 files changed, 4 insertions(+), 62 deletions(-)
 
-diff --git a/package/dahdi-linux/dahdi-linux.hash b/package/dahdi-linux/dahdi-linux.hash
-index 7a4c688061..2d3f336777 100644
---- a/package/dahdi-linux/dahdi-linux.hash
-+++ b/package/dahdi-linux/dahdi-linux.hash
-@@ -1,5 +1,5 @@
--# Locally computed
--sha256  3faf127ee3f1fad0195c56d00b7bf2708ec8a54bf3c31edd827fd9beb47e0a51  dahdi-linux-5c840cf43838e0690873e73409491c392333b3b8-br1.tar.gz
-+# From http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases/dahdi-linux-3.2.0.sha256
-+sha256  e2ef9b3f6769f60f432cfa09c39c9a0d7ab5bddff59229f385056915c65f9f13  dahdi-linux-3.2.0.tar.gz
- 
- # Firmware files have no upstream hash, so sha56 locally computed
- sha256  3ff26cf80555fd7470b43a87c51d03c1db2a75abcd4561d79f69b6c48298e4a1  dahdi-fwload-vpmadt032-1.25.0.tar.gz
-diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
-index 93124f0e02..88519b5106 100644
---- a/package/dahdi-linux/dahdi-linux.mk
-+++ b/package/dahdi-linux/dahdi-linux.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch b/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
+deleted file mode 100644
+index fff848196a..0000000000
+--- a/package/fetchmail/0001-configure.ac-fix-cross-compilation-with-openssl.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 262aa59c1a7a7100e1dd4e73a6d0112d9becc701 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 1 Apr 2022 19:23:06 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation with openssl
+-
+-Don't call AC_LIB_LINKFLAGS when the libraries are retrieved through
+-pkg-config to avoid the following build failure when cross-compiling
+-raised since commit 77503f545d2806d07ab83c59ed9a96f435d281da:
+-
+-/home/autobuild/autobuild/instance-5/output-1/host/bin/arc-buildroot-linux-gnu-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -I/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include -I/usr/kerberos/include  -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib -o fetchmail socket.o getpass.o fetchmail.o env.o idle.o options.o daemon.o driver.o transact.o sink.o smtp.o idlist.o uid.o mxget.o md5ify.o cram.o gssapi.o opie.o interface.o netrc.o unmime.o conf.o checkalias.o uid_db.o lock.o rcfile_l.o rcfile_y.o ucs/norm_charmap.o fm_realpath.o  pop3.o imap.o etrn.o odmr.o     libfm.a  strlcpy.o strlcat.o  /usr/lib/libssl.so /usr/lib/libcrypto.so
+-/usr/lib/libssl.so: file not recognized: file format not recognized
+-
+-This build failure is raised because AC_LIB_LINKFLAGS will override the
+-pkg-config target libraries by the host openssl libraries:
+-
+-configure: Enabling OpenSSL support in /home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr.
+-configure: SSL-check: trying pkg-config for openssl
+-checking for SSL... yes
+-checking how to link with libssl... /usr/lib/libssl.so /usr/lib/libcrypto.so
+-configure: From pkg-config: Adding /usr/lib/libssl.so /usr/lib/libcrypto.so to LIBS. LDFLAGS= -L/home/autobuild/autobuild/instance-5/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/lib -L/home/autobuild/autobuild/instance-5/output-1/host/bin/../arc-buildroot-linux-gnu/sysroot/usr/lib
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/815f18f25017be178d478458c48712d9a8570d5a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.com/fetchmail/fetchmail/-/merge_requests/42]
+----
+- configure.ac | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index bd042d51..80e5bf91 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -838,15 +838,13 @@ else
+-     PKG_CHECK_MODULES([SSL],[$i],[
+- 	  set -- $SSL_LIBS
+- 	  while test $# -ge 1 ; do
+--		  case $1 in -l*|lib*) :                     ;;
+-+		  case $1 in -l*|lib*) LIBS="$LIBS $1"       ;;
+- 				    *) LDFLAGS="$LDFLAGS $1" ;;
+- 		  esac
+- 		  shift
+- 	  done
+- 	  CPPFLAGS="$SSL_CFLAGS $CPPFLAGS"
+--	  AC_LIB_LINKFLAGS([ssl], [crypto])
+--	  AS_MESSAGE([From pkg-config: Adding $LIBSSL to LIBS. LDFLAGS=$LDFLAGS])
+--	  LIBS="$LIBS $LIBSSL"
+-+	  AS_MESSAGE([From pkg-config: $SSL_LIBS])
+- 	  found=1
+- 	  break],[: ignore-error])
+-     done
+--- 
+-2.35.1
+-
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 5ff129b9a8..4b2cf90ed8 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37628013/
+-sha256  397df984082abae51edec6831700d68636f0e117cfaffcbdd3eed66d04b97321  fetchmail-6.4.29.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37721221/
++sha256  c3bdded1b5ce236960bd1ceeee3f3257220ed99c3eec84a5d76bb5618e3258d4  fetchmail-6.4.34.tar.xz
+ # Locally computed:
+ sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 25dfcae87b..063e41b2e1 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,15 +5,13 @@
  ################################################################################
  
--DAHDI_LINUX_VERSION = 5c840cf43838e0690873e73409491c392333b3b8
--DAHDI_LINUX_SITE = https://gerrit.asterisk.org/dahdi-linux
--DAHDI_LINUX_SITE_METHOD = git
-+DAHDI_LINUX_VERSION = 3.2.0
-+DAHDI_LINUX_SITE = \
-+	http://downloads.asterisk.org/pub/telephony/dahdi-linux/releases
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).29
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).34
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+-FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
++FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+ FETCHMAIL_LICENSE_FILES = COPYING
+ FETCHMAIL_CPE_ID_VENDOR = fetchmail
+ FETCHMAIL_SELINUX_MODULES = fetchmail mta
+-# We're patching configure.ac
+-FETCHMAIL_AUTORECONF = YES
  
- # We need to download all those firmware blobs ourselves, otherwise
- # dahdi-linux will try to download them at install time.
-
---===============7505726391526069401==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ FETCHMAIL_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7505726391526069401==--
