@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1244C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 08:56:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43212FA3744
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 09:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84BB4403FB;
-	Sat, 29 Oct 2022 08:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84BB4403FB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZY8aXyDoFc-a; Sat, 29 Oct 2022 08:56:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D828D40496;
-	Sat, 29 Oct 2022 08:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D828D40496
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CA3181BF348
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:56:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EE91408EB
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 08:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE91408EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6F23409A6;
+	Sat, 29 Oct 2022 09:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F23409A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ja6ZEJRu7OHz for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 08:56:28 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9gnb0ki5Otm9; Sat, 29 Oct 2022 09:25:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A32D54097E;
+	Sat, 29 Oct 2022 09:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A32D54097E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 49FF11BF319
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 09:25:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2270E81470
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 09:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2270E81470
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eNnSHSbMLvsG for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 09:25:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6172C408C4
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6172C408C4
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 08:56:28 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id k8so9389343wrh.1
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 01:56:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE3058145D
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE3058145D
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 09:25:24 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id o4so9413461wrq.6
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 02:25:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Hoh8Vn3My3zCrLW2R0UhA5ULjzSVDcx6Mi3j0h6jQS8=;
- b=K483TDw8Xn45UhWXPwQYIU5GEHJtLCNZjpgNQMf/UeOwjXwvBRLFgf0E8c4KrwIQQx
- X8KAxmsJBc/AJ4RhKi6HzfFDOcMYXMMznjUEg+SztGZ9IRLd711meZbK/VlLdiNF+ekr
- g13AEsl4RoMH+0oV6pNXE3nQgvNyA76ksW5u2Q+L/+ydKI69oGgONrRL5o3aIrXcQg/U
- OUUu+pccCikMYOsbTGSbSkEPu1QhcU/5S/hZf8BZU0V4ZP+n9uemOIcet4mcLxGtSOZw
- /WBVV2ttqvpCO2fR7pBESJqkWDflaolNPZBQlZBDy0rl0AGESiDfrU23LanzHuVtWfl+
- awMA==
-X-Gm-Message-State: ACrzQf1ynpngNCMLFQjzY8sVfTh0IYCWmsDllvnas2pBzWcDJHgBjvW/
- 4VLYp0AYXEuLdXn2KSyeK0+f7QPn1Qg=
-X-Google-Smtp-Source: AMsMyM7xyVqsjanLj3GPu6PNrh0RLsPapZfihHvwM1imWSuE+gNkN7IiLfzG1i2JdDJdrCoUb9j3xQ==
-X-Received: by 2002:adf:e3c1:0:b0:236:6d5d:ffa2 with SMTP id
- k1-20020adfe3c1000000b002366d5dffa2mr1825228wrm.557.1667033786250; 
- Sat, 29 Oct 2022 01:56:26 -0700 (PDT)
+ bh=D782SBJGXBXIXEAPYI2uKfLy0Y9HHMfOs3DnEPquXxI=;
+ b=khnN8XzRcBXcSciVo8ieoV0oHN1bIQVgeym+SU2pDk0W0MYjSXvmLELuGIB7sBJqSG
+ paHM14BxcxucAJTS09/Hp9zOEvXICCx2ccpInMC29j3ix1kCM2FwweMp31DcV5WdQ17x
+ PXQiQXfIJbevd6FqPmbBBb0T667BzIiadJho7RSJgUSC7NgFg1h3A4Q5D3VddCu4vf/s
+ GpBsibfFzk2JbR0FDRU1Dj+Df8g7FXfSxR0ZcrGW6cT808tojfGXOQvpAV6ut4HhTkYA
+ DQ5oao5t9yV7Tka9m5VMTGuY2VgBjrTEjkoJe8BibuCt72j5iQhHux0crvl0BBNV0X6n
+ U/LQ==
+X-Gm-Message-State: ACrzQf3lWP6mUfyWaHRYGu0EFbCmNBIMAvDJfRVye1KOVgjocL4/CIWM
+ Hb+0tajsCaIa0nzCftGnEWLxpYZPpa8=
+X-Google-Smtp-Source: AMsMyM5JOWgwmLZ9XQYiQKHGI7uO47aVsxNiHYzr5Id9N57No3xfqN9jMMQm9BogNVWNOujDX63IOg==
+X-Received: by 2002:a05:6000:18a5:b0:230:a3a:d93e with SMTP id
+ b5-20020a05600018a500b002300a3ad93emr1881592wri.626.1667035522725; 
+ Sat, 29 Oct 2022 02:25:22 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bg21-20020a05600c3c9500b003b49bd61b19sm1039324wmb.15.2022.10.29.01.56.25
+ n28-20020a05600c3b9c00b003b4a699ce8esm1135302wms.6.2022.10.29.02.25.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 29 Oct 2022 01:56:25 -0700 (PDT)
+ Sat, 29 Oct 2022 02:25:22 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 29 Oct 2022 10:56:22 +0200
-Message-Id: <20221029085622.104382-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Oct 2022 11:25:17 +0200
+Message-Id: <20221029092517.115919-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Hoh8Vn3My3zCrLW2R0UhA5ULjzSVDcx6Mi3j0h6jQS8=;
- b=X46JzqkuNQjxxMvdJ7yX8TUizUB23x04ddDHoV5FyzMBchqSV87zqOWMF1Cy6q92d4
- UuC9jl2ICz7i7GUKhGqedc6JFuiS0ywv/T1WTLWxQZRIMFz3RPwo7SvdYd3mi2UzunSA
- Qy5NrbxC3A37wwJ4dpp1GxR0iK3C5pnD2BiuJQf6awdHhWCwnSgcDER+1oK6FfFrJmZ3
- EuDnFs2PsG5Qa9nC55NA/iZsE2i8V1HYoyRiqZMuvR2BkXaVqekDpCltHoRs4q2tcFUn
- yY3bEW3EfWiug2YtJxrNwlibHMRH47+8sbA1AJIydFtVAlDdDanf5JiqG+M/uDKtieH+
- r0wg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=D782SBJGXBXIXEAPYI2uKfLy0Y9HHMfOs3DnEPquXxI=;
+ b=XUv08OQE8/jDeauV8esb+7+PH99KOFf1vE95JNcuoRp+Yg8OAhh1886foVSXVVK1oX
+ ILuECHaBM1KGH2kap5Y1hSFBn3bepjFnjKnA0aq9sPUkrBaFrezXSrvFQtuxjAEqHoJn
+ sabPLBV+azkeGlVnjIxIormBMn25Dw7Li/JFIm80K2UPz64Gdx04l9aOsWVHMIAi3hik
+ NmpsQfD8Fi5uhMwDVlDERmY+DNvWPGrNC8BaAm3yeNJE7a1kQM1sy6rWpWcth7SQOPuO
+ kcPvY1bx0yP6n3YirkF/KD9EsyK0M49xON7q4OZ8q3H3Dhc8BOwB0qUtGtf2J2KofGw+
+ Lasw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=X46Jzqku
-Subject: [Buildroot] [PATCH 1/1] package/ndisc6: bump to version 1.0.6
+ header.a=rsa-sha256 header.s=20210112 header.b=XUv08OQE
+Subject: [Buildroot] [PATCH 1/1] package/mxml: bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ndisc6: print NAT64 prefix if present.
-rdnssd: fix timeout calculation.
+Update hash of NOTICE (update in year:
+https://github.com/michaelrsweet/mxml/commit/d32818a16ceb352b8889f95ec7ff65575ad2e4f2)
 
-https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS;h=d9e87a5307ae7f50355ba2eaac1171c6c4ff9c47
+https://github.com/michaelrsweet/mxml/releases/tag/v3.3.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ndisc6/ndisc6.hash | 2 +-
- package/ndisc6/ndisc6.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mxml/mxml.hash | 4 ++--
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
-index d76e831208..e258382c53 100644
---- a/package/ndisc6/ndisc6.hash
-+++ b/package/ndisc6/ndisc6.hash
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 38056f4c3a..412977dff0 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  36932f9fc47e2844abcda7550fa1343b3af4b4208dfb61e0c9d9224aad5df351  ndisc6-1.0.5.tar.bz2
-+sha256  a713210e9be1f15cfa0809f4c2728b00cd5f25881d7585126986982055453cfb  ndisc6-1.0.6.tar.bz2
  # Locally computed
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index ff6439e310..23734ca7d7 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
+-sha256  7cf976366f9e8e4f8cff7d35a59bcf6201c769fce9e58015d64f4b6de1fe3dd8  mxml-3.3.tar.gz
++sha256  0c663ed1fe393b5619f80101798202eea43534abd7c8aff389022fd8c1dacc32  mxml-3.3.1.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+-sha256  ed63aec4c75b9c21a5156b40052138032269bd27fd6f4bc0c51389807cdc7db9  NOTICE
++sha256  7dedb0043b0bbed7880bcc9724b3a3dae4d5ab2dce98a7904703109572b626e3  NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 88d35cb7ee..d224cf5308 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NDISC6_VERSION = 1.0.5
-+NDISC6_VERSION = 1.0.6
- NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
- NDISC6_SITE = http://www.remlab.net/files/ndisc6
- NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=c11" LIBS=$(TARGET_NLS_LIBS)
+-MXML_VERSION = 3.3
++MXML_VERSION = 3.3.1
+ MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
+ MXML_LICENSE = Apache-2.0 with exceptions
+ MXML_LICENSE_FILES = LICENSE NOTICE
 -- 
 2.35.1
 
