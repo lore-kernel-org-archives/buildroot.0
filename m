@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02929C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5119AC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Oct 2022 16:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD58860B29;
-	Sat, 29 Oct 2022 16:11:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD58860B29
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0ACB60BC2;
+	Sat, 29 Oct 2022 16:11:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0ACB60BC2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0U9c_p8fjGBs; Sat, 29 Oct 2022 16:11:18 +0000 (UTC)
+	with ESMTP id akAauw52HWQf; Sat, 29 Oct 2022 16:11:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5A3060B60;
-	Sat, 29 Oct 2022 16:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A3060B60
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A75661BF5DC
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:10:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3206060B42;
+	Sat, 29 Oct 2022 16:11:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3206060B42
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 350AF1BF954
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82B23813B6
- for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82B23813B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A90E404DB
+ for <buildroot@lists.busybox.net>; Sat, 29 Oct 2022 16:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A90E404DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EBKYCHusBsvq for <buildroot@lists.busybox.net>;
- Sat, 29 Oct 2022 16:10:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD547813B5
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD547813B5
- for <buildroot@buildroot.org>; Sat, 29 Oct 2022 16:10:24 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8BA0240002;
- Sat, 29 Oct 2022 16:10:22 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oooPe-002mwO-3K; Sat, 29 Oct 2022 18:10:22 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1zulLRxk4lUH for <buildroot@lists.busybox.net>;
+ Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58889404C8
+ for <buildroot@buildroot.org>; Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58889404C8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 41B508718B; Sat, 29 Oct 2022 16:11:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221028192546.132535-1-bernd.kuhls@t-online.de>
-Date: Sat, 29 Oct 2022 18:10:22 +0200
-In-Reply-To: <20221028192546.132535-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 28 Oct 2022 21:25:46 +0200")
-Message-ID: <874jvmy5jl.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: add Bernd Kuhls to package
+To: buildroot@buildroot.org
+Date: Sat, 29 Oct 2022 18:10:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 96db6a8ac96742cb817f87ce4c869677c6a6cfda
+X-Git-Newrev: 098db8b4d5649345f983e7601d60a1fc30836e1d
+X-Patchwork-Hint: ignore
+Message-Id: <20221029161122.41B508718B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Bernd Kuhls to package
  rsync
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,20 +57,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=098db8b4d5649345f983e7601d60a1fc30836e1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dac8fefd0b..c4d23cd293 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -447,6 +447,7 @@ F:	package/python-pyicu/
+ F:	package/python-pylru/
+ F:	package/python-requests-oauthlib/
+ F:	package/python-slob/
++F:	package/rsync/
+ F:	package/rtmpdump/
+ F:	package/samba4/
+ F:	package/softether/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
