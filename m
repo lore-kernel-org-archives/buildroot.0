@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD85C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1BC7C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:52:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F80B40374;
-	Sun, 30 Oct 2022 10:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F80B40374
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28E52812C9;
+	Sun, 30 Oct 2022 10:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28E52812C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wp-yx2ZQZJAX; Sun, 30 Oct 2022 10:51:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EVYxkLd7nwYD; Sun, 30 Oct 2022 10:52:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6C2F4036F;
-	Sun, 30 Oct 2022 10:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6C2F4036F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D387E1BF2B7
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FD83812CE;
+	Sun, 30 Oct 2022 10:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FD83812CE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B9651BF2B7
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF615606EC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF615606EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52F9440357
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52F9440357
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WE4SNP6QYf75 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s0nF2PsDnCyJ for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 10:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E15BB600CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD90C40285
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E15BB600CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD90C40285
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFF6B8745B; Sun, 30 Oct 2022 10:51:50 +0000 (UTC)
+ id C65DA8746C; Sun, 30 Oct 2022 10:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 11:51:38 +0100
+Date: Sun, 30 Oct 2022 11:51:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 952fa08764acc8d78985d2cc91d37112324b67cb
-X-Git-Newrev: c999e540dd233f8cb52eee4c35373cd6603aea97
+X-Git-Oldrev: 1ce9af6ccfa3136e62d0c429adb38460bece058f
+X-Git-Newrev: 952fa08764acc8d78985d2cc91d37112324b67cb
 X-Patchwork-Hint: ignore
-Message-Id: <20221030105150.CFF6B8745B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/f2fs-tools: fix build with lz4
- 1.9.4
+Message-Id: <20221030105150.C65DA8746C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/f2fs-tools: add lz4 and lzo
+ optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,66 +64,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c999e540dd233f8cb52eee4c35373cd6603aea97
+commit: https://git.buildroot.net/buildroot/commit/?id=952fa08764acc8d78985d2cc91d37112324b67cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump of lz4 to version
-1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
-
-compress.c: In function 'lz4_compress_init':
-compress.c:36:42: error: 'LZ4_STREAMSIZE_U64' undeclared (first use in this function); did you mean 'LZ4_STREAMSIZE'?
-   36 | #define LZ4_STREAMSIZE                  (LZ4_STREAMSIZE_U64 * sizeof(long long))
-      |                                          ^~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/ca8b6646322a4cb911fad5fb9cb38046743609bf
+lz4 and lzo are optional dependencies (enabled by default) since bump to
+version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...2-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../0001-configure-ac-fix-cross-compilation.patch  | 88 ++++++++++++++++++++++
+ package/f2fs-tools/f2fs-tools.mk                   | 18 ++++-
+ 2 files changed, 105 insertions(+), 1 deletion(-)
 
-diff --git a/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch b/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
+diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
 new file mode 100644
-index 0000000000..b43def6bb7
+index 0000000000..0e3d4da191
 --- /dev/null
-+++ b/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
-@@ -0,0 +1,34 @@
-+From 19f77c6f6277a274434d6d8883f50e7955c6a8db Mon Sep 17 00:00:00 2001
-+From: Jaegeuk Kim <jaegeuk@kernel.org>
-+Date: Mon, 29 Aug 2022 11:03:35 -0700
-+Subject: f2fs-tools: fix build error on lz4-1.9.4
++++ b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+@@ -0,0 +1,88 @@
++From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
++From: Nick Hainke <vincent@systemli.org>
++Date: Mon, 4 Jul 2022 11:29:19 +0200
++Subject: configure.ac: fix cross compilation
 +
-+LZ4_STREAMSIZE_U64 is undefined in new lz4 lib.
++AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
++to disable lz4 and lzo2 manually.
 +
++Fixes errors in the form of:
++  Package f2fsck is missing dependencies for the following libraries:
++  liblz4.so.1
++  liblzo2.so.2
++
++Signed-off-by: Nick Hainke <vincent@systemli.org>
 +Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 +[Retrieved from:
-+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=19f77c6f6277a274434d6d8883f50e7955c6a8db]
++https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ fsck/compress.c | 5 +----
-+ 1 file changed, 1 insertion(+), 4 deletions(-)
++ configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
++ 1 file changed, 34 insertions(+), 10 deletions(-)
 +
-+diff --git a/fsck/compress.c b/fsck/compress.c
-+index b413492..b15f0a4 100644
-+--- a/fsck/compress.c
-++++ b/fsck/compress.c
-+@@ -32,10 +32,7 @@
-+ #ifdef HAVE_LIBLZ4
-+ #define LZ4_MEMORY_USAGE		14
-+ #define LZ4_MAX_INPUT_SIZE		0x7E000000 /* 2 113 929 216 bytes */
-+-#ifndef LZ4_STREAMSIZE
-+-#define LZ4_STREAMSIZE			(LZ4_STREAMSIZE_U64 * sizeof(long long))
-+-#endif
-+-#define LZ4_MEM_COMPRESS		LZ4_STREAMSIZE
-++#define LZ4_MEM_COMPRESS		sizeof(LZ4_stream_t)
-+ #define LZ4_ACCELERATION_DEFAULT	1
-+ #define LZ4_WORK_SIZE			ALIGN_UP(LZ4_MEM_COMPRESS, 8)
-+ #endif
++diff --git a/configure.ac b/configure.ac
++index ea39461..dbe9ad3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
++ 	[],
++ 	[with_blkid=check])
++ 
+++AC_ARG_WITH([lzo2],
+++	[AS_HELP_STRING([--without-lzo2],
+++	  [Ignore presence of liblzo2 and disable lzo2 support])],
+++	[],
+++	[with_lzo2=check])
+++
+++AC_ARG_WITH([lz4],
+++	[AS_HELP_STRING([--without-lz4],
+++	  [Ignore presence of liblz4 and disable lz4 support])],
+++	[],
+++	[with_lz4=check])
+++
++ # Checks for programs.
++ AC_PROG_CC
++ AM_PROG_AR
++@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
++         fi
++ 	], -lblkid)])
++ 
++-AC_CHECK_LIB([lzo2], [main],
++-	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
++-		AC_DEFINE([HAVE_LIBLZO2], [1],
++-		[Define if you have liblzo2])
++-	], [], [])
+++AS_IF([test "x$with_lzo2" != xno],
+++	[AC_CHECK_LIB([lzo2], [main],
+++		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
+++			AC_DEFINE([HAVE_LIBLZO2], [1],
+++			[Define if you have liblzo2])
+++		],
+++		[if test "x$with_lzo2" != xcheck; then
+++			AC_MSG_FAILURE(
+++                [--with-lzo2 was given, but test for lzo2 failed])
+++        fi
+++	], -llzo2)])
++ 
++-AC_CHECK_LIB([lz4], [main],
++-	[AC_SUBST([liblz4_LIBS], ["-llz4"])
++-		AC_DEFINE([HAVE_LIBLZ4], [1],
++-		[Define if you have liblz4])
++-	], [], [])
+++AS_IF([test "x$with_lz4" != xno],
+++	[AC_CHECK_LIB([lz4], [main],
+++		[AC_SUBST([liblz4_LIBS], ["-llz4"])
+++			AC_DEFINE([HAVE_LIBLZ4], [1],
+++			[Define if you have liblz4])
+++		],
+++		[if test "x$with_lz4" != xcheck; then
+++			AC_MSG_FAILURE(
+++                [--with-lz4 was given, but test for lz4 failed])
+++        fi
+++	], -llz4)])
++ 
++ AS_IF([test "x$with_selinux" != xno],
++ 	[AC_CHECK_LIB([selinux], [getcon],
 +-- 
 +cgit 
 +
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 2c4ee9185b..60f1004d77 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -22,6 +22,20 @@ else
+ F2FS_TOOLS_CONF_OPTS += --without-selinux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LZ4),y)
++F2FS_TOOLS_CONF_OPTS += --with-lz4
++F2FS_TOOLS_DEPENDENCIES += lz4
++else
++F2FS_TOOLS_CONF_OPTS += --without-lz4
++endif
++
++ifeq ($(BR2_PACKAGE_LZO),y)
++F2FS_TOOLS_CONF_OPTS += --with-lzo2
++F2FS_TOOLS_DEPENDENCIES += lzo
++else
++F2FS_TOOLS_CONF_OPTS += --without-lzo2
++endif
++
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+ # util-linux is a dependency already, no need to list it again
+ F2FS_TOOLS_CONF_OPTS += --with-blkid
+@@ -34,7 +48,9 @@ endif
+ # blkid support even if we have host-util-linux
+ HOST_F2FS_TOOLS_CONF_OPTS = \
+ 	--without-selinux \
+-	--without-blkid
++	--without-blkid \
++	--without-lz4 \
++	--without-lzo2
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
