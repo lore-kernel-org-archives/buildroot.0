@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D9BEC38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 22:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A342ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 22:21:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74A0481275;
-	Sun, 30 Oct 2022 22:20:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74A0481275
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C8B581286;
+	Sun, 30 Oct 2022 22:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C8B581286
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Av90Y8YSrVJv; Sun, 30 Oct 2022 22:20:11 +0000 (UTC)
+	with ESMTP id dl1EYfqOBGKh; Sun, 30 Oct 2022 22:20:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A545B80F2C;
-	Sun, 30 Oct 2022 22:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A545B80F2C
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFCF0812AC;
+	Sun, 30 Oct 2022 22:20:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFCF0812AC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B8BA71BF28B
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:20:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A2DCD1BF28B
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1A1060687
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A1060687
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E1F160687
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:20:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E1F160687
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4-M5e9ZmIIO2 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 22:20:07 +0000 (UTC)
+ with ESMTP id quoD0Qv6pO60 for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 22:20:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B49BB605A4
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
- [IPv6:2607:f8b0:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B49BB605A4
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 22:20:07 +0000 (UTC)
-Received: by mail-ot1-x334.google.com with SMTP id
- 16-20020a9d0490000000b0066938311495so5907745otm.4
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 15:20:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82D7A605A4
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82D7A605A4
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 22:20:54 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id t62so531946oib.12
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 15:20:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:subject:references
  :message-id:cc:to:from:date:x-gm-message-state:from:to:cc:subject
  :date:message-id:reply-to;
- bh=pWr8NSvclrh0x4scPjpGZ1yoTnzJFNTmZvhUA84RDTs=;
- b=44p7geg4hjej/ZS2BsaKDiCq+t58v3aPY1PgsK+le8WyiKEw/rp/HmFRxl4jEPixd2
- vcQAyWsG/GqHooH87uvvMQDGrG7awwVBtpFtPZF0AvkL9rby9GbwWaUqxoEh1Ysforfk
- GwYaSWOd/+lDpM2Mo4dbCH59k/BsIna5SD98BHtHZ6kZr2HV8oyZlhRcZM973XygLHts
- 15upsNzyp803AgwZuZGSGt5Hw2Bdup+aCZRuKZYdMzE1gLIb8E3GbQ3asu56aL9R+9U0
- WkBNv0e7AkxwmYQET+PGKvm+NrCQuiv1o+3COSXRkPUT8sGSiR9xbOCjWJqihXakB20v
- LYgA==
-X-Gm-Message-State: ACrzQf3Ah4IIP7yKuEDXw59pAoL6rEpcZmAZ8b0eBtmVDn21g4kUmzKW
- f/Agvqq715Ln17L1j30usK4=
-X-Google-Smtp-Source: AMsMyM5XE4H9W2fIX+ubbnGjAlQH5o2MYlE5ZFhZrs/6EjSJ5pN3iBlgk6KH6/PKjQE6ewdgC3/UCw==
-X-Received: by 2002:a9d:1b48:0:b0:66b:e4e2:6c70 with SMTP id
- l66-20020a9d1b48000000b0066be4e26c70mr5038418otl.67.1667168406685; 
- Sun, 30 Oct 2022 15:20:06 -0700 (PDT)
+ bh=CEWdzTp/PJqlnCh2eIueG+y0AowtN7eDnPfFiYSGIQY=;
+ b=DQDCS1OdTwN3+nIhVtPLELVAP8HpP6fHRXFEpo3Dn3TOb43kpKGCginRVJqxoOt7AB
+ PQ1QQJpz0ZAZ+R3ZsWd+wWLsvbLFy3zvYVRmfDUtpMWxYpMR1yOTyFY5tpCIQZmRy6+p
+ 8GdNr8mQOzgfQIcoW4BwAhoB5crGZ4tcCPZTudIYhSPwi1bgComh6Jy7JdGpKqO7OFZm
+ TKUFpg8trQsWcbSeva3Im6cz9Pe6riVGnNFhlRK+uXTIt3oW4HS02jKH4379yfV4X9nn
+ a00isIxtczCMiEs3UkSBWHpyzyVE8FknCfFAAy/SV/yys8RpOCXSP+qdlOXOOcAJp4jD
+ ECgA==
+X-Gm-Message-State: ACrzQf3HqQPIqTkixTMD1J6onL4AhURQsZqw8RKfylJGRk7JARNtihQK
+ VwbA96mjSaMvWRW9lHNAy/c=
+X-Google-Smtp-Source: AMsMyM633EFULW02brzTcsWyJI2KEL+Kc6xaJJlZ/GnHxvGxFgdWQc9La5+x3jwguugFtReIvbx5wQ==
+X-Received: by 2002:a05:6808:f05:b0:354:b362:c5be with SMTP id
+ m5-20020a0568080f0500b00354b362c5bemr5373949oiw.136.1667168453611; 
+ Sun, 30 Oct 2022 15:20:53 -0700 (PDT)
 Received: from gmail.com ([2804:14c:7980:988a:c978:dc5f:a55f:695])
  by smtp.gmail.com with ESMTPSA id
- ck13-20020a056830648d00b00661ad8741b4sm2135086otb.24.2022.10.30.15.20.04
+ l19-20020a05687040d300b00127ebb410a4sm2276582oal.11.2022.10.30.15.20.51
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Sun, 30 Oct 2022 15:20:05 -0700 (PDT)
-Date: Sun, 30 Oct 2022 19:20:04 -0300
+ Sun, 30 Oct 2022 15:20:53 -0700 (PDT)
+Date: Sun, 30 Oct 2022 19:20:51 -0300
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: oguz.ozhan@mind.be
-Message-ID: <635ef894b4558_3fcfb2ad9212def90221e8@xultri.mail>
-References: <20221021091531.2989489-2-oguz.ozhan@mind.be>
+Message-ID: <635ef8c3d5fea_3fcfb2ad9217830c8223a2@xultri.mail>
+References: <20221021091531.2989489-3-oguz.ozhan@mind.be>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="--==_mimepart_635ef89339fbe_3fcfb2ad9212def9022012";
+ boundary="--==_mimepart_635ef8c26397e_3fcfb2ad9217830c8222e4";
  charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -77,18 +76,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:subject:references
  :message-id:cc:to:from:date:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pWr8NSvclrh0x4scPjpGZ1yoTnzJFNTmZvhUA84RDTs=;
- b=NMWdAQhiaDf+3p3vWEWQhtBe5ZGBaIN+fbRIPeW2kkaKBEzpOnNSRFla5aGwZac6vW
- 8nRhRQWobhfS5fPamnHSMEn1taBICTAhmdv+Nk5iegKtnb8FFy+wtm4YBO1/tHzj0EEW
- uPKUQOr0k4W6OlBpaMjYkBAzBfR+n8CXpSCm/JRVcr9ou8ftWbheyyt+uxtQQ86IsNGp
- Zi+VqvVZoMgxnMqjzQ22qnUkyxuyNJFuy1XrX4VMLcVF0EXdIcVZJLg8aFj/wcCa8I1U
- /Y75+vb/dbIonH657BW0KHGiWUPkKYEpZGQNTfI5s8OeibX6KJMyQP2YJAlWntKsw2Za
- N62Q==
+ bh=CEWdzTp/PJqlnCh2eIueG+y0AowtN7eDnPfFiYSGIQY=;
+ b=j4+GFsqnWe9m3c/0qAyMAX0higbj/JRjCsoLEObxrc4YLC3eiHakYqFGKYrFKvhbjv
+ 25jK++6rWsvrulb1NkDS+gq46YHgC1jZ3h84k+F0uWlRQwRxFCAMzhsfXTPr2CyPYJXp
+ 7D/TR9rF3RLZ93zhAHSAA4a/AULH1mx1F195+IRuQmhBAOwrPWyz6eEV9VwgXk0YQLy3
+ GVJ6sIMQ0F4KKfOsGTIvuXbuMJ7s0yXUDlV/WIi3u7cRD8AdLKjS+TyL7BSrcle7+rTj
+ huLI04ZejuesgIMmMV1NS86v36BugOjveZ+LSqf7ORVLATi6P3un+XBW7BhRltJ44Yyl
+ 2bFQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NMWdAQhi
-Subject: Re: [Buildroot] [PATCH 2/3] support/testing: replace nose2 with
- pytest - run-tests
+ header.a=rsa-sha256 header.s=20210112 header.b=j4+GFsqn
+Subject: Re: [Buildroot] [PATCH 3/3] support/testing: replace nose2 with
+ pytest - CI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,12 +104,14 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
-----==_mimepart_635ef89339fbe_3fcfb2ad9212def9022012
+----==_mimepart_635ef8c26397e_3fcfb2ad9217830c8222e4
 Content-Type: text/plain;
  charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Hello,
+
+IMO, this change should be merged into patch 2.
 
 On Fri, Oct 21, 2022 at 06:15 AM, Oguz Ozhan wrote:
 
@@ -123,56 +124,52 @@ On Fri, Oct 21, 2022 at 06:15 AM, Oguz Ozhan wrote:
 > - pytest is more robust and has more ability compared to nose2
 > 
 > - Changes in this patch:
->   - run-tests modified to use pytest instead of nose2 to call tests. A corresponding Collector class added for pytest to list the available tests
->   - nose2 plugins removed which are not required anymore
->   - in test_iso9660.py, local test_ routine names changed to not be accepted as test_ cases via pytest
-
-Please split the changes to the tests in a new patch (first in the series).
-While doing that, please fix flake8 warnings.
-
+>   - the sed command was fine filtering the tests list with nose2 output but removing all operating on pytest output. With pytest no fine filtering is required to get the test names in correct format.
 > 
 > Signed-off-by: Oguz Ozhan <oguz.ozhan@mind.be>
 > ---
->  support/testing/conf/unittest.cfg        |  3 --
->  support/testing/run-tests                | 28 ++++++++++-------
-
-Please fix flake8 warnings for run-tests as well.
-
->  support/testing/tests/fs/test_iso9660.py | 40 ++++++++++++------------
->  3 files changed, 36 insertions(+), 35 deletions(-)
-
-Please update the manual, section 'Using the runtime tests framework', in the
-same commit that changes run-tests to use pytest.
-
-[snip]
-> @@ -106,15 +110,15 @@ def main():
->          return 1
->      BRConfigTest.timeout_multiplier = args.timeout_multiplier
+>  support/scripts/generate-gitlab-ci-yml | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+> index aa43aac019..bb4dcbbb22 100755
+> --- a/support/scripts/generate-gitlab-ci-yml
+> +++ b/support/scripts/generate-gitlab-ci-yml
+> @@ -31,7 +31,6 @@ gen_tests() {
+>      defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
 >  
-> -    nose2_args = ["-v",
-> -                  "-N", str(args.testcases),
-> -                  "-s", test_dir,
-> +    pytest_args = ["--workers", str(args.testcases),
-> +                  "--rootdir", test_dir,
->                    "-c", os.path.join(test_dir, "conf/unittest.cfg")]
-
-run-tests -s is broken: it does not show the build and runtime console
-
+>      runtimes=( $(./support/testing/run-tests -l 2>&1 \
+> -                 | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/' \
+>                   | LC_ALL=C sort)
+>               )
 >  
->      if args.testname:
-> -        nose2_args += args.testname
-> +        pytest_args += args.testname
-> +
-> +    pytest.main(pytest_args)
->  
-> -    nose2.discover(argv=nose2_args)
+> @@ -80,7 +79,6 @@ gen_tests() {
+>              ;;
+>            (*-tests.*)
 
-The detection of a failed test on GitLab CI is broken, even when tests fail
-run-tests returns exit code 0.
+This regexp must be adapted, something like this:
+          (*-support*)
+            pattern="${CI_COMMIT_REF_NAME/--/::}"
+            runtimes=( $(./support/testing/run-tests -l 2>&1 \
+                         | LC_ALL=C sort \
+                         | grep "^${pattern##*-}")
+
+Notice that ':' is not accepted on git branches, so we cannot use this branch
+name to run a single test on GitLab CI:
+ git push gitlab \
+ HEAD:foo-support/testing/tests/package/test_php_lua.py::TestPhpLuaLuajit
+so I guess we could use a pattern substitution, for instance:
+ git push gitlab \
+ HEAD:foo-support/testing/tests/package/test_php_lua.py--TestPhpLuaLuajit
+and document it in the manual.
+
+The manual must also be updated.
+ docs/manual/contribute.txt: $ git push gitlab HEAD:foo-tests.init.test_busybox
+ docs/manual/contribute.txt: $ git push gitlab HEAD:foo-tests.init
 
 Regards,
 Ricardo
-----==_mimepart_635ef89339fbe_3fcfb2ad9212def9022012
+----==_mimepart_635ef8c26397e_3fcfb2ad9217830c8222e4
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -183,4 +180,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
-----==_mimepart_635ef89339fbe_3fcfb2ad9212def9022012--
+----==_mimepart_635ef8c26397e_3fcfb2ad9217830c8222e4--
