@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670E9C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 09:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 610F2C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 09:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1950403A8;
-	Sun, 30 Oct 2022 09:28:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1950403A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E839340347;
+	Sun, 30 Oct 2022 09:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E839340347
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NTN133C11Bom; Sun, 30 Oct 2022 09:28:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MkunmhdrvAUQ; Sun, 30 Oct 2022 09:28:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93741403C8;
-	Sun, 30 Oct 2022 09:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93741403C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2EA7401A3;
+	Sun, 30 Oct 2022 09:28:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EA7401A3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03FF81BF336
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B299B1BF336
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD6A460A72
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD6A460A72
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BA84600CB
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BA84600CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N5U0qkx-4G1S for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 09:28:00 +0000 (UTC)
+ with ESMTP id 1ehhgubcku8j for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 09:28:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FB8600CB
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 67FB8600CB
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 09:28:00 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- l16-20020a05600c4f1000b003c6c0d2a445so6374113wmq.4
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 02:28:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AABE360017
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AABE360017
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 09:28:46 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id v1so12045851wrt.11
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 02:28:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=J68OWsogsUKqA4o4FbBTQk1Ex1+khTuEJ9qkSljSZWg=;
- b=NFfBM6OCzZhprbcUntSQIH0MYH1WV7m6A1jQwX185hPHtmDu+sDVXz7sEV6HJSM+eL
- oL1Oc7MkxgHmHzt1MHLRyOwTRhEjpvQcghbDH/7zP/sO/LrTj/3ImSJ2F6024Haehdqo
- v0PQj6KdUKWxTUyCSljzLGENxr5nzUpe6qOULo09aILesLFeozjdbtOrkHYMT74N7u+p
- EIS7BtVDww4Pv3fdAAomdWDjG8IiP78R3K6p1PDNcTRJRERZul0IT27WdWYpo3tXEmR0
- vW2njfQMkOg7iCpD9i5TiFBorhffo+i+OCll/tfhAXkWJyn3AFlEyVsi4Ud1esLAu8gq
- T/YA==
-X-Gm-Message-State: ACrzQf1EtjKCOadVnu7gYiZv0S3nHTkceG49aZFoPrzHG5SAmiNk1v0P
- Ry6mYNMa/nHveZTXSH5a5OsKzeSu1Tw=
-X-Google-Smtp-Source: AMsMyM76nD3IjdzNaPncqqHRd3zddAO9q5feOtHTO4+Sd6bs6IwtXpGxJiEkd/GS6GS/GloFTpQZIA==
-X-Received: by 2002:a05:600c:4e86:b0:3cf:5ec5:d3fd with SMTP id
- f6-20020a05600c4e8600b003cf5ec5d3fdmr7339289wmq.32.1667122077979; 
- Sun, 30 Oct 2022 02:27:57 -0700 (PDT)
+ bh=7hZHqbQdbQ8e94scGm9TtsnIJc36ljNeNLfh35sqrBc=;
+ b=vv1IdwyCKhXnXrUvr2Z0D+dQZrwYCHAVDtllz85bKMLF7I5eIob+G4SgcLejkcJKXG
+ 6O4T9lQ5zQt1qA9cFFxcgsMVBnjoNTeSaK2Jl7ISO/FMsdyHk4oB/o4zmZBXi3QQ7t0K
+ dsxbNaCt+mjMz7IyieIwCgR6JL9rEsMSKg5E6msDHCu8rIb93/1nmgJ33Kc0X9VP0wrO
+ ZwySRVIqxGe8mnIVI2Cps8b3NPGFkvAkrxAOgTsQnfku1pZAls7MUrcdFkDMUuXAtwb/
+ xoHq24dqAHKq2eL7bdt5Nvbs7kQt61HjLwBfseyyUpdnmwxfNyiXtAiej3HOFCMhxReQ
+ XKUw==
+X-Gm-Message-State: ACrzQf10e58RSi3PHuPBNnFesjIcUxFCZSOBh8tZn+QtNu9ODpCdGBcG
+ VTZNJagtqLKdvfkE/kr7NCG+MZ9Ixsc=
+X-Google-Smtp-Source: AMsMyM7KqoX3Wgg+HBur8yX7y4cQgaYshw1Ia9w5s69RUtIgL2VP/w5mmL3GZ19yJo519o1khQyu7g==
+X-Received: by 2002:a5d:644b:0:b0:236:862b:9ef1 with SMTP id
+ d11-20020a5d644b000000b00236862b9ef1mr4446016wrw.691.1667122124425; 
+ Sun, 30 Oct 2022 02:28:44 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bk17-20020a0560001d9100b0022cdb687bf9sm4521756wrb.0.2022.10.30.02.27.57
+ ay19-20020a5d6f13000000b00236b2804d79sm3706596wrb.2.2022.10.30.02.28.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Oct 2022 02:27:57 -0700 (PDT)
+ Sun, 30 Oct 2022 02:28:43 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 10:27:49 +0100
-Message-Id: <20221030092749.43292-1-fontaine.fabrice@gmail.com>
+Date: Sun, 30 Oct 2022 10:28:32 +0100
+Message-Id: <20221030092832.43581-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=J68OWsogsUKqA4o4FbBTQk1Ex1+khTuEJ9qkSljSZWg=;
- b=cx6A9q+KsFgDCJUeIufeffKGLgtJtr6vjuk7tHTie3M6pZXQ9QE+0232OFV1OWxspA
- /rYtLp81DdIYH9bpp6xbV/wTJnYQkgOHtZqLtTXqaArkmSquLTQSrJ9WlaPVetml4IVr
- cbxe91v3U8vLrLJdX5uuec+50VrRui6lZrpsagVPR1bIRsi7Zua96RWrN6sLsWfJXIl3
- VpJ9JUxPN5VOwfUEnt5UgQVpv1KD2tDEvEpMa/E4lXHDpnwQ1ib04vsz6spK4D1vCnqY
- QQZIEo/BsMwzaz33xnZT9pp6qLEPs5QBAZhoIzfWROhpyhoRYFUNceZsgMdcLxGmN3V+
- Bp3Q==
+ bh=7hZHqbQdbQ8e94scGm9TtsnIJc36ljNeNLfh35sqrBc=;
+ b=eDcp/txU9gV1luotDPaqs6AjMlFq3OQk2tIwhkWzF2EEJ2qsYLycUS9kJWY6y3MSwC
+ gdXWBAPvy/8UXlzrfymQVUzrN5aKnJSlLDKDvR9+kj2PLRRZoRDAc/Kt1CtgR/zNwVoo
+ wbC1GjWvvweqN2ZeAi5iUO/YpHyZAEgv6RRHNjmZc11k35Bn8+SfNVAJXNPUfE6Copt9
+ SajXEmB8nw5D4LW11bVbm25U3BGfRbYTlYSIasPB1UsIY2QYnoCjcunKYTVjITT7PXT7
+ Rf+IR6dsUrSRhwohObI1OYRd24r/dZq9L4qE1lrXtFtMDdwlHRnGfJJmPsRtuhrvw3/Q
+ i2Tw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cx6A9q+K
-Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.21
+ header.a=rsa-sha256 header.s=20210112 header.b=eDcp/txU
+Subject: [Buildroot] [PATCH 1/1] package/libpagekite: bump to version
+ 0.91.201110
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,43 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/jackaudio/jack2/releases/tag/v1.9.21
+https://github.com/pagekite/libpagekite/compare/v0.91.190530...v0.91.201110
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/jack2/jack2.hash | 2 +-
- package/jack2/jack2.mk   | 2 +-
+ package/libpagekite/libpagekite.hash | 2 +-
+ package/libpagekite/libpagekite.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
-index 6361473cf7..c98971ca1c 100644
---- a/package/jack2/jack2.hash
-+++ b/package/jack2/jack2.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libpagekite/libpagekite.hash b/package/libpagekite/libpagekite.hash
+index 8716b991ca..2c2e5c9b59 100644
+--- a/package/libpagekite/libpagekite.hash
++++ b/package/libpagekite/libpagekite.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  915ad2900992159bdb729b9fc4ea134b962ce32b2df0b384fee40a2c5808835d  jack2-1.9.20.tar.gz
-+sha256  8b044a40ba5393b47605a920ba30744fdf8bf77d210eca90d39c8637fe6bc65d  jack2-1.9.21.tar.gz
- sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 9d6a3b6479..f7683304a6 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
+-sha256  c812815aae6f100212b7d6f662370a0634151fabb59f028126a59c4083a6d26d  libpagekite-0.91.190530.tar.gz
++sha256  db835d49becebc00d462f2f47aefc1f1d3a4e0e096487cb3b4248134185df715  libpagekite-0.91.201110.tar.gz
+ 
+ # License files, locally calculated
+ sha256  ba443b9c9d4273d06aae3e147e9ad1ec199cc9c23455f486a039536d47f57eed  doc/COPYING.md
+diff --git a/package/libpagekite/libpagekite.mk b/package/libpagekite/libpagekite.mk
+index 60b62f5cfd..bb235ba1f3 100644
+--- a/package/libpagekite/libpagekite.mk
++++ b/package/libpagekite/libpagekite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JACK2_VERSION = 1.9.20
-+JACK2_VERSION = 1.9.21
- JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- JACK2_LICENSE_FILES = COPYING
+-LIBPAGEKITE_VERSION = 0.91.190530
++LIBPAGEKITE_VERSION = 0.91.201110
+ LIBPAGEKITE_SITE = $(call github,pagekite,libpagekite,v$(LIBPAGEKITE_VERSION))
+ 
+ # pkrelay is AGPL-3.0+ but is not built
 -- 
 2.35.1
 
