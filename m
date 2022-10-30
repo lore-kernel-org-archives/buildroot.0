@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C0A6C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B0CEFA373D
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC4274035D;
-	Sun, 30 Oct 2022 11:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC4274035D
+	by smtp2.osuosl.org (Postfix) with ESMTP id EAFE640376;
+	Sun, 30 Oct 2022 11:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAFE640376
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U9swQEGW0N0h; Sun, 30 Oct 2022 11:05:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7tTMNHIw6NAP; Sun, 30 Oct 2022 11:05:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC2F140357;
-	Sun, 30 Oct 2022 11:05:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC2F140357
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 022921BF957
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1532440347;
+	Sun, 30 Oct 2022 11:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1532440347
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D01B1BF95C
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37BE94030A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37BE94030A
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE7CF812FC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE7CF812FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3-BVafx3L1KX for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UmMguS7M35xn for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1946040358
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26CCA812DB
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1946040358
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26CCA812DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05FC387471; Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
+ id 13A4D8746D; Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 11:53:48 +0100
+Date: Sun, 30 Oct 2022 11:53:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 32602849a8352647c46cc5330668339000205bdf
-X-Git-Newrev: 8a5178293fa9dcfab1e2599de6dd7d6b163c7007
+X-Git-Oldrev: 8a5178293fa9dcfab1e2599de6dd7d6b163c7007
+X-Git-Newrev: 9cee6283459169a08cb72b96362de8bd4d1bb69f
 X-Patchwork-Hint: ignore
-Message-Id: <20221030110443.05FC387471@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wsaccel: bump to version
- 0.6.4
+Message-Id: <20221030110443.13A4D8746D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sedutil: bump to version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a5178293fa9dcfab1e2599de6dd7d6b163c7007
+commit: https://git.buildroot.net/buildroot/commit/?id=9cee6283459169a08cb72b96362de8bd4d1bb69f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://github.com/Drive-Trust-Alliance/sedutil/compare/1.15.1...1.20.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wsaccel/python-wsaccel.hash | 4 ++--
- package/python-wsaccel/python-wsaccel.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sedutil/sedutil.hash | 2 +-
+ package/sedutil/sedutil.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
-index 9d0002d41d..b388c3cc7c 100644
---- a/package/python-wsaccel/python-wsaccel.hash
-+++ b/package/python-wsaccel/python-wsaccel.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wsaccel/json
--md5  973168711818dd98b8b28a4c2db77a27  wsaccel-0.6.3.tar.gz
--sha256  fdb27866bb6b6e7a29e45222778ff97938782a0ce92eff07dfb20af8fb9301c4  wsaccel-0.6.3.tar.gz
-+md5  73bdc70035813ded14f9a4b81e82622a  wsaccel-0.6.4.tar.gz
-+sha256  cbf66a88bcaf6c6ad16d50ea29215891526b6e993c4bc7ed44b044ee6fe3ad3d  wsaccel-0.6.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b6982974cb838b985b54b663d1780d280735086249c2e28015f25dd455df25da  LICENSE
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
-index 7c78951f2f..ce41d431ff 100644
---- a/package/python-wsaccel/python-wsaccel.mk
-+++ b/package/python-wsaccel/python-wsaccel.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sedutil/sedutil.hash b/package/sedutil/sedutil.hash
+index 26643ef684..2ceb5db659 100644
+--- a/package/sedutil/sedutil.hash
++++ b/package/sedutil/sedutil.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9259466b4f73af276153c5245834a56f48f8721ea7263611b5d5e8326bc43d9e  sedutil-1.15.1.tar.gz
++sha256  88016b93cbbef98fa6f5c4e6f58e6c871662b6a7f1fc8dc788c8599fa37a44f3  sedutil-1.20.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  Common/LICENSE.txt
+diff --git a/package/sedutil/sedutil.mk b/package/sedutil/sedutil.mk
+index c80e43448d..566ed4fae8 100644
+--- a/package/sedutil/sedutil.mk
++++ b/package/sedutil/sedutil.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WSACCEL_VERSION = 0.6.3
-+PYTHON_WSACCEL_VERSION = 0.6.4
- PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
--PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/f5/d1/3e99875a764d0d6ec94a74977ed72dd3022a7f31d036622da9cff8fc072f
-+PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/77/0b/a44df15382a76b6768184630d483b8363d65b9f70d1aacf76153d496bbb9
- PYTHON_WSACCEL_LICENSE = Apache-2.0
- PYTHON_WSACCEL_LICENSE_FILES = LICENSE
- PYTHON_WSACCEL_SETUP_TYPE = setuptools
+-SEDUTIL_VERSION = 1.15.1
++SEDUTIL_VERSION = 1.20.0
+ SEDUTIL_SITE = $(call github,Drive-Trust-Alliance,sedutil,$(SEDUTIL_VERSION))
+ SEDUTIL_LICENSE = GPL-3.0+
+ SEDUTIL_LICENSE_FILES = Common/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
