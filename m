@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C786AECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 842AFC38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:28:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D13C60AE0;
-	Sun, 30 Oct 2022 16:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D13C60AE0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A47C4031F;
+	Sun, 30 Oct 2022 16:28:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A47C4031F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HzzdKJVZh1Au; Sun, 30 Oct 2022 16:28:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y_YzWJLm70R3; Sun, 30 Oct 2022 16:28:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95CA760A74;
-	Sun, 30 Oct 2022 16:28:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95CA760A74
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB41E4019F;
+	Sun, 30 Oct 2022 16:28:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB41E4019F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4597D1BF957
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 650CC1BF479
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D0C94032F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C84C40330
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D0C94032F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C84C40330
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ATeViZCqthNu for <buildroot@lists.busybox.net>;
+ with ESMTP id GcxZS6BNn_Qw for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 16:28:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2374940281
+ by smtp4.osuosl.org (Postfix) with ESMTP id 395154032E
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2374940281
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 395154032E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05266875A1; Sun, 30 Oct 2022 16:28:07 +0000 (UTC)
+ id 25C4F875A4; Sun, 30 Oct 2022 16:28:07 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 17:20:06 +0100
+Date: Sun, 30 Oct 2022 17:20:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 277e1250a6a000911ab463296dbb29e2e53514c4
-X-Git-Newrev: 702a60a2962172d725b210da42da2289a219a83f
+X-Git-Oldrev: 800eef905aac67b2dbd2446c6d011227b473502f
+X-Git-Newrev: f67480040b575fb225fcc2cd79c7a5408ef253b1
 X-Patchwork-Hint: ignore
-Message-Id: <20221030162807.05266875A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/numactl: use official license files
+Message-Id: <20221030162807.25C4F875A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mxml: bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +62,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=702a60a2962172d725b210da42da2289a219a83f
+commit: https://git.buildroot.net/buildroot/commit/?id=f67480040b575fb225fcc2cd79c7a5408ef253b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use official license files available since version 2.0.13 and
-https://github.com/numactl/numactl/commit/b4d36f6a34b045a67ed5c0314ec26f5514f4ee44
+Update hash of NOTICE (update in year:
+https://github.com/michaelrsweet/mxml/commit/d32818a16ceb352b8889f95ec7ff65575ad2e4f2)
+
+https://github.com/michaelrsweet/mxml/releases/tag/v3.3.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/numactl/numactl.hash | 3 ++-
- package/numactl/numactl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/mxml/mxml.hash | 4 ++--
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
-index 802175d360..a261eab9d0 100644
---- a/package/numactl/numactl.hash
-+++ b/package/numactl/numactl.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
--sha256  e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575  README.md
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index cf9c759693..6ff94091e9 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -7,7 +7,7 @@
- NUMACTL_VERSION = 2.0.14
- NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
- NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
--NUMACTL_LICENSE_FILES = README.md
-+NUMACTL_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
- NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 38056f4c3a..412977dff0 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  7cf976366f9e8e4f8cff7d35a59bcf6201c769fce9e58015d64f4b6de1fe3dd8  mxml-3.3.tar.gz
++sha256  0c663ed1fe393b5619f80101798202eea43534abd7c8aff389022fd8c1dacc32  mxml-3.3.1.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+-sha256  ed63aec4c75b9c21a5156b40052138032269bd27fd6f4bc0c51389807cdc7db9  NOTICE
++sha256  7dedb0043b0bbed7880bcc9724b3a3dae4d5ab2dce98a7904703109572b626e3  NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 88d35cb7ee..d224cf5308 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MXML_VERSION = 3.3
++MXML_VERSION = 3.3.1
+ MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
+ MXML_LICENSE = Apache-2.0 with exceptions
+ MXML_LICENSE_FILES = LICENSE NOTICE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
