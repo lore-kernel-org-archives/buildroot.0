@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B24E0FA373D
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 09:12:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670E9C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 09:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A77160A84;
-	Sun, 30 Oct 2022 09:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A77160A84
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1950403A8;
+	Sun, 30 Oct 2022 09:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1950403A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id juUlhdpdrxtm; Sun, 30 Oct 2022 09:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NTN133C11Bom; Sun, 30 Oct 2022 09:28:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3A0860A74;
-	Sun, 30 Oct 2022 09:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A0860A74
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93741403C8;
+	Sun, 30 Oct 2022 09:28:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93741403C8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C2E2C1BF336
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:12:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03FF81BF336
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97A8B607E1
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:12:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A8B607E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD6A460A72
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 09:28:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD6A460A72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LGIj66ZekEgv for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 09:12:09 +0000 (UTC)
+ with ESMTP id N5U0qkx-4G1S for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 09:28:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAEE960A74
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com
- [IPv6:2607:f8b0:4864:20::1131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DAEE960A74
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 09:12:08 +0000 (UTC)
-Received: by mail-yw1-x1131.google.com with SMTP id
- 00721157ae682-36ad4cf9132so83919497b3.6
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 02:12:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FB8600CB
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 67FB8600CB
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 09:28:00 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ l16-20020a05600c4f1000b003c6c0d2a445so6374113wmq.4
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 02:28:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zUrwdpVyygiloM74UInYRDcpj+lX66ekDokn/7hrukE=;
- b=eMJehF9frM/bLomCsJqEnU7Vvd3jNpwv4x/bxa0eNmv8AFj8XfDW30EmjFkphMJIyT
- bIOU+cd5ANlS5ec/o1lLTmffVbIDxHByYG3GB9Ksh8JWtCbOLHvcgXfKTPKdlpVYJg3j
- d4Al8WF6nDf17NII/CcI+wU9/YILpo9w88FxCqnxw22zz8MmiFLsw58cmeWgD+hTKHDF
- HkWepv0xr5dMIZXP2aV/rBn5sJ18o8NlXjEgRnr44SDdyyXNbZQFcwK/eDHKEnztJCWJ
- 0VA9ED+iAaQhCq3xBTYN6Jppgq1kKr5t7wHFG54pjwZfbACS8JOO6Gg2Imz5A7ZIpqq2
- SgUw==
-X-Gm-Message-State: ACrzQf2bG5cbuggy/9nKA8aLL+dGexKAoDgVg6+eWEn65Hv6CnjBilQC
- OoBi/GA8wattpuY6Zpm4zag2RflzvTjFUmfZc2U=
-X-Google-Smtp-Source: AMsMyM7/U/h++seEE8xRr5X3g+K7LCXEWaRjEARs0Lvd3KVHNEeuGVY5wwinuBiD9wiFh+vrETZbeKm4L0Zaxx+HyrE=
-X-Received: by 2002:a81:720a:0:b0:370:c85:7e5c with SMTP id
- n10-20020a81720a000000b003700c857e5cmr7561718ywc.153.1667121127593; Sun, 30
- Oct 2022 02:12:07 -0700 (PDT)
+ bh=J68OWsogsUKqA4o4FbBTQk1Ex1+khTuEJ9qkSljSZWg=;
+ b=NFfBM6OCzZhprbcUntSQIH0MYH1WV7m6A1jQwX185hPHtmDu+sDVXz7sEV6HJSM+eL
+ oL1Oc7MkxgHmHzt1MHLRyOwTRhEjpvQcghbDH/7zP/sO/LrTj/3ImSJ2F6024Haehdqo
+ v0PQj6KdUKWxTUyCSljzLGENxr5nzUpe6qOULo09aILesLFeozjdbtOrkHYMT74N7u+p
+ EIS7BtVDww4Pv3fdAAomdWDjG8IiP78R3K6p1PDNcTRJRERZul0IT27WdWYpo3tXEmR0
+ vW2njfQMkOg7iCpD9i5TiFBorhffo+i+OCll/tfhAXkWJyn3AFlEyVsi4Ud1esLAu8gq
+ T/YA==
+X-Gm-Message-State: ACrzQf1EtjKCOadVnu7gYiZv0S3nHTkceG49aZFoPrzHG5SAmiNk1v0P
+ Ry6mYNMa/nHveZTXSH5a5OsKzeSu1Tw=
+X-Google-Smtp-Source: AMsMyM76nD3IjdzNaPncqqHRd3zddAO9q5feOtHTO4+Sd6bs6IwtXpGxJiEkd/GS6GS/GloFTpQZIA==
+X-Received: by 2002:a05:600c:4e86:b0:3cf:5ec5:d3fd with SMTP id
+ f6-20020a05600c4e8600b003cf5ec5d3fdmr7339289wmq.32.1667122077979; 
+ Sun, 30 Oct 2022 02:27:57 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bk17-20020a0560001d9100b0022cdb687bf9sm4521756wrb.0.2022.10.30.02.27.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 30 Oct 2022 02:27:57 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 30 Oct 2022 10:27:49 +0100
+Message-Id: <20221030092749.43292-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221025065539.4646-1-afshin.nasser@gmail.com>
- <CAGm1_ku8QUbDtT+Bt=5jmD46Vws_go6r2dK9oD95i_bgJynLbg@mail.gmail.com>
- <20221026102255.GA602@smart-All-Series>
- <CAGm1_ktx6UuANUZ=Eqbh_wr7JrJNaHz=ou9zg9mSvGP+ivnzmA@mail.gmail.com>
- <20221029080229.GA24217@smart-All-Series>
-In-Reply-To: <20221029080229.GA24217@smart-All-Series>
-Date: Sun, 30 Oct 2022 10:11:56 +0100
-Message-ID: <CAGm1_kuquC8Z9DOZWazKO2jrS4pYVwgYnGWtj8s5WMTBva9wSA@mail.gmail.com>
-To: Nasser Afshin <afshin.nasser@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=zUrwdpVyygiloM74UInYRDcpj+lX66ekDokn/7hrukE=;
- b=K8qT50sRNiPo29fg8OpkKt+XwlOY/AJjlWEIu650LwE/66QCxv3NV7G0zyFoAKuj8T
- XcpkjDFsM//YL36nJsBElIxYvEOO0PtSZK6S5Afd1qUSi6ykS5P2sB+wahMUIHq+IojH
- kQY9V9dXBC2+VQ2yFzPq45Pp6dMeWKujWU6zo2EOqpxhvBZsAswy/0GlzpZrkpvjp9hh
- WNfuhk4V3/9BtwnF6ZN81Kfl2QQEPnJrku9a+YJ8XJXSPmtCqYPm3uton5KQ68XX2PMm
- xQLz18Mjg3ee9MTQNHSzgbxXm9Tl0C51+iX1+Z0fM8rLtGUBF2dro49MUSF3tPeyYb0a
- 4UYw==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=J68OWsogsUKqA4o4FbBTQk1Ex1+khTuEJ9qkSljSZWg=;
+ b=cx6A9q+KsFgDCJUeIufeffKGLgtJtr6vjuk7tHTie3M6pZXQ9QE+0232OFV1OWxspA
+ /rYtLp81DdIYH9bpp6xbV/wTJnYQkgOHtZqLtTXqaArkmSquLTQSrJ9WlaPVetml4IVr
+ cbxe91v3U8vLrLJdX5uuec+50VrRui6lZrpsagVPR1bIRsi7Zua96RWrN6sLsWfJXIl3
+ VpJ9JUxPN5VOwfUEnt5UgQVpv1KD2tDEvEpMa/E4lXHDpnwQ1ib04vsz6spK4D1vCnqY
+ QQZIEo/BsMwzaz33xnZT9pp6qLEPs5QBAZhoIzfWROhpyhoRYFUNceZsgMdcLxGmN3V+
+ Bp3Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=K8qT50sR
-Subject: Re: [Buildroot] [PATCH] python-pycrate: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cx6A9q+K
+Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,320 +94,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Nasser,
+https://github.com/jackaudio/jack2/releases/tag/v1.9.21
 
-On Sat, Oct 29, 2022 at 10:02 AM Nasser Afshin <afshin.nasser@gmail.com> wrote:
->
-> Hi Yegor,
->
-> On Wed, Oct 26, 2022 at 08:21:30PM +0200, Yegor Yefremov wrote:
-> > Hi Nasser,
-> >
-> > On Wed, Oct 26, 2022 at 12:23 PM Nasser Afshin <afshin.nasser@gmail.com> wrote:
-> > >
-> > > Hi Yegor,
-> > >
-> > > Thankyou for taking time to review my patch.
-> > >
-> > > On Tue, Oct 25, 2022 at 10:33:19AM +0200, Yegor Yefremov wrote:
-> > > > Hi Nasser,
-> > > >
-> > > > On Tue, Oct 25, 2022 at 8:55 AM Nasser Afshin <afshin.nasser@gmail.com> wrote:
-> > > > >
-> > > > > Signed-off-by: Nasser Afshin <afshin.nasser@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jack2/jack2.hash | 2 +-
+ package/jack2/jack2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index 6361473cf7..c98971ca1c 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  915ad2900992159bdb729b9fc4ea134b962ce32b2df0b384fee40a2c5808835d  jack2-1.9.20.tar.gz
++sha256  8b044a40ba5393b47605a920ba30744fdf8bf77d210eca90d39c8637fe6bc65d  jack2-1.9.21.tar.gz
+ sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 9d6a3b6479..f7683304a6 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JACK2_VERSION = 1.9.20
++JACK2_VERSION = 1.9.21
+ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+-- 
+2.35.1
 
-Best regards,
-Yegor
-
-> > > > > ---
-> > > > >  package/Config.in                          |  1 +
-> > > > >  package/python-pycrate/Config.in           |  8 ++++++++
-> > > > >  package/python-pycrate/python-pycrate.hash |  4 ++++
-> > > > >  package/python-pycrate/python-pycrate.mk   | 13 +++++++++++++
-> > > >
-> > > > An entry to the DEVELOPERS file is missing.
-> > >
-> > > May you help me to whome this entry should refer?
-> >
-> > You should add yourself as a "maintainer" of the package you add. Just
-> > look at other entries.
-> >
-> I have added myself as a maintainer of this package. Thankyou.
->
-> > >
-> > > >
-> > > > >  4 files changed, 26 insertions(+)
-> > > > >  create mode 100644 package/python-pycrate/Config.in
-> > > > >  create mode 100644 package/python-pycrate/python-pycrate.hash
-> > > > >  create mode 100644 package/python-pycrate/python-pycrate.mk
-> > > > >
-> > > > > diff --git a/package/Config.in b/package/Config.in
-> > > > > index 56b1a08d8b..2443b7bb27 100644
-> > > > > --- a/package/Config.in
-> > > > > +++ b/package/Config.in
-> > > > > @@ -951,6 +951,7 @@ menu "External python modules"
-> > > > >         source "package/python-pyasn1-modules/Config.in"
-> > > > >         source "package/python-pycli/Config.in"
-> > > > >         source "package/python-pycparser/Config.in"
-> > > > > +       source "package/python-pycrate/Config.in"
-> > > > >         source "package/python-pycrypto/Config.in"
-> > > > >         source "package/python-pycryptodomex/Config.in"
-> > > > >         source "package/python-pydal/Config.in"
-> > > > > diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> > > > > new file mode 100644
-> > > > > index 0000000000..9e2123d4dd
-> > > > > --- /dev/null
-> > > > > +++ b/package/python-pycrate/Config.in
-> > > > > @@ -0,0 +1,8 @@
-> > > > > +config BR2_PACKAGE_PYTHON_PYCRATE
-> > > > > +       bool "python-pycrate"
-> > > > > +       help
-> > > > > +        It provides basically a runtime for encoding and decoding data structures,
-> > > > > +        including CSN.1 and ASN.1. Additionally, it features a 3G and LTE mobile core
-> > > > > +        network.
-> > > > > +
-> > > > > +        https://github.com/P1sec/pycrate/
-> > > > > diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> > > > > new file mode 100644
-> > > > > index 0000000000..24aa51d8e4
-> > > > > --- /dev/null
-> > > > > +++ b/package/python-pycrate/python-pycrate.hash
-> > > > > @@ -0,0 +1,4 @@
-> > > > > +# md5 from https://pypi.python.org/pypi/pycrate/json
-> > > > > +md5    075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> > > > > +# Locally computed
-> > > > > +sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> > > > > diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> > > > > new file mode 100644
-> > > > > index 0000000000..41ce6c18f2
-> > > > > --- /dev/null
-> > > > > +++ b/package/python-pycrate/python-pycrate.mk
-> > > > > @@ -0,0 +1,13 @@
-> > > > > +################################################################################
-> > > > > +#
-> > > > > +# python-pycrate
-> > > > > +#
-> > > > > +################################################################################
-> > > > > +
-> > > > > +PYTHON_PYCRATE_VERSION = 0.5.5
-> > > > > +PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> > > > > +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> > > > > +PYTHON_PYCRATE_SETUP_TYPE = distutils
-> > > >
-> > > > SETUP_TYPE is setuptools.
-> > > >
-> > > > Have you tried this command?
-> > > >
-> > > > ./utils/scanpypi pycrate
-> > > >
-> > > > It will do almost everything you need. The thing that is missing is
-> > > > licensing info because there is no license file in the source archive.
-> > >
-> > > Thankyou for pointing this out. Now I send a new version, using this
-> > > command and also adding licensing info.
-> > > >
-> > > > Best regards,
-> > > > Yegor
-> > > >
-> > > > > +PYTHON_PYCRATE_LICENSE = LGPL-2.1-or-later
-> > > > > +
-> > > > > +$(eval $(python-package))
-> > > > > --
-> > > > > 2.17.1
-> > > > >
-> > >
-> > > This is the second version of my patch.
-> > >
-> > > From 979beabd86f1c15d159e37136bc9591fb39b844e Mon Sep 17 00:00:00 2001
-> > > From: Nasser Afshin <Afshin.Nasser@gmail.com>
-> > > Date: Tue, 25 Oct 2022 16:06:53 +0330
-> > > Subject: [PATCH v2] python-pycrate: new package
-> > >
-> > > Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-> > > ---
-> > > v1 -> v2: Added licence file and its checksum
-> > >                  Used ./utils/scanpypi pycrate tool to be consistent with
-> > >                  others
-> > >
-> > >  package/Config.in                          |  1 +
-> > >  package/python-pycrate/Config.in           |  6 ++++++
-> > >  package/python-pycrate/python-pycrate.hash |  6 ++++++
-> > >  package/python-pycrate/python-pycrate.mk   | 14 ++++++++++++++
-> > >  4 files changed, 27 insertions(+)
-> > >  create mode 100644 package/python-pycrate/Config.in
-> > >  create mode 100644 package/python-pycrate/python-pycrate.hash
-> > >  create mode 100644 package/python-pycrate/python-pycrate.mk
-> > >
-> > > diff --git a/package/Config.in b/package/Config.in
-> > > index e3a34d6e97..a6fcc72cc8 100644
-> > > --- a/package/Config.in
-> > > +++ b/package/Config.in
-> > > @@ -1168,6 +1168,7 @@ menu "External python modules"
-> > >         source "package/python-pycairo/Config.in"
-> > >         source "package/python-pycares/Config.in"
-> > >         source "package/python-pycparser/Config.in"
-> > > +       source "package/python-pycrate/Config.in"
-> > >         source "package/python-pycryptodomex/Config.in"
-> > >         source "package/python-pycups/Config.in"
-> > >         source "package/python-pydal/Config.in"
-> > > diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> > > new file mode 100644
-> > > index 0000000000..193a973f7e
-> > > --- /dev/null
-> > > +++ b/package/python-pycrate/Config.in
-> > > @@ -0,0 +1,6 @@
-> > > +config BR2_PACKAGE_PYTHON_PYCRATE
-> > > +       bool "python-pycrate"
-> > > +       help
-> > > +         A software suite to handle various data formats.
-> > > +
-> > > +         https://github.com/P1sec/pycrate/
-> > > diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> > > new file mode 100644
-> > > index 0000000000..8ad33370b4
-> > > --- /dev/null
-> > > +++ b/package/python-pycrate/python-pycrate.hash
-> > > @@ -0,0 +1,6 @@
-> > > +# md5, sha256 from https://pypi.org/pypi/pycrate/json
-> > > +md5  075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> > > +sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> > > +# Locally computed
-> > > +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  license.txt
-> > > +
-> > > diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> > > new file mode 100644
-> > > index 0000000000..c0da152656
-> > > --- /dev/null
-> > > +++ b/package/python-pycrate/python-pycrate.mk
-> > > @@ -0,0 +1,14 @@
-> > > +################################################################################
-> > > +#
-> > > +# python-pycrate
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +PYTHON_PYCRATE_VERSION = 0.5.5
-> > > +PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> > > +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> > > +PYTHON_PYCRATE_SETUP_TYPE = setuptools
-> > > +PYTHON_PYCRATE_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/P1sec/pycrate/master/license.txt
-> > > +PYTHON_PYCRATE_LICENSE = LGPL-2.1+
-> > > +
-> > > +$(eval $(python-package))
-> >
-> > The patch looks good now. Thanks.
-> >
-> > Best regards,
-> > Yegor
->
-> This is the third version of the patch:
->
-> From de6e28885836a6d9a5347a083a68055098508583 Mon Sep 17 00:00:00 2001
-> From: Nasser Afshin <Afshin.Nasser@gmail.com>
-> Date: Tue, 25 Oct 2022 16:06:53 +0330
-> Subject: [PATCH v3] python-pycrate: new package
->
-> Signed-off-by: Nasser Afshin <Afshin.Nasser@gmail.com>
-> ---
-> v1 -> v2: Added licence file and its checksum
->                 Used ./utils/scanpypi pycrate tool to be consistent with
->                 others
-> v2 -> v3: Added myself as the maintainer of this package
->
->  DEVELOPERS                                 |  3 +++
->  package/Config.in                          |  1 +
->  package/python-pycrate/Config.in           |  6 ++++++
->  package/python-pycrate/python-pycrate.hash |  6 ++++++
->  package/python-pycrate/python-pycrate.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/python-pycrate/Config.in
->  create mode 100644 package/python-pycrate/python-pycrate.hash
->  create mode 100644 package/python-pycrate/python-pycrate.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 6e0b765ba1..a1b48fd45c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2157,6 +2157,9 @@ N:        Murat Demirten <mdemirten@yh.com.tr>
->  F:     package/jpeg-turbo/
->  F:     package/libgeotiff/
->
-> +N:     Nasser Afshin <afshin.nasser@gmail.com>
-> +F:     package/python-pycrate/
-> +
->  N:     Nathaniel Roach <nroach44@gmail.com>
->  F:     package/bandwidthd/
->  F:     package/libgudev/
-> diff --git a/package/Config.in b/package/Config.in
-> index e3a34d6e97..a6fcc72cc8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1168,6 +1168,7 @@ menu "External python modules"
->         source "package/python-pycairo/Config.in"
->         source "package/python-pycares/Config.in"
->         source "package/python-pycparser/Config.in"
-> +       source "package/python-pycrate/Config.in"
->         source "package/python-pycryptodomex/Config.in"
->         source "package/python-pycups/Config.in"
->         source "package/python-pydal/Config.in"
-> diff --git a/package/python-pycrate/Config.in b/package/python-pycrate/Config.in
-> new file mode 100644
-> index 0000000000..193a973f7e
-> --- /dev/null
-> +++ b/package/python-pycrate/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PYCRATE
-> +       bool "python-pycrate"
-> +       help
-> +         A software suite to handle various data formats.
-> +
-> +         https://github.com/P1sec/pycrate/
-> diff --git a/package/python-pycrate/python-pycrate.hash b/package/python-pycrate/python-pycrate.hash
-> new file mode 100644
-> index 0000000000..8ad33370b4
-> --- /dev/null
-> +++ b/package/python-pycrate/python-pycrate.hash
-> @@ -0,0 +1,6 @@
-> +# md5, sha256 from https://pypi.org/pypi/pycrate/json
-> +md5  075622d5d573274cd4dbfe268ca52f7f  pycrate-0.5.5.tar.gz
-> +sha256  59f09331890a389a6b98412f19f4fb021c5a75a35ab07bf5ba0d1e299a0967af  pycrate-0.5.5.tar.gz
-> +# Locally computed
-> +sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  license.txt
-> +
-> diff --git a/package/python-pycrate/python-pycrate.mk b/package/python-pycrate/python-pycrate.mk
-> new file mode 100644
-> index 0000000000..c0da152656
-> --- /dev/null
-> +++ b/package/python-pycrate/python-pycrate.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pycrate
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYCRATE_VERSION = 0.5.5
-> +PYTHON_PYCRATE_SOURCE = pycrate-$(PYTHON_PYCRATE_VERSION).tar.gz
-> +PYTHON_PYCRATE_SITE = https://files.pythonhosted.org/packages/25/8f/b3d7e0b541aa04b2f0f7aa694a6946b572bfa2e2627cf1f12b5416d633df
-> +PYTHON_PYCRATE_SETUP_TYPE = setuptools
-> +PYTHON_PYCRATE_EXTRA_DOWNLOADS = https://raw.githubusercontent.com/P1sec/pycrate/master/license.txt
-> +PYTHON_PYCRATE_LICENSE = LGPL-2.1+
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.1
->
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
