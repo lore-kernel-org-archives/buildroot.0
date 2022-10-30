@@ -1,49 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1BC7C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33251C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28E52812C9;
-	Sun, 30 Oct 2022 10:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28E52812C9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EVYxkLd7nwYD; Sun, 30 Oct 2022 10:52:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FD83812CE;
-	Sun, 30 Oct 2022 10:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FD83812CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6B9651BF2B7
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52F9440357
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52F9440357
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8654037A;
+	Sun, 30 Oct 2022 10:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E8654037A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s0nF2PsDnCyJ for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 10:51:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD90C40285
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD90C40285
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C65DA8746C; Sun, 30 Oct 2022 10:51:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 11:51:34 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ce9af6ccfa3136e62d0c429adb38460bece058f
-X-Git-Newrev: 952fa08764acc8d78985d2cc91d37112324b67cb
-X-Patchwork-Hint: ignore
-Message-Id: <20221030105150.C65DA8746C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/f2fs-tools: add lz4 and lzo
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lNlX8LyFjmNY; Sun, 30 Oct 2022 10:52:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C54C40357;
+	Sun, 30 Oct 2022 10:52:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C54C40357
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C29251BF2B7
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:52:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D61B812AB
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D61B812AB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JEknbM_UumoR for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 10:52:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ACD8812CE
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4ACD8812CE
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:52:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 81275240008;
+ Sun, 30 Oct 2022 10:52:06 +0000 (UTC)
+Date: Sun, 30 Oct 2022 11:52:05 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221030115205.0fab7010@windsurf>
+In-Reply-To: <20221029170023.219493-1-fontaine.fabrice@gmail.com>
+References: <20221029170023.219493-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667127131;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XW3todxNlJBrSlihQVlCnEO7FRlcSKPkIM7m5N0EHmA=;
+ b=pvRoIb/G1xr2lg6t0sSZUgJA4zJJ6mGPgPphCN30qPpErDlRVycFlXwL0bjmF3FMXSm54A
+ QJFEbmK79NJROrZLC1Tvr9Fnr0WI5eOkElTkpCT1iwWIs9x0pUXpDrOTCkIi1GhGqPnkQI
+ M9xXSniCnNvpQZYhZ4n/ru2xX3DAG4G+VS1PMhUkguHcTIlcIxdAhahW+R1fMNrVoCr1nf
+ Sbx7WuUTW8g1rH4W1xgXeZkCPAve53cyoSJ93MhMA3Zd6mmFO6cmyJjJBLtbFJmjt/koUq
+ lwQ+WoMrDiDkSIe/xPMgb/TpD/rCDrjYtaRVaAvx7T7DZD9avPGLmHjccRzDoA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pvRoIb/G
+Subject: Re: [Buildroot] [PATCH 1/2] package/f2fs-tools: add lz4 and lzo
  optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,156 +77,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Grzegorz Blach <grzegorz@blach.pl>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=952fa08764acc8d78985d2cc91d37112324b67cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 29 Oct 2022 19:00:22 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-lz4 and lzo are optional dependencies (enabled by default) since bump to
-version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
+> lz4 and lzo are optional dependencies (enabled by default) since bump to
+> version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
+> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...1-configure-ac-fix-cross-compilation.patch | 88 +++++++++++++++++++
+>  package/f2fs-tools/f2fs-tools.mk              | 18 +++-
+>  2 files changed, 105 insertions(+), 1 deletion(-)
+>  create mode 100644 package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-configure-ac-fix-cross-compilation.patch  | 88 ++++++++++++++++++++++
- package/f2fs-tools/f2fs-tools.mk                   | 18 ++++-
- 2 files changed, 105 insertions(+), 1 deletion(-)
+Both applied to master. Thanks!
 
-diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-new file mode 100644
-index 0000000000..0e3d4da191
---- /dev/null
-+++ b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-@@ -0,0 +1,88 @@
-+From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
-+From: Nick Hainke <vincent@systemli.org>
-+Date: Mon, 4 Jul 2022 11:29:19 +0200
-+Subject: configure.ac: fix cross compilation
-+
-+AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
-+to disable lz4 and lzo2 manually.
-+
-+Fixes errors in the form of:
-+  Package f2fsck is missing dependencies for the following libraries:
-+  liblz4.so.1
-+  liblzo2.so.2
-+
-+Signed-off-by: Nick Hainke <vincent@systemli.org>
-+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 34 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ea39461..dbe9ad3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
-+ 	[],
-+ 	[with_blkid=check])
-+ 
-++AC_ARG_WITH([lzo2],
-++	[AS_HELP_STRING([--without-lzo2],
-++	  [Ignore presence of liblzo2 and disable lzo2 support])],
-++	[],
-++	[with_lzo2=check])
-++
-++AC_ARG_WITH([lz4],
-++	[AS_HELP_STRING([--without-lz4],
-++	  [Ignore presence of liblz4 and disable lz4 support])],
-++	[],
-++	[with_lz4=check])
-++
-+ # Checks for programs.
-+ AC_PROG_CC
-+ AM_PROG_AR
-+@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
-+         fi
-+ 	], -lblkid)])
-+ 
-+-AC_CHECK_LIB([lzo2], [main],
-+-	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-+-		AC_DEFINE([HAVE_LIBLZO2], [1],
-+-		[Define if you have liblzo2])
-+-	], [], [])
-++AS_IF([test "x$with_lzo2" != xno],
-++	[AC_CHECK_LIB([lzo2], [main],
-++		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-++			AC_DEFINE([HAVE_LIBLZO2], [1],
-++			[Define if you have liblzo2])
-++		],
-++		[if test "x$with_lzo2" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lzo2 was given, but test for lzo2 failed])
-++        fi
-++	], -llzo2)])
-+ 
-+-AC_CHECK_LIB([lz4], [main],
-+-	[AC_SUBST([liblz4_LIBS], ["-llz4"])
-+-		AC_DEFINE([HAVE_LIBLZ4], [1],
-+-		[Define if you have liblz4])
-+-	], [], [])
-++AS_IF([test "x$with_lz4" != xno],
-++	[AC_CHECK_LIB([lz4], [main],
-++		[AC_SUBST([liblz4_LIBS], ["-llz4"])
-++			AC_DEFINE([HAVE_LIBLZ4], [1],
-++			[Define if you have liblz4])
-++		],
-++		[if test "x$with_lz4" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lz4 was given, but test for lz4 failed])
-++        fi
-++	], -llz4)])
-+ 
-+ AS_IF([test "x$with_selinux" != xno],
-+ 	[AC_CHECK_LIB([selinux], [getcon],
-+-- 
-+cgit 
-+
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 2c4ee9185b..60f1004d77 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -22,6 +22,20 @@ else
- F2FS_TOOLS_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lz4
-+F2FS_TOOLS_DEPENDENCIES += lz4
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lz4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lzo2
-+F2FS_TOOLS_DEPENDENCIES += lzo
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lzo2
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
- # util-linux is a dependency already, no need to list it again
- F2FS_TOOLS_CONF_OPTS += --with-blkid
-@@ -34,7 +48,9 @@ endif
- # blkid support even if we have host-util-linux
- HOST_F2FS_TOOLS_CONF_OPTS = \
- 	--without-selinux \
--	--without-blkid
-+	--without-blkid \
-+	--without-lz4 \
-+	--without-lzo2
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
