@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19180ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED80FC38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBAE2403D6;
-	Sun, 30 Oct 2022 16:29:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBAE2403D6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94B7B4032D;
+	Sun, 30 Oct 2022 16:29:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94B7B4032D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 20Cc6eyPgDDH; Sun, 30 Oct 2022 16:29:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EVoXZ-Xh7JUx; Sun, 30 Oct 2022 16:29:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE26240198;
-	Sun, 30 Oct 2022 16:29:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE26240198
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5DFFF1BF479
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 674074031F;
+	Sun, 30 Oct 2022 16:29:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 674074031F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 03A731BF479
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46CD4403EA
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46CD4403EA
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2E8A80B37
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2E8A80B37
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7n1TV94I0WYa for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 16:28:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 203D640198
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 203D640198
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:28:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GE7KvLz0z45j for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 16:28:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCE4080B2D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DCE4080B2D
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:28:57 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:6ffe:83e9:a65c:45ae])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5F0EF13F85A;
- Sun, 30 Oct 2022 17:28:37 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 164C213F87C;
+ Sun, 30 Oct 2022 17:28:54 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 17:28:37 +0100
-Date: Sun, 30 Oct 2022 17:28:37 +0100
+ Sun, 30 Oct 2022 17:28:53 +0100
+Date: Sun, 30 Oct 2022 17:28:53 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221030162837.GP1058960@scaer>
-References: <20221029084455.97704-1-fontaine.fabrice@gmail.com>
- <20221029084455.97704-2-fontaine.fabrice@gmail.com>
+Message-ID: <20221030162853.GQ1058960@scaer>
+References: <20221029085622.104382-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221029084455.97704-2-fontaine.fabrice@gmail.com>
+In-Reply-To: <20221029085622.104382-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667147320;
- bh=9xxkLvojOHIRPNGl05qC1DqY3H3SlIxruQ9ANDPjdJo=;
+ d=free.fr; s=smtp-20201208; t=1667147336;
+ bh=8LqiPUd9MJx4f5kvmgrWHNPyn2RCVqEgpfifTva9Zqk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=S/H+2Q+qyLyPpOhOA4wxxo+aG9wFG22LfeCsc5cfPLzG31TSiXmnqCiVQDT7D2aH6
- e20DIQYrynvFL0jmA/5MO0+uLt5MvkS7Pf9rJod66XOUKbrrzxdmAakppyGwM1HEj8
- HvCa6q4kna0C0gNTs/wFQllNx9vANB7Qh5O2DmBkU1k0jw/O1zmUMgqf3pKoebOhdv
- 9DmuRVo8jiIIdmlDqCtD/4t1v64dNNOkQwWiH64YADeALORAgbWYOdb2iKfM9hmeMR
- 5fJk818Ww8VuXpu1S/WQWM3K7nWb+ORQ1ZJJthhqDxSD5/Qh7JWtaUNtPcKO+Z9b86
- 6sLZWscANr/sA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=NCiteJ5i1d7aYk+2ixY6u3+m0l7hblze+Om98/VjsnvMXKJydzVKxUUXvzh3laQMs
+ FP6GIExaNYf2Hk8d+Xy9S7/OX/DOJWBimpyV/r+y8tzLkKNAQkdqyVAOZP9iEV10Mq
+ QnL/KzWEenV9m97kcxb1WWdM91GfO0TSuHmUzfo7tJ96vGf/1x3a0ARs7dx+HXvOLC
+ 0Q85wRkWV7eO8kFjzytMtxdb7GqweO15PAtmo9/rKQlNtVe0Z805WCwS7TEfMJ5SaF
+ 6Wg6Hj4AGVobI5Ms6bxDBzrMS9/E2EGAf15lMApsx9Yg1U9LUfsfE9PyWspo2Ico+W
+ OhiXXlVi1bDXw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=S/H+2Q+q
-Subject: Re: [Buildroot] [PATCH 2/2] package/numactl: bump to version 2.0.16
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NCiteJ5i
+Subject: Re: [Buildroot] [PATCH 1/1] package/ndisc6: bump to version 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,7 +76,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -85,12 +84,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2022-10-29 10:44 +0200, Fabrice Fontaine spake thusly:
-> - Drop patches (already in version)
-> - Use official tarball and so drop autoreconf
+On 2022-10-29 10:56 +0200, Fabrice Fontaine spake thusly:
+> ndisc6: print NAT64 prefix if present.
+> rdnssd: fix timeout calculation.
 > 
-> https://github.com/numactl/numactl/releases/tag/v2.0.15
-> https://github.com/numactl/numactl/releases/tag/v2.0.16
+> https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS;h=d9e87a5307ae7f50355ba2eaac1171c6c4ff9c47
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -100,133 +98,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...0001-Do-not-stringify-SYMVER-symbols.patch | 25 ---------
->  .../0002-link-with-latomic-if-needed.patch    | 52 -------------------
->  package/numactl/numactl.hash                  |  2 +-
->  package/numactl/numactl.mk                    |  6 +--
->  4 files changed, 4 insertions(+), 81 deletions(-)
->  delete mode 100644 package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
->  delete mode 100644 package/numactl/0002-link-with-latomic-if-needed.patch
+>  package/ndisc6/ndisc6.hash | 2 +-
+>  package/ndisc6/ndisc6.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch b/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-> deleted file mode 100644
-> index c6981aaf73..0000000000
-> --- a/package/numactl/0001-Do-not-stringify-SYMVER-symbols.patch
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -From f96c96af7fbf2779b15f66f03b10315a24fb4f5a Mon Sep 17 00:00:00 2001
-> -From: Scott McMillan <smcmillan@nvidia.com>
-> -Date: Fri, 9 Oct 2020 08:56:52 -0500
-> -Subject: [PATCH] Do not stringify SYMVER symbols
-> -
-> -Upstream: f96c96af7fbf2779b15f66f03b10315a24fb4f5a
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ----
-> - util.h | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/util.h b/util.h
-> -index 99ada33..f2a20ac 100644
-> ---- a/util.h
-> -+++ b/util.h
-> -@@ -22,5 +22,5 @@ extern char *policy_name(int policy);
-> - #if HAVE_ATTRIBUTE_SYMVER
-> - #define SYMVER(a,b) __attribute__ ((symver (b)))
-> - #else
-> --#define SYMVER(a,b) __asm__ (".symver " #a "," #b);
-> -+#define SYMVER(a,b) __asm__ (".symver " a "," b);
-> - #endif
-> --- 
-> -2.30.2
-> -
-> diff --git a/package/numactl/0002-link-with-latomic-if-needed.patch b/package/numactl/0002-link-with-latomic-if-needed.patch
-> deleted file mode 100644
-> index 6dff0cb233..0000000000
-> --- a/package/numactl/0002-link-with-latomic-if-needed.patch
-> +++ /dev/null
-> @@ -1,52 +0,0 @@
-> -From e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Thu, 6 May 2021 23:08:36 +0200
-> -Subject: [PATCH] link with -latomic if needed
-> -
-> -numactl unconditionally uses __atomic_fetch_and but some architectures
-> -(e.g. sparc) needs to link with -latomic to be able to use it. So check
-> -if -latomic is needed and update numa.pc accordingly
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Retrieved from:
-> -https://github.com/numactl/numactl/commit/e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9]
-> ----
-> - Makefile.am  | 1 +
-> - configure.ac | 2 ++
-> - numa.pc.in   | 1 +
-> - 3 files changed, 4 insertions(+)
-> -
-> -diff --git a/Makefile.am b/Makefile.am
-> -index 44d0d76..34f6815 100644
-> ---- a/Makefile.am
-> -+++ b/Makefile.am
-> -@@ -151,6 +151,7 @@ SED_PROCESS = \
-> -         -e 's,@exec_prefix\@,$(exec_prefix),g' \
-> -         -e 's,@libdir\@,$(libdir),g' \
-> -         -e 's,@includedir\@,$(includedir),g' \
-> -+        -e 's,@LIBS\@,$(LIBS),g' \
-> -         < $< > $@ || rm $@
-> - 
-> - %.pc: %.pc.in Makefile
-> -diff --git a/configure.ac b/configure.ac
-> -index 659a765..e3b0eb3 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -24,6 +24,8 @@ AM_CONDITIONAL([HAVE_TREE_VECTORIZE], [test x"${tree_vectorize}" = x"true"])
-> - 
-> - AC_CONFIG_FILES([Makefile])
-> - 
-> -+AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
-> -+
-> - # GCC tries to be "helpful" and only issue a warning for unrecognized
-> - # attributes.  So we compile the test with Werror, so that if the
-> - # attribute is not recognized the compilation fails
-> -diff --git a/numa.pc.in b/numa.pc.in
-> -index 8a0f202..cc04d50 100644
-> ---- a/numa.pc.in
-> -+++ b/numa.pc.in
-> -@@ -8,3 +8,4 @@ Description: NUMA policy library
-> - Version: @VERSION@
-> - Cflags: -I${includedir}
-> - Libs: -L${libdir} -lnuma
-> -+Libs.Private: @LIBS@
-> diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
-> index a261eab9d0..757001b750 100644
-> --- a/package/numactl/numactl.hash
-> +++ b/package/numactl/numactl.hash
+> diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
+> index d76e831208..e258382c53 100644
+> --- a/package/ndisc6/ndisc6.hash
+> +++ b/package/ndisc6/ndisc6.hash
 > @@ -1,4 +1,4 @@
->  # Locally calculated
-> -sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
-> +sha256  1b242f893af977a1d31af6ce9d6b8dafdd2d8ec3dc9207f7c2dc0d3446e7c7c8  numactl-2.0.16.tar.gz
->  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-> diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-> index 6ff94091e9..b2f349255f 100644
-> --- a/package/numactl/numactl.mk
-> +++ b/package/numactl/numactl.mk
-> @@ -4,12 +4,12 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  36932f9fc47e2844abcda7550fa1343b3af4b4208dfb61e0c9d9224aad5df351  ndisc6-1.0.5.tar.bz2
+> +sha256  a713210e9be1f15cfa0809f4c2728b00cd5f25881d7585126986982055453cfb  ndisc6-1.0.6.tar.bz2
+>  # Locally computed
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+> diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+> index ff6439e310..23734ca7d7 100644
+> --- a/package/ndisc6/ndisc6.mk
+> +++ b/package/ndisc6/ndisc6.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -NUMACTL_VERSION = 2.0.14
-> -NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
-> +NUMACTL_VERSION = 2.0.16
-> +NUMACTL_SITE = \
-> +	https://github.com/numactl/numactl/releases/download/v$(NUMACTL_VERSION)
->  NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
->  NUMACTL_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
->  NUMACTL_INSTALL_STAGING = YES
-> -NUMACTL_AUTORECONF = YES
->  NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
->  
->  $(eval $(autotools-package))
+> -NDISC6_VERSION = 1.0.5
+> +NDISC6_VERSION = 1.0.6
+>  NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+>  NDISC6_SITE = http://www.remlab.net/files/ndisc6
+>  NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=c11" LIBS=$(TARGET_NLS_LIBS)
 > -- 
 > 2.35.1
 > 
