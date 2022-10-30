@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98660C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 18:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3274ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 18:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3EAB940523;
-	Sun, 30 Oct 2022 18:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EAB940523
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53C0D402C2;
+	Sun, 30 Oct 2022 18:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53C0D402C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r0YoVCiMIxr0; Sun, 30 Oct 2022 18:34:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xUvaUgwFMBDl; Sun, 30 Oct 2022 18:34:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55A5140151;
-	Sun, 30 Oct 2022 18:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55A5140151
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23BDA1BF956
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 18:33:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01CED401B1;
+	Sun, 30 Oct 2022 18:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01CED401B1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 005D61BF473
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 18:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3F0E605AC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 18:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3F0E605AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE4BE80C2C
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 18:34:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE4BE80C2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c6Mjrrb-k-LF for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 18:33:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12EB1605A4
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 18:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12EB1605A4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1745875BF; Sun, 30 Oct 2022 18:33:57 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 19:32:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7619682552dd34f499e9f17b0234af53da743ec
-X-Git-Newrev: 50da16cf949596ee450e8c3c20cc676a3baabc9a
-X-Patchwork-Hint: ignore
-Message-Id: <20221030183357.F1745875BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/batman-adv: bump to version 2022.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ejLf_lOy_dqH for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 18:34:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95B1780BD5
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95B1780BD5
+ for <buildroot@busybox.net>; Sun, 30 Oct 2022 18:34:13 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:6ffe:83e9:a65c:45ae])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A145E13F89D;
+ Sun, 30 Oct 2022 19:34:08 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 30 Oct 2022 19:34:07 +0100
+Date: Sun, 30 Oct 2022 19:34:07 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Baruch Siach <baruch@tkos.co.il>
+Message-ID: <20221030183407.GZ1058960@scaer>
+References: <7568ca93d2d360efc2c6096406b8d9af533dec86.1667154015.git.baruch@tkos.co.il>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <7568ca93d2d360efc2c6096406b8d9af533dec86.1667154015.git.baruch@tkos.co.il>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1667154852;
+ bh=4XoxnFl5kv/LCZgyhNfK27b9WYH91iFvbGEBuGJR9WU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=D2gbXUBP0+vzZnMxqqaQbwv0uYcI1/E4LNJSyXUYFjPXpTsN2hEaGHnTSYLO0Fz/R
+ QVF3u4vo6uTjTpIDTd0rZWRK7fcCDIpA9nE/tYXI2bdU3yja11seFkGlVcxni5Bty7
+ 7n4/U/mx6KW1LNsQOCWWOWLL3HGq9VNzIAs3YTT1cxnnnWd+YnC4nVEIuWLCJcXuiH
+ 5WijpjdEr/N6K5zp0qnNFYJFGusnE2YuS3UGBBiDzT/PCDWtgPlJE9r97ciJWsna2y
+ mUrz5ZwqEbsJ4E+r/cXSnlIwX0Adb+fOzVLdJqgDR7lOwZUpdpWu3JIoT/dUBNlNlU
+ ZsfTix5mShx3A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=D2gbXUBP
+Subject: Re: [Buildroot] [PATCH] package/libcurl: fix crypto backend
+ selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,78 +77,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5941141582776699851=="
+Cc: buildroot@busybox.net, Matt Weber <matthew.weber@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5941141582776699851==
-Content-Type: text/plain
+Baruch, All,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50da16cf949596ee450e8c3c20cc676a3baabc9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2022-10-30 20:20 +0200, Baruch Siach via buildroot spake thusly:
+> Since version 7.77 --with-ssl that used to select OpenSSL renamed to
+> --with-openssl. --without-ssl changed to mean no crypto backend.
+> 
+> Only in version 7.86 setting both --without-ssl and some other crypto
+> parameter became a hard configure error.
+> 
+> Update OpenSSL selection parameter, and add --without-ssl explicitly for
+> the case of no selected crypto backend.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/05e9cb71619e640849c27b2984d0df671a9f86c5/
+> http://autobuild.buildroot.net/results/5a4a905de2a232a38916f03278d0a3cbd8a29711/
+> http://autobuild.buildroot.net/results/4432314aa13d4acc8fce27f79177f82298ae0626/
+> 
+> Cc: Matt Weber <matthew.weber@collins.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-This bump will fix the following build failure with kernel >= 5.18 thanks to
-https://github.com/open-mesh-mirror/batman-adv/commit/f07a0c37ab278fb6a9e95cad89429b1282f1ab59:
+Applied to master, thanks.
 
-/home/buildroot/autobuild/instance-2/output-1/build/batman-adv-2021.4/net/batman-adv/bridge_loop_avoidance.c: In function ‘batadv_bla_send_claim’:
-/home/buildroot/autobuild/instance-2/output-1/build/batman-adv-2021.4/net/batman-adv/bridge_loop_avoidance.c:446:9: error: implicit declaration of function ‘netif_rx_any_context’ [-Werror=implicit-function-declaration]
-  446 |         netif_rx_any_context(skb);
-      |         ^~~~~~~~~~~~~~~~~~~~
+Regards,
+Yann E. MORIN.
 
-Indeed, netif_rx_any_context has been dropped since kernel 5.18:
-https://github.com/torvalds/linux/commit/2655926aea9beea62c9ba80c032485456fd848f0
+> ---
+>  package/libcurl/libcurl.mk | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 3c3ad082fc65..8de43581073d 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -50,6 +50,10 @@ endif
+>  
+>  LIBCURL_CONFIG_SCRIPTS = curl-config
+>  
+> +ifeq ($(BR2_PACKAGE_LIBCURL_TLS_NONE),y)
+> +LIBCURL_CONF_OPTS += --without-ssl
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+>  LIBCURL_DEPENDENCIES += openssl
+>  # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
+> @@ -57,10 +61,10 @@ LIBCURL_DEPENDENCIES += openssl
+>  # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+>  # are found first.
+>  LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
+> -LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
+> +LIBCURL_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr \
+>  	--with-ca-path=/etc/ssl/certs
+>  else
+> -LIBCURL_CONF_OPTS += --without-ssl
+> +LIBCURL_CONF_OPTS += --without-openssl
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCURL_BEARSSL),y)
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-https://github.com/open-mesh-mirror/batman-adv/blob/v2022.2/CHANGELOG.rst
-
-Fixes:
- - http://autobuild.buildroot.org/results/542b7b99da7b7a65e6e11e7c73a26856e3222e89
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/batman-adv/batman-adv.hash | 6 +++---
- package/batman-adv/batman-adv.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index c098663739..c5add4cdea 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,7 +1,7 @@
--# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.4/batman-adv-2021.4.tar.gz.sha1
--sha1  80a3e4d763b6bf35db6e561ed9d6775dc874d7c6  batman-adv-2021.4.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2022.2/batman-adv-2022.2.tar.gz.sha1
-+sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
- 
- # Hash for license files
--sha256  cff7a2f160045fd0dbf1f1cd7e35e93bf489e81cb8b9501b3756daa391f3eb1b  batman-adv-2021.4.tar.gz
-+sha256  8aca27c6f168b137a7ed7031d58169396c1a97f958c2ea95b9c30a9b92576fe0  batman-adv-2022.2.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 6a1aaa699c..d279694bf5 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATMAN_ADV_VERSION = 2021.4
-+BATMAN_ADV_VERSION = 2022.2
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
-
---===============5941141582776699851==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5941141582776699851==--
