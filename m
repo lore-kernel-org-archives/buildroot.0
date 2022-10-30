@@ -4,69 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0165AFA373D
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B00DC38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 12:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80AED8125B;
-	Sun, 30 Oct 2022 11:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80AED8125B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7C2681257;
+	Sun, 30 Oct 2022 12:54:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7C2681257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CFPNlXQDwV5i; Sun, 30 Oct 2022 11:45:33 +0000 (UTC)
+	with ESMTP id Ddx5vJZ62FCO; Sun, 30 Oct 2022 12:54:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 866858124B;
-	Sun, 30 Oct 2022 11:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 866858124B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 688E41BF5DC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:45:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F13C980FAE;
+	Sun, 30 Oct 2022 12:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F13C980FAE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4672D1BF48B
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 12:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42FFD40334
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42FFD40334
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F91D60750
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 12:54:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F91D60750
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u_gIgCW73BhB for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 11:45:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J5NwfAQ6XdXt for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 12:54:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B29F040320
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B29F040320
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:45:26 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6ffe:83e9:a65c:45ae])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C92DE13F846;
- Sun, 30 Oct 2022 12:45:19 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 12:45:19 +0100
-Date: Sun, 30 Oct 2022 12:45:19 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20221030114519.GE1058960@scaer>
-References: <20221026183427.3933387-1-thomas.petazzoni@bootlin.com>
- <20221026183427.3933387-2-thomas.petazzoni@bootlin.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B19E7608D8
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B19E7608D8
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 12:54:04 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id a14so12477421wru.5
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 05:54:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=DkYHXp3cr0bKX91rr21QMgW4dwceNpECgnCIYPdTtX8=;
+ b=tStGulWSrXhoeBODha1lCeyOuhIaLVVNS00uL8LCshAT2rIzEnwz/BZgTlGuI4P16t
+ AblqSykF+wxaY+d/mUpLMx9pM6jX1QdQpnKWOFJmM04wZPbwZ8B1C5ERaAvanCCqgWdi
+ dgt9fqnAA2FrjwlJ13ZE1Ss4Aro1YyDS4cnnyY/t+BVthN7OZJ434lAjsODTt4bsNdds
+ ff8B0e1/Ak0MWSrWfLRWy9sQLkLX+NIz9LQAxTtCA0Nd2cuD/t+Uv/sN5bR5abpoKCSo
+ l208oGYJuAEIQGrmns3vgMyd1a2/mxcdeby3kvR5yewTq0RQwubwpDx2nr5Cf9oi2tZa
+ 6HnQ==
+X-Gm-Message-State: ACrzQf3VJgeXmuZ9QRsr+UWnBFQPxbUb32Zr5YdNEdgKOi2DT5kjVxAd
+ 3SUDVrt4zRu50IVypgdR01eeN21MRB0=
+X-Google-Smtp-Source: AMsMyM5PB6S10Mnqfvs98hQkuZB7II6e/fa1BhbtSQJk2DoEdZ6uQOhsODqQAJ0SNbNAsz6NhFgz5A==
+X-Received: by 2002:a5d:4711:0:b0:236:48b6:cb89 with SMTP id
+ y17-20020a5d4711000000b0023648b6cb89mr5050383wrq.246.1667134442424; 
+ Sun, 30 Oct 2022 05:54:02 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ cy2-20020a056000400200b0022afedf3c87sm4115061wrb.105.2022.10.30.05.54.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 30 Oct 2022 05:54:01 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 30 Oct 2022 13:53:58 +0100
+Message-Id: <20221030125358.387628-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221026183427.3933387-2-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667130325;
- bh=UU1eYyHUdnIvf4Aumgz/IfIVf8Yp7VO4V6SFRWBe988=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=daHM+94v0ZICwKC0pQdiSesK7TUElc8EsvT2aXQOVPU974RTN5eUrr6zBrsBb8LyV
- LZE+Nb+0PPlD7eA1pTPAH2Fmof82xBbyh1W4lOpPbFio/AzRPEmOcnW91/uYtdafLn
- hVyPvG+TJ02oT5dr/xpjflH3+fW3HSyt80qWnPGXcLfDmkrccy6u4Sg3Vrl8WSCVlJ
- DZuilTeO31FleETb1EoNMCwHBLhOu4sHjG5758qYbcY4Acgl+ue2FA1fC/mMWQSQOP
- yBYgvs9DYLNSqiNCUNsRERcUjMv3k70NdRyb7QDu3FwqanZU2hTCt3Ye8CWdeKdRx0
- 2EcM3fHDjshqw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=daHM+94v
-Subject: Re: [Buildroot] [PATCH 2/2] package/glibc: headers >= 5.4 needed on
- RISC-V 32-bit
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=DkYHXp3cr0bKX91rr21QMgW4dwceNpECgnCIYPdTtX8=;
+ b=kfOag9bdnKCjWQhjykl+YX6QBhsjxJ48ozHq3lhEzvWR4svg1ibvr+uD5CF5LmBZl+
+ aAsN5XcgezavsOrALleHA270e/NgVleryJ9rL66Y/f6/1N6dWiasuDaR1s4yXS5txrN7
+ dtTfD0st4kEKh3FeUdm8SsZ0r1+7fFM77JTgim9RizX+ttl9rmfdDx3bDC7JoP+neu4A
+ vklyBwdKPJvKMzG4t+qNJV4c4OG6mcxMEfPFxksPAM8z2As2LWUc385C0lCWSjWdpcTg
+ RnyJnwIM6pzwx+8q5dKoRovtaiJ/VpgqbBGA9nTFS0+vIBdo0qIEr34NHo6V3+WZpeu5
+ 4cyg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kfOag9bd
+Subject: [Buildroot] [PATCH 1/1] package/kmemd: needs headers >= 5.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,103 +93,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Tobias Waldekranz <tobias@waldekranz.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+kmemd unconditionally uses BPF_PSEUDO_MAP_IDX_VALUE which is only
+available since kernel 5.14 and
+https://github.com/torvalds/linux/commit/387544bfa291a22383d60b40f887360e2b931ec6
+resulting in the following build failure since the addition of the
+package in commit b3f915c6561bcb2f7952faca3bedf1766f299538:
 
-On 2022-10-26 20:34 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Since glibc 2.33 (upstream commit
-> 7a55dd3fb6d2c307a002a16776be84310b9c8989), headers >= 5.4.0 are needed
-> to build glibc for RISC-V 32-bit. Indeed
-> sysdeps/unix/sysv/linux/riscv/configure.ac contains:
-> 
-> if test $libc_cv_riscv_int_abi = ilp32; then
->   arch_minimum_kernel=5.4.0
-> fi
-> 
-> In order to take into account this dependency, we add the appropriate
-> logic in package/glibc/Config.in and
-> toolchain/toolchain-buildroot/Config.in.
-> 
-> This change means that if headers < 5.4.0 are selected, then no C
-> library at all will be available for RISC-V 32-bit, as glibc is the
-> only C library supporting RISC-V 32-bit currently. However, thanks to
-> the recent addition of BR2_TOOLCHAIN_BUILDROOT_NONE, the
-> choice...endchoice for the C library selection will not be empty,
-> allowing the user to see the Config.in comment explaining why glibc
-> can't be selected.
-> 
-> Therefore, technically this commit does prevent from creating a
-> configuration with RISC-V 32-bit and headers < 5.4.0, but it will have
-> BR2_TOOLCHAIN_BUILDROOT_NONE=y, which is catched by
-> package/Makefile.in, which aborts the build early on pointing out that
-> the configuration is invalid.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/5ca49b2732f68eccb5276e7112f7f496dcc514ee/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+kmem.c:36:17: error: 'BPF_PSEUDO_MAP_IDX_VALUE' undeclared here (not in a function); did you mean 'BPF_PSEUDO_MAP_VALUE'?
+   36 |                 BPF_PSEUDO_MAP_IDX_VALUE, 0, _idx       \
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/dcd7e6321d64746b8b867fa3f32095d1180a40fc
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kmemd/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  package/glibc/Config.in                 | 1 +
->  toolchain/toolchain-buildroot/Config.in | 4 ++++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index b63f99b0b4..71c50504ac 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -34,6 +34,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_RISCV_32
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 26d731d976..64f7892f98 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -62,6 +62,10 @@ comment "glibc on RISC-V 64-bit needs a toolchain w/ headers >= 5.0"
->  	depends on BR2_RISCV_64
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
->  
-> +comment "glibc on RISC-V 32-bit needs a toolchain w/ headers >= 5.4"
-> +	depends on BR2_RISCV_32
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-> +
->  comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
->  	depends on BR2_arc
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-> -- 
-> 2.37.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/kmemd/Config.in b/package/kmemd/Config.in
+index 902e636947..cd92757508 100644
+--- a/package/kmemd/Config.in
++++ b/package/kmemd/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KMEMD
+ 	depends on BR2_USE_WCHAR # libbpf
+ 	depends on !BR2_STATIC_LIBS # libbpf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbpf
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 # libbpf
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # libbpf
+ 	select BR2_PACKAGE_LIBBPF
+ 	help
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_KMEMD
+ 
+ 	  https://github.com/wkz/kmemd
+ 
+-comment "kmemd needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
++comment "kmemd needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 5.14"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
