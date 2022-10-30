@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02932C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDF78ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABC63403E7;
-	Sun, 30 Oct 2022 16:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABC63403E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A17D40469;
+	Sun, 30 Oct 2022 16:15:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A17D40469
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 14GO8dVDsabv; Sun, 30 Oct 2022 16:15:15 +0000 (UTC)
+	with ESMTP id bWEKMpbFzr9f; Sun, 30 Oct 2022 16:15:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C87C3403A2;
-	Sun, 30 Oct 2022 16:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C87C3403A2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 71F9C1BF479
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D6D14011F;
+	Sun, 30 Oct 2022 16:15:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D6D14011F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 988F01BF956
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5947F60A8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A7C340352
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5947F60A8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A7C340352
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dBxt-2oT9Ewf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c3TX_hCauKGb for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AD7F607FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B8A540198
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AD7F607FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8A540198
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 689C587572; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
+ id 8A85D87571; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 17:10:06 +0100
+Date: Sun, 30 Oct 2022 17:10:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce8eb37a7ea0a13644fe9ec29bf8ce72df094386
-X-Git-Newrev: e0f40892e921dc06e89ff543df754e434b608633
+X-Git-Oldrev: e60fb6d252d5ece448a70957ab45389b151f7f79
+X-Git-Newrev: 5ef22cb6d10958a9867fc372725826819a8824ef
 X-Patchwork-Hint: ignore
-Message-Id: <20221030161421.689C587572@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slang: bump to version 2.3.3
+Message-Id: <20221030161421.8A85D87571@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/taglib: bump to version 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,88 +57,102 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0959796508808975123=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0959796508808975123==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e0f40892e921dc06e89ff543df754e434b608633
+commit: https://git.buildroot.net/buildroot/commit/?id=5ef22cb6d10958a9867fc372725826819a8824ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Refresh patch
+- Drop patch (already in version)
+- Use WITH_ZLIB which is available since
+  https://github.com/taglib/taglib/commit/1644c0dd87f40a2492bde4011fe72257fc72ee0e
 
-http://lists.jedsoft.org/lists/slang-users/2022/0000005.html
+https://github.com/taglib/taglib/releases/tag/v1.13
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/slang/0001-slsh-libs.patch | 6 ++++--
- package/slang/slang.hash           | 4 ++--
- package/slang/slang.mk             | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ ...latile-on-systems-without-HAVE_GCC_ATOMIC.patch | 34 ----------------------
+ package/taglib/taglib.hash                         |  2 +-
+ package/taglib/taglib.mk                           |  5 +++-
+ 3 files changed, 5 insertions(+), 36 deletions(-)
 
-diff --git a/package/slang/0001-slsh-libs.patch b/package/slang/0001-slsh-libs.patch
-index 211cb4a0e0..fad16d1b2f 100644
---- a/package/slang/0001-slsh-libs.patch
-+++ b/package/slang/0001-slsh-libs.patch
-@@ -5,6 +5,8 @@ probably Diego Pettenò.
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Bernd: rebased against 2.3.1a]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Fabrice: rebased against 2.3.3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- --- a/slsh/Makefile.in
- +++ b/slsh/Makefile.in
-@@ -12,8 +14,8 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  $(OBJDIR)/slsh_exe: $(OBJDIR)/slsh.o $(OBJDIR)/readline.o
-     $(CC) $(CFLAGS) $(OBJDIR)/slsh.o $(OBJDIR)/readline.o -o $(OBJDIR)/slsh_exe $(LDFLAGS) $(DLINK_FLAGS) $(SRC_LIBS)
-  $(OBJDIR)/slsh: $(OBJDIR)/slsh.o $(OBJDIR)/readline.o
---	$(CC) $(CFLAGS) $(OBJDIR)/slsh.o $(OBJDIR)/readline.o -o $(OBJDIR)/slsh $(LDFLAGS) $(DLINK_FLAGS) $(INST_LIBS)
--+	$(CC) $(CFLAGS) $(OBJDIR)/slsh.o $(OBJDIR)/readline.o -o $(OBJDIR)/slsh $(LDFLAGS) $(DLINK_FLAGS) $(SRC_LIBS)
-+-	$(CC) $(OBJDIR)/slsh.o $(OBJDIR)/readline.o -o $(OBJDIR)/slsh $(LDFLAGS) $(DLINK_FLAGS) $(INST_LIBS)
-++	$(CC) $(OBJDIR)/slsh.o $(OBJDIR)/readline.o -o $(OBJDIR)/slsh $(LDFLAGS) $(DLINK_FLAGS) $(SRC_LIBS)
-  $(OBJDIR)/slsh.o: $(OBJDIR_TSTAMP) slsh.c slsh.h config.h Makefile
-     cd $(OBJDIR) && $(CC) $(SLANG_SRCINC) $(CFLAGS) -c $(DEFS) $(SRCDIR)/slsh.c
-  $(OBJDIR)/readline.o: $(OBJDIR_TSTAMP) readline.c slsh.h config.h Makefile
-diff --git a/package/slang/slang.hash b/package/slang/slang.hash
-index 3e211ab548..563117b48a 100644
---- a/package/slang/slang.hash
-+++ b/package/slang/slang.hash
-@@ -1,6 +1,6 @@
- # sha1 from http://www.jedsoft.org/releases/slang/, sha256 locally computed
--sha1  bbf7f2dcc14e7c7fca40868fd4b411a2bd9e2655  slang-2.3.2.tar.bz2
--sha256  fc9e3b0fc4f67c3c1f6d43c90c16a5c42d117b8e28457c5b46831b8b5d3ae31a  slang-2.3.2.tar.bz2
-+sha1  38d9b8e80e4336f76dff3e1d85761d2d0f713595  slang-2.3.3.tar.bz2
-+sha256  f9145054ae131973c61208ea82486d5dd10e3c5cdad23b7c4a0617743c8f5a18  slang-2.3.3.tar.bz2
- 
- # License file, locally computed
- sha256  ff05a90962e7773f8bdc47b2a9585130526039102759b524c1dffbd57cfe469b  COPYING
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 44a0148088..e0f5968b46 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
+diff --git a/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch b/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
+deleted file mode 100644
+index d8af73cb08..0000000000
+--- a/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 1d24bd3399f2284104cbe87d017f87325b1797ab Mon Sep 17 00:00:00 2001
+-From: Oleg Antonyan <oleg.b.antonyan@gmail.com>
+-Date: Thu, 13 May 2021 16:41:35 +0200
+-Subject: [PATCH] =?UTF-8?q?Fix=20"error:=20duplicate=20=E2=80=98volatile?=
+- =?UTF-8?q?=E2=80=99"=20on=20systems=20without=20HAVE=5FGCC=5FATOMIC=20in?=
+- =?UTF-8?q?=201.12=20(#1012)?=
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-* fix error: duplicate volatile
+-
+-* fix volatile ATOMIC_INT in constructor
+-
+-[Retrieved from:
+-https://github.com/taglib/taglib/commit/1d24bd3399f2284104cbe87d017f87325b1797ab]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- taglib/toolkit/trefcounter.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/taglib/toolkit/trefcounter.cpp b/taglib/toolkit/trefcounter.cpp
+-index 18cb596c0..5b089abf9 100644
+---- a/taglib/toolkit/trefcounter.cpp
+-+++ b/taglib/toolkit/trefcounter.cpp
+-@@ -52,7 +52,7 @@
+- # define ATOMIC_INC(x) __sync_add_and_fetch(&x, 1)
+- # define ATOMIC_DEC(x) __sync_sub_and_fetch(&x, 1)
+- #else
+--# define ATOMIC_INT volatile int
+-+# define ATOMIC_INT int
+- # define ATOMIC_INC(x) (++x)
+- # define ATOMIC_DEC(x) (--x)
+- #endif
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index 38a44b41a5..7d1b2e8422 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  7fccd07669a523b07a15bd24c8da1bbb92206cb19e9366c3692af3d79253b703  taglib-1.12.tar.gz
++sha256  58f08b4db3dc31ed152c04896ee9172d22052bc7ef12888028c01d8b1d60ade0  taglib-1.13.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 9513e0d0e1..c687891002 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SLANG_VERSION = 2.3.2
-+SLANG_VERSION = 2.3.3
- SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
- SLANG_SITE = http://www.jedsoft.org/releases/slang
- SLANG_LICENSE = GPL-2.0+
-
---===============0959796508808975123==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-TAGLIB_VERSION = 1.12
++TAGLIB_VERSION = 1.13
+ TAGLIB_SITE = http://taglib.github.io/releases
+ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
+@@ -13,6 +13,9 @@ TAGLIB_CPE_ID_VENDOR = taglib
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ TAGLIB_DEPENDENCIES += zlib
++TAGLIB_CONF_OPTS += -DWITH_ZLIB=ON
++else
++TAGLIB_CONF_OPTS += -DWITH_ZLIB=OFF
+ endif
+ 
+ define TAGLIB_REMOVE_DEVFILE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0959796508808975123==--
