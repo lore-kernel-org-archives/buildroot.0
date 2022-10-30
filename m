@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7974C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 14:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D216ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 14:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 562D44034A;
-	Sun, 30 Oct 2022 14:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 562D44034A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B81B60ADC;
+	Sun, 30 Oct 2022 14:07:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B81B60ADC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pMjiz2a0eDb8; Sun, 30 Oct 2022 14:07:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VkRFYuFS_CEp; Sun, 30 Oct 2022 14:07:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E85A5401F9;
-	Sun, 30 Oct 2022 14:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E85A5401F9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 872421BF487
+	by smtp3.osuosl.org (Postfix) with ESMTP id 712E960ABD;
+	Sun, 30 Oct 2022 14:07:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 712E960ABD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E49C1BF956
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EAB04018E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73ACE81257
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:05:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EAB04018E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73ACE81257
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6RyoDxQMdiQl for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kXl4pLAErtnp for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 14:05:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74EFD40302
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F84B80F2C
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:05:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74EFD40302
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F84B80F2C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63B1487510; Sun, 30 Oct 2022 14:05:45 +0000 (UTC)
+ id 2D79287510; Sun, 30 Oct 2022 14:05:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 15:03:59 +0100
+Date: Sun, 30 Oct 2022 15:03:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 987c27510f7949807e93ceb573b4d2ee00abb35c
-X-Git-Newrev: de4a180b80905ee74a064d0fbc74d8de4fea7464
+X-Git-Oldrev: ff89dab6a0947a45a0be11cc90f4902a5e3d037d
+X-Git-Newrev: f3f71a4f6cede1b3461deccdf99c06017df56afa
 X-Patchwork-Hint: ignore
-Message-Id: <20221030140545.63B1487510@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-attrs: bump to version
- 22.1.0
+Message-Id: <20221030140545.2D79287510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-typing-extensions: bump to
+ version 4.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de4a180b80905ee74a064d0fbc74d8de4fea7464
+commit: https://git.buildroot.net/buildroot/commit/?id=f3f71a4f6cede1b3461deccdf99c06017df56afa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to ownership clarification:
-https://github.com/python-attrs/attrs/commit/899497f165b3c8291b66c9c3a01b64881b69cf39
+License hash changed due to date/formatting updates:
+https://github.com/python/typing_extensions/commit/fb77519b198f9d610ee8f674e27b8ce1da00f61f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-attrs/python-attrs.hash | 6 +++---
- package/python-attrs/python-attrs.mk   | 4 ++--
+ package/python-typing-extensions/python-typing-extensions.hash | 6 +++---
+ package/python-typing-extensions/python-typing-extensions.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index 823a9459bd..d5548c0ed3 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
+diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
+index 2512ed042d..249bb63a42 100644
+--- a/package/python-typing-extensions/python-typing-extensions.hash
++++ b/package/python-typing-extensions/python-typing-extensions.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5  5a9b5e9ceebc380a13fb93235b11bbda  attrs-21.4.0.tar.gz
--sha256  626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd  attrs-21.4.0.tar.gz
-+md5  0487081b7ead8753fc46cf7c6d1e28e3  attrs-22.1.0.tar.gz
-+sha256  29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6  attrs-22.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
+-md5  30ff8c89459dd93970a92a90b0386aba  typing_extensions-4.3.0.tar.gz
+-sha256  e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6  typing_extensions-4.3.0.tar.gz
++md5  5cfcb56ea6fc4972c3600c0030f4d136  typing_extensions-4.4.0.tar.gz
++sha256  1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa  typing_extensions-4.4.0.tar.gz
  # Locally computed sha256 checksums
--sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-+sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 4877d62285..33651ee80a 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
+-sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
++sha256  c7afb65e755707b9fb90487389a176d3ed3d0031d5131afde45c23715ff5e891  LICENSE
+diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
+index 2b8c23f354..fd7d0bd93a 100644
+--- a/package/python-typing-extensions/python-typing-extensions.mk
++++ b/package/python-typing-extensions/python-typing-extensions.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ATTRS_VERSION = 21.4.0
-+PYTHON_ATTRS_VERSION = 22.1.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/d7/77/ebb15fc26d0f815839ecd897b919ed6d85c050feeb83e100e020df9153d2
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/1a/cb/c4ffeb41e7137b23755a45e1bfec9cbb76ecf51874c6f1d113984ecaa32c
- PYTHON_ATTRS_SETUP_TYPE = setuptools
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+-PYTHON_TYPING_EXTENSIONS_VERSION = 4.3.0
++PYTHON_TYPING_EXTENSIONS_VERSION = 4.4.0
+ PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
+-PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/9e/1d/d128169ff58c501059330f1ad96ed62b79114a2eb30b8238af63a2e27f70
++PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/e3/a7/8f4e456ef0adac43f452efc2d0e4b242ab831297f1bac60ac815d37eb9cf
+ PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
+ PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
+ PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
