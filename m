@@ -1,84 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85106ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4AC6ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C6F38128B;
-	Sun, 30 Oct 2022 20:53:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C6F38128B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84A7E4014D;
+	Sun, 30 Oct 2022 20:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84A7E4014D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8qXzXDQle9ut; Sun, 30 Oct 2022 20:53:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r_3cHb8uERE0; Sun, 30 Oct 2022 20:55:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4572881284;
-	Sun, 30 Oct 2022 20:53:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4572881284
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB9E81BF387
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:53:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65116400FD;
+	Sun, 30 Oct 2022 20:55:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65116400FD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 976AF1BF387
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3B92608A5
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3B92608A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CCD9402B5
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:55:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CCD9402B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJ1i7rSj2Xcn for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 20:53:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QMJlvB-2J7sh for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 20:55:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A2060803
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 92A2060803
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:53:09 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id r76so4705607oie.13
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 13:53:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD8FA401A2
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD8FA401A2
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:55:39 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id g10so11223173oif.10
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 13:55:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bKrhlZif6bJgsbpWrtxLKc8iI4Pufseu6rPGpOx53jc=;
- b=uCw7KrOVXCpYRcC2O15+eSs2n8a2YYHIkQ+TnJXPbuYpK5LmfwE/V+GG+PnbY6lZaU
- Twska43PTKgeFOXNvY4zNgEav+jq3aJu6zbW/K9J5qNzMJWfKrlyYtf2sgo7X8yNy5gc
- NPTfkuMoCGEePnTfiTbzEFNm/cGYm4bYNGiUmPaV9l/TGlHkBkHD3R3t7wbU9hcOlk0+
- NzihR+dD/cvVBvha7R4Bysz+Xcpel7F8EFYUuF98+LeLIvj59ekTI+QLMJhcfmnMZjQy
- pMWjLQCsE/+caBi8oNnjwWo+kyWGnJuGAB7XhKo3xl36tIC8WL3l/pwoHVNirgz+H1sm
- qZNQ==
-X-Gm-Message-State: ACrzQf0sjYoy2BiOCpN7ZiO905jro0RS3wzV9tbh6/tPoIPbbhKuT3sv
- f6xdQzIWOEsNJ+hhW64grLsfA3uZCyVa1QjWIPQ6ATYXw/g=
-X-Google-Smtp-Source: AMsMyM7aAL2J5O/Z03lws/H5c7AKO3lEwz/DDFF6ypBSQxfh10S5PWsNfuxBt0sgQ6X5/yK9N8zXa15arXnencJFmuk=
+ bh=ZClqMTOCDo1vaZoYiHNPeDV4R0+ipepRYafkjLXo4f4=;
+ b=x8p/J26ybh5Dzgcms3kNQlTOmHGbEmW44yW4GQO67GQKb6tGbVRn9EdUHdEmXwtI9Y
+ jOnfC8NPC157ZVvWGU5R7OHBOrgVry/vXkZoSvGVNMB6g7Zs8zZ4nCzi5XSfFl/Rpk7b
+ XxAhojs+xxt3jI9lC9h7s8jJx0twyjU09ZwQ0jDwam2Zf5vsfPSdPqgyngofyUu8QAS6
+ +GrMwa/pMOKXrI65h9c4QU4sMy1iwODYBoPfUTkdZ0rJzW5ci/P7ZpgHxR+1OjP85aFq
+ KTHfsQ2txAQi6r8oUmhst95f11OtD3BEowOVBY8wZ4ntW04Nh8kw43IJdjCcnCJTJ2UV
+ bSlQ==
+X-Gm-Message-State: ACrzQf3ppr1YYnGSMeKTatnZ7uA2ERIAZCGrwI7AhWCvdX9biMYhefKS
+ vXJs5l8x1tJ+GYW5KKg1YjVenuemz6G+O3elv9o1vveTzPQ=
+X-Google-Smtp-Source: AMsMyM6r2TXj0HTNtS0sCssIHDvEFlr3Qin//FTGAewNEaqU5hzmFzqYRfCdmUlHidPL/zQFnYa8uYbX3eYG30n9pik=
 X-Received: by 2002:a05:6808:120c:b0:351:6d17:1845 with SMTP id
- a12-20020a056808120c00b003516d171845mr5151541oil.254.1667163188521; Sun, 30
- Oct 2022 13:53:08 -0700 (PDT)
+ a12-20020a056808120c00b003516d171845mr5154700oil.254.1667163338905; Sun, 30
+ Oct 2022 13:55:38 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221014065900.3311604-1-angelo@amarulasolutions.com>
- <20221014065900.3311604-2-angelo@amarulasolutions.com>
- <20221030214300.629c8f7b@windsurf>
-In-Reply-To: <20221030214300.629c8f7b@windsurf>
+ <20221014065900.3311604-4-angelo@amarulasolutions.com>
+ <20221030214809.1fa5997c@windsurf>
+In-Reply-To: <20221030214809.1fa5997c@windsurf>
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun, 30 Oct 2022 21:52:40 +0100
-Message-ID: <CA+_SqVa0Zy8tesA+Aj_7+HwQFd0b0NP_5=iatEqF1mt55ogbKg@mail.gmail.com>
+Date: Sun, 30 Oct 2022 21:55:10 +0100
+Message-ID: <CA+_SqVZvmi+iVGF=ig6ct4fbygRaL63KwJ-AQzCL1piTixgQVQ@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=bKrhlZif6bJgsbpWrtxLKc8iI4Pufseu6rPGpOx53jc=;
- b=fog3cXc3wL362rdhKGJW7dvfPA4uBOxv8ZBg25sh/nKzvLhGnijaoqKT+fHg4ifFG+
- 3dAIbn6gDlZiq/nbTqa/qd9TnreYs4Q1YSIPjqZqk4mBw9gndvfA/gyQnTaUw4R+8eBa
- JeG8GD6onLtC/GuPmFtbWklHCbkTP+LZd/rLA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ZClqMTOCDo1vaZoYiHNPeDV4R0+ipepRYafkjLXo4f4=;
+ b=jfK+ODqgw2ka2A/hlIi7MnS/LJqJZczwQLmvLq0XK/8ZH5w4cvtzvzS6h5ofK1lty9
+ Vq/USj5oQrarCVOjmthxnmpWfjlTyrNwAy5gWBmHstGNzRgd9LELz7tM61qpceuIi93J
+ UNJ3k/tN8M0+meqIPsMy9x+fi5/Ja36nEWuqA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=fog3cXc3
-Subject: Re: [Buildroot] [PATCH v2 1/5] linux: enable
- CONFIG_EXTRA_FIRMWARE_DIR
+ header.b=jfK+ODqg
+Subject: Re: [Buildroot] [PATCH v2 3/5] ackage/rtl8723ds-bt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,75 +90,95 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3694693018604627315=="
+Content-Type: multipart/mixed; boundary="===============7209255693898614710=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3694693018604627315==
-Content-Type: multipart/alternative; boundary="000000000000a281dd05ec46adce"
+--===============7209255693898614710==
+Content-Type: multipart/alternative; boundary="000000000000992de805ec46b617"
 
---000000000000a281dd05ec46adce
+--000000000000992de805ec46b617
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 30, 2022 at 9:43 PM Thomas Petazzoni <
+On Sun, Oct 30, 2022 at 9:48 PM Thomas Petazzoni <
 thomas.petazzoni@bootlin.com> wrote:
 
-> On Fri, 14 Oct 2022 08:58:56 +0200
+> On Fri, 14 Oct 2022 08:58:58 +0200
 > Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 >
-> > +     # The kernel CONFIG_EXTRA_FIRMWARE feature requires to have the
-> firmware full
-> > +     # path for locating firmware file.
+> > @@ -78,7 +78,8 @@ LINUX_DEPENDENCIES += \
+> >       $(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
+> >       $(if $(BR2_PACKAGE_LINUX_FIRMWARE),linux-firmware) \
+> >       $(if $(BR2_PACKAGE_FIRMWARE_IMX),firmware-imx) \
+> > -     $(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb)
+> > +     $(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb) \
+> > +     $(if $(BR2_PACKAGE_RTL8723DS_BT),rtl8723ds-bt)
+> >
+> >  # Starting with 4.16, the generated kconfig paser code is no longer
+> >  # shipped with the kernel sources, so we need flex and bison, but
+> > diff --git a/package/Config.in b/package/Config.in
+> > index e3a34d6e97..4f6e508106 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -578,6 +578,7 @@ endmenu
+> >       source "package/rtl8189fs/Config.in"
+> >       source "package/rtl8723bu/Config.in"
+> >       source "package/rtl8723ds/Config.in"
+> > +     source "package/rtl8723ds-bt/Config.in"
+> >       source "package/rtl8812au-aircrack-ng/Config.in"
+> >       source "package/rtl8821au/Config.in"
+> >       source "package/sane-backends/Config.in"
+> > diff --git a/package/rtl8723ds-bt/Config.in
+> b/package/rtl8723ds-bt/Config.in
+> > new file mode 100644
+> > index 0000000000..ab4ba0bf11
+> > --- /dev/null
+> > +++ b/package/rtl8723ds-bt/Config.in
+> > @@ -0,0 +1,6 @@
+> > +config BR2_PACKAGE_RTL8723DS_BT
+> > +     bool "rtl8723ds-bt"
+> > +     help
+> > +       rtl8723ds UART attached Bluetooth driver
+>
+> So here you're saying this package is for a driver.
+>
+> > +define RTL8723DS_BT_LINUX_CONFIG_FIXUPS
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_SERIAL_DEV_BUS)
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_SERIAL_DEV_CTRL_TTYPORT)
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_BT)
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART)
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART_3WIRE)
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART_RTL)
 > > +     $(call
-> KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,"$(STAGING_DIR)/lib/firmware")
+> KCONFIG_APPEND_OPT,CONFIG_EXTRA_FIRMWARE,rtl_bt/rtl8723ds_fw.bin
+> rtl_bt/rtl8723ds_config.bin)
+> > +endef
+> > +
+> > +define RTL8723DS_BT_INSTALL_STAGING_CMDS
+> > +     mkdir -p $(STAGING_DIR)/lib/firmware/rtl_bt/
+> > +     cp $(@D)/8723D/rtl8723d_fw
+> $(STAGING_DIR)/lib/firmware/rtl_bt/rtl8723ds_fw.bin
+> > +     cp $(@D)/8723D/rtl8723d_config
+> $(STAGING_DIR)/lib/firmware/rtl_bt/rtl8723ds_config.bin
 >
-> Unfortunately, this is really not a good idea, especially if it is
-> meant to be used with your rtl8723ds-bt package. Indeed, the
-> rtl8723ds-bt firmware is according to your package under a PROPRIETARY
-> license, so not compatible with the GPL.
+> But here you are only installing the firmware file, and you're not
+> building the kernel module that is provided in this Git repository.
+>
+> Is it because the driver is in the upstream kernel, and the only part
+> that it lacks is the firmware?
+>
+> This is not really clear in your commit log nor in the Config.in help
+> text.
 >
 
-Let's suppose the firware I was planning to load permits to be distributed
-within the kernk, why it isn't a good idea?
-I don't think technically there is some problems here, else let me
-understand.
-
-
-> Except that CONFIG_EXTRA_FIRMWARE_DIR can only be used for firmware
-> that is GPL-compatible, as they get linked into the kernel image. What
-> you're proposing to do makes it illegal to distribute the resulting
-> kernel image. You can do it on your machine, but you're not allowed to
-> distribute this kernel image, which for something like Buildroot is a
-> bit of a problem, as you can imagine.
->
-> See
->
-> https://elixir.bootlin.com/linux/latest/source/Documentation/driver-api/firmware/built-in-fw.rst#L21
-
-
-I don't really want to go down the rabbit hole of what is legal or not,
-there are legal departments for that.
-If you think the driver in question is not accptable, I'm ok with that, but
-I think the mechanism should stay for all the people who need to do
-something like that.
+Thi package "enables" (as in the commit log) the module, I didn't want to
+word differently, because what we are really doing here is simply enabling
+some kernel drivers and offering a way to download the firmware. Anyway, I
+will reword it better.
 
 
 >
-> The only options for such firmware is:
->
->  (1) In the root filesystem, which means the driver needs to be a
->      module... but that's anyway OK as it's going to be the case as it's an
->      out of tree kernel driver, and therefore always compiled as a
->      module.
->
->  (2) In an initramfs loaded separately from the kernel.
->
-
-Let's discuss this in the driver, I'm more than welcome to change the way I
-conceived it.
-
-
-> Best regards,
+> Thanks!
 >
 > Thomas
 > --
@@ -187,71 +206,109 @@ info@amarulasolutions.com
 www.amarulasolutions.com
 [`as] https://www.amarulasolutions.com|
 
---000000000000a281dd05ec46adce
+--000000000000992de805ec46b617
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 30, 2022 at 9:43 PM Thoma=
+<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 30, 2022 at 9:48 PM Thoma=
 s Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.peta=
 zzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote"=
  style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
-adding-left:1ex">On Fri, 14 Oct 2022 08:58:56 +0200<br>
+adding-left:1ex">On Fri, 14 Oct 2022 08:58:58 +0200<br>
 Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarulasolutions.com" targe=
 t=3D"_blank">angelo@amarulasolutions.com</a>&gt; wrote:<br>
 <br>
-&gt; +=C2=A0 =C2=A0 =C2=A0# The kernel CONFIG_EXTRA_FIRMWARE feature requir=
-es to have the firmware full<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0# path for locating firmware file.<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,=
-&quot;$(STAGING_DIR)/lib/firmware&quot;)<br>
+&gt; @@ -78,7 +78,8 @@ LINUX_DEPENDENCIES +=3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-mi=
+crocode) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_LINUX_FIRMWARE),linux-fir=
+mware) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_FIRMWARE_IMX),firmware-im=
+x) \<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb=
+)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb=
+) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_RTL8723DS_BT),rtl8723ds-bt)<br=
+>
+&gt;=C2=A0 <br>
+&gt;=C2=A0 # Starting with 4.16, the generated kconfig paser code is no lon=
+ger<br>
+&gt;=C2=A0 # shipped with the kernel sources, so we need flex and bison, bu=
+t<br>
+&gt; diff --git a/package/Config.in b/package/Config.in<br>
+&gt; index e3a34d6e97..4f6e508106 100644<br>
+&gt; --- a/package/Config.in<br>
+&gt; +++ b/package/Config.in<br>
+&gt; @@ -578,6 +578,7 @@ endmenu<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8189fs/Config.in&quo=
+t;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8723bu/Config.in&quo=
+t;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8723ds/Config.in&quo=
+t;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8723ds-bt/Config.in&quot;=
 <br>
-Unfortunately, this is really not a good idea, especially if it is<br>
-meant to be used with your rtl8723ds-bt package. Indeed, the<br>
-rtl8723ds-bt firmware is according to your package under a PROPRIETARY<br>
-license, so not compatible with the GPL.<br></blockquote><div><br></div><di=
-v>Let&#39;s suppose the firware I was planning to load permits to be distri=
-buted within the kernk, why it isn&#39;t a good idea?</div><div>I don&#39;t=
- think technically there is some problems here, else let me understand.<br>=
-</div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-">
-Except that CONFIG_EXTRA_FIRMWARE_DIR can only be used for firmware<br>
-that is GPL-compatible, as they get linked into the kernel image. What<br>
-you&#39;re proposing to do makes it illegal to distribute the resulting<br>
-kernel image. You can do it on your machine, but you&#39;re not allowed to<=
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8812au-aircrack-ng/C=
+onfig.in&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/rtl8821au/Config.in&quo=
+t;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/sane-backends/Config.in=
+&quot;<br>
+&gt; diff --git a/package/rtl8723ds-bt/Config.in b/package/rtl8723ds-bt/Con=
+fig.in<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..ab4ba0bf11<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/rtl8723ds-bt/Config.in<br>
+&gt; @@ -0,0 +1,6 @@<br>
+&gt; +config BR2_PACKAGE_RTL8723DS_BT<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;rtl8723ds-bt&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0rtl8723ds UART attached Bluetooth driver<b=
+r>
+<br>
+So here you&#39;re saying this package is for a driver.<br>
+<br>
+&gt; +define RTL8723DS_BT_LINUX_CONFIG_FIXUPS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_SERIAL_DEV_BUS)<=
 br>
-distribute this kernel image, which for something like Buildroot is a<br>
-bit of a problem, as you can imagine.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_SERIAL_DEV_CTRL_=
+TTYPORT)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_BT)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART_3WIRE=
+)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_BT_HCIUART_RTL)<=
+br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_APPEND_OPT,CONFIG_EXTRA_FIRMWARE,r=
+tl_bt/rtl8723ds_fw.bin rtl_bt/rtl8723ds_config.bin)<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +define RTL8723DS_BT_INSTALL_STAGING_CMDS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0mkdir -p $(STAGING_DIR)/lib/firmware/rtl_bt/<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0cp $(@D)/8723D/rtl8723d_fw $(STAGING_DIR)/lib/fir=
+mware/rtl_bt/rtl8723ds_fw.bin<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0cp $(@D)/8723D/rtl8723d_config $(STAGING_DIR)/lib=
+/firmware/rtl_bt/rtl8723ds_config.bin<br>
 <br>
-See<br>
-<a href=3D"https://elixir.bootlin.com/linux/latest/source/Documentation/dri=
-ver-api/firmware/built-in-fw.rst#L21" rel=3D"noreferrer" target=3D"_blank">=
-https://elixir.bootlin.com/linux/latest/source/Documentation/driver-api/fir=
-mware/built-in-fw.rst#L21</a></blockquote><div><br></div><div>I don&#39;t r=
-eally want to go down the rabbit hole of what is legal or not, there are le=
-gal departments for that.</div><div>If you think the driver in question is =
-not accptable, I&#39;m ok with that, but I think the mechanism should stay =
-for all the people who need to do something like that.<br></div><div>=C2=A0=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">
+But here you are only installing the firmware file, and you&#39;re not<br>
+building the kernel module that is provided in this Git repository.<br>
 <br>
-The only options for such firmware is:<br>
+Is it because the driver is in the upstream kernel, and the only part<br>
+that it lacks is the firmware?<br>
 <br>
-=C2=A0(1) In the root filesystem, which means the driver needs to be a<br>
-=C2=A0 =C2=A0 =C2=A0module... but that&#39;s anyway OK as it&#39;s going to=
- be the case as it&#39;s an<br>
-=C2=A0 =C2=A0 =C2=A0out of tree kernel driver, and therefore always compile=
-d as a<br>
-=C2=A0 =C2=A0 =C2=A0module.<br>
+This is not really clear in your commit log nor in the Config.in help<br>
+text.<br></blockquote><div><br></div><div>Thi package &quot;enables&quot; (=
+as in the commit log) the module, I didn&#39;t want to word differently, be=
+cause what we are really doing here is simply enabling some kernel drivers =
+and offering a way to download the firmware. Anyway, I will reword it bette=
+r.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"mar=
+gin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1=
+ex">
 <br>
-=C2=A0(2) In an initramfs loaded separately from the kernel.<br></blockquot=
-e><div><br></div><div>Let&#39;s discuss this in the driver, I&#39;m more th=
-an welcome to change the way I conceived it.</div><div> <br></div><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
-solid rgb(204,204,204);padding-left:1ex">
-<br>
-Best regards,<br>
+Thanks!<br>
 <br>
 Thomas<br>
 -- <br>
@@ -316,9 +373,9 @@ amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
 asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
 v></div></div></div>
 
---000000000000a281dd05ec46adce--
+--000000000000992de805ec46b617--
 
---===============3694693018604627315==
+--===============7209255693898614710==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -329,4 +386,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3694693018604627315==--
+--===============7209255693898614710==--
