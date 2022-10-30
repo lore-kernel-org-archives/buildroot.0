@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B38FDECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87383C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:55:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ACAD4030D;
-	Sun, 30 Oct 2022 21:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ACAD4030D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EA434010F;
+	Sun, 30 Oct 2022 21:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EA434010F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jrdcZ6YHL8B2; Sun, 30 Oct 2022 21:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9sJEKUE86kSz; Sun, 30 Oct 2022 21:55:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41368402B9;
-	Sun, 30 Oct 2022 21:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41368402B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 738AA1BF315
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:52:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E44A4014D;
+	Sun, 30 Oct 2022 21:55:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E44A4014D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 979BE1BF315
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A49F402B9
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A49F402B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71CBA8125F
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71CBA8125F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gZY3g6WgtR8n for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 21:52:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CHjVyyXh26sm for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 21:55:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C88402B1
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 36C88402B1
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:52:06 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id w14so13570206wru.8
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:52:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B19080F97
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B19080F97
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:55:12 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id q142so2481809iod.5
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:55:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=xy5gmDuHE2BwcX5rkL6e6KRb7pfgffo4C37Vvf1wjrE=;
- b=zxOALYE42TDbR4EXaIGFPQ85JJ037tFAwpPFA4qRLIEeA1kkMqD7bslfg5nXnmPzsi
- nsT/xvTFZSjI1R0z3gmdtjRuSYLe1ktyX76gBDF63qsCdBmu9qBpF8seiBiSuSG/rQYP
- uDCfcgnn7kCBqY3AiSjH5XXHHvS8J+MHbMC9iHCdaJRFx8FGaFjLtc5vF2H+HVbNnUWd
- 00u/OyJyfMpremiK3KPcl0GwE5fpFApQ1IkKhNnZQH2X18biJ54V4mD7cTzZW2gtep3e
- gjFHtO3v84Veqqa0A4kYkHsGkFkzmE1nT/3nP75O1BlUQxpaEMaff1mqqLEJQlvwzgeo
- c0Wg==
-X-Gm-Message-State: ACrzQf3umHpupoGkyv+frXQmw5CrVtlwjEZ5BBzLwAdEwEHKolYzS7dk
- sGyC2J+ScK27FZiF5ebBEhfzjWkMZc4=
-X-Google-Smtp-Source: AMsMyM59+aqHcJIpIAOyQcCqIDm6ZeAp7BCRilWmzNtLBNo6697HOUxAsvt298A5l0EgVlYoLsWAsA==
-X-Received: by 2002:a5d:44d0:0:b0:236:4acc:d977 with SMTP id
- z16-20020a5d44d0000000b002364accd977mr5769174wrr.479.1667166724152; 
- Sun, 30 Oct 2022 14:52:04 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- e15-20020adfe7cf000000b0022cc0a2cbecsm5247238wrn.15.2022.10.30.14.52.03
+ bh=if9dlKI5xY/Y+khEVsfPE1I25c5vwIUeMl8j0U+OH/Y=;
+ b=WRuiPurH40kgGFVMDG1/6Hyxu0K5NOv22VMrPUqwkPP+ZoxoEleYRuSsowu7X7uJNv
+ 0b6JIcpeeFDnwXRGPWMb/W3jmy1CxzU3t/8+aTNfoE8EEJ5juNnNwiwK8h+yOxyb0we9
+ umALEMZ3QTrbG3MzvRsVOFHn5pjJAbTOjsva+Uuzar7cBTd/J8KfdqO9vvEn/XXszi7a
+ LkTO012JhHoEp0qEKrgQEhQpoke5abAta0SP1cG0mhXW+X1laUUSM84TC+km5Ufl3AT0
+ Q1q0769930WGgVY4taIzzCv7AdVatJGTY/OuJpurtOY1SAhGivzFany5kpDl16eBHo8M
+ /BAw==
+X-Gm-Message-State: ACrzQf2kONK6FIT7hKn+lEtR1J9Bjy5L2fk8OwCSP4HURfr7BRN+yUue
+ 2F7SuVUz51pxlWfKR9214zZKSdVV8HtiKQ==
+X-Google-Smtp-Source: AMsMyM6eZoleafTCBiCUBjKmw7M+bio+p3uD0GI9Hz6MQo0aq6XdhabrZpjaMhkLc+VcaEhDHfH/og==
+X-Received: by 2002:a05:6602:2e8d:b0:6bd:543c:6fd7 with SMTP id
+ m13-20020a0566022e8d00b006bd543c6fd7mr5221946iow.134.1667166910838; 
+ Sun, 30 Oct 2022 14:55:10 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ w10-20020a6bf00a000000b0067b75781af9sm2118528ioc.37.2022.10.30.14.55.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Oct 2022 14:52:03 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 30 Oct 2022 14:55:10 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 22:52:01 +0100
-Message-Id: <20221030215201.463000-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sun, 30 Oct 2022 15:54:58 -0600
+Message-Id: <20221030215458.3773991-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xy5gmDuHE2BwcX5rkL6e6KRb7pfgffo4C37Vvf1wjrE=;
- b=aUpK5fzuAmIOui2wps4BTFNfZTdv/SlB+IXHVrfvHqT2KpOF2tqSD2KJelwvWzp9fp
- j5dvCY1ifNPdbe2JDp+ujSvC+1cDYOjQVrSd0hiPvFDdh84sSTdpwHwjfHZEL8zCHEC3
- YjHnSq7F/4Havo3Q+VYTtydGtOuN7cmD6x2yAGKIrs1jLABH7Bb60VDy/6Nkr2Sq4Tmb
- AlWof8SKiL1ItieCEfc34ACeMaPq0I4x6gD+rS4Vc/VkncVp8VBCJTwt8gRpErPoV5rL
- ChFpf4DKDfuggk/nZBJidlB35lVt5aAvnuXyX9a1Dn6t2GJFq6q1fq6Ny7A0nQIVVdVK
- zBeA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=if9dlKI5xY/Y+khEVsfPE1I25c5vwIUeMl8j0U+OH/Y=;
+ b=UULA+hhOZdzUS7LfCMPKSseLrCyci3bPsCiJey6glx8DgkQNWceCVufgwnJikyCijU
+ i3t/s7fqoc6908RPGrOKrgCklyg2ouzxoQSt0+F13xxS2sj3q5cIh7FGow36YZOxvF3v
+ pztjNyPKAdua8KZqassO9NtveiaT3ORRUkG/FgzUFk79q+6xh+QRYW0Knj1ri2vUACb8
+ xBcMQRnBiK/Wkch9zliAo9MlXyhe8IesQivhULsON+s43ooSyW08fs5CDToSIRVIqKw+
+ 83+XManteomz4VvRZZtGD8PymsKSXjdWwuvH0qXkRaNoL8Utds4WlOgsssCDRztT7aXA
+ gt/Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=aUpK5fzu
-Subject: [Buildroot] [PATCH 1/1] package/cups-pk-helper: bump to version
- 0.2.7
+ header.a=rsa-sha256 header.s=20210112 header.b=UULA+hhO
+Subject: [Buildroot] [PATCH 1/1] package/gawk: fix double free during kernel
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,54 +94,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to meson-package
+Backport an upstream patch to fix a crash during kernel build.
 
-https://gitlab.freedesktop.org/cups-pk-helper/cups-pk-helper/-/blob/0.2.7/NEWS
+Details: https://bugs.gentoo.org/868567
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+  GEN     /home/buildroot/buildroot/output/build/linux-6.0.6/tools/objtool/arch/x86/lib/inat-tables.c
+free(): double free detected in tcache 2
+Aborted
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/cups-pk-helper/cups-pk-helper.hash | 3 ++-
- package/cups-pk-helper/cups-pk-helper.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../0002-Fix-a-bug-with-Node_elem_new.patch   | 155 ++++++++++++++++++
+ 1 file changed, 155 insertions(+)
+ create mode 100644 package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
 
-diff --git a/package/cups-pk-helper/cups-pk-helper.hash b/package/cups-pk-helper/cups-pk-helper.hash
-index 18fe789389..75c5a5ffda 100644
---- a/package/cups-pk-helper/cups-pk-helper.hash
-+++ b/package/cups-pk-helper/cups-pk-helper.hash
-@@ -1,3 +1,4 @@
-+# From https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-0.2.7.tar.xz.sha256sum
-+sha256  66070ddb448fe9fcee76aa26be2ede5a80f85563e3a4afd59d2bfd79fbe2e831  cups-pk-helper-0.2.7.tar.xz
- # Locally computed:
--sha256  959af8f2f5a2761e7e498b61c9caf25ae963335031eae9972d999e9a0d97a228  cups-pk-helper-0.2.6.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/cups-pk-helper/cups-pk-helper.mk b/package/cups-pk-helper/cups-pk-helper.mk
-index c688743160..2bd00c6912 100644
---- a/package/cups-pk-helper/cups-pk-helper.mk
-+++ b/package/cups-pk-helper/cups-pk-helper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUPS_PK_HELPER_VERSION = 0.2.6
-+CUPS_PK_HELPER_VERSION = 0.2.7
- CUPS_PK_HELPER_SITE = https://www.freedesktop.org/software/cups-pk-helper/releases
- CUPS_PK_HELPER_SOURCE = cups-pk-helper-$(CUPS_PK_HELPER_VERSION).tar.xz
- CUPS_PK_HELPER_LICENSE = GPL-2.0+
-@@ -12,4 +12,4 @@ CUPS_PK_HELPER_LICENSE_FILES = COPYING
- CUPS_PK_HELPER_CPE_ID_VENDOR = cups-pk-helper_project
- CUPS_PK_HELPER_DEPENDENCIES = cups libglib2 polkit
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+diff --git a/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
+new file mode 100644
+index 0000000000..502f7dcd95
+--- /dev/null
++++ b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
+@@ -0,0 +1,155 @@
++From baab183439ff4e0c6b77d62156d447e61fc1dcfb Mon Sep 17 00:00:00 2001
++From: "Arnold D. Robbins" <arnold@skeeve.com>
++Date: Wed, 14 Sep 2022 21:08:59 +0300
++Subject: [PATCH] Fix a bug with Node_elem_new.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++baab183439ff4e0c6b77d62156d447e61fc1dcfb]
++---
++ ChangeLog         | 8 ++++++++
++ interpret.h       | 1 +
++ test/ChangeLog    | 5 +++++
++ test/Makefile.am  | 4 +++-
++ test/Makefile.in  | 9 ++++++++-
++ test/Maketests    | 5 +++++
++ test/elemnew1.awk | 9 +++++++++
++ test/elemnew1.ok  | 0
++ 8 files changed, 39 insertions(+), 2 deletions(-)
++ create mode 100644 test/elemnew1.awk
++ create mode 100644 test/elemnew1.ok
++
++diff --git a/ChangeLog b/ChangeLog
++index 5fb25483..cd9d9fcd 100644
++--- a/ChangeLog
+++++ b/ChangeLog
++@@ -1,3 +1,11 @@
+++2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
+++
+++	* interpret.h (r_interpret): For the `push' opcodes, upref
+++	the Node_elem_new. See test case elemnew1. Thanks to
+++	Emanuel Attila Czirai <corre.a.buscar@gmail.com> for the report,
+++	and to Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
+++	for the fix.
+++	
++ 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
++ 
++ 	* 5.2.0: Release tar ball made.
++diff --git a/interpret.h b/interpret.h
++index 57d060e6..268655b2 100644
++--- a/interpret.h
+++++ b/interpret.h
++@@ -238,6 +238,7 @@ uninitialized_scalar:
++ 						_("reference to uninitialized argument `%s'") :
++ 						_("reference to uninitialized variable `%s'"),
++ 								save_symbol->vname);
+++				UPREF(m);
++ 				PUSH(m);
++ 				break;
++ 
++diff --git a/test/ChangeLog b/test/ChangeLog
++index a73637bf..ea08edee 100644
++--- a/test/ChangeLog
+++++ b/test/ChangeLog
++@@ -1,3 +1,8 @@
+++2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
+++
+++	* Makefile.am (EXTRA_DIST): New test: elemnew1.
+++	* elemnew1.awk, elemnew1.ok: New files.
+++
++ 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
++ 
++ 	* 5.2.0: Release tar ball made.
++diff --git a/test/Makefile.am b/test/Makefile.am
++index ab06974c..8a5c3c49 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -282,6 +282,8 @@ EXTRA_DIST = \
++ 	dumpvars.ok \
++ 	dynlj.awk \
++ 	dynlj.ok \
+++	elemnew1.awk \
+++	elemnew1.ok \
++ 	escapebrace.awk \
++ 	escapebrace.in \
++ 	escapebrace.ok \
++@@ -1480,7 +1482,7 @@ GAWK_EXT_TESTS = \
++ 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
++ 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
++ 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
++-	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
+++	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
++ 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
++ 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
++ 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
++diff --git a/test/Makefile.in b/test/Makefile.in
++index 834feb09..a4fb1cc1 100644
++--- a/test/Makefile.in
+++++ b/test/Makefile.in
++@@ -550,6 +550,8 @@ EXTRA_DIST = \
++ 	dumpvars.ok \
++ 	dynlj.awk \
++ 	dynlj.ok \
+++	elemnew1.awk \
+++	elemnew1.ok \
++ 	escapebrace.awk \
++ 	escapebrace.in \
++ 	escapebrace.ok \
++@@ -1748,7 +1750,7 @@ GAWK_EXT_TESTS = \
++ 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
++ 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
++ 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
++-	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
+++	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
++ 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
++ 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
++ 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
++@@ -4476,6 +4478,11 @@ dfacheck1:
++ 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
++ 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
++ 
+++elemnew1:
+++	@echo $@
+++	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
+++	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
+++
++ exit:
++ 	@echo $@
++ 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
++diff --git a/test/Maketests b/test/Maketests
++index 3a667af8..90828e7f 100644
++--- a/test/Maketests
+++++ b/test/Maketests
++@@ -1432,6 +1432,11 @@ dfacheck1:
++ 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
++ 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
++ 
+++elemnew1:
+++	@echo $@
+++	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
+++	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
+++
++ exit:
++ 	@echo $@
++ 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
++diff --git a/test/elemnew1.awk b/test/elemnew1.awk
++new file mode 100644
++index 00000000..58dc9fcd
++--- /dev/null
+++++ b/test/elemnew1.awk
++@@ -0,0 +1,9 @@
+++function add_flags(old) {
+++  if (old)
+++    return 0
+++  if (!old)
+++    return 1
+++}
+++BEGIN {
+++  a[0]=add_flags(a[0])
+++}
++diff --git a/test/elemnew1.ok b/test/elemnew1.ok
++new file mode 100644
++index 00000000..e69de29b
++-- 
++2.34.1
++
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
