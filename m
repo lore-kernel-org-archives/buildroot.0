@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E13BC38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB49C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38B5740330;
-	Sun, 30 Oct 2022 16:03:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38B5740330
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6A2C403BF;
+	Sun, 30 Oct 2022 16:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6A2C403BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xVowjzTA9G_s; Sun, 30 Oct 2022 16:03:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PgKZu341fMwp; Sun, 30 Oct 2022 16:14:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16B13402B3;
-	Sun, 30 Oct 2022 16:03:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16B13402B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2F5840352;
+	Sun, 30 Oct 2022 16:14:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2F5840352
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6CE821BF47A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:03:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 626651BF479
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47FDB606EC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47FDB606EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B96860A74
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B96860A74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rsj1D7pZkdlw for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 16:03:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F7626005E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6F7626005E
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:03:46 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6ffe:83e9:a65c:45ae])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3C00F13F8C6;
- Sun, 30 Oct 2022 17:03:40 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 17:03:39 +0100
-Date: Sun, 30 Oct 2022 17:03:39 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221030160339.GG1058960@scaer>
-References: <20221015210940.4002212-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221015210940.4002212-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667145823;
- bh=VsApE6Gvob0FcU9BhldLu6kmElzvqvxB3GlOTCk+d0o=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=D6uQ1nlzx//2af2nsS3CQEQpf2mhO+Rz1GoY58Vj85D4tV6sKO9dDbLuIjlsV33AR
- nKVdlH8jbhtmBYYG7ql8qt3YctBU0XsKOmVTotgIiyNSNm7TNFjSPgQG9Kkyf3Un+R
- 0/hBd7dHAtoSELElp5T6Cx5FATTvTMVXNahg6wFdSUOqq4vgBUeXnRDkYC+xTXOVRB
- CzlXyStPJfOCO/TQeU+tQ6IykYJvyzT+5FqXfFMvORiPfWjJnoaWO9Zqik9p3rCc95
- Ux0vPOWR7edWB6SsEvJRtb5TAOyKWSwt69x2e4eWtNhnCiJLcA0D5OJx1Zaq9LKotl
- 0wPfn+DB4mG2A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=D6uQ1nlz
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/brltty: fix infinite loop in
- configure
+ with ESMTP id CKV0mE4fpvZp for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 715BC606EC
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 715BC606EC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5DB3887571; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 30 Oct 2022 17:10:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 241db490b703fc734f0e8719a07d0f9ff40faaba
+X-Git-Newrev: ce8eb37a7ea0a13644fe9ec29bf8ce72df094386
+X-Patchwork-Hint: ignore
+Message-Id: <20221030161421.5DB3887571@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.113
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,87 +56,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mario Lang <mlang@blind.guru>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce8eb37a7ea0a13644fe9ec29bf8ce72df094386
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-10-15 15:09 -0600, James Hilliard spake thusly:
-> Backport a patch to fix an infinite loop bug in configure.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/82a/82af705f7ca282495461cb3994f5a7e6f64273e1
->  - http://autobuild.buildroot.net/results/06c/06c9414a1ecbc1a147bc8dfddced03fc659af694
->  - http://autobuild.buildroot.net/results/59e/59e36093f7e437a5a37037f7fa50ce2443c47fd3
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Switch various configure options from true/false to enabled/disabled
+due to upstream commits:
+https://cgit.freedesktop.org/mesa/drm/commit/?id=26eb15165b767de50bef3c02abd29cec256cf4a1
+https://cgit.freedesktop.org/mesa/drm/commit/?id=a64a176cfd62956cc4967aa2929db2526d4faee2
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libdrm/libdrm.hash |  6 +++---
+ package/libdrm/libdrm.mk   | 54 +++++++++++++++++++++++-----------------------
+ 2 files changed, 30 insertions(+), 30 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - backport patch instead of revert
-> ---
->  ...unProgramTerminationCommands-used-a-.patch | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
-> 
-> diff --git a/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch b/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
-> new file mode 100644
-> index 0000000000..0f81254e08
-> --- /dev/null
-> +++ b/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
-> @@ -0,0 +1,29 @@
-> +From 4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f Mon Sep 17 00:00:00 2001
-> +From: Dave Mielke <Dave@Mielke.cc>
-> +Date: Sat, 15 Oct 2022 15:20:38 -0400
-> +Subject: [PATCH] shell prologue: runProgramTerminationCommands used a bash
-> + command. (dm)
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1@gmail.com: backport from upstream commit
-> +4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f]
-> +---
-> + brltty-prologue.sh | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/brltty-prologue.sh b/brltty-prologue.sh
-> +index 05b817742..6d1faf983 100644
-> +--- a/brltty-prologue.sh
-> ++++ b/brltty-prologue.sh
-> +@@ -102,7 +102,7 @@ runProgramTerminationCommands() {
-> +    while [ "${programTerminationCommandCount}" -gt 0 ]
-> +    do
-> +       set -- $(getVariable "programTerminationCommand${programTerminationCommandCount}")
-> +-      let "programTerminationCommandCount -= 1"
-> ++      programTerminationCommandCount=$((programTerminationCommandCount - 1))
-> + 
-> +       local process="${1}"
-> +       local directory="${2}"
-> +-- 
-> +2.34.1
-> +
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 082a158074..a47e169bed 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2022-July/362994.html
+-sha256  00b07710bd09b35cd8d80eaf4f4497fe27f4becf467a9830f1f5e8324f8420ff  libdrm-2.4.112.tar.xz
+-sha512  df8a207d9cce220ee2cf67877eda65394733fbfd0ff85fdbadb2b20ba9bacc41421b32452506c8caecddaf8361564ca68cd6c74d4faf3b1569ab30a3243e4340  libdrm-2.4.112.tar.xz
++# From https://lists.freedesktop.org/archives/dri-devel/2022-August/369983.html
++sha256  7fd7eb2967f63beb4606f22d50e277d993480d05ef75dd88a9bd8e677323e5e1  libdrm-2.4.113.tar.xz
++sha512  fca9834ce090f63ce6dc6d04491a2c5e86162fdddfc8ea70d55a6cdeb401be656388aae1577e58f463a78d8dc502be0a641908784819874e20bbec9a39a057e0  libdrm-2.4.113.tar.xz
+ 
+ # Hash for license file
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 79d9416ef0..34bd678c5a 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.112
++LIBDRM_VERSION = 2.4.113
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+@@ -16,8 +16,8 @@ LIBDRM_DEPENDENCIES = \
+ 	host-pkgconf
+ 
+ LIBDRM_CONF_OPTS = \
+-	-Dcairo-tests=false \
+-	-Dman-pages=false
++	-Dcairo-tests=disabled \
++	-Dman-pages=disabled
+ 
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+ LIBDRM_DEPENDENCIES += libatomic_ops
+@@ -27,70 +27,70 @@ endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+-LIBDRM_CONF_OPTS += -Dintel=true
++LIBDRM_CONF_OPTS += -Dintel=enabled
+ LIBDRM_DEPENDENCIES += libpciaccess
+ else
+-LIBDRM_CONF_OPTS += -Dintel=false
++LIBDRM_CONF_OPTS += -Dintel=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
+-LIBDRM_CONF_OPTS += -Dradeon=true
++LIBDRM_CONF_OPTS += -Dradeon=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dradeon=false
++LIBDRM_CONF_OPTS += -Dradeon=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU),y)
+-LIBDRM_CONF_OPTS += -Damdgpu=true
++LIBDRM_CONF_OPTS += -Damdgpu=enabled
+ else
+-LIBDRM_CONF_OPTS += -Damdgpu=false
++LIBDRM_CONF_OPTS += -Damdgpu=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
+-LIBDRM_CONF_OPTS += -Dnouveau=true
++LIBDRM_CONF_OPTS += -Dnouveau=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dnouveau=false
++LIBDRM_CONF_OPTS += -Dnouveau=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
+-LIBDRM_CONF_OPTS += -Dvmwgfx=true
++LIBDRM_CONF_OPTS += -Dvmwgfx=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dvmwgfx=false
++LIBDRM_CONF_OPTS += -Dvmwgfx=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_OMAP),y)
+-LIBDRM_CONF_OPTS += -Domap=true
++LIBDRM_CONF_OPTS += -Domap=enabled
+ else
+-LIBDRM_CONF_OPTS += -Domap=false
++LIBDRM_CONF_OPTS += -Domap=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_ETNAVIV),y)
+-LIBDRM_CONF_OPTS += -Detnaviv=true
++LIBDRM_CONF_OPTS += -Detnaviv=enabled
+ else
+-LIBDRM_CONF_OPTS += -Detnaviv=false
++LIBDRM_CONF_OPTS += -Detnaviv=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_EXYNOS),y)
+-LIBDRM_CONF_OPTS += -Dexynos=true
++LIBDRM_CONF_OPTS += -Dexynos=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dexynos=false
++LIBDRM_CONF_OPTS += -Dexynos=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_FREEDRENO),y)
+-LIBDRM_CONF_OPTS += -Dfreedreno=true
++LIBDRM_CONF_OPTS += -Dfreedreno=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dfreedreno=false
++LIBDRM_CONF_OPTS += -Dfreedreno=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_TEGRA),y)
+-LIBDRM_CONF_OPTS += -Dtegra=true
++LIBDRM_CONF_OPTS += -Dtegra=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dtegra=false
++LIBDRM_CONF_OPTS += -Dtegra=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_VC4),y)
+-LIBDRM_CONF_OPTS += -Dvc4=true
++LIBDRM_CONF_OPTS += -Dvc4=enabled
+ else
+-LIBDRM_CONF_OPTS += -Dvc4=false
++LIBDRM_CONF_OPTS += -Dvc4=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+@@ -101,10 +101,10 @@ LIBDRM_CONF_OPTS += -Dudev=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND),y)
+-LIBDRM_CONF_OPTS += -Dvalgrind=true
++LIBDRM_CONF_OPTS += -Dvalgrind=enabled
+ LIBDRM_DEPENDENCIES += valgrind
+ else
+-LIBDRM_CONF_OPTS += -Dvalgrind=false
++LIBDRM_CONF_OPTS += -Dvalgrind=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
