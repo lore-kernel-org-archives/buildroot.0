@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29D47C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7815DECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDF4440321;
-	Sun, 30 Oct 2022 20:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDF4440321
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E61260A97;
+	Sun, 30 Oct 2022 20:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E61260A97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jBiCrAZ_mB89; Sun, 30 Oct 2022 20:18:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ciQs7UjBig2; Sun, 30 Oct 2022 20:25:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52A5640335;
-	Sun, 30 Oct 2022 20:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52A5640335
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E3BB1BF957
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:18:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 480CF608A5;
+	Sun, 30 Oct 2022 20:25:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 480CF608A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DB831BF387
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48B6340277
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48B6340277
+ by smtp1.osuosl.org (Postfix) with ESMTP id 693A88124B
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 693A88124B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iEUSfMsSpJTq for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 20:18:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8w0Iu7oCjY7m for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 20:25:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 054194025A
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054194025A
+ by smtp1.osuosl.org (Postfix) with ESMTP id BAF0280FAE
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAF0280FAE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5CD987603; Sun, 30 Oct 2022 20:18:10 +0000 (UTC)
+ id A71278764C; Sun, 30 Oct 2022 20:25:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 21:06:49 +0100
+Date: Sun, 30 Oct 2022 21:22:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d64fff456890941f6bbe220d37f021437e0e0d0
-X-Git-Newrev: ba74bc8b6783aa478d00f3318c13064d66274ca9
+X-Git-Oldrev: fed7c4406aa07f1fb99bad5d5669f8562eb6e6b9
+X-Git-Newrev: 47504a72e8a6526258516fdc35122494a4d4b529
 X-Patchwork-Hint: ignore
-Message-Id: <20221030201810.E5CD987603@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8188eu: bump version to fix
- build failure with linux >= 6.0.0
+Message-Id: <20221030202515.A71278764C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pluggy: enable host package
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,54 +57,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba74bc8b6783aa478d00f3318c13064d66274ca9
+commit: https://git.buildroot.net/buildroot/commit/?id=47504a72e8a6526258516fdc35122494a4d4b529
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Note that we use latest commit from branch v5.2.2.4 instead of
-branch master.
+This will be needed for the upcoming host-python-hatchling.
 
-Fixes:
-http://autobuild.buildroot.org/results/550/550640296a92826f6f04d2344adde75c3025ea35/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pluggy/python-pluggy.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 9c7f2de4b6..0ad7786328 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6bc46a13b20a2ed121844e51fd690216b2ab3b1faa1af8d9501090026ca9bd22  rtl8188eu-903b6fcb821465fe9c63e83416080df70c1c3c90.tar.gz
-+sha256  50529c110e0a45fbe3169d0e237c4d0959300840f5e162c24256452976fb2670  rtl8188eu-c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index ebce4617ac..199362d7ae 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pluggy/python-pluggy.mk b/package/python-pluggy/python-pluggy.mk
+index 59382518ed..6dc6f970ea 100644
+--- a/package/python-pluggy/python-pluggy.mk
++++ b/package/python-pluggy/python-pluggy.mk
+@@ -11,5 +11,7 @@ PYTHON_PLUGGY_SETUP_TYPE = setuptools
+ PYTHON_PLUGGY_LICENSE = MIT
+ PYTHON_PLUGGY_LICENSE_FILES = LICENSE
+ PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
++HOST_PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
  
--RTL8188EU_VERSION = 903b6fcb821465fe9c63e83416080df70c1c3c90
-+RTL8188EU_VERSION = c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
