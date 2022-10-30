@@ -4,65 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F32CECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 935BEECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4C104012B;
-	Sun, 30 Oct 2022 20:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4C104012B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3153D40182;
+	Sun, 30 Oct 2022 20:20:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3153D40182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tefq4mSJyb1d; Sun, 30 Oct 2022 20:19:27 +0000 (UTC)
+	with ESMTP id TWjg6TK_hlws; Sun, 30 Oct 2022 20:20:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 115C0400EC;
-	Sun, 30 Oct 2022 20:19:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 115C0400EC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 90F3F1BF387
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:19:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B98E40120;
+	Sun, 30 Oct 2022 20:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B98E40120
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EBCF81BF387
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6BFDA80F59
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:19:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BFDA80F59
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3F8B60A70
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3F8B60A70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kD9CAG1zkX2e for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 20:19:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RWflNzEH5Ncb for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 20:20:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 675D680E55
- for <buildroot@uclibc.org>; Sun, 30 Oct 2022 20:19:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 675D680E55
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A1E3608A5
+ for <buildroot@uclibc.org>; Sun, 30 Oct 2022 20:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A1E3608A5
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 57B5D87616; Sun, 30 Oct 2022 20:19:22 +0000 (UTC)
+ id 1A8B487617; Sun, 30 Oct 2022 20:20:06 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 30 Oct 2022 20:19:22 +0000
+Date: Sun, 30 Oct 2022 20:20:05 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.08
+X-Bugzilla-Component: Outdated package
+X-Bugzilla-Version: 2022.02.6
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: major
 X-Bugzilla-Who: thomas.petazzoni@bootlin.com
 X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Resolution: WONTFIX
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-15061-163-y2PqwgDXiU@https.bugs.busybox.net/>
-In-Reply-To: <bug-15061-163@https.bugs.busybox.net/>
-References: <bug-15061-163@https.bugs.busybox.net/>
+Message-ID: <bug-15071-163-w6bsXJ4gn5@https.bugs.busybox.net/>
+In-Reply-To: <bug-15071-163@https.bugs.busybox.net/>
+References: <bug-15071-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15061] Node.js Package fails to build against musl
- i386
+Subject: [Buildroot] [Bug 15071] RTL8723BS library is outdated
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,18 +78,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15061
+https://bugs.busybox.net/show_bug.cgi?id=15071
 
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Fixed by
-https://gitlab.com/buildroot.org/buildroot/-/commit/7935e427bce601f16ee194978583e533213f78c6
+         Resolution|---                         |WONTFIX
 
 -- 
 You are receiving this mail because:
