@@ -4,56 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08459C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 19:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E571C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 19:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACA8A60AF6;
-	Sun, 30 Oct 2022 19:44:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACA8A60AF6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F90A60AE6;
+	Sun, 30 Oct 2022 19:45:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F90A60AE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dgsGKxiu2Sk0; Sun, 30 Oct 2022 19:44:35 +0000 (UTC)
+	with ESMTP id DXs38TuLKjvJ; Sun, 30 Oct 2022 19:45:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D806C60AE4;
-	Sun, 30 Oct 2022 19:44:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D806C60AE4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 14F891BF2A1
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 19:44:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6006B605F6;
+	Sun, 30 Oct 2022 19:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6006B605F6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 380C31BF2A1
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 19:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A189560AE4
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 19:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A189560AE4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 203E080C48
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 19:45:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 203E080C48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4gKZwf1_jbr7 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 19:44:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XKWKRo9ZYb22 for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 19:45:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9908760AE0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9908760AE0
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 19:44:31 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout03.t-online.de (Postfix) with SMTP id 7E9616C4C
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:44:28 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.197.145]) by fwd85.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB6D80BFB
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DB6D80BFB
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 19:45:34 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout10.t-online.de (Postfix) with SMTP id 9F7AE161F3;
+ Sun, 30 Oct 2022 20:45:20 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.197.145]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1opEEK-1oq6Ij0; Sun, 30 Oct 2022 20:44:24 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48982)
+ esmtp id 1opEFD-11rTDV0; Sun, 30 Oct 2022 20:45:20 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60914)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1opEEJ-00073p-38
- for buildroot@buildroot.org; Sun, 30 Oct 2022 20:44:24 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1opEFD-0007Dh-1f;
+ Sun, 30 Oct 2022 20:45:19 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 20:44:23 +0100
-Message-Id: <20221030194423.1208535-1-bernd.kuhls@t-online.de>
+Date: Sun, 30 Oct 2022 20:45:19 +0100
+Message-Id: <20221030194519.1208612-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221030194519.1208612-1-bernd.kuhls@t-online.de>
+References: <20221030194519.1208612-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1667159064-2D8B7EA1-0B6B2EC7/0/0 CLEAN NORMAL
-X-TOI-MSGID: baec8e6f-9a79-40e7-8c6b-02e4cfae1514
-Subject: [Buildroot] [PATCH 1/1] package/flac: bump version to 1.4.2
+X-TOI-EXPURGATEID: 150726::1667159120-C23211D1-138E93EC/0/0 CLEAN NORMAL
+X-TOI-MSGID: f1e72a84-4101-4d18-9886-12256d730a10
+Subject: [Buildroot] [PATCH 2/2] package/intel-mediasdk: bump version to
+ 22.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,77 +68,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://xiph.org/flac/changelog.html
-
-Switched _SITE to https and update project URL.
-
-Upstream removed the dependency to host-nasm:
-https://github.com/xiph/flac/commit/75ef7958df603ca6de29fa00e82615e0da017903#diff-49473dca262eeab3b4a43002adb08b4db31020d190caaad1594b47f1d5daa810L474
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/flac/Config.in |  2 +-
- package/flac/flac.hash |  4 ++--
- package/flac/flac.mk   | 11 ++---------
- 3 files changed, 5 insertions(+), 12 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flac/Config.in b/package/flac/Config.in
-index 267acb7f34..62aca290fe 100644
---- a/package/flac/Config.in
-+++ b/package/flac/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FLAC
- 	help
- 	  FLAC is an Open Source lossless audio codec.
- 
--	  http://flac.sourceforge.net/
-+	  https://xiph.org/flac/
- 
- comment "flac needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/flac/flac.hash b/package/flac/flac.hash
-index 1f7763fd6e..b993ebd759 100644
---- a/package/flac/flac.hash
-+++ b/package/flac/flac.hash
-@@ -1,5 +1,5 @@
--# From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
--sha256  af41c0733c93c237c3e52f64dd87e3b0d9af38259f1c7d11e8cbf583c48c2506  flac-1.4.0.tar.xz
-+# From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA256SUMS.txt
-+sha256  e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4  flac-1.4.2.tar.xz
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 25894aea63..da4286ae23 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
-diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-index 91d5840d72..ebb4778521 100644
---- a/package/flac/flac.mk
-+++ b/package/flac/flac.mk
-@@ -4,8 +4,8 @@
+-sha256  0eb04409a226da6e752576d60c46a3ec969ddfe03042897088367392207c7ab3  intel-mediasdk-22.5.4.tar.gz
++sha256  21a54b752c6b84f032b53a3e328d29f05a448b39f4c18f75fe4e79bb219dc40e  intel-mediasdk-22.6.0.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 4080188dc5..30fddfbcfd 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FLAC_VERSION = 1.4.0
--FLAC_SITE = http://downloads.xiph.org/releases/flac
-+FLAC_VERSION = 1.4.2
-+FLAC_SITE = https://ftp.osuosl.org/pub/xiph/releases/flac
- FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
- FLAC_INSTALL_STAGING = YES
- FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-@@ -27,11 +27,4 @@ else
- FLAC_CONF_OPTS += --disable-ogg
- endif
- 
--ifeq ($(BR2_X86_CPU_HAS_SSE),y)
--FLAC_DEPENDENCIES += host-nasm
--FLAC_CONF_OPTS += --enable-sse
--else
--FLAC_CONF_OPTS += --disable-sse
--endif
--
- $(eval $(autotools-package))
+-INTEL_MEDIASDK_VERSION = 22.5.4
++INTEL_MEDIASDK_VERSION = 22.6.0
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
