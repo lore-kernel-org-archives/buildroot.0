@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6DBBFA373D
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D4BC38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66D74605AE;
-	Sun, 30 Oct 2022 11:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66D74605AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC30880DCF;
+	Sun, 30 Oct 2022 11:10:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC30880DCF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SeUdAdjsKR9C; Sun, 30 Oct 2022 11:10:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E875A80C1E;
+	Sun, 30 Oct 2022 11:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E875A80C1E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 28C681BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 044D960644
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 044D960644
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oTQe5xAqHk_P; Sun, 30 Oct 2022 11:09:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4347606EC;
-	Sun, 30 Oct 2022 11:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4347606EC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A4F41BF956
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 522694035A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522694035A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1nWSLAQHFgeH for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 11:06:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A33AE403B8
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A33AE403B8
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:06:39 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6PCe2k2VGwAx for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 11:06:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE41860592
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE41860592
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:06:49 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A8EF140002;
- Sun, 30 Oct 2022 11:06:37 +0000 (UTC)
-Date: Sun, 30 Oct 2022 12:06:36 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 974001C0004;
+ Sun, 30 Oct 2022 11:06:46 +0000 (UTC)
+Date: Sun, 30 Oct 2022 12:06:45 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221030120636.06d3f86e@windsurf>
-In-Reply-To: <20221029172613.255025-1-fontaine.fabrice@gmail.com>
-References: <20221029172613.255025-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221030120645.74fc2990@windsurf>
+In-Reply-To: <20221029184742.17565-1-fontaine.fabrice@gmail.com>
+References: <20221029184742.17565-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667127998;
+ d=bootlin.com; s=gm1; t=1667128006;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tpbt10hzLRDAQQyIcZ/zEvXDUnNbmBnVhvgMc9HF2L4=;
- b=PhsxQs01Vix36Opqm6IbG2yylanavaAJyiAihl/eA0Yf5RbDJvLp/u/tmAwhVbkZ4atere
- FsJidAJlvHB6Zhdo9uHV8AFO5VIYii0XcsxZvWtlSa6coMCsAbkudHV0xKsyKjX5+6UJBV
- 2i/Jduegq0HxTtNLkmaD5fe34LbR1+6M3WnCLuMCpOqOEm6tdnOBXRj/rPPp0MsZehoBs6
- 36bvIj+dLxhtO8XQJXUq37B5Ga3mTkhhGGYSyUmhD6sZlMfY4Lr3Bjj9TkDSKKMjmD7kr1
- Xx1b/U/2BSQ2jrW+RtexlV37nWZCij3K275wGKvesQIZ0f+C0e6qxRIIlqOJsw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=7GhGNTrryhkxELY9cMGK2JyvObXpzBPlfCFdH9dFFc0=;
+ b=Tb7ibx8LVgGBlMXjcn/1togFKaF54xg6i6eBQjXXRhP0TPc8KiRngr+VRV3UjjOPiMisbk
+ q/qWSpmvsepATF+6Qluasz41nhft/qDEiQaf3z289jsporp368iLSXx4YxYlwT78qkzXr2
+ +1Uv20YHS8yFdFZT0+WQRvGN9+Kaj69khf41gtDS9/dbgpxzqoxTOBKhBe8pNO5ffFKT2q
+ 0Ssg9QsOPp/Knfb/QjBZwnjDcPIJBVmhcBXGFJLNnTQ7rb2yEkzvrOpGXgReGAhYvO7l7T
+ b2aiCe9ZsQkPlqtays1wKTEwQbaZ4NHp2VYPmDCSbtgfZLm3bfrUu63x99zTWQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PhsxQs01
-Subject: Re: [Buildroot] [PATCH 1/1] package/sedutil: bump to version 1.20.0
+ header.s=gm1 header.b=Tb7ibx8L
+Subject: Re: [Buildroot] [PATCH 1/1] package/gawk: bump to version 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,16 +83,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Oct 2022 19:26:13 +0200
+On Sat, 29 Oct 2022 20:47:42 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/Drive-Trust-Alliance/sedutil/compare/1.15.1...1.20.0
+> https://git.savannah.gnu.org/cgit/gawk.git/tree/NEWS?h=gawk-5.2.0
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/sedutil/sedutil.hash | 2 +-
->  package/sedutil/sedutil.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/gawk/gawk.hash | 4 ++--
+>  package/gawk/gawk.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
