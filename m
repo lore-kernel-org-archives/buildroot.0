@@ -1,90 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7504C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B38FDECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 848BD60A98;
-	Sun, 30 Oct 2022 21:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 848BD60A98
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5ACAD4030D;
+	Sun, 30 Oct 2022 21:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ACAD4030D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZBxKPNKkWF6G; Sun, 30 Oct 2022 21:51:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jrdcZ6YHL8B2; Sun, 30 Oct 2022 21:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC11560803;
-	Sun, 30 Oct 2022 21:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC11560803
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41368402B9;
+	Sun, 30 Oct 2022 21:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41368402B9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BEB651BF315
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:51:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 738AA1BF315
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A627A40325
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A627A40325
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A49F402B9
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A49F402B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dunQ_OPcMdm6 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 21:51:03 +0000 (UTC)
+ with ESMTP id gZY3g6WgtR8n for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 21:52:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9A5402B1
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F9A5402B1
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:51:03 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id h9so13647845wrt.0
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:51:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C88402B1
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 36C88402B1
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:52:06 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id w14so13570206wru.8
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:52:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=euYd3+J/jyCKs9aTx7asq6ITbP5h8QW8dYoOHRnAjME=;
- b=p4/mL/Tfj1Zc6luB+El/074utegeJtGmhh6XeK0IGtLBQanYuO5sbn2y1UX85VLUnG
- FhwLcifph3+0bf7fkhZJluKEkzK7hUKy8ojfB7LA9cJw91errGhH2rCk+yFRgF+yHyhp
- Ogd16HkXEPnK84xmwPaEDs4xhj2oWm7iYuTgOZjPDX4G+7tH+jfzEvOdWJ2ZdWhdyZyK
- qfr33gkYZJl2g5sWK4Nont2jiVApX1vYL0vzR902ffzy8R/q6mRRkK3Fc3ykTse2YDs4
- i1G6qM1y/hzOTpu6PgH1GPaw5yy38mdufMszaNlwXKBNi47eXUeqihSdywQt58QqkN55
- 6bVg==
-X-Gm-Message-State: ACrzQf1QzYuVdt9mTl0bfwD+u4GL8clGb9gB8AFlLRKl1Zoy0JkS8qwb
- 2yoCSKXLbvZze2k2ST+yYvO+gCkl1zM=
-X-Google-Smtp-Source: AMsMyM6E3giUfheqvKHacOwlYannjHD7uc/vi9VQ/aLAl/DtK9jAPQxlTyJOG+LotxRQgQXZVEVgOQ==
-X-Received: by 2002:adf:ebcf:0:b0:22c:9eb4:d6f6 with SMTP id
- v15-20020adfebcf000000b0022c9eb4d6f6mr6031418wrn.251.1667166660767; 
- Sun, 30 Oct 2022 14:51:00 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xy5gmDuHE2BwcX5rkL6e6KRb7pfgffo4C37Vvf1wjrE=;
+ b=zxOALYE42TDbR4EXaIGFPQ85JJ037tFAwpPFA4qRLIEeA1kkMqD7bslfg5nXnmPzsi
+ nsT/xvTFZSjI1R0z3gmdtjRuSYLe1ktyX76gBDF63qsCdBmu9qBpF8seiBiSuSG/rQYP
+ uDCfcgnn7kCBqY3AiSjH5XXHHvS8J+MHbMC9iHCdaJRFx8FGaFjLtc5vF2H+HVbNnUWd
+ 00u/OyJyfMpremiK3KPcl0GwE5fpFApQ1IkKhNnZQH2X18biJ54V4mD7cTzZW2gtep3e
+ gjFHtO3v84Veqqa0A4kYkHsGkFkzmE1nT/3nP75O1BlUQxpaEMaff1mqqLEJQlvwzgeo
+ c0Wg==
+X-Gm-Message-State: ACrzQf3umHpupoGkyv+frXQmw5CrVtlwjEZ5BBzLwAdEwEHKolYzS7dk
+ sGyC2J+ScK27FZiF5ebBEhfzjWkMZc4=
+X-Google-Smtp-Source: AMsMyM59+aqHcJIpIAOyQcCqIDm6ZeAp7BCRilWmzNtLBNo6697HOUxAsvt298A5l0EgVlYoLsWAsA==
+X-Received: by 2002:a5d:44d0:0:b0:236:4acc:d977 with SMTP id
+ z16-20020a5d44d0000000b002364accd977mr5769174wrr.479.1667166724152; 
+ Sun, 30 Oct 2022 14:52:04 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- v23-20020a05600c215700b003c5571c27a1sm5772003wml.32.2022.10.30.14.51.00
+ e15-20020adfe7cf000000b0022cc0a2cbecsm5247238wrn.15.2022.10.30.14.52.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Oct 2022 14:51:00 -0700 (PDT)
+ Sun, 30 Oct 2022 14:52:03 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 22:50:46 +0100
-Message-Id: <20221030215046.461380-2-fontaine.fabrice@gmail.com>
+Date: Sun, 30 Oct 2022 22:52:01 +0100
+Message-Id: <20221030215201.463000-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221030215046.461380-1-fontaine.fabrice@gmail.com>
-References: <20221030215046.461380-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=euYd3+J/jyCKs9aTx7asq6ITbP5h8QW8dYoOHRnAjME=;
- b=L8f8a8WH3aA1JTNSXcbYcbxobyMevNvvUYujhzUD78/u+wA5fOWQr1uEZxsyssU7FA
- 1gViDEpqTtEJWeSrMz+CwSyRnjl6w56OA5puQZdSJHIOGl8XsakXqu/DcPvJETJsa35v
- MRnefUmgWQjkE7/VrsYlxPjnbWx96tdfK5Ui4Z0Sf7LDu5jeR979i6GH4QufkSIDKOHu
- GSh0dK8fnvTPA3y3iM1e7JxtMmucsU5bbd540tSPRuqghK3x/p198a2UaCAbKysM4Nu0
- be0rN0z/v96H/GIEjACUd4niAFXMHtbaeIK54qkvxEr4AYoZDVExARX4n3SKPiC6nvFt
- FJZQ==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=xy5gmDuHE2BwcX5rkL6e6KRb7pfgffo4C37Vvf1wjrE=;
+ b=aUpK5fzuAmIOui2wps4BTFNfZTdv/SlB+IXHVrfvHqT2KpOF2tqSD2KJelwvWzp9fp
+ j5dvCY1ifNPdbe2JDp+ujSvC+1cDYOjQVrSd0hiPvFDdh84sSTdpwHwjfHZEL8zCHEC3
+ YjHnSq7F/4Havo3Q+VYTtydGtOuN7cmD6x2yAGKIrs1jLABH7Bb60VDy/6Nkr2Sq4Tmb
+ AlWof8SKiL1ItieCEfc34ACeMaPq0I4x6gD+rS4Vc/VkncVp8VBCJTwt8gRpErPoV5rL
+ ChFpf4DKDfuggk/nZBJidlB35lVt5aAvnuXyX9a1Dn6t2GJFq6q1fq6Ny7A0nQIVVdVK
+ zBeA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=L8f8a8WH
-Subject: [Buildroot] [PATCH 2/2] package/exfatprogs: bump to version 1.2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=aUpK5fzu
+Subject: [Buildroot] [PATCH 1/1] package/cups-pk-helper: bump to version
+ 0.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,46 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/exfatprogs/exfatprogs/releases/tag/1.2.0
+Switch to meson-package
+
+https://gitlab.freedesktop.org/cups-pk-helper/cups-pk-helper/-/blob/0.2.7/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/exfatprogs/exfatprogs.hash | 4 ++--
- package/exfatprogs/exfatprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cups-pk-helper/cups-pk-helper.hash | 3 ++-
+ package/cups-pk-helper/cups-pk-helper.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/exfatprogs/exfatprogs.hash b/package/exfatprogs/exfatprogs.hash
-index 99f57c9deb..49135b1da7 100644
---- a/package/exfatprogs/exfatprogs.hash
-+++ b/package/exfatprogs/exfatprogs.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/exfatprogs/exfatprogs/releases/download/1.1.3/exfatprogs-1.1.3.tar.xz.sha256
--sha256  3dbd74b60eec18d2c68d57be4a872d7baa4f7d848e669e31159452ef5245b809  exfatprogs-1.1.3.tar.xz
-+# From https://github.com/exfatprogs/exfatprogs/releases/download/1.2.0/exfatprogs-1.2.0.tar.xz.sha256
-+sha256  56d9a49465deafc367d428afc71c8098705a30ee19a3cdf3c5320650b8880742  exfatprogs-1.2.0.tar.xz
- 
- # Hash for license file
+diff --git a/package/cups-pk-helper/cups-pk-helper.hash b/package/cups-pk-helper/cups-pk-helper.hash
+index 18fe789389..75c5a5ffda 100644
+--- a/package/cups-pk-helper/cups-pk-helper.hash
++++ b/package/cups-pk-helper/cups-pk-helper.hash
+@@ -1,3 +1,4 @@
++# From https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-0.2.7.tar.xz.sha256sum
++sha256  66070ddb448fe9fcee76aa26be2ede5a80f85563e3a4afd59d2bfd79fbe2e831  cups-pk-helper-0.2.7.tar.xz
+ # Locally computed:
+-sha256  959af8f2f5a2761e7e498b61c9caf25ae963335031eae9972d999e9a0d97a228  cups-pk-helper-0.2.6.tar.xz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/exfatprogs/exfatprogs.mk b/package/exfatprogs/exfatprogs.mk
-index 44679c7d60..d755c7a214 100644
---- a/package/exfatprogs/exfatprogs.mk
-+++ b/package/exfatprogs/exfatprogs.mk
+diff --git a/package/cups-pk-helper/cups-pk-helper.mk b/package/cups-pk-helper/cups-pk-helper.mk
+index c688743160..2bd00c6912 100644
+--- a/package/cups-pk-helper/cups-pk-helper.mk
++++ b/package/cups-pk-helper/cups-pk-helper.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXFATPROGS_VERSION = 1.1.3
-+EXFATPROGS_VERSION = 1.2.0
- EXFATPROGS_SOURCE = exfatprogs-$(EXFATPROGS_VERSION).tar.xz
- EXFATPROGS_SITE = https://github.com/exfatprogs/exfatprogs/releases/download/$(EXFATPROGS_VERSION)
- EXFATPROGS_LICENSE = GPL-2.0+
+-CUPS_PK_HELPER_VERSION = 0.2.6
++CUPS_PK_HELPER_VERSION = 0.2.7
+ CUPS_PK_HELPER_SITE = https://www.freedesktop.org/software/cups-pk-helper/releases
+ CUPS_PK_HELPER_SOURCE = cups-pk-helper-$(CUPS_PK_HELPER_VERSION).tar.xz
+ CUPS_PK_HELPER_LICENSE = GPL-2.0+
+@@ -12,4 +12,4 @@ CUPS_PK_HELPER_LICENSE_FILES = COPYING
+ CUPS_PK_HELPER_CPE_ID_VENDOR = cups-pk-helper_project
+ CUPS_PK_HELPER_DEPENDENCIES = cups libglib2 polkit
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.35.1
 
