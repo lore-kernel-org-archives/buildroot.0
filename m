@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E720C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC3B3C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB6AD40330;
-	Sun, 30 Oct 2022 16:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB6AD40330
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EB2B40335;
+	Sun, 30 Oct 2022 16:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EB2B40335
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O0EZu8BNTodJ; Sun, 30 Oct 2022 16:17:08 +0000 (UTC)
+	with ESMTP id d17fCQzI-dfF; Sun, 30 Oct 2022 16:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96A6340281;
-	Sun, 30 Oct 2022 16:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A6340281
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0AA301BF479
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:17:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F24C84032F;
+	Sun, 30 Oct 2022 16:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F24C84032F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B021E1BF479
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E734B403A2
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:17:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E734B403A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98946812A0
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98946812A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V3Hi2T-sOASR for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 16:17:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7MX7SkC2TfhL for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 16:17:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD7D44011F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2453A81271
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD7D44011F
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:17:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2453A81271
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:17:23 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:6ffe:83e9:a65c:45ae])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0BBF113F85F;
- Sun, 30 Oct 2022 17:17:01 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D33E213F85F;
+ Sun, 30 Oct 2022 17:17:18 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 17:17:00 +0100
-Date: Sun, 30 Oct 2022 17:17:00 +0100
+ Sun, 30 Oct 2022 17:17:18 +0100
+Date: Sun, 30 Oct 2022 17:17:18 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221030161700.GK1058960@scaer>
-References: <20221028215325.278206-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221030161718.GL1058960@scaer>
+References: <20221028220223.286949-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221028215325.278206-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20221028220223.286949-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667146623;
- bh=YzDvCvJMfMIUjOe2KvO86ymyO1jyO0vJjVXdKWuj2j4=;
+ d=free.fr; s=smtp-20201208; t=1667146642;
+ bh=iywF+1etpafRN+Dcyghfd3PMTA8dV7Rnp18IMrimvm4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=aM59Ug/v/KACXbLGxXWpJh0q5g0FEIe3QnPGBI4JLa+Z0m/CDTO8q7Y2JPlVe0gEX
- lfc8gl1FU14AYNl0tKV5fDgGrwv4Nlb199mUmhghuwn/32c0ovWHuyPtyq3FrlOgEy
- cJC2yupYfbSTBC+iilttHmBpUjVeLpqobyArPUsp5EeDIdHaA/DlUfQ4ucpUsEFTBk
- qAPsyZbqJvde2lMX9kN47KWW+zUXVIyHryy0/c76n4r6ccKCw9O8aeKX1xyyfFwo0D
- CBMQrnBmnbSCCGH/0AnDoN5mSiAoivDLKcD9NiVDRupsIjqfUkeFimdDPTIIMunoOb
- 1TZlSDSxdVqBg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=B9gVfe+SYB0mBYKLZ2B+EZEsKb+E2qTggsTX2Tp7bxtGc1MY/6LDFZWMgxuyHtewm
+ hE0stfp4gh73e2K/INFJBn6fA9SIBJ722hsabeJ5avRrtfESPRD6oB/+UfK4Al4DzQ
+ yaurVkciDtLiTqOy+heAM+1cZcROs8q4r1HRhJl5Ns2o1vKGlIZ1gP9OJu11+4MYUD
+ jF+QHzzslh02SxCt61fEHh3V78DFcg1qWQmMjWAQwcr1WB6Who80hs7yhBiQ3YfySc
+ 6ZWqvOpf8Ev3/UcHlkaprhOQF9wmCX4PcBBq4Og2Q5RBJcylblGtfQ/QLMQBmc7jww
+ Ud340jw8yviNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aM59Ug/v
-Subject: Re: [Buildroot] [PATCH 1/1] package/smartmontools: bump to version
- 7.3
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=B9gVfe+S
+Subject: Re: [Buildroot] [PATCH 1/1] package/taglib: bump to version 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,7 +76,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -85,8 +84,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2022-10-28 23:53 +0200, Fabrice Fontaine spake thusly:
-> https://github.com/smartmontools/smartmontools/releases/tag/RELEASE_7_3
+On 2022-10-29 00:02 +0200, Fabrice Fontaine spake thusly:
+> - Drop patch (already in version)
+> - Use WITH_ZLIB which is available since
+>   https://github.com/taglib/taglib/commit/1644c0dd87f40a2492bde4011fe72257fc72ee0e
+> 
+> https://github.com/taglib/taglib/releases/tag/v1.13
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -96,39 +99,85 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/smartmontools/smartmontools.hash | 8 ++++----
->  package/smartmontools/smartmontools.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  ...e-on-systems-without-HAVE_GCC_ATOMIC.patch | 34 -------------------
+>  package/taglib/taglib.hash                    |  2 +-
+>  package/taglib/taglib.mk                      |  5 ++-
+>  3 files changed, 5 insertions(+), 36 deletions(-)
+>  delete mode 100644 package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
 > 
-> diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-> index 3c5535b29a..e48e955d01 100644
-> --- a/package/smartmontools/smartmontools.hash
-> +++ b/package/smartmontools/smartmontools.hash
-> @@ -1,7 +1,7 @@
-> -# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.2/
-> -md5  e8d134c69ae4959a05cb56b31172ffb1  smartmontools-7.2.tar.gz
-> -sha1  8d68241096f6ed5b1bbcd8b427fa4a881c1f3e33  smartmontools-7.2.tar.gz
-> +# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.3/
-> +md5  7a71d388124e3cd43abf6586a43cb1ff  smartmontools-7.3.tar.gz
-> +sha1  5ce7adb606119148d725b91a00652d427ca0adc2  smartmontools-7.3.tar.gz
->  
->  # Locally computed
-> -sha256  5cd98a27e6393168bc6aaea070d9e1cd551b0f898c52f66b2ff2e5d274118cd6  smartmontools-7.2.tar.gz
-> +sha256  a544f8808d0c58cfb0e7424ca1841cb858a974922b035d505d4e4c248be3a22b  smartmontools-7.3.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-> index 2e2bbcd4e2..d24f008df4 100644
-> --- a/package/smartmontools/smartmontools.mk
-> +++ b/package/smartmontools/smartmontools.mk
+> diff --git a/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch b/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
+> deleted file mode 100644
+> index d8af73cb08..0000000000
+> --- a/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -From 1d24bd3399f2284104cbe87d017f87325b1797ab Mon Sep 17 00:00:00 2001
+> -From: Oleg Antonyan <oleg.b.antonyan@gmail.com>
+> -Date: Thu, 13 May 2021 16:41:35 +0200
+> -Subject: [PATCH] =?UTF-8?q?Fix=20"error:=20duplicate=20=E2=80=98volatile?=
+> - =?UTF-8?q?=E2=80=99"=20on=20systems=20without=20HAVE=5FGCC=5FATOMIC=20in?=
+> - =?UTF-8?q?=201.12=20(#1012)?=
+> -MIME-Version: 1.0
+> -Content-Type: text/plain; charset=UTF-8
+> -Content-Transfer-Encoding: 8bit
+> -
+> -* fix error: duplicate volatile
+> -
+> -* fix volatile ATOMIC_INT in constructor
+> -
+> -[Retrieved from:
+> -https://github.com/taglib/taglib/commit/1d24bd3399f2284104cbe87d017f87325b1797ab]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - taglib/toolkit/trefcounter.cpp | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/taglib/toolkit/trefcounter.cpp b/taglib/toolkit/trefcounter.cpp
+> -index 18cb596c0..5b089abf9 100644
+> ---- a/taglib/toolkit/trefcounter.cpp
+> -+++ b/taglib/toolkit/trefcounter.cpp
+> -@@ -52,7 +52,7 @@
+> - # define ATOMIC_INC(x) __sync_add_and_fetch(&x, 1)
+> - # define ATOMIC_DEC(x) __sync_sub_and_fetch(&x, 1)
+> - #else
+> --# define ATOMIC_INT volatile int
+> -+# define ATOMIC_INT int
+> - # define ATOMIC_INC(x) (++x)
+> - # define ATOMIC_DEC(x) (--x)
+> - #endif
+> diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+> index 38a44b41a5..7d1b2e8422 100644
+> --- a/package/taglib/taglib.hash
+> +++ b/package/taglib/taglib.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256  7fccd07669a523b07a15bd24c8da1bbb92206cb19e9366c3692af3d79253b703  taglib-1.12.tar.gz
+> +sha256  58f08b4db3dc31ed152c04896ee9172d22052bc7ef12888028c01d8b1d60ade0  taglib-1.13.tar.gz
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+>  sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+> diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+> index 9513e0d0e1..c687891002 100644
+> --- a/package/taglib/taglib.mk
+> +++ b/package/taglib/taglib.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -SMARTMONTOOLS_VERSION = 7.2
-> +SMARTMONTOOLS_VERSION = 7.3
->  SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
->  SMARTMONTOOLS_LICENSE = GPL-2.0+
->  SMARTMONTOOLS_LICENSE_FILES = COPYING
+> -TAGLIB_VERSION = 1.12
+> +TAGLIB_VERSION = 1.13
+>  TAGLIB_SITE = http://taglib.github.io/releases
+>  TAGLIB_INSTALL_STAGING = YES
+>  TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
+> @@ -13,6 +13,9 @@ TAGLIB_CPE_ID_VENDOR = taglib
+>  
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  TAGLIB_DEPENDENCIES += zlib
+> +TAGLIB_CONF_OPTS += -DWITH_ZLIB=ON
+> +else
+> +TAGLIB_CONF_OPTS += -DWITH_ZLIB=OFF
+>  endif
+>  
+>  define TAGLIB_REMOVE_DEVFILE
 > -- 
 > 2.35.1
 > 
