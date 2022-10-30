@@ -1,49 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7AAECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65434C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE89040148;
-	Sun, 30 Oct 2022 21:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE89040148
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ED4560A90;
+	Sun, 30 Oct 2022 21:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ED4560A90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fjcgcdSXMue1; Sun, 30 Oct 2022 21:23:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wjgO9kF-thh8; Sun, 30 Oct 2022 21:23:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0FB3400FB;
-	Sun, 30 Oct 2022 21:23:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0FB3400FB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 848B11BF956
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C65A605AE;
+	Sun, 30 Oct 2022 21:23:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C65A605AE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8A601BF315
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5ED2640179
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ED2640179
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4174400DC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4174400DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aaLxAU7SjAKz for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 21:23:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BB3940177
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:23:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BB3940177
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ECBE887692; Sun, 30 Oct 2022 21:23:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 22:21:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 267188242e4edcfbca272168e62c2e9bc70864ce
-X-Git-Newrev: b123e8887dc29eb2764162c048e8521a4072531a
-X-Patchwork-Hint: ignore
-Message-Id: <20221030212300.ECBE887692@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openvmtools: fix CVE-2022-31676
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oY_oZiiNbbLG for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 21:23:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5C7A400CE
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A5C7A400CE
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:23:37 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:afdc:c5f1:f1be:8b47])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id F0DE2B0053B;
+ Sun, 30 Oct 2022 22:23:33 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 30 Oct 2022 22:23:33 +0100
+Date: Sun, 30 Oct 2022 22:23:33 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20221030212333.GI1058960@scaer>
+References: <20221014065900.3311604-1-angelo@amarulasolutions.com>
+ <20221014065900.3311604-2-angelo@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221014065900.3311604-2-angelo@amarulasolutions.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1667165016;
+ bh=InJ2t0k8pSlquStFdizIaYer5RQ+ncUgQTugDZGx19Q=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=q8p/IEE3/YLPhtAf3eyEzG2jvkpYzeZGfWSvj2n6NPlzLWkfMUAxURq9HCkugRGCm
+ 9Sr4yQ5lKDOnz10MgYattK9mESWUWvb7y3sMeXxhBW8rX7wM/uF2u9QmAgfYJh4z4U
+ 5nWQ1vO5IYo8tRoV1Z8EuZQLw3vWxmZPbo7PwPEfuCEioLQpHsmEkLB3Ab6Z2G6RiU
+ AroSmKAFh2e8aROT1rp+t5ELDKyEE+QfwsDEff1x3tezvo6NDlMHNiX7c+hDDVnn0h
+ FGbzrPGbQvfXkiZlSlbs6M+FSRL1vO9NaCsozbcjVWNfhM4stpfuPRFZWLSv1JQN9n
+ IfjiVxqXNv3+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=q8p/IEE3
+Subject: Re: [Buildroot] [PATCH v2 1/5] linux: enable
+ CONFIG_EXTRA_FIRMWARE_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,87 +78,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b123e8887dc29eb2764162c048e8521a4072531a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Angelo, All,
 
-Add a patch for CVE-2022-31676 (local privilege escalation
-vulnerability).
+On 2022-10-14 08:58 +0200, Angelo Compagnucci spake thusly:
+> CONFIG_EXTRA_FIRMWARE_DIR must point to the directory where firmware
+> file from CONFIG_EXTRA_FIRMWARE will be taken to be embedded to the
+> kernel.
+> The option is removed if CONFIG_EXTRA_FIRMWARE is not used, but it
+> defaults to a sensible value when used.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  linux/linux.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index efdc21eff2..9a909c7d7b 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -408,6 +408,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+>  	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+> +	# The kernel CONFIG_EXTRA_FIRMWARE feature requires to have the firmware full
+> +	# path for locating firmware file.
+> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,"$(STAGING_DIR)/lib/firmware")
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...eck-authorization-on-incoming-guestOps-re.patch | 40 ++++++++++++++++++++++
- package/openvmtools/openvmtools.mk                 |  3 ++
- 2 files changed, 43 insertions(+)
+Besides what Thomas already said: firmware files are not installed in
+STAGING_DIR/lib/firmware, but they are in TARGET_DIR/lib/frmware.
 
-diff --git a/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch b/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-new file mode 100644
-index 0000000000..91e379b9a6
---- /dev/null
-+++ b/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-@@ -0,0 +1,40 @@
-+From bb9f9ffbb151397545f921cee5b6a4933c6eea80 Mon Sep 17 00:00:00 2001
-+Message-Id: <bb9f9ffbb151397545f921cee5b6a4933c6eea80.1666169374.git.stefan@agner.ch>
-+From: John Wolfe <jwolfe@vmware.com>
-+Date: Wed, 10 Aug 2022 06:12:02 -0700
-+Subject: [PATCH] Properly check authorization on incoming guestOps requests
-+
-+Fix public pipe request checks.  Only a SessionRequest type should
-+be accepted on the public pipe.
-+
-+Upstream: https://github.com/vmware/open-vm-tools/blob/CVE-2022-31676.patch/1205-Properly-check-authorization-on-incoming-guestOps-re.patch
-+Signed-off-by: Stefan Agner <stefan@agner.ch>
-+---
-+ vgauth/serviceImpl/proto.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/vgauth/serviceImpl/proto.c b/vgauth/serviceImpl/proto.c
-+index db7159ee..c4f85b02 100644
-+--- a/vgauth/serviceImpl/proto.c
-++++ b/vgauth/serviceImpl/proto.c
-+@@ -1,5 +1,5 @@
-+ /*********************************************************
-+- * Copyright (C) 2011-2016,2019-2021 VMware, Inc. All rights reserved.
-++ * Copyright (c) 2011-2016,2019-2022 VMware, Inc. All rights reserved.
-+  *
-+  * This program is free software; you can redistribute it and/or modify it
-+  * under the terms of the GNU Lesser General Public License as published
-+@@ -1201,6 +1201,10 @@ Proto_SecurityCheckRequest(ServiceConnection *conn,
-+    VGAuthError err;
-+    gboolean isSecure = ServiceNetworkIsConnectionPrivateSuperUser(conn);
-+ 
-++   if (conn->isPublic && req->reqType != PROTO_REQUEST_SESSION_REQ) {
-++      return VGAUTH_E_PERMISSION_DENIED;
-++   }
-++
-+    switch (req->reqType) {
-+       /*
-+        * This comes over the public connection; alwsys let it through.
-+-- 
-+2.38.0
-+
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index d536e5e819..3106b9ecd6 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -13,6 +13,9 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
- OPENVMTOOLS_CPE_ID_VENDOR = vmware
- OPENVMTOOLS_CPE_ID_PRODUCT = tools
- 
-+# 0013-Properly-check-authorization-on-incoming-guestOps-re.patch
-+OPENVMTOOLS_IGNORE_CVES += CVE-2022-31676
-+
- # configure.ac is patched
- OPENVMTOOLS_AUTORECONF = YES
- OPENVMTOOLS_CONF_OPTS = --with-dnet \
+Also, some people already point CONFIG_EXTRA_FIRMWARE_DIR=$(INAGES_DIR)
+as there are some firmware fiels copied in there already, so we do not
+want to force that for them.
+
+Regards,
+Yann E. MORIN.
+
+>  	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+>  endef
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
