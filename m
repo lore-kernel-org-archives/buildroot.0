@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65434C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B6AECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ED4560A90;
-	Sun, 30 Oct 2022 21:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ED4560A90
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD9A9402E0;
+	Sun, 30 Oct 2022 21:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD9A9402E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wjgO9kF-thh8; Sun, 30 Oct 2022 21:23:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vb7KTEpmXDS4; Sun, 30 Oct 2022 21:24:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C65A605AE;
-	Sun, 30 Oct 2022 21:23:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C65A605AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADB6A401DA;
+	Sun, 30 Oct 2022 21:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADB6A401DA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8A601BF315
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 60D671BF315
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4174400DC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4174400DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27198400DC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:24:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27198400DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oY_oZiiNbbLG for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 21:23:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5C7A400CE
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A5C7A400CE
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:23:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:afdc:c5f1:f1be:8b47])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id F0DE2B0053B;
- Sun, 30 Oct 2022 22:23:33 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 22:23:33 +0100
-Date: Sun, 30 Oct 2022 22:23:33 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Angelo Compagnucci <angelo@amarulasolutions.com>
-Message-ID: <20221030212333.GI1058960@scaer>
-References: <20221014065900.3311604-1-angelo@amarulasolutions.com>
- <20221014065900.3311604-2-angelo@amarulasolutions.com>
+ with ESMTP id 3R3AKPk0K47k for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 21:24:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8581400CE
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8581400CE
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:24:35 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 02CF2E0003;
+ Sun, 30 Oct 2022 21:24:33 +0000 (UTC)
+Date: Sun, 30 Oct 2022 22:24:32 +0100
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20221030222432.26968da5@windsurf>
+In-Reply-To: <7aeb69a91cab8b3e5fdcfc210c2f5a112490b0a0.1666169750.git.stefan@agner.ch>
+References: <7aeb69a91cab8b3e5fdcfc210c2f5a112490b0a0.1666169750.git.stefan@agner.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221014065900.3311604-2-angelo@amarulasolutions.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667165016;
- bh=InJ2t0k8pSlquStFdizIaYer5RQ+ncUgQTugDZGx19Q=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=q8p/IEE3/YLPhtAf3eyEzG2jvkpYzeZGfWSvj2n6NPlzLWkfMUAxURq9HCkugRGCm
- 9Sr4yQ5lKDOnz10MgYattK9mESWUWvb7y3sMeXxhBW8rX7wM/uF2u9QmAgfYJh4z4U
- 5nWQ1vO5IYo8tRoV1Z8EuZQLw3vWxmZPbo7PwPEfuCEioLQpHsmEkLB3Ab6Z2G6RiU
- AroSmKAFh2e8aROT1rp+t5ELDKyEE+QfwsDEff1x3tezvo6NDlMHNiX7c+hDDVnn0h
- FGbzrPGbQvfXkiZlSlbs6M+FSRL1vO9NaCsozbcjVWNfhM4stpfuPRFZWLSv1JQN9n
- IfjiVxqXNv3+A==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667165074;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=xLVrnMhRoGDg1NDVzZaq2zJDiwew09K7n3aW66jikZM=;
+ b=n378pwDxebi6J6u39CZ6tqDgKvK3UZDZ4Ff669BiD7H4dRHi7r9NrzB8Np0PDZRvWy/vWg
+ KA9qvUKk4t2B+a1FynJZm25tgg89HK4lyTRX3E88Ohl0cVV3GK4xIp46bZwmMgQqZywQ/R
+ N6rqQJ8hf+hZDRxw8EM9oHGUFkKHRcKd1XcKMg2XVuVPm4NJxex0J3AkGSOj9nfzi1ovcx
+ dNE60GCokfkpnR5mVxfJtzRKpno/ygN6y9OPowDa4MudjXp4+vivgqfD7EqobCEqjXN1sf
+ 5rVUVwHS+G6hEuJYO9bKqJDcd5O+Uak1QOx9qE60b2d+4XGuUFUI57KRVnKXfQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=q8p/IEE3
-Subject: Re: [Buildroot] [PATCH v2 1/5] linux: enable
- CONFIG_EXTRA_FIRMWARE_DIR
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=n378pwDx
+Subject: Re: [Buildroot] [PATCH v2] package/openvmtools: fix local privilege
+ escalation vulnerability
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,66 +76,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: giulio.benetti@benettiengineering.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Angelo, All,
+Hello Stefan,
 
-On 2022-10-14 08:58 +0200, Angelo Compagnucci spake thusly:
-> CONFIG_EXTRA_FIRMWARE_DIR must point to the directory where firmware
-> file from CONFIG_EXTRA_FIRMWARE will be taken to be embedded to the
-> kernel.
-> The option is removed if CONFIG_EXTRA_FIRMWARE is not used, but it
-> defaults to a sensible value when used.
+On Wed, 19 Oct 2022 10:56:16 +0200
+Stefan Agner <stefan@agner.ch> wrote:
+
+> Add a patch for CVE-2022-31676 (local privilege escalation
+> vulnerability).
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
 > ---
->  linux/linux.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index efdc21eff2..9a909c7d7b 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -408,6 +408,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
->  	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
-> +	# The kernel CONFIG_EXTRA_FIRMWARE feature requires to have the firmware full
-> +	# path for locating firmware file.
-> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,"$(STAGING_DIR)/lib/firmware")
+> v2: Actually make the patch apply
 
-Besides what Thomas already said: firmware files are not installed in
-STAGING_DIR/lib/firmware, but they are in TARGET_DIR/lib/frmware.
+I've applied to master, but after:
 
-Also, some people already point CONFIG_EXTRA_FIRMWARE_DIR=$(INAGES_DIR)
-as there are some firmware fiels copied in there already, so we do not
-want to force that for them.
+ (1) Adding a reference to the upstream location where the patch was
+     provided
 
-Regards,
-Yann E. MORIN.
+ (2) Adding a OPENVMTOOLS_IGNORE_CVES entry in the .mk file to ignore
+     the CVE now that it is fixed.
 
->  	$(PACKAGES_LINUX_CONFIG_FIXUPS)
->  endef
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+According to our CVE tracking infrastructure, there are 3 other CVEs
+affecting openvmtools: CVE-2014-4199, CVE-2014-4200, CVE-2022-22943. Do
+you think you could have a look?
 
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
