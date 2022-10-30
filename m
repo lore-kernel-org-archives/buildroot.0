@@ -4,64 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 624F4C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 17:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AACAECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 17:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A02044030F;
-	Sun, 30 Oct 2022 17:27:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A02044030F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76FB54031B;
+	Sun, 30 Oct 2022 17:56:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76FB54031B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F7ojRkN-H83B; Sun, 30 Oct 2022 17:27:01 +0000 (UTC)
+	with ESMTP id n51uNibpyaPt; Sun, 30 Oct 2022 17:56:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 845634030A;
-	Sun, 30 Oct 2022 17:27:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 845634030A
+	by smtp4.osuosl.org (Postfix) with ESMTP id C31914030F;
+	Sun, 30 Oct 2022 17:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C31914030F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AFA7A1BF402
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 17:26:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B56231BF402
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 17:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A92B4030A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 17:26:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A92B4030A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A80C4031B
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 17:56:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A80C4031B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RV2MCjFCLm01 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 17:26:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0455D40309
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0455D40309
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 17:26:56 +0000 (UTC)
-Received: from uxmal.fritz.box ([151.71.224.230]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.17.189]) with ESMTPSA (Nemesis) id
- 1MXH3e-1oYAlc0EcI-00YfO5; Sun, 30 Oct 2022 18:26:54 +0100
-From: Pedro Aguilar <paguilar@paguilar.org>
+ with ESMTP id E54NYWrnQXBh for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 17:56:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0123E4030F
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0123E4030F
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 17:56:38 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ fn7-20020a05600c688700b003b4fb113b86so6820455wmb.0
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:56:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=0OpgQmkmmidRrq4mR4uVIh+6Mj/vvIz3BxAG3lQO6dE=;
+ b=yoWII8NKnlLzUrMBkLgft+544A4Re2LRV0So+aeu24zER6mTItt4vhQUcR/CAEUeS5
+ 8EqZzRE01xaDu3fI7C1PtF/tXAYxSEJkodHGDZe8n2W6fmplG36WFR8Uv7zGKwe4Kr/u
+ 4fBbkiqJev7oZ9G0Nie+ttYjOAtDHilpoagwEqDFokf/sKzYlPFgIbVgLXultsTUHk/E
+ z5DBlWnVd5iXROXRfUJu6+kah0yA0Ek7kDxr7rYQyAfyLuaz2h5YKCoIaELi/JXEAFam
+ u2N898eT3bfYuPG6SAFUlpTLqUBpNm1nn0B/Lr56AVOXYHNAJZZS6G9jr3pSKl3QwEOj
+ sSTQ==
+X-Gm-Message-State: ACrzQf2DZtGVPKAHdShAfRfMqnBSQXyZEVUKu2nF1J5aD27mkP1ehAa2
+ ie6QPNt03MJ3lTDTNK2jWceilav+d9c=
+X-Google-Smtp-Source: AMsMyM5ef5e5vQ/36RgIpoAUim/P+JDoBbt2Wnhikipwhu9Yqs9FMqOQIOWsK0r6Ezhjz1ElqTK5eg==
+X-Received: by 2002:a7b:c845:0:b0:3cf:62af:e353 with SMTP id
+ c5-20020a7bc845000000b003cf62afe353mr5816253wml.43.1667152596653; 
+ Sun, 30 Oct 2022 10:56:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ p10-20020a1c544a000000b003c71358a42dsm5398764wmi.18.2022.10.30.10.56.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 30 Oct 2022 10:56:36 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 18:26:39 +0100
-Message-Id: <20221030172639.199134-1-paguilar@paguilar.org>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 30 Oct 2022 18:56:32 +0100
+Message-Id: <20221030175632.4139-2-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221030175632.4139-1-fontaine.fabrice@gmail.com>
+References: <20221030175632.4139-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:QvTHsgxUnIloues7pQN9b7KhNjjYaniPGrRwgnMoIDZI6EWU+bM
- ETahGeDZFS+Gs/UzzMXxt5KiiLTri95rCTUcH0QX9pTQlQlxllLDKX+pxxXVinBNHE/oWNS
- loOsPB+yhPXEWwUkGf1uiY5fctZ1wKjvSUG5aCETJ77sTMYUuc67jEFBWinrJ/bf4uPW9PI
- B2R0GWfhzVF71aPlR2t8A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3syUxPel4iQ=:qVVsvjw9h9x7V/kUdw7yTU
- 59jnNleMZj7c9ZMVCzfIp1oqw3FsAm0ICeKt3Qlp1BITuj5lWts6m5kvVuNpRzzZ1R2bIkmIG
- OGLzaXX0pqa5EDBEu7NBCwxotLQJG+2g2FmC1/fwWLjVOgwM56nePknCpBVvtocYW0ldv5rbD
- QjKJ6X+ylEGOcbNj/dskVd4/bvBJ5wKT4GlEboqCVLCSDyIHsMTRDzs2njvcorQTqH9p6NJ47
- L2JwFtB6W1kHcpACzUKcXujehOod2EmcTjDGLbFE8K0TVmiAYq4Sn4wTIjrTZuFjz+zqYVr/H
- n6HR86CVuBBrVncRgHF0RGdCZvXk4guO9cgSgW3GFS41iAsVEqPSP0zpsEt+LS4Vnw5KeN7Ph
- MbKJ7zI5/ZvqGWSdJ4YzZvy0ip25Vy2u0JWLRGI6pZpPLcLDDZP9ugDzzEMiuCtuBDKslNvUS
- OfrDIi/VJzTwMGADVMgasmLmIm7jO5OnuzsFY0R6t56v20cBMfl8fkaG+uZudKquIcJb9CIGX
- 4PQcvY3SMY2nUvarKx7bBcwd5y1JyxcqLjbicaQW2EFxN5PDEeAPRy3ItDc+NqNDA4cLfuVB4
- ckcHCu9EzpzC+fTsznyMC/qYILpOUuDN6OkBdPfTXiZOXwEPT5v5J0aSR8D9mm3loOs7f6HF7
- HhMvNWwrlN40taH8nHGgUIEptiRhR3BdlQzMFTF+34lhq3uF55mri2I7s9qbeFESfwiQERYoV
- W9K/aydJbTpkl87yXKM8/1vWuXML/EcP14d0AocmCdi6+F0BMqmeDDLMxq4fk++a1CNUDc5wz
- N9EQCiHg/0nbDFzlvOfH2q3w8+umQ==
-Subject: [Buildroot] [PATCH v2 1/1] package/bdwgc: bump to version 8.2.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0OpgQmkmmidRrq4mR4uVIh+6Mj/vvIz3BxAG3lQO6dE=;
+ b=S/K8dVhobuYMLjWRemjLfURO0SXD+LD5tMyz2mup49ImlRbCy6SyXO1wy/V7De5Ono
+ IUij3li9/WuRv/xrgpfC3EsOv8g7xfswh3+BHWEMe0K63LC24StWTWbobqyBiCQzfhpb
+ yok3UDdMFgrjcFyNrxv9R5IpMP6uFctjt3nG91mY2VuVDEElNw+r5qbpiLKXRpxUP2/E
+ fYLookjPIMZ/chDuo12ka+EECjLxQ56vnkPafpU9KCiS0vINsZ0Ky3NaVxdoKC/N7bSd
+ 0gkn2TYuX8+ThX2ck0ShHKnAaQOU7dAg3DUN7hbbOd5cpDgYU4waACO3coX5nvSgOI1u
+ J31Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=S/K8dVho
+Subject: [Buildroot] [PATCH v2, 2/2] package/openipmi: bump to version 2.0.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,50 +97,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pedro Aguilar <paguilar@paguilar.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The license in file README.QUICK remains unchanged, but some
-C++ instructions change along with a few small typos/fixes.
+Drop patch (already in version) and so also drop autoreconf
 
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Update license file hash (pointed out by Yann)
+ ...01-Avoid-searching-host-library-path.patch | 53 -------------------
+ package/openipmi/openipmi.hash                |  6 +--
+ package/openipmi/openipmi.mk                  |  4 +-
+ 3 files changed, 4 insertions(+), 59 deletions(-)
+ delete mode 100644 package/openipmi/0001-Avoid-searching-host-library-path.patch
 
----
- package/bdwgc/bdwgc.hash | 4 ++--
- package/bdwgc/bdwgc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
-index 4276939083..917089da08 100644
---- a/package/bdwgc/bdwgc.hash
-+++ b/package/bdwgc/bdwgc.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/openipmi/0001-Avoid-searching-host-library-path.patch b/package/openipmi/0001-Avoid-searching-host-library-path.patch
+deleted file mode 100644
+index 15b4510f67..0000000000
+--- a/package/openipmi/0001-Avoid-searching-host-library-path.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 22 Jul 2015 07:04:33 +0300
+-Subject: [PATCH] Avoid searching host library path
+-
+-The $(libdir) variable points to the location of the directory on the target
+-system, /usr/lib by default. When cross compiling this directory contains the
+-host libraries which may be different than target libraries. Don't use
+-$(libdir) in the library search path.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+-[Fabrice: refresh patch for 2.0.32]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://sourceforge.net/p/openipmi/patches/35]
+----
+- cmdlang/Makefile.am | 3 +--
+- unix/Makefile.am    | 6 ++----
+- 2 files changed, 3 insertions(+), 6 deletions(-)
+-
+-diff --git a/cmdlang/Makefile.am b/cmdlang/Makefile.am
+-index 264ee12be79f..0b3843784656 100644
+---- a/cmdlang/Makefile.am
+-+++ b/cmdlang/Makefile.am
+-@@ -15,7 +15,7 @@ libOpenIPMIcmdlang_la_SOURCES = cmdlang.c cmd_domain.c cmd_entity.c cmd_mc.c \
+- 	$(top_builddir)/utils/libOpenIPMIutils.la \
+- 	$(top_builddir)/lib/libOpenIPMI.la
+- libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir) -no-undefined
+-+	-no-undefined
+- 
+- bin_PROGRAMS = openipmish
+- 
+-diff --git a/unix/Makefile.am b/unix/Makefile.am
+-index 5128839dad13..bd0f897ba8d6 100644
+---- a/unix/Makefile.am
+-+++ b/unix/Makefile.am
+-@@ -10,12 +10,12 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
+- libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
+- 	$(top_builddir)/utils/libOpenIPMIutils.la $(RT_LIB)
+- libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir) -no-undefined
+-+	-no-undefined
+- 
+- libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
+- libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
+- 	$(GDBM_LIB) $(RT_LIB)
+- libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir) -no-undefined
+-+	-no-undefined
+- 
+- noinst_HEADERS = heap.h
+- 
+diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
+index eded076ade..fc3cf1a520 100644
+--- a/package/openipmi/openipmi.hash
++++ b/package/openipmi/openipmi.hash
+@@ -1,8 +1,8 @@
+ # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
+-sha1  73d7dce4312b006983b11367e4a43d4ec52cf888  OpenIPMI-2.0.32.tar.gz
+-md5  532404c9df7d0e8bde975b95b9e6775b  OpenIPMI-2.0.32.tar.gz
++sha1  4387f227aad92756e296d1c9421e83231d355dbd  OpenIPMI-2.0.33.tar.gz
++md5  923d2914dbbc3307712f8c58401bab0f  OpenIPMI-2.0.33.tar.gz
  # Locally computed
--sha256  3b4914abc9fa76593596773e4da671d7ed4d5390e3d46fbf2e5f155e121bea11  gc-8.0.6.tar.gz
--sha256  0aab7a56a92ed878c4a5464cf282d65f38bcdee64fe9cf213e26254bddb3f340  README.QUICK
-+sha256  f30107bcb062e0920a790ffffa56d9512348546859364c23a14be264b38836a0  gc-8.2.2.tar.gz
-+sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index cefa975998..e776fb7458 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -4,7 +4,7 @@
+-sha256  f6d0fd4c0a74b05f80907229d0b270f54ca23294bcc11979f8b8d12766786945  OpenIPMI-2.0.32.tar.gz
++sha256  fb53e9ea5e2681cf8af7cda024b1a0044c675f84116ca27ae9616c8b7ad95b49  OpenIPMI-2.0.33.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  185323a62589e7ee80f86bf2ea29caad9a09fdda0ea3f1c00db8b778c7edf60e  COPYING.BSD
+ sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING.LIB
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index 81492ec131..ccf86f93cd 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--BDWGC_VERSION = 8.0.6
-+BDWGC_VERSION = 8.2.2
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
- BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
- BDWGC_INSTALL_STAGING = YES
+-OPENIPMI_VERSION = 2.0.32
++OPENIPMI_VERSION = 2.0.33
+ OPENIPMI_SITE = https://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
+ OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
+ OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
+ OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+ OPENIPMI_DEPENDENCIES = popt ncurses readline host-pkgconf
+ OPENIPMI_INSTALL_STAGING = YES
+-# Patching Makefile.am
+-OPENIPMI_AUTORECONF = YES
+ OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
+ OPENIPMI_CONF_OPTS = \
+ 	--with-glib=no \
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
