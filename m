@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39366C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 15:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39D0ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 15:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4972812C6;
-	Sun, 30 Oct 2022 15:58:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4972812C6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dWc0lc7JWtSb; Sun, 30 Oct 2022 15:58:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 054F1812BE;
-	Sun, 30 Oct 2022 15:58:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054F1812BE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54DF81BF47A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B0744032F
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B0744032F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 875A64031B;
+	Sun, 30 Oct 2022 15:58:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 875A64031B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ul3JojTIqCfK for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4IeXOjcU9nkz; Sun, 30 Oct 2022 15:58:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F44E40292;
+	Sun, 30 Oct 2022 15:58:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F44E40292
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D4241BF47A
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 174F6605AC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 174F6605AC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uWeVRh_9SX3C for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 489B14032E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CC32605AE
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 489B14032E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC32605AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35F8D8753B; Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
+ id 2ADB68753A; Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 16:57:10 +0100
+Date: Sun, 30 Oct 2022 16:56:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bed463a46f2b1949f66947b5cf1caa04ce9b6f0f
-X-Git-Newrev: a6e7d5c2ca091372a759bad60e6a7d8064d05234
+X-Git-Oldrev: f9e51e1150f59962577358b3da5c390ca4749291
+X-Git-Newrev: bed463a46f2b1949f66947b5cf1caa04ce9b6f0f
 X-Patchwork-Hint: ignore
-Message-Id: <20221030155749.35F8D8753B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbuffer: bump to version 20220418
+Message-Id: <20221030155749.2ADB68753A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/matio: bump to version 1.5.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6e7d5c2ca091372a759bad60e6a7d8064d05234
+commit: https://git.buildroot.net/buildroot/commit/?id=bed463a46f2b1949f66947b5cf1caa04ce9b6f0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://github.com/tbeu/matio/releases/tag/v1.5.23
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
+ package/matio/matio.hash | 4 ++--
+ package/matio/matio.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index bab568d1d8..8f7b8dd07b 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  b6787260112e3ac416c0febdb097caa8  mbuffer-20211018.tgz
-+md5  90e183efeec2812e2413e97b65600acc  mbuffer-20220418.tgz
- 
- # Locally computed after checking signature upstream
--sha256  e240c1e4e4ac14c28be8c660ec47d44ce16b1e8ec92aa907ad13004ffd5db6e3  mbuffer-20211018.tgz
-+sha256  6e5801f9f5ff11445d1d03028b5a03cd08af5408697b7f94c427833228a300c7  mbuffer-20220418.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index bbf27579f1..6381d97e8a 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+index 4634074ca0..94e0e48f69 100644
+--- a/package/matio/matio.hash
++++ b/package/matio/matio.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/matio/files/matio/1.5.22/
+-sha512  33fd3991413e94dfc9aba13ffd08b09ddcbdb9dfa579124d981449e195a8c61a3dc95b55e46bba360d48456c117cf36403af1c3448689c26b8aea5fa9cf38323  matio-1.5.22.tar.gz
++# From https://sourceforge.net/projects/matio/files/matio/1.5.23/
++sha512  e125278dcb25695affb7c576d0e2a86c0eff4225aa866b81536c9e4d7b2aea2c554f5389e96d534a8b559f5554b6cbecff4b44fe8915173cd64b2da6d1dc2629  matio-1.5.23.tar.gz
+ # Locally computed
+ sha256  3ed9a50d754fcc92d4accb8448e397eafeab686796b2a7445557ce782806e239  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+index d282852d37..5e09f4e6ce 100644
+--- a/package/matio/matio.mk
++++ b/package/matio/matio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBUFFER_VERSION = 20211018
-+MBUFFER_VERSION = 20220418
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
+-MATIO_VERSION = 1.5.22
++MATIO_VERSION = 1.5.23
+ MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
+ MATIO_LICENSE = BSD-2-Clause
+ MATIO_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
