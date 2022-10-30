@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39D0ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 15:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3CC9C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 875A64031B;
-	Sun, 30 Oct 2022 15:58:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 875A64031B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4IeXOjcU9nkz; Sun, 30 Oct 2022 15:58:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F44E40292;
-	Sun, 30 Oct 2022 15:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F44E40292
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D4241BF47A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 174F6605AC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 15:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 174F6605AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 526F660AD1;
+	Sun, 30 Oct 2022 16:03:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526F660AD1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uWeVRh_9SX3C for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IQ3JUBEDSaUt; Sun, 30 Oct 2022 16:03:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72E21606EC;
+	Sun, 30 Oct 2022 16:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E21606EC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D584A1BF47A
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:03:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B034B40332
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B034B40332
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7DUNaRicYAfL for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 16:03:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CC32605AE
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC32605AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A4FB40330
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:03:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A4FB40330
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2ADB68753A; Sun, 30 Oct 2022 15:57:49 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7624A8753E; Sun, 30 Oct 2022 16:03:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 16:56:26 +0100
+Date: Sun, 30 Oct 2022 17:02:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f9e51e1150f59962577358b3da5c390ca4749291
-X-Git-Newrev: bed463a46f2b1949f66947b5cf1caa04ce9b6f0f
+X-Git-Oldrev: a6e7d5c2ca091372a759bad60e6a7d8064d05234
+X-Git-Newrev: 241db490b703fc734f0e8719a07d0f9ff40faaba
 X-Patchwork-Hint: ignore
-Message-Id: <20221030155749.2ADB68753A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matio: bump to version 1.5.23
+Message-Id: <20221030160315.7624A8753E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/brltty: fix infinite loop in
+ configure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bed463a46f2b1949f66947b5cf1caa04ce9b6f0f
+commit: https://git.buildroot.net/buildroot/commit/?id=241db490b703fc734f0e8719a07d0f9ff40faaba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/tbeu/matio/releases/tag/v1.5.23
+Backport a patch to fix an infinite loop bug in configure.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/82a/82af705f7ca282495461cb3994f5a7e6f64273e1
+ - http://autobuild.buildroot.net/results/06c/06c9414a1ecbc1a147bc8dfddced03fc659af694
+ - http://autobuild.buildroot.net/results/59e/59e36093f7e437a5a37037f7fa50ce2443c47fd3
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/matio/matio.hash | 4 ++--
- package/matio/matio.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...gue-runProgramTerminationCommands-used-a-.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-index 4634074ca0..94e0e48f69 100644
---- a/package/matio/matio.hash
-+++ b/package/matio/matio.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/projects/matio/files/matio/1.5.22/
--sha512  33fd3991413e94dfc9aba13ffd08b09ddcbdb9dfa579124d981449e195a8c61a3dc95b55e46bba360d48456c117cf36403af1c3448689c26b8aea5fa9cf38323  matio-1.5.22.tar.gz
-+# From https://sourceforge.net/projects/matio/files/matio/1.5.23/
-+sha512  e125278dcb25695affb7c576d0e2a86c0eff4225aa866b81536c9e4d7b2aea2c554f5389e96d534a8b559f5554b6cbecff4b44fe8915173cd64b2da6d1dc2629  matio-1.5.23.tar.gz
- # Locally computed
- sha256  3ed9a50d754fcc92d4accb8448e397eafeab686796b2a7445557ce782806e239  COPYING
-diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-index d282852d37..5e09f4e6ce 100644
---- a/package/matio/matio.mk
-+++ b/package/matio/matio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MATIO_VERSION = 1.5.22
-+MATIO_VERSION = 1.5.23
- MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
- MATIO_LICENSE = BSD-2-Clause
- MATIO_LICENSE_FILES = COPYING
+diff --git a/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch b/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
+new file mode 100644
+index 0000000000..0f81254e08
+--- /dev/null
++++ b/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
+@@ -0,0 +1,29 @@
++From 4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f Mon Sep 17 00:00:00 2001
++From: Dave Mielke <Dave@Mielke.cc>
++Date: Sat, 15 Oct 2022 15:20:38 -0400
++Subject: [PATCH] shell prologue: runProgramTerminationCommands used a bash
++ command. (dm)
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f]
++---
++ brltty-prologue.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/brltty-prologue.sh b/brltty-prologue.sh
++index 05b817742..6d1faf983 100644
++--- a/brltty-prologue.sh
+++++ b/brltty-prologue.sh
++@@ -102,7 +102,7 @@ runProgramTerminationCommands() {
++    while [ "${programTerminationCommandCount}" -gt 0 ]
++    do
++       set -- $(getVariable "programTerminationCommand${programTerminationCommandCount}")
++-      let "programTerminationCommandCount -= 1"
+++      programTerminationCommandCount=$((programTerminationCommandCount - 1))
++ 
++       local process="${1}"
++       local directory="${2}"
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
