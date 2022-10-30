@@ -4,85 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB886ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 22:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFB9BECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 23:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B17460AB7;
-	Sun, 30 Oct 2022 22:43:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B17460AB7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B86E60ADC;
+	Sun, 30 Oct 2022 23:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B86E60ADC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y7AZb1ZXkNFg; Sun, 30 Oct 2022 22:43:36 +0000 (UTC)
+	with ESMTP id uunlbXnzp_qZ; Sun, 30 Oct 2022 23:04:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F48C60803;
-	Sun, 30 Oct 2022 22:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F48C60803
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 893101BF28B
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:43:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FA060AB7;
+	Sun, 30 Oct 2022 23:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6FA060AB7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 076D31BF427
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 23:04:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 649C4400D1
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 22:43:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 649C4400D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id E34E14031B
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 23:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E34E14031B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2aZ1fxiyOE3 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 22:43:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61A99400CE
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 61A99400CE
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 22:43:33 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id h9so13741452wrt.0
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 15:43:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AS9DgixIUsN3eMhnylklJt0TYAL3YOc2fC9qlK9hPD8=;
- b=r3pMoacbtrca6+RxV06iZ0JNFrCNGS8XsvKESfFiHOvdbUVkOtsUyg6UTqodMedRkR
- lmMFIXbCFq60G3ZswmTHutpTXhgbHPWV1bKSjVUIuqqXRcqOtbRlnRzLPPaH9jFimY8m
- eD/znlTmUIh/S2TvWakDJvG1oUjl5D8Th5p5xNgxzyK41gkOAf/Crgg8sTyOF/vd74oN
- JuatxpRCJ+xl9y1/KEFMViHqQpbYB6i4cl01/39QpS5vlGARMmGdburo5ku2hzKC2sXB
- M1IhqOZ7ReMIJ5K+Hc8ZB7tN6eZdLsticZ0rWahgcyOM3lKOeVfWpjrUsH6EmvGjUNCq
- tB2A==
-X-Gm-Message-State: ACrzQf2jsfUsRGWQKv4nFsHaD1DIz8r915dAneS9Yo2ttaLms66ANUQs
- qM2EhQSNIODJQ/3oGaE08xfiYVYEnJ8=
-X-Google-Smtp-Source: AMsMyM4DXxyYPrKp7UCZQUidQ1aMc86hBA5QQReYZ4uMQeXrt0KMoKxDJiCPMntS1eP6ALCdCAXoXg==
-X-Received: by 2002:adf:e804:0:b0:236:657e:756e with SMTP id
- o4-20020adfe804000000b00236657e756emr6135058wrm.452.1667169811114; 
- Sun, 30 Oct 2022 15:43:31 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bo30-20020a056000069e00b0022cce7689d3sm6380717wrb.36.2022.10.30.15.43.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Oct 2022 15:43:30 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tC-DgtstQtdq for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 23:04:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03ABD402B9
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 03ABD402B9
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 23:04:22 +0000 (UTC)
+From: Paul Cercueil <paul@crapouillou.net>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 23:43:28 +0100
-Message-Id: <20221030224328.684577-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sun, 30 Oct 2022 23:04:10 +0000
+Message-Id: <20221030230410.982946-1-paul@crapouillou.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AS9DgixIUsN3eMhnylklJt0TYAL3YOc2fC9qlK9hPD8=;
- b=bFrzo9h4h2LNivG9RWswthsyxPkkJI7hhVpH7PFkTotiRN0ax9A9XrNXlmIFR0Luuv
- V/Z6D0gIgpZe5TCuMMzgLiOeLsndIvLRAeNetvi6RqGEHAqh0+G/P6w5bvz73MmIqDm+
- msgENJBjzizP3kJ3ccOyAz4g38bQ5kSsigEE+NWqjO7SRY/hK2t4GAltuyLFuUQ8dxuT
- 4R8yZbWBJ2rYXYQRqwG5FcNHEB6XNv0q3+APFVlfSHNdcGcrCXI/5xon23ow4Bok/85E
- pZ3BFkTplh9z/fVpG0WuravslgkWFYe2OW0hh+sDZpnrdHuOuBq+WO9bkd6j0TyaIHpm
- Ti8A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bFrzo9h4
-Subject: [Buildroot] [PATCH 1/1] package/msmtp: security bump to version
- 1.8.22
+ d=crapouillou.net; 
+ s=mail; t=1667171059; h=from:from:sender:reply-to:subject:subject:date:date:
+ message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+ content-type:content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:references; bh=tZ0rrEP1xH1NoYBjBizQEba147yUJTPotcSjc6v9U/I=;
+ b=RBkTXr1SlXyxrqkZXdMLyOz9X3RF7FLteFWo0QAerZ4vpiETSRfRHswXcEGXynFhpEp7sD
+ c1+N9w2smwDetDyNdhYGKKTrNWnQAKs5+EGRPv4be85t/Jz3cri1l7NsBKYWrg1esYnO4Y
+ 4ds7uztdw9weaybOX/DT5qjWH3092a0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=RBkTXr1S
+Subject: [Buildroot] [PATCH 1/1] package/glmark2: add patch to fix GCC 12
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +65,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fixed a security problem in msmtpd: mail addresses starting with '-' could be
-  interpreted as options of the pipe command.
+Add a patch cherry-picked from upstream to fix the build with GCC 12.
 
-https://github.com/marlam/msmtp-mirror/blob/msmtp-1.8.22/NEWS
+Upstream commit is d1ca3f53c96dc8a4048b17dc16147a8fac782d4a.
+I don't know if it fixes any autobuilder errors, I noticed the bug when
+building locally.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ibmatrix-Add-missing-utility-include.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index 1e73d92470..c5571f2fb3 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.14.tar.xz.sig
-+# https://marlam.de/msmtp/releases/msmtp-1.8.22.tar.xz.sig
- # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
--sha256  d56f065d711486e9c234618515a02a48a48dab4051b34f3e108fbecb6fb773b4  msmtp-1.8.14.tar.xz
-+sha256  1b04206286a5b82622335e4eb09e17074368b7288e53d134543cbbc6b79ea3e7  msmtp-1.8.22.tar.xz
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 3db36f4cd0..c3928ffcbb 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSMTP_VERSION = 1.8.14
-+MSMTP_VERSION = 1.8.22
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+diff --git a/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch b/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
+new file mode 100644
+index 0000000000..2a658393ae
+--- /dev/null
++++ b/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
+@@ -0,0 +1,29 @@
++From d1ca3f53c96dc8a4048b17dc16147a8fac782d4a Mon Sep 17 00:00:00 2001
++From: Alexandros Frantzis <alexandros.frantzis@collabora.com>
++Date: Mon, 14 Feb 2022 13:54:09 +0200
++Subject: [PATCH] libmatrix: Add missing <utility> include
++
++Fixes compilation with GCC 12.
++
++Fixes #169
++---
++ Upstream commit: d1ca3f53c96dc8a4048b17dc16147a8fac782d4a
++
++ src/libmatrix/program.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/libmatrix/program.h b/src/libmatrix/program.h
++index f95b470..1c9de08 100644
++--- a/src/libmatrix/program.h
+++++ b/src/libmatrix/program.h
++@@ -15,6 +15,7 @@
++ #include <string>
++ #include <vector>
++ #include <map>
+++#include <utility>
++ #include "mat.h"
++ 
++ // Simple shader container.  Abstracts all of the OpenGL bits, but leaves
++-- 
++2.35.1
++
 -- 
 2.35.1
 
