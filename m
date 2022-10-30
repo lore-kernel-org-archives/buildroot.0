@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48911ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9EAFC38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 20:29:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC8018124B;
-	Sun, 30 Oct 2022 20:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC8018124B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5869F80C38;
+	Sun, 30 Oct 2022 20:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5869F80C38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QGB-mwhuwTmX; Sun, 30 Oct 2022 20:27:32 +0000 (UTC)
+	with ESMTP id 9x7x86-Ji2uo; Sun, 30 Oct 2022 20:29:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1496C80FB9;
-	Sun, 30 Oct 2022 20:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1496C80FB9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D97F01BF387
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:27:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8690C80C02;
+	Sun, 30 Oct 2022 20:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8690C80C02
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 468491BF387
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3E8B4025A
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3E8B4025A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1492C400EC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 20:29:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1492C400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TkNi5QONGO3a for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 20:27:27 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71A19400D2
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 71A19400D2
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:27:27 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:afdc:c5f1:f1be:8b47])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id DDE13B0051E;
- Sun, 30 Oct 2022 21:27:18 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Oct 2022 21:27:18 +0100
-Date: Sun, 30 Oct 2022 21:27:18 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vlOX6p2hqKll for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 20:29:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FAC0400DC
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8FAC0400DC
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 20:29:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CF424E0002;
+ Sun, 30 Oct 2022 20:29:21 +0000 (UTC)
+Date: Sun, 30 Oct 2022 21:29:20 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221030202718.GG1058960@scaer>
-References: <20221019215348.3262192-1-james.hilliard1@gmail.com>
+Message-ID: <20221030212920.3dd30baa@windsurf>
+In-Reply-To: <20221015005813.4055238-1-james.hilliard1@gmail.com>
+References: <20221015005813.4055238-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221019215348.3262192-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667161644;
- bh=3FWM+0CDFkEToJUEL+3raSMefMT+vK20+eo+8XmD00c=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=LalZoaVqG7MUC5cPuomO16C3exnsWwP2Kw0HAoNKxmSiJYVIMtwGlpgJxUNLy3Zmz
- n1tZs6RrRkDL6gSi+F2+C8EdPA8xqWr8epqMi5LAw+H6xJNvfhPYGi8+KMW8vZIaWr
- au5V0mKelU0HUYYSYYom0bdl//eBePR/LxNjL2dDWKAE/szfmxw2qSkrVb8JwCNYIq
- VPfxBPscXYoAX3fBdcv+0/mKxXnJqvHG9g/O8wDQa5OM143L0aBPcyoUypEJ/wLbIV
- OK4im9hbCmxUhq0jbz13qlm6sk3My9z1Yp03hdteBIgYxEREHf7ASvDLOonqqkJRgb
- ZwIRYBmC2+XZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LalZoaVq
-Subject: Re: [Buildroot] [PATCH 1/7] package/python-pluggy: enable host
- package build
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667161762;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qdqZBjeVt2o6BDz2V2jkzguGxODWsHQ8ViwIMGgy6Ck=;
+ b=Sd7cDjpQT/8zRJjEBVKfp2DXON5pSYU7YxjEnckemTwj59FW27JamfDVJL3LKbwcJezTxC
+ E+Ep9gI288LDQfXA2zNnvFnaOqbg62moSrmi3tqXf4r6/nZsvgvpgWWK9hpzE0Wl8X126x
+ 5PGSoKFP57HeucrTfLLMCvdE6+vjCYfy8DbRljpMH4n5QJiSkVt3BU+zZbhuRl2c1PvZ22
+ q68SyCJPk2oV82ZA1xlr8jXrRgu19ULOQqPx03B9aBXhAw2ZCDLSJ9FNK6jE8vBdDT9JCm
+ rOXP7z2w3CL18akrYTa7tKIHSZtkOczTmT7HCHIwjCFyq7rrrZrE7+YPOOOS9A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Sd7cDjpQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/bearssl: disable parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,60 +75,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+Hello James,
 
-On 2022-10-19 15:53 -0600, James Hilliard spake thusly:
-> This will be needed for the upcoming host-python-hatchling.
+On Fri, 14 Oct 2022 18:58:13 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> The bearssl package is not compatible with parallel builds.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/5e1/5e1b72db206b2d17fa5ce378a70fdc2f3f5bf773
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Whole series applied to master, thanks.
-
-I really wonder how many pep517 buildsystems there will be, and how many
-packages we'll have to introduce... Fantastic...
-
-Regards,
-Yann E. MORIN.
-
 > ---
->  package/python-pluggy/python-pluggy.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-pluggy/python-pluggy.mk b/package/python-pluggy/python-pluggy.mk
-> index 59382518ed..6dc6f970ea 100644
-> --- a/package/python-pluggy/python-pluggy.mk
-> +++ b/package/python-pluggy/python-pluggy.mk
-> @@ -11,5 +11,7 @@ PYTHON_PLUGGY_SETUP_TYPE = setuptools
->  PYTHON_PLUGGY_LICENSE = MIT
->  PYTHON_PLUGGY_LICENSE_FILES = LICENSE
->  PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
-> +HOST_PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>  package/bearssl/bearssl.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Based on the feedback which said that fixing bearssl was preferred over
+using $(MAKE1), I have marked this patch as Changes Requested. Could
+you see at fixing the bearssl build system, submit the fix upstream,
+and provide the fix for Buildroot?
+
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
