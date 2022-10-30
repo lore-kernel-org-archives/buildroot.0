@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33251C38A02
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFA2FA373D
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8654037A;
-	Sun, 30 Oct 2022 10:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E8654037A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4392040359;
+	Sun, 30 Oct 2022 11:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4392040359
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lNlX8LyFjmNY; Sun, 30 Oct 2022 10:52:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Euck7YOvb8zO; Sun, 30 Oct 2022 11:04:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C54C40357;
-	Sun, 30 Oct 2022 10:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C54C40357
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4204A40376;
+	Sun, 30 Oct 2022 11:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4204A40376
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C29251BF2B7
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:52:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0851E1BF957
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D61B812AB
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D61B812AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6325812F7
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6325812F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JEknbM_UumoR for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 10:52:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ACD8812CE
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4ACD8812CE
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:52:14 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 81275240008;
- Sun, 30 Oct 2022 10:52:06 +0000 (UTC)
-Date: Sun, 30 Oct 2022 11:52:05 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221030115205.0fab7010@windsurf>
-In-Reply-To: <20221029170023.219493-1-fontaine.fabrice@gmail.com>
-References: <20221029170023.219493-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667127131;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XW3todxNlJBrSlihQVlCnEO7FRlcSKPkIM7m5N0EHmA=;
- b=pvRoIb/G1xr2lg6t0sSZUgJA4zJJ6mGPgPphCN30qPpErDlRVycFlXwL0bjmF3FMXSm54A
- QJFEbmK79NJROrZLC1Tvr9Fnr0WI5eOkElTkpCT1iwWIs9x0pUXpDrOTCkIi1GhGqPnkQI
- M9xXSniCnNvpQZYhZ4n/ru2xX3DAG4G+VS1PMhUkguHcTIlcIxdAhahW+R1fMNrVoCr1nf
- Sbx7WuUTW8g1rH4W1xgXeZkCPAve53cyoSJ93MhMA3Zd6mmFO6cmyJjJBLtbFJmjt/koUq
- lwQ+WoMrDiDkSIe/xPMgb/TpD/rCDrjYtaRVaAvx7T7DZD9avPGLmHjccRzDoA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pvRoIb/G
-Subject: Re: [Buildroot] [PATCH 1/2] package/f2fs-tools: add lz4 and lzo
- optional dependencies
+ with ESMTP id Wbvhr8tP85Eb for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 11:04:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E69D3812DA
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E69D3812DA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D00F58746D; Sun, 30 Oct 2022 11:04:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Oct 2022 11:53:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c999e540dd233f8cb52eee4c35373cd6603aea97
+X-Git-Newrev: f020e03ad9910f9e3419666aa5c7d58ab205fa9d
+X-Patchwork-Hint: ignore
+Message-Id: <20221030110442.D00F58746D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hackrf: bump to version 2022.09.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +57,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Grzegorz Blach <grzegorz@blach.pl>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Oct 2022 19:00:22 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f020e03ad9910f9e3419666aa5c7d58ab205fa9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> lz4 and lzo are optional dependencies (enabled by default) since bump to
-> version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
-> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...1-configure-ac-fix-cross-compilation.patch | 88 +++++++++++++++++++
->  package/f2fs-tools/f2fs-tools.mk              | 18 +++-
->  2 files changed, 105 insertions(+), 1 deletion(-)
->  create mode 100644 package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+- Update site
+- Drop patch (already in version)
 
-Both applied to master. Thanks!
+https://github.com/greatscottgadgets/hackrf/releases/tag/v2022.09.1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...es-FindFFTW.cmake-fix-build-without-fftw3.patch | 34 ----------------------
+ package/hackrf/Config.in                           |  2 +-
+ package/hackrf/hackrf.hash                         |  2 +-
+ package/hackrf/hackrf.mk                           |  4 +--
+ 4 files changed, 4 insertions(+), 38 deletions(-)
+
+diff --git a/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch b/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
+deleted file mode 100644
+index 2b1f34879b..0000000000
+--- a/package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 3e32f46c7948f6b26476558905995ebec9b01760 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 15 Oct 2021 23:36:54 +0200
+-Subject: [PATCH] cmake/modules/FindFFTW.cmake: fix build without fftw3
+-
+-Build on Linux fails if libfftw3 is not available since commit
+-https://github.com/greatscottgadgets/hackrf/commit/a8c1fc92e9fa10843cb4aafd68c52f9903ebd05d
+-which replaced
+-pkg_check_modules(FFTW REQUIRED fftw3f)
+-by
+-find_package(FFTW REQUIRED)
+-
+-Fix this build failure by updating FindFFTW.cmake to check for fftw3f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/greatscottgadgets/hackrf/commit/3e32f46c7948f6b26476558905995ebec9b01760]
+----
+- host/cmake/modules/FindFFTW.cmake | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/host/cmake/modules/FindFFTW.cmake b/host/cmake/modules/FindFFTW.cmake
+-index b9f3bfb81..802db4f5b 100644
+---- a/host/cmake/modules/FindFFTW.cmake
+-+++ b/host/cmake/modules/FindFFTW.cmake
+-@@ -16,7 +16,7 @@ IF (WIN32)
+- include_directories(${FFTW_INCLUDES})
+- find_library (FFTW_LIBRARIES NAMES ${FFTW_LIBRARIES})
+- ELSE(WIN32)
+--find_library (FFTW_LIBRARIES NAMES fftw3)
+-+find_library (FFTW_LIBRARIES NAMES fftw3f)
+- ENDIF(WIN32)
+- 
+- 
+diff --git a/package/hackrf/Config.in b/package/hackrf/Config.in
+index 05d01adc96..d5df328dfa 100644
+--- a/package/hackrf/Config.in
++++ b/package/hackrf/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_HACKRF
+ 	help
+ 	  Library and tools for accessing HackRF SDR boards.
+ 
+-	  https://github.com/mossmann/hackrf/tree/master/host
++	  https://hackrf.readthedocs.io
+ 
+ comment "hackrf needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+diff --git a/package/hackrf/hackrf.hash b/package/hackrf/hackrf.hash
+index 9053858f76..16ccb9dcfb 100644
+--- a/package/hackrf/hackrf.hash
++++ b/package/hackrf/hackrf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a43e5080c11efdfe69ddebcc35a02b018e30e820de0e0ebdc7948cf7b0cd93a3  hackrf-2021.03.1.tar.xz
++sha256  bacd4e7937467ffa14654624444c8b5c716ab470d8c1ee8d220d2094ae2adb3e  hackrf-2022.09.1.tar.xz
+ sha256  49b60a6288f90f49074228cc1fae0fb16871ba36b756013abdf7c2fc92f01fad  COPYING
+diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+index c224afc332..4317da60bc 100644
+--- a/package/hackrf/hackrf.mk
++++ b/package/hackrf/hackrf.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HACKRF_VERSION = 2021.03.1
+-HACKRF_SITE = https://github.com/mossmann/hackrf/releases/download/v$(HACKRF_VERSION)
++HACKRF_VERSION = 2022.09.1
++HACKRF_SITE = https://github.com/greatscottgadgets/hackrf/releases/download/v$(HACKRF_VERSION)
+ HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
+ HACKRF_LICENSE = GPL-2.0+, BSD-3-Clause
+ HACKRF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
