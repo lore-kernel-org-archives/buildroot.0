@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CBF5FA373D
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D47FA373D
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 11:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C80D6607FE;
-	Sun, 30 Oct 2022 11:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C80D6607FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F2D860A7D;
+	Sun, 30 Oct 2022 11:09:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F2D860A7D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vihBjVZRAS-o; Sun, 30 Oct 2022 11:09:10 +0000 (UTC)
+	with ESMTP id 9bJiZvQLOt_p; Sun, 30 Oct 2022 11:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AEEE606EC;
-	Sun, 30 Oct 2022 11:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AEEE606EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EF1D606ED;
+	Sun, 30 Oct 2022 11:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EF1D606ED
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 55B3C1BF2EB
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:05:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 313651BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F25A440357
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:05:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F25A440357
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFBE8403C1
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 11:06:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFBE8403C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RBg-5C-LRS1c for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 11:05:54 +0000 (UTC)
+ with ESMTP id b80eNRJUI6OW for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 11:06:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46E754035A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 46E754035A
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD2D64030A
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD2D64030A
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 11:06:04 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4BFB840002;
- Sun, 30 Oct 2022 11:05:51 +0000 (UTC)
-Date: Sun, 30 Oct 2022 12:05:50 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221030120550.026290c0@windsurf>
-In-Reply-To: <20221029120937.820995-1-fontaine.fabrice@gmail.com>
-References: <20221029120937.820995-1-fontaine.fabrice@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 9B12960007;
+ Sun, 30 Oct 2022 11:06:02 +0000 (UTC)
+Date: Sun, 30 Oct 2022 12:06:01 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221030120601.0c81d9ed@windsurf>
+In-Reply-To: <20221029123903.1422864-1-james.hilliard1@gmail.com>
+References: <20221029123903.1422864-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667127951;
+ d=bootlin.com; s=gm1; t=1667127963;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=KR2slJDDowY4D2FVWoEnxxH8gdqmSa+2cozzcaQmXOs=;
- b=h+IDWRYIjZ5Zrr7ILPHUkMB0U4ZNx6n1xioJqzaw1U90blscwixnpQ+E8zqbEe4e7VFRWw
- XwePm5wgali1qAqZvU07lIodniX0DPdQrRueUzGwT+hWtjKpe4RaG3+0qgmY8cwtRK0Fbp
- 0HAOdvyqi0FXIhybT8f+Lc42VZocbriXa8UhxMvjHZkegb8zsxL1FCGN7yjYZ73C2bWo9l
- QnRpDl3vmCs86W/KcJSHZAm/Q6eYzEqRomPFAUMPlY8ua1DseDlYMT0wPCSPyWQlVQct7+
- PyrqDyPIprjOMfHmoyx5r96NBEvGvGbhgZTua94EI7CFRvmeaq3LDAer75b3Pw==
+ bh=iUojnBS5i+MFkveToYx5Yjw3L7UaFBnCbhbOFmYrakk=;
+ b=RBW/xzK/uRHv/lUR6FD+4Uk1x/9ZzJb9CYB4T+Nh6VO2gNzMSg1r+CfkHBoJogt2+TYbi2
+ fUP8dVbLehT28otIcr4cz7JokccYsmwzwbFyC3Q0LbkvJDkUhzo3A26uYlhtdqjEAsXGCf
+ c2fgwu3CLGBAtpDI1bGmtK2dcApTINurqSL+Wv5Y7dU/w3NbOSJ/WHQj9XAUxR5++ppgnb
+ 9/R4sqd2VUwUamZwycOEF+ItOV4WIhyoMRETGYYmGCufDZsEwgLacLWeEAhTwgZn2xZB3+
+ 2LbAvzkFUeGYYAGszJ9kSlcHFut3tFoxSqDCd2bc1qc3Qffz3jyEFFGNYHhSZw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=h+IDWRYI
-Subject: Re: [Buildroot] [PATCH 1/1] package/hackrf: bump to version
- 2022.09.1
+ header.s=gm1 header.b=RBW/xzK/
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
+ 0.13.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,28 +78,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Oct 2022 14:09:37 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 29 Oct 2022 06:39:03 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> - Update site
-> - Drop patch (already in version)
-> 
-> https://github.com/greatscottgadgets/hackrf/releases/tag/v2022.09.1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...ndFFTW.cmake-fix-build-without-fftw3.patch | 34 -------------------
->  package/hackrf/Config.in                      |  2 +-
->  package/hackrf/hackrf.hash                    |  2 +-
->  package/hackrf/hackrf.mk                      |  4 +--
->  4 files changed, 4 insertions(+), 38 deletions(-)
->  delete mode 100644 package/hackrf/0001-cmake-modules-FindFFTW.cmake-fix-build-without-fftw3.patch
+>  package/python-maturin/python-maturin.hash | 2 +-
+>  package/python-maturin/python-maturin.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
