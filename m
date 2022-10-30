@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF53ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF1C9C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 16:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0826260A90;
-	Sun, 30 Oct 2022 16:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0826260A90
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88D5F403F9;
+	Sun, 30 Oct 2022 16:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88D5F403F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id itY_NrmtYfyy; Sun, 30 Oct 2022 16:14:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hs-D8WlsOanc; Sun, 30 Oct 2022 16:14:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C2DC607FE;
-	Sun, 30 Oct 2022 16:14:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2DC607FE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C1D21BF956
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEE8B403AA;
+	Sun, 30 Oct 2022 16:14:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEE8B403AA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 852B31BF957
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54CE980C28
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6161E403A2
  for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 16:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54CE980C28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6161E403A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mnh5P0p8mc7n for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KmplQ-1CS3nr for <buildroot@lists.busybox.net>;
  Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9165C80C25
+ by smtp2.osuosl.org (Postfix) with ESMTP id A56E540352
  for <buildroot@buildroot.org>; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9165C80C25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A56E540352
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F76687575; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
+ id 9597F87572; Sun, 30 Oct 2022 16:14:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 17:10:56 +0100
+Date: Sun, 30 Oct 2022 17:11:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69c9cc60a10a114b49830134ac2ad5f136bd057f
-X-Git-Newrev: e60fb6d252d5ece448a70957ab45389b151f7f79
+X-Git-Oldrev: 5ef22cb6d10958a9867fc372725826819a8824ef
+X-Git-Newrev: 277e1250a6a000911ab463296dbb29e2e53514c4
 X-Patchwork-Hint: ignore
-Message-Id: <20221030161421.7F76687575@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/smartmontools: bump to version 7.3
+Message-Id: <20221030161421.9597F87572@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qlibc: bump to version 2.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e60fb6d252d5ece448a70957ab45389b151f7f79
+commit: https://git.buildroot.net/buildroot/commit/?id=277e1250a6a000911ab463296dbb29e2e53514c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/smartmontools/smartmontools/releases/tag/RELEASE_7_3
+https://github.com/wolkykim/qlibc/releases/tag/v2.4.7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/smartmontools/smartmontools.hash | 8 ++++----
- package/smartmontools/smartmontools.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/qlibc/qlibc.hash | 2 +-
+ package/qlibc/qlibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-index 3c5535b29a..e48e955d01 100644
---- a/package/smartmontools/smartmontools.hash
-+++ b/package/smartmontools/smartmontools.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.2/
--md5  e8d134c69ae4959a05cb56b31172ffb1  smartmontools-7.2.tar.gz
--sha1  8d68241096f6ed5b1bbcd8b427fa4a881c1f3e33  smartmontools-7.2.tar.gz
-+# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.3/
-+md5  7a71d388124e3cd43abf6586a43cb1ff  smartmontools-7.3.tar.gz
-+sha1  5ce7adb606119148d725b91a00652d427ca0adc2  smartmontools-7.3.tar.gz
- 
- # Locally computed
--sha256  5cd98a27e6393168bc6aaea070d9e1cd551b0f898c52f66b2ff2e5d274118cd6  smartmontools-7.2.tar.gz
-+sha256  a544f8808d0c58cfb0e7424ca1841cb858a974922b035d505d4e4c248be3a22b  smartmontools-7.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index 2e2bbcd4e2..d24f008df4 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
+diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
+index 5cd6e1860f..9b2af1a4e3 100644
+--- a/package/qlibc/qlibc.hash
++++ b/package/qlibc/qlibc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bd98c19f96c0d374adb69c99627c80cf967b5e860c8a4f28c13fa1b0d652a06e  qlibc-2.4.6.tar.gz
++sha256  ddb27da8ee6f3bf558e5d1d21d3d392c8a6f12d25767c5f70f4e757d814900c9  qlibc-2.4.7.tar.gz
+ sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
+diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
+index 3996bb3706..838ba68746 100644
+--- a/package/qlibc/qlibc.mk
++++ b/package/qlibc/qlibc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SMARTMONTOOLS_VERSION = 7.2
-+SMARTMONTOOLS_VERSION = 7.3
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPL-2.0+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
+-QLIBC_VERSION = 2.4.6
++QLIBC_VERSION = 2.4.7
+ QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
+ QLIBC_LICENSE = BSD-2-Clause
+ QLIBC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
