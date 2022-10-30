@@ -1,87 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A6F5ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5383C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 21:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B11D540117;
-	Sun, 30 Oct 2022 21:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B11D540117
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E892402B9;
+	Sun, 30 Oct 2022 21:37:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E892402B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zh8h8Tpi6aeX; Sun, 30 Oct 2022 21:35:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fCzlYw-jktUL; Sun, 30 Oct 2022 21:37:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD8A0400DC;
-	Sun, 30 Oct 2022 21:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD8A0400DC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15D2A1BF315
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:35:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF0E140239;
+	Sun, 30 Oct 2022 21:37:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF0E140239
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6212B1BF315
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4F74400DC
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:35:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4F74400DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D55781247
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 21:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D55781247
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ByMbP8f81R5 for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 21:35:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D83E9400CE
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D83E9400CE
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:35:23 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id a14so13569110wru.5
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:35:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lW29RfIxvBTC8q5gcyjrbFouOOmHWs7rQ+O11C2YTBA=;
- b=IH2Um4aij85XZX8QoHn4Cm/kMVu36dTcLJsYouQyYEMvP4Ocp1RKX2vzEJQGs9PKsK
- RLTbjvlaHb7X/9HYg+USx7efFzIExpcqCkisz/083hkGsLSERucurC+XZF3im+gKbvqk
- Zk7id7DAK2YpdSymU78I6j0DhA7d2VlHIYFxF1It2Ya0SQiyw1DJga1XI/IXNLUxzhub
- lrpKzEDPqIdVHwgqsxCC205ZqmcKl18ovHLYg5DtaSAgfkdNqYGH5P/VIwHD9SbPO6N2
- okgDuB/kjFm0Ml8dd6x7meojbAouf2z+kAS0OFYcHYXHf2ayZ6xqhbE3nbVLxe2IQUZr
- sNwg==
-X-Gm-Message-State: ACrzQf0naPxc7IT/RduMndXzOK0Gazy9ZK8RMdy3myoEAxztACH79LO1
- K3hPZED9FXFRTeeLvdl7L2iFPDXZd18=
-X-Google-Smtp-Source: AMsMyM48VclcFrhJ0VU1AdPy3ZWKSXbxuA78nkNWpjqFBSw9dtDLVhFwEFFIFrzuGasCVwRHv9cXew==
-X-Received: by 2002:a5d:64ee:0:b0:236:8f54:f180 with SMTP id
- g14-20020a5d64ee000000b002368f54f180mr5703587wri.559.1667165721543; 
- Sun, 30 Oct 2022 14:35:21 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- i4-20020a05600c354400b003cf4c1e211fsm5515464wmq.38.2022.10.30.14.35.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Oct 2022 14:35:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 22:35:17 +0100
-Message-Id: <20221030213517.95390-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S68owINGGzvJ for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 21:37:25 +0000 (UTC)
+X-Greylist: delayed 00:07:49 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D3AC80FAB
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D3AC80FAB
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 21:37:25 +0000 (UTC)
+Received: from pwmachine.localnet (85-170-25-210.rev.numericable.fr
+ [85.170.25.210])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 9FC7020B9F80;
+ Sun, 30 Oct 2022 14:29:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9FC7020B9F80
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 30 Oct 2022 22:29:32 +0100
+Message-ID: <5616514.DvuYhMxLoT@pwmachine>
+In-Reply-To: <CAPi7W821BMm3-zrAUGV=xV4qf2OQYLRNp-t-9mhAaBX+7JwrhA@mail.gmail.com>
+References: <20221029082510.61178-1-fontaine.fabrice@gmail.com>
+ <20221030215759.0d848e58@windsurf>
+ <CAPi7W821BMm3-zrAUGV=xV4qf2OQYLRNp-t-9mhAaBX+7JwrhA@mail.gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lW29RfIxvBTC8q5gcyjrbFouOOmHWs7rQ+O11C2YTBA=;
- b=Y2eQKQInSxuqVbYmZbpwg/Tw6pAywBbRlw27yUxCQmlDrqVSAYaYop6O16+RtUEl5B
- sXgiK2DvmHqVAK+lRFdust0ZHbrZRmIARznIBE+n2xoOPNs2nj7xng/dYvW6ExVTjtJl
- FBMQIA1fevZ0jf4/baZxScCZitlwp/8u5BlqiIBetf9jTyCyFeIWS1ij4HBRyeAwLLNV
- hnm07Cr0+zkiLy5stvxQnA3QYQyiUq5+KpIYA8o24Vd2F1uSowxAHAJe9K1gkrQn92IK
- VorwqMaGFOcCojryUEKwU/igSqb2h8QO6graWql51taFfEzeHUBvEypTzod4qSB8P449
- FF8A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Y2eQKQIn
-Subject: [Buildroot] [PATCH 1/1] package/arp-scan: bump to version 1.9.8
+ d=linux.microsoft.com; 
+ s=default; t=1667165375;
+ bh=WH0cg+N1dK1nv2j/sIkn0cT+smHKOuf0M5rvQMsYSm0=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=T791z4wJ/ebyYVG42NQKHlkhNYtyoRJfiuMkGROTbTA6X9qF6c3bb/qbn73bRzf7Y
+ C3gIdSpJuwqUCHBEI/ZLw71e5r3mEw8RGlGcoHlv4S46RcvGxjFaYA/GtYzbAeLyx7
+ 8kcz7ics2u7URekVSm6LxHWt3aRGIfITzRS/l3FE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+ header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
+ header.b=T791z4wJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/pahole: bump to version 1.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +74,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update hash of COPYING (gnu.org license file used since
-https://github.com/royhills/arp-scan/commit/6194ffb69d831709d49b83f734f8c338c13df28c)
+Hi.
 
-https://github.com/royhills/arp-scan/blob/1.9.8/ChangeLog
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/arp-scan/arp-scan.hash | 4 ++--
- package/arp-scan/arp-scan.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Le dimanche 30 octobre 2022, 22:17:55 CET Fabrice Fontaine a =E9crit :
+> Hello Thomas,
+> =
 
-diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
-index dd97333013..b18c6ceb38 100644
---- a/package/arp-scan/arp-scan.hash
-+++ b/package/arp-scan/arp-scan.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e03c36e4933c655bd0e4a841272554a347cd0136faf42c4a6564059e0761c039  arp-scan-1.9.7.tar.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  b9b75ceaef6348f5951b06c773ec7a243a9e780e160eafebc369f9c27f6a7d3f  arp-scan-1.9.8.tar.gz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index 3fdbd463c2..73d1b99bc7 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARP_SCAN_VERSION = 1.9.7
-+ARP_SCAN_VERSION = 1.9.8
- ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
- ARP_SCAN_LICENSE = GPL-3.0+
- ARP_SCAN_LICENSE_FILES = COPYING
--- 
-2.35.1
+> Le dim. 30 oct. 2022 =E0 21:58, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>
+> a =E9crit :
+> > Hello Fabrice,
+> > =
+
+> > On Sat, 29 Oct 2022 10:25:10 +0200
+> > =
+
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/NEWS?h=3D=
+v1.24
+> > > =
+
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > =
+
+> > We have zillions of build failures for host-pahole:
+> >   http://autobuild.buildroot.net/?reason=3Dhost-pahole%
+
+Sorry for the disturbance.
+
+> > Is this version bump fixing them? If not, do we have an idea on how to
+> > fix this build issue (I didn't investigated myself)?
+> =
+
+> Nope, this version bump will not fix these build failures. I tried to
+> investigate but I wasn't able to reproduce it locally on my machine.
+> These build failures are mostly raised by your autobuilder.
+> =
+
+> My assumption is that your kernel is probably too old, bpf_link_type is
+> only available since version 5.8 and
+> https://github.com/torvalds/linux/commit/f2e10bff16a0fdd41ba278c84da98137=
+00e
+> 356af
+> =
+
+> However, I don't know how to add this dependency to host-pahole (and
+> host-libbpf).
+
+I proposed this patch set:
+https://lore.kernel.org/buildroot/20220610165441.84812-1-flaniel@linux.micr=
+osoft.com/
+to fix the build failures.
+As pointed above, I am also not able to reproduce locally and I do not have =
+
+access to an autobuilder setup (or I do not know how I can mimic one) to =
+
+investigate on it.
+
+Do you think the above patch can do the trick?
+If not, is it possible to deploy locally an autobuilder to check if I can =
+
+reproduce the problem and propose a correct patch?
+
+> > Thanks!
+> > =
+
+> > Thomas
+> > --
+> > Thomas Petazzoni, co-owner and CEO, Bootlin
+> > Embedded Linux and Kernel engineering and training
+> > https://bootlin.com
+> =
+
+> Best Regards,
+> =
+
+> Fabrice
+
+
+Best regards and thank you in advance.
+
 
 _______________________________________________
 buildroot mailing list
