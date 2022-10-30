@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7013DECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 14:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E966ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 14:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 026C380E7E;
-	Sun, 30 Oct 2022 14:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 026C380E7E
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5C5D812C3;
+	Sun, 30 Oct 2022 14:03:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5C5D812C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJkH7PRaMevW; Sun, 30 Oct 2022 14:03:24 +0000 (UTC)
+	with ESMTP id 8ZuKjUuVCUf6; Sun, 30 Oct 2022 14:03:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E26A1812D4;
-	Sun, 30 Oct 2022 14:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E26A1812D4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE1121BF956
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:03:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D78C781292;
+	Sun, 30 Oct 2022 14:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D78C781292
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2106A1BF489
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA2DA80F2C
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA2DA80F2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id F149060034
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 14:03:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F149060034
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zvczJinUcnWU for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 14:03:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA35480E7E
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA35480E7E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B89B6874AD; Sun, 30 Oct 2022 14:03:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 15:02:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd317f701b60ddbf546504bf3f8aca6b960e05af
-X-Git-Newrev: c4db8416ff2c9ace3c79a71ccfa3d942daadd093
-X-Patchwork-Hint: ignore
-Message-Id: <20221030140306.B89B6874AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dahdi-linux: fix build with kernel
- >= 5.18
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rf5X87AiQf8T for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 14:03:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D18160ABA
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D18160ABA
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 14:03:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3EEB8240002;
+ Sun, 30 Oct 2022 14:03:19 +0000 (UTC)
+Date: Sun, 30 Oct 2022 15:03:18 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221030150318.45f4f1af@windsurf>
+In-Reply-To: <20221030125358.387628-1-fontaine.fabrice@gmail.com>
+References: <20221030125358.387628-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667138600;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=I+uCLYIMUuhJgFuam+EVaJUmBhCgU2AzkzdgzF9zdDg=;
+ b=EBUhIAl/vDm2ghmrzAFY0RU3nLjZupLmLJfkTJLgBqZdgtB29qxoWlYMmb93K/9A8OLUED
+ UdstKvM+a0ZTEmJUZNu+4hhPvsYtVoClqqfK39H+gJvG+Orc03fEYBAQAL2U+5l6Y0ofiD
+ Sv2Cd1eDtBwVYHubt+Qznml5iyL5UuVGftwZUlcofBdPwNOFErJFGq3mHRujin0LfWNnXG
+ JXq/gRkBPs8YyYOmiIlAmYHFkXr4/grcXvNesP5ydMXFu0r17mbvVxcoqPsl0g0xhjYeU2
+ imckJQdfLrbr3K1lUDQwDHpWHBcdXXKp0GZwgrrdZE4OpM/wH/ADQIWdmc6UbA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EBUhIAl/
+Subject: Re: [Buildroot] [PATCH 1/1] package/kmemd: needs headers >= 5.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,108 +77,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4064485152592779471=="
+Cc: Tobias Waldekranz <tobias@waldekranz.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4064485152592779471==
-Content-Type: text/plain
+On Sun, 30 Oct 2022 13:53:58 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4db8416ff2c9ace3c79a71ccfa3d942daadd093
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> kmemd unconditionally uses BPF_PSEUDO_MAP_IDX_VALUE which is only
+> available since kernel 5.14 and
+> https://github.com/torvalds/linux/commit/387544bfa291a22383d60b40f887360e2b931ec6
+> resulting in the following build failure since the addition of the
+> package in commit b3f915c6561bcb2f7952faca3bedf1766f299538:
+> 
+> kmem.c:36:17: error: 'BPF_PSEUDO_MAP_IDX_VALUE' undeclared here (not in a function); did you mean 'BPF_PSEUDO_MAP_VALUE'?
+>    36 |                 BPF_PSEUDO_MAP_IDX_VALUE, 0, _idx       \
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/dcd7e6321d64746b8b867fa3f32095d1180a40fc
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/kmemd/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fix the following build failure with kernel >= 5.18 raised since bump to
-version 3.2.0 in commit 6cbfed0dbf43c5e04e3cc543b642e3c996bfed97:
+Applied to master, thanks.
 
-/home/autobuild/autobuild/instance-0/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wct4xxp/base.c: In function ‘t4_allocate_buffers’:
-/home/autobuild/autobuild/instance-0/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wct4xxp/base.c:3864:17: error: implicit declaration of function ‘pci_alloc_consistent’ [-Werror=implicit-function-declaration]
- 3864 |         alloc = pci_alloc_consistent(wc->dev, numbufs * T4_BASE_SIZE(wc) * 2,
-      |                 ^~~~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/ddacd807dddeb1649e957264ac57bba27d9bb463
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...compilation-issues-on-linux-kernel-5-18-0.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch b/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch
-new file mode 100644
-index 0000000000..a896def375
---- /dev/null
-+++ b/package/dahdi-linux/0003-Fixed-compilation-issues-on-linux-kernel-5-18-0.patch
-@@ -0,0 +1,58 @@
-+From dbb43101c2a9205b67223b006bf75c29ebadced9 Mon Sep 17 00:00:00 2001
-+From: Pushkar Singh <psingh@sangoma.com>
-+Date: Tue, 2 Aug 2022 19:40:00 +0530
-+Subject: [PATCH] Fixed compilation issues on linux kernel >= 5.18.0
-+
-+With kernel 5.18 and higher
-+PCI: Remove the deprecated "pci-dma-compat.h" API
-+
-+The commit will make sure to impplement pci dma related api's
-+[Retrieved from:
-+https://github.com/asterisk/dahdi-linux/commit/dbb43101c2a9205b67223b006bf75c29ebadced9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/dahdi/kernel.h | 31 +++++++++++++++++++++++++++++++
-+ 1 file changed, 31 insertions(+)
-+
-+diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
-+index ed81e9e3..35e93bc4 100644
-+--- a/include/dahdi/kernel.h
-++++ b/include/dahdi/kernel.h
-+@@ -58,6 +58,37 @@
-+ 
-+ #include <linux/poll.h>
-+ 
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
-++#include <linux/pci.h>
-++#include <linux/dma-mapping.h>
-++
-++static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size, dma_addr_t *dma_handle)
-++{
-++    return dma_alloc_coherent(hwdev == NULL ? NULL : &hwdev->dev, size, dma_handle, GFP_ATOMIC);
-++}
-++
-++static inline void pci_free_consistent(struct pci_dev *hwdev, size_t size, void *vaddr, dma_addr_t dma_handle)
-++{
-++    dma_free_coherent(hwdev == NULL ? NULL : &hwdev->dev, size, vaddr, dma_handle);
-++}
-++
-++static inline dma_addr_t pci_map_single(struct pci_dev *hwdev, void *ptr, size_t size, int direction)
-++{
-++    return dma_map_single(&hwdev->dev, ptr, size, (enum dma_data_direction)direction);
-++}
-++
-++static inline void pci_unmap_single(struct pci_dev *hwdev, dma_addr_t dma_addr, size_t size, int direction)
-++{
-++    dma_unmap_single(&hwdev->dev, dma_addr, size, (enum dma_data_direction)direction);
-++}
-++
-++static inline int pci_set_dma_mask(struct pci_dev *dev, u64 mask)
-++{
-++    return dma_set_mask(&dev->dev, mask);
-++}
-++
-++#endif
-++
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
-+ #define HAVE_NET_DEVICE_OPS
-+ #endif
-
---===============4064485152592779471==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4064485152592779471==--
