@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C35FA373D
-	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF994C38A02
+	for <buildroot@archiver.kernel.org>; Sun, 30 Oct 2022 10:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE36A40567;
-	Sun, 30 Oct 2022 10:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE36A40567
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61636607FE;
+	Sun, 30 Oct 2022 10:45:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61636607FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ncwiz8GinxRS; Sun, 30 Oct 2022 10:42:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BKIEOhRxfud3; Sun, 30 Oct 2022 10:45:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D931B40527;
-	Sun, 30 Oct 2022 10:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D931B40527
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA636606EC;
+	Sun, 30 Oct 2022 10:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA636606EC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C3F91BF2B7
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:42:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3FA341BF2B7
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58C2D60644
- for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:42:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58C2D60644
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1935D606EC
+ for <buildroot@lists.busybox.net>; Sun, 30 Oct 2022 10:45:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1935D606EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hH0tPmZHaBFc for <buildroot@lists.busybox.net>;
- Sun, 30 Oct 2022 10:42:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8FD9606EC
- for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8FD9606EC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 974C387460; Sun, 30 Oct 2022 10:42:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Oct 2022 11:41:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ed6d61c03bf9e1ce7830bafcfeca683e6c93592
-X-Git-Newrev: 1ce9af6ccfa3136e62d0c429adb38460bece058f
-X-Patchwork-Hint: ignore
-Message-Id: <20221030104205.974C387460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libkcapi: support enabling
- lib-asym and lib-kpp
+ with ESMTP id Z0h5mRjMlijH for <buildroot@lists.busybox.net>;
+ Sun, 30 Oct 2022 10:45:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB15960644
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BB15960644
+ for <buildroot@buildroot.org>; Sun, 30 Oct 2022 10:45:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2D4E860004;
+ Sun, 30 Oct 2022 10:45:30 +0000 (UTC)
+Date: Sun, 30 Oct 2022 11:45:29 +0100
+To: Tan En De <ende.tan@linux.starfivetech.com>
+Message-ID: <20221030114529.607f4e73@windsurf>
+In-Reply-To: <20221015084757.277050-1-ende.tan@linux.starfivetech.com>
+References: <20221015084757.277050-1-ende.tan@linux.starfivetech.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667126731;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=n/U+/QGYqbGUuEXnyzWrkcFOea3h1cN/gzQdPtay/oU=;
+ b=PycR8r0EgL0Dw4XHL4kDWTHgSL5SUcmQ4nQR1A36D4WbstGW0g5Pfz3HvEsdiYnH+C/1wR
+ a1D3gl4o/+ELPPobwsXIA7vo4Dc1p38js6qC+4lHh9d9t2XancD1azfT87tJWYcv6S7MuY
+ sgehUzYOkDqleK74b1OEuVusWU/tMahQ77T+0Kb82jiBMNspeH7u0ThdZlbnFmI8yhMs+7
+ K6qjMbh2uMIzyfHRsu6FlOn6Bh+d5xqTSbtmeKm662gHAFgekeGLmjwkxU1C2jdsCzTb7W
+ Lps9O0/QvH9Lcz01e+KYGhz05e9UerR3hzwQHMPcjlzWp3qbUN0hc5iln1Ge9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PycR8r0E
+Subject: Re: [Buildroot] [0/3] package/libkcapi: bump version to 1.4.0 and
+ add Kconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,88 +78,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ce9af6ccfa3136e62d0c429adb38460bece058f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Tan,
 
-Add Kconfig options to allow enabling asymmetric cipher support
-(--enable-lib-asym) and key protocol primitives support
-(--enable-lib-kpp) in library.
+On Sat, 15 Oct 2022 16:47:54 +0800
+Tan En De <ende.tan@linux.starfivetech.com> wrote:
 
-Signed-off-by: Tan En De <ende.tan@linux.starfivetech.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libkcapi/Config.in   | 14 ++++++++++++++
- package/libkcapi/libkcapi.mk | 12 ++++++++++++
- 2 files changed, 26 insertions(+)
+> Tan En De (3):
+>   package/libkcapi: bump version to 1.4.0
+>   package/libkcapi: support building kcapi-dgst application
+>   package/libkcapi: support enabling lib-asym and lib-kpp
 
-diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
-index 8f2cf7ecc4..bf9c95270c 100644
---- a/package/libkcapi/Config.in
-+++ b/package/libkcapi/Config.in
-@@ -8,6 +8,13 @@ config BR2_PACKAGE_LIBKCAPI
- 
- if BR2_PACKAGE_LIBKCAPI
- 
-+config BR2_PACKAGE_LIBKCAPI_ASYM
-+	bool "build asymmetric ciphers library"
-+	help
-+	  Using this library requires the Linux kernel to be patched
-+	  with libkcapi Linux kernel patches found in libkcapi
-+	  kernel-patches/ directory.
-+
- config BR2_PACKAGE_LIBKCAPI_DGSTAPP
- 	bool "build dgst application"
- 
-@@ -21,6 +28,13 @@ config BR2_PACKAGE_LIBKCAPI_HASHER
- comment "hasher application needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
-+config BR2_PACKAGE_LIBKCAPI_KPP
-+	bool "build KPP library"
-+	help
-+	  Using this library requires the Linux kernel to be patched
-+	  with libkcapi Linux kernel patches found in libkcapi
-+	  kernel-patches/ directory.
-+
- config BR2_PACKAGE_LIBKCAPI_RNGAPP
- 	bool "build rng read application"
- 
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index c6e58c6a9b..e88928a74d 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -17,6 +17,12 @@ LIBKCAPI_CONF_ENV = \
- 	ac_cv_path_XMLTO=""
- LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
- 
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_ASYM),y)
-+LIBKCAPI_CONF_OPTS += --enable-lib-asym
-+else
-+LIBKCAPI_CONF_OPTS += --disable-lib-asym
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBKCAPI_DGSTAPP),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-dgstapp
- else
-@@ -35,6 +41,12 @@ else
- LIBKCAPI_CONF_OPTS += --disable-kcapi-hasher
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_KPP),y)
-+LIBKCAPI_CONF_OPTS += --enable-lib-kpp
-+else
-+LIBKCAPI_CONF_OPTS += --disable-lib-kpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBKCAPI_RNGAPP),y)
- LIBKCAPI_CONF_OPTS += --enable-kcapi-rngapp
- else
+Thanks a lot, all 3 patches applied. I did some minor changes on PATCH
+2/3 and 3/3:
+
+ - Alphabetic ordering in Config.in and libkcapi.mk
+
+ - Improvement of the prompt of the options, moving the discussion
+   about kernel patches into the help text of each option instead of
+   inside the prompt (which would otherwise be too long)
+
+Also, I see we have nobody in our DEVELOPERS associated to the libkcapi
+package. If you're a user of this package, would you agree to be listed
+in the DEVELOPERS file for this package? This way, you would receive
+notifications when we have build failures affecting this package, and
+you could help us maintain its support in Buildroot moving forward.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
