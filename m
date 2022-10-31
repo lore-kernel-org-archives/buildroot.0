@@ -1,63 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5080CFA3740
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 10:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD59C38A02
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 10:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF00440356;
-	Mon, 31 Oct 2022 10:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF00440356
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7D108138E;
+	Mon, 31 Oct 2022 10:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7D108138E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C4SVBkIAaNfu; Mon, 31 Oct 2022 10:40:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pIjHpGWHxCLk; Mon, 31 Oct 2022 10:41:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E283C40336;
-	Mon, 31 Oct 2022 10:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E283C40336
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 43E691BF3EC
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:40:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D513A81375;
+	Mon, 31 Oct 2022 10:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D513A81375
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A01381BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B16840336
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B16840336
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7799A81375
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7799A81375
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 68LWIe629p-r for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 10:40:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 485214031E
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 485214031E
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 10:40:26 +0000 (UTC)
-Date: Mon, 31 Oct 2022 10:40:14 +0000
-From: Paul Cercueil <paul@crapouillou.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qiriMFqg5fB2 for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 10:41:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8BBBC81361
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 10:41:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BBBC81361
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 758008789B; Mon, 31 Oct 2022 10:41:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-Id: <2N5MKR.3RVYNROA50C41@crapouillou.net>
-In-Reply-To: <20221030230410.982946-1-paul@crapouillou.net>
-References: <20221030230410.982946-1-paul@crapouillou.net>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; 
- s=mail; t=1667212823; h=from:from:sender:reply-to:subject:subject:date:date:
- message-id:message-id:to:to:cc:mime-version:mime-version:
- content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Fs2tOBa0jL8yTUnjR/lKb7p/zblRkcHUUkA39d3Xewc=;
- b=FEDFqJS1UQ1mB4MSz9aPPELv6w5U11WveElJGtlr38jKYQ59d3NQikx3y+rwQVitmaMiL+
- ScN7Gr8vBNLliCa725E24xZ4rOgALyE5MZg8ZfleYSdf4eWBlkwTCM0yy6aMRvUeI/KJp1
- Qq832xuyEPkhow/dDFoYNugAWcx6Fps=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=FEDFqJS1
-Subject: Re: [Buildroot] [PATCH 1/1] package/glmark2: add patch to fix GCC
- 12 build
+Date: Mon, 31 Oct 2022 11:39:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e3975ec7d4b478ec6c1ba56b63cbb5bccfb9dd09
+X-Git-Newrev: d76655c86ecc8ce302490422e8d6a286857ef36c
+X-Patchwork-Hint: ignore
+Message-Id: <20221031104104.758008789B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cni-plugins: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,93 +55,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d76655c86ecc8ce302490422e8d6a286857ef36c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Container Networking Interface plugins.
 
-Le dim. 30 oct. 2022 =E0 23:04:10 +0000, Paul Cercueil =
+https://github.com/containernetworking/plugins
 
-<paul@crapouillou.net> a =E9crit :
-> Add a patch cherry-picked from upstream to fix the build with GCC 12.
-> =
+Dependency of podman.
 
-> Upstream commit is d1ca3f53c96dc8a4048b17dc16147a8fac782d4a.
-> I don't know if it fixes any autobuilder errors, I noticed the bug =
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/cni-plugins/Config.in        | 16 +++++++++++
+ package/cni-plugins/cni-plugins.hash |  3 +++
+ package/cni-plugins/cni-plugins.mk   | 51 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 72 insertions(+)
 
-> when
-> building locally.
-> =
-
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  ...ibmatrix-Add-missing-utility-include.patch | 29 =
-
-> +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 =
-
-> package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
-> =
-
-> diff --git =
-
-> a/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch =
-
-> b/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
-> new file mode 100644
-> index 0000000000..2a658393ae
-> --- /dev/null
-> +++ b/package/glmark2/0002-libmatrix-Add-missing-utility-include.patch
-> @@ -0,0 +1,29 @@
-> +From d1ca3f53c96dc8a4048b17dc16147a8fac782d4a Mon Sep 17 00:00:00 =
-
-> 2001
-> +From: Alexandros Frantzis <alexandros.frantzis@collabora.com>
-> +Date: Mon, 14 Feb 2022 13:54:09 +0200
-> +Subject: [PATCH] libmatrix: Add missing <utility> include
-> +
-> +Fixes compilation with GCC 12.
-> +
-> +Fixes #169
-
-Forgot I had to sign the patch too:
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> +---
-> + Upstream commit: d1ca3f53c96dc8a4048b17dc16147a8fac782d4a
-> +
-> + src/libmatrix/program.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/libmatrix/program.h b/src/libmatrix/program.h
-> +index f95b470..1c9de08 100644
-> +--- a/src/libmatrix/program.h
-> ++++ b/src/libmatrix/program.h
-> +@@ -15,6 +15,7 @@
-> + #include <string>
-> + #include <vector>
-> + #include <map>
-> ++#include <utility>
-> + #include "mat.h"
-> +
-> + // Simple shader container.  Abstracts all of the OpenGL bits, but =
-
-> leaves
-> +--
-> +2.35.1
-> +
-> --
-> 2.35.1
-> =
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5939361ba8..64af4deb53 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -534,6 +534,7 @@ F:	package/python-pylibftdi/
+ N:	Christian Stewart <christian@paral.in>
+ F:	package/batman-adv/
+ F:	package/catatonit/
++F:	package/cni-plugins/
+ F:	package/containerd/
+ F:	package/crun/
+ F:	package/delve/
+diff --git a/package/Config.in b/package/Config.in
+index cbdaed2279..450a73d4ca 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1821,6 +1821,7 @@ menu "Networking"
+ 	source "package/bluez5_utils-headers/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/cgic/Config.in"
++	source "package/cni-plugins/Config.in"
+ 	source "package/cppzmq/Config.in"
+ 	source "package/curlpp/Config.in"
+ 	source "package/czmq/Config.in"
+diff --git a/package/cni-plugins/Config.in b/package/cni-plugins/Config.in
+new file mode 100644
+index 0000000000..e01cadc026
+--- /dev/null
++++ b/package/cni-plugins/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_CNI_PLUGINS
++	bool "cni-plugins"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
++	depends on BR2_USE_MMU
++	help
++	  Container Networking Interface plugins.
++
++	  https://github.com/containernetworking/plugins
++
++comment "cni-plugins needs a glibc or musl toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
++		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/cni-plugins/cni-plugins.hash b/package/cni-plugins/cni-plugins.hash
+new file mode 100644
+index 0000000000..fc3b5a7ead
+--- /dev/null
++++ b/package/cni-plugins/cni-plugins.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  c86c44877c47f69cd23611e22029ab26b613f620195b76b3ec20f589367a7962  cni-plugins-1.1.1.tar.gz
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
+new file mode 100644
+index 0000000000..b30937095a
+--- /dev/null
++++ b/package/cni-plugins/cni-plugins.mk
+@@ -0,0 +1,51 @@
++################################################################################
++#
++# cni-plugins
++#
++################################################################################
++
++CNI_PLUGINS_VERSION = 1.1.1
++CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
++CNI_PLUGINS_LICENSE = Apache-2.0
++CNI_PLUGINS_LICENSE_FILES = LICENSE
++
++CNI_PLUGINS_BUILD_TARGETS = \
++	plugins/ipam/dhcp \
++	plugins/main/bridge \
++	plugins/main/host-device \
++	plugins/main/ipvlan \
++	plugins/main/loopback \
++	plugins/main/macvlan \
++	plugins/main/ptp \
++	plugins/main/vlan \
++	plugins/meta/bandwidth \
++	plugins/meta/firewall \
++	plugins/meta/portmap \
++	plugins/meta/tuning \
++	plugins/meta/vrf
++CNI_PLUGINS_INSTALL_BINS = $(CNI_PLUGINS_BUILD_TARGETS)
++
++ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
++CNI_PLUGINS_DEPENDENCIES += libapparmor
++CNI_PLUGINS_TAGS += apparmor
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++CNI_PLUGINS_TAGS += seccomp
++CNI_PLUGINS_DEPENDENCIES += libseccomp host-pkgconf
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++CNI_PLUGINS_TAGS += selinux
++CNI_PLUGINS_DEPENDENCIES += libselinux
++endif
++
++define CNI_PLUGINS_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/cni/bin
++	$(foreach d,$(CNI_PLUGINS_INSTALL_BINS),\
++		$(INSTALL) -D -m 0755 $(@D)/bin/$$(basename $(d)) \
++			$(TARGET_DIR)/opt/cni/bin
++	)
++endef
++
++$(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
