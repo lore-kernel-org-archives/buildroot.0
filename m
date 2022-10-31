@@ -1,61 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3359BFA3741
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 19:53:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8C2AFA3741
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 20:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2D27408F8;
-	Mon, 31 Oct 2022 19:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2D27408F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83319812B5;
+	Mon, 31 Oct 2022 20:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83319812B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GyqzlKCpDuWe; Mon, 31 Oct 2022 19:53:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TN9z8ifmVbPO; Mon, 31 Oct 2022 20:39:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42A60408EC;
-	Mon, 31 Oct 2022 19:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A60408EC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D74AB1BF3CD
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 19:52:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F04480C3F;
+	Mon, 31 Oct 2022 20:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F04480C3F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A6341BF2F9
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:39:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF221408EC
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 19:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF221408EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22A6760B38
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A6760B38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TxguC_-6o5rq for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 19:52:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B212A408C1
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B212A408C1
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 19:52:57 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout01.t-online.de (Postfix) with SMTP id 740F94208;
- Mon, 31 Oct 2022 20:52:06 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.197.145]) by fwd78.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1opapJ-3ifYcj0; Mon, 31 Oct 2022 20:52:05 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44498)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1opapJ-00025N-0w;
- Mon, 31 Oct 2022 20:52:05 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 20:52:04 +0100
-Message-Id: <20221031195205.429257-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221031195205.429257-1-bernd.kuhls@t-online.de>
-References: <20221031195205.429257-1-bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eiv_mddBq26N for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 20:39:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C4C360B22
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4C4C360B22
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 20:39:32 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5B492240002;
+ Mon, 31 Oct 2022 20:39:28 +0000 (UTC)
+Date: Mon, 31 Oct 2022 21:39:26 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, mail@jens-maus.de,
+ fesc2000@mailbox.org, f.rogall@gmx.de, oliver.kasten@trsystems.de
+Message-ID: <20221031213926.50d3c778@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1667245925-78BAC9DD-C5898367/0/0 CLEAN NORMAL
-X-TOI-MSGID: 562fa5a9-ec22-454f-8840-c363af671ff1
-Subject: [Buildroot] [PATCH v2 2/3] package/monero: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667248770;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=lmGpLGnHpBA3CcBPnaSeeBOLm3TaIdbGznN7GRDNoPM=;
+ b=ZC+++7Vm3Cuu6HGSNCQzhghK92EPJtor5cX+DikSTatMhmIKfwNOmGC6goIOPHrOPkUfJq
+ tXuEc7G1u0lAns1jc1hnA5jHFHFh32QBgpVymLFNtf2DjHuXCCkGt5CpvfDxURSYqRnq4t
+ OpbMc7iCs5x+tzMHKoELbefXnDNtvrDGVvGgOZ+XtLD9E1H1uub1ljsxdsfvoiv9jMt7Xw
+ PIVXVLFKW6ZiP4UAa6A/d3RY8sqkBjItKhDYnYshObV/TV507G3qvPIezgbaZzXc6f3iMw
+ MbRJJ8Ifnw0o/dsNHtQoaEQllbl9sI6K11MW+Mwo19492SmolSgdNfu1bndH6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZC+++7Vm
+Subject: [Buildroot] NodeJS, qemu wrapper and ELF interpreter fun
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,315 +73,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, Stefan Ott <stefan@ott.net>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: disabled support for BR2_aarch64_be, not supported upstream:
-    https://github.com/tevador/RandomX/pull/257
+Hello,
 
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- .../monero/0001-disable-stack-protector.patch |  22 ++++
- package/monero/0002-system-miniupnpc.patch    | 112 ++++++++++++++++++
- package/monero/Config.in                      |  35 ++++++
- package/monero/monero.hash                    |   3 +
- package/monero/monero.mk                      |  55 +++++++++
- 7 files changed, 229 insertions(+)
- create mode 100644 package/monero/0001-disable-stack-protector.patch
- create mode 100644 package/monero/0002-system-miniupnpc.patch
- create mode 100644 package/monero/Config.in
- create mode 100644 package/monero/monero.hash
- create mode 100644 package/monero/monero.mk
+I finally took some time to investigate the NodeJS build issue that
+occurs on x86-64:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 06ee5d8056..7db7954871 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -407,6 +407,7 @@ F:	package/libyuv/
- F:	package/mesa3d/
- F:	package/minidlna/
- F:	package/mjpg-streamer/
-+F:	package/monero/
- F:	package/nut/
- F:	package/perl-crypt-openssl-guess/
- F:	package/perl-crypt-openssl-random/
-diff --git a/package/Config.in b/package/Config.in
-index fff8186351..ac811bf2e4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2179,6 +2179,7 @@ menu "Miscellaneous"
- 	source "package/haveged/Config.in"
- 	source "package/linux-syscall-support/Config.in"
- 	source "package/mobile-broadband-provider-info/Config.in"
-+	source "package/monero/Config.in"
- 	source "package/netdata/Config.in"
- 	source "package/proj/Config.in"
- 	source "package/qemu/Config.in"
-diff --git a/package/monero/0001-disable-stack-protector.patch b/package/monero/0001-disable-stack-protector.patch
-new file mode 100644
-index 0000000000..0407b4e32d
---- /dev/null
-+++ b/package/monero/0001-disable-stack-protector.patch
-@@ -0,0 +1,22 @@
-+Disable unconditional stack-protector support
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr monero-source-v0.18.1.0.orig/CMakeLists.txt monero-source-v0.18.1.0/CMakeLists.txt
-+--- monero-source-v0.18.1.0.orig/CMakeLists.txt	2022-08-10 05:34:23.000000000 +0200
-++++ monero-source-v0.18.1.0/CMakeLists.txt	2022-08-15 18:40:52.240699837 +0200
-+@@ -831,14 +831,6 @@
-+   add_c_flag_if_supported(-Wformat-security C_SECURITY_FLAGS)
-+   add_cxx_flag_if_supported(-Wformat-security CXX_SECURITY_FLAGS)
-+ 
-+-  # -fstack-protector
-+-  if (NOT OPENBSD AND NOT (WIN32 AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 9.1)))
-+-    add_c_flag_if_supported(-fstack-protector C_SECURITY_FLAGS)
-+-    add_cxx_flag_if_supported(-fstack-protector CXX_SECURITY_FLAGS)
-+-    add_c_flag_if_supported(-fstack-protector-strong C_SECURITY_FLAGS)
-+-    add_cxx_flag_if_supported(-fstack-protector-strong CXX_SECURITY_FLAGS)
-+-  endif()
-+-
-+   # New in GCC 8.2
-+   if (NOT OPENBSD AND NOT (WIN32 AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 9.1)))
-+     add_c_flag_if_supported(-fcf-protection=full C_SECURITY_FLAGS)
-diff --git a/package/monero/0002-system-miniupnpc.patch b/package/monero/0002-system-miniupnpc.patch
-new file mode 100644
-index 0000000000..e12d9302bd
---- /dev/null
-+++ b/package/monero/0002-system-miniupnpc.patch
-@@ -0,0 +1,112 @@
-+Add support for miniupnpc system library
-+
-+Downloaded from
-+https://git.alpinelinux.org/aports/plain/community/monero/system-miniupnpc.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -676,6 +676,14 @@
-+ include_directories("${CMAKE_CURRENT_BINARY_DIR}/translations")
-+ add_subdirectory(external)
-+ 
-++# Final setup for miniupnpc
-++if(UPNP_STATIC OR IOS)
-++  add_definitions("-DUPNP_STATIC")
-++else()
-++  add_definitions("-DUPNP_DYNAMIC")
-++  include_directories(${UPNP_INCLUDE})
-++endif()
-++
-+ # Final setup for libunbound
-+ include_directories(${UNBOUND_INCLUDE_DIR})
-+ 
-+diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
-+index 9b21705e..76340a22 100644
-+--- a/src/p2p/net_node.inl
-++++ b/src/p2p/net_node.inl
-+@@ -60,9 +60,16 @@
-+ #include "cryptonote_core/cryptonote_core.h"
-+ #include "net/parse.h"
-+ 
-+-#include <miniupnp/miniupnpc/miniupnpc.h>
-+-#include <miniupnp/miniupnpc/upnpcommands.h>
-+-#include <miniupnp/miniupnpc/upnperrors.h>
-++// We have to look for miniupnpc headers in different places, dependent on if its compiled or external
-++#ifdef UPNP_STATIC
-++  #include <miniupnp/miniupnpc/miniupnpc.h>
-++  #include <miniupnp/miniupnpc/upnpcommands.h>
-++  #include <miniupnp/miniupnpc/upnperrors.h>
-++#else
-++  #include "miniupnpc.h"
-++  #include "upnpcommands.h"
-++  #include "upnperrors.h"
-++#endif
-+ 
-+ #undef MONERO_DEFAULT_LOG_CATEGORY
-+ #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"
-+-- 
-+2.17.0
-+
-+--- a/external/CMakeLists.txt	2021-12-04 03:56:51.405517304 +0200
-++++ b/external/CMakeLists.txt	2021-12-04 04:02:37.649484660 +0200
-+@@ -34,24 +34,46 @@
-+ # We always compile if we are building statically to reduce static dependency issues...
-+ # ...except for FreeBSD, because FreeBSD is a special case that doesn't play well with
-+ # others.
-++if(NOT IOS)
-++    find_package(Miniupnpc QUIET)
-++endif()
-+ 
-+-find_package(Miniupnpc REQUIRED)
-+-
-+-message(STATUS "Using in-tree miniupnpc")
-+-set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
-+-add_subdirectory(miniupnp/miniupnpc)
-+-set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
-+-set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
-+-if(MSVC)
-+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
-+-elseif(NOT MSVC)
-+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-undef -Wno-unused-result -Wno-unused-value")
-++# If we have the correct shared version and we're not building static, use it
-++if(STATIC OR IOS)
-++ set(USE_SHARED_MINIUPNPC false)
-++elseif(MINIUPNP_FOUND AND MINIUPNPC_VERSION_1_7_OR_HIGHER)
-++ set(USE_SHARED_MINIUPNPC true)
-+ endif()
-++
-++
-++if(USE_SHARED_MINIUPNPC)
-++  message(STATUS "Using shared miniupnpc found at ${MINIUPNP_INCLUDE_DIR}")
-++
-++  set(UPNP_STATIC false PARENT_SCOPE)
-++  set(UPNP_INCLUDE ${MINIUPNP_INCLUDE_DIR} PARENT_SCOPE)
-++  set(UPNP_LIBRARIES ${MINIUPNP_LIBRARY} PARENT_SCOPE)
-++else()
-++  if(STATIC)
-++    message(STATUS "Using miniupnpc from local source tree for static build")
-++  else()
-++    message(STATUS "Using miniupnpc from local source tree (/external/miniupnp/miniupnpc)")
-++  endif()
-++  add_subdirectory(miniupnp/miniupnpc)
-++
-++  set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
-++  if(MSVC)
-++    set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
-++  elseif(NOT MSVC)
-++    set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-undef -Wno-unused-result -Wno-unused-value")
-++  endif()
-++
-+ if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
-+ 	set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -D_NETBSD_SOURCE")
-+ endif()
-+ 
-+-set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
-++  set(UPNP_STATIC true PARENT_SCOPE)
-++  set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
-++endif()
-+ 
-+ find_package(Unbound)
-+ 
-diff --git a/package/monero/Config.in b/package/monero/Config.in
-new file mode 100644
-index 0000000000..59036286cd
---- /dev/null
-+++ b/package/monero/Config.in
-@@ -0,0 +1,35 @@
-+config BR2_PACKAGE_MONERO
-+	bool "monero"
-+	depends on !BR2_aarch64_be && !BR2_i386
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
-+	# monero needs fenv.h which is not provided by uclibc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_LOCALE
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_SERIALIZATION
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_CZMQ
-+	select BR2_PACKAGE_LIBMINIUPNPC
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_UNBOUND
-+	help
-+	  The secure, private, untraceable cryptocurrency
-+
-+	  https://getmonero.org/
-+
-+comment "monero needs a glibc or musl toolchain w/ C++, dynamic library, threads"
-+	depends on !BR2_aarch64_be && !BR2_i386
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/monero/monero.hash b/package/monero/monero.hash
-new file mode 100644
-index 0000000000..91f452cbec
---- /dev/null
-+++ b/package/monero/monero.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  0b667acba2223f8f082b388d7ceb5d212e0515b8a94395f3ec69183ef4bebf6c  monero-source-v0.18.1.2.tar.bz2
-+sha256  c2fe351163f4e0cee45d38e9481f2ea60f3cb77b24f818c4a2c740383f2f4cb2  LICENSE
-diff --git a/package/monero/monero.mk b/package/monero/monero.mk
-new file mode 100644
-index 0000000000..ee215f90e1
---- /dev/null
-+++ b/package/monero/monero.mk
-@@ -0,0 +1,55 @@
-+################################################################################
-+#
-+# monero
-+#
-+################################################################################
-+
-+MONERO_VERSION = 0.18.1.2
-+MONERO_SOURCE = monero-source-v$(MONERO_VERSION).tar.bz2
-+MONERO_SITE = https://downloads.getmonero.org/cli
-+MONERO_LICENSE = MIT
-+MONERO_LICENSE_FILES = LICENSE
-+MONERO_CONF_OPTS = \
-+	-DBUILD_DOCUMENTATION=OFF \
-+	-DCMAKE_CXX_FLAGS="$(MONERO_CXXFLAGS)" \
-+	-DCMAKE_BUILD_TYPE=None \
-+	-DMANUAL_SUBMODULES=ON \
-+	-DSTACK_TRACE=OFF \
-+	-DUSE_CCACHE=OFF \
-+	-DUSE_DEVICE_TREZOR=OFF
-+MONERO_DEPENDENCIES = \
-+	boost \
-+	czmq \
-+	libminiupnpc \
-+	libsodium \
-+	openssl \
-+	unbound
-+
-+ifeq ($(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64el)$(BR2_sparc64),y)
-+MONERO_CONF_OPTS += -DNO_AES=ON
-+endif
-+
-+MONERO_CXXFLAGS = $(TARGET_CXXFLAGS) -std=c++11
-+
-+# Uses __atomic_load_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+MONERO_CXXFLAGS += -latomic
-+endif
-+
-+# relocation truncated to fit: R_MIPS_GOT16
-+ifeq ($(BR2_mipsel),y)
-+MONERO_CXXFLAGS += -mxgot
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HIDAPI),y)
-+MONERO_DEPENDENCIES += hidapi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+MONERO_CONF_OPTS += -DUSE_READLINE=ON
-+MONERO_DEPENDENCIES += readline
-+else
-+MONERO_CONF_OPTS += -DUSE_READLINE=OFF
-+endif
-+
-+$(eval $(cmake-package))
+  http://autobuild.buildroot.net/results/4f2/4f29c5e663b5d01af20d671baf6504332b8c1f7b/build-end.log
+
+The failure goes like this:
+
+cd ../../tools/v8_gypfiles; python ../../deps/v8/tools/run.py ../../out/Release/v8-qemu-wrapper ../../out/Release/bytecode_builtins_list_generator ../../out/Release/obj.host/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h
+../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by ../../out/Release/bytecode_builtins_list_generator)
+../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by ../../out/Release/bytecode_builtins_list_generator)
+../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by ../../out/Release/bytecode_builtins_list_generator)
+../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ../../out/Release/bytecode_builtins_list_generator)
+Return code is 1
+
+This problem also has a bug report at
+https://bugs.busybox.net/show_bug.cgi?id=14366.
+
+As you probably know, v8-qemu-wrapper is a script that uses Qemu
+user-mode emulation to run some programs built for the target. We are
+then supposed to use the libraries built for the target, but here for
+some reason, the C library of the host gets used, and it fails badly
+because it is older than the C library that is available for the
+target.
+
+So the question is: why the heck does Qemu use the host C library?
+
+To answer this question, we first have to look at how the -L option of
+Qemu is implemented. This option is documented as such:
+
+-L path              QEMU_LD_PREFIX    set the elf interpreter prefix to 'path'
+
+And the v8-qemu-wrapper script makes this option point to
+$(STAGING_DIR), so that the ELF interpreter used is the one in
+$(STAGING_DIR).
+
+However, contrary to what the option documentation says, this option
+does much more than setting the ELF interpreter prefix: it is going to
+affect how *all* system calls manipulating files (open, etc.) are
+going to work.
+
+When this option is passed, the function init_paths() in
+https://git.qemu.org/?p=qemu.git;a=blob;f=util/path.c is called at
+initialization time, and essentially its sets the global "base"
+variable to point to the directory passed as -L argument.
+
+Then, for every single syscall that manipulates a path, this path will
+be passed through the path() function in the same file. This function
+will first attempt to resolve the path with "base" as a prefix, and if
+not, return the unprefixed path.
+
+After adding some traces into this function, I was able to understand
+what happens:
+
+(1) -L$(STAGING_DIR) is passed, causing "base" to point to $(STAGING_DIR)
+
+(2) The target ELF interpreter from $(STAGING_DIR) is properly invoked
+
+(3) When this ELF interpreter then resolves the libc.so.6 library, it
+    first looks for /etc/ld.so.cache.
+
+(4) Qemu first looks for /etc/ld.so.cache with the -L prefix, i.e
+    $(STAGING_DIR)/etc/ld.so.cache, but it does not exist. So, the Qemu
+    system call emulation falls back to /etc/ld.so.cache, which means
+    the target ELF interpreter reads the /etc/ld.so.cache of the host
+    system.
+
+(5) This /etc/ld.so.cache of the host system says that libc.so.6 is in
+    /lib/x86_64-linux-gnu/
+
+(6) The target ELF interpreter therefore tries to use
+    /lib/x86_64-linux-gnu/libc.so.6. The Qemu system call emulation
+    first tries $(STAGING_DIR)/lib/x86_64-linux-gnu/libc.so.6, but
+    this library does not exist (it is in
+    $(STAGING_DIR)/lib/libc.so.6), so the Qemu system call emulation
+    falls back to /lib/x86_64-linux-gnu/libc.so.6 of the host system,
+    which exist... but is too old compared to the target C library.
+    Indeed, results from ld.so.cache take precedence over the simple
+    resolution of library paths in /usr/lib and /lib.
+
+We see 3 possible ideas to resolve this problem:
+
+(A) Change the behavior of Qemu to not fallback to unprefixed paths:
+    when -L is passed, all path-related system calls should see the
+    paths prefixed by the -L option.
+
+    Issue with this is that this change is unlikely to get accepted by
+    Qemu upstream. And there might be some side effects we have not
+    really identified.
+
+(B) Create an empty $(STAGING_DIR)/etc/ld.so.cache. We have tested
+    this solution and it works: it gets used instead of the host
+    /etc/ld.so.cache. Because $(STAGING_DIR)/etc/ld.so.cache is empty,
+    there's no libc.so.6 match, so the target ELF interpreter goes
+    through its normal library location resolution logic, which falls
+    back to trying in /usr/lib and /lib, which works as those paths
+    ends up being prefixed with $(STAGING_DIR) by Qemu.
+
+(C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
+    $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
+    LD_LIBRARY_PATH paths have precedence over paths given by
+    ld.so.cache.
+
+    This is the solution already used by the GOI qemu wrapper in
+    package/gobject-introspection/g-ir-scanner-qemuwrapper.in, and
+    which was suggested in bug
+    https://bugs.busybox.net/show_bug.cgi?id=14366.
+
+Any opinion? Or other ideas?
+
+Thanks!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
