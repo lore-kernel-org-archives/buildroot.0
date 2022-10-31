@@ -4,85 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C47DECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 17:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB6FFA3741
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 18:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCB76415CB;
-	Mon, 31 Oct 2022 17:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCB76415CB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A2EC4031E;
+	Mon, 31 Oct 2022 18:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A2EC4031E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aX4QLD-ZCxcG; Mon, 31 Oct 2022 17:50:10 +0000 (UTC)
+	with ESMTP id sUOPpWBY0ZNg; Mon, 31 Oct 2022 18:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B291D40919;
-	Mon, 31 Oct 2022 17:50:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B291D40919
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 71DD51BF327
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 17:50:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 309D94021B;
+	Mon, 31 Oct 2022 18:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 309D94021B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7976B1BF29D
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 18:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D95860AD8
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 17:50:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D95860AD8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 612DD4021B
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 18:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 612DD4021B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Fga7lsTiTVy for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 17:50:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k-hrf53jzEi5 for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 18:08:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAA3A60C1E
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DAA3A60C1E
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 17:50:06 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id 7so6556961ilg.11
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 10:50:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB1940202
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com
+ [IPv6:2607:f8b0:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5BB1940202
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 18:08:44 +0000 (UTC)
+Received: by mail-pg1-x535.google.com with SMTP id 128so11387439pga.1
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 11:08:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=618MTCOtu/bkrj3vtYQ1wyN7+mghLwJptHBVVAzwmFg=;
- b=PT/vWzDS1BUaEGlQwLAb9m0u4deVcquoZ1Z7fbjuU/JY5wZd0G+sC2tS9TZtIZTnZT
- tRH6ZUdOoM2sScryiPEXXO9d8I2FYHqtZjBa9oNHcxHoNpua7s46WNkMTDoStfOcNf/L
- +Rgaih5nJvpxCSnxI4kb9rHk2fsNCUMxCkvHDaGAVnluCA25qq9g9yEMVT4lF8+wNYpG
- +8+jPyMciObQ99sQr6TxXMzOOMsoDzCIUlZm+brzTcCUwbyCnRzehD33p3wsOM+YlL3J
- 9rPbhjsPTywiGzYIi5ARxzpi+PxYg+qGdgB8TU4DXUpVrdfV1spZ/qpy9BWbiRQsmjNW
- 6mkw==
-X-Gm-Message-State: ACrzQf2eWiVifyFIZCpTvoLicKGm82Iq4Dip6oRnFuPTvvldxyLlJZ5c
- KM0KQjaHuB4ddP+sQ6zb5bpXIvR0fPgorQ==
-X-Google-Smtp-Source: AMsMyM6Ky4zCJqVr4nwHvBJgP//HrfcHi9oYJN/gssotJAPBP6Wi4VkqISWwsYmtlaSyHeGviIPahg==
-X-Received: by 2002:a05:6e02:1aab:b0:2fa:80c2:8375 with SMTP id
- l11-20020a056e021aab00b002fa80c28375mr7543555ilv.72.1667238605522; 
- Mon, 31 Oct 2022 10:50:05 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- y98-20020a02956b000000b003639ef62d08sm2992559jah.84.2022.10.31.10.50.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Oct 2022 10:50:05 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 11:49:59 -0600
-Message-Id: <20221031174959.604094-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=vcr5g8+g3XX55Jn5AHJzf0YTh+0DEHeRUq8QNTxErJc=;
+ b=NxxTjaFP/IiX8iQ2l2hPmqSe//08WfFwXKcbQgIi99AR27qLBD5VOGP/BzALzpn86S
+ RI/AY7kj0c89KZYCatlxuZrct/dlVMefYaL20XbP/f40k/DBtusVkdksDlPK5aH3quuU
+ J8qtFZ6nGdLYmL3dfWYqDeaeJYKtrmrvn7fFXOI8SQVuguW4zIKGz26v7fSJiHUf1hl9
+ vKQxf3oNynl3QHbp2nruYBNTNYKLns7MAJopLkpzpQp+Ev1yzIMvhyswWdEnN/TbMk0F
+ 0j86CGotSNBzibg0yUNAtOb9qdUQAflVI5PusC/AH8K2BuifdsR8r7TMcAdn7dA8dL8B
+ 6RdA==
+X-Gm-Message-State: ACrzQf03CJhAARkOqnp3tB5onjbPxkHr32ATgjS+rv59uD6UXKpBS/Mt
+ D2dzrc0Fp0ZYcLjsSrgi06J8attCmYyQiR/HMpQQ1Osr5vo=
+X-Google-Smtp-Source: AMsMyM5W/73klA8LLKLjnYky1PBUl8jKcvNB4zc2JtIoI2Jqtue+zLe91xhINZ4T0QZnMC+kKXdYENHS1C7bKlp/oag=
+X-Received: by 2002:a63:90c7:0:b0:46e:c7be:16e1 with SMTP id
+ a190-20020a6390c7000000b0046ec7be16e1mr14134860pge.296.1667239723689; Mon, 31
+ Oct 2022 11:08:43 -0700 (PDT)
 MIME-Version: 1.0
+References: <20221019215348.3262192-1-james.hilliard1@gmail.com>
+ <20221030202718.GG1058960@scaer>
+In-Reply-To: <20221030202718.GG1058960@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 31 Oct 2022 14:08:31 -0400
+Message-ID: <CADvTj4r=68gOG3cfz58EKwWj4Xk6pf8Rm1ZC1TfiUS+UCUZsVw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=618MTCOtu/bkrj3vtYQ1wyN7+mghLwJptHBVVAzwmFg=;
- b=pZjvbW9lxAqezT4AhaHLCWXpjCb9gzdHvpx3cbS+1SJ5/7Jglr5hA6weL5W6bPOVav
- WKQt6lQO6qiw6ZV7sFoHfX6lXTbgvsHjIqrJ/mBPSe1eFUejHBYHX4ZFw7qXvrj1HvCD
- H41yqGFzqkM8wEGPEZmXHBsXAxla08lTcV1JBxS6ZjJ0w/RO6a/YzEOJLbmHETcrK6Sd
- E6SiKZ1Ulx4IqYM80uOG1J5Jr+etRGgkwFSTW0WHMqo0l1CLdF0tjUhvMZTqGgBFVyqv
- 2Z9yvFh7KY/Xzf32XoEsZuYhoR6qMkyV0VwBo8dQiNfBawB1v0jqvgO6dzxDI7WV+SxG
- osgw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=vcr5g8+g3XX55Jn5AHJzf0YTh+0DEHeRUq8QNTxErJc=;
+ b=qp0H0XRql7mVVr5e96CIrowl1uhaUO0F5N8YWdr3P96BBscqy3/tZbllJFf5gMqqDy
+ /dX2GRIl3Wj4AeO4+Mrp2uGHvTlxju15CBwzRwHh+dYWyGOLnaYxydvFaZnnIrXMa5Yx
+ VlKzVJ5b40HbhZKTxs9ktYUFBKUxo7gPS9dsCBWELyD4jvXih1lWxu8qY8itYF+aXojE
+ ogPT6ZjC3EX5QVZw3QU/W0/G8GqIIqWMn2IkWitkJ0fibip/L7uhp1krdMEuiwzxaHVN
+ BDIVnm+DTYpJZzVoPE8PgjCk3uwYXeB9a9YgZRuASU56zWxAicXQlypRdPUYAAqUGXmw
+ kqPw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pZjvbW9l
-Subject: [Buildroot] [PATCH v3 1/1] package/iwd: add dbus compile time
- dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=qp0H0XRq
+Subject: Re: [Buildroot] [PATCH 1/7] package/python-pluggy: enable host
+ package build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +91,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In 5b3b2d80f4cf586d360ff696c3dacbd4cb48fdc4 we dropped dbus as a build
-dependency, however we still need it when building with systemd so
-that the service directory is available via pkg-config.
+On Sun, Oct 30, 2022 at 4:27 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2022-10-19 15:53 -0600, James Hilliard spake thusly:
+> > This will be needed for the upcoming host-python-hatchling.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+> Whole series applied to master, thanks.
+>
+> I really wonder how many pep517 buildsystems there will be, and how many
+> packages we'll have to introduce... Fantastic...
 
-In addition we can drop --with-dbus-datadir by unconditionally
-requiring dbus as the datadir will then be fetched from pkg-config.
+Considering pep517 seems to have been designed to make it easy for everyone
+to write their own pep517 build backends...could be quite a few...yeah...
 
-Fixes:
-checking D-Bus bus services directory... configure: error: D-Bus bus services directory is required
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - always depend on dbus
-Changes v1 -> v2:
-  - depend on dbus when depending on systemd
----
- package/iwd/iwd.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 002988cf33..5ffbde334e 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -16,9 +16,8 @@ IWD_SELINUX_MODULES = networkmanager
- IWD_CONF_OPTS = \
- 	--disable-manual-pages \
- 	--enable-external-ell \
--	--enable-dbus-policy \
--	--with-dbus-datadir=/usr/share
--IWD_DEPENDENCIES = ell
-+	--enable-dbus-policy
-+IWD_DEPENDENCIES = dbus ell
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
- # iwd client depends on readline (GPL-3.0+)
--- 
-2.34.1
-
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  package/python-pluggy/python-pluggy.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/python-pluggy/python-pluggy.mk b/package/python-pluggy/python-pluggy.mk
+> > index 59382518ed..6dc6f970ea 100644
+> > --- a/package/python-pluggy/python-pluggy.mk
+> > +++ b/package/python-pluggy/python-pluggy.mk
+> > @@ -11,5 +11,7 @@ PYTHON_PLUGGY_SETUP_TYPE = setuptools
+> >  PYTHON_PLUGGY_LICENSE = MIT
+> >  PYTHON_PLUGGY_LICENSE_FILES = LICENSE
+> >  PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
+> > +HOST_PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
+> >
+> >  $(eval $(python-package))
+> > +$(eval $(host-python-package))
+> > --
+> > 2.34.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
