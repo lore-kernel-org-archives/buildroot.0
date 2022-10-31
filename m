@@ -1,49 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (unknown [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E10C1ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 12:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8311BC38A02
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 12:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8124640412;
-	Mon, 31 Oct 2022 12:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8124640412
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16B7E80BDE;
+	Mon, 31 Oct 2022 12:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16B7E80BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ijeUMRD_32BX; Mon, 31 Oct 2022 12:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kgHIAJmyyWa4; Mon, 31 Oct 2022 12:52:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E12440439;
-	Mon, 31 Oct 2022 12:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E12440439
+	by smtp1.osuosl.org (Postfix) with ESMTP id B118E80B9B;
+	Mon, 31 Oct 2022 12:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B118E80B9B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D02D1BF417
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:47:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F45C1BF417
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 462BB40439
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 462BB40439
+ by smtp2.osuosl.org (Postfix) with ESMTP id 791FB404B2
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 791FB404B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4NCJBhrzZYNf for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 12:47:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C16740412
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 12:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C16740412
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB50787917; Mon, 31 Oct 2022 12:47:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 13:46:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fbe2a973da559ecf6fec9c2fa313cfa1fd50ea6e
-X-Git-Newrev: 43f96ced67c9a1f84d3f0edf5cd632178eb176b8
-X-Patchwork-Hint: ignore
-Message-Id: <20221031124743.AB50787917@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docopt-cpp: new package
+ with ESMTP id k1VNpUytq1YG for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 12:52:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0FE840436
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
+ [IPv6:2001:4860:4864:20::29])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F0FE840436
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 12:52:27 +0000 (UTC)
+Received: by mail-oa1-x29.google.com with SMTP id
+ 586e51a60fabf-13b6c1c89bdso13281404fac.13
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 05:52:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=oNV7iHrDS7XJFuuBDIKX/d/3s3otr8LzFLpbyxjI2vE=;
+ b=Ga1ew4xLXAwuJ187btjjNsg1aipP5cetJxBuwPRqQGSc9J3DIKHTWH0BR318WBop1c
+ OJmXv29LTHBKezxhihaSyjD9oZQ+m9wjsE2XI1GhJDMhlnYXFv7EsqVgl5NyDKf0KK13
+ NZ2rIsKUD1sCgM8b20dTofQjvYmE/bNcarpuKx+e7M0D6htUwziHRmvRsq3OnIVFKoGh
+ G2SLxCTII/KrY4LLDsdl/NqHN2mhTBkWZiGv+FXcBupqTzmWAMih/yvRLTimuDkeBfoA
+ 9KdtoCbn60gxQ7rcJBhA+vBT/65pLkmGqOp4v6RDWDFNMRxDLZyPw3K+T2rznukQf1C3
+ P9zA==
+X-Gm-Message-State: ACrzQf2LRZ0HULV3GYqX7Dt07aH2uwGV2rnOM1wSiaH+QC/oQklHSfPQ
+ oMSQcQouHPlMl1FxL/Fk6T1zNgpvll2nAAQyTCoXSA==
+X-Google-Smtp-Source: AMsMyM4AO/qzpIOiS9cRRPpfe5pM1ZGvEDWPwaBysFwOjkl11liHqzBUmKkb6pgTyQ4K8oQsZz29egYel0TZslw+taQ=
+X-Received: by 2002:a05:6870:238a:b0:127:9dba:7c82 with SMTP id
+ e10-20020a056870238a00b001279dba7c82mr16991099oap.28.1667220746979; Mon, 31
+ Oct 2022 05:52:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221031114643.6648-1-tim.gover@raspberrypi.com>
+ <20221031123928.GB1058960@scaer>
+In-Reply-To: <20221031123928.GB1058960@scaer>
+From: Tim Gover <tim.gover@raspberrypi.com>
+Date: Mon, 31 Oct 2022 12:52:15 +0000
+Message-ID: <CAAvKZ67N24Hj7ejxQ7zueOQbsqq8WNNgLiZauM7GkMHLhN=kYw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=raspberrypi.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=oNV7iHrDS7XJFuuBDIKX/d/3s3otr8LzFLpbyxjI2vE=;
+ b=dBMlfc+OlTAbHazE6ryLPD8/qdcSIPtaqCMW5OrawpZMZ82pDssxGy/izcAdBGh8U2
+ umBdOPCRuWzy2LuNZet4zggrp2I098Cy6ffA5BtUUs6l4xrYqD0vBvcS7o4sMRAWStkX
+ BBI/lAhps742ckU0vRJ8w14E89H5oymVStnoZUVxeh1qDkXNypryrPu4FKVxEsekWx9q
+ k7A1ywcoVqRn5aeY7xqdM2CFVrQneF4NQAufJBIkUeVwdVzshoENySK+3mnI64s4UmuG
+ 1kbndWbz0B8YpvymRoKr9dFXxAInhYY0M/hWrCxQT/Z5ZuxYh+aFyD2u/DN9nW7Q2YM2
+ 3yUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com
+ header.a=rsa-sha256 header.s=google header.b=dBMlfc+O
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: add
+ overlays/README
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,117 +92,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43f96ced67c9a1f84d3f0edf5cd632178eb176b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 31 Oct 2022 at 12:39, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Tim, All,
+>
+> On 2022-10-31 11:46 +0000, Tim Gover spake thusly:
+> > If a custom os_prefix directory is specified then the Raspberry Pi
+> > firmware probes for the README file in overlays directory.
+> >
+> > Since the README file is small let's include it, otherwise,
+>
+> 197KiB is _not_ small. In fact, the README is bigger than every dtbo,
+> and accounts for ~25% of the size of all dtbo combined.
 
-Add docopt.cpp library that can be used to create intuitive command
-line interfaces with very little code by describing the valid calls
-using the (POSIX.1-2017) command line utility argument syntax.
+Good point. Would you be happy with simply creating an empty or small
+README file (a note indicating the purpose of the file) ?
 
-Signed-off-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
-Reviewed-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/docopt-cpp/Config.in       | 21 +++++++++++++++++++++
- package/docopt-cpp/docopt-cpp.hash |  6 ++++++
- package/docopt-cpp/docopt-cpp.mk   | 13 +++++++++++++
- 5 files changed, 44 insertions(+)
+> > the firmware won't recognize the overlays directory if the user
+> > later moves it to an os_prefix specific sub-directory.
+>
+> What is the goal here, in the context of Buildroot, where we only
+> install one set of overlays?
+>
+> If a user moved the overlays, they already have a script that does that,
+> so they should also ensure that script properly prepares config.txt to
+> specify the proper os_prefix, and so it is just a matter of adding a
+> 'touch' on the README in the same script.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3ab4d65d67..06ee5d8056 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -781,6 +781,9 @@ F:	board/acmesystems/acqua-a5/
- F:	configs/acmesystems_acqua_a5_256mb_defconfig
- F:	configs/acmesystems_acqua_a5_512mb_defconfig
- 
-+N:	Eero Aaltonen <eero.aaltonen@vaisala.com>
-+F:	package/docopt-cpp/
-+
- N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
- F:	package/bayer2rgb-neon/
- F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
-diff --git a/package/Config.in b/package/Config.in
-index 450a73d4ca..238d7813f0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2119,6 +2119,7 @@ endmenu
- 
- menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
-+	source "package/docopt-cpp/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/fmt/Config.in"
- 	source "package/fstrcmp/Config.in"
-diff --git a/package/docopt-cpp/Config.in b/package/docopt-cpp/Config.in
-new file mode 100644
-index 0000000000..ac85442732
---- /dev/null
-+++ b/package/docopt-cpp/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_DOCOPT_CPP
-+	bool "docopt-cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	help
-+	  docopt is a library that lets you define a command line
-+	  interface with the utility argument syntax that has been
-+	  used by command line utilities for decades (POSIX.1-2017).
-+	  From the description, docopt automatically generates a parser
-+	  for the command line arguments.
-+
-+	  docopt Command-line interface description language
-+	  http://docopt.org/
-+
-+	  docopt.cpp is a C++ port of docopt.
-+
-+	  https://github.com/docopt/docopt.cpp
-+
-+comment "docopt-cpp needs a toolchain w/ C++, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/docopt-cpp/docopt-cpp.hash b/package/docopt-cpp/docopt-cpp.hash
-new file mode 100644
-index 0000000000..c535914753
---- /dev/null
-+++ b/package/docopt-cpp/docopt-cpp.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  28af5a0c482c6d508d22b14d588a3b0bd9ff97135f99c2814a5aa3cbff1d6632  docopt-cpp-0.6.3.tar.gz
-+
-+# Hash for license files:
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-Boost-1.0
-+sha256  b2959a980bc25f5d5e020d7a31777b7184aace6eb160acc80619f85edf646f19  LICENSE-MIT
-diff --git a/package/docopt-cpp/docopt-cpp.mk b/package/docopt-cpp/docopt-cpp.mk
-new file mode 100644
-index 0000000000..d90b82820f
---- /dev/null
-+++ b/package/docopt-cpp/docopt-cpp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# docopt.cpp
-+#
-+################################################################################
-+
-+DOCOPT_CPP_VERSION = 0.6.3
-+DOCOPT_CPP_SITE = $(call github,docopt,docopt.cpp,v$(DOCOPT_CPP_VERSION))
-+DOCOPT_CPP_INSTALL_STAGING = YES
-+DOCOPT_CPP_LICENSE = BSL-1.0 or MIT
-+DOCOPT_CPP_LICENSE_FILES = LICENSE-Boost-1.0 LICENSE-MIT
-+
-+$(eval $(cmake-package))
+It's fairly common for non-expert users to modify the output of a
+buildroot image
+without re-building the image themselves. Adding a README file reduces
+the risk of them being tripped up by this difference in behaviour.
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > From
+> > https://www.raspberrypi.com/documentation/computers/config_txt.html#overlay_prefix
+> >
+> > Unless ${os_prefix}${overlay_prefix}README exists, overlays are shared
+> > with the main OS (i.e. os_prefix is ignored).
+> >
+> > Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
+> > ---
+> >  package/rpi-firmware/rpi-firmware.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> > index d4d1d07b3f..908d7def6a 100644
+> > --- a/package/rpi-firmware/rpi-firmware.mk
+> > +++ b/package/rpi-firmware/rpi-firmware.mk
+> > @@ -48,6 +48,7 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> >       $(foreach ovldtb,$(wildcard $(@D)/boot/overlays/*.dtbo), \
+> >               $(INSTALL) -D -m 0644 $(ovldtb) $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir $(ovldtb))
+> >       )
+> > +     $(INSTALL) -D -m 0644 $(@D)/boot/overlays/README $(BINARIES_DIR)/rpi-firmware/overlays/
+> >       $(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
+> >  endef
+> >  else
+> > --
+> > 2.25.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
