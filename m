@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2CFFA3744
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 21:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF8B8ECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 21:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDA92400CC;
-	Mon, 31 Oct 2022 21:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDA92400CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A42381414;
+	Mon, 31 Oct 2022 21:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A42381414
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1fqqPB8ry8JD; Mon, 31 Oct 2022 21:40:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FhF54xtrJz9i; Mon, 31 Oct 2022 21:57:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE8DC40157;
-	Mon, 31 Oct 2022 21:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8DC40157
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD6978140A;
+	Mon, 31 Oct 2022 21:57:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD6978140A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E7241BF2EA
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:40:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E05041BF2EA
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 396AC60B5E
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 396AC60B5E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7FD960B6E
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:57:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7FD960B6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VZQ4YIWhJPw9 for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 21:40:44 +0000 (UTC)
+ with ESMTP id 63vJtmLGVGs3 for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 21:57:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB4EF60AE6
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB4EF60AE6
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 21:40:43 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id w14so17789680wru.8
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 14:40:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 603E460AE6
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 603E460AE6
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 21:57:53 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id t1so4223226wmi.4
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 14:57:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FsHwZWflHJQ+axqBpECmf+cewfNziNKtDqFvvqDbiyo=;
- b=SwiXen0EnJytUqnAOibsugqUYFVLyn8OMxpn5kNp6jGWl3Vkr7HF0qhwlzagnewrH/
- umehz5nWVOqZZqzGar+OCkYAAB/ZL6a1/vzLUZz8xhNaxP0lvsjxj+x6qkKmvapgvQMv
- L03pUgMl5F2n/UtnEuhqUEhjAzgUH462LGgHgjx4vI7tuRvSiw/06zAkxAhoKV4SsmGb
- W0AOmk+kTEkvUUv9kVa5qawHEiLpP/BUzS7suFKb5+BESvj5kryg0IH3NUmzXhHFpwWM
- NcgWov68c/S30x7Qh7kNGBOSyJEqz0KEGM7EEH4dXTZ+mDhSsH0fMi6s1u5Cip7ZaVKS
- /rAw==
-X-Gm-Message-State: ACrzQf2LHZ/gyHjni9dzQT4OCXJ/qpWOdJFvdCsEs7V8xsp3NjPKlrpN
- 4LncF/MeCQtKHPXL/rjE0dLPKasJc5I=
-X-Google-Smtp-Source: AMsMyM4sVAADD9/9bF7cL6CFnjnP5kGVFh8McafzVMCb2j+Aczc32uXeWx0NwofmnXxub+ur4Bka2g==
-X-Received: by 2002:a5d:4e04:0:b0:236:5d2d:8c38 with SMTP id
- p4-20020a5d4e04000000b002365d2d8c38mr9769629wrt.593.1667252441673; 
- Mon, 31 Oct 2022 14:40:41 -0700 (PDT)
+ bh=6Yy0QNyjXlynundDgrMTKFiNPEiGmmY2OHvgiGBaVMk=;
+ b=qUzyfLbMhxQn1kv9QDn5m7aF5/BvWbymUs9wX24MPXghl/IG1EVQhrbweczmet4Kg5
+ 941kv8zpuBbB8hGHJjcLrcd5UIeiQ2TnZHNHFmJxovRPq2PVxivTGdDqwciF4ntHxZgo
+ ry+XiHCTBJR5MTtQ402CVQO45lwEKJUfSApy3TqLmUTTCUuV+2wWm2E531iC6TF3hLXP
+ 8Ic7Bbr8Ln5yAVfVKt6SCyR6jXCgBRpC1uJoRrNvNevi+gBOJjLGkAXL9BlAwVDOUKtJ
+ l6V/luMqRQk5i47riUYL1k4/z/HZ0jZyI8Ahu0hPJSmCAkezGAhMgAXGTi26eya1VhCV
+ 5b5Q==
+X-Gm-Message-State: ACrzQf3eULUjVShKr/syUcjKOtTZ54haMzVMdJ9YgEKQf4/YaeXgfOgd
+ DLfkcZKJbQqID9qq9ccLrDWzB9SybL4=
+X-Google-Smtp-Source: AMsMyM5FXKyLaJy5ZwhUqB/cW9PDHg1sKZzhUE+RMnnjBnxCjZ5U6OVbNXOJjS2krHDRvWB8dcQlVA==
+X-Received: by 2002:a05:600c:14c6:b0:3cf:6a83:c2a6 with SMTP id
+ i6-20020a05600c14c600b003cf6a83c2a6mr7230083wmh.52.1667253471153; 
+ Mon, 31 Oct 2022 14:57:51 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- m2-20020a5d4a02000000b00236695ff94fsm8102838wrq.34.2022.10.31.14.40.40
+ v10-20020a5d59ca000000b002362f6fcaf5sm8291737wry.48.2022.10.31.14.57.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Oct 2022 14:40:41 -0700 (PDT)
+ Mon, 31 Oct 2022 14:57:50 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 22:40:34 +0100
-Message-Id: <20221031214034.20298-1-fontaine.fabrice@gmail.com>
+Date: Mon, 31 Oct 2022 22:57:48 +0100
+Message-Id: <20221031215748.41579-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FsHwZWflHJQ+axqBpECmf+cewfNziNKtDqFvvqDbiyo=;
- b=aaL0lIPCn+qxGp4y2l9nqRlZ76h4Wz2qJYUGDnLPL9yBloZERCQwn3Mutp8QAi8NIM
- eq80j+nw2eqK1cwTfBvfjtqTCYO0U6MsDAd+ra34I/vzyC3gQO+4ujowZL2J4u0ZFnNz
- rxVRtZam66OQak0A8Ncc7xtxy0l/3qe8+V8cVDqx6Bp6wr8cpy3oZ62es5vdSgM9rEz2
- 6bSGTXZC6+EEMTcbNzx6mT94kyoAIQlSQBhB9ScnlcHEUjqOaAvCM5aEZF/lOcurmOG7
- 6dIdkC3koxGba8L6acuJJre8XNqqCEDtVfjoIQL2XAD+ceCA2wEpyrgGkvSL24FZQCFp
- qzng==
+ bh=6Yy0QNyjXlynundDgrMTKFiNPEiGmmY2OHvgiGBaVMk=;
+ b=YR5uXtT8x5TCpOTBg9Mt6QURAa6N6yz38GUx2SjzHXyC9GBJuTzvXIsyU9eXZ0ICS8
+ dtjj0XQTl/nzHKbWPX5KRPtm7BqcyvWGo5O1qRoefC3IsJ0xUmm3zeH8kbNomD0PDCHD
+ lIVuEV7MH88KKRKgWXd3h+509xPIpCzRWKn1OFIW+zNoexbA1Su/pZSsqchYL0ANLT9g
+ lpngBpcjQ37A2XeqaoSqxmaXJjlPsqupqVR5KaAHqOsdY5fOAMpyDT86V65/mrPWonFn
+ 5YPUfLTMRmlvaKbS7yC4YTCbGLLqOZS35HbxKWax7bn9WhIgprKVc7df9qQuXFLvbWxn
+ gXag==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=aaL0lIPC
-Subject: [Buildroot] [PATCH 1/1] package/xerces: bump to version 3.2.4
+ header.a=rsa-sha256 header.s=20210112 header.b=YR5uXtT8
+Subject: [Buildroot] [PATCH 1/1] package/flann: bump to version 1.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,142 +93,163 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Davide Viti <zinosat@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop second patch (already in version)
+- lz4 is a mandatory dependency since
+  https://github.com/flann-lib/flann/commit/df3fc59212660e43867cb85d5e557f5cae6d30d7
+- Drop patch (not needed since
+  https://github.com/flann-lib/flann/commit/86c92adbdea3e41d7ad371732cfe3b8231e0ecc6)
+- PYTHON_EXECUTABLE can be dropped since
+  https://github.com/flann-lib/flann/commit/5f4ac506323585c1f74ef57a73962beb887e3a3b
 
-https://github.com/apache/xerces-c/compare/v3.2.3...v3.2.4
+https://github.com/flann-lib/flann/blob/1.9.2/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...oadMsg-fix-memory-leak-when-transcod.patch | 87 -------------------
- package/xerces/xerces.hash                    |  4 +-
- package/xerces/xerces.mk                      |  2 +-
- 3 files changed, 3 insertions(+), 90 deletions(-)
- delete mode 100644 package/xerces/0002-InMemMsgLoader-loadMsg-fix-memory-leak-when-transcod.patch
+ .../0001-src-cpp-fix-cmake-3.11-build.patch   | 80 -------------------
+ package/flann/Config.in                       |  1 +
+ package/flann/flann.hash                      |  2 +-
+ package/flann/flann.mk                        |  4 +-
+ 4 files changed, 4 insertions(+), 83 deletions(-)
+ delete mode 100644 package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
 
-diff --git a/package/xerces/0002-InMemMsgLoader-loadMsg-fix-memory-leak-when-transcod.patch b/package/xerces/0002-InMemMsgLoader-loadMsg-fix-memory-leak-when-transcod.patch
+diff --git a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
 deleted file mode 100644
-index 76b37c63d9..0000000000
---- a/package/xerces/0002-InMemMsgLoader-loadMsg-fix-memory-leak-when-transcod.patch
+index b37bedcf6d..0000000000
+--- a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
 +++ /dev/null
-@@ -1,87 +0,0 @@
--From 1bdf6d8ba878c1fe1d779824be70001fc0bebd2c Mon Sep 17 00:00:00 2001
--From: Even Rouault <even.rouault@spatialys.com>
--Date: Fri, 27 Aug 2021 01:33:27 +0200
--Subject: [PATCH] InMemMsgLoader::loadMsg(): fix memory leak when transcoding
-- fails.
+@@ -1,80 +0,0 @@
+-From fa5ec96a94646492a3f908e12905b3e48a8e800b Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Wed, 18 Apr 2018 20:24:13 +0200
+-Subject: [PATCH] src/cpp: fix cmake >= 3.11 build
 -
--Seen with the IconvGNU transcoder when parsing "<aaa.xsdopengis.net/gml\x96".
--The reason is that XMLString::transcode(repText2, manager) throws a TranscodingException
--which causes the tmp1 string to leak.
+-CMake < 3.11 doesn't support add_library() without any source file
+-(i.e add_library(foo SHARED)). But flann CMake use a trick that use
+-an empty string "" as source list (i.e add_library(foo SHARED "")).
+-This look like a bug in CMake < 3.11.
 -
--```
--0 0x8791409 in operator new(unsigned int) /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:99:3
--1 0xbd147f7 in xercesc_4_0::MemoryManagerImpl::allocate(unsigned int) gdal/xerces-c/src/xercesc/internal/MemoryManagerImpl.cpp:40:18
--2 0xbe8c73e in xercesc_4_0::IconvGNULCPTranscoder::transcode(char const*, xercesc_4_0::MemoryManager*) gdal/xerces-c/src/xercesc/util/Transcoders/IconvGNU/IconvGNUTransService.cpp:870:32
--3 0xbc22ca2 in xercesc_4_0::XMLString::transcode(char const*, xercesc_4_0::MemoryManager*) gdal/xerces-c/src/xercesc/util/XMLString.cpp:621:25
--4 0xbe8f4ad in xercesc_4_0::InMemMsgLoader::loadMsg(unsigned int, char16_t*, unsigned int, char const*, char const*, char const*, char const*, xercesc_4_0::MemoryManager*) gdal/xerces-c/src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp:157:16
--5 0xbc20175 in xercesc_4_0::XMLException::loadExceptText(xercesc_4_0::XMLExcepts::Codes, char const*, char const*, char const*, char const*) gdal/xerces-c/src/xercesc/util/XMLException.cpp:241:23
--6 0xbc48bee in xercesc_4_0::UTFDataFormatException::UTFDataFormatException(char const*, unsigned long long, xercesc_4_0::XMLExcepts::Codes, char const*, char const*, char const*, char const*, xercesc_4_0::MemoryManager*) gdal/xerces-c/src/xercesc/util/UTFDataFormatException.hpp:31:1
--7 0xbc4824e in xercesc_4_0::XMLUTF8Transcoder::transcodeFrom(unsigned char const*, unsigned int, char16_t*, unsigned int, unsigned int&, unsigned char*) gdal/xerces-c/src/xercesc/util/XMLUTF8Transcoder.cpp:182:13
--8 0xbd27d7e in xercesc_4_0::XMLReader::xcodeMoreChars(char16_t*, unsigned char*, unsigned int) gdal/xerces-c/src/xercesc/internal/XMLReader.cpp:1926:34
--9 0xbd271dd in xercesc_4_0::XMLReader::refreshCharBuffer() gdal/xerces-c/src/xercesc/internal/XMLReader.cpp:571:19
--10 0xbd15c63 in xercesc_4_0::XMLReader::peekNextChar(char16_t&) gdal/xerces-c/src/xercesc/internal/XMLReader.hpp:767:14
--11 0xbd15aaf in xercesc_4_0::ReaderMgr::peekNextChar() gdal/xerces-c/src/xercesc/internal/ReaderMgr.cpp:158:21
--12 0xbd328da in xercesc_4_0::XMLScanner::scanProlog() gdal/xerces-c/src/xercesc/internal/XMLScanner.cpp:1241:45
--13 0xbd31ef4 in xercesc_4_0::XMLScanner::scanFirst(xercesc_4_0::InputSource const&, xercesc_4_0::XMLPScanToken&) gdal/xerces-c/src/xercesc/internal/XMLScanner.cpp:549:9
--14 0xbdadcff in xercesc_4_0::SAX2XMLReaderImpl::parseFirst(xercesc_4_0::InputSource const&, xercesc_4_0::XMLPScanToken&) gdal/xerces-c/src/xercesc/parsers/SAX2XMLReaderImpl.cpp:500:22
--```
--Upstream: https://github.com/apache/xerces-c/commit/1bdf6d8ba878c1fe1d779824be70001fc0bebd2c
+-With CMake >= 3.11, the new behaviour of add_library() break the
+-existing flann CMake code.
 -
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-From CMake Changelog [1]:
+-"add_library() and add_executable() commands can now be called without
+- any sources and will not complain as long as sources are added later
+- via the target_sources() command."
 -
+-Note: flann CMake code doesn't use target_sources() since no source file
+-are provided intentionally since the flann shared library is created by
+-linking with the flann_cpp_s static library with this line:
+-
+-target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
+-
+-If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
+-be normally done), the link fail due to already defined symbol.
+-
+-They are building the shared version using the static library "to speedup the
+-build time" [3]
+-
+-This issue is already reported upstream [2] with a proposed solution.
+-
+-Upstream status: Pending
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
+-
+-[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
+-[2] https://github.com/mariusmuja/flann/issues/369
+-[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- .../MsgLoaders/InMemory/InMemMsgLoader.cpp    | 31 ++++++++++++++-----
-- 1 file changed, 23 insertions(+), 8 deletions(-)
+- src/cpp/CMakeLists.txt | 4 ++--
+- src/cpp/empty.cpp      | 1 +
+- 2 files changed, 3 insertions(+), 2 deletions(-)
+- create mode 100644 src/cpp/empty.cpp
 -
--diff --git a/src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp b/src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp
--index cda103226..6971fde96 100644
----- a/src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp
--+++ b/src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp
--@@ -25,6 +25,7 @@
-- // ---------------------------------------------------------------------------
-- #include <xercesc/util/BitOps.hpp>
-- #include <xercesc/util/PlatformUtils.hpp>
--+#include <xercesc/util/TranscodingException.hpp>
-- #include <xercesc/util/XMLMsgLoader.hpp>
-- #include <xercesc/util/XMLString.hpp>
-- #include <xercesc/util/XMLUni.hpp>
--@@ -153,14 +154,28 @@ bool InMemMsgLoader::loadMsg(const  XMLMsgLoader::XMLMsgId  msgToLoad
--     XMLCh* tmp4 = 0;
--     
--     bool bRet = false;
---    if (repText1)
---        tmp1 = XMLString::transcode(repText1, manager);
---    if (repText2)
---        tmp2 = XMLString::transcode(repText2, manager);
---    if (repText3)
---        tmp3 = XMLString::transcode(repText3, manager);
---    if (repText4)
---        tmp4 = XMLString::transcode(repText4, manager);
--+    try
--+    {
--+        if (repText1)
--+            tmp1 = XMLString::transcode(repText1, manager);
--+        if (repText2)
--+            tmp2 = XMLString::transcode(repText2, manager);
--+        if (repText3)
--+            tmp3 = XMLString::transcode(repText3, manager);
--+        if (repText4)
--+            tmp4 = XMLString::transcode(repText4, manager);
--+    }
--+    catch( const TranscodingException& )
--+    {
--+        if (tmp1)
--+            manager->deallocate(tmp1);
--+        if (tmp2)
--+            manager->deallocate(tmp2);
--+        if (tmp3)
--+            manager->deallocate(tmp3);
--+        // Note: tmp4 cannot leak
--+        throw;
--+    }
+-diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+-index b44a735..a816863 100644
+---- a/src/cpp/CMakeLists.txt
+-+++ b/src/cpp/CMakeLists.txt
+-@@ -29,7 +29,7 @@ if (BUILD_CUDA_LIB)
+- endif()
 - 
--     bRet = loadMsg(msgToLoad, toFill, maxChars, tmp1, tmp2, tmp3, tmp4, manager);
+- if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
+--    add_library(flann_cpp SHARED "")
+-+    add_library(flann_cpp SHARED "empty.cpp")
+-     set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
+-     target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
 - 
+-@@ -85,7 +85,7 @@ if (BUILD_C_BINDINGS)
+-     set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+- 
+-     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
+--        add_library(flann SHARED "")
+-+        add_library(flann SHARED "empty.cpp")
+-         set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
+-         target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
+-     else()
+-diff --git a/src/cpp/empty.cpp b/src/cpp/empty.cpp
+-new file mode 100644
+-index 0000000..40a8c17
+---- /dev/null
+-+++ b/src/cpp/empty.cpp
+-@@ -0,0 +1 @@
+-+/* empty */
 --- 
--2.17.1
+-2.14.3
 -
-diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-index c75ce860e8..e6b5b922d2 100644
---- a/package/xerces/xerces.hash
-+++ b/package/xerces/xerces.hash
-@@ -1,5 +1,5 @@
--# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.xz.sha256
--sha256  12fc99a9fc1d1a79bd0e927b8b5637a576d6656f45b0d5e70ee3694d379cc149  xerces-c-3.2.3.tar.xz
-+# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.4.tar.xz.sha256
-+sha256  075bc57940da0f9be6dd183c550c8ce0b9833e4550dc382048377a1a5e3b2bd9  xerces-c-3.2.4.tar.xz
- 
- # Hash for license file
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index a3e5361b2e..08efa6fb5c 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/flann/Config.in b/package/flann/Config.in
+index 3725fc784f..180d7eae8a 100644
+--- a/package/flann/Config.in
++++ b/package/flann/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLANN
+ 	bool "flann"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LZ4
+ 	help
+ 	  FLANN is a library for performing fast approximate nearest
+ 	  neighbor searches in high dimensional spaces. It contains a
+diff --git a/package/flann/flann.hash b/package/flann/flann.hash
+index 543e4b483d..6eaa48c403 100644
+--- a/package/flann/flann.hash
++++ b/package/flann/flann.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b23b5f4e71139faa3bcb39e6bbcc76967fbaf308c4ee9d4f5bfbeceaa76cc5d3  flann-1.9.1.tar.gz
++sha256  e26829bb0017f317d9cc45ab83ddcb8b16d75ada1ae07157006c1e7d601c8824  flann-1.9.2.tar.gz
+ sha256  3993f339cc56506c62aa1eb2fb76f240ee93b738d857832899c1e207b1dc069a  COPYING
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index 6c2e6a9e78..d1a622e685 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
+@@ -4,18 +4,18 @@
  #
  ################################################################################
  
--XERCES_VERSION = 3.2.3
-+XERCES_VERSION = 3.2.4
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
- XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
- XERCES_LICENSE = Apache-2.0
+-FLANN_VERSION = 1.9.1
++FLANN_VERSION = 1.9.2
+ FLANN_SITE = $(call github,mariusmuja,flann,$(FLANN_VERSION))
+ FLANN_INSTALL_STAGING = YES
+ FLANN_LICENSE = BSD-3-Clause
+ FLANN_LICENSE_FILES = COPYING
++FLANN_DEPENDENCIES = host-pkgconf lz4
+ FLANN_CONF_OPTS = \
+ 	-DBUILD_C_BINDINGS=ON \
+ 	-DBUILD_PYTHON_BINDINGS=OFF \
+ 	-DBUILD_MATLAB_BINDINGS=OFF \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_FLANN_EXAMPLES),ON,OFF) \
+ 	-DUSE_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF) \
+-	-DPYTHON_EXECUTABLE=OFF \
+ 	-DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
+ 
+ FLANN_CXXFLAGS = $(TARGET_CXXFLAGS)
 -- 
 2.35.1
 
