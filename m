@@ -1,50 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECACCFA3743
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 14:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 923BBECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 14:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A29441570;
-	Mon, 31 Oct 2022 14:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A29441570
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2AF260D74;
+	Mon, 31 Oct 2022 14:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2AF260D74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GdvzNd4I0udy; Mon, 31 Oct 2022 14:41:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bqTklEBGIvsK; Mon, 31 Oct 2022 14:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18C9741603;
-	Mon, 31 Oct 2022 14:41:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18C9741603
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F3771BF3D7
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 14:40:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B20760C22;
+	Mon, 31 Oct 2022 14:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B20760C22
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DCA2E1BF3D7
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 14:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49E5C41570
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 14:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49E5C41570
+ by smtp3.osuosl.org (Postfix) with ESMTP id B74BA60C22
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 14:42:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B74BA60C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a5XcKJkKrggC for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 14:40:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 174AC41603
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 14:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 174AC41603
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F21DA87948; Mon, 31 Oct 2022 14:40:41 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 15:24:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f1a357452d473e384f28a37d3e4ba4146519160
-X-Git-Newrev: 1227e4e7202adcb0b73760584bf8383aa65bc0cf
-X-Patchwork-Hint: ignore
-Message-Id: <20221031144041.F21DA87948@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gawk: don't sliently try autoreconf
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 75cCp0W9FUlr for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 14:42:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F41360BDE
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3F41360BDE
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 14:42:12 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id EC0B7CE792
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 14:15:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8EC981C0007;
+ Mon, 31 Oct 2022 14:14:37 +0000 (UTC)
+Date: Mon, 31 Oct 2022 15:14:36 +0100
+To: Paul Cercueil <paul@crapouillou.net>
+Message-ID: <20221031151436.328c576c@windsurf>
+In-Reply-To: <20221018110157.35331-1-paul@crapouillou.net>
+References: <20221018110157.35331-1-paul@crapouillou.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667225677;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=t7F7vVNOt2zdL0GKJRnsFY7v0Ls/LmDqBs58xCNqSVQ=;
+ b=cLcJ4EDxnZWEtY9BQeV2qKpJOXdtmfB2rhaA5ZUm75Ct6rw1SCQt4y5dWbo7Bty9Ht3/wJ
+ dpbecTs/vWi1JLrbwP0ZFthdi/I+mPaNvAj99J9VrCM0iQV0wdGGtJlKtFACiMUvmFUnO5
+ PcbLrVfdOQpvIVUHaRzP/s/25s8IFQfDMDx1Hvsd/2vL8yKTB2du2cKzGB8GyfoGkSwdck
+ oQmIioOQmq2wR1s3OCvVOdb1LuZ0udgkMntd0rFBeuwHlK9FYVSGiZ1wr1/c27y4UDhW8D
+ 0VreSngu71OBkGgnChipYTTgfrvmK0vFL9e2/u3UqBs1mF1ABv+fTU85H3LGpg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cLcJ4EDx
+Subject: Re: [Buildroot] [PATCH 1/1] package/umtprd: add patch to fix
+ output_dir make dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,194 +78,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1227e4e7202adcb0b73760584bf8383aa65bc0cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 18 Oct 2022 12:01:57 +0100
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Commit e6942ad11ff0 (package/gawk: fix double free during kernel build)
-backported an upstream patch, with hunks in autotools files, Makefile.am
-and Makefile.in.
+> Object file targets need to depend on the output_dir target.
+> 
+> Upstream commit:
+> https://github.com/viveris/uMTP-Responder/commit/d84216a678edaca81c0899318231cdcca2100d38
+> 
+> Fixes:
+> - http://autobuild.buildroot.net/results/c7ce975d398190fc191ccc03813f8ec0b3464c7d/
+> - http://autobuild.buildroot.net/results/0331fb9cf2748b16440ef830d09452a9812f5217/
+> - http://autobuild.buildroot.net/results/a1b1de9e2f764ce22f23d8a8ea88f7ddcf2969a9/
+> - http://autobuild.buildroot.net/results/7c7dbe03d769dc5f155fc14102f6591855605640/
+> - http://autobuild.buildroot.net/results/6cd90b7877520669d9ab9c9fadc9fa36912963b4/
+> - http://autobuild.buildroot.net/results/186689fc9637ae1a8330d7e19057cd1b3c9a841c/
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  .../0001-Fix-output_dir-make-dependency.patch | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 package/umtprd/0001-Fix-output_dir-make-dependency.patch
 
-Such changes ususally require an explicitly autoreconf, but in this
-case, Makefile.in is modified after Makefile,am, and a simple local test
-did not trigger a silent autoreconf, so the patch was applied as-is.
+Applied to master, thanks.
 
-That was a bit too optimitstic, though, and the build fails in some
-situations.
-
-Since the hunks in the autotools files are about tests, just drop those
-hunks as we are not interested in running the tests.
-
-Also drop the hunks about the changelogs while at it.
-
-Fixes:
-    http://autobuild.buildroot.org/results/068/0686697cb52d22c42ae2249db3442c008082fe72/
-    http://autobuild.buildroot.org/results/754/75463639cb9cbc32108f059bd6044810a078db06/
-
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../gawk/0002-Fix-a-bug-with-Node_elem_new.patch   | 132 +--------------------
- 1 file changed, 3 insertions(+), 129 deletions(-)
-
-diff --git a/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-index 502f7dcd95..8cbe9c6d02 100644
---- a/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-+++ b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-@@ -6,35 +6,12 @@ Subject: [PATCH] Fix a bug with Node_elem_new.
- Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- [james.hilliard1@gmail.com: backport from upstream commit
- baab183439ff4e0c6b77d62156d447e61fc1dcfb]
-+[yann.morin.1998@free.fr: drop all hunks about tests and changelogs]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- ---
-- ChangeLog         | 8 ++++++++
-  interpret.h       | 1 +
-- test/ChangeLog    | 5 +++++
-- test/Makefile.am  | 4 +++-
-- test/Makefile.in  | 9 ++++++++-
-- test/Maketests    | 5 +++++
-- test/elemnew1.awk | 9 +++++++++
-- test/elemnew1.ok  | 0
-- 8 files changed, 39 insertions(+), 2 deletions(-)
-- create mode 100644 test/elemnew1.awk
-- create mode 100644 test/elemnew1.ok
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
- 
--diff --git a/ChangeLog b/ChangeLog
--index 5fb25483..cd9d9fcd 100644
----- a/ChangeLog
--+++ b/ChangeLog
--@@ -1,3 +1,11 @@
--+2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
--+
--+	* interpret.h (r_interpret): For the `push' opcodes, upref
--+	the Node_elem_new. See test case elemnew1. Thanks to
--+	Emanuel Attila Czirai <corre.a.buscar@gmail.com> for the report,
--+	and to Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
--+	for the fix.
--+	
-- 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
-- 
-- 	* 5.2.0: Release tar ball made.
- diff --git a/interpret.h b/interpret.h
- index 57d060e6..268655b2 100644
- --- a/interpret.h
-@@ -47,109 +24,6 @@ index 57d060e6..268655b2 100644
-  				PUSH(m);
-  				break;
-  
--diff --git a/test/ChangeLog b/test/ChangeLog
--index a73637bf..ea08edee 100644
----- a/test/ChangeLog
--+++ b/test/ChangeLog
--@@ -1,3 +1,8 @@
--+2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
--+
--+	* Makefile.am (EXTRA_DIST): New test: elemnew1.
--+	* elemnew1.awk, elemnew1.ok: New files.
--+
-- 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
-- 
-- 	* 5.2.0: Release tar ball made.
--diff --git a/test/Makefile.am b/test/Makefile.am
--index ab06974c..8a5c3c49 100644
----- a/test/Makefile.am
--+++ b/test/Makefile.am
--@@ -282,6 +282,8 @@ EXTRA_DIST = \
-- 	dumpvars.ok \
-- 	dynlj.awk \
-- 	dynlj.ok \
--+	elemnew1.awk \
--+	elemnew1.ok \
-- 	escapebrace.awk \
-- 	escapebrace.in \
-- 	escapebrace.ok \
--@@ -1480,7 +1482,7 @@ GAWK_EXT_TESTS = \
-- 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
-- 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
-- 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
---	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
--+	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
-- 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
-- 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
-- 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
--diff --git a/test/Makefile.in b/test/Makefile.in
--index 834feb09..a4fb1cc1 100644
----- a/test/Makefile.in
--+++ b/test/Makefile.in
--@@ -550,6 +550,8 @@ EXTRA_DIST = \
-- 	dumpvars.ok \
-- 	dynlj.awk \
-- 	dynlj.ok \
--+	elemnew1.awk \
--+	elemnew1.ok \
-- 	escapebrace.awk \
-- 	escapebrace.in \
-- 	escapebrace.ok \
--@@ -1748,7 +1750,7 @@ GAWK_EXT_TESTS = \
-- 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
-- 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
-- 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
---	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
--+	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
-- 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
-- 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
-- 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
--@@ -4476,6 +4478,11 @@ dfacheck1:
-- 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-- 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-- 
--+elemnew1:
--+	@echo $@
--+	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
--+	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
--+
-- exit:
-- 	@echo $@
-- 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
--diff --git a/test/Maketests b/test/Maketests
--index 3a667af8..90828e7f 100644
----- a/test/Maketests
--+++ b/test/Maketests
--@@ -1432,6 +1432,11 @@ dfacheck1:
-- 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-- 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-- 
--+elemnew1:
--+	@echo $@
--+	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
--+	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
--+
-- exit:
-- 	@echo $@
-- 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
--diff --git a/test/elemnew1.awk b/test/elemnew1.awk
--new file mode 100644
--index 00000000..58dc9fcd
----- /dev/null
--+++ b/test/elemnew1.awk
--@@ -0,0 +1,9 @@
--+function add_flags(old) {
--+  if (old)
--+    return 0
--+  if (!old)
--+    return 1
--+}
--+BEGIN {
--+  a[0]=add_flags(a[0])
--+}
--diff --git a/test/elemnew1.ok b/test/elemnew1.ok
--new file mode 100644
--index 00000000..e69de29b
- -- 
- 2.34.1
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
