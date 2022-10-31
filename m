@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03DCC38A02
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 07:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DE0FA3740
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 08:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DBA440277;
-	Mon, 31 Oct 2022 07:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DBA440277
+	by smtp4.osuosl.org (Postfix) with ESMTP id D65CC40273;
+	Mon, 31 Oct 2022 08:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D65CC40273
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CoEPXuMxE2pX; Mon, 31 Oct 2022 07:50:39 +0000 (UTC)
+	with ESMTP id R44BdkHyJv_f; Mon, 31 Oct 2022 08:17:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AF4940273;
-	Mon, 31 Oct 2022 07:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF4940273
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C2551BF2F5
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 07:50:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFD0B40265;
+	Mon, 31 Oct 2022 08:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFD0B40265
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 21A2E1BF2BF
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 08:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 678CE812DB
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 07:50:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 678CE812DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF77B40265
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 08:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF77B40265
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kriiAL1ITnBN for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 07:50:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DA8812A3
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07DA8812A3
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 07:50:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqfNVeJVN3O7 for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 08:17:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE6CE40263
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EE6CE40263
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 08:17:41 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:afdc:c5f1:f1be:8b47])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 679E9B0053E;
- Mon, 31 Oct 2022 08:50:30 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id BD6E8B00533;
+ Mon, 31 Oct 2022 09:17:35 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 31 Oct 2022 08:50:30 +0100
-Date: Mon, 31 Oct 2022 08:50:30 +0100
+ Mon, 31 Oct 2022 09:17:35 +0100
+Date: Mon, 31 Oct 2022 09:17:35 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221031075030.GJ1058960@scaer>
-References: <20221030215458.3773991-1-james.hilliard1@gmail.com>
+Message-ID: <20221031081735.GK1058960@scaer>
+References: <20221031010904.1109541-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221030215458.3773991-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221031010904.1109541-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667202632;
- bh=xUcSOD6sWw0UNPuG8tFdu4tLPkRS70iIoLaio0hKn0Y=;
+ d=free.fr; s=smtp-20201208; t=1667204259;
+ bh=J3sVkzwyP2W+xfUQnc3WhDAdaj2xAS1S9jKoma8Jqyc=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jpWWP2e+m7DJ9S37ve9KqIZ8/Lt+FMpoji7BQlSaMgZrZUQGZ+SWXrygOlm36w9Ad
- LqSMAGt4kIQTDdW07RC6RXhYjPvlLIf+0TmfPf2f/KMt3b12fkYdkX0Vmfh/+0SNTP
- WG207iZS+992wm6K+bKRBIX3QRkiep3pUv9o7u5vDkTeOSDyGZW4/ICWxwwrMkVAZn
- blYA6SfsqN9/sjCaLpIg+jMbTaykjqQU4mGcmFHM1avLQHlp4Q9DWDU/xKDzzY8gQI
- g7Vz3Ejve09lt+kzg/VNKFwoeeDv7X3YYIMjIHJ4vMlWl/GsZg3W5xyECFmLVmkiA/
- 8ci0GJ3OhpI/Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=rCePnD8kXjz2GTu2ppBvJCsHcIauQWLcHUG4WkUkQXY3FZEZU3+ofOxnU+asp2idJ
+ 2FoAOj8enwGlRLYn6EuMIC0lpsESGvfU2gWgwvj1z5W00w5y1oYLrs4YxdNF5YhkD8
+ PW6lwoYdqYi5nasbnqfkGTVw5yyOFTHrcppuEZQ4UNYQuKGpmmMhb3bYwYmFp8O/oB
+ DhpXdj/YiO9ViSMa5Zr0Lzl7R9jyVguSvGN9+esF0dJHpwlcPum8ryzhnrRjJzuhuM
+ CiSUoKwbr9dOOhNbLv5ThZrH1lHmeBoZseCTg3s/MHsfjMQZAzX7K1nwXADhiG9WtQ
+ BeGwWbrLUtpxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jpWWP2e+
-Subject: Re: [Buildroot] [PATCH 1/1] package/gawk: fix double free during
- kernel build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rCePnD8k
+Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: set dbus busdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,7 +76,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Daniel Lang <d.lang@abatec.at>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -85,194 +84,59 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2022-10-30 15:54 -0600, James Hilliard spake thusly:
-> Backport an upstream patch to fix a crash during kernel build.
-> 
-> Details: https://bugs.gentoo.org/868567
++Daniel
+
+On 2022-10-30 19:09 -0600, James Hilliard spake thusly:
+> In 5b3b2d80f4cf586d360ff696c3dacbd4cb48fdc4 we dropped dbus as a build
+> dependency, as such we also need to set --with-dbus-busdir which would
+> otherwise be pulled via pkg-config.
 > 
 > Fixes:
->   GEN     /home/buildroot/buildroot/output/build/linux-6.0.6/tools/objtool/arch/x86/lib/inat-tables.c
-> free(): double free detected in tcache 2
-> Aborted
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> checking D-Bus bus services directory... configure: error: D-Bus bus services directory is required
 
-Applied to master, thanks.
+I was surprised that I did not have this error locally, but it only
+happens when systemd is enabled.
 
-That made me notice some cruft we've been carying for gawk, if you could
-have a quick look (patch renumbering missing, I sent it before applying
-your patch):
-    https://patchwork.ozlabs.org/project/buildroot/patch/20221031072634.2986903-1-yann.morin.1998@free.fr/
+So, rather than hard-code the path, I think I would prefer we add back a
+buid dependency on dbus when systemd is enabled:
+
+    diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+    index 002988cf33..6e366e094d 100644
+    --- a/package/iwd/iwd.mk
+    +++ b/package/iwd/iwd.mk
+    @@ -31,7 +31,8 @@ endif
+    
+     ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+     IWD_CONF_OPTS += --enable-systemd-service
+    -IWD_DEPENDENCIES += systemd
+    +# Need dbus for system_bus_services_dir variable provided by dbus' .pc
+    +IWD_DEPENDENCIES += dbus systemd
+     else
+     IWD_CONF_OPTS += --disable-systemd-service
+     endif
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  .../0002-Fix-a-bug-with-Node_elem_new.patch   | 155 ++++++++++++++++++
->  1 file changed, 155 insertions(+)
->  create mode 100644 package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
+>  package/iwd/iwd.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-> new file mode 100644
-> index 0000000000..502f7dcd95
-> --- /dev/null
-> +++ b/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-> @@ -0,0 +1,155 @@
-> +From baab183439ff4e0c6b77d62156d447e61fc1dcfb Mon Sep 17 00:00:00 2001
-> +From: "Arnold D. Robbins" <arnold@skeeve.com>
-> +Date: Wed, 14 Sep 2022 21:08:59 +0300
-> +Subject: [PATCH] Fix a bug with Node_elem_new.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1@gmail.com: backport from upstream commit
-> +baab183439ff4e0c6b77d62156d447e61fc1dcfb]
-> +---
-> + ChangeLog         | 8 ++++++++
-> + interpret.h       | 1 +
-> + test/ChangeLog    | 5 +++++
-> + test/Makefile.am  | 4 +++-
-> + test/Makefile.in  | 9 ++++++++-
-> + test/Maketests    | 5 +++++
-> + test/elemnew1.awk | 9 +++++++++
-> + test/elemnew1.ok  | 0
-> + 8 files changed, 39 insertions(+), 2 deletions(-)
-> + create mode 100644 test/elemnew1.awk
-> + create mode 100644 test/elemnew1.ok
-> +
-> +diff --git a/ChangeLog b/ChangeLog
-> +index 5fb25483..cd9d9fcd 100644
-> +--- a/ChangeLog
-> ++++ b/ChangeLog
-> +@@ -1,3 +1,11 @@
-> ++2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
-> ++
-> ++	* interpret.h (r_interpret): For the `push' opcodes, upref
-> ++	the Node_elem_new. See test case elemnew1. Thanks to
-> ++	Emanuel Attila Czirai <corre.a.buscar@gmail.com> for the report,
-> ++	and to Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
-> ++	for the fix.
-> ++	
-> + 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
-> + 
-> + 	* 5.2.0: Release tar ball made.
-> +diff --git a/interpret.h b/interpret.h
-> +index 57d060e6..268655b2 100644
-> +--- a/interpret.h
-> ++++ b/interpret.h
-> +@@ -238,6 +238,7 @@ uninitialized_scalar:
-> + 						_("reference to uninitialized argument `%s'") :
-> + 						_("reference to uninitialized variable `%s'"),
-> + 								save_symbol->vname);
-> ++				UPREF(m);
-> + 				PUSH(m);
-> + 				break;
-> + 
-> +diff --git a/test/ChangeLog b/test/ChangeLog
-> +index a73637bf..ea08edee 100644
-> +--- a/test/ChangeLog
-> ++++ b/test/ChangeLog
-> +@@ -1,3 +1,8 @@
-> ++2022-09-14         Arnold D. Robbins     <arnold@skeeve.com>
-> ++
-> ++	* Makefile.am (EXTRA_DIST): New test: elemnew1.
-> ++	* elemnew1.awk, elemnew1.ok: New files.
-> ++
-> + 2022-09-04         Arnold D. Robbins     <arnold@skeeve.com>
-> + 
-> + 	* 5.2.0: Release tar ball made.
-> +diff --git a/test/Makefile.am b/test/Makefile.am
-> +index ab06974c..8a5c3c49 100644
-> +--- a/test/Makefile.am
-> ++++ b/test/Makefile.am
-> +@@ -282,6 +282,8 @@ EXTRA_DIST = \
-> + 	dumpvars.ok \
-> + 	dynlj.awk \
-> + 	dynlj.ok \
-> ++	elemnew1.awk \
-> ++	elemnew1.ok \
-> + 	escapebrace.awk \
-> + 	escapebrace.in \
-> + 	escapebrace.ok \
-> +@@ -1480,7 +1482,7 @@ GAWK_EXT_TESTS = \
-> + 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
-> + 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
-> + 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
-> +-	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
-> ++	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
-> + 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
-> + 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
-> + 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
-> +diff --git a/test/Makefile.in b/test/Makefile.in
-> +index 834feb09..a4fb1cc1 100644
-> +--- a/test/Makefile.in
-> ++++ b/test/Makefile.in
-> +@@ -550,6 +550,8 @@ EXTRA_DIST = \
-> + 	dumpvars.ok \
-> + 	dynlj.awk \
-> + 	dynlj.ok \
-> ++	elemnew1.awk \
-> ++	elemnew1.ok \
-> + 	escapebrace.awk \
-> + 	escapebrace.in \
-> + 	escapebrace.ok \
-> +@@ -1748,7 +1750,7 @@ GAWK_EXT_TESTS = \
-> + 	binmode1 charasbytes clos1way clos1way2 clos1way3 clos1way4 \
-> + 	clos1way5 clos1way6 colonwarn commas crlf dbugeval dbugeval2 \
-> + 	dbugeval3 dbugtypedre1 dbugtypedre2 delsub devfd devfd1 devfd2 \
-> +-	dfacheck1 dumpvars errno exit fieldwdth forcenum fpat1 fpat2 \
-> ++	dfacheck1 dumpvars elemnew1 errno exit fieldwdth forcenum fpat1 fpat2 \
-> + 	fpat3 fpat4 fpat5 fpat6 fpat7 fpat8 fpat9 fpatnull fsfwfs functab1 \
-> + 	functab2 functab3 functab6 funlen fwtest fwtest2 fwtest3 fwtest4 \
-> + 	fwtest5 fwtest6 fwtest7 fwtest8 genpot gensub gensub2 gensub3 \
-> +@@ -4476,6 +4478,11 @@ dfacheck1:
-> + 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> + 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-> + 
-> ++elemnew1:
-> ++	@echo $@
-> ++	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> ++	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-> ++
-> + exit:
-> + 	@echo $@
-> + 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> +diff --git a/test/Maketests b/test/Maketests
-> +index 3a667af8..90828e7f 100644
-> +--- a/test/Maketests
-> ++++ b/test/Maketests
-> +@@ -1432,6 +1432,11 @@ dfacheck1:
-> + 	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  < "$(srcdir)"/$@.in >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> + 	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-> + 
-> ++elemnew1:
-> ++	@echo $@
-> ++	@-AWKPATH="$(srcdir)" $(AWK) -f $@.awk  >_$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> ++	@-$(CMP) "$(srcdir)"/$@.ok _$@ && rm -f _$@
-> ++
-> + exit:
-> + 	@echo $@
-> + 	@-$(LOCALES) AWK="$(AWKPROG)" "$(srcdir)"/$@.sh  > _$@ 2>&1 || echo EXIT CODE: $$? >>_$@
-> +diff --git a/test/elemnew1.awk b/test/elemnew1.awk
-> +new file mode 100644
-> +index 00000000..58dc9fcd
-> +--- /dev/null
-> ++++ b/test/elemnew1.awk
-> +@@ -0,0 +1,9 @@
-> ++function add_flags(old) {
-> ++  if (old)
-> ++    return 0
-> ++  if (!old)
-> ++    return 1
-> ++}
-> ++BEGIN {
-> ++  a[0]=add_flags(a[0])
-> ++}
-> +diff --git a/test/elemnew1.ok b/test/elemnew1.ok
-> +new file mode 100644
-> +index 00000000..e69de29b
-> +-- 
-> +2.34.1
-> +
+> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> index 002988cf33..e53ae595d7 100644
+> --- a/package/iwd/iwd.mk
+> +++ b/package/iwd/iwd.mk
+> @@ -17,7 +17,8 @@ IWD_CONF_OPTS = \
+>  	--disable-manual-pages \
+>  	--enable-external-ell \
+>  	--enable-dbus-policy \
+> -	--with-dbus-datadir=/usr/share
+> +	--with-dbus-datadir=/usr/share \
+> +	--with-dbus-busdir=/usr/share/dbus-1/system-services
+>  IWD_DEPENDENCIES = ell
+>  
+>  ifeq ($(BR2_PACKAGE_READLINE),y)
 > -- 
 > 2.34.1
 > 
