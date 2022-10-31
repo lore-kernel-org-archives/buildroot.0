@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BF28FA3740
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 09:25:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F09BC38A02
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 09:30:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD88460B38;
-	Mon, 31 Oct 2022 09:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD88460B38
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC87E403B3;
+	Mon, 31 Oct 2022 09:30:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC87E403B3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WXLiwZtmh5nT; Mon, 31 Oct 2022 09:30:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE64340545;
+	Mon, 31 Oct 2022 09:30:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE64340545
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D1C291BF358
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 09:30:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD8B260A66
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 09:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8B260A66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0kxX4tiQT1gn; Mon, 31 Oct 2022 09:25:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA26160B26;
-	Mon, 31 Oct 2022 09:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA26160B26
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 989A31BF358
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 09:24:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73E584024F
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 09:24:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73E584024F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id usiuHKV_WoKd for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 09:24:42 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P8dssaLgVIFM for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 09:30:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94CD940256
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 09:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94CD940256
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BCA66058F
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 09:30:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BCA66058F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AD5D8371C; Mon, 31 Oct 2022 09:24:41 +0000 (UTC)
+ id 88EF78776E; Mon, 31 Oct 2022 09:30:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 10:20:59 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: b44e2cf19a1f8f19e228019f320921fd06834f01
-X-Git-Newrev: d0f071e3731b4c94f8c2c7d190e9eac101ed0e07
+Date: Mon, 31 Oct 2022 10:30:02 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: cc9bc36a7104b2a284d2f86dd3ffcc5beb317b40
+X-Git-Newrev: e2a9134bc76cadf5353c9f702ca813a2026823a7
 X-Patchwork-Hint: ignore
-Message-Id: <20221031092441.5AD5D8371C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/uclibc-ng-test:
- update to latest git
+Message-Id: <20221031093031.88EF78776E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] {linux,
+ linux-headers}: bump 4.{9, 14, 19}.x / 5.{4, 10, 15}.x / 6.0.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0f071e3731b4c94f8c2c7d190e9eac101ed0e07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e2a9134bc76cadf5353c9f702ca813a2026823a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes a musl autobuild compile error, see
-http://autobuild.buildroot.net/results/3cbd6f8007d1b5276b91e9f1688402f86b1f2049/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 616347a163a940f78300d980353e831a39095f3c)
+(cherry picked from commit 716b8c4e7bac4f39b7a2297f39858f5c4bfbcab6)
+{Peter: drop 6.0.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
- package/uclibc-ng-test/uclibc-ng-test.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
-index 37660b04c3..4028bada4c 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.hash
-+++ b/package/uclibc-ng-test/uclibc-ng-test.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f731307c0547ce4bbd3f5025972f64e9b22208a147e34e5745000b54d4d3aa98  uclibc-ng-test-0844445e7358eb10e716155b55b0fb23e88d644a-br1.tar.gz
-+sha256  655c9d9732cf24d8230defac7ef4d6bd92ad05c070ab02fe99c1fb47c7a40039  uclibc-ng-test-6790eafe897b3a8c19a2caf50a5ecccf06647adf-br1.tar.gz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 6a658b4293..a678bcf7f0 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 4be34dd7eb..733f57c4a4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--UCLIBC_NG_TEST_VERSION = 0844445e7358eb10e716155b55b0fb23e88d644a
-+UCLIBC_NG_TEST_VERSION = 6790eafe897b3a8c19a2caf50a5ecccf06647adf
- UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.15.67" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.15.73" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.115-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.109-cip5-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4d87543bbb..ec28403f36 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  d8060dc88f862baaae66b42a2dbc12298ed667c698eb5c55617a7786ee47bf25  linux-5.16.20.tar.xz
+-sha256  da47d9a80b694548835ccb553b6eb1a1f3f5d5cddd9e2bd6f4886b99ca14f940  linux-5.15.67.tar.xz
+-sha256  3f47ebdb9afe152a0c32c1157336ef13fa5cc08ac6d884dfc1f6ddc2b7dba268  linux-5.10.142.tar.xz
+-sha256  09c72e3dd85df773eb52e53e25c556d132958bd775b0ed6985a6b1ac21c9cfc2  linux-5.4.212.tar.xz
++sha256  a822f09525ae8803453939a91e73f18097a3ba2aec73be4fe9ab314a0131715d  linux-5.15.73.tar.xz
++sha256  85253abf097eb5013b988a400eb022eed0e0626e7e0a7daa3ab4b6bcabbced9a  linux-5.10.147.tar.xz
++sha256  2bb826cdf9b2cfce385fb5d51fc8070fe428e467bd3df4ae2a7eb6f0c0cc2e63  linux-5.4.217.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  35017bb40b604e0b577fc2b87e727632b46608a2ba3a4f5858b9177f58f376b3  linux-4.4.302.tar.xz
+-sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-4.9.327.tar.xz
+-sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
+-sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
++sha256  bf021936a450e9292e10cc7db9909cd0d336406191d22aadd22bdcc51ca2595f  linux-4.9.330.tar.xz
++sha256  62ccb9ba94a7da5115bc923eebf8dffee9229801da02be87d90ae68ab9a76a6b  linux-4.14.295.tar.xz
++sha256  bec33298bd0470b5e725c7dc29a2dd4daf02065cb01cd4a54f6adee6ff582cb2  linux-4.19.261.tar.xz
+ # Locally computed
+ sha256  f3559be277be9200897022282be18cfc0278d1d8baec8058305b04b9cd72002a  linux-cip-5.10.115-cip7.tar.gz
+ sha256  71fba4ed5cb48fa7869e9fe271b68b77fed26775ce5cf2f50891aa8f71c388b3  linux-cip-5.10.109-cip5-rt4.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c256e3bca1..dc5eeeb38b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -382,12 +382,12 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.302"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.327"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.292"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.257"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
++	default "4.9.330"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.295"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.261"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.217"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.147"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.73"	if BR2_KERNEL_HEADERS_5_15
+ 	default "5.16.20"	if BR2_KERNEL_HEADERS_5_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
