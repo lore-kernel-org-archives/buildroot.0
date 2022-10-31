@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B31ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 20:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A5DFA3741
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 21:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E5ED60BD2;
-	Mon, 31 Oct 2022 20:50:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5ED60BD2
+	by smtp4.osuosl.org (Postfix) with ESMTP id D49434031E;
+	Mon, 31 Oct 2022 21:02:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D49434031E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PBVOWYBZWxvg; Mon, 31 Oct 2022 20:50:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JOA1UN-ih2So; Mon, 31 Oct 2022 21:02:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3F8160B5E;
-	Mon, 31 Oct 2022 20:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3F8160B5E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DABD41BF2F9
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:50:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9C7E40189;
+	Mon, 31 Oct 2022 21:02:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C7E40189
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BF231BF327
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B564681242
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B564681242
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54516400CC
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 21:02:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54516400CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P9npwhQFRs43 for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 20:50:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WGMdrJM79_1v for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 21:02:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D22368109C
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D22368109C
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 20:49:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5772403F7
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D5772403F7
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 21:02:30 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B88D4FF804;
- Mon, 31 Oct 2022 20:49:57 +0000 (UTC)
-Date: Mon, 31 Oct 2022 21:49:56 +0100
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20221031214956.37e0ef12@windsurf>
-In-Reply-To: <20221031174632.377586-4-troglobit@gmail.com>
-References: <20221031174632.377586-1-troglobit@gmail.com>
- <20221031174632.377586-4-troglobit@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 2A8AB20005;
+ Mon, 31 Oct 2022 21:02:28 +0000 (UTC)
+Date: Mon, 31 Oct 2022 22:02:26 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20221031220226.36f3ccf8@windsurf>
+In-Reply-To: <20220925101041.GH1127102@scaer>
+References: <20220925090920.1585682-1-thomas.petazzoni@bootlin.com>
+ <20220925090920.1585682-2-thomas.petazzoni@bootlin.com>
+ <20220925101041.GH1127102@scaer>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667249398;
+ d=bootlin.com; s=gm1; t=1667250149;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uoHGtYz3zfWIjxyhfPVQ8j3Ux/KX2yYx5udL9JieOuM=;
- b=NoeHMCvt0a6EavUouwK1853CTaZD0qrCqQxbfjMpd2Hw4IPn+bx3bdJocKRvyholwwhjD+
- INeUAuyhEn3b2zY0s61vI76Rju5LLegcWhaYQbe943DpQIOtjxHNRnQm0k3O3ZYX4T4BW4
- gN2OlcWOWXvMmFJbBqS98jIyQJHee+1XhEZ4aLOu8TIIRVk3rbBmNffIRwn7gS+qAiK6CF
- rDjX5GEF2sqEjjxvh8jpVZ9M2F6fAd77al9110whxLiEGBzt5VCC8KxQlOIQ6INjLdhTUc
- eiZJkSZUZk9T8nsGNkNA4qLboYBXBRllhri8lGkaDR5fz5bweyAoi9sVAnbDeQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=2GhWOjcd/1Lkkwzph2oWCQdYnWdTNPHWow07vKR9JKk=;
+ b=Y4wcXeVfIb78vYhzQbXYJ4zQKYFgBUskVUGDDE3VmMlJpL+l+AtE95O33b1Hu9kVHYQfYY
+ 5fEzyywGEFGqd6zXGH/b29eszghQIaz+nBzur8R8u8GsziQO36GKgUkIkajgB+4a5qDB2t
+ FBGMgxW7Cj16ebQlxE4vAs6qVkv7BUdG5q4WbgReDEGx4xvRn6JBWpHxDrQNjI702HnLeW
+ 7OotzomTq5sA7koz8zcHQoYvAIvl3wYNVdgr0g2nkMtfpEmGBM73LGnWvLWAfVW6v3+An2
+ o+7RRfTOYAs2h6BLP31dm7pRmDWAC7GT3L7xAgKMhfNGzqdqKO3xVNeml06xoQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NoeHMCvt
-Subject: Re: [Buildroot] [PATCH 3/3] package/ssdp-responder: fix warnings
- from check-package and shellcheck
+ header.s=gm1 header.b=Y4wcXeVf
+Subject: Re: [Buildroot] [PATCH v2 1/5] arch/Config.in.xtensa: adjust
+ endianness logic to avoid bogus configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,58 +80,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>,
+ Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 31 Oct 2022 18:46:32 +0100
-Joachim Wiberg <troglobit@gmail.com> wrote:
+Hello,
 
-> +cmd()
-> +{
-> +	start-stop-daemon -q -p "$PIDFILE" -x "$DAEMON" "$@"
-> +	status=$?
-> +	[ $status -eq 0 ] && echo "OK" || echo "FAIL"
-> +
-> +	return $status
-> +}
+Sorry to bring back this topic only now, but there are still Xtensa
+issues that we need to resolve, and this series was aiming at solving
+them. But I have further questions.
 
-I don't think we're using this cmd construct anywhere else in the tree,
-or did I miss some change in our coding style/policy?
+On Sun, 25 Sep 2022 12:10:41 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
->  
->  start() {
-> -	printf 'Starting %s: ' "$NAME"
-> -	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
-> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> > diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+> > index f9d5adb4c9..4bb58e1964 100644
+> > --- a/arch/Config.in.xtensa
+> > +++ b/arch/Config.in.xtensa
+> > @@ -37,6 +37,10 @@ config BR2_XTENSA_LITTLE_ENDIAN
+> >  
+> >  config BR2_XTENSA_BIG_ENDIAN
+> >  	bool "Big endian"
+> > +	# Internal toolchains without an overlay file are always
+> > +	# little-endian, so we prevent from selecting big endian in
+> > +	# this case.
+> > +	depends on BR2_XTENSA_OVERLAY_FILE != "" || BR2_TOOLCHAIN_EXTERNAL  
+> 
+> I think that dependency should go to the whole choice instead:
+> 
+>     choice
+>         prompt "Target Architecture Endianness"
+>         default BR2_XTENSA_LITTLE_ENDIAN
+>         depends on BR2_XTENSA_CUSTOM || BR2_TOOLCHAIN_EXTERNAL
 
-This all looked matching our coding style. Why are you changing this?
->  case "$1" in
-> -    start|stop|restart)
-> -	"$1"
-> -	;;
-> -    reload)
-> -	restart
-> -	;;
-> -    *)
-> -	echo "Usage: $0 {start|stop|restart|reload}"
-> -	exit 1
-> +	start|stop|restart)
-> +		"$1"
-> +		;;
-> +	reload)
-> +		restart
-> +		;;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart|reload}"
-> +		exit 1
+My memory is probably vague, but I don't see how this solve the
+problem. The problem was to prevent the user from choosing "big endian"
+if he has selected a custom core but not specified an overlay.
 
-I'm not sure what is the recommended indentation style in our init
-scripts. Tabs? Spaces?
+> This should cover the external toolchain case, and the internal
+> toolchain for a custom core (assuming we keep the no-empty overlay for
+> custom cores).
 
-Thanks!
+Not sure what you mean by "assuming we keep the no-empty overlay for
+custom cores".
+
+> 
+> I.e. semantically, choosing between big or little is not about having or
+> not having an overlay, but about being a custom core or not (or using a
+> custom toolchain).
+
+Not sure to follow you here. The only issue is precisely that if you
+don't specify an overlay, there is no way your custom Xtensa core can
+be big endian: it will be little endian. The configuration we want to
+prevent the user from creating is: custom core, no overlay, big endian.
+
+Best regards,
 
 Thomas
 -- 
