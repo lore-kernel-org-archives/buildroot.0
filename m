@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B282AFA3741
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 23:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A274FA3741
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 23:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F62060BFF;
-	Mon, 31 Oct 2022 23:28:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F62060BFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id D64D760C14;
+	Mon, 31 Oct 2022 23:28:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D64D760C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Ce8cvvwgf_r; Mon, 31 Oct 2022 23:28:19 +0000 (UTC)
+	with ESMTP id 2ysgCIvPwrH0; Mon, 31 Oct 2022 23:28:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B661F60BEF;
-	Mon, 31 Oct 2022 23:28:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B661F60BEF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2419B1BF297
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 23:28:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10B8C60B6E;
+	Mon, 31 Oct 2022 23:28:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10B8C60B6E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9520D1BF297
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 23:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F143B40272
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 23:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F143B40272
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70E99813D1
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 23:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70E99813D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lILMVJZCd49q for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 23:28:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uN-pVhjTBrF9 for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 23:28:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BBB6400CC
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com
- [209.85.216.47])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6BBB6400CC
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 23:28:05 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id k5so4120848pjo.5
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 16:28:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA8B813CD
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com
+ [209.85.216.41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6FA8B813CD
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 23:28:08 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id
+ 3-20020a17090a0f8300b00212d5cd4e5eso17289920pjz.4
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 16:28:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=hGP9zH+Y6k5a+zj0HMG8T4vThY47ARcE1Ls7jlr893o=;
- b=LxlD1uHXc7PcbPKSbmUi7RyDR4kBVACUZzTWEbyNrjORG+gPuhMr3dKv2ts2oj243v
- oYI3Qi5e0+QymxolaJN3kr/huH58IPZfZqQTEpMPBfSDwPLPWHRW8OYNlyK2jV8jvFo5
- bjXeVY4epvckDjesUVufQju5heffOibTl8Gzvv1GWUu+DEMtgD8p+JDIBRXXYmx1WsxG
- qM+HqQOCSxnvFAHHV19vv29BHReQhvoGmP0KSL4i7A8nvMjiYis5NXyntHeYNAVjl7xZ
- /8pETpJAwTUaP8E0oikUK3p6CrOb3KIRbHuUqEqGJ42CufLHWSw0nYZnHu3dQ9TMz6p/
- U8bg==
-X-Gm-Message-State: ACrzQf34ZmbHWJ+pL1xJzM5PnCFELtWq8rUo2VZJLWRm+giaNuNhvRKs
- Q8ljbYolR2ForVb/bZ2S+r9JlFSxlN5Gmw==
-X-Google-Smtp-Source: AMsMyM4LPrONiW/akqegHM2W01NJifZZKPZPJl1SuewpIyYY/oj7Mn1ZtMXqhPLCx3Qbw7GlFvD+0g==
-X-Received: by 2002:a17:902:8e88:b0:185:3cea:6335 with SMTP id
- bg8-20020a1709028e8800b001853cea6335mr16711853plb.96.1667258884455; 
- Mon, 31 Oct 2022 16:28:04 -0700 (PDT)
+ bh=+5xCJS148exwQX+yynLgHQx9FsvxRZgULGwXMtUi9gI=;
+ b=IgswF7UIhvtaeqLhjMiGuvqyp5g54DeCsrvNZ4Jfy9ERZbykJ9osLRY2QydV857t5J
+ QooOOiLfudp6prk6//h7BYhfaDpXZ1WuDzXALLCurtGww+Onl7FLSSti/xlxQh8danla
+ nXAtBPWKGYKhD4LYttLugAOR7yrS/UVxdW7a5ayoXDoNkK1dYZ7C30zkqpz2GfQYNRY6
+ ybMH2z73ADMIHqoNq0/OSOmwI/tExxUdehqycKyWx30FOd7l8lc7vQcssCW8BtZSqPTo
+ JZdopEW2hidp9s6JSQHkygjX1KJKs29JCwVHTisFfz+svsZTh2406fdOPfCQap/HHLb8
+ HkkA==
+X-Gm-Message-State: ACrzQf3HPjoJsQcusOLTV6Ln01+lmd48KZmFl1aVXyUHUa7oxdJYPP+3
+ jhBrHGL0KErtwZvLnTXSbIrJ1y4tmZPEYw==
+X-Google-Smtp-Source: AMsMyM7Pq1Wb9xMhNsST6kh764co2iM9Fgf0g1GSdq4ov3MEVKeWojVNyCqGRtWydIJ26tCVaeyI7w==
+X-Received: by 2002:a17:903:248:b0:172:7520:db07 with SMTP id
+ j8-20020a170903024800b001727520db07mr16639449plh.76.1667258887404; 
+ Mon, 31 Oct 2022 16:28:07 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- n8-20020a170902d2c800b00186a1b243basm4932590plc.226.2022.10.31.16.28.03
+ n8-20020a170902d2c800b00186a1b243basm4932590plc.226.2022.10.31.16.28.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Oct 2022 16:28:03 -0700 (PDT)
+ Mon, 31 Oct 2022 16:28:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 16:27:50 -0700
-Message-Id: <20221031232752.626154-2-christian@paral.in>
+Date: Mon, 31 Oct 2022 16:27:52 -0700
+Message-Id: <20221031232752.626154-4-christian@paral.in>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221031232752.626154-1-christian@paral.in>
 References: <20221031232752.626154-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/4]
- support/testing/tests/package/test_docker-compose: fix docker compose
- container name
+Subject: [Buildroot] [PATCH v2 4/4]
+ support/testing/tests/package/test_docker-compose: update kernel to
+ 4.19.262
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,18 +99,18 @@ Signed-off-by: Christian Stewart <christian@paral.in>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 10ceee3167..c940cc8839 100644
+index a833c68233..38b669fc6d 100644
 --- a/support/testing/tests/package/test_docker_compose.py
 +++ b/support/testing/tests/package/test_docker_compose.py
-@@ -42,7 +42,7 @@ class TestDockerCompose(infra.basetest.BRTest):
-         # will download container if not available, which may take some time
-         self.assertRunOk('docker compose up -d', 120)
-         # container may take some time to start
--        self.assertRunOk('while ! docker inspect root_busybox_1 2>&1 >/dev/null; do sleep 1; done', 120)
-+        self.assertRunOk('while ! docker inspect root-busybox-1 2>&1 >/dev/null; do sleep 1; done', 120)
-         self.assertRunOk('wget -O /tmp/busybox http://127.0.0.1/busybox', 120)
-         self.assertRunOk('cmp /bin/busybox /tmp/busybox', 120)
- 
+@@ -15,7 +15,7 @@ class TestDockerCompose(infra.basetest.BRTest):
+         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
+         BR2_PACKAGE_CA_CERTIFICATES=y
 -- 
 2.38.1
 
