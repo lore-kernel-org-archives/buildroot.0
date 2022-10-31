@@ -1,72 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F401ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 12:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF717ECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 12:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EA9B408AE;
-	Mon, 31 Oct 2022 12:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EA9B408AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7172F60BE3;
+	Mon, 31 Oct 2022 12:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7172F60BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XAdDj0VnwQa0; Mon, 31 Oct 2022 12:55:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2KTgfObf5SGM; Mon, 31 Oct 2022 12:56:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73FC840247;
-	Mon, 31 Oct 2022 12:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73FC840247
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B41941BF417
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:55:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25DE460BF2;
+	Mon, 31 Oct 2022 12:55:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25DE460BF2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E3E21BF417
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BB1940247
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BB1940247
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E5AD80CE6
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 12:55:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E5AD80CE6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IiazurwTj5QO for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 12:55:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5220040241
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5220040241
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 12:55:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:afdc:c5f1:f1be:8b47])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 062E6B00539;
- Mon, 31 Oct 2022 13:54:05 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 31 Oct 2022 13:54:05 +0100
-Date: Mon, 31 Oct 2022 13:54:05 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20221031125405.GC1058960@scaer>
-References: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
- <20221031132519.4e5ebc69@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Axc6pdpU2jrl for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 12:55:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29D5980C09
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 29D5980C09
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 12:55:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E4AF340009;
+ Mon, 31 Oct 2022 12:54:56 +0000 (UTC)
+Date: Mon, 31 Oct 2022 13:54:55 +0100
+To: Eero Aaltonen via buildroot <buildroot@buildroot.org>
+Message-ID: <20221031135455.32d64698@windsurf>
+In-Reply-To: <20221019143219.329504-1-eero.aaltonen@vaisala.com>
+References: <20221019143219.329504-1-eero.aaltonen@vaisala.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221031132519.4e5ebc69@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667220850;
- bh=Iv14n+jUJLiUKiSuBbjbf/h17sGHnUoEObQCUE0NazY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RASlrgQgO50aoebFapFEQr2KjeqU8dFTOMzNRXvTWKYYwbcPYofCj/3Vq06gl61t2
- T1Q1+VXSay4ARQAT6HE+j6PrlUfOIzTkrWndQbFcRIxNm+HeRRmY7Cgc48yp3ByFPH
- ydURYCvFjNMZ9S1gE8U2K8DC6yDxnJk16tI+MJ+uzfdZbF64HZYQKvhJmtl8FJfRnj
- iKOnKd5ewDC7kQNIExL5Zibg72ua61DlBkrjw6sF62kz8gq82HlP3lYPzyEBmdTj9G
- JEbpP73lbMm2MjwBM9qWABMvqz40ghNz0VgW1fnVZZIQE9aIFmOzN8mqN3MD0WoqOH
- 71H8A1h6V/gQw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RASlrgQg
-Subject: Re: [Buildroot] [PATCH] package/mono: allow to select which folders
- to install to target
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667220897;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3AEdc1t0Eq/gAM5klRa5mPKI6J70vJR+6F13iftNAEI=;
+ b=R0cMiTiswo7+CIB8hOVk/8OHXjnF7Pu0YQsFWvNIIOlAqbsp6xhJ9HWJ3vqQAuW3YGdZAm
+ mQFtoszb/Fcb4Ze/b4L5siK2PYIICnDmjWx89e6SfoEkBa9PzthGr5sUHsY+UKCp1Z8/PY
+ cUhrFqxFKOajCfx5Xc1PUQdZgQx/EUjfo3UP/xrWfAVIPkXF47lo+wvCLejT945dj/Cn94
+ Bl5ElFf0w+MpOXVJay4f22kJwmNT9EJgz5JN9t+GPTA8lxlFfebjELm2RhmhcVabrXMO9n
+ rDP8t1lp/TggmXYQPTHfdUogpxJ031EqIhCZb/8bluyoESRUQu8tYl1WZxjzvA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=R0cMiTis
+Subject: Re: [Buildroot] [PATCH 1/1] package/docopt.cpp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,108 +75,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eero Aaltonen <eero.aaltonen@vaisala.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, Thomas, All,
+Hello Eero,
 
-On 2022-10-31 13:25 +0100, Thomas Petazzoni via buildroot spake thusly:
-> On Wed, 19 Oct 2022 01:46:17 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> > At the moment all APIs folders are copied to target increasing the size of
-> > rootfs of ~190MB. Allow to select which API folders we want to copy to
-> > target to shrink rootfs down.
-> > 
-> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Practically speaking, could you describe which folders are needed in a
-> typical scenario you've had?
+On Wed, 19 Oct 2022 17:32:19 +0300
+Eero Aaltonen via buildroot <buildroot@buildroot.org> wrote:
 
-Yes, can you provide a rationale for when only a subset of APIs is
-needed?
-
-> Here, I have these ones:
+> Add docopt.cpp library that can be used to create intuitive command
+> line interfaces with very little code by describing the valid calls
+> using the (POSIX.1-2017) command line utility argument syntax.
 > 
-> drwxr-xr-x   2 thomas thomas  4096 oct.  25 22:58 2.0-api
-> drwxr-xr-x   2 thomas thomas  4096 oct.  25 22:58 3.5-api
-> drwxr-xr-x   2 thomas thomas  4096 oct.  25 22:56 4.0
-> drwxr-xr-x   2 thomas thomas 12288 oct.  25 22:58 4.0-api
-> drwxr-xr-x   4 thomas thomas 16384 oct.  25 22:58 4.5
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.5.1-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.5.2-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.5-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.6.1-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.6.2-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.6-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.7.1-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.7.2-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.7-api
-> drwxr-xr-x   3 thomas thomas 12288 oct.  25 22:58 4.8-api
-> drwxr-xr-x 145 thomas thomas 12288 oct.  25 22:56 gac
-> drwxr-xr-x   2 thomas thomas  4096 oct.  25 22:56 lldb
-> drwxr-xr-x   3 thomas thomas  4096 oct.  25 22:56 mono-configuration-crypto
-> drwxr-xr-x   2 thomas thomas  4096 oct.  25 22:56 monodoc
-> drwxr-xr-x   3 thomas thomas  4096 oct.  25 22:56 msbuild
-> drwxr-xr-x   6 thomas thomas  4096 oct.  25 22:56 xbuild
-> drwxr-xr-x   4 thomas thomas  4096 oct.  25 22:56 xbuild-frameworks
+> Signed-off-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
 
-It looks like we have three sets of directories here;
-  - version-based dirs: from 2.0-api up to 4.8-api
-  - gac/: big number of subdirs in there...
-  - the rest
+Thanks a lot for your patch! I'm adding in Cc Angelo, who helped by
+reviewing/testing your patch. I have applied your patch, but after
+doing a number of changes, which are described below. Angelo: look
+below as well, to see the few things that you missed as part of your
+review, as it will definitely help in doing more detailed reviews in
+the future!
 
-Your change trat them all on the same level, but are they all really
-superfluous? Is there a set that absolutely needs to be there, or can we
-really do with just one (or even none, see below)?
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/docopt.cpp/Config.in       | 15 +++++++++++++++
+>  package/docopt.cpp/docopt.cpp.hash |  6 ++++++
+>  package/docopt.cpp/docopt.cpp.mk   | 13 +++++++++++++
+>  5 files changed, 38 insertions(+)
 
-Note: can we unconditionally get rid of monodoc/? Of msbuild/? Of lldb/?
+I renamed to package/docopt-cpp/. I don't think we have other packages
+with a "." in their name, and I didn't want to create a new situation.
 
-> > +config BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL
-> > +	bool "Specify folders to install to target"
-> > +	help
-> > +	  Allow to specify which Mono folder to install to target
-> 
-> I don't really have a very good suggestion, but I don't like the name
-> of the option. We rarely have option names that are "sentences", i.e
-> "specify folders to install" is a sentence.
-> 
-> Should we instead have a single string option
-> BR2_PACKAGE_MONO_INSTALL_LIB_DIRS, which is empty by default. When
-> empty, it means all folders are installed. Otherwise, only the
-> specified folders are installed.
 
-Agreed. I expect that having no API level installed would yield a
-non-working system, so:
+> diff --git a/package/docopt.cpp/Config.in b/package/docopt.cpp/Config.in
+> new file mode 100644
+> index 0000000000..655a656398
+> --- /dev/null
+> +++ b/package/docopt.cpp/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_DOCOPT_CPP
+> +	bool "docopt.cpp"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+> +	help
+> +	  docopt is a library that lets you define a command line
+> +	  interface with the utility argument syntax that has been
+> +	  used by command line utilities for decades (POSIX.1-2017).
+> +	  From the description, docopt automatically generates a parser
+> +	  for the command line arguments.
+> +
+> +	  docopt Command-line interface description language
+> +	  http://docopt.org/
+> +
+> +	  docopt C++ port https://github.com/docopt/docopt.cpp
 
-    config BR2_PACKAGE_MONO_API_VERSIONS
-        string "API versions to install"
-        help
-          Keep empty to install all.
+The last line of the help text should only contain the upstream URL of
+the project, so I reformatted a bit to match this requirement.
 
-> The other obvious question is whether this shouldn't simply be left as
-> something to do in a post-build script. Even though I admit that
-> reducing 190 MB down to something reasonable can be seen as something
-> that is almost mandatory.
-> 
-> Or alternatively, do we have a better way, where we could automate this
-> selection of which folders are needed?
+Also, you had forgotten a Config.in comment to document the C++ and gcc
+4.7+ dependencies, so I have added:
 
-I would prefer we avoid carrying the list of versionned APIs (and the
-rest, see above).
++comment "docopt-cpp needs a toolchain w/ C++, gcc >= 4.7"
++       depends on !BR2_INSTALL_LIBSTDCPP || \
++               !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 
-Regards,
-Yann E. MORIN.
+> diff --git a/package/docopt.cpp/docopt.cpp.mk b/package/docopt.cpp/docopt.cpp.mk
+> new file mode 100644
+> index 0000000000..647071243a
+> --- /dev/null
+> +++ b/package/docopt.cpp/docopt.cpp.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# docopt.cpp
+> +#
+> +################################################################################
+> +
+> +DOCOPT_CPP_VERSION = 0.6.3
+> +DOCOPT_CPP_SOURCE = v$(DOCOPT_CPP_VERSION).tar.gz
+> +DOCOPT_CPP_SITE = https://github.com/docopt/docopt.cpp/archive/refs/tags
 
+You should have use the github macro here:
+
++DOCOPT_CPP_VERSION = 0.6.3
++DOCOPT_CPP_SITE = $(call github,docopt,docopt.cpp,v$(DOCOPT_CPP_VERSION))
+
+> +DOCOPT_CPP_INSTALL_STAGING = YES
+> +DOCOPT_CPP_LICENSE_FILES = LICENSE-Boost-1.0 LICENSE-MIT
+
+The LICENSE variable was missing, so I've added it:
+
++DOCOPT_CPP_LICENSE = BSL-1.0 or MIT
+
+Again, applied with all those changes. See:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/43f96ced67c9a1f84d3f0edf5cd632178eb176b8
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
