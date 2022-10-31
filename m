@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3754DFA3740
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 10:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC295C38A02
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 10:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B96144038E;
-	Mon, 31 Oct 2022 10:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B96144038E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 565AE40396;
+	Mon, 31 Oct 2022 10:27:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 565AE40396
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfA6kqkN2naN; Mon, 31 Oct 2022 10:26:33 +0000 (UTC)
+	with ESMTP id iQqFDADZJCCv; Mon, 31 Oct 2022 10:27:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7DFE401CA;
-	Mon, 31 Oct 2022 10:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7DFE401CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91FE7401CA;
+	Mon, 31 Oct 2022 10:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91FE7401CA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 32F0A1BF3EC
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:26:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 431DD1BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0701481330
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:26:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0701481330
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1493981330
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 10:27:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1493981330
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l3tZvKlEKqgG for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 10:26:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F398C81323
- for <buildroot@buildroot.org>; Mon, 31 Oct 2022 10:26:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F398C81323
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE38287885; Mon, 31 Oct 2022 10:26:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 31 Oct 2022 11:26:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a294be424a4f78e1a54e3df7a706181fa287793
-X-Git-Newrev: 8369ff62db68ad911e8fac55881006c75af8b86e
-X-Patchwork-Hint: ignore
-Message-Id: <20221031102627.DE38287885@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libostree: select libarchive for
+ with ESMTP id akTojNmm7kHd for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 10:27:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB8C981323
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CB8C981323
+ for <buildroot@buildroot.org>; Mon, 31 Oct 2022 10:27:37 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CD5E724000E;
+ Mon, 31 Oct 2022 10:27:34 +0000 (UTC)
+Date: Mon, 31 Oct 2022 11:27:33 +0100
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+Message-ID: <20221031112733.7113d46c@windsurf>
+In-Reply-To: <20221011062647.741292-1-marcus.folkesson@gmail.com>
+References: <20221011062647.741292-1-marcus.folkesson@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667212055;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Ymar2II/9rQuhX8TvMmFGzrCa60jg8QeZhURiJhEk60=;
+ b=oMHeSf+T2WfPtwAQSm2Qein2q3/tgW1f/mrzmMfBLKiypjLQrgz47yHuxVW7IoqXnwxLbl
+ fBcjCvN9CDJLbKXmmKBYoXihvh//mxfizm2dMLgWrTk2MjmqVQuHIj5dpxYHyv36/y1GEX
+ mc6rRFQM71yNHSxgl+qbbgs6qM4E3BFl+SerhPxULaIfFWXf09BLIuX8MmcDQ+oPd2E7JM
+ pKlq91CLE64K8/38hetSFbkMlRJqoz1P4RS2aZXs9kuAmpPDfi7EH1s6nhaqK1EyVxmlDI
+ TdL2+T9e/+rcD1RnZZk1/od0QyIRgz2cEFVcrrLU4aR1vY2iCCwcFERYIxHcyQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oMHeSf+T
+Subject: Re: [Buildroot] [PATCH] package/libostree: select libarchive for
  s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,42 +78,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8369ff62db68ad911e8fac55881006c75af8b86e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Marcus,
 
-libarchive is needed when building for s390x.
+On Tue, 11 Oct 2022 08:26:47 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Introduced in this patch:
-c6a53ef6e8f9491633b0d494991f94c629791e1d s390x: use 'libarchive' to modify initrd in SE case
+> libarchive is needed when building for s390x.
+> 
+> Introduced in this patch:
+> c6a53ef6e8f9491633b0d494991f94c629791e1d s390x: use 'libarchive' to modify initrd in SE case
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/14cc164ab3005be9b3efde57b4bd914414e3acf0/
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>  package/libostree/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+> index 14ae4da4c8..a36e12ddde 100644
+> --- a/package/libostree/Config.in
+> +++ b/package/libostree/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBOSTREE
+>  	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL
+>  	select BR2_PACKAGE_E2FSPROGS
+> +    select BR2_PACKAGE_LIBARCHIVE if BR2_s390x
 
-Fixes:
+Thanks for the patch! The indentation was not correct here, so I fixed
+that up and applied. Thanks!
 
-  http://autobuild.buildroot.net/results/14cc164ab3005be9b3efde57b4bd914414e3acf0/
-
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libostree/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libostree/Config.in b/package/libostree/Config.in
-index 14ae4da4c8..696e8e1d6c 100644
---- a/package/libostree/Config.in
-+++ b/package/libostree/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBOSTREE
- 	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_LIBARCHIVE if BR2_s390x
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_LIBGPGME
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
