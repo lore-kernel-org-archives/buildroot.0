@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38A5CC433FE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 17:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4246AFA3741
+	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 20:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3D71821BE;
-	Fri,  4 Nov 2022 17:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3D71821BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id C43328175B;
+	Mon, 31 Oct 2022 20:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C43328175B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8-PABzju6uwH; Fri,  4 Nov 2022 17:42:39 +0000 (UTC)
+	with ESMTP id 59mPeWrkTEEk; Mon, 31 Oct 2022 20:35:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB0B6821B8;
-	Fri,  4 Nov 2022 17:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0B6821B8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED7211BF385
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 17:42:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F24781678;
+	Mon, 31 Oct 2022 20:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F24781678
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BEED51BF2F9
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C920D403BF
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 17:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C920D403BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99DB181678
+ for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99DB181678
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zz9OAC0LCPJj for <buildroot@lists.busybox.net>;
- Fri,  4 Nov 2022 17:42:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC85540198
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com
- [209.85.208.43])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC85540198
- for <buildroot@buildroot.org>; Fri,  4 Nov 2022 17:42:34 +0000 (UTC)
-Received: by mail-ed1-f43.google.com with SMTP id v17so8675064edc.8
- for <buildroot@buildroot.org>; Fri, 04 Nov 2022 10:42:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=9e3g2NsEc5dopDNXBy66yO1YIfX2e5yhkxYTR0ewAOk=;
- b=YslEjfFWiwHgDdfNN+8SAL0LLFvLFVOClU7it2YCGUZWWFpFfUMK0j9y6L0QSzjAZF
- gemi60gBiBdFejbAb2hfwGugJTSXHXkuyp6sY9C9CkBirKHaMmU0tcpU5Qsmbi3Hvdbd
- 8FeJtURT+pd7BCthlbXfopmkIsVfnz7v0zaJIxPrSkFGu7gV2vZQphCjWZCNczfg5Y9u
- t3Z8liKHn9QU84/tn7qkqQjqY3yG73A7+QCFtjj9Mhd1rg4jLvH0LX6ssWVs7nuwQjKX
- vMun/dclm1pYV2irF1b0YHHegS2HPJ9PVpnK/WZtBBSwvShm0r9hEfyop72y8zmX8Mqx
- /8Ew==
-X-Gm-Message-State: ACrzQf2Xq3JxTnaykjYTraAnJD9qNKtzVeLCUwqwqHMi+Q5MSDzGBIJh
- dzpDhNRVXg1+YBc/3Xh75jEaopKDD6cMz0PW
-X-Google-Smtp-Source: AMsMyM6JXsAhs/9czIP7E/kHx8XbFl96Nmlx0x9hF0fUxmQ/iDPoNE7N2sqoky/EDcE72W8WMSqGxg==
-X-Received: by 2002:a05:6402:40cc:b0:462:555e:5f73 with SMTP id
- z12-20020a05640240cc00b00462555e5f73mr38257857edb.259.1667583752570; 
- Fri, 04 Nov 2022 10:42:32 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com.
- [209.85.218.44]) by smtp.gmail.com with ESMTPSA id
- j10-20020aa7c0ca000000b00459ad800bbcsm36575edp.33.2022.11.04.10.42.31
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 04 Nov 2022 10:42:32 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id y14so15133898ejd.9
- for <buildroot@buildroot.org>; Fri, 04 Nov 2022 10:42:31 -0700 (PDT)
-X-Received: by 2002:a17:906:4fcb:b0:791:9a26:376f with SMTP id
- i11-20020a1709064fcb00b007919a26376fmr35158707ejw.431.1667583751429; Fri, 04
- Nov 2022 10:42:31 -0700 (PDT)
-MIME-Version: 1.0
-From: Bryce Johnson <bryce@redpinelabs.com>
-Date: Fri, 4 Nov 2022 11:42:20 -0600
-X-Gmail-Original-Message-ID: <CADXxVSJSHC44o49ax3jPv4P0H34+A5O71EWucGsQt_E_9PcNOw@mail.gmail.com>
-Message-ID: <CADXxVSJSHC44o49ax3jPv4P0H34+A5O71EWucGsQt_E_9PcNOw@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] Hash check for a file inside a git repo?
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SKhueBb8Tays for <buildroot@lists.busybox.net>;
+ Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF59B8148E
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF59B8148E
+ for <buildroot@uclibc.org>; Mon, 31 Oct 2022 20:35:39 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1opbVR-0004sF-C8
+ for buildroot@uclibc.org; Mon, 31 Oct 2022 21:35:37 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 31 Oct 2022 21:35:01 +0100
+Message-ID: <pan$dd0eb$bcfe6a21$17d3908c$470fd6da@ID-313208.user.individual.net>
+References: <20221023165026.13707-1-fontaine.fabrice__23420.659061388$1666543861$gmane$org@gmail.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libzlib: bump to version 1.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,29 +63,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi All,
-Is it possible to use the hash check on a file that is contained in a
-git repo?  I have a tarball (along with the hash) provided from a 3rd
-party that I put in a git repo on the local network. I was thinking of
-using buildroot's hash check to automate the check for me.  It looks
-like it works fine on the complete git repo download, but I wanted to
-only check that one file.
+Am Sun, 23 Oct 2022 18:50:26 +0200 schrieb Fabrice Fontaine:
 
-It looked like it was possible here:
-https://github.com/buildroot/buildroot/blob/master/docs/manual/adding-packages-directory.txt#L512
+> - Drop all patches (already in version)
+> - Replace README by LICENSE file added with
+>   https://github.com/madler/zlib/commit/
+352cb28d12baf02863ff5d4d96be0587ced419a1
+> 
+> https://github.com/madler/zlib/releases/tag/v1.2.13
 
-# md5 from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.md5,
-sha256 locally computed:
-md5  2d608f3c318c6b7557d551a5a09314f03452f1a1  libfoo-data.bin
-sha256  01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
- libfoo-data.bin
+Hi,
 
-I assumed libfoo-data.bin lives in libfoo-1.2.3.tar.bz2?
+ftr: this fixes CVE-2022-37434:
+https://nvd.nist.gov/vuln/detail/CVE-2022-37434
 
-Looks like I could work-around and use the _LICENSE_FILES but that
-only gets checked on the make legal-info?
+Regards, Bernd
 
-Bryce
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
