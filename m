@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9B4EFA373D
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 10:03:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C22FA3743
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 10:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA1260C34;
-	Tue,  1 Nov 2022 10:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA1260C34
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57AE181338;
+	Tue,  1 Nov 2022 10:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57AE181338
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PO2OJjm6rwVq; Tue,  1 Nov 2022 10:03:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d_c1FbnG3vsn; Tue,  1 Nov 2022 10:15:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCCDA60C20;
-	Tue,  1 Nov 2022 10:02:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCCDA60C20
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 970791BF873
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:02:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BCC381311;
+	Tue,  1 Nov 2022 10:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BCC381311
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CDD61BF2B3
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7956760C20
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7956760C20
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11CA181311
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11CA181311
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nDifUVTtj3tV for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 10:02:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ff89aeaC5wML for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 10:15:16 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8B8360AEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DED08130B
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E8B8360AEE
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 10:02:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0DED08130B
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 10:15:15 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:50d3:260a:b461:e6c4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id D411019F5AE;
- Tue,  1 Nov 2022 11:02:44 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id A581119F5BC;
+ Tue,  1 Nov 2022 11:15:07 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 01 Nov 2022 11:02:44 +0100
-Date: Tue, 1 Nov 2022 11:02:44 +0100
+ Tue, 01 Nov 2022 11:15:07 +0100
+Date: Tue, 1 Nov 2022 11:15:07 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: David Laight <David.Laight@ACULAB.COM>
-Message-ID: <20221101100244.GF1058960@scaer>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20221101101507.GG1058960@scaer>
 References: <20221031213926.50d3c778@windsurf>
- <f7086aad47234c089332330689ae9a42@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <f7086aad47234c089332330689ae9a42@AcuMS.aculab.com>
+In-Reply-To: <20221031213926.50d3c778@windsurf>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667296973;
- bh=A7gzo/QwGYDWv6kk6mq0u3y1BGFDk5wk0eLcQd4w9y0=;
+ d=free.fr; s=smtp-20201208; t=1667297714;
+ bh=DEhKLtAOgsN3ruptFyzMsroHExpwk3uNqFAG/TZpj3k=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ks2JkIIPpS86jo5RItLDHtOy2ooG5cKdG+cGD7H6icmQbhU+37zQwAjvfYTOiwJoG
- CPQPoP29TGzlKMnlQFnshjwrZ1m2/RLxF1BMuFKNB1RMLKdwrNIMjmpAfKuXi/E/Rj
- 42kmrQJ+EHXnGxoBKdQH43PrZfFPGun0KBHD4ISlO74+lbriWKH1MT7PeYMR9bRqvu
- o+as6bEwxdctg58Wn2LLyEZi8fHUfDRw/ByxaloXB8L+7lljhFBoLFg5zpwiVELN65
- Ulvg4RFZW4f/4o8Ru6gDUGiR8A22Ivpt0moCsTWZLIk2HpOURnVq/w4VMhCbMwfS9Y
- DbAXuZ5NJjoTw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=sGYmfVwJ6rOb3+fblCgo7osSU77cMWC1D5fvBk8HpwuEKC+jYjbWlprsI+tWz5dNb
+ vO09EdnZoMjnqmp32Zde1BIDyCwtt400LWh5WUMV5lW8mS8htRAr0Z2UX5Zv4PIR/h
+ Tuw1GQb0if3UyT4ly63yNnqMx+/Dnjhxe/0RqbnAXNym0QsXx/APmOXcQFDikQHsAe
+ M8vN0CWQmA2nBdqRWgDNqBf7W9OpyZChPHeokksguAlYDSq4GaeyhOupWu3H5Foh4o
+ cw4FDpl8uMlTQLbfW+gl7B0t2qVKImHSUIK31x7hmskczKgqTEbjM+Mvn17CeJmCz7
+ PW/SEI6xmfsPw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ks2JkIIP
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sGYmfVwJ
 Subject: Re: [Buildroot] NodeJS, qemu wrapper and ELF interpreter fun
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,57 +76,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: 'Thomas Petazzoni' <thomas.petazzoni@bootlin.com>,
- "f.rogall@gmx.de" <f.rogall@gmx.de>, "mail@jens-maus.de" <mail@jens-maus.de>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "fesc2000@mailbox.org" <fesc2000@mailbox.org>,
- "oliver.kasten@trsystems.de" <oliver.kasten@trsystems.de>
+Cc: fesc2000@mailbox.org, "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ oliver.kasten@trsystems.de, mail@jens-maus.de, f.rogall@gmx.de
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-David, All,
+Thomas, All,
 
-On 2022-11-01 08:46 +0000, David Laight spake thusly:
-> > (C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
-> >     $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
-> >     LD_LIBRARY_PATH paths have precedence over paths given by
-> >     ld.so.cache.
-> > 
-> >     This is the solution already used by the GOI qemu wrapper in
-> >     package/gobject-introspection/g-ir-scanner-qemuwrapper.in, and
-> >     which was suggested in bug
-> >     https://bugs.busybox.net/show_bug.cgi?id=14366.
-> > 
-> > Any opinion? Or other ideas?
+On 2022-10-31 21:39 +0100, Thomas Petazzoni spake thusly:
+> I finally took some time to investigate the NodeJS build issue that
+> occurs on x86-64:
+>   http://autobuild.buildroot.net/results/4f2/4f29c5e663b5d01af20d671baf6504332b8c1f7b/build-end.log
+[--SNIP--]
+> After adding some traces into this function, I was able to understand
+> what happens:
+
+Great explanations, thanks a lot!
+
+> We see 3 possible ideas to resolve this problem:
 > 
-> Using LD_LIBRARY_PATH like that is a bad idea.
+> (A) Change the behavior of Qemu to not fallback to unprefixed paths:
+>     when -L is passed, all path-related system calls should see the
+>     paths prefixed by the -L option.
+>     Issue with this is that this change is unlikely to get accepted by
+>     Qemu upstream. And there might be some side effects we have not
+>     really identified.
 
-Yeah, we know quite a bit about some LD_LIBRARY_PATH woes ;-)
+I am very skeptical of that solution...
 
-> Just google for it and you'll find a load of stuff about it.
-> LD_LIBRARY_PATH should only really be used not substitute a
-> non-standard library - eg for testing.
+> (B) Create an empty $(STAGING_DIR)/etc/ld.so.cache. We have tested
+>     this solution and it works: it gets used instead of the host
+>     /etc/ld.so.cache. Because $(STAGING_DIR)/etc/ld.so.cache is empty,
+>     there's no libc.so.6 match, so the target ELF interpreter goes
+>     through its normal library location resolution logic, which falls
+>     back to trying in /usr/lib and /lib, which works as those paths
+>     ends up being prefixed with $(STAGING_DIR) by Qemu.
 
-In this situation, the issue is that we are running a *target* program,
-on the *build machine*, and we want it to pick target ilbraries, not the
-host libraries.
+You'd also need an empty /etc/ld.so.cache.d/ maybe.
 
-Of course, during cross-compilation, we can't run target code on the
-build machine, so we run it through qemu-user.
+I was looking at the manpage for ld.so, and it has an option to disable
+looking in the cache:
 
-However, as Thomas explained and demonstrated, qemu-user intercepts and
-emulates the open()-like syscalls. Then it has a heuristic to resolve
-the opened path. This heuristic fails for us in some cases, however.
+    --inhibit-cache
+        Do not use /etc/ld.so.cache.
 
-Thus we need a way to force-tell where to look for libraries.
+However, we are not calling ld.so directly, so we'd need to pass it via
+an environment variable, but there's no such environment variable that
+would allow disable the cache.
 
-So, yes, LD_LIBRARY_PATH is far from a panacea, but technically it makes
-things work.
+I'm afraid an empty STAGING_DIR/etc/ld.so.cache might not be enough, but
+I have no fact to back this gut feeling...
+
+> (C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
+>     $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
+>     LD_LIBRARY_PATH paths have precedence over paths given by
+>     ld.so.cache.
+> 
+>     This is the solution already used by the GOI qemu wrapper in
+>     package/gobject-introspection/g-ir-scanner-qemuwrapper.in, and
+>     which was suggested in bug
+>     https://bugs.busybox.net/show_bug.cgi?id=14366.
+
+We know this has been working pretty well for the GOI wrapper, so if we
+were to use LD_LIBRARY_PATH, that would make for consistent wrappers.
+
+> Any opinion? Or other ideas?
+
+I would go for the LD_LIBRARY_PATH solution, if at least because it is
+consistent with the GOI wrapper.
 
 Regards,
 Yann E. MORIN.
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
