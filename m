@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E13AC433FE
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 17:42:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8984C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 18:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1B8B8197D;
-	Tue,  1 Nov 2022 17:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1B8B8197D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48DCE402BC;
+	Tue,  1 Nov 2022 18:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48DCE402BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oY7RYvUXXVcg; Tue,  1 Nov 2022 17:42:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RTEjR0qQSRh7; Tue,  1 Nov 2022 18:13:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B179813C4;
-	Tue,  1 Nov 2022 17:42:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B179813C4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E11B40276;
+	Tue,  1 Nov 2022 18:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E11B40276
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8D45E1BF831
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:42:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BAEC21BF5F8
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 18:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6255B4010D
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6255B4010D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9673E40445
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 18:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9673E40445
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F5vTSKqMDuZQ for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 17:42:10 +0000 (UTC)
+ with ESMTP id 0a-djH1MuEfK for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 18:13:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB0D1400D2
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DB0D1400D2
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 17:42:09 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:50d3:260a:b461:e6c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5629519F5AF;
- Tue,  1 Nov 2022 18:42:01 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 01 Nov 2022 18:42:01 +0100
-Date: Tue, 1 Nov 2022 18:42:00 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Angelo Compagnucci <angelo@amarulasolutions.com>
-Message-ID: <20221101174200.GJ2992523@scaer>
-References: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
- <20221031132519.4e5ebc69@windsurf> <20221031125405.GC1058960@scaer>
- <1e71c677-05cf-89b1-419f-df8e0f73ae63@benettiengineering.com>
- <20221101083206.GI2992523@scaer>
- <CA+_SqVZMnZvF2-n4HvrUUg1=k-VT4QBZGNAHZpoGM86y37fyuw@mail.gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9C88400D2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E9C88400D2
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 18:13:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 0000820002;
+ Tue,  1 Nov 2022 18:13:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue,  1 Nov 2022 19:13:18 +0100
+Message-Id: <20221101181320.368702-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221101181320.368702-1-thomas.petazzoni@bootlin.com>
+References: <20221101181320.368702-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CA+_SqVZMnZvF2-n4HvrUUg1=k-VT4QBZGNAHZpoGM86y37fyuw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667324526;
- bh=9KAof3ytBP3e0O6ik+DCGx4ERWR3csCBvpPNzYwjfyM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=NI1q/pGlHmsgkEZVhbDRSzGFk16f3OF42d6BG/D8QtDrKEqrtvxakINoCrwQteJvS
- e9BqhOeCN6O1kLLHCbBWUVSlp6OXca6BtLbCd4QTXV2RPwako8pwNO+e/3prCoaNWo
- 4O23L74ws8414Yo5CLh4LkWgSlgD4dWR2XRGgyOZY3vksb5/2mqo1mJlKaxTQa+2cI
- rscTk3ylckth2XuqxX29cJxB3CWYoea3h2T2/TEq6u04ZtNMINyzYaXztUHu+wZIaS
- xofRwRRT4dWBKl1u5yGFoG/ZTWUoRY4MiM9FBjUd4Z8LC/PfzBAEfxbagunJs0aJ8o
- DEjXVLXoOHIXg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667326406;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1I1eOWNyuKPjvQke5NNn/SXDUidtVQ6w5FwHgNvTkdE=;
+ b=FDet9SMCMWSzjWG7O52QxxaN6bKWY/OF+/mWPEgiYBcHY6bctxAH8a+uFYiMEhnVI63Ehm
+ WQoGko4fcnOoqPcHo0h0QksvGnSFHAQ65v1/I6fLuOptRNPXR5RZ/mJUccTeE1tZuKn1oY
+ sP95Vgka1YwahU9zMYGF+x0NFlgnSa3KhfuUDO0XbalOQfmJLd1HOxtjm5gnCfsinGDSq/
+ xYArRrfdYV6Q/dIeuWW1HX77mXRfljIXwvzxzzU4A2dqBF75EOVPOebsoAoE2HFx+919OS
+ kgjQjzlbL6B1+fxtzJk211TSo0kIRzpTLNHQI5maqdBAJAfrlSSXkUNoZB6zBA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NI1q/pGl
-Subject: Re: [Buildroot] [PATCH] package/mono: allow to select which folders
- to install to target
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FDet9SMC
+Subject: [Buildroot] [PATCH 2/3]
+ support/testing/tests/package/test_python_crossbar: use ext2 instead of
+ cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,48 +76,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW5nZWxvLCBBbGwsCgpPbiAyMDIyLTExLTAxIDEwOjE5ICswMTAwLCBBbmdlbG8gQ29tcGFnbnVj
-Y2kgc3Bha2UgdGh1c2x5OgpbLS1TTklQLS1dCj4gTXkgdHdvIGNlbnRzLiBIaXN0b3JpY2FsbHks
-IHRoZSBtb25vIGNvbmZpZ3VyZSB3YXMgb2ZmZXJpbmcgc29tZQo+IG9wdGlvbnMgdG8gZW5hYmxl
-IG9ubHkgc29tZSB2ZXJzaW9ucyBvZiB0aGUgQVBJIHdoaWNoIHdhcyBsYXRlbHkKPiByZW1vdmVk
-wqAKPiBTbywgcmVtb3Zpbmcgb2xkZXIgY29tcGF0aWJpbGl0eSBBUEkgZm9sZGVycyBzaG91bGQg
-YmUgcGVyZmVjdGx5Cj4gZmluZS4KClRoYW5rcyBmb3IgdGhlIGNvbmZpcm1hdGlvbiEgOi0pCgpN
-eSB1bmRlcnN0YW5kaW5nLCB0aG91Z2gsIHdvdWxkIGJlIHRoYXQgd2UgbWF5IG5lZWQgbW9yZSB0
-aGFuIG9uZSBzdWNoCnZlcnNpb25uZWQgQVBJLiBGb3IgZXhhbXBsZSwgSSB3b3VsZCAoaHlwb3Ro
-ZXRpY2FsbHkhKSBkZXZlbG9wZSBteSBhcHAKYWdhaW5ncyBjdXJyZW50IHZlcnNpb24sIHNheSA0
-LjgtYXBpLCBzbyBJIGFtIHVzaW5nIEFQSXMgZnJvbSB0aGF0CnZlcnNpb24uIFRoZW4gSSB1cGRh
-dGUgdG8gYSBuZXdlciBtb25vLCBhbmQgSSBzdGFydCB1c2luZyB0aGUgbmV3IEFQSXMsCmUuZy4g
-NS4zLWFwaSwgaW4gdGhlIG5ldyBwYXJ0cyBvZiBteSBhcHAsIGJ1dCB0aGUgZXhpc3RpbmcgcGFy
-dHMgYXJlCnN0aWxsIHVzaW5nIDQuOC1hcGksIHNvIEkgbmVlZCBib3RoLgoKSXMgdGhhdCBzZW5z
-aWJsZSwgb3IgZGlkIEkgbWlzLXVuZGVyc3Rvb2Q/CgpJZiBjb3JyZWN0LCB0aGVuIHdlIG5lZWQg
-dG8gYmUgYWJsZSB0byBzZWxlY3QgbW9yZSB0aGFuIG9uZSB2ZXJzaW9uZWQKQVBJLgoKPiBXZSBj
-YW5ub3QgcmVtb3ZlIHRoZSBHbG9iYWwgQXNzZW1ibHkgQ2FjaGUgKEdBQykuCgpTbywgd2UgYW4n
-IHJlbHkgb24gaXQgYmVpbmcgbGlzdGVkIGJ5IHRoZSB1c2VyOyB3ZSBtdXN0IGV4cGxpY2l0bHkK
-aW5zdGFsbCBpdC4KCiAgICBNT05PX0lOU1RBTExfRElSUyA9IFwKICAgICAgICBnYWMgXAogICAg
-ICAgICQoZml0bGVyLW91dCBnYWMsJChjYWxsIHFzdHJpcCwkKEJSMl9QQUNLQUdFX01PTk9fQVBJ
-X0RJUlMpKSkKCiAgICAkKGZvcmVhY2ggZGlyLCQoTU9OT19JTlNUQUxMX0RJUlMpLGNvcHkgdGhl
-ICQoZCkgZGlyKQoKPiBGb3IgdGhlIHJlc3QsIGl0IHdvdWxkIGJlIG5pY2UgaWYgR2l1bGlvIGNv
-dWxkIGRvIHNvbWUgdGVzdGluZyAoSSBjYW4KPiB0cnkgaXQgdG9vKSB0byB1bmRlcnN0YW5kIGF0
-IHdoYXQgZXh0ZW50IHdlIGNhbiByZW1vdmUgYW55IG90aGVyCj4gZm9sZGVyLgoKVGhhdCB3b3Vs
-ZCBiZSBhd2Vzb21lLCB0aGFua3MhCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4tLS0t
-LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
-LS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVk
-IHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYg
-MDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAg
-ICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFH
-QUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdl
-ZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8
-CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
-LS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+The CPIO filesystem generated by the test_python_crossbar test is too
+large, and doesn't fit as an initramfs in the 256MB of RAM available
+in the versatilepb machine. This causes a "Initramfs unpacking failed:
+write error" when booting, and many files being missing from the root
+filesystem, ultimately causing the test to fail.
+
+It would make sense to switch all test cases to use ext2 + a
+hard-drive, but for now, let's fix the few test cases that are causing
+problems.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828587
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../testing/tests/package/test_python_crossbar.py   | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
+index 83649aeec2..178b16be82 100644
+--- a/support/testing/tests/package/test_python_crossbar.py
++++ b/support/testing/tests/package/test_python_crossbar.py
+@@ -1,4 +1,5 @@
+ from tests.package.test_python import TestPythonPackageBase
++import os
+ 
+ 
+ class TestPythonPy3Crossbar(TestPythonPackageBase):
+@@ -13,8 +14,16 @@ class TestPythonPy3Crossbar(TestPythonPackageBase):
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_CROSSBAR=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+         """
+     sample_scripts = ["tests/package/sample_python_crossbar.py"]
+     timeout = 60
++
++    def login(self):
++        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
++                           kernel_cmdline=["rootwait", "root=/dev/sda"])
++        self.emulator.login()
+-- 
+2.37.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
