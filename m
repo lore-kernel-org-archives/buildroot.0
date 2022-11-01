@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E61BC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0161C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0817F40E47;
-	Tue,  1 Nov 2022 20:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0817F40E47
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A8264146F;
+	Tue,  1 Nov 2022 20:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A8264146F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u5PwlDUtyXGj; Tue,  1 Nov 2022 20:45:56 +0000 (UTC)
+	with ESMTP id CctQwNhPyl61; Tue,  1 Nov 2022 20:46:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40C3B409BE;
-	Tue,  1 Nov 2022 20:45:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C3B409BE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 740D81BF834
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:45:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D024F414CE;
+	Tue,  1 Nov 2022 20:46:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D024F414CE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 291501BF834
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E226409BE
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E226409BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB11B812CD
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB11B812CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pS0lDN6DbW12 for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 20:45:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99B8640913
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 20:45:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99B8640913
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 834A9870E1; Tue,  1 Nov 2022 20:45:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 21:41:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 544806bfd8052d05dee671c23c354e5f73f954f9
-X-Git-Newrev: 135685977414fa840ee58bd5c72eec7a9e4b7164
-X-Patchwork-Hint: ignore
-Message-Id: <20221101204540.834A9870E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
- 22.3.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dfwklc1M_NFv for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 20:45:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2B3D8128C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C2B3D8128C
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 20:45:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EA5DCC0007;
+ Tue,  1 Nov 2022 20:45:42 +0000 (UTC)
+Date: Tue, 1 Nov 2022 21:45:41 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20221101214541.228f9e47@windsurf>
+In-Reply-To: <20221101183032.3631097-1-yann.morin.1998@free.fr>
+References: <20221101183032.3631097-1-yann.morin.1998@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667335543;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=l701RhuWnqviCI1pZ+irXdmZ2LpR/Z1JYlVbEsOMBVw=;
+ b=eLpaEghubjeffKmA2dAIpwx1kHI89rplr0KT52UgrIEzHU/nYNzJWz6nv3jP2C3M7psuMU
+ 95sWNo/uMRgM1i1LhHSeui7kTn2Z2HnB+0/68xAe84ezhnwHDEciDf0j0aIQiTiz0Bhf8a
+ pJL7M7Ah2cu9eOEgj5FO5qkDmszNKN7vUrtJJ1UATlDu5Fs30DrcGUgv77vnRNxrb46Hju
+ RJ7rvYRSfmXVsFfmnw+hwo2jq9cADw4JwVu0Xrxa92xuNuF0We5WQqRK+R7Rc5JRafYXWC
+ qSAPzwzKDoWHnGqiK3lyTYzCsMDhEpvx/OX5dyes5Xwz+xlTencFQySjUACYCg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eLpaEghu
+Subject: Re: [Buildroot] [PATCH] fs/cpio: don't fail systems without
+ /dev/null
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +78,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=135685977414fa840ee58bd5c72eec7a9e4b7164
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  1 Nov 2022 19:30:32 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Rebased patch 0001.
+> We pass all our dracut configuration files via a config dir, but dracut
+> insist with having one config file. Because we do not want to have to
+> chose which file we pass (which would then have to be excluded fro; the
+> config dir), we jsut used an arbitrary empty file, and /dev/null seemed
+> to be a good candidate.
+> 
+> However, some build environments do not have a complete /dev, and may be
+> missing entries otherwise taken for granted, like /dev/null. This is
+> especially the case in constrained environments like containers.
+> 
+> Switch away from using /dev/n ull, and do create an actual empty file
+> that we can use as the dracut config file.
+> 
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828364
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  fs/cpio/cpio.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-gmmlib/0001-Drop-hardening-related-flags.patch | 2 +-
- package/intel-gmmlib/intel-gmmlib.hash                       | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk                         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
-index c429df6581..b63d82f3c8 100644
---- a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
-+++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
-@@ -15,7 +15,7 @@ diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
- index 1a09bc4..b28fc1b 100644
- --- a/Source/GmmLib/Linux.cmake
- +++ b/Source/GmmLib/Linux.cmake
--@@ -99,7 +99,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
-+@@ -97,7 +97,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
-      -DUSE_SSE3
-      -DUSE_SSSE3
-      # Other common flags
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index bfff5e4b82..490ff46dfc 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  363084a52db1557f6e7409278c8ce46a66fcafa2b4672e399c452501a60b4437  intel-gmmlib-22.2.1.tar.gz
-+sha256  c1f33e1519edfc527127baeb0436b783430dfd256c643130169a3a71dc86aff9  intel-gmmlib-22.3.0.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index e949176cf7..ee5b60ab6b 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.2.1
-+INTEL_GMMLIB_VERSION = 22.3.0
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
