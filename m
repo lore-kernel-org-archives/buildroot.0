@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF46CC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 467CAC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92B7D81A30;
-	Tue,  1 Nov 2022 22:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92B7D81A30
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5C6760E6F;
+	Tue,  1 Nov 2022 22:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5C6760E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zIB6QU4Z_wOr; Tue,  1 Nov 2022 22:26:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3U1odOy6isK1; Tue,  1 Nov 2022 22:26:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1D7A8190B;
-	Tue,  1 Nov 2022 22:26:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D7A8190B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BE9C60E4E;
+	Tue,  1 Nov 2022 22:26:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BE9C60E4E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 55FF51BF95C
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B50EE1BF3E8
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31CD18190B
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31CD18190B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 903C08190B
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 903C08190B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rc8-NPFz3BcR for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BBDC81A24
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BBDC81A24
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BA58879A3; Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 23:25:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de17165fd5f94766aef1f51d09d0998fee8096b3
-X-Git-Newrev: f71e8c313eecd6aeacc3d7e4f10edd645034809d
-X-Patchwork-Hint: ignore
-Message-Id: <20221101222614.3BA58879A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
- 1.27
+ with ESMTP id 45dPJvj92Cew for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:26:26 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C1D58146E
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C1D58146E
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:26:26 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F14BE60006;
+ Tue,  1 Nov 2022 22:26:24 +0000 (UTC)
+Date: Tue, 1 Nov 2022 23:26:23 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221101232623.16b4d452@windsurf>
+In-Reply-To: <20221015191433.1504189-1-james.hilliard1@gmail.com>
+References: <20221015191433.1504189-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667341585;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tadH+PfYIiu58Lq+XV7GzkpkUU8A6c6wBLFn9rNOTHM=;
+ b=CtKMwvbUSs6pq/JFucRpocB1w9hqDcJn82gHRlUN9KhrnQ2uPn+VcFHTQ4LiK6TGvH4qf/
+ UjMYYzuAyKgw8czG6ZyfjqrgmKdBnk7qi7taKmeg03tgDDtOOLA9/2pdh2hGNt/2QPbQ34
+ Ddn/EUS+gEJb+wonQam2rnA7ftdHkjTRR3S5v+hQfTZnypUEisDbZuPZ8rvRPGQAayezt4
+ j+p5dcFRG4B7kPjrF2f+YknswmFzuUQejvu24okm5HY7lPJiG4R0HB/vh6dVKa0gu8tjYp
+ EE2ylMEDw3bv6gtbb62L4Df+unEiTvZeWuw5LldpWckXSnTJLkw8A2v12sqSCg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CtKMwvbU
+Subject: Re: [Buildroot] [PATCH 1/1] package/wayland-protocols: bump to
+ version 1.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f71e8c313eecd6aeacc3d7e4f10edd645034809d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 15 Oct 2022 13:14:33 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wayland-protocols/wayland-protocols.hash | 7 +++----
- package/wayland-protocols/wayland-protocols.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/wayland-protocols/wayland-protocols.hash | 7 +++----
+>  package/wayland-protocols/wayland-protocols.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index 2d98c47c6f..4717523dc2 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,5 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2022-July/042270.html
--md5  0c6b3e037f3881650d9a53610dd235c7  wayland-protocols-1.26.tar.xz
--sha1  8aeb1a629d847ec26e26d5a59c150add41e482bd  wayland-protocols-1.26.tar.xz
--sha256  c553384c1c68afd762fa537a2569cc9074fe7600da12d3472761e77a2ba56f13  wayland-protocols-1.26.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2022-October/042466.html
-+sha256  9046f10a425d4e2a00965a03acfb6b3fb575a56503ac72c2b86821c69653375c  wayland-protocols-1.27.tar.xz
-+sha512  c0a49bc46c663c9f602998dfe2e184c09756790fbcc7acbc2bf9d9cf8f7d6dcdd00259b768222a30e5d134e6f97f7f4faf252947b544e8b32f53278b70da0390  wayland-protocols-1.27.tar.xz
- sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 8e6d72480f..2510d7c04e 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WAYLAND_PROTOCOLS_VERSION = 1.26
--WAYLAND_PROTOCOLS_SITE = https://wayland.freedesktop.org/releases
-+WAYLAND_PROTOCOLS_VERSION = 1.27
-+WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
- WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
