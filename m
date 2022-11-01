@@ -1,85 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D818FC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 16:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFE2C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 16:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30E6F81460;
-	Tue,  1 Nov 2022 16:37:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30E6F81460
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB4BD40604;
+	Tue,  1 Nov 2022 16:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB4BD40604
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5AdIuRONlA33; Tue,  1 Nov 2022 16:37:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rbWWPruJdHNS; Tue,  1 Nov 2022 16:44:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F6D881419;
-	Tue,  1 Nov 2022 16:37:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6D881419
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC9F5405C1;
+	Tue,  1 Nov 2022 16:44:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC9F5405C1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E24181BF292
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:37:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E72481BF859
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA46B60E1E
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:37:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA46B60E1E
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFDCB60AF6
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFDCB60AF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bQZ_OaGpKqdW for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 16:37:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5927F60E19
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5927F60E19
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 16:37:08 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id f37so24202194lfv.8
- for <buildroot@buildroot.org>; Tue, 01 Nov 2022 09:37:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vilPD8lXJqjNhJuepT81i3vjy281tsGl2eXUm83S1hQ=;
- b=aYca+OwTn0Qr0Q+mIV+Mf9l5S1HzROq0bFYtxhDAkZ1Sn+JQM9U927USBBXdT2UiRI
- i2mQV4QWG2vLEuVsgNY+ndcon787Az0/ygF/Q08EZL7w2pCCiKG4RRfrf9JqaRJEYadt
- rrYNqvjeakxoYcymLGyyNvNWvqug/ZP18F18aBMtLczYMuVf7rFlLOvLRnu2bJxhSYXD
- PY3nBY5kk9UVuhpLGvRbN3qqGVbcDRFgEiapDnRhhL2tTZm+sxyqtGJjLCyu8T2LDXMd
- 8XG9ztO0snarFFn+HyehhGEehzDVqmat5561YfaI3d4R0RnRGk/qF+d1SDmSgFhGF5fI
- WLqA==
-X-Gm-Message-State: ACrzQf1APjq99Qw+FQN2NH8YKnTboRAellXncx85AoxSc8U6PFY9KYBZ
- biljrBTdywptubrb/L66k3+MYuW6eJssCM2jLZw=
-X-Google-Smtp-Source: AMsMyM6bKjFrxCgYtXZ9TDB09JiUU6QfPo1Lft7hu6BhIdAPzmZerfKNwMfzsyZ0FZOhYfa32acB/tZB1dCPhfmcu/g=
-X-Received: by 2002:a05:6512:3415:b0:4a2:9a52:bc3b with SMTP id
- i21-20020a056512341500b004a29a52bc3bmr7520470lfr.294.1667320626002; Tue, 01
- Nov 2022 09:37:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221029110943.155259-1-glex.spb@gmail.com>
- <20221030164825.GV1058960@scaer>
-In-Reply-To: <20221030164825.GV1058960@scaer>
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Tue, 1 Nov 2022 16:36:54 +0000
-Message-ID: <CADjhFRASGKb1feOAk5vwod+TW-bkzGxh__ehGguEh81ZV27Rpw@mail.gmail.com>
+ with ESMTP id dIvcKAuDkGPD for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 16:44:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20156600CC
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 20156600CC
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 16:44:48 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.83.94])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id puNZoxuOOMWOipuNaooli2; Tue, 01 Nov 2022 17:44:46 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 1 Nov 2022 17:44:35 +0100
+Message-Id: <390F45E7-B1AA-4A5D-BA18-F0E31AAD18F6@benettiengineering.com>
+References: <20221101083206.GI2992523@scaer>
+In-Reply-To: <20221101083206.GI2992523@scaer>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=vilPD8lXJqjNhJuepT81i3vjy281tsGl2eXUm83S1hQ=;
- b=prYbl/Z6eStW3wQ66MtJ+VcU1VEsdvXAsJHMpisDhkYTxls6+D7cdKvttgwFIXUsam
- WKQgNtw2tpUwECmNIKdNV8MzVqNguH5y+AUDhH68x9q5oCf2CaCKQjxz/pwuTJ+XpWye
- 7veAm/ukN9TPgsWO6kJWT+rHgRYqGtOW8YPUOUyPXR8hyjyY9C9e3tFv8myXSbrYupOv
- kDeo0MBUg1/tCFfEETQEHneZCWkCnGwbCegTF09H34u4uJJfG2jQkY5aWXCJfOqrRWjn
- +DzNWNWn2LUbuOOpNElq3zta9Hy5Fo4bm1OmzNaUA35v3Sp+BYRaZaXKfIOJCtLydxR4
- JnIQ==
+X-Mailer: iPhone Mail (20A392)
+X-CMAE-Envelope: MS4xfBmKbf8hAFqZM50mrxNYScnqipZeDcH/PWnH5uy2lnYAHsAmo+UGNjYvMhhm6opf2rG268T2yCVEGYS7a80t47zaX0hTwnGKb46vmF7JMG/XbnSs3JpG
+ amYHIRMd1ZUtxFM/gL14dmia+sEqP4iEK96SwFCIfZl4NtOF71Hbvmoc39ECXBMJnWUm1n65Hc9R/aqFZerajUeFUHjje9Q7W/xo+YkkvaCZEZHDzlZZZzmZ
+ Gssn/Q6RmavTSYnKovfhdiS7jRJOgkqmbxNZD7dRm11P9kVx3A7rCOEYgV71e7q+FrVzLmvYu04WMPrK3suFmJSzRny34yt6gid+LEAHn5M=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1667321086; bh=FWhUYLnL2R6UWMWYsF8sCpKRwUYrjpx0YgLUS+G+6Us=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=my6qWDWV7TXWiU26sx/SVltr/OFmzcRw3hfoM0gfeH5QRqp6yrlX2SlwfnorFx5jJ
+ 2zy5G/7QB8JBb4bvfo4XjDDFRV9Cstj5ti6tmWEzboCJL2kgSIEZsNkLWO/oJVGUmD
+ vaBxXqL7sAKBvivJ0wmL36bt8aTTaAGAftkipwT7xaWGGD/nsEvc9CC+cfvOt6vnsd
+ zPC3cFvsAAiAmcgE10Rinut8pBpo4MVsIsXXK0R7hpepQgPczSuJSW6m3/Ukujqy+z
+ KWW9ffK5Tr1d4UdCaalWDUqhi9vJhj6j2Gv6lrt7bU6xdKwvMTLkSeEQVurLl53UQu
+ Mgf/gA1VhG5Dw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=prYbl/Z6
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cmake.mk: unset
- CMAKE_GENERATOR vars
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=my6qWDWV
+Subject: Re: [Buildroot] [PATCH] package/mono: allow to select which folders
+ to install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,230 +75,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4922919343402497520=="
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4922919343402497520==
-Content-Type: multipart/alternative; boundary="000000000000a3be0a05ec6b555b"
-
---000000000000a3be0a05ec6b555b
-Content-Type: text/plain; charset="UTF-8"
-
-Thanks!
-Can we do something similar for `PERL_MM_OPT`?
-
-Buildroot currently requires the user to unset it manually but ideally it'd
-just unset it itself
-https://github.com/buildroot/buildroot/blob/ba2659401feb5cc97cad501ab8b38268de578d3f/support/dependencies/dependencies.sh#L49-L56
-
-On Sun, Oct 30, 2022 at 4:48 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-
-> Gleb, All,
->
-> On 2022-10-29 12:09 +0100, Gleb Mazovetskiy spake thusly:
-> > If the user environment defines `CMAKE_GENERATOR` (e.g.
-> > `CMAKE_GENERATOR=Ninja`), buildroot would previously fail to build cmake
-> > packages because buildroot uses `make` explicitly (as opposed to
-> > `cmake --build`).
-> >
-> > Unsets all the `CMAKE_GENERATOR*` variables before configuring a cmake
-> > package.
-> >
-> > Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-> > ---
-> >  package/pkg-cmake.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> > index 081960b5bf..96b2579cc5 100644
-> > --- a/package/pkg-cmake.mk
-> > +++ b/package/pkg-cmake.mk
-> > @@ -86,6 +86,7 @@ define $(2)_CONFIGURE_CMDS
-> >       (mkdir -p $$($$(PKG)_BUILDDIR) && \
-> >       cd $$($$(PKG)_BUILDDIR) && \
-> >       rm -f CMakeCache.txt && \
-> > +     unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM
-> CMAKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE && \
->
-> I've instead applied the patch from Woody:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/94745932ea2dfa030e3d438d7cf6b84f1ef2f69c.camel@carnegierobotics.com/
->
-> So I dropped your patch.
->
-> In the future, we should be able to replace the hard-coded "Unix
-> Makefiles" with a per-package setting, where package can elect building
-> built with nother backend (or better yet, switch netirely to another
-> backend globally), and the patch from Woody felt like slightly preparing
-> for that future.
->
-> Regards,
-> Yann E. MORIN.
->
-> >       PATH=$$(BR_PATH) \
-> >       $$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-> >
->  -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
-> > @@ -111,6 +112,7 @@ define $(2)_CONFIGURE_CMDS
-> >       (mkdir -p $$($$(PKG)_BUILDDIR) && \
-> >       cd $$($$(PKG)_BUILDDIR) && \
-> >       rm -f CMakeCache.txt && \
-> > +     unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM
-> CMAKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE && \
-> >       PATH=$$(BR_PATH) \
-> >       PKG_CONFIG="$$(PKG_CONFIG_HOST_BINARY)" \
-> >       PKG_CONFIG_SYSROOT_DIR="/" \
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
-
---000000000000a3be0a05ec6b555b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Thanks!</div><div>Can we do something similar for `PE=
-RL_MM_OPT`?</div><div><br></div><div>Buildroot currently requires the user =
-to unset it manually but ideally it&#39;d just unset it itself</div><div><a=
- href=3D"https://github.com/buildroot/buildroot/blob/ba2659401feb5cc97cad50=
-1ab8b38268de578d3f/support/dependencies/dependencies.sh#L49-L56">https://gi=
-thub.com/buildroot/buildroot/blob/ba2659401feb5cc97cad501ab8b38268de578d3f/=
-support/dependencies/dependencies.sh#L49-L56</a></div></div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 30, 2022=
- at 4:48 PM Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">ya=
-nn.morin.1998@free.fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_qu=
-ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
-4);padding-left:1ex">Gleb, All,<br>
-<br>
-On 2022-10-29 12:09 +0100, Gleb Mazovetskiy spake thusly:<br>
-&gt; If the user environment defines `CMAKE_GENERATOR` (e.g.<br>
-&gt; `CMAKE_GENERATOR=3DNinja`), buildroot would previously fail to build c=
-make<br>
-&gt; packages because buildroot uses `make` explicitly (as opposed to<br>
-&gt; `cmake --build`).<br>
-&gt; <br>
-&gt; Unsets all the `CMAKE_GENERATOR*` variables before configuring a cmake=
-<br>
-&gt; package.<br>
-&gt; <br>
-&gt; Signed-off-by: Gleb Mazovetskiy &lt;<a href=3D"mailto:glex.spb@gmail.c=
-om" target=3D"_blank">glex.spb@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 package/<a href=3D"http://pkg-cmake.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">pkg-cmake.mk</a> | 2 ++<br>
-&gt;=C2=A0 1 file changed, 2 insertions(+)<br>
-&gt; <br>
-&gt; diff --git a/package/<a href=3D"http://pkg-cmake.mk" rel=3D"noreferrer=
-" target=3D"_blank">pkg-cmake.mk</a> b/package/<a href=3D"http://pkg-cmake.=
-mk" rel=3D"noreferrer" target=3D"_blank">pkg-cmake.mk</a><br>
-&gt; index 081960b5bf..96b2579cc5 100644<br>
-&gt; --- a/package/<a href=3D"http://pkg-cmake.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">pkg-cmake.mk</a><br>
-&gt; +++ b/package/<a href=3D"http://pkg-cmake.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">pkg-cmake.mk</a><br>
-&gt; @@ -86,6 +86,7 @@ define $(2)_CONFIGURE_CMDS<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0(mkdir -p $$($$(PKG)_BUILDDIR) &amp;&amp; \<=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0cd $$($$(PKG)_BUILDDIR) &amp;&amp; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0rm -f CMakeCache.txt &amp;&amp; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM CM=
-AKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE &amp;&amp; \<br>
-<br>
-I&#39;ve instead applied the patch from Woody:<br>
-=C2=A0 =C2=A0 <a href=3D"https://patchwork.ozlabs.org/project/buildroot/pat=
-ch/94745932ea2dfa030e3d438d7cf6b84f1ef2f69c.camel@carnegierobotics.com/" re=
-l=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.org/project/bui=
-ldroot/patch/94745932ea2dfa030e3d438d7cf6b84f1ef2f69c.camel@carnegierobotic=
-s.com/</a><br>
-<br>
-So I dropped your patch.<br>
-<br>
-In the future, we should be able to replace the hard-coded &quot;Unix<br>
-Makefiles&quot; with a per-package setting, where package can elect buildin=
-g<br>
-built with nother backend (or better yet, switch netirely to another<br>
-backend globally), and the patch from Woody felt like slightly preparing<br=
->
-for that future.<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0PATH=3D$$(BR_PATH) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG=
-)_SRCDIR) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-DCMAKE_TOOLCHAI=
-N_FILE=3D&quot;$$(HOST_DIR)/share/buildroot/toolchainfile.cmake&quot; \<br>
-&gt; @@ -111,6 +112,7 @@ define $(2)_CONFIGURE_CMDS<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0(mkdir -p $$($$(PKG)_BUILDDIR) &amp;&amp; \<=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0cd $$($$(PKG)_BUILDDIR) &amp;&amp; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0rm -f CMakeCache.txt &amp;&amp; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0unset CMAKE_GENERATOR CMAKE_GENERATOR_PLATFORM CM=
-AKE_GENERATOR_TOOLSET CMAKE_GENERATOR_INSTANCE &amp;&amp; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0PATH=3D$$(BR_PATH) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0PKG_CONFIG=3D&quot;$$(PKG_CONFIG_HOST_BINARY=
-)&quot; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0PKG_CONFIG_SYSROOT_DIR=3D&quot;/&quot; \<br>
-&gt; -- <br>
-&gt; 2.34.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
-|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-</blockquote></div>
-
---000000000000a3be0a05ec6b555b--
-
---===============4922919343402497520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4922919343402497520==--
+Cj4gSWwgZ2lvcm5vIDEgbm92IDIwMjIsIGFsbGUgb3JlIDA5OjMyLCBZYW5uIEUuIE1PUklOIDx5
+YW5uLm1vcmluLjE5OThAZnJlZS5mcj4gaGEgc2NyaXR0bzoKPiAKPiDvu79HaXVsaW8sIEFsbCwK
+PiAKPiBPbiAyMDIyLTExLTAxIDAzOjI3ICswMTAwLCBHaXVsaW8gQmVuZXR0aSBzcGFrZSB0aHVz
+bHk6Cj4+PiBPbiAzMS8xMC8yMiAxMzo1NCwgWWFubiBFLiBNT1JJTiB3cm90ZToKPj4+IE9uIDIw
+MjItMTAtMzEgMTM6MjUgKzAxMDAsIFRob21hcyBQZXRhenpvbmkgdmlhIGJ1aWxkcm9vdCBzcGFr
+ZSB0aHVzbHk6Cj4+Pj4gT24gV2VkLCAxOSBPY3QgMjAyMiAwMTo0NjoxNyArMDIwMAo+Pj4+IEdp
+dWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90
+ZToKPj4+Pj4gQXQgdGhlIG1vbWVudCBhbGwgQVBJcyBmb2xkZXJzIGFyZSBjb3BpZWQgdG8gdGFy
+Z2V0IGluY3JlYXNpbmcgdGhlIHNpemUgb2YKPj4+Pj4gcm9vdGZzIG9mIH4xOTBNQi4gQWxsb3cg
+dG8gc2VsZWN0IHdoaWNoIEFQSSBmb2xkZXJzIHdlIHdhbnQgdG8gY29weSB0bwo+Pj4+PiB0YXJn
+ZXQgdG8gc2hyaW5rIHJvb3RmcyBkb3duLgo+Pj4+PiAKPj4+Pj4gU2lnbmVkLW9mZi1ieTogR2l1
+bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4+Pj4g
+UHJhY3RpY2FsbHkgc3BlYWtpbmcsIGNvdWxkIHlvdSBkZXNjcmliZSB3aGljaCBmb2xkZXJzIGFy
+ZSBuZWVkZWQgaW4gYQo+Pj4+IHR5cGljYWwgc2NlbmFyaW8geW91J3ZlIGhhZD8KPj4+IFllcywg
+Y2FuIHlvdSBwcm92aWRlIGEgcmF0aW9uYWxlIGZvciB3aGVuIG9ubHkgYSBzdWJzZXQgb2YgQVBJ
+cyBpcwo+Pj4gbmVlZGVkPwo+PiBJJ3ZlIGFuc3dlcmVkIG9uIHByZXZpb3VzIGUtbWFpbC4gSSd2
+ZSByZWFsaXplZCBvbmx5IG5vdyB0aGF0IEkgY291bGQKPj4gYW5zd2VyIHRvIHlvdXIgZS1tYWls
+IGZvciBib3RoLgo+IAo+IEhleSwgd2hhdCB5b3UgYW5zd2VyZWQgVGhvbWFzIGlzIG5vdCBhIHJh
+dGlvbmFsZSwgaXQgaXMgYW4gZXhhbXBsZS4gOy0pCj4gQSByYXRpb25hbGUgaXMgImFuIGV4cGxh
+bmF0aW9uIG9mIGNvbnRyb2xsaW5nIHByaW5jaXBsZXMgb2Ygb3BpbmlvbiwKPiBiZWxpZWYsIHBy
+YWN0aWNlLCBvciBwaGVub21lbmEiLCBvciAiYW4gdW5kZXJseWluZyByZWFzb24iLiBbMF0KPiAK
+PiBBcyBhIHJhdGlvbmFsZSwgSSB3b3VsZCBoYXZlIGV4cGVjdGVkIHNvbWV0aGluZyB0aGF0IGV4
+cGxhaW5zIHRoZSByZWFzb24KPiB3aHkgdGhlcmUgYXJlIHNvIG1hbnkgZGlyZWN0b3JpZXMsIGFu
+ZCBzbyB3aHksIHVuZGVyIHNvbWUgY2lyY3Vtc3RhbmNlcywKPiB3ZSBjYW4gZ2V0IHJpZCBvZiB0
+aGVtIChvciBub3QpLiBJdCBuZWVkcyBub3QgYmUgdG9vIGxvbmcsIGJ1dCBqdXN0Cj4gcHJvdmlk
+ZSBhbiBvdmVydmlldy4gRm9yIGV4YW1wbGUsIGhlcmUgaXMgYSB0b3RhbGx5IG1hZGUgdXAgYmx1
+cmI6Cj4gCj4gICAgbW9ubyBwcm92aWRlcyBzdXBwb3J0IGZvciBhIGxvdCBvZiBsZWdhY3kgQVBJ
+cyBmb3IgYmFja3dhcmQKPiAgICBjb21wYXRpYmlsaXR5IGZvciBleGlzdGluZyBhcHBsaWNhdGlv
+bnMsIHdheSBiYWNrIGZyb20gdGhlIGZpcnN0Cj4gICAgc3RhYmxlIEFQSSwgMi4wIGFuZCB1cCB0
+byB0aGUgY3VycmVudCB2ZXJzaW9uLiBUaGUgc2V0IG9mIEFQSXMgYXJlCj4gICAgc3BsaXQgaW4g
+dHdvIGNhdGVnb3JpZXM6IHZlcnNpb24tYmFzZWQgQVBJcywgYW5kIHRoZSByZXN0IChnYWMsIHRo
+ZQo+ICAgIEZvb0JhciBzZXQgb2YgY29tbW9uIEJhejsgbW9ub2RvYywgd2hpY2ggcmVuZGVycyBk
+b2N1bWVudGF0aW9uIHdoaWxlCj4gICAgcmlkaW5nIGEgdW5pY3ljbGUuLi4pLgo+IAo+ICAgIEZv
+ciBhIGN1c3RvbSBhcHBsaWNhdGlvbiwgdGhlIHNldCBvZiByZXF1aXJlZCB2ZXJzaW9uZWQgQVBJ
+cyBpcwo+ICAgIGxpbWl0ZWQ7IG1vc3Qgb2Z0ZW4gb25seSB0aGUgbGF0ZXN0IG9yIHRoZSB2ZXJ5
+IGZldyBsYXRlc3QgYXJlCj4gICAgbmVlZGVkLiBPbmx5IGdhYyBpcyBhbHdheXMgcmVxdWlyZWQs
+IGFuZCBtb25vZG9jIGlzIG5ldmVyIHVzZWQgb24KPiAgICB0aGUgdGFyZ2V0IGFzIHdlIG5ldmVy
+IHJlbmRlciB0aGUgZG9jdW1lbnRhdGlvbiB0aGVyZS4KCk9oLCB0aGFuayB5b3UgWWFubiwgbXkg
+RW5nbGlzaCBoYXMgc29tZSBnYXAsIEkgZGlkbuKAmXQga25vdyB0aGF0LiBBbmQgdGhhbmtzIGZv
+ciB0aGUgZXhhbXBsZSB0b28uClNvIHlvdeKAmXZlIGdpdmVuIGFscmVhZHkgYSByYXRpb25hbGUg
+aGVyZS4KCknigJlsbCBjb21lIHVwIHdpdGggYSBWMiBwYXRjaCB0aGVuIQoKQmVzdCByZWdhcmRz
+CkdpdWxpbwoKPiAKPiBbMF0gaHR0cHM6Ly93d3cubWVycmlhbS13ZWJzdGVyLmNvbS9kaWN0aW9u
+YXJ5L3JhdGlvbmFsZQo+IAo+IFstLVNOSVAtLV0KPj4+PiBTaG91bGQgd2UgaW5zdGVhZCBoYXZl
+IGEgc2luZ2xlIHN0cmluZyBvcHRpb24KPj4+PiBCUjJfUEFDS0FHRV9NT05PX0lOU1RBTExfTElC
+X0RJUlMsIHdoaWNoIGlzIGVtcHR5IGJ5IGRlZmF1bHQuIFdoZW4KPj4+PiBlbXB0eSwgaXQgbWVh
+bnMgYWxsIGZvbGRlcnMgYXJlIGluc3RhbGxlZC4gT3RoZXJ3aXNlLCBvbmx5IHRoZQo+Pj4+IHNw
+ZWNpZmllZCBmb2xkZXJzIGFyZSBpbnN0YWxsZWQuCj4+PiBBZ3JlZWQuIEkgZXhwZWN0IHRoYXQg
+aGF2aW5nIG5vIEFQSSBsZXZlbCBpbnN0YWxsZWQgd291bGQgeWllbGQgYQo+Pj4gbm9uLXdvcmtp
+bmcgc3lzdGVtLCBzbzoKPj4+ICAgIGNvbmZpZyBCUjJfUEFDS0FHRV9NT05PX0FQSV9WRVJTSU9O
+Uwo+Pj4gICAgICAgIHN0cmluZyAiQVBJIHZlcnNpb25zIHRvIGluc3RhbGwiCj4+PiAgICAgICAg
+aGVscAo+Pj4gICAgICAgICAgS2VlcCBlbXB0eSB0byBpbnN0YWxsIGFsbC4KPj4gT2ssIEkgZ28g
+d2l0aCB0aGF0IHRoZW4hCj4gCj4gQUNLLgo+IAo+IFJlZ2FyZHMsCj4gWWFubiBFLiBNT1JJTi4K
+PiAKPiAtLSAKPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4gTU9SSU4gIHwg
+UmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5
+OiB8Cj4gfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJ
+R04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0t
+LS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAo+
+IHwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAg
+ICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
