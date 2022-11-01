@@ -4,61 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3300C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 16:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6033C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 17:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FA4B415CB;
-	Tue,  1 Nov 2022 16:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA4B415CB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45B9C409EF;
+	Tue,  1 Nov 2022 17:00:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45B9C409EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AbgTFGlT_oPO; Tue,  1 Nov 2022 16:57:22 +0000 (UTC)
+	with ESMTP id vXCPikeasn6i; Tue,  1 Nov 2022 17:00:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2163415DD;
-	Tue,  1 Nov 2022 16:57:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2163415DD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC81C1BF859
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:57:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECF4A40919;
+	Tue,  1 Nov 2022 17:00:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECF4A40919
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 566FB1BF859
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4FD181429
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 16:57:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4FD181429
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31B2040445
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:00:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B2040445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G_2crO30rV3S for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 16:57:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D1B280ACD
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D1B280ACD
- for <buildroot@busybox.net>; Tue,  1 Nov 2022 16:57:17 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 46348440774;
- Tue,  1 Nov 2022 18:54:54 +0200 (IST)
-To: buildroot@busybox.net
-Date: Tue,  1 Nov 2022 18:57:06 +0200
-Message-Id: <5c28d160a68a33114f598450fed73bb1d774d9dc.1667321825.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Md9i52B-jWvO for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 17:00:51 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B93E400D2
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B93E400D2
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 17:00:50 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout05.t-online.de (Postfix) with SMTP id 8B96B1D5AE;
+ Tue,  1 Nov 2022 18:00:47 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.183.139]) by fwd86.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1opud5-28GWW10; Tue, 1 Nov 2022 18:00:47 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36288)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1opud5-0001NY-05;
+ Tue, 01 Nov 2022 18:00:47 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Tue,  1 Nov 2022 18:00:46 +0100
+Message-Id: <20221101170046.2122339-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1667321694;
- bh=kgEHMFshiT9u7cZwDk+I0rXcc37JREaIChtDs6dUdh0=;
- h=From:To:Cc:Subject:Date:From;
- b=uvy6P6N9/l9Tpjzx28SSRP2KaRSO1oaqtMM+vge9taUAwRVbHBlWLuXMS4hx4vbzN
- gWT6At7EeUvPBm/IobeRfUguxFpgW+5beVqhPJDzdyf+Od4OwSvPc3ex4+COschFxk
- 6IsaffW49XMHX1qGraz3wHiXAeTgqxhaIJjP/IrMlWTHG36Kfc/WcP92XkXNzlZTcA
- Z2KPFjiTB5IidMrdZZA1/wtWMtn8HJN7MoYPYW/O1fdpWxfYprD5tzZRcthkLwgviu
- ClQit1idPKSsQHH4siLqkW2NMhz0fJhrRq3LTPauvLlYHKV2OR0q7ofgOBA/op6j4h
- LpcVsqxDnSlEQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=uvy6P6N9
-Subject: [Buildroot] [PATCH] package/strace: bump to version 6.0
+X-TOI-EXPURGATEID: 150726::1667322047-C3FF99D3-BB9BFBAB/0/0 CLEAN NORMAL
+X-TOI-MSGID: c08c2f1f-0d22-4285-a8cd-da9f8be3d8d7
+Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,46 +65,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Rebased patch 0001.
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index cadcb20f4781..1743a369b4af 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.19/strace-5.19.tar.xz.asc
--sha256  aa3dc1c8e60e4f6ff3d396514aa247f3c7bf719d8a8dc4dd4fa793be786beca3  strace-5.19.tar.xz
-+# https://strace.io/files/6.0/strace-6.0.tar.xz.asc
-+sha256  92d720a666855e9f1c6a11512fd6e99674a82bbfe1442557815f2ce8e1293338  strace-6.0.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 7bdf36a47e6a..09e620530e6e 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-gmmlib/0001-Drop-hardening-related-flags.patch | 2 +-
+ package/intel-gmmlib/intel-gmmlib.hash                       | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk                         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+index c429df6581..b63d82f3c8 100644
+--- a/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
++++ b/package/intel-gmmlib/0001-Drop-hardening-related-flags.patch
+@@ -15,7 +15,7 @@ diff --git a/Source/GmmLib/Linux.cmake b/Source/GmmLib/Linux.cmake
+ index 1a09bc4..b28fc1b 100644
+ --- a/Source/GmmLib/Linux.cmake
+ +++ b/Source/GmmLib/Linux.cmake
+-@@ -99,7 +99,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
++@@ -97,7 +97,6 @@ SET (GMMLIB_COMPILER_FLAGS_COMMON
+      -DUSE_SSE3
+      -DUSE_SSSE3
+      # Other common flags
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index bfff5e4b82..490ff46dfc 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  363084a52db1557f6e7409278c8ce46a66fcafa2b4672e399c452501a60b4437  intel-gmmlib-22.2.1.tar.gz
++sha256  c1f33e1519edfc527127baeb0436b783430dfd256c643130169a3a71dc86aff9  intel-gmmlib-22.3.0.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index e949176cf7..ee5b60ab6b 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 5.19
-+STRACE_VERSION = 6.0
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-INTEL_GMMLIB_VERSION = 22.2.1
++INTEL_GMMLIB_VERSION = 22.3.0
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
