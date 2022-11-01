@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 912B9C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D30C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C1724064D;
-	Tue,  1 Nov 2022 22:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C1724064D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3214D81B72;
+	Tue,  1 Nov 2022 22:05:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3214D81B72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bDRbWiYBaLH4; Tue,  1 Nov 2022 22:05:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wOb7hfRtEqbi; Tue,  1 Nov 2022 22:05:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 325EB405BC;
-	Tue,  1 Nov 2022 22:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 325EB405BC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 27BD51BF5DE
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:04:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E512981B69;
+	Tue,  1 Nov 2022 22:05:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E512981B69
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 102A11BF5DE
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0243940761
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED90860D70
  for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0243940761
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED90860D70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aYj5qdVX3fzR for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 22:04:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4858740632
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S1LEkdYVTN5w for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:04:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BA9560881
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4858740632
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:04:06 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7BA9560881
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:04:07 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 6B158C0005;
- Tue,  1 Nov 2022 22:04:04 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id A86EAC0009;
+ Tue,  1 Nov 2022 22:04:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  1 Nov 2022 23:03:39 +0100
-Message-Id: <20221101220354.403933-8-thomas.petazzoni@bootlin.com>
+Date: Tue,  1 Nov 2022 23:03:40 +0100
+Message-Id: <20221101220354.403933-9-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221101220354.403933-1-thomas.petazzoni@bootlin.com>
 References: <20221101220354.403933-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667340244;
+ d=bootlin.com; s=gm1; t=1667340246;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8Z/W+FiG3pUX7jFFFwtX1dKC/Hsvk78j+uQBzt5E7x4=;
- b=RZ0SrGbwNqsK+zpWLSp0AstoSqF5flGC/oOLAPbz0nQigpvldGmJxRK+9AtmD+/ASd8Wyi
- TxW9Mcu3RYeTJyuy+8SXhqPokBDaRN985P0uJI4NXxY1awAueF6g4w6eKkZAlt1eBweE+4
- 0MN2lg3qZPBOM1eJp42W7uwRRQ45tSpBaAN2SjOW0hVVAuZcyoITz9Of7djq8FGU3emydj
- 7DuSaLIT1xUAIVtXkgy6+Mb4h39empLpqWJ8mTsqFwZL4rmRb5dz7O9vBgtvz12yDewHh6
- 06ah/FtrCoLp4AFnE3W07/OSsargG9eEDggt1YCVtIAGJ0rtzoJj0lr/jmC30A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=oTTPuqnQxJH3G+cWdQlTpL8A3gU+ryM/1FMbAha7Fqw=;
+ b=O2RDA20/oMgU5BQylnr6xrh6MfICSR2Je2BeDfoiFGSnMTFRA87ByABwgPE2FJSXESRdoL
+ O4rHcS2b0BPmTPuHNZQfqKl7WI1zkbCE9W5mIH/J9iF9At+4Dl7er6TAFQ+ZocQX+7ZcqV
+ Ot/eztEFmUjM0Y4IuMpQR+ojvFNi2jSSZO5IHhPbWyojs6QOZfN+qdQZo9e15gCFW8wLWw
+ hmlE6YPkPGBNlwPHeQXrU0g8JphvSerOq+AjrlNk8tS5p7b99BQZcUUHYJdEUW1MX9LQWU
+ NHbHZ415Hyzi54nzK+PY6LWc/IDVHgfUx6UEZAo3hwdun/jj7zKif49JOTlAQg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RZ0SrGbw
-Subject: [Buildroot] [PATCH 07/21] configs/friendlyarm_nanopc_t4: remove
+ header.s=gm1 header.b=O2RDA20/
+Subject: [Buildroot] [PATCH 08/21] configs/friendlyarm_nanopi_a64: remove
  defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,129 +77,220 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jagan Teki <jagan@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBkZWZjb25maWcgaGFzIGJlZW4gZmFpbGluZyB0byBidWlsZCBmb3Igc2V2ZXJhbCBtb250
-aHMsIHdpdGgKbm9ib2R5IHN0ZXBwaW5nIHVwIHRvIGZpeCBpdC4gSXQncyB0aW1lIHRvIGRyb3Ag
-aXQuCgpTZWUKaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjIwODA2MjI0MzM4
-LjAxNTllMTVjQHdpbmRzdXJmLwpmb3IgYSBub3RpZmljYXRpb24gb24gQXVndXN0IDYsIDIwMjIg
-YWJvdXQgdGhlIGlzc3VlcyB3aXRoIHRoaXMKZGVmY29uZmlnLgoKRml4ZXM6CgogIGh0dHBzOi8v
-Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMzIzNDQ5OTA0OAoKQ2M6
-IFN1bmllbCBNYWhlc2ggPHN1bmlsQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgpTaWduZWQtb2ZmLWJ5
-OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0KIERF
-VkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgLQogYm9hcmQvZnJp
-ZW5kbHlhcm0vbmFub3BjLXQ0L2V4dGxpbnV4LmNvbmYgfCAgNCAtLQogYm9hcmQvZnJpZW5kbHlh
-cm0vbmFub3BjLXQ0L2dlbmltYWdlLmNmZyAgfCAzOSAtLS0tLS0tLS0tLS0tLS0tLQogYm9hcmQv
-ZnJpZW5kbHlhcm0vbmFub3BjLXQ0L3Bvc3QtYnVpbGQuc2ggfCAgNSAtLS0KIGJvYXJkL2ZyaWVu
-ZGx5YXJtL25hbm9wYy10NC9yZWFkbWUudHh0ICAgIHwgNDUgLS0tLS0tLS0tLS0tLS0tLS0tLQog
-Y29uZmlncy9mcmllbmRseWFybV9uYW5vcGNfdDRfZGVmY29uZmlnICAgfCA1MyAtLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQogNiBmaWxlcyBjaGFuZ2VkLCAxNDggZGVsZXRpb25zKC0pCiBkZWxldGUg
-bW9kZSAxMDA2NDQgYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BjLXQ0L2V4dGxpbnV4LmNvbmYKIGRl
-bGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvZ2VuaW1hZ2UuY2Zn
-CiBkZWxldGUgbW9kZSAxMDA3NTUgYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BjLXQ0L3Bvc3QtYnVp
-bGQuc2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvcmVh
-ZG1lLnR4dAogZGVsZXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3MvZnJpZW5kbHlhcm1fbmFub3BjX3Q0
-X2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDM2
-ODBkYmUzMWIuLjc0MmY1ZDcwOGEgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxP
-UEVSUwpAQCAtMjc0OCwxNCArMjc0OCwxMiBAQCBGOglwYWNrYWdlL3Bvd2VydG9wLwogCiBOOglT
-dW5pZWwgTWFoZXNoIDxzdW5pbEBhbWFydWxhc29sdXRpb25zLmNvbT4KIEY6CWJvYXJkL2ZpcmVm
-bHkvCi1GOglib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQKIEY6CWJvYXJkL2ZyaWVuZGx5YXJt
-L25hbm9waS1tNAogRjoJYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktcmszMzk5CiBGOglib2FyZC9w
-aW5lNjQvcm9ja3BybzY0CiBGOglib2FyZC9yYWR4YS9yb2NrcGktNAogRjoJYm9hcmQvcmFkeGEv
-cm9ja3BpLW44CiBGOglib2FyZC9yYWR4YS9yb2NrcGktbjEwCi1GOgljb25maWdzL2ZyaWVuZGx5
-YXJtX25hbm9wY190NF9kZWZjb25maWcKIEY6CWNvbmZpZ3MvZnJpZW5kbHlhcm1fbmFub3BpX200
-X2RlZmNvbmZpZwogRjoJY29uZmlncy9vcmFuZ2VwaV9yazMzOTlfZGVmY29uZmlnCiBGOgljb25m
-aWdzL3JvY19wY19yazMzOTlfZGVmY29uZmlnCmRpZmYgLS1naXQgYS9ib2FyZC9mcmllbmRseWFy
-bS9uYW5vcGMtdDQvZXh0bGludXguY29uZiBiL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9l
-eHRsaW51eC5jb25mCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAzMWM2YjMwZDMyLi4w
-MDAwMDAwMDAwCi0tLSBhL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9leHRsaW51eC5jb25m
-CisrKyAvZGV2L251bGwKQEAgLTEsNCArMCwwIEBACi1sYWJlbCBSSzMzOTlfTmFub1BDX1Q0IGxp
-bnV4Ci0gIGtlcm5lbCAvSW1hZ2UKLSAgZGV2aWNldHJlZSAvcmszMzk5LW5hbm9wYy10NC5kdGIK
-LSAgYXBwZW5kIGVhcmx5Y29uPXVhcnQ4MjUwLG1taW8zMiwweGZmMWEwMDAwIHJvb3Q9L2Rldi9t
-bWNibGsxcDQgcm9vdHdhaXQKZGlmZiAtLWdpdCBhL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10
-NC9nZW5pbWFnZS5jZmcgYi9ib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvZ2VuaW1hZ2UuY2Zn
-CmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAxNzg3MzIyMjYwLi4wMDAwMDAwMDAwCi0t
-LSBhL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9nZW5pbWFnZS5jZmcKKysrIC9kZXYvbnVs
-bApAQCAtMSwzOSArMCwwIEBACi1pbWFnZSBib290LnZmYXQgewotCXZmYXQgewotCQlmaWxlcyA9
-IHsKLQkJCSJJbWFnZSIsCi0JCQkicmszMzk5LW5hbm9wYy10NC5kdGIiLAotCQkJImV4dGxpbnV4
-IgotCQl9Ci0JfQotCi0Jc2l6ZSA9IDY0TQotfQotCi1pbWFnZSBzZGNhcmQuaW1nIHsKLQloZGlt
-YWdlIHsKLQkJcGFydGl0aW9uLXRhYmxlLXR5cGUgPSAiZ3B0IgotCX0KLQotCXBhcnRpdGlvbiBs
-b2FkZXIxIHsKLQkJaW1hZ2UgPSAiaWRibG9hZGVyLmltZyIKLQkJb2Zmc2V0ID0gMzJLCi0JfQot
-Ci0JcGFydGl0aW9uIGxvYWRlcjIgewotCQlpbWFnZSA9ICJ1LWJvb3QuaXRiIgotCQlvZmZzZXQg
-PSA4TQotCX0KLQotCXBhcnRpdGlvbiBib290IHsKLQkJcGFydGl0aW9uLXR5cGUtdXVpZCA9IEYK
-LQkJYm9vdGFibGUgPSAidHJ1ZSIKLQkJaW1hZ2UgPSAiYm9vdC52ZmF0IgotCQlvZmZzZXQgPSAx
-Nk0KLQl9Ci0KLQlwYXJ0aXRpb24gcm9vdGZzIHsKLQkJcGFydGl0aW9uLXR5cGUtdXVpZCA9IGI5
-MjFiMDQ1LTFkZjAtNDFjMy1hZjQ0LTRjNmYyODBkM2ZhZQotCQlpbWFnZSA9ICJyb290ZnMuZXh0
-NCIKLQl9Ci19CmRpZmYgLS1naXQgYS9ib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvcG9zdC1i
-dWlsZC5zaCBiL2JvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9wb3N0LWJ1aWxkLnNoCmRlbGV0
-ZWQgZmlsZSBtb2RlIDEwMDc1NQppbmRleCBiYTI5Mzc1YzA1Li4wMDAwMDAwMDAwCi0tLSBhL2Jv
-YXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9wb3N0LWJ1aWxkLnNoCisrKyAvZGV2L251bGwKQEAg
-LTEsNSArMCwwIEBACi0jIS9iaW4vc2gKLQotQk9BUkRfRElSPSIkKGRpcm5hbWUgJDApIgotCi1p
-bnN0YWxsIC1tIDA2NDQgLUQgJEJPQVJEX0RJUi9leHRsaW51eC5jb25mICRCSU5BUklFU19ESVIv
-ZXh0bGludXgvZXh0bGludXguY29uZgpkaWZmIC0tZ2l0IGEvYm9hcmQvZnJpZW5kbHlhcm0vbmFu
-b3BjLXQ0L3JlYWRtZS50eHQgYi9ib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvcmVhZG1lLnR4
-dApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDk4OWM2Y2MxZS4uMDAwMDAwMDAwMAot
-LS0gYS9ib2FyZC9mcmllbmRseWFybS9uYW5vcGMtdDQvcmVhZG1lLnR4dAorKysgL2Rldi9udWxs
-CkBAIC0xLDQ1ICswLDAgQEAKLUZyaWVuZGx5QVJNIE5BTk9QQy1UNAotPT09PT09PT09PT09PT09
-PT09PT09Ci0KLUJ1aWxkOgotCi0gICQgbWFrZSBmcmllbmRseWFybV9uYW5vcGNfdDRfZGVmY29u
-ZmlnCi0gICQgbWFrZQotCi1GaWxlcyBjcmVhdGVkIGluIG91dHB1dCBkaXJlY3RvcnkKLT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PQotCi1vdXRwdXQvaW1hZ2VzCi0KLeKUnOKUgOKU
-gCBibDMxLmVsZgot4pSc4pSA4pSAIGJvb3QudmZhdAot4pSc4pSA4pSAIGV4dGxpbnV4Ci3ilJzi
-lIDilIAgaWRibG9hZGVyLmltZwot4pSc4pSA4pSAIEltYWdlCi3ilJzilIDilIAgcmszMzk5LW5h
-bm9wYy10NC5kdGIKLeKUnOKUgOKUgCByb290ZnMuZXh0Mgot4pSc4pSA4pSAIHJvb3Rmcy5leHQ0
-IC0+IHJvb3Rmcy5leHQyCi3ilJzilIDilIAgcm9vdGZzLnRhcgot4pSc4pSA4pSAIHNkY2FyZC5p
-bWcKLeKUnOKUgOKUgCB1LWJvb3QuYmluCi3ilJTilIDilIAgdS1ib290Lml0YgotCi1DcmVhdGlu
-ZyBib290YWJsZSBTRCBjYXJkOgotPT09PT09PT09PT09PT09PT09PT09PT09PT0KLQotU2ltcGx5
-IGludm9rZSAoYXMgcm9vdCkKLQotc3VkbyBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcg
-b2Y9L2Rldi9zZFggJiYgc3luYwotCi1XaGVyZSBYIGlzIHlvdXIgU0QgY2FyZCBkZXZpY2UKLQot
-U2VyaWFsIGNvbnNvbGUKLS0tLS0tLS0tLS0tLS0tCi0KLUJhdWRyYXRlIGZvciB0aGlzIGJvYXJk
-IGlzIDE1MDAwMDAKLQotTG9naW46Ci0tLS0tLS0KLUFwcGx5IHBvd2VyIGFuZCBwcmVzcyB0aGUg
-UFdSIGJ1dHRvbiBmb3IgMyBzZWMuIEVudGVyICdyb290JyBhcyBsb2dpbiB1c2VyLCBhbmQgdGhl
-IHByb21wdCBpcyByZWFkeS4KLQotaHR0cHM6Ly93aWtpLmFtYXJ1bGFzb2x1dGlvbnMuY29tL2Jz
-cC9yb2NrY2hpcC9yazMzOTkvbnBjX3Q0Lmh0bWwKZGlmZiAtLWdpdCBhL2NvbmZpZ3MvZnJpZW5k
-bHlhcm1fbmFub3BjX3Q0X2RlZmNvbmZpZyBiL2NvbmZpZ3MvZnJpZW5kbHlhcm1fbmFub3BjX3Q0
-X2RlZmNvbmZpZwpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMmY3YzUzOTA0ZS4uMDAw
-MDAwMDAwMAotLS0gYS9jb25maWdzL2ZyaWVuZGx5YXJtX25hbm9wY190NF9kZWZjb25maWcKKysr
-IC9kZXYvbnVsbApAQCAtMSw1MyArMCwwIEBACi0jIEFyY2hpdGVjdHVyZQotQlIyX2FhcmNoNjQ9
-eQotQlIyX2NvcnRleF9hNzJfYTUzPXkKLQotIyBMaW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVs
-LCBhIDUuOCBzZXJpZXMKLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV84
-PXkKLQotIyBGaXJtd2FyZQotQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Ci1CUjJf
-VEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9HSVQ9eQotQlIyX1RBUkdFVF9BUk1f
-VFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19VUkw9Imh0dHBzOi8vZ2l0LnRydXN0ZWRmaXJt
-d2FyZS5vcmcvVEYtQS90cnVzdGVkLWZpcm13YXJlLWEuZ2l0IgotQlIyX1RBUkdFVF9BUk1fVFJV
-U1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19WRVJTSU9OPSIxMWEwYTQ2YTg5OWZjYzNiMWZkYjIx
-NGIzODJmM2Q3NDk1ZDg4ZWNhIgotQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFU
-Rk9STT0icmszMzk5IgotQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMxPXkKLUJS
-Ml9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTkVFRFNfQVJNMzJfVE9PTENIQUlOPXkKLUJS
-Ml9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfSU1BR0VTPSIiCi0KLSMgQm9vdGxvYWRlcgot
-QlIyX1RBUkdFVF9VQk9PVD15Ci1CUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklH
-PXkKLUJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQotQlIyX1RBUkdFVF9VQk9PVF9D
-VVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyMC4wNyIKLUJSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVG
-Q09ORklHPSJuYW5vcGMtdDQtcmszMzk5IgotQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQot
-QlIyX1RBUkdFVF9VQk9PVF9ORUVEU19QWVRIT04zPXkKLUJSMl9UQVJHRVRfVUJPT1RfTkVFRFNf
-QVRGX0JMMzE9eQotQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19BVEZfQkwzMV9FTEY9eQotQlIyX1RB
-UkdFVF9VQk9PVF9GT1JNQVRfQ1VTVE9NPXkKLUJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RP
-TV9OQU1FPSJ1LWJvb3QuaXRiIgotQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQotQlIyX1RBUkdFVF9V
-Qk9PVF9TUExfTkFNRT0iaWRibG9hZGVyLmltZyIKLQotIyBLZXJuZWwKLUJSMl9MSU5VWF9LRVJO
-RUw9eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Ci1CUjJfTElOVVhfS0VSTkVM
-X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjguMiIKLUJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hf
-REVGQVVMVF9DT05GSUc9eQotQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Ci1CUjJfTElO
-VVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0icm9ja2NoaXAvcmszMzk5LW5hbm9wYy10NCIKLUJS
-Ml9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKLQotIyBGaWxlc3lzdGVtCi1CUjJf
-VEFSR0VUX0dFTkVSSUNfSE9TVE5BTUU9Im5hbm9wYy10NCIKLUJSMl9UQVJHRVRfR0VORVJJQ19J
-U1NVRT0iV2VsY29tZSB0byBOYW5vUEMtVDQiCi1CUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKLUJS
-Ml9UQVJHRVRfUk9PVEZTX0VYVDJfND15Ci1CUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQot
-QlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Ci1CUjJfUEFDS0FHRV9IT1NUX01UT09MUz15Ci1C
-UjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkKLUJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJ
-UFQ9InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIKLUJSMl9ST09URlNfUE9TVF9TQ1JJUFRf
-QVJHUz0iLWMgYm9hcmQvZnJpZW5kbHlhcm0vbmFub3BjLXQ0L2dlbmltYWdlLmNmZyIKLUJSMl9S
-T09URlNfUE9TVF9CVUlMRF9TQ1JJUFQ9ImJvYXJkL2ZyaWVuZGx5YXJtL25hbm9wYy10NC9wb3N0
-LWJ1aWxkLnNoIgotLSAKMi4zNy4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
+
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499049
+
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                |  2 -
+ board/friendlyarm/nanopi-a64/boot.cmd     |  6 ---
+ board/friendlyarm/nanopi-a64/genimage.cfg | 40 ------------------
+ board/friendlyarm/nanopi-a64/readme.txt   | 37 -----------------
+ configs/friendlyarm_nanopi_a64_defconfig  | 50 -----------------------
+ 5 files changed, 135 deletions(-)
+ delete mode 100644 board/friendlyarm/nanopi-a64/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-a64/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-a64/readme.txt
+ delete mode 100644 configs/friendlyarm_nanopi_a64_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 742f5d708a..479189c166 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1304,7 +1304,6 @@ F:	board/amarula/
+ F:	board/asus/
+ F:	board/bananapi/
+ F:	board/engicam/
+-F:	board/friendlyarm/nanopi-a64/
+ F:	board/friendlyarm/nanopi-neo2/
+ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+@@ -1322,7 +1321,6 @@ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_defconfig
+ F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_isiot_defconfig
+-F:	configs/friendlyarm_nanopi_a64_defconfig
+ F:	configs/friendlyarm_nanopi_neo2_defconfig
+ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+diff --git a/board/friendlyarm/nanopi-a64/boot.cmd b/board/friendlyarm/nanopi-a64/boot.cmd
+deleted file mode 100644
+index 446bd85672..0000000000
+--- a/board/friendlyarm/nanopi-a64/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-a64-nanopi-a64.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-a64/genimage.cfg b/board/friendlyarm/nanopi-a64/genimage.cfg
+deleted file mode 100644
+index 6907314149..0000000000
+--- a/board/friendlyarm/nanopi-a64/genimage.cfg
++++ /dev/null
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-a64-nanopi-a64.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/friendlyarm/nanopi-a64/readme.txt b/board/friendlyarm/nanopi-a64/readme.txt
+deleted file mode 100644
+index 88c4e661cb..0000000000
+--- a/board/friendlyarm/nanopi-a64/readme.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Nanopi A64. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-Nanopi A64 link:
+-http://nanopi.io/nanopi-a64.html
+-
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/FriendlyARM+Nanopi+A64
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-How to build
+-============
+-
+-    $ make friendlyarm_nanopi_a64_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your Nanopi A64 and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
+deleted file mode 100644
+index 4df22b2a2f..0000000000
+--- a/configs/friendlyarm_nanopi_a64_defconfig
++++ /dev/null
+@@ -1,50 +0,0 @@
+-BR2_aarch64=y
+-BR2_cortex_a53=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Firmware
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_a64"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi A64"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-a64/genimage.cfg"
+-- 
+2.37.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
