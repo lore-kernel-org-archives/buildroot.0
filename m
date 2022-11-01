@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8243C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF46CC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:26:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F6E241685;
-	Tue,  1 Nov 2022 22:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F6E241685
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92B7D81A30;
+	Tue,  1 Nov 2022 22:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92B7D81A30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aJFthKzBo7rZ; Tue,  1 Nov 2022 22:26:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zIB6QU4Z_wOr; Tue,  1 Nov 2022 22:26:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B6BA415D8;
-	Tue,  1 Nov 2022 22:26:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B6BA415D8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4FF001BF3E8
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1D7A8190B;
+	Tue,  1 Nov 2022 22:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D7A8190B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 55FF51BF95C
  for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C6DF60E4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31CD18190B
  for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C6DF60E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31CD18190B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 65nzmtcH8iqU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rc8-NPFz3BcR for <buildroot@lists.busybox.net>;
  Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5751860E2F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BBDC81A24
  for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5751860E2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BBDC81A24
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 46034879A4; Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
+ id 3BA58879A3; Tue,  1 Nov 2022 22:26:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 23:26:05 +0100
+Date: Tue, 1 Nov 2022 23:25:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f71e8c313eecd6aeacc3d7e4f10edd645034809d
-X-Git-Newrev: fbaffb0179b904e4a19a3a13af842f4ba9ee0b96
+X-Git-Oldrev: de17165fd5f94766aef1f51d09d0998fee8096b3
+X-Git-Newrev: f71e8c313eecd6aeacc3d7e4f10edd645034809d
 X-Patchwork-Hint: ignore
-Message-Id: <20221101222614.46034879A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/igd2-for-linux: bump to version 2.2
+Message-Id: <20221101222614.3BA58879A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
+ 1.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbaffb0179b904e4a19a3a13af842f4ba9ee0b96
+commit: https://git.buildroot.net/buildroot/commit/?id=f71e8c313eecd6aeacc3d7e4f10edd645034809d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump will fix the build with pupnp >= 1.14.13 raised since commit
-a9ee25b01b741ad4f68575974c89c65146ab87f2 and
-https://github.com/pupnp/pupnp/commit/2f99af26731ec7d5677e5576c006a35128b59d55:
-
-In file included from src/threadutil/FreeList.h:43,
-                 from src/threadutil/TimerThread.h:39,
-                 from src/gatedevice.h:32,
-                 from src/gatedevice.c:38:
-src/threadutil/ithread.h:917:12: error: expected ';' before 'int'
-  917 | EXPORT_SPEC int pthread_mutexattr_setkind_np(
-      |            ^~~~
-      |            ;
-
-Fixes:
- - http://autobuild.buildroot.org/results/2eebf8264327bd492ee8cadc0c539d42c4f2e252
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/igd2-for-linux/igd2-for-linux.hash | 2 +-
- package/igd2-for-linux/igd2-for-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 7 +++----
+ package/wayland-protocols/wayland-protocols.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
-index fe1272338a..3b4fd4f5c9 100644
---- a/package/igd2-for-linux/igd2-for-linux.hash
-+++ b/package/igd2-for-linux/igd2-for-linux.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  843f2b0a7597e6cc7af85da099a7cce3401a334cbb4a6ae9d38ce252311db9b9  igd2-for-linux-2.1.tar.gz
-+sha256  68ee10bf02b18890af8bf9e38be377f038627cd16fce54200fc1b26fd83e4375  igd2-for-linux-2.2.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  linuxigd2/doc/LICENSE
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  linuxigd2/src/threadutil/COPYING
-diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
-index 8cc3c6ae18..c646c6bf92 100644
---- a/package/igd2-for-linux/igd2-for-linux.mk
-+++ b/package/igd2-for-linux/igd2-for-linux.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 2d98c47c6f..4717523dc2 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,5 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2022-July/042270.html
+-md5  0c6b3e037f3881650d9a53610dd235c7  wayland-protocols-1.26.tar.xz
+-sha1  8aeb1a629d847ec26e26d5a59c150add41e482bd  wayland-protocols-1.26.tar.xz
+-sha256  c553384c1c68afd762fa537a2569cc9074fe7600da12d3472761e77a2ba56f13  wayland-protocols-1.26.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2022-October/042466.html
++sha256  9046f10a425d4e2a00965a03acfb6b3fb575a56503ac72c2b86821c69653375c  wayland-protocols-1.27.tar.xz
++sha512  c0a49bc46c663c9f602998dfe2e184c09756790fbcc7acbc2bf9d9cf8f7d6dcdd00259b768222a30e5d134e6f97f7f4faf252947b544e8b32f53278b70da0390  wayland-protocols-1.27.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 8e6d72480f..2510d7c04e 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--IGD2_FOR_LINUX_VERSION = 2.1
-+IGD2_FOR_LINUX_VERSION = 2.2
- IGD2_FOR_LINUX_SITE = \
- 	$(call github,Orange-OpenSource,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
- 
+-WAYLAND_PROTOCOLS_VERSION = 1.26
+-WAYLAND_PROTOCOLS_SITE = https://wayland.freedesktop.org/releases
++WAYLAND_PROTOCOLS_VERSION = 1.27
++WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+ WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
