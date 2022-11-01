@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAE1C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98303C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B52C8410A4;
-	Tue,  1 Nov 2022 20:41:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B52C8410A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3653D60E2A;
+	Tue,  1 Nov 2022 20:41:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3653D60E2A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G1tH344PHIoG; Tue,  1 Nov 2022 20:41:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KPRbKYbKh6CZ; Tue,  1 Nov 2022 20:41:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A54E3409BE;
-	Tue,  1 Nov 2022 20:41:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A54E3409BE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3A10C1BF834
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80A6360E27;
+	Tue,  1 Nov 2022 20:41:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80A6360E27
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 212AE1BF834
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1132B81463
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1132B81463
+ by smtp3.osuosl.org (Postfix) with ESMTP id F128F60758
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F128F60758
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pIlOijuHsuoQ for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 20:41:08 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C7D81460
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E0C7D81460
- for <buildroot@busybox.net>; Tue,  1 Nov 2022 20:41:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tnvWpELBQaid for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 20:41:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D27D760E31
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D27D760E31
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 20:41:44 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4A787FF802;
- Tue,  1 Nov 2022 20:41:05 +0000 (UTC)
-Date: Tue, 1 Nov 2022 21:41:03 +0100
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20221101214103.1d0db42e@windsurf>
-In-Reply-To: <5c28d160a68a33114f598450fed73bb1d774d9dc.1667321825.git.baruch@tkos.co.il>
-References: <5c28d160a68a33114f598450fed73bb1d774d9dc.1667321825.git.baruch@tkos.co.il>
+ by mail.gandi.net (Postfix) with ESMTPSA id AA587100003;
+ Tue,  1 Nov 2022 20:41:42 +0000 (UTC)
+Date: Tue, 1 Nov 2022 21:41:41 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20221101214141.56b12028@windsurf>
+In-Reply-To: <20221101170046.2122339-1-bernd.kuhls@t-online.de>
+References: <20221101170046.2122339-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667335266;
+ d=bootlin.com; s=gm1; t=1667335303;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=aD0+eoiDaID3zKaYUJnYVSQm2ejIGZDMJInNCq3KZIo=;
- b=RZchjYgj6PpFosfe9ScCcXqOjQ896fG9A+8NrQ5GVxFcv0M3Kq77NXipOgpOvTqLd7BYgV
- 7OxJvJGvRou3bly/qi7W8ikyLTtmhJNKmFAD+j4tukmsz9GEYOIpBFpBb5XtC33H2zpd9G
- ISB+zoZd4iRGnz19zb7tr7wDR195ibd45CqzXoGEN+IsSBUC2z74OBUAlObYkzm6idks8B
- x+LtLGsdMJiqYtwk/Dpp+WJZg3BjV4rk2tGjH9PAm/y9InU7c0TYSVNdufRmiWZZj3uYEg
- Lzeotg8ZuHkY455hSIY7pZWPalFLrb4X2sXRoGRlFxlj50eN9+uRXpAmsmk9iw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=dJpdj5x+l345lwxudB6spl3upfcEKvX2IpIlMHL6HEk=;
+ b=iXbHiNmeYWsCrMQBjpxJqFna4sNj4ErMDfYO4fpHAk6utuCqtOouBteaYcsq/Sj05nKdxG
+ TnCY9KN04GoFkZckfZ3VZqdg8d2BEXlqoPrssdYdWoI2XHljXLUOICoTynMys7p/dQeoDe
+ skM2TvSHZO5dwYjc3eWntXEHHiTsCRD29GxJQzVy8VvgGs50ac+/VDo5WhEwBfh0feP2X8
+ rCO7otp2eWGcl7NjfZDaNVWDHf/vf+ypQ0dN5rXiiPF7ZE3ByPlVL2Et88NpN0PuwmW4Qq
+ ADsUlDivAHMLSQFWpaPvyQxsIwTrrhcds+SJoy4V7mv4Xvx4R5rWn4Lygd6dhQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RZchjYgj
-Subject: Re: [Buildroot] [PATCH] package/strace: bump to version 6.0
+ header.s=gm1 header.b=iXbHiNme
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to
+ 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,20 +77,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  1 Nov 2022 18:57:06 +0200
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+On Tue,  1 Nov 2022 18:00:46 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Rebased patch 0001.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/strace/strace.hash | 4 ++--
->  package/strace/strace.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/intel-gmmlib/0001-Drop-hardening-related-flags.patch | 2 +-
+>  package/intel-gmmlib/intel-gmmlib.hash                       | 2 +-
+>  package/intel-gmmlib/intel-gmmlib.mk                         | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
