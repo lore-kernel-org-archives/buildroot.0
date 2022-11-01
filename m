@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A206C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D195C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C23E81BB0;
-	Tue,  1 Nov 2022 22:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C23E81BB0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 017C740643;
+	Tue,  1 Nov 2022 22:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 017C740643
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zADqoht4IRKK; Tue,  1 Nov 2022 22:27:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bnjTJK2ZakkZ; Tue,  1 Nov 2022 22:31:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5279A8190B;
-	Tue,  1 Nov 2022 22:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5279A8190B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A0A31BF3E8
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 280D1405BC;
+	Tue,  1 Nov 2022 22:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 280D1405BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F7031BF3E8
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E801A4161B
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E801A4161B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 149EC405BC
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:31:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 149EC405BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jTv3JgEyrQUD for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 22:27:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9baWPO65hlTx for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:31:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AB7A415D8
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AB7A415D8
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F4145400EF
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F4145400EF
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:31:46 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B3D27240003;
- Tue,  1 Nov 2022 22:27:41 +0000 (UTC)
-Date: Tue, 1 Nov 2022 23:27:40 +0100
-To: Wolfgang Grandegger <wg@grandegger.com>
-Message-ID: <20221101232740.5dc5e8f0@windsurf>
-In-Reply-To: <44ae3630-5f21-54d4-8d77-9cb9fa137289@grandegger.com>
-References: <44ae3630-5f21-54d4-8d77-9cb9fa137289@grandegger.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 41C66100008;
+ Tue,  1 Nov 2022 22:31:45 +0000 (UTC)
+Date: Tue, 1 Nov 2022 23:31:44 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221101233144.535079ab@windsurf>
+In-Reply-To: <20221008134414.1305025-1-james.hilliard1@gmail.com>
+References: <20221008134414.1305025-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667341663;
+ d=bootlin.com; s=gm1; t=1667341905;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=iCGpknTcFlbdw/TPfG/ljhQQ+KbC25R6MebjD8z/Ih0=;
- b=EIgZfq6hZ1uURIdgADp2ZByQLac+he4aHO3kJ74q7Xorg1O4RcsWVQ9kvUEBi+qgQr78eE
- omqXH85kkiRsN+U+3HmM0SyzeP7+bsFRNnC5nGXEfUKum1ToiyOjNbXf+BFKs9YVhuqWQU
- kC7K0U3+sAJMS1BiIPfCUPPx6ZaOnlUlSw6+EpLer+3JwqJF9Ny2xI8fGDXU21upjJ1LLa
- xoCSy9fl0mTSWzmSbt93ssdlzVkWFFWmSwYYaFRKIhFUL7YXBFsgCukFNIOCfcYt5vC7ko
- TKKTYB6NY8QwTj8BFlbLp/FLvD+KO7c1tLSFQf31pwuMFKnaQI6ApnM77sZMjw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=3oh7wH6ZKgmANGeQkGbrwASieiG9FGRLTQj99P9Ncyc=;
+ b=ORAZEEkBYKWbJaMhSRgABpLrQqVyfo/OxyICHZE64JJ2hF0xpHDVAh1TmrnzbwKDRM65fc
+ oQCksa8uUeHjhxS7nnyN/yex+AaaibG/ea49A2cW+U89OO3f1xlGAbXu1BAuNAHyXbn9NG
+ 22QLcaAtP26sd0LtoaJaH3QvsFlrYC45CYF5bfbDFfLU2NTpJQqVdPFFpidTozw4RsGK0F
+ k/CBpl2Pz+ULAkvzvR8QRm513pMXj67ssNqdpMDEMKf9Avr09RNSCNHVI9fC5AggPGVzlk
+ iX4m0YLWgm7IgvBlCB6d3r2DVb97oPe2HTBaHgdF+AUVVoSmj06E5BWt+oGQfQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EIgZfq6h
-Subject: Re: [Buildroot] [PATCH v2] package/udisks: install to staging
+ header.s=gm1 header.b=ORAZEEkB
+Subject: Re: [Buildroot] [PATCH 1/1] package/ocf-linux: fix build with
+ kernels up to version 4.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +77,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Marek Belisko <marek.belisko@open-nandra.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 7 Oct 2022 09:27:37 +0200
-Wolfgang Grandegger <wg@grandegger.com> wrote:
+Hello James,
 
-> UDisks2 provides a Library API [1] for accessing the UDisks2 service
-> via "libudisks2.so". For development of UDisks2 clients, install to
-> staging as well!
-> 
-> [1] http://storaged.org/doc/udisks2-api/2.9.4/ref-library.html
-> 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
+On Sat,  8 Oct 2022 07:44:14 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Applied to master, thanks.
+> Add patches fixing build on kernels up to version 4.14.
+> 
+> Depend on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15 as builds fail on 4.15
+> and newer currently.
+
+Thing is that !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15 does not guarantee
+that the kernel is < 4.15. Indeed, the kernel version can be much more
+recent than the kernel headers version. For example, you can be using
+an external toolchain with headers 4.9... and be building a 6.0 Linux
+kernel, against which the ocf-linux kernel modules will be built.. and
+fail to build.
+
+To be honest, the last release of ocf-linux was in 2017. It doesn't
+build after 4.14, and even 4.14 requires patches. I would advocate for
+dropping ocf-linux entirely. It was added by Gustavo back in the days,
+and nobody ever cared about this package except you earlier this year
+with the bump to 20171122. All other changes on ocf-linux have been
+related to tree-wide cleanup/infrastructure changes.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
