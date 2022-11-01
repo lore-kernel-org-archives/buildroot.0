@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A12C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAE1C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DE8B401C9;
-	Tue,  1 Nov 2022 20:41:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE8B401C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B52C8410A4;
+	Tue,  1 Nov 2022 20:41:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B52C8410A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ORWgpECYkPCJ; Tue,  1 Nov 2022 20:41:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G1tH344PHIoG; Tue,  1 Nov 2022 20:41:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55E1C40503;
-	Tue,  1 Nov 2022 20:41:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55E1C40503
+	by smtp4.osuosl.org (Postfix) with ESMTP id A54E3409BE;
+	Tue,  1 Nov 2022 20:41:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A54E3409BE
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 981261BF834
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A10C1BF834
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72A1881460
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A1881460
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1132B81463
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1132B81463
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9vhoMOpyzuKj for <buildroot@lists.busybox.net>;
+ with ESMTP id pIlOijuHsuoQ for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 20:41:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C7D81460
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0C7D81460
+ for <buildroot@busybox.net>; Tue,  1 Nov 2022 20:41:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4A787FF802;
  Tue,  1 Nov 2022 20:41:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FA498145E
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 20:41:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FA498145E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A31E86FA4; Tue,  1 Nov 2022 20:41:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 21:34:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df4a3c1833da3b3e7dadcac57cd7802f0831c542
-X-Git-Newrev: 544806bfd8052d05dee671c23c354e5f73f954f9
-X-Patchwork-Hint: ignore
-Message-Id: <20221101204105.8A31E86FA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump to version 6.0
+Date: Tue, 1 Nov 2022 21:41:03 +0100
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+Message-ID: <20221101214103.1d0db42e@windsurf>
+In-Reply-To: <5c28d160a68a33114f598450fed73bb1d774d9dc.1667321825.git.baruch@tkos.co.il>
+References: <5c28d160a68a33114f598450fed73bb1d774d9dc.1667321825.git.baruch@tkos.co.il>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667335266;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aD0+eoiDaID3zKaYUJnYVSQm2ejIGZDMJInNCq3KZIo=;
+ b=RZchjYgj6PpFosfe9ScCcXqOjQ896fG9A+8NrQ5GVxFcv0M3Kq77NXipOgpOvTqLd7BYgV
+ 7OxJvJGvRou3bly/qi7W8ikyLTtmhJNKmFAD+j4tukmsz9GEYOIpBFpBb5XtC33H2zpd9G
+ ISB+zoZd4iRGnz19zb7tr7wDR195ibd45CqzXoGEN+IsSBUC2z74OBUAlObYkzm6idks8B
+ x+LtLGsdMJiqYtwk/Dpp+WJZg3BjV4rk2tGjH9PAm/y9InU7c0TYSVNdufRmiWZZj3uYEg
+ Lzeotg8ZuHkY455hSIY7pZWPalFLrb4X2sXRoGRlFxlj50eN9+uRXpAmsmk9iw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RZchjYgj
+Subject: Re: [Buildroot] [PATCH] package/strace: bump to version 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=544806bfd8052d05dee671c23c354e5f73f954f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  1 Nov 2022 18:57:06 +0200
+Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/strace/strace.hash | 4 ++--
+>  package/strace/strace.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index cadcb20f47..1743a369b4 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.19/strace-5.19.tar.xz.asc
--sha256  aa3dc1c8e60e4f6ff3d396514aa247f3c7bf719d8a8dc4dd4fa793be786beca3  strace-5.19.tar.xz
-+# https://strace.io/files/6.0/strace-6.0.tar.xz.asc
-+sha256  92d720a666855e9f1c6a11512fd6e99674a82bbfe1442557815f2ce8e1293338  strace-6.0.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 7bdf36a47e..09e620530e 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.19
-+STRACE_VERSION = 6.0
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
