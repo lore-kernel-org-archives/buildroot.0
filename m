@@ -1,87 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABED1C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 21:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EF00C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E25AC4157B;
-	Tue,  1 Nov 2022 21:57:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E25AC4157B
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFDE581266;
+	Tue,  1 Nov 2022 22:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFDE581266
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DRzBvlYNv5pS; Tue,  1 Nov 2022 21:57:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jh2yqxftxIOC; Tue,  1 Nov 2022 22:04:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCDB7415AB;
-	Tue,  1 Nov 2022 21:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCDB7415AB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7ACB580C2E;
+	Tue,  1 Nov 2022 22:04:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ACB580C2E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D704F1BF5DE
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 21:57:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DCBC1BF5DE
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B93964035D
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 21:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B93964035D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7626B40643
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:03:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7626B40643
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OROhrGLCgx3w for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 21:57:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C48FE40166
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C48FE40166
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 21:57:49 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id t1so5928223wmi.4
- for <buildroot@buildroot.org>; Tue, 01 Nov 2022 14:57:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gfCIPocTxg3kEeFMaNLQpSoWM00hIf8gfguSyxLCztY=;
- b=54BOExU2LTpN+0vjXjAStT9iVanfqk6LCK1fSLzJsucHwe4WuKV8hUQyZ8vEE8PjwX
- KhAa5c+6HWFMS6X0Qc3F7nlcOzQSbPviAGNfrr3LnO0EqDlMzTL1/tzq82qYPHc/I9MO
- phdlEWfdDBpOGjZCNJIufUrSqsuEtltqPVk+2b7nkAXZNOK0QTFzxSaXS/CqBbbY0nJS
- o/r+2jaPHqj/1kO/srb4kuq/nCy2mgQdFBVqPbaic7JUA0zUm5Cgwf19mcE48U3edfIW
- /6D05uBpHWw1K3/Qv7OjMCgfDekBwk6Mw7ptNIVbSEhvM4QbMwYfljGnj81eoNijlEeD
- 7EgQ==
-X-Gm-Message-State: ACrzQf2wJDMCOkqXl62sVcbu11b5haBoYU8CvbvlllP/pjdBUWlXCrDx
- 7fna3Um/TupFuRSuCXyWJ44pK1M4bmo=
-X-Google-Smtp-Source: AMsMyM5O5YkqxFQfNA7JX+2A443XmYOO3nhZWnK0BqIMGXX4NSt9hu2w1cwct9qx5n0xfGyWApIFow==
-X-Received: by 2002:a05:600c:46ce:b0:3c6:f274:33b2 with SMTP id
- q14-20020a05600c46ce00b003c6f27433b2mr13286798wmo.27.1667339867527; 
- Tue, 01 Nov 2022 14:57:47 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- f11-20020a05600c4e8b00b003b435c41103sm64907wmq.0.2022.11.01.14.57.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Nov 2022 14:57:46 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 3M0a21QrFz3k for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:03:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F3D240640
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F3D240640
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:03:57 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id BD4D0C0004;
+ Tue,  1 Nov 2022 22:03:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  1 Nov 2022 22:57:45 +0100
-Message-Id: <20221101215745.58044-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Tue,  1 Nov 2022 23:03:32 +0100
+Message-Id: <20221101220354.403933-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gfCIPocTxg3kEeFMaNLQpSoWM00hIf8gfguSyxLCztY=;
- b=JFzR1+HxjsykmUC8z2ZsSnXpL9eTBIjlsTydBVYm+Szj3fU78brUzgNWJsF1yKyvF1
- 02tLFMM8+/6mncvZ3jsTZ7w6fiN4xARfnHeTcybp4Kcnn95KYqaQasQ81t5+sq4KMP0g
- b2AOSbX0YraTtoNFDZtXeA5Ttwdu3e39NfLtj/7qtUxtJbrhmmR9JO5yTxiPVikfZbcH
- tF8HWpQOugzdwaj6KjuVA2lcGihn8YsX8bSsARm2C/JxrfYesyoCiFgD4ExE7QQ+7Duj
- tfdQ+AIcjVXozSoyVNimydYEAjqFISICWGFl/dzjbhZ8nH5LM72XlpDkIslqtaEMemSb
- HGzQ==
+ d=bootlin.com; s=gm1; t=1667340236;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=2I4n0BnMyzYL/yCQf7EsPsWo4mnNDeW/rJDfbwzEFGc=;
+ b=m3Tk+N++zVjCki0uHZKnimKIBnBeUtQ7LNxp3HRBsJT0ooY1jnBFhrECAnMWZC1u7YQ8KX
+ 8nPzFtkR+jKm//to98vJi401bNvtuFF0XUN8Kn6asiRIySp1wijR8nBW7aLo0nOL69l3qH
+ nFBgii6/qtL/BtHk95Ape0Xy8O72/wZ79rTM6FSJdUhiF77lCW4fjP3G0r6MbyD3kxe0gK
+ 8A/Mr2oU5FgorAyKm0otKwXP6tmm0QfVIU9nqCc3pQJmOqYzrotLICXBjAsSZ/LrjHfK5u
+ q/E9h/H532XynG6l8/X4v650t58Vhje2s5vkaFaNF/WDBtrH5SBubze3nY3xiw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JFzR1+Hx
-Subject: [Buildroot] [PATCH 1/1] package/xl2tp: bump to version 1.3.18
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=m3Tk+N++
+Subject: [Buildroot] [PATCH 00/21] First batch of defconfig removals
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +71,262 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/xelerance/xl2tpd/releases/tag/v1.3.18
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This patch series proposes to remove 21 defconfigs which have been
+failing to build for month. All of these defconfigs have already been
+listed in an e-mail sent on August 6, 2022 [0] to the relevant
+defconfig maintainers, and they still haven't been fixed. Close to 3
+months later, it's time to remove them, with the goal of having all
+defconfigs building for the upcoming 2022.11 release.
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index eca918bc83..64db273a71 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  898d9b6a374c78dea5f20d80fd50fac13428ad746fefb16ff5f6bec449affe67  xl2tp-1.3.17.tar.gz
-+sha256  47f52b9c56cabe77766533bca3736a8198581ff38443eb4b4c8971c885ac9329  xl2tp-1.3.18.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index 4a2bd66308..404a934562 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XL2TP_VERSION = 1.3.17
-+XL2TP_VERSION = 1.3.18
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+I'm proposing to give one extra week (until November 7) before
+applying these patches, to see if some of the defconfig maintainers
+send patches to fix the defconfigs they are in charge of, or if
+anybody else steps up.
+
+[0] https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+
+Thanks,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (21):
+  configs/amarula_a64_relic: remove defconfig
+  configs/arm_juno: remove defconfig
+  configs/bananapi_m1: remove defconfig
+  configs/bananapi_m1_plus: remove defconfig
+  configs/bananapi_m2_plus: remove defconfig
+  configs/bananapi_m64: remove defconfig
+  configs/friendlyarm_nanopc_t4: remove defconfig
+  configs/friendlyarm_nanopi_a64: remove defconfig
+  configs/friendlyarm_nanopi_m1: remove defconfig
+  configs/friendlyarm_nanopi_m1: remove defconfig
+  configs/friendlyarm_nanopi_m4: remove defconfig
+  configs/friendlyarm_nanopi_neo2: remove defconfig
+  configs/friendlyarm_nanopi_neo4: remove defconfig
+  configs/friendlyarm_nanopi_neo_plus2: remove defconfig
+  configs/friendlyarm_nanopi_r1: remove defconfig
+  configs/orangepi_pc2: remove defconfig
+  configs/orangepi_plus: remove defconfig
+  configs/orangepi_prime: remove defconfig
+  configs/orangepi_rk3399: remove defconfig
+  configs/orangepi_win: remove defconfig
+  configs/pine64: remove defconfig
+
+ DEVELOPERS                                    |  38 ----
+ board/amarula/a64-relic/extlinux.conf         |   4 -
+ board/amarula/a64-relic/genimage.cfg          |  11 --
+ board/amarula/a64-relic/post-build.sh         |   4 -
+ board/amarula/a64-relic/readme.txt            |  90 ----------
+ .../lib/firmware/brcm/brcmfmac4330-sdio.txt   |  83 ---------
+ board/arm/juno/linux-juno-defconfig           | 169 -----------------
+ board/arm/juno/readme.txt                     | 134 --------------
+ board/bananapi/bananapi-m1/boot.cmd           |   7 -
+ board/bananapi/bananapi-m1/genimage.cfg       |  34 ----
+ board/bananapi/bananapi-m1/readme.txt         |  37 ----
+ board/bananapi/bananapi-m64/boot.cmd          |   6 -
+ board/bananapi/bananapi-m64/genimage.cfg      |  40 -----
+ board/bananapi/bananapi-m64/readme.txt        |  37 ----
+ board/friendlyarm/nanopc-t4/extlinux.conf     |   4 -
+ board/friendlyarm/nanopc-t4/genimage.cfg      |  39 ----
+ board/friendlyarm/nanopc-t4/post-build.sh     |   5 -
+ board/friendlyarm/nanopc-t4/readme.txt        |  45 -----
+ board/friendlyarm/nanopi-a64/boot.cmd         |   6 -
+ board/friendlyarm/nanopi-a64/genimage.cfg     |  40 -----
+ board/friendlyarm/nanopi-a64/readme.txt       |  37 ----
+ board/friendlyarm/nanopi-m1-plus/boot.cmd     |   8 -
+ board/friendlyarm/nanopi-m1-plus/genimage.cfg |  36 ----
+ board/friendlyarm/nanopi-m1-plus/readme.txt   |  29 ---
+ board/friendlyarm/nanopi-m1/boot.cmd          |   8 -
+ board/friendlyarm/nanopi-m1/genimage.cfg      |  37 ----
+ board/friendlyarm/nanopi-m1/readme.txt        |  29 ---
+ board/friendlyarm/nanopi-m4/extlinux.conf     |   4 -
+ board/friendlyarm/nanopi-m4/genimage.cfg      |  39 ----
+ board/friendlyarm/nanopi-m4/post-build.sh     |   5 -
+ board/friendlyarm/nanopi-m4/readme.txt        |  45 -----
+ .../nanopi-neo-plus2/extlinux.conf            |   4 -
+ .../friendlyarm/nanopi-neo-plus2/genimage.cfg |  40 -----
+ .../nanopi-neo-plus2/linux-extras.config      |  10 --
+ .../nanopi-neo-plus2/post-build.sh            |   4 -
+ board/friendlyarm/nanopi-neo-plus2/readme.txt |  37 ----
+ ...3430-sdio.friendlyarm,nanopi-neo-plus2.txt |  53 ------
+ board/friendlyarm/nanopi-neo2/boot.cmd        |   6 -
+ board/friendlyarm/nanopi-neo2/genimage.cfg    |  40 -----
+ board/friendlyarm/nanopi-neo2/readme.txt      |  37 ----
+ board/friendlyarm/nanopi-neo4/extlinux.conf   |   4 -
+ board/friendlyarm/nanopi-neo4/genimage.cfg    |  22 ---
+ board/friendlyarm/nanopi-neo4/post-build.sh   |   5 -
+ board/friendlyarm/nanopi-neo4/readme.txt      |  53 ------
+ board/friendlyarm/nanopi-r1/boot.cmd          |   8 -
+ board/friendlyarm/nanopi-r1/genimage.cfg      |  37 ----
+ .../nanopi-r1/kernel/linux-extras.config      |   2 -
+ .../nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts   | 170 ------------------
+ board/friendlyarm/nanopi-r1/readme.txt        |  29 ---
+ .../nanopi-r1/uboot/nanopi_r1_defconfig       |  22 ---
+ .../nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts    | 102 -----------
+ board/orangepi/orangepi-pc2/boot.cmd          |   6 -
+ board/orangepi/orangepi-pc2/genimage.cfg      |  40 -----
+ board/orangepi/orangepi-pc2/readme.txt        |  37 ----
+ board/orangepi/orangepi-plus/boot.cmd         |   8 -
+ board/orangepi/orangepi-plus/genimage.cfg     |  36 ----
+ board/orangepi/orangepi-plus/readme.txt       |  29 ---
+ board/orangepi/orangepi-prime/boot.cmd        |   6 -
+ board/orangepi/orangepi-prime/genimage.cfg    |  40 -----
+ board/orangepi/orangepi-prime/readme.txt      |  37 ----
+ board/orangepi/orangepi-rk3399/extlinux.conf  |   4 -
+ board/orangepi/orangepi-rk3399/genimage.cfg   |  38 ----
+ board/orangepi/orangepi-rk3399/post-build.sh  |   5 -
+ board/orangepi/orangepi-rk3399/readme.txt     |  56 ------
+ board/orangepi/orangepi-win/boot.cmd          |   6 -
+ board/orangepi/orangepi-win/genimage.cfg      |  40 -----
+ board/orangepi/orangepi-win/readme.txt        |  37 ----
+ board/pine64/pine64/boot.cmd                  |   6 -
+ board/pine64/pine64/genimage.cfg              |  40 -----
+ board/pine64/pine64/readme.txt                |  38 ----
+ board/sinovoip/m1-plus/boot.cmd               |   5 -
+ board/sinovoip/m1-plus/genimage.cfg           |  38 ----
+ board/sinovoip/m1-plus/linux-wifi.fragment    |  10 --
+ ...nanapi-m1-plus-Disable-OOB-IRQ-for-b.patch |  39 ----
+ board/sinovoip/m1-plus/post-build.sh          |   4 -
+ board/sinovoip/m1-plus/readme.txt             |  64 -------
+ ...rcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt |   1 -
+ .../lib/firmware/brcm/brcmfmac43362-sdio.txt  |  56 ------
+ board/sinovoip/m2-plus/boot.cmd               |   7 -
+ board/sinovoip/m2-plus/genimage.cfg           |  34 ----
+ configs/amarula_a64_relic_defconfig           |  63 -------
+ configs/arm_juno_defconfig                    |  23 ---
+ configs/bananapi_m1_defconfig                 |  29 ---
+ configs/bananapi_m1_plus_defconfig            |  45 -----
+ configs/bananapi_m2_plus_defconfig            |  30 ----
+ configs/bananapi_m64_defconfig                |  50 ------
+ configs/friendlyarm_nanopc_t4_defconfig       |  53 ------
+ configs/friendlyarm_nanopi_a64_defconfig      |  50 ------
+ configs/friendlyarm_nanopi_m1_defconfig       |  45 -----
+ configs/friendlyarm_nanopi_m1_plus_defconfig  |  45 -----
+ configs/friendlyarm_nanopi_m4_defconfig       |  53 ------
+ configs/friendlyarm_nanopi_neo2_defconfig     |  50 ------
+ configs/friendlyarm_nanopi_neo4_defconfig     |  55 ------
+ .../friendlyarm_nanopi_neo_plus2_defconfig    |  62 -------
+ configs/friendlyarm_nanopi_r1_defconfig       |  49 -----
+ configs/orangepi_pc2_defconfig                |  50 ------
+ configs/orangepi_plus_defconfig               |  44 -----
+ configs/orangepi_prime_defconfig              |  50 ------
+ configs/orangepi_rk3399_defconfig             |  53 ------
+ configs/orangepi_win_defconfig                |  48 -----
+ configs/pine64_defconfig                      |  50 ------
+ 101 files changed, 3559 deletions(-)
+ delete mode 100644 board/amarula/a64-relic/extlinux.conf
+ delete mode 100644 board/amarula/a64-relic/genimage.cfg
+ delete mode 100755 board/amarula/a64-relic/post-build.sh
+ delete mode 100644 board/amarula/a64-relic/readme.txt
+ delete mode 100644 board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+ delete mode 100644 board/arm/juno/linux-juno-defconfig
+ delete mode 100644 board/arm/juno/readme.txt
+ delete mode 100644 board/bananapi/bananapi-m1/boot.cmd
+ delete mode 100644 board/bananapi/bananapi-m1/genimage.cfg
+ delete mode 100644 board/bananapi/bananapi-m1/readme.txt
+ delete mode 100644 board/bananapi/bananapi-m64/boot.cmd
+ delete mode 100644 board/bananapi/bananapi-m64/genimage.cfg
+ delete mode 100644 board/bananapi/bananapi-m64/readme.txt
+ delete mode 100644 board/friendlyarm/nanopc-t4/extlinux.conf
+ delete mode 100644 board/friendlyarm/nanopc-t4/genimage.cfg
+ delete mode 100755 board/friendlyarm/nanopc-t4/post-build.sh
+ delete mode 100644 board/friendlyarm/nanopc-t4/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-a64/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-a64/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-a64/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-m1-plus/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-m1-plus/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-m1-plus/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-m1/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-m1/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-m1/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-m4/extlinux.conf
+ delete mode 100644 board/friendlyarm/nanopi-m4/genimage.cfg
+ delete mode 100755 board/friendlyarm/nanopi-m4/post-build.sh
+ delete mode 100644 board/friendlyarm/nanopi-m4/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/extlinux.conf
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/linux-extras.config
+ delete mode 100755 board/friendlyarm/nanopi-neo-plus2/post-build.sh
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-neo-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt
+ delete mode 100644 board/friendlyarm/nanopi-neo2/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-neo4/extlinux.conf
+ delete mode 100644 board/friendlyarm/nanopi-neo4/genimage.cfg
+ delete mode 100755 board/friendlyarm/nanopi-neo4/post-build.sh
+ delete mode 100644 board/friendlyarm/nanopi-neo4/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-r1/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-r1/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-r1/kernel/linux-extras.config
+ delete mode 100644 board/friendlyarm/nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts
+ delete mode 100644 board/friendlyarm/nanopi-r1/readme.txt
+ delete mode 100644 board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig
+ delete mode 100644 board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts
+ delete mode 100644 board/orangepi/orangepi-pc2/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-pc2/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-pc2/readme.txt
+ delete mode 100644 board/orangepi/orangepi-plus/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-plus/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-plus/readme.txt
+ delete mode 100644 board/orangepi/orangepi-prime/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-prime/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-prime/readme.txt
+ delete mode 100644 board/orangepi/orangepi-rk3399/extlinux.conf
+ delete mode 100644 board/orangepi/orangepi-rk3399/genimage.cfg
+ delete mode 100755 board/orangepi/orangepi-rk3399/post-build.sh
+ delete mode 100644 board/orangepi/orangepi-rk3399/readme.txt
+ delete mode 100644 board/orangepi/orangepi-win/boot.cmd
+ delete mode 100644 board/orangepi/orangepi-win/genimage.cfg
+ delete mode 100644 board/orangepi/orangepi-win/readme.txt
+ delete mode 100644 board/pine64/pine64/boot.cmd
+ delete mode 100644 board/pine64/pine64/genimage.cfg
+ delete mode 100644 board/pine64/pine64/readme.txt
+ delete mode 100644 board/sinovoip/m1-plus/boot.cmd
+ delete mode 100644 board/sinovoip/m1-plus/genimage.cfg
+ delete mode 100644 board/sinovoip/m1-plus/linux-wifi.fragment
+ delete mode 100644 board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch
+ delete mode 100755 board/sinovoip/m1-plus/post-build.sh
+ delete mode 100644 board/sinovoip/m1-plus/readme.txt
+ delete mode 120000 board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt
+ delete mode 100644 board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
+ delete mode 100644 board/sinovoip/m2-plus/boot.cmd
+ delete mode 100644 board/sinovoip/m2-plus/genimage.cfg
+ delete mode 100644 configs/amarula_a64_relic_defconfig
+ delete mode 100644 configs/arm_juno_defconfig
+ delete mode 100644 configs/bananapi_m1_defconfig
+ delete mode 100644 configs/bananapi_m1_plus_defconfig
+ delete mode 100644 configs/bananapi_m2_plus_defconfig
+ delete mode 100644 configs/bananapi_m64_defconfig
+ delete mode 100644 configs/friendlyarm_nanopc_t4_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_a64_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_m1_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_m1_plus_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_m4_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_neo4_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_neo_plus2_defconfig
+ delete mode 100644 configs/friendlyarm_nanopi_r1_defconfig
+ delete mode 100644 configs/orangepi_pc2_defconfig
+ delete mode 100644 configs/orangepi_plus_defconfig
+ delete mode 100644 configs/orangepi_prime_defconfig
+ delete mode 100644 configs/orangepi_rk3399_defconfig
+ delete mode 100644 configs/orangepi_win_defconfig
+ delete mode 100644 configs/pine64_defconfig
+
 -- 
-2.35.1
+2.37.3
 
 _______________________________________________
 buildroot mailing list
