@@ -4,67 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C22FA3743
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 10:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D7EFC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 13:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57AE181338;
-	Tue,  1 Nov 2022 10:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57AE181338
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2B3C813DA;
+	Tue,  1 Nov 2022 13:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2B3C813DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d_c1FbnG3vsn; Tue,  1 Nov 2022 10:15:19 +0000 (UTC)
+	with ESMTP id xVs3h_k6U-kr; Tue,  1 Nov 2022 13:40:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BCC381311;
-	Tue,  1 Nov 2022 10:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BCC381311
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08C7E8134A;
+	Tue,  1 Nov 2022 13:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08C7E8134A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CDD61BF2B3
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:15:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 16BA11BF2EB
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 13:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11CA181311
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 10:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11CA181311
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5745812DB
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 13:40:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5745812DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ff89aeaC5wML for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 10:15:16 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DED08130B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0DED08130B
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 10:15:15 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:50d3:260a:b461:e6c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id A581119F5BC;
- Tue,  1 Nov 2022 11:15:07 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 01 Nov 2022 11:15:07 +0100
-Date: Tue, 1 Nov 2022 11:15:07 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20221101101507.GG1058960@scaer>
-References: <20221031213926.50d3c778@windsurf>
+ with ESMTP id uCFHwIZ6MoKd for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 13:40:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 795CE812CB
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 795CE812CB
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 13:40:37 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id j15so20157968wrq.3
+ for <buildroot@buildroot.org>; Tue, 01 Nov 2022 06:40:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=C7WF0Tsp5awYD7YXv0fgWeLq7WfmmEgrfGHbcVr6lbA=;
+ b=sPkzl5j1FIKMTxr9h00AIUmg8rCGU+YOC/eEkflTC5mbUiESzb/9N2cpr68dqbQ6NE
+ VINaXd5LHNGALdi7GdN7n3AWlxjxQRiiMxthENXGWzrbrBGEdbEVu/SH2+O9nTXJme1K
+ Z3Djp4ZFZeIAtXPAZ4Vh7J6E/WdFYaLSoJdvgz3CVpawW+Ni4QxFdSwnn9p/dcIySvCU
+ WbP9MlQ06dmjI0CueLlb8hIogWSjtrOsq8TYP/i6gJOBIjfK5SiKXbPLFK1bTmNXJ946
+ LU3xyJzzR4oGbjmvmCUVsibF6bDophWgPYPbp3XhHwfutC22qlTErWOe/v/ZUE6YIFEK
+ Pttg==
+X-Gm-Message-State: ACrzQf3uX333EqZz5fhJ1BNWzXV9mpHL0YA7n0+iVHdje1w63iDbF2T2
+ uh+pZs3BXQvhVbEgUWXidFtJQdSTK8w=
+X-Google-Smtp-Source: AMsMyM5BwEVAHycvfUn765B2vofw0pZLv819RyeeNEn7QM+TFI71g2ZaFWnH1u8QoPd4MSjUWxuPEg==
+X-Received: by 2002:a5d:59a5:0:b0:236:8d38:4f1d with SMTP id
+ p5-20020a5d59a5000000b002368d384f1dmr11641922wrr.131.1667310035237; 
+ Tue, 01 Nov 2022 06:40:35 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bv19-20020a0560001f1300b00236627c078esm10270186wrb.110.2022.11.01.06.40.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Nov 2022 06:40:34 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  1 Nov 2022 14:40:32 +0100
+Message-Id: <20221101134032.100587-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221031213926.50d3c778@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667297714;
- bh=DEhKLtAOgsN3ruptFyzMsroHExpwk3uNqFAG/TZpj3k=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=sGYmfVwJ6rOb3+fblCgo7osSU77cMWC1D5fvBk8HpwuEKC+jYjbWlprsI+tWz5dNb
- vO09EdnZoMjnqmp32Zde1BIDyCwtt400LWh5WUMV5lW8mS8htRAr0Z2UX5Zv4PIR/h
- Tuw1GQb0if3UyT4ly63yNnqMx+/Dnjhxe/0RqbnAXNym0QsXx/APmOXcQFDikQHsAe
- M8vN0CWQmA2nBdqRWgDNqBf7W9OpyZChPHeokksguAlYDSq4GaeyhOupWu3H5Foh4o
- cw4FDpl8uMlTQLbfW+gl7B0t2qVKImHSUIK31x7hmskczKgqTEbjM+Mvn17CeJmCz7
- PW/SEI6xmfsPw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=C7WF0Tsp5awYD7YXv0fgWeLq7WfmmEgrfGHbcVr6lbA=;
+ b=W2it7wvRd2ZkOJ7rRn+G8w/tqemoqFkhOEdVcqwjIlpwP/nX/C7sY66yRYVFTPgTn3
+ qjnfbqeznNSlkyHN10hOBVmMkzBEWwzim2QLcfahLIO3QpNttuZc4TQakKqo1iCZCGq0
+ Q5/5eSpX+cEG+6aYjMILMy/0cpnk+W1f/YF8a0pvlpvVZaeIyUv9N8iqu5sA1V9uT1H6
+ gmlkCZ6PQ4DNwk5JyT4yRaJtiO2Zucv10Dfs3cOlkKNk+axNYR9l4GlYUTddwielTkCP
+ xJatg8tG65sKY3WOdORU/VY0sSDmCm26B7JekxMm2Lg/f1wrQ9LXjEBurfU+4TqfbiUa
+ Vvtg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sGYmfVwJ
-Subject: Re: [Buildroot] NodeJS, qemu wrapper and ELF interpreter fun
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=W2it7wvR
+Subject: [Buildroot] [PATCH 1/1] package/catatonit: fix build with kernel <
+ 5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,88 +94,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: fesc2000@mailbox.org, "buildroot@buildroot.org" <buildroot@buildroot.org>,
- oliver.kasten@trsystems.de, mail@jens-maus.de, f.rogall@gmx.de
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Fix the following build failure with kernel < 5.0 raised since the
+addition of the package in commit
+e3975ec7d4b478ec6c1ba56b63cbb5bccfb9dd09:
 
-On 2022-10-31 21:39 +0100, Thomas Petazzoni spake thusly:
-> I finally took some time to investigate the NodeJS build issue that
-> occurs on x86-64:
->   http://autobuild.buildroot.net/results/4f2/4f29c5e663b5d01af20d671baf6504332b8c1f7b/build-end.log
-[--SNIP--]
-> After adding some traces into this function, I was able to understand
-> what happens:
+catatonit.c:39:11: fatal error: linux/close_range.h: No such file or directory
+   39 | # include <linux/close_range.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~
 
-Great explanations, thanks a lot!
+Fixes:
+ - http://autobuild.buildroot.org/results/ed9a847905083175c7fcb2f2df28f9ac5b9c3313
 
-> We see 3 possible ideas to resolve this problem:
-> 
-> (A) Change the behavior of Qemu to not fallback to unprefixed paths:
->     when -L is passed, all path-related system calls should see the
->     paths prefixed by the -L option.
->     Issue with this is that this change is unlikely to get accepted by
->     Qemu upstream. And there might be some side effects we have not
->     really identified.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-fix-build-with-kernel-5.9.patch      | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/catatonit/0002-fix-build-with-kernel-5.9.patch
 
-I am very skeptical of that solution...
-
-> (B) Create an empty $(STAGING_DIR)/etc/ld.so.cache. We have tested
->     this solution and it works: it gets used instead of the host
->     /etc/ld.so.cache. Because $(STAGING_DIR)/etc/ld.so.cache is empty,
->     there's no libc.so.6 match, so the target ELF interpreter goes
->     through its normal library location resolution logic, which falls
->     back to trying in /usr/lib and /lib, which works as those paths
->     ends up being prefixed with $(STAGING_DIR) by Qemu.
-
-You'd also need an empty /etc/ld.so.cache.d/ maybe.
-
-I was looking at the manpage for ld.so, and it has an option to disable
-looking in the cache:
-
-    --inhibit-cache
-        Do not use /etc/ld.so.cache.
-
-However, we are not calling ld.so directly, so we'd need to pass it via
-an environment variable, but there's no such environment variable that
-would allow disable the cache.
-
-I'm afraid an empty STAGING_DIR/etc/ld.so.cache might not be enough, but
-I have no fact to back this gut feeling...
-
-> (C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
->     $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
->     LD_LIBRARY_PATH paths have precedence over paths given by
->     ld.so.cache.
-> 
->     This is the solution already used by the GOI qemu wrapper in
->     package/gobject-introspection/g-ir-scanner-qemuwrapper.in, and
->     which was suggested in bug
->     https://bugs.busybox.net/show_bug.cgi?id=14366.
-
-We know this has been working pretty well for the GOI wrapper, so if we
-were to use LD_LIBRARY_PATH, that would make for consistent wrappers.
-
-> Any opinion? Or other ideas?
-
-I would go for the LD_LIBRARY_PATH solution, if at least because it is
-consistent with the GOI wrapper.
-
-Regards,
-Yann E. MORIN.
-
-
+diff --git a/package/catatonit/0002-fix-build-with-kernel-5.9.patch b/package/catatonit/0002-fix-build-with-kernel-5.9.patch
+new file mode 100644
+index 0000000000..a4c66389db
+--- /dev/null
++++ b/package/catatonit/0002-fix-build-with-kernel-5.9.patch
+@@ -0,0 +1,52 @@
++From 1fefcbffe4ade02d625bf058a7c07aeaf9fa7a2f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 1 Nov 2022 14:16:01 +0100
++Subject: [PATCH] fix build with kernel < 5.9
++
++linux/close_range.h is only available since kernel 5.9 and
++https://github.com/torvalds/linux/commit/60997c3d45d9a67daf01c56d805ae4fec37e0bd8
++resulting in the following build failure:
++
++catatonit.c:39:11: fatal error: linux/close_range.h: No such file or directory
++   39 | # include <linux/close_range.h>
++      |           ^~~~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ed9a847905083175c7fcb2f2df28f9ac5b9c3313
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/openSUSE/catatonit/pull/24]
++---
++ catatonit.c  | 2 +-
++ configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/catatonit.c b/catatonit.c
++index a38263a..474c525 100644
++--- a/catatonit.c
+++++ b/catatonit.c
++@@ -35,7 +35,7 @@
++ #include <limits.h>
++ #include <dirent.h>
++ 
++-#ifdef HAVE_CLOSE_RANGE
+++#ifdef HAVE_LINUX_CLOSE_RANGE_H
++ # include <linux/close_range.h>
++ #else
++ # include <sys/syscall.h>
++diff --git a/configure.ac b/configure.ac
++index 94c5c84..a746ea1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -22,7 +22,7 @@ LT_PREREQ([2.4.2])
++ LT_INIT([disable-shared])
++ 
++ AC_CHECK_HEADERS([errno.h fcntl.h signal.h stdarg.h stdio.h stdlib.h unistd.h])
++-AC_CHECK_HEADERS([sys/prctl.h sys/signalfd.h sys/stat.h sys/types.h sys/wait.h])
+++AC_CHECK_HEADERS([linux/close_range.h sys/prctl.h sys/signalfd.h sys/stat.h sys/types.h sys/wait.h])
++ 
++ AC_CHECK_FUNCS([close_range])
++ 
++-- 
++2.35.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
