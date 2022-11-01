@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63528C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A206C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11C2D41635;
-	Tue,  1 Nov 2022 22:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11C2D41635
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C23E81BB0;
+	Tue,  1 Nov 2022 22:27:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C23E81BB0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zADqoht4IRKK; Tue,  1 Nov 2022 22:27:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5279A8190B;
+	Tue,  1 Nov 2022 22:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5279A8190B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A0A31BF3E8
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E801A4161B
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E801A4161B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fr7Q36m3umxa; Tue,  1 Nov 2022 22:27:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01519415D8;
-	Tue,  1 Nov 2022 22:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01519415D8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 90F7F1BF3E8
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D01960E59
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:27:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D01960E59
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ei4UdKXvIlRm for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 22:27:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98F2360E4A
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:27:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98F2360E4A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87022879AC; Tue,  1 Nov 2022 22:27:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 23:27:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fbaffb0179b904e4a19a3a13af842f4ba9ee0b96
-X-Git-Newrev: f66221589fe9a2107f1ef4709875bb8efdb41d2a
-X-Patchwork-Hint: ignore
-Message-Id: <20221101222738.87022879AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/udisks: install to staging
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jTv3JgEyrQUD for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:27:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AB7A415D8
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8AB7A415D8
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:27:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B3D27240003;
+ Tue,  1 Nov 2022 22:27:41 +0000 (UTC)
+Date: Tue, 1 Nov 2022 23:27:40 +0100
+To: Wolfgang Grandegger <wg@grandegger.com>
+Message-ID: <20221101232740.5dc5e8f0@windsurf>
+In-Reply-To: <44ae3630-5f21-54d4-8d77-9cb9fa137289@grandegger.com>
+References: <44ae3630-5f21-54d4-8d77-9cb9fa137289@grandegger.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667341663;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=iCGpknTcFlbdw/TPfG/ljhQQ+KbC25R6MebjD8z/Ih0=;
+ b=EIgZfq6hZ1uURIdgADp2ZByQLac+he4aHO3kJ74q7Xorg1O4RcsWVQ9kvUEBi+qgQr78eE
+ omqXH85kkiRsN+U+3HmM0SyzeP7+bsFRNnC5nGXEfUKum1ToiyOjNbXf+BFKs9YVhuqWQU
+ kC7K0U3+sAJMS1BiIPfCUPPx6ZaOnlUlSw6+EpLer+3JwqJF9Ny2xI8fGDXU21upjJ1LLa
+ xoCSy9fl0mTSWzmSbt93ssdlzVkWFFWmSwYYaFRKIhFUL7YXBFsgCukFNIOCfcYt5vC7ko
+ TKKTYB6NY8QwTj8BFlbLp/FLvD+KO7c1tLSFQf31pwuMFKnaQI6ApnM77sZMjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EIgZfq6h
+Subject: Re: [Buildroot] [PATCH v2] package/udisks: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +77,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f66221589fe9a2107f1ef4709875bb8efdb41d2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 7 Oct 2022 09:27:37 +0200
+Wolfgang Grandegger <wg@grandegger.com> wrote:
 
-UDisks2 provides a Library API [1] for accessing the UDisks2 service
-via "libudisks2.so". For development of UDisks2 clients, install to
-staging as well!
+> UDisks2 provides a Library API [1] for accessing the UDisks2 service
+> via "libudisks2.so". For development of UDisks2 clients, install to
+> staging as well!
+> 
+> [1] http://storaged.org/doc/udisks2-api/2.9.4/ref-library.html
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
 
-[1] http://storaged.org/doc/udisks2-api/2.9.4/ref-library.html
+Applied to master, thanks.
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/udisks/udisks.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-index 2bf519a2cc..959333d01f 100644
---- a/package/udisks/udisks.mk
-+++ b/package/udisks/udisks.mk
-@@ -10,6 +10,7 @@ UDISKS_SITE = https://github.com/storaged-project/udisks/releases/download/udisk
- UDISKS_LICENSE = GPL-2.0+
- UDISKS_LICENSE_FILES = COPYING
- UDISKS_CPE_ID_VENDOR = freedesktop
-+UDISKS_INSTALL_STAGING = YES
- 
- UDISKS_DEPENDENCIES = \
- 	host-pkgconf \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
