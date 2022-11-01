@@ -1,72 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA45C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0EB7C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 22:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2EE5415AB;
-	Tue,  1 Nov 2022 22:15:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2EE5415AB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 807A781268;
+	Tue,  1 Nov 2022 22:19:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 807A781268
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tZPeHSfR_34l; Tue,  1 Nov 2022 22:15:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zxYsGJjpYylH; Tue,  1 Nov 2022 22:19:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A11F441061;
-	Tue,  1 Nov 2022 22:15:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A11F441061
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 188F61BF3E8
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:15:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97F9980C15;
+	Tue,  1 Nov 2022 22:19:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97F9980C15
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 08C0D1BF3E8
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:18:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7DD060E2F
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:15:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7DD060E2F
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7041405BC
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 22:18:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7041405BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a9925uT0zf2J for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 22:15:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3650560D70
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com
- [209.85.215.178])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3650560D70
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:15:41 +0000 (UTC)
-Received: by mail-pg1-f178.google.com with SMTP id q71so14625024pgq.8
- for <buildroot@buildroot.org>; Tue, 01 Nov 2022 15:15:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Q+PGGq7M1cXa+U9NdDvudx6ocQQsp+2SWwle4UN8NDI=;
- b=Wt6K4DU9lyj5tMC1YG536fxdJqTJSPqtsiteJXvJIJqCTjoW/NxU63HihZfCh4gzY4
- /DAPU+/0K3WSCWW7oJiXNUNI2jaf0zZpIXEwvx5WFXqI1WsrhNDu/jIn8ltuHrEqjadt
- 8TlAiKAbz0AeWNwSCH8sbqjlshi3ACe/buVLccDbb7cPhPmDhOqZAlL3y0xHZHaBd9uz
- 7lYvy4M8HQ3fWQW11zYtV2FzBH3sua76PR4BBgxb5GIsIs9HA8E+tATkL/nWGTfRUoxb
- 3lxcDWkp8gVL4pWqx/6207agGbTGIcyKKtVZlkwg7e4vUWC4ZMT519L+/7UYfOfDwTMj
- BNdg==
-X-Gm-Message-State: ACrzQf1KS1nZVVIryVVlftxerf0UyiwulB9rPm27F4RfL/PvuZod1cs/
- nM0Y7pz2rzCn2T0KTcWnUO1gU4VAV4VQpA==
-X-Google-Smtp-Source: AMsMyM4h/vg3IcgXHXcUTOtCn3LI4Rf3hCnEzisJvEQroqafObieVWgABRjwDvEec1XRZFv3aZAwdQ==
-X-Received: by 2002:a05:6a00:21d4:b0:56c:3ebf:2174 with SMTP id
- t20-20020a056a0021d400b0056c3ebf2174mr22343117pfj.53.1667340940189; 
- Tue, 01 Nov 2022 15:15:40 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- s20-20020a63d054000000b0046f73d92ea5sm6262001pgi.90.2022.11.01.15.15.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Nov 2022 15:15:39 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sGuS-aI2wU3g for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 22:18:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69CDC400EF
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69CDC400EF
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 22:18:57 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 8CC522000A;
+ Tue,  1 Nov 2022 22:18:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  1 Nov 2022 15:15:37 -0700
-Message-Id: <20221101221537.15506-1-christian@paral.in>
-X-Mailer: git-send-email 2.38.1
+Date: Tue,  1 Nov 2022 23:18:49 +0100
+Message-Id: <20221101221849.406974-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221101220354.403933-1-thomas.petazzoni@bootlin.com>
+References: <20221101220354.403933-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/go: security bump to go 1.19.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667341135;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8D2I7xSbu9seRWN544k9VzMJ83npIprs3+unMFAqrYg=;
+ b=ZfNNEbQrMXw9L53HMXt2kTtlFyPZ9e2hvafZo26WWvm0SjiWdII+4ovdcCZOkQMBNAVS61
+ j+uRNxpJpbUFlwKQjwGvAsU7EpiYct5bsG9kgHxa+SeWOTOMykEnh50bSxCNBGY+vHk3Hj
+ OdT+kagSQJ3RZEVWjf4Uj22w0IJL8ulzgCMnX6QSV5DjXNXboXhjMjNwr4NEH36PfqtDqp
+ /r9Uzws0lWJ/ynGpeMjyiIZ0dXo6zNtDg02ilU1HIu3noPUCMxyFmqxd7+dsa94VC+CEGi
+ zUA8lgQrbwCxoR6ffz3RGTlzxami07rFCzxdn8n4CZqKGl5fy+2k6tkKuHmL/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZfNNEbQr
+Subject: [Buildroot] [PATCH 09/21] configs/friendlyarm_nanopi_m1: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,56 +75,185 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-go1.19.3 (released 2022-11-01) includes security fixes to the os/exec and
-syscall packages, as well as bug fixes to the compiler and the runtime.
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-Fixes: CVE-2022-41716
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
-NOTE: this CVE is specific to Windows and is not directly relevant to Buildroot.
+This defconfig did not even have an entry in the DEVELOPERS file.
 
-https://go.dev/doc/devel/release#go1.19
-https://github.com/golang/go/issues?q=milestone%3AGo1.19.3+label%3ACherryPickApproved
+Fixes:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499050
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/friendlyarm/nanopi-m1/boot.cmd     |  8 -----
+ board/friendlyarm/nanopi-m1/genimage.cfg | 37 -------------------
+ board/friendlyarm/nanopi-m1/readme.txt   | 29 ---------------
+ configs/friendlyarm_nanopi_m1_defconfig  | 45 ------------------------
+ 4 files changed, 119 deletions(-)
+ delete mode 100644 board/friendlyarm/nanopi-m1/boot.cmd
+ delete mode 100644 board/friendlyarm/nanopi-m1/genimage.cfg
+ delete mode 100644 board/friendlyarm/nanopi-m1/readme.txt
+ delete mode 100644 configs/friendlyarm_nanopi_m1_defconfig
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index f944bd5304..c2a7321634 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  2ce930d70a931de660fdaf271d70192793b1b240272645bf0275779f6704df6b  go1.19.2.src.tar.gz
-+sha256	18ac263e39210bcf68d85f4370e97fb1734166995a1f63fb38b4f6e07d90d212	go1.19.3.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index fe4d3a29a9..fd4caa2e5a 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.19.2
-+GO_VERSION = 1.19.3
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/board/friendlyarm/nanopi-m1/boot.cmd b/board/friendlyarm/nanopi-m1/boot.cmd
+deleted file mode 100644
+index b4d612ede7..0000000000
+--- a/board/friendlyarm/nanopi-m1/boot.cmd
++++ /dev/null
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
+-
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-m1.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-m1/genimage.cfg b/board/friendlyarm/nanopi-m1/genimage.cfg
+deleted file mode 100644
+index 3b2b82ce96..0000000000
+--- a/board/friendlyarm/nanopi-m1/genimage.cfg
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# Minimal SD card image for the NanoPi M1
+-#
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-nanopi-m1.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 10M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/board/friendlyarm/nanopi-m1/readme.txt b/board/friendlyarm/nanopi-m1/readme.txt
+deleted file mode 100644
+index 6a34c4239d..0000000000
+--- a/board/friendlyarm/nanopi-m1/readme.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-NanoPi M1
+-
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the NanoPi M1. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-How to build it
+-===============
+-
+-Configure Buildroot:
+-
+-    $ make friendlyarm_nanopi_m1_defconfig
+-
+-Compile everything and build the SD card image:
+-
+-    $ make
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/friendlyarm_nanopi_m1_defconfig b/configs/friendlyarm_nanopi_m1_defconfig
+deleted file mode 100644
+index 18cfcb261e..0000000000
+--- a/configs/friendlyarm_nanopi_m1_defconfig
++++ /dev/null
+@@ -1,45 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# System configuration
+-BR2_TARGET_GENERIC_HOSTNAME="nanopi-m1"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1"
+-
+-# Bootloaders
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-m1/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-m1"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m1/genimage.cfg"
+-# BR2_TARGET_ROOTFS_TAR is not set
+-
+-# Additional tools
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-2.38.1
+2.37.3
 
 _______________________________________________
 buildroot mailing list
