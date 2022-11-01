@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FF36C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EFECC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 20:26:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B830860E0F;
-	Tue,  1 Nov 2022 20:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B830860E0F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 178428175B;
+	Tue,  1 Nov 2022 20:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 178428175B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pi7486et93Eu; Tue,  1 Nov 2022 20:26:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VnFGy5f7Z6gl; Tue,  1 Nov 2022 20:26:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF25D60D70;
-	Tue,  1 Nov 2022 20:26:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF25D60D70
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D06F21BF834
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:26:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E6808149C;
+	Tue,  1 Nov 2022 20:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E6808149C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BD36D1BF834
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:26:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6A3660E0F
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A3660E0F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5EC68148A
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 20:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5EC68148A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DWAX03ooPb1l for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 20:26:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E234560D70
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 20:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E234560D70
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCDEE85EE1; Tue,  1 Nov 2022 20:26:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Nov 2022 21:19:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1d797892474b241eb00fca66ef1956e548233276
-X-Git-Newrev: bfe4828f539167c9d891ca322c2e54b4961508e7
-X-Patchwork-Hint: ignore
-Message-Id: <20221101202612.CCDEE85EE1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libressl: bump to version 3.6.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bYI7fmcIwc_R for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 20:26:18 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AD0581402
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AD0581402
+ for <buildroot@busybox.net>; Tue,  1 Nov 2022 20:26:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17964240002;
+ Tue,  1 Nov 2022 20:26:14 +0000 (UTC)
+Date: Tue, 1 Nov 2022 21:26:13 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20221101212613.55deeba7@windsurf>
+In-Reply-To: <20221101060321.1488881-1-francois.perrad@gadz.org>
+References: <20221101060321.1488881-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667334375;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=SE8HLOmTf1/tlQVQkYK6/VwaApN2KOlkzqXx+BedxA4=;
+ b=pZ56pvYEhE9oXc2EV9ZX/7R8d5LGicSl9auWmvMNJt3A5eunQpw50kI+PEjHOcjB0dxlPE
+ 12Jw8vWkIY2hgs2j4wEOJxFDIKS1+gNmWlxBNPNYcZq5+1crKRgS+Txy/heWQB+ZZClZhJ
+ 1QZD3GqCQctag7e2Y0ICJlw8q2i82i7IFholAXzbWdNtXPDpwTlaBwEZXN+ViV65WrzhTO
+ G9r7RQ620hSWmB4gAg4RbCSbkXMzKVwcrv4dgdF8zFHQQK+kjzYMUOUVLYo50QdAYQPhGE
+ nfm9cKOjQ+mWbF/jcb2USmd36C4bNNQBTDCt2CBkPCKEn3z1JGdfTzWeJeDzKA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pZ56pvYE
+Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfe4828f539167c9d891ca322c2e54b4961508e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  1 Nov 2022 07:03:21 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch | 2 +-
- package/libressl/libressl.hash                              | 2 +-
- package/libressl/libressl.mk                                | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch | 2 +-
+>  package/libressl/libressl.hash                              | 2 +-
+>  package/libressl/libressl.mk                                | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
-index 1c59aec723..48f3fa16e0 100644
---- a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
-+++ b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
-@@ -20,7 +20,7 @@ diff --git a/include/openssl/ssl.h b/include/openssl/ssl.h
- index 46f24b2ea..4048a6e63 100644
- --- a/include/openssl/ssl.h
- +++ b/include/openssl/ssl.h
--@@ -408,11 +408,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
-+@@ -412,11 +412,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
-  #define SSL_OP_NO_TLSv1					0x04000000L
-  #define SSL_OP_NO_TLSv1_2				0x08000000L
-  #define SSL_OP_NO_TLSv1_1				0x10000000L
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 7a7638b2db..0988e6a36d 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  3ab5e5eaef69ce20c6b170ee64d785b42235f48f2e62b095fca5d7b6672b8b28  libressl-3.5.3.tar.gz
-+sha256  acfac61316e93b919c28d62d53037ca734de85c46b4d703f19fd8395cf006774  libressl-3.6.1.tar.gz
- # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 85d1fe5e3a..8fd7bccbc4 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.5.3
-+LIBRESSL_VERSION = 3.6.1
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
