@@ -1,60 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26163C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 17:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E13AC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  1 Nov 2022 17:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A38E408C6;
-	Tue,  1 Nov 2022 17:37:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A38E408C6
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B8B8197D;
+	Tue,  1 Nov 2022 17:42:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1B8B8197D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iVRppEzZtOsf; Tue,  1 Nov 2022 17:37:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oY7RYvUXXVcg; Tue,  1 Nov 2022 17:42:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53D8440894;
-	Tue,  1 Nov 2022 17:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53D8440894
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B179813C4;
+	Tue,  1 Nov 2022 17:42:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B179813C4
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE4A51BF831
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:37:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8D45E1BF831
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 969AA40462
- for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:37:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 969AA40462
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6255B4010D
+ for <buildroot@lists.busybox.net>; Tue,  1 Nov 2022 17:42:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6255B4010D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nhTRN6XPmH8Y for <buildroot@lists.busybox.net>;
- Tue,  1 Nov 2022 17:37:14 +0000 (UTC)
+ with ESMTP id F5vTSKqMDuZQ for <buildroot@lists.busybox.net>;
+ Tue,  1 Nov 2022 17:42:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEE8A400D2
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CEE8A400D2
- for <buildroot@buildroot.org>; Tue,  1 Nov 2022 17:37:13 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout12.t-online.de (Postfix) with SMTP id 716FA10D75;
- Tue,  1 Nov 2022 18:37:03 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.183.139]) by fwd79.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1opvCB-0cTTGr0; Tue, 1 Nov 2022 18:37:03 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33284)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1opvCA-0008E1-3A;
- Tue, 01 Nov 2022 18:37:03 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Tue,  1 Nov 2022 18:37:02 +0100
-Message-Id: <20221101173702.2167372-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB0D1400D2
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB0D1400D2
+ for <buildroot@buildroot.org>; Tue,  1 Nov 2022 17:42:09 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:50d3:260a:b461:e6c4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5629519F5AF;
+ Tue,  1 Nov 2022 18:42:01 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 01 Nov 2022 18:42:01 +0100
+Date: Tue, 1 Nov 2022 18:42:00 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20221101174200.GJ2992523@scaer>
+References: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
+ <20221031132519.4e5ebc69@windsurf> <20221031125405.GC1058960@scaer>
+ <1e71c677-05cf-89b1-419f-df8e0f73ae63@benettiengineering.com>
+ <20221101083206.GI2992523@scaer>
+ <CA+_SqVZMnZvF2-n4HvrUUg1=k-VT4QBZGNAHZpoGM86y37fyuw@mail.gmail.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1667324223-F3FEE417-1D538FE5/0/0 CLEAN NORMAL
-X-TOI-MSGID: c97205fd-70aa-490b-887a-e61ba0ab0c8e
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediadriver: add more options
- to disable Gen9/11/12 support
+Content-Disposition: inline
+In-Reply-To: <CA+_SqVZMnZvF2-n4HvrUUg1=k-VT4QBZGNAHZpoGM86y37fyuw@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1667324526;
+ bh=9KAof3ytBP3e0O6ik+DCGx4ERWR3csCBvpPNzYwjfyM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=NI1q/pGlHmsgkEZVhbDRSzGFk16f3OF42d6BG/D8QtDrKEqrtvxakINoCrwQteJvS
+ e9BqhOeCN6O1kLLHCbBWUVSlp6OXca6BtLbCd4QTXV2RPwako8pwNO+e/3prCoaNWo
+ 4O23L74ws8414Yo5CLh4LkWgSlgD4dWR2XRGgyOZY3vksb5/2mqo1mJlKaxTQa+2cI
+ rscTk3ylckth2XuqxX29cJxB3CWYoea3h2T2/TEq6u04ZtNMINyzYaXztUHu+wZIaS
+ xofRwRRT4dWBKl1u5yGFoG/ZTWUoRY4MiM9FBjUd4Z8LC/PfzBAEfxbagunJs0aJ8o
+ DEjXVLXoOHIXg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NI1q/pGl
+Subject: Re: [Buildroot] [PATCH] package/mono: allow to select which folders
+ to install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,83 +81,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Gen10 was disabled by default upstream as it was never shipped:
-https://github.com/intel/media-driver/commit/0ad37351305be5c5e7c622833f9d7093fb2639cc
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/intel-mediadriver/Config.in            | 18 ++++++++++++++++++
- package/intel-mediadriver/intel-mediadriver.mk | 18 ++++++++++++++++++
- 2 files changed, 36 insertions(+)
-
-diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
-index 79511a8808..880d8d3245 100644
---- a/package/intel-mediadriver/Config.in
-+++ b/package/intel-mediadriver/Config.in
-@@ -31,6 +31,24 @@ config BR2_PACKAGE_INTEL_MEDIADRIVER_GEN8
- 	help
- 	  Enable support for Gen8 GPUs (Coffee Lake)
- 
-+config BR2_PACKAGE_INTEL_MEDIADRIVER_GEN9
-+	bool "Gen9 support"
-+	default y
-+	help
-+	  Enable support for Gen9 GPUs
-+
-+config BR2_PACKAGE_INTEL_MEDIADRIVER_GEN11
-+	bool "Gen11 support"
-+	default y
-+	help
-+	  Enable support for Gen11 GPUs
-+
-+config BR2_PACKAGE_INTEL_MEDIADRIVER_GEN12
-+	bool "Gen12 support"
-+	default y
-+	help
-+	  Enable support for Gen12 GPUs
-+
- endif # BR2_PACKAGE_INTEL_MEDIADRIVER
- 
- comment "intel-mediadriver needs a toolchain w/ dynamic library, C++, NPTL"
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 821c0920f4..17217a8644 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -42,6 +42,24 @@ else
- INTEL_MEDIADRIVER_CONF_OPTS += -DGEN8=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_INTEL_MEDIADRIVER_GEN9),y)
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN9=ON
-+else
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN9=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INTEL_MEDIADRIVER_GEN11),y)
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN11=ON
-+else
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN11=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INTEL_MEDIADRIVER_GEN12),y)
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN12=ON
-+else
-+INTEL_MEDIADRIVER_CONF_OPTS += -DGEN12=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_INTEL_MEDIADRIVER_NONFREE),y)
- INTEL_MEDIADRIVER_CONF_OPTS += \
- 	-DBUILD_CMRTLIB=OFF \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QW5nZWxvLCBBbGwsCgpPbiAyMDIyLTExLTAxIDEwOjE5ICswMTAwLCBBbmdlbG8gQ29tcGFnbnVj
+Y2kgc3Bha2UgdGh1c2x5OgpbLS1TTklQLS1dCj4gTXkgdHdvIGNlbnRzLiBIaXN0b3JpY2FsbHks
+IHRoZSBtb25vIGNvbmZpZ3VyZSB3YXMgb2ZmZXJpbmcgc29tZQo+IG9wdGlvbnMgdG8gZW5hYmxl
+IG9ubHkgc29tZSB2ZXJzaW9ucyBvZiB0aGUgQVBJIHdoaWNoIHdhcyBsYXRlbHkKPiByZW1vdmVk
+wqAKPiBTbywgcmVtb3Zpbmcgb2xkZXIgY29tcGF0aWJpbGl0eSBBUEkgZm9sZGVycyBzaG91bGQg
+YmUgcGVyZmVjdGx5Cj4gZmluZS4KClRoYW5rcyBmb3IgdGhlIGNvbmZpcm1hdGlvbiEgOi0pCgpN
+eSB1bmRlcnN0YW5kaW5nLCB0aG91Z2gsIHdvdWxkIGJlIHRoYXQgd2UgbWF5IG5lZWQgbW9yZSB0
+aGFuIG9uZSBzdWNoCnZlcnNpb25uZWQgQVBJLiBGb3IgZXhhbXBsZSwgSSB3b3VsZCAoaHlwb3Ro
+ZXRpY2FsbHkhKSBkZXZlbG9wZSBteSBhcHAKYWdhaW5ncyBjdXJyZW50IHZlcnNpb24sIHNheSA0
+LjgtYXBpLCBzbyBJIGFtIHVzaW5nIEFQSXMgZnJvbSB0aGF0CnZlcnNpb24uIFRoZW4gSSB1cGRh
+dGUgdG8gYSBuZXdlciBtb25vLCBhbmQgSSBzdGFydCB1c2luZyB0aGUgbmV3IEFQSXMsCmUuZy4g
+NS4zLWFwaSwgaW4gdGhlIG5ldyBwYXJ0cyBvZiBteSBhcHAsIGJ1dCB0aGUgZXhpc3RpbmcgcGFy
+dHMgYXJlCnN0aWxsIHVzaW5nIDQuOC1hcGksIHNvIEkgbmVlZCBib3RoLgoKSXMgdGhhdCBzZW5z
+aWJsZSwgb3IgZGlkIEkgbWlzLXVuZGVyc3Rvb2Q/CgpJZiBjb3JyZWN0LCB0aGVuIHdlIG5lZWQg
+dG8gYmUgYWJsZSB0byBzZWxlY3QgbW9yZSB0aGFuIG9uZSB2ZXJzaW9uZWQKQVBJLgoKPiBXZSBj
+YW5ub3QgcmVtb3ZlIHRoZSBHbG9iYWwgQXNzZW1ibHkgQ2FjaGUgKEdBQykuCgpTbywgd2UgYW4n
+IHJlbHkgb24gaXQgYmVpbmcgbGlzdGVkIGJ5IHRoZSB1c2VyOyB3ZSBtdXN0IGV4cGxpY2l0bHkK
+aW5zdGFsbCBpdC4KCiAgICBNT05PX0lOU1RBTExfRElSUyA9IFwKICAgICAgICBnYWMgXAogICAg
+ICAgICQoZml0bGVyLW91dCBnYWMsJChjYWxsIHFzdHJpcCwkKEJSMl9QQUNLQUdFX01PTk9fQVBJ
+X0RJUlMpKSkKCiAgICAkKGZvcmVhY2ggZGlyLCQoTU9OT19JTlNUQUxMX0RJUlMpLGNvcHkgdGhl
+ICQoZCkgZGlyKQoKPiBGb3IgdGhlIHJlc3QsIGl0IHdvdWxkIGJlIG5pY2UgaWYgR2l1bGlvIGNv
+dWxkIGRvIHNvbWUgdGVzdGluZyAoSSBjYW4KPiB0cnkgaXQgdG9vKSB0byB1bmRlcnN0YW5kIGF0
+IHdoYXQgZXh0ZW50IHdlIGNhbiByZW1vdmUgYW55IG90aGVyCj4gZm9sZGVyLgoKVGhhdCB3b3Vs
+ZCBiZSBhd2Vzb21lLCB0aGFua3MhCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVk
+IHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYg
+MDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAg
+ICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFH
+QUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdl
+ZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8
+CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
+LS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
