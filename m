@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A43D6C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B35CC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ADB841730;
-	Wed,  2 Nov 2022 22:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ADB841730
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B61F41737;
+	Wed,  2 Nov 2022 22:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B61F41737
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IJHq74ShNbeu; Wed,  2 Nov 2022 22:58:06 +0000 (UTC)
+	with ESMTP id Abf775FFjad1; Wed,  2 Nov 2022 22:58:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3042B40355;
-	Wed,  2 Nov 2022 22:58:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3042B40355
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27ABE1BF95F
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:57:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5AF841749;
+	Wed,  2 Nov 2022 22:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5AF841749
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D633E1BF95F
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 035F460AFC
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 035F460AFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id B26A1408E5
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:58:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B26A1408E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dREGUVaZ3sQq for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 22:57:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01DF960BC7
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 01DF960BC7
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:57:56 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 41FBA100004;
- Wed,  2 Nov 2022 22:57:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oqMgC-007nfi-6x; Wed, 02 Nov 2022 23:57:52 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vfpG2sHncOAw for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 22:58:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AF26408DC
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:58:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF26408DC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EC34F87B31; Wed,  2 Nov 2022 22:58:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-References: <20221017094429.4752-1-neal.frager@amd.com>
-Date: Wed, 02 Nov 2022 23:57:52 +0100
-In-Reply-To: <20221017094429.4752-1-neal.frager@amd.com> (Neal Frager's
- message of "Mon, 17 Oct 2022 03:44:29 -0600")
-Message-ID: <87y1stq80f.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
- fix pmufw sw reset
+To: buildroot@buildroot.org
+Date: Wed, 2 Nov 2022 23:56:17 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 31d9d073e0b75c957355b5a05823845d8bb0b236
+X-Git-Newrev: 9f270271f8ab5092361c3a86dcc8e16ccebb3d96
+X-Patchwork-Hint: ignore
+Message-Id: <20221102225804.EC34F87B31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x]
+ configs/zynqmp_kria_kv260_defconfig: fix pmufw sw reset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: luca.ceresoli@bootlin.com, buildroot@buildroot.org, kris.chaplin@amd.com,
- wesley@sonifex.co.uk, giulio.benetti@benettiengineering.com,
- michal.simek@amd.com, yann.morin.1998@free.fr
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9f270271f8ab5092361c3a86dcc8e16ccebb3d96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > This patch will solve the problem of the pmufw built by the
- > zynqmp-pmufw-builder where soft resets crash for the kv260.
- > Details of the issue can be found here:
+This patch will solve the problem of the pmufw built by the
+zynqmp-pmufw-builder where soft resets crash for the kv260.
+Details of the issue can be found here:
 
- > https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
+https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
 
- > Please note that this is a temporary solution as the kv260
- > pmufw is not yet available on the Xilinx github. This is expected
- > in the coming months.  The nealfrager github uses the same
- > licensing terms as the Xilinx github regarding the distribution of
- > zynqmp pmufw binary files.
+Please note that this is a temporary solution as the kv260
+pmufw is not yet available on the Xilinx github. This is expected
+in the coming months.  The nealfrager github uses the same
+licensing terms as the Xilinx github regarding the distribution of
+zynqmp pmufw binary files.
 
- > https://github.com/Xilinx/ubuntu-firmware/blob/v2022.1_22.04_1/LICENSE
- > https://github.com/nealfrager/buildroot-firmware/blob/v2022.1/LICENSE
+https://github.com/Xilinx/ubuntu-firmware/blob/v2022.1_22.04_1/LICENSE
+https://github.com/nealfrager/buildroot-firmware/blob/v2022.1/LICENSE
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2b564a8ccf8016d4c3c285702b37192abe0852e4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/zynqmp_kria_kv260_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2022.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 4700e651dc..25bab4cbb4 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -30,7 +30,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/v2022.1/bin/pmufw-v2022.1.bin"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.1/kv260/kv260_pmufw.bin"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
