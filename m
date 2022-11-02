@@ -1,52 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4246AFA3741
-	for <buildroot@archiver.kernel.org>; Mon, 31 Oct 2022 20:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9076AC433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 20:57:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C43328175B;
-	Mon, 31 Oct 2022 20:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C43328175B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1272E41697;
+	Wed,  2 Nov 2022 20:57:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1272E41697
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 59mPeWrkTEEk; Mon, 31 Oct 2022 20:35:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gM_RP56u-LF8; Wed,  2 Nov 2022 20:57:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F24781678;
-	Mon, 31 Oct 2022 20:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F24781678
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BEED51BF2F9
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C96F416BA;
+	Wed,  2 Nov 2022 20:57:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C96F416BA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA4FA1BF476
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99DB181678
- for <buildroot@lists.busybox.net>; Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99DB181678
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4CAB60737
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:57:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4CAB60737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SKhueBb8Tays for <buildroot@lists.busybox.net>;
- Mon, 31 Oct 2022 20:35:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF59B8148E
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF59B8148E
- for <buildroot@uclibc.org>; Mon, 31 Oct 2022 20:35:39 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1opbVR-0004sF-C8
- for buildroot@uclibc.org; Mon, 31 Oct 2022 21:35:37 +0100
-X-Injected-Via-Gmane: http://gmane.org/
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4jujjjT8FrEX for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 20:57:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06ED1606C6
+ for <buildroot@uclibc.org>; Wed,  2 Nov 2022 20:57:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06ED1606C6
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id E96E987A69; Wed,  2 Nov 2022 20:57:40 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 31 Oct 2022 21:35:01 +0100
-Message-ID: <pan$dd0eb$bcfe6a21$17d3908c$470fd6da@ID-313208.user.individual.net>
-References: <20221023165026.13707-1-fontaine.fabrice__23420.659061388$1666543861$gmane$org@gmail.com>
-Mime-Version: 1.0
-User-Agent: Pan/0.148 (Chamechaude; a70bd74)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libzlib: bump to version 1.2.13
+Date: Wed, 02 Nov 2022 20:57:40 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: unspecified
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: thomas.petazzoni@bootlin.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-15021-163-PPjDvTn0uP@https.bugs.busybox.net/>
+In-Reply-To: <bug-15021-163@https.bugs.busybox.net/>
+References: <bug-15021-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 15021] Buildroot not compiling with systemd and
+ glibc.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +79,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 23 Oct 2022 18:50:26 +0200 schrieb Fabrice Fontaine:
+https://bugs.busybox.net/show_bug.cgi?id=15021
 
-> - Drop all patches (already in version)
-> - Replace README by LICENSE file added with
->   https://github.com/madler/zlib/commit/
-352cb28d12baf02863ff5d4d96be0587ced419a1
-> 
-> https://github.com/madler/zlib/releases/tag/v1.2.13
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-Hi,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-ftr: this fixes CVE-2022-37434:
-https://nvd.nist.gov/vuln/detail/CVE-2022-37434
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+This has normally been fixed by
+https://gitlab.com/buildroot.org/buildroot/-/commit/4ed7d51d1896144caecfd40cf760cf13bbdb9c9d.
 
-Regards, Bernd
-
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
