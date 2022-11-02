@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76C62C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2887C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12F5F416F8;
-	Wed,  2 Nov 2022 19:06:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F5F416F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CE1260B74;
+	Wed,  2 Nov 2022 19:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE1260B74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WjV8ldH7XXWO; Wed,  2 Nov 2022 19:06:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wfCmPNznyJFS; Wed,  2 Nov 2022 19:09:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBD1B416E2;
-	Wed,  2 Nov 2022 19:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBD1B416E2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12A461BF3E1
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:06:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2795606AA;
+	Wed,  2 Nov 2022 19:08:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2795606AA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FC211BF3E1
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED977416E2
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED977416E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFDAC60ACA
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:08:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFDAC60ACA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ef-ixe8IQiTq for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 19:06:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KOUosuoRrOwb for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 19:08:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C1B4167A
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2C1B4167A
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:06:43 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id g13so9975801ile.0
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:06:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 939FA6068B
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 939FA6068B
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:08:56 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id 11so15877746iou.0
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:08:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0lV6Z+2IRAT65Yh1KrAtbJniqZ6h4QQ3Dxp/wdLh68M=;
- b=FNacL+71rJLr/XZJOCNXvza9uwAe24Cvh/ulPRO4oZCDJBpIg7TiblIYU+foR9EfBl
- YnY/IhVU51EZ8pGmjTFuS/c/dj0io4dmXJQVSt89IkSjxdZknypf42p48fRxE2AFIOob
- /neusE8ozjLLhSU/yyVg6cwh5h5DiGHU/LC5CR1N4MvJMbBPC7Qcc5bmTFnABVWd5DYe
- 0a7d0J+bVJIFVnN+57NujhOsGZXNIrQMrDTcIYHi2eo6MAMYTXVnpByl+zg8Ctkk3tTD
- DTk4KJyT4dozgMrlpMSzuEZV5v9DbcDUFNIU8VUrkKH8H3slIge63Y4tU10Jtv8Go4G5
- FsCQ==
-X-Gm-Message-State: ACrzQf3YTgzkcvir/6dkq0hPzVof4ypKCostMu6qWAUVw9sF338wRnPz
- hm1cbl3xPBgZWhMsvGWsoLSJUwGFyeVKDA==
-X-Google-Smtp-Source: AMsMyM53H/KIWRn0eCi3UYsr4pUBtz8bs/TPthbQbxaFcFdfsUoL6680an8dv1+od6zj76o5IDiavg==
-X-Received: by 2002:a92:d74f:0:b0:300:ad95:35c5 with SMTP id
- e15-20020a92d74f000000b00300ad9535c5mr12497368ilq.137.1667416002505; 
- Wed, 02 Nov 2022 12:06:42 -0700 (PDT)
+ bh=oiUqb02L7C4rkTcqCUCQJw/Te7mIe2V8nkGvI8T+Dgs=;
+ b=6GpkdG0/YuEspBxKq/PcNDZnZc7O3zA55FIu40m+m4EmJMoY/pDf9H5bHmB251WtC6
+ 3sBc4LqS4Ge26GbM3E2R+LpHsW7AdxoF1KcR14sYy1+Hja/w8931JmxYiPZfaT1UQ0SA
+ PQW7LZrSikZ4q6mWqzh71PJfAuPvLLBTs0Mjr3ZD/bphv87JCzYJvqlg0eWjjx0WtP0i
+ LDNSAfjmxQb+wQDJI7nx3gGQoa+tepYR7QNLz3aIzvH90ulpDtIg+manNd9mLcR0e+Sc
+ uVRfivnv+zi+GxLIYBggFxFfYVX9LbVIKZgWZYiDL/z3P4MTf+E4n78E/blj4dCwpduI
+ 4xhA==
+X-Gm-Message-State: ACrzQf1B0WCt4k62/o8xii4PbCvVq0pemqye/xb1YrXNrmauO3/Upkum
+ 7RZ9tQj41Vn17dAzNuNZero62GQHTK+Shw==
+X-Google-Smtp-Source: AMsMyM5A6qWfRaecUiEX+btKyl/aoRSaSHbPPRcGHC3xNo7vSKQ+eWCoyTlIeMTxmiouBuqt+peczQ==
+X-Received: by 2002:a02:cf8f:0:b0:373:9526:ff08 with SMTP id
+ w15-20020a02cf8f000000b003739526ff08mr17889965jar.298.1667416135468; 
+ Wed, 02 Nov 2022 12:08:55 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- b3-20020a923403000000b00300d658f4b6sm179259ila.19.2022.11.02.12.06.41
+ x12-20020a026f0c000000b00374da9c6e37sm5209735jab.123.2022.11.02.12.08.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 12:06:41 -0700 (PDT)
+ Wed, 02 Nov 2022 12:08:54 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 13:06:40 -0600
-Message-Id: <20221102190640.2855482-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 13:08:53 -0600
+Message-Id: <20221102190853.3023422-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0lV6Z+2IRAT65Yh1KrAtbJniqZ6h4QQ3Dxp/wdLh68M=;
- b=bKWzHU+IirFq+b2dJru+33AuU89+Gc/mSj4y88CtqRSy9mQENb6W2ULePDlTTnB9Pi
- pUaYUaCBIkD9oPVnoTSt156uqA+V/dUmDwTs9sxkR92u3OLPYWY+C3EnFbPhaJ+av+Tc
- NZi4pyKctNpTOZwpR1OQBY0RLJudnJQbllbhdLURAtAMk8j0lmYn/M8Hk/1H1a1gWBct
- mp0+aiFeOvaxUE4ktAux93sKPxVZBlIAVBef2OJf2Cb2nU/G7C3ajrT/k6TVRgej1jNM
- ExJeEiTUIdOGtte3aug3UpUbeGjlLe/SPIY9ev7ay2zxaBEg7MZ2CN/akRNWFW0YpUDT
- KUcg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=oiUqb02L7C4rkTcqCUCQJw/Te7mIe2V8nkGvI8T+Dgs=;
+ b=JoAyE8mWfpW+m+qPY0bck54fBC5btE+5MScq43CWfbRKRlRZGg6TsJyAj/Ar2skEEX
+ rq97hY7oB56X+TLPO8OiLV7rVX908zJdUWrgvllYqYUNOtXOeqkPX+JvMWkQi0bdyq2D
+ sOa+PzxV/dKJGw7ww2jMLsvmZY5YnKdyJrgyB+vWeKMDmkB1+jmoV7ShmHYO7ZLK7OF/
+ q9BC7o4x8DrE0sWYgaJkxRTnMFopfJvFgahO+TRt4RQvXamwu1GDuc8eDW9QCE70tjLO
+ LtwuzOFwut/lqL6l/86mb2GzsgXrXkJ1jNYrauceLym1+WGaTVBvVedxuuMciOHA33nF
+ QXPQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bKWzHU+I
-Subject: [Buildroot] [PATCH 1/1] package/python-channels: bump to version
- 4.0.0
+ header.a=rsa-sha256 header.s=20210112 header.b=JoAyE8mW
+Subject: [Buildroot] [PATCH 1/1] package/python-channels-redis: bump to
+ version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-channels/python-channels.hash | 4 ++--
- package/python-channels/python-channels.mk   | 4 ++--
+ package/python-channels-redis/python-channels-redis.hash | 4 ++--
+ package/python-channels-redis/python-channels-redis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-channels/python-channels.hash b/package/python-channels/python-channels.hash
-index 2d0097da2b..ea643f1589 100644
---- a/package/python-channels/python-channels.hash
-+++ b/package/python-channels/python-channels.hash
+diff --git a/package/python-channels-redis/python-channels-redis.hash b/package/python-channels-redis/python-channels-redis.hash
+index 5c98953fa1..eaab5814a6 100644
+--- a/package/python-channels-redis/python-channels-redis.hash
++++ b/package/python-channels-redis/python-channels-redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/channels/json
--md5  6f3fb75828b681a69372934a09ac3f32  channels-2.3.1.tar.gz
--sha256  6b8ebd93fe0041a23e31c9f4130d92fadb9c0040c0eb377a004540631325a31d  channels-2.3.1.tar.gz
-+md5  b145f0623bf1bad8ceb534c306ad2f2a  channels-4.0.0.tar.gz
-+sha256  0ce53507a7da7b148eaa454526e0e05f7da5e5d1c23440e4886cf146981d8420  channels-4.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/channels-redis/json
+-md5  9ec9ffd467e181906f257d6c0dbabf45  channels_redis-2.4.1.tar.gz
+-sha256  ddfa0c067085fdce24fb80d9c0b848638cbdbf0e1167f14eb2e99d635ad216e6  channels_redis-2.4.1.tar.gz
++md5  82898cb3b50bb19e8484b80b4d940910  channels_redis-4.0.0.tar.gz
++sha256  122414f29f525f7b9e0c9d59cdcfc4dc1b0eecba16fbb6a1c23f1d9b58f49dcb  channels_redis-4.0.0.tar.gz
  # Locally computed sha256 checksums
  sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-channels/python-channels.mk b/package/python-channels/python-channels.mk
-index c0eca71aa2..40f17cb114 100644
---- a/package/python-channels/python-channels.mk
-+++ b/package/python-channels/python-channels.mk
+diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
+index c2c6f59c3c..727f403aaf 100644
+--- a/package/python-channels-redis/python-channels-redis.mk
++++ b/package/python-channels-redis/python-channels-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHANNELS_VERSION = 2.3.1
-+PYTHON_CHANNELS_VERSION = 4.0.0
- PYTHON_CHANNELS_SOURCE = channels-$(PYTHON_CHANNELS_VERSION).tar.gz
--PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/75/53/2db9662a52dcedb02a25f87d8efc5e630059967790e4c10887dbd2db2073
-+PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/8e/cb/6fedd9df5972b893a04c8e5d7748873d6480a813e74b0797945bee1f4282
- PYTHON_CHANNELS_SETUP_TYPE = setuptools
- PYTHON_CHANNELS_LICENSE = BSD-3-Clause
- PYTHON_CHANNELS_LICENSE_FILES = LICENSE
+-PYTHON_CHANNELS_REDIS_VERSION = 2.4.1
++PYTHON_CHANNELS_REDIS_VERSION = 4.0.0
+ PYTHON_CHANNELS_REDIS_SOURCE = channels_redis-$(PYTHON_CHANNELS_REDIS_VERSION).tar.gz
+-PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/87/a9/8d11c32ae6bf3a2cc893185f7d1e03b80bda680131a08473c07ed1fe591d
++PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/8a/8d/bf96c62e3ca6c5ae59eb3482804afbe026c1c98b05b3ab65a0d46663644a
+ PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
