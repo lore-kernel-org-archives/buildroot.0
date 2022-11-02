@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E059C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 979FEC433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3BA681E84;
-	Wed,  2 Nov 2022 22:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3BA681E84
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1p_uOcJWwXVJ; Wed,  2 Nov 2022 22:14:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0DF2817E4;
-	Wed,  2 Nov 2022 22:14:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0DF2817E4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 77C7E1BF471
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:14:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5183A416F2
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5183A416F2
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECFE541704;
+	Wed,  2 Nov 2022 22:17:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECFE541704
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dtmcsAgKHAt8 for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 22:14:26 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 78O-ySpEpdw8; Wed,  2 Nov 2022 22:17:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADF88416FF;
+	Wed,  2 Nov 2022 22:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADF88416FF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0388C1BF471
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:17:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CED334014B
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED334014B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZvFxw0ZeKpH9 for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 22:17:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0E78416EE
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A0E78416EE
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:14:25 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id bp15so30369881lfb.13
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 15:14:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA735408DC
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA735408DC
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:17:25 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id z3so16242518iof.3
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 15:17:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Oc++GipHj1DXcI/mSkCVvxXSaBDPrWL9tK1EgcOHWgs=;
- b=RA+F8jVLMbX0sCIuR1xs5aKE0qmSxDafgYYWDa3f8rUlXk3yHKQUjU2urHnEIzX7OR
- zH1zV4t/pl3ahn1LoFmC9Hq0P80MZwtYymJFiQt44URkfAEy4Asvn9UP2vxMLKymT00k
- I7RqMc4tzegCDDu69aHIHFk7VIfXemdck2clQ0EWxlcuqHJ0lB+NcG4UyV3ntPV+9BmA
- PpN1QAtwiKV8gsW+gMw+rKeUhPAN4K7MOv4MX1D7FC1hPFCQEyWu2msIZhSas3k03MlI
- fP9ytGobjzz/zR6W1rCQ017tiTuK81x3Aw4CusXIktr5TM3pyfKHLK8bucdz1zbw47up
- xQWQ==
-X-Gm-Message-State: ACrzQf24KUY49I8WJcK/Pn7AQ0MHhDrq7VtVs4LSkCfYj1OrsscViCbe
- S9Ip36EbSbQkouyW2peyo8gqEJzxItLyZrBdVLj46oRXdNc=
-X-Google-Smtp-Source: AMsMyM5XjsaCRjcpBQoxu1wyrVfmsBN3HwI5KrURNrM6wC2CRE0J2ENuimeojJbCrg05r6BAI/IX3ryLOWwDxMNaMDI=
-X-Received: by 2002:a05:6512:39c2:b0:4a2:500f:aed5 with SMTP id
- k2-20020a05651239c200b004a2500faed5mr11118035lfu.111.1667427263382; Wed, 02
- Nov 2022 15:14:23 -0700 (PDT)
+ bh=pLPXiq3XDmZt/H1uI4H3B844fMafVEvJoPBQBlDXI10=;
+ b=5udYQ7U4etdIDVyRiTF/HQ9QCw7JnEnwtau0Dcsmtn0aAFgDmtayol/NCIcQSpDGsD
+ UAB7gqLZricFenPh7bVw62u6+UN0uGd6lNGTyTjxm1X+BaSXMXkt+bcyELKTPqe07GYj
+ jN8PB9LPFSeAvEhe5HkCH8U8EZHFzDy5vG+13ryWe2FCpR6dBP2NOZ59r8cgSznHpe9q
+ 4Atiys/BJ84OuTb7PD8e7KVO5iOATHWt/5l7/cNsH+trWHj39Rj3gJ9dque9g9d4AcXg
+ BpyA8i4k8erMpjCrqV4iWONv4udqocJSC/2/QqumbUcdOdKFVBMiWW+4OyTL+oc3vm06
+ eGgA==
+X-Gm-Message-State: ACrzQf1fj07kDLVZmJdZcihS+15Nv6fnoMUeIj3k/val8OlRsk/x4ban
+ +bJmbSW7oE8lhX1ZLi5aKjWvMGipKSnpkQ==
+X-Google-Smtp-Source: AMsMyM5jWnpSVZ5RuPLoNbWMXyeeGMjwz4HifDMFc1JjuY79M7iWwhTPpl1T9E876pgVGmI0j4ivNg==
+X-Received: by 2002:a02:6d15:0:b0:375:3523:b643 with SMTP id
+ m21-20020a026d15000000b003753523b643mr18257197jac.144.1667427444580; 
+ Wed, 02 Nov 2022 15:17:24 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ m8-20020a924a08000000b002f9a7dc2e1fsm4895337ilf.53.2022.11.02.15.17.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Nov 2022 15:17:24 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  2 Nov 2022 16:17:22 -0600
+Message-Id: <20221102221722.2501784-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221102123500.311904-1-fontaine.fabrice@gmail.com>
- <20221102210216.4ae702df@windsurf>
-In-Reply-To: <20221102210216.4ae702df@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 2 Nov 2022 23:14:12 +0100
-Message-ID: <CAPi7W82QQef1ZhM+oB9GKQP8HiRF0ubMTrp2UCchOmLjVWTRmw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=Oc++GipHj1DXcI/mSkCVvxXSaBDPrWL9tK1EgcOHWgs=;
- b=PdhESENHFO0ClandO5Ifqe14EiWwe9NZV3anPfrihsM0Ph95u3PVWZpbtpplgd77KJ
- 5hD2xz7be6hI5LVOceoSM0S/v9Qkoia8FH1L6GOaACimDpILseASYMsWF5gDgnlCtVLD
- 7/5JIJN/4UM9vQhzv5tBfh5YXpiqiYYt7YjQpR8zhRsdWT35kyL06a8E4Fqo75PLzRIh
- gS9kBzN4kzyu4L6Ztn8FDJ5g4jQ7axybuNt0qLeuvvFtpR9iL/lM1mGE1tJmq6xRiAdG
- 6EwRtS9113r25VL3PtFIt0yGBrdztHOY46O/UuMei+Gn3CPqdA8qN9q/jrMXRQ6L/ziU
- Im7A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=pLPXiq3XDmZt/H1uI4H3B844fMafVEvJoPBQBlDXI10=;
+ b=PzTLSE7gEeNlnGapO99jwFbk4PlPd2tbMMOoeZRsb6UjlT5uASsYkNIJxPoS/lOGjZ
+ FIiFDtcal/7xHtuZf8IxxlLdXEE5IiwN9nunoP7JNS+1TZxWZ9EAiKNh3GwbjdCI0z1z
+ qSBwcD9/bGMbqQqz87plAtS3DQDNppVHay9SUr1WIzSpvYcy4xYMZoPFk5LMsadbIkPR
+ OnFj2UMc/QXiM1VzK0+r4B3RLwvPVw3PfPeCOnq/TpxzrEyH5uIfkA1AGNe5kmPXbjx3
+ SgIzd3hxLaCmhl395X9NOhKn5EcFIKHWLVxUWK2skAI6uq6c1rlK0tPm10t1+ALrdS3T
+ 0RPg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PdhESENH
-Subject: Re: [Buildroot] [PATCH 1/1] package/numactl: link with -latomic if
- needed
+ header.a=rsa-sha256 header.s=20210112 header.b=PzTLSE7g
+Subject: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
+ 8.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,149 +94,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1125058857080151664=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1125058857080151664==
-Content-Type: multipart/alternative; boundary="000000000000b9086705ec84292c"
+Drop patch which is no longer needed.
 
---000000000000b9086705ec84292c
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Migrate from distutils to setuptools infrastructure.
 
-Le mer. 2 nov. 2022 =C3=A0 21:02, Thomas Petazzoni <thomas.petazzoni@bootli=
-n.com>
-a =C3=A9crit :
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../0001-set-correct-python-executable-path.patch | 15 ---------------
+ package/python-ipython/python-ipython.hash        |  4 ++--
+ package/python-ipython/python-ipython.mk          |  6 +++---
+ 3 files changed, 5 insertions(+), 20 deletions(-)
+ delete mode 100644 package/python-ipython/0001-set-correct-python-executable-path.patch
 
-> On Wed,  2 Nov 2022 13:35:00 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Fix the following build failure raised since bump to version 2.0.16 in
-> > commit e9bc980d93a189a16e7320bd254b906c87ca9f87:
-> >
-> >
-> /nvmedata/autobuild/instance-7/output-1/per-package/numactl/host/bin/../l=
-ib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linu=
-x-uclibc/bin/ld:
-> ./.libs/libnuma.a(libnuma.o): in function `numa_police_memory':
-> > libnuma.c:(.text+0xe28): undefined reference to `__atomic_fetch_and_1'
-> >
-> > Fixes:
-> >  -
-> http://autobuild.buildroot.org/results/a92c1c60518d3fe08f3f808f9cc812031e=
-85a4e9
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...01-link-with-latomic-if-needed-again.patch | 41 +++++++++++++++++++
-> >  package/numactl/numactl.mk                    |  2 +
-> >  2 files changed, 43 insertions(+)
-> >  create mode 100644
-> package/numactl/0001-link-with-latomic-if-needed-again.patch
->
-> Also related to numactl and libatomic, we also have this pending patch:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20221024174911.75444=
--1-abrodkin@synopsys.com/
-> ,
-> which still seems weird to me.
->
-
-This weird patch tries to handle a very specific case where LD_LIBRARY_PATH
-points to a self-build toolchain. I think this is out of scope of buildroot
-but I'll let you confirm.
-Otherwise, it should be noted that upstream merged my patch.
-
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
-Best Regards,
-
-Fabrice
-
---000000000000b9086705ec84292c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 2 nov. 2022 =C3=A0=C2=A0=
-21:02, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com"=
->thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px=
- solid rgb(204,204,204);padding-left:1ex">On Wed,=C2=A0 2 Nov 2022 13:35:00=
- +0100<br>
-Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
-=3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; Fix the following build failure raised since bump to version 2.0.16 in=
-<br>
-&gt; commit e9bc980d93a189a16e7320bd254b906c87ca9f87:<br>
-&gt; <br>
-&gt; /nvmedata/autobuild/instance-7/output-1/per-package/numactl/host/bin/.=
-./lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-l=
-inux-uclibc/bin/ld: ./.libs/libnuma.a(libnuma.o): in function `numa_police_=
-memory&#39;:<br>
-&gt; libnuma.c:(.text+0xe28): undefined reference to `__atomic_fetch_and_1&=
-#39;<br>
-&gt; <br>
-&gt; Fixes:<br>
-&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/a92c1c60518d=
-3fe08f3f808f9cc812031e85a4e9" rel=3D"noreferrer" target=3D"_blank">http://a=
-utobuild.buildroot.org/results/a92c1c60518d3fe08f3f808f9cc812031e85a4e9</a>=
-<br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 ...01-link-with-latomic-if-needed-again.patch | 41 +++++++++++++=
-++++++<br>
-&gt;=C2=A0 package/numactl/<a href=3D"http://numactl.mk" rel=3D"noreferrer"=
- target=3D"_blank">numactl.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 +<br>
-&gt;=C2=A0 2 files changed, 43 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 package/numactl/0001-link-with-latomic-if-nee=
-ded-again.patch<br>
-<br>
-Also related to numactl and libatomic, we also have this pending patch:<br>
-<a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20221024174=
-911.75444-1-abrodkin@synopsys.com/" rel=3D"noreferrer" target=3D"_blank">ht=
-tps://patchwork.ozlabs.org/project/buildroot/patch/20221024174911.75444-1-a=
-brodkin@synopsys.com/</a>,<br>
-which still seems weird to me.<br></blockquote><div><br></div><div>This wei=
-rd patch tries to handle a very specific case where LD_LIBRARY_PATH points =
-to a self-build toolchain. I think this is out of scope of buildroot but I&=
-#39;ll let you confirm.</div><div>Otherwise, it should be noted that upstre=
-am merged my patch.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_qu=
-ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
-4);padding-left:1ex">
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, CTO, Bootlin<br>
-Embedded Linux and Kernel engineering<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br></blockquote><div><br></div><div>Best Regards,</div><d=
-iv><br></div><div>Fabrice <br></div></div></div>
-
---000000000000b9086705ec84292c--
-
---===============1125058857080151664==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-ipython/0001-set-correct-python-executable-path.patch b/package/python-ipython/0001-set-correct-python-executable-path.patch
+deleted file mode 100644
+index 0fbd5a1c8e..0000000000
+--- a/package/python-ipython/0001-set-correct-python-executable-path.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Set correct Python executable path
+-
+-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+-
+---- python-ipython-2.1.0/setupbase.py	2014-05-21 15:19:12.000000000 -0400
+-+++ python-ipython-2.1.0-new/setupbase.py	2014-07-23 23:34:32.892030423 -0400
+-@@ -394,7 +394,7 @@ class build_scripts_entrypt(build_script
+- 
+-             mod, func = entrypt.split(':')
+-             with open(outfile, 'w') as f:
+--                f.write(script_src.format(executable=sys.executable,
+-+                f.write(script_src.format(executable='/usr/bin/env python',
+-                                           mod=mod, func=func))
+- 
+-         return outfiles, outfiles
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index cd18c3d125..e61727e045 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5  6907b67691ba697173a3befb2c35f7ac  ipython-7.31.1.tar.gz
+-sha256  b5548ec5329a4bcf054a5deed5099b0f9622eb9ea51aaa7104d215fece201d8c  ipython-7.31.1.tar.gz
++md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
++sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
+ sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 389ebfa897..f3aac75db1 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IPYTHON_VERSION = 7.31.1
++PYTHON_IPYTHON_VERSION = 8.6.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/fb/39/c1947dc1bb993a35469ca474535cb3214c91f5f9a7752a1fcbd9b6b37dde
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+ PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
+-PYTHON_IPYTHON_SETUP_TYPE = distutils
++PYTHON_IPYTHON_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1125058857080151664==--
