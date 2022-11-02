@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F57C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F0D0C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63CD060E64;
-	Wed,  2 Nov 2022 19:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63CD060E64
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30B18403A9;
+	Wed,  2 Nov 2022 19:24:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30B18403A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9mMq_iThkbeR; Wed,  2 Nov 2022 19:18:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QCRfD7dzHnVa; Wed,  2 Nov 2022 19:24:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80D7460B74;
-	Wed,  2 Nov 2022 19:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80D7460B74
+	by smtp2.osuosl.org (Postfix) with ESMTP id 62DF94014E;
+	Wed,  2 Nov 2022 19:24:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62DF94014E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 34E781BF3E1
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:18:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 142F51BF3E1
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F1264168B
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F1264168B
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0013409A5
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:24:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0013409A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WjxvRchlT6Ez for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 19:18:14 +0000 (UTC)
+ with ESMTP id qIh8XJOgkHZs for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 19:24:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4AF841682
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D4AF841682
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:18:13 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id r81so7171597iod.2
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:18:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D663940977
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D663940977
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:24:29 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id e189so5066808iof.1
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:24:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=BS0p4JvlWON1HroyAz2yj7+kjpiK6Of1xffS2W3hujU=;
- b=jP+3tTOMEHcHBaJuhTqpi6aUKL1qdt7BVYnWUgTpHmpmy2OB3R1fTR1BZquUVZ8LnE
- jT0n8b9DdE+DJm5HRxaA5kJcktThFVmc3LDVokgjUiD8FdQUZtZe40MBhkOKwunHQzjI
- 0MJTfqpWyxLoSOkGBckmUQb/upeUSO2PTEFJMLachnzxCrCr5N9mvrIAZ7SnJctjtcvt
- ZxLWXyYn+MsLi/86PXbYaWuCG3t3DVDjLNyofRupnocannT/VEMA++94uNb/hmFKcdaB
- Cgn7xFEvjl2GRHNEBJU9pk3YybIW30Hlr7++kFWHQQIgAQRJiItZP92cTtEurcKK2mN9
- F7jA==
-X-Gm-Message-State: ACrzQf0ZLfDF0XZcxr99y2WOWkZ9PUNnEfvsZeLRoGj+XzDsxcTK7h/a
- w/71JDEseWK/PoRvr0utNV8+3Up6lcAivw==
-X-Google-Smtp-Source: AMsMyM6Oj00c6Kx9UQdMpj5i7HhU6Wl85Ia5VObQ4louftJ+9lXcIZ2tPo4JZROl/j73vsW5ae0kRQ==
-X-Received: by 2002:a02:94cf:0:b0:363:4a26:8cff with SMTP id
- x73-20020a0294cf000000b003634a268cffmr16993946jah.286.1667416692597; 
- Wed, 02 Nov 2022 12:18:12 -0700 (PDT)
+ bh=sfhBlak4TSaVu3tAOrtxCTmWLBk/mH9jR9dQxUCCfY0=;
+ b=cR0w7CabsaAkVAL5g3g984NR8IKb37HosRbxCdIqNYLcKS0Y4To1idP/7xIaP1CKGV
+ lzlBQbaJTn7qlvGQJDbpHiw1kU1QQXmHPBV6KCiAgeIFvEXP7twlAmv6j+D4F3rNiYJa
+ 2cqE16KQWyfrnfmUYeN8vhNbtFIQSWd3eKP8YckNo+BJK3GX0QdTyfjzsQz6lTjvsRxJ
+ RhjvqRXWsBbfpDfygqyOPN0GJw3tB/dYYZBhE0QmgwVSiMfk3bU4PNlHsgUyVvf08HJs
+ xUFnzRwddGmvJh9EQm3133RBFxURQF7ZF/Y7EMlBlWeUqUhS94SZ3xC3g+1jYsQliG6X
+ pyQw==
+X-Gm-Message-State: ACrzQf3I1yO1AOpgEMwzyls5nCsayM05UEG/iU/LjiSf3mLb+Lxe93qG
+ tksZLra98EaignhLnfEVzMDM7rv5YUrTGQ==
+X-Google-Smtp-Source: AMsMyM7w1nDbhXftio7hKIGC3vArBILZGnZZOkOXru6UKSYnvj8XD6JqHFQnzeq4clw2j4LelV1HPw==
+X-Received: by 2002:a02:cbcb:0:b0:375:60dd:79a5 with SMTP id
+ u11-20020a02cbcb000000b0037560dd79a5mr11053817jaq.150.1667417068445; 
+ Wed, 02 Nov 2022 12:24:28 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- t20-20020a02b194000000b003738c0a80b4sm5127715jah.144.2022.11.02.12.18.11
+ m2-20020a02a142000000b0036cc14af7adsm5157659jah.149.2022.11.02.12.24.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 12:18:12 -0700 (PDT)
+ Wed, 02 Nov 2022 12:24:27 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 13:18:10 -0600
-Message-Id: <20221102191810.3545899-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 13:24:25 -0600
+Message-Id: <20221102192425.3919394-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BS0p4JvlWON1HroyAz2yj7+kjpiK6Of1xffS2W3hujU=;
- b=e+5qVktRYvEpm2aCLgQUAIFieo05QT+9QdZ1iV6cdsnmDdP5VKKboCtOfiBjldJyLx
- ofxN3/tgD5sWkJqLP3RtEcA52tAdFgkdY1q8Ctb0BresneANBBfVZhlZ6XKpP7ZwsBMb
- LEUf7vrIjaE5xFQyK2u2ah2PtrazmrMHl0l2hCy9Swa+yePgVJFI3TXH/ek4Sd/EdKb6
- f9fse/SNn67cWM8XDdLVdLDstS28wot1RJxnE8+9P9FAHEgEqpWwqi1y8MRT54ns6hne
- XAP2P7b7HTtG4Iet+Id+b0HhkfCYr3raZgJVUc24uGLCtnfiwAFtSLqttRuEvRJ8Whb5
- q3fA==
+ bh=sfhBlak4TSaVu3tAOrtxCTmWLBk/mH9jR9dQxUCCfY0=;
+ b=myaZDx+2CVeCplscbQcpNrWzjGRaOoBOFKjgIr1tkP8oGg+9R8NG0Gz0PB//Xgvsx5
+ XKubjkzaufb9rDp8XQSLx8b0OuI81gv26saJagYufMpkEzuq9GM1pKENBHvTudCd8oaT
+ bi+rlU17dnJWcC2ZOHNWk/X+wco4uqXKKWbUqWI31Hn8DCAm4t5v0cHmRdpdeqAiVqmV
+ dx8K1ax36CwfMcXxRmzF3PQcYhb99QCfrB5G+XIhx6rH8p95NmHyHGsEM/00LTfQ0MZg
+ FlTaWy5CJmlc0koMVXvZMevL29tmsHsXge9kYGc5W2hhD7fk2V2ZeI3KQB/xgMjAbkSC
+ EbSg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=e+5qVktR
-Subject: [Buildroot] [PATCH 1/1] package/python-cherrypy: bump to version
- 18.8.0
+ header.a=rsa-sha256 header.s=20210112 header.b=myaZDx+2
+Subject: [Buildroot] [PATCH 1/1] package/python-colorama: bump to version
+ 0.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to url update:
-https://github.com/cherrypy/cherrypy/commit/07aec3c90326e537613e5a77584df201ac5fdb1a
+Migrate to hatchling pep517 build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cherrypy/python-cherrypy.hash | 9 +++++----
- package/python-cherrypy/python-cherrypy.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-colorama/python-colorama.hash | 4 ++--
+ package/python-colorama/python-colorama.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index 2e7a92d6f3..cd8f8756d8 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
--md5  e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
--sha256  6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
--sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
-+# md5, sha256 from https://pypi.org/pypi/cherrypy/json
-+md5  033c58bf3da497f283b039911d1c882b  CherryPy-18.8.0.tar.gz
-+sha256  9b48cfba8a2f16d5b6419cc657e6d51db005ba35c5e3824e4728bb03bbc7ef9b  CherryPy-18.8.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  45ade933c280ece37e3e01d3a91afeed9505746a456f72ad10b0897c49e65104  LICENSE.md
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 72b17bc876..9b6ad0e99a 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
+index e975a66363..aba1be3eba 100644
+--- a/package/python-colorama/python-colorama.hash
++++ b/package/python-colorama/python-colorama.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/colorama/json
+-md5  57b22f2597f63df051b69906fbf310cc  colorama-0.4.4.tar.gz
+-sha256  5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b  colorama-0.4.4.tar.gz
++md5  11fe1cbf8299798551ac88f824ea11c4  colorama-0.4.6.tar.gz
++sha256  08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44  colorama-0.4.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318  LICENSE.txt
+diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
+index d3d29a63e9..d633e00602 100644
+--- a/package/python-colorama/python-colorama.mk
++++ b/package/python-colorama/python-colorama.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_CHERRYPY_VERSION = 12.0.1
-+PYTHON_CHERRYPY_VERSION = 18.8.0
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
-+PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/60/ea/6c4d16b0cd1f4f64a478bac8a37d75a585e854afb5693ce80a9711efdc4a
- PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
- PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
- PYTHON_CHERRYPY_SETUP_TYPE = setuptools
+-PYTHON_COLORAMA_VERSION = 0.4.4
++PYTHON_COLORAMA_VERSION = 0.4.6
+ PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
+-PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/1f/bb/5d3246097ab77fa083a61bd8d3d527b7ae063c7d8e8671b1cf8c4ec10cbe
+-PYTHON_COLORAMA_SETUP_TYPE = setuptools
++PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4
++PYTHON_COLORAMA_SETUP_TYPE = pep517
+ PYTHON_COLORAMA_LICENSE = BSD-3-Clause
+ PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
++PYTHON_COLORAMA_DEPENDENCIES = host-python-hatchling
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
