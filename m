@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1563C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3133BC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DE98400D0;
-	Wed,  2 Nov 2022 22:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DE98400D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFFCF40B85;
+	Wed,  2 Nov 2022 22:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFFCF40B85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3uc5jqlbad1g; Wed,  2 Nov 2022 22:51:13 +0000 (UTC)
+	with ESMTP id 2gxhZOk12BV4; Wed,  2 Nov 2022 22:51:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABC2E408E5;
-	Wed,  2 Nov 2022 22:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABC2E408E5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B118C1BF471
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3BC640B7D;
+	Wed,  2 Nov 2022 22:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3BC640B7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BA0B81BF95F
  for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A007812D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95CA6408E5
  for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A007812D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95CA6408E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yTXNSkvZNP3W for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YYdJRiKwr5UT for <buildroot@lists.busybox.net>;
  Wed,  2 Nov 2022 22:51:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF6D781466
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA0B2400D0
  for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:51:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF6D781466
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA0B2400D0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE0AC87AA2; Wed,  2 Nov 2022 22:51:03 +0000 (UTC)
+ id B5B0087AF7; Wed,  2 Nov 2022 22:51:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 2 Nov 2022 23:50:45 +0100
+Date: Wed, 2 Nov 2022 23:50:00 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7c53e77a87e238e8b793059352dda0cd10f0668b
-X-Git-Newrev: 2ad7133517c8f2085c7a29e639afa20c5ad15d55
+X-Git-Oldrev: 9c545f74c598ca1e988fbb11338db152baf6142c
+X-Git-Newrev: 7c53e77a87e238e8b793059352dda0cd10f0668b
 X-Patchwork-Hint: ignore
-Message-Id: <20221102225103.BE0AC87AA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libosip2:
- security bump to version 5.3.1
+Message-Id: <20221102225103.B5B0087AF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/dhcp: security
+ bump to version 4.4.3-P1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ad7133517c8f2085c7a29e639afa20c5ad15d55
+commit: https://git.buildroot.net/buildroot/commit/?id=7c53e77a87e238e8b793059352dda0cd10f0668b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-41550: GNU oSIP v5.3.0 was discovered to contain an integer
-overflow via the component osip_body_parse_header.
+- Corrected a reference count leak that occurs when the server builds
+  responses to leasequery packets. Thanks to VictorV of Cyber Kunlun
+  Lab for reporting the issue.
+  [Gitlab #253]
+  CVE: CVE-2022-2928
+
+- Corrected a memory leak that occurs when unpacking a packet that has an
+  FQDN option (81) that contains a label with length greater than 63 bytes.
+  Thanks to VictorV of Cyber Kunlun Lab for reporting the issue.
+  [Gitlab #254]
+  CVE: CVE-2022-2929
+
+https://kb.isc.org/docs/cve-2022-2928
+https://kb.isc.org/docs/cve-2022-2929
+https://ftp.isc.org/isc/dhcp/4.4.3-P1/dhcp-4.4.3-P1-RELNOTES
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e6cede090f0ad129469d9cd621cdf74d578712d)
+(cherry picked from commit 99a570ee2b1368ca8b2be36c496bbe71224679ad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libosip2/libosip2.hash | 2 +-
- package/libosip2/libosip2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcp/dhcp.hash | 4 ++--
+ package/dhcp/dhcp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
-index 071ad7e61a..a563f0c4cd 100644
---- a/package/libosip2/libosip2.hash
-+++ b/package/libosip2/libosip2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  f4725916c22cf514969efb15c3c207233d64739383f7d42956038b78f6cae8c8  libosip2-5.3.0.tar.gz
-+sha256  fe82fe841608266ac15a5c1118216da00c554d5006e2875a8ac3752b1e6adc79  libosip2-5.3.1.tar.gz
- 
- # Hash for license file:
- sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 2f9b7a9242..618d98a85c 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
+diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
+index be03423db8..7dd80a7acc 100644
+--- a/package/dhcp/dhcp.hash
++++ b/package/dhcp/dhcp.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/dhcp/4.4.3/dhcp-4.4.3.tar.gz.sha256.asc
+-sha256  0e3ec6b4c2a05ec0148874bcd999a66d05518378d77421f607fb0bc9d0135818  dhcp-4.4.3.tar.gz
++# Verified from https://ftp.isc.org/isc/dhcp/4.4.3-P1/dhcp-4.4.3-P1.tar.gz.sha256.asc
++sha256  0ac416bb55997ca8632174fd10737fd61cdb8dba2752160a335775bc21dc73c7  dhcp-4.4.3-P1.tar.gz
+ # Locally calculated
+ sha256  45a39c430be0920cb9570f34b32d2378fe6048c034f2f3265b9326d64ada73df  LICENSE
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 981e34e551..c523c2ffd7 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSIP2_VERSION = 5.3.0
-+LIBOSIP2_VERSION = 5.3.1
- LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
- LIBOSIP2_INSTALL_STAGING = YES
- LIBOSIP2_LICENSE = LGPL-2.1+
+-DHCP_VERSION = 4.4.3
++DHCP_VERSION = 4.4.3-P1
+ DHCP_SITE = https://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = MPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
