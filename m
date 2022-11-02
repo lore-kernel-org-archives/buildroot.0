@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2AEBC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38AA2C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D8FF60F8D;
-	Wed,  2 Nov 2022 22:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D8FF60F8D
+	by smtp2.osuosl.org (Postfix) with ESMTP id D838C40AAB;
+	Wed,  2 Nov 2022 22:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D838C40AAB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qahxI_oPCUeC; Wed,  2 Nov 2022 22:47:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qjoFRyLN8r0P; Wed,  2 Nov 2022 22:47:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6646160E4C;
-	Wed,  2 Nov 2022 22:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6646160E4C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C9B271BF966
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1217340B30;
+	Wed,  2 Nov 2022 22:47:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1217340B30
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 106121BF471
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B26A541717
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2FFD81E50
  for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B26A541717
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2FFD81E50
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TqLj0bqKhulN for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y5vNSgh45T0u for <buildroot@lists.busybox.net>;
  Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B461340871
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA4BC81E86
  for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B461340871
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA4BC81E86
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1DE287AA7; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
+ id 98B1E87AA6; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 2 Nov 2022 19:58:39 +0100
+Date: Wed, 2 Nov 2022 19:57:24 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 27fdbc129b53e575a3bce9265ed287207ce4e848
-X-Git-Newrev: 9c545f74c598ca1e988fbb11338db152baf6142c
+X-Git-Oldrev: 9146f9a7dad3ef4cb8afc3e77aba3ec392e93ed2
+X-Git-Newrev: 27fdbc129b53e575a3bce9265ed287207ce4e848
 X-Patchwork-Hint: ignore
-Message-Id: <20221102224704.A1DE287AA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- boot/arm-trusted-firmware: don't enable SSP by default
+Message-Id: <20221102224704.98B1E87AA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ffmpeg: bump
+ version to 4.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c545f74c598ca1e988fbb11338db152baf6142c
+commit: https://git.buildroot.net/buildroot/commit/?id=27fdbc129b53e575a3bce9265ed287207ce4e848
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-SSP support requires support in ATF platform code. Not all platforms
-implement plat_get_stack_protector_canary() hook. The result is build
-failure:
+Changelog:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
 
-(.text.asm.update_stack_protector_canary+0x4): undefined reference to `plat_get_stack_protector_canary'
-
-Commit cf176128ec4 ("boot/arm-trusted-firmware: add SSP option")
-originally introduces this issue. But then commit ccac9a5bbbd
-("boot/arm-trusted-firmware: don't force ENABLE_STACK_PROTECTOR") hid
-the problem by effectively disabling SSP for all platforms. So only
-after commit 09acc7cbc91f5 ("boot/arm-trusted-firmware: fix SSP
-support") the issue showed up.
-
-Make SSP an opt-in for platform that actually provide the
-plat_get_stack_protector_canary() hook.
-
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: Dick Olsson <hi@senzilla.io>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f03ae604510bab7f7f7e516db96a6f880dd86688)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 529203635159f224a0de1a5f3a9fb11bbba46644)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index ad87909bbf..ee009ceb57 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -199,7 +199,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 8669a060d0..c9d7ea7c41 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  af419a7f88adbc56c758ab19b4c708afbcae15ef09606b82b855291f6a6faa93  ffmpeg-4.4.2.tar.xz
++sha256  6c5b6c195e61534766a0b5fe16acc919170c883362612816d0a1c7f4f947006e  ffmpeg-4.4.3.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index ced5ce598f..136e3e24ca 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
- 	bool "Build with SSP"
--	default y
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on !BR2_SSP_NONE
- 	help
+-FFMPEG_VERSION = 4.4.2
++FFMPEG_VERSION = 4.4.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
