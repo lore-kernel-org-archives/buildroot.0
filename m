@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38AA2C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 216A8C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D838C40AAB;
-	Wed,  2 Nov 2022 22:47:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D838C40AAB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C121B40B33;
+	Wed,  2 Nov 2022 22:48:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C121B40B33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qjoFRyLN8r0P; Wed,  2 Nov 2022 22:47:57 +0000 (UTC)
+	with ESMTP id t4Ya3A10L7uH; Wed,  2 Nov 2022 22:48:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1217340B30;
-	Wed,  2 Nov 2022 22:47:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1217340B30
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 106121BF471
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D42D740B30;
+	Wed,  2 Nov 2022 22:48:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D42D740B30
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02CC71BF471
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2FFD81E50
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2FFD81E50
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE83040AD5
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE83040AD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y5vNSgh45T0u for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kTj_sqawT1dC for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 22:48:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA4BC81E86
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA4BC81E86
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BBD1408E5
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BBD1408E5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98B1E87AA6; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
+ id 1C23987AD0; Wed,  2 Nov 2022 22:48:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 2 Nov 2022 19:57:24 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9146f9a7dad3ef4cb8afc3e77aba3ec392e93ed2
-X-Git-Newrev: 27fdbc129b53e575a3bce9265ed287207ce4e848
+Date: Wed, 2 Nov 2022 19:43:58 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 75d099fa674abb61c54376a39bcb055b78c34486
+X-Git-Newrev: 7a8d074cc1d2c1ffaa8fa28549aae86069a296bf
 X-Patchwork-Hint: ignore
-Message-Id: <20221102224704.98B1E87AA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ffmpeg: bump
- version to 4.4.3
+Message-Id: <20221102224807.1C23987AD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] boot/mv-ddr-marvell:
+ disable SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27fdbc129b53e575a3bce9265ed287207ce4e848
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7a8d074cc1d2c1ffaa8fa28549aae86069a296bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
+Add a patch to disable SSP. The toolchain enables SSP by default when
+one of BR2_SSP_ options is enabled. But ATF code for the Marvell
+platform does not provide the required low level routines. This leads to
+link time failure.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3101770000
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3134230006
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 529203635159f224a0de1a5f3a9fb11bbba46644)
+(cherry picked from commit 42d66f8fc6d4836dc08f0c75c93ce4ed35b13eee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Makefile-disable-stack-protection.patch   | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8669a060d0..c9d7ea7c41 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  af419a7f88adbc56c758ab19b4c708afbcae15ef09606b82b855291f6a6faa93  ffmpeg-4.4.2.tar.xz
-+sha256  6c5b6c195e61534766a0b5fe16acc919170c883362612816d0a1c7f4f947006e  ffmpeg-4.4.3.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ced5ce598f..136e3e24ca 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.4.2
-+FFMPEG_VERSION = 4.4.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+diff --git a/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
+new file mode 100644
+index 0000000000..62b1000727
+--- /dev/null
++++ b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
+@@ -0,0 +1,34 @@
++From 53e34e3bff26fcbb7cc14178fa9fc80e7a73d556 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 11 Oct 2022 16:34:44 +0300
++Subject: [PATCH] Makefile: disable stack protection
++
++The Buildroot toolchain might enable stack protection by default. That
++breaks linking because ATF does not provide the required __stack_chk
++routines.
++
++The mv-ddr-marvell Makefile provides no way to add custom CFLAGS. Patch
++Makefile to disable stack protection.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: not applicable; Buildroot specific
++---
++ Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile b/Makefile
++index 3f0dd89a7381..feae75cc16e4 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -331,6 +331,7 @@ OBJ_DIR ?= $(MV_DDR_ROOT)
++ CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
++ CFLAGS += -Wall -Werror -Os -ffreestanding -mlittle-endian -g -gdwarf-2 -nostdinc
++ CFLAGS += -march=armv8-a -fpie
+++CFLAGS += -fno-stack-protector
++ 
++ # PLATFORM is set in ble/ble.mk
++ ifneq ($(findstring a80x0,$(PLATFORM)),)
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
