@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CA1C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 20:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1AF9C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 20:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75B928177C;
-	Wed,  2 Nov 2022 20:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75B928177C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BDE881E90;
+	Wed,  2 Nov 2022 20:38:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BDE881E90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0IVjoi89mGmv; Wed,  2 Nov 2022 20:34:09 +0000 (UTC)
+	with ESMTP id i_YItY9srCU6; Wed,  2 Nov 2022 20:38:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96C31817AA;
-	Wed,  2 Nov 2022 20:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96C31817AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B0B21BF476
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:34:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91FB781E39;
+	Wed,  2 Nov 2022 20:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91FB781E39
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58C641BF476
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73F7160ABF
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73F7160ABF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40D9C409FC
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 20:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40D9C409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4RTot7BVJiAu for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 20:34:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FZrIx5SbUt6o for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 20:38:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFB1860A9E
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EFB1860A9E
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 20:34:05 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id 7so35040ilg.11
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 13:34:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23C6D409A5
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23C6D409A5
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 20:38:05 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id y6so13065772iof.9
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 13:38:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PRhOIQpWKnW0oCNixpeiq7n7hmka2FcCEkxfdegmMlY=;
- b=ByKVAK/ZrgyGO2nhUv73csMm4+XeuoC0Mnryjucd3DuwujC7J5KhrKX+KchfYhG3f6
- U67ICgqpSm0kIaKpuaS4Vvigh/tCzC7lOMKyDFWk+k0vEUGsokR190plkdOd/ZZrDx3t
- XIdZumCHb4J5PtogV5vckJryeSEjZp7gSDz7MJf1yOQgqLh1X6Kv+wlBhtKCWx/tNprS
- 1s4JFTFIURa7xHyabk0NcPfQKpZHw0xP8IqUL6baokwJbwo63tyT2MufDQ5HAmzEDzqh
- f2BqruoySxnfNzssXb52EUtb2eqfP4Q72TOb5KeCYC8itqM3S14qliITSYkxTQ7L05oV
- Ljzw==
-X-Gm-Message-State: ACrzQf2HiExJvn6eaKhKjlOKYs8V2nXkCShYJvSisq/yeVO7V7QdZee5
- tWqFvjFo3zRkFBxkp2hANAm9vqBrBP32jg==
-X-Google-Smtp-Source: AMsMyM5j07WE1MgdAf7DC7aFHMBLWkAANMXDe4DCVRAo69MW1p3P4lziHhHUEQjzEecBlUyKZUfhLw==
-X-Received: by 2002:a05:6e02:178d:b0:2ff:cbc4:ea46 with SMTP id
- y13-20020a056e02178d00b002ffcbc4ea46mr14752257ilu.157.1667421244718; 
- Wed, 02 Nov 2022 13:34:04 -0700 (PDT)
+ bh=mv6fIy90qGEvITPk6n1kzr3F/5y6/k/cFxfG9aEsxe4=;
+ b=IbHV1KEwCCmV45e9KJuClCi0RbEsi/4DU24rYgHOmnFdc5f//ODgjQC+ijY7a4AaqH
+ 13Qq9FfBkfPy59IWohn4ZzR/ZYjblzahWEVWTIeO9p/DWiD275JV/W/yx8KK+UssgSs/
+ prLqwWwYf9vka+ZKvtyBwL9NkABnC5PU9K420M+WukLa/4VY43UJN+SRf2i0qm6BMeEJ
+ xiVUb97q5fpTwuJYFyYJ7VDBXG7pHP9VGPJ01X2L8uYuPHmOd5+//yb/v+qbX2sKiz8k
+ iSd90az6gjGMABP1Y5CAPIHRDMT3DBeelZGLaNmBK5lGYB2qATFeCe+r21/torOvoSZo
+ J4NQ==
+X-Gm-Message-State: ACrzQf2YvXLv6QVWdG/Opda1XWFm8+Sysis87ef6n+8n+VpKThKjsh2R
+ XuwFj0/P40XJDkH14ABlLVp2mZAf25MZ4A==
+X-Google-Smtp-Source: AMsMyM7IT0vhw1dOK36GWAO7xuuZjRKi5mcVH/1/gJWti/JcJADPkMrJCE1AV7nju//wAe3RfAvWcQ==
+X-Received: by 2002:a02:8781:0:b0:375:3779:9061 with SMTP id
+ t1-20020a028781000000b0037537799061mr16490771jai.308.1667421483406; 
+ Wed, 02 Nov 2022 13:38:03 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- q16-20020a05663810d000b00363d6918540sm5112986jad.171.2022.11.02.13.34.03
+ b15-20020a92dccf000000b002fadf9505b4sm4854297ilr.16.2022.11.02.13.38.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 13:34:04 -0700 (PDT)
+ Wed, 02 Nov 2022 13:38:02 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 14:34:02 -0600
-Message-Id: <20221102203402.3609657-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 14:37:52 -0600
+Message-Id: <20221102203752.4053123-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PRhOIQpWKnW0oCNixpeiq7n7hmka2FcCEkxfdegmMlY=;
- b=UQlrsMrFllC6OwFhQ2kv3BKipfHFR8OwH7atT7lBfFohT8Lq//QFecWF+jK9u0mp+f
- i+MOKskxmbLqDgjFTWxMrF/UGkAPrcEK1QTIZbCtptHeeyOBOyg4PZPAnhGLG/NXWqWl
- JRpkQvObUrf1zjwpIID7nyHvsUksrjWLx2DeTfcjjo5b5OwEdwx70XfhjM7k/Wvsbpn7
- oxYA9r2Dg6zh97Eh83lCuSXjDxxBEAlV3z6Ga1eitquFaDMXoDBIwfMNIZNVXZ7kdtdJ
- x1b+03RMSwC1OsZJAH3dxV9kbWuzrMKDXKF2VJrgCZgewy7PyHcnxho/OvIK+n13B4gg
- JKbg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=mv6fIy90qGEvITPk6n1kzr3F/5y6/k/cFxfG9aEsxe4=;
+ b=SQpmIMGLNA9xNkoNdwjvKDJ2NHFMHDuD4UvwknsdeGAjF3rE0MeVdMP2slsmc2EDye
+ KMx/3BxjYlt+69HazCRb171SZP4qxZ4PM+Wq0f84dVlZ3JNzg8LkeqPq6Ov6Lr6LsL4y
+ lzLXeuLOl9JX+KeCCDoFk5o2ZbdcBSMDmq/HtuvJaiKdsrDfhlm/UYODfsiwfLfRyvX2
+ 1G5O2gaIjsWrbpa1lojD9HJMC1IpQ4jw1P3V2I82uO4BpwZdCW5LcEkI8OV9GYVhEdkA
+ mDCvWw3Dr3G7wE/DiZBn2K4TvEMtM/Nk7vxi03evkXZLxEyHJRrwZPXtZF0L58M9fzjW
+ hRpQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UQlrsMrF
-Subject: [Buildroot] [PATCH 1/1] package/python-flask: bump to version 2.2.2
+ header.a=rsa-sha256 header.s=20210112 header.b=SQpmIMGL
+Subject: [Buildroot] [PATCH 1/1] package/python-flask-sqlalchemy: bump to
+ version 3.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lionel Flandrin <lionel@svkt.org>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,39 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-flask/python-flask.hash | 4 ++--
- package/python-flask/python-flask.mk   | 4 ++--
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash | 4 ++--
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 5f19a450a1..9b6391750a 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/flask/json
--md5  93f1832e5be704ef6ff2a4124579cd85  Flask-2.1.2.tar.gz
--sha256  315ded2ddf8a6281567edb27393010fe3406188bafbfe65a3339d5787d89e477  Flask-2.1.2.tar.gz
-+md5  c0d2276cb7d59a06d62c915da9c77ba6  Flask-2.2.2.tar.gz
-+sha256  642c450d19c4ad482f96729bd2a8f6d32554aa1e231f4f6b4e7e5264b16cca2b  Flask-2.2.2.tar.gz
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+index 4c2a701eb3..50ca14371d 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/flask-sqlalchemy/json
+-md5  dcb6b62248ced71dab183f2cb2778583  Flask-SQLAlchemy-2.5.1.tar.gz
+-sha256  2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912  Flask-SQLAlchemy-2.5.1.tar.gz
++md5  cbc5756b7e14683de1a540516159a81a  Flask-SQLAlchemy-3.0.2.tar.gz
++sha256  16199f5b3ddfb69e0df2f52ae4c76aedbfec823462349dabb21a1b2e0a2b65e9  Flask-SQLAlchemy-3.0.2.tar.gz
  # Locally computed sha256 checksums
  sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
- sha256  7535eac513edd12fb8e33f203c6a403549629e34b363418cdbd6c6ea5464515d  docs/license.rst
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index b684aff480..1b1ffdf034 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
+index b1d00ad6c0..ca6fd0c793 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 2.1.2
-+PYTHON_FLASK_VERSION = 2.2.2
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/d3/3c/94f38d4db919a9326a706ad56f05a7e6f0c8f7b7d93e2997cca54d3bc14b
-+PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/69/b6/53cfa30eed5aa7343daff36622843688ba8c6fe9829bb2b92e193ab1163f
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.rst docs/license.rst
+-PYTHON_FLASK_SQLALCHEMY_VERSION = 2.5.1
++PYTHON_FLASK_SQLALCHEMY_VERSION = 3.0.2
+ PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/35/f0/39dd2d8e7e5223f78a5206d7020dc0e16718a964acfb3564d89e9798ab9b
++PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/0b/b7/05a8f9c3f010775275f8dec53e40ff7ea1ae61bf1cfa4b524caf4d3da982
+ PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = LICENSE.rst
 -- 
 2.34.1
 
