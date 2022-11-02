@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01276C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07E44C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 22:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87DB341718;
-	Wed,  2 Nov 2022 22:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87DB341718
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ii1K5ukTvnVl; Wed,  2 Nov 2022 22:47:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F13941713;
-	Wed,  2 Nov 2022 22:47:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F13941713
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F0C61BF471
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67EAF408DC
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67EAF408DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7F2140A90;
+	Wed,  2 Nov 2022 22:47:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F2140A90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JrCZ-uiKNqpU for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X9FRRofdqIRv; Wed,  2 Nov 2022 22:47:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6443408DC;
+	Wed,  2 Nov 2022 22:47:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6443408DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AD0D71BF95F
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8922E81E90
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 22:47:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8922E81E90
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kHPhzuamSn2n for <buildroot@lists.busybox.net>;
  Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2D08400D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9304481E50
  for <buildroot@buildroot.org>; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2D08400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9304481E50
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E8B187AA5; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
+ id 7D8B787AA3; Wed,  2 Nov 2022 22:47:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 2 Nov 2022 19:45:24 +0100
+Date: Wed, 2 Nov 2022 19:42:48 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 416b70a4d74d526d092eb111e59d866b6329bb5e
-X-Git-Newrev: 9146f9a7dad3ef4cb8afc3e77aba3ec392e93ed2
+X-Git-Oldrev: 1adf0b06988b43752ed02a6b9ae308e0c09f88f5
+X-Git-Newrev: 416b70a4d74d526d092eb111e59d866b6329bb5e
 X-Patchwork-Hint: ignore
-Message-Id: <20221102224704.8E8B187AA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/mv-ddr-marvell:
- disable SSP
+Message-Id: <20221102224704.7D8B787AA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ boot/arm-trusted-firmware: fix SSP support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9146f9a7dad3ef4cb8afc3e77aba3ec392e93ed2
+commit: https://git.buildroot.net/buildroot/commit/?id=416b70a4d74d526d092eb111e59d866b6329bb5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Add a patch to disable SSP. The toolchain enables SSP by default when
-one of BR2_SSP_ options is enabled. But ATF code for the Marvell
-platform does not provide the required low level routines. This leads to
-link time failure.
+Commit ccac9a5bbbd ("boot/arm-trusted-firmware: don't force
+ENABLE_STACK_PROTECTOR") fixed a build failure but also effectively
+disabled SSP entirely for ATF. This is because ENABLE_STACK_PROTECTOR is
+set to 0 unconditionally in make_helpers/defaults.mk, overwriting any
+environment set value. So we must pass ENABLE_STACK_PROTECTOR in
+MAKE_OPTS for it to be effective. But to avoid said build failure we
+can't pass ENABLE_STACK_PROTECTOR=0.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3101770000
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3134230006
+Only pass ENABLE_STACK_PROTECTOR when
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is enabled. Drop SSP_LEVEL value for
+the !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP case which is now unused.
 
+Cc: Dick Olsson <hi@senzilla.io>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 42d66f8fc6d4836dc08f0c75c93ce4ed35b13eee)
+(cherry picked from commit 09acc7cbc91f50305730ca0690a58fb93529034b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Makefile-disable-stack-protection.patch   | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ boot/arm-trusted-firmware/Config.in               | 4 ----
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
-new file mode 100644
-index 0000000000..62b1000727
---- /dev/null
-+++ b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
-@@ -0,0 +1,34 @@
-+From 53e34e3bff26fcbb7cc14178fa9fc80e7a73d556 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 11 Oct 2022 16:34:44 +0300
-+Subject: [PATCH] Makefile: disable stack protection
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index b1fc03e10b..ad87909bbf 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -213,10 +213,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL
+ 	string
+-	# While newer versions of TF-A support "none" as
+-	# ENABLE_STACK_PROTECTOR value, older versions (e.g 2.0) only
+-	# supported "0" to disable SSP.
+-	default "0"    	  if !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
+ 	default "default" if BR2_SSP_REGULAR
+ 	default "strong"  if BR2_SSP_STRONG
+ 	default "all"     if BR2_SSP_ALL
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index c53fe20b10..f39a24128c 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -53,10 +53,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+ 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
++	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
++endif
 +
-+The Buildroot toolchain might enable stack protection by default. That
-+breaks linking because ATF does not provide the required __stack_chk
-+routines.
-+
-+The mv-ddr-marvell Makefile provides no way to add custom CFLAGS. Patch
-+Makefile to disable stack protection.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: not applicable; Buildroot specific
-+---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 3f0dd89a7381..feae75cc16e4 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -331,6 +331,7 @@ OBJ_DIR ?= $(MV_DDR_ROOT)
-+ CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
-+ CFLAGS += -Wall -Werror -Os -ffreestanding -mlittle-endian -g -gdwarf-2 -nostdinc
-+ CFLAGS += -march=armv8-a -fpie
-++CFLAGS += -fno-stack-protector
-+ 
-+ # PLATFORM is set in ble/ble.mk
-+ ifneq ($(findstring a80x0,$(PLATFORM)),)
-+-- 
-+2.35.1
-+
+ ARM_TRUSTED_FIRMWARE_MAKE_ENV += \
+ 	$(TARGET_MAKE_ENV) \
+-	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE") \
+-	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
++	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE")
+ 
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
