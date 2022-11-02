@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D240C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 18:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94983C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 18:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C780760F3D;
-	Wed,  2 Nov 2022 18:57:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C780760F3D
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2C8B416E2;
+	Wed,  2 Nov 2022 18:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2C8B416E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aDX6QoPtjDbb; Wed,  2 Nov 2022 18:57:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lc9mA64-3tKQ; Wed,  2 Nov 2022 18:58:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A43060E63;
-	Wed,  2 Nov 2022 18:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A43060E63
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9FFE416D4;
+	Wed,  2 Nov 2022 18:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9FFE416D4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 214501BF4DB
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 18:57:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E1AEA1BF4DB
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 18:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F10F560E64
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 18:57:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F10F560E64
+ by smtp3.osuosl.org (Postfix) with ESMTP id C795B60A7B
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 18:57:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C795B60A7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fyMZsHu41Mp5 for <buildroot@lists.busybox.net>;
+ with ESMTP id 3kW80b9YPYAb for <buildroot@lists.busybox.net>;
  Wed,  2 Nov 2022 18:57:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C723260A7B
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C723260A7B
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 18:57:42 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id p141so15804543iod.6
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 11:57:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDBDA60E63
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BDBDA60E63
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 18:57:43 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id d123so11070145iof.7
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 11:57:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OAD2MLiEEiqFngKyuYq3pRcgfhNOkyXzi9CC30n4z7c=;
- b=xAM062MJa8YG+g1/FSXJIrP0Vb0Ig4112DyzdrJKQ2LB/RcCVuEERJpacNl5Gr95Tg
- rzd0sZ/f84Y80fr5Yx9YpaerqagLltIe+2VxNjARVS1b6U1WtXIJT2E5WDKYNc6dzvV9
- 8pooSfDvB9KMuzMVwyfD2mhz8TPJYm4orWzlHUKk/wVj9qwMeVT1qxffFB2T8cX+Vq+6
- uGgnI/hWhD+fOL0VT9p1ysSukdJhXqX5STSJ8FtU/7uymQysj1jt3OkAgEwZhziT3GiG
- /4m7PAccbpokyfYXnC67xTWR4oYPlXX/IfqErNZJds3sxF4rNHnbf49ObtggfxYnjP5e
- SnlQ==
-X-Gm-Message-State: ACrzQf3AWX05QVigescjIhuR0fxgwP7mRTsTg4wY0QSn02yjAxRB400Z
- CK8M3Osxtpz9vFCDpRlNvNqltr5CkUiG6w==
-X-Google-Smtp-Source: AMsMyM4h6BnMd1ANQgnvqz4pyBo43umYLal9WoVe2rpxYh5lqNwvGCdvIHfVq9GfK0pLSr2svR7bgA==
-X-Received: by 2002:a05:6602:164f:b0:6d4:8783:8019 with SMTP id
- y15-20020a056602164f00b006d487838019mr3351364iow.77.1667415461413; 
- Wed, 02 Nov 2022 11:57:41 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=zK7a+P9xeEuQ+V5HPEyX1uoQb3C72/9BqGFPXaoN7Dg=;
+ b=dNPOPSTy5tstbgJZpSOWgN/wK0SKL6BbqeO7nGRz4xfJH/QeNmQhkCDK+8HZSAvjyg
+ ToOLmd1CINUsGgQM5+jt6uYDsBAd+HkN9AvGPew0f9carLdKasA3KgwTiFn+KAkaSRbe
+ jRU3MbNICYmQ3NyGJw2u0imauyC5jEWR2EPzQ+4KtbBbO8Zimr2qpDE81XU727aA7zmq
+ UkqGaCEwsouJpjkgKdpFlFWT7b76WoZgfgWr880Zuysd9FpqbzyBvLGLUMRHE1Q26Dzn
+ B3aFjQFqdbIGHayMCUHoy+uhMUPEHL57JlzwVACcMNXagANdeCWR5SNwSGkCDCyFQhL0
+ cJlA==
+X-Gm-Message-State: ACrzQf1oKL4E5nHdgwRdZBjyBpgrlKPTFHn4j1p1zRkkWyMGjEFglNSA
+ We2bn55YIPUgsfyptYRAgkyjDoKOmSdK1w==
+X-Google-Smtp-Source: AMsMyM67YBw3QVEqOOqIb9FTTANEGScI0K1Q0Yq95l8DQbGa0Y7hdkZjTfz3MjTvjdlHZoLhw3VHog==
+X-Received: by 2002:a6b:2ad5:0:b0:6c5:da79:4caf with SMTP id
+ q204-20020a6b2ad5000000b006c5da794cafmr17020043ioq.158.1667415462497; 
+ Wed, 02 Nov 2022 11:57:42 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- q30-20020a056638345e00b00349deda465asm5067753jav.39.2022.11.02.11.57.40
+ q30-20020a056638345e00b00349deda465asm5067753jav.39.2022.11.02.11.57.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 11:57:40 -0700 (PDT)
+ Wed, 02 Nov 2022 11:57:41 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 12:57:38 -0600
-Message-Id: <20221102185739.2346971-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 12:57:39 -0600
+Message-Id: <20221102185739.2346971-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221102185739.2346971-1-james.hilliard1@gmail.com>
+References: <20221102185739.2346971-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OAD2MLiEEiqFngKyuYq3pRcgfhNOkyXzi9CC30n4z7c=;
- b=EKebx8ZqVmQBQ66+kPD3sxSc7S8q677h+EWZ19wVXpwbNSzBMKUiA4+zR/89GQlTY4
- xbYDLpXQpfoKk3+fNWS1WEPF4P2X2NivTKqdJPnUGgHxYGk13FsyxARFXXeUHlrNNEs5
- 2y/xW7BOtHeOajcZFTRi2Pca6BFvvjeJW1FDxxXE722npxqFNxtPpo7ZCMIx5vAoACoY
- M+iMX9+1Ke4tZMbtN1SPVtH2DlJZ2oYS1Npdg2h6R1ElwsaDGKznrEndDDnFjI1aiKLI
- vGMdI4x2kkN8GwzI18xP7mx5VZW6VCTDXGx9JM72NmYOQtd7VWN8YGwBZsa9v9IB78mL
- VGRg==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=zK7a+P9xeEuQ+V5HPEyX1uoQb3C72/9BqGFPXaoN7Dg=;
+ b=LyJNY7On3FTNJaz6fnf1awwbHmiSCpLvDpAhqr60xfIjn3hT8eh4Yf0U3NIDOiAIDJ
+ mmrNGfvJqszD61VVMA/zY0vAnEW+Jv6s83JUHJylQ0A9RTfvpMm/AmJyQJwn9YPzM8Pt
+ S2pO86hjjzvIsihdNPBuxhXSQAzrTGaFKYUEe6VnvnsS4DI+dsai/zZnhKF7RPKbsFK6
+ df1dbE2d07Dg85bb/sZEcd/fANNd6T04znO6ByebpL2Oc8Q0FufvHNBAR9tQUGaUHHpC
+ tCqvCNwW4QC4zzsQLXgTDGYsHmbdrMra/zygmA2MnM3mfuw3MKz7YNwRakXHvdRZs/o3
+ 7rxA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EKebx8Zq
-Subject: [Buildroot] [PATCH 1/2] package/python-dbus-fast: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=LyJNY7On
+Subject: [Buildroot] [PATCH 2/2] package/python-bleak: bump to version 0.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,88 +105,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Replace python-dbus-next dependency with python-dbus-fast.
+
+Add new async-timeout dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-dbus-fast/Config.in             |  7 +++++++
- package/python-dbus-fast/python-dbus-fast.hash |  5 +++++
- package/python-dbus-fast/python-dbus-fast.mk   | 16 ++++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/python-dbus-fast/Config.in
- create mode 100644 package/python-dbus-fast/python-dbus-fast.hash
- create mode 100644 package/python-dbus-fast/python-dbus-fast.mk
+ package/python-bleak/Config.in         | 3 ++-
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7d27936992..4104a33f7f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1881,6 +1881,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/python-ansicolors/
- F:	package/python-bleak/
-+F:	package/python-dbus-fast/
- F:	package/python-dbus-next/
- F:	package/python-iniconfig/
- F:	package/python-intelhex/
-diff --git a/package/Config.in b/package/Config.in
-index 238d7813f0..db9e94f357 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1015,6 +1015,7 @@ menu "External python modules"
- 	source "package/python-daphne/Config.in"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
-+	source "package/python-dbus-fast/Config.in"
- 	source "package/python-dbus-next/Config.in"
- 	source "package/python-decorator/Config.in"
- 	source "package/python-defusedxml/Config.in"
-diff --git a/package/python-dbus-fast/Config.in b/package/python-dbus-fast/Config.in
-new file mode 100644
-index 0000000000..400e70bd7b
---- /dev/null
-+++ b/package/python-dbus-fast/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_DBUS_FAST
-+	bool "python-dbus-fast"
+diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
+index 085c16fae8..691450f86b 100644
+--- a/package/python-bleak/Config.in
++++ b/package/python-bleak/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_BLEAK
+ 	bool "python-bleak"
+-	select BR2_PACKAGE_PYTHON_DBUS_NEXT # runtime
 +	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-+	help
-+	  A faster version of dbus-next.
-+
-+	  https://github.com/bluetooth-devices/dbus-fast
-diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-new file mode 100644
-index 0000000000..f0dceeb43d
---- /dev/null
-+++ b/package/python-dbus-fast/python-dbus-fast.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dbus-fast/json
-+md5  eebf2c558dd1af0f8f32b361e91f2fa3  dbus_fast-1.61.1.tar.gz
-+sha256  bda4a7d559047b74f409eda278f68f610a418e86ad3efa0368fa2ed240daa6b6  dbus_fast-1.61.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-new file mode 100644
-index 0000000000..de7049ba22
---- /dev/null
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-dbus-fast
-+#
-+################################################################################
-+
-+PYTHON_DBUS_FAST_VERSION = 1.61.1
-+PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
-+PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/dd/f4/a280d46b119d59f6a3d84abf474452ae76651558b0963ab8c48ae13b5a44
-+PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
-+PYTHON_DBUS_FAST_LICENSE = MIT
-+PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
-+PYTHON_DBUS_FAST_ENV = REQUIRE_CYTHON=1
-+PYTHON_DBUS_FAST_DEPENDENCIES = host-python-cython
-+
-+$(eval $(python-package))
++	select BR2_PACKAGE_PYTHON_DBUS_FAST # runtime
+ 	help
+ 	  Bluetooth Low Energy platform Agnostic Klient.
+ 
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 5acac877c9..9a8310b11c 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  0c26b270358a782767012220fc595aa5  bleak-0.12.1.tar.gz
+-sha256  4a80a24cc944e52e856054639f298229c39a2fc720e5f7adbeebb117d10849ed  bleak-0.12.1.tar.gz
++md5  57564087d6e17ad1853109f530279b27  bleak-0.19.1.tar.gz
++sha256  dff7c7f281dcb6629d0d722209c79ec3aa2a6c33867cb5c1ea3d44b72ca155c0  bleak-0.19.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 3ae6d90311..00a4946ef6 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BLEAK_VERSION = 0.12.1
++PYTHON_BLEAK_VERSION = 0.19.1
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/67/4b/ba00c69a24a8d08c86f02caa45727a2ad2844c7bee9630ccb063be226f71
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/30/b9/60e1f455365e2340fe076cf7683f4e6d03db0b759d4f93fa45e68dc371e5
+ PYTHON_BLEAK_SETUP_TYPE = setuptools
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
