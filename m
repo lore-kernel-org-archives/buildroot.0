@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E05DC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD59C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  2 Nov 2022 19:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36BB6416F2;
-	Wed,  2 Nov 2022 19:01:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36BB6416F2
+	by smtp4.osuosl.org (Postfix) with ESMTP id E539F41676;
+	Wed,  2 Nov 2022 19:04:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E539F41676
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FWRwPzjt4NH7; Wed,  2 Nov 2022 19:01:54 +0000 (UTC)
+	with ESMTP id M78jReaOYf8N; Wed,  2 Nov 2022 19:04:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27BDA416E5;
-	Wed,  2 Nov 2022 19:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27BDA416E5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C97FF1BF4E7
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:01:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D22CC4163E;
+	Wed,  2 Nov 2022 19:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D22CC4163E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A46191BF4E7
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A551560E64
- for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:01:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A551560E64
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F2434163E
+ for <buildroot@lists.busybox.net>; Wed,  2 Nov 2022 19:04:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F2434163E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YF8bBiKWJMpb for <buildroot@lists.busybox.net>;
- Wed,  2 Nov 2022 19:01:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2bV1cj4iVa0f for <buildroot@lists.busybox.net>;
+ Wed,  2 Nov 2022 19:04:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85BC560758
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85BC560758
- for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:01:48 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id b2so913531iof.12
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:01:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E85341635
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com
+ [IPv6:2607:f8b0:4864:20::82e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E85341635
+ for <buildroot@buildroot.org>; Wed,  2 Nov 2022 19:04:03 +0000 (UTC)
+Received: by mail-qt1-x82e.google.com with SMTP id w4so1357779qts.0
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 12:04:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9I/d4W4HUG6E9RBQMFBI6Uc8FiKcxYR8Ms8iD4hXUmQ=;
- b=vW5FLtsjU+zrfCGis1TXTU0zDlurxvY0MAk9+OwPZhaCW95VRvn21ewdOiAH+n0R+I
- FgJdntTeA3QtrRDh7ovyg9fRTM4y0BFtkdVimtbRJA4mLvbZ4d3563Stx2ZTavTcqN3Q
- 85IPuJOzdAy0uVa3UfCQrzW0fih6h/+ErVnECBDY///JNP8ulCz6LhzBbB6m8oG2heD3
- RG9nnRiWgXVvadsGFhQP15Bqoj/X+i9Veb8X6aG8KoS0I6FFwE6XC8az7qrGeFUdkKc4
- UPHIHeMXLdaWk9iZudB8APgct6nVGT31I+T4Uv8D64xSFDz275HY8s/AbcifG9lAIR0j
- xrMw==
-X-Gm-Message-State: ACrzQf1dXz6nNDtIBrao0x1iA1kzWY6EFQazD+o2b7W/8Qxc7iGvfPGZ
- 43aCWXeVahMOR9RyeIefyjXDHQ1QPBgFbQ==
-X-Google-Smtp-Source: AMsMyM7rGDjeecp8rbJjjsOY49K/hamKA8SMFWInBpmuTkUGytG1pgw8JzVdpD1zPh1uRp4Ky/AKJA==
-X-Received: by 2002:a6b:5f0e:0:b0:6ca:4b22:ba30 with SMTP id
- t14-20020a6b5f0e000000b006ca4b22ba30mr16785715iob.51.1667415707049; 
- Wed, 02 Nov 2022 12:01:47 -0700 (PDT)
+ bh=RdUrD1P+8HCqJoVeR5+KOsiNI00DeH7Zp2bdF2HqwwE=;
+ b=tgwljcualkcYnrmv2cMyQ59S10eLK3//aW+dDhGG5vCAZhi7Mqzeslk3dPLKpCu2bO
+ 2Je6jjPhi/zQCKUDMQqat8EvEzdFH0vTfKaraNvaD5cU93FsZx0ewJJJHh9bjzvjerFd
+ LgRaZQ4EBqcUQcerEk6DB3wk/fdpw7qVR/O3c2Yy1QupHCrZ4aIlTBNeSprZwc6QHRoF
+ 100XWrU2VAFwpe5fiopjmkPJqt2LQgnNuFziyNvbnWXqtuMUnoVtk0SDTMslLS8wSOGB
+ J2ykvutHK4Qo6oxzH8blr9ruoImyf2vQHhvH17Qgdiffu9LrvBw/Q11tY/NFxaCNpZwq
+ m37A==
+X-Gm-Message-State: ACrzQf3StScNNGvEDygxps0q1UvgdiiHohj0LEldPcSLxiQng5J12u03
+ lYGMrxAQGJnpHQrg7RMwFx8jjlL4MozRwQ==
+X-Google-Smtp-Source: AMsMyM6DTdzR6qq5VzXiUlcgyvLn6gQEadmOCBoegi6IK/93bBIrXDTUQEFpL1ImJItYLEBjYRIB+g==
+X-Received: by 2002:a05:622a:100e:b0:39c:e7d2:21d0 with SMTP id
+ d14-20020a05622a100e00b0039ce7d221d0mr21059998qte.352.1667415841373; 
+ Wed, 02 Nov 2022 12:04:01 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- l14-20020a05663814ce00b0037108a00c73sm2563513jak.139.2022.11.02.12.01.46
+ q20-20020a05620a0d9400b006ec771d8f89sm8908163qkl.112.2022.11.02.12.04.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 12:01:46 -0700 (PDT)
+ Wed, 02 Nov 2022 12:04:00 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 13:01:44 -0600
-Message-Id: <20221102190144.2506841-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 13:03:58 -0600
+Message-Id: <20221102190358.2614738-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9I/d4W4HUG6E9RBQMFBI6Uc8FiKcxYR8Ms8iD4hXUmQ=;
- b=NC0oP5pjknu6ok77yuCAF4B9vDaOumqDILi+XmEJu+kNjspnwyJ0ALFG92naxIqaAQ
- EA1ZhbudoENLQ3DrYsCy2CtMzbzymBL5GPT9XCGwsNVSu6LBEEMpYevz7VgjgM/lBiZC
- PBu7Fq2UnNJIqkQTuabQJ2cKJ4+cltdtsap7PpzYhuMDtGwrSqvSWhNENcSq8yIpEH5A
- 0pKfEYiAE3KhIXcaQE+S78Hthaxm9Zi5M6jzmcH8SlSXyPm7ekt7Pyc409/cwLrk1eYI
- jG/fjYQVqHuRRFNP4+HDXPCPFBNAqBnPb0mLGzprqGUQuj+9V3zzFS/MZk/fKyYPhebu
- thKg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=RdUrD1P+8HCqJoVeR5+KOsiNI00DeH7Zp2bdF2HqwwE=;
+ b=hyn0YavsDhAdyGpB6+Kx34dW4yw0N8Te/COSEHyjoDPM5YUvv79dMBEnlEWssRdieR
+ HDX0knNlj7v7/yL3rDdmOZd8OGT95MTt565nL1JU4S7iyOIYY7inQl9umUYWrKG9A/kM
+ 1aRu5UAt+M845+3TfdaJwvc5I0njDaGvjXobgKrs8d/vCGwXxQ6fwafamDSh1U/Uu2o/
+ c384EJ5tkt/bjwWveIBOp2+9UH0mTGqsjPjuSeusLjvpV5kyVd/tg6UAexC7ddHQSdZK
+ zvwdHklwpQpxrZYMPEruNGjgQVaP7i/Ethj2nqgyn3kSJKWULd6yhcn4a34KM//bFPj3
+ Rs0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NC0oP5pj
-Subject: [Buildroot] [PATCH 1/1] package/python-boto3: bump to version 1.26.0
+ header.a=rsa-sha256 header.s=20210112 header.b=hyn0Yavs
+Subject: [Buildroot] [PATCH 1/1] package/python-botocore: bump to version
+ 1.29.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,38 +104,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-boto3/python-boto3.hash | 5 +++--
- package/python-boto3/python-boto3.mk   | 4 ++--
+ package/python-botocore/python-botocore.hash | 5 +++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
  2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 96c03be61c..347acde9b2 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index bb806fe251..72e64f521e 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
 @@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/boto3/json
--sha256  833e67edfb73f2cc22ff27a1c33728686dc90a9e81ba2551f9462ea2d1b04f41  boto3-1.24.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/boto3/json
-+md5  17f5f946d79da139fa9fd9b014fe0d99  boto3-1.26.0.tar.gz
-+sha256  8f0e4eb5c26f927c09bc03302d38156af578b816f1e4f8ca4f0f734d134b9d4f  boto3-1.26.0.tar.gz
+-# sha256 from https://pypi.org/pypi/botocore/json
+-sha256  db6667b8dfd175d16187653942cd91dd1f0cf36adc0ea9d7a0805ba4d2a3321f  botocore-1.27.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/botocore/json
++md5  fae1e9ad89e12436ef65b8208febdc3e  botocore-1.29.0.tar.gz
++sha256  f25dc0827005f81abf4b890a20c71f64ee40ea9e9795df38a242fdeed79e0a89  botocore-1.29.0.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index c5f9133573..03dc32a08b 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index 459eefeab1..9d2a94b39b 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTO3_VERSION = 1.24.8
-+PYTHON_BOTO3_VERSION = 1.26.0
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/60/3b/6fed306341003fd059f402d22747ba33d07b8ac8bfe53dbedb2c6e42ee3b
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/77/18/91af4ff58b26d03af8bf8e0759c4087b77032bdc54199d750905080c669a
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
+-PYTHON_BOTOCORE_VERSION = 1.27.8
++PYTHON_BOTOCORE_VERSION = 1.29.0
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/d1/b0/ea92703bbbf82353d571636fe6697b162c3881576986d6474119d03fce53
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/0a/95/8f31139077187f2da9132d7547979262376e19056d99c7cf6278431a53de
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
