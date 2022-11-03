@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D37EC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37464C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD7928177A;
-	Mon,  5 Dec 2022 11:44:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD7928177A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4zbQ8nQcK9BT; Mon,  5 Dec 2022 11:44:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FA658148A;
-	Mon,  5 Dec 2022 11:44:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FA658148A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 105331BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 541B241600
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 541B241600
+	by smtp4.osuosl.org (Postfix) with ESMTP id D106F40900;
+	Mon,  5 Dec 2022 11:44:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D106F40900
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8f-kkY4A4SwU for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PX1BPiqEEJPM; Mon,  5 Dec 2022 11:44:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4C2F402EF;
+	Mon,  5 Dec 2022 11:44:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4C2F402EF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A0201BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D4094057C
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D4094057C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S4wtaP8ZZW98 for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58C4741603
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58C4741603
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7715B40585
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7715B40585
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4ED6F85BA2; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+ id 746A085B9E; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:04:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 383f65fcdac581e06df5617203fcf4cbae5a9ee9
-X-Git-Newrev: 785566c29e65c043ce819315572c9244621e08c9
+X-Git-Oldrev: b10a60e0b67ab839926b12e1be05d281d9f6a9b4
+X-Git-Newrev: 0e6461c51f07e04cd42708843cf45583108f37ac
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112604.4ED6F85BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pygments: bump to version
- 2.13.0
+Message-Id: <20221205112603.746A085B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-networkmanager: bump to
+ version 2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=785566c29e65c043ce819315572c9244621e08c9
+commit: https://git.buildroot.net/buildroot/commit/?id=0e6461c51f07e04cd42708843cf45583108f37ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 License hash changed due to date update:
-https://github.com/pygments/pygments/commit/ab4afd821aa41403f7a0b1e714112c40b2ad843b
+https://github.com/seveas/python-networkmanager/commit/9acb5c9d90154a68ffadd144e9d72f1b56038649
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pygments/python-pygments.hash | 6 +++---
- package/python-pygments/python-pygments.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-networkmanager/python-networkmanager.hash | 10 +++++-----
+ package/python-networkmanager/python-networkmanager.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
-index 09b47b2bdc..610acb96d7 100644
---- a/package/python-pygments/python-pygments.hash
-+++ b/package/python-pygments/python-pygments.hash
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index 105949d50e..d4e21f1d82 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pygments/json
--md5  390a49fa0eb5486a795b2b54b9a7b666  Pygments-2.7.4.tar.gz
--sha256  df49d09b498e83c1a73128295860250b0b7edd4c723a32e9bc0d295c7c2ec337  Pygments-2.7.4.tar.gz
-+md5  6ccae578d28d18968b30a4711652fd9a  Pygments-2.13.0.tar.gz
-+sha256  56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1  Pygments-2.13.0.tar.gz
- # Locally computed sha256 checksums
--sha256  c012cf17a2ba79142977c8cc5bb1497a675401bf79c2c9b95a7604e2ddfde8b8  LICENSE
-+sha256  a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17  LICENSE
-diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
-index 781b16353b..c09350c42b 100644
---- a/package/python-pygments/python-pygments.mk
-+++ b/package/python-pygments/python-pygments.mk
-@@ -4,9 +4,9 @@
+-# md5 and sha256 from https://pypi.python.org/pypi/python-networkmanager/json
+-md5  f638d854a3639fb37c0e06d1092a771e  python-networkmanager-2.1.tar.gz
+-sha256  aef1e34d98d7bec7cc368e0ca0f2e97493f9b5ebe6d7103f8f6460cfca3dc6fc  python-networkmanager-2.1.tar.gz
+-# Locally computed
+-sha256  be40f44d54bb5e0f0eee28e957ad020a00a6e3adb0290262e92129eba1c044cf  COPYING
++# md5, sha256 from https://pypi.org/pypi/python-networkmanager/json
++md5  7e05d3ca40a4fa50222ba93cda3d0d02  python-networkmanager-2.2.tar.gz
++sha256  de6eb921d94aba7549f428ed2b3aa482a5d543ecb6965cbaa0fbb555ab31b9d5  python-networkmanager-2.2.tar.gz
++# Locally computed sha256 checksums
++sha256  d12bbc105c723d4471b39fe8197d43df822e5b4bda822a8255719d039e701f49  COPYING
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index de893f757a..785d2c0d3e 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYGMENTS_VERSION = 2.7.4
-+PYTHON_PYGMENTS_VERSION = 2.13.0
- PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
--PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/e1/86/8059180e8217299079d8719c6e23d674aadaba0b1939e25e0cc15dcf075b
-+PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/e0/ef/5905cd3642f2337d44143529c941cc3a02e5af16f0f65f81cbef7af452bb
- PYTHON_PYGMENTS_LICENSE = BSD-2-Clause
- PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
- PYTHON_PYGMENTS_CPE_ID_VENDOR = pygments
+-PYTHON_NETWORKMANAGER_VERSION = 2.1
+-PYTHON_NETWORKMANAGER_SITE = https://files.pythonhosted.org/packages/73/ec/2cc46290cedc99f59df3633d428dfa91d95946ca49af96fdb53514ee195f
++PYTHON_NETWORKMANAGER_VERSION = 2.2
++PYTHON_NETWORKMANAGER_SITE = https://files.pythonhosted.org/packages/f2/3d/0924d03117636b80a88af783f857fb101e4c47953a8bb0f733b964d50af4
+ PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
+ PYTHON_NETWORKMANAGER_LICENSE = Zlib
+ PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
