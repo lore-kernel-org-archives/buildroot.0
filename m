@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C77C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD70AC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:36:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0852081DE4;
-	Mon,  5 Dec 2022 11:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0852081DE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71F8D60C0A;
+	Mon,  5 Dec 2022 11:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71F8D60C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6fBPs0NYDo1m; Mon,  5 Dec 2022 11:36:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zLxE5hmPiEJm; Mon,  5 Dec 2022 11:36:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36EBC8132C;
-	Mon,  5 Dec 2022 11:36:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36EBC8132C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 329A61BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1AD960BC9;
+	Mon,  5 Dec 2022 11:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1AD960BC9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AB331BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 511CB40545
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F14F415E3
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 511CB40545
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F14F415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CNDcxQlF8CCr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yCJZrp10Ggst for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A054D4051B
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A054D4051B
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3EFF415FF
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3EFF415FF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BCD185B9E; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+ id 946D985BA3; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:45 +0100
+Date: Thu, 3 Nov 2022 21:04:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d680db0ba77dab0ab28734d2d596e44aafeb525c
-X-Git-Newrev: 8d6ae5dae91367b3bfd6e1ed441eb954966684f4
+X-Git-Oldrev: f0b9199cc4210fa5a5b51b84181c49d055a034b1
+X-Git-Newrev: f7851c8c2f4e35c3e5f3a99c48c6ca70817f741e
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112601.9BCD185B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-docutils: bump to version
- 0.19
+Message-Id: <20221205112602.946D985BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jaraco-classes: bump to
+ version 3.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d6ae5dae91367b3bfd6e1ed441eb954966684f4
+commit: https://git.buildroot.net/buildroot/commit/?id=f7851c8c2f4e35c3e5f3a99c48c6ca70817f741e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to url update:
-https://sourceforge.net/p/docutils/code/8959/
+License hash changed due to line wrapping:
+https://github.com/jaraco/jaraco.classes/commit/7558cfe2eb2f1ffe3676905e9871466cbc9da24f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-docutils/python-docutils.hash | 9 +++++----
- package/python-docutils/python-docutils.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-jaraco-classes/python-jaraco-classes.hash | 6 +++---
+ package/python-jaraco-classes/python-jaraco-classes.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
-index f5e0b82db8..6a36f362e9 100644
---- a/package/python-docutils/python-docutils.hash
-+++ b/package/python-docutils/python-docutils.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/docutils/json, sha256 locally computed
--md5  ca5827e2432fd58f4c8d74a6591135de  docutils-0.18.1.tar.gz
--sha256  679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06  docutils-0.18.1.tar.gz
--sha256  f20172170ef9aeebbf53adf5d8f7d309f7dc6068e9a3a1b52ea772305686739d  COPYING.txt
-+# md5, sha256 from https://pypi.org/pypi/docutils/json
-+md5  0afa992a6e93db892107c3f087d0d9df  docutils-0.19.tar.gz
-+sha256  33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6  docutils-0.19.tar.gz
-+# Locally computed sha256 checksums
-+sha256  16b78bd9994588326a871ac39f64480969ebeb57ecd46a31874744560e72390a  COPYING.txt
-diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
-index 39a570f5a1..d06521d10f 100644
---- a/package/python-docutils/python-docutils.mk
-+++ b/package/python-docutils/python-docutils.mk
+diff --git a/package/python-jaraco-classes/python-jaraco-classes.hash b/package/python-jaraco-classes/python-jaraco-classes.hash
+index 088ee2269e..0e170d58d1 100644
+--- a/package/python-jaraco-classes/python-jaraco-classes.hash
++++ b/package/python-jaraco-classes/python-jaraco-classes.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jaraco.classes/json
+-md5  63d4f5a2df2625ec3979c9633da1505e  jaraco.classes-2.0.tar.gz
+-sha256  dcc2c4a8ca4b344cdbf2e1be7124a5c4f192574cdbb453b62350ae8240a2caf5  jaraco.classes-2.0.tar.gz
++md5  a661acdae43995c08500324a8df62f03  jaraco.classes-3.2.3.tar.gz
++sha256  89559fa5c1d3c34eff6f631ad80bb21f378dbcbb35dd161fd2c6b93f5be2f98a  jaraco.classes-3.2.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
++sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
+index 7455ed4d44..4790516330 100644
+--- a/package/python-jaraco-classes/python-jaraco-classes.mk
++++ b/package/python-jaraco-classes/python-jaraco-classes.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DOCUTILS_VERSION = 0.18.1
-+PYTHON_DOCUTILS_VERSION = 0.19
- PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
--PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/57/b1/b880503681ea1b64df05106fc7e3c4e3801736cf63deffc6fa7fc5404cf5
-+PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/6b/5c/330ea8d383eb2ce973df34d1239b3b21e91cd8c865d21ff82902d952f91f
- PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, BSD-3-Clause, Python-2.0, GPL-3.0+ (emacs mode)
- PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
- PYTHON_DOCUTILS_SETUP_TYPE = setuptools
+-PYTHON_JARACO_CLASSES_VERSION = 2.0
++PYTHON_JARACO_CLASSES_VERSION = 3.2.3
+ PYTHON_JARACO_CLASSES_SOURCE = jaraco.classes-$(PYTHON_JARACO_CLASSES_VERSION).tar.gz
+-PYTHON_JARACO_CLASSES_SITE = https://files.pythonhosted.org/packages/6e/27/f6ce0863a6ce574922ffe70d63c40b9771aefb686cb595cf435d184f0ca3
++PYTHON_JARACO_CLASSES_SITE = https://files.pythonhosted.org/packages/bf/02/a956c9bfd2dfe60b30c065ed8e28df7fcf72b292b861dca97e951c145ef6
+ PYTHON_JARACO_CLASSES_LICENSE = MIT
+ PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
+ PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
