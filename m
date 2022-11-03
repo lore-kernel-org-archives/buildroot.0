@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E7CC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6944C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19D8C6104D;
-	Thu,  3 Nov 2022 19:30:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19D8C6104D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59F3D40B6D;
+	Thu,  3 Nov 2022 19:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59F3D40B6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1_mAXJK3nqcw; Thu,  3 Nov 2022 19:30:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2IXProh1xAEW; Thu,  3 Nov 2022 19:36:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F32596103B;
-	Thu,  3 Nov 2022 19:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F32596103B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 67EF41BF3C0
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:30:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1DB740B63;
+	Thu,  3 Nov 2022 19:36:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1DB740B63
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A46FA1BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EB9561034
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EB9561034
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CCC240B63
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:36:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CCC240B63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6lb1tdnXcBxX for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 19:30:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VoaiAIuUNnre for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 19:36:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C0D605D6
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9C0D605D6
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:30:07 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id h206so2194606iof.10
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:30:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3559840BB8
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3559840BB8
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:36:05 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id z3so2243152iof.3
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:36:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Z8pD7KIREBXwKP6N53nKSp3oc19iihqqNjQwwNWBfkw=;
- b=DgvulWHagS0pMjO9CRar3oJdEvdNThuM4xYQi2zOLid6K/yTCg7/SEgp5SmCvOU3Fv
- sOFcJSt833jPALLaNoFkWtSgGUh2DXTszguT9k0gvijteWwkepoOwx5xUmmTb0nWNHFi
- 5ZB21MZfxpfhZ0G54eAp8QMNEplkFIbB1gfeifIacETDzIz1/HdW6PSlxhykglNQptjQ
- kwFqeb9ioMw8DWrrzMehtbeb+ivHzxvywNH1U/T+UDDaluul0x2wCsSf8B/2AFEIl2ep
- U0Q3h0k+0LULdyDjv+b3Hi4EjnxlhPI1xKi+SZID/nsQB/gL0O9bgav6U1CWdhcwg1pT
- BWOg==
-X-Gm-Message-State: ACrzQf0aWolhEhX71oBD1PH5vQ2IFSoKFm8K1hZAOArqxqe1a1at7nNk
- u0fF7Lz/UWtqjsw8PnzlGL7KDZi2zGu3vlSE
-X-Google-Smtp-Source: AMsMyM7CFj+6jCDfSsTpys8bpNuXXznBoYwnPD9Ymga8AnTDbsgJ2IPpAhTZQFl1a+R7F017k5QiNA==
-X-Received: by 2002:a05:6638:e8a:b0:374:f6c5:cff6 with SMTP id
- p10-20020a0566380e8a00b00374f6c5cff6mr20228266jas.187.1667503806662; 
- Thu, 03 Nov 2022 12:30:06 -0700 (PDT)
+ bh=YNC49qifmObmj6eR0V1DYrQjBhlpcwkPjyRxteLfJng=;
+ b=qCmcW1XKa07XvZNYCfuE2ZI//mJs8KDYHAx6q07/cebhp2xGdtSy9QvtgkXhEFnkhA
+ 8MecTobj4l9SejBA0bKT8rfSUDBBjoQxNpUMSGtKcmDiB9YeKcTlxTnhJTI0SDvGEMoA
+ GgYrajalLz7MeDsaq1z2YGpKMa/P+Hh0YOcCmKGs7GhhiGelkqAeKxF+XkSU4CVLxW+j
+ CVlAvmvqFn4YQUuxHXUHfdtErQrq4N+qVmK5XIH1RB3vsYKUpQHZffmhpZ8FYDV4n/8F
+ QY1iLTY/ffFzAEg+l+8iv/RleF1mKxq1kCdSir3KfY7Lssk4VnGp3oBw+7KstTX9sgr8
+ XTrg==
+X-Gm-Message-State: ACrzQf0x91E9JzuQSgum4XcRdAtB8fYiAt+qjnbxubFZXOqvAn9NyWuX
+ cqwryHL0oBo7wEljdfo6PBBg1xwwPwCKgwNA
+X-Google-Smtp-Source: AMsMyM5S8BfbnKKVFW/uwwrD3w2cb7jEErSfj0+yHRT+O3cgWon8T10tWEyqujNW7OOfoR0Pt+M1Jw==
+X-Received: by 2002:a05:6638:470a:b0:374:17a5:cee6 with SMTP id
+ cs10-20020a056638470a00b0037417a5cee6mr19912652jab.161.1667504164015; 
+ Thu, 03 Nov 2022 12:36:04 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- r10-20020a02b10a000000b00374fa30a0d3sm475555jah.143.2022.11.03.12.30.05
+ p30-20020a02b01e000000b00370c2b787a9sm470864jah.168.2022.11.03.12.36.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 12:30:06 -0700 (PDT)
+ Thu, 03 Nov 2022 12:36:03 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 13:30:04 -0600
-Message-Id: <20221103193004.437008-1-james.hilliard1@gmail.com>
+Date: Thu,  3 Nov 2022 13:36:02 -0600
+Message-Id: <20221103193602.705984-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Z8pD7KIREBXwKP6N53nKSp3oc19iihqqNjQwwNWBfkw=;
- b=LxerWSVjelA3JtpaJgyYYXPiBeUe2niVB4fdzY16yG2a7s05l5OFvpLwOn3BCSo7uM
- PSA+f7peLpvXLQTuLvkIlZE3krEUe2RvoOvy8ZbWfjOakIvNQnb7Q6rVnfKjWqbyh+nC
- e7jjjoo4f8m3Lu3lVEH/wARRmuiHj9HgN8TgsHkUCoyMAd9ARRhlqupNBzmxe3Ss/o6/
- pgME6WXCWhWarKh2bKoQpbvI3FOQ/7gTixgDk0UoOwFdE7RWLatys0QXk2Xyyx5BpqZt
- +rBpwkqzTBLkBWiPe7jyPRO1QFbrgrME4rBbjg0KQylj8+R2gUuPAA3MRQmE6iA9ab72
- 2oGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=YNC49qifmObmj6eR0V1DYrQjBhlpcwkPjyRxteLfJng=;
+ b=Zhlx1K2WXCgDX5UzXWAHrKUU6JaJOSpmRFz6OL7XOF5QaBA7ERkKlXSvf4d5QHBCAF
+ UDuNcPLWzHQGnv5IF1a8i76hUBThSOzFMw3ccJYTT1P/pVl0d2fZcxjOkTLhqxwIHUpc
+ EHgKYS/CUsYNSLSmEw7X6inWgamLlO2f9sZqfWlR+YY7DgingvD3PmZT807NNPdK1axp
+ H5yI8gkp302zh2rnxpMCW+cVUASss8ju6b5NtdhTE6anXUAf9NW6xnzY6ZFp8hj8QRtg
+ tRIMyQBcn+d/mdECqWVA0+uK3+KulAKIdpqchMWjGRn+0UvljO/+PCU5niartU1yEQnD
+ v0ZA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LxerWSVj
-Subject: [Buildroot] [PATCH 1/1] package/python-socketio: bump to version
- 5.7.2
+ header.a=rsa-sha256 header.s=20210112 header.b=Zhlx1K2W
+Subject: [Buildroot] [PATCH 1/1] package/python-soupsieve: bump to version
+ 2.3.2.post1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,39 +100,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Migrate from setuptools to hatchling pep517 build backend.
+
+License hash changed due to date update:
+https://github.com/facelessuser/soupsieve/commit/9da2de87bd67308b933d794a46b349d8da74dac1
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-socketio/python-socketio.hash | 4 ++--
- package/python-socketio/python-socketio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-soupsieve/python-soupsieve.hash | 6 +++---
+ package/python-soupsieve/python-soupsieve.mk   | 7 ++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
-index 40e74cef96..abdcc3a5b7 100644
---- a/package/python-socketio/python-socketio.hash
-+++ b/package/python-socketio/python-socketio.hash
+diff --git a/package/python-soupsieve/python-soupsieve.hash b/package/python-soupsieve/python-soupsieve.hash
+index 699cb9581a..cf348d441f 100644
+--- a/package/python-soupsieve/python-soupsieve.hash
++++ b/package/python-soupsieve/python-soupsieve.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-socketio/json
--md5  0507825ca4bd6527cbaed81ec5767bfe  python-socketio-5.4.0.tar.gz
--sha256  ca807c9e1f168e96dea412d64dd834fb47c470d27fd83da0504aa4b248ba2544  python-socketio-5.4.0.tar.gz
-+md5  e63369252a9d383cbfc503337b864733  python-socketio-5.7.2.tar.gz
-+sha256  92395062d9db3c13d30e7cdedaa0e1330bba78505645db695415f9a3c628d097  python-socketio-5.7.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/soupsieve/json
+-md5  73ff6ce22ba973fe2d47197834e0f728  soupsieve-2.2.1.tar.gz
+-sha256  052774848f448cf19c7e959adf5566904d525f33a3f8b6ba6f6f8f26ec7de0cc  soupsieve-2.2.1.tar.gz
++md5  4c824620563604cbf783de149c8b8889  soupsieve-2.3.2.post1.tar.gz
++sha256  fc53893b3da2c33de295667a0e19f078c14bf86544af307354de5fcf12a3f30d  soupsieve-2.3.2.post1.tar.gz
  # Locally computed sha256 checksums
- sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index f23342b776..aecff55ef4 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
-@@ -4,8 +4,8 @@
+-sha256  e34a760fe8bb3e3c1ffaa88abe495cf76e56f8ae3c7a6dde0e4b41cd013c41d4  LICENSE.md
++sha256  bc66234cadd3f6e7aaf7160faf165f3f869ffc8a11b6b0d6c44a2e2a83314dd0  LICENSE.md
+diff --git a/package/python-soupsieve/python-soupsieve.mk b/package/python-soupsieve/python-soupsieve.mk
+index dd2ddebbb1..ebf2ada7ac 100644
+--- a/package/python-soupsieve/python-soupsieve.mk
++++ b/package/python-soupsieve/python-soupsieve.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_SOCKETIO_VERSION = 5.4.0
--PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/72/70/9b992f4b8adfcbf0724c079c18629d83f20b36fb0eb64d4fdf874054becf
-+PYTHON_SOCKETIO_VERSION = 5.7.2
-+PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ee/56/294629986bf6cea96e0edb3933a7f2fac7a079d12909e893903a2effc670
- PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+-PYTHON_SOUPSIEVE_VERSION = 2.2.1
++PYTHON_SOUPSIEVE_VERSION = 2.3.2.post1
+ PYTHON_SOUPSIEVE_SOURCE = soupsieve-$(PYTHON_SOUPSIEVE_VERSION).tar.gz
+-PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/c8/3f/e71d92e90771ac2d69986aa0e81cf0dfda6271e8483698f4847b861dd449
+-PYTHON_SOUPSIEVE_SETUP_TYPE = setuptools
++PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/f3/03/bac179d539362319b4779a00764e95f7542f4920084163db6b0fd4742d38
++PYTHON_SOUPSIEVE_SETUP_TYPE = pep517
+ PYTHON_SOUPSIEVE_LICENSE = MIT
+ PYTHON_SOUPSIEVE_LICENSE_FILES = LICENSE.md
++PYTHON_SOUPSIEVE_DEPENDENCIES = host-python-hatchling
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
