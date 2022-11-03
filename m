@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BE18C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC799C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:10:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5A1661012;
-	Thu,  3 Nov 2022 19:07:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5A1661012
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70ECE817A7;
+	Thu,  3 Nov 2022 19:10:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70ECE817A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MMjqO5VbL2AQ; Thu,  3 Nov 2022 19:07:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AUu_3_c9xupY; Thu,  3 Nov 2022 19:10:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE0ED60FFD;
-	Thu,  3 Nov 2022 19:07:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0ED60FFD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F51A8176C;
+	Thu,  3 Nov 2022 19:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F51A8176C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 05C5E1BF3C0
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:07:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E40F81BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2D0981F6E
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:07:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2D0981F6E
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFEC98176C
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFEC98176C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nViFAeUelU6q for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 19:07:34 +0000 (UTC)
+ with ESMTP id C5Gn-2i-L8KN for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 19:10:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0499781F6D
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0499781F6D
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:07:33 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id m15so1567772ilq.2
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:07:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD3F8174A
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BFD3F8174A
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:10:40 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id r81so2183151iod.2
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:10:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zcE4rTGr1BO+eGQX9XToFHSG4J+eMe6UEq96RHOoGbU=;
- b=adCH7Re76g5A4OYP4YP7a6P2uE+7axe8//Q2bLWAsehnB6jz2IMoOlZOoIoprqLgIp
- hrvUkkI0Fr1lE2a9KP4iRoItZhr563euIQpoYqcxYDCRy952F0I9c5ywxA2NClKVbWH5
- XeWodQkxLio0q1osqQjCO4hJY2wz/UiYZYTnfJKUMiCFB4JtAuP3TlMWumJuHtB1OIE6
- 7mjYp9fTqMJ4XSkz5PMVmJmVJgd3nvyo6hU1Vlg/V8w0UdDDHIOilzflIm8B+He3+48u
- 3dVfPEh1m3yvxDf1QGhQSttddJI0DiWjmXDX04M+UzyKZLmjr40h5htieBxX/JuO8O+I
- lbEA==
-X-Gm-Message-State: ACrzQf1L3Y4T7R5qSwnv+IiH1YZNvF7CowURd92YXYIv/nUqsi+JYlYB
- DoAb5JAuBHKQJWDVblgfPcnMTaHQQH20NMWj
-X-Google-Smtp-Source: AMsMyM4I6KZRKa4mPrwWCb3JXaBkDMwxLOawa6kKbQHh31eCRSwUwrxXVHQjNMjkSs4KW8fddPO0hg==
-X-Received: by 2002:a92:ca07:0:b0:2fa:ad2a:cd4c with SMTP id
- j7-20020a92ca07000000b002faad2acd4cmr18525505ils.292.1667502452836; 
- Thu, 03 Nov 2022 12:07:32 -0700 (PDT)
+ bh=NqAX9nJJUIu7uPH03lOjAfJ4lxdyvjFPCdHwB3I2YGM=;
+ b=UdBSbKVRYs8BEmquJJsLpGdQERU7HwZ67HRlTb6RtV10W62OatMaRyMq4RwUy9bZwQ
+ FzVwBMakR84aDqRjVRXcnGdPoSSgAzWV8u/mJMjbrGogd8OTGW560dL4OF3gWG/S1IHq
+ X5bp9zPsJcqguQIRlr2TNYPezUNfAdUcdi33TRyepczRT6HC/sQ+4vcR9KidzTtI09o7
+ kPeZR8oKxrpTTb0iM/NJKH/J5mBSFndlMNmObWWPLLogq7fEomgH7RRrJKptrpG88qcK
+ JEm6FP7R8t306zSIvhY+aMTZgoYlpf+r0DaBNOfXrBni8htiyqpQKUYDx3D4YGUipca7
+ /crQ==
+X-Gm-Message-State: ACrzQf3yRscm8OsrtIVX4szwy3mYkmGj+0WOWj4hVavCCvdUPQ/FSnn6
+ Y57JTST9bBWOAakygv2JuMSActCoJHhLyYdH
+X-Google-Smtp-Source: AMsMyM6WSNzNJ+AO/XImlkdVAYNzLeemquv8VrA0CpgvBuvIMMIQxz8937S8LUxOdb/GthuNVDIwOw==
+X-Received: by 2002:a05:6638:343:b0:375:8a1e:c186 with SMTP id
+ x3-20020a056638034300b003758a1ec186mr4901678jap.92.1667502639612; 
+ Thu, 03 Nov 2022 12:10:39 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- z8-20020a92d6c8000000b002f9537986f3sm584537ilp.24.2022.11.03.12.07.32
+ q5-20020a02a985000000b003750f2bc28dsm476161jam.3.2022.11.03.12.10.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 12:07:32 -0700 (PDT)
+ Thu, 03 Nov 2022 12:10:39 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 13:07:30 -0600
-Message-Id: <20221103190730.3777421-1-james.hilliard1@gmail.com>
+Date: Thu,  3 Nov 2022 13:10:37 -0600
+Message-Id: <20221103191037.3911655-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zcE4rTGr1BO+eGQX9XToFHSG4J+eMe6UEq96RHOoGbU=;
- b=hcnS6ym9kNFibbrVTaO641RObUOvm99Hp+f46sPz/9s5mQjhlzxygIVyBq2EcpD9dl
- wuVyVtex1JoltWyclw80vGxPQ4EiVvG2T7OPB2OF0uxaBqxweMlbyT9S9VYUqthQ/FxX
- 0zI4177uOXTlmN1CBWAiuT9VCm0P/MsksmgVu9aOg54hXHZFztWkztlxdetD/EzLzXqL
- odms55Qqyls0/7jwbF7f1xTxfGKpoW/FmYliCDEoVxdgDmHrk0uYthG/SrL7UWrEGgvO
- UN2FylEZtRjR6Li958cih3iboeJaml9goR517wG9meXM99eEk0loR8SnVCiVv0ZVRo6D
- 3bfg==
+ bh=NqAX9nJJUIu7uPH03lOjAfJ4lxdyvjFPCdHwB3I2YGM=;
+ b=pu/fUTclI8rdWT+Vnwf97rS91AtFyPPxKdkJuLvkzTwqTghaWbcw2vBPjhVyG7m5J0
+ 358jI6kIjjTLNcrNcrxVGgI5oDM9DWydwNoqMsXDRpZQziYsEJLgj9rhrZpzaqyxU0k3
+ LTven0gJgG/G2UFC8FHQ6c8xdiFWmGHp63X7C4MnAuShbVqTdgaTEv6ZmZS+sXno1Cem
+ cjj19tDmjxmI+zRnVkZVhBbiYQ81NPBT9sXT7wKn4XQ2Hpcmd5eA/OJBAVh4KcX/PPZ1
+ JUki83HHoNcF+RPEwsuj6BuQty1Sop7g03z2Ttn572WL4S4lRCy9Lzr+2DoJN1Z06Qft
+ IocA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hcnS6ym9
-Subject: [Buildroot] [PATCH 1/1] package/python-secretstorage: bump to
- version 3.3.3
+ header.a=rsa-sha256 header.s=20210112 header.b=pu/fUTcl
+Subject: [Buildroot] [PATCH 1/1] package/python-semantic-version: bump to
+ version 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-secretstorage/python-secretstorage.hash | 4 ++--
- package/python-secretstorage/python-secretstorage.mk   | 4 ++--
+ package/python-semantic-version/python-semantic-version.hash | 4 ++--
+ package/python-semantic-version/python-semantic-version.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
-index a8e535f892..ae0a5be347 100644
---- a/package/python-secretstorage/python-secretstorage.hash
-+++ b/package/python-secretstorage/python-secretstorage.hash
+diff --git a/package/python-semantic-version/python-semantic-version.hash b/package/python-semantic-version/python-semantic-version.hash
+index 692905ec29..49e28c429a 100644
+--- a/package/python-semantic-version/python-semantic-version.hash
++++ b/package/python-semantic-version/python-semantic-version.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/secretstorage/json
--md5  c2a8c0e08e5da198fc38c379b98c28f1  SecretStorage-3.1.2.tar.gz
--sha256  15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6  SecretStorage-3.1.2.tar.gz
-+md5  c6ff1cc866d2f1d274b75c6490726b1b  SecretStorage-3.3.3.tar.gz
-+sha256  2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77  SecretStorage-3.3.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/semantic-version/json
+-md5  76d7364def7ee487b6153d40b13de904  semantic_version-2.8.5.tar.gz
+-sha256  d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54  semantic_version-2.8.5.tar.gz
++md5  e48abef93ba69abcd4eaf4640edfc38b  semantic_version-2.10.0.tar.gz
++sha256  bdabb6d336998cbb378d4b9db3a4b56a1e3235701dc05ea2690d9a997ed5041c  semantic_version-2.10.0.tar.gz
  # Locally computed sha256 checksums
- sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
-diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
-index 4c209bf513..81487aa8fb 100644
---- a/package/python-secretstorage/python-secretstorage.mk
-+++ b/package/python-secretstorage/python-secretstorage.mk
+ sha256  a85e7ef2fbc670d26781ed6844cd31a7e8ada65d21328f75a0b02402faae37ea  LICENSE
+diff --git a/package/python-semantic-version/python-semantic-version.mk b/package/python-semantic-version/python-semantic-version.mk
+index 2352690e26..76a65e734f 100644
+--- a/package/python-semantic-version/python-semantic-version.mk
++++ b/package/python-semantic-version/python-semantic-version.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SECRETSTORAGE_VERSION = 3.1.2
-+PYTHON_SECRETSTORAGE_VERSION = 3.3.3
- PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
--PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/fd/9f/36197c75d9a09b1ab63f56cb985af6cd858ca3fc41fd9cd890ce69bae5b9
-+PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/53/a4/f48c9d79cb507ed1373477dbceaba7401fd8a23af63b837fa61f1dcd3691
- PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
- PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
- PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
+-PYTHON_SEMANTIC_VERSION_VERSION = 2.8.5
++PYTHON_SEMANTIC_VERSION_VERSION = 2.10.0
+ PYTHON_SEMANTIC_VERSION_SOURCE = semantic_version-$(PYTHON_SEMANTIC_VERSION_VERSION).tar.gz
+-PYTHON_SEMANTIC_VERSION_SITE = https://files.pythonhosted.org/packages/d4/52/3be868c7ed1f408cb822bc92ce17ffe4e97d11c42caafce0589f05844dd0
++PYTHON_SEMANTIC_VERSION_SITE = https://files.pythonhosted.org/packages/7d/31/f2289ce78b9b473d582568c234e104d2a342fd658cc288a7553d83bb8595
+ PYTHON_SEMANTIC_VERSION_SETUP_TYPE = setuptools
+ PYTHON_SEMANTIC_VERSION_LICENSE = BSD-2-Clause
+ PYTHON_SEMANTIC_VERSION_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
