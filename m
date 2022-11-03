@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 368E1C4708D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 261CEC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2A8541679;
-	Mon,  5 Dec 2022 11:55:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2A8541679
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB31981DE5;
+	Mon,  5 Dec 2022 11:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB31981DE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B3uovjHdha-a; Mon,  5 Dec 2022 11:55:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lTFBSPOEt976; Mon,  5 Dec 2022 11:55:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A47D41676;
-	Mon,  5 Dec 2022 11:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A47D41676
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2E21BF352
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1445F8128C;
+	Mon,  5 Dec 2022 11:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1445F8128C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 72EF11BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BB4F41690
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB4F41690
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA9C2405F9
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9C2405F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7YNszvyJL6z9 for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fHY0eOSpLcwG for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AC6F4163E
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AC6F4163E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20CDA4055E
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20CDA4055E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B03E85BA3; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+ id 1CA2185B9E; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:16:46 +0100
+Date: Thu, 3 Nov 2022 22:02:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db7089edd4cc9e0e12d149c55a719abcdf7d144f
-X-Git-Newrev: 9afa3e3c7d073643c325a948358550caf9a6f8f3
+X-Git-Oldrev: e85049dc29affffebff18c4ed87b4780fe2df77e
+X-Git-Newrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112608.5B03E85BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/meson: bump to version 0.64.0
+Message-Id: <20221205112606.1CA2185B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tornado: bump to version 6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9afa3e3c7d073643c325a948358550caf9a6f8f3
+commit: https://git.buildroot.net/buildroot/commit/?id=55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Verified license remains Apache-2.0 after hash change.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-tornado/python-tornado.hash | 6 +++---
+ package/python-tornado/python-tornado.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 60d9ae9436..2a76f32874 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.63.3/meson-0.63.3.tar.gz.asc
--sha256  519c0932e1a8b208741f0fdce90aa5c0b528dd297cf337009bf63539846ac056  meson-0.63.3.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.64.0/meson-0.64.0.tar.gz.asc
-+sha256  c5e27e091c2a35b9049e152a6535045ebbd057253aeb67856de6ecbb7b917bab  meson-0.64.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 3ca483c289..06ca555d12 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index e9fbbedf65..f30a6bb136 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tornado/json
+-md5  cf39425f3d7eba9a54287f3e795a2f23  tornado-6.0.4.tar.gz
+-sha256  0fe2d45ba43b00a41cd73f8be321a44936dc1aba233dee979f17a042b83eb6dc  tornado-6.0.4.tar.gz
++md5  32fbad606b439c3e1bf4e79d4e872741  tornado-6.2.tar.gz
++sha256  9b630419bde84ec666bfd7ea0a4cb2a8a651c2d5cccdbdd1972a0c859dfc3c13  tornado-6.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index c05a7d65d3..2af86ecb18 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.63.3
-+MESON_VERSION = 0.64.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-PYTHON_TORNADO_VERSION = 6.0.4
++PYTHON_TORNADO_VERSION = 6.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/95/84/119a46d494f008969bf0c775cb2c6b3579d3c4cc1bb1b41a022aa93ee242
++PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/f3/9e/225a41452f2d9418d89be5e32cf824c84fe1e639d350d6e8d49db5b7f73a
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_LICENSE_FILES = LICENSE
+ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
