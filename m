@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7472EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 23:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0A34C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 23:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 086EF6104F;
-	Thu,  3 Nov 2022 23:16:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 086EF6104F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B4B440BDD;
+	Thu,  3 Nov 2022 23:43:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B4B440BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IZp2n7bN7EGm; Thu,  3 Nov 2022 23:16:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PnezPt_URII7; Thu,  3 Nov 2022 23:43:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 207CA6104D;
-	Thu,  3 Nov 2022 23:16:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 207CA6104D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 993A31BF322
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:16:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A47940BD3;
+	Thu,  3 Nov 2022 23:43:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A47940BD3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D4BB1BF322
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 821286104D
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:16:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 821286104D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61F8D40BD3
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61F8D40BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1MtlMKDcN93V for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 23:16:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hs2fXThoMSWT for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 23:43:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 597516104C
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 597516104C
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 23:16:28 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- bg9-20020a05600c3c8900b003bf249616b0so2182366wmb.3
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 16:16:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DE8E40520
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DE8E40520
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 23:43:49 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id o30so2102320wms.2
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 16:43:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=w0T+WoiDVXq01v16ONKYzGGKsfqB8emvIWPXz7sD5sw=;
- b=0EBFSeKLSG6PozfGvGtT/mBuj6Hx/FH3M9FrPLlIBSyXygjBsABxTUtszNlNSxnVg6
- ZfhwThrnX8AbNvMyCljYFSCgjgfWwRBCjxtJBoXI90uQlora0wFc7Bx4T5fV5FIp6mAI
- K/7oVZFXhxzrQ/Ip6uuUZh9apCdqKqk3D1iBTY8LmU1XJeV0PaBQglLIUj6AIfnW53rf
- WONoBkJjLeVMAVboHEXl8W6m9x4wl9IBtvtQN37jVDHmn16SxlTyLf2kexyqRkoC6D7f
- Xxlz2GlkVE1e3V/o/fBnbc0/KmfC13XY7x/4bjnOQXECVxjLeBgMUJTIlhKVemxtVtiV
- erew==
-X-Gm-Message-State: ACrzQf1z67ICs6AtCzzFIyhz4zLRCRbhNmi4Y1wYSUvsONv7TdxMmQJZ
- AawAgplbQNWnTDP+kFZaOALzZ0vFROk=
-X-Google-Smtp-Source: AMsMyM4RWnpcN1wleGt6UDgUlg7ReLBhfxXuedFKqmcXCGLrRRsweuyfxDGAP+D+2gZRunBJFWJjuA==
-X-Received: by 2002:a05:600c:a4c:b0:3b4:fc1b:81 with SMTP id
- c12-20020a05600c0a4c00b003b4fc1b0081mr21076555wmq.125.1667517386137; 
- Thu, 03 Nov 2022 16:16:26 -0700 (PDT)
+ bh=OuTSRryIGznO8UA4P7Oubfnl+xkdCrdzzK2r+3EUQPE=;
+ b=F3+CQuLisDpT3jm2ZBAjFzRfS15RdI1hv7gaaLo9FheOlCVu3cC9Ualah9+6cG9hzt
+ N9J1A2MD/o3ogrc3J+6wX9ljFsc5X4+QiKeqS5c9tsLnbLkK/KtdHsQP5DBp+n8KXMi0
+ ImGA01HpDOt6ggMjZl2wftOzFK60MUc8X40wIMcjdXGUMVHhjxCQmuk25GBFy0XSXHnK
+ cfCatNAKu+aMjOvvhg9pRalxWYiNkbVVzZbS8jpcg2iEDq8tqAtCLKfjH0OF0rjllQLg
+ /E/Zz+JFplGljFF6xhEbk4z0rRpBUBuHoIjldMU152u9yaGsUPv+pKoGISyubDHjFCBs
+ 1EkA==
+X-Gm-Message-State: ACrzQf2SK1WH/5sUBLvvrRKmAvgZAkc1J372Is/U46kma5uVDwlG5eZ6
+ igMgjtk5linMHaJIdeZkF5nqZshLoUc=
+X-Google-Smtp-Source: AMsMyM6tTPN+GfohgmM6nCcLz9mTTA2M/VvtyJ5f/bT8jd6le286HGrFK2nrxFKLaKH6/XfsRYH2qQ==
+X-Received: by 2002:a05:600c:4b27:b0:3cf:8ec7:b8f with SMTP id
+ i39-20020a05600c4b2700b003cf8ec70b8fmr3078291wmp.69.1667519027016; 
+ Thu, 03 Nov 2022 16:43:47 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- w30-20020a05600c099e00b003a6a3595edasm1067436wmp.27.2022.11.03.16.16.25
+ b3-20020a05600c150300b003c6c1686b10sm1141232wmg.7.2022.11.03.16.43.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 16:16:25 -0700 (PDT)
+ Thu, 03 Nov 2022 16:43:46 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  4 Nov 2022 00:16:23 +0100
-Message-Id: <20221103231623.238493-1-fontaine.fabrice@gmail.com>
+Date: Fri,  4 Nov 2022 00:43:42 +0100
+Message-Id: <20221103234342.351104-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=w0T+WoiDVXq01v16ONKYzGGKsfqB8emvIWPXz7sD5sw=;
- b=JaChpsS6Gh+/tiDMHbdC/6ItW4fmxOQ72mazslT+ycpIjSzsTdWMSCxBFyDhX6mkKe
- fDeS2d1ZetEdzzm8GPh97gDsNGOGY/T4LlxuA62fbwWzQLO3NCdtOq2QU0698ndzd836
- 5yHU+lXDkwGlKAhugwoK8z/VbdaqJ33A9z4tuLypdjhEAb2mMhT0wHzy7wOliZtYmPEI
- 2jn2NTyktcbksTOMJb9bCo+gtb0NikfdTI0rHewU8tNgHYZTean5xLeqaFNgeQqML/a3
- y2J3wn4N/yS7oYgnbnqUJUnvAf4ooU6R9o66beusme3Si8kGfIGqYPKVlWKIVujA3C9n
- Umxw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=OuTSRryIGznO8UA4P7Oubfnl+xkdCrdzzK2r+3EUQPE=;
+ b=m9OpOIQbHrDxDoYlifkIMEw2dUIAfYXOcwKskoVgM1tNIpuyNtbwy+//Mq+LSCGaEh
+ w8u2bNi+zbqP83nggiD5953Myswl20uInDdfwW8/W/7TFDAscb0H0PE8nFI8Ny0AvgTB
+ ruRxA1sb9s2Pn9R2Jh2EUViZdPvfef/2C22AMhCLWzbEqcHe0b91tum3mT4XRiSDG78W
+ JR647b7fUAqsmV3QbsQlPx6oQJxsQL2d/K89hUMI338DvtmfVtqulrTVXIz2A1yW4Vp+
+ eWxS9OpjXwcD/10SWmJXkOIsKC3l7asYHEPdL7ZHVsc53T9bNQL1v5hiE/NVQjcO2fFh
+ FGQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JaChpsS6
-Subject: [Buildroot] [PATCH 1/1] package/docopt-cpp: fix static build
+ header.a=rsa-sha256 header.s=20210112 header.b=m9OpOIQb
+Subject: [Buildroot] [PATCH 1/1] package/libqb: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,121 +93,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Eero Aaltonen <eero.aaltonen@vaisala.com>
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following static build failure raised since the addition of the
-package in commit 43f96ced67c9a1f84d3f0edf5cd632178eb176b8:
+Disable tests to avoid the following build failure when check is
+enabled:
 
-[ 66%] Linking CXX shared library libdocopt.so
-ld (ld-elf2flt): -shared used without passing a shared library ID
+libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
+   11 | #include <gnu/lib-names.h>
+      |          ^~~~~~~~~~~~~~~~~
+
+This build failure is raised since bump to version 2.0.6 in commit
+2ee1bd7bb2e8d01f4ddca3fb1127ec729be1c9bf and
+https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
 
 Fixes:
- - http://autobuild.buildroot.org/results/834a0209c8165b3208ebf8654cb6cf8e3568b671
+ - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-BUILD_SHARED_LIBS-where-appropriate.patch | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch
+ .../libqb/0001-Add-disable-tests-option.patch | 62 +++++++++++++++++++
+ package/libqb/libqb.mk                        |  3 +
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/libqb/0001-Add-disable-tests-option.patch
 
-diff --git a/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch b/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch
+diff --git a/package/libqb/0001-Add-disable-tests-option.patch b/package/libqb/0001-Add-disable-tests-option.patch
 new file mode 100644
-index 0000000000..77206d5208
+index 0000000000..1afb05520d
 --- /dev/null
-+++ b/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch
-@@ -0,0 +1,87 @@
-+From 6d3b803d2b0e4bf8703bbfa51a67f378d6bd59f6 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Th=C3=A9o=20DELRIEU?= <theo.delrieu@tanker.io>
-+Date: Tue, 19 Nov 2019 14:58:59 +0100
-+Subject: [PATCH] only build one target, use BUILD_SHARED_LIBS where
-+ appropriate
++++ b/package/libqb/0001-Add-disable-tests-option.patch
+@@ -0,0 +1,62 @@
++From 051d9cfe8f365e30affc6476ed79b9e04a6b15ad Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 4 Nov 2022 00:27:50 +0100
++Subject: [PATCH] Add --disable-tests option
 +
-+[Retrieved from:
-+https://github.com/docopt/docopt.cpp/commit/6d3b803d2b0e4bf8703bbfa51a67f378d6bd59f6]
++Add --disable-tests to allow the user to disable tests. As a
++side-effect, this will avoid the following build failure when check is
++found:
++
++libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
++   11 | #include <gnu/lib-names.h>
++      |          ^~~~~~~~~~~~~~~~~
++
++This build failure is raised since version 2.0.5 and
++https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
++
++Fixes:
++ - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ClusterLabs/libqb/pull/475]
 +---
-+ CMakeLists.txt | 39 ++++++---------------------------------
-+ 1 file changed, 6 insertions(+), 33 deletions(-)
++ Makefile.am  | 6 +++++-
++ configure.ac | 5 +++++
++ 2 files changed, 10 insertions(+), 1 deletion(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index feff32e..14c3420 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -34,33 +34,15 @@ set(docopt_HEADERS
-+ #============================================================================
-+ # Compile targets
-+ #============================================================================
-+-if(MSVC OR XCODE)
-+-    # MSVC requires __declspec() attributes, which are achieved via the 
-+-    # DOCOPT_DLL and DOCOPT_EXPORTS macros below. Since those macros are only
-+-    # defined when building a shared library, we must build the shared and
-+-    # static libraries completely separately.
-+-    # Xcode does not support libraries with only object files as sources.
-+-    # See https://cmake.org/cmake/help/v3.0/command/add_library.html?highlight=add_library
-+-    add_library(docopt SHARED ${docopt_SOURCES} ${docopt_HEADERS})
-+-    add_library(docopt_s STATIC ${docopt_SOURCES} ${docopt_HEADERS})
-+-else()
-+-    # If not using MSVC or Xcode, we will create an intermediate object target
-+-    # to avoid compiling the source code twice.
-+-    add_library(docopt_o OBJECT ${docopt_SOURCES} ${docopt_HEADERS})
-+-    set_target_properties(docopt_o PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-+-
-+-    add_library(docopt SHARED $<TARGET_OBJECTS:docopt_o>)
-+-	set_target_properties(docopt PROPERTIES
-+-			VERSION ${PROJECT_VERSION}
-+-			SOVERSION ${PROJECT_VERSION_MAJOR}
-+-			)
-+-    add_library(docopt_s STATIC $<TARGET_OBJECTS:docopt_o>)
-+-endif()
-++add_library(docopt ${docopt_SOURCES} ${docopt_HEADERS})
-++set_target_properties(docopt PROPERTIES
-++  VERSION ${PROJECT_VERSION}
-++  SOVERSION ${PROJECT_VERSION_MAJOR}
-++)
++diff --git a/Makefile.am b/Makefile.am
++index a08b1d2..6a710a0 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -39,7 +39,11 @@ ACLOCAL_AMFLAGS		= -I m4
 + 
-+ target_include_directories(docopt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}> $<INSTALL_INTERFACE:include/docopt>)
-+-target_include_directories(docopt_s PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}> $<INSTALL_INTERFACE:include/docopt>)
++ dist_doc_DATA		= COPYING INSTALL README.markdown
 + 
-+-if(MSVC)
-++if(MSVC AND BUILD_SHARED_LIBS)
-+     # DOCOPT_DLL: Must be specified when building *and* when using the DLL.
-+     #             That's what the "PUBLIC" means.
-+     # DOCOPT_EXPORTS: Must use __declspec(dllexport) when building the DLL.
-+@@ -69,11 +51,6 @@ if(MSVC)
-+                                       PRIVATE DOCOPT_EXPORTS)
-+ endif()
++-SUBDIRS			= include lib doxygen2man docs tools tests examples
+++SUBDIRS			= include lib doxygen2man docs tools examples
+++
+++if ENABLE_TESTS
+++SUBDIRS			+= tests
+++endif
 + 
-+-if(NOT MSVC)
-+-	set_target_properties(docopt PROPERTIES OUTPUT_NAME docopt)
-+-	set_target_properties(docopt_s PROPERTIES OUTPUT_NAME docopt)
-+-endif()
-+-
-+ if(USE_BOOST_REGEX)
-+ 	add_definitions("-DDOCTOPT_USE_BOOST_REGEX")
-+ 	# This is needed on Linux, where linking a static library into docopt.so
-+@@ -82,9 +59,6 @@ if(USE_BOOST_REGEX)
-+     find_package(Boost 1.53 REQUIRED COMPONENTS regex)
-+     include_directories(${Boost_INCLUDE_DIRS})
-+     target_link_libraries(docopt ${Boost_LIBRARIES})
-+-	if(WITH_STATIC)
-+-		target_link_libraries(docopt_s ${Boost_LIBRARIES})
-+-	endif()
-+ endif()
++ dist-clean-local:
++ 	rm -f .snapshot-version autoconf automake autoheader
++diff --git a/configure.ac b/configure.ac
++index ac44b7e..4946008 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -562,6 +562,11 @@ AC_ARG_WITH([force-sockets-config-file],
++ 	[ FORCESOCKETSFILE="$withval" ],
++ 	[ FORCESOCKETSFILE="$sysconfdir/libqb/force-filesystem-sockets" ])
 + 
-+ #============================================================================
-+@@ -120,7 +94,6 @@ set(export_name "docopt-targets")
-+ install(TARGETS docopt EXPORT ${export_name} DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+ 
-+ # Development package
-+-install(TARGETS docopt_s EXPORT ${export_name} DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+ install(FILES ${docopt_HEADERS} DESTINATION include/docopt)
-+ 
-+ # CMake Package
+++AC_ARG_ENABLE([tests],
+++  [AS_HELP_STRING([--disable-tests],[disable tests])],,
+++  [ enable_tests="yes" ])
+++AM_CONDITIONAL([ENABLE_TESTS], [test x$enable_tests = xyes])
+++
++ AC_ARG_ENABLE([install-tests],
++   [AS_HELP_STRING([--enable-install-tests],[install tests])],,
++   [ enable_install_tests="no" ])
++-- 
++2.35.1
++
+diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
+index 0f409fd646..65d68181ee 100644
+--- a/package/libqb/libqb.mk
++++ b/package/libqb/libqb.mk
+@@ -12,6 +12,9 @@ LIBQB_LICENSE = LGPL-2.1+
+ LIBQB_LICENSE_FILES = COPYING
+ LIBQB_CPE_ID_VENDOR = clusterlabs
+ LIBQB_INSTALL_STAGING = YES
++# We're patching configure.ac
++LIBQB_AUTORECONF = YES
++LIBQB_CONF_OPTS = --disable-tests
+ LIBQB_DEPENDENCIES = libxml2
+ 
+ # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
 -- 
 2.35.1
 
