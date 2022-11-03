@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3C78C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278BBC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FAD26103B;
-	Thu,  3 Nov 2022 22:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FAD26103B
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA6924185A;
+	Thu,  3 Nov 2022 22:07:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA6924185A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YRt3F_PTKv9V; Thu,  3 Nov 2022 22:07:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qSfU1dWRDM0P; Thu,  3 Nov 2022 22:07:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F69F61042;
-	Thu,  3 Nov 2022 22:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F69F61042
+	by smtp4.osuosl.org (Postfix) with ESMTP id A775E41857;
+	Thu,  3 Nov 2022 22:07:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A775E41857
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 653CB1BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CC8711BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEABC41858
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEABC41858
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40B8641859
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40B8641859
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nl0JNQ7SpKFh for <buildroot@lists.busybox.net>;
+ with ESMTP id mixp7moFWR2Z for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5E6841859
+ by smtp4.osuosl.org (Postfix) with ESMTP id 473AA41857
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E6841859
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 473AA41857
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EBD787CAC; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
+ id 35D1787CAB; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:06:51 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9bab65a21c1805eab7127aaf557a1e5189386dcf
-X-Git-Newrev: df46e3e6f64fc77d2f522c1ac8b643c13ee6a13d
+Date: Thu, 3 Nov 2022 23:05:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
+X-Git-Newrev: 0a7a5641597c5c3d0978906fb8cf93eb153425a3
 X-Patchwork-Hint: ignore
-Message-Id: <20221103220701.8EBD787CAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/quota: bump to version
- 4.09
+Message-Id: <20221103220701.35D1787CAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/multipath-tools: security bump to
+ version 0.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,90 +64,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df46e3e6f64fc77d2f522c1ac8b643c13ee6a13d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=0a7a5641597c5c3d0978906fb8cf93eb153425a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
+Fixes the following security issues:
 
-https://sourceforge.net/p/linuxquota/code/ci/master/tree/Changelog
+- CVE-2022-41974: Authorization bypass
+- CVE-2022-41973: Symlink attack
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For more details, see the writeup:
+https://www.qualys.com/2022/10/24/leeloo-multipath/leeloo-multipath.txt
+
+Update README.md hash after license-unrelated changes:
+
+git shortlog 0.9.0..0.9.3 -- README.md
+Konstantin Kharlamov (1):
+      README.md: mention libreadline and libedit optional deps
+
+Xose Vazquez Perez (4):
+      multipath-tools: update devel repo info in README.md
+      multipath-tools: add ALUA info to README.md
+      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
+      multipath-tools: add more info for NetApp RDAC arrays
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...a-Use-realloc-3-instead-of-reallocarray-3.patch | 34 ----------------------
- package/quota/quota.hash                           |  8 ++---
- package/quota/quota.mk                             |  2 +-
- 3 files changed, 5 insertions(+), 39 deletions(-)
+ package/multipath-tools/multipath-tools.hash | 4 ++--
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
-deleted file mode 100644
-index 093d7cc821..0000000000
---- a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 02b222a335527f1031cc9495d8c5ebc1bc5b1d4e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 11 Nov 2020 15:00:47 +0100
--Subject: [PATCH] quota: Use realloc(3) instead of reallocarray(3)
--
--reallocarray(3) has been added to glibc relatively recently (version
--2.26, from 2017) and apparently not all users run new enough glibc. Just
--use realloc(3) for now since in this case there's no real risk of
--overflow.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Jan Kara <jack@suse.cz>
--[Retrieved from:
--https://sourceforge.net/p/linuxquota/code/ci/02b222a335527f1031cc9495d8c5ebc1bc5b1d4e]
-----
-- quota.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/quota.c b/quota.c
--index a6ed61f..a60de12 100644
----- a/quota.c
--+++ b/quota.c
--@@ -385,7 +385,7 @@ int main(int argc, char **argv)
-- 			  break;
-- 		  case 259:
-- 			  fscount++;
---			  fsnames = reallocarray(fsnames, fscount, sizeof(char *));
--+			  fsnames = realloc(fsnames, fscount * sizeof(char *));
-- 			  if (!fsnames)
-- 				die(1, _("Not enough memory for filesystem names"));
-- 			  fsnames[fscount - 1] = optarg;
---- 
--2.28.0
--
-diff --git a/package/quota/quota.hash b/package/quota/quota.hash
-index 354a3e2de4..5b083c911c 100644
---- a/package/quota/quota.hash
-+++ b/package/quota/quota.hash
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index df0d24fb74..6f893d37ce 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
 @@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.06/ (click on info button)
--md5  aef94648438832b684978d46fdf75110  quota-4.06.tar.gz
--sha1  98288699cc14da42f762301c2b6731ec7c777681  quota-4.06.tar.gz
-+# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.09/ (click on info button)
-+md5  f85c2e15d9a735640675ff4977b57bb6  quota-4.09.tar.gz
-+sha1  5c215d869626b532be2773f4161bdcc8b9f97126  quota-4.09.tar.gz
- 
- # Locally calculated
--sha256  2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d  quota-4.06.tar.gz
-+sha256  9cdaca154bc92afc3117f0e5f5b3208dd5f84583af1cf061c39baa0a2bb142f9  quota-4.09.tar.gz
- sha256  32a5fd41e7a257f7f0373988ea8d45cebdbf376060703c242c11c000751b1203  COPYING
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 0c751d4436..1b6a4b1975 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
+ # Locally computed:
+-sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
++sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+-sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
++sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index f3ce3ca8b8..ec5d853644 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QUOTA_VERSION = 4.06
-+QUOTA_VERSION = 4.09
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
- QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
- QUOTA_LICENSE = GPL-2.0+
+-MULTIPATH_TOOLS_VERSION = 0.9.0
++MULTIPATH_TOOLS_VERSION = 0.9.3
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
