@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07851C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66650C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3FAB61058;
-	Thu,  3 Nov 2022 21:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3FAB61058
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04EA040BD4;
+	Thu,  3 Nov 2022 21:07:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04EA040BD4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kYNBD7w2KTtp; Thu,  3 Nov 2022 21:07:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZNO3j4L1OCbW; Thu,  3 Nov 2022 21:07:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C406E61051;
-	Thu,  3 Nov 2022 21:07:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C406E61051
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CBA340BDE;
+	Thu,  3 Nov 2022 21:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CBA340BDE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A84BD1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B87021BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E8B640BF1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7727E40BC6
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E8B640BF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7727E40BC6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ft-NQ3VS9ic6 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+ with ESMTP id 1HfQv7kb5571 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 821E040BE0
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 821E040BE0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B63C40BF9
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B63C40BF9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70CE387BC3; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+ id 7B4B387BCD; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:48 +0100
+Date: Thu, 3 Nov 2022 21:04:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c12a87f6ea28d94c7ff71b0f76838e1ac6a833f6
-X-Git-Newrev: fb56dd4b94b08cf419f0d4adc23e19b9bee14f58
+X-Git-Oldrev: 2879baa7a6136c3ec12202c0b86c470e71589eab
+X-Git-Newrev: ff2de64f479aa9e6f8464e0bf5fe869b06f1ed6f
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205511.70CE387BC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-dpkt: bump to
- version 1.9.8
+Message-Id: <20221103205512.7B4B387BCD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-memory-profiler: bump to version 0.60.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb56dd4b94b08cf419f0d4adc23e19b9bee14f58
+commit: https://git.buildroot.net/buildroot/commit/?id=ff2de64f479aa9e6f8464e0bf5fe869b06f1ed6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dpkt/python-dpkt.hash | 4 ++--
- package/python-dpkt/python-dpkt.mk   | 4 ++--
+ package/python-memory-profiler/python-memory-profiler.hash | 4 ++--
+ package/python-memory-profiler/python-memory-profiler.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
-index e5e986628c..7de0d748fc 100644
---- a/package/python-dpkt/python-dpkt.hash
-+++ b/package/python-dpkt/python-dpkt.hash
+diff --git a/package/python-memory-profiler/python-memory-profiler.hash b/package/python-memory-profiler/python-memory-profiler.hash
+index 9ee515b529..9e3aca517b 100644
+--- a/package/python-memory-profiler/python-memory-profiler.hash
++++ b/package/python-memory-profiler/python-memory-profiler.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dpkt/json
--md5  ac3ace1c5ee12a74f12a863ac9082b59  dpkt-1.9.7.2.tar.gz
--sha256  80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b  dpkt-1.9.7.2.tar.gz
-+md5  0f16de3c0b8caa6ec2261210f08c7b8b  dpkt-1.9.8.tar.gz
-+sha256  43f8686e455da5052835fd1eda2689d51de3670aac9799b1b00cfd203927ee45  dpkt-1.9.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/memory-profiler/json
+-md5  b1d1783064a1198fb21bc877e535ec1b  memory_profiler-0.58.0.tar.gz
+-sha256  01385ac0fec944fcf7969814ec4406c6d8a9c66c079d09276723c5a7680f44e5  memory_profiler-0.58.0.tar.gz
++md5  c4d29b47885c32581f5bcefb44d2ca8e  memory_profiler-0.60.0.tar.gz
++sha256  6a12869511d6cebcb29b71ba26985675a58e16e06b3c523b49f67c5497a33d1c  memory_profiler-0.60.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
-index 87945d67c6..a99a1e8604 100644
---- a/package/python-dpkt/python-dpkt.mk
-+++ b/package/python-dpkt/python-dpkt.mk
+ sha256  51926ce91b8283532efa9dfb02518582c15f49c105a3ac18cce1f7a4947e96ae  COPYING
+diff --git a/package/python-memory-profiler/python-memory-profiler.mk b/package/python-memory-profiler/python-memory-profiler.mk
+index 053b0e2d62..5e43662e07 100644
+--- a/package/python-memory-profiler/python-memory-profiler.mk
++++ b/package/python-memory-profiler/python-memory-profiler.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DPKT_VERSION = 1.9.7.2
-+PYTHON_DPKT_VERSION = 1.9.8
- PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
--PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/95/51/923b370880eff9b62fe4fe965a916da709022a02669c670731da69088e93
-+PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/c9/7d/52f17a794db52a66e46ebb0c7549bf2f035ed61d5a920ba4aaa127dd038e
- PYTHON_DPKT_SETUP_TYPE = setuptools
- PYTHON_DPKT_LICENSE = BSD-3-Clause
- PYTHON_DPKT_LICENSE_FILES = LICENSE
+-PYTHON_MEMORY_PROFILER_VERSION = 0.58.0
++PYTHON_MEMORY_PROFILER_VERSION = 0.60.0
+ PYTHON_MEMORY_PROFILER_SOURCE = memory_profiler-$(PYTHON_MEMORY_PROFILER_VERSION).tar.gz
+-PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/8f/fd/d92b3295657f8837e0177e7b48b32d6651436f0293af42b76d134c3bb489
++PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/06/dd/7308a8ef1902db9d81c5bc226befe346a87ed8787caff00b8d91ed9f3b86
+ PYTHON_MEMORY_PROFILER_SETUP_TYPE = setuptools
+ PYTHON_MEMORY_PROFILER_LICENSE = BSD-3-Clause
+ PYTHON_MEMORY_PROFILER_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
