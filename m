@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A075EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B53C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5033B61077;
-	Thu,  3 Nov 2022 21:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5033B61077
+	by smtp3.osuosl.org (Postfix) with ESMTP id C67FB610AB;
+	Thu,  3 Nov 2022 21:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C67FB610AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UTCkcB2cm7nL; Thu,  3 Nov 2022 21:12:17 +0000 (UTC)
+	with ESMTP id Z5bXy5aROvvB; Thu,  3 Nov 2022 21:12:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 747066106C;
-	Thu,  3 Nov 2022 21:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 747066106C
+	by smtp3.osuosl.org (Postfix) with ESMTP id D48FA6109C;
+	Thu,  3 Nov 2022 21:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D48FA6109C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 77C281BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E3A491BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BD6840BEB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53E6540C01
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BD6840BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53E6540C01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sJUKbVgZGjGo for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:18 +0000 (UTC)
+ with ESMTP id eqoWHOBYNbsJ for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A318D40C12
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42F9240C0A
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A318D40C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42F9240C0A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FBF387BCC; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+ id 39CA087BD1; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 95702e627051b99c9911196841a584c461583c2d
-X-Git-Newrev: aef5c2d3b6bf9aabe543495a9ad33de7ddf58812
+X-Git-Oldrev: f8bb4a619ac723d6a35e2b3ebe9f6e1d07a5d0f6
+X-Git-Newrev: c4525b49cb32651c5029847ed02e72b5c075ef4d
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205513.9FBF387BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pylibftdi: bump
- to version 0.20.0
+Message-Id: <20221103205513.39CA087BD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pudb: bump to
+ version 2022.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aef5c2d3b6bf9aabe543495a9ad33de7ddf58812
+commit: https://git.buildroot.net/buildroot/commit/?id=c4525b49cb32651c5029847ed02e72b5c075ef4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash changed due to date update:
-https://github.com/codedstructure/pylibftdi/commit/4662ebe069eefd5a89709d4165e3be808cad636c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pylibftdi/python-pylibftdi.hash | 6 +++---
- package/python-pylibftdi/python-pylibftdi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pudb/python-pudb.hash | 4 ++--
+ package/python-pudb/python-pudb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
-index 5570c1c9f6..ee0ba127ca 100644
---- a/package/python-pylibftdi/python-pylibftdi.hash
-+++ b/package/python-pylibftdi/python-pylibftdi.hash
+diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
+index fc19f589d9..d9943a3601 100644
+--- a/package/python-pudb/python-pudb.hash
++++ b/package/python-pudb/python-pudb.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
--md5  c48e442cef7b1e865b4d96ab92f509ad  pylibftdi-0.18.1.tar.gz
--sha256  bdd04076933959b20b3c8b4fb8be7882d3362675f259e7eeb23ebff03b81859d  pylibftdi-0.18.1.tar.gz
-+md5  fb43ade3283b809d4ebe92bf4a60d7fc  pylibftdi-0.20.0.tar.gz
-+sha256  f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f  pylibftdi-0.20.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pudb/json
+-md5  100b955e103b72279604420bbdcd07a5  pudb-2021.1.tar.gz
+-sha256  309ee82b45a0ffca0bc4c7f521fd3e357589c764f339bdf9dcabb7ad40692d6e  pudb-2021.1.tar.gz
++md5  c2b4275b76068f18d630f7bae889345b  pudb-2022.1.2.tar.gz
++sha256  6b83ab805bddb53710109690a2237e98bf83c0b3a00033c517cdf5f6a8fa470d  pudb-2022.1.2.tar.gz
  # Locally computed sha256 checksums
--sha256  0e40132339e1ef7d17d93837fbc273d1e87302e9295162bd19c9161e5700ddcc  LICENSE.txt
-+sha256  0d3f1af06b566a783091422061b60e864fc5d5853418b71643041e254b4ae7f9  LICENSE.txt
-diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
-index 2f5614867d..34040b72ac 100644
---- a/package/python-pylibftdi/python-pylibftdi.mk
-+++ b/package/python-pylibftdi/python-pylibftdi.mk
+ sha256  a95343fffff49cde3d9bf33cf6bb71cb3bf0ed83f47d98a7ba04b175d29c79ab  LICENSE
+diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
+index 31df3147d0..7df38f0f02 100644
+--- a/package/python-pudb/python-pudb.mk
++++ b/package/python-pudb/python-pudb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYLIBFTDI_VERSION = 0.18.1
-+PYTHON_PYLIBFTDI_VERSION = 0.20.0
- PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
--PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/50/9b/1e1cdb9715bacfb83e5eaf5e69f4e2fbd92d61f43c5e185cc3935ec01b28
-+PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/b8/03/4f778ce6dceea58dc5bfd555c22fdb265afc922d81d3c4496a791a54c479
- PYTHON_PYLIBFTDI_LICENSE = MIT
- PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
- PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
+-PYTHON_PUDB_VERSION = 2021.1
++PYTHON_PUDB_VERSION = 2022.1.2
+ PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
+-PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/c7/69/813e93519fc28744457ff68fa2eaac3b4ea30dda1e6994e969fe9d3008d9
++PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/8b/ef/6dea7c63fdddd7753e2a2930e59799ef32247f2499c0d9bcd233439e7483
+ PYTHON_PUDB_SETUP_TYPE = setuptools
+ PYTHON_PUDB_LICENSE = MIT
+ PYTHON_PUDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
