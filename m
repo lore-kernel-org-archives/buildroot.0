@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF2DC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0DCC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C69140BC0;
-	Thu,  3 Nov 2022 20:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C69140BC0
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5D4441865;
+	Thu,  3 Nov 2022 20:57:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5D4441865
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mMqgcLWIaM3g; Thu,  3 Nov 2022 20:57:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j28y4yWe1a6o; Thu,  3 Nov 2022 20:57:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D4EA40BDF;
-	Thu,  3 Nov 2022 20:57:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D4EA40BDF
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9E894185B;
+	Thu,  3 Nov 2022 20:57:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9E894185B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12B4D1BF968
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17A121BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FD2840BEE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3610640BF2
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FD2840BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3610640BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qqKZWhH65i0Z for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
+ with ESMTP id mEoPUDCzCG8p for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9284540BC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5D8440BD2
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9284540BC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D8440BD2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 827DF87BCE; Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
+ id B23CE87BCE; Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:15 +0100
+Date: Thu, 3 Nov 2022 21:03:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3c2a62601547ef0666e1883cee0ea110ebff387e
-X-Git-Newrev: 474148dc7a9ee5d30ac29d95643667500360220b
+X-Git-Oldrev: 7e07b8caede2bb538c6dc57cd3d16c3dffbd3f73
+X-Git-Newrev: 4046164fd70fde0b265875a91c96daef01e29205
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205510.827DF87BCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-beautifulsoup4:
- bump to version 4.11.1
+Message-Id: <20221103205510.B23CE87BCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-channels: bump
+ to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=474148dc7a9ee5d30ac29d95643667500360220b
+commit: https://git.buildroot.net/buildroot/commit/?id=4046164fd70fde0b265875a91c96daef01e29205
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License file moved per changelog:
-the license file is packaged as LICENSE
-
-License hash changed due to formatting changes.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-beautifulsoup4/python-beautifulsoup4.hash | 6 +++---
- package/python-beautifulsoup4/python-beautifulsoup4.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-channels/python-channels.hash | 4 ++--
+ package/python-channels/python-channels.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
-index 665c142d53..4641d2e3a3 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+diff --git a/package/python-channels/python-channels.hash b/package/python-channels/python-channels.hash
+index 2d0097da2b..ea643f1589 100644
+--- a/package/python-channels/python-channels.hash
++++ b/package/python-channels/python-channels.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/beautifulsoup4/json
--md5  e754242642253dd31d249d00358d552e  beautifulsoup4-4.10.0.tar.gz
--sha256  c23ad23c521d818955a4151a67d81580319d4bf548d3d49f4223ae041ff98891  beautifulsoup4-4.10.0.tar.gz
-+md5  22f22f89cf9da41b22e1ece9639c66a3  beautifulsoup4-4.11.1.tar.gz
-+sha256  ad9aa55b65ef2808eb405f46cf74df7fcb7044d5cbc26487f96eb2ef2e436693  beautifulsoup4-4.11.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/channels/json
+-md5  6f3fb75828b681a69372934a09ac3f32  channels-2.3.1.tar.gz
+-sha256  6b8ebd93fe0041a23e31c9f4130d92fadb9c0040c0eb377a004540631325a31d  channels-2.3.1.tar.gz
++md5  b145f0623bf1bad8ceb534c306ad2f2a  channels-4.0.0.tar.gz
++sha256  0ce53507a7da7b148eaa454526e0e05f7da5e5d1c23440e4886cf146981d8420  channels-4.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256  a47ea51236098464fe0b4f559743590b533056d9e00f49ecbf80299fab47e231  COPYING.txt
-+sha256  9e41dab3a48f5c734a9d5446557b28a6616e4924ee51d205598e4416bb93ce25  LICENSE
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-index f729d1051a..78f885ba08 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-@@ -4,11 +4,11 @@
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-channels/python-channels.mk b/package/python-channels/python-channels.mk
+index c0eca71aa2..40f17cb114 100644
+--- a/package/python-channels/python-channels.mk
++++ b/package/python-channels/python-channels.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BEAUTIFULSOUP4_VERSION = 4.10.0
-+PYTHON_BEAUTIFULSOUP4_VERSION = 4.11.1
- PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
--PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/a1/69/daeee6d8f22c997e522cdbeb59641c4d31ab120aba0f2c799500f7456b7e
-+PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/e8/b0/cd2b968000577ec5ce6c741a54d846dfa402372369b8b6861720aa9ecea7
- PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = setuptools
- PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
--PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = COPYING.txt
-+PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_CHANNELS_VERSION = 2.3.1
++PYTHON_CHANNELS_VERSION = 4.0.0
+ PYTHON_CHANNELS_SOURCE = channels-$(PYTHON_CHANNELS_VERSION).tar.gz
+-PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/75/53/2db9662a52dcedb02a25f87d8efc5e630059967790e4c10887dbd2db2073
++PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/8e/cb/6fedd9df5972b893a04c8e5d7748873d6480a813e74b0797945bee1f4282
+ PYTHON_CHANNELS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
