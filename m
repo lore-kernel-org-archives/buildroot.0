@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500C4C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DAF0C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E900141879;
-	Thu,  3 Nov 2022 21:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E900141879
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E42C81FAE;
+	Thu,  3 Nov 2022 21:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E42C81FAE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id anhmdLCLoWnK; Thu,  3 Nov 2022 21:15:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uo8NyWxVJpzG; Thu,  3 Nov 2022 21:15:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA301410B0;
-	Thu,  3 Nov 2022 21:15:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA301410B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 730F081F5E;
+	Thu,  3 Nov 2022 21:15:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 730F081F5E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B78E1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B4C601BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 328FB40BDA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50D5140C11
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 328FB40BDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50D5140C11
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0dMUiNiWr-QV for <buildroot@lists.busybox.net>;
+ with ESMTP id ALlOH5g8GFh3 for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2950140C1C
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2950140C1C
+ by smtp2.osuosl.org (Postfix) with ESMTP id F366440BE5
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F366440BE5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A11087BCC; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ id F10C187BCC; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 21:19:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3d8312153ef4760865dc2fe0f612e82a3515637c
-X-Git-Newrev: cedea0649dbd80a8bcf09874c48fb5298616c6f1
+X-Git-Oldrev: d77a49554e1caf7322ee6bf43a6a254a60215ccd
+X-Git-Newrev: 68672d598de858df7360f4a031680b6c965a07b5
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205514.1A11087BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-reentry: bump
- to version 1.3.3
+Message-Id: <20221103205513.F10C187BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pytz: bump to
+ version 2022.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cedea0649dbd80a8bcf09874c48fb5298616c6f1
+commit: https://git.buildroot.net/buildroot/commit/?id=68672d598de858df7360f4a031680b6c965a07b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-reentry/python-reentry.hash | 4 ++--
- package/python-reentry/python-reentry.mk   | 4 ++--
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
-index 522b936118..1d6ff0e217 100644
---- a/package/python-reentry/python-reentry.hash
-+++ b/package/python-reentry/python-reentry.hash
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index e0f253902c..e71e77e5b7 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/reentry/json
--md5  398c1e5bbda657aa645c8d2d38afb63f  reentry-1.3.2.tar.gz
--sha256  c6667e59aeabbb4d122aadc2170102a270e6a811d16a5431c5c3b91fabd7cf02  reentry-1.3.2.tar.gz
-+md5  30b57a189bb3c319c0552a2f3105d34d  reentry-1.3.3.tar.gz
-+sha256  6343d83245e5047c9f8db0702ec1a7fa8210bd553f0ab643212572f6fce2c3ff  reentry-1.3.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5  d7b7060bbac4970afa2050c139c9fcb6  pytz-2021.3.tar.gz
+-sha256  acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326  pytz-2021.3.tar.gz
++md5  bf46b54a7e9bcb65ea38f54646181979  pytz-2022.6.tar.gz
++sha256  e89512406b793ca39f5971bc999cc538ce125c0e51c27941bef4568b460095e2  pytz-2022.6.tar.gz
  # Locally computed sha256 checksums
- sha256  4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
-diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
-index ec33c17452..5808eee4a2 100644
---- a/package/python-reentry/python-reentry.mk
-+++ b/package/python-reentry/python-reentry.mk
+ sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index d606750699..ccf8e2179c 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REENTRY_VERSION = 1.3.2
-+PYTHON_REENTRY_VERSION = 1.3.3
- PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
--PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/a0/88/eb0c107c19227a2292ed11711034a3d80c0dc1368d2b3ebeb3fe7b936a8e
-+PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/95/20/e820a29014f1cb662423d7001dc09a9ea5280083ea300f0c5efe5cae238b
- PYTHON_REENTRY_SETUP_TYPE = setuptools
- PYTHON_REENTRY_LICENSE = MIT
- PYTHON_REENTRY_LICENSE_FILES = LICENSE
+-PYTHON_PYTZ_VERSION = 2021.3
++PYTHON_PYTZ_VERSION = 2022.6
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/e3/8e/1cde9d002f48a940b9d9d38820aaf444b229450c0854bdf15305ce4a3d1a
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/76/63/1be349ff0a44e4795d9712cc0b2d806f5e063d4d34631b71b832fac715a8
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
