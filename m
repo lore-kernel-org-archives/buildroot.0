@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0690EC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:38:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFDCC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:38:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5A0F402F3;
-	Mon,  5 Dec 2022 11:38:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A0F402F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04B6C60B30;
+	Mon,  5 Dec 2022 11:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04B6C60B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GGozzQznaIjP; Mon,  5 Dec 2022 11:38:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PKVudMgfKk9n; Mon,  5 Dec 2022 11:38:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80F0A400F8;
-	Mon,  5 Dec 2022 11:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80F0A400F8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6207A1BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF2E60A47;
+	Mon,  5 Dec 2022 11:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BF2E60A47
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AF451BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25C4C415E7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25C4C415E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id A99FC40592
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99FC40592
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ndjI8QjeHoAx for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cW6K6qXRMn7A for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 162DE41605
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162DE41605
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AB1240527
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AB1240527
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1008085BA3; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+ id 27BA485B9B; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:27 +0100
+Date: Thu, 3 Nov 2022 21:03:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2e19ebb5035a171750e98926429b286cb1f6e21
-X-Git-Newrev: ea19ddb3707781a8f8e91a384a59f5649e618e64
+X-Git-Oldrev: 1fbb2cef681e154ab5ee0b8d13e90596d902c5e8
+X-Git-Newrev: ada358be6bba0ca95f4a16e98373ecf7a9e1e263
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112603.1008085BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markupsafe: bump to version
- 2.1.1
+Message-Id: <20221205112602.27BA485B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flask-sqlalchemy: bump to
+ version 3.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea19ddb3707781a8f8e91a384a59f5649e618e64
+commit: https://git.buildroot.net/buildroot/commit/?id=ada358be6bba0ca95f4a16e98373ecf7a9e1e263
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-markupsafe/python-markupsafe.hash | 4 ++--
- package/python-markupsafe/python-markupsafe.mk   | 4 ++--
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash | 4 ++--
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
-index 520bb405fb..2d1d81c62e 100644
---- a/package/python-markupsafe/python-markupsafe.hash
-+++ b/package/python-markupsafe/python-markupsafe.hash
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+index 4c2a701eb3..50ca14371d 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markupsafe/json
--md5  892e0fefa3c488387e5cc0cad2daa523  MarkupSafe-2.0.1.tar.gz
--sha256  594c67807fb16238b30c44bdf74f36c02cdf22d1c8cda91ef8a0ed8dabf5620a  MarkupSafe-2.0.1.tar.gz
-+md5  9809f9fdd98bc835b0c21aa8f79cbf30  MarkupSafe-2.1.1.tar.gz
-+sha256  7f91197cc9e48f989d12e4e6fbc46495c446636dfc81b9ccf50bb0ec74b91d4b  MarkupSafe-2.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/flask-sqlalchemy/json
+-md5  dcb6b62248ced71dab183f2cb2778583  Flask-SQLAlchemy-2.5.1.tar.gz
+-sha256  2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912  Flask-SQLAlchemy-2.5.1.tar.gz
++md5  cbc5756b7e14683de1a540516159a81a  Flask-SQLAlchemy-3.0.2.tar.gz
++sha256  16199f5b3ddfb69e0df2f52ae4c76aedbfec823462349dabb21a1b2e0a2b65e9  Flask-SQLAlchemy-3.0.2.tar.gz
  # Locally computed sha256 checksums
  sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index e0e689f5a1..49bfc0b840 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
+index b1d00ad6c0..ca6fd0c793 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKUPSAFE_VERSION = 2.0.1
-+PYTHON_MARKUPSAFE_VERSION = 2.1.1
- PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
--PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e
-+PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/1d/97/2288fe498044284f39ab8950703e88abbac2abbdf65524d576157af70556
- PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
- PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
- PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
+-PYTHON_FLASK_SQLALCHEMY_VERSION = 2.5.1
++PYTHON_FLASK_SQLALCHEMY_VERSION = 3.0.2
+ PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/35/f0/39dd2d8e7e5223f78a5206d7020dc0e16718a964acfb3564d89e9798ab9b
++PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/0b/b7/05a8f9c3f010775275f8dec53e40ff7ea1ae61bf1cfa4b524caf4d3da982
+ PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
