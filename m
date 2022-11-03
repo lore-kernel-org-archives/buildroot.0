@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEF65C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2AEC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F7AD6104B;
-	Thu,  3 Nov 2022 21:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F7AD6104B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2229940BDE;
+	Thu,  3 Nov 2022 21:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2229940BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0fzx3uHkzBPm; Thu,  3 Nov 2022 21:16:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r1BbnGTOEzkN; Thu,  3 Nov 2022 21:16:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C254F60784;
-	Thu,  3 Nov 2022 21:16:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C254F60784
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37DD040BF0;
+	Thu,  3 Nov 2022 21:16:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37DD040BF0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F4541BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 629DE1BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE4E440C13
+ by smtp2.osuosl.org (Postfix) with ESMTP id D716440BEE
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE4E440C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D716440BEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CLGjoa5ykIVl for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
+ with ESMTP id e98BRLR2gJQc for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1616740BEE
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1616740BEE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C99D340C16
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99D340C16
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 066D387BCD; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ id C757487BCA; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 21:19:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 68672d598de858df7360f4a031680b6c965a07b5
-X-Git-Newrev: b4b545c7bb18cb475062d3074750001c13f8bfdb
+X-Git-Oldrev: c6945c4d31c9088f030c6b254a1ef202a28e84c6
+X-Git-Newrev: 439f553b6c7d84fc04cef3e69f9473c6e8161f45
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205514.066D387BCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyudev: bump to
- version 0.24.0
+Message-Id: <20221103205513.C757487BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyrsistent:
+ bump to version 0.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,72 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4b545c7bb18cb475062d3074750001c13f8bfdb
+commit: https://git.buildroot.net/buildroot/commit/?id=439f553b6c7d84fc04cef3e69f9473c6e8161f45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixup patch so that it applies against 0.24.0.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Workaround-finding-libudev-on-systems-without-ldconf.patch | 6 +++---
- package/python-pyudev/python-pyudev.hash                            | 4 ++--
- package/python-pyudev/python-pyudev.mk                              | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-pyrsistent/python-pyrsistent.hash | 4 ++--
+ package/python-pyrsistent/python-pyrsistent.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch b/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
-index d798f836a5..26f1ef6390 100644
---- a/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
-+++ b/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
-@@ -24,9 +24,9 @@ index 9dffb3c..aa9942f 100644
- --- a/src/pyudev/_ctypeslib/utils.py
- +++ b/src/pyudev/_ctypeslib/utils.py
- @@ -28,7 +28,7 @@
-- from __future__ import print_function
-- from __future__ import unicode_literals
-+ """
-  
-+ # isort: STDLIB
- -from ctypes import CDLL
- +from ctypes import cdll, CDLL
-  from ctypes.util import find_library
-@@ -41,7 +41,7 @@ index 9dffb3c..aa9942f 100644
- +    try:
- +        lib = cdll.LoadLibrary('lib%s.so' % name)
- +    except OSError:
--         raise ImportError('No library named %s' % name)
-+         raise ImportError("No library named %s" % name)
- -    lib = CDLL(library_name, use_errno=True)
-      # Add function signatures
-      for funcname, signature in signatures.items():
-diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
-index def10542fa..014bf20933 100644
---- a/package/python-pyudev/python-pyudev.hash
-+++ b/package/python-pyudev/python-pyudev.hash
+diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
+index 70d1cc6fa2..bb55c7135d 100644
+--- a/package/python-pyrsistent/python-pyrsistent.hash
++++ b/package/python-pyrsistent/python-pyrsistent.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyudev/json
--md5  377eda61186c91e9440f01d76dbb4206  pyudev-0.22.0.tar.gz
--sha256  69bb1beb7ac52855b6d1b9fe909eefb0017f38d917cba9939602c6880035b276  pyudev-0.22.0.tar.gz
-+md5  17c0a41f0e4dfc016350806a0a60f630  pyudev-0.24.0.tar.gz
-+sha256  b2a3afe1c99ea751f8296652557eac559874da2a1b1ec0625178706ec5a345f3  pyudev-0.24.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyrsistent/json
+-md5  cef3da08455664bf917dcf8cd00d49a4  pyrsistent-0.18.1.tar.gz
+-sha256  d4d61f8b993a7255ba714df3aca52700f8125289f84f704cf80916517c46eb96  pyrsistent-0.18.1.tar.gz
++md5  23da81256b8817e123568a858bf78997  pyrsistent-0.19.2.tar.gz
++sha256  bfa0351be89c9fcbcb8c9879b826f4353be10f58f8a677efab0c017bf7137ec2  pyrsistent-0.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
-index 42d5c7000b..5d48cd4f7c 100644
---- a/package/python-pyudev/python-pyudev.mk
-+++ b/package/python-pyudev/python-pyudev.mk
+ sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
+diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
+index 27ec41028f..6a5ac30a15 100644
+--- a/package/python-pyrsistent/python-pyrsistent.mk
++++ b/package/python-pyrsistent/python-pyrsistent.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYUDEV_VERSION = 0.22.0
-+PYTHON_PYUDEV_VERSION = 0.24.0
- PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
--PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/72/c8/4660d815a79b1d42c409012aaa10ebd6b07a47529b4cb6880f27a24bd646
-+PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/00/8d/810750cb2fc64d7e0dbefc106a9137b157616a95be3f0ea51ca3cf6c762a
- PYTHON_PYUDEV_LICENSE = LGPL-2.1+
- PYTHON_PYUDEV_LICENSE_FILES = COPYING
- PYTHON_PYUDEV_SETUP_TYPE = setuptools
+-PYTHON_PYRSISTENT_VERSION = 0.18.1
++PYTHON_PYRSISTENT_VERSION = 0.19.2
+ PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
+-PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/42/ac/455fdc7294acc4d4154b904e80d964cc9aae75b087bbf486be04df9f2abd
++PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/b8/ef/325da441a385a8a931b3eeb70db23cb52da42799691988d8d943c5237f10
+ PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
+ PYTHON_PYRSISTENT_LICENSE = MIT
+ PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
