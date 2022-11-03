@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1235C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A5BC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D15A40522;
-	Mon,  5 Dec 2022 11:57:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D15A40522
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECE0D60C01;
+	Mon,  5 Dec 2022 11:57:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECE0D60C01
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NV3kIpi472D4; Mon,  5 Dec 2022 11:57:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37A1960A47;
+	Mon,  5 Dec 2022 11:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37A1960A47
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18B7C1BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86D7B4060C
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D7B4060C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SnEN5jGcUgHC; Mon,  5 Dec 2022 11:57:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4AF84055E;
-	Mon,  5 Dec 2022 11:57:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4AF84055E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 35F9D1BF8C7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFF1A41691
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFF1A41691
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mL6_6gp5gqsh for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2LTO2p8jnhJy for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E771E4168D
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E771E4168D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B3C9405E6
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B3C9405E6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E55F985BA3; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+ id 76975857AA; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Nov 2022 23:05:23 +0100
+Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1c32fc61779fa25fdba662012803a14f6c4687d
-X-Git-Newrev: a85f5f2a412db894fdf548e10d12e7c56eda9107
+X-Git-Oldrev: 90572af5a930345ed7ad3001889db4e83e94dcb3
+X-Git-Newrev: 96a9097ca814942951a4530ff294efedfed65036
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112608.E55F985BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tpm2-pkcs11: bump version to 1.8.0
+Message-Id: <20221205112606.76975857AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-webpy: bump to version 0.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a85f5f2a412db894fdf548e10d12e7c56eda9107
+commit: https://git.buildroot.net/buildroot/commit/?id=96a9097ca814942951a4530ff294efedfed65036
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+License file was accidentially removed in latest release but project
+is still public domain licensed.
+
+Details:
+https://github.com/webpy/webpy/commit/04bf405dd86485c8f3774c526e6a869a1eb73408
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
- package/tpm2-pkcs11/tpm2-pkcs11.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/python-webpy/python-webpy.hash | 6 ++----
+ package/python-webpy/python-webpy.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-index 1d5bcc7a54..b027bad72a 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  078a445ed0e9f5009675a162b4b7b88f3520436cfbc791bb2249f37bd1f475bd  tpm2-pkcs11-1.7.0.tar.gz
-+sha256  79f28899047defd6b4b72b7268dd56abf27774954022315f818c239af33e05bd  tpm2-pkcs11-1.8.0.tar.gz
- sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-index adb5a46f56..9d61340775 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-@@ -4,14 +4,15 @@
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index ed3da6b1ab..540771a244 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,5 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/web.py/json
+-md5  4e7ec89e7ae1e938d01fff01ba752606  web.py-0.40.tar.gz
+-sha256  dc5e42ffbc42d77d07f75b7acca9975a3368ae609774e49ddebb497a784131f3  web.py-0.40.tar.gz
+-# Locally computed sha256 checksums
+-sha256  791bf6e9419435f114a19fc6519ff33738021eb3c41b18490943230ab0894df9  LICENSE.txt
++md5  cd2c0296ceffa1acb96ae5315214eb42  web.py-0.62.tar.gz
++sha256  5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e  web.py-0.62.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 187a481286..06d4ae039b 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--TPM2_PKCS11_VERSION = 1.7.0
-+TPM2_PKCS11_VERSION = 1.8.0
- TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
- TPM2_PKCS11_LICENSE = BSD-2-Clause
- TPM2_PKCS11_LICENSE_FILES = LICENSE
- TPM2_PKCS11_DEPENDENCIES = host-pkgconf libyaml openssl sqlite tpm2-tss
+-PYTHON_WEBPY_VERSION = 0.40
++PYTHON_WEBPY_VERSION = 0.62
+ PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/e3/23/ed84b174add09153329c6357984c8433e2f350de91c3859fa48c3cdbf7dc
++PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/cd/6e/338a060bb5b52ee8229bdada422eaa5f71b13f8d33467f37f870ed2cae4b
+ PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain
+-PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt
  
- TPM2_PKCS11_CONF_OPTS += \
--		--disable-hardening
-+		--disable-hardening \
-+		--disable-ptool-checks
- 
- # Fix tpm.c:746:5: error: 'for' loop initial declarations are only allowed in C99 mode
- # Fix implicit declaration of function 'strnlen'
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
