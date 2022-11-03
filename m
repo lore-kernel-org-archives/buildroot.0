@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F7AEC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 430DDC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AA9680C37;
-	Mon,  5 Dec 2022 11:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AA9680C37
+	by smtp1.osuosl.org (Postfix) with ESMTP id E45118125B;
+	Mon,  5 Dec 2022 11:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E45118125B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5bo-wQ1jeCg6; Mon,  5 Dec 2022 11:33:34 +0000 (UTC)
+	with ESMTP id lcyRtKr2wddk; Mon,  5 Dec 2022 11:33:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 452D480B54;
-	Mon,  5 Dec 2022 11:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 452D480B54
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 188DA1BF8C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2BB381095;
+	Mon,  5 Dec 2022 11:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2BB381095
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 271A81BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D07DD4052F
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC9894160B
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07DD4052F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9894160B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MNYs1B37xPYU for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZFB8XGbToJfQ for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57316403D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08F9B415A9
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57316403D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F9B415A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47CB885B9E; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+ id E6A1885BA2; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:35 +0100
+Date: Thu, 3 Nov 2022 21:03:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f4b2e8fb6984789bfcc7eff30fbecf2f51b8665
-X-Git-Newrev: d2ccca7470426f25244684e0cf86b031ec0add96
+X-Git-Oldrev: a059b829ab2a38843ad7b9d83929c8dcc986fe35
+X-Git-Newrev: f8a8b58aadfd484c36dd6b164f67aca56f4091db
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112601.47CB885B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-daphne: bump to version
- 4.0.0
+Message-Id: <20221205112601.E6A1885BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-engineio: bump to version
+ 4.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,71 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2ccca7470426f25244684e0cf86b031ec0add96
+commit: https://git.buildroot.net/buildroot/commit/?id=f8a8b58aadfd484c36dd6b164f67aca56f4091db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixup remove pytest runner patch.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../python-daphne/0001-remove-pytest-runner-requirement.patch  | 10 +++++-----
- package/python-daphne/python-daphne.hash                       |  6 +++---
- package/python-daphne/python-daphne.mk                         |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-daphne/0001-remove-pytest-runner-requirement.patch b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
-index 30acf201d6..70cdb4f19d 100644
---- a/package/python-daphne/0001-remove-pytest-runner-requirement.patch
-+++ b/package/python-daphne/0001-remove-pytest-runner-requirement.patch
-@@ -15,13 +15,13 @@ index 64e94f1..4e3abb0 100755
- --- a/setup.py
- +++ b/setup.py
- @@ -23,7 +23,6 @@ setup(
--     packages=find_packages() + ["twisted.plugins"],
-      include_package_data=True,
--     install_requires=["twisted[tls]>=18.7", "autobahn>=0.18", "asgiref~=3.2"],
-+     install_requires=["twisted[tls]>=22.4", "autobahn>=22.4.2", "asgiref>=3.5.2,<4"],
-+     python_requires=">=3.7",
- -    setup_requires=["pytest-runner"],
--     extras_require={
--         "tests": ["hypothesis~=3.88", "pytest~=3.10", "pytest-asyncio~=0.8"]
--     },
-+     extras_require={"tests": ["hypothesis", "pytest", "pytest-asyncio", "django"]},
-+     entry_points={
-+         "console_scripts": ["daphne = daphne.cli:CommandLineInterface.entrypoint"]
- -- 
- 2.21.0
- 
-diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
-index f80d7175cb..90d053bff6 100644
---- a/package/python-daphne/python-daphne.hash
-+++ b/package/python-daphne/python-daphne.hash
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 5762303af0..651226cc9c 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/daphne/json
--md5  564353eaed92659e3b113d966a0288f2  daphne-2.4.1.tar.gz0
--sha256  1e41d02d78da373c1f8504835cdca6d447b5d64c2941661d4bd968d412b6c383  daphne-2.4.1.tar.gz
--# Locally computed sha256
-+md5  f0dcc0618459ad7d25508704f9505b56  daphne-4.0.0.tar.gz
-+sha256  cce9afc8f49a4f15d4270b8cfb0e0fe811b770a5cc795474e97e4da287497666  daphne-4.0.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
-index cd4739db19..c08088278e 100644
---- a/package/python-daphne/python-daphne.mk
-+++ b/package/python-daphne/python-daphne.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5  d2bc7184d64e9d5a692bfad29ff73dea  python-engineio-4.2.1.tar.gz
+-sha256  d510329b6d8ed5662547862f58bc73659ae62defa66b66d745ba021de112fa62  python-engineio-4.2.1.tar.gz
++md5  cb093c07bc5b5351e6a2edb555b02f33  python-engineio-4.3.4.tar.gz
++sha256  d8d8b072799c36cadcdcc2b40d2a560ce09797ab3d2d596b2ad519a5e4df19ae  python-engineio-4.3.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 81bd49fb64..388e669155 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_DAPHNE_VERSION = 2.4.1
-+PYTHON_DAPHNE_VERSION = 4.0.0
- PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
--PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/03/6c/847d1c962f8c45aa2ab0791583c4a41669d158e28fd6369ce940b8ea8417
-+PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/d7/77/57b19d5caabf8537879aa4cf3a017b99d0b727f2521ffca7fd9140573509
- PYTHON_DAPHNE_SETUP_TYPE = setuptools
- # https://github.com/django/daphne/blob/master/LICENSE
- PYTHON_DAPHNE_LICENSE = BSD-3-Clause
+-PYTHON_ENGINEIO_VERSION = 4.2.1
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/74/1e/33e402011bb2fe33ab12762e5a66d66df1d47302a23e9c5e8310e11b1403
++PYTHON_ENGINEIO_VERSION = 4.3.4
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/7e/ff/970c5d084f513fb38108cd7c90497489d7cff8666f9bfabae00a3f4e13d4
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
