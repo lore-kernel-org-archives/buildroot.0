@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 261CEC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A675EC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB31981DE5;
-	Mon,  5 Dec 2022 11:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB31981DE5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 552FB60BC9;
+	Mon,  5 Dec 2022 11:56:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 552FB60BC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lTFBSPOEt976; Mon,  5 Dec 2022 11:55:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KXqFrP98PetA; Mon,  5 Dec 2022 11:55:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1445F8128C;
-	Mon,  5 Dec 2022 11:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1445F8128C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D59F607CA;
+	Mon,  5 Dec 2022 11:55:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D59F607CA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 72EF11BF8C7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 557D71BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA9C2405F9
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9C2405F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2692440600
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2692440600
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fHY0eOSpLcwG for <buildroot@lists.busybox.net>;
+ with ESMTP id uzH2gzUjxZuH for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20CDA4055E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18192405BA
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20CDA4055E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18192405BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CA2185B9E; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+ id 0F8A585B9B; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:09 +0100
+Date: Thu, 3 Nov 2022 22:02:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e85049dc29affffebff18c4ed87b4780fe2df77e
-X-Git-Newrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+X-Git-Oldrev: 22bfd5d15915a9e913233a5ee15df2540b165079
+X-Git-Newrev: e85049dc29affffebff18c4ed87b4780fe2df77e
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.1CA2185B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tornado: bump to version 6.2
+Message-Id: <20221205112606.0F8A585B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-thrift: bump to version
+ 0.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+commit: https://git.buildroot.net/buildroot/commit/?id=e85049dc29affffebff18c4ed87b4780fe2df77e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Verified license remains Apache-2.0 after hash change.
+License details moved to readme.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-tornado/python-tornado.hash | 6 +++---
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-thrift/python-thrift.hash | 6 +++---
+ package/python-thrift/python-thrift.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index e9fbbedf65..f30a6bb136 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 1d1d628908..0907a6e88f 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tornado/json
--md5  cf39425f3d7eba9a54287f3e795a2f23  tornado-6.0.4.tar.gz
--sha256  0fe2d45ba43b00a41cd73f8be321a44936dc1aba233dee979f17a042b83eb6dc  tornado-6.0.4.tar.gz
-+md5  32fbad606b439c3e1bf4e79d4e872741  tornado-6.2.tar.gz
-+sha256  9b630419bde84ec666bfd7ea0a4cb2a8a651c2d5cccdbdd1972a0c859dfc3c13  tornado-6.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/thrift/json
+-md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
+-sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
++md5  486887192acd558636a1528dfddf918c  thrift-0.16.0.tar.gz
++sha256  2b5b6488fcded21f9d312aa23c9ff6a0195d0f6ae26ddbd5ad9e3e25dfc14408  thrift-0.16.0.tar.gz
  # Locally computed sha256 checksums
--sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index c05a7d65d3..2af86ecb18 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,9 +4,9 @@
+-sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
++sha256  35e2508f171c3ac2529f402c123c12f3b2ac91643f2e52b334f71f8c861be321  README.md
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 3a908ca91c..23a2ad0476 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_TORNADO_VERSION = 6.0.4
-+PYTHON_TORNADO_VERSION = 6.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/95/84/119a46d494f008969bf0c775cb2c6b3579d3c4cc1bb1b41a022aa93ee242
-+PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/f3/9e/225a41452f2d9418d89be5e32cf824c84fe1e639d350d6e8d49db5b7f73a
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
+-PYTHON_THRIFT_VERSION = 0.13.0
++PYTHON_THRIFT_VERSION = 0.16.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/e4/23/dd951c9883cb49a73b750bdfe91e39d78e8a3f1f7175608634f381a197d5
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = LICENSE
++PYTHON_THRIFT_LICENSE_FILES = README.md
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
