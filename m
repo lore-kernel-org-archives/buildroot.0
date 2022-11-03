@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D35EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 164C1C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD7936103F;
-	Thu,  3 Nov 2022 22:00:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD7936103F
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABAB661056;
+	Thu,  3 Nov 2022 22:03:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABAB661056
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sak-19YHD4bC; Thu,  3 Nov 2022 22:00:40 +0000 (UTC)
+	with ESMTP id vDOYyGBOG463; Thu,  3 Nov 2022 22:03:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14AC26102E;
-	Thu,  3 Nov 2022 22:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14AC26102E
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDD3D61038;
+	Thu,  3 Nov 2022 22:03:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDD3D61038
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6EEE51BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:00:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CAC241BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3422240362
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3422240362
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2AFA4184D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:03:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2AFA4184D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fnz4fMun7MwJ for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 22:00:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C19744034F
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C19744034F
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:00:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 733A9FF808;
- Thu,  3 Nov 2022 22:00:31 +0000 (UTC)
-Date: Thu, 3 Nov 2022 23:00:30 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221103230030.5b78b481@windsurf>
-In-Reply-To: <CADvTj4q=9OB0Qk-E=UhDj3Dp3KCQsB+cJceZpLvJnoYU7B9vqg@mail.gmail.com>
-References: <20221103202350.9395-1-james.hilliard1@gmail.com>
- <20221103220710.409e33ea@windsurf>
- <CADvTj4q=9OB0Qk-E=UhDj3Dp3KCQsB+cJceZpLvJnoYU7B9vqg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667512833;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Tha2OC2KIPNZnhbMmpI0w0s+TNaDoLDf4CzFb27IPuA=;
- b=kycOCQNMrigjMWhfLn2jdfG8oHN2BFgb0hBLJk11JPa+q+Hr4PRcEu1kEc+6e96eLPurJ3
- ILJBErTJGXS4X3LlejXGUKhf/UoaxyouUukkouq23BAuYPAQs7bdj9yIX03KA2pxmvDUgt
- Zr9r4sHBjpyJ3ECS1wny3tCt7urYQgJDI80JfJoZ0zp+q/i7hOTUgQtIIxbQEmqEUINsRJ
- cUZ5W0K1ZGDBRSbqBADczq+shngdjHAMeiiQNnb9wMI2urHsBJL3g0KE8CmLu+1LCxfSqb
- qpwfTYpWqPm3JTHcXCBRrn7+hWH2WW5dKi1xrDqvLpA22xvPcpYoummIb94L8w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kycOCQNM
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-twisted: bump to version
- 22.10.0
+ with ESMTP id 03wV6bKEcLmG for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 22:03:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82DB34183C
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82DB34183C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6D1D987C80; Thu,  3 Nov 2022 22:03:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 3 Nov 2022 23:03:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c07caa732b5c4ca5836ee81ce90f57f967dcc721
+X-Git-Newrev: 1a95fcbebf5955de48dd7f57dfc27708739968da
+X-Patchwork-Hint: ignore
+Message-Id: <20221103220343.6D1D987C80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ipmitool: drop ncurses dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,27 +57,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 3 Nov 2022 17:26:33 -0400
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a95fcbebf5955de48dd7f57dfc27708739968da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Hm, did you look at the comment above these variables? :-)  
-> 
-> Yep, tested that this didn't break python-treq build which only has a 22.2.0
-> release so far.
+ncurses is not a dependency since bump to version 1.8.19 in commit
+8317065ecb4979fe43c466f7e5a7f6dc281bd10d and
+https://github.com/ipmitool/ipmitool/commit/63dd71c39c9bf522ad3a785dd001737a285458eb
 
-Something to note in the commit log? :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ipmitool/Config.in   | 1 -
+ package/ipmitool/ipmitool.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index f5c79c8403..dbd6483110 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -32,7 +32,6 @@ config BR2_PACKAGE_IPMITOOL_IPMIEVD
+ 
+ config BR2_PACKAGE_IPMITOOL_IPMISHELL
+ 	bool "ipmishell"
+-	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	help
+ 	  IPMI shell interface
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 06d50bb6b9..0b8befffcd 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -34,7 +34,7 @@ IPMITOOL_CONF_OPTS += --disable-intf-usb
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_IPMITOOL_IPMISHELL),y)
+-IPMITOOL_DEPENDENCIES += ncurses readline
++IPMITOOL_DEPENDENCIES += readline
+ IPMITOOL_CONF_OPTS += --enable-ipmishell
+ else
+ IPMITOOL_CONF_OPTS += --disable-ipmishell
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
