@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A598C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:41:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA013C4708C
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C02D81773;
-	Mon,  5 Dec 2022 11:41:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C02D81773
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73BC360C11;
+	Mon,  5 Dec 2022 11:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73BC360C11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q90ixgG51exM; Mon,  5 Dec 2022 11:41:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7fAb2L8kh_OZ; Mon,  5 Dec 2022 11:42:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4057B81CD0;
-	Mon,  5 Dec 2022 11:41:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4057B81CD0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 63B841BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B61F060BDE;
+	Mon,  5 Dec 2022 11:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B61F060BDE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 10F7E1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F91140546
+ by smtp4.osuosl.org (Postfix) with ESMTP id E45BD4162C
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F91140546
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E45BD4162C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xciOgK9-S6pa for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qpK4Saj_fdqX for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1700440577
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEEE541602
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1700440577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEEE541602
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0535B85B9E; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+ id AD39A85BA2; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:26 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6dab7b3b44111f28384b80392393bb9a6e03485
-X-Git-Newrev: a2e19ebb5035a171750e98926429b286cb1f6e21
+X-Git-Oldrev: 4b47bf463981fb14359857b8336fd9b1dfc49c21
+X-Git-Newrev: 3263543a0249f2ba3018656bd35366d3a429fd2f
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112603.0535B85B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markdown2: bump to version
- 2.4.6
+Message-Id: <20221205112603.AD39A85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pathvalidate: bump to
+ version 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2e19ebb5035a171750e98926429b286cb1f6e21
+commit: https://git.buildroot.net/buildroot/commit/?id=3263543a0249f2ba3018656bd35366d3a429fd2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-markdown2/python-markdown2.hash | 4 ++--
- package/python-markdown2/python-markdown2.mk   | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index a3e310aacf..f8582ba5b8 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index adf1a75dca..828236304e 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5  6134fce06c4783b3178a90a719fa9d91  markdown2-2.4.1.tar.gz
--sha256  ce9265cf179c4e07934e7b6a4b03f3edb7891e66e6d0f7017755f6064bbbe13f  markdown2-2.4.1.tar.gz
-+md5  bb3f451bed011a0d8959e3c1d5850c53  markdown2-2.4.6.tar.gz
-+sha256  f65b4dbe1e16591b14fd40bc659b8b58d285eab70c1da21f390294fcdec42bb0  markdown2-2.4.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
+-md5  afc0343cd8c4ad732431a8b860d73330  pathvalidate-2.5.0.tar.gz
+-sha256  119ba36be7e9a405d704c7b7aea4b871c757c53c9adc0ed64f40be1ed8da2781  pathvalidate-2.5.0.tar.gz
++md5  541238984572fb21db2da2af1d70a993  pathvalidate-2.5.2.tar.gz
++sha256  5ff57d0fabe5ecb7a4f1e4957bfeb5ad8ab5ab4c0fa71f79c6bbc24bd9b7d14d  pathvalidate-2.5.2.tar.gz
  # Locally computed sha256 checksums
- sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index 6acfad2ccb..b1c162e12f 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
+ sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index bb434f3662..6ca8c0f2ad 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN2_VERSION = 2.4.1
-+PYTHON_MARKDOWN2_VERSION = 2.4.6
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/fb/10/4f327f4517fa5dda90021618fe174d1f4aff3c4e06abcd7f77685a455511
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/83/b7/24613765f558afde9f47b61fcd787a9856ac1515b53af38bd11bf2fb3c8c
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+-PYTHON_PATHVALIDATE_VERSION = 2.5.0
++PYTHON_PATHVALIDATE_VERSION = 2.5.2
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/2e/89/7853a1ea323e848ab1e90c8930733bc19e35a935deb80d78b572c36ea33f
++PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/60/f7/ff244fdd8ed98e98d4f9acecfe74a890e5e3245ce55253ef88db51e94652
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
