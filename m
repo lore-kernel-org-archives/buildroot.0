@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8407C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C26C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 624184185F;
-	Thu,  3 Nov 2022 20:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624184185F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 867676104F;
+	Thu,  3 Nov 2022 20:59:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 867676104F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GVmO6NpLpKEk; Thu,  3 Nov 2022 20:59:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dJ3hpMEqgiF8; Thu,  3 Nov 2022 20:59:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AF38417A5;
-	Thu,  3 Nov 2022 20:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF38417A5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E29C91BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2DED6104C;
+	Thu,  3 Nov 2022 20:59:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2DED6104C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14DC61BF968
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AE854177F
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AE854177F
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9E8240C01
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9E8240C01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U2OM63Y3JB9R for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E9wcf26YaSpg for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64F28409E6
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64F28409E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DB3C40BCE
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB3C40BCE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6061987BCF; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+ id 9B66087BCC; Thu,  3 Nov 2022 20:55:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:26 +0100
+Date: Thu, 3 Nov 2022 21:03:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d6dab7b3b44111f28384b80392393bb9a6e03485
-X-Git-Newrev: a2e19ebb5035a171750e98926429b286cb1f6e21
+X-Git-Oldrev: 66911c3dd28a134f550ca03efe19c19daf229dd1
+X-Git-Newrev: 448e701daa35bb6bd23bc6ad3c667c058e7ffb04
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205512.6061987BCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-markdown2: bump
- to version 2.4.6
+Message-Id: <20221103205510.9B66087BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-boto3: bump to
+ version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2e19ebb5035a171750e98926429b286cb1f6e21
+commit: https://git.buildroot.net/buildroot/commit/?id=448e701daa35bb6bd23bc6ad3c667c058e7ffb04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-markdown2/python-markdown2.hash | 4 ++--
- package/python-markdown2/python-markdown2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-boto3/python-boto3.hash | 5 +++--
+ package/python-boto3/python-boto3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index a3e310aacf..f8582ba5b8 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5  6134fce06c4783b3178a90a719fa9d91  markdown2-2.4.1.tar.gz
--sha256  ce9265cf179c4e07934e7b6a4b03f3edb7891e66e6d0f7017755f6064bbbe13f  markdown2-2.4.1.tar.gz
-+md5  bb3f451bed011a0d8959e3c1d5850c53  markdown2-2.4.6.tar.gz
-+sha256  f65b4dbe1e16591b14fd40bc659b8b58d285eab70c1da21f390294fcdec42bb0  markdown2-2.4.6.tar.gz
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index 96c03be61c..347acde9b2 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/boto3/json
+-sha256  833e67edfb73f2cc22ff27a1c33728686dc90a9e81ba2551f9462ea2d1b04f41  boto3-1.24.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/boto3/json
++md5  17f5f946d79da139fa9fd9b014fe0d99  boto3-1.26.0.tar.gz
++sha256  8f0e4eb5c26f927c09bc03302d38156af578b816f1e4f8ca4f0f734d134b9d4f  boto3-1.26.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index 6acfad2ccb..b1c162e12f 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index c5f9133573..03dc32a08b 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN2_VERSION = 2.4.1
-+PYTHON_MARKDOWN2_VERSION = 2.4.6
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/fb/10/4f327f4517fa5dda90021618fe174d1f4aff3c4e06abcd7f77685a455511
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/83/b7/24613765f558afde9f47b61fcd787a9856ac1515b53af38bd11bf2fb3c8c
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+-PYTHON_BOTO3_VERSION = 1.24.8
++PYTHON_BOTO3_VERSION = 1.26.0
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/60/3b/6fed306341003fd059f402d22747ba33d07b8ac8bfe53dbedb2c6e42ee3b
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/77/18/91af4ff58b26d03af8bf8e0759c4087b77032bdc54199d750905080c669a
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
