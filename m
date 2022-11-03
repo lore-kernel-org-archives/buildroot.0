@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B5DBC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0F2C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16FC140C00;
-	Thu,  3 Nov 2022 21:17:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16FC140C00
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DBA681FBF;
+	Thu,  3 Nov 2022 21:18:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DBA681FBF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8Ewuzc7syHwb; Thu,  3 Nov 2022 21:17:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sWLmC4cZJ4jt; Thu,  3 Nov 2022 21:18:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2490640BD3;
-	Thu,  3 Nov 2022 21:17:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2490640BD3
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0B79815CC;
+	Thu,  3 Nov 2022 21:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0B79815CC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19E1C1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1CD0A1BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B54140C1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EC6B40C1C
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B54140C1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EC6B40C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R6Z2gekWPUNi for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
+ with ESMTP id wGx1Pq-JioNR for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B691140C2E
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B691140C2E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E94B340C19
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94B340C19
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4C0A87BCE; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ id E4FCB87BCA; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:22 +0100
+Date: Thu, 3 Nov 2022 21:19:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 331393e8a5903fa5b41e7854c02b56f3c0b168a5
-X-Git-Newrev: 3cbc054f7f560a058c0b380bcf650a15dcd25a18
+X-Git-Oldrev: 7e5672420ba9c4e30d71460b60b3f6207baf12a3
+X-Git-Newrev: d77a49554e1caf7322ee6bf43a6a254a60215ccd
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205514.B4C0A87BCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sqliteschema:
- bump to version 1.3.0
+Message-Id: <20221103205513.E4FCB87BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pytablewriter:
+ bump to version 0.64.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cbc054f7f560a058c0b380bcf650a15dcd25a18
+commit: https://git.buildroot.net/buildroot/commit/?id=d77a49554e1caf7322ee6bf43a6a254a60215ccd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sqliteschema/python-sqliteschema.hash | 4 ++--
- package/python-sqliteschema/python-sqliteschema.mk   | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
-index e60bd64325..d5fe6e7af1 100644
---- a/package/python-sqliteschema/python-sqliteschema.hash
-+++ b/package/python-sqliteschema/python-sqliteschema.hash
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 27a84f5fda..f082542dfb 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqliteschema/json
--md5  4fb0130e7cc60d92be468091fbfc3d51  sqliteschema-1.2.1.tar.gz
--sha256  dde195bd7bc70d5841bc01dff20ec23bd43be87d760d2dfc7c7f2e5fd3808ef3  sqliteschema-1.2.1.tar.gz
-+md5  46da4f7575a0cc6c1d92377a279e5188  sqliteschema-1.3.0.tar.gz
-+sha256  1acdd5087cab54a099135a5623bb1960019816e2e3042b889c637901a832d3c3  sqliteschema-1.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytablewriter/json
+-md5  4909dcdba8c6df35e14dbecbc6c94b6c  pytablewriter-0.46.1.tar.gz
+-sha256  9d52ecc84bb89197c312e193b4ff04a3c934b914f3c32e4826d44a0acbc7764f  pytablewriter-0.46.1.tar.gz
++md5  0eaa4a2429d22389b5e4b8c5f5135bbb  pytablewriter-0.64.2.tar.gz
++sha256  99409d401d6ef5f06d1bc40f265a8e3053afe4cbfbaf709f71124076afb40dbb  pytablewriter-0.64.2.tar.gz
  # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
-index 5c52e35111..c399ebd6f6 100644
---- a/package/python-sqliteschema/python-sqliteschema.mk
-+++ b/package/python-sqliteschema/python-sqliteschema.mk
+ sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index a63f7f8a2a..d865a89330 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SQLITESCHEMA_VERSION = 1.2.1
-+PYTHON_SQLITESCHEMA_VERSION = 1.3.0
- PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
--PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/85/f8/be54d4bebf551cb533d1dea11c3bf165a1a408c2a1cceb1f9724aadd9967
-+PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/3d/ff/91cfff0c96f9ba2bddc27d6855db4907af77551a267b86740c8842beeb78
- PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
- PYTHON_SQLITESCHEMA_LICENSE = MIT
- PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
+-PYTHON_PYTABLEWRITER_VERSION = 0.46.1
++PYTHON_PYTABLEWRITER_VERSION = 0.64.2
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/bb/86/d5f3dfec35d2d7583c9f3f1d731adf729851d1fe01011f07a747eb8c7df0
++PYTHON_PYTABLEWRITER_SITE = https://files.pythonhosted.org/packages/a6/e1/50c1cd9734a9edc1386913b178f9e4757c1bc37665c1855a6596c25957d6
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
