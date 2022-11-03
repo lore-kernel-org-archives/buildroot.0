@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652A4C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A968C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1400061051;
-	Thu,  3 Nov 2022 21:18:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1400061051
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1562E6106E;
+	Thu,  3 Nov 2022 21:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1562E6106E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gFsT7BZ532vg; Thu,  3 Nov 2022 21:18:17 +0000 (UTC)
+	with ESMTP id 4clCIa4bMMLQ; Thu,  3 Nov 2022 21:18:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4C6361040;
-	Thu,  3 Nov 2022 21:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C6361040
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2889A6107A;
+	Thu,  3 Nov 2022 21:18:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2889A6107A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F6CC1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F8081BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3D4E40C1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD1A940C19
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3D4E40C1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD1A940C19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DT9_XuuRyzbH for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:20 +0000 (UTC)
+ with ESMTP id MHgeXXC3fEq1 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B51F40C22
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4B3240C2F
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B51F40C22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4B3240C2F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 544A787BCD; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ id CCCF787BCA; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 21:19:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e556af6f20d8fdf12ee83427e95a9698a4d6ddfa
-X-Git-Newrev: dbb859d66ba5249b3cfef1c3821683054cdce8cd
+X-Git-Oldrev: ed582011f9a467dc044e05ed306b31bd10996eb8
+X-Git-Newrev: 035211b4648847ad624b4216d6e3a9e186d70121
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205514.544A787BCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-secretstorage:
- bump to version 3.3.3
+Message-Id: <20221103205514.CCCF787BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-tempora: bump
+ to version 5.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbb859d66ba5249b3cfef1c3821683054cdce8cd
+commit: https://git.buildroot.net/buildroot/commit/?id=035211b4648847ad624b4216d6e3a9e186d70121
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License hash changed due to line wrap:
+https://github.com/jaraco/tempora/commit/7558cfe2eb2f1ffe3676905e9871466cbc9da24f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-secretstorage/python-secretstorage.hash | 4 ++--
- package/python-secretstorage/python-secretstorage.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tempora/python-tempora.hash | 6 +++---
+ package/python-tempora/python-tempora.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
-index a8e535f892..ae0a5be347 100644
---- a/package/python-secretstorage/python-secretstorage.hash
-+++ b/package/python-secretstorage/python-secretstorage.hash
+diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
+index 0fca58354b..d802a63d87 100644
+--- a/package/python-tempora/python-tempora.hash
++++ b/package/python-tempora/python-tempora.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/secretstorage/json
--md5  c2a8c0e08e5da198fc38c379b98c28f1  SecretStorage-3.1.2.tar.gz
--sha256  15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6  SecretStorage-3.1.2.tar.gz
-+md5  c6ff1cc866d2f1d274b75c6490726b1b  SecretStorage-3.3.3.tar.gz
-+sha256  2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77  SecretStorage-3.3.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tempora/json
+-md5  f8b2b0df1adf3f83b829a85e31bddb2d  tempora-1.14.1.tar.gz
+-sha256  cb60b1d2b1664104e307f8e5269d7f4acdb077c82e35cd57246ae14a3427d2d6  tempora-1.14.1.tar.gz
++md5  24b77c173a7e89084004a38fe44e3ce3  tempora-5.0.2.tar.gz
++sha256  31fa5bb33b2641026211f23e808eb8bd351901988b167d45f323c8f450ecf211  tempora-5.0.2.tar.gz
  # Locally computed sha256 checksums
- sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
-diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
-index 4c209bf513..81487aa8fb 100644
---- a/package/python-secretstorage/python-secretstorage.mk
-+++ b/package/python-secretstorage/python-secretstorage.mk
+-sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
++sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
+index b2f1b6b309..e22ac52472 100644
+--- a/package/python-tempora/python-tempora.mk
++++ b/package/python-tempora/python-tempora.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SECRETSTORAGE_VERSION = 3.1.2
-+PYTHON_SECRETSTORAGE_VERSION = 3.3.3
- PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
--PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/fd/9f/36197c75d9a09b1ab63f56cb985af6cd858ca3fc41fd9cd890ce69bae5b9
-+PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/53/a4/f48c9d79cb507ed1373477dbceaba7401fd8a23af63b837fa61f1dcd3691
- PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
- PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
- PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
+-PYTHON_TEMPORA_VERSION = 1.14.1
++PYTHON_TEMPORA_VERSION = 5.0.2
+ PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
+-PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/2f/b5/5b0464385454c5ca93a39a1c6acefdf574aeb10ef45fa8958b3832cc7d96
++PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/72/2c/9aff4204a4ea5172b0cb3508f8a504ab6562ba539825ea2e33a5b4cb629b
+ PYTHON_TEMPORA_LICENSE = MIT
+ PYTHON_TEMPORA_LICENSE_FILES = LICENSE
+ PYTHON_TEMPORA_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
