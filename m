@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B35C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2528DC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D89781442;
-	Mon,  5 Dec 2022 11:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D89781442
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBEEF60C01;
+	Mon,  5 Dec 2022 11:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEEF60C01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W5-alVEbF1FD; Mon,  5 Dec 2022 11:39:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pvkgdzi9PVNz; Mon,  5 Dec 2022 11:39:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76E9381427;
-	Mon,  5 Dec 2022 11:39:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76E9381427
+	by smtp3.osuosl.org (Postfix) with ESMTP id E292E60AFC;
+	Mon,  5 Dec 2022 11:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E292E60AFC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 765111BF8C7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B3481BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 376014161D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58B68415A9
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 376014161D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58B68415A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DTM-sa4GP_sg for <buildroot@lists.busybox.net>;
+ with ESMTP id 5A9wq2z3Z5TB for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ABF5415A9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 420DB415F4
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ABF5415A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 420DB415F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BAB485BA2; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+ id 3B83085BA3; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:29 +0100
+Date: Thu, 3 Nov 2022 21:04:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea19ddb3707781a8f8e91a384a59f5649e618e64
-X-Git-Newrev: 2879baa7a6136c3ec12202c0b86c470e71589eab
+X-Git-Oldrev: ead539c27dd61ba010b3723b26af91da0779eb98
+X-Git-Newrev: 50447d0c8eb65593b1d33f348be10f9a498f0695
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112603.1BAB485BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mbstrdecoder: bump to
- version 1.1.1
+Message-Id: <20221205112603.3B83085BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-more-itertools: bump to
+ version 9.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2879baa7a6136c3ec12202c0b86c470e71589eab
+commit: https://git.buildroot.net/buildroot/commit/?id=50447d0c8eb65593b1d33f348be10f9a498f0695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Migrate from setuptools to flit package infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-more-itertools/python-more-itertools.hash | 4 ++--
+ package/python-more-itertools/python-more-itertools.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index 90b9abb8d6..dd2f412bee 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
+index 4e6e7bdfb8..c12d3f5623 100644
+--- a/package/python-more-itertools/python-more-itertools.hash
++++ b/package/python-more-itertools/python-more-itertools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
--md5  b32ff478a38730a8ab0b884fe162cc41  mbstrdecoder-1.1.0.tar.gz
--sha256  f4dfd549e424ad8dfc985e6af8b55cb4ec0c208782f610d57439fe6a9a44c244  mbstrdecoder-1.1.0.tar.gz
-+md5  62efa113a3cd2d40942359d6699338f7  mbstrdecoder-1.1.1.tar.gz
-+sha256  0a99413b92bbaddda89d376f496d710dc7131417e98414a756ebcd41374e068d  mbstrdecoder-1.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/more-itertools/json
+-md5  9930552c4f7eedc00193673d5f7f0f19  more-itertools-8.10.0.tar.gz
+-sha256  1debcabeb1df793814859d64a81ad7cb10504c24349368ccf214c664c474f41f  more-itertools-8.10.0.tar.gz
++md5  58f6fe36c3c94bbc569130df546dcfc9  more-itertools-9.0.0.tar.gz
++sha256  5a6257e40878ef0520b1803990e3e22303a41b5714006c32a3fd8304b26ea1ab  more-itertools-9.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index 63f9af74f5..f875e4d71d 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-@@ -4,9 +4,9 @@
+ sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
+diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
+index 3b9957b72e..734d87e057 100644
+--- a/package/python-more-itertools/python-more-itertools.mk
++++ b/package/python-more-itertools/python-more-itertools.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_MBSTRDECODER_VERSION = 1.1.0
-+PYTHON_MBSTRDECODER_VERSION = 1.1.1
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/6c/10/f82ba5a91489c91bf6adaa0e1aca38a7ab2d1d7d80195a5f6ad8c2ff387a
-+PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/ba/ac/ba46bb6eb6165541ce25ff230469efe1c04043cf173f856dcc91876c38de
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+-PYTHON_MORE_ITERTOOLS_VERSION = 8.10.0
++PYTHON_MORE_ITERTOOLS_VERSION = 9.0.0
+ PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
+-PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/8a/f7/93cf3c81629c95f6f40e509f7cd63985a6ddd829181a66c1c8ef101e55f2
+-PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
++PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/13/b3/397aa9668da8b1f0c307bc474608653d46122ae0563d1d32f60e24fa0cbd
++PYTHON_MORE_ITERTOOLS_SETUP_TYPE = flit
+ PYTHON_MORE_ITERTOOLS_LICENSE = MIT
+ PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
