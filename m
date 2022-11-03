@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55829C43219
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E80AC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0023881E64;
-	Thu,  3 Nov 2022 21:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0023881E64
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6CC081FDA;
+	Thu,  3 Nov 2022 21:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6CC081FDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AVUmb6GPbsSA; Thu,  3 Nov 2022 21:21:45 +0000 (UTC)
+	with ESMTP id bpdFxnM3pPOQ; Thu,  3 Nov 2022 21:22:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3FC681FE9;
-	Thu,  3 Nov 2022 21:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3FC681FE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id D044C81FDE;
+	Thu,  3 Nov 2022 21:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D044C81FDE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 378E71BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D5131BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1289841806
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1289841806
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48968417D1
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48968417D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AYwm-e7d5fsO for <buildroot@lists.busybox.net>;
+ with ESMTP id mLDvGQ0Fk0yg for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC580417D1
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC580417D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0310A417FB
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0310A417FB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D978A87C31; Thu,  3 Nov 2022 21:05:46 +0000 (UTC)
+ id E482187C32; Thu,  3 Nov 2022 21:05:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:06 +0100
+Date: Thu, 3 Nov 2022 22:02:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 935edcfc311a9b76cc1d720b29985f89e686be3c
-X-Git-Newrev: 22bfd5d15915a9e913233a5ee15df2540b165079
+X-Git-Oldrev: 22bfd5d15915a9e913233a5ee15df2540b165079
+X-Git-Newrev: e85049dc29affffebff18c4ed87b4780fe2df77e
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210546.D978A87C31@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pymodbus: bump
- to version 3.0.0
+Message-Id: <20221103210546.E482187C32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-thrift: bump to
+ version 0.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22bfd5d15915a9e913233a5ee15df2540b165079
+commit: https://git.buildroot.net/buildroot/commit/?id=e85049dc29affffebff18c4ed87b4780fe2df77e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License details moved to readme.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pymodbus/python-pymodbus.hash | 9 +++++----
- package/python-pymodbus/python-pymodbus.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-thrift/python-thrift.hash | 6 +++---
+ package/python-thrift/python-thrift.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 8e60d94e62..b5243567b7 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,4 +1,5 @@
--# sha256 locally computed
--sha256  088c7ece2a11cad652939719695c457f26f9148cd7d2f4a79872167925180ad5  pymodbus-2.2.0.tar.gz
--# Hash for license file
--sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pymodbus/json
-+md5  25a8724539d0eac1b09d9b41812d86f9  pymodbus-3.0.0.tar.gz
-+sha256  37c9b6f3e5c82f39ee42047ca48cbc9fd0c49a6731126789500191e9deea6cbc  pymodbus-3.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index d96e21a55c..2ed7e94afe 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 1d1d628908..0907a6e88f 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/thrift/json
+-md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
+-sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
++md5  486887192acd558636a1528dfddf918c  thrift-0.16.0.tar.gz
++sha256  2b5b6488fcded21f9d312aa23c9ff6a0195d0f6ae26ddbd5ad9e3e25dfc14408  thrift-0.16.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
++sha256  35e2508f171c3ac2529f402c123c12f3b2ac91643f2e52b334f71f8c861be321  README.md
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 3a908ca91c..23a2ad0476 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
 @@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 2.2.0
-+PYTHON_PYMODBUS_VERSION = 3.0.0
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = $(call github,riptideio,pymodbus,v$(PYTHON_PYMODBUS_VERSION))
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/0f/5a/50e9492f98ef911af18c2b603bc003fef726e84d22bac2ce6e651643b29c
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
--PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
-+PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-PYTHON_THRIFT_VERSION = 0.13.0
++PYTHON_THRIFT_VERSION = 0.16.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/e4/23/dd951c9883cb49a73b750bdfe91e39d78e8a3f1f7175608634f381a197d5
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = LICENSE
++PYTHON_THRIFT_LICENSE_FILES = README.md
  
  $(eval $(python-package))
 _______________________________________________
