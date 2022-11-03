@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3B5BC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30BB6C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77AAC4185D;
-	Thu,  3 Nov 2022 21:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77AAC4185D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D247581F05;
+	Thu,  3 Nov 2022 21:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D247581F05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fmh8Tg78RNdT; Thu,  3 Nov 2022 21:02:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WGi-bsONJR7r; Thu,  3 Nov 2022 21:02:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34E36417CA;
-	Thu,  3 Nov 2022 21:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E36417CA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 376561BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00C2781EF7;
+	Thu,  3 Nov 2022 21:02:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00C2781EF7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 03EB91BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B56D44179D
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56D44179D
+ by smtp2.osuosl.org (Postfix) with ESMTP id E94E440C1A
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94E440C1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IIRkkrPr7cKD for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3wehwwOToxHY for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF7AD4162D
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF7AD4162D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 243CE40BDB
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243CE40BDB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD22487BCF; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+ id 222FE87BCC; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:03:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 13d4626b304375844f34afe881cb295dc7d5fcfc
-X-Git-Newrev: c6945c4d31c9088f030c6b254a1ef202a28e84c6
+X-Git-Oldrev: d2ccca7470426f25244684e0cf86b031ec0add96
+X-Git-Newrev: d40ad5de4b64b5857acb10dded9eae213c720bad
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205513.BD22487BCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyopenssl: bump
- to version 22.1.0
+Message-Id: <20221103205511.222FE87BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-dataproperty:
+ bump to version 0.55.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6945c4d31c9088f030c6b254a1ef202a28e84c6
+commit: https://git.buildroot.net/buildroot/commit/?id=d40ad5de4b64b5857acb10dded9eae213c720bad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
- package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 0dc9f921fa..bc65bb5868 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 380846e9f1..3edec5cc8c 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
--md5  182c9f258c431c731906ab7fdaf6d0a8  pyOpenSSL-22.0.0.tar.gz
--sha256  660b1b1425aac4a1bea1d94168a85d99f0b3144c869dd4390d27629d0087f1bf  pyOpenSSL-22.0.0.tar.gz
-+md5  6834da75e33d3c8dcd891b723bfcec9e  pyOpenSSL-22.1.0.tar.gz
-+sha256  7a83b7b272dd595222d672f5ce29aa030f1fb837630ef229f62e72e395ce8968  pyOpenSSL-22.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dataproperty/json
+-md5  ce5fd0d37b6d0ca57f144e22cd62bfec  DataProperty-0.54.2.tar.gz
+-sha256  df2fcf00e7a57f0a6089f686f847527eb3c91ded5c419daef6d06ee4bb1187b4  DataProperty-0.54.2.tar.gz
++md5  8c8864a1dc456d25456b5c4de99a3fb6  DataProperty-0.55.0.tar.gz
++sha256  73ccf10f8b123968210438a1a1aa859ea6d5a16b4e1f4d307da7a81b838e79fa  DataProperty-0.55.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index 21a3f06907..85f856b319 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+ sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 1b07dc1bb7..0feef55310 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 22.0.0
-+PYTHON_PYOPENSSL_VERSION = 22.1.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
--PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/35/d3/d6a9610f19d943e198df502ae660c6b5acf84cc3bc421a2aa3c0fb6b21d1
-+PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/e7/2f/c6d89edac75482f11e231b644e365d31d5479b7b727734e6a8f3d00decd5
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
- PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
- PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
+-PYTHON_DATAPROPERTY_VERSION = 0.54.2
++PYTHON_DATAPROPERTY_VERSION = 0.55.0
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/9a/03/44fb9094c4fb8032f254eaa37b3b07db82fa35779ceca097b3cde8464749
++PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/85/6e/627eba99858c486c5b82468e4aaf60808c2e35d1bb768ee5da712b6fe9be
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
