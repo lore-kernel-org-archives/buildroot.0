@@ -4,84 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 130BCC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 367C9C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 23:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C5D540BDA;
-	Thu,  3 Nov 2022 22:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C5D540BDA
+	by smtp2.osuosl.org (Postfix) with ESMTP id B684140BDD;
+	Thu,  3 Nov 2022 23:06:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B684140BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mbIn-TkTch7q; Thu,  3 Nov 2022 22:53:21 +0000 (UTC)
+	with ESMTP id QDwDc3gIXSAQ; Thu,  3 Nov 2022 23:06:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5DA640BCE;
-	Thu,  3 Nov 2022 22:53:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5DA640BCE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3FFDE1BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:53:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E087E40BD8;
+	Thu,  3 Nov 2022 23:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E087E40BD8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 971FA1BF322
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26FBD41875
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26FBD41875
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E60D40BD8
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 23:06:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E60D40BD8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Czfr8jS9LBit for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 22:53:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCCBB417A6
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCCBB417A6
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:53:17 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id j15so4839187wrq.3
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 15:53:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wgR9K6q2qfjoCVMUUwN3IPDtFuSgIe4R5sN3CJhls4A=;
- b=OYHjEH1JjSyUkYSiBTQu/A9iFIh94GwpLwIvgA4gRDqLfhpMNek93+PeSHfTN4xgNI
- G/K3xIo1WEJfXrOkdWAGReYSb6RvkV7R+SpxsoSYkRqULLDTX3FJYZrxmrVOfdZmW2qn
- 2iO1/hzwMDBjHYqSxD1FcWbsDwq5yfi0vwpvIefookiqKyVK+6fAvVErFapfWCbtfetb
- vC4AK0zu1M43z7dlHA2ScwMqcNcnnHBRVrXYcFD5SrEjxpnc1NKjg7RRkxZXHGtT1XYo
- 1IzYsn3tpr0N51J69uuTzY3rkPK0KC2CeaCEFhH/vwqgIDSS7VgkDtoOcsYFxiPKFRUn
- 981A==
-X-Gm-Message-State: ACrzQf1L3hYkLWIL3oPFavLPqsOLF3zz/7K3rrhFc6ZylqWOOsFn/ar4
- 0lXGGD80CQ1Yxfmu3o85B4p5xGfFqXM=
-X-Google-Smtp-Source: AMsMyM4mlLJXEKpISK5muZ84wUdBbUyqhG4H9An5MURS7dVpn/UYRxxXLgdkRIqdTTuNEgrGFigwCg==
-X-Received: by 2002:adf:f9cf:0:b0:236:6a26:c055 with SMTP id
- w15-20020adff9cf000000b002366a26c055mr20520439wrr.195.1667515995218; 
- Thu, 03 Nov 2022 15:53:15 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- x17-20020a1c7c11000000b003a3170a7af9sm1119979wmc.4.2022.11.03.15.53.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 15:53:14 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 23:52:24 +0100
-Message-Id: <20221103225224.6375-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xuUaQ5ifQgzD for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 23:06:40 +0000 (UTC)
+X-Greylist: delayed 00:36:11 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E03C40BCE
+Received: from 001.lax.mailroute.net (001.lax.mailroute.net [199.89.1.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E03C40BCE
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 23:06:40 +0000 (UTC)
+Received: from localhost (001.lax.mailroute.net [127.0.0.1])
+ by 001.lax.mailroute.net (Postfix) with ESMTP id 4N3KBm0trpz1M8Cv;
+ Thu,  3 Nov 2022 23:06:40 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+Received: from 001.lax.mailroute.net ([199.89.1.4])
+ by localhost (001.lax [127.0.0.1]) (mroute_mailscanner, port 10026)
+ with LMTP id d52biMvfYpXS; Thu,  3 Nov 2022 23:06:38 +0000 (UTC)
+Received: from mail.carnegierobotics.com (unknown [72.22.26.5])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by 001.lax.mailroute.net (Postfix) with ESMTPS id 4N3KBk4HSxz1M86Y;
+ Thu,  3 Nov 2022 23:06:38 +0000 (UTC)
+Received: from CRL-PGH-EX19-1.crl.local (10.1.7.176) by
+ CRL-PGH-EX19-1.crl.local (10.1.7.176) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.858.15; Thu, 3 Nov 2022 19:06:37 -0400
+Received: from CRL-PGH-EX19-1.crl.local ([fe80::895e:aa1a:c80e:9f5c]) by
+ CRL-PGH-EX19-1.crl.local ([fe80::895e:aa1a:c80e:9f5c%7]) with mapi id
+ 15.02.0858.015; Thu, 3 Nov 2022 19:06:37 -0400
+To: "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>
+Thread-Topic: [PATCH 1/1] package/opencv4: add support for opencv4_contrib
+ repository for extra modules
+Thread-Index: AQHY79PchIcNjjfRmUGsVEGv/RpL7q4uELMAgAAEjIA=
+Date: Thu, 3 Nov 2022 23:06:37 +0000
+Message-ID: <e7c0b899287bbb78b1d871f0ce10767d7b57beab.camel@carnegierobotics.com>
+References: <70a53e0eb3fdc514641a9cb83dd42aa5bd0f1be6.camel@carnegierobotics.com>
+ <20221103235020.70bb8e8e@windsurf>
+In-Reply-To: <20221103235020.70bb8e8e@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.5-1.1 
+x-originating-ip: [10.212.134.122]
+Content-ID: <78B989FFC183744C8EBB6801D05CDC3E@crl.local>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wgR9K6q2qfjoCVMUUwN3IPDtFuSgIe4R5sN3CJhls4A=;
- b=R+97XhVOUYCdrBHCjZQxvhMt27sYbju9SxE8S85iqm18ekeC1EYGGaa027pItq4eEV
- NtV3ewwZ6R0krLKGA66Wd0D1htcNZ11S6r6u0aqHNBDoJPqrZmbx1sY9jKd8bIWit3vH
- HABwp3gA1MFdgpcp81Ef/77vsyaeQPLUGT1e1EapkVxU+yybKCIskuhHTJuvFmYwkB9+
- 8q8bh5y74HRyqyWgwwkgvDRJIGXskBahykBxGFxP1V02goegDnb3kXeLPe+jtMWL9h5u
- J1AfIaOFnY5+Pgh2flJmB6cwaF3MWbcrSHVQWv4kRqp+VF9B3cjyHkpK8ubn59g+sze3
- 4AYw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=R+97XhVO
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: bump to version 5.5.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ carnegierobotics.com; h=mime-version:content-transfer-encoding
+ :content-id:content-type:content-type:user-agent
+ :content-language:accept-language:in-reply-to:references
+ :message-id:date:date:subject:subject:from:from:received
+ :received:received:received; s=mr01; t=1667516798; x=1670108799;
+ bh=BIl1I94yjmTYINCtmMLlCrAXvlZG9wOO2uWkWLtLUnc=; b=OMqOIvlw8/dq
+ +RsLXyj7h4ziUI8iKsKdZuT2QAe0L4K/O8jce9zUJadLLaG3sEeAZLkRL3DfXB3b
+ 7DN5TCLTTL/YhJkRXLgL+rSRJzGTYwoeAUPPOe/QiPOfXd3WXZmOg+53JkyNXlcF
+ L/pcfuXMTfBm90MDxmBlX3lmI3kZgzRZJAQC6bzCDlNj4k1Q30xy+azTd5ZgxRs/
+ 3ffjGls78OqLThXuHhkPoW0LWSnumW2JTNz0oYnLEfn0TstvyjnX6T4mGb+zLPmK
+ tZLezNqfOos+pl86ZEb1AwUsQB3/b0XJYWzTzNLaNKOaYPCsz1TAsBp8CBzwwQLz
+ CMyIAx8aGw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=carnegierobotics.com header.i=@carnegierobotics.com
+ header.a=rsa-sha256 header.s=mr01 header.b=OMqOIvlw
+Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: add support for
+ opencv4_contrib repository for extra modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +101,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Woody Douglass via buildroot <buildroot@buildroot.org>
+Reply-To: Woody Douglass <wdouglass@carnegierobotics.com>
+Cc: "fontaine.fabrice@gmail.com" <fontaine.fabrice@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4IGZvciBwb3NzaWJsZSBidWZmZXIgemVyb2l6YXRpb24gb3ZlcnJ1biBpbnRyb2R1Y2VkIGF0
-IHRoZSBlbmQgb2YKdjUuNS4yIHJlbGVhc2UgY3ljbGUgaW4gR2l0SHViIHB1bGwgcmVxdWVzdCA1
-NzQzICgjNTc0MykgYW5kIGZpeGVkIGluCnB1bGwgcmVxdWVzdCA1NzU3ICgjNTc1NykuIEluIHRo
-ZSBjYXNlIHdoZXJlIGEgc3BlY2lmaWMgbWVtb3J5CmFsbG9jYXRpb24gZmFpbGVkIG9yIGEgaGFy
-ZHdhcmUgZmF1bHQgaGFwcGVuZWQgdGhlcmUgd2FzIHRoZSBwb3RlbnRpYWwKZm9yIGFuIG92ZXJy
-dW4gb2YgMOKAmXMgd2hlbiBtYXNraW5nIHRoZSBidWZmZXIgdXNlZCBmb3IgKEQpVExTIDEuMiBh
-bmQKbG93ZXIgb3BlcmF0aW9ucy4gKEQpVExTIDEuMyBvbmx5IGFuZCBjcnlwdG8gb25seSB1c2Vy
-cyBhcmUgbm90IGFmZmVjdGVkCmJ5IHRoZSBpc3N1ZS4gVGhpcyBpcyBub3QgcmVsYXRlZCBpbiBh
-bnkgd2F5IHRvIHJlY2VudCBpc3N1ZXMgcmVwb3J0ZWQKaW4gT3BlblNTTC4KCmh0dHBzOi8vZ2l0
-aHViLmNvbS93b2xmU1NML3dvbGZzc2wvcmVsZWFzZXMvdGFnL3Y1LjUuMy1zdGFibGUKClNpZ25l
-ZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgot
-LS0KIHBhY2thZ2Uvd29sZnNzbC93b2xmc3NsLmhhc2ggfCAyICstCiBwYWNrYWdlL3dvbGZzc2wv
-d29sZnNzbC5tayAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wuaGFzaCBi
-L3BhY2thZ2Uvd29sZnNzbC93b2xmc3NsLmhhc2gKaW5kZXggNjVkNzdjYTY1OS4uMDgyNjIxMTNh
-MCAxMDA2NDQKLS0tIGEvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wuaGFzaAorKysgYi9wYWNrYWdl
-L3dvbGZzc2wvd29sZnNzbC5oYXNoCkBAIC0xLDUgKzEsNSBAQAogIyBMb2NhbGx5IGNvbXB1dGVk
-Ogotc2hhMjU2ICA0OWM2MTk1NDYyY2FlMDM0ZWZlNmM4NjI2ODgyNGJhNTE1NjgyNTA4YTVmNTE5
-OTM1OGQ1NmE0MTY4YTgyY2YwICB3b2xmc3NsLTUuNS4yLnRhci5negorc2hhMjU2ICBmZDMxMzVi
-ODY1N2QwOWZiOTZhOGFhZDE2NTg1ZGE4NTBiOTZlYTQyMGFlOGNlNWFjNGQ1ZmRmYzYxNGMyNjgz
-ICB3b2xmc3NsLTUuNS4zLnRhci5negogCiAjIEhhc2ggZm9yIGxpY2Vuc2UgZmlsZXM6CiBzaGEy
-NTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAx
-MDUyMWI4ODA2NDMgIENPUFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd29sZnNzbC93b2xmc3Ns
-Lm1rIGIvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wubWsKaW5kZXggZDlmYTcyY2NmNC4uY2QzYWNk
-OTQxMSAxMDA2NDQKLS0tIGEvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wubWsKKysrIGIvcGFja2Fn
-ZS93b2xmc3NsL3dvbGZzc2wubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIwogCi1XT0xGU1NMX1ZFUlNJT04gPSA1LjUuMgorV09MRlNTTF9WRVJTSU9OID0gNS41
-LjMKIFdPTEZTU0xfU0lURSA9ICQoY2FsbCBnaXRodWIsd29sZlNTTCx3b2xmc3NsLHYkKFdPTEZT
-U0xfVkVSU0lPTiktc3RhYmxlKQogV09MRlNTTF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKIAotLSAK
-Mi4zNS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Thomas
+Ok, no worries. My work email is outlook, so I cannot seem to get git
+send-email working with it. I will attempt again in the morning, from
+my personal (SMTP) email and with a revised commit message (and maybe a
+comment in the .mk file)
+
+Thanks for taking a look!
+Woody
+
+On Thu, 2022-11-03 at 23:50 +0100, Thomas Petazzoni wrote:
+> Hello Woody,
+> 
+> On Thu, 3 Nov 2022 22:30:21 +0000
+> Woody Douglass <wdouglass@carnegierobotics.com> wrote:
+> 
+> > This adds a separate opencv4_contrib package to manage
+> > downloading/unpacking that repository. These extra modules
+> > are useful for a lot of applications, but not necessary
+> > for minimal installs, so they are all given dedicated Kconfig
+> > options
+> > 
+> > Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+> 
+> Thanks a lot for your patch! One issue is that because you did not
+> send
+> it with "git send-email", it arrived on the mailing list badly
+> damaged
+> (line-wrapped)  by your e-mail client.
+> 
+> Also, one thing that really should be explained in the commit log is
+> that the opencv4-contrib is only useful to download additional
+> source,
+> but that it actually gets built as part of the opencv4 package
+> itself,
+> which is why opencv4-contrib is a dependency of opencv4 and not the
+> other way around.
+> 
+> Even though this is quite unusual, it should be noted that it is not
+> the first case we have: nginx modules are handled in the same way
+> (see nginx-upload, nginx-dav-ext, nginx-naxsi, nginx-modsecurity).
+> 
+> Thanks!
+> 
+> Thomas
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
