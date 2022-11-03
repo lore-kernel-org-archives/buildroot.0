@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2528DC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DDD5C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBEEF60C01;
-	Mon,  5 Dec 2022 11:39:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEEF60C01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41F0A60DCA;
+	Mon,  5 Dec 2022 11:39:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41F0A60DCA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pvkgdzi9PVNz; Mon,  5 Dec 2022 11:39:20 +0000 (UTC)
+	with ESMTP id zQc9T5PXQCBL; Mon,  5 Dec 2022 11:39:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E292E60AFC;
-	Mon,  5 Dec 2022 11:39:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E292E60AFC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5B3481BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id 460C360BC9;
+	Mon,  5 Dec 2022 11:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 460C360BC9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 73F011BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58B68415A9
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58B68415A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id CAF894058E
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAF894058E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5A9wq2z3Z5TB for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jUQHnGxSJbhu for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 420DB415F4
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 420DB415F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42061400DC
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42061400DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B83085BA3; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+ id 3D45D85BA2; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:34 +0100
+Date: Thu, 3 Nov 2022 21:04:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ead539c27dd61ba010b3723b26af91da0779eb98
-X-Git-Newrev: 50447d0c8eb65593b1d33f348be10f9a498f0695
+X-Git-Oldrev: 506d170855cbae6210426c9d84a3c36f252306cb
+X-Git-Newrev: c75f86321131fbdbb5691dda0dce57473981c08c
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112603.3B83085BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-more-itertools: bump to
- version 9.0.0
+Message-Id: <20221205112602.3D45D85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-httplib2: bump to version
+ 0.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50447d0c8eb65593b1d33f348be10f9a498f0695
+commit: https://git.buildroot.net/buildroot/commit/?id=c75f86321131fbdbb5691dda0dce57473981c08c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate from setuptools to flit package infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-more-itertools/python-more-itertools.hash | 4 ++--
- package/python-more-itertools/python-more-itertools.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-httplib2/python-httplib2.hash | 4 ++--
+ package/python-httplib2/python-httplib2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
-index 4e6e7bdfb8..c12d3f5623 100644
---- a/package/python-more-itertools/python-more-itertools.hash
-+++ b/package/python-more-itertools/python-more-itertools.hash
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+index 2c5914c5f6..4da8f26e43 100644
+--- a/package/python-httplib2/python-httplib2.hash
++++ b/package/python-httplib2/python-httplib2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/more-itertools/json
--md5  9930552c4f7eedc00193673d5f7f0f19  more-itertools-8.10.0.tar.gz
--sha256  1debcabeb1df793814859d64a81ad7cb10504c24349368ccf214c664c474f41f  more-itertools-8.10.0.tar.gz
-+md5  58f6fe36c3c94bbc569130df546dcfc9  more-itertools-9.0.0.tar.gz
-+sha256  5a6257e40878ef0520b1803990e3e22303a41b5714006c32a3fd8304b26ea1ab  more-itertools-9.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/httplib2/json
+-md5  de7f5e3a4adb3105889867327bdd39dc  httplib2-0.19.1.tar.gz
+-sha256  0b12617eeca7433d4c396a100eaecfa4b08ee99aa881e6df6e257a7aad5d533d  httplib2-0.19.1.tar.gz
++md5  b42f508585d988e77eac3980db1fd967  httplib2-0.21.0.tar.gz
++sha256  fc144f091c7286b82bec71bdbd9b27323ba709cc612568d3000893bfd9cb4b34  httplib2-0.21.0.tar.gz
  # Locally computed sha256 checksums
- sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
-diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
-index 3b9957b72e..734d87e057 100644
---- a/package/python-more-itertools/python-more-itertools.mk
-+++ b/package/python-more-itertools/python-more-itertools.mk
-@@ -4,10 +4,10 @@
+ sha256  589eec38f72df2be203711d3b8cbece9b908c5e7ff00bc3cab7f63bae9e366b4  LICENSE
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index a259c33c73..1093ecab39 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MORE_ITERTOOLS_VERSION = 8.10.0
-+PYTHON_MORE_ITERTOOLS_VERSION = 9.0.0
- PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
--PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/8a/f7/93cf3c81629c95f6f40e509f7cd63985a6ddd829181a66c1c8ef101e55f2
--PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
-+PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/13/b3/397aa9668da8b1f0c307bc474608653d46122ae0563d1d32f60e24fa0cbd
-+PYTHON_MORE_ITERTOOLS_SETUP_TYPE = flit
- PYTHON_MORE_ITERTOOLS_LICENSE = MIT
- PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
- 
+-PYTHON_HTTPLIB2_VERSION = 0.19.1
++PYTHON_HTTPLIB2_VERSION = 0.21.0
+ PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+-PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ed/cd/533a1e9e04671bcee5d2854b4f651a3fab9586d698de769d93b05ee2bff1
++PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/c2/37/a093aaa902f6b2301f0f2cff5285548dbc4ab9b9a29215eb440381cbb32b
+ PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
+ PYTHON_HTTPLIB2_LICENSE = MIT
+ PYTHON_HTTPLIB2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
