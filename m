@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A9FEC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1F5EC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 05F5140522;
-	Mon,  5 Dec 2022 11:30:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05F5140522
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9ED884052C;
+	Mon,  5 Dec 2022 11:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ED884052C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D-dC1AfA1BMI; Mon,  5 Dec 2022 11:30:47 +0000 (UTC)
+	with ESMTP id 75pwulROLUg7; Mon,  5 Dec 2022 11:30:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 283B5403D6;
-	Mon,  5 Dec 2022 11:30:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283B5403D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1ABE01BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D8E640528;
+	Mon,  5 Dec 2022 11:30:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D8E640528
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 259D01BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E5EA4052C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E1E9415FC
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E5EA4052C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E1E9415FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QSsPgU6-0fA8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tiJW7v5_CeeT for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09F8B4052B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6709941578
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09F8B4052B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6709941578
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 050B085BBE; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+ id 632B785BA2; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:27 +0100
+Date: Thu, 3 Nov 2022 21:03:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
-X-Git-Newrev: 6263acc00de3ed3187d6c3ba0bf06267d6128646
+X-Git-Oldrev: d40ad5de4b64b5857acb10dded9eae213c720bad
+X-Git-Newrev: f1a8e3abab4f44832f04cfe03c1f7fd6df77ea47
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112601.050B085BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cherrypy: bump to version
- 18.8.0
+Message-Id: <20221205112601.632B785BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-decorator: bump to version
+ 5.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6263acc00de3ed3187d6c3ba0bf06267d6128646
+commit: https://git.buildroot.net/buildroot/commit/?id=f1a8e3abab4f44832f04cfe03c1f7fd6df77ea47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to url update:
-https://github.com/cherrypy/cherrypy/commit/07aec3c90326e537613e5a77584df201ac5fdb1a
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cherrypy/python-cherrypy.hash | 9 +++++----
- package/python-cherrypy/python-cherrypy.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-decorator/python-decorator.hash | 4 ++--
+ package/python-decorator/python-decorator.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index 2e7a92d6f3..cd8f8756d8 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
--md5  e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
--sha256  6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
--sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
-+# md5, sha256 from https://pypi.org/pypi/cherrypy/json
-+md5  033c58bf3da497f283b039911d1c882b  CherryPy-18.8.0.tar.gz
-+sha256  9b48cfba8a2f16d5b6419cc657e6d51db005ba35c5e3824e4728bb03bbc7ef9b  CherryPy-18.8.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  45ade933c280ece37e3e01d3a91afeed9505746a456f72ad10b0897c49e65104  LICENSE.md
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 72b17bc876..9b6ad0e99a 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
+diff --git a/package/python-decorator/python-decorator.hash b/package/python-decorator/python-decorator.hash
+index 46ff7206d7..e12d34e7ed 100644
+--- a/package/python-decorator/python-decorator.hash
++++ b/package/python-decorator/python-decorator.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/decorator/json
+-md5  d01585c3ea5b36a209747fcc978a98c8  decorator-5.1.0.tar.gz
+-sha256  e59913af105b9860aa2c8d3272d9de5a56a4e608db9a2f167a8480b323d529a7  decorator-5.1.0.tar.gz
++md5  a6b34700dcac8a4bb04efd55e99626c1  decorator-5.1.1.tar.gz
++sha256  637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330  decorator-5.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fd11660cabf0532082c45706862fafc294907ec7f8e217818240a4999806782e  LICENSE.txt
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
+index a61f045e2a..5dba8cc915 100644
+--- a/package/python-decorator/python-decorator.mk
++++ b/package/python-decorator/python-decorator.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHERRYPY_VERSION = 12.0.1
-+PYTHON_CHERRYPY_VERSION = 18.8.0
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
-+PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/60/ea/6c4d16b0cd1f4f64a478bac8a37d75a585e854afb5693ce80a9711efdc4a
- PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
- PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
- PYTHON_CHERRYPY_SETUP_TYPE = setuptools
+-PYTHON_DECORATOR_VERSION = 5.1.0
++PYTHON_DECORATOR_VERSION = 5.1.1
+ PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
+-PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/92/3c/34f8448b61809968052882b830f7d8d9a8e1c07048f70deb039ae599f73c
++PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/66/0c/8d907af351aa16b42caae42f9d6aa37b900c67308052d10fdce809f8d952
+ PYTHON_DECORATOR_LICENSE = BSD-2-Clause
+ PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
+ PYTHON_DECORATOR_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
