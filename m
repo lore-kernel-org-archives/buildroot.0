@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C31C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A9FEC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E12A41610;
-	Mon,  5 Dec 2022 11:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E12A41610
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05F5140522;
+	Mon,  5 Dec 2022 11:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05F5140522
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6FC-4E1slXoR; Mon,  5 Dec 2022 11:30:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D-dC1AfA1BMI; Mon,  5 Dec 2022 11:30:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DD66404B9;
-	Mon,  5 Dec 2022 11:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DD66404B9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0DA5E1BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id 283B5403D6;
+	Mon,  5 Dec 2022 11:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283B5403D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ABE01BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57B4781A2B
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57B4781A2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E5EA4052C
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E5EA4052C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JHS-Jot8FZ9i for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QSsPgU6-0fA8 for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90D2981B84
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90D2981B84
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09F8B4052B
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09F8B4052B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EDB085BBE; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+ id 050B085BBE; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:22 +0100
+Date: Thu, 3 Nov 2022 21:03:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a76ef23ae323fd0d571dd2f0c218201921c06bf
-X-Git-Newrev: 2a10f8e21100420026666c171b38d279ec2fecc5
+X-Git-Oldrev: 3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
+X-Git-Newrev: 6263acc00de3ed3187d6c3ba0bf06267d6128646
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112605.8EDB085BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-simplesqlite: bump to
- version 1.3.0
+Message-Id: <20221205112601.050B085BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cherrypy: bump to version
+ 18.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a10f8e21100420026666c171b38d279ec2fecc5
+commit: https://git.buildroot.net/buildroot/commit/?id=6263acc00de3ed3187d6c3ba0bf06267d6128646
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Verified license remains MIT after hash change.
+License hash changed due to url update:
+https://github.com/cherrypy/cherrypy/commit/07aec3c90326e537613e5a77584df201ac5fdb1a
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-simplesqlite/python-simplesqlite.hash | 6 +++---
- package/python-simplesqlite/python-simplesqlite.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cherrypy/python-cherrypy.hash | 9 +++++----
+ package/python-cherrypy/python-cherrypy.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-simplesqlite/python-simplesqlite.hash b/package/python-simplesqlite/python-simplesqlite.hash
-index 404670aef3..06edbfab3d 100644
---- a/package/python-simplesqlite/python-simplesqlite.hash
-+++ b/package/python-simplesqlite/python-simplesqlite.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplesqlite/json
--md5  f1d4f2ec14e2c782a62e451587477598  SimpleSQLite-0.45.2.tar.gz
--sha256  0b19c99c36b63173a715649f94a2fc3aee8deb9b70c683d584bca85e5930244b  SimpleSQLite-0.45.2.tar.gz
-+md5  11f2ef73243fb0d677ed00d22f1441b2  SimpleSQLite-1.3.0.tar.gz
-+sha256  f7e862bec5982059e665cc73b6fdb4c8340a1f565ba3497387c3c48f10d43bf8  SimpleSQLite-1.3.0.tar.gz
- # Locally computed sha256 checksums
--sha256  98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
-+sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-simplesqlite/python-simplesqlite.mk b/package/python-simplesqlite/python-simplesqlite.mk
-index 88ffcd4d45..ea60cefc16 100644
---- a/package/python-simplesqlite/python-simplesqlite.mk
-+++ b/package/python-simplesqlite/python-simplesqlite.mk
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index 2e7a92d6f3..cd8f8756d8 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
+-md5  e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
+-sha256  6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
+-sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
++# md5, sha256 from https://pypi.org/pypi/cherrypy/json
++md5  033c58bf3da497f283b039911d1c882b  CherryPy-18.8.0.tar.gz
++sha256  9b48cfba8a2f16d5b6419cc657e6d51db005ba35c5e3824e4728bb03bbc7ef9b  CherryPy-18.8.0.tar.gz
++# Locally computed sha256 checksums
++sha256  45ade933c280ece37e3e01d3a91afeed9505746a456f72ad10b0897c49e65104  LICENSE.md
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index 72b17bc876..9b6ad0e99a 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIMPLESQLITE_VERSION = 0.45.2
-+PYTHON_SIMPLESQLITE_VERSION = 1.3.0
- PYTHON_SIMPLESQLITE_SOURCE = SimpleSQLite-$(PYTHON_SIMPLESQLITE_VERSION).tar.gz
--PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/b3/d1/bc3668ed7d90ee70d556124b8b5b3329505d72b5290bb393626f1afe714d
-+PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/a0/2c/39a9e7dc4af46d101f48753086c686982790ecc2bdf5e9fa88f85f027e7a
- PYTHON_SIMPLESQLITE_SETUP_TYPE = setuptools
- PYTHON_SIMPLESQLITE_LICENSE = MIT
- PYTHON_SIMPLESQLITE_LICENSE_FILES = LICENSE
+-PYTHON_CHERRYPY_VERSION = 12.0.1
++PYTHON_CHERRYPY_VERSION = 18.8.0
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+-PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
++PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/60/ea/6c4d16b0cd1f4f64a478bac8a37d75a585e854afb5693ce80a9711efdc4a
+ PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
+ PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
+ PYTHON_CHERRYPY_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
