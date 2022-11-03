@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45F70C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72EF7C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E443F40BCE;
-	Thu,  3 Nov 2022 22:08:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E443F40BCE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 234DB81F72;
+	Thu,  3 Nov 2022 22:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 234DB81F72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lGEtFu-xX5Li; Thu,  3 Nov 2022 22:08:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T38-twxdfEJ5; Thu,  3 Nov 2022 22:08:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E03A40BDC;
-	Thu,  3 Nov 2022 22:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E03A40BDC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6D70B1BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:08:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EECF81F61;
+	Thu,  3 Nov 2022 22:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EECF81F61
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BDF81BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48CD361043
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1311481DF3
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:08:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48CD361043
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1311481DF3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jGYk_ITyWVqX for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ctqYYuujPWs for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 22:08:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CB8D61042
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4155081F61
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CB8D61042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4155081F61
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B09887CEC; Thu,  3 Nov 2022 22:08:21 +0000 (UTC)
+ id 31CA887CEB; Thu,  3 Nov 2022 22:08:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:08:10 +0100
+Date: Thu, 3 Nov 2022 23:07:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e7930708a3b1e429ea605f4544564b29313b0a7b
-X-Git-Newrev: b9dd9ee857ec59e35552efe46a173eebc50659d2
+X-Git-Oldrev: 3884cfc0571abc19b35b2f161f6c8c009847a0bb
+X-Git-Newrev: e7930708a3b1e429ea605f4544564b29313b0a7b
 X-Patchwork-Hint: ignore
-Message-Id: <20221103220821.3B09887CEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/tests/package/test_gdb.py:
- drop version-specific tests
+Message-Id: <20221103220821.31CA887CEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_python_crossbar: use ext2 instead of
+ cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,156 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9dd9ee857ec59e35552efe46a173eebc50659d2
+commit: https://git.buildroot.net/buildroot/commit/?id=e7930708a3b1e429ea605f4544564b29313b0a7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Back when support/testing/tests/package/test_gdb was introduced, there
-was a significant difference in how gdb < 10 and gdb >= 10 were
-handled in gdb.mk, which explained why we were testing both gdb 9.x
-and gdb 11.x.
+The CPIO filesystem generated by the test_python_crossbar test is too
+large, and doesn't fit as an initramfs in the 256MB of RAM available
+in the versatilepb machine. This causes a "Initramfs unpacking failed:
+write error" when booting, and many files being missing from the root
+filesystem, ultimately causing the test to fail.
 
-However, support for gdb 9.x has now been dropped, and we only support
-gdb >= 10.x, so testing gdb 9.x and 11.x separately no longer make
-much sense. In addition:
-
- - other GDB tests in the same file already test the default version,
- which is now 11.x, meaning we in fact have duplicated tests between
- the ones testing the default version and the ones testing 11.x
- specifically
-
- - GDB 9.x has been removed, which means all the tests testing GDB 9.x
- are failing, with a Config.in.legacy build error.
+It would make sense to switch all test cases to use ext2 + a
+hard-drive, but for now, let's fix the few test cases that are causing
+problems.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828456 (TestGdbHostOnly9x)
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828454 (TestGdbHostGdbserver9x)
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828451 (TestGdbHostGdbTarget9x)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828587
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_gdb.py | 108 ------------------------------
- 1 file changed, 108 deletions(-)
+ support/testing/tests/package/test_python_crossbar.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_gdb.py b/support/testing/tests/package/test_gdb.py
-index a7b0870644..4712162349 100644
---- a/support/testing/tests/package/test_gdb.py
-+++ b/support/testing/tests/package/test_gdb.py
-@@ -91,114 +91,6 @@ class TestGdbFullTarget(BaseGdb):
-         self.verify_gdb()
+diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
+index 83649aeec2..178b16be82 100644
+--- a/support/testing/tests/package/test_python_crossbar.py
++++ b/support/testing/tests/package/test_python_crossbar.py
+@@ -1,4 +1,5 @@
+ from tests.package.test_python import TestPythonPackageBase
++import os
  
  
--class TestGdbHostOnly9x(BaseGdb):
--    config = \
--        infra.basetest.MINIMAL_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--
--
--class TestGdbHostGdbserver9x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        BR2_PACKAGE_GDB=y
+ class TestPythonPy3Crossbar(TestPythonPackageBase):
+@@ -13,8 +14,16 @@ class TestPythonPy3Crossbar(TestPythonPackageBase):
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_CROSSBAR=y
 -        BR2_TARGET_ROOTFS_CPIO=y
 -        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdbserver()
--
--
--class TestGdbHostGdbTarget9x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        BR2_PACKAGE_GDB=y
--        BR2_PACKAGE_GDB_DEBUGGER=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdb()
--
--
--class TestGdbHostOnly11x(BaseGdb):
--    config = \
--        infra.basetest.MINIMAL_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--
--
--class TestGdbHostGdbserver11x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        BR2_PACKAGE_GDB=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdbserver()
--
--
--class TestGdbHostGdbTarget11x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        BR2_PACKAGE_GDB=y
--        BR2_PACKAGE_GDB_DEBUGGER=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdb()
--
--
- class TestGdbArc(BaseGdb):
-     config = \
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
          """
+     sample_scripts = ["tests/package/sample_python_crossbar.py"]
+     timeout = 60
++
++    def login(self):
++        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
++                           kernel_cmdline=["rootwait", "root=/dev/sda"])
++        self.emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
