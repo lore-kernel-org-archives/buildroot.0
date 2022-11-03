@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25253C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58F98C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B35C840573;
-	Mon,  5 Dec 2022 11:31:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35C840573
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04BA14094C;
+	Mon,  5 Dec 2022 11:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04BA14094C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bgD7g56iIoeB; Mon,  5 Dec 2022 11:31:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hrFRkOQha-Ep; Mon,  5 Dec 2022 11:31:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0EF5405AB;
-	Mon,  5 Dec 2022 11:31:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0EF5405AB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 142691BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0D774160D;
+	Mon,  5 Dec 2022 11:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D774160D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CB0F1BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5D8481A47
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5D8481A47
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8F713415FE
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F713415FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K0S50xt5j8ss for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 91jr8eKaB7pM for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 041C181BB4
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041C181BB4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1293F415DE
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1293F415DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E90AD85BBE; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+ id EEBF285BA2; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:04 +0100
+Date: Thu, 3 Nov 2022 21:03:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef116427cfeaaef3af9d0968246a0cfedfd9887a
-X-Git-Newrev: 935edcfc311a9b76cc1d720b29985f89e686be3c
+X-Git-Oldrev: 3e9322e0ad4c29fde3eb4e816ce84182bfba593a
+X-Git-Newrev: 3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112605.E90AD85BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-babel: bump to version
- 2.11.0
+Message-Id: <20221205112600.EEBF285BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cheroot: bump to version
+ 8.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=935edcfc311a9b76cc1d720b29985f89e686be3c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to template update:
-https://github.com/python-babel/babel/commit/8f5757cc85402a46c1db722f08c18cfa7f119858
+License hash changed due to links update:
+https://github.com/cherrypy/cheroot/commit/b4b8c11c8b9bc5dae1f9b37861f78b828882e57c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-babel/python-babel.hash | 6 +++---
- package/python-babel/python-babel.mk   | 4 ++--
+ package/python-cheroot/python-cheroot.hash | 6 +++---
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
-index 5211f20110..2b2f56d8c6 100644
---- a/package/python-babel/python-babel.hash
-+++ b/package/python-babel/python-babel.hash
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index 06d9453163..e538d1fcdc 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/babel/json
--md5  7166099733d78aa857d74fa50d8ff58c  Babel-2.9.1.tar.gz
--sha256  bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0  Babel-2.9.1.tar.gz
-+md5  9ee7784fd452d456206ecd3a12694010  Babel-2.11.0.tar.gz
-+sha256  5ef4b3226b0180dedded4229651c8b0e1a3a6a2837d45a073272f313e4cf97f6  Babel-2.11.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cheroot/json
+-md5  7ace4b584a8092deb9f6b0142a627086  cheroot-8.2.1.tar.gz
+-sha256  5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff  cheroot-8.2.1.tar.gz
++md5  70247d0948899f453b50e6181cddd0d7  cheroot-8.6.0.tar.gz
++sha256  366adf6e7cac9555486c2d1be6297993022eff6f8c4655c1443268cca3f08e25  cheroot-8.6.0.tar.gz
  # Locally computed sha256 checksums
--sha256  28c97bf33e7506e277487bdaa3a69b70f170d6af5a82785ac0a74c8428042e40  LICENSE
-+sha256  2499aec3c5f041c3ac2c448a15fb233314e4c20cbac1530be04ec31b2788631c  LICENSE
-diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
-index a503a139f9..8bc881e61c 100644
---- a/package/python-babel/python-babel.mk
-+++ b/package/python-babel/python-babel.mk
+-sha256  da6dc218683f6dab91c6367f00bf33095d980fb1f04d430c81c5e6994b8605e0  LICENSE.md
++sha256  e20feeb491a7e98084f15719349e9857aad41c4503c5e479f8815b063dbf7564  LICENSE.md
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 9eae887989..95f2e39480 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BABEL_VERSION = 2.9.1
-+PYTHON_BABEL_VERSION = 2.11.0
- PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
--PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/17/e6/ec9aa6ac3d00c383a5731cc97ed7c619d3996232c977bb8326bcbb6c687e
-+PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/ff/80/45b42203ecc32c8de281f52e3ec81cb5e4ef16127e9e8543089d8b1649fb
- PYTHON_BABEL_SETUP_TYPE = setuptools
- PYTHON_BABEL_LICENSE = BSD-3-Clause
- PYTHON_BABEL_LICENSE_FILES = LICENSE
+-PYTHON_CHEROOT_VERSION = 8.2.1
++PYTHON_CHEROOT_VERSION = 8.6.0
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/9b/4d/2e51e7ce60f54a5279e91648b9b9b497d4d22bc624ecae6af1b6866144a7
++PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/99/c4/9b5ca09208047f2689c24ee63e195aa01ceffb7857d715cabc046559ddd6
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
