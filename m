@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D42CC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C28A8C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A997C607D1;
-	Thu,  3 Nov 2022 00:19:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A997C607D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C67560E16;
+	Thu,  3 Nov 2022 00:23:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C67560E16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkWS8trmWDW9; Thu,  3 Nov 2022 00:19:41 +0000 (UTC)
+	with ESMTP id rVyqWEhtd8bq; Thu,  3 Nov 2022 00:23:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC43C6059C;
-	Thu,  3 Nov 2022 00:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC43C6059C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 832B060AA4;
+	Thu,  3 Nov 2022 00:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 832B060AA4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D1E61BF41D
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:19:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDD9D1BF41D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC8AC80C06
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC8AC80C06
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8BCE81E86
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8BCE81E86
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hoHydKptCCMI for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 00:19:38 +0000 (UTC)
+ with ESMTP id hJ87UZeh0zJh for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 00:23:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E968280BAC
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E968280BAC
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:19:37 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id y6so150568iof.9
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:19:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDF3881CAF
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDF3881CAF
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:23:53 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id g13so335992ile.0
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:23:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rx2K+uFVWUS2XPHA4UTz2HikwO2UzXPWHI6+b7Mle/Y=;
- b=ssg/3kRurPiuD4VYtkYSzMx8IIFbkGKbowk/xfsjC/bDvHT7mTRF1wVahSDjJb+XHN
- R5H106FPjGG7gqk8mXQ6r2dlP0mvq5an16e3N4lLlOFFXsVzfZKQPXdcb9XShjIMHIFM
- L1bMYyc0HSokeP/o5plPCAtCL07RXjbnq1nDjk2WHpAg+Ic+FSBmj3JUVC2iM6bg692F
- dP4+E3a32zKfKJSI02ThpNI4DP9C8J5TZY0FNSwR8HuYfeSsZYBMC5/S9BRJDnxLhn4U
- yn9YKFZdTWeDqTbq+xkUPnMsIEwEoctDgNfkX9O9O7YHB+4MDogEyh+6wrqKpQVbOF11
- TWew==
-X-Gm-Message-State: ACrzQf22eMQlidEgkaL+V5URMp9FCUDz3fZCYz3ErQnfhFpVEuThZyCt
- z7zkhUIPwTlTvEp0LVUHW3deT4PXLt1eQQ==
-X-Google-Smtp-Source: AMsMyM6XlXoA3ODR4hYqc9DpMXERa0f414EuCNJfUpdQXEG+4Oc+ZeVX8rf2awCoktUj+mPtO1Z0ww==
-X-Received: by 2002:a02:b383:0:b0:375:4fc8:586b with SMTP id
- p3-20020a02b383000000b003754fc8586bmr14365531jan.200.1667434776630; 
- Wed, 02 Nov 2022 17:19:36 -0700 (PDT)
+ bh=BBkyRvelw/3hi2+Q8ZRfIbSi5cxoc2W45Tbg2fTmzJY=;
+ b=g8rNnJc26btPQZPYy0rxfo6TNZiaL0NLgQ3FT1N8y15Iv3lSGEuCfjdvYSr/T+kUkl
+ 2eEYR9oE6Rj0zF4dB0HetrdAW+9ywqvtt69duPR65SXa5M5aNwDthQtRc9MfU+yqjSbu
+ z9IRjAVkUd07Rq2dhkp9awjbPNdvFAHQDQLDVnWzS2og13n486TlRXHdku0s/Nm0PA4i
+ 6TQtPYPZuBN9DrILXoiARfGbhFD2aYHysTP+idrh8JeWl9k9e0fw+z20toQWeWtt2Lv2
+ fBxJAKyj1q0DVJyeBYF1apvDA1j8Na9QZDnTo705e4wUCPSjCU1INPhhT7Ao9fsik0pS
+ K0kQ==
+X-Gm-Message-State: ACrzQf2xRCnC04Ix/HrT/j7aO3TRAeUVoeMPcrZUP/aajpLosET+VWy/
+ yaTtA7bJoonpgXaZwlktfMTyj0lxFfqdr0TQ
+X-Google-Smtp-Source: AMsMyM6Ej423XH8viioFKIXL30HYXWmVmk2wWk+Ksorbu7QMyuxrkM5+aBsuZyUOBQHmHccuTBc77g==
+X-Received: by 2002:a05:6e02:588:b0:2ff:d4bc:6744 with SMTP id
+ c8-20020a056e02058800b002ffd4bc6744mr15505174ils.222.1667435032548; 
+ Wed, 02 Nov 2022 17:23:52 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- y19-20020a027313000000b0035a10a7e3ecsm5198938jab.74.2022.11.02.17.19.35
+ i66-20020a6bb845000000b006bb5af55ddfsm5707544iof.19.2022.11.02.17.23.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 17:19:36 -0700 (PDT)
+ Wed, 02 Nov 2022 17:23:52 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 18:19:34 -0600
-Message-Id: <20221103001934.2100260-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 18:23:50 -0600
+Message-Id: <20221103002350.2425582-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rx2K+uFVWUS2XPHA4UTz2HikwO2UzXPWHI6+b7Mle/Y=;
- b=Lo76nbHDaYcICBZGuZnAawtFcohYEdWOblSQe2kGOezGVJZTgkniKarrTtSiKo9gvA
- 5nyNljTa/7IabnsD4EtpnFws+pbjc6/wbz9oy1d5HzPeWcI7+rIvhsG1eQsDwFbZhVBE
- CZvD439a50SZDcWYIJULlXVToXhyzwHx+fwkMB/U/DiqTBVZZlONwPZVxVFj4ggYHSCh
- 2Ch/HYlC5Qcvfr8ieckgttattGoCiK9DKjQsfP8Tj7xh4211Hzc8DKsQTOtF6wJAQV+c
- S4JiJXJuLrbOyQYt3HCUQHPIOnJQQftsE2NbAd+4CpREkhI1edvdl6TUVMUXZEaIwg6B
- m9Cw==
+ bh=BBkyRvelw/3hi2+Q8ZRfIbSi5cxoc2W45Tbg2fTmzJY=;
+ b=oS01VFcGcoM0JRjqh3WLy1kx/M9sgTVtA69LiRZI1YdXSPGNQRhQrPJ3wagM9faCNY
+ X40WkeWdTJIDYdVZ7wBopfKKCZgsOtL50w0JXBo+zUOcENXTfYNE4vrQKV7ihQcS2ckR
+ +KAGrsy3nnec+2HGS00cI8IYQQM2u6rT6qTC154Lr+kv3BCZBVbzXiXU+jL0FLFgmuTy
+ omYzlrGRCjKO79fNT5r907As4yywYPpiIstFGGPEhZ9zqSbJ45SExhri/a5EoAkRJ1zF
+ H/uez9nQRpoomFp0ivDQNnBui/fuJdds0b2WALj9EkXzX1euyCOkwkXBagNdIn0sSt/K
+ e3Tg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Lo76nbHD
-Subject: [Buildroot] [PATCH 1/1] package/python-libusb1: bump to version
- 3.0.0
+ header.a=rsa-sha256 header.s=20210112 header.b=oS01VFcG
+Subject: [Buildroot] [PATCH 1/1] package/python-mako: bump to version 1.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +93,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year update:
+https://github.com/sqlalchemy/mako/commit/36e10468c1e159803147bfbc7fffc930a9bd368c
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-libusb1/python-libusb1.hash | 7 ++++---
- package/python-libusb1/python-libusb1.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
-index 7d2302e088..86dea08c89 100644
---- a/package/python-libusb1/python-libusb1.hash
-+++ b/package/python-libusb1/python-libusb1.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
--md5  b087646fb0c8c4cf7e8123af72f885b9  libusb1-2.0.1.tar.gz
--sha256  d3ba82ecf7ab6a48d21dac6697e26504670cc3522b8e5941bd28fb56cf3f6c46  libusb1-2.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/libusb1/json
-+md5  ffbb02bf9aa49f973a6a58112aed7b06  libusb1-3.0.0.tar.gz
-+sha256  5792a9defee40f15d330a40d9b1800545c32e47ba7fc66b6f28f133c9fcc8538  libusb1-3.0.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
-index 40a64141af..48a0b1dea3 100644
---- a/package/python-libusb1/python-libusb1.mk
-+++ b/package/python-libusb1/python-libusb1.mk
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index f5b5daf06d..4bacafafde 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  409bdc38e9ddda5eada61fb092cb12fd  Mako-1.1.5.tar.gz
+-sha256  169fa52af22a91900d852e937400e79f535496191c63712e3b9fda5a9bed6fc3  Mako-1.1.5.tar.gz
++md5  4fa0a489a247c59b36fe3e0de5514fed  Mako-1.2.3.tar.gz
++sha256  7fde96466fcfeedb0eed94f187f20b23d85e4cb41444be0e542e2c8c65c396cd  Mako-1.2.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256  47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
++sha256  760f22b3e9ea4a50eb99201bd8dd118869f28108cfb64ccce6d1b305cf9ae9fa  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 553c4a5339..a663b7dbda 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LIBUSB1_VERSION = 2.0.1
-+PYTHON_LIBUSB1_VERSION = 3.0.0
- PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
--PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/a9/97/e8afa2af12b6de608ec86c8c4ad57f1248d98946d1b5e1aa0bff926755e9
-+PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/f4/83/59bf75e74e0c4859ea63eae0c7da660c1dcb78b31667d4a5f735d52f5974
- PYTHON_LIBUSB1_SETUP_TYPE = setuptools
- PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
- PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
+-PYTHON_MAKO_VERSION = 1.1.5
++PYTHON_MAKO_VERSION = 1.2.3
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/d1/42/ff293411e980debfc647be9306d89840c8b82ea24571b014f1a35b2ad80f
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/b9/38/c25f0874ea71802fc6f1e9f0f88a7e9666818121b28991bbc1d8eddbcdb1
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
