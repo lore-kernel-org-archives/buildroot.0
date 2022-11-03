@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF37C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BE18C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9B1240216;
-	Thu,  3 Nov 2022 19:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9B1240216
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5A1661012;
+	Thu,  3 Nov 2022 19:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5A1661012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BtEX3VIm-uWi; Thu,  3 Nov 2022 19:05:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MMjqO5VbL2AQ; Thu,  3 Nov 2022 19:07:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C601401D6;
-	Thu,  3 Nov 2022 19:05:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C601401D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 208281BF3C0
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:05:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE0ED60FFD;
+	Thu,  3 Nov 2022 19:07:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0ED60FFD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 05C5E1BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07986401CB
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:05:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07986401CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2D0981F6E
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2D0981F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kzJ_qUdxmbVu for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 19:04:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nViFAeUelU6q for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 19:07:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 514574016E
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 514574016E
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:04:58 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id 21so4536490edv.3
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:04:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0499781F6D
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0499781F6D
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:07:33 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id m15so1567772ilq.2
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:07:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Yk9uDceJVcznaPfSTltPMp/KzoE7EkzGkHNjc3KrcXQ=;
- b=4vviJjQrjD3FtyMy5cDUJchVHUcw/teu+Msz/1WQpUrtbrhel/VEfaFJWiXJA5z5eZ
- LC/wwHYJBY3OyUxbHOLvMvpIBORqxyjp/mAJBft82LdzL7JdQmTKqDnVLqy/fLOrLW6+
- FinwS7/Pb9CVV9JM7U9D9D9vCGY/WIkkB9lvxlSEifJrTC1bmBh+9lWyv8v7xe3d7p+h
- 1fI1uQ/Gfcczq6w6wFGPqAczHYywmMD/xwBvF/DZ/H0eZoG6xke/MVGQanUvaJZMf83v
- zA7WjJgoSuLZVIZbL4VJVTNY3AnTPb0x7QCn8cz6bRaHqgJSRvr/aTYDf+mG67BEb5f2
- 7KMQ==
-X-Gm-Message-State: ACrzQf0CzE4I0bPQMidDSCed/VPPhL4RfpEC8AeuyCwQCZjGWheI2bfg
- pi2tPEkJ1vLt4NG/zhg852Z7iQ89ZdVtRA==
-X-Google-Smtp-Source: AMsMyM7ZvyznGy0lBgWNv72QKJtuEsVu0wtG7wCeJapBmJnFRqescVT5YrqFED4jwho3Add7R3RgEA==
-X-Received: by 2002:a05:6402:1d4a:b0:461:d375:7927 with SMTP id
- dz10-20020a0564021d4a00b00461d3757927mr32521464edb.18.1667502295853; 
- Thu, 03 Nov 2022 12:04:55 -0700 (PDT)
-Received: from jesse-ubuntu22.display.esterline.net
- (192.234-180-91.adsl-dyn.isp.belgacom.be. [91.180.234.192])
- by smtp.gmail.com with ESMTPSA id
- u10-20020a1709061daa00b007ae1ab8f887sm842649ejh.14.2022.11.03.12.04.54
+ bh=zcE4rTGr1BO+eGQX9XToFHSG4J+eMe6UEq96RHOoGbU=;
+ b=adCH7Re76g5A4OYP4YP7a6P2uE+7axe8//Q2bLWAsehnB6jz2IMoOlZOoIoprqLgIp
+ hrvUkkI0Fr1lE2a9KP4iRoItZhr563euIQpoYqcxYDCRy952F0I9c5ywxA2NClKVbWH5
+ XeWodQkxLio0q1osqQjCO4hJY2wz/UiYZYTnfJKUMiCFB4JtAuP3TlMWumJuHtB1OIE6
+ 7mjYp9fTqMJ4XSkz5PMVmJmVJgd3nvyo6hU1Vlg/V8w0UdDDHIOilzflIm8B+He3+48u
+ 3dVfPEh1m3yvxDf1QGhQSttddJI0DiWjmXDX04M+UzyKZLmjr40h5htieBxX/JuO8O+I
+ lbEA==
+X-Gm-Message-State: ACrzQf1L3Y4T7R5qSwnv+IiH1YZNvF7CowURd92YXYIv/nUqsi+JYlYB
+ DoAb5JAuBHKQJWDVblgfPcnMTaHQQH20NMWj
+X-Google-Smtp-Source: AMsMyM4I6KZRKa4mPrwWCb3JXaBkDMwxLOawa6kKbQHh31eCRSwUwrxXVHQjNMjkSs4KW8fddPO0hg==
+X-Received: by 2002:a92:ca07:0:b0:2fa:ad2a:cd4c with SMTP id
+ j7-20020a92ca07000000b002faad2acd4cmr18525505ils.292.1667502452836; 
+ Thu, 03 Nov 2022 12:07:32 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ z8-20020a92d6c8000000b002f9537986f3sm584537ilp.24.2022.11.03.12.07.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 12:04:55 -0700 (PDT)
-From: Jesse Van Gavere <jesseevg@gmail.com>
+ Thu, 03 Nov 2022 12:07:32 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 20:04:46 +0100
-Message-Id: <20221103190446.3574423-1-jesseevg@gmail.com>
+Date: Thu,  3 Nov 2022 13:07:30 -0600
+Message-Id: <20221103190730.3777421-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Yk9uDceJVcznaPfSTltPMp/KzoE7EkzGkHNjc3KrcXQ=;
- b=mUtkwdh64N02LH6iRWD10Lx4TZv1V4nk8dqJ9ZKuSanMLGwFm9uMIjToce9ctzuXBX
- 9CZs8p0BBhJUm54QxcFdvQ57Nc5HsVMDRLjcrYtQCdBokNSJQm7KDtrijk+i8cAOITbz
- 0bJ1k8rKMkAkD8U92X0o+DoZhdRRAE9067QzoWPWai4KSNEiDT5MW9sE4OcMlIeUsB2R
- MblaqT0TKFSKZiwtRBEehUsYDQDMDLZdyBejOIytJJO2SRmUDNn5/xforeYgDRkr2S+s
- V4rVU8P/jSAiGa5r0WGTHzu6odMAMdXUEMTDCrO1/ObWMwudPFrCd4Qr3bROsTFzWfvi
- eJwg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=zcE4rTGr1BO+eGQX9XToFHSG4J+eMe6UEq96RHOoGbU=;
+ b=hcnS6ym9kNFibbrVTaO641RObUOvm99Hp+f46sPz/9s5mQjhlzxygIVyBq2EcpD9dl
+ wuVyVtex1JoltWyclw80vGxPQ4EiVvG2T7OPB2OF0uxaBqxweMlbyT9S9VYUqthQ/FxX
+ 0zI4177uOXTlmN1CBWAiuT9VCm0P/MsksmgVu9aOg54hXHZFztWkztlxdetD/EzLzXqL
+ odms55Qqyls0/7jwbF7f1xTxfGKpoW/FmYliCDEoVxdgDmHrk0uYthG/SrL7UWrEGgvO
+ UN2FylEZtRjR6Li958cih3iboeJaml9goR517wG9meXM99eEk0loR8SnVCiVv0ZVRo6D
+ 3bfg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mUtkwdh6
-Subject: [Buildroot] [PATCH 1/1] package/qt6: Add qmake functionality
+ header.a=rsa-sha256 header.s=20210112 header.b=hcnS6ym9
+Subject: [Buildroot] [PATCH 1/1] package/python-secretstorage: bump to
+ version 3.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,153 +94,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The qmake functionality had been missing due to the new host/target
-build requirement, to get it working the main parts of the qt5 qmake
-has been kept, we're still making our own device spec which we use to
-run qmake with along with passing some additional device options for our
-flags/cross-compiler the biggest difference is that where previously
-qt.conf was used to fixup per-paths builds, this is now always
-created with changed contents so qmake looks at the correct target
-directories.
-
-A big thanks to Angelo Compagnucci for the encouragement and testing.
-
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/qt6/qt6.mk                  | 12 ++++++++++
- package/qt6/qt6base/qmake.conf.in   | 36 +++++++++++++++++++++++++++++
- package/qt6/qt6base/qplatformdefs.h |  1 +
- package/qt6/qt6base/qt.conf.in      |  7 ++++++
- package/qt6/qt6base/qt6base.mk      | 18 +++++++++++++++
- 5 files changed, 74 insertions(+)
- create mode 100644 package/qt6/qt6base/qmake.conf.in
- create mode 100644 package/qt6/qt6base/qplatformdefs.h
- create mode 100644 package/qt6/qt6base/qt.conf.in
+ package/python-secretstorage/python-secretstorage.hash | 4 ++--
+ package/python-secretstorage/python-secretstorage.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
-index 575b2f826c..bd8fb0ab51 100644
---- a/package/qt6/qt6.mk
-+++ b/package/qt6/qt6.mk
-@@ -10,3 +10,15 @@ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
- QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
+index a8e535f892..ae0a5be347 100644
+--- a/package/python-secretstorage/python-secretstorage.hash
++++ b/package/python-secretstorage/python-secretstorage.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/secretstorage/json
+-md5  c2a8c0e08e5da198fc38c379b98c28f1  SecretStorage-3.1.2.tar.gz
+-sha256  15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6  SecretStorage-3.1.2.tar.gz
++md5  c6ff1cc866d2f1d274b75c6490726b1b  SecretStorage-3.3.3.tar.gz
++sha256  2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77  SecretStorage-3.3.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
+diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
+index 4c209bf513..81487aa8fb 100644
+--- a/package/python-secretstorage/python-secretstorage.mk
++++ b/package/python-secretstorage/python-secretstorage.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- include $(sort $(wildcard package/qt6/*/*.mk))
-+
-+# The file "qt.conf" can be used to override the hard-coded paths that are
-+# compiled into the Qt library. We need it to make "qmake" relocatable due
-+# to the host/target build and tweak the per-package install pathes
-+define QT6_INSTALL_QT_CONF
-+	rm -f $(HOST_DIR)/bin/qt.conf
-+	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
-+		$(QT6BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
-+endef
-+
-+# Variable for other Qt applications to use
-+QT6_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
-diff --git a/package/qt6/qt6base/qmake.conf.in b/package/qt6/qt6base/qmake.conf.in
-new file mode 100644
-index 0000000000..ebb8497d2d
---- /dev/null
-+++ b/package/qt6/qt6base/qmake.conf.in
-@@ -0,0 +1,36 @@
-+# Qt6 has a mechanism to support "device" profiles, so that people can
-+# specify the compiler, compiler flags and so on for a specific device.
-+
-+# We leverage this mechanism in the Buildroot packaging of qt6 to
-+# simplify cross-compilation: we have our own "device" definition, which
-+# allows us to easily pass the cross-compiler paths and flags from our
-+# qt6.mk.
-+
-+include(../common/linux_device_pre.conf)
-+
-+# modifications to g++-unix.conf
-+QMAKE_CC                = $${CROSS_COMPILE}gcc
-+QMAKE_CXX               = $${CROSS_COMPILE}g++
-+QMAKE_LINK		= $${CROSS_COMPILE}g++
-+
-+# modifications to gcc-base.conf
-+QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
-+QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-+# Remove all optimisation flags, we really only want our own.
-+QMAKE_CFLAGS_OPTIMIZE       =
-+QMAKE_CFLAGS_OPTIMIZE_DEBUG =
-+QMAKE_CFLAGS_OPTIMIZE_FULL  =
-+QMAKE_CFLAGS_OPTIMIZE_SIZE  =
-+QMAKE_CFLAGS_DEBUG =
-+QMAKE_CXXFLAGS_DEBUG =
-+QMAKE_CFLAGS_RELEASE =
-+QMAKE_CXXFLAGS_RELEASE =
-+CONFIG                 += nostrip
-+
-+QMAKE_LIBS             += -lrt -lpthread -ldl
-+QMAKE_CFLAGS_ISYSTEM   =
-+
-+@EGLFS_DEVICE@
-+
-+include(../common/linux_device_post.conf)
-+load(qt_config)
-diff --git a/package/qt6/qt6base/qplatformdefs.h b/package/qt6/qt6base/qplatformdefs.h
-new file mode 100644
-index 0000000000..99e9a27923
---- /dev/null
-+++ b/package/qt6/qt6base/qplatformdefs.h
-@@ -0,0 +1 @@
-+#include "../../linux-g++/qplatformdefs.h"
-diff --git a/package/qt6/qt6base/qt.conf.in b/package/qt6/qt6base/qt.conf.in
-new file mode 100644
-index 0000000000..4842bcb462
---- /dev/null
-+++ b/package/qt6/qt6base/qt.conf.in
-@@ -0,0 +1,7 @@
-+[Paths]
-+Prefix=/usr
-+HostPrefix=@@HOST_DIR@@
-+HostData=../target/usr
-+Sysroot=@@STAGING_DIR@@
-+SysrootifyPrefix=true
-+TargetSpec=devices/linux-buildroot-g++
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index b7ee6037f3..9e2f884e94 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -35,6 +35,9 @@ QT6BASE_CONF_OPTS = \
- 	-DFEATURE_system_zlib=ON \
- 	-DFEATURE_system_libb2=ON
- 
-+QT6BASE_CFLAGS = $(TARGET_CFLAGS)
-+QT6BASE_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
- # x86 optimization options. While we have a BR2_X86_CPU_HAS_AVX512, it
- # is not clear yet how it maps to all the avx512* options of Qt, so we
- # for now keeps them disabled.
-@@ -215,5 +218,20 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_zstd=OFF
- endif
- 
-+define QT6BASE_MAKE_BR_SPEC
-+	mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
-+	sed 's/@EGLFS_DEVICE@/$(QT6BASE_EGLFS_DEVICE)/g' \
-+		$(QT6BASE_PKGDIR)/qmake.conf.in > \
-+		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
-+	$(INSTALL) -m 0644 -D $(QT6BASE_PKGDIR)/qplatformdefs.h \
-+		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
-+endef
-+
-+QT6BASE_CONF_OPTS += -DQT_QMAKE_DEVICE_OPTIONS=CROSS_COMPILE="$(TARGET_CROSS)";BR_COMPILER_CFLAGS="$(QT6BASE_CFLAGS)";BR_COMPILER_CXXFLAGS="$(QT6BASE_CXX_FLAGS)"
-+
-+QT6BASE_PRE_CONFIGURE_HOOKS += QT6BASE_MAKE_BR_SPEC
-+
-+QT6BASE_POST_INSTALL_STAGING_HOOKS += QT6_INSTALL_QT_CONF
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+-PYTHON_SECRETSTORAGE_VERSION = 3.1.2
++PYTHON_SECRETSTORAGE_VERSION = 3.3.3
+ PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
+-PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/fd/9f/36197c75d9a09b1ab63f56cb985af6cd858ca3fc41fd9cd890ce69bae5b9
++PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/53/a4/f48c9d79cb507ed1373477dbceaba7401fd8a23af63b837fa61f1dcd3691
+ PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
+ PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
+ PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
