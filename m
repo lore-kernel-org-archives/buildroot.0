@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278BBC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8ED7C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA6924185A;
-	Thu,  3 Nov 2022 22:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA6924185A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 747A341857;
+	Thu,  3 Nov 2022 22:07:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 747A341857
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qSfU1dWRDM0P; Thu,  3 Nov 2022 22:07:30 +0000 (UTC)
+	with ESMTP id Xzn0F2PCIcRl; Thu,  3 Nov 2022 22:07:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A775E41857;
-	Thu,  3 Nov 2022 22:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A775E41857
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC8711BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3736E4183C;
+	Thu,  3 Nov 2022 22:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3736E4183C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 715261BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40B8641859
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40B8641859
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D0CB61043
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D0CB61043
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mixp7moFWR2Z for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 473AA41857
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 473AA41857
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35D1787CAB; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:05:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
-X-Git-Newrev: 0a7a5641597c5c3d0978906fb8cf93eb153425a3
-X-Patchwork-Hint: ignore
-Message-Id: <20221103220701.35D1787CAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/multipath-tools: security bump to
- version 0.9.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a6Eo-6n0TEiy for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 22:07:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3732961042
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3732961042
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:07:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 08EBBE0003;
+ Thu,  3 Nov 2022 22:07:18 +0000 (UTC)
+Date: Thu, 3 Nov 2022 23:07:17 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221103230717.22d076b4@windsurf>
+In-Reply-To: <20221101225550.249546-1-fontaine.fabrice@gmail.com>
+References: <20221101225550.249546-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667513239;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=J4OXO7kDpLpt6UHP5V4haMpJfsXsiGOYuH235fQJv1Y=;
+ b=do9wUYYqDlg4XmgK/DnzzhUvK0yFsGWrZis/nbl9EHlW5IqP3VCZ0WcMwJpqezjVrcHgNH
+ Sb77KEuH/8FNkwGC96TOEUPPe8bSp0yuW8P2rOdl+vmOqOfD1lhEhck36nVpR6uxTv5sVp
+ 4DSMgkBRwcKP39pgFooJ5RKAS8NzxdONpHkG+UQa6B2E6XHNcGmT6i8A89Asd+lbbsbVbc
+ Swl/loYrtj4Xj8PEbxmT7e+E9Rz4jiD6fICeFEAMJiDTC7UrkM3lO4qtfCKNMY5DLKb2OB
+ av51tuL0QMn+bBQWwoKxi33tcPWnjbFAMuGT5uYZqhwWyn/Hy2Dtosmy39dGNA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=do9wUYYq
+Subject: Re: [Buildroot] [PATCH 1/1] package/quota: bump to version 4.09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +77,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Jarkko Sakkinen <jarkko.sakkinen@intel.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a7a5641597c5c3d0978906fb8cf93eb153425a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  1 Nov 2022 23:55:50 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes the following security issues:
+> Drop patch (already in version)
+> 
+> https://sourceforge.net/p/linuxquota/code/ci/master/tree/Changelog
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-realloc-3-instead-of-reallocarray-3.patch | 34 -------------------
+>  package/quota/quota.hash                      |  8 ++---
+>  package/quota/quota.mk                        |  2 +-
+>  3 files changed, 5 insertions(+), 39 deletions(-)
+>  delete mode 100644 package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
 
-- CVE-2022-41974: Authorization bypass
-- CVE-2022-41973: Symlink attack
+Applied to master, thanks.
 
-For more details, see the writeup:
-https://www.qualys.com/2022/10/24/leeloo-multipath/leeloo-multipath.txt
-
-Update README.md hash after license-unrelated changes:
-
-git shortlog 0.9.0..0.9.3 -- README.md
-Konstantin Kharlamov (1):
-      README.md: mention libreadline and libedit optional deps
-
-Xose Vazquez Perez (4):
-      multipath-tools: update devel repo info in README.md
-      multipath-tools: add ALUA info to README.md
-      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
-      multipath-tools: add more info for NetApp RDAC arrays
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/multipath-tools/multipath-tools.hash | 4 ++--
- package/multipath-tools/multipath-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index df0d24fb74..6f893d37ce 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
-+sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
-+sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index f3ce3ca8b8..ec5d853644 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MULTIPATH_TOOLS_VERSION = 0.9.0
-+MULTIPATH_TOOLS_VERSION = 0.9.3
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
- 
- MULTIPATH_TOOLS_LICENSE = \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
