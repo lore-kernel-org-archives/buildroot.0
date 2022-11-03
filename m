@@ -1,88 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 989DDC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3339C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4633760FC7;
-	Thu,  3 Nov 2022 14:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4633760FC7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E1E1416C5;
+	Thu,  3 Nov 2022 14:11:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E1E1416C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T3soAOMtdIXu; Thu,  3 Nov 2022 14:10:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zia1eCyAvlhJ; Thu,  3 Nov 2022 14:11:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6650660B09;
-	Thu,  3 Nov 2022 14:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6650660B09
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 48EEE1BF38A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF45441682;
+	Thu,  3 Nov 2022 14:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF45441682
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0801A1BF38A
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23EFA80AD5
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:10:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23EFA80AD5
+ by smtp4.osuosl.org (Postfix) with ESMTP id E209941682
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E209941682
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ax5dnwrFoOY7 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 14:10:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3185680AB9
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3185680AB9
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:10:22 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id z9so1076791ilu.10
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 07:10:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AxuNGKb0yusWvb3gaFp71YtB6ds9NCOYtdJeCj8EdmY=;
- b=1z4ergXy+8V2gyoi6TJsgFlY4vPvnq4IxRyb3fU9XTCuzl50Ny8G0KQFMmwnQRj8Qh
- bhZk+Z+E+5fPtZMYThI0Lr0MwiWqWJbrNEj9kr6yVgF2pTD7g2KuF2ykOPP+TTmCQsvU
- DRDHns1Dh7dsEbw6S+MM9OWEHD4NDLu1LFXA9sKQKIdMixWGVuYnbDEApWrsL66l7Byx
- wZellTA1e7OU1u+B8zmRcdzH/sK26u1S6pc0r9QWXMVkhfsSbmAuhv+fTN1X7MML4WjJ
- FqiTofIGTr8NH/uP0WUvJAgytJ8CQ8gtyD1GLnD7bhTNqkd69duI9U3BS0P1LFO9b0T9
- k6kw==
-X-Gm-Message-State: ACrzQf3dZGchJQHGuZ7RryVBxxpMIwJ0N3/d/4E9ruahjddL0fycJAH0
- HViCHgR7w0H5+ATBv/XEA49R+4GnRvn2T3XZ
-X-Google-Smtp-Source: AMsMyM4mWhYT8JXd3AZlSyDnHuHj3k5yek2WtcOWYcJ0B3MTustfkX3x3SPGYhYKzyLPKb7RRn41kg==
-X-Received: by 2002:a05:6e02:606:b0:300:c570:74d6 with SMTP id
- t6-20020a056e02060600b00300c57074d6mr8072070ils.152.1667484620933; 
- Thu, 03 Nov 2022 07:10:20 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- v10-20020a02b08a000000b003754033c6aesm230027jah.155.2022.11.03.07.10.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 07:10:20 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9dLkrNPLDPya for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 14:11:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE3DB408CB
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE3DB408CB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B768C87B80; Thu,  3 Nov 2022 14:11:37 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 08:10:19 -0600
-Message-Id: <20221103141019.136682-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AxuNGKb0yusWvb3gaFp71YtB6ds9NCOYtdJeCj8EdmY=;
- b=qV+/xm3yLvxnYkHZJ2n+sVxeQscPJbWw/N2SV+wsxy4gzk9+fMv/dL+941cReOSw8c
- M55+7CWmFf0eBg9bbTFb3Xyiu/CN+R9W8WqAvzbl6Orqx5mDM7uoJNiKSmsUhILZt/t6
- DI4CmL+cdMsRcWMzMoCmrqgTBhCGsxVIHN2RmOzZ/5YZ/BVpeL3GNfMxIJpN+IfxsAI1
- 4M34utCCbjLEGcBMRD78HQYM/EStD14vJ3dJTG3EZYTKEP8OBi/sfnnfVPyDVhUjZhIJ
- j/tjuZHE2txJ5CuddGTUhS9OeCUQbqIpNbAsmY+Z15vd/dJqbfJo8hN6HPawGrXBJP6n
- A0OA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qV+/xm3y
-Subject: [Buildroot] [PATCH 1/1] package/python-pyelftools: bump to version
- 0.29
+Date: Thu, 3 Nov 2022 14:48:40 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 88ca169d15af5330490faddf37e564001c375898
+X-Git-Newrev: 9bb4f83a08956ed0a038b53b3d4b3244ab974ee8
+X-Patchwork-Hint: ignore
+Message-Id: <20221103141137.B768C87B80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Makefile: really generate
+ glibc locales in parallel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Olivier Matz <olivier.matz@6wind.com>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=9bb4f83a08956ed0a038b53b3d4b3244ab974ee8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+
+To generate the glibc locale data, we call into a recursive Makefile,
+so as to generate locales in parallel. This is done as part of a
+target-finalize hook.
+
+However, that hook is registered after all packages have been parsed,
+and as such, it maye be registered after hooks defined in packages.
+
+Furthermore, the expansion of target-finalize hooks is done in a recipe,
+so it is not easy to understand whether this generates a "simple" rule
+or not.
+
+As a consequence, despite the use of $(MAKE), make may not notice that
+the command is a recursive call, and will decide to close the jobserver
+file-descriptors, yielding warnings like:
+    make[2]: warning: jobserver unavailable: using -j1.  Add '+' to
+    parent make rule.
+
+This causes the lcoale data to not be generated in parallel, which is
+initially all the fuss about using a sub-makefile...
+
+So, do as suggested, and prepend the hook with a '+', so that it is
+explicit to make that it should not close its jobserver fds.
+
+Fixes: 6fbdf5159607 (Makefile: Parallelize glibc locale generation)
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4164ed24f277b24096ab065aa85b7de9d0c80c02)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyelftools/python-pyelftools.hash | 4 ++--
- package/python-pyelftools/python-pyelftools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pyelftools/python-pyelftools.hash b/package/python-pyelftools/python-pyelftools.hash
-index a309b90e15..7cffe2d646 100644
---- a/package/python-pyelftools/python-pyelftools.hash
-+++ b/package/python-pyelftools/python-pyelftools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyelftools/json
--md5  061d67c669a9b1f8d07f28c47fb6a65f  pyelftools-0.27.tar.gz
--sha256  cde854e662774c5457d688ca41615f6594187ba7067af101232df889a6b7a66b  pyelftools-0.27.tar.gz
-+md5  2afc97cd239c0dea0cca97d00d3dcb42  pyelftools-0.29.tar.gz
-+sha256  ec761596aafa16e282a31de188737e5485552469ac63b60cfcccf22263fd24ff  pyelftools-0.29.tar.gz
- # Locally computed sha256 checksums
- sha256  ae18bf4cb82f92af7547259177bc28bc48e4fc732518bcedfe690226288d3445  LICENSE
-diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
-index 5bfdcd33ae..7566f24895 100644
---- a/package/python-pyelftools/python-pyelftools.mk
-+++ b/package/python-pyelftools/python-pyelftools.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 93125e16a6..03f2154f9f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -664,7 +664,7 @@ ifneq ($(GLIBC_GENERATE_LOCALES),)
+ PACKAGES += host-localedef
  
--PYTHON_PYELFTOOLS_VERSION = 0.27
-+PYTHON_PYELFTOOLS_VERSION = 0.29
- PYTHON_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
--PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/6b/b5/f7022f2d950327ba970ec85fb8f85c79244031092c129b6f34ab17514ae0
-+PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/0e/35/e76da824595452a5ad07f289ea1737ca0971fc6cc7b6ee9464279be06b5e
- PYTHON_PYELFTOOLS_LICENSE = Public domain
- PYTHON_PYELFTOOLS_LICENSE_FILES = LICENSE
- PYTHON_PYELFTOOLS_SETUP_TYPE = setuptools
--- 
-2.34.1
-
+ define GENERATE_GLIBC_LOCALES
+-	$(MAKE) -f support/misc/gen-glibc-locales.mk \
++	+$(MAKE) -f support/misc/gen-glibc-locales.mk \
+ 		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
+ 		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
+ 		Q=$(Q)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
