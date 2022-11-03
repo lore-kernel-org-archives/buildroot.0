@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6426DC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76752C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 20:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0953081E0D;
-	Thu,  3 Nov 2022 20:59:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0953081E0D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D65B8142B;
+	Thu,  3 Nov 2022 20:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D65B8142B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7mjZxCXiE135; Thu,  3 Nov 2022 20:59:43 +0000 (UTC)
+	with ESMTP id WbKUoCttGlHo; Thu,  3 Nov 2022 20:59:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 207C481589;
-	Thu,  3 Nov 2022 20:59:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 207C481589
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E5EDB1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAE6B81EFD;
+	Thu,  3 Nov 2022 20:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAE6B81EFD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D34A1BF968
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCA0A409E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3214A40C08
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCA0A409E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3214A40C08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qxatRI6TP7lX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PaJCwqywKmED for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C83754159F
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83754159F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D01940BD9
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D01940BD9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5D7F87BCC; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+ id 0B37D87BCC; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:43 +0100
+Date: Thu, 3 Nov 2022 21:03:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0e6461c51f07e04cd42708843cf45583108f37ac
-X-Git-Newrev: 303b98a1991e2bc1b7b416f180d0e5e291655290
+X-Git-Oldrev: 2fe854e9fccefb10091e8df0fb3152815c47c79d
+X-Git-Newrev: 2f4b2e8fb6984789bfcc7eff30fbecf2f51b8665
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205512.C5D7F87BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-networkx: bump
- to version 2.8.8
+Message-Id: <20221103205511.0B37D87BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cssselect: bump
+ to version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=303b98a1991e2bc1b7b416f180d0e5e291655290
+commit: https://git.buildroot.net/buildroot/commit/?id=2f4b2e8fb6984789bfcc7eff30fbecf2f51b8665
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash changed due to year update:
-https://github.com/networkx/networkx/commit/922d587d8c556f87b664281109fefd7fc66d813f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-networkx/python-networkx.hash | 6 +++---
- package/python-networkx/python-networkx.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cssselect/python-cssselect.hash | 4 ++--
+ package/python-cssselect/python-cssselect.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
-index ace5c6721a..d166f0b8d8 100644
---- a/package/python-networkx/python-networkx.hash
-+++ b/package/python-networkx/python-networkx.hash
+diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
+index f0687a4abd..df2523265f 100644
+--- a/package/python-cssselect/python-cssselect.hash
++++ b/package/python-cssselect/python-cssselect.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/networkx/json
--md5  407eb28c54e08725559754ca7ab185e0  networkx-2.6.3.tar.gz
--sha256  c0946ed31d71f1b732b5aaa6da5a0388a345019af232ce2f49c766e2d6795c51  networkx-2.6.3.tar.gz
-+md5  22139ab5a47818fa00cbaa91eb126381  networkx-2.8.8.tar.gz
-+sha256  230d388117af870fce5647a3c52401fcf753e94720e6ea6b4197a5355648885e  networkx-2.8.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cssselect/json
+-md5  fa57704c1cb66cc8e537b782bd6b227e  cssselect-1.1.0.tar.gz
+-sha256  f95f8dedd925fd8f54edb3d2dfb44c190d9d18512377d3c1e2388d16126879bc  cssselect-1.1.0.tar.gz
++md5  27fbafacce5447cb867acb240d35002a  cssselect-1.2.0.tar.gz
++sha256  666b19839cfaddb9ce9d36bfe4c969132c647b92fc9088c4e23f786b30f1b3dc  cssselect-1.2.0.tar.gz
  # Locally computed sha256 checksums
--sha256  f9c25c92ced5a264a3fe857231205d5eb625ae367935aaf8d61cdd5087dfb90e  LICENSE.txt
-+sha256  aae9f809fb1a1592ed72e9f52df10cfad8fe226b8d4d28385f90dd4341ce7119  LICENSE.txt
-diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
-index 1908ed8f93..f097671d66 100644
---- a/package/python-networkx/python-networkx.mk
-+++ b/package/python-networkx/python-networkx.mk
+ sha256  5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892  LICENSE
+diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
+index f6faa94b4c..96f6f98737 100644
+--- a/package/python-cssselect/python-cssselect.mk
++++ b/package/python-cssselect/python-cssselect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NETWORKX_VERSION = 2.6.3
-+PYTHON_NETWORKX_VERSION = 2.8.8
- PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
--PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/97/ae/7497bc5e1c84af95e585e3f98585c9f06c627fac6340984c4243053e8f44
-+PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/cd/16/c44e8550012735b8f21b3df7f39e8ba5a987fb764ac017ad5f3589735889
- PYTHON_NETWORKX_LICENSE = BSD-3-Clause
- PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
- PYTHON_NETWORKX_CPE_ID_VENDOR = python
+-PYTHON_CSSSELECT_VERSION = 1.1.0
++PYTHON_CSSSELECT_VERSION = 1.2.0
+ PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
+-PYTHON_CSSSELECT_SITE = https://files.pythonhosted.org/packages/70/54/37630f6eb2c214cdee2ae56b7287394c8aa2f3bafb8b4eb8c3791aae7a14
++PYTHON_CSSSELECT_SITE = https://files.pythonhosted.org/packages/d1/91/d51202cc41fbfca7fa332f43a5adac4b253962588c7cc5a54824b019081c
+ PYTHON_CSSSELECT_SETUP_TYPE = setuptools
+ PYTHON_CSSSELECT_LICENSE = BSD-3-Clause
+ PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
