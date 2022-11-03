@@ -1,96 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C22FDC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A6C5C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58B9E40519;
-	Thu,  3 Nov 2022 22:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58B9E40519
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2E9841875;
+	Thu,  3 Nov 2022 22:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2E9841875
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dz6lQfFjrMvN; Thu,  3 Nov 2022 22:30:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ye556uzrxM8s; Thu,  3 Nov 2022 22:42:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DDE9A40520;
-	Thu,  3 Nov 2022 22:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDE9A40520
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58E8F4186C;
+	Thu,  3 Nov 2022 22:42:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58E8F4186C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D5B71BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:30:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DDB21BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5829540520
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5829540520
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6868840BCE
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:42:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6868840BCE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x8wjxqlOv8v7 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 22:30:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8045540519
-Received: from 002.mia.mailroute.net (002.mia.mailroute.net [199.89.3.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8045540519
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:30:33 +0000 (UTC)
-Received: from 003.lax.mailroute.net (003.lax.mailroute.net [199.89.1.6])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by 002.mia.mailroute.net (Postfix) with ESMTPS id 4N3JP41HSCz25hfn
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:30:32 +0000 (UTC)
-Received: from localhost (003.lax.mailroute.net [127.0.0.1])
- by 003.lax.mailroute.net (Postfix) with ESMTP id 4N3JP12wksz1spjx;
- Thu,  3 Nov 2022 22:30:29 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 003.lax.mailroute.net ([199.89.1.6])
- by localhost (003.lax [127.0.0.1]) (mroute_mailscanner, port 10026)
- with LMTP id 1PpMuPTzR17I; Thu,  3 Nov 2022 22:30:23 +0000 (UTC)
-Received: from mail.carnegierobotics.com (unknown [72.22.26.5])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by 003.lax.mailroute.net (Postfix) with ESMTPS id 4N3JNv1Zjpz1splk;
- Thu,  3 Nov 2022 22:30:23 +0000 (UTC)
-Received: from CRL-PGH-EX19-1.crl.local (10.1.7.176) by
- CRL-PGH-EX19-1.crl.local (10.1.7.176) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.858.15; Thu, 3 Nov 2022 18:30:22 -0400
-Received: from CRL-PGH-EX19-1.crl.local ([fe80::895e:aa1a:c80e:9f5c]) by
- CRL-PGH-EX19-1.crl.local ([fe80::895e:aa1a:c80e:9f5c%7]) with mapi id
- 15.02.0858.015; Thu, 3 Nov 2022 18:30:22 -0400
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 1/1] package/opencv4: add support for opencv4_contrib
- repository for extra modules
-Thread-Index: AQHY79PchIcNjjfRmUGsVEGv/RpL7g==
-Date: Thu, 3 Nov 2022 22:30:21 +0000
-Message-ID: <70a53e0eb3fdc514641a9cb83dd42aa5bd0f1be6.camel@carnegierobotics.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.30.5-1.1 
-x-originating-ip: [10.212.134.122]
-Content-ID: <7AF7B5634AE3E049BA30DDBF5A21A2C2@crl.local>
+ with ESMTP id 5YZuwITG0l01 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 22:42:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 007F3403C8
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 007F3403C8
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:42:09 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id n191so2565962iod.13
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 15:42:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=eEMWlEy/VWtYIRuygpiOSPqQ+xpYPZs2ETD37Ko3YMY=;
+ b=a0UHD8kySKuAp3DFZM1DeNj8z5nADimtAtpVockU3dwcwRvyC8PeC2/F7GsgagErgw
+ MabF+7V2zoqTE1/Bj3t2aVxWzMk7+Dz9ZMbA5uZdklKTeLMhIsc7EK4ym5Fii7eeSCfg
+ SpQAtYS/p4IYENHMpMmpxvyGweFLlEZTtaB/uiOxlzJ3lP2oSgBQnE6iD+ZkJIQCXzkO
+ QDpjAh2VYfoQOa1D/GucyxSnaFxst9pmwMN6onEcfUKke0RxsSa2xHLKq/4F7Pu7w7kw
+ xcJd+nlH9GPbX3XlrjgnsIuQxWYn03R1Dmsg/TXNxYZUoEQOTU1Qt/IqpxntuX0iAQlt
+ m8yg==
+X-Gm-Message-State: ACrzQf1PJNKYgbM2UknyRr0mnE9hsaG1nnC1PLNt7RXguUaTBEoNGr23
+ voHPDJTCpUbOThJtqc80sAStPsYkLxNISxvf
+X-Google-Smtp-Source: AMsMyM6PisWUddqnZSKy4Bo/Mu2SkDZYOzqYwsLujwD8CmobSsqRoisxt2M6DgIPMBq5rW6KNCR3QQ==
+X-Received: by 2002:a05:6638:391:b0:375:647d:d782 with SMTP id
+ y17-20020a056638039100b00375647dd782mr14850651jap.271.1667515328310; 
+ Thu, 03 Nov 2022 15:42:08 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ r15-20020a02aa0f000000b00349c45fd3a8sm626963jam.29.2022.11.03.15.42.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Nov 2022 15:42:07 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  3 Nov 2022 16:42:06 -0600
+Message-Id: <20221103224206.3984607-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- carnegierobotics.com; h=mime-version:content-transfer-encoding
- :content-id:content-type:content-type:user-agent
- :content-language:accept-language:message-id:date:date:subject
- :subject:from:from:received:received:received:received; s=mr01;
- t=1667514623; x=1670106624; bh=QA/B9QwEJeH7BhEzPWguBMtPMG+1+aI/
- hXxxCJtcHGE=; b=dKE8u1+dj53LXdVJnNz7gYNse8T7jZMyfCaFhIFK9PQlG6U8
- zhPH3Ax79Z+5Yg7RXNQBozLG1ky0kkYL/RSHr4Ey3WsIfHqBJQIU1lNozhH1wqyy
- g1G5BKCo7J6GZMADJioqwZ/qgrgKVRiHu4drbjVVtusCNRkI2I3Mi06gWmEZ3ngF
- /JR4uVneDlzQwgdk82SJ0Xx3+sheGPQz/TDQcWInkvd9yNI/YK7H4DbrMs5RfE2S
- b7M6BdwYyAkoht2Dy6ET2yyzIStawuLtVzaOb7calMDy7AU9/esq3efmzlT/QUfu
- QbqPw73+tF7EGOeCXlMVu2DtxwHpNxYMhmOvMQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eEMWlEy/VWtYIRuygpiOSPqQ+xpYPZs2ETD37Ko3YMY=;
+ b=Tq9M4RJzB6RMkrRA0XiL1magrgNGVmH9u/ZyFH8yw5HEQqrlT5FZbzV+adIQ5k7TRK
+ XnHVvuI7wGaZZh496TOb0YxlTwO9iBCyMyCoU7RmxxDXJUkEP9FbporsyObZRkmbKJsA
+ pwrE3cZkwCziGUTwJs51eLvRF7islQHmE83IHK6YJ4d0b9ZgzKIiBA8vJpu5ld7u7fMG
+ eayUKvUSTPwQfxx8rtdrCZMR2d9zvSWrdxXL+/vC+g6ZLYAeBxtpoLU9SnEYAnE8n7f6
+ +icoKloXa6jqDjTrcfpdeC/PddH/ZdIgB905Lmo8bi39TA8fBsoIo0aZNQk7xTy62EZp
+ +osA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=carnegierobotics.com header.i=@carnegierobotics.com
- header.a=rsa-sha256 header.s=mr01 header.b=dKE8u1+d
-Subject: [Buildroot] [PATCH 1/1] package/opencv4: add support for
- opencv4_contrib repository for extra modules
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Tq9M4RJz
+Subject: [Buildroot] [PATCH 1/1] package/{rust,
+ rust-bin}: bump to version 1.65.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,527 +94,354 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woody Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woody Douglass <wdouglass@carnegierobotics.com>
-Cc: "fontaine.fabrice@gmail.com" <fontaine.fabrice@gmail.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This adds a separate opencv4_contrib package to manage
-downloading/unpacking that repository. These extra modules
-are useful for a lot of applications, but not necessary
-for minimal installs, so they are all given dedicated Kconfig
-options
+Link to Rust 1.65.0 annoucement: https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+Newest version of the source archives have been retrieved with their hash values,
+and the signature of the .asc files have been verified as follows:
+$ curl -fsSL https://static.rust-lang.org/rust-key.gpg.ascii | gpg --import
+$ gpg --verify <filename.asc> <filename>
+
+There is no typographical error in the packages according to the check-pakage utility:
+$ ./utils/check-package package/rust-bin/*
+$ ./utils/check-package package/rust/*
+
+The testsuite tool were successfully run for rust and rust-bin packages to test
+the Rust toolchain under 1.65.0:
+$ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRustBin
+$ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRust
+
+In order to verify the compatibility of packages depending on Rust 1.65.0,
+tests using `./utils/test-pkg` were run.
+You may want to execute the test-pkg command after creating a `.config` file
+enabling the corresponding BR2_PACKAGE, for example:
+Create a file `buildroot/ripgrep.config` containing "BR2_PACKAGE_RIPGREP=y"
+Then execute:
+$ ./utils/test-pkg -d test-pkg -c ripgrep.config -p ripgrep
+
+Results:
+librsvg OK
+ripgrep OK
+suricata OK
+bat OK
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                            |   1 +
- package/opencv4-contrib/Config.in            | 313 +++++++++++++++++++
- package/opencv4-contrib/opencv4-contrib.hash |   3 +
- package/opencv4-contrib/opencv4-contrib.mk   |  13 +
- package/opencv4/opencv4.mk                   |  56 +++-
- 5 files changed, 385 insertions(+), 1 deletion(-)
- create mode 100644 package/opencv4-contrib/Config.in
- create mode 100644 package/opencv4-contrib/opencv4-contrib.hash
- create mode 100644 package/opencv4-contrib/opencv4-contrib.mk
+ package/rust-bin/rust-bin.hash | 252 ++++++++++++++++-----------------
+ package/rust-bin/rust-bin.mk   |   2 +-
+ package/rust/rust.hash         |   6 +-
+ package/rust/rust.mk           |   2 +-
+ 4 files changed, 131 insertions(+), 131 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 238d7813f0..f03b5aad82 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1593,6 +1593,7 @@ menu "Graphics"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
-+	source "package/opencv4-contrib/Config.in"
- 	source "package/opengl/Config.in"
- 	source "package/openjpeg/Config.in"
- 	source "package/pango/Config.in"
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-
-contrib/Config.in
-new file mode 100644
-index 0000000000..9800333035
---- /dev/null
-+++ b/package/opencv4-contrib/Config.in
-@@ -0,0 +1,313 @@
-+menuconfig BR2_PACKAGE_OPENCV4_CONTRIB
-+	bool "opencv4-contrib"
-+	depends on BR2_PACKAGE_OPENCV4
-+	help
-+	  OpenCV (Open Source Computer Vision) is a library of
-+	  programming functions for real time computer vision.
-+
-+	  http://opencv.org/
-+
-+if BR2_PACKAGE_OPENCV4_CONTRIB
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT
-+	bool "alphamat"
-+	help
-+	  Computer Vision based Alpha Matting -- Given an input image
-+	  and a trimap, generate an alpha matte.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO
-+	bool "aruco"
-+	help
-+	  ArUco and ChArUco Markers -- Augmented reality ArUco marker
-+	  and "ChARUco" markers where ArUco markers embedded inside the
-+	  white areas of the checker board.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE
-+	bool "barcode"
-+	help
-+	  Barcode detecting and decoding methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM
-+	bool "bgsegm"
-+	help
-+	  Background segmentation algorithm combining statistical
-+	  background image estimation and per-pixel Bayesian
-+	  segmentation.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED
-+	bool "bioinspired"
-+	help
-+	  Biological Vision -- Biologically inspired vision model:
-+	  minimize noise and luminance variance, transient event
-+	  segmentation, high dynamic range tone mapping methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB
-+	bool "ccalib"
-+	help
-+	  Custom Calibration -- Patterns for 3D reconstruction,
-+	  omnidirectional camera calibration, random pattern
-calibration
-+	  and multi-camera calibration.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ
-+	bool "cnn_3dobj"
-+	help
-+	  Deep Object Recognition and Pose -- Uses Caffe Deep Neural
-Net
-+	  library to build, train and test a CNN model of visual object
-+	  recognition and pose.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV
-+	bool "cvv"
-+	help
-+	  Computer Vision Debugger -- Simple code that you can add
-+	  to your program that pops up a GUI allowing you to
-+	  interactively and visually debug computer vision programs.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
-+	bool "datasets"
-+	help
-+	  Datasets Reader -- Code for reading existing computer vision
-+	  databases and samples of using the readers to train, test and
-+	  run using that dataset's data.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
-+	bool "dnn_objdetect"
-+	help
-+	  Object Detection using CNNs -- Implements compact CNN Model
-+	  for object detection. Trained using Caffe but uses
-+	  opencv_dnn module.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
-+	bool "dnn_superres"
-+	help
-+	  Superresolution using CNNs -- Contains four trained
-+	  convolutional neural networks to upscale images.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
-+	bool "dnns_easily_fooled"
-+	help
-+	  Subvert DNNs -- This code can use the activations in a
-+	  network to fool the networks into recognizing something else.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
-+	bool "dpm"
-+	help
-+	  Deformable Part Model -- Felzenszwalb's Cascade with
-+	  deformable parts object recognition code.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
-+	bool "face"
-+	help
-+	  Face Recognition -- Face recognition techniques: Eigen,
-Fisher
-+	  and Local Binary Pattern Histograms LBPH methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
-+	bool "freetype"
-+	help
-+	  Drawing text using freetype and harfbuzz.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY
-+	bool "fuzzy"
-+	help
-+	  Fuzzy Logic in Vision -- Fuzzy logic image transform and
-+	  inverse; Fuzzy image processing.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF
-+	bool "hdf"
-+	help
-+	  Hierarchical Data Storage -- This module contains I/O
-+	  routines for Hierarchical Data Format:
-+	  https://en.m.wikipedia.org/wiki/Hierarchical_Data_Format
-+	  meant to store large amounts of data.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS
-+	bool "hfs"
-+	help
-+	  Hierarchical Feature Selection for Efficient Image
-+	  Segmentation -- This module contains an efficient
-+	  algorithm to segment an image.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH
-+	bool "img_hash"
-+	help
-+	  This module contains algorithms to extract hash of an
-+	  image allowing to efficiently estimate similarity between
-+	  images.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM
-+	bool "intensity_transform"
-+	help
-+	  The module brings implementations of intensity transformation
-+	  algorithms to adjust image contrast.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA
-+	bool "julia"
-+	help
-+	  Julia language wrappers with samples and tests.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR
-+	bool "line_descriptor"
-+	help
-+	  Line Segment Extract and Match -- Methods of extracting,
-+	  describing and matching line segments using binary
-+	  descriptors.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB
-+	bool "matlab"
-+	help
-+	  Matlab Interface -- OpenCV Matlab Mex wrapper code generator
-+	  for certain opencv core modules.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC
-+	bool "mcc"
-+	help
-+	  Macbeth Color Chart detector -- Find and return color patch
-+	  location in MacBeth color calibration charts.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW
-+	bool "optflow"
-+	help
-+	  Optical Flow -- Algorithms for running and evaluating
-+	  deepflow, simpleflow, sparsetodenseflow and motion
-+	  templates (silhouette flow).
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS
-+	bool "ovis"
-+	help
-+	  OGRE 3D Visualiser -- allows you to render 3D data using
-+	  the OGRE 3D engine.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING
-+	bool "phase_unwrapping"
-+	help
-+	  Quality-guided phase unwrapping.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT
-+	bool "plot"
-+	help
-+	  Plotting -- The plot module allows you to easily plot data
-+	  in 1D or 2D.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY
-+	bool "quality"
-+	help
-+	  Image Quality Analysis (IQA) API.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID
-+	bool "rapid"
-+	help
-+	  Silhouette based 3D object tracking.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG
-+	bool "reg"
-+	help
-+	  Image Registration -- Pixels based image registration for
-+	  precise alignment. Follows the paper "Image Alignment and
-+	  Stitching: A Tutorial", by Richard Szeliski.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD
-+	bool "rgbd"
-+	help
-+	  RGB-Depth Processing module -- Linemod 3D object recognition;
-+	  Fast surface normals and 3D plane finding. 3D visual
-odometry.
-+	  3d reconstruction using KinectFusion.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
-+	bool "saliency"
-+	help
-+	  Saliency API -- Where humans would look in a scene. Has
-+	  routines for static, motion and "objectness" saliency.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
-+	bool "sfm"
-+	help
-+	  Structure from Motion -- This module contains algorithms
-+	  to perform 3d reconstruction from 2d images. The core of
-+	  the module is a light version of Libmv.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
-+	bool "shape"
-+	help
-+	  Shape Distance and Matching
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO
-+	bool "stereo"
-+	help
-+	  Stereo Correspondence -- Stereo matching done with different
-+	  descriptors: Census / CS-Census / MCT / BRIEF / MV and dense
-+	  stereo correspondence using Quasi Dense Stereo method.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT
-+	bool "structured_light"
-+	help
-+	  Structured Light Use -- How to generate and project gray code
-+	  patterns and use them to find dense depth in a scene.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES
-+	bool "superres"
-+	help
-+	  Super Resolution
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING
-+	bool "surface_matching"
-+	help
-+	  Point Pair Features -- Implements 3d object detection and
-+	  localization using multimodal point pair features.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT
-+	bool "text"
-+	help
-+	  Scene Text Detection and Recognition -- This module contains
-+	  algorithms to perform text detection, words segmentation and
-+	  text recognition in a visual scene.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
-+	bool "tracking"
-+	help
-+	  Vision Based Object Tracking -- Use and/or evaluate different
-+	  visual object tracking techniques.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB
-+	bool "videostab"
-+	help
-+	  Video Stabilization
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ
-+	bool "viz"
-+	help
-+	  3D Visualizer
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE
-+	bool "wechat_qrcode"
-+	help
-+	  WeChat QR code detector for detecting and parsing QR code.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D
-+	bool "xfeatures2d"
-+	help
-+	  Features2D extra -- Extra 2D Features Framework containing
-+	  experimental and non-free 2D feature detector/descriptor
-+	  algorithms. SURF, BRIEF, Censure, Freak, LUCID, Daisy,
-+	  Self-similar.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC
-+	bool "ximgproc"
-+	help
-+	  Extended Image Processing -- Structured Forests / Domain
-+	  Transform Filter / Guided Filter / Adaptive Manifold Filter
-+	  / Joint Bilateral Filter / Superpixels / Ridge Detection
-+	  Filter.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
-+	bool "xobjdetect"
-+	help
-+	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
-+	  local binary patterns computed as integral features for 2D
-+	  object detection.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
-+	bool "xphoto"
-+	help
-+	  Extra Computational Photography -- Additional photo
-processing
-+	  algorithms: Color balance / Denoising / Inpainting.
-+
-+endif
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash
-b/package/opencv4-contrib/opencv4-contrib.hash
-new file mode 100644
-index 0000000000..9db112c9e9
---- /dev/null
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  a97c2eaecf7a23c6dbd119a609c6d7fae903e5f9ff5f1fe678933e01c67a6c
-11  opencv4-contrib-4.5.5.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d
-30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk
-b/package/opencv4-contrib/opencv4-contrib.mk
-new file mode 100644
-index 0000000000..e4eb66a14a
---- /dev/null
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -0,0 +1,13 @@
-+######################################################################
-##########
-+#
-+# opencv4-contrib
-+#
-+######################################################################
-##########
-+
-+OPENCV4_CONTRIB_VERSION = 4.5.5
-+OPENCV4_CONTRIB_SITE = $(call
-github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
-+OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
-+OPENCV4_CONTRIB_LICENSE = Apache-2.0
-+OPENCV4_CONTRIB_LICENSE_FILES = LICENSE
-+
-+$(eval $(generic-package))
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index ef15c6d911..801910ad6a 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -83,7 +83,7 @@ OPENCV4_CONF_OPTS += \
- #   - world: all-in-one module
- #
- # * Contrib modules from [1] are disabled:
--#   - opencv_contrib package is not available in Buildroot;
-+#   - opencv_contrib package is not available in Buildroot;s
- #   - OPENCV_EXTRA_MODULES_PATH is not set.
- #
- # [1] https://github.com/Itseez/opencv_contrib
-@@ -232,6 +232,60 @@ OPENCV4_CONF_OPTS += \
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index 595402f1b8..af9927a028 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,129 +1,129 @@
+-# From https://static.rust-lang.org/dist/rust-1.64.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-aarch64-unknown-linux-gnu.tar.xz.asc
+-sha256  9081928cced6fc650eaccb88f2ea154dc95c066957b234fa9c0cbe1770479f54  rust-1.64.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256  b22e0efcdff9bcb27aef82148f26a5d3d67da618da3e6e8c9402fe7fcdd8ca69  rust-1.64.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-mips-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-mips-unknown-linux-gnu.tar.xz.asc
+-sha256  e40f1a1ad1404e87511e86964e03636de9e45b68bc745f1814e6e0b1f8fb8523  rust-1.64.0-mips-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-mipsel-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-mipsel-unknown-linux-gnu.tar.xz.asc
+-sha256  27926d9f16018c3e8ac57012cd7062f12783e5eca34dcc57da2b7bf1bea80d32  rust-1.64.0-mipsel-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-powerpc-unknown-linux-gnu.tar.xz.asc
+-sha256  2e046d4aad27d98e5d15a2c74272169995740981acb006aeb4109e1bdf5ff0d4  rust-1.64.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-powerpc64-unknown-linux-gnu.tar.xz.asc
+-sha256  9f0c8a041fe1351bc3d615a74a4c9d5b1cbe194903f2b9a77dc6b42ca374ead9  rust-1.64.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256  913e8286a3bc709ee0916fabec31dd9b6703c40b065b1ac59fd2125011a7fb34  rust-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
+-sha256  822cfc0abb4a30f37bf53b6703acac69f56edb2700a62502caca5ae09ede4e10  rust-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-s390x-unknown-linux-gnu.tar.xz.asc
+-sha256  283e8fb39770a9dc939ba750c44a9c40cac799e77a0556354de448c166b792c0  rust-1.64.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.64.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.64.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256  bd69e42f6cfe3ba96d781ad0b4095ddac4f0fc31c1af445018edf6f0aba543e4  rust-1.64.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-aarch64-unknown-linux-gnu.tar.xz.asc
+-sha256  40abc9ec4f86ff0e37ba176e4c68dfa708e9857bb0372169c865367593127566  rust-std-1.64.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-aarch64-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-aarch64-unknown-linux-musl.tar.xz.asc
+-sha256  2438f7116711b2c65b60d59662ad333cc5f66868ec34498777ed764103f4d4a3  rust-std-1.64.0-aarch64-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-gnueabi.tar.xz.asc
+-sha256  9e7dc879ce647d0b5c7423dcfea1438d64ea2e0764895b5cb9b3258ab0ecf8dd  rust-std-1.64.0-arm-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-gnueabihf.tar.xz.asc
+-sha256  07fbe4ef51f33e7954e25c433522da224b10c6f7353f612713669a4fc58704e8  rust-std-1.64.0-arm-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-musleabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-musleabihf.tar.xz.asc
+-sha256  9955ac8be9828e0400c16a1c0388a769401dc8e732d099ffada156867cab08fb  rust-std-1.64.0-arm-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-arm-unknown-linux-musleabi.tar.xz.asc
+-sha256  f0d24e63e2687af229ea1472650bf5dd5a50d7706062b47a73413e28101fccf1  rust-std-1.64.0-arm-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
+-sha256  af9b36ce5ad613112f83f085840e1f2c5f58ec7b72d8dbf9e833883105699a37  rust-std-1.64.0-armv5te-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv5te-unknown-linux-musleabi.tar.xz.asc
+-sha256  5246edd6be26f10d11a3100d3e74f460c2cfbdabb417e4cc8225ce2b82c485ce  rust-std-1.64.0-armv5te-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
+-sha256  ef1820f55b341ed1a78cadbd3564f9f8800f99bbfb7533821ef5f90ba2c21e87  rust-std-1.64.0-armv7-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-gnueabi.tar.xz.asc
+-sha256  eca7608caa6b8fb31467b4524292e86f854ebd06fcff29f58f5fc860b664c711  rust-std-1.64.0-armv7-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-musleabihf.tar.xz.asc
+-sha256  a31b9284ca3e864343fdad900fc877cc14e00de32dcde7326023372720cd4b09  rust-std-1.64.0-armv7-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-armv7-unknown-linux-musleabi.tar.xz.asc
+-sha256  742fac589f1bc1a0ddd857e32b317e2b673c40adb8ef6dfc3516563ba9bc839f  rust-std-1.64.0-armv7-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-i586-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-i586-unknown-linux-gnu.tar.xz.asc
+-sha256  791aafcfb41c342783bc3c8cdb57ac61453fc02eee185f15c275716f419556f3  rust-std-1.64.0-i586-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-i586-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-i586-unknown-linux-musl.tar.xz.asc
+-sha256  0cb3b0848cd31bd68ac82cd138c6345e5348f5af3dcc1f13275ee019a0895c59  rust-std-1.64.0-i586-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256  c80c57df63517d6171c061e6c095b794593172a3abefa9b4202992706bda12e5  rust-std-1.64.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-i686-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-i686-unknown-linux-musl.tar.xz.asc
+-sha256  b193faf2e37951bf1ac6c3f2d4bd4fe84971a2f56f22e66323cccd142df54156  rust-std-1.64.0-i686-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips-unknown-linux-gnu.tar.xz.asc
+-sha256  45baef38fbfadf21d4e603554c49d62525d1dff887e4ea7045b1fc88feb81663  rust-std-1.64.0-mips-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips-unknown-linux-musl.tar.xz.asc
+-sha256  993b3e003feaa966466509ea9161106978ef7c874877461b4ca1a9936032b25b  rust-std-1.64.0-mips-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
+-sha256  a2d2e2d274105054303adfd9ecb75ea2fba36a228ab23a669c609062f4db0035  rust-std-1.64.0-mips64-unknown-linux-gnuabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips64-unknown-linux-muslabi64.tar.xz.asc
+-sha256  83981de8b57719d714d59b55f3749d8c6ff10588d8d6c7d7ae371bfb668a7b5b  rust-std-1.64.0-mips64-unknown-linux-muslabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
+-sha256  8ec026244400bac48d918230a0c99aa2c31ff33d6cc4d18552228509ca58c074  rust-std-1.64.0-mips64el-unknown-linux-gnuabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
+-sha256  97f40ad383014955448f7917abba7a547d1ddd205746641d3e9c3f730cbd129e  rust-std-1.64.0-mips64el-unknown-linux-muslabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mipsel-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mipsel-unknown-linux-gnu.tar.xz.asc
+-sha256  7dbcf969fc6717215796079437cf073a8ef7df95b77ded4654009c8379c91e0a  rust-std-1.64.0-mipsel-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-mipsel-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-mipsel-unknown-linux-musl.tar.xz.asc
+-sha256  288dd07746b0ece185753e784c7e97f2f01984e9302ef46a4ff71db665002637  rust-std-1.64.0-mipsel-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc-unknown-linux-gnu.tar.xz.asc
+-sha256  6b29ebec4cd705760db634717cf6df68a9a377d52c25def30f5a2e2641a83279  rust-std-1.64.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc64-unknown-linux-gnu.tar.xz.asc
+-sha256  dc0352fdcf7f8b4fcb551d63001738ee120ea2a0fcc7d55db11f1f87eba90b3e  rust-std-1.64.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256  ef697469b2a3ea8897f49b70e3be0c7aaca3f26fd3234812113e2e85cafac738  rust-std-1.64.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
+-sha256  284b09a96d4cdbb96827914a318f9c41e2b207c0afeae76b9f0e3830d2ef2d4d  rust-std-1.64.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-s390x-unknown-linux-gnu.tar.xz.asc
+-sha256  939db2384f543325cc8a2423ab53e28623b9e9762dacea1e2010cf894d3e6ab1  rust-std-1.64.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-sparc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-sparc64-unknown-linux-gnu.tar.xz.asc
+-sha256  3551f014fe1839e68e7b06eeb1b3f67869bef9c4849da9c9c01a7b8c3e32ebf2  rust-std-1.64.0-sparc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256  6ace34bcbba9557aa2fc3a0515c3da4a83ca24d7d45506c5e1b32f589fa38a8b  rust-std-1.64.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.64.0-x86_64-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.64.0-x86_64-unknown-linux-musl.tar.xz.asc
+-sha256  29af13a882abbe797fadd43afcb75bce2e2304438db9e21a3e64a2e9100501fb  rust-std-1.64.0-x86_64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-aarch64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-aarch64-unknown-linux-gnu.tar.xz.asc
++sha256  b3a83a9585b8c4ede4eab2a11b3f96895f676d8b46c9642140c4fefd5c309ed1  rust-1.65.0-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-i686-unknown-linux-gnu.tar.xz.asc
++sha256  50595b96f98e0940bbfe00209d6c233e9158e140ecd6088ad3bd53f89b123e9d  rust-1.65.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-mips-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-mips-unknown-linux-gnu.tar.xz.asc
++sha256  afa3af620b3a0bf8a1da33413eace1db681db5f99b2572ac016027b3d71a50b7  rust-1.65.0-mips-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-mipsel-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-mipsel-unknown-linux-gnu.tar.xz.asc
++sha256  c6b48026fb131a404bcdc7a691246c3de716e32805d58d1571e253b9a5b047b5  rust-1.65.0-mipsel-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-powerpc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-powerpc-unknown-linux-gnu.tar.xz.asc
++sha256  5601b31290790a7077c342c8731bb1d5de1a89639476e14bc7840aeaa3ab6010  rust-1.65.0-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-powerpc64-unknown-linux-gnu.tar.xz.asc
++sha256  8cf900ac125d6bebc97ebb777761923b2062e4fc36692c1f2d68faa0e70949b2  rust-1.65.0-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256  e0654c20446aa5c66def122617f3ca4be9e9b86e75040327e3d35973b6b88980  rust-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
++sha256  f02e1bac01415e101fac58608b070b0f37c7df1a142c8001ddbc489cfb85c232  rust-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-s390x-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-s390x-unknown-linux-gnu.tar.xz.asc
++sha256  e7dc9bb42c0e738f68f8ad4b05cf4b7bef8fa490c379e5730c7e282507b305ee  rust-1.65.0-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.65.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.65.0-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256  9455cab767f7b9f46259aac8d953f15f11b3d65513384e2b0a5e77d0432ae82f  rust-1.65.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-aarch64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-aarch64-unknown-linux-gnu.tar.xz.asc
++sha256  735b681c8a6e60925c76d6cc899e78b4cb4562ada24a1f265b2021c1faad78ad  rust-std-1.65.0-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-aarch64-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-aarch64-unknown-linux-musl.tar.xz.asc
++sha256  9ea488da40c347826cce7e238847c745ee566254bb1d077412673f8243fb1cd2  rust-std-1.65.0-aarch64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-gnueabi.tar.xz.asc
++sha256  c8793e77ef43336bc372a7a5b4720d5449e92577c7875471c2bc40ddbfde4811  rust-std-1.65.0-arm-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-gnueabihf.tar.xz.asc
++sha256  f7d5eb17dbe46ee9d3c4f9fcffc07b8e3311c747545402c8d3b5c43043f27288  rust-std-1.65.0-arm-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-musleabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-musleabihf.tar.xz.asc
++sha256  32d7f301196d73027fb9a5ae595dbadacdc234307c36b4a175a132e75318e38c  rust-std-1.65.0-arm-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-arm-unknown-linux-musleabi.tar.xz.asc
++sha256  453a1443e4753611dc4e6969e50ad8d7984a31d1a457729a860599ed19b1de7a  rust-std-1.65.0-arm-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
++sha256  d079e841be640b4ce26aa821f29bc813243a7c0af7b8aca8ca4acf5c2e5b722f  rust-std-1.65.0-armv5te-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv5te-unknown-linux-musleabi.tar.xz.asc
++sha256  1d11ab1d60070ae30ff87b55dca077f4d532d814a9ab7bc77055b5b429a78c6e  rust-std-1.65.0-armv5te-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
++sha256  fec73401941bffce3b6913d31955f1291119dea119c0051d94f271ae7c959d4c  rust-std-1.65.0-armv7-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-gnueabi.tar.xz.asc
++sha256  c14268337c69650a2618909d8e691489385d748374d73ab8d6a2f9d6b030d70d  rust-std-1.65.0-armv7-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-musleabihf.tar.xz.asc
++sha256  9368527053c4bab0fd320209b45f0278d0a1e54a37006a56a6e565404ab73fef  rust-std-1.65.0-armv7-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-armv7-unknown-linux-musleabi.tar.xz.asc
++sha256  0b5bc219333e3e983fb1e7e86a0c268c4a52ccbd6326a16785be9d9017d97e9f  rust-std-1.65.0-armv7-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-i586-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-i586-unknown-linux-gnu.tar.xz.asc
++sha256  533eda439eb5ffec258b8219445742d6d60570040b3ff167291e3d0d985b9d70  rust-std-1.65.0-i586-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-i586-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-i586-unknown-linux-musl.tar.xz.asc
++sha256  7f5d9ae65827aef1a51676927a4c9533f942021d2fd45fd93b23dfaa738ee205  rust-std-1.65.0-i586-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-i686-unknown-linux-gnu.tar.xz.asc
++sha256  99bd62d593a6ab3205cab7f06b5793a075b9d05d868e927a6948e46269d61e82  rust-std-1.65.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-i686-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-i686-unknown-linux-musl.tar.xz.asc
++sha256  644a4c57c1392f776c5ebb13f9832778b69464391b3766e6bbd18c3aa11787a6  rust-std-1.65.0-i686-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips-unknown-linux-gnu.tar.xz.asc
++sha256  50c65a8effc85aa89242ba0a2a2c89bfcc4d0a39dcb42396d10b0036b9a4e90c  rust-std-1.65.0-mips-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips-unknown-linux-musl.tar.xz.asc
++sha256  3bc5043f4eb7bb6418708792ee8e777197e562d03843a9adf62ce245ba07289a  rust-std-1.65.0-mips-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
++sha256  338c702b79dac33e32dde097084dd38852487d2976c5eb66b44ba8fc8319342b  rust-std-1.65.0-mips64-unknown-linux-gnuabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips64-unknown-linux-muslabi64.tar.xz.asc
++sha256  9450745a5e678c9b7e65ecc7d6a016f92d8d22d8091c4a77431b1e58b99a435f  rust-std-1.65.0-mips64-unknown-linux-muslabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
++sha256  a0a0e60a0e850140194250fbbfb962c322d4f474f4ec22d03b7f537034257c09  rust-std-1.65.0-mips64el-unknown-linux-gnuabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
++sha256  0862706d22dcfee39b0d2df874dd6065d8c3020c0b8974f6e7b694edd42413ae  rust-std-1.65.0-mips64el-unknown-linux-muslabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mipsel-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mipsel-unknown-linux-gnu.tar.xz.asc
++sha256  79e078420f7c45fd1cf38b70620ced50d35ddb1621736b65be987c20481fe5bc  rust-std-1.65.0-mipsel-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-mipsel-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-mipsel-unknown-linux-musl.tar.xz.asc
++sha256  482e9245873338a08f47ea2c29683134b8813deb3e3eafb78b786d34bbecce51  rust-std-1.65.0-mipsel-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc-unknown-linux-gnu.tar.xz.asc
++sha256  672b9ea8018dcdf7d5f79f5298bacc34e7600a082727b4f1a20c14251752aaa2  rust-std-1.65.0-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc64-unknown-linux-gnu.tar.xz.asc
++sha256  8a26e08908156ae5a05c64c2732435ef4efb994a2ac6d0b2e9c93c0dae19d089  rust-std-1.65.0-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256  ce18b44300f7d5d94856cef5b270ba010061fafa411beb9782207e26cbab88a6  rust-std-1.65.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
++sha256  fa99f123ce14f1cda245857b50fd4709adee960e7d36ce663b87c13aee18b64b  rust-std-1.65.0-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-s390x-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-s390x-unknown-linux-gnu.tar.xz.asc
++sha256  a3f6740be345364f4599ae837d2401e0f31e5d33a4f958852d12a384ee581a83  rust-std-1.65.0-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-sparc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-sparc64-unknown-linux-gnu.tar.xz.asc
++sha256  fc2a8816665f464d3085dcd379c44b9de0ee1f1084fae0a4c32c57754b27992b  rust-std-1.65.0-sparc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256  2b588cd2d49688c0c33b7466614123e8fe4c910f4d802fc0ff0662b1772816a9  rust-std-1.65.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.65.0-x86_64-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.65.0-x86_64-unknown-linux-musl.tar.xz.asc
++sha256  55abeb1b55aeebc46a4af2f304271361397df58d12f7eb23fb262bc3132c6056  rust-std-1.65.0-x86_64-unknown-linux-musl.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index a356acd3dc..91ee5a5372 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -6,7 +6,7 @@
  
- OPENCV4_DEPENDENCIES += host-pkgconf zlib
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_BIN_VERSION = 1.64.0
++RUST_BIN_VERSION = 1.65.0
+ RUST_BIN_SITE = https://static.rust-lang.org/dist
+ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index fbef37683a..9776f3f84c 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
+@@ -1,6 +1,6 @@
+-# From https://static.rust-lang.org/dist/rustc-1.64.0-src.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rustc-1.64.0-src.tar.xz.asc
+-sha256  e8170d318fac9d2fc17d5c3e648e7068f56e8db8d233d864aeffbef7c6542eac  rustc-1.64.0-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.65.0-src.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rustc-1.65.0-src.tar.xz.asc
++sha256  2d6aa2ea3fedd55acbbd65f78349385f9daa9c14e25db7a8df5d015588eee1cf  rustc-1.65.0-src.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 4b5e5fac48..d501391d77 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_PACKAGE_OPENCV4_CONTRIB),y)
-+OPENCV4_DEPENDENCIES += opencv4-contrib
-+OPENCV4_CONF_OPTS += \
-+	-DOPENCV_EXTRA_MODULES_PATH=$(OPENCV4_CONTRIB_DIR)/modules \
-+	-DBUILD_opencv_alphamat=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT),ON,OFF) \
-+	-DBUILD_opencv_aruco=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO),ON,OFF) \
-+	-DBUILD_opencv_barcode=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE),ON,OFF) \
-+	-DBUILD_opencv_bgsegm=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM),ON,OFF) \
-+	-DBUILD_opencv_bioinspired=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED),ON,OFF) \
-+	-DBUILD_opencv_ccalib=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB),ON,OFF) \
-+	-DBUILD_opencv_cnn_3dobj=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ),ON,OFF) \
-+	-DBUILD_opencv_cvv=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV),ON,OFF) \
-+	-DBUILD_opencv_datasets=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS),ON,OFF) \
-+	-DBUILD_opencv_dnn_objdetect=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT),ON,OFF) \
-+	-DBUILD_opencv_dnn_superres=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES),ON,OFF) \
-+	-DBUILD_opencv_dnns_easily_fooled=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED),ON,OFF) \
-+	-DBUILD_opencv_dpm=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM),ON,OFF) \
-+	-DBUILD_opencv_face=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE),ON,OFF) \
-+	-DBUILD_opencv_freetype=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE),ON,OFF) \
-+	-DBUILD_opencv_fuzzy=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY),ON,OFF) \
-+	-DBUILD_opencv_hdf=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF),ON,OFF) \
-+	-DBUILD_opencv_hfs=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS),ON,OFF) \
-+	-DBUILD_opencv_img_hash=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH),ON,OFF) \
-+	-DBUILD_opencv_intensity_transform=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM),ON,OFF) \
-+	-DBUILD_opencv_julia=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA),ON,OFF) \
-+	-DBUILD_opencv_line_descriptor=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR),ON,OFF) \
-+	-DBUILD_opencv_matlab=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB),ON,OFF) \
-+	-DBUILD_opencv_mcc=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC),ON,OFF) \
-+	-DBUILD_opencv_optflow=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW),ON,OFF) \
-+	-DBUILD_opencv_ovis=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS),ON,OFF) \
-+	-DBUILD_opencv_phase_unwrapping=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING),ON,OFF) \
-+	-DBUILD_opencv_plot=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT),ON,OFF) \
-+	-DBUILD_opencv_quality=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY),ON,OFF) \
-+	-DBUILD_opencv_rapid=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID),ON,OFF) \
-+	-DBUILD_opencv_reg=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG),ON,OFF) \
-+	-DBUILD_opencv_rgbd=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD),ON,OFF) \
-+	-DBUILD_opencv_saliency=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY),ON,OFF) \
-+	-DBUILD_opencv_sfm=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM),ON,OFF) \
-+	-DBUILD_opencv_shape=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE),ON,OFF) \
-+	-DBUILD_opencv_stereo=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO),ON,OFF) \
-+	-DBUILD_opencv_structured_light=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT),ON,OFF) \
-+	-DBUILD_opencv_superres=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES),ON,OFF) \
-+	-DBUILD_opencv_surface_matching=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING),ON,OFF) \
-+	-DBUILD_opencv_text=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT),ON,OFF) \
-+	-DBUILD_opencv_tracking=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING),ON,OFF) \
-+	-DBUILD_opencv_videostab=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB),ON,OFF) \
-+	-DBUILD_opencv_viz=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ),ON,OFF) \
-+	-DBUILD_opencv_wechat_qrcode=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE),ON,OFF) \
-+	-DBUILD_opencv_xfeatures2d=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D),ON,OFF) \
-+	-DBUILD_opencv_ximgproc=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC),ON,OFF) \
-+	-DBUILD_opencv_xobjdetect=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT),ON,OFF) \
-+	-DBUILD_opencv_xphoto=$(if
-$(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO),ON,OFF)
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
- OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
- OPENCV4_DEPENDENCIES += jasper
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_VERSION = 1.64.0
++RUST_VERSION = 1.65.0
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
