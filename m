@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E455CC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22B8C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B02E4032B;
-	Thu,  3 Nov 2022 00:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B02E4032B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9195041724;
+	Thu,  3 Nov 2022 00:34:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9195041724
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PnQkTYq0qtDC; Thu,  3 Nov 2022 00:32:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XX1MZBla3e-V; Thu,  3 Nov 2022 00:34:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3C4B40112;
-	Thu,  3 Nov 2022 00:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3C4B40112
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F02901BF95F
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:32:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A13C341682;
+	Thu,  3 Nov 2022 00:34:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A13C341682
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 980641BF95F
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB72C60B70
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB72C60B70
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F42241682
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F42241682
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EIpIi-MSEyMg for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 00:32:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9IVAJdL_yIBt for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 00:34:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D42D1606C6
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D42D1606C6
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:32:05 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id z3so187397iof.3
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:32:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45F074159F
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 45F074159F
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:34:03 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id h206so165696iof.10
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:34:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=A+yS4LLHC8EbAKXHbBKpaIpJQ8IjQ3Ih/SkzmeEf07U=;
- b=hGctfiW9kuPmOk8A8NMV4uSlW9KDOPifWlV0kEzYFbMvvF6dOgfcBkxjcP4H3ISPJ0
- OAPVsnQ6rlCxq/IxZ+45OlK0AFya4yKThOpuocZBz0427iSsGgAaCMSReVcbJCr3CgJs
- Fs3sDihypY/oapnGC3Ool1fw7AfnTh5Kx77PSShN4bbttHz0Wv7OZAIUJ7waCpVNUi6c
- X2MgJrHg6f0g0Twcb3sF+II8ycoXSLIjDtqqw4Ge9UrrxFMF/LHyur2sPXRZXJPkCPU1
- plkjgiojT3L6qIHaW20AzDELZN6HDCrBy5rKJ0vlUgxaIP3EghpI0lM8dMNAsTgLhgFZ
- pKwQ==
-X-Gm-Message-State: ACrzQf2YAkaA79haoeck10j5ROftyoS8r87NuK9cOV2jd1it9tiUm2Ih
- E/iudljpT8jzKuo5539gBidt1BhcdbMaJA==
-X-Google-Smtp-Source: AMsMyM6jgtqQheVjdyKimRSJOBoKK7EyfyoUGHaM/US0ZgRrV5Se8KCyEkt+hKL7FjNxhY+OpXqVAg==
-X-Received: by 2002:a05:6602:2ccf:b0:6bc:d52f:a323 with SMTP id
- j15-20020a0566022ccf00b006bcd52fa323mr17962291iow.152.1667435524632; 
- Wed, 02 Nov 2022 17:32:04 -0700 (PDT)
+ bh=m2+qkYG6kBldA3R2KTcNiSaIkrqoMmFv6f+BU815T2I=;
+ b=n8QAdKc8AjZqh8gDSGCHKyPWYNK1btSaTcyC1t6K2lDmewHeu/n5u4vXCK+UlqaAIZ
+ K+Xb8OMaVZjENHusvY38Rb7v2dZQlbdJLUJcqYVAcbERtHf6FS87N3DpkwjGlVuS+50t
+ cI3dUdPWbCwP4PBWbNCJ6aBCr3g5esUTvs1lXQ7BwkJjcVASSKZMeKb51+m2K3XLfhaD
+ sx2HoYOqN2wr5lOq4c3MXmU/VKKuNRws0P4ne7EqSycXBFDUu+UPusvOuKQ62PtYQ5YA
+ VFL0wFg0SL0VzqUv7Ai67Xs+pHqJy7Pp6ijB3Qo9/0JgboL00aRnmUelkMSdF+4m2exv
+ J7aw==
+X-Gm-Message-State: ACrzQf2XWma9MuMvyUsQpRz65JUPTWZsJPQWPopb38RbyULaApcHNf+n
+ Zl4eDUYinZrV7He9jH2ir52du0AGoS1QHw==
+X-Google-Smtp-Source: AMsMyM6n6D3o/Wp9VfLYPyyzar1lerPit3TeSImncErwzqGPXfUYHt1KrXN0BWfifaASNwWBw8ZF3Q==
+X-Received: by 2002:a02:95ce:0:b0:375:7eda:8c58 with SMTP id
+ b72-20020a0295ce000000b003757eda8c58mr4328507jai.292.1667435642086; 
+ Wed, 02 Nov 2022 17:34:02 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- a12-20020a02a00c000000b00356738a2aa2sm5303363jah.55.2022.11.02.17.32.03
+ a27-20020a027a1b000000b0037502ffac71sm5427473jac.18.2022.11.02.17.34.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 17:32:04 -0700 (PDT)
+ Wed, 02 Nov 2022 17:34:01 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 18:32:02 -0600
-Message-Id: <20221103003202.3007879-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 18:34:00 -0600
+Message-Id: <20221103003400.3164180-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=A+yS4LLHC8EbAKXHbBKpaIpJQ8IjQ3Ih/SkzmeEf07U=;
- b=S1aruzTQUIy13XAb3aWT0yursNzCt2O01arY3DADr0wydjfue9Ioa9YwvvsnTadEea
- 5Og5xp8d5LuP84w5DNUxB6cwGiziMTL6LfwvOZ8B5OjfO7QzaLDqsBkdRBPjCd6z2BXW
- VMR2pVlW8Nvj3IR8h5AN4VcMVBrheYT4XY+mc2Kfyh1wv1Q2CPOgseejQ1xOOkiRYOt9
- MGcIzKW0FMueomfkW/U8WWoh6RVT0mhPNelysOA/v2z7j4dIVJ6lic4Pt64pg1yNz5qA
- 9+Clx1LWuvn8LM1Ksj8lrPoVqFdLKIuCXcbm1sbpToiK/JOa6V+18nDUa0YD7PywbEIK
- 5HaQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=m2+qkYG6kBldA3R2KTcNiSaIkrqoMmFv6f+BU815T2I=;
+ b=M58xHFD/h0ZBKwvxIzRrQvhcgr1qFC4nuNACNLRN1vAUs+/0jcOMh+gqXNc88hsCQR
+ gP4IZm6YhYieD/hgEaojFGKTjTxszL0ltQttmEmxmanhF2naWs5DsjVtpP/dFGG0POOX
+ 8xCcJtcX2QWznNUyAzFliXRlVC8C7j/St+UtA/mkW3gvtXE6rm2zXpNNTVkASzv3JZiD
+ lPKnKL3YrATk/ODqPvKZKEAodLfC4vjAhrIDXhl/wuQ12SjkVCySQxoEmW9fh4bsitNa
+ 6WA3l399+BigEoh8ITphvRMdR/O/wC4fDQPN2PHQbAGRwhI6N65o7b/Qq46WR5NSIUO7
+ 5q4w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=S1aruzTQ
-Subject: [Buildroot] [PATCH 1/1] package/python-mbstrdecoder: bump to
- version 1.1.1
+ header.a=rsa-sha256 header.s=20210112 header.b=M58xHFD/
+Subject: [Buildroot] [PATCH 1/1] package/python-memory-profiler: bump to
+ version 0.60.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
+ package/python-memory-profiler/python-memory-profiler.hash | 4 ++--
+ package/python-memory-profiler/python-memory-profiler.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index 90b9abb8d6..dd2f412bee 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+diff --git a/package/python-memory-profiler/python-memory-profiler.hash b/package/python-memory-profiler/python-memory-profiler.hash
+index 9ee515b529..9e3aca517b 100644
+--- a/package/python-memory-profiler/python-memory-profiler.hash
++++ b/package/python-memory-profiler/python-memory-profiler.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
--md5  b32ff478a38730a8ab0b884fe162cc41  mbstrdecoder-1.1.0.tar.gz
--sha256  f4dfd549e424ad8dfc985e6af8b55cb4ec0c208782f610d57439fe6a9a44c244  mbstrdecoder-1.1.0.tar.gz
-+md5  62efa113a3cd2d40942359d6699338f7  mbstrdecoder-1.1.1.tar.gz
-+sha256  0a99413b92bbaddda89d376f496d710dc7131417e98414a756ebcd41374e068d  mbstrdecoder-1.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/memory-profiler/json
+-md5  b1d1783064a1198fb21bc877e535ec1b  memory_profiler-0.58.0.tar.gz
+-sha256  01385ac0fec944fcf7969814ec4406c6d8a9c66c079d09276723c5a7680f44e5  memory_profiler-0.58.0.tar.gz
++md5  c4d29b47885c32581f5bcefb44d2ca8e  memory_profiler-0.60.0.tar.gz
++sha256  6a12869511d6cebcb29b71ba26985675a58e16e06b3c523b49f67c5497a33d1c  memory_profiler-0.60.0.tar.gz
  # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index 63f9af74f5..f875e4d71d 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+ sha256  51926ce91b8283532efa9dfb02518582c15f49c105a3ac18cce1f7a4947e96ae  COPYING
+diff --git a/package/python-memory-profiler/python-memory-profiler.mk b/package/python-memory-profiler/python-memory-profiler.mk
+index 053b0e2d62..5e43662e07 100644
+--- a/package/python-memory-profiler/python-memory-profiler.mk
++++ b/package/python-memory-profiler/python-memory-profiler.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MBSTRDECODER_VERSION = 1.1.0
-+PYTHON_MBSTRDECODER_VERSION = 1.1.1
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/6c/10/f82ba5a91489c91bf6adaa0e1aca38a7ab2d1d7d80195a5f6ad8c2ff387a
-+PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/ba/ac/ba46bb6eb6165541ce25ff230469efe1c04043cf173f856dcc91876c38de
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+-PYTHON_MEMORY_PROFILER_VERSION = 0.58.0
++PYTHON_MEMORY_PROFILER_VERSION = 0.60.0
+ PYTHON_MEMORY_PROFILER_SOURCE = memory_profiler-$(PYTHON_MEMORY_PROFILER_VERSION).tar.gz
+-PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/8f/fd/d92b3295657f8837e0177e7b48b32d6651436f0293af42b76d134c3bb489
++PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/06/dd/7308a8ef1902db9d81c5bc226befe346a87ed8787caff00b8d91ed9f3b86
+ PYTHON_MEMORY_PROFILER_SETUP_TYPE = setuptools
+ PYTHON_MEMORY_PROFILER_LICENSE = BSD-3-Clause
+ PYTHON_MEMORY_PROFILER_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
