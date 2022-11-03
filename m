@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ECC6C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:00:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEF47C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF6B34056A;
-	Mon,  5 Dec 2022 11:59:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF6B34056A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DAAB40528;
+	Mon,  5 Dec 2022 12:00:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DAAB40528
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yr1nT7YZXU6F; Mon,  5 Dec 2022 11:59:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H9RKujZJdHHJ; Mon,  5 Dec 2022 12:00:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB52B401DC;
-	Mon,  5 Dec 2022 11:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB52B401DC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 161961BF955
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E25840527;
+	Mon,  5 Dec 2022 12:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E25840527
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 793F01BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B2BC4168D
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B2BC4168D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FAD24052C
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FAD24052C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jSMv9yr2gA2H for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W6lojN81EZYK for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACB844167A
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACB844167A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B90F940569
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B90F940569
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A502B85BBE; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ id A798B857AA; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 23:14:05 +0100
+Date: Thu, 3 Nov 2022 23:06:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b2bf6853c11fffb5621632d60f1d3d5ee71e8c0d
-X-Git-Newrev: 58d1032f96a565320dc043254cf2ade1950ec0aa
+X-Git-Oldrev: d6f194c5131b6ed76e4b954399a04859e64a6c25
+X-Git-Newrev: 9bab65a21c1805eab7127aaf557a1e5189386dcf
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112609.A502B85BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.60
+Message-Id: <20221205112606.A798B857AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/quazip: bump to version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58d1032f96a565320dc043254cf2ade1950ec0aa
+commit: https://git.buildroot.net/buildroot/commit/?id=9bab65a21c1805eab7127aaf557a1e5189386dcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for new optional bluez5-backend-native-mm and readline
-config options.
+https://github.com/stachenov/quazip/releases/tag/v1.3
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pipewire/pipewire.hash |  2 +-
- package/pipewire/pipewire.mk   | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ package/quazip/quazip.hash | 2 +-
+ package/quazip/quazip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 9bead47bd9..4585534569 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  32a6db3f42f00eb95a07369160a614420443ca4f4e90ac628db8ca508e08538e  pipewire-0.3.59.tar.bz2
-+sha256  8164eb53c9eafedfa22fe1adc4b8e38f3173c6f33695c735a17ed1a3d43c664e  pipewire-0.3.60.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index d7ae07170d..9fef605878 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index bcb16acdc0..16d299fdf4 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2dfb911d6b27545de0b98798d967c40430312377e6ade57096d6ec80c720cb61  quazip-1.2.tar.gz
++sha256  c1239559cd6860cab80a0fd81f4204e606f9324f702dab6166b0960676ee1754  quazip-1.3.tar.gz
+ sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 7731e59d94..f4de2a11a4 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PIPEWIRE_VERSION = 0.3.59
-+PIPEWIRE_VERSION = 0.3.60
- PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
- PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
- PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
-@@ -105,6 +105,12 @@ endif
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
- PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
- PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
-+ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
-+PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=enabled
-+PIPEWIRE_DEPENDENCIES += modem-manager
-+else
-+PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=disabled
-+endif
- ifeq ($(BR2_PACKAGE_OPUS),y)
- PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=enabled
- PIPEWIRE_DEPENDENCIES += opus
-@@ -189,7 +195,10 @@ PIPEWIRE_CONF_OPTS += -Dlibpulse=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
-+PIPEWIRE_CONF_OPTS += -Dreadline=enabled
- PIPEWIRE_DEPENDENCIES += readline
-+else
-+PIPEWIRE_CONF_OPTS += -Dreadline=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL2),y)
+-QUAZIP_VERSION = 1.2
++QUAZIP_VERSION = 1.3
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
