@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED837C47089
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 375B3C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B700408FC;
-	Mon,  5 Dec 2022 11:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B700408FC
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCA6C607CA;
+	Mon,  5 Dec 2022 11:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCA6C607CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z_HfPNJM6wT7; Mon,  5 Dec 2022 11:53:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RJ90luJbYqRf; Mon,  5 Dec 2022 11:53:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A3624161F;
-	Mon,  5 Dec 2022 11:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A3624161F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E2551BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 133096059E;
+	Mon,  5 Dec 2022 11:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 133096059E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0807F1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E51E14168A
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E51E14168A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B2F9405C0
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B2F9405C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ISEhFLUD9gpC for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lRzkhgrEQAej for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D616241655
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D616241655
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BB2440569
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BB2440569
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D31B185BA3; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 99A3B85B9B; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 19:23:49 +0100
+Date: Thu, 3 Nov 2022 21:19:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 738500c296c8b1206f20e94ca3e7c5932a6a0486
-X-Git-Newrev: 54fd5f74f19d1e83d7c4571fc1b766c733072b94
+X-Git-Oldrev: 2a10f8e21100420026666c171b38d279ec2fecc5
+X-Git-Newrev: d4f5dff4a3c73c5d0a1f57e131cc44d697f4c77f
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.D31B185BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ssdp-responder: bump to version 1.9
+Message-Id: <20221205112605.99A3B85B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-socketio: bump to version
+ 5.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +56,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54fd5f74f19d1e83d7c4571fc1b766c733072b94
+commit: https://git.buildroot.net/buildroot/commit/?id=d4f5dff4a3c73c5d0a1f57e131cc44d697f4c77f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
- - New command line options to ssdp-scan
- - Update copyright years (affects LICENSE file hash)
-
-Fixes:
- - Workaround for OpenVPN /32 default server setup
- - Time-of-check vs time-of-use issue with caching of UUID,
-   found by Coverity Scan, fixed by Raul Porancea
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ssdp-responder/ssdp-responder.hash | 4 ++--
- package/ssdp-responder/ssdp-responder.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-socketio/python-socketio.hash | 4 ++--
+ package/python-socketio/python-socketio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
-index e8cbbb4a1f..425ad86e08 100644
---- a/package/ssdp-responder/ssdp-responder.hash
-+++ b/package/ssdp-responder/ssdp-responder.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7ae49229e7c7a55fed9e36598b12e2173eecef0fffe0a386b6a10fad30f3c79f  ssdp-responder-1.8.tar.gz
--sha256  e17dc0bc91bf499d8cca5e016c22c6d2a4770e3cc1a43756a7973375a83ddb90  LICENSE
-+sha256  974c244abd4ba8c87532867a84756182a1460c99072ffb1eb91c5a1f73311d89  ssdp-responder-1.9.tar.gz
-+sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index 3fee4c2006..fd7b1ea44b 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index 40e74cef96..abdcc3a5b7 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-socketio/json
+-md5  0507825ca4bd6527cbaed81ec5767bfe  python-socketio-5.4.0.tar.gz
+-sha256  ca807c9e1f168e96dea412d64dd834fb47c470d27fd83da0504aa4b248ba2544  python-socketio-5.4.0.tar.gz
++md5  e63369252a9d383cbfc503337b864733  python-socketio-5.7.2.tar.gz
++sha256  92395062d9db3c13d30e7cdedaa0e1330bba78505645db695415f9a3c628d097  python-socketio-5.7.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index f23342b776..aecff55ef4 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SSDP_RESPONDER_VERSION = 1.8
-+SSDP_RESPONDER_VERSION = 1.9
- SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
- SSDP_RESPONDER_LICENSE = ISC
- SSDP_RESPONDER_LICENSE_FILES = LICENSE
+-PYTHON_SOCKETIO_VERSION = 5.4.0
+-PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/72/70/9b992f4b8adfcbf0724c079c18629d83f20b36fb0eb64d4fdf874054becf
++PYTHON_SOCKETIO_VERSION = 5.7.2
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ee/56/294629986bf6cea96e0edb3933a7f2fac7a079d12909e893903a2effc670
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
