@@ -4,85 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 001F5C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76315C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:44:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89FFF81EEA;
-	Thu,  3 Nov 2022 14:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89FFF81EEA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1335281F09;
+	Thu,  3 Nov 2022 14:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1335281F09
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i7CZHkHZ79dE; Thu,  3 Nov 2022 14:36:49 +0000 (UTC)
+	with ESMTP id vfEf_foMOJND; Thu,  3 Nov 2022 14:44:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD3EA81EE4;
-	Thu,  3 Nov 2022 14:36:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD3EA81EE4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B6F561BF38A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:36:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 953BE81EFF;
+	Thu,  3 Nov 2022 14:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 953BE81EFF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 671BA1BF38A
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 928A360FA2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 928A360FA2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4117A405AA
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4117A405AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EwFaO5vPJ6vj for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 14:36:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4072160F9C
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4072160F9C
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:36:46 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id q142so1470819iod.5
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 07:36:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UULfIZIJK666sYlJkScVPimta7UJYC1CbIG14fzsDiA=;
- b=CckQUpAMf9Og5g3offz0Yyp7v+zOKdGpg6xOwUbRAIFlmKp8S43FSnu5uGXJGyUZK8
- 4NdssH57g+ZIEB1tgenfgPRkpjLIq0Mm6T1yM0GD4L5A7ixBf4GHjdRKa5OMwrQggoHN
- +ZwyhpFaUUge+C+eaxdHyDdghEH42Fn9IiGuaMFNEmG5GQ7O7f2Y7qkRfAS/2AY0zQUh
- 5wdCqZsEbFGlzBgKW4MzeWTPBx0tg32SvukCdIWdrhMOusapZzLDqdDwmXGFwhUFpxa2
- 3ATqpIWsv8cqAJalC/bXauY5rPD8qC1bj9hGQfP5m3sZGjCVeCTrj7delhxHX/m05oVY
- ZOdw==
-X-Gm-Message-State: ACrzQf1/58xNxNd8BCoXEoLPQQGSO2Nmb3inpjtfHoxuz0aIjHPCYDFt
- Dms/8QykhSSKIRLf4iLbw3Lp3p60AP5yztGx
-X-Google-Smtp-Source: AMsMyM7zWjdhkuQ5MDYqWB9gvDFQJpv1rTWs/oz/sxlA6wqCbznDEQGTeGwKle9JY+/jvXF1w4Fjxg==
-X-Received: by 2002:a6b:3103:0:b0:6ce:e628:dba9 with SMTP id
- j3-20020a6b3103000000b006cee628dba9mr15795088ioa.151.1667486205018; 
- Thu, 03 Nov 2022 07:36:45 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- y1-20020a056e02118100b002f9652849f6sm356448ili.67.2022.11.03.07.36.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 07:36:44 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ScLX9gPem6ct for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 14:44:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3245140571
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3245140571
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:44:11 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 3AF78D4A00
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:34:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5B00320008;
+ Thu,  3 Nov 2022 14:34:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1oqbIP-00B0oi-5u; Thu, 03 Nov 2022 15:34:17 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 08:36:42 -0600
-Message-Id: <20221103143642.2186317-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  3 Nov 2022 15:34:13 +0100
+Message-Id: <20221103143414.2624696-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UULfIZIJK666sYlJkScVPimta7UJYC1CbIG14fzsDiA=;
- b=Y/SiL2IR98mgSpLoPwKXsYL0fgZqXllriM1DxAi01jTK5d/EOPULmjJEZX8ci+RGEm
- +PGNCweQdCRbyFGs7AElYR7f9wXZFjbmTmAvgj7oLRP2uF0/AFFb884fajUahviSvGeL
- l5klXfbgUfPyUX0mR+XvFTNXfdGCfFVGOw2jBHUBq+dRv8BYLsIDEoWsg9p5ajxU7WyN
- 7EUJx3KNSyoLvVutDJnVn7cp/6DBIF9dp7h4BrrZpht+jMBOL0OLLusTvnlNrkXGyQ2j
- LRRsbmJiolcWKvItY+S1zanCEPpXCfYFRGrDgYfdhBN/kuFLaHD6KXuiDjhTGa8GOaob
- pJAw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Y/SiL2IR
-Subject: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to version
- 3.0.0
+Subject: [Buildroot] [PATCH] package/multipath-tools: security bump to
+ version 0.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,54 +63,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Falco Hyfing <hyfinglists@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pymodbus/python-pymodbus.hash | 9 +++++----
- package/python-pymodbus/python-pymodbus.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+Fixes the following security issues:
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 8e60d94e62..b5243567b7 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,4 +1,5 @@
--# sha256 locally computed
--sha256  088c7ece2a11cad652939719695c457f26f9148cd7d2f4a79872167925180ad5  pymodbus-2.2.0.tar.gz
--# Hash for license file
--sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
-+# md5, sha256 from https://pypi.org/pypi/pymodbus/json
-+md5  25a8724539d0eac1b09d9b41812d86f9  pymodbus-3.0.0.tar.gz
-+sha256  37c9b6f3e5c82f39ee42047ca48cbc9fd0c49a6731126789500191e9deea6cbc  pymodbus-3.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index d96e21a55c..2ed7e94afe 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -4,11 +4,11 @@
+- CVE-2022-41974: Authorization bypass
+- CVE-2022-41973: Symlink attack
+
+For more details, see the writeup:
+https://blog.qualys.com/vulnerabilities-threat-research/2022/10/25/leeloo-multipath-authorization-bypass-and-symlink-attack-in-multipathd-cve-2022-41974-and-cve-2022-41973
+
+Update README.md hash after license-unrelated changes:
+
+git shortlog 0.9.0..0.9.3 -- README.md
+Konstantin Kharlamov (1):
+      README.md: mention libreadline and libedit optional deps
+
+Xose Vazquez Perez (4):
+      multipath-tools: update devel repo info in README.md
+      multipath-tools: add ALUA info to README.md
+      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
+      multipath-tools: add more info for NetApp RDAC arrays
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/multipath-tools/multipath-tools.hash | 4 ++--
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index df0d24fb74..6f893d37ce 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,7 +1,7 @@
+ # Locally computed:
+-sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
++sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+-sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
++sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index f3ce3ca8b8..ec5d853644 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 2.2.0
-+PYTHON_PYMODBUS_VERSION = 3.0.0
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = $(call github,riptideio,pymodbus,v$(PYTHON_PYMODBUS_VERSION))
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/0f/5a/50e9492f98ef911af18c2b603bc003fef726e84d22bac2ce6e651643b29c
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
--PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
-+PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-MULTIPATH_TOOLS_VERSION = 0.9.0
++MULTIPATH_TOOLS_VERSION = 0.9.3
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
  
- $(eval $(python-package))
+ MULTIPATH_TOOLS_LICENSE = \
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
