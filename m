@@ -1,86 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0633FC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 938B9C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B73781FC8;
-	Thu,  3 Nov 2022 21:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B73781FC8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2597A40BED;
+	Thu,  3 Nov 2022 21:38:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2597A40BED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HeietgLiGADI; Thu,  3 Nov 2022 21:38:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ga9rYXIRj2ME; Thu,  3 Nov 2022 21:38:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B27A481FC2;
-	Thu,  3 Nov 2022 21:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B27A481FC2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CFBC40BD3;
+	Thu,  3 Nov 2022 21:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CFBC40BD3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86FA01BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:38:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 601611BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 628AA81FC2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 628AA81FC2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2898781FCB
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:38:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2898781FCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7IkK5SDek7Gi for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 21:38:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2787A80DCB
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2787A80DCB
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:38:18 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- b1-20020a17090a7ac100b00213fde52d49so3016816pjl.3
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 14:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OUxx+169wEtUh1APqckL0AY5UwjNB+zu1PpBQkRvUKo=;
- b=N8kDTzjSi6fxSmIX3oUHEyqxjt/Eo+8DDHgSsSPCjakUczdwUVP2/Up59VCNPw4jau
- 1CRfe0MhoOCmuPFJGNUPCRCjReBiR4dsMlwBlziJS+jQjLCdwjxE78MQVUxLQwnOWmVq
- Yz1wuZp+Z6/i3gioTRww/2P5kKOUbHVtYnzR5m0Hb4aO7Xa9gVrI8Xno0WZHpVeleZpb
- NqWQrJ9KjTsiYj5p2816QH6VwTMRJjfgmUGyoPRoFHeNDvxC2/ohsg+ETJkbin7n/Zhm
- yEoZ6DNjaI0AzJ+XPL1ou2zQsLkhzim+RvTkSZP2Aqtth82klB1njlJ5yHCN4mwplWRR
- gExQ==
-X-Gm-Message-State: ACrzQf3hfwf5HeyTE7nrDMYUp/gqBkFGySeUtTlRZzpnq6a7ywKw8TVP
- xw6uRmJRWvFqoaeIMm9N39TXu3y1HuoCvRamo2w=
-X-Google-Smtp-Source: AMsMyM5i4PO8DBVC+5dUz3GMWk+XkOM95hAdPGeAyIAfzWbcG/fYX4riwyEFnmGzjCySkbFDNQNuLFtrHdfeJh5umFk=
-X-Received: by 2002:a17:902:e552:b0:179:e795:71c5 with SMTP id
- n18-20020a170902e55200b00179e79571c5mr31675857plf.57.1667511497446; Thu, 03
- Nov 2022 14:38:17 -0700 (PDT)
+ with ESMTP id 82UEBtPxCZXp for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 21:38:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCBA681FC2
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BCBA681FC2
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:38:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 80C5540006;
+ Thu,  3 Nov 2022 21:38:36 +0000 (UTC)
+Date: Thu, 3 Nov 2022 22:38:34 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221103223834.1e9564a5@windsurf>
+In-Reply-To: <20221103174818.1469409-1-fontaine.fabrice@gmail.com>
+References: <20221103174818.1469409-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20221103132829.1589487-1-james.hilliard1@gmail.com>
- <20221103215812.58a4ca20@windsurf>
-In-Reply-To: <20221103215812.58a4ca20@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 3 Nov 2022 17:38:05 -0400
-Message-ID: <CADvTj4pnYgRWJ6RV4QOq01fiZtZy6PZE79hFtsYvGZMbhk5rjg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=OUxx+169wEtUh1APqckL0AY5UwjNB+zu1PpBQkRvUKo=;
- b=A8vXc43X6ubHR/XkGi394axh7hC+FEjLAJwe+3RDJCD2vHCiHaf1BfrjMIlTT2i/5z
- QfEnwjd1N6eV+OwWOc1cLgcGXkg5Ik1mMWWhgtjOIEuPT1wTqkKi2MpevqM++Dsowq96
- fXIxRYqLwHwQ7n/P3hhWzRtiaPOl9KMmSRgAJNvZXeNr/BLHf0GNTeLSgKHSjRwQH0MT
- nNtHYr2D4Xo3IOnuwHIqCRpwwtnzvNRhkA2yku3YFaHcEreHFWZ5Etipy8QHs1ky9W5D
- vMO5735+ppRIJ+WP8au7vdd9axVvdJj2DDVJNGIgJtzQM9BEMUMYDx9XXadvdFLG1iWi
- qAJA==
+ d=bootlin.com; s=gm1; t=1667511517;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ijEhRUVgNj6b5/seu7+BBSSoLUeAqYaEjOSYs7me5ac=;
+ b=l8fTzAnuugYVJwYBj3PSs7yr2gApCPZmJlAu0B/wPL8KO8sMdHgGSaKh1icqdmWvHvJpTy
+ f658V4EW4IbS4sffRuL+7D1DQBEtWEDWyL/87Fqrq8eXfDPkbwTXUBuGOnpbiZTWjNDgTv
+ 31OOMlWxeVl5DWNnrBbCXFQtV8wz24m2S3ieCiy2JCaUbEXTw6rRTPdeffCS6YKCgTSZxa
+ D91y6XA+K2t9h9zLEGng3gUORas7OJJjCTQjW/zEeX8c3Df0FFkRShSRCZ0bzdihasugor
+ sPHtBbw/oZgseQI4x4rqF8m+hM40VBRJ9v83yzhlpxwRg0ughyl63NNB1qOdPA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=A8vXc43X
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-opcua-asyncio: bump to
- version 1.0.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=l8fTzAnu
+Subject: Re: [Buildroot] [PATCH 1/1] package/procps-ng: fix build without
+ __NR_pidfd_open
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,79 +76,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Nov 3, 2022 at 4:58 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Thu,  3 Nov 2022 07:28:29 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/python-opcua-asyncio/python-opcua-asyncio.hash | 6 ++++--
-> >  package/python-opcua-asyncio/python-opcua-asyncio.mk   | 6 +++---
-> >  2 files changed, 7 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.hash b/package/python-opcua-asyncio/python-opcua-asyncio.hash
-> > index d8aee272de..36b16a1596 100644
-> > --- a/package/python-opcua-asyncio/python-opcua-asyncio.hash
-> > +++ b/package/python-opcua-asyncio/python-opcua-asyncio.hash
-> > @@ -1,3 +1,5 @@
-> > -# Locally computed
-> > -sha256  e5fab37a92162351fe40cab43df09db8a2e9f8b8a2a8f13ed680aa6f6d687ec3  opcua-asyncio-0.8.4.tar.gz
-> > +# md5, sha256 from https://pypi.org/pypi/asyncua/json
-> > +md5  a52df0dc0586abd1592c97a0274d1c9d  asyncua-1.0.0.tar.gz
-> > +sha256  25966e374b0c90da112a96e9dbc5cc36c123b2b60412eac6f26b04a4b0b4d91e  asyncua-1.0.0.tar.gz
->
-> Are you sure this is the same thing: opcua-asyncio-0.8.4.tar.gz and
-> asyncua-1.0.0.tar.gz ?
+On Thu,  3 Nov 2022 18:48:18 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Should be:
-https://github.com/FreeOpcUa/opcua-asyncio#installation
+> Fix the following build failure without __NR_pidfd_open raised since
+> bump to version 3.3.17 in commit
+> cc28c7aa6df7798ce5ca79d6d1c7c2eb115ba220 and
+> https://gitlab.com/procps-ng/procps/-/commit/c8384e682c1cfb3b2dc797e0f8a3cbaaccf7a3da:
+> 
+> pgrep.c: In function 'pidfd_open':
+> pgrep.c:748:17: error: '__NR_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
+>   748 |  return syscall(__NR_pidfd_open, pid, flags);
+>       |                 ^~~~~~~~~~~~~~~
+>       |                 pidfd_open
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f23a5156e641b2ebdd673973dec0f9c87760c688
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../procps-ng/0003-fix-pifd_open-check.patch  | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 package/procps-ng/0003-fix-pifd_open-check.patch
+> 
+> diff --git a/package/procps-ng/0003-fix-pifd_open-check.patch b/package/procps-ng/0003-fix-pifd_open-check.patch
+> new file mode 100644
+> index 0000000000..7152901e70
+> --- /dev/null
+> +++ b/package/procps-ng/0003-fix-pifd_open-check.patch
+> @@ -0,0 +1,59 @@
+> +From 0cce3e981540c28d2f703b9ab16c04d0df8fa03d Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Thu, 3 Nov 2022 18:24:53 +0100
+> +Subject: [PATCH] fix pifd_open check
+> +
+> +Replace AC_CHECK_FUNC by AC_CHECK_FUNCS otherwise HAVE_PIDFD_OPEN will
+> +never be defined resulting in the following build failure if pidfd_open
+> +is available but __NR_pidfd_open is not available:
+> +
+> +pgrep.c: In function 'pidfd_open':
+> +pgrep.c:748:17: error: '__NR_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
+> +  748 |  return syscall(__NR_pidfd_open, pid, flags);
+> +      |                 ^~~~~~~~~~~~~~~
+> +      |                 pidfd_open
+> +
+> +This build failure is raised since the addition of pwait in version
+> +3.3.17 and
+> +https://gitlab.com/procps-ng/procps/-/commit/c8384e682c1cfb3b2dc797e0f8a3cbaaccf7a3da
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/f23a5156e641b2ebdd673973dec0f9c87760c688
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status:
+> +https://gitlab.com/procps-ng/procps/-/merge_requests/166]
+> +---
+> + configure.ac | 2 +-
+> + src/pgrep.c  | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 629881a6..1a3ccdb8 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -160,7 +160,7 @@ AC_TRY_COMPILE([#include <errno.h>],
+> + 		AC_MSG_RESULT(yes),
+> + 		AC_MSG_RESULT(no))
+> + 
+> +-AC_CHECK_FUNC([pidfd_open], [enable_pwait=yes], [
+> ++AC_CHECK_FUNCS([pidfd_open], [enable_pwait=yes], [
+> +   AC_MSG_CHECKING([for __NR_pidfd_open])
+> +   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+> + #include <sys/syscall.h>
+> +diff --git a/pgrep.c b/pgrep.c
+> +index c4ad5da3..29cfedf7 100644
+> +--- a/pgrep.c
+> ++++ b/pgrep.c
+> +@@ -38,7 +38,7 @@
+> + #include <stdbool.h>
+> + #include <time.h>
+> + 
+> +-#if defined(ENABLE_PWAIT) && !defined(HAVE_PIDFD_OPEN)
+> ++#if defined(ENABLE_PWAIT)
+> + #include <sys/epoll.h>
+> + #include <sys/syscall.h>
+> + #endif
 
->
-> > +# Locally computed sha256 checksums
-> >  sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-> > diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.mk b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-> > index 50b581037b..54f8a1d0a0 100644
-> > --- a/package/python-opcua-asyncio/python-opcua-asyncio.mk
-> > +++ b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-> > @@ -4,9 +4,9 @@
-> >  #
-> >  ################################################################################
-> >
-> > -PYTHON_OPCUA_ASYNCIO_VERSION = 0.8.4
-> > -PYTHON_OPCUA_ASYNCIO_SOURCE = opcua-asyncio-$(PYTHON_OPCUA_ASYNCIO_VERSION).tar.gz
-> > -PYTHON_OPCUA_ASYNCIO_SITE = $(call github,FreeOpcUa,opcua-asyncio,$(PYTHON_OPCUA_ASYNCIO_VERSION))
-> > +PYTHON_OPCUA_ASYNCIO_VERSION = 1.0.0
-> > +PYTHON_OPCUA_ASYNCIO_SOURCE = asyncua-$(PYTHON_ASYNCUA_VERSION).tar.gz
->
-> I don't see how this can work: this package defines
-> PYTHON_OPCUA_ASYNCIO_VERSION, but you use PYTHON_ASYNCUA_VERSION. Did
-> you test this? :-)
+I think here the change should have been:
 
-I did...but I bet I had not yet purged the scanpypi generated package which
-defined that variable from my working tree before testing.
+#if defined(ENABLE_PWAIT)
+#include <sys/epoll.h>
+#if !defined(HAVE_PIDFD_OPEN)
+#include <sys/syscall.h>
+#endif /* !HAVE_PIDFD_OPEN */
+#endif
 
-Fixed in v2:
-https://patchwork.ozlabs.org/project/buildroot/patch/20221103213628.1321537-1-james.hilliard1@gmail.com/
+Indeed, the <sys/epoll.h> is needed for the pwait functionality.
+However, the <sys/syscall.h> is only needed when the replacement
+pidfd_open() function is provided, i.e when !HAVE_PIDFD_OPEN.
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+Anyway, I've applied as-is to Buildroot, but maybe for upstream this
+change would be more correct.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
