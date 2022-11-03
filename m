@@ -1,54 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECAFDC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 10:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3C0C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 10:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 734CE60FB4;
-	Thu,  3 Nov 2022 10:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 734CE60FB4
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1E83417C5;
+	Thu,  3 Nov 2022 10:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E83417C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zwc5nhlvJJTA; Thu,  3 Nov 2022 10:21:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BP-hD9Or1ugE; Thu,  3 Nov 2022 10:21:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FE49606C6;
-	Thu,  3 Nov 2022 10:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FE49606C6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 90BBF1BF3D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15478415A7;
+	Thu,  3 Nov 2022 10:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15478415A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AA4471BF968
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 10:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C3658142B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84FC9415A7
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 10:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C3658142B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84FC9415A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ku6ldI2OsGAY for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M00uSAGnDTiA for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 10:21:25 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76E8681422
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0462E41554
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76E8681422
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 10:21:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0462E41554
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 10:21:24 +0000 (UTC)
 X-Virus-Scanned: by amavisd-new using ClamAV (22)
 Received: from zm.lan (pub-52.182.29.194.multiplay.pl [194.29.182.52])
- by server220076.nazwa.pl (Postfix) with ESMTP id 5822D1BC440;
- Thu,  3 Nov 2022 11:21:22 +0100 (CET)
+ by server220076.nazwa.pl (Postfix) with ESMTP id 4CCA91BCA41;
+ Thu,  3 Nov 2022 11:21:21 +0100 (CET)
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 11:21:02 +0100
-Message-Id: <20221103102102.924370-2-m.niestroj@grinn-global.com>
+Date: Thu,  3 Nov 2022 11:21:01 +0100
+Message-Id: <20221103102102.924370-1-m.niestroj@grinn-global.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221103102102.924370-1-m.niestroj@grinn-global.com>
-References: <20221103102102.924370-1-m.niestroj@grinn-global.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/2] package/python-bleak: bump version to
- 0.19.1
+Subject: [Buildroot] [PATCH v2 1/2] package/python-dbus-fast: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,7 +58,8 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -69,54 +67,200 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
-v1 -> v2: no changes
+v1 -> v2:
+* added REQUIRE_CYTHON=1 env and host-python-cython dependencies (suggested by
+  James)
 
- package/python-bleak/Config.in         | 3 ++-
- package/python-bleak/python-bleak.hash | 4 ++--
- package/python-bleak/python-bleak.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ DEVELOPERS                                    |  2 +
+ package/Config.in                             |  1 +
+ package/python-dbus-fast/Config.in            |  9 ++++
+ .../python-dbus-fast/python-dbus-fast.hash    |  5 +++
+ package/python-dbus-fast/python-dbus-fast.mk  | 16 +++++++
+ .../tests/package/sample_python_dbus_fast.py  | 44 +++++++++++++++++++
+ .../tests/package/test_python_dbus_fast.py    | 40 +++++++++++++++++
+ 7 files changed, 117 insertions(+)
+ create mode 100644 package/python-dbus-fast/Config.in
+ create mode 100644 package/python-dbus-fast/python-dbus-fast.hash
+ create mode 100644 package/python-dbus-fast/python-dbus-fast.mk
+ create mode 100644 support/testing/tests/package/sample_python_dbus_fast.py
+ create mode 100644 support/testing/tests/package/test_python_dbus_fast.py
 
-diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
-index 085c16fae8..691450f86b 100644
---- a/package/python-bleak/Config.in
-+++ b/package/python-bleak/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_BLEAK
- 	bool "python-bleak"
--	select BR2_PACKAGE_PYTHON_DBUS_NEXT # runtime
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d27936992..6d670ae21a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1881,6 +1881,7 @@ F:	package/murata-cyw-fw/
+ F:	package/netdata/
+ F:	package/python-ansicolors/
+ F:	package/python-bleak/
++F:	package/python-dbus-fast/
+ F:	package/python-dbus-next/
+ F:	package/python-iniconfig/
+ F:	package/python-intelhex/
+@@ -1892,6 +1893,7 @@ F:	package/python-typing-extensions/
+ F:	package/python-xmodem/
+ F:	package/rs485conf/
+ F:	package/turbolua/
++F:	support/testing/tests/package/sample_python_dbus_fast.py
+ F:	support/testing/tests/package/sample_python_dbus_next.py
+ F:	support/testing/tests/package/sample_python_pytest.py
+ F:	support/testing/tests/package/sample_python_pytest_asyncio.py
+diff --git a/package/Config.in b/package/Config.in
+index 238d7813f0..db9e94f357 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1015,6 +1015,7 @@ menu "External python modules"
+ 	source "package/python-daphne/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
++	source "package/python-dbus-fast/Config.in"
+ 	source "package/python-dbus-next/Config.in"
+ 	source "package/python-decorator/Config.in"
+ 	source "package/python-defusedxml/Config.in"
+diff --git a/package/python-dbus-fast/Config.in b/package/python-dbus-fast/Config.in
+new file mode 100644
+index 0000000000..2665bd1964
+--- /dev/null
++++ b/package/python-dbus-fast/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_DBUS_FAST
++	bool "python-dbus-fast"
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
 +	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-+	select BR2_PACKAGE_PYTHON_DBUS_FAST # runtime
- 	help
- 	  Bluetooth Low Energy platform Agnostic Klient.
- 
-diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
-index 5acac877c9..9a8310b11c 100644
---- a/package/python-bleak/python-bleak.hash
-+++ b/package/python-bleak/python-bleak.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bleak/json
--md5  0c26b270358a782767012220fc595aa5  bleak-0.12.1.tar.gz
--sha256  4a80a24cc944e52e856054639f298229c39a2fc720e5f7adbeebb117d10849ed  bleak-0.12.1.tar.gz
-+md5  57564087d6e17ad1853109f530279b27  bleak-0.19.1.tar.gz
-+sha256  dff7c7f281dcb6629d0d722209c79ec3aa2a6c33867cb5c1ea3d44b72ca155c0  bleak-0.19.1.tar.gz
- # Locally computed sha256 checksums
- sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
-diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
-index 3ae6d90311..00a4946ef6 100644
---- a/package/python-bleak/python-bleak.mk
-+++ b/package/python-bleak/python-bleak.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_BLEAK_VERSION = 0.12.1
-+PYTHON_BLEAK_VERSION = 0.19.1
- PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
--PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/67/4b/ba00c69a24a8d08c86f02caa45727a2ad2844c7bee9630ccb063be226f71
-+PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/30/b9/60e1f455365e2340fe076cf7683f4e6d03db0b759d4f93fa45e68dc371e5
- PYTHON_BLEAK_SETUP_TYPE = setuptools
- PYTHON_BLEAK_LICENSE = MIT
- PYTHON_BLEAK_LICENSE_FILES = LICENSE
++	help
++	  A faster version of dbus-next, a DBus library for Python with
++	  asyncio support.
++
++	  https://github.com/bluetooth-devices/dbus-fast
+diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
+new file mode 100644
+index 0000000000..f0dceeb43d
+--- /dev/null
++++ b/package/python-dbus-fast/python-dbus-fast.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/dbus-fast/json
++md5  eebf2c558dd1af0f8f32b361e91f2fa3  dbus_fast-1.61.1.tar.gz
++sha256  bda4a7d559047b74f409eda278f68f610a418e86ad3efa0368fa2ed240daa6b6  dbus_fast-1.61.1.tar.gz
++# Locally computed sha256 checksums
++sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
+diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
+new file mode 100644
+index 0000000000..de7049ba22
+--- /dev/null
++++ b/package/python-dbus-fast/python-dbus-fast.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-dbus-fast
++#
++################################################################################
++
++PYTHON_DBUS_FAST_VERSION = 1.61.1
++PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
++PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/dd/f4/a280d46b119d59f6a3d84abf474452ae76651558b0963ab8c48ae13b5a44
++PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
++PYTHON_DBUS_FAST_LICENSE = MIT
++PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
++PYTHON_DBUS_FAST_ENV = REQUIRE_CYTHON=1
++PYTHON_DBUS_FAST_DEPENDENCIES = host-python-cython
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_dbus_fast.py b/support/testing/tests/package/sample_python_dbus_fast.py
+new file mode 100644
+index 0000000000..c2855464a1
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_dbus_fast.py
+@@ -0,0 +1,44 @@
++import asyncio
++from dbus_fast.aio import MessageBus
++from dbus_fast.service import ServiceInterface, method
++import dbus_fast.introspection as intr
++from dbus_fast import BusType
++
++
++class SampleInterface(ServiceInterface):
++    def __init__(self):
++        super().__init__('test.interface')
++
++    @method()
++    def Ping(self):
++        pass
++
++    @method()
++    def ConcatStrings(self, what1: 's', what2: 's') -> 's':  # noqa: F821
++        return what1 + what2
++
++
++async def main():
++    bus_name = 'dbus.fast.sample'
++
++    bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
++    bus2 = await MessageBus(bus_type=BusType.SYSTEM).connect()
++
++    await bus.request_name(bus_name)
++
++    service_interface = SampleInterface()
++    bus.export('/test/path', service_interface)
++
++    introspection = await bus2.introspect(bus_name, '/test/path')
++    assert type(introspection) is intr.Node
++    obj = bus2.get_proxy_object(bus_name, '/test/path', introspection)
++    interface = obj.get_interface(service_interface.name)
++
++    result = await interface.call_ping()
++    assert result is None
++
++    result = await interface.call_concat_strings('hello ', 'world')
++    assert result == 'hello world'
++
++
++asyncio.run(main())
+diff --git a/support/testing/tests/package/test_python_dbus_fast.py b/support/testing/tests/package/test_python_dbus_fast.py
+new file mode 100644
+index 0000000000..5f67cfd8cc
+--- /dev/null
++++ b/support/testing/tests/package/test_python_dbus_fast.py
+@@ -0,0 +1,40 @@
++import textwrap
++
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3DBusFast(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_DBUS=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DBUS_FAST=y
++        """
++    sample_scripts = ["tests/package/sample_python_dbus_fast.py"]
++
++    def run_sample_scripts(self):
++        config = \
++            """
++            <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
++             "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
++            <busconfig>
++              <policy user="root">
++                <allow own="dbus.fast.sample"/>
++                <allow send_destination="dbus.fast.sample"/>
++              </policy>
++            </busconfig>
++            """
++        config = textwrap.dedent(config)
++        config_dir = "/etc/dbus-1/system.d"
++        config_fn = "dbus.fast.sample.conf"
++
++        # Setup and reload D-Bus configuration
++        self.emulator.run("mkdir -p " + config_dir)
++        self.emulator.run("cat > " + config_dir + "/" + config_fn +
++                          " <<EOF" + config + "EOF")
++        self.emulator.run("killall -SIGHUP dbus-daemon")
++
++        # Run test scripts
++        super().run_sample_scripts()
 -- 
 2.38.1
 
