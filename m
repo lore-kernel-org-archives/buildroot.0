@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6B68C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC57C4708C
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D89981865;
-	Mon,  5 Dec 2022 11:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D89981865
+	by smtp3.osuosl.org (Postfix) with ESMTP id 222B060BDE;
+	Mon,  5 Dec 2022 11:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222B060BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tje7cs-8tKdp; Mon,  5 Dec 2022 11:46:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a7_Gp4SIeNu6; Mon,  5 Dec 2022 11:46:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB11381D02;
-	Mon,  5 Dec 2022 11:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB11381D02
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4D4FC1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A0C560BDA;
+	Mon,  5 Dec 2022 11:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A0C560BDA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 106791BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 235A541607
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 235A541607
+ by smtp2.osuosl.org (Postfix) with ESMTP id 147F3405B9
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 147F3405B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bVKJfICSnlZL for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ncjVl04hx-5t for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5FF841615
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E22540562
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5FF841615
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E22540562
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2F8A85BA2; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+ id 06C9F85B9E; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 770ba1fa01432de1ecef979267b88cd94194c6b1
-X-Git-Newrev: 7e5672420ba9c4e30d71460b60b3f6207baf12a3
+X-Git-Oldrev: f8bb4a619ac723d6a35e2b3ebe9f6e1d07a5d0f6
+X-Git-Newrev: c4525b49cb32651c5029847ed02e72b5c075ef4d
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112604.C2F8A85BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pytablereader: bump to
- version 0.31.3
+Message-Id: <20221205112604.06C9F85B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pudb: bump to version
+ 2022.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e5672420ba9c4e30d71460b60b3f6207baf12a3
+commit: https://git.buildroot.net/buildroot/commit/?id=c4525b49cb32651c5029847ed02e72b5c075ef4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License verified as still MIT after hash changed.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pytablereader/python-pytablereader.hash | 6 +++---
- package/python-pytablereader/python-pytablereader.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pudb/python-pudb.hash | 4 ++--
+ package/python-pudb/python-pudb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytablereader/python-pytablereader.hash b/package/python-pytablereader/python-pytablereader.hash
-index 675ce5680e..2034cfd61e 100644
---- a/package/python-pytablereader/python-pytablereader.hash
-+++ b/package/python-pytablereader/python-pytablereader.hash
+diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
+index fc19f589d9..d9943a3601 100644
+--- a/package/python-pudb/python-pudb.hash
++++ b/package/python-pudb/python-pudb.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytablereader/json
--md5  23ba6121e2f916dfbf4015516779dfcd  pytablereader-0.26.1.tar.gz
--sha256  f2e1477de8886267b765af7861baacc65606761bfabb0689f118cc5d27861f26  pytablereader-0.26.1.tar.gz
-+md5  8d732b706186666a4c28d14927c26754  pytablereader-0.31.3.tar.gz
-+sha256  e292b81ecd96546fe0f53d9c83e716a4682d07d7ead6d9be8beb14ab0591df11  pytablereader-0.31.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pudb/json
+-md5  100b955e103b72279604420bbdcd07a5  pudb-2021.1.tar.gz
+-sha256  309ee82b45a0ffca0bc4c7f521fd3e357589c764f339bdf9dcabb7ad40692d6e  pudb-2021.1.tar.gz
++md5  c2b4275b76068f18d630f7bae889345b  pudb-2022.1.2.tar.gz
++sha256  6b83ab805bddb53710109690a2237e98bf83c0b3a00033c517cdf5f6a8fa470d  pudb-2022.1.2.tar.gz
  # Locally computed sha256 checksums
--sha256  7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
-+sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-pytablereader/python-pytablereader.mk b/package/python-pytablereader/python-pytablereader.mk
-index 0f9e4c593a..daa484d393 100644
---- a/package/python-pytablereader/python-pytablereader.mk
-+++ b/package/python-pytablereader/python-pytablereader.mk
+ sha256  a95343fffff49cde3d9bf33cf6bb71cb3bf0ed83f47d98a7ba04b175d29c79ab  LICENSE
+diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
+index 31df3147d0..7df38f0f02 100644
+--- a/package/python-pudb/python-pudb.mk
++++ b/package/python-pudb/python-pudb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTABLEREADER_VERSION = 0.26.1
-+PYTHON_PYTABLEREADER_VERSION = 0.31.3
- PYTHON_PYTABLEREADER_SOURCE = pytablereader-$(PYTHON_PYTABLEREADER_VERSION).tar.gz
--PYTHON_PYTABLEREADER_SITE = https://files.pythonhosted.org/packages/1e/bc/f60da8a733cd87215d8533f28536f8149eca3b898bbca346b37b6c915d8d
-+PYTHON_PYTABLEREADER_SITE = https://files.pythonhosted.org/packages/b5/c8/67590578e27cb1716c7b71291946d685b5bf63fbfe7a254a7cb3f6f8aeab
- PYTHON_PYTABLEREADER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEREADER_LICENSE = MIT
- PYTHON_PYTABLEREADER_LICENSE_FILES = LICENSE
+-PYTHON_PUDB_VERSION = 2021.1
++PYTHON_PUDB_VERSION = 2022.1.2
+ PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
+-PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/c7/69/813e93519fc28744457ff68fa2eaac3b4ea30dda1e6994e969fe9d3008d9
++PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/8b/ef/6dea7c63fdddd7753e2a2930e59799ef32247f2499c0d9bcd233439e7483
+ PYTHON_PUDB_SETUP_TYPE = setuptools
+ PYTHON_PUDB_LICENSE = MIT
+ PYTHON_PUDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
