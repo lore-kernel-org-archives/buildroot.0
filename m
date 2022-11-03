@@ -1,135 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD828C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 09:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24421C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 09:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 051AC41756;
-	Thu,  3 Nov 2022 09:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 051AC41756
+	by smtp1.osuosl.org (Postfix) with ESMTP id A306A80EE1;
+	Thu,  3 Nov 2022 09:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A306A80EE1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yCWB8C8uwgMb; Thu,  3 Nov 2022 09:08:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xHmuSMqgkMxr; Thu,  3 Nov 2022 09:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2EC84174E;
-	Thu,  3 Nov 2022 09:08:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2EC84174E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 034A21BF83C
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 09:08:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD5C580D96;
+	Thu,  3 Nov 2022 09:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD5C580D96
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B873C1BF83C
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 09:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C04E84174E
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 09:08:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C04E84174E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92D2A40190
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 09:29:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92D2A40190
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9y_3L2s0hPYt for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 09:08:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o-OCzu4A6GcY for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 09:29:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B20E44174C
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B20E44174C
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 09:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B7AC40165
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9B7AC40165
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 09:29:50 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=atXCJwVV0d/4tOJwObom5ZQ+9ypUqy0otw9LSwVgUX69Gc8lOZW2FFg/t/fzE3PornmyqW9sPj56rHbH4JOsRGsR9yb/g4H9dR0UCkVVvr7UfNTvaYDnBqHhZWqS6EWMNEJA4uKgdBfBtYu6pSAWfSPHCJC/BToSxE0onshMH2Ra/tdyYCM9uRH17Ha7KwkUJzBF73xyyOUmrglWksbjLEs7RgILxFk5ul4ojbRJky9luLfHr/dE1SeXebKlS51NJkKkq0fax4832eSgK3WkaZBUh7qYldZL90od+4K2NY4hLC1I/divizJAq4LVtUI8Nd1oNWcjeLAEtF4szjfOMA==
+ b=UCU68+guR61g0EeLp5rI3zH2ND4KS3zpk4M3UlKeqwPnPhaJz9QlGp4zIGKj9MK+viFvbVXeEAHHVQH4XbQCcPIYVUPnI0FpGfyV9p+EDgttzlu/OM+wLbDZNzdv/6uNV6xO4owsKlX9p7PbwVW3RnroD+PLWPOOEO2QtYKojGrifuJMi8ITEZjr5cYjlq+qWPKwsZaUEhvMS7whm4SgTqei4ztEwe/lVbjM7G47Zl7S4jVdmUYhiDIsTcjPHlgd8QBmOA2vDwaZ+9G5N5cxUrKVCfH6ZHv6YfxDv/KoS13utEYX/vTgFfWzVxjq/UYkkdEqKZlkPg3V4/xYyTyb5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JI+QicaCRYJo+iK6n9UI2aQVhP3kK46r9cgUvixeJLY=;
- b=TKsCOZyISRniZr8a3M7DUEf65sTWMCqFubJoUOhBG0vDmx4PNMP/W0Lp4XjMjWByGylLRc36fIYivzEIDuzprkpE7QqmseKTXliUwYSO/qeI3smLIiZa8Ufq6dO5/rpfIrd8eTxbXjyY4mpcgSRilzngj+CZo0QgsZETsuynQTaimunFc1ff5xSq3kXJHr02eJtQijFAFbpT/y1W/AVLd56svI0Wsp5qEOTJseMmfs5ieh1Coutzar5qtpdIrrrbC6NBQ7LkWsVlbLjYrTLa/qmKMIAaYAcLKIZv/0f1twYgKI1gu1inE0e/44dYNv32b6sBE5/mItsOGiWCbZzzSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SA0PR12MB7004.namprd12.prod.outlook.com (2603:10b6:806:2c0::6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Thu, 3 Nov
- 2022 09:08:40 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::3e43:21e9:b9b3:1000]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::3e43:21e9:b9b3:1000%7]) with mapi id 15.20.5791.020; Thu, 3 Nov 2022
- 09:08:40 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v1 1/3] add package/versal-firmware
-Thread-Index: AQHY57QIHKFrcdzw5k+BQFfLZ6/jW64s4VEAgAAWoRA=
-Date: Thu, 3 Nov 2022 09:08:40 +0000
-Message-ID: <CH2PR12MB5004A4D2088C03D08ED2F7A8F0389@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20221024142216.31273-1-neal.frager@amd.com>
- <20221103084620.60165a0a@booty>
-In-Reply-To: <20221103084620.60165a0a@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SA0PR12MB7004:EE_
-x-ms-office365-filtering-correlation-id: a88a91c0-1d85-4c29-0901-08dabd7b0000
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0ZUOh6JyXroryVQG5/8zeqpz915iUvclb8fes4EGWimJ/Us5+cITetvn0/6x7rMjDaNo3EbBwDd/OTffP3dat2ygXiAr774bXiYHzz5+6K+hZztUJPuyxZCINchBM3O2kb2OZQMJLug+3g/oKvChGDUsMmsRkxNuasOLLAtCiLJiUJh0BpYNkcKUhdmx+0sceYaO3AuKeijH/FkU5j53aEALjsXOClze9uhpIto1zs3DcZLyHvwfMP1p5HZxx2L1e19zJIx2Do4TmHoUzMUq7Zwz0I5JPqn7+lQuosDCRomdothKETnMbiT80XX4VGLBxRnupRY5zTCtfJsvw1CaDqxc7E4lPtbIM0MmAv3+Fbk/VhObXl0PYgq1xCACxMPhaOjytUjCjAkywc7eCSlJYwxCmKv2WPOZBAfElxKFSSBmBHYXwwzgR+eEjOFmocsKaX2uMg50W+qQotxqvdRmqeRX142RfyBdRk+Hxp4/dSoxWXATRLustGeL5LQmFHNEuE7R28aIiUWMw/GAK/VDH99RqRY3P9+R6QbgZf7yOfaTlnjRjWgBCxe44lAAoYuy3CTf7urw8cbhuUsa9md+fitZt2skb34au+lcav6A3LFEOYZY+5i7VtCwMMa4GrMe9LF8RTLDDtYCFPuASTle8zsT3R1V+zJcKSY71iUUa3dYGsWk65TASDQNpP6Ynl0GW7p7g71C6RG4Ok0YguOhBaLYYIna7J788Igg6chn3hvViR1vnhauuWV+M9Lm1zpMDe/NZ0ybFZLZpZEvDFD6xMmSoaFSPFJMLIJhOCKjSbg=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199015)(478600001)(33656002)(9686003)(41300700001)(2906002)(52536014)(4744005)(8936002)(55016003)(86362001)(186003)(122000001)(38070700005)(38100700002)(54906003)(316002)(5660300002)(6916009)(4326008)(966005)(71200400001)(66446008)(66556008)(76116006)(6506007)(8676002)(66946007)(64756008)(66476007)(7696005);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8L0EqgHb8h2qIfSBNwt20ei+18EL4gGsqWkRsDs9Y7MEk2XILdLUePnJfmhz?=
- =?us-ascii?Q?pahOboNPZoIlsVLZLwhM8r1IpjkTlDwvx2UQHae0tVFfGX4wrQiQH9ClsQdG?=
- =?us-ascii?Q?RRhlrHOM+N5J8lBVuTqQga0zqLeKW/6++vmVi30FgxYHntoLiFGLLpRLDZzh?=
- =?us-ascii?Q?Kv3xICrjFFX8Jol6i2CfpQeGyzzSoyW/vJK3ZO9ngzgdN+jFczHrumjfkunT?=
- =?us-ascii?Q?8H3UavbLo4aed1HnyRkcfIhm1r2xkUSImCIIH9cOp0HX287ar6f6MyXZnCHW?=
- =?us-ascii?Q?vQUcIMno4ta2YXB4/31JURvSU5+RNaOVyJzKEcRwe0bzGgiy/mS8r5cdXLhE?=
- =?us-ascii?Q?ZxbZ7CdAnv3pp1CUSywGlR72NbCpRbX6IlaU1FLngWECgjQCypgfSpZ08/GV?=
- =?us-ascii?Q?rUifbnwTHlXCDXaCDz9bvV1p8jSwKt9dSXcPYWOB+e3dD9dv3RCJAuYUs4WE?=
- =?us-ascii?Q?YKc8ncMUF9yzJ8LSfo6ob2Q50b6j79dtMUBmqsqMVIVXxxC02FfjistBGXNq?=
- =?us-ascii?Q?c4pX4r2wYdIB440lPc2DgpjhL3VSSKR2DPVKMsgDZthKKkRYnG9bVLdgIgQL?=
- =?us-ascii?Q?1ZHLq7FCRHHwDyqvZSbj7p+k2Vy4WFqmfI2msud0Wn5hV9IEA/+pA+cSK4rl?=
- =?us-ascii?Q?3Wm75n5zP9pIKEHtk2aX0BTNLfcgndVkF2IvainvPdeboPtiv1zn19SBwLuV?=
- =?us-ascii?Q?EBOCIw7/aomvkL/Q4KGu8z3GfQS4/sKN5uwwsh8sQL5eiY041RaI/jV9Hx7+?=
- =?us-ascii?Q?1jTUeGTqoVtVCnE4spGalX747x0IjssyFwiL8m9GHq+tyXGTdhmjU85liSXj?=
- =?us-ascii?Q?3lblOaiNfDBJtIF1Xm9U5aLPVYtoOrCwXjVv0kqa/hZZuOn1c4uwVk3QQA1k?=
- =?us-ascii?Q?lIbwTH1vRr5SOn8Exlb4aSxFmLWpZsXGsn9+ZTRi2IqNP+gDHw3M3gz0RohI?=
- =?us-ascii?Q?6H2lckuRMEIDUqUGNshTy+Dd1EP07rvZP7/Clg1KTEJHeQRWZifOuNla7Ctc?=
- =?us-ascii?Q?d69meRg7eOPsKp2UOkoFVyubYcDkZ1ZQxjr6COPEuOYutVf5H/1e1lc5nrx0?=
- =?us-ascii?Q?9Ijxk8YUgPKAVcW3lnQOIC38DqN11RE/McDBovEX+Yzo3u5c1hlgPhAUw7Ym?=
- =?us-ascii?Q?yEyZcCwfY/zRVMpBDXamihEXywNzIyat6W1CCUsHFRmyuZL/Fh5K8dOmSxl6?=
- =?us-ascii?Q?lwlMH2J5VEhgi3SXFy0mgiMUDRKNWEoCS9GH+bsVKpTtX9lPLGPZyMgzNsM4?=
- =?us-ascii?Q?5eoqHCZiDJp33V1lO6RbTCSEwW70dE5fIUuEJthSqYSrCxQLv9sKUfGUNXNl?=
- =?us-ascii?Q?zHb7X7PWmiJx8XA+dUJG08klCCzPnA83hjW9gbGVk3GV0LMZ6rhnpRlix7KI?=
- =?us-ascii?Q?xHLcSr53dIXGihKHp2GoPbxnC8vJZGz6/UIu7LDu0yoqVg3iVRccgC8xKTy8?=
- =?us-ascii?Q?9uCrrpC4lc1AidGJxZ4PJzuyGfk3TdMemHZm9rJKvSvd0fExlJpPOXFJQDsn?=
- =?us-ascii?Q?etVvVLIrRCkS9yhBpYQTA8uy6nuRWTYoR83XtcJhM4+1wF8a/9k9YxtRrJ1o?=
- =?us-ascii?Q?Fu/gwO6AloIF/N8X0GA1cS7y28RV72jhoNX77d3cR4pb/zCehrUNhM5Pll0O?=
- =?us-ascii?Q?tKUp+J6gxzVMitLDPVi+1sg=3D?=
+ bh=AD1WerwsXHQhkqej13LXRPs0dsei9TGWItfmU+hDUvE=;
+ b=mXShX7EQA+Ik9mmUS8znsUZHJT0cPuWlkSTzjy4c0WU59ATkbzVU5AtvA9PvgI4IZrOyd2B0XxH2mzaTTOY9pJxg35T5Vtd2wWUicjYnbdQ2rMX98hTADLxcxmGvt/ByhhvLQPQFSVggci6lZ2N0RQXWmcw3Pl2Mqn6zh490IAJi2rTw1ovKpaeUi+sD4UJcN+IKMNyAL4HgOaApdjVf0mGMbL5rQAvmbx1hoyILhMLEH0JhrIHlCBn+T/hwAWzS0qTpFWc3U2+tZ49jlSEl0h2b+q3O3wyqH7B14ghVPVzUWbh7TwGTiD7AouqcS6Pp+v7krqdlcbcndvC65gLO2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from BN9PR03CA0464.namprd03.prod.outlook.com (2603:10b6:408:139::19)
+ by DM4PR12MB6064.namprd12.prod.outlook.com (2603:10b6:8:af::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Thu, 3 Nov
+ 2022 09:29:47 +0000
+Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:139:cafe::a5) by BN9PR03CA0464.outlook.office365.com
+ (2603:10b6:408:139::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22 via Frontend
+ Transport; Thu, 3 Nov 2022 09:29:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5791.20 via Frontend Transport; Thu, 3 Nov 2022 09:29:46 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
+ 2022 04:29:46 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
+ 2022 04:29:36 -0500
+Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Thu, 3 Nov 2022 04:29:35 -0500
+To: <buildroot@buildroot.org>
+Date: Thu, 3 Nov 2022 03:29:31 -0600
+Message-ID: <20221103092932.17159-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|DM4PR12MB6064:EE_
+X-MS-Office365-Filtering-Correlation-Id: 063612bf-3146-4ca8-6cb2-08dabd7df2d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KZsBb55Ja8aDh4/dSRBLIkSSzoAglu0uJLruDXBAXHw5XouKwDI46a59GX07TJ9wfRli8tvm94TezH1WhLhID/Ij/0wPL0XnQj4ELcCjvd6bzvnCXQyoZ1+62CyhPiuArTDU6RvL6l9QZ9TIjXNwnTBqDtR6u6WW9WxwuMerUu4nscUxRuAy70udmenQm8SIL7dbeWpJu/+TP7LjlKDqs3SHqe4NzLW8BCieotDNCPu/jmWLDDC5x+XgKiXP83obSB+oPweSSmMdHoReHrKsJUZs1kj+wAGpfy7U2fXGKVDKWnNGwFcrcrUgtda2MW8qvSd73Lsl2+rCHW3wx0iaet9jQjh6zXVX3a/ZjtVnLKDQD0T46GO2ZvpF21+UhGI9gHltmZhHVTEBIIBsjE6J+ZCmWUSjhtQfZFWA/RBDCfouRokARn+vUX3afkYZ8ynpzwj9su82duShQXl7IjRHM1UHvua41bw6qd8xjHZw3P0lEeCxFjPoEOJoimxEdqukoNg7Y0DdrJU9B6ZZ85g3evrYKdbFySh1iqSh9CZ87Vs7DLDhIKGuc+VSCav9M8K9srbGh/YBzrM2EVsF02iV0kSIkBRvSzvggY/Ut170qO+GtLh4iEYpyBxzTCrLVwIwHCiDP7Yi7gh8kmo+6z1vqyc83QiIG+hyC/PYQ1QOraFhrGYNfewWOBC2XQuYiK7INQwxhQ4kxLtgxQ2SefYbnLyTQ3UzI6/ef/41BlrRK0C7XwJx8E49Y8LP7l9cT+S87fnFdADjWlrSuct8UARCZcrxinu8ruVwRfE6wlnJK6M5u+H4NbgR/L8uzgkQt+cQ3suQlrD4vH7jNCx1rjsBhA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230022)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(86362001)(36756003)(6916009)(81166007)(82740400003)(356005)(186003)(1076003)(336012)(40480700001)(44832011)(40460700003)(47076005)(2906002)(426003)(2616005)(478600001)(6666004)(26005)(36860700001)(83380400001)(54906003)(41300700001)(70586007)(82310400005)(966005)(5660300002)(4326008)(316002)(8936002)(70206006)(8676002)(36900700001);
+ DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a88a91c0-1d85-4c29-0901-08dabd7b0000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 09:08:40.4820 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qC0q4RTFIlPuu/4DIzR6HjAlJ5WTC4jFCF0dVO4zM9UcECOCp3HZYTo5+3raYeMF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7004
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 09:29:46.8512 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 063612bf-3146-4ca8-6cb2-08dabd7df2d5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6064
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JI+QicaCRYJo+iK6n9UI2aQVhP3kK46r9cgUvixeJLY=;
- b=QORsOZMJIx6wauhsXKz9S3UDaq2qFnVBRDXYNqasjSy3EqtJVMUiwo1R4hfJ5i9lmTox3joqIPjoYh8voWnngbD1mBrJ2JCjrwMLhkiM2AhFOImACM8GrwK+hiOcsECRIrvdAQ935u7vthaP6CDkloKHIPF992tczjE/gAUq3hs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=AD1WerwsXHQhkqej13LXRPs0dsei9TGWItfmU+hDUvE=;
+ b=Q8vX1zzqvqEiI3AH9T7W74XpzSLTPXw9YWpawTkGkx+zSsi9soxrhRP/MlXfGBf53rRNiWYfB4gFktHIhw+NllhGgFZX4dAuoXUsbgX5VUDYiuR/MKiZRVEX7veutXDAmPhCUskf9GJVAOUUxSgrmhLWwTxHLoGKrmBoQ4rJaI0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=QORsOZMJ
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/3] add package/versal-firmware
+ header.s=selector1 header.b=Q8vX1zzq
+Subject: [Buildroot] [PATCH v2 1/2] package/versal-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -141,48 +126,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "O'Neal,
- Terry" <terry.oneal@amd.com>, "Chaplin, Kris" <Kris.Chaplin@amd.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>, "Simek,
- Michal" <michal.simek@amd.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: terry.oneal@amd.com, luca.ceresoli@bootlin.com, kris.chaplin@amd.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+This patch adds support for downloading versal microblaze firmware binaries.
+These are necessary for booting Xilinx versal devices.
 
-> --- /dev/null
-> +++ b/package/versal-firmware/versal-firmware.mk
-> @@ -0,0 +1,24 @@
-> +#####################################################################
-> +###########
-> +#
-> +# versal-firmware
-> +#
-> +#####################################################################
-> +###########
-> +
-> +VERSAL_FIRMWARE_VERSION = $(call 
-> +qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-> +VERSAL_FIRMWARE_SITE = $(call 
-> +github,nealfrager,buildroot-firmware,$(BR2_PACKAGE_VERSAL_FIRMWARE_VE
-> +RSION)) VERSAL_FIRMWARE_LICENSE = Xilinx-Binary-Only 
-> +VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
+The location of these binaries is temporary, and will soon be added to the
+Xilinx firmware repository.  The temporary location is using the same free
+distribution license as the Xilinx firmware repository.
 
-> The LICENSE file appears like a "Xilinx-Binary-Only or
-> GPL-2.0-or-later": https://github.com/nealfrager/buildroot-firmware/blob/main/LICENSE
+Once these files are available on the Xilinx repository, this package will
+be updated to the new location.
 
-Yes, you are right.  I will change it to the following:
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+V1->V2:
+  - set defaults for version and board name
+  - improved format of install commands
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/versal-firmware/Config.in          | 24 ++++++++++++++++++++++
+ package/versal-firmware/versal-firmware.mk | 23 +++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 package/versal-firmware/Config.in
+ create mode 100644 package/versal-firmware/versal-firmware.mk
 
-VERSAL_FIRMWARE_LICENSE = "Xilinx-Binary-Only or GPL-2.0-or-later"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d27936992..fcb46bf59d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2188,6 +2188,7 @@ F:	configs/zynqmp_zcu102_defconfig
+ F:	configs/zynqmp_zcu106_defconfig
+ F:	configs/zynqmp_kria_kv260_defconfig
+ F:	package/bootgen/
++F:	package/versal-firmware/
+ 
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+ F:	package/uacme/
+diff --git a/package/Config.in b/package/Config.in
+index 238d7813f0..c2080b9d9d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -443,6 +443,7 @@ menu "Firmware"
+ 	source "package/sunxi-boards/Config.in"
+ 	source "package/ts4900-fpga/Config.in"
+ 	source "package/ux500-firmware/Config.in"
++	source "package/versal-firmware/Config.in"
+ 	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
+diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
+new file mode 100644
+index 0000000000..122ef02175
+--- /dev/null
++++ b/package/versal-firmware/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_VERSAL_FIRMWARE
++	bool "versal-firmware"
++	depends on BR2_aarch64
++	help
++	  Pre-built firmware files for Xilinx Versal boards.
++
++	  https://github.com/nealfrager/buildroot-firmware
++
++if BR2_PACKAGE_VERSAL_FIRMWARE
++
++config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
++	string "versal firmware version"
++	default v2022.2
++	help
++	  Release version of Versal firmware.
++
++config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
++	string "versal board name"
++	default vck190
++	help
++	  Name of Versal target board.
++	  Used for installing the appropriate firmware boot.bin.
++
++endif # BR2_PACKAGE_VERSAL_FIRMWARE
+diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
+new file mode 100644
+index 0000000000..cb36d1e045
+--- /dev/null
++++ b/package/versal-firmware/versal-firmware.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# versal-firmware
++#
++################################################################################
++
++VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
++VERSAL_FIRMWARE_SITE = $(call github,nealfrager,buildroot-firmware,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
++VERSAL_FIRMWARE_LICENSE = "Xilinx-Binary-Only or GPL-2.0-or-later"
++
++VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
++
++VERSAL_FIRMWARE_INSTALL_TARGET = NO
++VERSAL_FIRMWARE_INSTALL_IMAGES = YES
++
++define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(foreach f,plm.elf psmfw.elf vpl_gen_fixed.pdi,\
++		$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f) \
++			$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f)
++	)
++endef
++
++$(eval $(generic-package))
+-- 
+2.17.1
 
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
