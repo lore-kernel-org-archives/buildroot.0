@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D302C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E375C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 234924187A;
-	Thu,  3 Nov 2022 21:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 234924187A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A03081E89;
+	Thu,  3 Nov 2022 21:28:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A03081E89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1zTP98frnos5; Thu,  3 Nov 2022 21:28:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dffZRaFatlVk; Thu,  3 Nov 2022 21:28:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6F9041893;
-	Thu,  3 Nov 2022 21:28:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6F9041893
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D358813DC;
+	Thu,  3 Nov 2022 21:28:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D358813DC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8AC0E1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:12:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1761E1BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65E8A40BF7
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65E8A40BF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id F412B40BEB
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:12:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F412B40BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i5mdS0pv9ZD6 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 21:12:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E287B40BC0
+ with ESMTP id oDFv11vfxoj2 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 21:12:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCD3B40BC0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E287B40BC0
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:12:19 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DCD3B40BC0
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:12:47 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3B111C0006;
- Thu,  3 Nov 2022 21:12:16 +0000 (UTC)
-Date: Thu, 3 Nov 2022 22:12:15 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id CEA0AC000D;
+ Thu,  3 Nov 2022 21:12:45 +0000 (UTC)
+Date: Thu, 3 Nov 2022 22:12:44 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221103221215.19ba6939@windsurf>
-In-Reply-To: <20221102120751.103984-1-fontaine.fabrice@gmail.com>
-References: <20221102120751.103984-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221103221244.17f40c1a@windsurf>
+In-Reply-To: <20221102123500.311904-1-fontaine.fabrice@gmail.com>
+References: <20221102123500.311904-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667509937;
+ d=bootlin.com; s=gm1; t=1667509966;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=QzMze1UMsHyC9D2DtKzvdFXnwYGhKP4rU5FI35c2bcQ=;
- b=Sr1KhYYs1lOjS7lafyLZDH6C2KLrf8MhK2U08IMni9ggjBSHeNlFOW85BXN/MKXhpwNi4d
- GHqgaGAMR1FfLVqz2tgfFIinFODIzI7Cpnt/AbgknZpNL0/UE5qX8CDeotxze9UKfL6Bgj
- 3PVL/hr2papnyMg0jYCl3XbiFQCLa3HXd7S1x9lOcyhwaRFJgeQa62kbgvQqeI4sMdYSy1
- GcPmOorbwX0S/GP+kRQKsO3ZjCPuFWa18iFbTL+MfUaKObBRq3+dRI61TzHGPVegip9XAv
- 9MpzCoi9K8QvwPpvX8++JAew0XEETOmLacD1Vm8hWv88uubGCbVxcGkR03zUIA==
+ bh=bdsy6PWj1ZfsqKWNqEpz6+x2KcNLOMQ/fqB236IEm3Y=;
+ b=icaV1crcwyXUDBxCvuFbcSOBKaB2NtBBm0NPvLjBx/13IXyJcwNbhHaFYuC1Zqtwjxx2cq
+ q68Rs88shiKQ4PmDBS9bTM3PsoYo8YgcEWMFkUJ2m/59d58pn1fDr7I2AUxdbZyqnpdXO5
+ X//ece+h79Y8BTjfR6yJppmTZ4/9e8rQ5cwod3W3tnNI7zsZcPVJbnFTGGFvV1FeWUJyIC
+ /hGcO1DmIGprTB2Z/nAugagH7TZbFMiacIFfzFeMbmH5MoIX6jUUKhbIQFeoD7qaAWOB9J
+ e2RklPM8v3irZCv9LxfxxigzCz67DOhRcSVEhb6oZxIwQNxulnReGmMLaXY3zw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Sr1KhYYs
-Subject: Re: [Buildroot] [PATCH 1/1] package/makedumpfile: fix mips64 build
+ header.s=gm1 header.b=icaV1crc
+Subject: Re: [Buildroot] [PATCH 1/1] package/numactl: link with -latomic if
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +78,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>, buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  2 Nov 2022 13:07:51 +0100
+On Wed,  2 Nov 2022 13:35:00 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following mips64 build failure raised since commit
-> 0b389385666687ecfd09cdbce6c6ecfd74ce11ab:
+> Fix the following build failure raised since bump to version 2.0.16 in
+> commit e9bc980d93a189a16e7320bd254b906c87ca9f87:
 > 
-> makedumpfile.c: In function 'is_kvaddr':
-> makedumpfile.c:1613:39: error: 'KVBASE' undeclared (first use in this function)
->   return (addr >= (unsigned long long)(KVBASE));
->                                        ^~~~~~
+> /nvmedata/autobuild/instance-7/output-1/per-package/numactl/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./.libs/libnuma.a(libnuma.o): in function `numa_police_memory':
+> libnuma.c:(.text+0xe28): undefined reference to `__atomic_fetch_and_1'
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/94824fa8baa8edb99a5ca245e5561e0c4e430638
+>  - http://autobuild.buildroot.org/results/a92c1c60518d3fe08f3f808f9cc812031e85a4e9
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../makedumpfile/0002-Handle-__mips64.patch   | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 package/makedumpfile/0002-Handle-__mips64.patch
+>  ...01-link-with-latomic-if-needed-again.patch | 41 +++++++++++++++++++
+>  package/numactl/numactl.mk                    |  2 +
+>  2 files changed, 43 insertions(+)
+>  create mode 100644 package/numactl/0001-link-with-latomic-if-needed-again.patch
 
 Applied to master, thanks.
 
