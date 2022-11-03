@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02BF8C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C68FDC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 19:24:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9033641850;
-	Thu,  3 Nov 2022 19:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9033641850
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AAC881F75;
+	Thu,  3 Nov 2022 19:24:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AAC881F75
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZRuZg1EEABqY; Thu,  3 Nov 2022 19:20:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k3ihEHHk_Zyb; Thu,  3 Nov 2022 19:24:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EB6C4181F;
-	Thu,  3 Nov 2022 19:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EB6C4181F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A95B81F72;
+	Thu,  3 Nov 2022 19:24:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A95B81F72
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 35C591BF3C0
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:20:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E3B351BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1EBDC404ED
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EBDC404ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF52C404ED
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 19:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF52C404ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y6ZsGErWWMD6 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 19:20:54 +0000 (UTC)
+ with ESMTP id ORN8AFgnQ0Np for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 19:24:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F5D2404C9
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F5D2404C9
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:20:54 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id q5so1556048ilt.13
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:20:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E105A404C9
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E105A404C9
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 19:24:10 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id x16so1584349ilm.5
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 12:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=hhzXVVk9//mrZAvsSLxomjn+ZQvtLCg3EZBv22+9zsQ=;
- b=ia4SKR2iNpnrh04PlZphXONtHfyzV7iMRXzhZit5OeJvGP/TspGu8a/KZ1j3fnWzl7
- yWLLMYVY3E3m+66jnOcZHhPrKWByo7vmq0sijgXZsjMRQLUEKA1hvSaioJ/VdYW1wksE
- YAlncNRS09L2u1wz0TXl7IrqNTEZw7uUfmp0fdAuVb1jTnT1+egeAhf09PMmvDOlch0a
- 6bnZa+iabqNWVlh2riRaFINH9oI+LGFq2TiscS5E5u4XOUPxLrpqc5MDrtMifIWbL6iT
- M2yzZgi2ml32FbZSNao4AW5l0SRgUaYEZbU5G0MEhRkBR/z0tdZq9yTxLIOln0TPEIlH
- kLZQ==
-X-Gm-Message-State: ACrzQf016GJJHfJ4a95AnxZERUb51chtf7wLl39LeWt+eIpKWw12XZHs
- sBWqiXgPh//GhmzRLF7ijCpbnrMmzS4X+84s
-X-Google-Smtp-Source: AMsMyM6kkk4MwtziyeSsOguVbRwzOGaJKDHdeUwOfIieMqYBYYnSgTlcYOalhZ8hGTWnB+2Fxj853A==
-X-Received: by 2002:a92:2a03:0:b0:2fa:16e3:1833 with SMTP id
- r3-20020a922a03000000b002fa16e31833mr18985983ile.286.1667503252906; 
- Thu, 03 Nov 2022 12:20:52 -0700 (PDT)
+ bh=whaiGkf7ibCzJ6X5WXCZiUcL5VwrCqSZ3Pl7Uf7R8MA=;
+ b=qkHNGT1D72coen7wU4H0G9T1fM4JJz6o3ef7dRMZ00iDv4xudL11PlIaCuYSTHOu29
+ ug9K8IgI+KeEsPqMNS+/jHsPiK96r/HEATYqf4fHrU5NhClbo+11xdW7af6BP8/ASa0H
+ szfO1+FcCKoMYGL09zuYNEFb7YAnLc5iSLWHRyipMCAfypKA/XJTrEuQtelJpimTrYFD
+ s70lcfpsGdMbG+HxRX2q3/SAvoyzFyDXWKZ3iqhfMsiwBshMlNWf8J2TdnEpvaD4i3N1
+ /VMScgW7iSAQ3BANGwv6iC8VgowyDkA00jkQHVlyCk+8qBiYhIs8PTlDLc/yWjFrEANs
+ Mhfg==
+X-Gm-Message-State: ACrzQf3j0TRbjX4eK7AwzqMRHNr1ktaS1WamC8ZlF+CN7yGP7lDWfDKr
+ WqXTScg1KPhFNWiPLEku0Bx4drvY5arCnH0f
+X-Google-Smtp-Source: AMsMyM4Os28JZRPCfsqCshUOI+TcC1D0IQxt+tfd2+MBYWfwGAtvMfygHkuwHczYj9WZV0lXhXZ8ZA==
+X-Received: by 2002:a92:730c:0:b0:2f5:7dd7:45f7 with SMTP id
+ o12-20020a92730c000000b002f57dd745f7mr19017819ilc.12.1667503449748; 
+ Thu, 03 Nov 2022 12:24:09 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- q5-20020a02a985000000b003750f2bc28dsm483969jam.3.2022.11.03.12.20.52
+ o8-20020a92d388000000b002fff117027dsm605541ilo.13.2022.11.03.12.24.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 12:20:52 -0700 (PDT)
+ Thu, 03 Nov 2022 12:24:09 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 13:20:50 -0600
-Message-Id: <20221103192050.273473-1-james.hilliard1@gmail.com>
+Date: Thu,  3 Nov 2022 13:24:07 -0600
+Message-Id: <20221103192407.338034-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hhzXVVk9//mrZAvsSLxomjn+ZQvtLCg3EZBv22+9zsQ=;
- b=IzyO3o5Wp9HKmCx6XcFJQkajtP5htC+b7XFAW2SvLN274tBpS71XUlhrXfwNv3+Qh/
- dR4yR35hpe579dMSYZQTSSeQRHFcdghvdpfH9e+MflbnG7YJEt2LPWm80fP5WKeKfsF+
- maL7R9eaCaaSQjejUBhiF9QjyGsX5P/Q9neZPGEmT7JazsD71NhdxCTM3yprBjnPL57J
- x+FdWuGyU6KYzoTt5SRESReBNqWvrTwddsB/0Q3L7RhBxO60dKEBeMVz4QMeuZXdSbsl
- alOR1RR8MIKXZEcFOn94tDs15XFA8Qrf/Ldv4vCvO8KwwPOhk2CvQupBVZUueUBjvobt
- VdIA==
+ bh=whaiGkf7ibCzJ6X5WXCZiUcL5VwrCqSZ3Pl7Uf7R8MA=;
+ b=mkXX72tZHp3yMyv8bPXWV2zqDUdD1ubQ+oKRFNZseSlmrMoSzc6HwBnykiQBm5Bvbu
+ IxiU0+pxg5BdoaNxmw8CQXcG0VEjY2ByWsy5xAoEGPBk5i35EsCK1Dc3FRXmzZZvOyyq
+ qq36vOkJ2dg4Z0VEo+4MR/NeQg/buolGuVyqfRdMRwNTiK1sWVPVKujRWqAgrXkjjkP/
+ ohXbeM783rYtNr/VhDab5/o13rQPfz+OJGTrBKPFWcbtqKEN/Osu4wXhcNDggws+7M1F
+ hXyOLzKEIaLXQP54NQ5/2Ge4xItvKbxSZMEWe/PTMgxzj6Vn/jJWiLY7xCleMSrzOaKp
+ WEww==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IzyO3o5W
-Subject: [Buildroot] [PATCH 1/1] package/python-sh: bump to version 1.14.3
+ header.a=rsa-sha256 header.s=20210112 header.b=mkXX72tZ
+Subject: [Buildroot] [PATCH 1/1] package/python-simplesqlite: bump to
+ version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,41 +100,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Verified license remains MIT after hash change.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-sh/python-sh.hash | 6 +++---
- package/python-sh/python-sh.mk   | 4 ++--
+ package/python-simplesqlite/python-simplesqlite.hash | 6 +++---
+ package/python-simplesqlite/python-simplesqlite.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
-index 13a0207de9..a31aacdee1 100644
---- a/package/python-sh/python-sh.hash
-+++ b/package/python-sh/python-sh.hash
+diff --git a/package/python-simplesqlite/python-simplesqlite.hash b/package/python-simplesqlite/python-simplesqlite.hash
+index 404670aef3..06edbfab3d 100644
+--- a/package/python-simplesqlite/python-simplesqlite.hash
++++ b/package/python-simplesqlite/python-simplesqlite.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sh/json
--md5  33becadcb5214afd00b9eec05fa98c06  sh-1.14.2.tar.gz
--sha256  9d7bd0334d494b2a4609fe521b2107438cdb21c0e469ffeeb191489883d6fe0d  sh-1.14.2.tar.gz
--# Locally computed
-+md5  d60498172876f35aef6303a9cbb8eb11  sh-1.14.3.tar.gz
-+sha256  e4045b6c732d9ce75d571c79f5ac2234edd9ae4f5fa9d59b09705082bdca18c7  sh-1.14.3.tar.gz
-+# Locally computed sha256 checksums
- sha256  d8491c6e236568d04f7c8c07f2f1b8f5d142706dab6ab88f6e0d2dd476b6c706  LICENSE.txt
-diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
-index d2d8b14c8b..781de88ab1 100644
---- a/package/python-sh/python-sh.mk
-+++ b/package/python-sh/python-sh.mk
+ # md5, sha256 from https://pypi.org/pypi/simplesqlite/json
+-md5  f1d4f2ec14e2c782a62e451587477598  SimpleSQLite-0.45.2.tar.gz
+-sha256  0b19c99c36b63173a715649f94a2fc3aee8deb9b70c683d584bca85e5930244b  SimpleSQLite-0.45.2.tar.gz
++md5  11f2ef73243fb0d677ed00d22f1441b2  SimpleSQLite-1.3.0.tar.gz
++sha256  f7e862bec5982059e665cc73b6fdb4c8340a1f565ba3497387c3c48f10d43bf8  SimpleSQLite-1.3.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
++sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-simplesqlite/python-simplesqlite.mk b/package/python-simplesqlite/python-simplesqlite.mk
+index 88ffcd4d45..ea60cefc16 100644
+--- a/package/python-simplesqlite/python-simplesqlite.mk
++++ b/package/python-simplesqlite/python-simplesqlite.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SH_VERSION = 1.14.2
-+PYTHON_SH_VERSION = 1.14.3
- PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
--PYTHON_SH_SITE = https://files.pythonhosted.org/packages/80/39/ed280d183c322453e276a518605b2435f682342f2c3bcf63228404d36375
-+PYTHON_SH_SITE = https://files.pythonhosted.org/packages/b7/09/89c28aaf2a49f226fef8587c90c6386bd2cc03a0295bc4ff7fc6ee43c01d
- PYTHON_SH_SETUP_TYPE = setuptools
- PYTHON_SH_LICENSE = MIT
- PYTHON_SH_LICENSE_FILES = LICENSE.txt
+-PYTHON_SIMPLESQLITE_VERSION = 0.45.2
++PYTHON_SIMPLESQLITE_VERSION = 1.3.0
+ PYTHON_SIMPLESQLITE_SOURCE = SimpleSQLite-$(PYTHON_SIMPLESQLITE_VERSION).tar.gz
+-PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/b3/d1/bc3668ed7d90ee70d556124b8b5b3329505d72b5290bb393626f1afe714d
++PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/a0/2c/39a9e7dc4af46d101f48753086c686982790ecc2bdf5e9fa88f85f027e7a
+ PYTHON_SIMPLESQLITE_SETUP_TYPE = setuptools
+ PYTHON_SIMPLESQLITE_LICENSE = MIT
+ PYTHON_SIMPLESQLITE_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
