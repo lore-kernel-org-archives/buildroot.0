@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF0E6C47089
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D48C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 772F740264;
-	Mon,  5 Dec 2022 11:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 772F740264
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAF1E60AFC;
+	Mon,  5 Dec 2022 11:28:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAF1E60AFC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1dDX6EIC3oY0; Mon,  5 Dec 2022 11:28:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED055607E3;
+	Mon,  5 Dec 2022 11:28:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED055607E3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01BF81BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5FF6415ED
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5FF6415ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5-zqGm34UgME; Mon,  5 Dec 2022 11:28:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72E1340915;
-	Mon,  5 Dec 2022 11:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E1340915
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 226961BF955
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9823A40546
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9823A40546
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lDhSx-jBLkdq for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rj3BwPVp6eHU for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C868F40523
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5CC14157B
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C868F40523
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5CC14157B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3F8C85BA2; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
+ id 94AB085BA2; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:19 +0100
+Date: Thu, 3 Nov 2022 21:03:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66911c3dd28a134f550ca03efe19c19daf229dd1
-X-Git-Newrev: 448e701daa35bb6bd23bc6ad3c667c058e7ffb04
+X-Git-Oldrev: 2ede119da2d8bf45120c482e11ccb84d31c22afe
+X-Git-Newrev: c9b862b2973aaaebac6dacca6ad20f2b20944f87
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112600.C3F8C85BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-boto3: bump to version
- 1.26.0
+Message-Id: <20221205112600.94AB085BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{avro-c,
+ python-avro}: bump to version 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=448e701daa35bb6bd23bc6ad3c667c058e7ffb04
+commit: https://git.buildroot.net/buildroot/commit/?id=c9b862b2973aaaebac6dacca6ad20f2b20944f87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-boto3/python-boto3.hash | 5 +++--
- package/python-boto3/python-boto3.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/avro-c/avro-c.hash           | 4 ++--
+ package/avro-c/avro-c.mk             | 2 +-
+ package/python-avro/python-avro.hash | 4 ++--
+ package/python-avro/python-avro.mk   | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 96c03be61c..347acde9b2 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/boto3/json
--sha256  833e67edfb73f2cc22ff27a1c33728686dc90a9e81ba2551f9462ea2d1b04f41  boto3-1.24.8.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/boto3/json
-+md5  17f5f946d79da139fa9fd9b014fe0d99  boto3-1.26.0.tar.gz
-+sha256  8f0e4eb5c26f927c09bc03302d38156af578b816f1e4f8ca4f0f734d134b9d4f  boto3-1.26.0.tar.gz
- # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index c5f9133573..03dc32a08b 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
+index 7a4a6f7aca..b52a787ed5 100644
+--- a/package/avro-c/avro-c.hash
++++ b/package/avro-c/avro-c.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/avro/avro-1.11.0/c/avro-c-1.11.0.tar.gz.sha512
+-sha512  5369ec11832e0ce1aa0181d594f657bae82ab5fb317ec1bee5ba190de9ed42956b425a5bf7e423940e8f871a54ae1246b92db2ce8562f270b4a05523ec4b60ae  avro-c-1.11.0.tar.gz
++# From https://downloads.apache.org/avro/avro-1.11.1/c/avro-c-1.11.1.tar.gz.sha512
++sha512  e72e8c245a8b86326bc18a5d5127e9beeaceaf805e8a62760fd88d627e29954c750346485bb43822df408c8a172d910c27ddf7e3815bddbdb04d16c54d859323  avro-c-1.11.1.tar.gz
+ 
+ # License files
+ sha256  d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
+diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
+index f55c579656..f217c1d7ed 100644
+--- a/package/avro-c/avro-c.mk
++++ b/package/avro-c/avro-c.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_BOTO3_VERSION = 1.24.8
-+PYTHON_BOTO3_VERSION = 1.26.0
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/60/3b/6fed306341003fd059f402d22747ba33d07b8ac8bfe53dbedb2c6e42ee3b
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/77/18/91af4ff58b26d03af8bf8e0759c4087b77032bdc54199d750905080c669a
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
+ # When updating the version, please also update python-avro
+-AVRO_C_VERSION = 1.11.0
++AVRO_C_VERSION = 1.11.1
+ AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
+ AVRO_C_LICENSE = Apache-2.0
+ AVRO_C_LICENSE_FILES = LICENSE
+diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
+index d752fa8ae6..0d457a11fd 100644
+--- a/package/python-avro/python-avro.hash
++++ b/package/python-avro/python-avro.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/avro/avro-1.11.0/py/avro-1.11.0.tar.gz.sha512
+-sha512  8af67deb33b9990b74ffd7ab5c3c55e13a649070b4623c7bbe2b278287fd0929e57ed6d0344f9e93f3eb79663b43f75891d0810812349dfaecce65fdd9b44e93  avro-1.11.0.tar.gz
++# From https://downloads.apache.org/avro/avro-1.11.1/py/avro-1.11.1.tar.gz.sha512
++sha512  bce5983cd7ed20be848cca41d143f16bf5bab57edc010d590fc1268405de4267e028ff7ec740282a03034aff5aa528feadb2be4e71ee6879b3080e0a9e19cb37  avro-1.11.1.tar.gz
+ 
+ # License files
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
+diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
+index 42aa11aa4e..6193cbbd8e 100644
+--- a/package/python-avro/python-avro.mk
++++ b/package/python-avro/python-avro.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update avro-c
+-PYTHON_AVRO_VERSION = 1.11.0
++PYTHON_AVRO_VERSION = 1.11.1
+ PYTHON_AVRO_SITE = \
+ 	https://www-eu.apache.org/dist/avro/avro-$(PYTHON_AVRO_VERSION)/py
+ PYTHON_AVRO_SOURCE = avro-$(PYTHON_AVRO_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
