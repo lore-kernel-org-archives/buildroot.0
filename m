@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62F50C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3C78C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1BD04185C;
-	Thu,  3 Nov 2022 22:07:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BD04185C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FAD26103B;
+	Thu,  3 Nov 2022 22:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FAD26103B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 59n8Yoz7BkZp; Thu,  3 Nov 2022 22:07:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YRt3F_PTKv9V; Thu,  3 Nov 2022 22:07:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9F0741858;
-	Thu,  3 Nov 2022 22:07:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9F0741858
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F69F61042;
+	Thu,  3 Nov 2022 22:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F69F61042
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A67C41BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 653CB1BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80B884185A
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEABC41858
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B884185A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEABC41858
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H1gre7gEFiVu for <buildroot@lists.busybox.net>;
+ with ESMTP id nl0JNQ7SpKFh for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 941CB41858
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5E6841859
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 941CB41858
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E6841859
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82FBD87CAB; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
+ id 8EBD787CAC; Thu,  3 Nov 2022 22:07:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:06:48 +0100
+Date: Thu, 3 Nov 2022 23:06:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d6f194c5131b6ed76e4b954399a04859e64a6c25
-X-Git-Newrev: 9bab65a21c1805eab7127aaf557a1e5189386dcf
+X-Git-Oldrev: 9bab65a21c1805eab7127aaf557a1e5189386dcf
+X-Git-Newrev: df46e3e6f64fc77d2f522c1ac8b643c13ee6a13d
 X-Patchwork-Hint: ignore
-Message-Id: <20221103220701.82FBD87CAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/quazip: bump to
- version 1.3
+Message-Id: <20221103220701.8EBD787CAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/quota: bump to version
+ 4.09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bab65a21c1805eab7127aaf557a1e5189386dcf
+commit: https://git.buildroot.net/buildroot/commit/?id=df46e3e6f64fc77d2f522c1ac8b643c13ee6a13d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/stachenov/quazip/releases/tag/v1.3
+Drop patch (already in version)
+
+https://sourceforge.net/p/linuxquota/code/ci/master/tree/Changelog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quazip/quazip.hash | 2 +-
- package/quazip/quazip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...a-Use-realloc-3-instead-of-reallocarray-3.patch | 34 ----------------------
+ package/quota/quota.hash                           |  8 ++---
+ package/quota/quota.mk                             |  2 +-
+ 3 files changed, 5 insertions(+), 39 deletions(-)
 
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-index bcb16acdc0..16d299fdf4 100644
---- a/package/quazip/quazip.hash
-+++ b/package/quazip/quazip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2dfb911d6b27545de0b98798d967c40430312377e6ade57096d6ec80c720cb61  quazip-1.2.tar.gz
-+sha256  c1239559cd6860cab80a0fd81f4204e606f9324f702dab6166b0960676ee1754  quazip-1.3.tar.gz
- sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 7731e59d94..f4de2a11a4 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
+diff --git a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
+deleted file mode 100644
+index 093d7cc821..0000000000
+--- a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 02b222a335527f1031cc9495d8c5ebc1bc5b1d4e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 11 Nov 2020 15:00:47 +0100
+-Subject: [PATCH] quota: Use realloc(3) instead of reallocarray(3)
+-
+-reallocarray(3) has been added to glibc relatively recently (version
+-2.26, from 2017) and apparently not all users run new enough glibc. Just
+-use realloc(3) for now since in this case there's no real risk of
+-overflow.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Jan Kara <jack@suse.cz>
+-[Retrieved from:
+-https://sourceforge.net/p/linuxquota/code/ci/02b222a335527f1031cc9495d8c5ebc1bc5b1d4e]
+----
+- quota.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/quota.c b/quota.c
+-index a6ed61f..a60de12 100644
+---- a/quota.c
+-+++ b/quota.c
+-@@ -385,7 +385,7 @@ int main(int argc, char **argv)
+- 			  break;
+- 		  case 259:
+- 			  fscount++;
+--			  fsnames = reallocarray(fsnames, fscount, sizeof(char *));
+-+			  fsnames = realloc(fsnames, fscount * sizeof(char *));
+- 			  if (!fsnames)
+- 				die(1, _("Not enough memory for filesystem names"));
+- 			  fsnames[fscount - 1] = optarg;
+--- 
+-2.28.0
+-
+diff --git a/package/quota/quota.hash b/package/quota/quota.hash
+index 354a3e2de4..5b083c911c 100644
+--- a/package/quota/quota.hash
++++ b/package/quota/quota.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.06/ (click on info button)
+-md5  aef94648438832b684978d46fdf75110  quota-4.06.tar.gz
+-sha1  98288699cc14da42f762301c2b6731ec7c777681  quota-4.06.tar.gz
++# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.09/ (click on info button)
++md5  f85c2e15d9a735640675ff4977b57bb6  quota-4.09.tar.gz
++sha1  5c215d869626b532be2773f4161bdcc8b9f97126  quota-4.09.tar.gz
+ 
+ # Locally calculated
+-sha256  2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d  quota-4.06.tar.gz
++sha256  9cdaca154bc92afc3117f0e5f5b3208dd5f84583af1cf061c39baa0a2bb142f9  quota-4.09.tar.gz
+ sha256  32a5fd41e7a257f7f0373988ea8d45cebdbf376060703c242c11c000751b1203  COPYING
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 0c751d4436..1b6a4b1975 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QUAZIP_VERSION = 1.2
-+QUAZIP_VERSION = 1.3
- QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = \
+-QUOTA_VERSION = 4.06
++QUOTA_VERSION = 4.09
+ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
