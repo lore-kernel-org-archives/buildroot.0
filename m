@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BFBC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08D8DC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C6941836;
-	Thu,  3 Nov 2022 21:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63C6941836
+	by smtp1.osuosl.org (Postfix) with ESMTP id A19F881FBE;
+	Thu,  3 Nov 2022 21:21:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A19F881FBE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kx7gX9JyY8yL; Thu,  3 Nov 2022 21:21:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 98YNkAw2IuFY; Thu,  3 Nov 2022 21:21:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C9E641864;
-	Thu,  3 Nov 2022 21:21:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C9E641864
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FC111BF8B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id C950081F7B;
+	Thu,  3 Nov 2022 21:21:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C950081F7B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1737A1BF96B
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECA0940BED
+ by smtp1.osuosl.org (Postfix) with ESMTP id E65BA81FBF
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA0940BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E65BA81FBF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Eons2DrP2Eb for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a5bm51SKNRFR for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E23940BC6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14EB881FAB
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E23940BC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14EB881FAB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E1C787C31; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+ id 03CBC87C30; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:13 +0100
+Date: Thu, 3 Nov 2022 22:02:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
-X-Git-Newrev: 964eccb839eb169e8b3d883693dc921793287c8a
+X-Git-Oldrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+X-Git-Newrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210547.0E1C787C31@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-traitlets: bump
- to version 5.5.0
+Message-Id: <20221103210547.03CBC87C30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-tqdm: bump to
+ version 4.64.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,52 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=964eccb839eb169e8b3d883693dc921793287c8a
+commit: https://git.buildroot.net/buildroot/commit/?id=3164c0983ab0fa76c8c70ccb02164ad5085d7a65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate from distutils to hatchling pep517 build backend.
+Add new host-python-setuptools-scm build dependency.
 
-License hash changed due to formatting change:
-https://github.com/ipython/traitlets/commit/9fd01cc7b279a46e58fddc3c29149e73c7d67ab1
+License has changed due to file->project word change:
+https://github.com/tqdm/tqdm/commit/5df32ae36013ed056619aa0b90f7d249d04087fa
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-traitlets/python-traitlets.hash | 6 +++---
- package/python-traitlets/python-traitlets.mk   | 7 ++++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-tqdm/python-tqdm.hash | 6 +++---
+ package/python-tqdm/python-tqdm.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-index 01e2bf8e30..095e85c155 100644
---- a/package/python-traitlets/python-traitlets.hash
-+++ b/package/python-traitlets/python-traitlets.hash
+diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
+index 8251ae48d2..4be54de7de 100644
+--- a/package/python-tqdm/python-tqdm.hash
++++ b/package/python-tqdm/python-tqdm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/traitlets/json
--md5  19483ec0685e837912cff128209aa845  traitlets-5.1.0.tar.gz
--sha256  bd382d7ea181fbbcce157c133db9a829ce06edffe097bcf3ab945b435452b46d  traitlets-5.1.0.tar.gz
-+md5  d5f87bbea8acf897ac3e435c7b71acdc  traitlets-5.5.0.tar.gz
-+sha256  b122f9ff2f2f6c1709dab289a05555be011c87828e911c0cf4074b85cb780a79  traitlets-5.5.0.tar.gz
+ # md5, sha256 from https://pypi.org/project/tqdm
+-md5  285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
+-sha256  e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
++md5  5822af464d77ea156ad1167c23e1bdac  tqdm-4.64.1.tar.gz
++sha256  5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4  tqdm-4.64.1.tar.gz
  # Locally computed sha256 checksums
--sha256  71c89129039b870cc92309466c4fbe8f285a82fa0ea36f0e840fa83979cbe31f  COPYING.md
-+sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index 5f41f6ee8f..25ab71047a 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -4,11 +4,12 @@
+-sha256  1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
++sha256  a0fc1785a8f2a200a3124d703d49550601b7741ccffc861713c2ddaa07a537dd  LICENCE
+diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
+index 5ceddde14c..a6296bd0f5 100644
+--- a/package/python-tqdm/python-tqdm.mk
++++ b/package/python-tqdm/python-tqdm.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--PYTHON_TRAITLETS_VERSION = 5.1.0
-+PYTHON_TRAITLETS_VERSION = 5.5.0
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
--PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/d5/bc/37d490908e7ac949614d62767db3c86f37bc5adb6129d378c35859a75b87
-+PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/dd/a8/278742d17c9e95ccb0dcb86ae216df114d2166d88e72f42b60a7b58b600b
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
- PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
--PYTHON_TRAITLETS_SETUP_TYPE = distutils
-+PYTHON_TRAITLETS_SETUP_TYPE = pep517
-+PYTHON_TRAITLETS_DEPENDENCIES = host-python-hatchling
+-PYTHON_TQDM_VERSION = 4.40.1
++PYTHON_TQDM_VERSION = 4.64.1
+ PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
+-PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
++PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/c1/c2/d8a40e5363fb01806870e444fc1d066282743292ff32a9da54af51ce36a2
+ PYTHON_TQDM_SETUP_TYPE = setuptools
+ PYTHON_TQDM_LICENSE = MPL-2.0, MIT
+ PYTHON_TQDM_LICENSE_FILES = LICENCE
+ PYTHON_TQDM_CPE_ID_VENDOR = tqdm_project
+ PYTHON_TQDM_CPE_ID_PRODUCT = tqdm
++PYTHON_TQDM_DEPENDENCIES = host-python-setuptools-scm
  
  $(eval $(python-package))
 _______________________________________________
