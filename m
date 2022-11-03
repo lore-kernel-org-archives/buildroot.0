@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66FB1C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07851C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15A5E40BDA;
-	Thu,  3 Nov 2022 21:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A5E40BDA
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3FAB61058;
+	Thu,  3 Nov 2022 21:07:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3FAB61058
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E-M3bmqCMWuU; Thu,  3 Nov 2022 21:07:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kYNBD7w2KTtp; Thu,  3 Nov 2022 21:07:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4586240BCE;
-	Thu,  3 Nov 2022 21:07:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4586240BCE
+	by smtp3.osuosl.org (Postfix) with ESMTP id C406E61051;
+	Thu,  3 Nov 2022 21:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C406E61051
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C0811BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A84BD1BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5310F40BF8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E8B640BF1
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5310F40BF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E8B640BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HUetjMA3hFhE for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ with ESMTP id ft-NQ3VS9ic6 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50A2540BC6
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50A2540BC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 821E040BE0
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 821E040BE0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D15D87BCD; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+ id 70CE387BC3; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:23 +0100
+Date: Thu, 3 Nov 2022 21:03:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6bed05b2f1b660383b7c6835d59b45eac01bf982
-X-Git-Newrev: 1cc98a4f39a2d8ba8d7cfd8fca32776e54f32b8c
+X-Git-Oldrev: c12a87f6ea28d94c7ff71b0f76838e1ac6a833f6
+X-Git-Newrev: fb56dd4b94b08cf419f0d4adc23e19b9bee14f58
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205512.4D15D87BCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-libusb1: bump
- to version 3.0.0
+Message-Id: <20221103205511.70CE387BC3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-dpkt: bump to
+ version 1.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc98a4f39a2d8ba8d7cfd8fca32776e54f32b8c
+commit: https://git.buildroot.net/buildroot/commit/?id=fb56dd4b94b08cf419f0d4adc23e19b9bee14f58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-libusb1/python-libusb1.hash | 7 ++++---
- package/python-libusb1/python-libusb1.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-dpkt/python-dpkt.hash | 4 ++--
+ package/python-dpkt/python-dpkt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
-index 7d2302e088..86dea08c89 100644
---- a/package/python-libusb1/python-libusb1.hash
-+++ b/package/python-libusb1/python-libusb1.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
--md5  b087646fb0c8c4cf7e8123af72f885b9  libusb1-2.0.1.tar.gz
--sha256  d3ba82ecf7ab6a48d21dac6697e26504670cc3522b8e5941bd28fb56cf3f6c46  libusb1-2.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/libusb1/json
-+md5  ffbb02bf9aa49f973a6a58112aed7b06  libusb1-3.0.0.tar.gz
-+sha256  5792a9defee40f15d330a40d9b1800545c32e47ba7fc66b6f28f133c9fcc8538  libusb1-3.0.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
-index 40a64141af..48a0b1dea3 100644
---- a/package/python-libusb1/python-libusb1.mk
-+++ b/package/python-libusb1/python-libusb1.mk
+diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
+index e5e986628c..7de0d748fc 100644
+--- a/package/python-dpkt/python-dpkt.hash
++++ b/package/python-dpkt/python-dpkt.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dpkt/json
+-md5  ac3ace1c5ee12a74f12a863ac9082b59  dpkt-1.9.7.2.tar.gz
+-sha256  80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b  dpkt-1.9.7.2.tar.gz
++md5  0f16de3c0b8caa6ec2261210f08c7b8b  dpkt-1.9.8.tar.gz
++sha256  43f8686e455da5052835fd1eda2689d51de3670aac9799b1b00cfd203927ee45  dpkt-1.9.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4c5ffde575425591cbd51410219a6b98bbbb717e0c5784187e356653da8e5095  LICENSE
+diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+index 87945d67c6..a99a1e8604 100644
+--- a/package/python-dpkt/python-dpkt.mk
++++ b/package/python-dpkt/python-dpkt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LIBUSB1_VERSION = 2.0.1
-+PYTHON_LIBUSB1_VERSION = 3.0.0
- PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
--PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/a9/97/e8afa2af12b6de608ec86c8c4ad57f1248d98946d1b5e1aa0bff926755e9
-+PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/f4/83/59bf75e74e0c4859ea63eae0c7da660c1dcb78b31667d4a5f735d52f5974
- PYTHON_LIBUSB1_SETUP_TYPE = setuptools
- PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
- PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
+-PYTHON_DPKT_VERSION = 1.9.7.2
++PYTHON_DPKT_VERSION = 1.9.8
+ PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
+-PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/95/51/923b370880eff9b62fe4fe965a916da709022a02669c670731da69088e93
++PYTHON_DPKT_SITE = https://files.pythonhosted.org/packages/c9/7d/52f17a794db52a66e46ebb0c7549bf2f035ed61d5a920ba4aaa127dd038e
+ PYTHON_DPKT_SETUP_TYPE = setuptools
+ PYTHON_DPKT_LICENSE = BSD-3-Clause
+ PYTHON_DPKT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
