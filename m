@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 972DFC6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C784C64EC7
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DB5C822F7;
-	Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DB5C822F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2813641990;
+	Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2813641990
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CDfrQXPhmHzn; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pslaGkF2wzko; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9801A82306;
-	Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9801A82306
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 170D71BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BDF84194F;
+	Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDF84194F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 273241BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FD4761075
+ by smtp2.osuosl.org (Postfix) with ESMTP id D49B04015F
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FD4761075
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D49B04015F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jVlpLkiX994V for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9ed8q4ujnOLx for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4F3861023
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F3861023
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FF1D409D6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FF1D409D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1C5D86495; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+ id F228486495; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:27:16 +0100
+Date: Thu, 3 Nov 2022 23:04:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5044928baeaed86cee6f8452dc3850d5d0cb80a5
-X-Git-Newrev: acae82e8a13ca97c354c94cedd2a59f89fba2ee6
+X-Git-Oldrev: 82480ee22bdfae6f7d399975722b5c125749d8c7
+X-Git-Newrev: a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205145.B1C5D86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/qemu_aarch64_ebbr:
- bump u-boot and linux versions
+Message-Id: <20230220205145.F228486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libidn2: fix build
+ with libunistring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,64 +59,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5617027625404311657=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5617027625404311657==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=acae82e8a13ca97c354c94cedd2a59f89fba2ee6
+commit: https://git.buildroot.net/buildroot/commit/?id=a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump U-Boot version to v2022.10.
-- Bump Linux kernel version to v6.0.0.
+Fix the following build failure with libunistring raised since the
+addition of the package in commit
+ffb85a4a16df94e4980057a194e5fdc3c8332e32:
 
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: warning: libunistring.so.2, needed by ../lib/.libs/libidn2.so, not found (try using -rpath or -rpath-link)
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../lib/.libs/libidn2.so: undefined reference to `u8_strconv_to_encoding'
+
+[...]
+
+aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/30ac50512cd4b4cb3ecc97514a72d1f316a1b33a
+ - http://autobuild.buildroot.org/results/c225ff4ef007b9a3ca56e6b601687aaa33699675
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_aarch64_ebbr_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libidn2/libidn2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
-index 15822e17a3..a0d8105c43 100644
---- a/configs/qemu_aarch64_ebbr_defconfig
-+++ b/configs/qemu_aarch64_ebbr_defconfig
-@@ -6,12 +6,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-ebbr/p
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-ebbr/genimage.cfg"
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 9d72998149..9d24e93d27 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -13,10 +13,12 @@ LIBIDN2_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LIBIDN2_CONF_OPTS = --without-included-libunistring
+ LIBIDN2_INSTALL_STAGING = YES
  
- # Linux headers
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
+ ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+ LIBIDN2_DEPENDENCIES += libunistring
++LIBIDN2_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr/lib
+ endif
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.0.6"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-@@ -39,7 +39,7 @@ BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_armv8a"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm64"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-ebbr/u-boot.config"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-
---===============5617027625404311657==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_LIBIDN2_BINARY),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5617027625404311657==--
