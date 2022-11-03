@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BADC6C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7593C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68A1F82003;
-	Thu,  3 Nov 2022 21:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A1F82003
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83EC68200A;
+	Thu,  3 Nov 2022 21:22:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83EC68200A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ODB8d5bL03fx; Thu,  3 Nov 2022 21:22:32 +0000 (UTC)
+	with ESMTP id w4gcIlyJh-v2; Thu,  3 Nov 2022 21:22:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1198F81FFD;
-	Thu,  3 Nov 2022 21:22:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1198F81FFD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A25E31BF96B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 957D482008;
+	Thu,  3 Nov 2022 21:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 957D482008
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D31251BF2F2
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09C8681FAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24C0360AAC
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09C8681FAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24C0360AAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 241FNKHWmv36 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0g6F23np9xDz for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CE7D81FB1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C03A61023
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE7D81FB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C03A61023
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A65087C30; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+ id 3C93E87C31; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1ebc97276599074948df6aa37d78b901d3c67dc1
-X-Git-Newrev: 619bbe3e3745955e1abdd95748b6b30859815bf4
+X-Git-Oldrev: 90572af5a930345ed7ad3001889db4e83e94dcb3
+X-Git-Newrev: 96a9097ca814942951a4530ff294efedfed65036
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210547.2A65087C30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-watchdog: bump
- to version 2.1.9
+Message-Id: <20221103210547.3C93E87C31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-webpy: bump to
+ version 0.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=619bbe3e3745955e1abdd95748b6b30859815bf4
+commit: https://git.buildroot.net/buildroot/commit/?id=96a9097ca814942951a4530ff294efedfed65036
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License file was accidentially removed in latest release but project
+is still public domain licensed.
+
+Details:
+https://github.com/webpy/webpy/commit/04bf405dd86485c8f3774c526e6a869a1eb73408
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-watchdog/python-watchdog.hash | 4 ++--
- package/python-watchdog/python-watchdog.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-webpy/python-webpy.hash | 6 ++----
+ package/python-webpy/python-webpy.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
-index 3b633f9156..59facb8fea 100644
---- a/package/python-watchdog/python-watchdog.hash
-+++ b/package/python-watchdog/python-watchdog.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/watchdog/json
--md5  6aac660b0f3358c63658806a0579b832  watchdog-2.1.6.tar.gz
--sha256  a36e75df6c767cbf46f61a91c70b3ba71811dfa0aca4a324d9407a06a8b7a2e7  watchdog-2.1.6.tar.gz
-+md5  0e60e0a2d3a8c18ba37105f8b44de810  watchdog-2.1.9.tar.gz
-+sha256  43ce20ebb36a51f21fa376f76d1d4692452b2527ccd601950d69ed36b9e21609  watchdog-2.1.9.tar.gz
- # Locally computed sha256 checksums
- sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
-index 2dafef97e1..71a3f8a0c2 100644
---- a/package/python-watchdog/python-watchdog.mk
-+++ b/package/python-watchdog/python-watchdog.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index ed3da6b1ab..540771a244 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,5 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/web.py/json
+-md5  4e7ec89e7ae1e938d01fff01ba752606  web.py-0.40.tar.gz
+-sha256  dc5e42ffbc42d77d07f75b7acca9975a3368ae609774e49ddebb497a784131f3  web.py-0.40.tar.gz
+-# Locally computed sha256 checksums
+-sha256  791bf6e9419435f114a19fc6519ff33738021eb3c41b18490943230ab0894df9  LICENSE.txt
++md5  cd2c0296ceffa1acb96ae5315214eb42  web.py-0.62.tar.gz
++sha256  5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e  web.py-0.62.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 187a481286..06d4ae039b 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--PYTHON_WATCHDOG_VERSION = 2.1.6
-+PYTHON_WATCHDOG_VERSION = 2.1.9
- PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
--PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/e8/a8/fc4edd7d768361b00ea850e5310211d157df6b5a1db6148dd434e787d898
-+PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/42/f7/da8e889f8626786eac9454e8d2718fc79359ed517be20cdd50c647167d39
- PYTHON_WATCHDOG_SETUP_TYPE = setuptools
- PYTHON_WATCHDOG_LICENSE = Apache-2.0
- PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
+-PYTHON_WEBPY_VERSION = 0.40
++PYTHON_WEBPY_VERSION = 0.62
+ PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/e3/23/ed84b174add09153329c6357984c8433e2f350de91c3859fa48c3cdbf7dc
++PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/cd/6e/338a060bb5b52ee8229bdada422eaa5f71b13f8d33467f37f870ed2cae4b
+ PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain
+-PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
