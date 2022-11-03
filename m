@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2AEC433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11709C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2229940BDE;
-	Thu,  3 Nov 2022 21:16:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2229940BDE
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADF4A4187D;
+	Thu,  3 Nov 2022 21:16:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADF4A4187D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r1BbnGTOEzkN; Thu,  3 Nov 2022 21:16:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QI4B2wIlkPiS; Thu,  3 Nov 2022 21:16:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37DD040BF0;
-	Thu,  3 Nov 2022 21:16:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37DD040BF0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 962A141841;
+	Thu,  3 Nov 2022 21:16:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 962A141841
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 629DE1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 65AC41BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D716440BEE
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D716440BEE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1110040C14
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1110040C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e98BRLR2gJQc for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:18 +0000 (UTC)
+ with ESMTP id pXlLAjdKopIu for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C99D340C16
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A76140C0D
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99D340C16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A76140C0D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C757487BCA; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+ id 58D6F87BCD; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c6945c4d31c9088f030c6b254a1ef202a28e84c6
-X-Git-Newrev: 439f553b6c7d84fc04cef3e69f9473c6e8161f45
+X-Git-Oldrev: 66a20bac4847d7df0c2859eb4ae95e7bf09647bc
+X-Git-Newrev: ea11973ab14a4a1210382691d0dc42da9439bf7c
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205513.C757487BCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyrsistent:
- bump to version 0.19.2
+Message-Id: <20221103205513.58D6F87BCD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pydantic: bump
+ to version 1.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=439f553b6c7d84fc04cef3e69f9473c6e8161f45
+commit: https://git.buildroot.net/buildroot/commit/?id=ea11973ab14a4a1210382691d0dc42da9439bf7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyrsistent/python-pyrsistent.hash | 4 ++--
- package/python-pyrsistent/python-pyrsistent.mk   | 4 ++--
+ package/python-pydantic/python-pydantic.hash | 4 ++--
+ package/python-pydantic/python-pydantic.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
-index 70d1cc6fa2..bb55c7135d 100644
---- a/package/python-pyrsistent/python-pyrsistent.hash
-+++ b/package/python-pyrsistent/python-pyrsistent.hash
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index 215b5d1714..a5eb025fcb 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyrsistent/json
--md5  cef3da08455664bf917dcf8cd00d49a4  pyrsistent-0.18.1.tar.gz
--sha256  d4d61f8b993a7255ba714df3aca52700f8125289f84f704cf80916517c46eb96  pyrsistent-0.18.1.tar.gz
-+md5  23da81256b8817e123568a858bf78997  pyrsistent-0.19.2.tar.gz
-+sha256  bfa0351be89c9fcbcb8c9879b826f4353be10f58f8a677efab0c017bf7137ec2  pyrsistent-0.19.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  7845d2f3c8fe8602f73f53ec5b6dfa29  pydantic-1.8.2.tar.gz
+-sha256  26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b  pydantic-1.8.2.tar.gz
++md5  9691f29e97c1280ab56b7d0a2dade9c1  pydantic-1.10.2.tar.gz
++sha256  91b8e218852ef6007c2b98cd861601c6a09f1aa32bbbb74fab5b1c33d4a1e410  pydantic-1.10.2.tar.gz
  # Locally computed sha256 checksums
- sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
-diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
-index 27ec41028f..6a5ac30a15 100644
---- a/package/python-pyrsistent/python-pyrsistent.mk
-+++ b/package/python-pyrsistent/python-pyrsistent.mk
+ sha256  9e3946690ac88b6b73e8f001a0586af13568be8852fd514e4393f39761764387  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index b282241506..04014214e1 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYRSISTENT_VERSION = 0.18.1
-+PYTHON_PYRSISTENT_VERSION = 0.19.2
- PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
--PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/42/ac/455fdc7294acc4d4154b904e80d964cc9aae75b087bbf486be04df9f2abd
-+PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/b8/ef/325da441a385a8a931b3eeb70db23cb52da42799691988d8d943c5237f10
- PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
- PYTHON_PYRSISTENT_LICENSE = MIT
- PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
+-PYTHON_PYDANTIC_VERSION = 1.8.2
++PYTHON_PYDANTIC_VERSION = 1.10.2
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/b9/d2/12a808613937a6b98cd50d6467352f01322dc0d8ca9fb5b94441625d6684
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/7d/7d/58dd62f792b002fa28cce4e83cb90f4359809e6d12db86eedf26a752895c
+ PYTHON_PYDANTIC_SETUP_TYPE = setuptools
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
