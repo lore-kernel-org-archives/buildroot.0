@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08D8DC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 762F4C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A19F881FBE;
-	Thu,  3 Nov 2022 21:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A19F881FBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 268EE81FE1;
+	Thu,  3 Nov 2022 21:21:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 268EE81FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 98YNkAw2IuFY; Thu,  3 Nov 2022 21:21:20 +0000 (UTC)
+	with ESMTP id nDnSc4Mx3QCI; Thu,  3 Nov 2022 21:21:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C950081F7B;
-	Thu,  3 Nov 2022 21:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C950081F7B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1737A1BF96B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3721F81E07;
+	Thu,  3 Nov 2022 21:21:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3721F81E07
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 200591BF973
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E65BA81FBF
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E65BA81FBF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0941161045
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0941161045
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a5bm51SKNRFR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id snz4qxOz_g4X for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14EB881FAB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 309EC60AAC
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14EB881FAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309EC60AAC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03CBC87C30; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+ id 20D6687C32; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:11 +0100
+Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
-X-Git-Newrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
+X-Git-Oldrev: 32c0a8de28bfef8a418aafcfa3913ccab0d15be7
+X-Git-Newrev: 1ebc97276599074948df6aa37d78b901d3c67dc1
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210547.03CBC87C30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-tqdm: bump to
- version 4.64.1
+Message-Id: <20221103210547.20D6687C32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-validators:
+ bump to version 0.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3164c0983ab0fa76c8c70ccb02164ad5085d7a65
+commit: https://git.buildroot.net/buildroot/commit/?id=1ebc97276599074948df6aa37d78b901d3c67dc1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add new host-python-setuptools-scm build dependency.
-
-License has changed due to file->project word change:
-https://github.com/tqdm/tqdm/commit/5df32ae36013ed056619aa0b90f7d249d04087fa
+Drop no longer required six runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-tqdm/python-tqdm.hash | 6 +++---
- package/python-tqdm/python-tqdm.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-validators/Config.in              | 1 -
+ package/python-validators/python-validators.hash | 4 ++--
+ package/python-validators/python-validators.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
-index 8251ae48d2..4be54de7de 100644
---- a/package/python-tqdm/python-tqdm.hash
-+++ b/package/python-tqdm/python-tqdm.hash
+diff --git a/package/python-validators/Config.in b/package/python-validators/Config.in
+index e700369910..8a2ddb49fb 100644
+--- a/package/python-validators/Config.in
++++ b/package/python-validators/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_VALIDATORS
+ 	bool "python-validators"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_DECORATOR # runtime
+ 	help
+ 	  Python Data Validation for Humans.
+diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
+index 2845a2e8c0..4f4e1c21f8 100644
+--- a/package/python-validators/python-validators.hash
++++ b/package/python-validators/python-validators.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/project/tqdm
--md5  285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
--sha256  e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
-+md5  5822af464d77ea156ad1167c23e1bdac  tqdm-4.64.1.tar.gz
-+sha256  5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4  tqdm-4.64.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/validators/json
+-md5  2f0446f2a15aa694be0cfd8728eb4444  validators-0.15.0.tar.gz
+-sha256  31e8bb01b48b48940a021b8a9576b840f98fa06b91762ef921d02cb96d38727a  validators-0.15.0.tar.gz
++md5  f03b5acb91079450bae664726ae01948  validators-0.20.0.tar.gz
++sha256  24148ce4e64100a2d5e267233e23e7afeb55316b47d30faae7eb6e7292bc226a  validators-0.20.0.tar.gz
  # Locally computed sha256 checksums
--sha256  1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
-+sha256  a0fc1785a8f2a200a3124d703d49550601b7741ccffc861713c2ddaa07a537dd  LICENCE
-diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
-index 5ceddde14c..a6296bd0f5 100644
---- a/package/python-tqdm/python-tqdm.mk
-+++ b/package/python-tqdm/python-tqdm.mk
-@@ -4,13 +4,14 @@
+ sha256  a7fd9d761c7ca1c6508b9baf030f6e21f5752d1caea3e49a270634aa9ef01e6f  LICENSE
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index 5bed051911..731aca11f6 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TQDM_VERSION = 4.40.1
-+PYTHON_TQDM_VERSION = 4.64.1
- PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
--PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
-+PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/c1/c2/d8a40e5363fb01806870e444fc1d066282743292ff32a9da54af51ce36a2
- PYTHON_TQDM_SETUP_TYPE = setuptools
- PYTHON_TQDM_LICENSE = MPL-2.0, MIT
- PYTHON_TQDM_LICENSE_FILES = LICENCE
- PYTHON_TQDM_CPE_ID_VENDOR = tqdm_project
- PYTHON_TQDM_CPE_ID_PRODUCT = tqdm
-+PYTHON_TQDM_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(python-package))
+-PYTHON_VALIDATORS_VERSION = 0.15.0
++PYTHON_VALIDATORS_VERSION = 0.20.0
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+-PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/c4/4a/4f9c892f9a9f08ee5f99c32bbd4297499099c2c5f7eff8c617a57d31a7d8
++PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/95/14/ed0af6865d378cfc3c504aed0d278a890cbefb2f1934bf2dbe92ecf9d6b1
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+ PYTHON_VALIDATORS_LICENSE = MIT
+ PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
