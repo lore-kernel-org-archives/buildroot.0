@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6934BC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35F5C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1100C40BE7;
-	Thu,  3 Nov 2022 21:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1100C40BE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F60F61067;
+	Thu,  3 Nov 2022 21:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F60F61067
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2dhEyJZJSFXB; Thu,  3 Nov 2022 21:22:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bsxv_nY35Xzp; Thu,  3 Nov 2022 21:23:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A15240BC0;
-	Thu,  3 Nov 2022 21:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A15240BC0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 128051BF2F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2B8D61060;
+	Thu,  3 Nov 2022 21:23:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2B8D61060
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B27F91BF2F2
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3674840BDD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CB0C81FAB
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3674840BDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CB0C81FAB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SOOn4IIFJmFj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RHRE4WAzdwpo for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B81C40BE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27BE381FAE
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B81C40BE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27BE381FAE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58DA987C33; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+ id 17BF087C34; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 33eb6661449b39b00b2f9ecaaa226471c897282b
-X-Git-Newrev: d6f194c5131b6ed76e4b954399a04859e64a6c25
+X-Git-Oldrev: 964eccb839eb169e8b3d883693dc921793287c8a
+X-Git-Newrev: 32c0a8de28bfef8a418aafcfa3913ccab0d15be7
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210547.58DA987C33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-werkzeug: bump
- to version 2.2.2
+Message-Id: <20221103210547.17BF087C34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-txtorcon: bump
+ to version 22.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6f194c5131b6ed76e4b954399a04859e64a6c25
+commit: https://git.buildroot.net/buildroot/commit/?id=32c0a8de28bfef8a418aafcfa3913ccab0d15be7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 4 ++--
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ package/python-txtorcon/python-txtorcon.hash | 4 ++--
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 73fa6b5630..13b95bc448 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index 220b5fb23e..9c8e3599ea 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/Werkzeug/json
--md5  5835c8738b8081c53367cbcc5db8784c  Werkzeug-2.1.2.tar.gz
--sha256  1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6  Werkzeug-2.1.2.tar.gz
-+md5  9d7e50c5bb3a9fc12823b5faf374b90e  Werkzeug-2.2.2.tar.gz
-+sha256  7ea2d48322cc7c0f8b3a215ed73eabd7b5d75d0b50e31ab006286ccff9e00b8f  Werkzeug-2.2.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5  dbb53821a3ce3e921e09c5de4f722fdb  txtorcon-21.1.0.tar.gz
+-sha256  aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6  txtorcon-21.1.0.tar.gz
++md5  17a84954a4ba13fa6ee443129bdc401a  txtorcon-22.0.0.tar.gz
++sha256  89a1b65e32a4b369d67e6c166387fbc468cc5d05227448d239a5e7e9718aa053  txtorcon-22.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 9b32fdf097..3ebae3c165 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
+ sha256  3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index acf586cb8c..c17d5da074 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 2.1.2
-+PYTHON_WERKZEUG_VERSION = 2.2.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/cf/97eb1a3847c01ae53e8376bc21145555ac95279523a935963dc8ff96c50b
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/f8/c1/1c8e539f040acd80f844c69a5ef8e2fccdf8b442dabb969e497b55d544e1
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+-PYTHON_TXTORCON_VERSION = 21.1.0
++PYTHON_TXTORCON_VERSION = 22.0.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/eb/43/2426009377cef519c53bdc8969590cb100e9fd745846859963c881c6d176
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/47/ca/7941660345c769637a97bdbaf25202460fbab35eead55c538fb1fe61b71e
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
