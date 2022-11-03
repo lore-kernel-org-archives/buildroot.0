@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C4B9C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5136BC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EF7741B98;
-	Mon, 20 Feb 2023 20:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EF7741B98
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAFF741CFE;
+	Mon, 20 Feb 2023 20:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAFF741CFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ObfR9rUdbVvk; Mon, 20 Feb 2023 20:54:41 +0000 (UTC)
+	with ESMTP id wolaMzrMKiqA; Mon, 20 Feb 2023 20:54:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EA2041CEB;
-	Mon, 20 Feb 2023 20:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EA2041CEB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 263321BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A56B841CF8;
+	Mon, 20 Feb 2023 20:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A56B841CF8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 19CBF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75B3040C0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04E8F61084
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75B3040C0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04E8F61084
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id agLocbmjBDz0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mSOf8xYowmAk for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5037C40BAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CBB861048
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5037C40BAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CBB861048
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DD6186494; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0AB7E8648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 13:27:06 +0100
+Date: Thu, 3 Nov 2022 23:05:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0b17cd017e8b946d718c81f0e38fd570e6a6bc0d
-X-Git-Newrev: 4721367debff67d2a4fddb3a5d72796ebbb401f8
+X-Git-Oldrev: a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
+X-Git-Newrev: 0a7a5641597c5c3d0978906fb8cf93eb153425a3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.4DD6186494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gawk: renumber
- remaining patch
+Message-Id: <20230220205146.0AB7E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/multipath-tools:
+ security bump to version 0.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,31 +56,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4721367debff67d2a4fddb3a5d72796ebbb401f8
+commit: https://git.buildroot.net/buildroot/commit/?id=0a7a5641597c5c3d0978906fb8cf93eb153425a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit aaba432e2cae (package/gawk: drop incorrect patch) was sent on the
-list before e6942ad11ff0 (package/gawk: fix double free during kernel
-build) was applied. But when aaba432e2cae was eventually applied, the
-remaining patch was not renumbered.
+Fixes the following security issues:
 
-Fix that now.
+- CVE-2022-41974: Authorization bypass
+- CVE-2022-41973: Symlink attack
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+For more details, see the writeup:
+https://www.qualys.com/2022/10/24/leeloo-multipath/leeloo-multipath.txt
+
+Update README.md hash after license-unrelated changes:
+
+git shortlog 0.9.0..0.9.3 -- README.md
+Konstantin Kharlamov (1):
+      README.md: mention libreadline and libedit optional deps
+
+Xose Vazquez Perez (4):
+      multipath-tools: update devel repo info in README.md
+      multipath-tools: add ALUA info to README.md
+      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
+      multipath-tools: add more info for NetApp RDAC arrays
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...g-with-Node_elem_new.patch => 0001-Fix-a-bug-with-Node_elem_new.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
+ package/multipath-tools/multipath-tools.hash | 4 ++--
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch b/package/gawk/0001-Fix-a-bug-with-Node_elem_new.patch
-similarity index 100%
-rename from package/gawk/0002-Fix-a-bug-with-Node_elem_new.patch
-rename to package/gawk/0001-Fix-a-bug-with-Node_elem_new.patch
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index df0d24fb74..6f893d37ce 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,7 +1,7 @@
+ # Locally computed:
+-sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
++sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
+-sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
++sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index f3ce3ca8b8..ec5d853644 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MULTIPATH_TOOLS_VERSION = 0.9.0
++MULTIPATH_TOOLS_VERSION = 0.9.3
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
