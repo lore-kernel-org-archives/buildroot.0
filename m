@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC57C4708C
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B27BC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 222B060BDE;
-	Mon,  5 Dec 2022 11:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222B060BDE
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE8AD60A47;
+	Mon,  5 Dec 2022 11:46:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE8AD60A47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a7_Gp4SIeNu6; Mon,  5 Dec 2022 11:46:34 +0000 (UTC)
+	with ESMTP id KSRN4up-1J1q; Mon,  5 Dec 2022 11:46:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A0C560BDA;
-	Mon,  5 Dec 2022 11:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A0C560BDA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 106791BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1F1F60C28;
+	Mon,  5 Dec 2022 11:46:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1F1F60C28
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3711D1BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 147F3405B9
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 147F3405B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 225744157B
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225744157B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ncjVl04hx-5t for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F-2zaFwrSuvy for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E22540562
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E22540562
+ by smtp4.osuosl.org (Postfix) with ESMTP id 313AB4156C
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 313AB4156C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06C9F85B9E; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+ id 29F2485BA2; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:20 +0100
+Date: Thu, 3 Nov 2022 21:19:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8bb4a619ac723d6a35e2b3ebe9f6e1d07a5d0f6
-X-Git-Newrev: c4525b49cb32651c5029847ed02e72b5c075ef4d
+X-Git-Oldrev: 84ceba764166a8533194d0c91a91a6b4d25b7c41
+X-Git-Newrev: a8a4d299d3ab097788d2c2fdcabe8bfc4b46bfde
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112604.06C9F85B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pudb: bump to version
- 2022.1.2
+Message-Id: <20221205112605.29F2485BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-requests-toolbelt: bump to
+ version 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4525b49cb32651c5029847ed02e72b5c075ef4d
+commit: https://git.buildroot.net/buildroot/commit/?id=a8a4d299d3ab097788d2c2fdcabe8bfc4b46bfde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to url changing to https:
+https://github.com/requests/toolbelt/commit/e9875f91861c81e437deb3d76a641e4cf0146ea4
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pudb/python-pudb.hash | 4 ++--
- package/python-pudb/python-pudb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-requests-toolbelt/python-requests-toolbelt.hash | 6 +++---
+ package/python-requests-toolbelt/python-requests-toolbelt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
-index fc19f589d9..d9943a3601 100644
---- a/package/python-pudb/python-pudb.hash
-+++ b/package/python-pudb/python-pudb.hash
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+index 833570b113..28abf2c628 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pudb/json
--md5  100b955e103b72279604420bbdcd07a5  pudb-2021.1.tar.gz
--sha256  309ee82b45a0ffca0bc4c7f521fd3e357589c764f339bdf9dcabb7ad40692d6e  pudb-2021.1.tar.gz
-+md5  c2b4275b76068f18d630f7bae889345b  pudb-2022.1.2.tar.gz
-+sha256  6b83ab805bddb53710109690a2237e98bf83c0b3a00033c517cdf5f6a8fa470d  pudb-2022.1.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
+-md5  b1509735c4b4cf95df2619facbc3672e  requests-toolbelt-0.9.1.tar.gz
+-sha256  968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0  requests-toolbelt-0.9.1.tar.gz
++md5  636d226d03632d013269aebbc85f4f4b  requests-toolbelt-0.10.1.tar.gz
++sha256  62e09f7ff5ccbda92772a29f394a49c3ad6cb181d568b1337626b2abb628a63d  requests-toolbelt-0.10.1.tar.gz
  # Locally computed sha256 checksums
- sha256  a95343fffff49cde3d9bf33cf6bb71cb3bf0ed83f47d98a7ba04b175d29c79ab  LICENSE
-diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
-index 31df3147d0..7df38f0f02 100644
---- a/package/python-pudb/python-pudb.mk
-+++ b/package/python-pudb/python-pudb.mk
+-sha256  3a1a3cffa7abc000cbd726a664f56c33c532a55480f9e056dfe941cf93b7c37f  LICENSE
++sha256  1f8cf8bdacd98ed6d36d0fec0c07f7765acebd6e81205962ab5146023b3c858d  LICENSE
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+index 119c402785..8c141e3aa9 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PUDB_VERSION = 2021.1
-+PYTHON_PUDB_VERSION = 2022.1.2
- PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
--PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/c7/69/813e93519fc28744457ff68fa2eaac3b4ea30dda1e6994e969fe9d3008d9
-+PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/8b/ef/6dea7c63fdddd7753e2a2930e59799ef32247f2499c0d9bcd233439e7483
- PYTHON_PUDB_SETUP_TYPE = setuptools
- PYTHON_PUDB_LICENSE = MIT
- PYTHON_PUDB_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_TOOLBELT_VERSION = 0.9.1
++PYTHON_REQUESTS_TOOLBELT_VERSION = 0.10.1
+ PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
+-PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310
++PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/0c/4c/07f01c6ac44f7784fa399137fbc8d0cdc1b5d35304e8c0f278ad82105b58
+ PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
