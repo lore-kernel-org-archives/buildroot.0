@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB37C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A509FC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C89C981D73;
-	Mon,  5 Dec 2022 11:56:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C89C981D73
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E7C7606EB;
+	Mon,  5 Dec 2022 11:56:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E7C7606EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H7jdMMylIn7l; Mon,  5 Dec 2022 11:56:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DNhic9F0jO_u; Mon,  5 Dec 2022 11:56:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18E75813AE;
-	Mon,  5 Dec 2022 11:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18E75813AE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E1D71BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8246460A47;
+	Mon,  5 Dec 2022 11:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8246460A47
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 090CB1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 905B44167B
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 905B44167B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C5B740522
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C5B740522
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B7rCcv-B3_KB for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8YqimH7M2ocW for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE7224167A
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE7224167A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41DB2405AB
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41DB2405AB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBED185BA2; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+ id 3A4B685B9B; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:20:10 +0100
+Date: Thu, 3 Nov 2022 22:02:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b43db8c4226015548c0e2898c230323255add7a8
-X-Git-Newrev: 4f98d5dc255a3e3b296c8956ac20eba9944dabb2
+X-Git-Oldrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
+X-Git-Newrev: 964eccb839eb169e8b3d883693dc921793287c8a
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112608.BBED185BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyparted: bump to version
- 3.12.0
+Message-Id: <20221205112606.3A4B685B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-traitlets: bump to version
+ 5.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +64,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f98d5dc255a3e3b296c8956ac20eba9944dabb2
+commit: https://git.buildroot.net/buildroot/commit/?id=964eccb839eb169e8b3d883693dc921793287c8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate from distutils to setuptools package infrastructure.
+Migrate from distutils to hatchling pep517 build backend.
 
-Switch to pypi sdist source.
+License hash changed due to formatting change:
+https://github.com/ipython/traitlets/commit/9fd01cc7b279a46e58fddc3c29149e73c7d67ab1
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyparted/python-pyparted.hash | 6 ++++--
- package/python-pyparted/python-pyparted.mk   | 7 ++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-traitlets/python-traitlets.hash | 6 +++---
+ package/python-traitlets/python-traitlets.mk   | 7 ++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
-index 0c3e4a15fd..a13276ce79 100644
---- a/package/python-pyparted/python-pyparted.hash
-+++ b/package/python-pyparted/python-pyparted.hash
-@@ -1,3 +1,5 @@
--# Locally computed
--sha256  d214288ae1a70b5925861ce01b3352378eb6b1419aa3b786f509e9ef2a501c02  python-pyparted-3.11.6.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyparted/json
-+md5  97df779564210100ea3e4eda0d33f7b9  pyparted-3.12.0.tar.gz
-+sha256  da985e116beb733371feb605b174db9eec8bd0eedffc8f739f8e603f51b521e7  pyparted-3.12.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
-index 9d48fd9351..5e12995e2e 100644
---- a/package/python-pyparted/python-pyparted.mk
-+++ b/package/python-pyparted/python-pyparted.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 01e2bf8e30..095e85c155 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  19483ec0685e837912cff128209aa845  traitlets-5.1.0.tar.gz
+-sha256  bd382d7ea181fbbcce157c133db9a829ce06edffe097bcf3ab945b435452b46d  traitlets-5.1.0.tar.gz
++md5  d5f87bbea8acf897ac3e435c7b71acdc  traitlets-5.5.0.tar.gz
++sha256  b122f9ff2f2f6c1709dab289a05555be011c87828e911c0cf4074b85cb780a79  traitlets-5.5.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  71c89129039b870cc92309466c4fbe8f285a82fa0ea36f0e840fa83979cbe31f  COPYING.md
++sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 5f41f6ee8f..25ab71047a 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYPARTED_VERSION = 3.11.6
--PYTHON_PYPARTED_SITE = $(call github,rhinstaller,pyparted,v$(PYTHON_PYPARTED_VERSION))
--PYTHON_PYPARTED_SETUP_TYPE = distutils
-+PYTHON_PYPARTED_VERSION = 3.12.0
-+PYTHON_PYPARTED_SOURCE = pyparted-$(PYTHON_PYPARTED_VERSION).tar.gz
-+PYTHON_PYPARTED_SITE = https://files.pythonhosted.org/packages/c2/d0/d32aa5758d6567eef620075f5c84f475c93bb1bf8da9d17051ce3ef055db
-+PYTHON_PYPARTED_SETUP_TYPE = setuptools
- PYTHON_PYPARTED_LICENSE = GPL-2.0+
- PYTHON_PYPARTED_LICENSE_FILES = COPYING
- PYTHON_PYPARTED_DEPENDENCIES = parted
+-PYTHON_TRAITLETS_VERSION = 5.1.0
++PYTHON_TRAITLETS_VERSION = 5.5.0
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/d5/bc/37d490908e7ac949614d62767db3c86f37bc5adb6129d378c35859a75b87
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/dd/a8/278742d17c9e95ccb0dcb86ae216df114d2166d88e72f42b60a7b58b600b
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+-PYTHON_TRAITLETS_SETUP_TYPE = distutils
++PYTHON_TRAITLETS_SETUP_TYPE = pep517
++PYTHON_TRAITLETS_DEPENDENCIES = host-python-hatchling
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
