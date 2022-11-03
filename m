@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F8FC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E884C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5043960BDE;
-	Mon,  5 Dec 2022 11:47:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5043960BDE
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0CE760C28;
+	Mon,  5 Dec 2022 11:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0CE760C28
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7TMqRJ5LELcU; Mon,  5 Dec 2022 11:47:49 +0000 (UTC)
+	with ESMTP id 6Rbqb5A1yoa0; Mon,  5 Dec 2022 11:48:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E87460BD9;
-	Mon,  5 Dec 2022 11:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E87460BD9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E9471BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C17960BDA;
+	Mon,  5 Dec 2022 11:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C17960BDA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7007A1BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 652B840562
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 652B840562
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8084B41602
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8084B41602
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id osTQcWpABMFK for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7_UH8nRBvP2I for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5ECB9405A6
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ECB9405A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8ACF541603
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ACF541603
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A76685B9B; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+ id 8427C85BA3; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:19:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 785566c29e65c043ce819315572c9244621e08c9
-X-Git-Newrev: c114f2615a026eb0e4b6adf62469212104ca69ab
+X-Git-Oldrev: 9df477fa61405eacb896e559080c0aba608f1e28
+X-Git-Newrev: 2a76ef23ae323fd0d571dd2f0c218201921c06bf
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112604.5A76685B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyhamcrest: bump to version
- 2.0.4
+Message-Id: <20221205112605.8427C85BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sh: bump to version 1.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c114f2615a026eb0e4b6adf62469212104ca69ab
+commit: https://git.buildroot.net/buildroot/commit/?id=2a76ef23ae323fd0d571dd2f0c218201921c06bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyhamcrest/python-pyhamcrest.hash | 4 ++--
- package/python-pyhamcrest/python-pyhamcrest.mk   | 6 +++---
+ package/python-sh/python-sh.hash | 6 +++---
+ package/python-sh/python-sh.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyhamcrest/python-pyhamcrest.hash b/package/python-pyhamcrest/python-pyhamcrest.hash
-index b2e84d7d1f..176079e0f5 100644
---- a/package/python-pyhamcrest/python-pyhamcrest.hash
-+++ b/package/python-pyhamcrest/python-pyhamcrest.hash
+diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
+index 13a0207de9..a31aacdee1 100644
+--- a/package/python-sh/python-sh.hash
++++ b/package/python-sh/python-sh.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyhamcrest/json
--md5  7a086f0b067f8d38958ec32f054559b4  PyHamcrest-2.0.2.tar.gz
--sha256  412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316  PyHamcrest-2.0.2.tar.gz
-+md5  c808291b2fca0991d044927884e6d15e  pyhamcrest-2.0.4.tar.gz
-+sha256  b5d9ce6b977696286cf232ce2adf8969b4d0b045975b0936ac9005e84e67e9c1  pyhamcrest-2.0.4.tar.gz
- # Locally computed sha256 checksums
- sha256  71beae6c8151362cfe398cbd350191a1cc52d3d28499839a7830b25f5b50a7fe  LICENSE.txt
-diff --git a/package/python-pyhamcrest/python-pyhamcrest.mk b/package/python-pyhamcrest/python-pyhamcrest.mk
-index 28979600dd..de5295e964 100644
---- a/package/python-pyhamcrest/python-pyhamcrest.mk
-+++ b/package/python-pyhamcrest/python-pyhamcrest.mk
+ # md5, sha256 from https://pypi.org/pypi/sh/json
+-md5  33becadcb5214afd00b9eec05fa98c06  sh-1.14.2.tar.gz
+-sha256  9d7bd0334d494b2a4609fe521b2107438cdb21c0e469ffeeb191489883d6fe0d  sh-1.14.2.tar.gz
+-# Locally computed
++md5  d60498172876f35aef6303a9cbb8eb11  sh-1.14.3.tar.gz
++sha256  e4045b6c732d9ce75d571c79f5ac2234edd9ae4f5fa9d59b09705082bdca18c7  sh-1.14.3.tar.gz
++# Locally computed sha256 checksums
+ sha256  d8491c6e236568d04f7c8c07f2f1b8f5d142706dab6ab88f6e0d2dd476b6c706  LICENSE.txt
+diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
+index d2d8b14c8b..781de88ab1 100644
+--- a/package/python-sh/python-sh.mk
++++ b/package/python-sh/python-sh.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYHAMCREST_VERSION = 2.0.2
--PYTHON_PYHAMCREST_SOURCE = PyHamcrest-$(PYTHON_PYHAMCREST_VERSION).tar.gz
--PYTHON_PYHAMCREST_SITE = https://files.pythonhosted.org/packages/58/05/7b993fabb44ff0b52a90916d96bfd91a65ecf90b8248e72bba325ba8e438
-+PYTHON_PYHAMCREST_VERSION = 2.0.4
-+PYTHON_PYHAMCREST_SOURCE = pyhamcrest-$(PYTHON_PYHAMCREST_VERSION).tar.gz
-+PYTHON_PYHAMCREST_SITE = https://files.pythonhosted.org/packages/b1/9a/588f086b64ace8d2e9843d8551e9068b2570c3c51b06cb49a107303f8700
- PYTHON_PYHAMCREST_SETUP_TYPE = setuptools
- PYTHON_PYHAMCREST_LICENSE = BSD-3-Clause
- PYTHON_PYHAMCREST_LICENSE_FILES = LICENSE.txt
+-PYTHON_SH_VERSION = 1.14.2
++PYTHON_SH_VERSION = 1.14.3
+ PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
+-PYTHON_SH_SITE = https://files.pythonhosted.org/packages/80/39/ed280d183c322453e276a518605b2435f682342f2c3bcf63228404d36375
++PYTHON_SH_SITE = https://files.pythonhosted.org/packages/b7/09/89c28aaf2a49f226fef8587c90c6386bd2cc03a0295bc4ff7fc6ee43c01d
+ PYTHON_SH_SETUP_TYPE = setuptools
+ PYTHON_SH_LICENSE = MIT
+ PYTHON_SH_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
