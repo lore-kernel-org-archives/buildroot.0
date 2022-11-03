@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29E2BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB770C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C632B40522;
-	Mon,  5 Dec 2022 11:58:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C632B40522
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91F9040522;
+	Mon,  5 Dec 2022 11:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91F9040522
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id maDRs0lo7Of1; Mon,  5 Dec 2022 11:58:56 +0000 (UTC)
+	with ESMTP id yxPrFDdU2Aaa; Mon,  5 Dec 2022 11:59:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 140AB40523;
-	Mon,  5 Dec 2022 11:58:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 140AB40523
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 11D691BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97A8540577;
+	Mon,  5 Dec 2022 11:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97A8540577
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D44B1BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AAD941684
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAD941684
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDCCA40610
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDCCA40610
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u0Mr_mJebZFL for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ol5YBrxtPh3G for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AF0E4167C
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AF0E4167C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8458C405EF
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8458C405EF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B68B85BA3; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ id 8232E85BA2; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 22:14:53 +0100
+Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d6aa73ada756b8291a16413b36a952a8d93225d
-X-Git-Newrev: 01fec1b37265fdbd2e89f0217bccd35275e32f98
+X-Git-Oldrev: 96a9097ca814942951a4530ff294efedfed65036
+X-Git-Newrev: d23c655958f9f6d6eeaf860cabdd0ba5a65274ed
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112609.5B68B85BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lttng-modules: bump to 2.13.7
+Message-Id: <20221205112606.8232E85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-websocket-client: bump to
+ version 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,62 +59,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0211017650427988684=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0211017650427988684==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=01fec1b37265fdbd2e89f0217bccd35275e32f98
+commit: https://git.buildroot.net/buildroot/commit/?id=d23c655958f9f6d6eeaf860cabdd0ba5a65274ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the latest point release in the stable 2.13 branch (currently
-the latest stable branch available).
+Drop no longer required six runtime dependency.
 
-Cc: Clément Léger <clement.leger@bootlin.com>
-Reported-by: Clément Léger <clement.leger@bootlin.com>
+Project relicensed as Apache 2.0:
+https://github.com/websocket-client/websocket-client/commit/ee5e352ebfcb78dd944d6923ce775ee4fcb5fd7f
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lttng-modules/lttng-modules.hash | 4 ++--
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-websocket-client/Config.in                    | 1 -
+ package/python-websocket-client/python-websocket-client.hash | 6 +++---
+ package/python-websocket-client/python-websocket-client.mk   | 8 ++++----
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index fb253c9bf6..e685cc3367 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
+diff --git a/package/python-websocket-client/Config.in b/package/python-websocket-client/Config.in
+index 519e506615..f915905400 100644
+--- a/package/python-websocket-client/Config.in
++++ b/package/python-websocket-client/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT
+ 	bool "python-websocket-client"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL # runtime
+ 	help
+ 	  WebSocket client for python. hybi13 is supported.
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+index 1e745dc1d5..08a6c260ca 100644
+--- a/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
 @@ -1,5 +1,5 @@
--# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.1.tar.bz2.sha256
--sha256  a7c86d91c9bbe66d27f025aa04b8cfc6d7785ed2fc7ef774930800ee44d7f343  lttng-modules-2.13.1.tar.bz2
-+# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.7.tar.bz2.sha256
-+sha256  5a99679df7903160cbde3918fee5af90ffafc90fc96ccdefaa57cf230492b234  lttng-modules-2.13.7.tar.bz2
- 
- # Hash for license files
- sha256  d72921266bc8452a8789f8a04a82755373990d00b7e0b0f1a8edb8f854e94d1c  LICENSES/LGPL-2.1
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 97cda53f08..416833f4ef 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/websocket-client/json
+-md5  8fc86b13dc97dc032855c6257f9168df  websocket_client-0.58.0.tar.gz
+-sha256  63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f  websocket_client-0.58.0.tar.gz
++md5  1e8b6daae0cad86f8cd9210b24bdf95b  websocket-client-1.4.1.tar.gz
++sha256  f9611eb65c8241a67fb373bef040b3cf8ad377a9f6546a12b620b6511e8ea9ef  websocket-client-1.4.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  7c6699c75f87b52bdc542db26d6b1b92892577cda46e20eceb79e2790a1c291b  LICENSE
++sha256  638eb70dcc4af2e6d8388de0636ced399f7c24716e11b8573a6b06f879e80691  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+index d2873e3601..7e21187e22 100644
+--- a/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LTTNG_MODULES_VERSION = 2.13.1
-+LTTNG_MODULES_VERSION = 2.13.7
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
-
---===============0211017650427988684==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_WEBSOCKET_CLIENT_VERSION = 0.58.0
+-PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+-PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/4a/df/112c278ba1ead96786d24d973429ce1e1a2c86b9843183d9f8ef8c6330d7
++PYTHON_WEBSOCKET_CLIENT_VERSION = 1.4.1
++PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket-client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
++PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/99/11/01fe7ebcb7545a1990c53c11f31230afe1388b0b34256e3fd20e49482245
+ PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+-PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
++PYTHON_WEBSOCKET_CLIENT_LICENSE = Apache-2.0
+ PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0211017650427988684==--
