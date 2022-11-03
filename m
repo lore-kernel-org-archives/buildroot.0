@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1811C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9820CC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 298BA404AF;
-	Thu,  3 Nov 2022 14:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298BA404AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BADB404AF;
+	Thu,  3 Nov 2022 14:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BADB404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pGirS3_u-ilx; Thu,  3 Nov 2022 14:28:27 +0000 (UTC)
+	with ESMTP id SpLPRc_xcP48; Thu,  3 Nov 2022 14:31:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3ED4840B6D;
-	Thu,  3 Nov 2022 14:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ED4840B6D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C34911BF38A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:28:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F83740297;
+	Thu,  3 Nov 2022 14:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F83740297
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86C161BF38A
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9B534177A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B534177A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F97460EA1
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F97460EA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a5Hn9a19Vxk3 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 14:28:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bIsjRysQEki7 for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 14:31:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B41940901
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8B41940901
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:28:22 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id m15so1128468ilq.2
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 07:28:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62E00605A7
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62E00605A7
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:31:48 +0000 (UTC)
+Received: by mail-io1-xd31.google.com with SMTP id q142so1456452iod.5
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 07:31:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=n+3C5Lf+ofkOgj+GbW/Ccy565u1QZcqGTXMdRJcoSAM=;
- b=RG1R1XEHP+K6S+TRN4U3l4i8eYwoY/mWGYfQ3p9t8P/FUVemHVAyCifwcVZtJJVEIj
- 6ugmSMSzI8gO5gyrPTQ2slEtVh+AzKmu/U0BmZ4A7fy7+N2qXooS9mUpF1q5/B+GPeYn
- Rvmnn0TLsTWBt0iLmytMTXzmtZMIrmKBOoJhXTA9zGQrtgzxWuWsU2rrWmQiYfVcGr4K
- fLjJIa8uO9KTOlcTDwbUrPMOPOGlZIOneUkptI8llAMg4mPM+h3+BrYfR7GRlv6K01tn
- LEYOLLo96iIAFYkruwPK6rLBRYBJ/eXthtm2mCiPRngPAsELHVC/NhrpRv9nPeTwAKYl
- EM2g==
-X-Gm-Message-State: ACrzQf1s2vFi61k1aMBgW6HDdBRbrYJl54cJk0HWhILRNozZQfLo8PfY
- Smd5UE9d+v2FzkrV36YJeDvUkRu+tPQfN/QD
-X-Google-Smtp-Source: AMsMyM7DH12MnStGMuN9xIAYn+COlxh3WfrNyMn+tNpNV6ZkYqE7ul3/z/VFJQtRezu2QPearNvCNg==
-X-Received: by 2002:a05:6e02:1102:b0:300:8fb7:1ecd with SMTP id
- u2-20020a056e02110200b003008fb71ecdmr17085990ilk.211.1667485701267; 
- Thu, 03 Nov 2022 07:28:21 -0700 (PDT)
+ bh=ADm2Leu0qlvuVeeiUB2Tc7Zjq2xs2rT8LGDMDsmKT4c=;
+ b=Z9NmiaNkRKuBibwGa5lBCOeyotNXWmc/BwvMkEOMly8hWg/3Si61S7zpPQTDKlmS1S
+ CmrAqcDADEMq3+X43eCOqwzyvBiP5zSHL+gY1z5Wf+bRSvxeGaEXBQytQUT7qxVJod7d
+ tVKU2f2cDri04IaPjfC2x1c5rX5zwYk6Pes/MHu/moh+gETRWMWztLgv9sw3vluU0DwO
+ sw/IS7J5hyP4Uo9Iul2o+hyftAgYs+npNHGGzEJLw45OilgdaJqUPgLTc7YvvMbC/EHI
+ 68yGPJr9nEFYBYjGA7ZrpPFTMvn1RUfBl0lAy+bvpsVtM8YTAhHMHTCzehLUNW7k0bHy
+ Zexg==
+X-Gm-Message-State: ACrzQf1jbNeWQ+yDr6ZEkb/T8tOXlWTqT/RgNMSnkY6LvYgRwkxNHC6y
+ xOrsWW5WVKeKZt3j1iM/ORa79cBtIFOcn4Ji
+X-Google-Smtp-Source: AMsMyM6S6nw81b4WdTeSFvEws48VAmcPgXnVhVAt/kTDwABAYRS94fhFIZF7MGc1pcXE0uZmw8+vqw==
+X-Received: by 2002:a02:cabb:0:b0:363:5b16:c871 with SMTP id
+ e27-20020a02cabb000000b003635b16c871mr19373619jap.6.1667485907033; 
+ Thu, 03 Nov 2022 07:31:47 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- z8-20020a92d6c8000000b002f9537986f3sm377842ilp.24.2022.11.03.07.28.20
+ o126-20020a022284000000b003758bcba4b5sm250020jao.153.2022.11.03.07.31.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 07:28:20 -0700 (PDT)
+ Thu, 03 Nov 2022 07:31:46 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 08:28:19 -0600
-Message-Id: <20221103142819.1485494-1-james.hilliard1@gmail.com>
+Date: Thu,  3 Nov 2022 08:31:45 -0600
+Message-Id: <20221103143145.1736534-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=n+3C5Lf+ofkOgj+GbW/Ccy565u1QZcqGTXMdRJcoSAM=;
- b=mCk3gYmvxuRXLJnfWT8pMuX4Lf5JJFsUWJbmSuiLIenN13UNRAtaW9GThoigJ2N9Wr
- /T6KXWZ5Iq3wXPMEObx/WjbwluMhB9OfyU/2C3jAEEqybkbJNQc4RJgE+kFTjL5BNEGx
- Z/TSoq3WlmY+QFesT1WqCwfU5UTuiI/CdMuSH4fvCIvQsnKP1w0pbRxBMzQeCLrWTyq7
- tSsHrSCUWuYv1lH/NWPGh0Sn8K6aYJ0LGOFp0F46hqrWJ0u2zSE2zy4Bmmxha4MH5Xl9
- SFASHir+h2DX3+GUfi2czfBGFpBr0y4ztFpx9xYSjO8/tzBnplPlC00yh2xC/6V4ZQP1
- 9fDw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ADm2Leu0qlvuVeeiUB2Tc7Zjq2xs2rT8LGDMDsmKT4c=;
+ b=UbNAfoYqRIhEoc6a9s8zDpqcYSpg3P7u1iAmnhV9y+HXmEOKdQmTbcscJcU/NS2CRg
+ f/wpdC+z/PATf5iIuc4x0u7lifrqigbTVZLZwgrn3p9z+kt/HFOhweAsSXlIym+ve7C7
+ RxA6Olt8kMXp5oXXYZizeK6ly7RKNxY49H7IaYnDp2Uawi6nSR1i/+2Om33yXWctPP75
+ x9nizRUXzjEcMR6vIfoBYFZdvkb/eN8u51rn2HHwLCASPmdkW3EMKZpvS2UixsCmCBhH
+ aBMnMmntr1rYFc/TSkqe9h4QyBV1iwiNr1ChTRX6b01o8vqUApnqNSUJwTpNBUHkUZ6W
+ Ebgg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mCk3gYmv
-Subject: [Buildroot] [PATCH 1/1] package/python-pyjwt: bump to version 2.6.0
+ header.a=rsa-sha256 header.s=20210112 header.b=UbNAfoYq
+Subject: [Buildroot] [PATCH 1/1] package/python-pylibftdi: bump to version
+ 0.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +95,51 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+ Christian Kellermann <christian.kellermann@solectrix.de>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to date update:
+https://github.com/codedstructure/pylibftdi/commit/4662ebe069eefd5a89709d4165e3be808cad636c
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyjwt/python-pyjwt.hash | 4 ++--
- package/python-pyjwt/python-pyjwt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pylibftdi/python-pylibftdi.hash | 6 +++---
+ package/python-pylibftdi/python-pylibftdi.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
-index d51df02be1..cc64be6cca 100644
---- a/package/python-pyjwt/python-pyjwt.hash
-+++ b/package/python-pyjwt/python-pyjwt.hash
+diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
+index 5570c1c9f6..ee0ba127ca 100644
+--- a/package/python-pylibftdi/python-pylibftdi.hash
++++ b/package/python-pylibftdi/python-pylibftdi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyJWT/json
--md5  665f444d7805e36826bb09ce6434e73a  PyJWT-2.4.0.tar.gz
--sha256  d42908208c699b3b973cbeb01a969ba6a96c821eefb1c5bfe4c390c01d67abba  PyJWT-2.4.0.tar.gz
-+md5  aeed6d3a581ae383b2288a2079fa562d  PyJWT-2.6.0.tar.gz
-+sha256  69285c7e31fc44f68a1feb309e948e0df53259d579295e6cfe2b1792329f05fd  PyJWT-2.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
+-md5  c48e442cef7b1e865b4d96ab92f509ad  pylibftdi-0.18.1.tar.gz
+-sha256  bdd04076933959b20b3c8b4fb8be7882d3362675f259e7eeb23ebff03b81859d  pylibftdi-0.18.1.tar.gz
++md5  fb43ade3283b809d4ebe92bf4a60d7fc  pylibftdi-0.20.0.tar.gz
++sha256  f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f  pylibftdi-0.20.0.tar.gz
  # Locally computed sha256 checksums
- sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index 53cc50b650..fe4eeff38a 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
+-sha256  0e40132339e1ef7d17d93837fbc273d1e87302e9295162bd19c9161e5700ddcc  LICENSE.txt
++sha256  0d3f1af06b566a783091422061b60e864fc5d5853418b71643041e254b4ae7f9  LICENSE.txt
+diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
+index 2f5614867d..34040b72ac 100644
+--- a/package/python-pylibftdi/python-pylibftdi.mk
++++ b/package/python-pylibftdi/python-pylibftdi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYJWT_VERSION = 2.4.0
-+PYTHON_PYJWT_VERSION = 2.6.0
- PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
--PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/d8/6b/6287745054dbcccf75903630346be77d4715c594402cec7c2518032416c2
-+PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/75/65/db64904a7f23e12dbf0565b53de01db04d848a497c6c9b87e102f74c9304
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
+-PYTHON_PYLIBFTDI_VERSION = 0.18.1
++PYTHON_PYLIBFTDI_VERSION = 0.20.0
+ PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
+-PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/50/9b/1e1cdb9715bacfb83e5eaf5e69f4e2fbd92d61f43c5e185cc3935ec01b28
++PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/b8/03/4f778ce6dceea58dc5bfd555c22fdb265afc922d81d3c4496a791a54c479
+ PYTHON_PYLIBFTDI_LICENSE = MIT
+ PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
 -- 
 2.34.1
 
