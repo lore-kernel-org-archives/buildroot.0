@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 792ECC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25253C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27B04400DC;
-	Mon,  5 Dec 2022 11:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27B04400DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id B35C840573;
+	Mon,  5 Dec 2022 11:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35C840573
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nwiNhEbqi7W0; Mon,  5 Dec 2022 11:31:12 +0000 (UTC)
+	with ESMTP id bgD7g56iIoeB; Mon,  5 Dec 2022 11:31:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 577B240584;
-	Mon,  5 Dec 2022 11:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 577B240584
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 10F781BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0EF5405AB;
+	Mon,  5 Dec 2022 11:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0EF5405AB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 142691BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7029D4052D
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7029D4052D
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5D8481A47
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5D8481A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KOyXrKoWmSpq for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K0S50xt5j8ss for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EF264052E
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EF264052E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 041C181BB4
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041C181BB4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CEA685BA2; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+ id E90AD85BBE; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:32 +0100
+Date: Thu, 3 Nov 2022 22:02:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b246c5844c6c00806389ef8d40a39f17e2d68acb
-X-Git-Newrev: 2fe854e9fccefb10091e8df0fb3152815c47c79d
+X-Git-Oldrev: ef116427cfeaaef3af9d0968246a0cfedfd9887a
+X-Git-Newrev: 935edcfc311a9b76cc1d720b29985f89e686be3c
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112601.2CEA685BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cryptography: bump to
- version 38.0.3
+Message-Id: <20221205112605.E90AD85BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-babel: bump to version
+ 2.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fe854e9fccefb10091e8df0fb3152815c47c79d
+commit: https://git.buildroot.net/buildroot/commit/?id=935edcfc311a9b76cc1d720b29985f89e686be3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to template update:
+https://github.com/python-babel/babel/commit/8f5757cc85402a46c1db722f08c18cfa7f119858
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-babel/python-babel.hash | 6 +++---
+ package/python-babel/python-babel.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 0f6a62164b..40d217f666 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
+index 5211f20110..2b2f56d8c6 100644
+--- a/package/python-babel/python-babel.hash
++++ b/package/python-babel/python-babel.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  59f77beef181a9e6643ad2c10b8c6551fc561452287bd3552bec76c86d55b774  cryptography-38.0.1.tar.gz
-+sha256  cd0b4536eabc6fcb80aa03430fc2ca485d33249eea0cd23f76c1dd9da410c66c  cryptography-38.0.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/babel/json
+-md5  7166099733d78aa857d74fa50d8ff58c  Babel-2.9.1.tar.gz
+-sha256  bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0  Babel-2.9.1.tar.gz
++md5  9ee7784fd452d456206ecd3a12694010  Babel-2.11.0.tar.gz
++sha256  5ef4b3226b0180dedded4229651c8b0e1a3a6a2837d45a073272f313e4cf97f6  Babel-2.11.0.tar.gz
  # Locally computed sha256 checksums
- sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index c0265f5bfa..69eb90d795 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+-sha256  28c97bf33e7506e277487bdaa3a69b70f170d6af5a82785ac0a74c8428042e40  LICENSE
++sha256  2499aec3c5f041c3ac2c448a15fb233314e4c20cbac1530be04ec31b2788631c  LICENSE
+diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
+index a503a139f9..8bc881e61c 100644
+--- a/package/python-babel/python-babel.mk
++++ b/package/python-babel/python-babel.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 38.0.1
-+PYTHON_CRYPTOGRAPHY_VERSION = 38.0.3
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6d/0c/5e67831007ba6cd7e52c4095f053cf45c357739b0a7c46a45ddd50049019
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/13/dd/a9608b7aebe5d2dc0c98a4b2090a6b815628efa46cc1c046b89d8cd25f4c
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_BABEL_VERSION = 2.9.1
++PYTHON_BABEL_VERSION = 2.11.0
+ PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
+-PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/17/e6/ec9aa6ac3d00c383a5731cc97ed7c619d3996232c977bb8326bcbb6c687e
++PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/ff/80/45b42203ecc32c8de281f52e3ec81cb5e4ef16127e9e8543089d8b1649fb
+ PYTHON_BABEL_SETUP_TYPE = setuptools
+ PYTHON_BABEL_LICENSE = BSD-3-Clause
+ PYTHON_BABEL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
