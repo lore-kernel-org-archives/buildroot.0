@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D48C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 083E3C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAF1E60AFC;
-	Mon,  5 Dec 2022 11:28:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAF1E60AFC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1dDX6EIC3oY0; Mon,  5 Dec 2022 11:28:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED055607E3;
-	Mon,  5 Dec 2022 11:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED055607E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 01BF81BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5FF6415ED
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5FF6415ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A742404B9;
+	Mon,  5 Dec 2022 11:28:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A742404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rj3BwPVp6eHU for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yHJFq30OFPWq; Mon,  5 Dec 2022 11:28:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79E8340268;
+	Mon,  5 Dec 2022 11:28:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79E8340268
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D0E71BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8399E81B84
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8399E81B84
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YXol_RL0ffcM for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5CC14157B
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5CC14157B
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB58381B71
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB58381B71
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94AB085BA2; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
+ id B952C85BBE; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:12 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ede119da2d8bf45120c482e11ccb84d31c22afe
-X-Git-Newrev: c9b862b2973aaaebac6dacca6ad20f2b20944f87
+X-Git-Oldrev: 3263543a0249f2ba3018656bd35366d3a429fd2f
+X-Git-Newrev: 59d2890c1e0bab8e9076d7a8759135da164511e8
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112600.94AB085BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{avro-c,
- python-avro}: bump to version 1.11.1
+Message-Id: <20221205112603.B952C85BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pbr: bump to version 5.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,68 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9b862b2973aaaebac6dacca6ad20f2b20944f87
+commit: https://git.buildroot.net/buildroot/commit/?id=59d2890c1e0bab8e9076d7a8759135da164511e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/avro-c/avro-c.hash           | 4 ++--
- package/avro-c/avro-c.mk             | 2 +-
- package/python-avro/python-avro.hash | 4 ++--
- package/python-avro/python-avro.mk   | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-pbr/python-pbr.hash | 4 ++--
+ package/python-pbr/python-pbr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
-index 7a4a6f7aca..b52a787ed5 100644
---- a/package/avro-c/avro-c.hash
-+++ b/package/avro-c/avro-c.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.11.0/c/avro-c-1.11.0.tar.gz.sha512
--sha512  5369ec11832e0ce1aa0181d594f657bae82ab5fb317ec1bee5ba190de9ed42956b425a5bf7e423940e8f871a54ae1246b92db2ce8562f270b4a05523ec4b60ae  avro-c-1.11.0.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.1/c/avro-c-1.11.1.tar.gz.sha512
-+sha512  e72e8c245a8b86326bc18a5d5127e9beeaceaf805e8a62760fd88d627e29954c750346485bb43822df408c8a172d910c27ddf7e3815bddbdb04d16c54d859323  avro-c-1.11.1.tar.gz
- 
- # License files
- sha256  d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
-diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
-index f55c579656..f217c1d7ed 100644
---- a/package/avro-c/avro-c.mk
-+++ b/package/avro-c/avro-c.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
+index 8cf2a18d36..4ca503e976 100644
+--- a/package/python-pbr/python-pbr.hash
++++ b/package/python-pbr/python-pbr.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pbr/json
+-md5  62565acc6bf3e7e10b082463421f8b46  pbr-5.6.0.tar.gz
+-sha256  42df03e7797b796625b1029c0400279c7c34fd7df24a7d7818a1abb5b38710dd  pbr-5.6.0.tar.gz
++md5  99ef94dbe5a00054fdcbbaa87268c3cd  pbr-5.11.0.tar.gz
++sha256  b97bc6695b2aff02144133c2e7399d5885223d42b7912ffaec2ca3898e673bfe  pbr-5.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
+ sha256  eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
+diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
+index 3cc7ab81fa..99f0101e19 100644
+--- a/package/python-pbr/python-pbr.mk
++++ b/package/python-pbr/python-pbr.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version, please also update python-avro
--AVRO_C_VERSION = 1.11.0
-+AVRO_C_VERSION = 1.11.1
- AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
- AVRO_C_LICENSE = Apache-2.0
- AVRO_C_LICENSE_FILES = LICENSE
-diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-index d752fa8ae6..0d457a11fd 100644
---- a/package/python-avro/python-avro.hash
-+++ b/package/python-avro/python-avro.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.11.0/py/avro-1.11.0.tar.gz.sha512
--sha512  8af67deb33b9990b74ffd7ab5c3c55e13a649070b4623c7bbe2b278287fd0929e57ed6d0344f9e93f3eb79663b43f75891d0810812349dfaecce65fdd9b44e93  avro-1.11.0.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.1/py/avro-1.11.1.tar.gz.sha512
-+sha512  bce5983cd7ed20be848cca41d143f16bf5bab57edc010d590fc1268405de4267e028ff7ec740282a03034aff5aa528feadb2be4e71ee6879b3080e0a9e19cb37  avro-1.11.1.tar.gz
- 
- # License files
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
-diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
-index 42aa11aa4e..6193cbbd8e 100644
---- a/package/python-avro/python-avro.mk
-+++ b/package/python-avro/python-avro.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update avro-c
--PYTHON_AVRO_VERSION = 1.11.0
-+PYTHON_AVRO_VERSION = 1.11.1
- PYTHON_AVRO_SITE = \
- 	https://www-eu.apache.org/dist/avro/avro-$(PYTHON_AVRO_VERSION)/py
- PYTHON_AVRO_SOURCE = avro-$(PYTHON_AVRO_VERSION).tar.gz
+-PYTHON_PBR_VERSION = 5.6.0
++PYTHON_PBR_VERSION = 5.11.0
+ PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
+-PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/35/8c/69ed04ae31ad498c9bdea55766ed4c0c72de596e75ac0d70b58aa25e0acf
++PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/52/fb/630d52aaca8fc7634a0711b6ae12a0e828b6f9264bd8051225025c3ed075
+ PYTHON_PBR_SETUP_TYPE = setuptools
+ PYTHON_PBR_LICENSE = Apache-2.0 (module), BSD-3-Clause (test package)
+ PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
