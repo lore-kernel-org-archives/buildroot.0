@@ -1,81 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E72B8C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 017AEC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54CF641712;
-	Thu,  3 Nov 2022 00:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54CF641712
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8398B81E97;
+	Thu,  3 Nov 2022 00:12:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8398B81E97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a4EJOVRaeIbN; Thu,  3 Nov 2022 00:04:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e7sJodowUwDM; Thu,  3 Nov 2022 00:12:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E669041713;
-	Thu,  3 Nov 2022 00:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E669041713
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8A0881E8C;
+	Thu,  3 Nov 2022 00:12:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8A0881E8C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75D351BF46A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:04:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BC501BF41D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5117960E16
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5117960E16
+ by smtp3.osuosl.org (Postfix) with ESMTP id 169E560B9D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 169E560B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IdadN-byhmTV for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 00:04:06 +0000 (UTC)
+ with ESMTP id S6NRqU8QB7mC for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 00:12:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 741F060B70
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 741F060B70
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:04:06 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id f37so293768lfv.8
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:04:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A587F60B70
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A587F60B70
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:12:05 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id q142so152706iod.5
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:12:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=oex89xa4N36rqJ29bSeei9JRtuPFkhzfnZZLUqI96jM=;
- b=WJm+qg+NnIClt05MPasYqNSsKri+d3wKSv0lAG25E5M6kQeBYqD9MIhuMUpTUUjXXw
- 9S6iIqyDusNxUdQrtp8gOENLUQM7gZ4AykvOz4gcIvKn7ikwCAy9Hajd1g23SKYapf4p
- gmNmt7YIpyVLcETKdLbuZSCNk4FOytEIscewxsjUqXmJvsr8+kpJB+iAX3gN/mhY+EN6
- pok3ZvPTXP8a8Xe1iO6W4185gL2tzJ/GnduPjKMGB/2roLWUlo+MkX9cNNWXSc1CPG0r
- HL3FSKjxpVIccZsBe9h2Fp5q+LvjkFnOc+3YWKVuhA23eBLGYqRaqAwya862PvkOUjJ7
- KMpQ==
-X-Gm-Message-State: ACrzQf3OJbbw+Vzt0/GHbfcWoNal50nDUxNv9h1NU9Fz9TXm5QqMmHd6
- jp5OTB/0o0bNqvdNVy4nCeyL0rDo5rLQZ71avZORFGkxcLY=
-X-Google-Smtp-Source: AMsMyM4+yvAqCuZ0czRP9U+lSt7rOSrXKDZ2hskJM/jrUPMb+k5Fu1BXPjAd4sl2XPkt2ZXmHjUHtIOtBr8eVBy+Op0=
-X-Received: by 2002:a05:6512:2209:b0:4a2:6b07:9a97 with SMTP id
- h9-20020a056512220900b004a26b079a97mr9916759lfu.509.1667433844150; Wed, 02
- Nov 2022 17:04:04 -0700 (PDT)
+ bh=wxyEN8FmSVMkAxTamEXaz0hEyEuPbN5WSl+XD6LsHfQ=;
+ b=zOOr+b8LQWiXua3z1I8M4X4dGnVV6FYlrYlvII9vwJEQD48IJLvZNQ6FkmY/WKOJxa
+ 6KOt5+G4NV179n+9IILt5QHWhnx37eKTL3DBUrvc8AiYMzOg/C8NGXdC9A3gSxdvCJ8+
+ VpYP8mjdc2aLNEz2bqxR6zILvYuEfKc7GKIs9a2NakZV2pT5Az7ZBsi5aQhvJttc6Iuj
+ uJJT0012ZOj5+ITK9DiQ0mdsC5IcmNTLQXYHMI6k96GtZVoUd2uM1+wZE7a6o33O6dpL
+ 2+js/6PkE7HH6G9/SD4FAHViaPX0RKrMI1FYdeOX44QK65yagvK85eVIsK3CpZ5ly9Bh
+ nPsg==
+X-Gm-Message-State: ACrzQf1vXZhhmisBN3qBQZaOGrG/G3/mZYgm5U7PEHHpwdSUjV3izcLY
+ FfRLW2vSOCA4S2vVDZJvrAsG3XOuYEt+/lOy
+X-Google-Smtp-Source: AMsMyM6CoeNjjsenoTB8jLyRHw3WAgMLSOWLXFqIQgFyvzsjC4axRMP0KKRQ6+pQLE/3WnCgPfX+7w==
+X-Received: by 2002:a05:6602:2f0c:b0:6d1:c87:fe3e with SMTP id
+ q12-20020a0566022f0c00b006d10c87fe3emr12548995iow.57.1667434324349; 
+ Wed, 02 Nov 2022 17:12:04 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ i16-20020a925410000000b002fc323a2902sm4956990ilb.62.2022.11.02.17.12.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Nov 2022 17:12:03 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  2 Nov 2022 18:11:59 -0600
+Message-Id: <20221103001200.1576937-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221102201858.555294-1-thomas.petazzoni@bootlin.com>
- <20221102201858.555294-2-thomas.petazzoni@bootlin.com>
-In-Reply-To: <20221102201858.555294-2-thomas.petazzoni@bootlin.com>
-From: Da Xue <da@lessconfused.com>
-Date: Wed, 2 Nov 2022 20:03:51 -0400
-Message-ID: <CACdvmAh_sHZ3xwmhBa332f5Pg_9c=ZL5BxWbZO3tHn=mRDJJ7g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lessconfused.com; s=lessconfused;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=oex89xa4N36rqJ29bSeei9JRtuPFkhzfnZZLUqI96jM=;
- b=I0x5lY7Mb2AH4QutP0aqSvnoTRS0g22OWiGil1RJGX+ovY/qbCajOJKqVjDh91J99a
- wMzaW4A8Ya+LabqL01zXe2rIHUw+jvCznw4wwTwNte9XiEwP7j5rnvY4KdQE6Rz9bop5
- axAyYSRJAbjpSGMxc/U9n+4a7Au/NobJB5LiM=
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wxyEN8FmSVMkAxTamEXaz0hEyEuPbN5WSl+XD6LsHfQ=;
+ b=dayMofKQUeSKeT1xk/IxtptnjQ4lbFEGwP1Jumv1f8i30Dk29ltlpl058hQWsQwqUi
+ gWyRoFrgQvAoiV9+MztsvhH2z3X1Ym3OWAvAonijQp9eSHIKx4VjyXicwD4WWoF6UTKC
+ o1cWtBYCjFCf01ocxJC9007euENwmKtzdNAh+F/RNmAv5uw0vkTivzmL9fYs1sbZwFq7
+ axBSmVUjz+YRUajCtpSmFOKtTcn2FFUz23K0Frjl3e5d0gjJ3Ug9ndEuZUTe2a9L8PD1
+ lkhuyu1u0eZnfKtwiH1CbDBAzEWGv3mW8SyiM8s9Zw/r3HxCqwXsTFvSNegWdWRH7KKf
+ br2A==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com
- header.a=rsa-sha256 header.s=lessconfused header.b=I0x5lY7M
-Subject: Re: [Buildroot] [PATCH 1/3] configs/roc_pc_rk3399: remove defconfig
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=dayMofKQ
+Subject: [Buildroot] [PATCH 1/2] package/python-cppy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,391 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0039523395762046719=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Esben Haabendal <esben@haabendal.dk>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0039523395762046719==
-Content-Type: multipart/alternative; boundary="000000000000f7ad1505ec85b1dc"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-cppy/python-cppy.hash |  5 +++++
+ package/python-cppy/python-cppy.mk   | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/python-cppy/python-cppy.hash
+ create mode 100644 package/python-cppy/python-cppy.mk
 
---000000000000f7ad1505ec85b1dc
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Thomas,
-
-This is a Libre Computer only product in the future so the folder is wrong.
-I will re-create in the right folder and maintain these boards in the
-future.
-
-Best,
-Da
-
-
-On Wed, Nov 2, 2022, 4:19 PM Thomas Petazzoni via buildroot <
-buildroot@buildroot.org> wrote:
-
-> This defconfig has been failing to build for several months, with
-> nobody stepping up to fix it. It's time to drop it.
->
-> See
-> https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-> for a notification on August 6, 2022 about the issues with this
-> defconfig.
->
-> Fixes:
->
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/3259671226
->
-> Cc: Suniel Mahesh <sunil@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  DEVELOPERS                                |  2 --
->  board/firefly/roc-rk3399-pc/extlinux.conf |  4 ---
->  board/firefly/roc-rk3399-pc/genimage.cfg  | 22 -------------
->  board/firefly/roc-rk3399-pc/post-build.sh |  5 ---
->  board/firefly/roc-rk3399-pc/readme.txt    | 40 -----------------------
->  5 files changed, 73 deletions(-)
->  delete mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
->  delete mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
->  delete mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
->  delete mode 100644 board/firefly/roc-rk3399-pc/readme.txt
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9569ee720b..591276bec8 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2729,13 +2729,11 @@ F:      package/hwloc/
->  F:     package/powertop/
->
->  N:     Suniel Mahesh <sunil@amarulasolutions.com>
-> -F:     board/firefly/
->  F:     board/friendlyarm/nanopi-m4
->  F:     board/pine64/rockpro64
->  F:     board/radxa/rockpi-4
->  F:     board/radxa/rockpi-n8
->  F:     board/radxa/rockpi-n10
-> -F:     configs/roc_pc_rk3399_defconfig
->  F:     configs/rock_pi_4_defconfig
->  F:     configs/rock_pi_n8_defconfig
->  F:     configs/rock_pi_n10_defconfig
-> diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf
-> b/board/firefly/roc-rk3399-pc/extlinux.conf
-> deleted file mode 100644
-> index 50a358fadc..0000000000
-> --- a/board/firefly/roc-rk3399-pc/extlinux.conf
-> +++ /dev/null
-> @@ -1,4 +0,0 @@
-> -label RK3399RocPC linux
-> -  kernel /boot/Image
-> -  devicetree /boot/rk3399-roc-pc.dtb
-> -  append earlycon=3Duart8250,mmio32,0xff1a0000 root=3D/dev/mmcblk0p1 roo=
-twait
-> diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg
-> b/board/firefly/roc-rk3399-pc/genimage.cfg
-> deleted file mode 100644
-> index 966c869273..0000000000
-> --- a/board/firefly/roc-rk3399-pc/genimage.cfg
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -image sdcard.img {
-> -       hdimage {
-> -       }
-> -
-> -       partition u-boot-tpl-spl-dtb {
-> -               in-partition-table =3D "no"
-> -               image =3D "idbloader.img"
-> -               offset =3D 32K
-> -       }
-> -
-> -       partition u-boot-dtb {
-> -               in-partition-table =3D "no"
-> -               image =3D "u-boot.itb"
-> -               offset =3D 8M
-> -               size =3D 30M
-> -       }
-> -
-> -       partition rootfs {
-> -               partition-type =3D 0x83
-> -               image =3D "rootfs.ext4"
-> -       }
-> -}
-> diff --git a/board/firefly/roc-rk3399-pc/post-build.sh
-> b/board/firefly/roc-rk3399-pc/post-build.sh
-> deleted file mode 100755
-> index 1f5ff6a611..0000000000
-> --- a/board/firefly/roc-rk3399-pc/post-build.sh
-> +++ /dev/null
-> @@ -1,5 +0,0 @@
-> -#!/bin/sh
-> -
-> -BOARD_DIR=3D"$(dirname $0)"
-> -
-> -install -m 0644 -D $BOARD_DIR/extlinux.conf
-> $TARGET_DIR/boot/extlinux/extlinux.conf
-> diff --git a/board/firefly/roc-rk3399-pc/readme.txt
-> b/board/firefly/roc-rk3399-pc/readme.txt
-> deleted file mode 100644
-> index 8a6f1cdee6..0000000000
-> --- a/board/firefly/roc-rk3399-pc/readme.txt
-> +++ /dev/null
-> @@ -1,40 +0,0 @@
-> -Libre Computer Board ROC-RK3399-PC
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -Build:
-> -
-> -  $ make roc_pc_rk3399_defconfig
-> -  $ make
-> -
-> -Files created in output directory
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -output/images
-> -
-> -=E2=94=9C=E2=94=80=E2=94=80 bl31.elf
-> -=E2=94=9C=E2=94=80=E2=94=80 idbloader.img
-> -=E2=94=9C=E2=94=80=E2=94=80 Image
-> -=E2=94=9C=E2=94=80=E2=94=80 rk3399-roc-pc.dtb
-> -=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext2
-> -=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext4 -> rootfs.ext2
-> -=E2=94=9C=E2=94=80=E2=94=80 rootfs.tar
-> -=E2=94=9C=E2=94=80=E2=94=80 sdcard.img
-> -=E2=94=9C=E2=94=80=E2=94=80 u-boot.bin
-> -=E2=94=94=E2=94=80=E2=94=80 u-boot.itb
-> -
-> -Creating bootable SD card:
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> -
-> -Simply invoke (as root)
-> -
-> -sudo dd if=3Doutput/images/sdcard.img of=3D/dev/sdX && sync
-> -
-> -Where X is your SD card device
-> -
-> -Serial console
-> ---------------
-> -
-> -Baudrate for this board is 1500000
-> -
-> -Wiki link:
-> -https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
-> --
-> 2.38.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---000000000000f7ad1505ec85b1dc
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hi Thomas,<div dir=3D"auto"><br></div><div dir=3D"au=
-to">This is a Libre Computer only product in the future so the folder is wr=
-ong. I will re-create in the right folder and maintain these boards in the =
-future.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Best,</div><div =
-dir=3D"auto">Da</div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" cl=
-ass=3D"gmail_attr">On Wed, Nov 2, 2022, 4:19 PM Thomas Petazzoni via buildr=
-oot &lt;<a href=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org<=
-/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
- 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">This defconfig has b=
-een failing to build for several months, with<br>
-nobody stepping up to fix it. It&#39;s time to drop it.<br>
-<br>
-See<br>
-<a href=3D"https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsu=
-rf/" rel=3D"noreferrer noreferrer" target=3D"_blank">https://lore.kernel.or=
-g/buildroot/20220806224338.0159e15c@windsurf/</a><br>
-for a notification on August 6, 2022 about the issues with this<br>
-defconfig.<br>
-<br>
-Fixes:<br>
-<br>
-=C2=A0 <a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/3259671=
-226" rel=3D"noreferrer noreferrer" target=3D"_blank">https://gitlab.com/bui=
-ldroot.org/buildroot/-/jobs/3259671226</a><br>
-<br>
-Cc: Suniel Mahesh &lt;<a href=3D"mailto:sunil@amarulasolutions.com" target=
-=3D"_blank" rel=3D"noreferrer">sunil@amarulasolutions.com</a>&gt;<br>
-Signed-off-by: Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@boot=
-lin.com" target=3D"_blank" rel=3D"noreferrer">thomas.petazzoni@bootlin.com<=
-/a>&gt;<br>
----<br>
-=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 --<br>
-=C2=A0board/firefly/roc-rk3399-pc/extlinux.conf |=C2=A0 4 ---<br>
-=C2=A0board/firefly/roc-rk3399-pc/genimage.cfg=C2=A0 | 22 -------------<br>
-=C2=A0board/firefly/roc-rk3399-pc/post-build.sh |=C2=A0 5 ---<br>
-=C2=A0board/firefly/roc-rk3399-pc/readme.txt=C2=A0 =C2=A0 | 40 ------------=
------------<br>
-=C2=A05 files changed, 73 deletions(-)<br>
-=C2=A0delete mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf<br>
-=C2=A0delete mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg<br>
-=C2=A0delete mode 100755 board/firefly/roc-rk3399-pc/post-build.sh<br>
-=C2=A0delete mode 100644 board/firefly/roc-rk3399-pc/readme.txt<br>
-<br>
-diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index 9569ee720b..591276bec8 100644<br>
---- a/DEVELOPERS<br>
-+++ b/DEVELOPERS<br>
-@@ -2729,13 +2729,11 @@ F:=C2=A0 =C2=A0 =C2=A0 package/hwloc/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/powertop/<br>
-<br>
-=C2=A0N:=C2=A0 =C2=A0 =C2=A0Suniel Mahesh &lt;<a href=3D"mailto:sunil@amaru=
-lasolutions.com" target=3D"_blank" rel=3D"noreferrer">sunil@amarulasolution=
-s.com</a>&gt;<br>
--F:=C2=A0 =C2=A0 =C2=A0board/firefly/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0board/friendlyarm/nanopi-m4<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0board/pine64/rockpro64<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0board/radxa/rockpi-4<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0board/radxa/rockpi-n8<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0board/radxa/rockpi-n10<br>
--F:=C2=A0 =C2=A0 =C2=A0configs/roc_pc_rk3399_defconfig<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0configs/rock_pi_4_defconfig<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0configs/rock_pi_n8_defconfig<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0configs/rock_pi_n10_defconfig<br>
-diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-=
-rk3399-pc/extlinux.conf<br>
-deleted file mode 100644<br>
-index 50a358fadc..0000000000<br>
---- a/board/firefly/roc-rk3399-pc/extlinux.conf<br>
-+++ /dev/null<br>
-@@ -1,4 +0,0 @@<br>
--label RK3399RocPC linux<br>
--=C2=A0 kernel /boot/Image<br>
--=C2=A0 devicetree /boot/rk3399-roc-pc.dtb<br>
--=C2=A0 append earlycon=3Duart8250,mmio32,0xff1a0000 root=3D/dev/mmcblk0p1 =
-rootwait<br>
-diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-r=
-k3399-pc/genimage.cfg<br>
-deleted file mode 100644<br>
-index 966c869273..0000000000<br>
---- a/board/firefly/roc-rk3399-pc/genimage.cfg<br>
-+++ /dev/null<br>
-@@ -1,22 +0,0 @@<br>
--image sdcard.img {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0hdimage {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
--<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0partition u-boot-tpl-spl-dtb {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0in-partition-table =
-=3D &quot;no&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;idb=
-loader.img&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0offset =3D 32K<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
--<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0partition u-boot-dtb {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0in-partition-table =
-=3D &quot;no&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;u-b=
-oot.itb&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0offset =3D 8M<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0size =3D 30M<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
--<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0partition rootfs {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0partition-type =3D =
-0x83<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;roo=
-tfs.ext4&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
--}<br>
-diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-=
-rk3399-pc/post-build.sh<br>
-deleted file mode 100755<br>
-index 1f5ff6a611..0000000000<br>
---- a/board/firefly/roc-rk3399-pc/post-build.sh<br>
-+++ /dev/null<br>
-@@ -1,5 +0,0 @@<br>
--#!/bin/sh<br>
--<br>
--BOARD_DIR=3D&quot;$(dirname $0)&quot;<br>
--<br>
--install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extl=
-inux.conf<br>
-diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3=
-399-pc/readme.txt<br>
-deleted file mode 100644<br>
-index 8a6f1cdee6..0000000000<br>
---- a/board/firefly/roc-rk3399-pc/readme.txt<br>
-+++ /dev/null<br>
-@@ -1,40 +0,0 @@<br>
--Libre Computer Board ROC-RK3399-PC<br>
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
--<br>
--Build:<br>
--<br>
--=C2=A0 $ make roc_pc_rk3399_defconfig<br>
--=C2=A0 $ make<br>
--<br>
--Files created in output directory<br>
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
--<br>
--output/images<br>
--<br>
--=E2=94=9C=E2=94=80=E2=94=80 bl31.elf<br>
--=E2=94=9C=E2=94=80=E2=94=80 idbloader.img<br>
--=E2=94=9C=E2=94=80=E2=94=80 Image<br>
--=E2=94=9C=E2=94=80=E2=94=80 rk3399-roc-pc.dtb<br>
--=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext2<br>
--=E2=94=9C=E2=94=80=E2=94=80 rootfs.ext4 -&gt; rootfs.ext2<br>
--=E2=94=9C=E2=94=80=E2=94=80 rootfs.tar<br>
--=E2=94=9C=E2=94=80=E2=94=80 sdcard.img<br>
--=E2=94=9C=E2=94=80=E2=94=80 u-boot.bin<br>
--=E2=94=94=E2=94=80=E2=94=80 u-boot.itb<br>
--<br>
--Creating bootable SD card:<br>
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D<br>
--<br>
--Simply invoke (as root)<br>
--<br>
--sudo dd if=3Doutput/images/sdcard.img of=3D/dev/sdX &amp;&amp; sync<br>
--<br>
--Where X is your SD card device<br>
--<br>
--Serial console<br>
----------------<br>
--<br>
--Baudrate for this board is 1500000<br>
--<br>
--Wiki link:<br>
--<a href=3D"https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk339=
-9-pc.html" rel=3D"noreferrer noreferrer" target=3D"_blank">https://wiki.ama=
-rulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html</a><br>
--- <br>
-2.38.1<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"norefer=
-rer">buildroot@buildroot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman=
-/listinfo/buildroot</a><br>
-</blockquote></div></div></div>
-
---000000000000f7ad1505ec85b1dc--
-
---===============0039523395762046719==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-cppy/python-cppy.hash b/package/python-cppy/python-cppy.hash
+new file mode 100644
+index 0000000000..45b78eab8e
+--- /dev/null
++++ b/package/python-cppy/python-cppy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/cppy/json
++md5  7c1f825c43dd66454440932a35b9969c  cppy-1.2.1.tar.gz
++sha256  83b43bf17b1085ac15c5debdb42154f138b928234b21447358981f69d0d6fe1b  cppy-1.2.1.tar.gz
++# Locally computed sha256 checksums
++sha256  db7a008bff1e63ccec397cfa033109740c4dc6cb12070a70d0cfe69aba27c4df  LICENSE
+diff --git a/package/python-cppy/python-cppy.mk b/package/python-cppy/python-cppy.mk
+new file mode 100644
+index 0000000000..adadc352d3
+--- /dev/null
++++ b/package/python-cppy/python-cppy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cppy
++#
++################################################################################
++
++PYTHON_CPPY_VERSION = 1.2.1
++PYTHON_CPPY_SOURCE = cppy-$(PYTHON_CPPY_VERSION).tar.gz
++PYTHON_CPPY_SITE = https://files.pythonhosted.org/packages/c5/7e/6cc5acd93752ee52d2f0423046072a2ce3ae16dfcd44373b9fe2a0222204
++PYTHON_CPPY_LICENSE = BSD-3-Clause
++PYTHON_CPPY_LICENSE_FILES = LICENSE
++PYTHON_CPPY_SETUP_TYPE = setuptools
++
++$(eval $(host-python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0039523395762046719==--
