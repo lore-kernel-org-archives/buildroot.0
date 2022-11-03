@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C952BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD9E3C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 757EB40522;
-	Mon,  5 Dec 2022 11:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 757EB40522
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47177401FB;
+	Mon,  5 Dec 2022 11:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47177401FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 57kIx9QWtCEM; Mon,  5 Dec 2022 11:48:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p6WyeO0_86ro; Mon,  5 Dec 2022 11:48:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92966404FE;
-	Mon,  5 Dec 2022 11:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92966404FE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 10A2C1BF352
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EE8340202;
+	Mon,  5 Dec 2022 11:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EE8340202
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F5CE1BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74DB9405BC
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74DB9405BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8318941615
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8318941615
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6_CCfmYk0N_o for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mzqtjj3eD1fp for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8228B405AC
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8228B405AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DFC44161A
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFC44161A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EF1785B9B; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+ id 5671B85BA2; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:21 +0100
+Date: Thu, 3 Nov 2022 21:19:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95702e627051b99c9911196841a584c461583c2d
-X-Git-Newrev: aef5c2d3b6bf9aabe543495a9ad33de7ddf58812
+X-Git-Oldrev: dbb859d66ba5249b3cfef1c3821683054cdce8cd
+X-Git-Newrev: 0af5cbd4bee578444fa1320a72d045149ab0f897
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112604.7EF1785B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pylibftdi: bump to version
- 0.20.0
+Message-Id: <20221205112605.5671B85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-semantic-version: bump to
+ version 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aef5c2d3b6bf9aabe543495a9ad33de7ddf58812
+commit: https://git.buildroot.net/buildroot/commit/?id=0af5cbd4bee578444fa1320a72d045149ab0f897
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to date update:
-https://github.com/codedstructure/pylibftdi/commit/4662ebe069eefd5a89709d4165e3be808cad636c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pylibftdi/python-pylibftdi.hash | 6 +++---
- package/python-pylibftdi/python-pylibftdi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-semantic-version/python-semantic-version.hash | 4 ++--
+ package/python-semantic-version/python-semantic-version.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
-index 5570c1c9f6..ee0ba127ca 100644
---- a/package/python-pylibftdi/python-pylibftdi.hash
-+++ b/package/python-pylibftdi/python-pylibftdi.hash
+diff --git a/package/python-semantic-version/python-semantic-version.hash b/package/python-semantic-version/python-semantic-version.hash
+index 692905ec29..49e28c429a 100644
+--- a/package/python-semantic-version/python-semantic-version.hash
++++ b/package/python-semantic-version/python-semantic-version.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
--md5  c48e442cef7b1e865b4d96ab92f509ad  pylibftdi-0.18.1.tar.gz
--sha256  bdd04076933959b20b3c8b4fb8be7882d3362675f259e7eeb23ebff03b81859d  pylibftdi-0.18.1.tar.gz
-+md5  fb43ade3283b809d4ebe92bf4a60d7fc  pylibftdi-0.20.0.tar.gz
-+sha256  f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f  pylibftdi-0.20.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/semantic-version/json
+-md5  76d7364def7ee487b6153d40b13de904  semantic_version-2.8.5.tar.gz
+-sha256  d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54  semantic_version-2.8.5.tar.gz
++md5  e48abef93ba69abcd4eaf4640edfc38b  semantic_version-2.10.0.tar.gz
++sha256  bdabb6d336998cbb378d4b9db3a4b56a1e3235701dc05ea2690d9a997ed5041c  semantic_version-2.10.0.tar.gz
  # Locally computed sha256 checksums
--sha256  0e40132339e1ef7d17d93837fbc273d1e87302e9295162bd19c9161e5700ddcc  LICENSE.txt
-+sha256  0d3f1af06b566a783091422061b60e864fc5d5853418b71643041e254b4ae7f9  LICENSE.txt
-diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
-index 2f5614867d..34040b72ac 100644
---- a/package/python-pylibftdi/python-pylibftdi.mk
-+++ b/package/python-pylibftdi/python-pylibftdi.mk
+ sha256  a85e7ef2fbc670d26781ed6844cd31a7e8ada65d21328f75a0b02402faae37ea  LICENSE
+diff --git a/package/python-semantic-version/python-semantic-version.mk b/package/python-semantic-version/python-semantic-version.mk
+index 2352690e26..76a65e734f 100644
+--- a/package/python-semantic-version/python-semantic-version.mk
++++ b/package/python-semantic-version/python-semantic-version.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYLIBFTDI_VERSION = 0.18.1
-+PYTHON_PYLIBFTDI_VERSION = 0.20.0
- PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
--PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/50/9b/1e1cdb9715bacfb83e5eaf5e69f4e2fbd92d61f43c5e185cc3935ec01b28
-+PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/b8/03/4f778ce6dceea58dc5bfd555c22fdb265afc922d81d3c4496a791a54c479
- PYTHON_PYLIBFTDI_LICENSE = MIT
- PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
- PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
+-PYTHON_SEMANTIC_VERSION_VERSION = 2.8.5
++PYTHON_SEMANTIC_VERSION_VERSION = 2.10.0
+ PYTHON_SEMANTIC_VERSION_SOURCE = semantic_version-$(PYTHON_SEMANTIC_VERSION_VERSION).tar.gz
+-PYTHON_SEMANTIC_VERSION_SITE = https://files.pythonhosted.org/packages/d4/52/3be868c7ed1f408cb822bc92ce17ffe4e97d11c42caafce0589f05844dd0
++PYTHON_SEMANTIC_VERSION_SITE = https://files.pythonhosted.org/packages/7d/31/f2289ce78b9b473d582568c234e104d2a342fd658cc288a7553d83bb8595
+ PYTHON_SEMANTIC_VERSION_SETUP_TYPE = setuptools
+ PYTHON_SEMANTIC_VERSION_LICENSE = BSD-2-Clause
+ PYTHON_SEMANTIC_VERSION_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
