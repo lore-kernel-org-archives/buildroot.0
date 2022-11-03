@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DBBAC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDD6C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E354360AFC;
-	Mon,  5 Dec 2022 11:37:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E354360AFC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7502681D02;
+	Mon,  5 Dec 2022 11:37:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7502681D02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wiaPuKdIJXG3; Mon,  5 Dec 2022 11:37:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8XnCwVM16v41; Mon,  5 Dec 2022 11:37:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 118F460BD9;
-	Mon,  5 Dec 2022 11:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 118F460BD9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 385521BF8C7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C8DD81336;
+	Mon,  5 Dec 2022 11:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C8DD81336
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0589F1BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62AE440580
+ by smtp4.osuosl.org (Postfix) with ESMTP id D804341612
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62AE440580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D804341612
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4EorwSrBprUE for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IHvl-w5epVN6 for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7D2F40522
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7D2F40522
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5D8E415E7
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5D8E415E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6C7A85B9B; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+ id E376D85BA2; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:49 +0100
+Date: Thu, 3 Nov 2022 21:04:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb56dd4b94b08cf419f0d4adc23e19b9bee14f58
-X-Git-Newrev: d3bf40a3603ff99834a5eee97ef0eb757678cb92
+X-Git-Oldrev: 6bed05b2f1b660383b7c6835d59b45eac01bf982
+X-Git-Newrev: 1cc98a4f39a2d8ba8d7cfd8fca32776e54f32b8c
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112601.C6C7A85B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dtschema: bump to version
- 2022.11
+Message-Id: <20221205112602.E376D85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-libusb1: bump to version
+ 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3bf40a3603ff99834a5eee97ef0eb757678cb92
+commit: https://git.buildroot.net/buildroot/commit/?id=1cc98a4f39a2d8ba8d7cfd8fca32776e54f32b8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dtschema/python-dtschema.hash | 4 ++--
- package/python-dtschema/python-dtschema.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-libusb1/python-libusb1.hash | 7 ++++---
+ package/python-libusb1/python-libusb1.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
-index 7b183e28e3..32e6e99fa7 100644
---- a/package/python-dtschema/python-dtschema.hash
-+++ b/package/python-dtschema/python-dtschema.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dtschema/json
--md5  ed75defac9a7297a567f278994b14d5b  dtschema-2022.8.tar.gz
--sha256  1befe7c9f74cea248a8b524cf6185ac48912a5b2aae96854d77cb94584433ca4  dtschema-2022.8.tar.gz
-+md5  69f39814b2e90809b32cbeafc3e6aaab  dtschema-2022.11.tar.gz
-+sha256  825e51b8bb82a2d4833d15c25ff2b9a3f5a53b36a490d7c4b6b136037e823320  dtschema-2022.11.tar.gz
- # Locally computed sha256 checksums
- sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
-diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
-index 263061dc98..90fffd4255 100644
---- a/package/python-dtschema/python-dtschema.mk
-+++ b/package/python-dtschema/python-dtschema.mk
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+index 7d2302e088..86dea08c89 100644
+--- a/package/python-libusb1/python-libusb1.hash
++++ b/package/python-libusb1/python-libusb1.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
+-md5  b087646fb0c8c4cf7e8123af72f885b9  libusb1-2.0.1.tar.gz
+-sha256  d3ba82ecf7ab6a48d21dac6697e26504670cc3522b8e5941bd28fb56cf3f6c46  libusb1-2.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/libusb1/json
++md5  ffbb02bf9aa49f973a6a58112aed7b06  libusb1-3.0.0.tar.gz
++sha256  5792a9defee40f15d330a40d9b1800545c32e47ba7fc66b6f28f133c9fcc8538  libusb1-3.0.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+index 40a64141af..48a0b1dea3 100644
+--- a/package/python-libusb1/python-libusb1.mk
++++ b/package/python-libusb1/python-libusb1.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DTSCHEMA_VERSION = 2022.8
-+PYTHON_DTSCHEMA_VERSION = 2022.11
- PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
--PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/95/be/cb576760b9578cb69da020aeb80f3c2d05ff46b4090ab350c1e05691329e
-+PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/9a/15/41ece48fc9524ad815238cfbd164b8ac9dde889759790afbcc4903564dbd
- PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
- PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
- PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
+-PYTHON_LIBUSB1_VERSION = 2.0.1
++PYTHON_LIBUSB1_VERSION = 3.0.0
+ PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
+-PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/a9/97/e8afa2af12b6de608ec86c8c4ad57f1248d98946d1b5e1aa0bff926755e9
++PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/f4/83/59bf75e74e0c4859ea63eae0c7da660c1dcb78b31667d4a5f735d52f5974
+ PYTHON_LIBUSB1_SETUP_TYPE = setuptools
+ PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
+ PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
