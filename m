@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B01C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 13:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D076C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 13:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB7CC417D1;
-	Thu,  3 Nov 2022 13:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB7CC417D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 351A941813;
+	Thu,  3 Nov 2022 13:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 351A941813
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p84DADO8IPsb; Thu,  3 Nov 2022 13:51:49 +0000 (UTC)
+	with ESMTP id l8HFs2Ur28j6; Thu,  3 Nov 2022 13:52:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 821A0417A7;
-	Thu,  3 Nov 2022 13:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821A0417A7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A05731BF3F4
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:51:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C073741802;
+	Thu,  3 Nov 2022 13:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C073741802
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 31C121BF3F4
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B3D760AA3
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B3D760AA3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A1A9404A1
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A1A9404A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lKymtmdyCVL1 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 13:51:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xg7uwx0paFOV for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 13:52:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BFBD607F1
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7BFBD607F1
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 13:51:45 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id o65so1349704iof.4
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 06:51:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2D8940297
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2D8940297
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 13:52:04 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id z14so2864976wrn.7
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 06:52:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+RfnMeKrPqhmMfOpudRcY0Zw8QSa7acn87EK+ZdJ6sw=;
- b=ZudIPawS8RAXF7A8GLqQ/EySxkIW1KcDXLdx4QeY3ypi8VuBRXR+/I3TEY6tMmzhvo
- mQj9P9f7l89BknwJD4ASp5zxCo0sYsDauMDF/M5qUDWQBpVF5oBvhFJLOVzmEMq36r88
- 7Rs84hEX764ZPHrCg61nG9zrczcJP8ci5wnUdAgAt9SXkaad5POw692fNfaUlnvDZRdW
- d6pjfAMk1RhGSiWdD3d+8JdcK8aHgrp3b5Y/qMA71B+fB+ukeEdg22zqCbteGXyeCorE
- 4CR+M2DG1xI9RlN2XojwC7pVyFavuZy+f3OdvJWDazNXVC693x+zPxDzeOLst0mTyQgq
- G7sg==
-X-Gm-Message-State: ACrzQf35cis7yVQWH2H0U0fwFLeu4t5Pr4A/7PJ63lhjbLs8KYHWYPyL
- /3s0ZQZIfh7YXWC7ymG0HaLcytV1axX6fB4+
-X-Google-Smtp-Source: AMsMyM7fN67B5fIFiIXATuecxw6ZKS+vfHJCzXh2XVeMidWK+LHOetVUQu04/IpFwv+Limkb+VXX6g==
-X-Received: by 2002:a6b:d112:0:b0:6c0:27e5:9edd with SMTP id
- l18-20020a6bd112000000b006c027e59eddmr19473137iob.213.1667483504319; 
- Thu, 03 Nov 2022 06:51:44 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- m3-20020a0566022e8300b006bb5af55ddfsm356019iow.19.2022.11.03.06.51.43
+ bh=fryaRC4dmogSW5QOFD30GF1YGkkCQ6yjRWekxGf9ezo=;
+ b=LxsJ7zcCy/TSYKLE4QoleHskMRmOtiYpqKQ2icLthEoePzBxUx9SMnZn50+ALQCDTl
+ U8HDAqhIcNweN+NqXWIL3leT/RA67Cx6N2H1Q2ekvdEE89t4/Xk0/XlD5IsJkUkPGKyb
+ GRwgPyCiX3nG5vUi6tula3ilidVaU3DMkBU+93dXdSGt6bkq0UCG38kmF030vjtApowq
+ 1xVL0dN5aX3iDO3Pbe/tzGfqDUlb4ZFHDDHMwUHII3pw4zfqZUlN2iN5ZwYAj/Gwz93z
+ iVQjHXIk8UogySWx/qLH+mDZA1c8ZF1D1JzcZWYSHe1+7/5o6NIfL0FrlUT/ioyg42mb
+ 1lDQ==
+X-Gm-Message-State: ACrzQf1pTxc8hRxQbrBx4OzOkym3uz1yxHvhjTmFi4DNk76pKESvGQNJ
+ UmUPtbzdxhUSvjO/JDenEwtT9D629xU=
+X-Google-Smtp-Source: AMsMyM4MSOwWds5BEhZG80VnbSv+Ks3P+3PBqDLTYwiNPzHtd4nii2nQY9uXlj+i78/fn0CiytDOJA==
+X-Received: by 2002:adf:dbc5:0:b0:22c:c605:3b81 with SMTP id
+ e5-20020adfdbc5000000b0022cc6053b81mr18843759wrj.218.1667483522539; 
+ Thu, 03 Nov 2022 06:52:02 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ r8-20020adfa148000000b00236722ebe66sm897981wrr.75.2022.11.03.06.52.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 06:51:43 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Thu, 03 Nov 2022 06:52:01 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 07:51:42 -0600
-Message-Id: <20221103135142.2907724-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  3 Nov 2022 14:51:59 +0100
+Message-Id: <20221103135159.825586-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+RfnMeKrPqhmMfOpudRcY0Zw8QSa7acn87EK+ZdJ6sw=;
- b=K1IbFM/gBC57GOh8eUGEYzn4aZa3w0DzkBjOXsEYYevfxVsAAxPir9hetSCNlo10Bm
- vJ4xBNtwb+YSAITwO9ooHAXpE08pF9+uLAA15CFL4ICOFOKCp1fJuvoO/Z9vn7RKKJDJ
- cZ4R68WK1vMeB7XRyLHYEfRLxVu8HIWAL66JJd9aChTHd6+F8OpbJmKyPw4trwd1d1LC
- XvUuNHSu1ibmIcpC8YdirCByOOJefr/jSYtM5j2CSROxTqd4EM6obAzlPFip6eoY/7Nu
- A9CcfyzzX+qzulm+kWrcd7dDORGCoB9G+YwpoV5GRhCksY4a9Nf6odhGEIwT0pfHmq8f
- OV5w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=fryaRC4dmogSW5QOFD30GF1YGkkCQ6yjRWekxGf9ezo=;
+ b=TH90RtTTYd4+A2id6s69la1KlZNet3l0sDy6hbLg6PECI3L7whni0pAV3bUBFiVtnR
+ MMINwZXVO/H26in7ZlMvHJQI51vC8wObBt8ycXzyVIH9kSokPZqdeHm29DyxMjF/hwVg
+ GVYMMJ6uATIkl3bHTFAsl4W4q+PlItQn83izKjHn4zy07ukbtZv9sXposS78OkCOfiKU
+ gpPM8L5g4Hi2LK4QoTMnbv0JKwqd9tnCwNr+Eh98k5gtm8EKbBXpW8VSKLJpfr9pkkFT
+ svpiS0W7siJmIXp10VgGN+iQy3+wXTMA8njMTdc9VsL61sJoKJeEjqWf9C0mFIuE+s5a
+ 2tWA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=K1IbFM/g
-Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 5.9.3
+ header.a=rsa-sha256 header.s=20210112 header.b=TH90RtTT
+Subject: [Buildroot] [PATCH 1/1] package/libidn2: fix build with libunistring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +93,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fix the following build failure with libunistring raised since the
+addition of the package in commit
+ffb85a4a16df94e4980057a194e5fdc3c8332e32:
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 552ced55ec..c7b7e46ec1 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5  91060da163ef478002a4456dd99cbb4c  psutil-5.8.0.tar.gz
--sha256  0c9ccb99ab76025f2f0bbecf341d4656e9c1351db8cc8a03ccd62e318ab4b5c6  psutil-5.8.0.tar.gz
-+md5  66b847f94545e96b540518ebe19740b4  psutil-5.9.3.tar.gz
-+sha256  7ccfcdfea4fc4b0a02ca2c31de7fcd186beb9cff8207800e14ab66f79c773af6  psutil-5.9.3.tar.gz
- # Locally computed sha256 checksums
- sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 3a2781c284..578f69d3c7 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: warning: libunistring.so.2, needed by ../lib/.libs/libidn2.so, not found (try using -rpath or -rpath-link)
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../lib/.libs/libidn2.so: undefined reference to `u8_strconv_to_encoding'
+
+[...]
+
+aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/30ac50512cd4b4cb3ecc97514a72d1f316a1b33a
+ - http://autobuild.buildroot.org/results/c225ff4ef007b9a3ca56e6b601687aaa33699675
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libidn2/libidn2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 9d72998149..9d24e93d27 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -13,10 +13,12 @@ LIBIDN2_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LIBIDN2_CONF_OPTS = --without-included-libunistring
+ LIBIDN2_INSTALL_STAGING = YES
  
--PYTHON_PSUTIL_VERSION = 5.8.0
-+PYTHON_PSUTIL_VERSION = 5.9.3
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/e1/b0/7276de53321c12981717490516b7e612364f2cb372ee8901bd4a66a000d7
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/de/eb/1c01a34c86ee3b058c556e407ce5b07cb7d186ebe47b3e69d6f152ca5cc5
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+ LIBIDN2_DEPENDENCIES += libunistring
++LIBIDN2_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr/lib
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBIDN2_BINARY),)
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
