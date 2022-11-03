@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C2DC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 719F5C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 877F660D95;
-	Mon,  5 Dec 2022 11:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877F660D95
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08BB24051B;
+	Mon,  5 Dec 2022 11:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08BB24051B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BwmrPOC5vhwy; Mon,  5 Dec 2022 11:50:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ndupuN8nKRah; Mon,  5 Dec 2022 11:50:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B673D60DFE;
-	Mon,  5 Dec 2022 11:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B673D60DFE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4AD901BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FB2E40543;
+	Mon,  5 Dec 2022 11:50:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FB2E40543
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6794F1BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B75441621
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B75441621
+ by smtp2.osuosl.org (Postfix) with ESMTP id C5EDC40585
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5EDC40585
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jGqHBosz-vaw for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FZH7vhftzVJx for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E381415ED
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E381415ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF13A405B2
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF13A405B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E6EC85BA3; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+ id DA1D485B9B; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:05:33 +0100
+Date: Thu, 3 Nov 2022 21:19:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ebc97276599074948df6aa37d78b901d3c67dc1
-X-Git-Newrev: 619bbe3e3745955e1abdd95748b6b30859815bf4
+X-Git-Oldrev: d77a49554e1caf7322ee6bf43a6a254a60215ccd
+X-Git-Newrev: 68672d598de858df7360f4a031680b6c965a07b5
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.5E6EC85BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
- 2.1.9
+Message-Id: <20221205112604.DA1D485B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytz: bump to version 2022.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=619bbe3e3745955e1abdd95748b6b30859815bf4
+commit: https://git.buildroot.net/buildroot/commit/?id=68672d598de858df7360f4a031680b6c965a07b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-watchdog/python-watchdog.hash | 4 ++--
- package/python-watchdog/python-watchdog.mk   | 4 ++--
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
-index 3b633f9156..59facb8fea 100644
---- a/package/python-watchdog/python-watchdog.hash
-+++ b/package/python-watchdog/python-watchdog.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/watchdog/json
--md5  6aac660b0f3358c63658806a0579b832  watchdog-2.1.6.tar.gz
--sha256  a36e75df6c767cbf46f61a91c70b3ba71811dfa0aca4a324d9407a06a8b7a2e7  watchdog-2.1.6.tar.gz
-+md5  0e60e0a2d3a8c18ba37105f8b44de810  watchdog-2.1.9.tar.gz
-+sha256  43ce20ebb36a51f21fa376f76d1d4692452b2527ccd601950d69ed36b9e21609  watchdog-2.1.9.tar.gz
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index e0f253902c..e71e77e5b7 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5  d7b7060bbac4970afa2050c139c9fcb6  pytz-2021.3.tar.gz
+-sha256  acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326  pytz-2021.3.tar.gz
++md5  bf46b54a7e9bcb65ea38f54646181979  pytz-2022.6.tar.gz
++sha256  e89512406b793ca39f5971bc999cc538ce125c0e51c27941bef4568b460095e2  pytz-2022.6.tar.gz
  # Locally computed sha256 checksums
- sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
-index 2dafef97e1..71a3f8a0c2 100644
---- a/package/python-watchdog/python-watchdog.mk
-+++ b/package/python-watchdog/python-watchdog.mk
+ sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index d606750699..ccf8e2179c 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WATCHDOG_VERSION = 2.1.6
-+PYTHON_WATCHDOG_VERSION = 2.1.9
- PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
--PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/e8/a8/fc4edd7d768361b00ea850e5310211d157df6b5a1db6148dd434e787d898
-+PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/42/f7/da8e889f8626786eac9454e8d2718fc79359ed517be20cdd50c647167d39
- PYTHON_WATCHDOG_SETUP_TYPE = setuptools
- PYTHON_WATCHDOG_LICENSE = Apache-2.0
- PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
+-PYTHON_PYTZ_VERSION = 2021.3
++PYTHON_PYTZ_VERSION = 2022.6
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/e3/8e/1cde9d002f48a940b9d9d38820aaf444b229450c0854bdf15305ce4a3d1a
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/76/63/1be349ff0a44e4795d9712cc0b2d806f5e063d4d34631b71b832fac715a8
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
