@@ -1,58 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6B3C43219
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 12:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D328CC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 13:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CDB560FD6;
-	Thu,  3 Nov 2022 12:46:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CDB560FD6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67D19404A1;
+	Thu,  3 Nov 2022 13:13:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67D19404A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pcEqQRpcYvqZ; Thu,  3 Nov 2022 12:46:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gjEg08WB1_Yf; Thu,  3 Nov 2022 13:13:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DFF760FA2;
-	Thu,  3 Nov 2022 12:46:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DFF760FA2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19C6B1BF404
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 12:46:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 904E540424;
+	Thu,  3 Nov 2022 13:13:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 904E540424
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 32DDB1BF3F4
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01DC181EFA
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 12:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01DC181EFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E1EF40424
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 13:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E1EF40424
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MfmhEyucmDZb for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 12:46:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F215181DE7
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F215181DE7
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 12:46:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 00BB11814B9; Thu,  3 Nov 2022 13:46:09 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eiO0ewf6UoTD for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 13:13:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22EFE403B7
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22EFE403B7
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 13:13:29 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id e189so1266704iof.1
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 06:13:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9HgmGu5CUG8Bv8BUFBAaUCF9CRa1OXj8C/U+tkcygHg=;
+ b=Vw++rfqOOs8/bUHb1CEcbNDEeVWF57yH8Gwfk51noQ4t8/B+y9KNxhYIVWtBWJIBS2
+ tcEfzp4Bj1MEtD8/LD6s0hEbyp3SzFnr4htjSi3bwsn7rSfBT/eKuVQOdyVfLpVcKVYK
+ SQ0JU/ck8TlYwfYB/aeLFL7WvrhXExi5sKrRV3pCand3pEU4FSjoShtUrBB6TCmxkXWv
+ 3uzekFuelNqq0UVmEoG8GAGRibrbzenzmv51M1BW9WeVd/VFyLPs/cMZDtxKbLgSO3gL
+ QSwxJTBn5CtJBsZk1n0oCy4HYfmh97NPR88/DdmtAD+UI7+4nH2gthjC37gsX7V9eQDw
+ nRAw==
+X-Gm-Message-State: ACrzQf1v9T9XbbPjlAYGn3FDDGNuJGyTltOMHsi1Vb65PEQZDvYKQWBO
+ 7XmeKNrUYlOWUvRus/FXdvgya3h6GebvoMBA
+X-Google-Smtp-Source: AMsMyM7VBROnSa62tnw2KO2SAhDGGm2YRppBVoqB2EijVP2ReRLNTG3T/PM7bqXsdnmaxa/XDIwb7w==
+X-Received: by 2002:a05:6602:2b94:b0:6a4:7b57:ecfb with SMTP id
+ r20-20020a0566022b9400b006a47b57ecfbmr19037780iov.8.1667481207648; 
+ Thu, 03 Nov 2022 06:13:27 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ s28-20020a02cc9c000000b003740de9fb65sm214153jap.46.2022.11.03.06.13.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Nov 2022 06:13:27 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 13:45:49 +0100
-Message-Id: <20221103124554.2907988-1-buildroot@heine.tech>
+Date: Thu,  3 Nov 2022 07:13:25 -0600
+Message-Id: <20221103131325.441462-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1667479571; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=fQYvvHMIINFDfRM6ogoT+W8q45jjlIMslN5tNn2KccI=;
- b=vJMryP4Quq5ZcQm9InWVl6SaWMA4bUfZqHe7o15JNm1mgi0DYRee2YHH/joqt21xDES5Pg
- DNjTqunOnkgPjL/ElDqjG5Ng6i4iB4kv1xw8HTQG/75TnVwCU8JcPEYHdP5bkxdT00tyMo
- TKdQbzmmPodo+64rPZFpHErrtt7LunU=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=vJMryP4Q
-Subject: [Buildroot] [PATCH] package/spdlog: bump to version 1.11.0
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9HgmGu5CUG8Bv8BUFBAaUCF9CRa1OXj8C/U+tkcygHg=;
+ b=SwAJtDzxkNRDs+pADjd8ucyvxlRCXtocVdx648GzII5QQP+TbWPH5W6n5TIOxN16BC
+ B52qYKorZkzbsLham3v9mc7S3MlW6d89iJMLv019Mr5BkCKfVCQx6G8ORmdwkzETCbWQ
+ UfowCD9+ocWkzTYw2IRUOcQXegX/yeCBhI5fDAemLNLsl/lWBTEK49yve1KLu7+mC8fn
+ 17W/U4+aIWLKY5Ki4cdCZtylR4Tv5bnUeLbfX9neM+1vpp/OWE/UkRvKZ69nckxOSX2d
+ HAet+KfxO2v5Ro5/by5qsiYR1N19SEPIAfta2SYlJoFMnQawCX2z7l8SmL3Kc94s9j07
+ F/dA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=SwAJtDzx
+Subject: [Buildroot] [PATCH 1/1] package/python-msgfy: bump to version 0.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-msgfy/python-msgfy.hash | 4 ++--
+ package/python-msgfy/python-msgfy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 866d1d6d02..af89ba4e84 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224  spdlog-1.10.0.tar.gz
-+sha256  ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb  spdlog-1.11.0.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 9c5e76a9e8..32a0265484 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+index c795f7fa5e..9f5bfe4804 100644
+--- a/package/python-msgfy/python-msgfy.hash
++++ b/package/python-msgfy/python-msgfy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgfy/json
+-md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
+-sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
++md5  1727a08a0cf7fb704045168c71993280  msgfy-0.2.0.tar.gz
++sha256  37c907cccb19afe73ce44111a21b410b685be92c9c44496bc4381fd93c5ad7b6  msgfy-0.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+index c187061d41..4100a912b2 100644
+--- a/package/python-msgfy/python-msgfy.mk
++++ b/package/python-msgfy/python-msgfy.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SPDLOG_VERSION = 1.10.0
-+SPDLOG_VERSION = 1.11.0
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+-PYTHON_MSGFY_VERSION = 0.1.0
++PYTHON_MSGFY_VERSION = 0.2.0
+ PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
+-PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/c6/2a/663ef86625f34ee4165da1eb824442cfb1f676e892946d7fe39a8c775682
+ PYTHON_MSGFY_SETUP_TYPE = setuptools
+ PYTHON_MSGFY_LICENSE = MIT
+ PYTHON_MSGFY_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
