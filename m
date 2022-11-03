@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35F5C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD45C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F60F61067;
-	Thu,  3 Nov 2022 21:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F60F61067
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64BB041878;
+	Thu,  3 Nov 2022 21:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64BB041878
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bsxv_nY35Xzp; Thu,  3 Nov 2022 21:23:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id maPnj8h5uObo; Thu,  3 Nov 2022 21:23:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2B8D61060;
-	Thu,  3 Nov 2022 21:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2B8D61060
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32E2641850;
+	Thu,  3 Nov 2022 21:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32E2641850
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B27F91BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C28331BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6CB0C81FAB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FFEE81FAE
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CB0C81FAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FFEE81FAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RHRE4WAzdwpo for <buildroot@lists.busybox.net>;
+ with ESMTP id OcXBHZMSwU5Q for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 27BE381FAE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68D3381FB8
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27BE381FAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68D3381FB8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17BF087C34; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+ id 4F93687C32; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 3 Nov 2022 22:05:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 964eccb839eb169e8b3d883693dc921793287c8a
-X-Git-Newrev: 32c0a8de28bfef8a418aafcfa3913ccab0d15be7
+X-Git-Oldrev: d23c655958f9f6d6eeaf860cabdd0ba5a65274ed
+X-Git-Newrev: 33eb6661449b39b00b2f9ecaaa226471c897282b
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210547.17BF087C34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-txtorcon: bump
- to version 22.0.0
+Message-Id: <20221103210547.4F93687C32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-websockets:
+ bump to version 10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c0a8de28bfef8a418aafcfa3913ccab0d15be7
+commit: https://git.buildroot.net/buildroot/commit/?id=33eb6661449b39b00b2f9ecaaa226471c897282b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ package/python-websockets/python-websockets.hash | 4 ++--
+ package/python-websockets/python-websockets.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index 220b5fb23e..9c8e3599ea 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+index cec1d1599c..62c7cb8467 100644
+--- a/package/python-websockets/python-websockets.hash
++++ b/package/python-websockets/python-websockets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5  dbb53821a3ce3e921e09c5de4f722fdb  txtorcon-21.1.0.tar.gz
--sha256  aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6  txtorcon-21.1.0.tar.gz
-+md5  17a84954a4ba13fa6ee443129bdc401a  txtorcon-22.0.0.tar.gz
-+sha256  89a1b65e32a4b369d67e6c166387fbc468cc5d05227448d239a5e7e9718aa053  txtorcon-22.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/websockets/json
+-md5  ebb9e4930bf2c35cd3723be0dfa83d89  websockets-10.0.tar.gz
+-sha256  c4fc9a1d242317892590abe5b61a9127f1a61740477bfb121743f290b8054002  websockets-10.0.tar.gz
++md5  d6b1a2cb5e194ae43f849c125b71c8db  websockets-10.4.tar.gz
++sha256  eef610b23933c54d5d921c92578ae5f89813438fded840c2e9809d378dc765d3  websockets-10.4.tar.gz
  # Locally computed sha256 checksums
- sha256  3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index acf586cb8c..c17d5da074 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
+ sha256  daeca11bf3608da35e546ea0c32be18958a8be1441fa3de9cbd20e4c8bc718e6  LICENSE
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+index 9f4c5f1da7..7f721220a5 100644
+--- a/package/python-websockets/python-websockets.mk
++++ b/package/python-websockets/python-websockets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 21.1.0
-+PYTHON_TXTORCON_VERSION = 22.0.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/eb/43/2426009377cef519c53bdc8969590cb100e9fd745846859963c881c6d176
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/47/ca/7941660345c769637a97bdbaf25202460fbab35eead55c538fb1fe61b71e
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-PYTHON_WEBSOCKETS_VERSION = 10.0
++PYTHON_WEBSOCKETS_VERSION = 10.4
+ PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
+-PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/1c/f4/61aee1eb4baadf8477fb7f3bc6b04a50fe683ef8ad2f60282806821e4b3b
++PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/85/dc/549a807a53c13fd4a8dac286f117a7a71260defea9ec0c05d6027f2ae273
+ PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
