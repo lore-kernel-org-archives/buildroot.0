@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07123C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAA79C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B066D40BD4;
-	Thu,  3 Nov 2022 21:00:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B066D40BD4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 795B2417CD;
+	Thu,  3 Nov 2022 21:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 795B2417CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r5ejHxFHKc-i; Thu,  3 Nov 2022 21:00:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JJbkSnK16a_a; Thu,  3 Nov 2022 21:00:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C39C640BCE;
-	Thu,  3 Nov 2022 21:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C39C640BCE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 319B91BF968
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CB2C417BE;
+	Thu,  3 Nov 2022 21:00:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CB2C417BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14C141BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D29E40C09
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D29E40C09
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C9114179F
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C9114179F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q88szJC9OGjl for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zH5HIaYtmIvQ for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 302DA40BDD
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 302DA40BDD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DB394185A
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DB394185A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E73987BCD; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+ id 2E18787BD0; Thu,  3 Nov 2022 20:55:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:38 +0100
+Date: Thu, 3 Nov 2022 21:19:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d40ad5de4b64b5857acb10dded9eae213c720bad
-X-Git-Newrev: f1a8e3abab4f44832f04cfe03c1f7fd6df77ea47
+X-Git-Oldrev: 16b97f6825b7206cf3b112e67c570247c56e59ae
+X-Git-Newrev: f8bb4a619ac723d6a35e2b3ebe9f6e1d07a5d0f6
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205511.2E73987BCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-decorator: bump
- to version 5.1.1
+Message-Id: <20221103205513.2E18787BD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-psycopg2: bump
+ to version 2.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1a8e3abab4f44832f04cfe03c1f7fd6df77ea47
+commit: https://git.buildroot.net/buildroot/commit/?id=f8bb4a619ac723d6a35e2b3ebe9f6e1d07a5d0f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-decorator/python-decorator.hash | 4 ++--
- package/python-decorator/python-decorator.mk   | 4 ++--
+ package/python-psycopg2/python-psycopg2.hash | 4 ++--
+ package/python-psycopg2/python-psycopg2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-decorator/python-decorator.hash b/package/python-decorator/python-decorator.hash
-index 46ff7206d7..e12d34e7ed 100644
---- a/package/python-decorator/python-decorator.hash
-+++ b/package/python-decorator/python-decorator.hash
+diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
+index d02ffc2ec8..58f98f9d84 100644
+--- a/package/python-psycopg2/python-psycopg2.hash
++++ b/package/python-psycopg2/python-psycopg2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/decorator/json
--md5  d01585c3ea5b36a209747fcc978a98c8  decorator-5.1.0.tar.gz
--sha256  e59913af105b9860aa2c8d3272d9de5a56a4e608db9a2f167a8480b323d529a7  decorator-5.1.0.tar.gz
-+md5  a6b34700dcac8a4bb04efd55e99626c1  decorator-5.1.1.tar.gz
-+sha256  637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330  decorator-5.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/psycopg2/json
+-md5  182e3e8cf3381c254f65f70cad4976e5  psycopg2-2.9.1.tar.gz
+-sha256  de5303a6f1d0a7a34b9d40e4d3bef684ccc44a49bbe3eb85e3c0bffb4a131b7c  psycopg2-2.9.1.tar.gz
++md5  3cec7285f61690633bb070d4bba259c2  psycopg2-2.9.5.tar.gz
++sha256  a5246d2e683a972e2187a8714b5c2cf8156c064629f9a9b1a873c1730d9e245a  psycopg2-2.9.5.tar.gz
  # Locally computed sha256 checksums
- sha256  fd11660cabf0532082c45706862fafc294907ec7f8e217818240a4999806782e  LICENSE.txt
-diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
-index a61f045e2a..5dba8cc915 100644
---- a/package/python-decorator/python-decorator.mk
-+++ b/package/python-decorator/python-decorator.mk
+ sha256  9614b85dfc9a72c5b2ca33144c1d7e1ed3b1c297459d9fb28a6a5762c2e8d71b  LICENSE
+diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
+index de466e2c59..fa23c2814f 100644
+--- a/package/python-psycopg2/python-psycopg2.mk
++++ b/package/python-psycopg2/python-psycopg2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DECORATOR_VERSION = 5.1.0
-+PYTHON_DECORATOR_VERSION = 5.1.1
- PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
--PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/92/3c/34f8448b61809968052882b830f7d8d9a8e1c07048f70deb039ae599f73c
-+PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/66/0c/8d907af351aa16b42caae42f9d6aa37b900c67308052d10fdce809f8d952
- PYTHON_DECORATOR_LICENSE = BSD-2-Clause
- PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
- PYTHON_DECORATOR_CPE_ID_VENDOR = python
+-PYTHON_PSYCOPG2_VERSION = 2.9.1
++PYTHON_PSYCOPG2_VERSION = 2.9.5
+ PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
+-PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/aa/8a/7c80e7e44fb1b4277e89bd9ca509aefdd4dd1b2c547c6f293afe9f7ffd04
++PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/89/d6/cd8c46417e0f7a16b4b0fc321f4ab676a59250d08fce5b64921897fb07cc
+ PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
+ PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
+ PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
