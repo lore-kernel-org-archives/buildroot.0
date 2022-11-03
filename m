@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19346C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BB4C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6DCE40BF3;
-	Thu,  3 Nov 2022 21:05:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6DCE40BF3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7497281FB1;
+	Thu,  3 Nov 2022 21:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7497281FB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zyymwdNphdah; Thu,  3 Nov 2022 21:05:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nKjIfYLlK-0U; Thu,  3 Nov 2022 21:05:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDEE840BED;
-	Thu,  3 Nov 2022 21:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDEE840BED
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D9DD81FAA;
+	Thu,  3 Nov 2022 21:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D9DD81FAA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 17CCB1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15BE91BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97E3F40BE6
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4FD440BEC
  for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 20:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97E3F40BE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4FD440BEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rYvfaLACbXlp for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 20:55:14 +0000 (UTC)
+ with ESMTP id ZfMcxRfh8Nfu for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 20:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BD7C40BEC
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BD7C40BEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54E7040BD2
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54E7040BD2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F15A287BCA; Thu,  3 Nov 2022 20:55:11 +0000 (UTC)
+ id 43ED987BCA; Thu,  3 Nov 2022 20:55:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:10 +0100
+Date: Thu, 3 Nov 2022 21:04:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3de9aa3eea839f3a6bfef923545ef6f7db16f1cd
-X-Git-Newrev: 2e6c204f51f5696aa056324a5a30ac5d23648e8f
+X-Git-Oldrev: 4ce5a582e9f99ac05bfbc8330c8ea978d7af9724
+X-Git-Newrev: 6bed05b2f1b660383b7c6835d59b45eac01bf982
 X-Patchwork-Hint: ignore
-Message-Id: <20221103205511.F15A287BCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-ipython: bump
- to version 8.6.0
+Message-Id: <20221103205512.43ED987BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-lark: bump to
+ version 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,76 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e6c204f51f5696aa056324a5a30ac5d23648e8f
+commit: https://git.buildroot.net/buildroot/commit/?id=6bed05b2f1b660383b7c6835d59b45eac01bf982
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch which is no longer needed.
-
-Migrate from distutils to setuptools infrastructure.
+License hash changed due to whitespace removal:
+https://github.com/lark-parser/lark/commit/5236ff95a37cf464ba7049b27622d87b662c1918
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-set-correct-python-executable-path.patch         | 15 ---------------
- package/python-ipython/python-ipython.hash                |  4 ++--
- package/python-ipython/python-ipython.mk                  |  6 +++---
- 3 files changed, 5 insertions(+), 20 deletions(-)
+ package/python-lark/python-lark.hash | 6 +++---
+ package/python-lark/python-lark.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ipython/0001-set-correct-python-executable-path.patch b/package/python-ipython/0001-set-correct-python-executable-path.patch
-deleted file mode 100644
-index 0fbd5a1c8e..0000000000
---- a/package/python-ipython/0001-set-correct-python-executable-path.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Set correct Python executable path
--
--Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
--
----- python-ipython-2.1.0/setupbase.py	2014-05-21 15:19:12.000000000 -0400
--+++ python-ipython-2.1.0-new/setupbase.py	2014-07-23 23:34:32.892030423 -0400
--@@ -394,7 +394,7 @@ class build_scripts_entrypt(build_script
-- 
--             mod, func = entrypt.split(':')
--             with open(outfile, 'w') as f:
---                f.write(script_src.format(executable=sys.executable,
--+                f.write(script_src.format(executable='/usr/bin/env python',
--                                           mod=mod, func=func))
-- 
--         return outfiles, outfiles
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index cd18c3d125..e61727e045 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  6907b67691ba697173a3befb2c35f7ac  ipython-7.31.1.tar.gz
--sha256  b5548ec5329a4bcf054a5deed5099b0f9622eb9ea51aaa7104d215fece201d8c  ipython-7.31.1.tar.gz
-+md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
-+sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
+diff --git a/package/python-lark/python-lark.hash b/package/python-lark/python-lark.hash
+index 3773c00f7c..abc168e93b 100644
+--- a/package/python-lark/python-lark.hash
++++ b/package/python-lark/python-lark.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/lark/json
+-md5  fd3ca96a8d9d67798508470032921078  lark-1.1.2.tar.gz
+-sha256  7a8d0c07d663da9391d7faee1bf1d7df4998c47ca43a593cbef5c7566acd057a  lark-1.1.2.tar.gz
++md5  d7368d8f9fd0b844c034f321f5b52fd4  lark-1.1.4.tar.gz
++sha256  eee86062b149600ef62de0d8dfd38cf85ffc737e16911e7d8c18880f8c5b1333  lark-1.1.4.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 389ebfa897..f3aac75db1 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -4,13 +4,13 @@
+-sha256  6e83ad8e0de51690a53eac02dd2b6188dfd7949053be56fba5b651140d27ee57  LICENSE
++sha256  8263e5652d07cecb3adadf05140b65e70cfa169ecec5f520fe1671479ce12a83  LICENSE
+diff --git a/package/python-lark/python-lark.mk b/package/python-lark/python-lark.mk
+index 52c249552e..548adcd833 100644
+--- a/package/python-lark/python-lark.mk
++++ b/package/python-lark/python-lark.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 7.31.1
-+PYTHON_IPYTHON_VERSION = 8.6.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/fb/39/c1947dc1bb993a35469ca474535cb3214c91f5f9a7752a1fcbd9b6b37dde
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
- PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
--PYTHON_IPYTHON_SETUP_TYPE = distutils
-+PYTHON_IPYTHON_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_LARK_VERSION = 1.1.2
++PYTHON_LARK_VERSION = 1.1.4
+ PYTHON_LARK_SOURCE = lark-$(PYTHON_LARK_VERSION).tar.gz
+-PYTHON_LARK_SITE = https://files.pythonhosted.org/packages/a3/c5/11d0a086590b207ad1b6c9ba6e019f8290652f3d703cdb002d72e220dd99
++PYTHON_LARK_SITE = https://files.pythonhosted.org/packages/1d/08/eb2590d4f824b5a947d866c603799fa70278f1372cbf8d15b7b4823dfb2b
+ PYTHON_LARK_SETUP_TYPE = setuptools
+ PYTHON_LARK_LICENSE = MIT
+ PYTHON_LARK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
