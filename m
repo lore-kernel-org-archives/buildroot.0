@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 297C2C4708D
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B73AFC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEDA681C2F;
-	Mon,  5 Dec 2022 11:35:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEDA681C2F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6873F4053C;
+	Mon,  5 Dec 2022 11:36:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6873F4053C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UpbCrbFDKYjG; Mon,  5 Dec 2022 11:35:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id av3gTrGx52dD; Mon,  5 Dec 2022 11:36:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09DCE81403;
-	Mon,  5 Dec 2022 11:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09DCE81403
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 137501BF352
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2DE44055F;
+	Mon,  5 Dec 2022 11:36:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2DE44055F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 272F81BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D5AE41610
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36ACE4053C
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D5AE41610
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36ACE4053C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x-dtJagAlaA8 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z5anIPw1Rw_X for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CA39415E3
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CA39415E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABDA140567
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABDA140567
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55E2385B9E; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+ id A940E85B9B; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:05 +0100
+Date: Thu, 3 Nov 2022 21:03:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90c35b2c14544143d1f18c22f425f1de7bd19b2b
-X-Git-Newrev: 6a7801f1a1feaa8b84f8f56699a001c1d71e3ffd
+X-Git-Oldrev: 8d6ae5dae91367b3bfd6e1ed441eb954966684f4
+X-Git-Newrev: c12a87f6ea28d94c7ff71b0f76838e1ac6a833f6
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112602.55E2385B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-huepy: bump to version 1.2.1
+Message-Id: <20221205112601.A940E85B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dominate: bump to version
+ 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a7801f1a1feaa8b84f8f56699a001c1d71e3ffd
+commit: https://git.buildroot.net/buildroot/commit/?id=c12a87f6ea28d94c7ff71b0f76838e1ac6a833f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch which is no longer needed.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-huepy/0001-fix-import-with-python3.patch | 8 --------
- package/python-huepy/python-huepy.hash                  | 7 ++++---
- package/python-huepy/python-huepy.mk                    | 5 +++--
- 3 files changed, 7 insertions(+), 13 deletions(-)
+ package/python-dominate/python-dominate.hash | 4 ++--
+ package/python-dominate/python-dominate.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-huepy/0001-fix-import-with-python3.patch b/package/python-huepy/0001-fix-import-with-python3.patch
-deleted file mode 100644
-index e04eacb228..0000000000
---- a/package/python-huepy/0001-fix-import-with-python3.patch
-+++ /dev/null
-@@ -1,8 +0,0 @@
----- a/huepy/__init__.py
--+++ b/huepy/__init__.py
--@@ -1,4 +1,4 @@
---from hue import COMMANDS
--+from .hue import COMMANDS
-- 
-- __all__ = list(COMMANDS.keys())
-- __version__ = '1.0.1'
-diff --git a/package/python-huepy/python-huepy.hash b/package/python-huepy/python-huepy.hash
-index 32d0eb2674..74b02864d3 100644
---- a/package/python-huepy/python-huepy.hash
-+++ b/package/python-huepy/python-huepy.hash
-@@ -1,4 +1,5 @@
--# Locally computer sha256 checksums
--md5  da6514d9d61fb75ac9470f6863ce1aca  python-huepy-a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e.tar.gz
--sha256  63147cef5ecae5c1ab38000be91def351710e6bef2c5f67b5303418becf6c0f2  python-huepy-a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/huepy/json
-+md5  394a1072bec18c27097b053c40ddf0ea  huepy-1.2.1.tar.gz
-+sha256  5b29beef797312fb7606188bc5cd98f78ab8f7e01576427a9312f1c9b20b759d  huepy-1.2.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
-diff --git a/package/python-huepy/python-huepy.mk b/package/python-huepy/python-huepy.mk
-index 5c1041205d..cca3c3429e 100644
---- a/package/python-huepy/python-huepy.mk
-+++ b/package/python-huepy/python-huepy.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
+index 2e77d72a2e..89293baec6 100644
+--- a/package/python-dominate/python-dominate.hash
++++ b/package/python-dominate/python-dominate.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dominate/json
+-md5  9f714324ca99eee98bb3c3cdbe838de6  dominate-2.6.0.tar.gz
+-sha256  76ec2cde23700a6fc4fee098168b9dee43b99c2f1dd0ca6a711f683e8eb7e1e4  dominate-2.6.0.tar.gz
++md5  77bba29beaaac4dfb657092cd89db033  dominate-2.7.0.tar.gz
++sha256  520101360892ebf9d0553f67d37e359ff92403d8a1e33814030503088a05da49  dominate-2.7.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
+diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
+index 79fc058737..0f3687de5f 100644
+--- a/package/python-dominate/python-dominate.mk
++++ b/package/python-dominate/python-dominate.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HUEPY_VERSION = a9851d5aea10d2299cc62b3f6dce26ac4ef2ea3e
--PYTHON_HUEPY_SITE = $(call github,s0md3v,hue,$(PYTHON_HUEPY_VERSION))
-+PYTHON_HUEPY_VERSION = 1.2.1
-+PYTHON_HUEPY_SOURCE = huepy-$(PYTHON_HUEPY_VERSION).tar.gz
-+PYTHON_HUEPY_SITE = https://files.pythonhosted.org/packages/d6/4e/2dae447d8858a31158ca6c313f5d1902bc83b8542bb5f10c0307de2973bc
- PYTHON_HUEPY_LICENSE = GPL-3.0
- PYTHON_HUEPY_LICENSE_FILES = LICENSE
- PYTHON_HUEPY_SETUP_TYPE = setuptools
+-PYTHON_DOMINATE_VERSION = 2.6.0
++PYTHON_DOMINATE_VERSION = 2.7.0
+ PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
+-PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/29/23/edf8e470f1053245c1aa99d92c8a3da9e83f6c7d3eb39205486965425be5
++PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/12/d7/5e5f50f5d5bdd4282d2a70b9479c1d91d6628bebd4829e455cdf7366a92e
+ PYTHON_DOMINATE_SETUP_TYPE = setuptools
+ PYTHON_DOMINATE_LICENSE = LGPL-3.0+
+ PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
