@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECA3BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C3EBC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1A5540523;
-	Mon,  5 Dec 2022 11:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1A5540523
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2931260C01;
+	Mon,  5 Dec 2022 11:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2931260C01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W4E-UKQzB5HF; Mon,  5 Dec 2022 11:39:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ExTT4fy1eq7V; Mon,  5 Dec 2022 11:39:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7A724052C;
-	Mon,  5 Dec 2022 11:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7A724052C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 780DD1BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BE5B60BB6;
+	Mon,  5 Dec 2022 11:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BE5B60BB6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 83FD31BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BE9B41605
+ by smtp2.osuosl.org (Postfix) with ESMTP id 026D0400DC
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BE9B41605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 026D0400DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6FRkF01EyXFB for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DL-AyJsxxJkv for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64FDB415E6
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64FDB415E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A7F94052B
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A7F94052B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5ED8385BA2; Mon,  5 Dec 2022 11:26:03 +0000 (UTC)
+ id 7B24A85B9E; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:04:38 +0100
+Date: Thu, 3 Nov 2022 21:04:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bca80837c380d71b00b1923980067a171b80084d
-X-Git-Newrev: b53b980881c4e19b42de624c23ffc2ad619ac3f1
+X-Git-Oldrev: 3de9aa3eea839f3a6bfef923545ef6f7db16f1cd
+X-Git-Newrev: 2e6c204f51f5696aa056324a5a30ac5d23648e8f
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112603.5ED8385BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-msgfy: bump to version 0.2.0
+Message-Id: <20221205112602.7B24A85B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipython: bump to version
+ 8.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +64,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b53b980881c4e19b42de624c23ffc2ad619ac3f1
+commit: https://git.buildroot.net/buildroot/commit/?id=2e6c204f51f5696aa056324a5a30ac5d23648e8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop patch which is no longer needed.
+
+Migrate from distutils to setuptools infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-msgfy/python-msgfy.hash | 4 ++--
- package/python-msgfy/python-msgfy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-set-correct-python-executable-path.patch         | 15 ---------------
+ package/python-ipython/python-ipython.hash                |  4 ++--
+ package/python-ipython/python-ipython.mk                  |  6 +++---
+ 3 files changed, 5 insertions(+), 20 deletions(-)
 
-diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
-index c795f7fa5e..9f5bfe4804 100644
---- a/package/python-msgfy/python-msgfy.hash
-+++ b/package/python-msgfy/python-msgfy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgfy/json
--md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
--sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
-+md5  1727a08a0cf7fb704045168c71993280  msgfy-0.2.0.tar.gz
-+sha256  37c907cccb19afe73ce44111a21b410b685be92c9c44496bc4381fd93c5ad7b6  msgfy-0.2.0.tar.gz
+diff --git a/package/python-ipython/0001-set-correct-python-executable-path.patch b/package/python-ipython/0001-set-correct-python-executable-path.patch
+deleted file mode 100644
+index 0fbd5a1c8e..0000000000
+--- a/package/python-ipython/0001-set-correct-python-executable-path.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Set correct Python executable path
+-
+-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+-
+---- python-ipython-2.1.0/setupbase.py	2014-05-21 15:19:12.000000000 -0400
+-+++ python-ipython-2.1.0-new/setupbase.py	2014-07-23 23:34:32.892030423 -0400
+-@@ -394,7 +394,7 @@ class build_scripts_entrypt(build_script
+- 
+-             mod, func = entrypt.split(':')
+-             with open(outfile, 'w') as f:
+--                f.write(script_src.format(executable=sys.executable,
+-+                f.write(script_src.format(executable='/usr/bin/env python',
+-                                           mod=mod, func=func))
+- 
+-         return outfiles, outfiles
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index cd18c3d125..e61727e045 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5  6907b67691ba697173a3befb2c35f7ac  ipython-7.31.1.tar.gz
+-sha256  b5548ec5329a4bcf054a5deed5099b0f9622eb9ea51aaa7104d215fece201d8c  ipython-7.31.1.tar.gz
++md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
++sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
  # Locally computed sha256 checksums
- sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
-diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
-index c187061d41..4100a912b2 100644
---- a/package/python-msgfy/python-msgfy.mk
-+++ b/package/python-msgfy/python-msgfy.mk
-@@ -4,9 +4,9 @@
+ sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
+ sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 389ebfa897..f3aac75db1 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--PYTHON_MSGFY_VERSION = 0.1.0
-+PYTHON_MSGFY_VERSION = 0.2.0
- PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
--PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
-+PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/c6/2a/663ef86625f34ee4165da1eb824442cfb1f676e892946d7fe39a8c775682
- PYTHON_MSGFY_SETUP_TYPE = setuptools
- PYTHON_MSGFY_LICENSE = MIT
- PYTHON_MSGFY_LICENSE_FILES = LICENSE
+-PYTHON_IPYTHON_VERSION = 7.31.1
++PYTHON_IPYTHON_VERSION = 8.6.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/fb/39/c1947dc1bb993a35469ca474535cb3214c91f5f9a7752a1fcbd9b6b37dde
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+ PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
+-PYTHON_IPYTHON_SETUP_TYPE = distutils
++PYTHON_IPYTHON_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
