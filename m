@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDE3C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 18:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD32CC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 18:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFE0E40B63;
-	Thu,  3 Nov 2022 18:50:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE0E40B63
+	by smtp4.osuosl.org (Postfix) with ESMTP id 315AF41850;
+	Thu,  3 Nov 2022 18:53:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 315AF41850
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ENqPltx86oiy; Thu,  3 Nov 2022 18:50:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3CU3dCxCbXsz; Thu,  3 Nov 2022 18:53:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD7D8404C9;
-	Thu,  3 Nov 2022 18:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD7D8404C9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A02B1BF3DE
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 18:50:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 141564184D;
+	Thu,  3 Nov 2022 18:53:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 141564184D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BD8F1BF3DE
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 18:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 028CA404C9
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 18:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 028CA404C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 664244184D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 18:53:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 664244184D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wXmXNprXQjo8 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 18:50:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HahA31sBSqfr for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 18:53:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CA7D403B7
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0CA7D403B7
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 18:50:39 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id r81so2135269iod.2
- for <buildroot@buildroot.org>; Thu, 03 Nov 2022 11:50:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D4254184C
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0D4254184C
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 18:53:21 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id 63so2118608iov.8
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 11:53:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4kBted6nY6jTnmsGQ5bjrBavLOMMDittHziQuzH6c8o=;
- b=HTn8CdykV0KAPXvRhU2E2RvORNe3Zl/BwkZBtCzTwxqn8AeGeIzynNqALIgqeEae9O
- 7nLcAxrKEVsBaDvPcFjTjQVJXIoNW952Xz2vHpGcI/NSZyafd7OrtfrpXmKfcFJPFFxa
- z0OqG3vLp1PMzAZwUatD9VeHkX+OKcZvF3hXmqRoz6hehKpgZuA4NpaNfNz6PwRux4/J
- st1mrZIKmJg0bOzHDTbTG/hmlPJBC1A9rSDWYDXY8T97zpyPm34n2ZTfyC9ORLO4qg1p
- LqCC5YaoRWKuj0nMqoyb0DDWxudS0a7XjmdkoevNA++G0R/uWn55MWlJ5uSk2ly+GAfm
- hl6Q==
-X-Gm-Message-State: ACrzQf2nmFQ+sflWuxNV0X+6IRbFZ1YU+n3f0F1xVEQu9HBOToWDu9Sq
- mzavmyOi4/gWHrWm+vgNU64/5J7rgCyZxagF
-X-Google-Smtp-Source: AMsMyM6wnFZzO6ruiszcuNuV2IQZOLMIu6XkQQ3bvkL518sGZ+gmbepGqRK/Hf9CoIf1BHWqhm7jOA==
-X-Received: by 2002:a05:6602:2bec:b0:6c0:e5d2:b924 with SMTP id
- d12-20020a0566022bec00b006c0e5d2b924mr10583060ioy.143.1667501438766; 
- Thu, 03 Nov 2022 11:50:38 -0700 (PDT)
+ bh=LKixGTDblLRTFD9XoveC5pk0RaDvUenPhXhkfNcrzSQ=;
+ b=AYM7eHipUIiQc22E0rUiwVxe3GOh9aeUjpoI6opk1uhy7DJLNt9bm3n4spkN5vIh7U
+ 0+9PPCNSVMFGTmXk77TxOppbo/XA+F2loAap1qWtmpM3wF8OjP6GauoxbTANTD9KEIRh
+ EWlch2I9h+BBtogIDZFLEJABBAq3YHftd6q5rXt8PSOLYYIfN7SN0UTu9f+GNOcAXjtj
+ jtnlJSQ6aM3E7TVgKbY/x6sUD3Wu2qkOSHk5sIX5QMrC7q73zhsvt6HQOmoflrBF2ns4
+ uvq+eu6a/FFeCfo92gpULYjo8z/lcHjCpwWCcEwuwToXfAqzb+19fKwh8OGvFN49DzN2
+ UrpA==
+X-Gm-Message-State: ACrzQf1bjuDK5CLGCdl+k5nekkO1j8lPOzikmnAlTu+drlCdkh004k9B
+ SvWnO1HeTiMC7kZsf18hRuDmZbWL+2O2vuN4
+X-Google-Smtp-Source: AMsMyM45TkgZeZ+EenuT7bXo6v+DKzcbro2Sm1UO901QkIlPqHX1CH1Rav6X8Re8tQxrkC/I5GPK7g==
+X-Received: by 2002:a02:cf8f:0:b0:373:9526:ff08 with SMTP id
+ w15-20020a02cf8f000000b003739526ff08mr20829796jar.298.1667501600686; 
+ Thu, 03 Nov 2022 11:53:20 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- v15-20020a02b08f000000b00375966aa90esm437997jah.161.2022.11.03.11.50.38
+ q130-20020a6b2a88000000b006a102cb4900sm621058ioq.39.2022.11.03.11.53.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Nov 2022 11:50:38 -0700 (PDT)
+ Thu, 03 Nov 2022 11:53:20 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Nov 2022 12:50:36 -0600
-Message-Id: <20221103185036.2469293-1-james.hilliard1@gmail.com>
+Date: Thu,  3 Nov 2022 12:53:18 -0600
+Message-Id: <20221103185318.2719978-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4kBted6nY6jTnmsGQ5bjrBavLOMMDittHziQuzH6c8o=;
- b=NCVo7NbyEhREAnEJpKG7TJlgaiExSoo81af/uai20KcBg1G/sHfU2zfCTagrxSaD0p
- T+46eqfsphs9GVdcWLJIe+F69vruhl64KkaUZVheGPIqJ00/LJbtragEAbsmmh+3hiny
- bntNkyXO4yF1nv9Idtvt4ak8za6CrTYPMi+re/4wz+TQPg2ZZJq22u5Ip0yB4EInj23w
- Iq100kVzW2M/Qj/EqH8I4gGC0kSE/DpJ7UOb7piW/Ba373rO89wpWy/xuD3HAT7k9e6y
- aWE1uGXxXg/HxaKxU7h/Fg56hDNZ3orssMVoDWeR5UpNXL8wFYWwrw060KPLGG9cItPQ
- s9tw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=LKixGTDblLRTFD9XoveC5pk0RaDvUenPhXhkfNcrzSQ=;
+ b=BIiXNTAUyWqwzxTm7Tawaly0EJPkRpC+e5mwfHQkenHI/sPOmJeHsJCbAmlhLIZRmI
+ fnoS9gJ5EpEAbDCeS9q1K8mby8exiW4vJfUtjwctnAWx9Vg7KAFtnkzaZrI1XG9IFLM6
+ kh5At+0lJ+rnfM4WbEEuXMJPvWog+2thObK6xi9xSL23Dfl2eh+X7JchU7n/G4AIcJ61
+ UqPC/hq+dZLNRm3Y6uu1jHQVIdTdWhDqXP8XF6gxXA+YDdjTDe87rfqtAoVl/ounJGFV
+ kbWOh831yCNXaR5vVv9jBVUf2qDGhV1YbMtcOnCgIUvq1OjCbm6j7t+qm4v4AXfhL9Dq
+ 4kMA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NCVo7Nby
-Subject: [Buildroot] [PATCH 1/1] package/python-requests-oauthlib: bump to
- version 1.3.1
+ header.a=rsa-sha256 header.s=20210112 header.b=BIiXNTAU
+Subject: [Buildroot] [PATCH 1/1] package/python-requests-toolbelt: bump to
+ version 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to url changing to https:
+https://github.com/requests/toolbelt/commit/e9875f91861c81e437deb3d76a641e4cf0146ea4
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../python-requests-oauthlib/python-requests-oauthlib.hash    | 4 ++--
- package/python-requests-oauthlib/python-requests-oauthlib.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../python-requests-toolbelt/python-requests-toolbelt.hash  | 6 +++---
+ .../python-requests-toolbelt/python-requests-toolbelt.mk    | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
-index d33cabfefc..08c19ab1f6 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.hash
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+index 833570b113..28abf2c628 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests-oauthlib/json
--md5  1ebcd55f1b1b9281940b4bc33010e2ba  requests-oauthlib-1.3.0.tar.gz
--sha256  b4261601a71fd721a8bd6d7aa1cc1d6a8a93b4a9f5e96626f8e4d91e8beeaa6a  requests-oauthlib-1.3.0.tar.gz
-+md5  c4f3b4ecdb72a56a13675e5a3302852a  requests-oauthlib-1.3.1.tar.gz
-+sha256  75beac4a47881eeb94d5ea5d6ad31ef88856affe2332b9aafb52c6452ccf0d7a  requests-oauthlib-1.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/requests-toolbelt/json
+-md5  b1509735c4b4cf95df2619facbc3672e  requests-toolbelt-0.9.1.tar.gz
+-sha256  968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0  requests-toolbelt-0.9.1.tar.gz
++md5  636d226d03632d013269aebbc85f4f4b  requests-toolbelt-0.10.1.tar.gz
++sha256  62e09f7ff5ccbda92772a29f394a49c3ad6cb181d568b1337626b2abb628a63d  requests-toolbelt-0.10.1.tar.gz
  # Locally computed sha256 checksums
- sha256  ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
-index 9fe5b186b0..cdd334fb9a 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.mk
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
+-sha256  3a1a3cffa7abc000cbd726a664f56c33c532a55480f9e056dfe941cf93b7c37f  LICENSE
++sha256  1f8cf8bdacd98ed6d36d0fec0c07f7765acebd6e81205962ab5146023b3c858d  LICENSE
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+index 119c402785..8c141e3aa9 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.3.0
-+PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.3.1
- PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
--PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/23/eb/68fc8fa86e0f5789832f275c8289257d8dc44dbe93fce7ff819112b9df8f
-+PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/95/52/531ef197b426646f26b53815a7d2a67cb7a331ef098bb276db26a68ac49f
- PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
- PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_TOOLBELT_VERSION = 0.9.1
++PYTHON_REQUESTS_TOOLBELT_VERSION = 0.10.1
+ PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
+-PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310
++PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/0c/4c/07f01c6ac44f7784fa399137fbc8d0cdc1b5d35304e8c0f278ad82105b58
+ PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
