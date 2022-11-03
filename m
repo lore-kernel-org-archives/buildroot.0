@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAEBC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D71FFC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA3F40222;
-	Mon,  5 Dec 2022 11:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA3F40222
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85B17813D9;
+	Mon,  5 Dec 2022 11:50:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85B17813D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s2ybeGLivqie; Mon,  5 Dec 2022 11:49:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XryAnfKYHhM3; Mon,  5 Dec 2022 11:49:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 491CF40259;
-	Mon,  5 Dec 2022 11:49:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 491CF40259
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADD83813CE;
+	Mon,  5 Dec 2022 11:49:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADD83813CE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB03B1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F8021BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC6DC41674
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED7BA41678
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC6DC41674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED7BA41678
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 24kfmd0omy5z for <buildroot@lists.busybox.net>;
+ with ESMTP id yfcUGXHJ7o_t for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC3CE41621
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC3CE41621
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C66D4163E
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C66D4163E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA6C985BA3; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+ id 2A78F85BA2; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:22 +0100
+Date: Thu, 3 Nov 2022 22:02:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 331393e8a5903fa5b41e7854c02b56f3c0b168a5
-X-Git-Newrev: 3cbc054f7f560a058c0b380bcf650a15dcd25a18
+X-Git-Oldrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+X-Git-Newrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112605.BA6C985BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sqliteschema: bump to
- version 1.3.0
+Message-Id: <20221205112606.2A78F85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tqdm: bump to version 4.64.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cbc054f7f560a058c0b380bcf650a15dcd25a18
+commit: https://git.buildroot.net/buildroot/commit/?id=3164c0983ab0fa76c8c70ccb02164ad5085d7a65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add new host-python-setuptools-scm build dependency.
+
+License has changed due to file->project word change:
+https://github.com/tqdm/tqdm/commit/5df32ae36013ed056619aa0b90f7d249d04087fa
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sqliteschema/python-sqliteschema.hash | 4 ++--
- package/python-sqliteschema/python-sqliteschema.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tqdm/python-tqdm.hash | 6 +++---
+ package/python-tqdm/python-tqdm.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
-index e60bd64325..d5fe6e7af1 100644
---- a/package/python-sqliteschema/python-sqliteschema.hash
-+++ b/package/python-sqliteschema/python-sqliteschema.hash
+diff --git a/package/python-tqdm/python-tqdm.hash b/package/python-tqdm/python-tqdm.hash
+index 8251ae48d2..4be54de7de 100644
+--- a/package/python-tqdm/python-tqdm.hash
++++ b/package/python-tqdm/python-tqdm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqliteschema/json
--md5  4fb0130e7cc60d92be468091fbfc3d51  sqliteschema-1.2.1.tar.gz
--sha256  dde195bd7bc70d5841bc01dff20ec23bd43be87d760d2dfc7c7f2e5fd3808ef3  sqliteschema-1.2.1.tar.gz
-+md5  46da4f7575a0cc6c1d92377a279e5188  sqliteschema-1.3.0.tar.gz
-+sha256  1acdd5087cab54a099135a5623bb1960019816e2e3042b889c637901a832d3c3  sqliteschema-1.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/project/tqdm
+-md5  285af1f905f4c375f03a86a667047950  tqdm-4.40.1.tar.gz
+-sha256  e405d16c98fcf30725d0c9d493ed07302a18846b5452de5253030ccd18996f87  tqdm-4.40.1.tar.gz
++md5  5822af464d77ea156ad1167c23e1bdac  tqdm-4.64.1.tar.gz
++sha256  5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4  tqdm-4.64.1.tar.gz
  # Locally computed sha256 checksums
- sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
-index 5c52e35111..c399ebd6f6 100644
---- a/package/python-sqliteschema/python-sqliteschema.mk
-+++ b/package/python-sqliteschema/python-sqliteschema.mk
-@@ -4,9 +4,9 @@
+-sha256  1bbf12d09d437844527b3cdaba01d379dac651b5cbb5ebb0d764274684d2680b  LICENCE
++sha256  a0fc1785a8f2a200a3124d703d49550601b7741ccffc861713c2ddaa07a537dd  LICENCE
+diff --git a/package/python-tqdm/python-tqdm.mk b/package/python-tqdm/python-tqdm.mk
+index 5ceddde14c..a6296bd0f5 100644
+--- a/package/python-tqdm/python-tqdm.mk
++++ b/package/python-tqdm/python-tqdm.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--PYTHON_SQLITESCHEMA_VERSION = 1.2.1
-+PYTHON_SQLITESCHEMA_VERSION = 1.3.0
- PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
--PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/85/f8/be54d4bebf551cb533d1dea11c3bf165a1a408c2a1cceb1f9724aadd9967
-+PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/3d/ff/91cfff0c96f9ba2bddc27d6855db4907af77551a267b86740c8842beeb78
- PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
- PYTHON_SQLITESCHEMA_LICENSE = MIT
- PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
+-PYTHON_TQDM_VERSION = 4.40.1
++PYTHON_TQDM_VERSION = 4.64.1
+ PYTHON_TQDM_SOURCE = tqdm-$(PYTHON_TQDM_VERSION).tar.gz
+-PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/4c/45/830c5c4bfaba60ef7d356a53c7751a86c81d148a16fda0daf3ac5ca8e288
++PYTHON_TQDM_SITE = https://files.pythonhosted.org/packages/c1/c2/d8a40e5363fb01806870e444fc1d066282743292ff32a9da54af51ce36a2
+ PYTHON_TQDM_SETUP_TYPE = setuptools
+ PYTHON_TQDM_LICENSE = MPL-2.0, MIT
+ PYTHON_TQDM_LICENSE_FILES = LICENCE
+ PYTHON_TQDM_CPE_ID_VENDOR = tqdm_project
+ PYTHON_TQDM_CPE_ID_PRODUCT = tqdm
++PYTHON_TQDM_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
