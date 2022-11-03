@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CC4EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA821C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 14:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB47360FF6;
-	Thu,  3 Nov 2022 14:11:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB47360FF6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7003D404D5;
+	Thu,  3 Nov 2022 14:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7003D404D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3bQHuakA4VI; Thu,  3 Nov 2022 14:11:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3IgkqDLjk5RR; Thu,  3 Nov 2022 14:12:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A66560FA2;
-	Thu,  3 Nov 2022 14:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A66560FA2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 852844049A;
+	Thu,  3 Nov 2022 14:12:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 852844049A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF7081BF38A
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:11:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F31A1BF38A
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89505416C5
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89505416C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED98F416D4
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 14:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED98F416D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zBpDKktfTsl1 for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 14:11:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78745416BA
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:11:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78745416BA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62D3087B80; Thu,  3 Nov 2022 14:11:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id CQQY9lplszYo for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 14:12:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D028941756
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D028941756
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 14:12:01 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id n191so1378600iod.13
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 07:12:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=//eB9CwzOmpt8XhFxUmCWxGaRecE3a+XQLlrvQPdEc0=;
+ b=5rq9hQbDXNNCgg8kbSh7CBHauPGG02r4tEqOKfOY0Uc9L83FIpb0nzLREbLqveAWOj
+ G4nV3F5rUqw7Hb+IoyXywuaGL07QHC3OY7lOMOLbP8LrkgZ2UDyCHCftaVrhdyWiXB/A
+ VvFXg0DJ5y+RYmpy95N3smCHHfeC2X+c4MwTrJYjr4Uxk9uf4hsa6yXe9Fpm5BLZEh/J
+ PuIP2cWZ11m8zDRizEsyQwl5D+KGkJIOdIlpoNbw1ARQkCHNpweUuk781H+DM1QkBSP9
+ gYvdG44JcMBLRZy1zjVsDIef743nOvSuUhgiQeEWd0zs51fPNZUXAqygthvRLYs6H0D5
+ mboA==
+X-Gm-Message-State: ACrzQf3TEJOYOvQw0A8ZL0xvENiLltfWnfS8LEO92tZ1vWcXcn7FolRM
+ SvbyRlvOh42RUh7WVRxH4fLM8a8/U7rWXnxp
+X-Google-Smtp-Source: AMsMyM6Q+Fr4xaNsmmlI90BcNIrpShTr1xkTMPiKHR7MZHF5+HEAfjuTeRpz/tN31nSgvzd44HTi3A==
+X-Received: by 2002:a05:6638:d4c:b0:374:f734:c16b with SMTP id
+ d12-20020a0566380d4c00b00374f734c16bmr18614421jak.7.1667484720643; 
+ Thu, 03 Nov 2022 07:12:00 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ g17-20020a056602151100b0069e1bcbddaesm378917iow.16.2022.11.03.07.12.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Nov 2022 07:12:00 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 14:48:27 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 7d4a9cd2c5a2ac25f44346bc0b74e1a6418b82b8
-X-Git-Newrev: fb97023520191c12b91e1bf3dc88b9591e368009
-X-Patchwork-Hint: ignore
-Message-Id: <20221103141140.62D3087B80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] Makefile: really generate
- glibc locales in parallel
+Date: Thu,  3 Nov 2022 08:11:58 -0600
+Message-Id: <20221103141158.315907-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=//eB9CwzOmpt8XhFxUmCWxGaRecE3a+XQLlrvQPdEc0=;
+ b=RaPTIaO9vQNa/Kq5GY/IAb/AlkUUu8Vqy5eqjjV3azo6BzECYls/vQsKQ+w/5bPZxf
+ F1uptvhv/0nIJ03G79ZyUJ76uuv9WDJ8hXXoWbblBtiJxE2KTc/NNJt5UZRUpWnHHMUU
+ t1MiJUIa81kEEqWotg2PSioVcbTMQAODBR7UnfLZlnd7FpHHwaFk11b6CuDmY0Cvnnyh
+ /TRNoCTgldxcpO3UwzFkcvFa7jUKdGsMo0Wqp6q2ygFrX9LVDHVHsl8nz8aAyIdTtME6
+ 5t+kuIUF/EtRKbTd6SnJAqhfY5MMktYG4UG69SM9MjXGvgPuGkcNU66xyb9C226Fz8jX
+ 6hjA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=RaPTIaO9
+Subject: [Buildroot] [PATCH 1/1] package/python-pyftpdlib: bump to version
+ 1.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb97023520191c12b91e1bf3dc88b9591e368009
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
-
-To generate the glibc locale data, we call into a recursive Makefile,
-so as to generate locales in parallel. This is done as part of a
-target-finalize hook.
-
-However, that hook is registered after all packages have been parsed,
-and as such, it maye be registered after hooks defined in packages.
-
-Furthermore, the expansion of target-finalize hooks is done in a recipe,
-so it is not easy to understand whether this generates a "simple" rule
-or not.
-
-As a consequence, despite the use of $(MAKE), make may not notice that
-the command is a recursive call, and will decide to close the jobserver
-file-descriptors, yielding warnings like:
-    make[2]: warning: jobserver unavailable: using -j1.  Add '+' to
-    parent make rule.
-
-This causes the lcoale data to not be generated in parallel, which is
-initially all the fuss about using a sub-makefile...
-
-So, do as suggested, and prepend the hook with a '+', so that it is
-explicit to make that it should not close its jobserver fds.
-
-Fixes: 6fbdf5159607 (Makefile: Parallelize glibc locale generation)
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Gleb Mazovetskiy <glex.spb@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4164ed24f277b24096ab065aa85b7de9d0c80c02)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-pyftpdlib/python-pyftpdlib.hash | 4 ++--
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 36896684b1..cebf3a9240 100644
---- a/Makefile
-+++ b/Makefile
-@@ -653,7 +653,7 @@ ifneq ($(GLIBC_GENERATE_LOCALES),)
- PACKAGES += host-localedef
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+index abbb1261b2..46b5ae6336 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.hash
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
+-md5  459dd3e685c4b7dfcf574ca05e5586eb  pyftpdlib-1.5.6.tar.gz
+-sha256  fda655d81f29af52885ca2f8a2704134baed540f16d66a0b26e8fdfafd12db5e  pyftpdlib-1.5.6.tar.gz
++md5  6d9539aea866d4f959d86ae001cdddf7  pyftpdlib-1.5.7.tar.gz
++sha256  7ea3ce4137db8209af1f6b9ea020590f462c63ed7c7a1240bd596e4d3a7b656e  pyftpdlib-1.5.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  67a832551570a5ac5f7901eaa5ece4b9491fda7f2d8c93957c3bbc68a5a76d88  LICENSE
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+index 931e2dad06..bd1ada8125 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.mk
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- define GENERATE_GLIBC_LOCALES
--	$(MAKE) -f support/misc/gen-glibc-locales.mk \
-+	+$(MAKE) -f support/misc/gen-glibc-locales.mk \
- 		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
- 		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
- 		Q=$(Q)
+-PYTHON_PYFTPDLIB_VERSION = 1.5.6
++PYTHON_PYFTPDLIB_VERSION = 1.5.7
+ PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
+-PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/31/61/63ef60aca6de07eba1639d9d47f3f8e29462e8bb49d6a8dce9aeff240646
++PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/2f/bc/f03a15bf807698bbecdcf316041e3d79b25a40fa7b6e071e17702ff7b9d4
+ PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+ PYTHON_PYFTPDLIB_LICENSE = MIT
+ PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
