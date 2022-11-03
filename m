@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6F1C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BFBC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DAF240C24;
-	Thu,  3 Nov 2022 21:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DAF240C24
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63C6941836;
+	Thu,  3 Nov 2022 21:21:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63C6941836
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kx7gX9JyY8yL; Thu,  3 Nov 2022 21:21:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C9E641864;
+	Thu,  3 Nov 2022 21:21:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C9E641864
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FC111BF8B4
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECA0940BED
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA0940BED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YkFlP1MTVYhO; Thu,  3 Nov 2022 21:20:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B25040C2F;
-	Thu,  3 Nov 2022 21:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B25040C2F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E8B2D1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D18E081FB9
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D18E081FB9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gt_msXc46xXu for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Eons2DrP2Eb for <buildroot@lists.busybox.net>;
  Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AC2D81FAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E23940BC6
  for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AC2D81FAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E23940BC6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDD4387C33; Thu,  3 Nov 2022 21:05:46 +0000 (UTC)
+ id 0E1C787C31; Thu,  3 Nov 2022 21:05:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:02:09 +0100
+Date: Thu, 3 Nov 2022 22:02:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e85049dc29affffebff18c4ed87b4780fe2df77e
-X-Git-Newrev: 55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+X-Git-Oldrev: 3164c0983ab0fa76c8c70ccb02164ad5085d7a65
+X-Git-Newrev: 964eccb839eb169e8b3d883693dc921793287c8a
 X-Patchwork-Hint: ignore
-Message-Id: <20221103210546.EDD4387C33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-tornado: bump
- to version 6.2
+Message-Id: <20221103210547.0E1C787C31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-traitlets: bump
+ to version 5.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +64,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55fb5ddec854e6298a2c5454cbadb1a3fdc8cb84
+commit: https://git.buildroot.net/buildroot/commit/?id=964eccb839eb169e8b3d883693dc921793287c8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Verified license remains Apache-2.0 after hash change.
+Migrate from distutils to hatchling pep517 build backend.
+
+License hash changed due to formatting change:
+https://github.com/ipython/traitlets/commit/9fd01cc7b279a46e58fddc3c29149e73c7d67ab1
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-tornado/python-tornado.hash | 6 +++---
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-traitlets/python-traitlets.hash | 6 +++---
+ package/python-traitlets/python-traitlets.mk   | 7 ++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index e9fbbedf65..f30a6bb136 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 01e2bf8e30..095e85c155 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tornado/json
--md5  cf39425f3d7eba9a54287f3e795a2f23  tornado-6.0.4.tar.gz
--sha256  0fe2d45ba43b00a41cd73f8be321a44936dc1aba233dee979f17a042b83eb6dc  tornado-6.0.4.tar.gz
-+md5  32fbad606b439c3e1bf4e79d4e872741  tornado-6.2.tar.gz
-+sha256  9b630419bde84ec666bfd7ea0a4cb2a8a651c2d5cccdbdd1972a0c859dfc3c13  tornado-6.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  19483ec0685e837912cff128209aa845  traitlets-5.1.0.tar.gz
+-sha256  bd382d7ea181fbbcce157c133db9a829ce06edffe097bcf3ab945b435452b46d  traitlets-5.1.0.tar.gz
++md5  d5f87bbea8acf897ac3e435c7b71acdc  traitlets-5.5.0.tar.gz
++sha256  b122f9ff2f2f6c1709dab289a05555be011c87828e911c0cf4074b85cb780a79  traitlets-5.5.0.tar.gz
  # Locally computed sha256 checksums
--sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index c05a7d65d3..2af86ecb18 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,9 +4,9 @@
+-sha256  71c89129039b870cc92309466c4fbe8f285a82fa0ea36f0e840fa83979cbe31f  COPYING.md
++sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 5f41f6ee8f..25ab71047a 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_TORNADO_VERSION = 6.0.4
-+PYTHON_TORNADO_VERSION = 6.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/95/84/119a46d494f008969bf0c775cb2c6b3579d3c4cc1bb1b41a022aa93ee242
-+PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/f3/9e/225a41452f2d9418d89be5e32cf824c84fe1e639d350d6e8d49db5b7f73a
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
+-PYTHON_TRAITLETS_VERSION = 5.1.0
++PYTHON_TRAITLETS_VERSION = 5.5.0
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/d5/bc/37d490908e7ac949614d62767db3c86f37bc5adb6129d378c35859a75b87
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/dd/a8/278742d17c9e95ccb0dcb86ae216df114d2166d88e72f42b60a7b58b600b
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+-PYTHON_TRAITLETS_SETUP_TYPE = distutils
++PYTHON_TRAITLETS_SETUP_TYPE = pep517
++PYTHON_TRAITLETS_DEPENDENCIES = host-python-hatchling
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
