@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B428AC6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B155C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CCDC41D18;
-	Mon, 20 Feb 2023 20:56:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CCDC41D18
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09BED41CCE;
+	Mon, 20 Feb 2023 20:56:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09BED41CCE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Agldl-abfiLc; Mon, 20 Feb 2023 20:56:17 +0000 (UTC)
+	with ESMTP id E8DIl53uIwAI; Mon, 20 Feb 2023 20:56:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2B5841D13;
-	Mon, 20 Feb 2023 20:56:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B5841D13
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 08A7F1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD64041D2B;
+	Mon, 20 Feb 2023 20:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD64041D2B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E0FB1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F363A4010E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47C3F61088
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F363A4010E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47C3F61088
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cwk2Rtcln_Hw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dggbEAi5wW-7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1128E409D6
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1128E409D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A0456100B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A0456100B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E98F86494; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+ id 294CF8648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 22:31:35 +0100
+Date: Thu, 3 Nov 2022 23:08:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 34b681cfefe2aee03df290715f3047f624595288
-X-Git-Newrev: 94e47000c27c447de45e7190fbe8d3ef24d7df04
+X-Git-Oldrev: e7930708a3b1e429ea605f4544564b29313b0a7b
+X-Git-Newrev: b9dd9ee857ec59e35552efe46a173eebc50659d2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205147.0E98F86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gsl: fix powerpc build
+Message-Id: <20230220205146.294CF8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/testing/tests/package/test_gdb.py: drop version-specific tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,112 +64,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94e47000c27c447de45e7190fbe8d3ef24d7df04
+commit: https://git.buildroot.net/buildroot/commit/?id=b9dd9ee857ec59e35552efe46a173eebc50659d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following powerpc build failures on:
- - musl raised because fpu_control.h is not available:
+Back when support/testing/tests/package/test_gdb was introduced, there
+was a significant difference in how gdb < 10 and gdb >= 10 were
+handled in gdb.mk, which explained why we were testing both gdb 9.x
+and gdb 11.x.
 
-In file included from fp.c:8:
-fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
-   21 | #include <fpu_control.h>
-      |          ^~~~~~~~~~~~~~~
+However, support for gdb 9.x has now been dropped, and we only support
+gdb >= 10.x, so testing gdb 9.x and 11.x separately no longer make
+much sense. In addition:
 
- - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
-   set:
+ - other GDB tests in the same file already test the default version,
+ which is now 11.x, meaning we in fact have duplicated tests between
+ the ones testing the default version and the ones testing 11.x
+ specifically
 
-   In file included from fp.c:8:
-fp-gnuppc.c: In function 'gsl_ieee_set_mode':
-fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
-   53 |       mode |= _FPU_RC_NEAREST ;
-      |               ^~~~~~~~~~~~~~~
-
-These build failures are raised since the addition of the package in
-commit 9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
+ - GDB 9.x has been removed, which means all the tests testing GDB 9.x
+ are failing, with a Config.in.legacy build error.
 
 Fixes:
- - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
- - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828456 (TestGdbHostOnly9x)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828454 (TestGdbHostGdbserver9x)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828451 (TestGdbHostGdbTarget9x)
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-configure.ac-fix-build-on-powerpc.patch   | 53 ++++++++++++++++++++++
- package/gsl/gsl.mk                                 |  2 +
- 2 files changed, 55 insertions(+)
+ support/testing/tests/package/test_gdb.py | 108 ------------------------------
+ 1 file changed, 108 deletions(-)
 
-diff --git a/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-new file mode 100644
-index 0000000000..13f6da4588
---- /dev/null
-+++ b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-@@ -0,0 +1,53 @@
-+From 84e62d57b90b41a0c96bb9fb6ec61ecaac76a1ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Nov 2022 21:31:36 +0100
-+Subject: [PATCH] configure.ac: fix build on powerpc
-+
-+Fix the following powerpc build failures on:
-+ - musl raised because fpu_control.h is not available:
-+
-+In file included from fp.c:8:
-+fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
-+   21 | #include <fpu_control.h>
-+      |          ^~~~~~~~~~~~~~~
-+
-+ - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
-+   set:
-+
-+   In file included from fp.c:8:
-+fp-gnuppc.c: In function 'gsl_ieee_set_mode':
-+fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
-+   53 |       mode |= _FPU_RC_NEAREST ;
-+      |               ^~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
-+ - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bfd9ca30..1ee6dca0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -389,6 +389,14 @@ if test "$ac_cv_c_ieee_interface" = "gnux86" ; then
-+    fi
-+ fi
-+ 
-++if test "$ac_cv_c_ieee_interface" = "gnuppc" ; then
-++    AC_CACHE_CHECK([for _FPU_RC_NEAREST], ac_cv_c__fpu_rc_nearest,
-++    [ac_cv_c__fpu_rc_nearest=no
-++    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fpu_control.h>
-++]], [[ unsigned short mode = _FPU_RC_NEAREST ; ]])],[ac_cv_c__fpu_rc_nearest="yes"],[ac_cv_c_ieee_interface=unknown])
-++    ])
-++fi
-++
-+ ac_tr_ieee_interface=HAVE_`echo $ac_cv_c_ieee_interface | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`_IEEE_INTERFACE
-+ AC_DEFINE_UNQUOTED($ac_tr_ieee_interface,1,[IEEE Interface Type])
-+ 
-+-- 
-+2.35.1
-+
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-index 416955b72c..3604f9836c 100644
---- a/package/gsl/gsl.mk
-+++ b/package/gsl/gsl.mk
-@@ -10,6 +10,8 @@ GSL_INSTALL_STAGING = YES
- GSL_LICENSE = GPL-3.0
- GSL_LICENSE_FILES = COPYING
- GSL_CONFIG_SCRIPTS = gsl-config
-+# We're patching configure.ac
-+GSL_AUTORECONF = YES
+diff --git a/support/testing/tests/package/test_gdb.py b/support/testing/tests/package/test_gdb.py
+index a7b0870644..4712162349 100644
+--- a/support/testing/tests/package/test_gdb.py
++++ b/support/testing/tests/package/test_gdb.py
+@@ -91,114 +91,6 @@ class TestGdbFullTarget(BaseGdb):
+         self.verify_gdb()
  
- # uClibc pretends to have fenv support as it installs <fenv.h>, but in
- # practice, it only implements it for i386. Problem reported upstream
+ 
+-class TestGdbHostOnly9x(BaseGdb):
+-    config = \
+-        infra.basetest.MINIMAL_CONFIG + \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_9_2=y
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-
+-
+-class TestGdbHostGdbserver9x(BaseGdb):
+-    config = \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_9_2=y
+-        BR2_PACKAGE_GDB=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-        self.boot()
+-        self.verify_gdbserver()
+-
+-
+-class TestGdbHostGdbTarget9x(BaseGdb):
+-    config = \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_9_2=y
+-        BR2_PACKAGE_GDB=y
+-        BR2_PACKAGE_GDB_DEBUGGER=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-        self.boot()
+-        self.verify_gdb()
+-
+-
+-class TestGdbHostOnly11x(BaseGdb):
+-    config = \
+-        infra.basetest.MINIMAL_CONFIG + \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_11=y
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-
+-
+-class TestGdbHostGdbserver11x(BaseGdb):
+-    config = \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_11=y
+-        BR2_PACKAGE_GDB=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-        self.boot()
+-        self.verify_gdbserver()
+-
+-
+-class TestGdbHostGdbTarget11x(BaseGdb):
+-    config = \
+-        """
+-        BR2_arm=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-        BR2_PACKAGE_HOST_GDB=y
+-        BR2_GDB_VERSION_11=y
+-        BR2_PACKAGE_GDB=y
+-        BR2_PACKAGE_GDB_DEBUGGER=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-
+-    def test_run(self):
+-        self.verify_host_gdb()
+-        self.boot()
+-        self.verify_gdb()
+-
+-
+ class TestGdbArc(BaseGdb):
+     config = \
+         """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
