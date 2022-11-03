@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B0BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 515A5C47089
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B1AA81BC6;
-	Mon,  5 Dec 2022 11:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B1AA81BC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id E722460C0C;
+	Mon,  5 Dec 2022 11:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E722460C0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SbhU7Wu0ixmQ; Mon,  5 Dec 2022 11:31:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TV4e6YDe5frE; Mon,  5 Dec 2022 11:32:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E4A781BE3;
-	Mon,  5 Dec 2022 11:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E4A781BE3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10BBB1BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C83E60C18;
+	Mon,  5 Dec 2022 11:32:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C83E60C18
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FBFC1BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 595F881A2B
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 595F881A2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id A92CB40570
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A92CB40570
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xsMw0c91Wucc for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ap1xMTsmJ9Mc for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9391D81B84
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9391D81B84
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BE8A4052F
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BE8A4052F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 918F485BBF; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+ id 39BD185B9B; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 23:08:25 +0100
+Date: Thu, 3 Nov 2022 21:03:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6177018855a0794903e619b1e6d84617da07772f
-X-Git-Newrev: db1cf03ac5b6f8e165f953be28d1ce2723c7f3cf
+X-Git-Oldrev: 2fe854e9fccefb10091e8df0fb3152815c47c79d
+X-Git-Newrev: 2f4b2e8fb6984789bfcc7eff30fbecf2f51b8665
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112607.918F485BBF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
- version 5.5.1
+Message-Id: <20221205112601.39BD185B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cssselect: bump to version
+ 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db1cf03ac5b6f8e165f953be28d1ce2723c7f3cf
+commit: https://git.buildroot.net/buildroot/commit/?id=2f4b2e8fb6984789bfcc7eff30fbecf2f51b8665
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-zope-interface/python-zope-interface.hash | 4 ++--
- package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ package/python-cssselect/python-cssselect.hash | 4 ++--
+ package/python-cssselect/python-cssselect.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index f7fa673e24..6bab9d2c1c 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
+diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
+index f0687a4abd..df2523265f 100644
+--- a/package/python-cssselect/python-cssselect.hash
++++ b/package/python-cssselect/python-cssselect.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zope-interface/json
--md5  c58b31da83449631efb499de13c68c6a  zope.interface-5.4.0.tar.gz
--sha256  5dba5f530fec3f0988d83b78cc591b58c0b6eb8431a85edd1569a0539a8a5a0e  zope.interface-5.4.0.tar.gz
-+md5  644f7574b81710a21b1b738d448811e4  zope.interface-5.5.1.tar.gz
-+sha256  6d678475fdeb11394dc9aaa5c564213a1567cc663082e0ee85d52f78d1fbaab2  zope.interface-5.5.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cssselect/json
+-md5  fa57704c1cb66cc8e537b782bd6b227e  cssselect-1.1.0.tar.gz
+-sha256  f95f8dedd925fd8f54edb3d2dfb44c190d9d18512377d3c1e2388d16126879bc  cssselect-1.1.0.tar.gz
++md5  27fbafacce5447cb867acb240d35002a  cssselect-1.2.0.tar.gz
++sha256  666b19839cfaddb9ce9d36bfe4c969132c647b92fc9088c4e23f786b30f1b3dc  cssselect-1.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index beacfb4f5e..4f201e5cbf 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
+ sha256  5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892  LICENSE
+diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
+index f6faa94b4c..96f6f98737 100644
+--- a/package/python-cssselect/python-cssselect.mk
++++ b/package/python-cssselect/python-cssselect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ZOPE_INTERFACE_VERSION = 5.4.0
-+PYTHON_ZOPE_INTERFACE_VERSION = 5.5.1
- PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
--PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ae/58/e0877f58daa69126a5fb325d6df92b20b77431cd281e189c5ec42b722f58
-+PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/c5/ec/3e116b5c3c54f1fb7296a686c110c14d1242bbea17286c487892075d9858
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
- PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
- PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
+-PYTHON_CSSSELECT_VERSION = 1.1.0
++PYTHON_CSSSELECT_VERSION = 1.2.0
+ PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
+-PYTHON_CSSSELECT_SITE = https://files.pythonhosted.org/packages/70/54/37630f6eb2c214cdee2ae56b7287394c8aa2f3bafb8b4eb8c3791aae7a14
++PYTHON_CSSSELECT_SITE = https://files.pythonhosted.org/packages/d1/91/d51202cc41fbfca7fa332f43a5adac4b253962588c7cc5a54824b019081c
+ PYTHON_CSSSELECT_SETUP_TYPE = setuptools
+ PYTHON_CSSSELECT_LICENSE = BSD-3-Clause
+ PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
