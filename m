@@ -1,50 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF86AC43217
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D55BC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 21:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 905A2812A5;
-	Thu,  3 Nov 2022 21:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 905A2812A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B28F41885;
+	Thu,  3 Nov 2022 21:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B28F41885
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PBtOEmRXWIzs; Thu,  3 Nov 2022 21:29:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ay53_Igh8Kex; Thu,  3 Nov 2022 21:29:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9DBC813DC;
-	Thu,  3 Nov 2022 21:29:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9DBC813DC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93D2A1BF2F2
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:13:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F68D41876;
+	Thu,  3 Nov 2022 21:29:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F68D41876
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56B031BF2F2
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FD8F40BC6
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:13:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FD8F40BC6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F7336077D
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 21:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F7336077D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7WegWa69644k for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 21:13:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43C5240520
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:13:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43C5240520
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33BBF87C43; Thu,  3 Nov 2022 21:13:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XyB-oQ9BEU4x for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 21:15:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43DEA60672
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 43DEA60672
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 21:15:16 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id z3so2454319iof.3
+ for <buildroot@buildroot.org>; Thu, 03 Nov 2022 14:15:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=c7yRgCBC5A7rHWNbiQE9XPbhqAJSF9z955yDP3GiO90=;
+ b=2UXpf/TzcWKDEM0nWPXlcz2HfmSnyEHvCcSIAL3C0bIYAB5Aw1S7SNsCdth53Xhsy7
+ vJzm0bfQhpCU68/Lh2xEeJI58JlH9Yw9KRKMThQbufIRcpSkPG4TNJAh+4Y01fBx2ZlJ
+ z4wYgJc+lX46PmN7uR6hbXANVOee0mVh1dCl6gk4AP7EjDbKUIrdlyP0kkxFL+tZadX1
+ /KTObsfKJV3HCxgYe7sxUaC0YdppgLbHIp0T4SEHoMx5LlTp0bsZGIS5KiqRa4Kmr+Vc
+ ZyO6WoKfTrymLVYUZZEqa+nHigumgZVodfbP6aNLxXv4wKOla+8N1itBztkRA0QpSm3G
+ h8Qw==
+X-Gm-Message-State: ACrzQf145lY42onYXha0qEcWnODat9JfLMe7285fwayo7rWAJMM+n1fk
+ wVgFza5hekXQRRa+dHhv3Jp/EQvlN6y42Bd6
+X-Google-Smtp-Source: AMsMyM5SfepPKpYliE5v9JoVwwBvNTAaI2FaxOxxdbbaGXjHA07X7mIiQo3wKUiKMMRaBcLO1p/vAQ==
+X-Received: by 2002:a05:6602:26d2:b0:6a3:f044:a942 with SMTP id
+ g18-20020a05660226d200b006a3f044a942mr19814046ioo.50.1667510115051; 
+ Thu, 03 Nov 2022 14:15:15 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ y18-20020a027312000000b00374a9dbd061sm544741jab.73.2022.11.03.14.15.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Nov 2022 14:15:14 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:12:33 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5adf96d5bd3a580ab47e74ef8988594435a18a20
-X-Git-Newrev: a353cf87367fa2df22b8f0e55dee4d48a6f91ea8
-X-Patchwork-Hint: ignore
-Message-Id: <20221103211336.33BBF87C43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/numactl: link with -latomic if
- needed
+Date: Thu,  3 Nov 2022 15:15:13 -0600
+Message-Id: <20221103211513.4099651-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=c7yRgCBC5A7rHWNbiQE9XPbhqAJSF9z955yDP3GiO90=;
+ b=lzQ1aDjpuNCWofg3KYoLqWPG4OtwayYMoq/XTQjWoN1rbbRxQH8alPkYqDr+NASF/t
+ my8B184y5zZOjPVlSH7i0V6aX+vi3IIGa5N8gdhFEX6yN0HGMqJ+y99QbK8Plgu+r2Uh
+ 6Ovz/SsXLFr1zZ8aX/ESTkcla/fn9QwN2DVwyee5CAf+AHve/9DOk5kVkEQeBe0fSBwU
+ 7lWl9eD71/V6kRoWsS5QpCORz9FY6wAcqmL2VKTdNIR34SoBorbOI4WIZQHi33mE4jYx
+ fk8oScDfRAyekHq/qqMdB0VEmnYb2b9S+iOrH1IR698N3MEXkKizuOnJA1Y7Q7I/8KyI
+ n4nQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=lzQ1aDjp
+Subject: [Buildroot] [PATCH 1/1] package/python-xlsxwriter: bump to version
+ 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,93 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a353cf87367fa2df22b8f0e55dee4d48a6f91ea8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+License hash changed due to date update:
+https://github.com/jmcnamara/XlsxWriter/commit/0fc418931f984e5d6119569d47e9985b2bae5d57
 
-Fix the following build failure raised since bump to version 2.0.16 in
-commit e9bc980d93a189a16e7320bd254b906c87ca9f87:
-
-/nvmedata/autobuild/instance-7/output-1/per-package/numactl/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./.libs/libnuma.a(libnuma.o): in function `numa_police_memory':
-libnuma.c:(.text+0xe28): undefined reference to `__atomic_fetch_and_1'
-
-Fixes:
- - http://autobuild.buildroot.org/results/a92c1c60518d3fe08f3f808f9cc812031e85a4e9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../0001-link-with-latomic-if-needed-again.patch   | 41 ++++++++++++++++++++++
- package/numactl/numactl.mk                         |  2 ++
- 2 files changed, 43 insertions(+)
+ package/python-xlsxwriter/python-xlsxwriter.hash | 6 +++---
+ package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/numactl/0001-link-with-latomic-if-needed-again.patch b/package/numactl/0001-link-with-latomic-if-needed-again.patch
-new file mode 100644
-index 0000000000..54d55656ec
---- /dev/null
-+++ b/package/numactl/0001-link-with-latomic-if-needed-again.patch
-@@ -0,0 +1,41 @@
-+From 692abb6d751a41c7f0206771ecd454933750256e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Nov 2022 13:28:02 +0100
-+Subject: [PATCH] link with -latomic if needed (again ...)
-+
-+numactl unconditionally uses __atomic_fetch_and but some architectures
-+(e.g. sparc) needs to link with -latomic to be able to use it. So check
-+if -latomic is needed and update numa.pc accordingly.
-+
-+This linking was made by e0de0d9e981ddb53bdeb4a4b9dc43046c9ff4ff9 but
-+wrongly reverted by 10c277c20768be9a563f75265bcd7e73954763ad resulting
-+in the following build failure on sparc or microblaze:
-+
-+/nvmedata/autobuild/instance-7/output-1/per-package/numactl/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./.libs/libnuma.a(libnuma.o): in function `numa_police_memory':
-+libnuma.c:(.text+0xe28): undefined reference to `__atomic_fetch_and_1'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/54b7567d804d9abff56f47cd26bae774c1e38669
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/numactl/numactl/pull/144]
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8510fc5..ebf9917 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -27,6 +27,8 @@ AM_CONDITIONAL([RISCV64], [test x"${target_cpu}" = x"riscv64"])
-+ 
-+ AC_CONFIG_FILES([Makefile])
-+ 
-++AC_SEARCH_LIBS([__atomic_fetch_and_1], [atomic])
-++
-+ # GCC tries to be "helpful" and only issue a warning for unrecognized
-+ # attributes.  So we compile the test with Werror, so that if the
-+ # attribute is not recognized the compilation fails
-+-- 
-+2.35.1
-+
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index b2f349255f..157f953c51 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -10,6 +10,8 @@ NUMACTL_SITE = \
- NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
- NUMACTL_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
- NUMACTL_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+NUMACTL_AUTORECONF = YES
- NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
+index 7c9698067b..4363799079 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.hash
++++ b/package/python-xlsxwriter/python-xlsxwriter.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/xlsxwriter/json
+-md5  5f759dccf222e8f2a9924e90c4afaf84  XlsxWriter-3.0.1.tar.gz
+-sha256  3f39bf581c55f3ad1438bc170d7f4c4649cee8b6b7a80d21f79508118eeea52a  XlsxWriter-3.0.1.tar.gz
++md5  b08fcc4753c14aa64b9d99219475d91e  XlsxWriter-3.0.3.tar.gz
++sha256  e89f4a1d2fa2c9ea15cde77de95cd3fd8b0345d0efb3964623f395c8c4988b7f  XlsxWriter-3.0.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256  8fbb9b28ef0afac1c7d999102fd2634f347448d069c8c821976f3dbd2b3f812c  LICENSE.txt
++sha256  6287be39bd007c8729f5c3cf8dfda9b462af725c1d06e3bf0e17b1532196a08f  LICENSE.txt
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
+index 4c8a512086..4055e52622 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.mk
++++ b/package/python-xlsxwriter/python-xlsxwriter.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-PYTHON_XLSXWRITER_VERSION = 3.0.1
++PYTHON_XLSXWRITER_VERSION = 3.0.3
+ PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
+-PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/5d/36/e943d07af9d26cc2f11861955dbf0031e891f77f3d55f70217fd6a0f4d9f
++PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/53/04/91ff43803c3e88c32aa272fdbda5859fc3c3b50b0de3a1e439cc57455330
+ PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
+ PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
+ PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
