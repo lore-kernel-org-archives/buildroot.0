@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13BE9C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:11:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F078BC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 22:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2B6D40BDD;
-	Thu,  3 Nov 2022 22:11:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2B6D40BDD
+	by smtp2.osuosl.org (Postfix) with ESMTP id A55BE40BE9;
+	Thu,  3 Nov 2022 22:12:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A55BE40BE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8oS2oD7gGUuj; Thu,  3 Nov 2022 22:11:49 +0000 (UTC)
+	with ESMTP id EZQhD_SsWAr6; Thu,  3 Nov 2022 22:12:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3856540520;
-	Thu,  3 Nov 2022 22:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3856540520
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B07E41BF331
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:11:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C844440BEC;
+	Thu,  3 Nov 2022 22:12:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C844440BEC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB6601BF331
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C72061056
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C72061056
+ by smtp1.osuosl.org (Postfix) with ESMTP id 96F4B81F78
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 22:12:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96F4B81F78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JjkEtCPpCAZv for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 22:11:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C8nBCp7MuHql for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 22:12:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C870B61043
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C870B61043
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB06181F72
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 22:12:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB06181F72
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B848387D22; Thu,  3 Nov 2022 22:11:45 +0000 (UTC)
+ id BB13987D2A; Thu,  3 Nov 2022 22:12:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:10:33 +0100
+Date: Thu, 3 Nov 2022 23:12:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b9dd9ee857ec59e35552efe46a173eebc50659d2
-X-Git-Newrev: aaba432e2cae6ccff2bc6fa30c3ec0cc3c0f3c71
+X-Git-Oldrev: aaba432e2cae6ccff2bc6fa30c3ec0cc3c0f3c71
+X-Git-Newrev: 0b17cd017e8b946d718c81f0e38fd570e6a6bc0d
 X-Patchwork-Hint: ignore
-Message-Id: <20221103221145.B848387D22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gawk: drop incorrect patch
+Message-Id: <20221103221246.BB13987D2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsync: force HAVE_C99_VSNPRINTF to
+ "yes"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +64,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaba432e2cae6ccff2bc6fa30c3ec0cc3c0f3c71
+commit: https://git.buildroot.net/buildroot/commit/?id=0b17cd017e8b946d718c81f0e38fd570e6a6bc0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 8cd06967b9be (gawk: bump version and migrate to autotargets)
-added a patch that purportedly reduced the installation size by not
-installing the versioned program (gawk-X.Y).
+We know the system will have a modern-enough C library that implements
+the required snprintf() functionality. Since the configure stage can't
+detect the system's capabilities (because it is cross-compiling), let's
+hard-code the decision.
 
-However, the versioned program is a hard-link to the unversioned one,
-so, save for a directory entry, it does not take extra space in the
-final image.
+As a result, rsync won't be linking in its own copy of snprintf().
 
-Drop that patch.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gawk/0001-no-versioned.patch | 16 ----------------
- 1 file changed, 16 deletions(-)
+ package/rsync/rsync.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gawk/0001-no-versioned.patch b/package/gawk/0001-no-versioned.patch
-deleted file mode 100644
-index c5bbdddeb5..0000000000
---- a/package/gawk/0001-no-versioned.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Disabled versioned installation of binaries to save space.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Gustavo: update for 4.1.2]
--
--diff -Nura gawk-4.1.2.orig/Makefile.in gawk-4.1.2/Makefile.in
----- gawk-4.1.2.orig/Makefile.in	2015-04-29 16:11:09.367925925 -0300
--+++ gawk-4.1.2/Makefile.in	2015-04-29 16:11:25.308466495 -0300
--@@ -1173,6 +1173,7 @@
-- # (This is done universally, which may not always be right, but
-- # there's no easy way to distinguish GNU from non-GNU systems.)
-- install-exec-hook:
--+foo:
-- 	(cd $(DESTDIR)$(bindir); \
-- 	$(LN) gawk$(EXEEXT) gawk-$(VERSION)$(EXEEXT) 2>/dev/null ; \
-- 	if [ ! -f awk$(EXEEXT) ]; \
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 81ad4b9291..7ff7ca6eef 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -11,6 +11,9 @@ RSYNC_LICENSE_FILES = COPYING
+ RSYNC_CPE_ID_VENDOR = samba
+ RSYNC_SELINUX_MODULES = rsync
+ RSYNC_DEPENDENCIES = zlib popt
++# We know that our C library is modern enough for C99 vsnprintf(). Since
++# configure can't detect this, we tell configure that vsnprintf() is safe.
++RSYNC_CONF_ENV = rsync_cv_HAVE_C99_VSNPRINTF=yes
+ RSYNC_CONF_OPTS = \
+ 	--with-included-zlib=no \
+ 	--with-included-popt=no \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
