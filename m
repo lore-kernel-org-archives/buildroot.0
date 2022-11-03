@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7431C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CE5C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  3 Nov 2022 00:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B63E81EA6;
-	Thu,  3 Nov 2022 00:37:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B63E81EA6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AB2D81E3B;
+	Thu,  3 Nov 2022 00:46:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AB2D81E3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2uAPVcm8v4L; Thu,  3 Nov 2022 00:37:44 +0000 (UTC)
+	with ESMTP id 5tNDn5f1jcQL; Thu,  3 Nov 2022 00:46:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AA8881E9B;
-	Thu,  3 Nov 2022 00:37:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AA8881E9B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A0CD21BF95F
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:37:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9817081E25;
+	Thu,  3 Nov 2022 00:46:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9817081E25
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E5791BF95F
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85BBF4032B
- for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85BBF4032B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 589F74168B
+ for <buildroot@lists.busybox.net>; Thu,  3 Nov 2022 00:46:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 589F74168B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lMg_TUD131xb for <buildroot@lists.busybox.net>;
- Thu,  3 Nov 2022 00:37:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eKWIp-PwtfFd for <buildroot@lists.busybox.net>;
+ Thu,  3 Nov 2022 00:46:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85C40400D0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85C40400D0
- for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:37:39 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id p141so183012iod.6
- for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:37:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9797141682
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9797141682
+ for <buildroot@buildroot.org>; Thu,  3 Nov 2022 00:46:03 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id p184so178620iof.11
+ for <buildroot@buildroot.org>; Wed, 02 Nov 2022 17:46:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=w9AcQozMcxffGEiRkLc0rrH8OVHqTQXbdvOOnAHPFD8=;
- b=Zeq7twtLFk+Q4HKOxVFA00nIImYiTHssnOaoA1ce5/1YECUGaXjuQW3wI4HVf/ElBg
- +gfSzFCCFh/JN4YfPcNGyn//o3nZV/9oD/3pk6v/wO4JUuFxHCWc0KchwB6snHG6aRn+
- T754FnDOQZmO2IpsKaUsUp6fmD4puUTtT9WBj13YbG7i30/zLfC9dj4cOTeyezI7xAro
- OycjYskajHoSvVQA2bEUhYfuaAQm91BBmQrHpJh4GvRCRRPbhKXykE7ohbVo/21nUde2
- ITTE3VUuX2rzkHx++mVqIpu4weMUlYP4SWYw21JkJV40oR4dsYvIf2/junS8JLJUl4d3
- z6ng==
-X-Gm-Message-State: ACrzQf1eBy36ZfD1Y8Jp7V9pHjq7xROfk4QCGvUFjIx6cVNSZBiSUN7p
- NdGE4du7qys9Y3qhrFNoFib+jlrn1GXtZg9u
-X-Google-Smtp-Source: AMsMyM6LcYGCuJFuB9M22nU3jy/29jVC0hg9fSj5c2X2r4g1AVludZ+6vOyPDp8rzSyjMTrPlYxhhg==
-X-Received: by 2002:a02:8807:0:b0:363:937f:6 with SMTP id
- r7-20020a028807000000b00363937f0006mr17642712jai.136.1667435858312; 
- Wed, 02 Nov 2022 17:37:38 -0700 (PDT)
+ bh=jvwZwQAb4gf7p3UMkkeDbTf1K9xAvLbk0mpHlICjNjM=;
+ b=cBhH8ul6LbmQIWbpSPQTWMbF+EpClhE3rIWK1FpZYpbjX0WDDyyk+m2WQ+F0h8LsKu
+ U/sk8lFlZsWX8lpePckDybY4Psy+rUHgkjkZngEE/73tYpc52bF7eRnwaxobStp+7WY8
+ +EMoUkh5cVy3sMmCYzisJgdO1/fqJEtSknDtgH06XijlD/nbz3BILnGlqRcVmXOjDrIB
+ h/+ZV+zxsBWAOvFROQt4E0sr1fpOi89AmJbt/keB9OZxNUYy5+CfPW585R5En2F58Aug
+ 0wNn0ZCAbL+bJEELxwFZkJ6lagG9aRUxdNw6wJnbWn+Bccsv+wPQsz9vIslIr7G7RzGg
+ fyKA==
+X-Gm-Message-State: ACrzQf01fBBSzwu6DkHizOXVbfLfR6aXES5aSjckvv8tJW2XSeJL9Dmv
+ NIIqqbENUX1TRGehXLiKcglqWIH3gB1X1XvZ
+X-Google-Smtp-Source: AMsMyM7o69A+AIHUFPHZMkwkitqyx5cYbA0cv/86A4JtCfUrFpQcUYkfwxjgFTBD98Z/xwZopm9LBQ==
+X-Received: by 2002:a02:290e:0:b0:35a:d680:7aad with SMTP id
+ p14-20020a02290e000000b0035ad6807aadmr16573659jap.62.1667436362081; 
+ Wed, 02 Nov 2022 17:46:02 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- s23-20020a02b157000000b00374fbd37c72sm5362346jah.147.2022.11.02.17.37.37
+ s1-20020a92cc01000000b002ffcac9d1cbsm1308429ilp.3.2022.11.02.17.46.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Nov 2022 17:37:37 -0700 (PDT)
+ Wed, 02 Nov 2022 17:46:00 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Nov 2022 18:37:36 -0600
-Message-Id: <20221103003736.3357983-1-james.hilliard1@gmail.com>
+Date: Wed,  2 Nov 2022 18:45:59 -0600
+Message-Id: <20221103004559.3821058-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=w9AcQozMcxffGEiRkLc0rrH8OVHqTQXbdvOOnAHPFD8=;
- b=myDILoTzfBsEC0uxshfEaWZHbVCrBtOh9SL4EKDpQ1oBWMUiGmZpDjvvQIcypieQZ+
- K2ZAYCF/EX1QP/r9kBbsbaUHckeRas7y5sCUaTqYHsRblA6u/9ZDmPj2gguLoX4oxtPq
- YQ/CpcAQz8KOPALzRMj5KRMhUeA2F1roxHzRpR7BEAuvrm80jC8WfHobUUILXXmeMOdL
- GxKnt8oXpaQyKbpibQnDxdF0TBHTsspfm+EKEioZa3Z8x+SeZQa1ZUd87WxDKktMUuE8
- tMi2tCp+wYSCwHgRw4+MkQonH87KlFCJuSQEfWoxIWbhaqsJvohe4ex1Ioqbdp5PkbN3
- nCsA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jvwZwQAb4gf7p3UMkkeDbTf1K9xAvLbk0mpHlICjNjM=;
+ b=QRfDqTpy+yKB8m5IKg078lNzOi3JdaNRwUSXUkzcL5WmJDG9PCK8aHezNjwn1oAWmv
+ K7hNMGHs35CkmSARjBYWXje9/rBOopkckdab/oY6huk4lBWyewOm8b7Y7LC/SW9BzvNO
+ po5EZsCoqYbUEpU7aGc6WLR8O7hkX/i+G5CP03P7ZbcygmFM040y4NSHxcpBYZ62Jc2J
+ WYA3eSJ7wA0lpUZ0R5OW4Ag9eitxAcp0pplE0Inv9SabAawLuPlF2uuYiqGcKGWam9F+
+ mYyYoPy9CM/b/f4HZUWSILFcJMoEPmxluAzfFi6rFhX2wA4urU9qYkZ9odszQQFtKC+/
+ tMHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=myDILoTz
-Subject: [Buildroot] [PATCH 1/1] package/python-mistune: bump to version
- 2.0.4
+ header.a=rsa-sha256 header.s=20210112 header.b=QRfDqTpy
+Subject: [Buildroot] [PATCH 1/1] package/python-more-itertools: bump to
+ version 9.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to date update:
-https://github.com/lepture/mistune/commit/991c683584279102a94542b9b46e0637a9b4cb3b
+Migrate from setuptools to flit package infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-mistune/python-mistune.hash | 6 +++---
- package/python-mistune/python-mistune.mk   | 4 ++--
+ package/python-more-itertools/python-more-itertools.hash | 4 ++--
+ package/python-more-itertools/python-more-itertools.mk   | 6 +++---
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index a7a5936096..161f2ed6ff 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
+diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
+index 4e6e7bdfb8..c12d3f5623 100644
+--- a/package/python-more-itertools/python-more-itertools.hash
++++ b/package/python-more-itertools/python-more-itertools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mistune/json
--md5  fb6ab174ece938dea09f8b2adad771e4  mistune-0.8.4.tar.gz
--sha256  59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e  mistune-0.8.4.tar.gz
-+md5  a4437edb22cf6519a7c61730fecb1a3f  mistune-2.0.4.tar.gz
-+sha256  9ee0a66053e2267aba772c71e06891fa8f1af6d4b01d5e84e267b4570d4d9808  mistune-2.0.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/more-itertools/json
+-md5  9930552c4f7eedc00193673d5f7f0f19  more-itertools-8.10.0.tar.gz
+-sha256  1debcabeb1df793814859d64a81ad7cb10504c24349368ccf214c664c474f41f  more-itertools-8.10.0.tar.gz
++md5  58f6fe36c3c94bbc569130df546dcfc9  more-itertools-9.0.0.tar.gz
++sha256  5a6257e40878ef0520b1803990e3e22303a41b5714006c32a3fd8304b26ea1ab  more-itertools-9.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256  0c5259c3dd0a7c46f4835221645f62a0638c9b9faa02af08676e8069e1ff964b  LICENSE
-+sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 6beb425837..1e4bb71903 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
-@@ -4,9 +4,9 @@
+ sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
+diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
+index 3b9957b72e..734d87e057 100644
+--- a/package/python-more-itertools/python-more-itertools.mk
++++ b/package/python-more-itertools/python-more-itertools.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 0.8.4
-+PYTHON_MISTUNE_VERSION = 2.0.4
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/2d/a4/509f6e7783ddd35482feda27bc7f72e65b5e7dc910eca4ab2164daf9c577
-+PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/cd/9b/0f98334812f548a5ee4399b76e33752a74fc7bb976f5efb34d962f03d585
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_MORE_ITERTOOLS_VERSION = 8.10.0
++PYTHON_MORE_ITERTOOLS_VERSION = 9.0.0
+ PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
+-PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/8a/f7/93cf3c81629c95f6f40e509f7cd63985a6ddd829181a66c1c8ef101e55f2
+-PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
++PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/13/b3/397aa9668da8b1f0c307bc474608653d46122ae0563d1d32f60e24fa0cbd
++PYTHON_MORE_ITERTOOLS_SETUP_TYPE = flit
+ PYTHON_MORE_ITERTOOLS_LICENSE = MIT
+ PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
+ 
 -- 
 2.34.1
 
