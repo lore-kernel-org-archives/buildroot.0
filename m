@@ -1,51 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C6ECC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 08:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 931D0C433FE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 08:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5B604187D;
-	Fri,  4 Nov 2022 08:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5B604187D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F9AC6102D;
+	Fri,  4 Nov 2022 08:48:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F9AC6102D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bnbZvGH-xSdX; Fri,  4 Nov 2022 08:14:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DPf86vcL9G86; Fri,  4 Nov 2022 08:48:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0959D41878;
-	Fri,  4 Nov 2022 08:14:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0959D41878
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22CA91BF973
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 08:14:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 309F660FEF;
+	Fri,  4 Nov 2022 08:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309F660FEF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E4B91BF2AB
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 08:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1D0741878
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 08:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1D0741878
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD63E60FEF
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 08:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD63E60FEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hDzKMD6TNmcj for <buildroot@lists.busybox.net>;
- Fri,  4 Nov 2022 08:14:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4AE84185E
- for <buildroot@buildroot.org>; Fri,  4 Nov 2022 08:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4AE84185E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C301D87DA5; Fri,  4 Nov 2022 08:14:38 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 4 Nov 2022 09:06:47 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: bfabad7e35003b6fcc08420624b1196735d1146e
-X-Git-Newrev: 36222e99f43b2c6cbcac73942d75b5c6b22d6691
-X-Patchwork-Hint: ignore
-Message-Id: <20221104081438.C301D87DA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/rtl8723bu: fix
- build failure on PowerPC
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MCYJ_6-q9pJX for <buildroot@lists.busybox.net>;
+ Fri,  4 Nov 2022 08:48:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 349E06063B
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com
+ [64.147.123.24])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 349E06063B
+ for <buildroot@buildroot.org>; Fri,  4 Nov 2022 08:48:33 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.west.internal (Postfix) with ESMTP id 276D832008FA
+ for <buildroot@buildroot.org>; Fri,  4 Nov 2022 04:48:28 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+ by compute3.internal (MEProxy); Fri, 04 Nov 2022 04:48:28 -0400
+X-ME-Sender: <xms:29FkY0_p5u9UP7dXjeYc7_S6smYY7oxjGo-HBhgeTKbdsgmsDM-U_A>
+ <xme:29FkY8tsuHm1HddNT_lIj3wIz_FoGn2d6r2TQjbz5wsbDDuQ_ZZarFnE671vxm_mb
+ c65QLBMLszmQzSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddtgdduvdegucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvufgtsehttdertd
+ erredtnecuhfhrohhmpedfffgrnhhilhhouceurghrghgvnhdfuceomhgrihhlsegusghr
+ ghhnrdgthheqnecuggftrfgrthhtvghrnhepueevudevhedtgfethffhfeehjeehfeffie
+ ekgfekiefhleegleeigedtgfeugeejnecuffhomhgrihhnpehgihhthhhusgdrtghomhdp
+ sghuihhlughrohhothdrnhgvthenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+ epmhgrihhlfhhrohhmpehmrghilhesuggsrhhgnhdrtghh
+X-ME-Proxy: <xmx:29FkY6AMydFljKB6uVNpp-RYOd4s7_s_wOL46hj6Xtf-i8ohiMwSvw>
+ <xmx:29FkY0eMVZxRntwmdnlIG0gZmWUc8N5cyQsJYcx96CXBUD4SpZVucw>
+ <xmx:29FkY5NILIzdbVTfW0cS9Msr9ygFcoAZEKnWv_8edrrgJfe73JWzZw>
+ <xmx:29FkY3tUHUnGKpWVNt-YeKFgiqnwZdr7kPwGSbns_-L1Xhn58RXn0g>
+Feedback-ID: i1d444086:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+ id 51D7431A0063; Fri,  4 Nov 2022 04:48:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+x-forwarded-message-id: <cmu-lmtpd-383475-1667547569-2@sloti48n14>
+Message-Id: <8732ac2d-8b91-4316-8983-95f1881ede13@app.fastmail.com>
+Date: Fri, 04 Nov 2022 09:48:06 +0100
+From: "Danilo Bargen" <mail@dbrgn.ch>
+To: Buildroot <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dbrgn.ch; h=cc
+ :content-type:date:date:from:from:in-reply-to:message-id
+ :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+ 1667551707; x=1667638107; bh=pXCQffu/NgEs2Jz7QQXLpd9QsScTNh3VgmI
+ QKYlVEms=; b=L3C/s8yj2Q+Hblez+o49YKMh3pII4qi2QvZ1xoiu1zYhbQ80yw6
+ +ctqaU8MlfUE6Q0yJ+svPTUR2hh7dq+PsOyKLVgj/rn6fVbY1swUKROEWJV8zx/M
+ KTKX6soGy+09kj6QtzByxNIzEzMDDvDiz3mmo5WawDd1+N1tFO68iA3qRKoz9hT9
+ mmehCKNfgTzxRPv4MEK2wNpJ/xVsBYdJUptecvZX1NhePmT/FY/DI8eNkyC1yiKm
+ Cg3gAGKq+9k6mIl6eaA2ch4VGqBYR7bxWPr7Dm7TEyLZpVb2rWxiCjzCrGsVcghv
+ 4OW4wluinDPNSmiVQPDmmcs3G78a2xwAM7Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=cc:content-type:date:date:feedback-id
+ :feedback-id:from:from:in-reply-to:message-id:mime-version
+ :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667551707; x=
+ 1667638107; bh=pXCQffu/NgEs2Jz7QQXLpd9QsScTNh3VgmIQKYlVEms=; b=d
+ +CyMQG7Ffc2GRM7ivu43qvhjoH2L3ssgd2cHSVTB27j0QG/lGI1k9ELToePG7v4y
+ 5Ydpwu7tQS422wMjismbK/64Sup06278c8wr9Gr6YyaKA/WLp+H4MUu47rIxRjBy
+ uNVXy6yYMd+KNzkPOgAdVjSSpUEgYb/Gf6M6clFlkFmqEmZHnV8TYOgTztUm9GTR
+ dyCt3VDiHsBJJCx6PF8VyXs9LlIM1IsNhU2YiwGhWAA44OMbiTirsPqjEbmerZjB
+ Svz+zds5bthM8DS2onijXqL9VxnAOROzXHECkxEbVZ9Uu7ias0PFu6SRNxm/1M4m
+ WY54iwEEAO1cELR3nbOOA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=dbrgn.ch header.i=@dbrgn.ch
+ header.a=rsa-sha256 header.s=fm1 header.b=L3C/s8yj; 
+ dkim=pass (2048-bit key,
+ unprotected) header.d=messagingengine.com header.i=@messagingengine.com
+ header.a=rsa-sha256 header.s=fm3 header.b=d+CyMQG7
+Subject: [Buildroot] Fwd: [autobuild.buildroot.net] Your daily results for
+ 2022-11-03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,85 +109,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36222e99f43b2c6cbcac73942d75b5c6b22d6691
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+Hi all
 
-Add local patch(pending upstream[0]) to fix build failure with PowerPC due
-to a package re-defition of get_ra() that is only defined in Linux PowerPC
-implementation.
+The package below does not currently build on MIPS because one of crypto libraries it depends on doesn't yet fully support that architecture: https://github.com/briansmith/ring/issues/562
 
-[0]: https://github.com/lwfinger/rtl8723bu/pull/192
+Is there a way to exclude certain architectures for a package? What is the process for this?
 
-Fixes:
-http://autobuild.buildroot.net/results/99571b055e6185d57f89b90821b76099ebc766ed/
+Cheers,
+Danilo
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9833f110bb7e2b85a362f8c49246ea7349a36bcb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Fix-build-failure-on-PowerPc-architecture.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+----- Original message -----
+Betreff: [autobuild.buildroot.net] Your daily results for 2022-11-03
+Datum: Freitag, 04. November 2022 08:39
 
-diff --git a/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
-new file mode 100644
-index 0000000000..06cf2d64c1
---- /dev/null
-+++ b/package/rtl8723bu/0001-Fix-build-failure-on-PowerPc-architecture.patch
-@@ -0,0 +1,47 @@
-+From dde7bddfddddb7212f2d9671391e2096d770c449 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sun, 23 Oct 2022 22:57:41 +0200
-+Subject: [PATCH] Fix build failure on PowerPc architecture
-+
-+In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
-+that has a completely different purpose. So let's rename local get_ra()
-+to wifi_get_ra() to make it different from Linux's get_ra().
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h#n49
-+
-+Upstream: https://github.com/lwfinger/rtl8723bu/pull/192
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ hal/rtl8723bu_recv.c | 2 +-
-+ include/wifi.h       | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/hal/rtl8723bu_recv.c b/hal/rtl8723bu_recv.c
-+index a2fc82b..39e5044 100644
-+--- a/hal/rtl8723bu_recv.c
-++++ b/hal/rtl8723bu_recv.c
-+@@ -288,7 +288,7 @@ void update_recvframe_phyinfo(
-+ 		!pattrib->icv_err && !pattrib->crc_err &&
-+ 		_rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN));
-+ 
-+-	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
-++	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID && (_rtw_memcmp(wifi_get_ra(wlanhdr), myid(&padapter->eeprompriv), ETH_ALEN));
-+ 
-+ 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
-+ 	sa = get_ta(wlanhdr);
-+diff --git a/include/wifi.h b/include/wifi.h
-+index 5dc32eb..23578cc 100644
-+--- a/include/wifi.h
-++++ b/include/wifi.h
-+@@ -373,7 +373,7 @@ __inline static int IS_MCAST(unsigned char *da)
-+ 		return _FALSE;
-+ }
-+ 
-+-__inline static unsigned char * get_ra(unsigned char *pframe)
-++__inline static unsigned char * wifi_get_ra(unsigned char *pframe)
-+ {
-+ 	unsigned char	*ra;
-+ 	ra = GetAddr1Ptr(pframe);
-+-- 
-+2.34.1
-+
+Hello,
+
+Autobuilder failures
+====================
+
+Below is a list of build failures reported by the Buildroot autobuilders
+in relation to packages or CPU architectures you are in charge of.
+Please help us improving the quality of Buildroot by investigating those
+build failures and sending patches to fix them.
+
+Results for the 'master' branch
+-------------------------------
+
+Build failures related to your packages:
+
+    arch     |             reason             |                                       url                                      
+-------------+--------------------------------+---------------------------------------------------------------------------------
+    mips     |         tealdeer-1.6.1         | http://autobuild.buildroot.net/results/d4863f476de2a8b4c9d28ee52b1a48f5b0947c4b
+
+
+Thanks for your contribution to Buildroot!
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
