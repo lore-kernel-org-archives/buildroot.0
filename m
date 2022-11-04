@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1004C43219
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C028BC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 789444188A;
-	Fri,  4 Nov 2022 07:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 789444188A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69E376104D;
+	Fri,  4 Nov 2022 07:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E376104D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AZnmu7YdC7lq; Fri,  4 Nov 2022 07:53:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XSlQWLFKMvok; Fri,  4 Nov 2022 07:53:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5889A41884;
-	Fri,  4 Nov 2022 07:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5889A41884
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7FB361038;
+	Fri,  4 Nov 2022 07:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7FB361038
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CB5131BF399
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:53:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 179D11BF399
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5978E61038
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5978E61038
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEC0960BEE
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:53:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEC0960BEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C-fSuRpUuoub for <buildroot@lists.busybox.net>;
+ with ESMTP id CO7xigZ0or8C for <buildroot@lists.busybox.net>;
  Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7609A61042
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81D2E61043
  for <buildroot@buildroot.org>; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7609A61042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81D2E61043
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63F6F87D85; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
+ id 6D2DC87D8A; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 4 Nov 2022 08:48:56 +0100
+Date: Fri, 4 Nov 2022 08:50:18 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 556b9025d92ecbc56470a9d098f43883f89cc5c5
-X-Git-Newrev: b75b3ba46cfd65b272be5bef015912e1301c5ba3
+X-Git-Oldrev: b75b3ba46cfd65b272be5bef015912e1301c5ba3
+X-Git-Newrev: fef6e1fa5be38bfb4070e5978d0cadccf5df67fd
 X-Patchwork-Hint: ignore
-Message-Id: <20221104075258.63F6F87D85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sqlite: bump to
- version 3.39.4
+Message-Id: <20221104075258.6D2DC87D8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/wireguard-linux-compat: bump version to 1.0.20220627
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b75b3ba46cfd65b272be5bef015912e1301c5ba3
+commit: https://git.buildroot.net/buildroot/commit/?id=fef6e1fa5be38bfb4070e5978d0cadccf5df67fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2022-June/007660.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c6f17bf1bf8d7bae46b997cc1cc1f21fdf6eb5fd)
+(cherry picked from commit fe56cf24b649b5e87d7a9e5a1c3c23d7740fa3f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index d5af2297f4..936f42e8e9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  852be8a6183a17ba47cee0bbff7400b7aa5affd283bf3beefc34fcd088a239de  sqlite-autoconf-3390200.tar.gz
-+sha256  f31d445b48e67e284cf206717cc170ab63cbe4fd7f79a82793b772285e78fdbb  sqlite-autoconf-3390400.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 01dbb153bc..4f4164c374 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 3072b66e92..0f5713fc34 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2021-December/007369.html
+-sha256  c0e607138a17daac656f508d8e63ea3737b5221fa5d9288191ddeb099f5a3b92  wireguard-linux-compat-1.0.20211208.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2022-June/007660.html
++sha256  362d412693c8fe82de00283435818d5c5def7f15e2433a07a9fe99d0518f63c0  wireguard-linux-compat-1.0.20220627.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 44cc30f36e..258e184765 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3.39.2
--SQLITE_TAR_VERSION = 3390200
-+SQLITE_VERSION = 3.39.4
-+SQLITE_TAR_VERSION = 3390400
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2022
- SQLITE_LICENSE = Public domain
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20211208
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20220627
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
