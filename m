@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82DF9C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 12:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388B0C433FE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 13:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFCA58206F;
-	Fri,  4 Nov 2022 12:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFCA58206F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SP2oA37qRUva; Fri,  4 Nov 2022 12:32:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65ECC8206A;
-	Fri,  4 Nov 2022 12:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65ECC8206A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 581841BF976
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 12:32:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FFDB60B0F
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 12:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFDB60B0F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D85C61120;
+	Fri,  4 Nov 2022 13:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D85C61120
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rLmsYgQpOujI for <buildroot@lists.busybox.net>;
- Fri,  4 Nov 2022 12:32:22 +0000 (UTC)
-X-Greylist: delayed 00:11:01 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CA9C60AE8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0CA9C60AE8
- for <buildroot@buildroot.org>; Fri,  4 Nov 2022 12:32:21 +0000 (UTC)
-Feedback-ID: 3578:1022:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -228679107; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 04 Nov 2022 12:21:03 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LsMOwzdX2uZz; Fri,  4 Nov 2022 13:07:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F5E36111A;
+	Fri,  4 Nov 2022 13:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F5E36111A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 768401BF354
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 13:07:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50109820F7
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 13:07:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50109820F7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jF3hDCh_oG0X for <buildroot@lists.busybox.net>;
+ Fri,  4 Nov 2022 13:07:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC27B820E7
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC27B820E7
+ for <buildroot@buildroot.org>; Fri,  4 Nov 2022 13:06:59 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id l14so7002105wrw.2
+ for <buildroot@buildroot.org>; Fri, 04 Nov 2022 06:06:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JJzJ5SrIkMM5GJlCZy6Czx72iFb5kMHh1Zt7vh8YzRM=;
+ b=TFNMB9Thl5ybKRSonmqAJO9ORrfFETOT1Xl0PXKWgY9Rl5SA5hFVt+I4ff5cCY6LaP
+ ZlV7FY+JwfbhanVd+ZPObHIn7c8OZX+9zpHw3A8usT+HPyhghtNCIEyVaYtBUEk3SSbs
+ jDvizvw3Ugz17XiJH1FFEQgGCRpMKK4Ne+/LA7rQmakCEvwWQu+7OVW8kDbVyeKshlUt
+ fYx4PPeIjm6F2esQtUCR7B6I9Q8SSWLCbRjoWvzd7vVsZY1bBR8R4GBFGng/7SbAgNLs
+ O+uvzwe3aUiwGat6OkOXJELxEpS7aEY5p3Q86mKH7C/n5lh9dMxA3bZrx7hBGFdxz4Py
+ Xa+A==
+X-Gm-Message-State: ACrzQf0ud4viuq3VmGycQUmrDPpqpa0IuaYTbdpJTfkUUiVe3TlkQWRY
+ 0LfO1513y4TI8MPO0+Bg85rOGPeodJM=
+X-Google-Smtp-Source: AMsMyM6ySgCCrmgPuC3GHJUfZ+gzjuIg/6Q1MgpXC94LO3ZDcJtBdD14il++XJZ3/o7WbAlIFLYfDw==
+X-Received: by 2002:adf:f186:0:b0:236:6f10:b7b8 with SMTP id
+ h6-20020adff186000000b002366f10b7b8mr22142572wro.568.1667567217415; 
+ Fri, 04 Nov 2022 06:06:57 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bg15-20020a05600c3c8f00b003cf894dbc4fsm3299604wmb.25.2022.11.04.06.06.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 04 Nov 2022 06:06:56 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  4 Nov 2022 08:20:46 -0400
-Message-Id: <20221104122046.8959-1-woodrow@douglass.dev>
-X-Mailer: git-send-email 2.20.1
+Date: Fri,  4 Nov 2022 14:06:55 +0100
+Message-Id: <20221104130655.538206-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=kptduwz9+5zp6zMwC27w9ErPfcA9LTAszT0nR+5C792knRfznQliha5jRT3J6tY9Maxm0bnu/jMlP9RALPoAgodoxHoPdeNRnKMYf70Ks78kxuuUt+IU2fifEgG9OIhj4hb5CPG6UqusIiBUQrDJ5DKhsuIZr8lKpI4qc6dLtx7Rcu+bDn0sLzQCHBTs4hGKi/0zzZbXmJpgvWVqnNXuNpkhjw208aW+ZpatAl2fR0HXKVNKmiuuL2vE2xPPh661WJxAABKGq1eWfZFsv0YfBBjlf4qPV7nzFQGxOKmZlmL8+xLJ316ak63fDKVUfsBsykr0Y+vgOFweG6QhlGGqKQ==;
- s=purelymail1; d=douglass.dev; v=1;
- bh=9zraorHc19GMAS/kPAhYhsLkVB3ZRMkP6ac9UOB/JrE=; h=Received:From:To:Subject; 
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ge98pZaB2BffVEQacFt/lTwB4LhS7WxaeXjuU5kLTtPMZfPspe4ALufl1/S2gwTtfK0xUVPHzUda9lzYS2wzxEGIWzrCJq6l1cDYcUPfzE8eB/EVrnxD5e6QYz0keBf08fvmLE2IohfT7ZltGwEWSQ2afLSKG2oyh1ZkquZ6ABOR87r56wP7FwIWqkea7/9aP6Ol7d6TqsGcIv+qGLZV3GANTrKAbT30UL5lwDvYCaUL733QdLBBh/WLzAFRcMZ6sPzTV9u2j94yOeCcEvY30iYHxoyTghsvCQOKzSctH+bkX4KAHHEwBe6vvGEi0DLwjtY2CTAHZfkq1oA7lge5MQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=9zraorHc19GMAS/kPAhYhsLkVB3ZRMkP6ac9UOB/JrE=;
- h=Feedback-ID:Received:From:To:Subject; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=douglass.dev
- header.i=@douglass.dev header.a=rsa-sha256 header.s=purelymail1
- header.b=kptduwz9; 
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=ge98pZaB
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 1/1] package/opencv4: add support for
- opencv4_contrib repository for extra modules
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JJzJ5SrIkMM5GJlCZy6Czx72iFb5kMHh1Zt7vh8YzRM=;
+ b=m0iPvQxzVFhujmBtLzMZX/hvInsEv/z3loCJpXvVqIx3TCEwX4+D7Or4XjzNglSv6n
+ SJ5pir7PEPhkdz8BACAbwNgDopTHBizTmGYlEUH04NOItWGZC6MWqXR5+coEGx7SHvUw
+ nD7apfVNSGSMHJ7COXsBfYlpclVMRvF+NYQdVWP0SJ4lBM1xlYj3KAczJCkUYe4q4zhm
+ FKabTGx07ejZi/dKP3+YMCGJ7h/fX5QwuB4syz1PvYBNPnssGTTMPYmT4IWRCvfLUyUI
+ i0SH4MN7MEAgKToj0YkfP4f16wvLleiVImaeZqWQLIflkgqy1aKNp54NvSAm5kuQwseX
+ BXAQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=m0iPvQxz
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,478 +93,339 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woody Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woody Douglass <woodrow@douglass.dev>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Woody Douglass <woodrow@douglass.dev>,
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Woodrow Douglass <wdouglass@carnegierobotics.com>
+LXC 5.0 will be supported until June 2027 and our current LTS release,
+LXC 4.0 will now switch to a slower maintenance pace, only getting
+critical bugfixes and security updates.
 
-This adds a separate opencv4_contrib package to manage
-downloading/unpacking that repository. These extra modules
-are useful for a lot of applications, but not necessary
-for minimal installs, so they are all given dedicated Kconfig
-options
+We strongly recommend all LXC users to plan an upgrade to the 5.0
+branch.
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+- Switch to meson-package
+- Add an upstream patch to fix the following build failure with glibc
+  2.36 (unfortunately upstream doesn't plan to fix this for 4.x:
+  https://github.com/lxc/lxc/issues/4183 and patch is only working with
+  meson, not autotools)
+
+https://discuss.linuxcontainers.org/t/lxc-5-0-lts-has-been-released
+https://discuss.linuxcontainers.org/t/lxc-5-0-1-has-been-released
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f77e2dc44c9a224f280e08089a890e85c302274f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/Config.in                            |   1 +
- package/opencv4-contrib/Config.in            | 313 +++++++++++++++++++
- package/opencv4-contrib/opencv4-contrib.hash |   3 +
- package/opencv4-contrib/opencv4-contrib.mk   |  13 +
- package/opencv4/opencv4.mk                   |  62 +++-
- 5 files changed, 387 insertions(+), 5 deletions(-)
- create mode 100644 package/opencv4-contrib/Config.in
- create mode 100644 package/opencv4-contrib/opencv4-contrib.hash
- create mode 100644 package/opencv4-contrib/opencv4-contrib.mk
+ ...-where-struct-mount_attr-is-declared.patch | 186 ++++++++++++++++++
+ package/lxc/lxc.hash                          |   2 +-
+ package/lxc/lxc.mk                            |  41 ++--
+ 3 files changed, 208 insertions(+), 21 deletions(-)
+ create mode 100644 package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 238d7813f0..f03b5aad82 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1593,6 +1593,7 @@ menu "Graphics"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
-+	source "package/opencv4-contrib/Config.in"
- 	source "package/opengl/Config.in"
- 	source "package/openjpeg/Config.in"
- 	source "package/pango/Config.in"
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+diff --git a/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch b/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
 new file mode 100644
-index 0000000000..9800333035
+index 0000000000..8de7adcc56
 --- /dev/null
-+++ b/package/opencv4-contrib/Config.in
-@@ -0,0 +1,313 @@
-+menuconfig BR2_PACKAGE_OPENCV4_CONTRIB
-+	bool "opencv4-contrib"
-+	depends on BR2_PACKAGE_OPENCV4
-+	help
-+	  OpenCV (Open Source Computer Vision) is a library of
-+	  programming functions for real time computer vision.
++++ b/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
+@@ -0,0 +1,186 @@
++From c1115e1503bf955c97f4cf3b925a6a9f619764c3 Mon Sep 17 00:00:00 2001
++From: Christian Brauner <brauner@kernel.org>
++Date: Tue, 9 Aug 2022 16:14:25 +0200
++Subject: [PATCH] build: detect where struct mount_attr is declared
 +
-+	  http://opencv.org/
++Fixes: #4176
++Signed-off-by: Christian Brauner (Microsoft) <christian.brauner@ubuntu.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/c1115e1503bf955c97f4cf3b925a6a9f619764c3]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build                | 30 ++++++++++++++++++++++++++++--
++ src/lxc/conf.c             |  6 +++---
++ src/lxc/conf.h             |  2 +-
++ src/lxc/mount_utils.c      |  6 +++---
++ src/lxc/syscall_wrappers.h | 12 ++++++++++--
++ 5 files changed, 45 insertions(+), 11 deletions(-)
 +
-+if BR2_PACKAGE_OPENCV4_CONTRIB
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT
-+	bool "alphamat"
-+	help
-+	  Computer Vision based Alpha Matting -- Given an input image
-+	  and a trimap, generate an alpha matte.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO
-+	bool "aruco"
-+	help
-+	  ArUco and ChArUco Markers -- Augmented reality ArUco marker
-+	  and "ChARUco" markers where ArUco markers embedded inside the
-+	  white areas of the checker board.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE
-+	bool "barcode"
-+	help
-+	  Barcode detecting and decoding methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM
-+	bool "bgsegm"
-+	help
-+	  Background segmentation algorithm combining statistical
-+	  background image estimation and per-pixel Bayesian
-+	  segmentation.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED
-+	bool "bioinspired"
-+	help
-+	  Biological Vision -- Biologically inspired vision model:
-+	  minimize noise and luminance variance, transient event
-+	  segmentation, high dynamic range tone mapping methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB
-+	bool "ccalib"
-+	help
-+	  Custom Calibration -- Patterns for 3D reconstruction,
-+	  omnidirectional camera calibration, random pattern calibration
-+	  and multi-camera calibration.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ
-+	bool "cnn_3dobj"
-+	help
-+	  Deep Object Recognition and Pose -- Uses Caffe Deep Neural Net
-+	  library to build, train and test a CNN model of visual object
-+	  recognition and pose.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV
-+	bool "cvv"
-+	help
-+	  Computer Vision Debugger -- Simple code that you can add
-+	  to your program that pops up a GUI allowing you to
-+	  interactively and visually debug computer vision programs.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
-+	bool "datasets"
-+	help
-+	  Datasets Reader -- Code for reading existing computer vision
-+	  databases and samples of using the readers to train, test and
-+	  run using that dataset's data.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
-+	bool "dnn_objdetect"
-+	help
-+	  Object Detection using CNNs -- Implements compact CNN Model
-+	  for object detection. Trained using Caffe but uses
-+	  opencv_dnn module.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
-+	bool "dnn_superres"
-+	help
-+	  Superresolution using CNNs -- Contains four trained
-+	  convolutional neural networks to upscale images.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
-+	bool "dnns_easily_fooled"
-+	help
-+	  Subvert DNNs -- This code can use the activations in a
-+	  network to fool the networks into recognizing something else.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
-+	bool "dpm"
-+	help
-+	  Deformable Part Model -- Felzenszwalb's Cascade with
-+	  deformable parts object recognition code.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
-+	bool "face"
-+	help
-+	  Face Recognition -- Face recognition techniques: Eigen, Fisher
-+	  and Local Binary Pattern Histograms LBPH methods.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
-+	bool "freetype"
-+	help
-+	  Drawing text using freetype and harfbuzz.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY
-+	bool "fuzzy"
-+	help
-+	  Fuzzy Logic in Vision -- Fuzzy logic image transform and
-+	  inverse; Fuzzy image processing.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF
-+	bool "hdf"
-+	help
-+	  Hierarchical Data Storage -- This module contains I/O
-+	  routines for Hierarchical Data Format:
-+	  https://en.m.wikipedia.org/wiki/Hierarchical_Data_Format
-+	  meant to store large amounts of data.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS
-+	bool "hfs"
-+	help
-+	  Hierarchical Feature Selection for Efficient Image
-+	  Segmentation -- This module contains an efficient
-+	  algorithm to segment an image.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH
-+	bool "img_hash"
-+	help
-+	  This module contains algorithms to extract hash of an
-+	  image allowing to efficiently estimate similarity between
-+	  images.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM
-+	bool "intensity_transform"
-+	help
-+	  The module brings implementations of intensity transformation
-+	  algorithms to adjust image contrast.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA
-+	bool "julia"
-+	help
-+	  Julia language wrappers with samples and tests.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR
-+	bool "line_descriptor"
-+	help
-+	  Line Segment Extract and Match -- Methods of extracting,
-+	  describing and matching line segments using binary
-+	  descriptors.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB
-+	bool "matlab"
-+	help
-+	  Matlab Interface -- OpenCV Matlab Mex wrapper code generator
-+	  for certain opencv core modules.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC
-+	bool "mcc"
-+	help
-+	  Macbeth Color Chart detector -- Find and return color patch
-+	  location in MacBeth color calibration charts.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW
-+	bool "optflow"
-+	help
-+	  Optical Flow -- Algorithms for running and evaluating
-+	  deepflow, simpleflow, sparsetodenseflow and motion
-+	  templates (silhouette flow).
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS
-+	bool "ovis"
-+	help
-+	  OGRE 3D Visualiser -- allows you to render 3D data using
-+	  the OGRE 3D engine.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING
-+	bool "phase_unwrapping"
-+	help
-+	  Quality-guided phase unwrapping.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT
-+	bool "plot"
-+	help
-+	  Plotting -- The plot module allows you to easily plot data
-+	  in 1D or 2D.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY
-+	bool "quality"
-+	help
-+	  Image Quality Analysis (IQA) API.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID
-+	bool "rapid"
-+	help
-+	  Silhouette based 3D object tracking.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG
-+	bool "reg"
-+	help
-+	  Image Registration -- Pixels based image registration for
-+	  precise alignment. Follows the paper "Image Alignment and
-+	  Stitching: A Tutorial", by Richard Szeliski.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD
-+	bool "rgbd"
-+	help
-+	  RGB-Depth Processing module -- Linemod 3D object recognition;
-+	  Fast surface normals and 3D plane finding. 3D visual odometry.
-+	  3d reconstruction using KinectFusion.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
-+	bool "saliency"
-+	help
-+	  Saliency API -- Where humans would look in a scene. Has
-+	  routines for static, motion and "objectness" saliency.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
-+	bool "sfm"
-+	help
-+	  Structure from Motion -- This module contains algorithms
-+	  to perform 3d reconstruction from 2d images. The core of
-+	  the module is a light version of Libmv.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
-+	bool "shape"
-+	help
-+	  Shape Distance and Matching
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO
-+	bool "stereo"
-+	help
-+	  Stereo Correspondence -- Stereo matching done with different
-+	  descriptors: Census / CS-Census / MCT / BRIEF / MV and dense
-+	  stereo correspondence using Quasi Dense Stereo method.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT
-+	bool "structured_light"
-+	help
-+	  Structured Light Use -- How to generate and project gray code
-+	  patterns and use them to find dense depth in a scene.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES
-+	bool "superres"
-+	help
-+	  Super Resolution
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING
-+	bool "surface_matching"
-+	help
-+	  Point Pair Features -- Implements 3d object detection and
-+	  localization using multimodal point pair features.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT
-+	bool "text"
-+	help
-+	  Scene Text Detection and Recognition -- This module contains
-+	  algorithms to perform text detection, words segmentation and
-+	  text recognition in a visual scene.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
-+	bool "tracking"
-+	help
-+	  Vision Based Object Tracking -- Use and/or evaluate different
-+	  visual object tracking techniques.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB
-+	bool "videostab"
-+	help
-+	  Video Stabilization
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ
-+	bool "viz"
-+	help
-+	  3D Visualizer
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE
-+	bool "wechat_qrcode"
-+	help
-+	  WeChat QR code detector for detecting and parsing QR code.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D
-+	bool "xfeatures2d"
-+	help
-+	  Features2D extra -- Extra 2D Features Framework containing
-+	  experimental and non-free 2D feature detector/descriptor
-+	  algorithms. SURF, BRIEF, Censure, Freak, LUCID, Daisy,
-+	  Self-similar.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC
-+	bool "ximgproc"
-+	help
-+	  Extended Image Processing -- Structured Forests / Domain
-+	  Transform Filter / Guided Filter / Adaptive Manifold Filter
-+	  / Joint Bilateral Filter / Superpixels / Ridge Detection
-+	  Filter.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
-+	bool "xobjdetect"
-+	help
-+	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
-+	  local binary patterns computed as integral features for 2D
-+	  object detection.
-+
-+config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
-+	bool "xphoto"
-+	help
-+	  Extra Computational Photography -- Additional photo processing
-+	  algorithms: Color balance / Denoising / Inpainting.
-+
-+endif
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
-new file mode 100644
-index 0000000000..9db112c9e9
---- /dev/null
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  a97c2eaecf7a23c6dbd119a609c6d7fae903e5f9ff5f1fe678933e01c67a6c11  opencv4-contrib-4.5.5.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-new file mode 100644
-index 0000000000..58dbe27e28
---- /dev/null
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# opencv4-contrib
-+#
-+################################################################################
-+
-+OPENCV4_CONTRIB_VERSION = 4.6.0
-+OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
-+OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
-+OPENCV4_CONTRIB_LICENSE = Apache-2.0
-+OPENCV4_CONTRIB_LICENSE_FILES = LICENSE
-+
-+$(eval $(generic-package))
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index ef15c6d911..a665793ad9 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -82,11 +82,6 @@ OPENCV4_CONF_OPTS += \
- #   - viz: missing VTK dependency
- #   - world: all-in-one module
++diff --git a/meson.build b/meson.build
++index a145faf069..f679aabbc8 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -590,7 +590,6 @@ decl_headers = '''
++ foreach decl: [
++     '__aligned_u64',
++     'struct clone_args',
++-    'struct mount_attr',
++     'struct open_how',
++     'struct rtnl_link_stats64',
++ ]
++@@ -610,7 +609,6 @@ foreach tuple: [
++     ['struct seccomp_notif_sizes'],
++     ['struct clone_args'],
++     ['__aligned_u64'],
++-    ['struct mount_attr'],
++     ['struct open_how'],
++     ['struct rtnl_link_stats64'],
++ ]
++@@ -630,6 +628,34 @@ foreach tuple: [
++     endif
++ endforeach
++ 
+++## Types.
+++decl_headers = '''
+++#include <sys/mount.h>
+++'''
+++
+++# We get -1 if the size cannot be determined
+++if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
+++    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), true)
+++    found_types += 'struct mount_attr (sys/mount.h)'
+++else
+++    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), false)
+++    missing_types += 'struct mount_attr (sys/mount.h)'
+++endif
+++
+++## Types.
+++decl_headers = '''
+++#include <linux/mount.h>
+++'''
+++
+++# We get -1 if the size cannot be determined
+++if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
+++    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), true)
+++    found_types += 'struct mount_attr (linux/mount.h)'
+++else
+++    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), false)
+++    missing_types += 'struct mount_attr (linux/mount.h)'
+++endif
+++
++ ## Headers.
++ foreach ident: [
++     ['bpf',               '''#include <sys/syscall.h>
++diff --git a/src/lxc/conf.c b/src/lxc/conf.c
++index ffbe74c2f6..4193cd07f5 100644
++--- a/src/lxc/conf.c
+++++ b/src/lxc/conf.c
++@@ -2885,7 +2885,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
++ 		struct lxc_mount_options opts = {};
++ 		int dfd_from;
++ 		const char *source_relative, *target_relative;
++-		struct lxc_mount_attr attr = {};
+++		struct mount_attr attr = {};
++ 
++ 		ret = parse_lxc_mount_attrs(&opts, mntent.mnt_opts);
++ 		if (ret < 0)
++@@ -3005,7 +3005,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
++ 
++ 		/* Set propagation mount options. */
++ 		if (opts.attr.propagation) {
++-			attr = (struct lxc_mount_attr) {
+++			attr = (struct mount_attr) {
++ 				.propagation = opts.attr.propagation,
++ 			};
++ 
++@@ -4109,7 +4109,7 @@ int lxc_idmapped_mounts_parent(struct lxc_handler *handler)
++ 
++ 	for (;;) {
++ 		__do_close int fd_from = -EBADF, fd_userns = -EBADF;
++-		struct lxc_mount_attr attr = {};
+++		struct mount_attr attr = {};
++ 		struct lxc_mount_options opts = {};
++ 		ssize_t ret;
++ 
++diff --git a/src/lxc/conf.h b/src/lxc/conf.h
++index 7dc2f15b60..772479f9e1 100644
++--- a/src/lxc/conf.h
+++++ b/src/lxc/conf.h
++@@ -223,7 +223,7 @@ struct lxc_mount_options {
++ 	unsigned long mnt_flags;
++ 	unsigned long prop_flags;
++ 	char *data;
++-	struct lxc_mount_attr attr;
+++	struct mount_attr attr;
++ 	char *raw_options;
++ };
++ 
++diff --git a/src/lxc/mount_utils.c b/src/lxc/mount_utils.c
++index bba75f933c..88dd73ee36 100644
++--- a/src/lxc/mount_utils.c
+++++ b/src/lxc/mount_utils.c
++@@ -31,7 +31,7 @@ lxc_log_define(mount_utils, lxc);
++  * setting in @attr_set, but must also specify MOUNT_ATTR__ATIME in the
++  * @attr_clr field.
++  */
++-static inline void set_atime(struct lxc_mount_attr *attr)
+++static inline void set_atime(struct mount_attr *attr)
++ {
++ 	switch (attr->attr_set & MOUNT_ATTR__ATIME) {
++ 	case MOUNT_ATTR_RELATIME:
++@@ -272,7 +272,7 @@ int create_detached_idmapped_mount(const char *path, int userns_fd,
++ {
++ 	__do_close int fd_tree_from = -EBADF;
++ 	unsigned int open_tree_flags = OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC;
++-	struct lxc_mount_attr attr = {
+++	struct mount_attr attr = {
++ 		.attr_set	= MOUNT_ATTR_IDMAP | attr_set,
++ 		.attr_clr	= attr_clr,
++ 		.userns_fd	= userns_fd,
++@@ -335,7 +335,7 @@ int __fd_bind_mount(int dfd_from, const char *path_from, __u64 o_flags_from,
++ 		    __u64 attr_clr, __u64 propagation, int userns_fd,
++ 		    bool recursive)
++ {
++-	struct lxc_mount_attr attr = {
+++	struct mount_attr attr = {
++ 		.attr_set	= attr_set,
++ 		.attr_clr	= attr_clr,
++ 		.propagation	= propagation,
++diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
++index a5e98b565c..c8a7d0c7b7 100644
++--- a/src/lxc/syscall_wrappers.h
+++++ b/src/lxc/syscall_wrappers.h
++@@ -18,6 +18,12 @@
++ #include "macro.h"
++ #include "syscall_numbers.h"
++ 
+++#if HAVE_STRUCT_MOUNT_ATTR
+++#include <sys/mount.h>
+++#elif HAVE_UAPI_STRUCT_MOUNT_ATTR
+++#include <linux/mount.h>
+++#endif
+++
++ #ifdef HAVE_LINUX_MEMFD_H
++ #include <linux/memfd.h>
++ #endif
++@@ -210,16 +216,18 @@ extern int fsmount(int fs_fd, unsigned int flags, unsigned int attr_flags);
++ /*
++  * mount_setattr()
++  */
++-struct lxc_mount_attr {
+++#if !HAVE_STRUCT_MOUNT_ATTR && !HAVE_UAPI_STRUCT_MOUNT_ATTR
+++struct mount_attr {
++ 	__u64 attr_set;
++ 	__u64 attr_clr;
++ 	__u64 propagation;
++ 	__u64 userns_fd;
++ };
+++#endif
++ 
++ #if !HAVE_MOUNT_SETATTR
++ static inline int mount_setattr(int dfd, const char *path, unsigned int flags,
++-				struct lxc_mount_attr *attr, size_t size)
+++				struct mount_attr *attr, size_t size)
++ {
++ 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
++ }
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index d460bc6a01..c18e062cc1 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  db242f8366fc63e8c7588bb2017b354173cf3c4b20abc18780debdc48b14d3ef  lxc-4.0.12.tar.gz
++sha256  d8195423bb1e206f8521d24b6cde4789f043960c7cf065990a9cf741dcfd4222  lxc-5.0.1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index cd07c6c4c3..75311ec559 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
  #
--# * Contrib modules from [1] are disabled:
--#   - opencv_contrib package is not available in Buildroot;
--#   - OPENCV_EXTRA_MODULES_PATH is not set.
--#
--# [1] https://github.com/Itseez/opencv_contrib
- OPENCV4_CONF_OPTS += \
- 	-DBUILD_opencv_androidcamera=OFF \
- 	-DBUILD_opencv_apps=OFF \
-@@ -232,6 +227,63 @@ OPENCV4_CONF_OPTS += \
+ ################################################################################
  
- OPENCV4_DEPENDENCIES += host-pkgconf zlib
+-LXC_VERSION = 4.0.12
++LXC_VERSION = 5.0.1
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+@@ -13,60 +13,61 @@ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_OPENCV4_CONTRIB),y)
-+# OPENCV4 depends on OPENCV4_CONTRIB, and not the other way around.
-+# The modules in OPENCV4_CONTRIB get built as part of the build
-+# process for OPENCV4, so the source needs to be unpacked already
-+OPENCV4_DEPENDENCIES += opencv4-contrib
-+OPENCV4_CONF_OPTS += \
-+	-DOPENCV_EXTRA_MODULES_PATH=$(OPENCV4_CONTRIB_DIR)/modules \
-+	-DBUILD_opencv_alphamat=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT),ON,OFF) \
-+	-DBUILD_opencv_aruco=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO),ON,OFF) \
-+	-DBUILD_opencv_barcode=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE),ON,OFF) \
-+	-DBUILD_opencv_bgsegm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM),ON,OFF) \
-+	-DBUILD_opencv_bioinspired=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED),ON,OFF) \
-+	-DBUILD_opencv_ccalib=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB),ON,OFF) \
-+	-DBUILD_opencv_cnn_3dobj=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ),ON,OFF) \
-+	-DBUILD_opencv_cvv=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV),ON,OFF) \
-+	-DBUILD_opencv_datasets=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS),ON,OFF) \
-+	-DBUILD_opencv_dnn_objdetect=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT),ON,OFF) \
-+	-DBUILD_opencv_dnn_superres=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES),ON,OFF) \
-+	-DBUILD_opencv_dnns_easily_fooled=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED),ON,OFF) \
-+	-DBUILD_opencv_dpm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM),ON,OFF) \
-+	-DBUILD_opencv_face=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE),ON,OFF) \
-+	-DBUILD_opencv_freetype=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE),ON,OFF) \
-+	-DBUILD_opencv_fuzzy=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY),ON,OFF) \
-+	-DBUILD_opencv_hdf=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF),ON,OFF) \
-+	-DBUILD_opencv_hfs=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS),ON,OFF) \
-+	-DBUILD_opencv_img_hash=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH),ON,OFF) \
-+	-DBUILD_opencv_intensity_transform=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM),ON,OFF) \
-+	-DBUILD_opencv_julia=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA),ON,OFF) \
-+	-DBUILD_opencv_line_descriptor=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR),ON,OFF) \
-+	-DBUILD_opencv_matlab=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB),ON,OFF) \
-+	-DBUILD_opencv_mcc=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC),ON,OFF) \
-+	-DBUILD_opencv_optflow=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW),ON,OFF) \
-+	-DBUILD_opencv_ovis=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS),ON,OFF) \
-+	-DBUILD_opencv_phase_unwrapping=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING),ON,OFF) \
-+	-DBUILD_opencv_plot=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT),ON,OFF) \
-+	-DBUILD_opencv_quality=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY),ON,OFF) \
-+	-DBUILD_opencv_rapid=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID),ON,OFF) \
-+	-DBUILD_opencv_reg=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG),ON,OFF) \
-+	-DBUILD_opencv_rgbd=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD),ON,OFF) \
-+	-DBUILD_opencv_saliency=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY),ON,OFF) \
-+	-DBUILD_opencv_sfm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM),ON,OFF) \
-+	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE),ON,OFF) \
-+	-DBUILD_opencv_stereo=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO),ON,OFF) \
-+	-DBUILD_opencv_structured_light=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT),ON,OFF) \
-+	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES),ON,OFF) \
-+	-DBUILD_opencv_surface_matching=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING),ON,OFF) \
-+	-DBUILD_opencv_text=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT),ON,OFF) \
-+	-DBUILD_opencv_tracking=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING),ON,OFF) \
-+	-DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB),ON,OFF) \
-+	-DBUILD_opencv_viz=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ),ON,OFF) \
-+	-DBUILD_opencv_wechat_qrcode=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE),ON,OFF) \
-+	-DBUILD_opencv_xfeatures2d=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D),ON,OFF) \
-+	-DBUILD_opencv_ximgproc=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC),ON,OFF) \
-+	-DBUILD_opencv_xobjdetect=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT),ON,OFF) \
-+	-DBUILD_opencv_xphoto=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO),ON,OFF)
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
- OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
- OPENCV4_DEPENDENCIES += jasper
+ LXC_CONF_OPTS = \
+-	--disable-apparmor \
+-	--disable-examples \
+-	--with-distro=buildroot \
+-	--disable-werror \
+-	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
++	-Dapparmor=false \
++	-Dexamples=false \
++	-Dman=false
+ 
+ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ LXC_DEPENDENCIES += bash-completion
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-LXC_CONF_OPTS += --enable-capabilities
++LXC_CONF_OPTS += -Dcapabilities=true
+ LXC_DEPENDENCIES += libcap
+ else
+-LXC_CONF_OPTS += --disable-capabilities
++LXC_CONF_OPTS += -Dcapabilities=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+-LXC_CONF_OPTS += --enable-seccomp
++LXC_CONF_OPTS += -Dseccomp=true
+ LXC_DEPENDENCIES += libseccomp
+ else
+-LXC_CONF_OPTS += --disable-seccomp
++LXC_CONF_OPTS += -Dseccomp=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+-LXC_CONF_OPTS += --enable-selinux
++LXC_CONF_OPTS += -Dselinux=true
+ LXC_DEPENDENCIES += libselinux
+ else
+-LXC_CONF_OPTS += --disable-selinux
++LXC_CONF_OPTS += -Dselinux=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBURING),y)
+-LXC_CONF_OPTS += --enable-liburing
++LXC_CONF_OPTS += -Dio-uring-event-loop=true
+ LXC_DEPENDENCIES += liburing
+ else
+-LXC_CONF_OPTS += --disable-liburing
++LXC_CONF_OPTS += -Dio-uring-event-loop=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-LXC_CONF_OPTS += --enable-pam
++LXC_CONF_OPTS += -Dpam-cgroup=true
+ LXC_DEPENDENCIES += linux-pam
+ else
+-LXC_CONF_OPTS += --disable-pam
++LXC_CONF_OPTS += -Dpam-cgroup=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LXC_CONF_OPTS += --enable-openssl
++LXC_CONF_OPTS += -Dopenssl=true
+ LXC_DEPENDENCIES += openssl
+ else
+-LXC_CONF_OPTS += --disable-openssl
++LXC_CONF_OPTS += -Dopenssl=false
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+-LXC_CONF_OPTS += --with-init-script=systemd
++LXC_CONF_OPTS += -Dinit-script=systemd
++LXC_DEPENDENCIES += systemd
++else
++LXC_CONF_OPTS += -Dinit-script=''
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-2.20.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
