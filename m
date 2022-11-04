@@ -1,88 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7928EC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 23:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87951C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 23:57:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA732611A7;
-	Fri,  4 Nov 2022 23:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA732611A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 299D78226B;
+	Fri,  4 Nov 2022 23:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 299D78226B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cG69n0g34b1J; Fri,  4 Nov 2022 23:57:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65E8882254;
+	Fri,  4 Nov 2022 23:57:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65E8882254
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D4FA31BF31A
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 23:57:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0F1A61162
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 23:57:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0F1A61162
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RF6MsRYKdMJF; Fri,  4 Nov 2022 23:57:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13C2161162;
-	Fri,  4 Nov 2022 23:57:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13C2161162
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7A14D1BF31A
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 23:57:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5461141945
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 23:57:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5461141945
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VmsLZANWJpyv for <buildroot@lists.busybox.net>;
- Fri,  4 Nov 2022 23:57:33 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cX-7X24DxDCC for <buildroot@lists.busybox.net>;
+ Fri,  4 Nov 2022 23:57:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 747E34189A
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
- [IPv6:2607:f8b0:4864:20::22a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 747E34189A
- for <buildroot@buildroot.org>; Fri,  4 Nov 2022 23:57:33 +0000 (UTC)
-Received: by mail-oi1-x22a.google.com with SMTP id v81so6758971oie.5
- for <buildroot@buildroot.org>; Fri, 04 Nov 2022 16:57:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1240560A6B
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com
+ [IPv6:2607:f8b0:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1240560A6B
+ for <buildroot@buildroot.org>; Fri,  4 Nov 2022 23:57:34 +0000 (UTC)
+Received: by mail-ot1-x330.google.com with SMTP id
+ 46-20020a9d0631000000b00666823da25fso3555371otn.0
+ for <buildroot@buildroot.org>; Fri, 04 Nov 2022 16:57:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oFVgcrMViJUrDruT+SVHm2tB2sMKXiDnf08j2PV/ZUY=;
- b=YoO0lgBDWegIwZEUhDOafOSsKn3BXO7syoqHDeI0urp3+qvokjHuZZSJWNrm4o4i7v
- oLTJki/4GSlwD8bx/PvnHcLMPENdPJ9ttZkr99MIgsXEK7ChHN7rGpF3N17N1gIIrN3Z
- IsNFUZhSdeeuq1bXfq7ZaKoSVi93x2H4cCcpONHL/rRQBDL0Ey0YkPwHKOqOWG1XAF+X
- SyeQvUaLl9wOdRtLVMhRK2+L4/Rt7+m0sWP0jN4cEgWpT7g1m7ifu2OJj7OI771UDCPu
- 4i2sORFzxGRqvEbE6y52+0a0Ko4VgaJDfkkOXQZCkJIAt1yfqh2Ymap9ZMPv4OcLFPf7
- lMBw==
-X-Gm-Message-State: ACrzQf2WAlRz7DX99cPG5hojQJXzHbgIwIbr1GptfwWsOSxSPFgPDY4S
- u60SHkAgbEf/LGyMtwHYsGYYGfpn2Xw=
-X-Google-Smtp-Source: AMsMyM41Wd5mgAdpv3QuchsbIMhbFlBvVl5ShBGqz7DWAuPQnpmx7NaURFgd9kQTzZBoGBDmsCH1IA==
-X-Received: by 2002:a05:6808:1644:b0:355:6f12:ca0d with SMTP id
- az4-20020a056808164400b003556f12ca0dmr29026930oib.61.1667606252381; 
- Fri, 04 Nov 2022 16:57:32 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=7OcOhyRS54YAvgIcRNVRm4fIrs+W1qIxBRQCU/Vegxw=;
+ b=1IAPlcJx5wUHJTpETbA9ktPaA9N8upMmOHUlqCp/BMPUGqiKr9tTIFCJWm2dbqLzbF
+ MLAAmhOUZ4YHDh9zu7hy1hpNRY1Fzknzd2yqUtL8ehkiSqsVw98fRAIR4oAfUh7MDiT5
+ KHqMewjKiXIxWX9nulbpMw7OjxYLnYlqSBeFaxQweKvKF74Ms6mraBd/jnUdE8bzDRFp
+ LOCrlQwYaZy2e87PY/5AhO9II5MHJJZNWa8LsDPpTqBrw/WUK8wRsQnYv4bYcN4w/WD2
+ mIRvmDK/RPA1uxoFHXq5wgyrxeOk99hOhbAQUzz/e5FEI91OxRyktyJlSDwoqdYbV/Ak
+ Cfig==
+X-Gm-Message-State: ACrzQf3V7FuJ8dpDr8IajssbcvAyuDJ0p9yRRZZis0hi+IkqoKlDNOSg
+ yUJQyoofXCmTXzUqwVd0lUtEv7Gk1EI=
+X-Google-Smtp-Source: AMsMyM7U2EvNLHtu+jotQrDKrY4t1zK0VnbYsh9AWslePG7YFqpiRM/qUmLUepzZoZB1eYm/4pkXCQ==
+X-Received: by 2002:a9d:6b18:0:b0:66c:6333:5117 with SMTP id
+ g24-20020a9d6b18000000b0066c63335117mr12464810otp.147.1667606253959; 
+ Fri, 04 Nov 2022 16:57:33 -0700 (PDT)
 Received: from casantos.remote.csb (177.204.173.152.dynamic.adsl.gvt.net.br.
  [177.204.173.152]) by smtp.gmail.com with ESMTPSA id
- k131-20020aca3d89000000b003549db40f38sm165638oia.46.2022.11.04.16.57.31
+ k131-20020aca3d89000000b003549db40f38sm165638oia.46.2022.11.04.16.57.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Nov 2022 16:57:32 -0700 (PDT)
+ Fri, 04 Nov 2022 16:57:33 -0700 (PDT)
 From: unixmania@gmail.com
 To: buildroot@buildroot.org
-Date: Fri,  4 Nov 2022 20:57:24 -0300
-Message-Id: <20221104235727.587650-1-unixmania@gmail.com>
+Date: Fri,  4 Nov 2022 20:57:25 -0300
+Message-Id: <20221104235727.587650-2-unixmania@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221104235727.587650-1-unixmania@gmail.com>
+References: <20221104235727.587650-1-unixmania@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oFVgcrMViJUrDruT+SVHm2tB2sMKXiDnf08j2PV/ZUY=;
- b=jQo1c3MbMaTV0oMXldIYvFEap5XqL6jhNs/oylWfSuJirXHpHpY61d/YI99T62KhiB
- bmnwpoN3a/N2fHfPQEPEVO6drFujYfveEDzALFCDXvYUIdaqObBg56Kc4tVIqTMKIIBD
- aMJgGh1VzNhsjnV/x4R6EzOP5aeXJFyPo4PSgKpN6KI6ugp2q+NEG6G13qog913VEZk6
- VJVe0o8+uhqwYZ3qSd3zk9xHnVAT2w0Uge57n4AzR8DaKImqMsxfZlxZOrhID8hcPi9N
- qF0L28LunRouFKRTOyCPLU7QOF3OOOYRmSasQ+F4OKByFMXChvLlJkGV0sQaDR2DtURS
- 3nqg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=7OcOhyRS54YAvgIcRNVRm4fIrs+W1qIxBRQCU/Vegxw=;
+ b=mKx9zgvCJdj43YtQzdwWrVBx6RR9AZJXTZCndx4oJ8xmdvBDompKppc3/nIHHThZaf
+ Hl78mZb5z0FV11T3oY53jYz3P9DXc0vXJZ5OmIjiyF1xyaPa+Fexi3sXVUMhQmDhKKcE
+ e84EpZWpQLaBFiJBn5IKcngAW3nEMjjkrRxLzcUErQoe59ORIhEY/Eu2V3rn6xnCJywa
+ uFj+T+xVEz3bUQylAkSqdPE5KQgx3YkZzq/GXvonrlCwGRc+TYb8XMmWvwwxDb8Rdoq0
+ Gl8dpFPGFHQyaP4ZJfBf+8oGeCsoNG+gEAiiDRBPVBeSTLCQOzUM4a+zc1e2xfej0xj3
+ vEJQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jQo1c3Mb
-Subject: [Buildroot] [PATCH 0/3] package/qemu: add option to enable guest
- agent
+ header.a=rsa-sha256 header.s=20210112 header.b=mKx9zgvC
+Subject: [Buildroot] [PATCH 1/3] package/qemu: make "custom targets" config
+ depend on !BR2_STATIC_LIBS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,18 +106,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Before doing it, fix two small erros in the configuration menu that can lead
-to build failures.
+Custom targets selects system and Linux user-land emulation, which in
+their turn require shared libraries.
 
-Carlos Santos (3):
-  package/qemu: make "custom targets" config depend on !BR2_STATIC_LIBS
-  package/qemu: select FDT for custom targets too
-  package/qemu: add option to enable guest agent
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/qemu/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- package/qemu/Config.in | 18 +++++++++++++++++-
- package/qemu/qemu.mk   |  6 ++++++
- 2 files changed, 23 insertions(+), 1 deletion(-)
-
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 15d6c7d6b5..8b8a999885 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -51,6 +51,7 @@ comment "Emulators selection"
+ 
+ config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
+ 	string "Enable specific targets"
++	depends on !BR2_STATIC_LIBS # dtc
+ 	help
+ 	  Enter here the list of QEMU targets you want to build. For
+ 	  example:
 -- 
 2.31.1
 
