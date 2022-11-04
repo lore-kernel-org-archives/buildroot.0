@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 236FEC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAECBC433FE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9F556104D;
-	Fri,  4 Nov 2022 07:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9F556104D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44E1F6105F;
+	Fri,  4 Nov 2022 07:53:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44E1F6105F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TQ8TZj6DyNjw; Fri,  4 Nov 2022 07:53:02 +0000 (UTC)
+	with ESMTP id f7P_89SHWPWd; Fri,  4 Nov 2022 07:53:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E10B561038;
-	Fri,  4 Nov 2022 07:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E10B561038
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F5041BF399
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A38061060;
+	Fri,  4 Nov 2022 07:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A38061060
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6605F1BF973
  for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A39F4188A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E05B40BF8
  for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A39F4188A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E05B40BF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DiTi2oOBnUgf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OKECmGFfWb93 for <buildroot@lists.busybox.net>;
  Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A01F41888
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AA5F40124
  for <buildroot@buildroot.org>; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A01F41888
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA5F40124
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48CFE87D7E; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
+ id 5AF2E87D82; Fri,  4 Nov 2022 07:52:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 4 Nov 2022 08:39:54 +0100
+Date: Fri, 4 Nov 2022 08:45:59 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9bb4f83a08956ed0a038b53b3d4b3244ab974ee8
-X-Git-Newrev: 89fa62f1ae6dc06b9b70a30f5394b20cc248977c
+X-Git-Oldrev: 311c54f1925519f8740546c59b4c66c9610692ca
+X-Git-Newrev: 556b9025d92ecbc56470a9d098f43883f89cc5c5
 X-Patchwork-Hint: ignore
-Message-Id: <20221104075258.48CFE87D7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] support/scripts: don't
- require gawk to generate glibc gconv modules
+Message-Id: <20221104075258.5AF2E87D82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uftp: bump to
+ version 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89fa62f1ae6dc06b9b70a30f5394b20cc248977c
+commit: https://git.buildroot.net/buildroot/commit/?id=556b9025d92ecbc56470a9d098f43883f89cc5c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-When only a subset of the glibc gconv modules are installed, we need to
-generate a trimmed-down list of available modules. We currently use gawk
-for that.
+Version 5.0.1 - 8/2/2022
+ - On very low speed transfers (<10Kbps) sessions would time out due to
+   a very large interpacket transmission interval.  Fixed by putting a
+   lower limit on the advertised GRTT of of the interpacket transmission
+   interval.
+ - Sending of ABORT messages on early shutdown would sometimes fail due
+   to OpenSSL cleanup functions running before application cleanup.
+   Changed the ordering of atexit() handlers to ensure OpenSSL cleanup
+   happens last.
+ - Fixed missing timestamp update when clients read CONG_CTRL messages
+ - Fix to GRTT handling on server to ensure it doesn't fall below minumim.
+ - Fixed bypassed checking of existing files on client for backup
+ - Various logging fixes
 
-However, we are not using any GNU extension in that awk script, and it
-happens to work as expected when using mawk (which has no GNU
-extension).
+https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
 
-Commit 11c1076db9a5 (toolchain: add option to copy the gconv libraries)
-did not explain why it used gawk explicitly, and given the age for that
-commit, we doubt we'd be able to have the involved participants recall
-anything from that period...
-
-Besides, gawk is not a requirement for Buildroot.
-
-Switch over to using plain awk.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 822cc1ebc42cc43877a20ca51d94689aed3e4424)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 744607a5cb966e3100494d9fb7f40172336c5605)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/expunge-gconv-modules | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uftp/uftp.hash | 2 +-
+ package/uftp/uftp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/expunge-gconv-modules b/support/scripts/expunge-gconv-modules
-index 03012c1ce3..bc60fc0ce4 100755
---- a/support/scripts/expunge-gconv-modules
-+++ b/support/scripts/expunge-gconv-modules
-@@ -19,7 +19,7 @@
- # we handle each with slightly different code, since the second never has
- # associated aliases.
+diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
+index aaebcad014..e47cba9394 100644
+--- a/package/uftp/uftp.hash
++++ b/package/uftp/uftp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed sha256
+-sha256  562f71ea5a24b615eb491f5744bad01e9c2e58244c1d6252d5ae98d320d308e0  uftp-5.0.tar.gz
++sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index 1c36cb0ce6..ce865c20ec 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--gawk -v files="${1}" '
-+awk -v files="${2}" '
- $1 == "alias" {
-     aliases[$3] = aliases[$3] " " $2;
- }
+-UFTP_VERSION = 5.0
++UFTP_VERSION = 5.0.1
+ UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
