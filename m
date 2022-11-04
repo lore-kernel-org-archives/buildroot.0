@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94DB6C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A09CC433FE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 07:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BFB481FDA;
-	Fri,  4 Nov 2022 07:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BFB481FDA
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2C224188D;
+	Fri,  4 Nov 2022 07:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2C224188D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o9uiX2elvinP; Fri,  4 Nov 2022 07:52:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bADIKjNBevFt; Fri,  4 Nov 2022 07:52:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 772D781FCA;
-	Fri,  4 Nov 2022 07:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 772D781FCA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9B75E1BF399
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:51:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C0C041888;
+	Fri,  4 Nov 2022 07:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0C041888
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8257D1BF399
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7634161038
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BFB240BEF
  for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 07:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7634161038
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BFB240BEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJ1EFdhJ538b for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6g1RFiFcxHtH for <buildroot@lists.busybox.net>;
  Fri,  4 Nov 2022 07:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABB5260BEE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98EF440B56
  for <buildroot@buildroot.org>; Fri,  4 Nov 2022 07:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABB5260BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98EF440B56
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9994287D62; Fri,  4 Nov 2022 07:51:49 +0000 (UTC)
+ id 8632C87D60; Fri,  4 Nov 2022 07:51:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 4 Nov 2022 08:50:23 +0100
+Date: Fri, 4 Nov 2022 08:45:45 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 0faa04688930d3b58bfd621c0478169dc989e92f
-X-Git-Newrev: bfabad7e35003b6fcc08420624b1196735d1146e
+X-Git-Oldrev: e0e9f8c8a542965d977982c1b74bd737d8c174af
+X-Git-Newrev: 6dc13919dbc0b774b232891fe0622724ce8e92bb
 X-Patchwork-Hint: ignore
-Message-Id: <20221104075149.9994287D62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- package/wireguard-linux-compat: bump version to 1.0.20220627
+Message-Id: <20221104075149.8632C87D60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/uftp: bump to
+ version 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfabad7e35003b6fcc08420624b1196735d1146e
+commit: https://git.buildroot.net/buildroot/commit/?id=6dc13919dbc0b774b232891fe0622724ce8e92bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2022-June/007660.html
+Version 5.0.1 - 8/2/2022
+ - On very low speed transfers (<10Kbps) sessions would time out due to
+   a very large interpacket transmission interval.  Fixed by putting a
+   lower limit on the advertised GRTT of of the interpacket transmission
+   interval.
+ - Sending of ABORT messages on early shutdown would sometimes fail due
+   to OpenSSL cleanup functions running before application cleanup.
+   Changed the ordering of atexit() handlers to ensure OpenSSL cleanup
+   happens last.
+ - Fixed missing timestamp update when clients read CONG_CTRL messages
+ - Fix to GRTT handling on server to ensure it doesn't fall below minumim.
+ - Fixed bypassed checking of existing files on client for backup
+ - Various logging fixes
 
+https://sourceforge.net/projects/uftp-multicast/files/Changes.txt/download
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fe56cf24b649b5e87d7a9e5a1c3c23d7740fa3f6)
+(cherry picked from commit 744607a5cb966e3100494d9fb7f40172336c5605)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/uftp/uftp.hash | 2 +-
+ package/uftp/uftp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 3072b66e92..0f5713fc34 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2021-December/007369.html
--sha256  c0e607138a17daac656f508d8e63ea3737b5221fa5d9288191ddeb099f5a3b92  wireguard-linux-compat-1.0.20211208.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2022-June/007660.html
-+sha256  362d412693c8fe82de00283435818d5c5def7f15e2433a07a9fe99d0518f63c0  wireguard-linux-compat-1.0.20220627.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 44cc30f36e..258e184765 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+diff --git a/package/uftp/uftp.hash b/package/uftp/uftp.hash
+index aaebcad014..e47cba9394 100644
+--- a/package/uftp/uftp.hash
++++ b/package/uftp/uftp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed sha256
+-sha256  562f71ea5a24b615eb491f5744bad01e9c2e58244c1d6252d5ae98d320d308e0  uftp-5.0.tar.gz
++sha256  f0435fbc8e9ffa125e05600cb6c7fc933d7d587f5bae41b257267be4f2ce0e61  uftp-5.0.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index 1c36cb0ce6..ce865c20ec 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20211208
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20220627
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-UFTP_VERSION = 5.0
++UFTP_VERSION = 5.0.1
+ UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
