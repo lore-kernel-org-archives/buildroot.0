@@ -1,87 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D20C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 10:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82DF9C433FE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Nov 2022 12:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 151336109E;
-	Fri,  4 Nov 2022 10:16:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 151336109E
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFCA58206F;
+	Fri,  4 Nov 2022 12:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFCA58206F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SP2oA37qRUva; Fri,  4 Nov 2022 12:32:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65ECC8206A;
+	Fri,  4 Nov 2022 12:32:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65ECC8206A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 581841BF976
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 12:32:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FFDB60B0F
+ for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 12:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFDB60B0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PkN-UOsEt14f; Fri,  4 Nov 2022 10:16:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EC4461071;
-	Fri,  4 Nov 2022 10:16:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC4461071
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A6D01BF32D
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 10:16:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60826410C0
- for <buildroot@lists.busybox.net>; Fri,  4 Nov 2022 10:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60826410C0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EtE67E6BACxP for <buildroot@lists.busybox.net>;
- Fri,  4 Nov 2022 10:16:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5CD8409E3
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D5CD8409E3
- for <buildroot@buildroot.org>; Fri,  4 Nov 2022 10:16:44 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id h9so6439760wrt.0
- for <buildroot@buildroot.org>; Fri, 04 Nov 2022 03:16:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=4yXIPrjBfX6DZT7MR3ryPb0yH8IZQkXr5riu1lpmsyE=;
- b=mufPcNQRU+CLYAeYRRItwY+kI8h8IsGQkFK8KWJpqjTcyw98h3/SBRKYrPq4xEk1nh
- fhQOoItRo8bnZuoAyd+pggkoM2x6vPJiDDMWpNcb8BFe2vQN26sP5v8sifBY/t7YOy5j
- eZ4SksVj4Dr1VB6uVsGx2AFb04iCynjO/a2TcJkvMQbviB1raPACdm+R5gu0JqvF8Qwt
- QGtOJTUL4fvQT6Kz03AzcT84v958dKgd+j06+KjM3QYkUB5QJuU7r9TwDCiBaKnUu26Q
- sMLBIUllHn/CkyMZuNQ7Uta878vtuKDsn3Za8nJeuGjIm9a88uGyyvXr0aVdGMhu65gt
- 1TZA==
-X-Gm-Message-State: ACrzQf20mLQoZtsHd33y526ln7VHzJK0knR7zlypXWxXOEBSuQygQtF+
- CH7LDU4kht2+eQRs0gpGoI9kgEGhNU8=
-X-Google-Smtp-Source: AMsMyM4gGvhUqmAsNKQMYnTuqlZEka42LN8fgtYIeaJZ9pl5QCWD+L86LkPw8aEHlVnpkL30cSLM+g==
-X-Received: by 2002:a5d:4d8e:0:b0:236:d95e:2a7 with SMTP id
- b14-20020a5d4d8e000000b00236d95e02a7mr15159974wru.408.1667557002556; 
- Fri, 04 Nov 2022 03:16:42 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- d18-20020a5d6dd2000000b00236863c02f5sm3033065wrz.96.2022.11.04.03.16.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Nov 2022 03:16:42 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rLmsYgQpOujI for <buildroot@lists.busybox.net>;
+ Fri,  4 Nov 2022 12:32:22 +0000 (UTC)
+X-Greylist: delayed 00:11:01 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CA9C60AE8
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0CA9C60AE8
+ for <buildroot@buildroot.org>; Fri,  4 Nov 2022 12:32:21 +0000 (UTC)
+Feedback-ID: 3578:1022:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -228679107; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 04 Nov 2022 12:21:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri,  4 Nov 2022 11:16:39 +0100
-Message-Id: <20221104101639.24364-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri,  4 Nov 2022 08:20:46 -0400
+Message-Id: <20221104122046.8959-1-woodrow@douglass.dev>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4yXIPrjBfX6DZT7MR3ryPb0yH8IZQkXr5riu1lpmsyE=;
- b=J0pnWk7Ix5sOQcRKlciD59eAOTSH/Fs2jtzSw4jPCdWk4Gk4b/eq/dJBRdpAnflych
- uKrqqOrjqXrMAXkSd4U5D4QSmmTo//zv9MoQlZ0H/vrzOisOIFxQP+CMLiJ/VYYl+55+
- PZFJQ4++kXwlk64yM/vS7xHPqq1e+FjqLicO0KNXAKbMwPGaQ8IAwzFH9j8k5xCok1Tq
- uzSWsFNH0hcSqEJI/vXQ0d+R6bUtWln0b5Br6/3yJslOGcyT5sD+pN9uo1q0lx4hNFdC
- FkZgtIDVlBL5nJQk6/qc30lfO2yo4iezX4hnRlTRDb7cujoHk0ytkiEjhui1KgyW9Mz/
- I3Dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=J0pnWk7I
-Subject: [Buildroot] [PATCH 1/1] package/botan: add host-python3 dependency
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=kptduwz9+5zp6zMwC27w9ErPfcA9LTAszT0nR+5C792knRfznQliha5jRT3J6tY9Maxm0bnu/jMlP9RALPoAgodoxHoPdeNRnKMYf70Ks78kxuuUt+IU2fifEgG9OIhj4hb5CPG6UqusIiBUQrDJ5DKhsuIZr8lKpI4qc6dLtx7Rcu+bDn0sLzQCHBTs4hGKi/0zzZbXmJpgvWVqnNXuNpkhjw208aW+ZpatAl2fR0HXKVNKmiuuL2vE2xPPh661WJxAABKGq1eWfZFsv0YfBBjlf4qPV7nzFQGxOKmZlmL8+xLJ316ak63fDKVUfsBsykr0Y+vgOFweG6QhlGGqKQ==;
+ s=purelymail1; d=douglass.dev; v=1;
+ bh=9zraorHc19GMAS/kPAhYhsLkVB3ZRMkP6ac9UOB/JrE=; h=Received:From:To:Subject; 
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=ge98pZaB2BffVEQacFt/lTwB4LhS7WxaeXjuU5kLTtPMZfPspe4ALufl1/S2gwTtfK0xUVPHzUda9lzYS2wzxEGIWzrCJq6l1cDYcUPfzE8eB/EVrnxD5e6QYz0keBf08fvmLE2IohfT7ZltGwEWSQ2afLSKG2oyh1ZkquZ6ABOR87r56wP7FwIWqkea7/9aP6Ol7d6TqsGcIv+qGLZV3GANTrKAbT30UL5lwDvYCaUL733QdLBBh/WLzAFRcMZ6sPzTV9u2j94yOeCcEvY30iYHxoyTghsvCQOKzSctH+bkX4KAHHEwBe6vvGEi0DLwjtY2CTAHZfkq1oA7lge5MQ==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=9zraorHc19GMAS/kPAhYhsLkVB3ZRMkP6ac9UOB/JrE=;
+ h=Feedback-ID:Received:From:To:Subject; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=douglass.dev
+ header.i=@douglass.dev header.a=rsa-sha256 header.s=purelymail1
+ header.b=kptduwz9; 
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=ge98pZaB
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH 1/1] package/opencv4: add support for
+ opencv4_contrib repository for extra modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,41 +77,478 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Woody Douglass via buildroot <buildroot@buildroot.org>
+Reply-To: Woody Douglass <woodrow@douglass.dev>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Woody Douglass <woodrow@douglass.dev>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-add host-python3 dependency to avoid the following build failure raised
-since the addition of the package in commit
-e43da7bb32285bbd41b38a379aef77132d149df7:
+From: Woodrow Douglass <wdouglass@carnegierobotics.com>
 
-(cd /home/autobuild/autobuild/instance-19/output-1/build/botan-2.19.2; PATH="/home/autobuild/autobuild/instance-19/output-1/host/bin:/home/autobuild/autobuild/instance-19/output-1/host/sbin:/home/autobuild/make:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ./configure.py --cpu="m68k" --disable-cc-tests --os=linux --cc=gcc --cc-bin="/home/autobuild/autobuild/instance-19/output-1/host/bin/m68k-linux-g++" --prefix=/usr --without-documentation --extra-libs=atomic --disable-shared-library --enable-static-library --no-autoload --without-stack-protector --without-os-feature=getauxval --with-boost --with-sqlite --with-zlib --disable-altivec --disable-neon)
-/usr/bin/env: 'python': No such file or directory
+This adds a separate opencv4_contrib package to manage
+downloading/unpacking that repository. These extra modules
+are useful for a lot of applications, but not necessary
+for minimal installs, so they are all given dedicated Kconfig
+options
 
-Fixes:
- - http://autobuild.buildroot.org/results/91eb6d03ee899bc1034efc5ac7d1fe78961d37ca
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 ---
- package/botan/botan.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in                            |   1 +
+ package/opencv4-contrib/Config.in            | 313 +++++++++++++++++++
+ package/opencv4-contrib/opencv4-contrib.hash |   3 +
+ package/opencv4-contrib/opencv4-contrib.mk   |  13 +
+ package/opencv4/opencv4.mk                   |  62 +++-
+ 5 files changed, 387 insertions(+), 5 deletions(-)
+ create mode 100644 package/opencv4-contrib/Config.in
+ create mode 100644 package/opencv4-contrib/opencv4-contrib.hash
+ create mode 100644 package/opencv4-contrib/opencv4-contrib.mk
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index b26ee4c66e..b0ebe594b1 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -13,6 +13,7 @@ BOTAN_CPE_ID_VENDOR = botan_project
+diff --git a/package/Config.in b/package/Config.in
+index 238d7813f0..f03b5aad82 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1593,6 +1593,7 @@ menu "Graphics"
+ 	source "package/opencl-clhpp/Config.in"
+ 	source "package/opencv3/Config.in"
+ 	source "package/opencv4/Config.in"
++	source "package/opencv4-contrib/Config.in"
+ 	source "package/opengl/Config.in"
+ 	source "package/openjpeg/Config.in"
+ 	source "package/pango/Config.in"
+diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+new file mode 100644
+index 0000000000..9800333035
+--- /dev/null
++++ b/package/opencv4-contrib/Config.in
+@@ -0,0 +1,313 @@
++menuconfig BR2_PACKAGE_OPENCV4_CONTRIB
++	bool "opencv4-contrib"
++	depends on BR2_PACKAGE_OPENCV4
++	help
++	  OpenCV (Open Source Computer Vision) is a library of
++	  programming functions for real time computer vision.
++
++	  http://opencv.org/
++
++if BR2_PACKAGE_OPENCV4_CONTRIB
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT
++	bool "alphamat"
++	help
++	  Computer Vision based Alpha Matting -- Given an input image
++	  and a trimap, generate an alpha matte.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO
++	bool "aruco"
++	help
++	  ArUco and ChArUco Markers -- Augmented reality ArUco marker
++	  and "ChARUco" markers where ArUco markers embedded inside the
++	  white areas of the checker board.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE
++	bool "barcode"
++	help
++	  Barcode detecting and decoding methods.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM
++	bool "bgsegm"
++	help
++	  Background segmentation algorithm combining statistical
++	  background image estimation and per-pixel Bayesian
++	  segmentation.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED
++	bool "bioinspired"
++	help
++	  Biological Vision -- Biologically inspired vision model:
++	  minimize noise and luminance variance, transient event
++	  segmentation, high dynamic range tone mapping methods.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB
++	bool "ccalib"
++	help
++	  Custom Calibration -- Patterns for 3D reconstruction,
++	  omnidirectional camera calibration, random pattern calibration
++	  and multi-camera calibration.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ
++	bool "cnn_3dobj"
++	help
++	  Deep Object Recognition and Pose -- Uses Caffe Deep Neural Net
++	  library to build, train and test a CNN model of visual object
++	  recognition and pose.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV
++	bool "cvv"
++	help
++	  Computer Vision Debugger -- Simple code that you can add
++	  to your program that pops up a GUI allowing you to
++	  interactively and visually debug computer vision programs.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
++	bool "datasets"
++	help
++	  Datasets Reader -- Code for reading existing computer vision
++	  databases and samples of using the readers to train, test and
++	  run using that dataset's data.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
++	bool "dnn_objdetect"
++	help
++	  Object Detection using CNNs -- Implements compact CNN Model
++	  for object detection. Trained using Caffe but uses
++	  opencv_dnn module.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
++	bool "dnn_superres"
++	help
++	  Superresolution using CNNs -- Contains four trained
++	  convolutional neural networks to upscale images.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
++	bool "dnns_easily_fooled"
++	help
++	  Subvert DNNs -- This code can use the activations in a
++	  network to fool the networks into recognizing something else.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
++	bool "dpm"
++	help
++	  Deformable Part Model -- Felzenszwalb's Cascade with
++	  deformable parts object recognition code.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
++	bool "face"
++	help
++	  Face Recognition -- Face recognition techniques: Eigen, Fisher
++	  and Local Binary Pattern Histograms LBPH methods.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE
++	bool "freetype"
++	help
++	  Drawing text using freetype and harfbuzz.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY
++	bool "fuzzy"
++	help
++	  Fuzzy Logic in Vision -- Fuzzy logic image transform and
++	  inverse; Fuzzy image processing.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF
++	bool "hdf"
++	help
++	  Hierarchical Data Storage -- This module contains I/O
++	  routines for Hierarchical Data Format:
++	  https://en.m.wikipedia.org/wiki/Hierarchical_Data_Format
++	  meant to store large amounts of data.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS
++	bool "hfs"
++	help
++	  Hierarchical Feature Selection for Efficient Image
++	  Segmentation -- This module contains an efficient
++	  algorithm to segment an image.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH
++	bool "img_hash"
++	help
++	  This module contains algorithms to extract hash of an
++	  image allowing to efficiently estimate similarity between
++	  images.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM
++	bool "intensity_transform"
++	help
++	  The module brings implementations of intensity transformation
++	  algorithms to adjust image contrast.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA
++	bool "julia"
++	help
++	  Julia language wrappers with samples and tests.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR
++	bool "line_descriptor"
++	help
++	  Line Segment Extract and Match -- Methods of extracting,
++	  describing and matching line segments using binary
++	  descriptors.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB
++	bool "matlab"
++	help
++	  Matlab Interface -- OpenCV Matlab Mex wrapper code generator
++	  for certain opencv core modules.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC
++	bool "mcc"
++	help
++	  Macbeth Color Chart detector -- Find and return color patch
++	  location in MacBeth color calibration charts.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW
++	bool "optflow"
++	help
++	  Optical Flow -- Algorithms for running and evaluating
++	  deepflow, simpleflow, sparsetodenseflow and motion
++	  templates (silhouette flow).
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS
++	bool "ovis"
++	help
++	  OGRE 3D Visualiser -- allows you to render 3D data using
++	  the OGRE 3D engine.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING
++	bool "phase_unwrapping"
++	help
++	  Quality-guided phase unwrapping.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT
++	bool "plot"
++	help
++	  Plotting -- The plot module allows you to easily plot data
++	  in 1D or 2D.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY
++	bool "quality"
++	help
++	  Image Quality Analysis (IQA) API.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID
++	bool "rapid"
++	help
++	  Silhouette based 3D object tracking.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG
++	bool "reg"
++	help
++	  Image Registration -- Pixels based image registration for
++	  precise alignment. Follows the paper "Image Alignment and
++	  Stitching: A Tutorial", by Richard Szeliski.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD
++	bool "rgbd"
++	help
++	  RGB-Depth Processing module -- Linemod 3D object recognition;
++	  Fast surface normals and 3D plane finding. 3D visual odometry.
++	  3d reconstruction using KinectFusion.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
++	bool "saliency"
++	help
++	  Saliency API -- Where humans would look in a scene. Has
++	  routines for static, motion and "objectness" saliency.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
++	bool "sfm"
++	help
++	  Structure from Motion -- This module contains algorithms
++	  to perform 3d reconstruction from 2d images. The core of
++	  the module is a light version of Libmv.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
++	bool "shape"
++	help
++	  Shape Distance and Matching
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO
++	bool "stereo"
++	help
++	  Stereo Correspondence -- Stereo matching done with different
++	  descriptors: Census / CS-Census / MCT / BRIEF / MV and dense
++	  stereo correspondence using Quasi Dense Stereo method.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT
++	bool "structured_light"
++	help
++	  Structured Light Use -- How to generate and project gray code
++	  patterns and use them to find dense depth in a scene.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES
++	bool "superres"
++	help
++	  Super Resolution
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING
++	bool "surface_matching"
++	help
++	  Point Pair Features -- Implements 3d object detection and
++	  localization using multimodal point pair features.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT
++	bool "text"
++	help
++	  Scene Text Detection and Recognition -- This module contains
++	  algorithms to perform text detection, words segmentation and
++	  text recognition in a visual scene.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
++	bool "tracking"
++	help
++	  Vision Based Object Tracking -- Use and/or evaluate different
++	  visual object tracking techniques.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB
++	bool "videostab"
++	help
++	  Video Stabilization
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ
++	bool "viz"
++	help
++	  3D Visualizer
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE
++	bool "wechat_qrcode"
++	help
++	  WeChat QR code detector for detecting and parsing QR code.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D
++	bool "xfeatures2d"
++	help
++	  Features2D extra -- Extra 2D Features Framework containing
++	  experimental and non-free 2D feature detector/descriptor
++	  algorithms. SURF, BRIEF, Censure, Freak, LUCID, Daisy,
++	  Self-similar.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC
++	bool "ximgproc"
++	help
++	  Extended Image Processing -- Structured Forests / Domain
++	  Transform Filter / Guided Filter / Adaptive Manifold Filter
++	  / Joint Bilateral Filter / Superpixels / Ridge Detection
++	  Filter.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
++	bool "xobjdetect"
++	help
++	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
++	  local binary patterns computed as integral features for 2D
++	  object detection.
++
++config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
++	bool "xphoto"
++	help
++	  Extra Computational Photography -- Additional photo processing
++	  algorithms: Color balance / Denoising / Inpainting.
++
++endif
+diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
+new file mode 100644
+index 0000000000..9db112c9e9
+--- /dev/null
++++ b/package/opencv4-contrib/opencv4-contrib.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  a97c2eaecf7a23c6dbd119a609c6d7fae903e5f9ff5f1fe678933e01c67a6c11  opencv4-contrib-4.5.5.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
+new file mode 100644
+index 0000000000..58dbe27e28
+--- /dev/null
++++ b/package/opencv4-contrib/opencv4-contrib.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# opencv4-contrib
++#
++################################################################################
++
++OPENCV4_CONTRIB_VERSION = 4.6.0
++OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
++OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
++OPENCV4_CONTRIB_LICENSE = Apache-2.0
++OPENCV4_CONTRIB_LICENSE_FILES = LICENSE
++
++$(eval $(generic-package))
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index ef15c6d911..a665793ad9 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -82,11 +82,6 @@ OPENCV4_CONF_OPTS += \
+ #   - viz: missing VTK dependency
+ #   - world: all-in-one module
+ #
+-# * Contrib modules from [1] are disabled:
+-#   - opencv_contrib package is not available in Buildroot;
+-#   - OPENCV_EXTRA_MODULES_PATH is not set.
+-#
+-# [1] https://github.com/Itseez/opencv_contrib
+ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_opencv_androidcamera=OFF \
+ 	-DBUILD_opencv_apps=OFF \
+@@ -232,6 +227,63 @@ OPENCV4_CONF_OPTS += \
  
- BOTAN_INSTALL_STAGING = YES
+ OPENCV4_DEPENDENCIES += host-pkgconf zlib
  
-+BOTAN_DEPENDENCIES = host-python3
- BOTAN_CONF_OPTS = \
- 	--cpu=$(BR2_ARCH) \
- 	--disable-cc-tests \
++ifeq ($(BR2_PACKAGE_OPENCV4_CONTRIB),y)
++# OPENCV4 depends on OPENCV4_CONTRIB, and not the other way around.
++# The modules in OPENCV4_CONTRIB get built as part of the build
++# process for OPENCV4, so the source needs to be unpacked already
++OPENCV4_DEPENDENCIES += opencv4-contrib
++OPENCV4_CONF_OPTS += \
++	-DOPENCV_EXTRA_MODULES_PATH=$(OPENCV4_CONTRIB_DIR)/modules \
++	-DBUILD_opencv_alphamat=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT),ON,OFF) \
++	-DBUILD_opencv_aruco=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO),ON,OFF) \
++	-DBUILD_opencv_barcode=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE),ON,OFF) \
++	-DBUILD_opencv_bgsegm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM),ON,OFF) \
++	-DBUILD_opencv_bioinspired=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED),ON,OFF) \
++	-DBUILD_opencv_ccalib=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB),ON,OFF) \
++	-DBUILD_opencv_cnn_3dobj=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CNN_3DOBJ),ON,OFF) \
++	-DBUILD_opencv_cvv=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CVV),ON,OFF) \
++	-DBUILD_opencv_datasets=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS),ON,OFF) \
++	-DBUILD_opencv_dnn_objdetect=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT),ON,OFF) \
++	-DBUILD_opencv_dnn_superres=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES),ON,OFF) \
++	-DBUILD_opencv_dnns_easily_fooled=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED),ON,OFF) \
++	-DBUILD_opencv_dpm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM),ON,OFF) \
++	-DBUILD_opencv_face=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE),ON,OFF) \
++	-DBUILD_opencv_freetype=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FREETYPE),ON,OFF) \
++	-DBUILD_opencv_fuzzy=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FUZZY),ON,OFF) \
++	-DBUILD_opencv_hdf=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HDF),ON,OFF) \
++	-DBUILD_opencv_hfs=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_HFS),ON,OFF) \
++	-DBUILD_opencv_img_hash=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_IMG_HASH),ON,OFF) \
++	-DBUILD_opencv_intensity_transform=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_INTENSITY_TRANSFORM),ON,OFF) \
++	-DBUILD_opencv_julia=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_JULIA),ON,OFF) \
++	-DBUILD_opencv_line_descriptor=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_LINE_DESCRIPTOR),ON,OFF) \
++	-DBUILD_opencv_matlab=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MATLAB),ON,OFF) \
++	-DBUILD_opencv_mcc=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC),ON,OFF) \
++	-DBUILD_opencv_optflow=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW),ON,OFF) \
++	-DBUILD_opencv_ovis=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OVIS),ON,OFF) \
++	-DBUILD_opencv_phase_unwrapping=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PHASE_UNWRAPPING),ON,OFF) \
++	-DBUILD_opencv_plot=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_PLOT),ON,OFF) \
++	-DBUILD_opencv_quality=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_QUALITY),ON,OFF) \
++	-DBUILD_opencv_rapid=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RAPID),ON,OFF) \
++	-DBUILD_opencv_reg=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_REG),ON,OFF) \
++	-DBUILD_opencv_rgbd=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_RGBD),ON,OFF) \
++	-DBUILD_opencv_saliency=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY),ON,OFF) \
++	-DBUILD_opencv_sfm=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM),ON,OFF) \
++	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE),ON,OFF) \
++	-DBUILD_opencv_stereo=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO),ON,OFF) \
++	-DBUILD_opencv_structured_light=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT),ON,OFF) \
++	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES),ON,OFF) \
++	-DBUILD_opencv_surface_matching=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SURFACE_MATCHING),ON,OFF) \
++	-DBUILD_opencv_text=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT),ON,OFF) \
++	-DBUILD_opencv_tracking=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING),ON,OFF) \
++	-DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB),ON,OFF) \
++	-DBUILD_opencv_viz=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIZ),ON,OFF) \
++	-DBUILD_opencv_wechat_qrcode=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_WECHAT_QRCODE),ON,OFF) \
++	-DBUILD_opencv_xfeatures2d=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XFEATURES2D),ON,OFF) \
++	-DBUILD_opencv_ximgproc=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC),ON,OFF) \
++	-DBUILD_opencv_xobjdetect=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT),ON,OFF) \
++	-DBUILD_opencv_xphoto=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO),ON,OFF)
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
+ OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
+ OPENCV4_DEPENDENCIES += jasper
 -- 
-2.35.1
+2.20.1
 
 _______________________________________________
 buildroot mailing list
