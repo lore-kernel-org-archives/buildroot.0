@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5C64C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 18:25:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F6AC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 18:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 675DA60AAE;
-	Sat,  5 Nov 2022 18:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 675DA60AAE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5036860ABE;
+	Sat,  5 Nov 2022 18:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5036860ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ClsFewaAWVQl; Sat,  5 Nov 2022 18:25:09 +0000 (UTC)
+	with ESMTP id HUaQOyfyQVqi; Sat,  5 Nov 2022 18:25:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6E416063B;
-	Sat,  5 Nov 2022 18:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6E416063B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 109411BF375
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B59060B20;
+	Sat,  5 Nov 2022 18:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B59060B20
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 463B71BF870
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:25:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6D39812D1
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6D39812D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D99E4023C
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D99E4023C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IqdnEnAUFyqr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9g_O20gWm-vS for <buildroot@lists.busybox.net>;
  Sat,  5 Nov 2022 18:25:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 192A2812C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16D04401FF
  for <buildroot@buildroot.org>; Sat,  5 Nov 2022 18:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 192A2812C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16D04401FF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03C7C87DC0; Sat,  5 Nov 2022 18:25:05 +0000 (UTC)
+ id EE40787DB5; Sat,  5 Nov 2022 18:25:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 19:23:51 +0100
+Date: Sat, 5 Nov 2022 19:23:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 54fd5f74f19d1e83d7c4571fc1b766c733072b94
-X-Git-Newrev: 8c8a463a71c6ebaa34c339b1efc3e33c9306f450
+X-Git-Oldrev: 738500c296c8b1206f20e94ca3e7c5932a6a0486
+X-Git-Newrev: 54fd5f74f19d1e83d7c4571fc1b766c733072b94
 X-Patchwork-Hint: ignore
-Message-Id: <20221105182505.03C7C87DC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ssdp-responder: minor
- update of help text
+Message-Id: <20221105182504.EE40787DB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ssdp-responder: bump
+ to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c8a463a71c6ebaa34c339b1efc3e33c9306f450
+commit: https://git.buildroot.net/buildroot/commit/?id=54fd5f74f19d1e83d7c4571fc1b766c733072b94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Changes:
+ - New command line options to ssdp-scan
+ - Update copyright years (affects LICENSE file hash)
+
+Fixes:
+ - Workaround for OpenVPN /32 default server setup
+ - Time-of-check vs time-of-use issue with caching of UUID,
+   found by Coverity Scan, fixed by Raul Porancea
+
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ssdp-responder/Config.in | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ package/ssdp-responder/ssdp-responder.hash | 4 ++--
+ package/ssdp-responder/ssdp-responder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ssdp-responder/Config.in b/package/ssdp-responder/Config.in
-index df57546eed..8b5dfe67a6 100644
---- a/package/ssdp-responder/Config.in
-+++ b/package/ssdp-responder/Config.in
-@@ -7,14 +7,16 @@ config BR2_PACKAGE_SSDP_RESPONDER
- 	  targeted more at embedded systems that need to announce
- 	  themselves to Windows systems.
+diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
+index e8cbbb4a1f..425ad86e08 100644
+--- a/package/ssdp-responder/ssdp-responder.hash
++++ b/package/ssdp-responder/ssdp-responder.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7ae49229e7c7a55fed9e36598b12e2173eecef0fffe0a386b6a10fad30f3c79f  ssdp-responder-1.8.tar.gz
+-sha256  e17dc0bc91bf499d8cca5e016c22c6d2a4770e3cc1a43756a7973375a83ddb90  LICENSE
++sha256  974c244abd4ba8c87532867a84756182a1460c99072ffb1eb91c5a1f73311d89  ssdp-responder-1.9.tar.gz
++sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index 3fee4c2006..fd7b1ea44b 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  ssdpd is a stand-alone UNIX, no external dependencies but the
--	  standard C library.  It has a built-in web server for serving
--	  the UPnP XML description which Windows use to present the
--	  icon, by default an InternetGatewayDevice is announced.
-+	  The project consists of ssdpd and ssdp-scan.  The former is a
-+	  stand-alone UNIX daemon, it has no dependencies but a standard
-+	  C library.  It comes with built-in web server for serving the
-+	  UPnP XML description on port 1901, the XML is used by Windows
-+	  to present the icon, by default an InternetGatewayDevice is
-+	  announced.
- 
--	  Also included is ssdp-scan, a tool similar to mdns-scan, which
--	  continuously scans for SSDP capable hosts on the network.
--	  Take care only to use for debugging since it scans the network
--	  quite aggressively.
-+	  ssdp-scan is a tool, similar to mdns-scan, to find other SSDP
-+	  capable hosts on the network.  Take care to only use it for
-+	  debugging, or quicker device discovery operations, since it
-+	  scans the network quite aggressively.
- 
- 	  https://github.com/troglobit/ssdp-responder/
+-SSDP_RESPONDER_VERSION = 1.8
++SSDP_RESPONDER_VERSION = 1.9
+ SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
+ SSDP_RESPONDER_LICENSE = ISC
+ SSDP_RESPONDER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
