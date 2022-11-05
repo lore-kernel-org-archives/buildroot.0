@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2545EC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 782C2C64ED9
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B65E341CF8;
-	Mon, 20 Feb 2023 20:57:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B65E341CF8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A8D041D5A;
+	Mon, 20 Feb 2023 20:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A8D041D5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SzhQYFpDVxba; Mon, 20 Feb 2023 20:57:52 +0000 (UTC)
+	with ESMTP id iumg2ttPRNHh; Mon, 20 Feb 2023 20:58:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 977A941D54;
-	Mon, 20 Feb 2023 20:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 977A941D54
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECEEE41D5E;
+	Mon, 20 Feb 2023 20:58:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECEEE41D5E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 238D41BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0DE831BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACFD86108C
+ by smtp3.osuosl.org (Postfix) with ESMTP id F24F56108E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACFD86108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F24F56108E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jab4ImFGiShH for <buildroot@lists.busybox.net>;
+ with ESMTP id Gjqjrs-Js3Fh for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5BFB46106F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 749056101C
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BFB46106F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 749056101C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A1558648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+ id 72F3F828C8; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 15:03:39 +0100
+Date: Sat, 5 Nov 2022 16:03:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4721367debff67d2a4fddb3a5d72796ebbb401f8
-X-Git-Newrev: 26634490364decc24fa32f175c12c8a2d984f1d3
+X-Git-Oldrev: a848418db4f956486a17dedc08f09803b26c84a1
+X-Git-Newrev: adc1c5d8f14f69a62a2a4260465363ab120816ab
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.5A1558648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sudo: fix
- CVE-2022-43995
+Message-Id: <20230220205146.72F3F828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libopenssl: don't
+ build the afalg engine
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,102 +58,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0483269088579558916=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26634490364decc24fa32f175c12c8a2d984f1d3
+--===============0483269088579558916==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=adc1c5d8f14f69a62a2a4260465363ab120816ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sudo 1.8.0 through 1.9.12, with the crypt() password backend, contains a
-plugins/sudoers/auth/passwd.c array-out-of-bounds error that can result
-in a heap-based buffer over-read. This can be triggered by arbitrary
-local users with access to Sudo by entering a password of seven
-characters or fewer. The impact could vary depending on the compiler and
-processor architecture.
+The openssl configure script disables the afalg engine when it detects
+cross-compilation, but the detection missfires because it is based on
+the CROSS_COMPILE environment variable, which we do not set (as we pass
+fully qualified CC et al.).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+So, the afalg engine is built, but it is built for the host, not the
+target, so it does not make sense to build and install it. Besides, it
+leaks build host info.
+
+Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
+[yann.morin.1998@free.fr: extend commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sudo/0001-Fix-CVE-2022-43995.patch | 53 ++++++++++++++++++++++++++++++
- package/sudo/sudo.mk                       |  3 ++
- 2 files changed, 56 insertions(+)
+ package/libopenssl/libopenssl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sudo/0001-Fix-CVE-2022-43995.patch b/package/sudo/0001-Fix-CVE-2022-43995.patch
-new file mode 100644
-index 0000000000..3f544dcf81
---- /dev/null
-+++ b/package/sudo/0001-Fix-CVE-2022-43995.patch
-@@ -0,0 +1,53 @@
-+From bd209b9f16fcd1270c13db27ae3329c677d48050 Mon Sep 17 00:00:00 2001
-+From: "Todd C. Miller" <Todd.Miller@sudo.ws>
-+Date: Fri, 28 Oct 2022 07:29:55 -0600
-+Subject: [PATCH] Fix CVE-2022-43995, potential heap overflow for passwords < 8
-+ characters. Starting with sudo 1.8.0 the plaintext password buffer is
-+ dynamically sized so it is not safe to assume that it is at least 9 bytes in
-+ size. Found by Hugo Lefeuvre (University of Manchester) with ConfFuzz.
-+
-+[Retrieved from:
-+https://github.com/sudo-project/sudo/commit/bd209b9f16fcd1270c13db27ae3329c677d48050]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ plugins/sudoers/auth/passwd.c | 11 +++++------
-+ 1 file changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/plugins/sudoers/auth/passwd.c b/plugins/sudoers/auth/passwd.c
-+index b2046eca2..0416861e9 100644
-+--- a/plugins/sudoers/auth/passwd.c
-++++ b/plugins/sudoers/auth/passwd.c
-+@@ -63,7 +63,7 @@ sudo_passwd_init(struct passwd *pw, sudo_auth *auth)
-+ int
-+ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_callback *callback)
-+ {
-+-    char sav, *epass;
-++    char des_pass[9], *epass;
-+     char *pw_epasswd = auth->data;
-+     size_t pw_len;
-+     int matched = 0;
-+@@ -75,12 +75,12 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
-+ 
-+     /*
-+      * Truncate to 8 chars if standard DES since not all crypt()'s do this.
-+-     * If this turns out not to be safe we will have to use OS #ifdef's (sigh).
-+      */
-+-    sav = pass[8];
-+     pw_len = strlen(pw_epasswd);
-+-    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len))
-+-	pass[8] = '\0';
-++    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len)) {
-++	strlcpy(des_pass, pass, sizeof(des_pass));
-++	pass = des_pass;
-++    }
-+ 
-+     /*
-+      * Normal UN*X password check.
-+@@ -88,7 +88,6 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
-+      * only compare the first DESLEN characters in that case.
-+      */
-+     epass = (char *) crypt(pass, pw_epasswd);
-+-    pass[8] = sav;
-+     if (epass != NULL) {
-+ 	if (HAS_AGEINFO(pw_epasswd, pw_len) && strlen(epass) == DESLEN)
-+ 	    matched = !strncmp(pw_epasswd, epass, DESLEN);
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 4f9fdb4b2c..1826f72017 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -23,6 +23,9 @@ SUDO_CONF_OPTS = \
- 	--without-interfaces \
- 	--with-env-editor
- 
-+# 0001-Fix-CVE-2022-43995.patch
-+SUDO_IGNORE_CVES += CVE-2022-43995
-+
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- define SUDO_INSTALL_PAM_CONF
- 	$(INSTALL) -D -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index c7a2d65cc4..50d41a6533 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -83,6 +83,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			no-tests \
+ 			no-fuzz-libfuzzer \
+ 			no-fuzz-afl \
++			no-afalgeng \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5),,no-rc5) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
+
+--===============0483269088579558916==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0483269088579558916==--
