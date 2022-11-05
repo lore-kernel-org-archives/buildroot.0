@@ -1,52 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD36C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 19:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABFA0C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99051416C7;
-	Sat,  5 Nov 2022 19:47:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99051416C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 137EF403C2;
+	Sat,  5 Nov 2022 20:01:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 137EF403C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2jBqdhZBO5Ni; Sat,  5 Nov 2022 19:47:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id npommf5BIJNN; Sat,  5 Nov 2022 20:01:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 870C8416BA;
-	Sat,  5 Nov 2022 19:47:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 870C8416BA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0D2601BF371
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 19:47:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E52F40222;
+	Sat,  5 Nov 2022 20:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E52F40222
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F4B81BF371
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 400F081A73
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 19:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 400F081A73
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AA82607B0
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AA82607B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mfbqmq_yxj-c for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 19:47:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC37681A65
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.142])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC37681A65
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 19:47:24 +0000 (UTC)
-Received: from submission (posteo.de [185.67.36.169]) 
- by mout02.posteo.de (Postfix) with ESMTPS id 98E34240101
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:47:21 +0100 (CET)
-Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4N4Sgs1hdPz6tmG;
- Sat,  5 Nov 2022 20:47:21 +0100 (CET)
-From: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero@schwaericke.email>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M_soUoMO47rz for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 877B760769
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877B760769
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 749CB87DE0; Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat,  5 Nov 2022 19:47:12 +0000
-Message-Id: <20221105194712.541286-1-gero@schwaericke.email>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] board/cubietech/cubieboard1: add Cubieboard 1
+Date: Sat, 5 Nov 2022 21:01:14 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 785ea2179c40040cc0087b7b635dc3a78dd11f42
+X-Git-Newrev: fcdc4b29c7a84422214ee3af116c75fa62289484
+X-Patchwork-Hint: ignore
+Message-Id: <20221105200153.749CB87DE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zic: bump to version
+ 2022f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +56,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero@schwaericke.email>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Qm9hcmQgc3VwcG9ydCBmb3IgdGhlIEN1YmllYm9hcmQgMSBmcm9tIEN1YmlldGVjaC4gQmFzZWQg
-dGhlIGNvbmZpZyBmb3IKQ3ViaWVib2FyZCAyIGFuZCB0aGUgT2xpbWV4IEExMC1PTGludVhpbm8t
-TElNRSB3aGljaCBpcyBhbHNvIGFuCkFsbHdpbm5lciBBMTAgYm9hcmQgKHN1bnhpIGtlcm5lbCku
-CgpTaWduZWQtb2ZmLWJ5OiBHZXJvIFNjaHfDpHJpY2tlIDxnZXJvQHNjaHdhZXJpY2tlLmVtYWls
-PgotLS0KIGJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9ib290LmNtZCAgICAgfCAgNyArKysr
-KwogYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL2dlbmltYWdlLmNmZyB8IDM2ICsrKysrKysr
-KysrKysrKysrKysrKysKIGNvbmZpZ3MvY3ViaWVib2FyZDFfZGVmY29uZmlnICAgICAgICAgICAg
-fCAzOSArKysrKysrKysrKysrKysrKysrKysrKysKIDMgZmlsZXMgY2hhbmdlZCwgODIgaW5zZXJ0
-aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9i
-b290LmNtZAogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9n
-ZW5pbWFnZS5jZmcKIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2N1YmllYm9hcmQxX2RlZmNv
-bmZpZwoKZGlmZiAtLWdpdCBhL2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9ib290LmNtZCBi
-L2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9ib290LmNtZApuZXcgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCAwMDAwMDAwMDAwLi5lZWZiZGM4MTY5Ci0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQv
-Y3ViaWV0ZWNoL2N1YmllYm9hcmQxL2Jvb3QuY21kCkBAIC0wLDAgKzEsNyBAQAorIyBiYXNlZCBv
-biBib2FyZC9jdWJpZWJvYXJkMi9ib290LmNtZAorCitzZXRlbnYgZmR0X2hpZ2ggZmZmZmZmZmYK
-K3NldGVudiBib290YXJncyBjb25zb2xlPXR0eVMwLDExNTIwMCBlYXJseXByaW50ayByb290PS9k
-ZXYvbW1jYmxrMHAyIHJvb3R3YWl0CitmYXRsb2FkIG1tYyAwICRrZXJuZWxfYWRkcl9yIHpJbWFn
-ZQorZmF0bG9hZCBtbWMgMCAkZmR0X2FkZHJfciBzdW40aS1hMTAtY3ViaWVib2FyZC5kdGIKK2Jv
-b3R6ICRrZXJuZWxfYWRkcl9yIC0gJGZkdF9hZGRyX3IKZGlmZiAtLWdpdCBhL2JvYXJkL2N1Ymll
-dGVjaC9jdWJpZWJvYXJkMS9nZW5pbWFnZS5jZmcgYi9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2Fy
-ZDEvZ2VuaW1hZ2UuY2ZnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjJl
-ZDRkZGU5NTEKLS0tIC9kZXYvbnVsbAorKysgYi9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEv
-Z2VuaW1hZ2UuY2ZnCkBAIC0wLDAgKzEsMzYgQEAKKyMgYmFzZWQgb24gYm9hcmQvY3ViaWVib2Fy
-ZDIvZ2VuaW1hZ2UuY2ZnCisKK2ltYWdlIGJvb3QudmZhdCB7CisJdmZhdCB7CisJCWZpbGVzID0g
-eworCQkJInpJbWFnZSIsCisJCQkic3VuNGktYTEwLWN1YmllYm9hcmQuZHRiIiwKKwkJCSJib290
-LnNjciIKKwkJfQorCX0KKworCXNpemUgPSAxNk0KK30KKworaW1hZ2Ugc2RjYXJkLmltZyB7CisJ
-aGRpbWFnZSB7CisJfQorCisJcGFydGl0aW9uIHUtYm9vdCB7CisJCWluLXBhcnRpdGlvbi10YWJs
-ZSA9ICJubyIKKwkJaW1hZ2UgPSAidS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbiIKKwkJb2Zmc2V0
-ID0gOEsKKwkJc2l6ZSA9IDEwMTZLICMgMU1CIC0gOEtCCisJfQorCisJcGFydGl0aW9uIGJvb3Qg
-eworCQlwYXJ0aXRpb24tdHlwZSA9IDB4QworCQlib290YWJsZSA9ICJ0cnVlIgorCQlpbWFnZSA9
-ICJib290LnZmYXQiCisJfQorCisJcGFydGl0aW9uIHJvb3RmcyB7CisJCXBhcnRpdGlvbi10eXBl
-ID0gMHg4MworCQlpbWFnZSA9ICJyb290ZnMuZXh0NCIKKwl9Cit9CmRpZmYgLS1naXQgYS9jb25m
-aWdzL2N1YmllYm9hcmQxX2RlZmNvbmZpZyBiL2NvbmZpZ3MvY3ViaWVib2FyZDFfZGVmY29uZmln
-Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjYwMWQ0YWIzOGMKLS0tIC9k
-ZXYvbnVsbAorKysgYi9jb25maWdzL2N1YmllYm9hcmQxX2RlZmNvbmZpZwpAQCAtMCwwICsxLDM5
-IEBACisjIEFyY2hpdGVjdHVyZQorQlIyX2FybT15CitCUjJfY29ydGV4X2E4PXkKKworIyBUb29s
-Y2hhaW4gb3B0aW9ucworQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzA9
-eQorCisjIEJvb3Rsb2FkZXIKK0JSMl9UQVJHRVRfVUJPT1Q9eQorQlIyX1RBUkdFVF9VQk9PVF9D
-VVNUT01fVkVSU0lPTj15CitCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIy
-MDIyLjA0IgorQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJRz15CitCUjJfVEFS
-R0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iQ3ViaWVib2FyZCIKK0JSMl9UQVJHRVRfVUJPT1Rf
-TkVFRFNfUFlMSUJGRFQ9eQorQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKK0JSMl9U
-QVJHRVRfVUJPT1RfU1BMPXkKK0JSMl9UQVJHRVRfVUJPT1RfU1BMX05BTUU9InUtYm9vdC1zdW54
-aS13aXRoLXNwbC5iaW4iCitCUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkKK0JSMl9QQUNL
-QUdFX0hPU1RfVUJPT1RfVE9PTFNfQk9PVF9TQ1JJUFQ9eQorQlIyX1BBQ0tBR0VfSE9TVF9VQk9P
-VF9UT09MU19CT09UX1NDUklQVF9TT1VSQ0U9ImJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9i
-b290LmNtZCIKKworIyBLZXJuZWwKK0JSMl9MSU5VWF9LRVJORUw9eQorQlIyX0xJTlVYX0tFUk5F
-TF9DVVNUT01fVkVSU0lPTj15CitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVF
-PSI2LjAuMSIKK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJzdW54aSIKK0JSMl9MSU5VWF9L
-RVJORUxfRFRTX1NVUFBPUlQ9eQorQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9InN1
-bjRpLWExMC1jdWJpZWJvYXJkIgorCisjIEZpbGVzeXN0ZW0KK0JSMl9UQVJHRVRfUk9PVEZTX0VY
-VDI9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKK0JSMl9ST09URlNfUE9TVF9JTUFHRV9T
-Q1JJUFQ9InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIKK0JSMl9ST09URlNfUE9TVF9TQ1JJ
-UFRfQVJHUz0iLWMgYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL2dlbmltYWdlLmNmZyIKKwor
-IyBIb3N0IFJlcXVpcmVtZW50cworQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15CitCUjJfUEFD
-S0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQorQlIyX1BBQ0tBR0VfSE9TVF9NVE9PTFM9eQotLSAKMi4y
-NS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=fcdc4b29c7a84422214ee3af116c75fa62289484
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zic/0001-remove-dependency-check-on-version-file.patch | 2 +-
+ package/zic/zic.hash                                           | 4 ++--
+ package/zic/zic.mk                                             | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/zic/0001-remove-dependency-check-on-version-file.patch b/package/zic/0001-remove-dependency-check-on-version-file.patch
+index 64587bc0df..cba7ed679e 100644
+--- a/package/zic/0001-remove-dependency-check-on-version-file.patch
++++ b/package/zic/0001-remove-dependency-check-on-version-file.patch
+@@ -18,7 +18,7 @@ diff --git a/Makefile b/Makefile
+ index 1b714a8..00d2c09 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -609,7 +609,7 @@ INSTALL:	ALL install date.1
++@@ -615,7 +615,7 @@ INSTALL:	ALL install date.1
+  # Otherwise, use $(VERSION) unless it is "unknown" and there is already
+  # a 'version' file, in which case reuse the existing 'version' contents
+  # and append "-dirty" if the contents do not already end in "-dirty".
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index c9c7491948..40f68f0299 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2022-August/000072.html
+-sha512  3373fa16a12007415c3dc3a75c4a0d61d6ae54968eeecedcdf4bcfd7f554020a15c4687dde107b90462b75d848eebe1e200c33322ebe0d3f1ad11bc769cade06  tzcode2022c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2022-October/000075.html
++sha512  3e2ef91b972f1872e3e8da9eae9d1c4638bfdb32600f164484edd7147be45a116db80443cd5ae61b5c34f8b841e4362f4beefd957633f6cc9b7def543ed6752b  tzcode2022f.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index bb5cd3c916..229afaadc2 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2022c
++ZIC_VERSION = 2022f
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
