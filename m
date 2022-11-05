@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9782FC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2F1C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 410E040893;
-	Sat,  5 Nov 2022 20:04:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 410E040893
+	by smtp3.osuosl.org (Postfix) with ESMTP id E55F460888;
+	Sat,  5 Nov 2022 20:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55F460888
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A5iKzzWsR4J3; Sat,  5 Nov 2022 20:04:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HUf77RWHR6Rj; Sat,  5 Nov 2022 20:09:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34A5C4087E;
-	Sat,  5 Nov 2022 20:04:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34A5C4087E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26B521BF371
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:03:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A142607F4;
+	Sat,  5 Nov 2022 20:09:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A142607F4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 15F5E1BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2F714087E
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2F714087E
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2A4681E0D
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2A4681E0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CunwSIsEEs9g for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 20:03:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A96864085B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A96864085B
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:03:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2B97440005;
- Sat,  5 Nov 2022 20:03:45 +0000 (UTC)
-Date: Sat, 5 Nov 2022 21:03:43 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221105210343.4b8409be@windsurf>
-In-Reply-To: <20221104161851.645974-1-fontaine.fabrice@gmail.com>
-References: <20221104161851.645974-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667678625;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=a1PyYhUsrOrvOODxzDoNB2mrpueNQYEGN3ABa9QVr20=;
- b=lK/7F6PgBJMltj78YWHIU55N8YFMdE/uqo7TTPCnkUuF0FHcbJejBicndsZruj9FXnp0x+
- ciDEbLVFJ34NUN5JtlEaJQ9G1LVBno+HI4/irX5W+qp3PSM4RR+LqdZlUXTgEhmrkthLKH
- 5Rr2Tn2uL5XVIknjvNqADuLh6j8pxRCqppDEKbLUHfYgwz8yhnw3OuWqm9CGW1+bDVCePQ
- 24WZRaHiTu2miSAreVbECML5gUBbYadws8Zf0sGKf1SrXB1E8J9i/wfwU1y86aZPb7Jyqz
- EXbzp7CpgGAw1CMpScNSw/06ceqH1bkxFWQI6yuPAwLnNBLA76mEQev15OxfLA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lK/7F6Pg
-Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: security bump to
- version 5.9.8
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2vtO1352ydWL for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C5B281E02
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C5B281E02
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E7DF287DEF; Sat,  5 Nov 2022 20:09:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 5 Nov 2022 21:09:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b79d735139282ecf052dc89d4c221bbd16447112
+X-Git-Newrev: 0ad4301f608a270b6f463ebd91684cde0f584ebd
+X-Patchwork-Hint: ignore
+Message-Id: <20221105200932.E7DF287DEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/botan: add host-python3 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,46 +57,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  4 Nov 2022 17:18:51 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0ad4301f608a270b6f463ebd91684cde0f584ebd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixed a vulnerability related to online certificate revocation checking
-> that was caused because the revocation plugin used potentially untrusted
-> OCSP URIs and CRL distribution points in certificates. This allowed a
-> remote attacker to initiate IKE_SAs and send crafted certificates that
-> contain URIs pointing to servers under their control, which could have
-> lead to a denial-of-service attack. This vulnerability has been
-> registered as CVE-2022-40617.
-> 
-> Drop patch (already in version)
-> 
-> https://www.strongswan.org/blog/2022/10/03/strongswan-vulnerability-(cve-2022-40617).html
-> https://github.com/strongswan/strongswan/releases/tag/5.9.6
-> https://github.com/strongswan/strongswan/releases/tag/5.9.7
-> https://github.com/strongswan/strongswan/releases/tag/5.9.8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...gswan-plugins-wolfssl-rename-encrypt.patch | 150 ------------------
->  package/strongswan/strongswan.hash            |   6 +-
->  package/strongswan/strongswan.mk              |   2 +-
->  3 files changed, 4 insertions(+), 154 deletions(-)
->  delete mode 100644 package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
+add host-python3 dependency to avoid the following build failure raised
+since the addition of the package in commit
+e43da7bb32285bbd41b38a379aef77132d149df7:
 
-Applied to master, thanks.
+(cd /home/autobuild/autobuild/instance-19/output-1/build/botan-2.19.2; PATH="/home/autobuild/autobuild/instance-19/output-1/host/bin:/home/autobuild/autobuild/instance-19/output-1/host/sbin:/home/autobuild/make:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ./configure.py --cpu="m68k" --disable-cc-tests --os=linux --cc=gcc --cc-bin="/home/autobuild/autobuild/instance-19/output-1/host/bin/m68k-linux-g++" --prefix=/usr --without-documentation --extra-libs=atomic --disable-shared-library --enable-static-library --no-autoload --without-stack-protector --without-os-feature=getauxval --with-boost --with-sqlite --with-zlib --disable-altivec --disable-neon)
+/usr/bin/env: 'python': No such file or directory
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/91eb6d03ee899bc1034efc5ac7d1fe78961d37ca
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/botan/botan.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index b26ee4c66e..b0ebe594b1 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -13,6 +13,7 @@ BOTAN_CPE_ID_VENDOR = botan_project
+ 
+ BOTAN_INSTALL_STAGING = YES
+ 
++BOTAN_DEPENDENCIES = host-python3
+ BOTAN_CONF_OPTS = \
+ 	--cpu=$(BR2_ARCH) \
+ 	--disable-cc-tests \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
