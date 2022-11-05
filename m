@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7666CC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11163C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B0AD81DB2;
-	Sat,  5 Nov 2022 21:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B0AD81DB2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 824C160AFD;
+	Sat,  5 Nov 2022 21:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 824C160AFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YxN0pAKAtorx; Sat,  5 Nov 2022 21:19:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yk8OgvbYhkzV; Sat,  5 Nov 2022 21:23:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D53381DAB;
-	Sat,  5 Nov 2022 21:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D53381DAB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E2D160A90;
+	Sat,  5 Nov 2022 21:23:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E2D160A90
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FC081BF283
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:19:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C0681BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55266408CB
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55266408CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4116C408CB
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:23:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4116C408CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pgK8VmA8Ub6O for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 21:19:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 006C1405A6
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 006C1405A6
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:19:01 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4D98AFF803;
- Sat,  5 Nov 2022 21:18:59 +0000 (UTC)
-Date: Sat, 5 Nov 2022 22:18:57 +0100
-To: Carlos Santos <unixmania@gmail.com>
-Message-ID: <20221105221857.5567e63f@windsurf>
-In-Reply-To: <CAJ4jsacyrm_vy13vFbX0sR9K991LeVa=iJsQeevo_V9+OkSA_g@mail.gmail.com>
-References: <20221104235727.587650-1-unixmania@gmail.com>
- <20221104235727.587650-3-unixmania@gmail.com>
- <20221105114433.2a5e6b09@tuxfamily.org>
- <CAJ4jsacyrm_vy13vFbX0sR9K991LeVa=iJsQeevo_V9+OkSA_g@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id AWLcVxS70nnQ for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 21:23:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6437A408BD
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6437A408BD
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:23:47 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id g12so11276563wrs.10
+ for <buildroot@buildroot.org>; Sat, 05 Nov 2022 14:23:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=m/rRq6uNNU79eLCvXO9Xv2AxPPQGPT2n+M2yXpZwi2I=;
+ b=Ys2hkurtYpZnrCe4S4ZRw8+g9W42WZI6dLNJJ3E8zL4vE7txDHgiUQXokDkiHE3ZAO
+ XEcjEofhlzgDqNopU6bIvvmLCp0scOHmgaSiKRtyCsbzq/ypfX2Wck89q4gLzaX8xq9W
+ hj9aKcjr/jFdrSLtXz7ai5uNwd3oJ9bhqcQ0ook8dqXWG632DJmh6qFRn0D/tkDJKo5c
+ YfJmWTcCMLMdLQZYcdSvM43zOksnsqdWfYfPQa5gz+neCEtKWiR8wBHnMv0rPrafI8i4
+ pLnZbqREEdKkliELpi9sWfjAJ4KgR8+0bOvxQliLWExEXoSk6RjwOmguE7BGp5UZUEhf
+ vLkQ==
+X-Gm-Message-State: ACrzQf3wvof8s0y3sYLvFk+gQZQIXtHNX8KlJUgO+Uo5a96IeBEXfv4T
+ zHui2SGCJ4CU/rpFNHLwX2daszWWWVU=
+X-Google-Smtp-Source: AMsMyM42TwFB7Qb2PN3e7EwuyFjNWjU+9pB5CcpQP0h8g+625FaSC4WSRk8JdBMzBd6cyWkMiM4s2A==
+X-Received: by 2002:adf:dd91:0:b0:236:a261:6930 with SMTP id
+ x17-20020adfdd91000000b00236a2616930mr26154195wrl.551.1667683425084; 
+ Sat, 05 Nov 2022 14:23:45 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ g1-20020a7bc4c1000000b003b3365b38f9sm3624421wmk.10.2022.11.05.14.23.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Nov 2022 14:23:44 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  5 Nov 2022 22:23:43 +0100
+Message-Id: <20221105212343.353414-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667683140;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Wg5rTeaFn180e1WZKNXBw1ULwKdaiGSfqa+VayH0kTc=;
- b=c1lL7zM/eZgL+GuZ61XAWJE2B8eXkdVa2ZD6qlWBNrQtlwEV8n8M0cuji+ji4YzzGt+J/Z
- kMfn3XMWekNa+/YF7ddUfTqQ95VkHlsKWRmByKYG21sVHFWW6sRtO9AaWMhb9a4HGnPiSY
- HAMS4wNnDJ4rfnN2eM8klpWwKB9O9jcaC3AAFN+iONkkX7H1Rfd/zDVlo+9GQFimzPTBWv
- 0354Sb/SnHLl4/ET5VUx3ivCxy+goo9gVxfz9S7y8YOA7s13HOD8i1AH5kneTblX8K1S48
- yPLEqHhh4cGVeWzCAFFF8gAYRxIUJs/KjeVmGjRLHBP1np2ovvUt7xASCr5Uiw==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=m/rRq6uNNU79eLCvXO9Xv2AxPPQGPT2n+M2yXpZwi2I=;
+ b=ilAOUpd/nWHcg2b0oHu0hULanjtpH1hLzpgEcr74LLApSkh+KnW0WJTORGZYvjjngS
+ +s3ucozG1PfJpb7CcY/yLzseQP7j1Vuu5BR+AQeosWNqTcC+oln0HR+syh83i+pdK7v6
+ TML7hIJExcF0NMnZeL9OpcrYrOeUDGI3zxukrEFevXOFvH7TrlAZawPC2CafdB8SPTBC
+ o68T1sl7O/Qu0DbBTGJL8eMzG2pZaW4rHyfBDSlmp7+6yXldQYlFs+2YgbrrMx2v8+nh
+ Bq+vDPYC+qUubUZOqfCX0Lt7i4kAr1yEZxhOvTVoUjqSTpQ4SGBqZDVxZ1Ytx8VkjbBz
+ Nvvw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=c1lL7zM/
-Subject: Re: [Buildroot] [PATCH 2/3] package/qemu: select FDT for custom
- targets too
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ilAOUpd/
+Subject: [Buildroot] [PATCH v2,1/1] package/lxc: bump to version 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,64 +93,335 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
- buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 5 Nov 2022 17:23:53 -0300
-Carlos Santos <unixmania@gmail.com> wrote:
+LXC 5.0 will be supported until June 2027 and our current LTS release,
+LXC 4.0 will now switch to a slower maintenance pace, only getting
+critical bugfixes and security updates.
 
-> BR2_PACKAGE_QEMU_CUSTOM_TARGETS is a string, so adding a "select
-> BR2_PACKAGE_QEMU_FDT" does not have any effect.
-> 
-> A better solution for the case in which only linux-user targets are
-> selected requires a more complex approach. I will submit a separate
-> patch for this purpose. Meanwhile, let's put this series on hold.
+We strongly recommend all LXC users to plan an upgrade to the 5.0
+branch.
 
-Hm, I think I start to understand the issue, and with the current
-organization of the Config.in options in package/qemu/Config.in, it's
-going to be difficult to fix in a correct way.
+- Switch to meson-package
+- Add an upstream patch to fix the following build failure with glibc
+  2.36 (unfortunately upstream doesn't plan to fix this for 4.x:
+  https://github.com/lxc/lxc/issues/4183 and patch is only working with
+  meson, not autotools)
 
-For example, it looks like the linux-user mode emulation doesn't work
-with the musl C library:
+https://discuss.linuxcontainers.org/t/lxc-5-0-lts-has-been-released
+https://discuss.linuxcontainers.org/t/lxc-5-0-1-has-been-released
 
-config BR2_PACKAGE_QEMU_LINUX_USER
-        bool "Enable all Linux user-land emulation"
-        # Incompatible "struct sigevent" definition on musl
-        depends on !BR2_TOOLCHAIN_USES_MUSL
+Fixes:
+ - http://autobuild.buildroot.org/results/f77e2dc44c9a224f280e08089a890e85c302274f
 
-So, it means that BR2_PACKAGE_QEMU_CUSTOM_TARGETS="i386-linux-user"
-will in fact fail to build with a musl toolchain...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Rebase patch so it applies cleanly on master
 
-I only sane way to address this I believe would be to remove
-BR2_PACKAGE_QEMU_CUSTOM_TARGETS entirely, and instead have
-BR2_PACKAGE_QEMU_SYSTEM_TARGETS and
-BR2_PACKAGE_QEMU_LINUX_USER_TARGETS, which would only be accessible
-when BR2_PACKAGE_QEMU_SYSTEM or BR2_PACKAGE_QEMU_LINUX_USER
-respectively are enabled. When BR2_PACKAGE_QEMU_SYSTEM_TARGETS is
-empty, all system emulation targets are built, otherwise only the
-specified ones are built. Ditto for the user emulation targets.
+ ...-where-struct-mount_attr-is-declared.patch | 186 ++++++++++++++++++
+ package/lxc/lxc.hash                          |   2 +-
+ package/lxc/lxc.mk                            |  36 ++--
+ 3 files changed, 204 insertions(+), 20 deletions(-)
+ create mode 100644 package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
 
-Obviously as usual, the main drawback is that is breaks backward
-compatibility with existing configurations...
-
-The other approach, which you took, is to assume for the "worst", and
-assume that when BR2_PACKAGE_QEMU_CUSTOM_TARGETS != "", we might build
-system or user emulation targets, and therefore this option needs to
-have the combination of the dependencies of the system and user
-emulation options.... which would mean disabling this option with musl
-toolchains, for example.
-
-Thomas
+diff --git a/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch b/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
+new file mode 100644
+index 0000000000..8de7adcc56
+--- /dev/null
++++ b/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
+@@ -0,0 +1,186 @@
++From c1115e1503bf955c97f4cf3b925a6a9f619764c3 Mon Sep 17 00:00:00 2001
++From: Christian Brauner <brauner@kernel.org>
++Date: Tue, 9 Aug 2022 16:14:25 +0200
++Subject: [PATCH] build: detect where struct mount_attr is declared
++
++Fixes: #4176
++Signed-off-by: Christian Brauner (Microsoft) <christian.brauner@ubuntu.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/c1115e1503bf955c97f4cf3b925a6a9f619764c3]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build                | 30 ++++++++++++++++++++++++++++--
++ src/lxc/conf.c             |  6 +++---
++ src/lxc/conf.h             |  2 +-
++ src/lxc/mount_utils.c      |  6 +++---
++ src/lxc/syscall_wrappers.h | 12 ++++++++++--
++ 5 files changed, 45 insertions(+), 11 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index a145faf069..f679aabbc8 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -590,7 +590,6 @@ decl_headers = '''
++ foreach decl: [
++     '__aligned_u64',
++     'struct clone_args',
++-    'struct mount_attr',
++     'struct open_how',
++     'struct rtnl_link_stats64',
++ ]
++@@ -610,7 +609,6 @@ foreach tuple: [
++     ['struct seccomp_notif_sizes'],
++     ['struct clone_args'],
++     ['__aligned_u64'],
++-    ['struct mount_attr'],
++     ['struct open_how'],
++     ['struct rtnl_link_stats64'],
++ ]
++@@ -630,6 +628,34 @@ foreach tuple: [
++     endif
++ endforeach
++ 
+++## Types.
+++decl_headers = '''
+++#include <sys/mount.h>
+++'''
+++
+++# We get -1 if the size cannot be determined
+++if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
+++    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), true)
+++    found_types += 'struct mount_attr (sys/mount.h)'
+++else
+++    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), false)
+++    missing_types += 'struct mount_attr (sys/mount.h)'
+++endif
+++
+++## Types.
+++decl_headers = '''
+++#include <linux/mount.h>
+++'''
+++
+++# We get -1 if the size cannot be determined
+++if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
+++    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), true)
+++    found_types += 'struct mount_attr (linux/mount.h)'
+++else
+++    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), false)
+++    missing_types += 'struct mount_attr (linux/mount.h)'
+++endif
+++
++ ## Headers.
++ foreach ident: [
++     ['bpf',               '''#include <sys/syscall.h>
++diff --git a/src/lxc/conf.c b/src/lxc/conf.c
++index ffbe74c2f6..4193cd07f5 100644
++--- a/src/lxc/conf.c
+++++ b/src/lxc/conf.c
++@@ -2885,7 +2885,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
++ 		struct lxc_mount_options opts = {};
++ 		int dfd_from;
++ 		const char *source_relative, *target_relative;
++-		struct lxc_mount_attr attr = {};
+++		struct mount_attr attr = {};
++ 
++ 		ret = parse_lxc_mount_attrs(&opts, mntent.mnt_opts);
++ 		if (ret < 0)
++@@ -3005,7 +3005,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
++ 
++ 		/* Set propagation mount options. */
++ 		if (opts.attr.propagation) {
++-			attr = (struct lxc_mount_attr) {
+++			attr = (struct mount_attr) {
++ 				.propagation = opts.attr.propagation,
++ 			};
++ 
++@@ -4109,7 +4109,7 @@ int lxc_idmapped_mounts_parent(struct lxc_handler *handler)
++ 
++ 	for (;;) {
++ 		__do_close int fd_from = -EBADF, fd_userns = -EBADF;
++-		struct lxc_mount_attr attr = {};
+++		struct mount_attr attr = {};
++ 		struct lxc_mount_options opts = {};
++ 		ssize_t ret;
++ 
++diff --git a/src/lxc/conf.h b/src/lxc/conf.h
++index 7dc2f15b60..772479f9e1 100644
++--- a/src/lxc/conf.h
+++++ b/src/lxc/conf.h
++@@ -223,7 +223,7 @@ struct lxc_mount_options {
++ 	unsigned long mnt_flags;
++ 	unsigned long prop_flags;
++ 	char *data;
++-	struct lxc_mount_attr attr;
+++	struct mount_attr attr;
++ 	char *raw_options;
++ };
++ 
++diff --git a/src/lxc/mount_utils.c b/src/lxc/mount_utils.c
++index bba75f933c..88dd73ee36 100644
++--- a/src/lxc/mount_utils.c
+++++ b/src/lxc/mount_utils.c
++@@ -31,7 +31,7 @@ lxc_log_define(mount_utils, lxc);
++  * setting in @attr_set, but must also specify MOUNT_ATTR__ATIME in the
++  * @attr_clr field.
++  */
++-static inline void set_atime(struct lxc_mount_attr *attr)
+++static inline void set_atime(struct mount_attr *attr)
++ {
++ 	switch (attr->attr_set & MOUNT_ATTR__ATIME) {
++ 	case MOUNT_ATTR_RELATIME:
++@@ -272,7 +272,7 @@ int create_detached_idmapped_mount(const char *path, int userns_fd,
++ {
++ 	__do_close int fd_tree_from = -EBADF;
++ 	unsigned int open_tree_flags = OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC;
++-	struct lxc_mount_attr attr = {
+++	struct mount_attr attr = {
++ 		.attr_set	= MOUNT_ATTR_IDMAP | attr_set,
++ 		.attr_clr	= attr_clr,
++ 		.userns_fd	= userns_fd,
++@@ -335,7 +335,7 @@ int __fd_bind_mount(int dfd_from, const char *path_from, __u64 o_flags_from,
++ 		    __u64 attr_clr, __u64 propagation, int userns_fd,
++ 		    bool recursive)
++ {
++-	struct lxc_mount_attr attr = {
+++	struct mount_attr attr = {
++ 		.attr_set	= attr_set,
++ 		.attr_clr	= attr_clr,
++ 		.propagation	= propagation,
++diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
++index a5e98b565c..c8a7d0c7b7 100644
++--- a/src/lxc/syscall_wrappers.h
+++++ b/src/lxc/syscall_wrappers.h
++@@ -18,6 +18,12 @@
++ #include "macro.h"
++ #include "syscall_numbers.h"
++ 
+++#if HAVE_STRUCT_MOUNT_ATTR
+++#include <sys/mount.h>
+++#elif HAVE_UAPI_STRUCT_MOUNT_ATTR
+++#include <linux/mount.h>
+++#endif
+++
++ #ifdef HAVE_LINUX_MEMFD_H
++ #include <linux/memfd.h>
++ #endif
++@@ -210,16 +216,18 @@ extern int fsmount(int fs_fd, unsigned int flags, unsigned int attr_flags);
++ /*
++  * mount_setattr()
++  */
++-struct lxc_mount_attr {
+++#if !HAVE_STRUCT_MOUNT_ATTR && !HAVE_UAPI_STRUCT_MOUNT_ATTR
+++struct mount_attr {
++ 	__u64 attr_set;
++ 	__u64 attr_clr;
++ 	__u64 propagation;
++ 	__u64 userns_fd;
++ };
+++#endif
++ 
++ #if !HAVE_MOUNT_SETATTR
++ static inline int mount_setattr(int dfd, const char *path, unsigned int flags,
++-				struct lxc_mount_attr *attr, size_t size)
+++				struct mount_attr *attr, size_t size)
++ {
++ 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
++ }
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index d460bc6a01..c18e062cc1 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  db242f8366fc63e8c7588bb2017b354173cf3c4b20abc18780debdc48b14d3ef  lxc-4.0.12.tar.gz
++sha256  d8195423bb1e206f8521d24b6cde4789f043960c7cf065990a9cf741dcfd4222  lxc-5.0.1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index cece27411e..f0a0e8041a 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 4.0.12
++LXC_VERSION = 5.0.1
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+@@ -13,56 +13,54 @@ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
+ 
+ LXC_CONF_OPTS = \
+-	--disable-apparmor \
+-	--disable-examples \
+-	--with-distro=buildroot \
+-	--disable-werror \
+-	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
++	-Dapparmor=false \
++	-Dexamples=false \
++	-Dman=false
+ 
+ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ LXC_DEPENDENCIES += bash-completion
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-LXC_CONF_OPTS += --enable-capabilities
++LXC_CONF_OPTS += -Dcapabilities=true
+ LXC_DEPENDENCIES += libcap
+ else
+-LXC_CONF_OPTS += --disable-capabilities
++LXC_CONF_OPTS += -Dcapabilities=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+-LXC_CONF_OPTS += --enable-seccomp
++LXC_CONF_OPTS += -Dseccomp=true
+ LXC_DEPENDENCIES += libseccomp
+ else
+-LXC_CONF_OPTS += --disable-seccomp
++LXC_CONF_OPTS += -Dseccomp=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+-LXC_CONF_OPTS += --enable-selinux
++LXC_CONF_OPTS += -Dselinux=true
+ LXC_DEPENDENCIES += libselinux
+ else
+-LXC_CONF_OPTS += --disable-selinux
++LXC_CONF_OPTS += -Dselinux=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBURING),y)
+-LXC_CONF_OPTS += --enable-liburing
++LXC_CONF_OPTS += -Dio-uring-event-loop=true
+ LXC_DEPENDENCIES += liburing
+ else
+-LXC_CONF_OPTS += --disable-liburing
++LXC_CONF_OPTS += -Dio-uring-event-loop=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-LXC_CONF_OPTS += --enable-pam
++LXC_CONF_OPTS += -Dpam-cgroup=true
+ LXC_DEPENDENCIES += linux-pam
+ else
+-LXC_CONF_OPTS += --disable-pam
++LXC_CONF_OPTS += -Dpam-cgroup=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LXC_CONF_OPTS += --enable-openssl
++LXC_CONF_OPTS += -Dopenssl=true
+ LXC_DEPENDENCIES += openssl
+ else
+-LXC_CONF_OPTS += --disable-openssl
++LXC_CONF_OPTS += -Dopenssl=false
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
