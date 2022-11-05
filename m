@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2039BC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2545EC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C52C0408F9;
-	Mon, 20 Feb 2023 20:57:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C52C0408F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B65E341CF8;
+	Mon, 20 Feb 2023 20:57:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B65E341CF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yA6NwDZLGxqx; Mon, 20 Feb 2023 20:57:39 +0000 (UTC)
+	with ESMTP id SzhQYFpDVxba; Mon, 20 Feb 2023 20:57:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1142341D55;
-	Mon, 20 Feb 2023 20:57:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1142341D55
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16D3D1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 977A941D54;
+	Mon, 20 Feb 2023 20:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 977A941D54
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 238D41BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87B0C40C1F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87B0C40C1F
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACFD86108C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACFD86108C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 88LC-nH8bGOE for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jab4ImFGiShH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 733C740C03
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 733C740C03
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BFB46106F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BFB46106F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 615018648F; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+ id 5A1558648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 23:43:05 +0100
+Date: Sat, 5 Nov 2022 15:03:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca6f38a340bf7eaac76aafcdf7dd78f5c61b0ba6
-X-Git-Newrev: fbf3253d76399f2b310120e87c29569dd65749cc
+X-Git-Oldrev: 4721367debff67d2a4fddb3a5d72796ebbb401f8
+X-Git-Newrev: 26634490364decc24fa32f175c12c8a2d984f1d3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205147.615018648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freeipmi: fix build
- without makeinfo
+Message-Id: <20230220205146.5A1558648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sudo: fix
+ CVE-2022-43995
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,136 +57,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbf3253d76399f2b310120e87c29569dd65749cc
+commit: https://git.buildroot.net/buildroot/commit/?id=26634490364decc24fa32f175c12c8a2d984f1d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable documentation to avoid the following build failure without
-makeinfo raised at least since bump to version 1.6.10 in commit
-f0faa3b71c585cb70bcd6fa4bafb756b98130bd5 (and probably since the
-addition of the package in commit
-663f39c88c01593855c18355a4decdceeffd884b):
-
-/home/buildroot/autobuild/instance-0/output-1/build/freeipmi-1.6.10/config/missing: line 81: makeinfo: command not found
-WARNING: 'makeinfo' is missing on your system.
-         You should only need it if you modified a '.texi' file, or
-         any other file indirectly affecting the aspect of the manual.
-         You might want to install the Texinfo package:
-         <https://www.gnu.org/software/texinfo/>
-         The spurious makeinfo call might also be the consequence of
-         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-         want to install GNU make:
-         <https://www.gnu.org/software/make/>
-Makefile:442: recipe for target 'freeipmi-faq.info' failed
-
-Fixes:
- - http://autobuild.buildroot.org/results/ac6ff1c746a354f885fc1674d10e7bff9e536134
+Sudo 1.8.0 through 1.9.12, with the crypt() password backend, contains a
+plugins/sudoers/auth/passwd.c array-out-of-bounds error that can result
+in a heap-based buffer over-read. This can be triggered by arbitrary
+local users with access to Sudo by entering a password of seven
+characters or fewer. The impact could vary depending on the compiler and
+processor architecture.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freeipmi/0001-add-disable-doc.patch | 72 +++++++++++++++++++++++++++++
- package/freeipmi/freeipmi.mk                |  2 +
- 2 files changed, 74 insertions(+)
+ package/sudo/0001-Fix-CVE-2022-43995.patch | 53 ++++++++++++++++++++++++++++++
+ package/sudo/sudo.mk                       |  3 ++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/freeipmi/0001-add-disable-doc.patch b/package/freeipmi/0001-add-disable-doc.patch
+diff --git a/package/sudo/0001-Fix-CVE-2022-43995.patch b/package/sudo/0001-Fix-CVE-2022-43995.patch
 new file mode 100644
-index 0000000000..e410d2b52f
+index 0000000000..3f544dcf81
 --- /dev/null
-+++ b/package/freeipmi/0001-add-disable-doc.patch
-@@ -0,0 +1,72 @@
-+From 5324c88632c021a87251370b03067d857e9a9892 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 2 Nov 2022 19:02:42 +0100
-+Subject: [PATCH] add --disable-doc
++++ b/package/sudo/0001-Fix-CVE-2022-43995.patch
+@@ -0,0 +1,53 @@
++From bd209b9f16fcd1270c13db27ae3329c677d48050 Mon Sep 17 00:00:00 2001
++From: "Todd C. Miller" <Todd.Miller@sudo.ws>
++Date: Fri, 28 Oct 2022 07:29:55 -0600
++Subject: [PATCH] Fix CVE-2022-43995, potential heap overflow for passwords < 8
++ characters. Starting with sudo 1.8.0 the plaintext password buffer is
++ dynamically sized so it is not safe to assume that it is at least 9 bytes in
++ size. Found by Hugo Lefeuvre (University of Manchester) with ConfFuzz.
 +
-+Allow the user to disable documentation through --disable-doc to avoid
-+the following build failure without makeinfo:
-+
-+/home/buildroot/autobuild/instance-0/output-1/build/freeipmi-1.6.10/config/missing: line 81: makeinfo: command not found
-+WARNING: 'makeinfo' is missing on your system.
-+         You should only need it if you modified a '.texi' file, or
-+         any other file indirectly affecting the aspect of the manual.
-+         You might want to install the Texinfo package:
-+         <https://www.gnu.org/software/texinfo/>
-+         The spurious makeinfo call might also be the consequence of
-+         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-+         want to install GNU make:
-+         <https://www.gnu.org/software/make/>
-+Makefile:442: recipe for target 'freeipmi-faq.info' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ac6ff1c746a354f885fc1674d10e7bff9e536134
-+
++[Retrieved from:
++https://github.com/sudo-project/sudo/commit/bd209b9f16fcd1270c13db27ae3329c677d48050]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/chu11/freeipmi-mirror/pull/61]
 +---
-+ Makefile.am  | 6 +++++-
-+ configure.ac | 4 ++++
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
++ plugins/sudoers/auth/passwd.c | 11 +++++------
++ 1 file changed, 5 insertions(+), 6 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index cf757f634..d74952e30 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -3,7 +3,6 @@
-+ ACLOCAL_AMFLAGS = -I config
++diff --git a/plugins/sudoers/auth/passwd.c b/plugins/sudoers/auth/passwd.c
++index b2046eca2..0416861e9 100644
++--- a/plugins/sudoers/auth/passwd.c
+++++ b/plugins/sudoers/auth/passwd.c
++@@ -63,7 +63,7 @@ sudo_passwd_init(struct passwd *pw, sudo_auth *auth)
++ int
++ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_callback *callback)
++ {
++-    char sav, *epass;
+++    char des_pass[9], *epass;
++     char *pw_epasswd = auth->data;
++     size_t pw_len;
++     int matched = 0;
++@@ -75,12 +75,12 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
 + 
-+ SUBDIRS = \
-+-	doc \
-+ 	etc \
-+ 	common \
-+ 	libfreeipmi \
-+@@ -33,6 +32,11 @@ SUBDIRS = \
-+ 	rmcpping \
-+ 	contrib
++     /*
++      * Truncate to 8 chars if standard DES since not all crypt()'s do this.
++-     * If this turns out not to be safe we will have to use OS #ifdef's (sigh).
++      */
++-    sav = pass[8];
++     pw_len = strlen(pw_epasswd);
++-    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len))
++-	pass[8] = '\0';
+++    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len)) {
+++	strlcpy(des_pass, pass, sizeof(des_pass));
+++	pass = des_pass;
+++    }
 + 
-++if ENABLE_DOC
-++SUBDIRS += \
-++	doc
-++endif
-++
-+ PACKAGE = @PACKAGE@
-+ VERSION = @VERSION@
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index 54fdf6367..7a94b958b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -341,6 +341,10 @@ else
-+ fi
-+ AC_SUBST(WITH_DEBUG)
-+ 
-++AC_ARG_ENABLE(doc,
-++              AC_HELP_STRING([--disable-doc], [turn off documentation]))
-++AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
-++
-+ dnl Allow advanced developers to compile with raw dumping
-+ AC_ARG_ENABLE(rawdumps,
-+    AC_HELP_STRING([--enable-rawdumps], [output raw packet dumps when debugging]))
-+-- 
-+2.35.1
++     /*
++      * Normal UN*X password check.
++@@ -88,7 +88,6 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
++      * only compare the first DESLEN characters in that case.
++      */
++     epass = (char *) crypt(pass, pw_epasswd);
++-    pass[8] = sav;
++     if (epass != NULL) {
++ 	if (HAS_AGEINFO(pw_epasswd, pw_len) && strlen(epass) == DESLEN)
++ 	    matched = !strncmp(pw_epasswd, epass, DESLEN);
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 4f9fdb4b2c..1826f72017 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -23,6 +23,9 @@ SUDO_CONF_OPTS = \
+ 	--without-interfaces \
+ 	--with-env-editor
+ 
++# 0001-Fix-CVE-2022-43995.patch
++SUDO_IGNORE_CVES += CVE-2022-43995
 +
-diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
-index 916f2eb68a..3e0ac0ffa9 100644
---- a/package/freeipmi/freeipmi.mk
-+++ b/package/freeipmi/freeipmi.mk
-@@ -12,6 +12,8 @@ FREEIPMI_LICENSE_FILES = \
- 	COPYING.ipmidetect COPYING.ipmi-fru COPYING.ipmimonitoring \
- 	COPYING.ipmiping COPYING.ipmipower COPYING.ipmiseld COPYING.pstdout \
- 	COPYING.sunbmc COPYING.ZRESEARCH
-+# We're patching configure.ac
-+FREEIPMI_AUTORECONF = YES
- FREEIPMI_DEPENDENCIES = host-pkgconf
- FREEIPMI_INSTALL_STAGING = YES
- # Disable checking for /dev/urandom and /dev/random through AC_CHECK_FILE
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ define SUDO_INSTALL_PAM_CONF
+ 	$(INSTALL) -D -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
