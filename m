@@ -4,72 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D17F3C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 12:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A7D6C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 13:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B24B402CE;
-	Sat,  5 Nov 2022 12:50:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B24B402CE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 831BB403C7;
+	Sat,  5 Nov 2022 13:56:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 831BB403C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id heqgpliybs9t; Sat,  5 Nov 2022 12:50:12 +0000 (UTC)
+	with ESMTP id MCxfojybYbil; Sat,  5 Nov 2022 13:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A10740179;
-	Sat,  5 Nov 2022 12:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A10740179
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 71CAD1BF82F
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 12:50:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AD824038E;
+	Sat,  5 Nov 2022 13:56:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AD824038E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FC4E1BF2C7
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 13:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A89040179
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 12:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A89040179
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14E4181F33
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 13:56:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14E4181F33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dScUPLAFUnKO for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 12:50:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC84440148
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC84440148
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 12:50:07 +0000 (UTC)
-Received: from [176.231.53.223] ([176.231.53.223]) by web-mail.gmx.net
- (3c-app-mailcom-bs05.server.lan [172.19.170.173]) (via HTTP); Sat, 5 Nov
- 2022 13:50:04 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qzX1mz3wgXXM for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 13:56:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4C9C81EFD
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E4C9C81EFD
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 13:56:23 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id a14so10484713wru.5
+ for <buildroot@buildroot.org>; Sat, 05 Nov 2022 06:56:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=rkJ1XbU5TO6OWciy5ofKecNLDDD88MZlE05bruWKGbU=;
+ b=e7x1uRowKA7vqzr+R0UA3JLSR/S7pbjZytQ19/q2rfibKEsqWgxpE2TifAe1MkwUtu
+ 36pZToPyDg2M1RanVEo1t9zRuhy4te6k/jZ2zpFSIbQ25uWktKpNzeXD2/nu7aprqVwf
+ qs3isOl0XxasOPIKTph9exE0NMBtGj0+AK/lmTBLaSQ/ArflnXqdVe+DHF6e695tIVKv
+ bOMZsE9omiA9EGk6mxuanlfzkJ6awbf9LppyJZZ6muMYhxjHJ3fvQ2u0EZ3pzVNwI6yn
+ yqNU45R6SGGw6D9FQ+Dd7WmWxV6S4jgafMsgUzzlM/HOJFsqPxQOzQcychfyQwmjG+FZ
+ wygQ==
+X-Gm-Message-State: ACrzQf0gukTWLeUbTyGQVhAxS6k55JiM4RvCAePpk7EezUmv8XRM4uAL
+ gdDu+qoEdu5FmZa1AyEl6PdJ2/JcFtg=
+X-Google-Smtp-Source: AMsMyM4vOHaSwbshRXa1ytBNYBuZ8zhFUqocDUnG966wDNxtd7Mc6SE9yUWCKmabcytGYfQ+XyYQKw==
+X-Received: by 2002:a5d:4708:0:b0:23a:43b7:cdcc with SMTP id
+ y8-20020a5d4708000000b0023a43b7cdccmr5501780wrq.545.1667656581352; 
+ Sat, 05 Nov 2022 06:56:21 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ o13-20020a05600c510d00b003cf54b77bfesm6437282wms.28.2022.11.05.06.56.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Nov 2022 06:56:20 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  5 Nov 2022 14:56:18 +0100
+Message-Id: <20221105135618.322293-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Message-ID: <trinity-0984207b-922e-4b6f-b8b9-e0e36c5a65f6-1667652604408@3c-app-mailcom-bs05>
-From: daggs <daggs@gmx.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Sat, 5 Nov 2022 13:50:04 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20221105123417.GD3918838@scaer>
-References: <trinity-5e5104ec-f62c-4643-b0ac-dfd2df7c6f42-1667640576096@3c-app-mailcom-bs11>
- <20221105123417.GD3918838@scaer>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:EPn318aABiWnuBV91K5Z3VILfOa5dTNx+GtCP61Ljf0uRX3p0lCTBWzaN23ujTgdWWoZB
- XSCCURRVkJtp2cTyHUkquQrOEQUwsIDorFRHm/7o/JpJbJVJHOor1ua3b6WdkzafoK6rIQMdkAgY
- Mwz3XGM1Hhlbil0uuVvsAnxtV2BMnVOiUiDhokSjp50rIH5Oa5e18KadswzQSjTOyV4JQK6kXLZi
- z0aghSGFw3eE0Oe1Ost5/kV26mXCwB38yb5YcHXZUTwp3wsqS1LyMAuAU2sdqlEFZ9zgYAN64znC
- DE=
-UI-OutboundReport: notjunk:1;M01:P0:6S5Wgx4TBis=;78oOWaY+zJUL4LiseuHLby1e53M
- mgsCrft1K5gyneXfXp19XHuRfmyhC14R3OQadRojF0KGBBLVOoX7NrgXYJ/kDfMjAMndz1DWi
- q/p5OGUuDbuxake6htt4EW7vkUiQnNA9RWdfJ1WkbxB7N1uNvvyA/jgDavySG/M77JSHxlsgB
- cEnDw9B01FC4Hg7BW/42cFFQHMc+UgAkM+LRF4jewZqDCJv4DOVm+XcTi1TCc10qc6v5/REhc
- 9HUo88Pwfz9OUpKNBC5hzYwjG85xy4sG+NQYyVBFSLsxs35EEdbx/CaOpPjqlKjv06CDlsoFX
- 3OQKcQjWrBae+tQBnlJVKzeBsnlK0igI4L9WLMSiyk+NbW5mCCtdS9fHiTlv4UU0GF1D4NluI
- NUkjHULZuQhgWHkdh77f8+RlTKpi9hb51DsWMrczTXGfrEw/c42YdocBBruFDnXLjazk+gkxm
- Ca8YDbqpQhBF41equ3u9boSyzzpCIoou9UBbTRsLfvx8Abn6DtVyTtC3ri6zYxmCSO3OkGfXG
- 8Ca04JzXA94CvoHPMLIURUJqqhEFt8guXPqhwv2TqHzq1q/uIRTuMW2LoGnkEP9OdwAGPgtJ4
- VhGLi06o5/sfHGpb7vmM5LAuiD3jgP8+fK9SZPXt3IprXx82qoPt7jZOuCEuCYUE76g9OuKl6
- JsCT2db+kP1MmpLPiyDNg0r7up4JGUI7O2sELdRueSIkXt2D3Kl0GsoAYX6W8sLnf3hujgvi+
- VziVGNAd96wtkyxtMbbuPIlcm9zVWDr/237kCOBmjT6KqCBqpADr1NIESRWR8VzxLM3mlttco
- ZKNsVV6TESv6kBAmHEQDhrITFq1oxwdTRtDYhBxKu+Kx4=
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-11-04
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=rkJ1XbU5TO6OWciy5ofKecNLDDD88MZlE05bruWKGbU=;
+ b=WLAUQpaipzWlZCJpKXRyXVU4WgXypIxHBL0q88iFSFO1JzVd/mCzUkM0zsjrwsa+tA
+ N+kZvkJdWluPpqO5HcU9RRa7cIm5yg2yFED+UbAvmlpkt+j3Lc692AvYhaAWwBMbCnNr
+ SIG21VG6T0qeXCjbKdQz6vE4SYJTScqokePAK1vBC4CEkS1aWfOzHpfhJgMl3C4ZyyXC
+ hlfoI7lTYdp1LPrcnln7qR9W8C26itJw8Tejk5ElG6bSdnT69+1ytWotexRtvnERppt8
+ 1OFxm8B32ZT4UHXxp8cwxjfh2pv9rDQfgjyyVAo3rcmDSWXBV3czrK8YRt4npOYpSW+A
+ eYVQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=WLAUQpai
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix build with wolfssl
+ >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,52 +94,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Jianhui Zhao <zhaojh329@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Greetings Yan,
+Fix the following build failure with wolfssl raised since bump to
+version 5.2.0 in commit 14e0c4de719a0d63192cc5de66a608f75297f37d and
+https://github.com/wolfSSL/wolfssl/commit/33cb8231481d5beb46b57511c2630aba36028256:
 
-> Sent: Saturday, November 05, 2022 at 2:34 PM
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: "daggs" <daggs@gmx.com>
-> Cc: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-> Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for 2022-11-04
->
-> daggs, All,
-> 
-> On 2022-11-05 10:29 +0100, daggs spake thusly:
-> > > Sent: Saturday, November 05, 2022 at 9:37 AM
-> > > From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> > > To: "Dagg Stompler" <daggs@gmx.com>
-> > > Subject: [autobuild.buildroot.net] Your daily results for 2022-11-04
-> > > 
-> > > Build failures related to your defconfigs:
-> > >                          odroidc2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233868 
-> > I've tried to reproduce it on latest master and the didn't reproduced, any idea how to reproduce it?
-> 
-> Err... This is simply a case where the disk is full:
-> 
->     xzcat /builds/buildroot.org/buildroot/dl/linux/linux-5.7.tar.xz | tar --strip-components=1 -C /builds/buildroot.org/buildroot/output/build/linux-5.7   -xf -
->     tar: drivers/watchdog/ftwdt010_wdt.c: Wrote only 4096 of 5381 bytes
->     tar: drivers/watchdog/gef_wdt.c: Cannot write: No space left on device
->     [...]
-> 
-> I don't think there is much issue to try to reproduce...
-> 
-> The runner is gcc159, so probably the disk got filled with build stuff
-> that did not get cleaned somehow...
-> 
-> Regards,
-> Yann E. MORIN.
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c: In function 'handle_wolfssl_asn_error':
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:339:10: error: 'ASN_NTRU_KEY_E' undeclared (first use in this function); did you mean 'ASN_ECC_KEY_E'?
+  339 |     case ASN_NTRU_KEY_E:
+      |          ^~~~~~~~~~~~~~
+      |          ASN_ECC_KEY_E
 
-thought so, just wanted to be sure.
+Fixes:
+ - http://autobuild.buildroot.org/results/3261b0035c8aadd1b62538b53e03af1cd8a7b312
 
-Thanks,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-add-compatibility-for-wolfssl-5-0.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
 
-Dagg
+diff --git a/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
+new file mode 100644
+index 0000000000..7da7199e7e
+--- /dev/null
++++ b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
+@@ -0,0 +1,30 @@
++From 73aa4ef762b2de67bc8c7c260bd36b34fdb91e63 Mon Sep 17 00:00:00 2001
++From: "Sergey V. Lobanov" <sergey@lobanov.in>
++Date: Mon, 3 Jan 2022 19:36:52 +0300
++Subject: [PATCH] add compatibility for wolfssl >= 5.0
++
++NTRU support has been removed in wolfssl 5.0 so it is required to
++mask NTRU specific code if wolfssl >= 5.0
++
++Signed-off-by: Sergey V. Lobanov <sergey at lobanov.in>
++[Retrieved from:
++https://github.com/zhaojh329/ssl/commit/73aa4ef762b2de67bc8c7c260bd36b34fdb91e63]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ openssl.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/ssl/openssl.c b/src/ssl/openssl.c
++index 5a49267..278bab5 100644
++--- a/src/ssl/openssl.c
+++++ b/src/ssl/openssl.c
++@@ -336,7 +336,9 @@ static bool handle_wolfssl_asn_error(void *ssl, int r,
++     case ASN_SIG_HASH_E:
++     case ASN_SIG_KEY_E:
++     case ASN_DH_KEY_E:
+++#if LIBWOLFSSL_VERSION_HEX < 0x05000000
++     case ASN_NTRU_KEY_E:
+++#endif
++     case ASN_CRIT_EXT_E:
++     case ASN_ALT_NAME_E:
++     case ASN_NO_PEM_HEADER:
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
