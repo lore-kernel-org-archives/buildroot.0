@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22645C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7750C64ED9
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAA3842AF0;
-	Mon, 20 Feb 2023 21:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA3842AF0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3F942AF8;
+	Mon, 20 Feb 2023 21:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B3F942AF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jBTIHVJ8fNQl; Mon, 20 Feb 2023 21:11:47 +0000 (UTC)
+	with ESMTP id bhupXmeS69Jg; Mon, 20 Feb 2023 21:12:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68A1D42AF4;
-	Mon, 20 Feb 2023 21:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68A1D42AF4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B93142B06;
+	Mon, 20 Feb 2023 21:12:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B93142B06
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 135171BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13C2E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D56861086
+ by smtp3.osuosl.org (Postfix) with ESMTP id 995D76107E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D56861086
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 995D76107E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dx42XUVY7nBd for <buildroot@lists.busybox.net>;
+ with ESMTP id 03oUyP5ZJkG0 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BDED61033
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4907B61089
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BDED61033
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4907B61089
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BAC08648F; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+ id 4667186495; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 22:47:12 +0100
+Date: Sat, 5 Nov 2022 23:03:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 94e47000c27c447de45e7190fbe8d3ef24d7df04
-X-Git-Newrev: ceb51d1463acb6918fbb825dc56b2a2b48ab8674
+X-Git-Oldrev: db19998035701d08bf1b5fd366e0b5aa9adb8e57
+X-Git-Newrev: 958c166837a484e2a9515342c49e93dca734d726
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205147.1BAC08648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bdwgc: needs MMU
+Message-Id: <20230220205147.4667186495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-tools: perf
+ needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceb51d1463acb6918fbb825dc56b2a2b48ab8674
+commit: https://git.buildroot.net/buildroot/commit/?id=958c166837a484e2a9515342c49e93dca734d726
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure raise since bump to version 8.2.2 in
-commit d7619682552dd34f499e9f17b0234af53da743ec and
-https://github.com/ivmai/bdwgc/commit/9d8c196268068bb75f86dee0ba75ccd024531e72:
+Fix the following build failure raised (at least) since linux 4.0 and
+https://github.com/torvalds/linux/commit/459a3df76c99124fd222586be7f10f862547e7a9:
 
-os_dep.c: In function 'block_unmap_inner':
-os_dep.c:2668:17: warning: implicit declaration of function 'madvise'; did you mean 'raise'? [-Wimplicit-function-declaration]
- 2668 |             if (madvise(start_addr, len, MADV_DONTNEED) == -1)
-      |                 ^~~~~~~
-      |                 raise
+  CC      /home/autobuild/autobuild/instance-2/output-1/build/linux-6.0.1/tools/perf/builtin-bench.o
+In file included from builtin-bench.c:22:
+bench/bench.h:66:10: fatal error: pthread.h: No such file or directory
+   66 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/2b9924cb8c36a75e1ca7aefe83e95dc11c10ded6
+Fies:
+ - http://autobuild.buildroot.org/results/b6abd641f528101e74f9af33e54ccefe0731148f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bdwgc/Config.in | 1 +
- package/guile/Config.in | 2 ++
- package/poke/Config.in  | 2 ++
- 3 files changed, 5 insertions(+)
+ package/linux-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
-index aad2bc9ef2..1124ab0f60 100644
---- a/package/bdwgc/Config.in
-+++ b/package/bdwgc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BDWGC
- 	bool "bdwgc"
-+	depends on BR2_USE_MMU # madvise()
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBATOMIC_OPS
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 82e62f826e..8a0b6d5802 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -47,14 +47,15 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
+ 
+ 	  These tools are available only from kernel version 4.20.
+ 
+-comment "perf needs a toolchain w/ dynamic library"
++comment "perf needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LINUX_TOOLS
  	help
-diff --git a/package/guile/Config.in b/package/guile/Config.in
-index f70e674018..3cf0ec863b 100644
---- a/package/guile/Config.in
-+++ b/package/guile/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GUILE
- 	bool "guile"
-+	depends on BR2_USE_MMU # bdwgc
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # no strtol_l
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # bdwgc
-@@ -17,5 +18,6 @@ config BR2_PACKAGE_GUILE
- 	  http://www.gnu.org/software/guile
- 
- comment "guile needs a uClibc or glibc toolchain w/ threads, wchar, dynamic library"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/poke/Config.in b/package/poke/Config.in
-index 40e7a31bab..8bedb12bf8 100644
---- a/package/poke/Config.in
-+++ b/package/poke/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_POKE
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # bdwgc
- 	depends on BR2_USE_WCHAR # needs wctomb
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_MMU # bdwgc
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # less
- 	select BR2_PACKAGE_BDWGC
- 	select BR2_PACKAGE_LESS # runtime
-@@ -25,4 +26,5 @@ config BR2_PACKAGE_POKE
- 
- comment "poke needs a toolchain w/ NPTL, wchar"
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+ 	  perf (sometimes "Perf Events" or perf tools, originally
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
