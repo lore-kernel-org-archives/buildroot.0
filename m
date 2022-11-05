@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58F98C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B0BC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04BA14094C;
-	Mon,  5 Dec 2022 11:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04BA14094C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B1AA81BC6;
+	Mon,  5 Dec 2022 11:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B1AA81BC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hrFRkOQha-Ep; Mon,  5 Dec 2022 11:31:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SbhU7Wu0ixmQ; Mon,  5 Dec 2022 11:31:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0D774160D;
-	Mon,  5 Dec 2022 11:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D774160D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1CB0F1BF955
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E4A781BE3;
+	Mon,  5 Dec 2022 11:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E4A781BE3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10BBB1BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F713415FE
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F713415FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 595F881A2B
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 595F881A2B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91jr8eKaB7pM for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xsMw0c91Wucc for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1293F415DE
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1293F415DE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9391D81B84
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9391D81B84
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEBF285BA2; Mon,  5 Dec 2022 11:26:00 +0000 (UTC)
+ id 918F485BBF; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:03:25 +0100
+Date: Sat, 5 Nov 2022 23:08:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e9322e0ad4c29fde3eb4e816ce84182bfba593a
-X-Git-Newrev: 3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
+X-Git-Oldrev: 6177018855a0794903e619b1e6d84617da07772f
+X-Git-Newrev: db1cf03ac5b6f8e165f953be28d1ce2723c7f3cf
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112600.EEBF285BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cheroot: bump to version
- 8.6.0
+Message-Id: <20221205112607.918F485BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
+ version 5.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b8c9bd4588a717e4977debca8d51c1fcd58e4b5
+commit: https://git.buildroot.net/buildroot/commit/?id=db1cf03ac5b6f8e165f953be28d1ce2723c7f3cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to links update:
-https://github.com/cherrypy/cheroot/commit/b4b8c11c8b9bc5dae1f9b37861f78b828882e57c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cheroot/python-cheroot.hash | 6 +++---
- package/python-cheroot/python-cheroot.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-index 06d9453163..e538d1fcdc 100644
---- a/package/python-cheroot/python-cheroot.hash
-+++ b/package/python-cheroot/python-cheroot.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index f7fa673e24..6bab9d2c1c 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cheroot/json
--md5  7ace4b584a8092deb9f6b0142a627086  cheroot-8.2.1.tar.gz
--sha256  5b525b3e4a755adf78070ab54c1821fb860d4255a9317dba2b88eb2df2441cff  cheroot-8.2.1.tar.gz
-+md5  70247d0948899f453b50e6181cddd0d7  cheroot-8.6.0.tar.gz
-+sha256  366adf6e7cac9555486c2d1be6297993022eff6f8c4655c1443268cca3f08e25  cheroot-8.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zope-interface/json
+-md5  c58b31da83449631efb499de13c68c6a  zope.interface-5.4.0.tar.gz
+-sha256  5dba5f530fec3f0988d83b78cc591b58c0b6eb8431a85edd1569a0539a8a5a0e  zope.interface-5.4.0.tar.gz
++md5  644f7574b81710a21b1b738d448811e4  zope.interface-5.5.1.tar.gz
++sha256  6d678475fdeb11394dc9aaa5c564213a1567cc663082e0ee85d52f78d1fbaab2  zope.interface-5.5.1.tar.gz
  # Locally computed sha256 checksums
--sha256  da6dc218683f6dab91c6367f00bf33095d980fb1f04d430c81c5e6994b8605e0  LICENSE.md
-+sha256  e20feeb491a7e98084f15719349e9857aad41c4503c5e479f8815b063dbf7564  LICENSE.md
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index 9eae887989..95f2e39480 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
+ sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index beacfb4f5e..4f201e5cbf 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHEROOT_VERSION = 8.2.1
-+PYTHON_CHEROOT_VERSION = 8.6.0
- PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
--PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/9b/4d/2e51e7ce60f54a5279e91648b9b9b497d4d22bc624ecae6af1b6866144a7
-+PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/99/c4/9b5ca09208047f2689c24ee63e195aa01ceffb7857d715cabc046559ddd6
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
- PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
+-PYTHON_ZOPE_INTERFACE_VERSION = 5.4.0
++PYTHON_ZOPE_INTERFACE_VERSION = 5.5.1
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ae/58/e0877f58daa69126a5fb325d6df92b20b77431cd281e189c5ec42b722f58
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/c5/ec/3e116b5c3c54f1fb7296a686c110c14d1242bbea17286c487892075d9858
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
