@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D79C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 18:02:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEBDC433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 18:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E0EF408D2;
-	Sat,  5 Nov 2022 18:02:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E0EF408D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA8A60AE0;
+	Sat,  5 Nov 2022 18:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BA8A60AE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gbCmhBGlt1DU; Sat,  5 Nov 2022 18:02:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KitL56QXEo2W; Sat,  5 Nov 2022 18:11:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E45B408BE;
-	Sat,  5 Nov 2022 18:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E45B408BE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F3DA1BF46D
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:02:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4989160AAE;
+	Sat,  5 Nov 2022 18:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4989160AAE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 46D4E1BF375
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72D3C81307
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72D3C81307
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21D0760AAE
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 18:11:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D0760AAE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2iL9ydtRPtM0 for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 18:02:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F0E8812F8
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F0E8812F8
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 18:02:03 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b857:25fc:60e2:657f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id B530C5FF7A;
- Sat,  5 Nov 2022 19:01:56 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 05 Nov 2022 19:01:56 +0100
-Date: Sat, 5 Nov 2022 19:01:56 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cpEikMqbVorw for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 18:11:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4563060A94
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 18:11:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4563060A94
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3294987D5B; Sat,  5 Nov 2022 18:11:41 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <20221105180156.GJ3918838@scaer>
-References: <20221105165524.747494-1-yann.morin.1998@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221105165524.747494-1-yann.morin.1998@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667671319;
- bh=S6zwQ4Cmz1QjN1Zmvt0KYtHJa36ldbmgMO+O7K/T5EU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nSx9ocbyYKyR8LzGbWvHQTs/mqyeajTnCR/U/H9ed7SsJslSXxIs+VicicxOn1ntl
- nVYNszYq/kB0uS1e+XYIaCAlDvlH5KYlSLmVzNz/T1uwi3GfFI2i098Ou0uVxLMJto
- i/cTEIVZRM7m741sxDg9qA87q//iVRY2/Rs/ZDp/jqi7q5nggay8uRv6u+1bBS65/M
- cAeQr1gpFGQnPZMEVnbgM72/nHDyEdCiMk1B+UFmQ6J6VzsLJ7r0S5Xu1dvBts845I
- x8exzaYSAdyhFvkYY8Sans82ajrDlcloEjGJ9vWfPTQG1y7bHB8rPiD306i+VutdaX
- SjirLonfbBNPA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nSx9ocby
-Subject: Re: [Buildroot] [PATCH 1/2] package/libopenssl: drop useles option
- for rc5
+Date: Sat, 5 Nov 2022 19:09:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: adc1c5d8f14f69a62a2a4260465363ab120816ab
+X-Git-Newrev: c6aed2126b9c4cbae2a3f770e6d9029b44daa957
+X-Patchwork-Hint: ignore
+Message-Id: <20221105181141.3294987D5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdcadec: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,102 +56,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>, "Weber,
- Matthew L Collins" <Matthew.Weber@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c6aed2126b9c4cbae2a3f770e6d9029b44daa957
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-11-05 17:55 +0100, Yann E. MORIN spake thusly:
-> Commit a83d41867c8d (package/libopenssl: add option to enable some
-> features) added an option to enabled rc5. However, since commit
-> 1fff94121936 (Fixup non-x86 openssl build), dated 2002-12-30, rc5
-> has always been forcibly disabled in Buildrrot.
-> 
-> Given that it was unconditionally disabled all those times
+Quoting https://github.com/foo86/dcadec
 
-It seems I did not finish my sentence... So, the full sentence should
-read something like:
+"This program is deprecated!
 
-    Given that it was unconditionally disabled all those times, and no
-    one complained, itmeans there is virtually noone using rc5, so we
-    can just ropt the option.
+ This decoder has been fully integrated into FFmpeg master branch and
+ further development will continue there. Using FFmpeg for DTS decoding
+ is now recommended."
 
-Regards,
-Yann E. MORIN.
+lbdcadec has had no commit oin the past 7+ years now.
 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>
-> Cc: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>
-> ---
->  Config.in.legacy                 | 7 +++++++
->  package/libopenssl/Config.in     | 4 ----
->  package/libopenssl/libopenssl.mk | 1 -
->  3 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 0e63d59a98..8efc7ea976 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2022.11"
->  
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
-> +	bool "libopenssl rc5 was never enabled"
-> +	select BR2_LEGACY
-> +	help
-> +	  The libopenssl option for rc5 never actually enabled rc5,
-> +	  which had always been disabled in Buildroot.
-> +
->  config BR2_KERNEL_HEADERS_5_17
->  	bool "kernel headers version 5.17.x are no longer supported"
->  	select BR2_LEGACY
-> diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-> index fcead4c11a..00339238fb 100644
-> --- a/package/libopenssl/Config.in
-> +++ b/package/libopenssl/Config.in
-> @@ -44,10 +44,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA
->  	bool "enable CHACHA"
->  	default y
->  
-> -config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
-> -	bool "enable RC5"
-> -	default y
-> -
->  config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2
->  	bool "enable RC2"
->  	default y
-> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-> index 50d41a6533..3542b89727 100644
-> --- a/package/libopenssl/libopenssl.mk
-> +++ b/package/libopenssl/libopenssl.mk
-> @@ -85,7 +85,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
->  			no-fuzz-afl \
->  			no-afalgeng \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
-> -			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5),,no-rc5) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
->  			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Fixes:
+http://autobuild.buildroot.net/results/1e63586c91a2670ecac2940f6e9840e6801c32f3/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr: amend commit log with age of last activity]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                 |  8 ++++++++
+ DEVELOPERS                       |  1 -
+ package/Config.in                |  1 -
+ package/libdcadec/Config.in      |  7 -------
+ package/libdcadec/libdcadec.hash |  3 ---
+ package/libdcadec/libdcadec.mk   | 33 ---------------------------------
+ 6 files changed, 8 insertions(+), 45 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0e63d59a98..7458fa331e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2022.11"
+ 
++config BR2_PACKAGE_LIBDCADEC
++	bool "package was deprecated upstream, use ffmpeg instead"
++	select BR2_LEGACY
++	help
++	  This decoder has been fully integrated into FFmpeg master
++	  branch and further development will continue there. Using
++	  FFmpeg for DTS decoding is now recommended.
++
+ config BR2_KERNEL_HEADERS_5_17
+ 	bool "kernel headers version 5.17.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d27936992..2613624f4b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -363,7 +363,6 @@ F:	package/libcdio/
+ F:	package/libcec/
+ F:	package/libcodec2/
+ F:	package/libcrossguid/
+-F:	package/libdcadec/
+ F:	package/libdeflate/
+ F:	package/libdrm/
+ F:	package/libdvbcsa/
+diff --git a/package/Config.in b/package/Config.in
+index 238d7813f0..aef80f9ab0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1785,7 +1785,6 @@ menu "Multimedia"
+ 	source "package/libbluray/Config.in"
+ 	source "package/libcamera/Config.in"
+ 	source "package/libcamera-apps/Config.in"
+-	source "package/libdcadec/Config.in"
+ 	source "package/libdvbcsa/Config.in"
+ 	source "package/libdvbpsi/Config.in"
+ 	source "package/libdvbsi/Config.in"
+diff --git a/package/libdcadec/Config.in b/package/libdcadec/Config.in
+deleted file mode 100644
+index 2687a18187..0000000000
+--- a/package/libdcadec/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_LIBDCADEC
+-	bool "libdcadec"
+-	help
+-	  dcadec is a free DTS Coherent Acoustics decoder with support
+-	  for HD extensions.
+-
+-	  https://github.com/foo86/dcadec
+diff --git a/package/libdcadec/libdcadec.hash b/package/libdcadec/libdcadec.hash
+deleted file mode 100644
+index 3c3e80e8a3..0000000000
+--- a/package/libdcadec/libdcadec.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  ed9d207fde3e8d576f3af8b0d1235b3371e315175757173689104efcaebf0d44  libdcadec-0.2.0.tar.gz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
+diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+deleted file mode 100644
+index a3579ad632..0000000000
+--- a/package/libdcadec/libdcadec.mk
++++ /dev/null
+@@ -1,33 +0,0 @@
+-################################################################################
+-#
+-# libdcadec
+-#
+-################################################################################
+-
+-LIBDCADEC_VERSION = 0.2.0
+-LIBDCADEC_SITE = $(call github,foo86,dcadec,v$(LIBDCADEC_VERSION))
+-LIBDCADEC_LICENSE = LGPL-2.1+
+-LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+-LIBDCADEC_INSTALL_STAGING = YES
+-
+-ifeq ($(BR2_STATIC_LIBS),)
+-LIBDCADEC_SHARED = CONFIG_SHARED=1
+-endif
+-
+-define LIBDCADEC_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+-		$(LIBDCADEC_SHARED) -C $(@D)
+-endef
+-
+-define LIBDCADEC_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		$(LIBDCADEC_SHARED) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
+-endef
+-
+-define LIBDCADEC_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		$(LIBDCADEC_SHARED) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
