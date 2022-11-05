@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B19A7C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:47:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84583C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 538C84047B;
-	Sat,  5 Nov 2022 16:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 538C84047B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 177C1404BB;
+	Sat,  5 Nov 2022 16:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 177C1404BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OQ1Ax9kw8nYb; Sat,  5 Nov 2022 16:47:43 +0000 (UTC)
+	with ESMTP id 1APbSLn4kM76; Sat,  5 Nov 2022 16:47:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E64AA40148;
-	Sat,  5 Nov 2022 16:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E64AA40148
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 729B01BF38C
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:47:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A6BE404D3;
+	Sat,  5 Nov 2022 16:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A6BE404D3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CC29A1BF38C
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4DFB681F84
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DFB681F84
+ by smtp2.osuosl.org (Postfix) with ESMTP id A81F940471
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A81F940471
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NSjZjnJqLZzx for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 16:47:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31A6981F7C
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31A6981F7C
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 16:47:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 50395100003
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 16:47:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1orMKV-00CXc7-Ak
- for buildroot@buildroot.org; Sat, 05 Nov 2022 17:47:35 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rEtwNo7UfpW3 for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 16:47:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB40440148
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 16:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB40440148
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C3EAA87AF7; Sat,  5 Nov 2022 16:47:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20221018082548.1987175-1-peter@korsgaard.com>
-Date: Sat, 05 Nov 2022 17:47:35 +0100
-In-Reply-To: <20221018082548.1987175-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 18 Oct 2022 10:25:48 +0200")
-Message-ID: <87bkplmjq0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/squid: security bump to version 5.7
+Date: Sat, 5 Nov 2022 17:46:53 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: e8cccbb50ce5a754f81c2abc64da331577cfce7e
+X-Git-Newrev: bb070db122ad702b1fdfba596d8e90fbc7835ffb
+X-Patchwork-Hint: ignore
+Message-Id: <20221105164744.C3EAA87AF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/squid: security
+ bump to version 5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,26 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bb070db122ad702b1fdfba596d8e90fbc7835ffb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fixes the following security issues:
- > - CVE-2022-41317: Exposure of Sensitive Information in Cache Manager
- >   https://www.openwall.com/lists/oss-security/2022/09/23/1
+Fixes the following security issues:
 
- > - CVE-2022-41318: Buffer Over Read in SSPI and SMB Authentication
- >   https://www.openwall.com/lists/oss-security/2022/09/23/2
+- CVE-2022-41317: Exposure of Sensitive Information in Cache Manager
+  https://www.openwall.com/lists/oss-security/2022/09/23/1
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- CVE-2022-41318: Buffer Over Read in SSPI and SMB Authentication
+  https://www.openwall.com/lists/oss-security/2022/09/23/2
 
-Committed to 2022.08.x and 2022.02.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e6c9a95a34eec997168780d9049560f26cfaeb60)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 22c6db8c70..b00d14011e 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v5/squid-5.6.tar.xz.asc
+-md5  2f2201a18a0a727ab589d951ebe4f815  squid-5.6.tar.xz
+-sha1  a01f47b3e9ff06245c894773de30bfd88ab14f65  squid-5.6.tar.xz
++# From http://www.squid-cache.org/Versions/v5/squid-5.7.tar.xz.asc
++md5  7a3764a3c5833631a779d7827901cda7  squid-5.7.tar.xz
++sha1  141e8007d6b1cfee34654127a9ca025125b37b58  squid-5.7.tar.xz
+ # Locally calculated
+-sha256  38d27338a347597ce0e93d0c3be6e5f66b6750417c474ca87ee0d61bb6d148db  squid-5.6.tar.xz
++sha256  6b0753aaba4c9c4efd333e67124caecf7ad6cc2d38581f19d2f0321f5b7ecd81  squid-5.7.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 86a0c714c6..355af0b902 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 5.6
++SQUID_VERSION = 5.7
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v5
+ SQUID_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
