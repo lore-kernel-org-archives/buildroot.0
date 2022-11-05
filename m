@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0FEBC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 22:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 624F1C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 22:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D1DB81020;
-	Sat,  5 Nov 2022 22:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D1DB81020
+	by smtp1.osuosl.org (Postfix) with ESMTP id EADA281E22;
+	Sat,  5 Nov 2022 22:41:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EADA281E22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c6LPIbhf9qJT; Sat,  5 Nov 2022 22:39:54 +0000 (UTC)
+	with ESMTP id pncXxQ7l7HyL; Sat,  5 Nov 2022 22:41:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2D7680E46;
-	Sat,  5 Nov 2022 22:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2D7680E46
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85F2C1BF3FD
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:39:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25B16812F1;
+	Sat,  5 Nov 2022 22:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25B16812F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 04BD81BF3FD
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 619F360670
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 619F360670
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3A5240629
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3A5240629
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VJTz-VRvwNJK for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 22:39:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B566605AC
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B566605AC
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 22:39:49 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A3F06E0006;
- Sat,  5 Nov 2022 22:39:46 +0000 (UTC)
-Date: Sat, 5 Nov 2022 23:39:45 +0100
-To: Marcin Niestroj <m.niestroj@grinn-global.com>
-Message-ID: <20221105233945.2f258c44@windsurf>
-In-Reply-To: <20221103014132.791440-1-m.niestroj@grinn-global.com>
-References: <20221103014132.791440-1-m.niestroj@grinn-global.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667687987;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IBaknjOh5pYPm0IyUST9+1/kJR5OwWQwG3Zx5Hs+2vM=;
- b=dq8hiMonstRwh7Kp2H2aX5/Jjviy0wNHh1bAzPxv4WQb8lWtEN+9HO+Yt3FIAF7eQ3XJvo
- 9kdc7u/TUuWUdbf4zBAUsv8h00ujz6XDvEq0rz37IzowXRrcZpbPuspLuThBITdB/c7eOi
- eKnbi5iToPMKe85m5MYNcEKugkd3IoqJUN+sr9ylIhC6jFdmxry1brG6ZntIwDQMAgf+p1
- 2pLcN448+fGX6S/Q7s2BOwFjm1jd4fiEfEkbnmrjRx+3MrBKDqcsexqr1aNPYbTsJ/YKbh
- K/zteSfrS/sHysz4aNlCRVYs3SSECIKzcxCkxigjUIqzwMYMGl4K/dDdffTJww==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dq8hiMon
-Subject: Re: [Buildroot] [PATCH] package/gitlab-runner: bump version to
- 15.5.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wa30M9pTo5Sa for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 22:40:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3CDA4054A
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 22:40:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3CDA4054A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D136B87F6B; Sat,  5 Nov 2022 22:40:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 5 Nov 2022 23:39:53 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 2ca53d27c0cff85ad50c54aab5ac72872b15c2d0
+X-Git-Newrev: f39db2c84cd0e3dc428d265f62db1f4edc54b3a8
+X-Patchwork-Hint: ignore
+Message-Id: <20221105224057.D136B87F6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/spdlog: bump to
+ version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,28 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  3 Nov 2022 02:41:32 +0100
-Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f39db2c84cd0e3dc428d265f62db1f4edc54b3a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/gitlab-runner/gitlab-runner.hash | 2 +-
->  package/gitlab-runner/gitlab-runner.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/spdlog/spdlog.hash | 2 +-
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index 866d1d6d02..af89ba4e84 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224  spdlog-1.10.0.tar.gz
++sha256  ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb  spdlog-1.11.0.tar.gz
+ sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 9c5e76a9e8..32a0265484 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPDLOG_VERSION = 1.10.0
++SPDLOG_VERSION = 1.11.0
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
