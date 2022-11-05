@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A3DC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC48C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32B9E60B19;
-	Sat,  5 Nov 2022 20:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B9E60B19
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5A2E60B3D;
+	Sat,  5 Nov 2022 20:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5A2E60B3D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AIWa5e4VdBhR; Sat,  5 Nov 2022 20:02:24 +0000 (UTC)
+	with ESMTP id SZwmog-tVosE; Sat,  5 Nov 2022 20:02:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62D4960888;
-	Sat,  5 Nov 2022 20:02:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62D4960888
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBB9860B28;
+	Sat,  5 Nov 2022 20:02:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB9860B28
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AEB8C1BF873
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2BD381BF371
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 953DC4088F
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 953DC4088F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0682E4085B
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0682E4085B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Stpda3FT4ipQ for <buildroot@lists.busybox.net>;
+ with ESMTP id qegp1m-EauXJ for <buildroot@lists.busybox.net>;
  Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74E3C4087E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D15640881
  for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74E3C4087E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D15640881
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F36F87DDE; Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
+ id 69ECD87DB3; Sat,  5 Nov 2022 20:01:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:01:01 +0100
+Date: Sat, 5 Nov 2022 21:01:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8c8a463a71c6ebaa34c339b1efc3e33c9306f450
-X-Git-Newrev: cd2757bd76d2bc2411e67a27a25b8ab55d40bdb7
+X-Git-Oldrev: cd2757bd76d2bc2411e67a27a25b8ab55d40bdb7
+X-Git-Newrev: 785ea2179c40040cc0087b7b635dc3a78dd11f42
 X-Patchwork-Hint: ignore
-Message-Id: <20221105200153.5F36F87DDE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdk-pixbuf: bump to
- version 2.42.10
+Message-Id: <20221105200153.69ECD87DB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pango: bump to version
+ 1.50.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd2757bd76d2bc2411e67a27a25b8ab55d40bdb7
+commit: https://git.buildroot.net/buildroot/commit/?id=785ea2179c40040cc0087b7b635dc3a78dd11f42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 35084a50ac..23a7c3fc05 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,3 +1,3 @@
--# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.9.sha256sum
--sha256  28f7958e7bf29a32d4e963556d241d0a41a6786582ff6a5ad11665e0347fc962  gdk-pixbuf-2.42.9.tar.xz
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.10.sha256sum
-+sha256  ee9b6c75d13ba096907a2e3c6b27b61bcd17f5c7ebeab5a5b439d2f2e39fe44b  gdk-pixbuf-2.42.10.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 4a513effbd..561e191569 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index cbd391db20..d073526cf7 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.10.sha256sum
+-sha256  7e5d2f1e40854d24a9a2c4d093bafe75dcdbeccdf1de43e4437332eabed64966  pango-1.50.10.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.11.sha256sum
++sha256  8800f812d89ee61388188703203f3a7878963c22f8695aaf1fa0a1a1428d17ae  pango-1.50.11.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 649f3398cf..a61473431e 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- GDK_PIXBUF_VERSION_MAJOR = 2.42
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).9
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.1+
+ PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).10
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).11
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
