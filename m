@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 547CBC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED837C47089
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5D2C81E0F;
-	Mon,  5 Dec 2022 11:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5D2C81E0F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B700408FC;
+	Mon,  5 Dec 2022 11:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B700408FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id szhdxaZsrRZ6; Mon,  5 Dec 2022 11:53:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z_HfPNJM6wT7; Mon,  5 Dec 2022 11:53:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8359281403;
-	Mon,  5 Dec 2022 11:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8359281403
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1337D1BF352
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A3624161F;
+	Mon,  5 Dec 2022 11:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A3624161F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E2551BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B51D405F3
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B51D405F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E51E14168A
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E51E14168A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oTR1syLoxXWx for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ISEhFLUD9gpC for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4903740527
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4903740527
+ by smtp4.osuosl.org (Postfix) with ESMTP id D616241655
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D616241655
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35E9885B9B; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+ id D31B185BA3; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:22 +0100
+Date: Sat, 5 Nov 2022 19:23:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8a4d299d3ab097788d2c2fdcabe8bfc4b46bfde
-X-Git-Newrev: 30b3823ce4a47e93e347b64e06ad0f1ccf7f4b82
+X-Git-Oldrev: 738500c296c8b1206f20e94ca3e7c5932a6a0486
+X-Git-Newrev: 54fd5f74f19d1e83d7c4571fc1b766c733072b94
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112605.35E9885B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rpi-gpio: bump to version
- 0.7.1
+Message-Id: <20221205112606.D31B185BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ssdp-responder: bump to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,219 +56,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30b3823ce4a47e93e347b64e06ad0f1ccf7f4b82
+commit: https://git.buildroot.net/buildroot/commit/?id=54fd5f74f19d1e83d7c4571fc1b766c733072b94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate from distutils to setuptools build backend.
+Changes:
+ - New command line options to ssdp-scan
+ - Update copyright years (affects LICENSE file hash)
 
-Drop patch which is now upstream.
+Fixes:
+ - Workaround for OpenVPN /32 default server setup
+ - Time-of-check vs time-of-use issue with caching of UUID,
+   found by Coverity Scan, fixed by Raul Porancea
 
-License hash changed due to date update:
-https://sourceforge.net/p/raspberry-gpio-python/code/ci/7524ba4d7dc243f32238ca54ee5f6ef94ef801c2/
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-fix-build-with-gcc-10.x.patch             | 147 ---------------------
- package/python-rpi-gpio/python-rpi-gpio.hash       |   9 +-
- package/python-rpi-gpio/python-rpi-gpio.mk         |   6 +-
- 3 files changed, 7 insertions(+), 155 deletions(-)
+ package/ssdp-responder/ssdp-responder.hash | 4 ++--
+ package/ssdp-responder/ssdp-responder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch b/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch
-deleted file mode 100644
-index 95892f997f..0000000000
---- a/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch
-+++ /dev/null
-@@ -1,147 +0,0 @@
--Description: This patch fixes the "multiple definition of" errors with gcc10
--
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--
--diff -purN python-rpi-gpio.org/source/common.c python-rpi-gpio/source/common.c
----- python-rpi-gpio.org/source/common.c	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/common.c	2020-08-07 09:31:33.948575964 +0200
--@@ -28,6 +28,9 @@
-- const int pin_to_gpio_rev1[41] = {-1, -1, -1, 0, -1, 1, -1, 4, 14, -1, 15, 17, 18, 21, -1, 22, 23, -1, 24, 10, -1, 9, 25, 11, 8, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-- const int pin_to_gpio_rev2[41] = {-1, -1, -1, 2, -1, 3, -1, 4, 14, -1, 15, 17, 18, 27, -1, 22, 23, -1, 24, 10, -1, 9, 25, 11, 8, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-- const int pin_to_gpio_rev3[41] = {-1, -1, -1, 2, -1, 3, -1, 4, 14, -1, 15, 17, 18, 27, -1, 22, 23, -1, 24, 10, -1, 9, 25, 11, 8, -1, 7, -1, -1, 5, -1, 6, 12, 13, -1, 19, 16, 26, 20, -1, 21 };
--+const int (*pin_to_gpio)[41];
--+int gpio_direction[54];
--+rpi_info rpiinfo;
-- int setup_error = 0;
-- int module_setup = 0;
-- 
--diff -purN python-rpi-gpio.org/source/common.h python-rpi-gpio/source/common.h
----- python-rpi-gpio.org/source/common.h	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/common.h	2020-08-07 09:31:33.948575964 +0200
--@@ -30,14 +30,14 @@ SOFTWARE.
-- #define I2C          42
-- #define PWM          43
-- 
---int gpio_mode;
---const int pin_to_gpio_rev1[41];
---const int pin_to_gpio_rev2[41];
---const int pin_to_gpio_rev3[41];
---const int (*pin_to_gpio)[41];
---int gpio_direction[54];
---rpi_info rpiinfo;
---int setup_error;
---int module_setup;
--+extern int gpio_mode;
--+extern const int pin_to_gpio_rev1[41];
--+extern const int pin_to_gpio_rev2[41];
--+extern const int pin_to_gpio_rev3[41];
--+extern const int (*pin_to_gpio)[41];
--+extern int gpio_direction[54];
--+extern rpi_info rpiinfo;
--+extern int setup_error;
--+extern int module_setup;
-- int check_gpio_priv(void);
-- int get_gpio_number(int channel, unsigned int *gpio);
--diff -purN python-rpi-gpio.org/source/constants.c python-rpi-gpio/source/constants.c
----- python-rpi-gpio.org/source/constants.c	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/constants.c	2020-08-07 09:32:15.522196618 +0200
--@@ -21,6 +21,7 @@
-- */
-- 
-- #include "Python.h"
--+#define CONSTANTS_C
-- #include "constants.h"
-- #include "common.h"
-- #include "c_gpio.h"
--diff -purN python-rpi-gpio.org/source/constants.h python-rpi-gpio/source/constants.h
----- python-rpi-gpio.org/source/constants.h	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/constants.h	2020-08-07 09:32:15.522196618 +0200
--@@ -23,22 +23,28 @@ SOFTWARE.
-- #define PY_PUD_CONST_OFFSET 20
-- #define PY_EVENT_CONST_OFFSET 30
-- 
---PyObject *high;
---PyObject *low;
---PyObject *input;
---PyObject *output;
---PyObject *pwm;
---PyObject *serial;
---PyObject *i2c;
---PyObject *spi;
---PyObject *unknown;
---PyObject *board;
---PyObject *bcm;
---PyObject *pud_off;
---PyObject *pud_up;
---PyObject *pud_down;
---PyObject *rising_edge;
---PyObject *falling_edge;
---PyObject *both_edge;
--+#ifdef CONSTANTS_C
--+#define MAYBE_EXTERN
--+#else
--+#define MAYBE_EXTERN extern
--+#endif
--+
--+MAYBE_EXTERN PyObject *high;
--+MAYBE_EXTERN PyObject *low;
--+MAYBE_EXTERN PyObject *input;
--+MAYBE_EXTERN PyObject *output;
--+MAYBE_EXTERN PyObject *pwm;
--+MAYBE_EXTERN PyObject *serial;
--+MAYBE_EXTERN PyObject *i2c;
--+MAYBE_EXTERN PyObject *spi;
--+MAYBE_EXTERN PyObject *unknown;
--+MAYBE_EXTERN PyObject *board;
--+MAYBE_EXTERN PyObject *bcm;
--+MAYBE_EXTERN PyObject *pud_off;
--+MAYBE_EXTERN PyObject *pud_up;
--+MAYBE_EXTERN PyObject *pud_down;
--+MAYBE_EXTERN PyObject *rising_edge;
--+MAYBE_EXTERN PyObject *falling_edge;
--+MAYBE_EXTERN PyObject *both_edge;
-- 
-- void define_constants(PyObject *module);
--diff -purN python-rpi-gpio.org/source/event_gpio.c python-rpi-gpio/source/event_gpio.c
----- python-rpi-gpio.org/source/event_gpio.c	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/event_gpio.c	2020-08-07 09:42:05.564483136 +0200
--@@ -57,7 +57,7 @@ struct callback
-- };
-- struct callback *callbacks = NULL;
-- 
---pthread_t threads;
--+static pthread_t threads;
-- int event_occurred[54] = { 0 };
-- int thread_running = 0;
-- int epfd_thread = -1;
--diff -purN python-rpi-gpio.org/source/py_pwm.h python-rpi-gpio/source/py_pwm.h
----- python-rpi-gpio.org/source/py_pwm.h	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/py_pwm.h	2020-08-07 09:38:49.445646807 +0200
--@@ -20,5 +20,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWAR
-- SOFTWARE.
-- */
-- 
---PyTypeObject PWMType;
--+extern PyTypeObject PWMType;
-- PyTypeObject *PWM_init_PWMType(void);
--diff -purN python-rpi-gpio.org/source/soft_pwm.c python-rpi-gpio/source/soft_pwm.c
----- python-rpi-gpio.org/source/soft_pwm.c	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/soft_pwm.c	2020-08-07 09:42:40.753160437 +0200
--@@ -25,7 +25,7 @@ SOFTWARE.
-- #include <time.h>
-- #include "c_gpio.h"
-- #include "soft_pwm.h"
---pthread_t threads;
--+static pthread_t threads;
-- 
-- struct pwm
-- {
--diff -purN python-rpi-gpio.org/source/soft_pwm.h python-rpi-gpio/source/soft_pwm.h
----- python-rpi-gpio.org/source/soft_pwm.h	2019-07-21 14:41:22.000000000 +0200
--+++ python-rpi-gpio/source/soft_pwm.h	2020-08-07 09:39:25.916811352 +0200
--@@ -26,4 +26,4 @@ void pwm_set_duty_cycle(unsigned int gpi
-- void pwm_set_frequency(unsigned int gpio, float freq);
-- void pwm_start(unsigned int gpio);
-- void pwm_stop(unsigned int gpio);
---int pwm_exists(unsigned int gpio);
--+extern int pwm_exists(unsigned int gpio);
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-index 09d1a90765..22bcaebdcb 100644
---- a/package/python-rpi-gpio/python-rpi-gpio.hash
-+++ b/package/python-rpi-gpio/python-rpi-gpio.hash
-@@ -1,6 +1,5 @@
--# md5 from https://pypi.python.org/pypi/rpi_gpio/json
--# sha256 from https://pypi.python.org/pypi/rpi_gpio/json
--md5  777617f9dea9a1680f9af43db0cf150e  RPi.GPIO-0.7.0.tar.gz
--sha256  7424bc6c205466764f30f666c18187a0824077daf20b295c42f08aea2cb87d3f  RPi.GPIO-0.7.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/rpi_gpio/json
-+md5  22704930a4e674a3d35342bde6d69fe5  RPi.GPIO-0.7.1.tar.gz
-+sha256  cd61c4b03c37b62bba4a5acfea9862749c33c618e0295e7e90aa4713fb373b70  RPi.GPIO-0.7.1.tar.gz
- # Locally computed
--sha256  a668b3edecb3e69e81ec25987257008208ffcba9d6c43682033b8060c5f2f994  LICENCE.txt
-+sha256  1ccf039a03088da42bdb218a446a564330b881ec71f7022a9fb1930f3fb65d8a  LICENCE.txt
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-index dfc59c882e..4e62e07533 100644
---- a/package/python-rpi-gpio/python-rpi-gpio.mk
-+++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
+index e8cbbb4a1f..425ad86e08 100644
+--- a/package/ssdp-responder/ssdp-responder.hash
++++ b/package/ssdp-responder/ssdp-responder.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7ae49229e7c7a55fed9e36598b12e2173eecef0fffe0a386b6a10fad30f3c79f  ssdp-responder-1.8.tar.gz
+-sha256  e17dc0bc91bf499d8cca5e016c22c6d2a4770e3cc1a43756a7973375a83ddb90  LICENSE
++sha256  974c244abd4ba8c87532867a84756182a1460c99072ffb1eb91c5a1f73311d89  ssdp-responder-1.9.tar.gz
++sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index 3fee4c2006..fd7b1ea44b 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_RPI_GPIO_VERSION = 0.7.0
-+PYTHON_RPI_GPIO_VERSION = 0.7.1
- PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
--PYTHON_RPI_GPIO_SITE = https://sourceforge.net/projects/raspberry-gpio-python/files
-+PYTHON_RPI_GPIO_SITE = https://files.pythonhosted.org/packages/c4/0f/10b524a12b3445af1c607c27b2f5ed122ef55756e29942900e5c950735f2
- PYTHON_RPI_GPIO_LICENSE = MIT
- PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
--PYTHON_RPI_GPIO_SETUP_TYPE = distutils
-+PYTHON_RPI_GPIO_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-SSDP_RESPONDER_VERSION = 1.8
++SSDP_RESPONDER_VERSION = 1.9
+ SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
+ SSDP_RESPONDER_LICENSE = ISC
+ SSDP_RESPONDER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
