@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AABC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 788C6C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 156CD81471;
-	Mon,  5 Dec 2022 12:05:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 156CD81471
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B08560C0A;
+	Mon,  5 Dec 2022 12:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B08560C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1yqfn1GTD1S9; Mon,  5 Dec 2022 12:05:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YJn7c5ndY9Zf; Mon,  5 Dec 2022 12:05:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 030A981420;
-	Mon,  5 Dec 2022 12:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 030A981420
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 01D551BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73FCD60B30;
+	Mon,  5 Dec 2022 12:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73FCD60B30
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 765981BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 444BF4169B
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 444BF4169B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4406F40606
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4406F40606
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ezqtzwm8Ax92 for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ctsSHLkc3AXU for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B68E416B1
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B68E416B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2493405EB
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2493405EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75C4885BBE; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+ id D773E85B9E; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 23:33:18 +0100
+Date: Sat, 5 Nov 2022 23:44:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8c63011e2b0c54e0a17171b668bfcb253954481
-X-Git-Newrev: 1692691e45fcaaad9572330fb9f7b35b72ad0854
+X-Git-Oldrev: 0954717eeeabac8c3273f78139c6f754ee04c9bf
+X-Git-Newrev: 6732e230354e0eb62345b039605a1933ba0ad3bf
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112611.75C4885BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/freescale-imx/imx-vpu-hantro-daemon: remove _SOURCE variable
+Message-Id: <20221205112607.D773E85B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ninja: bump to version
+ 1.11.1.g95dee.kitware.jobserver-1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,35 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1692691e45fcaaad9572330fb9f7b35b72ad0854
+commit: https://git.buildroot.net/buildroot/commit/?id=6732e230354e0eb62345b039605a1933ba0ad3bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The value of the _SOURCE variable is the default value for this
-variable, making its definition redundant.
-
-Fixes:
-
-package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk:9: remove default value of _SOURCE variable (http://nightly.buildroot.org/#generic-package-reference)
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3371766926
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/ninja/ninja.hash | 2 +-
+ package/ninja/ninja.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-index bf9088b065..4f6f166b60 100644
---- a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-@@ -6,7 +6,6 @@
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+index ecde199844..57c10bb287 100644
+--- a/package/ninja/ninja.hash
++++ b/package/ninja/ninja.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  549c31ee596566b952c600e23eb9b8d39a4112cd5fdeb2e5a83370669176da40  ninja-1.10.2.g51db2.kitware.jobserver-1.tar.gz
++sha256  7ba84551f5b315b4270dc7c51adef5dff83a2154a3665a6c9744245c122dd0db  ninja-1.11.1.g95dee.kitware.jobserver-1.tar.gz
+ sha256  eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  COPYING
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+index bc84046414..b7bc1a4f1c 100644
+--- a/package/ninja/ninja.mk
++++ b/package/ninja/ninja.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- IMX_VPU_HANTRO_DAEMON_VERSION = 1.1.4
- IMX_VPU_HANTRO_DAEMON_SITE = $(FREESCALE_IMX_SITE)
--IMX_VPU_HANTRO_DAEMON_SOURCE = imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION).tar.gz
- IMX_VPU_HANTRO_DAEMON_LICENSE = NXP Semiconductor Software License Agreement
- IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt
- IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE = NO
+-NINJA_VERSION_MAJOR = 1.10.2
+-NINJA_VERSION = $(NINJA_VERSION_MAJOR).g51db2.kitware.jobserver-1
++NINJA_VERSION_MAJOR = 1.11.1
++NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
+ NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
+ NINJA_LICENSE = Apache-2.0
+ NINJA_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
