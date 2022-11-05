@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FADC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165FAC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3F76410E5;
-	Mon, 20 Feb 2023 21:04:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3F76410E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD56541D5D;
+	Mon, 20 Feb 2023 21:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD56541D5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aGJbwvC4YjyG; Mon, 20 Feb 2023 21:04:56 +0000 (UTC)
+	with ESMTP id hXs4qDJTyu2M; Mon, 20 Feb 2023 21:05:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B87E429D0;
-	Mon, 20 Feb 2023 21:04:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B87E429D0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C4581BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAAFF42A4F;
+	Mon, 20 Feb 2023 21:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAAFF42A4F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 17AB71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 492F94015F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 492F94015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id C46FD61033
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46FD61033
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bZ0g64XFiNrM for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0nyKiJ1OgdYL for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4DA440C29
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4DA440C29
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEB116107A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB116107A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A18FA86495; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 9FD678648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:44 +0100
+Date: Sat, 5 Nov 2022 21:03:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5f7a517f5c156666cef58dec429bfffd4ae41e81
-X-Git-Newrev: d968cab0bd673311a87a8fc5187b1701200719de
+X-Git-Oldrev: 0b4a9930124f7fb4c7bfae281db900905006a2da
+X-Git-Newrev: b79d735139282ecf052dc89d4c221bbd16447112
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.A18FA86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/friendlyarm_nanopi_neo_plus2: remove defconfig
+Message-Id: <20230220205146.9FD678648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/strongswan: security
+ bump to version 5.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,306 +56,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d968cab0bd673311a87a8fc5187b1701200719de
+commit: https://git.buildroot.net/buildroot/commit/?id=b79d735139282ecf052dc89d4c221bbd16447112
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+Fixed a vulnerability related to online certificate revocation checking
+that was caused because the revocation plugin used potentially untrusted
+OCSP URIs and CRL distribution points in certificates. This allowed a
+remote attacker to initiate IKE_SAs and send crafted certificates that
+contain URIs pointing to servers under their control, which could have
+lead to a denial-of-service attack. This vulnerability has been
+registered as CVE-2022-40617.
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+Drop patch (already in version)
 
-Fixes:
+https://www.strongswan.org/blog/2022/10/03/strongswan-vulnerability-(cve-2022-40617).html
+https://github.com/strongswan/strongswan/releases/tag/5.9.6
+https://github.com/strongswan/strongswan/releases/tag/5.9.7
+https://github.com/strongswan/strongswan/releases/tag/5.9.8
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499055
-
-Cc: Louis Aussedat <aussedat.louis@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                         |  2 -
- board/friendlyarm/nanopi-neo-plus2/extlinux.conf   |  4 --
- board/friendlyarm/nanopi-neo-plus2/genimage.cfg    | 40 --------------
- .../nanopi-neo-plus2/linux-extras.config           | 10 ----
- board/friendlyarm/nanopi-neo-plus2/post-build.sh   |  4 --
- board/friendlyarm/nanopi-neo-plus2/readme.txt      | 37 -------------
- ...fmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt | 53 ------------------
- configs/friendlyarm_nanopi_neo_plus2_defconfig     | 62 ----------------------
- 8 files changed, 212 deletions(-)
+ ...strongswan-plugins-wolfssl-rename-encrypt.patch | 150 ---------------------
+ package/strongswan/strongswan.hash                 |   6 +-
+ package/strongswan/strongswan.mk                   |   2 +-
+ 3 files changed, 4 insertions(+), 154 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 27482d095a..0c9f885808 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1780,8 +1780,6 @@ F:	package/ti-sgx-km/
- F:	package/ti-sgx-um/
+diff --git a/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch b/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
+deleted file mode 100644
+index 7b47b3278b..0000000000
+--- a/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
++++ /dev/null
+@@ -1,150 +0,0 @@
+-From 5900426a710eaa65a27784687775e331bcb0489b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 8 Aug 2022 09:52:19 +0200
+-Subject: [PATCH] wolfssl: Rename `encrypt` methods to avoid conflicts with
+- system headers
+-
+-Rename `encrypt` methods to avoid the following build failure when wolfSSL
+-is built with --enable-opensslextra:
+-
+-In file included from ../../../../src/libstrongswan/utils/utils.h:59,
+-                 from ../../../../src/libstrongswan/library.h:101,
+-                 from wolfssl_common.h:29,
+-                 from wolfssl_aead.c:23:
+-wolfssl_aead.c:90:16: error: conflicting types for 'encrypt'; have '_Bool(union <anonymous>,  chunk_t,  chunk_t,  chunk_t,  chunk_t *)'
+-   90 | METHOD(aead_t, encrypt, bool,
+-      |                ^~~~~~~
+-../../../../src/libstrongswan/utils/utils/object.h:99:20: note: in definition of macro 'METHOD'
+-   99 |         static ret name(union {iface *_public; this;} \
+-      |                    ^~~~
+-In file included from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/wc_port.h:573,
+-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/types.h:35,
+-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/logging.h:33,
+-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/ssl.h:35,
+-                 from wolfssl_common.h:64,
+-                 from wolfssl_aead.c:23:
+-/home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/unistd.h:149:6: note: previous declaration of 'encrypt' with type 'void(char *, int)'
+-  149 | void encrypt(char *, int);
+-      |      ^~~~~~~
+-
+-Closes strongswan/strongswan#1201
+-[Retrieved from:
+-https://github.com/strongswan/strongswan/commit/5900426a710eaa65a27784687775e331bcb0489b]
+----
+- src/libstrongswan/plugins/wolfssl/wolfssl_aead.c           | 4 ++--
+- src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c        | 4 ++--
+- src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c  | 4 ++--
+- src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c  | 4 ++--
+- src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c | 4 ++--
+- 5 files changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
+-index 2ea7c94cd65..44f054916cf 100644
+---- a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
+-+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
+-@@ -87,7 +87,7 @@ struct private_aead_t {
+- 	encryption_algorithm_t alg;
+- };
+- 
+--METHOD(aead_t, encrypt, bool,
+-+METHOD(aead_t, encrypt_, bool,
+- 	private_aead_t *this, chunk_t plain, chunk_t assoc, chunk_t iv,
+- 	chunk_t *encrypted)
+- {
+-@@ -323,7 +323,7 @@ aead_t *wolfssl_aead_create(encryption_algorithm_t algo,
+- 
+- 	INIT(this,
+- 		.public = {
+--			.encrypt = _encrypt,
+-+			.encrypt = _encrypt_,
+- 			.decrypt = _decrypt,
+- 			.get_block_size = _get_block_size,
+- 			.get_icv_size = _get_icv_size,
+-diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
+-index cffe7ba2375..085a912404c 100644
+---- a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
+-+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
+-@@ -230,7 +230,7 @@ METHOD(crypter_t, decrypt, bool,
+- 	return success;
+- }
+- 
+--METHOD(crypter_t, encrypt, bool,
+-+METHOD(crypter_t, encrypt_, bool,
+- 	private_wolfssl_crypter_t *this, chunk_t data, chunk_t iv, chunk_t *dst)
+- {
+- 	u_char *out;
+-@@ -578,7 +578,7 @@ wolfssl_crypter_t *wolfssl_crypter_create(encryption_algorithm_t algo,
+- 	INIT(this,
+- 		.public = {
+- 			.crypter = {
+--				.encrypt = _encrypt,
+-+				.encrypt = _encrypt_,
+- 				.decrypt = _decrypt,
+- 				.get_block_size = _get_block_size,
+- 				.get_iv_size = _get_iv_size,
+-diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
+-index d8a1ededb06..110543762f2 100644
+---- a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
+-+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
+-@@ -193,7 +193,7 @@ METHOD(public_key_t, verify, bool,
+- 	}
+- }
+- 
+--METHOD(public_key_t, encrypt, bool,
+-+METHOD(public_key_t, encrypt_, bool,
+- 	private_wolfssl_ec_public_key_t *this, encryption_scheme_t scheme,
+- 	void *params, chunk_t crypto, chunk_t *plain)
+- {
+-@@ -324,7 +324,7 @@ static private_wolfssl_ec_public_key_t *create_empty()
+- 			.key = {
+- 				.get_type = _get_type,
+- 				.verify = _verify,
+--				.encrypt = _encrypt,
+-+				.encrypt = _encrypt_,
+- 				.get_keysize = _get_keysize,
+- 				.equals = public_key_equals,
+- 				.get_fingerprint = _get_fingerprint,
+-diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
+-index f423d8d5691..ea0fb3dfc77 100644
+---- a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
+-+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
+-@@ -111,7 +111,7 @@ METHOD(public_key_t, verify, bool,
+- 	return ret == 0 && res == 1;
+- }
+- 
+--METHOD(public_key_t, encrypt, bool,
+-+METHOD(public_key_t, encrypt_, bool,
+- 	private_public_key_t *this, encryption_scheme_t scheme,
+- 	void *params, chunk_t crypto, chunk_t *plain)
+- {
+-@@ -368,7 +368,7 @@ static private_public_key_t *create_empty(key_type_t type)
+- 		.public = {
+- 			.get_type = _get_type,
+- 			.verify = _verify,
+--			.encrypt = _encrypt,
+-+			.encrypt = _encrypt_,
+- 			.get_keysize = _get_keysize,
+- 			.equals = public_key_equals,
+- 			.get_fingerprint = _get_fingerprint,
+-diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
+-index 72df115fe90..da8899c2d8c 100644
+---- a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
+-+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
+-@@ -216,7 +216,7 @@ METHOD(public_key_t, verify, bool,
+- 	}
+- }
+- 
+--METHOD(public_key_t, encrypt, bool,
+-+METHOD(public_key_t, encrypt_, bool,
+- 	private_wolfssl_rsa_public_key_t *this, encryption_scheme_t scheme,
+- 	void *params, chunk_t plain, chunk_t *crypto)
+- {
+-@@ -440,7 +440,7 @@ static private_wolfssl_rsa_public_key_t *create_empty()
+- 			.key = {
+- 				.get_type = _get_type,
+- 				.verify = _verify,
+--				.encrypt = _encrypt,
+-+				.encrypt = _encrypt_,
+- 				.equals = public_key_equals,
+- 				.get_keysize = _get_keysize,
+- 				.get_fingerprint = _get_fingerprint,
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index aca7ddf5cd..4822f9152f 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-5.9.5.tar.bz2.md5
+-md5  53005324e3cba8592f1fb958b1c2d0e5  strongswan-5.9.5.tar.bz2
++# From http://download.strongswan.org/strongswan-5.9.8.tar.bz2.md5
++md5  f46b0d3e7aed88824650d0721c887443  strongswan-5.9.8.tar.bz2
+ # Calculated based on the hash above
+-sha256  983e4ef4a4c6c9d69f5fe6707c7fe0b2b9a9291943bbf4e008faab6bf91c0bdd  strongswan-5.9.5.tar.bz2
++sha256  d3303a43c0bd7b75a12b64855e8edcb53696f06190364f26d1533bde1f2e453c  strongswan-5.9.8.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 44c20f8414..cae1433e39 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Louis Aussedat <aussedat.louis@gmail.com>
--F:	board/friendlyarm/nanopi-neo-plus2/
--F:	configs/friendlyarm_nanopi_neo_plus2_defconfig
- F:	package/mfoc
- F:	package/libpam-nfc
- F:	package/python-dnspython/
-diff --git a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf b/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-deleted file mode 100644
-index fcb6f632c1..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/extlinux.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--label linux
--  kernel /Image
--  devicetree /sun50i-h5-nanopi-neo-plus2.dtb
--  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-diff --git a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg b/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-deleted file mode 100644
-index 9000201399..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/genimage.cfg
-+++ /dev/null
-@@ -1,40 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"sun50i-h5-nanopi-neo-plus2.dtb",
--			"extlinux"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition spl {
--		in-partition-table = "no"
--		image = "sunxi-spl.bin"
--		offset = 8K
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 40K
--		size = 1M # 1MB - 40KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/friendlyarm/nanopi-neo-plus2/linux-extras.config b/board/friendlyarm/nanopi-neo-plus2/linux-extras.config
-deleted file mode 100644
-index 52b4b4b29e..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/linux-extras.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--# wireless core
--CONFIG_WIRELESS=y
--CONFIG_CFG80211=y
--CONFIG_MAC80211=y
--CONFIG_CFG80211_WEXT=y
--
--# wireless drivers
--CONFIG_WLAN=y
--CONFIG_WLAN_VENDOR_BROADCOM=y
--CONFIG_BRCMFMAC=m
-diff --git a/board/friendlyarm/nanopi-neo-plus2/post-build.sh b/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-deleted file mode 100755
-index ec20fca7d9..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/post-build.sh
-+++ /dev/null
-@@ -1,4 +0,0 @@
--#!/bin/sh
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopi-neo-plus2/readme.txt b/board/friendlyarm/nanopi-neo-plus2/readme.txt
-deleted file mode 100644
-index ae59952029..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/readme.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Nanopi NEO Plus2. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--Nanopi NEO2 link:
--http://nanopi.io/nanopi-neo-plus2.html
--
--Wiki link:
--http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO_Plus2
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--How to build
--============
--
--    $ make friendlyarm_nanopi_neo_plus2_defconfig
--    $ make
--
--Note: you will need access to the internet to download the required
--sources.
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--  $ sudo sync
--
--Insert the micro SDcard in your Nanopi NEO Plus2 and power it up. The console
--is on the serial line, 115200 8N1.
-diff --git a/board/friendlyarm/nanopi-neo-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt b/board/friendlyarm/nanopi-neo-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt
-deleted file mode 100644
-index 740d172eb5..0000000000
---- a/board/friendlyarm/nanopi-neo-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt
-+++ /dev/null
-@@ -1,53 +0,0 @@
--#AP6212_NVRAM_V1.0.1_20160606
--# 2.4 GHz, 20 MHz BW mode
--# The following parameter values are just placeholders, need to be updated.
--manfid=0x2d0
--prodid=0x0726
--vendid=0x14e4
--devid=0x43e2
--boardtype=0x0726
--boardrev=0x1101
--boardnum=22
--macaddr=00:90:4c:c5:12:38
--sromrev=11
--boardflags=0x00404201
--xtalfreq=26000
--nocrc=1
--ag0=255
--aa2g=1
--ccode=ALL
--
--pa0itssit=0x20
--extpagain2g=0
--
--#PA parameters for 2.4GHz, measured at CHIP OUTPUT
--pa2ga0=-168,7161,-820
--AvVmid_c0=0x0,0xc8
--cckpwroffset0=5
--
--# PPR params
--maxp2ga0=90
--txpwrbckof=6
--cckbw202gpo=0x5555
--legofdmbw202gpo=0x77777777
--mcsbw202gpo=0xaaaaaaaa
--
--# OFDM IIR :
--ofdmdigfilttype=7
--# PAPD mode:
--papdmode=2
--
--il0macaddr=00:90:4c:c5:12:38
--wl0id=0x431b
--
--#OOB parameters
--hostwake=0x40
--hostrdy=0x41
--usbrdy=0x03
--usbrdydelay=100
--deadman_to=0xffffffff
--# muxenab: 0x1 for UART enable, 0x10 for Host awake
--muxenab=0x10
--# CLDO PWM voltage settings - 0x4 - 1.1 volt
--#cldo_pwm=0x4
--glitch_based_crsmin=1
-diff --git a/configs/friendlyarm_nanopi_neo_plus2_defconfig b/configs/friendlyarm_nanopi_neo_plus2_defconfig
-deleted file mode 100644
-index 461e468cb6..0000000000
---- a/configs/friendlyarm_nanopi_neo_plus2_defconfig
-+++ /dev/null
-@@ -1,62 +0,0 @@
--BR2_aarch64=y
--BR2_cortex_a53=y
--BR2_ARM_FPU_VFPV4=y
--
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_ROOTFS_OVERLAY="board/friendlyarm/nanopi-neo-plus2/rootfs_overlay"
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--R2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo_plus2"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo-plus2"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/friendlyarm/nanopi-neo-plus2/linux-extras.config"
--
--# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi NEO Plus2"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo-plus2/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo-plus2/post-build.sh"
--
--# wireless firmware
--BR2_PACKAGE_LINUX_FIRMWARE=y
--BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
--
--# wireless tools
--BR2_PACKAGE_IW=y
--BR2_PACKAGE_WIRELESS_TOOLS=y
--BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
--BR2_PACKAGE_WPA_SUPPLICANT=y
--BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
--BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+-STRONGSWAN_VERSION = 5.9.5
++STRONGSWAN_VERSION = 5.9.8
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
