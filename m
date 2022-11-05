@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D2CC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC63C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B4ED60A7D;
-	Sat,  5 Nov 2022 21:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B4ED60A7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0655C81E40;
+	Sat,  5 Nov 2022 21:41:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0655C81E40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G2jxvvNIm_Dz; Sat,  5 Nov 2022 21:41:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rPgqVGt-mlIR; Sat,  5 Nov 2022 21:41:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7535A605E9;
-	Sat,  5 Nov 2022 21:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7535A605E9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6AB1BF283
+	by smtp1.osuosl.org (Postfix) with ESMTP id E147E81DE5;
+	Sat,  5 Nov 2022 21:41:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E147E81DE5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EDFB41BF283
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8D784032A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6148C40204
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8D784032A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6148C40204
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Hq35vvnugyJ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IV7JOifmr8b4 for <buildroot@lists.busybox.net>;
  Sat,  5 Nov 2022 21:40:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 118B6400D9
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 118B6400D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D632C40218
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D632C40218
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0143687E79; Sat,  5 Nov 2022 21:40:07 +0000 (UTC)
+ id C062187E79; Sat,  5 Nov 2022 21:40:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:36:11 +0100
+Date: Sat, 5 Nov 2022 21:31:34 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0fed5ae029881b7092110b51147d93030309e909
-X-Git-Newrev: 60e7460aa797b4b18f6fc589c4870ada51b100f2
+X-Git-Oldrev: e358c238507b1f8a5cbd295f1b9cfb7981348499
+X-Git-Newrev: 3e1a446d1d2094986837624c3fb8f44e5964e3a8
 X-Patchwork-Hint: ignore
-Message-Id: <20221105214007.0143687E79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/go: fix go on
- riscv64 in sv57 mode
+Message-Id: <20221105214006.C062187E79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/go: add support
+ for riscv64 architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +63,217 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e7460aa797b4b18f6fc589c4870ada51b100f2
+commit: https://git.buildroot.net/buildroot/commit/?id=3e1a446d1d2094986837624c3fb8f44e5964e3a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-On machines supporting Riscv SV57 mode like Qemu, Go programs currently crash
-with the following type of error:
+Enable the supported "riscv64" GOARCH.
 
-runtime: lfstack.push invalid packing: node=0xffffff5908a940 cnt=0x1
-packed=0xffff5908a9400001 -> node=0xffff5908a940
+Add a patch to fix a build failure due to GOARCH leaking into the calls to the
+go-bootstrap compiler. Unsets the GOARCH before calling go-bootstrap.
 
-The upstream PR fixes this error, but has not yet been merged.
-
-Upstream: https://go-review.googlesource.com/c/go/+/409055/4
+PR: https://github.com/golang/go/pull/52362
 
 Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fb97f4f354bd4e2fce270eebfba072c45a2a8a7c)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 8a1158f89f15fbb7448f39a118e4882bd1b44c81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-runtime-support-riscv64-SV57-mode.patch   | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ ...d.go-explicit-option-for-crosscompilation.patch |   8 +-
+ ...trap-set-environment-before-generating-bu.patch | 119 +++++++++++++++++++++
+ package/go/Config.in.host                          |   8 +-
+ package/go/go.mk                                   |   2 +
+ 4 files changed, 132 insertions(+), 5 deletions(-)
 
-diff --git a/package/go/0003-runtime-support-riscv64-SV57-mode.patch b/package/go/0003-runtime-support-riscv64-SV57-mode.patch
+diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+index f76c5b1d03..3a9b47474c 100644
+--- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
++++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+@@ -1,4 +1,4 @@
+-From e1382a731a726293e30901038c6870fa77ef6095 Mon Sep 17 00:00:00 2001
++From 335c6245674088de616324398137416c7a1cbe8f Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 8 May 2018 16:08:44 +0200
+ Subject: [PATCH] build.go: explicit option for crosscompilation
+@@ -17,10 +17,10 @@ Signed-off-by: Anisse Astier <anisse@astier.eu>
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/src/cmd/dist/build.go b/src/cmd/dist/build.go
+-index 99d1db5..eb4097f 100644
++index f99f1f4e43..08a9f24f59 100644
+ --- a/src/cmd/dist/build.go
+ +++ b/src/cmd/dist/build.go
+-@@ -252,12 +252,13 @@ func xinit() {
++@@ -286,12 +286,13 @@ func xinit() {
+  // $CC_FOR_goos_goarch, if set, applies only to goos/goarch.
+  func compilerEnv(envName, def string) map[string]string {
+  	m := map[string]string{"": def}
+@@ -36,5 +36,5 @@ index 99d1db5..eb4097f 100644
+  		}
+  		m[""] = env
+ -- 
+-2.7.4
++2.35.1
+ 
+diff --git a/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
 new file mode 100644
-index 0000000000..f51c2ca093
+index 0000000000..5a6b694857
 --- /dev/null
-+++ b/package/go/0003-runtime-support-riscv64-SV57-mode.patch
-@@ -0,0 +1,65 @@
-+From 6618c7af436488fa12018cdcd31eeedb3a698745 Mon Sep 17 00:00:00 2001
-+From: Dmitry Vyukov <dvyukov@google.com>
-+Date: Fri, 27 May 2022 18:55:35 +0200
-+Subject: [PATCH] runtime: support riscv64 SV57 mode
++++ b/package/go/0002-build-bootstrap-set-environment-before-generating-bu.patch
+@@ -0,0 +1,119 @@
++From 4d43f7c4dd06e6f62be446996019d4505af54764 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Thu, 14 Apr 2022 13:34:26 -0700
++Subject: [PATCH] build: bootstrap: set environment before generating buildcfg
 +
-+Riscv64 has SV57 mode when user-space VA is 56 bits.
-+Linux kernel recently got support for this mode and Go binaries started crashing as:
++The GOOS and GOARCH environment variables should be unset before calling
++mkbuildcfg. This change fixes a build failure when GOARCH=riscv64.
 +
-+runtime: lfstack.push invalid packing: node=0xffffff5908a940 cnt=0x1
-+packed=0xffff5908a9400001 -> node=0xffff5908a940
++Building Go toolchain1 using go-1.4-bootstrap-20171003.
++src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
++invalid operation: y << x (shift count type int64, must be unsigned integer)
 +
-+Adjust lfstack code to use only 8 top bits of pointers on riscv64.
++There is a build issue with go1.4 with the riscv64 code: however, why is the
++riscv64 code being compiled at all?
 +
-+For context see:
-+https://groups.google.com/g/syzkaller-bugs/c/lU0GQTZoNQQ/m/O_c3vmE3AAAJ
++GOARCH is set when calling mkbuildcfg, so go1.4 is trying to compile riscv64.
 +
-+Update #54104
++[Buildroot]: submitted to upstream:
 +
-+Change-Id: Ib5d3d6a79c0c6eddf11618d73fcc8bc1832a9c25
++ - https://github.com/golang/go/issues/52583
++ - https://go-review.googlesource.com/c/go/+/400376
++ - GitHub-Pull-Request: golang/go#52362
++
 +Signed-off-by: Christian Stewart <christian@paral.in>
 +---
++ src/cmd/dist/buildtool.go | 56 ++++++++++++++++++++-------------------
++ 1 file changed, 29 insertions(+), 27 deletions(-)
 +
-+Upstream: https://go-review.googlesource.com/c/go/+/409055/4
-+---
-+ src/runtime/lfstack_64bit.go | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/src/runtime/lfstack_64bit.go b/src/runtime/lfstack_64bit.go
-+index 154130cf63..39fa647b9e 100644
-+--- a/src/runtime/lfstack_64bit.go
-++++ b/src/runtime/lfstack_64bit.go
-+@@ -36,12 +36,21 @@ const (
-+ 	// We use one bit to distinguish between the two ranges.
-+ 	aixAddrBits = 57
-+ 	aixCntBits  = 64 - aixAddrBits + 3
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index f1f3d50b6f..dabf01cf84 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -116,9 +116,6 @@ func bootstrapBuildTools() {
++ 	}
++ 	xprintf("Building Go toolchain1 using %s.\n", goroot_bootstrap)
++ 
++-	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
++-	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
++-
++ 	// Use $GOROOT/pkg/bootstrap as the bootstrap workspace root.
++ 	// We use a subdirectory of $GOROOT/pkg because that's the
++ 	// space within $GOROOT where we store all generated objects.
++@@ -130,6 +127,34 @@ func bootstrapBuildTools() {
++ 	base := pathf("%s/src/bootstrap", workspace)
++ 	xmkdirall(base)
++ 
+++	// Set up environment for invoking Go 1.4 go command.
+++	// GOROOT points at Go 1.4 GOROOT,
+++	// GOPATH points at our bootstrap workspace,
+++	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
+++	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
+++	// so that Go 1.4 builds whatever kind of binary it knows how to build.
+++	// Restore GOROOT, GOPATH, and GOBIN when done.
+++	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
+++	// because setup will take care of those when bootstrapBuildTools returns.
 ++
-++	// Riscv64 SV57 mode gives 56 bits of userspace VA.
-++	// lfstack code supports it, but broader support for SV57 mode is incomplete,
-++	// and there may be other issues (see #54104).
-++	riscv64AddrBits = 56
-++	riscv64CntBits  = 64 - riscv64AddrBits + 3
-+ )
-+ 
-+ func lfstackPack(node *lfnode, cnt uintptr) uint64 {
-+ 	if GOARCH == "ppc64" && GOOS == "aix" {
-+ 		return uint64(uintptr(unsafe.Pointer(node)))<<(64-aixAddrBits) | uint64(cnt&(1<<aixCntBits-1))
+++	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
+++	os.Setenv("GOROOT", goroot_bootstrap)
+++
+++	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
+++	os.Setenv("GOPATH", workspace)
+++
+++	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
+++	os.Setenv("GOBIN", "")
+++
+++	os.Setenv("GOOS", "")
+++	os.Setenv("GOHOSTOS", "")
+++	os.Setenv("GOARCH", "")
+++	os.Setenv("GOHOSTARCH", "")
+++
+++	// Create the build config files.
+++	mkbuildcfg(pathf("%s/src/internal/buildcfg/zbootstrap.go", goroot))
+++	mkobjabi(pathf("%s/src/cmd/internal/objabi/zbootstrap.go", goroot))
+++
++ 	// Copy source code into $GOROOT/pkg/bootstrap and rewrite import paths.
++ 	writefile("module bootstrap\n", pathf("%s/%s", base, "go.mod"), 0)
++ 	for _, dir := range bootstrapDirs {
++@@ -176,30 +201,6 @@ func bootstrapBuildTools() {
++ 		})
 + 	}
-++	if GOARCH == "riscv64" {
-++		return uint64(uintptr(unsafe.Pointer(node)))<<(64-riscv64AddrBits) | uint64(cnt&(1<<riscv64CntBits-1))
-++	}
-+ 	return uint64(uintptr(unsafe.Pointer(node)))<<(64-addrBits) | uint64(cnt&(1<<cntBits-1))
-+ }
 + 
-+@@ -54,5 +63,8 @@ func lfstackUnpack(val uint64) *lfnode {
-+ 	if GOARCH == "ppc64" && GOOS == "aix" {
-+ 		return (*lfnode)(unsafe.Pointer(uintptr((val >> aixCntBits << 3) | 0xa<<56)))
++-	// Set up environment for invoking Go 1.4 go command.
++-	// GOROOT points at Go 1.4 GOROOT,
++-	// GOPATH points at our bootstrap workspace,
++-	// GOBIN is empty, so that binaries are installed to GOPATH/bin,
++-	// and GOOS, GOHOSTOS, GOARCH, and GOHOSTOS are empty,
++-	// so that Go 1.4 builds whatever kind of binary it knows how to build.
++-	// Restore GOROOT, GOPATH, and GOBIN when done.
++-	// Don't bother with GOOS, GOHOSTOS, GOARCH, and GOHOSTARCH,
++-	// because setup will take care of those when bootstrapBuildTools returns.
++-
++-	defer os.Setenv("GOROOT", os.Getenv("GOROOT"))
++-	os.Setenv("GOROOT", goroot_bootstrap)
++-
++-	defer os.Setenv("GOPATH", os.Getenv("GOPATH"))
++-	os.Setenv("GOPATH", workspace)
++-
++-	defer os.Setenv("GOBIN", os.Getenv("GOBIN"))
++-	os.Setenv("GOBIN", "")
++-
++-	os.Setenv("GOOS", "")
++-	os.Setenv("GOHOSTOS", "")
++-	os.Setenv("GOARCH", "")
++-	os.Setenv("GOHOSTARCH", "")
++-
++ 	// Run Go 1.4 to build binaries. Use -gcflags=-l to disable inlining to
++ 	// workaround bugs in Go 1.4's compiler. See discussion thread:
++ 	// https://groups.google.com/d/msg/golang-dev/Ss7mCKsvk8w/Gsq7VYI0AwAJ
++@@ -221,6 +222,7 @@ func bootstrapBuildTools() {
++ 		cmd = append(cmd, "-toolexec="+tool)
 + 	}
-++	if GOARCH == "riscv64" {
-++		return (*lfnode)(unsafe.Pointer(uintptr(val >> riscv64CntBits << 3)))
-++	}
-+ 	return (*lfnode)(unsafe.Pointer(uintptr(val >> cntBits << 3)))
-+ }
++ 	cmd = append(cmd, "bootstrap/cmd/...")
+++
++ 	run(base, ShowOutput|CheckExit, cmd...)
++ 
++ 	// Copy binaries into tool binary directory.
 +-- 
 +2.35.1
 +
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index e82ab6e81a..ded02d3b3a 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -5,10 +5,16 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+ 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+-		|| BR2_mips64 || BR2_mips64el || BR2_s390x
++		|| BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	# MIPS R6 support in Go has not yet been developed.
+ 	depends on !BR2_MIPS_CPU_MIPS64R6
++	# Go doesn't support Risc-v 32-bit.
++	depends on !BR2_RISCV_32
++	# Go requires the following Risc-v General (G) features:
++	depends on !BR2_riscv || (BR2_RISCV_ISA_RVI && \
++		BR2_RISCV_ISA_RVM && BR2_RISCV_ISA_RVA && \
++		BR2_RISCV_ISA_RVF && BR2_RISCV_ISA_RVD)
+ 
+ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	bool
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 1df52edf91..f9445c7dd3 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -63,6 +63,8 @@ else ifeq ($(BR2_mips64),y)
+ GO_GOARCH = mips64
+ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
++else ifeq ($(BR2_riscv),y)
++GO_GOARCH = riscv64
+ else ifeq ($(BR2_s390x),y)
+ GO_GOARCH = s390x
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
