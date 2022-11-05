@@ -4,66 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B6EC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4255EC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E7F660AAE;
-	Sat,  5 Nov 2022 21:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E7F660AAE
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC33160AB0;
+	Sat,  5 Nov 2022 21:57:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC33160AB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d_dxJpwZsnJ9; Sat,  5 Nov 2022 21:51:52 +0000 (UTC)
+	with ESMTP id PfWwqeFHaeeD; Sat,  5 Nov 2022 21:57:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E53C5607F6;
-	Sat,  5 Nov 2022 21:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E53C5607F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 088B9607F6;
+	Sat,  5 Nov 2022 21:57:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 088B9607F6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F2961BF283
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:51:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EAC3F1BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:57:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22123405AE
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22123405AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1372408BD
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1372408BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KTOZlRg17RcW for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 21:51:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545B140510
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 545B140510
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:51:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9B14160002;
- Sat,  5 Nov 2022 21:51:44 +0000 (UTC)
-Date: Sat, 5 Nov 2022 22:51:43 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221105225143.0c1ab11e@windsurf>
-In-Reply-To: <20221105211639.349885-1-fontaine.fabrice@gmail.com>
-References: <20221105211639.349885-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id 2iEYryTWyuY3 for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 21:57:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B583D40898
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B583D40898
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:57:23 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ v124-20020a1cac82000000b003cf7a4ea2caso7429481wme.5
+ for <buildroot@buildroot.org>; Sat, 05 Nov 2022 14:57:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Lh4+bumj/3hSFgKKEqVGr+mp+dnCBodv2/fhFK/wDZ8=;
+ b=M97cPlTWBJdpvnupMgWmp0Mu697/yQm4WSXCy7bAhmLxEHOUQIoDyVbquK3dYF3rdq
+ h/1WlEHsuSgEiy7AQWdnCxfYC7HmuO7eVyH+W28NY7ihat4uv89bWgaGCdVVa/LpR3fY
+ alw8E/4jAm4WVTeCAr1QHmsPlouXMKHw3eIOMf8UHQZ9Y2WtPemNrWAr30BKG04DGriG
+ Y3p7miL1QM6gJ7vmTdQ5Dm4V9DHKsXgLutrFZD/vqCRV5Lq6uaHAxW6UDptnA6XNDFjh
+ FFOi0bW9WHyEoeIt7ZoYtqSwyExioYMEHjtyrU8mHwDw6HLYn24cIKLI7S8x5Y2g4ld2
+ ERBQ==
+X-Gm-Message-State: ACrzQf2GJRQzDo5Lem+P6102NtO88+PK5JmWrSO+JLfjulrs+lk4gCxj
+ IW+hNObN1Noz9wRHAKEgP2mx/ke8iF8=
+X-Google-Smtp-Source: AMsMyM4crKvusepc6zwnl5R0lr/wzQ5iOajqsD+0VlMB+4ZkB4EbVm9q8fK9N9f6ZxiEfQYbDO1uzA==
+X-Received: by 2002:a05:600c:4e16:b0:3cf:a3e0:73e4 with SMTP id
+ b22-20020a05600c4e1600b003cfa3e073e4mr71419wmq.21.1667685441624; 
+ Sat, 05 Nov 2022 14:57:21 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ g1-20020a7bc4c1000000b003b3365b38f9sm3681412wmk.10.2022.11.05.14.57.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 05 Nov 2022 14:57:21 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  5 Nov 2022 22:57:18 +0100
+Message-Id: <20221105215718.647971-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667685105;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tixTdkst06+VAglncHxEdXT5Yxx7EBDPY3V09daFaKA=;
- b=Vl+94CHQNoyvby8bNT50ox5CxLq8F7DmboXowwl1FXjIzP9u04+M3tiwPO08/jNI4xGo+c
- ILOkEdO2/9/eAlfiRLY56l3uyJePSPymFaCYCMdh5f9o2erQFRy1nFWLD1w/qOK4aQIJZy
- /GNYpV3JFoblgQaQ7TRjNrNDdrlYCZZ7yubtRl0g6KpZQS2y1V/3xksO65Ou6LLte2Ce+K
- NfYZFt91SNcuw3IBnuTHwH1HmyDyv1BiJFKs0u/JlNDYdCT2atYE75le03nZMonRr8Ijc3
- 9GsCm51DScK+0WoIrHcpbICdYzd0uHM8JBhKb4xAmZTXK9xhAtkBkhYh/OdBrw==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Lh4+bumj/3hSFgKKEqVGr+mp+dnCBodv2/fhFK/wDZ8=;
+ b=YdMOCOXcJgoHnX6EB+KO3j796L5/5vs6PLJjas9Rl1hizriaMwWIpr6TDM/ewLQ0Ti
+ UY4o3M2PkWEhfBJeYXbDPXLNl5Z6dZuQp1cQ3OcXPbGHJv2i/XqwdH2DAdYCJwGmVqxC
+ MNjN7ohPcJGbl7k3Bj3qO+cK05h24JxdDA/C0CTJiXJ9aJLcKrxRtdfwighGoU4dY09O
+ c/7QFnpFGtlmKqN/v0DiLQo0wgfwdhyyGhM2cIwI1gSk8YtfNU7NjZEFKqIbYB07asYV
+ 4+ieHu71QaFi7gEM0z/lgpa9PUtsYbn9ml9fu1Uq3CNSgGsKBKhQCOaV91jKdYxr6Ytw
+ 6cOQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Vl+94CHQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/bdwgc: needs MMU
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YdMOCOXc
+Subject: [Buildroot] [PATCH 1/1] package/linux-tools: perf needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,66 +94,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Pedro Aguilar <paguilar@paguilar.org>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAgNSBOb3YgMjAyMiAyMjoxNjozOSArMDEwMApGYWJyaWNlIEZvbnRhaW5lIDxmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IEZpeCB0aGUgZm9sbG93aW5nIGJ1aWxk
-IGZhaWx1cmUgcmFpc2Ugc2luY2UgYnVtcCB0byB2ZXJzaW9uIDguMi4yIGluCj4gY29tbWl0IGQ3
-NjE5NjgyNTUyZGQzNGY0OTllOWYxN2IwMjM0YWY1M2RhNzQzZWMgYW5kCj4gaHR0cHM6Ly9naXRo
-dWIuY29tL2l2bWFpL2Jkd2djL2NvbW1pdC85ZDhjMTk2MjY4MDY4YmI3NWY4NmRlZTBiYTc1Y2Nk
-MDI0NTMxZTcyOgo+IAo+IG9zX2RlcC5jOiBJbiBmdW5jdGlvbiAnYmxvY2tfdW5tYXBfaW5uZXIn
-Ogo+IG9zX2RlcC5jOjI2Njg6MTc6IHdhcm5pbmc6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1
-bmN0aW9uICdtYWR2aXNlJzsgZGlkIHlvdSBtZWFuICdyYWlzZSc/IFstV2ltcGxpY2l0LWZ1bmN0
-aW9uLWRlY2xhcmF0aW9uXQo+ICAyNjY4IHwgICAgICAgICAgICAgaWYgKG1hZHZpc2Uoc3RhcnRf
-YWRkciwgbGVuLCBNQURWX0RPTlRORUVEKSA9PSAtMSkKPiAgICAgICB8ICAgICAgICAgICAgICAg
-ICBefn5+fn5+Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgcmFpc2UKPiAKPiBGaXhlczoKPiAg
-LSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8yYjk5MjRjYjhjMzZhNzVl
-MWNhN2FlZmU4M2U5NWRjMTFjMTBkZWQ2Cj4gCj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250
-YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CgpJIGhlc2l0YXRlZCBhIGJpdCwgYmVj
-YXVzZSBub3JtYWxseSBtYWR2aXNlKCkgaXMgb25seSB0byBwcm92aWRlIGFuCmFkdmljZSB0byB0
-aGUgT1MsIGFuZCB0aGVyZWZvcmUgc2hvdWxkIG5vdCBiZSBzdHJpY3RseSBtYW5kYXRvcnkuCkhv
-d2V2ZXIsIE1BRFZfRE9OVE5FRUQgY2hhbmdlcyB0aGUgc2VtYW50aWMgb2YgZnV0dXJlIG1lbW9y
-eSBhY2Nlc3NlczoKCiAgICAgICBNQURWX0RPTlRORUVECiAgICAgICAgICAgICAgRG8gbm90IGV4
-cGVjdCBhY2Nlc3MgaW4gdGhlIG5lYXIgZnV0dXJlLiAgKEZvciB0aGUgdGltZSBiZWluZywgdGhl
-IGFwcGxpY2F0aW9uIGlzCiAgICAgICAgICAgICAgZmluaXNoZWQgd2l0aCB0aGUgZ2l2ZW4gcmFu
-Z2UsIHNvIHRoZSBrZXJuZWwgY2FuIGZyZWUgcmVzb3VyY2VzICBhc3NvY2lhdGVkICB3aXRoCiAg
-ICAgICAgICAgICAgaXQuKQoKICAgICAgICAgICAgICBBZnRlciBhIHN1Y2Nlc3NmdWwgTUFEVl9E
-T05UTkVFRCBvcGVyYXRpb24sIHRoZSBzZW1hbnRpY3Mgb2YgbWVtb3J5IGFjY2VzcyBpbiB0aGUK
-ICAgICAgICAgICAgICBzcGVjaWZpZWQgcmVnaW9uIGFyZSBjaGFuZ2VkOiBzdWJzZXF1ZW50IGFj
-Y2Vzc2VzIG9mIHBhZ2VzIGluIHRoZSByYW5nZSB3aWxsIHN1Y+KAkAogICAgICAgICAgICAgIGNl
-ZWQsICBidXQgd2lsbCByZXN1bHQgaW4gZWl0aGVyIHJlcG9wdWxhdGluZyB0aGUgbWVtb3J5IGNv
-bnRlbnRzIGZyb20gdGhlIHVwLXRvLQogICAgICAgICAgICAgIGRhdGUgY29udGVudHMgb2YgdGhl
-IHVuZGVybHlpbmcgbWFwcGVkIGZpbGUgKGZvciAgc2hhcmVkICBmaWxlICBtYXBwaW5ncywgIHNo
-YXJlZAogICAgICAgICAgICAgIGFub255bW91cyAgbWFwcGluZ3MsICBhbmQgIHNobWVtLWJhc2Vk
-ICB0ZWNobmlxdWVzIHN1Y2ggYXMgU3lzdGVtIFYgc2hhcmVkIG1lbW9yeQogICAgICAgICAgICAg
-IHNlZ21lbnRzKSBvciB6ZXJvLWZpbGwtb24tZGVtYW5kIHBhZ2VzIGZvciBhbm9ueW1vdXMgcHJp
-dmF0ZSBtYXBwaW5ncy4KCiAgICAgICAgICAgICAgTm90ZSB0aGF0LCB3aGVuIGFwcGxpZWQgdG8g
-c2hhcmVkIG1hcHBpbmdzLCBNQURWX0RPTlRORUVEIG1pZ2h0IG5vdCBsZWFkIHRvIGltbWXigJAK
-ICAgICAgICAgICAgICBkaWF0ZSBmcmVlaW5nIG9mIHRoZSBwYWdlcyBpbiB0aGUgcmFuZ2UuICBU
-aGUga2VybmVsIGlzIGZyZWUgdG8gZGVsYXkgZnJlZWluZyB0aGUKICAgICAgICAgICAgICBwYWdl
-cyB1bnRpbCBhbiBhcHByb3ByaWF0ZSBtb21lbnQuICBUaGUgcmVzaWRlbnQgc2V0IHNpemUgKFJT
-UykgIG9mICB0aGUgIGNhbGxpbmcKICAgICAgICAgICAgICBwcm9jZXNzIHdpbGwgYmUgaW1tZWRp
-YXRlbHkgcmVkdWNlZCBob3dldmVyLgoKICAgICAgICAgICAgICBNQURWX0RPTlRORUVEICBjYW5u
-b3QgIGJlICBhcHBsaWVkICB0byBsb2NrZWQgcGFnZXMsIEh1Z2UgVExCIHBhZ2VzLCBvciBWTV9Q
-Rk5NQVAKICAgICAgICAgICAgICBwYWdlcy4gIChQYWdlcyBtYXJrZWQgd2l0aCB0aGUga2VybmVs
-LWludGVybmFsIFZNX1BGTk1BUCBmbGFnIGFyZSBzcGVjaWFsICBtZW1vcnkKICAgICAgICAgICAg
-ICBhcmVhcyB0aGF0IGFyZSBub3QgbWFuYWdlZCBieSB0aGUgdmlydHVhbCBtZW1vcnkgc3Vic3lz
-dGVtLiAgU3VjaCBwYWdlcyBhcmUgdHlwaeKAkAogICAgICAgICAgICAgIGNhbGx5IGNyZWF0ZWQg
-YnkgZGV2aWNlIGRyaXZlcnMgdGhhdCBtYXAgdGhlIHBhZ2VzIGludG8gdXNlciBzcGFjZS4pCgpB
-bmQgYWxzbyB0aGUgZnVuY3Rpb24gaW4gYmRnd2MgdGhhdCB1c2VzIG1hZHZpc2UoKSBpcyBhIGNv
-bnZvbHV0ZWQgbWVzcwpvZiAjaWZkZWYtZXJ5LCBzbyBJIGRpZG4ndCB3YW50IHRvIHRha2UgYW55
-IHJpc2sgdGhlcmUsIGFuZCBJIGRvbid0CnJlYWxseSBjYXJlIGFib3V0IGJkd2djIG9uIG5vTU1V
-IHRhcmdldHMuIFNvIEkgYXBwbGllZCB5b3VyIHBhdGNoLgoKSG93ZXZlciwgeW91IGZvcmdvdCB0
-byBwcm9wYWdhdGUgdGhpcyBkZXBlbmRlbmN5IHRvIHBhY2thZ2UvcG9rZSwgd2hpY2gKYWxzbyBz
-ZWxlY3RzIGJkd2djLgoKQXBwbGllZCB0byBtYXN0ZXIgd2l0aCB0aGlzIGZpeC4gVGhhbmtzIQoK
-VGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVt
-YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8v
-Ym9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following build failure raised (at least) since linux 4.0 and
+https://github.com/torvalds/linux/commit/459a3df76c99124fd222586be7f10f862547e7a9:
+
+  CC      /home/autobuild/autobuild/instance-2/output-1/build/linux-6.0.1/tools/perf/builtin-bench.o
+In file included from builtin-bench.c:22:
+bench/bench.h:66:10: fatal error: pthread.h: No such file or directory
+   66 | #include <pthread.h>
+      |          ^~~~~~~~~~~
+
+Fies:
+ - http://autobuild.buildroot.org/results/b6abd641f528101e74f9af33e54ccefe0731148f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/linux-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 82e62f826e..8a0b6d5802 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -47,14 +47,15 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
+ 
+ 	  These tools are available only from kernel version 4.20.
+ 
+-comment "perf needs a toolchain w/ dynamic library"
++comment "perf needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LINUX_TOOLS
+ 	help
+ 	  perf (sometimes "Perf Events" or perf tools, originally
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
