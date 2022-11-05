@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0DA2C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C7BC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 21:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FCCB40414;
-	Sat,  5 Nov 2022 21:41:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FCCB40414
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DFC960AEB;
+	Sat,  5 Nov 2022 21:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DFC960AEB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NIKFLDR3ThEb; Sat,  5 Nov 2022 21:41:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WSvlejiFB9wO; Sat,  5 Nov 2022 21:42:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C22D440467;
-	Sat,  5 Nov 2022 21:41:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C22D440467
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 35F6C1BF283
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:40:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4545F60AAE;
+	Sat,  5 Nov 2022 21:42:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4545F60AAE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 78DE71BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C607A4026E
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C607A4026E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53A8D60AAE
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 21:42:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53A8D60AAE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0VL6InQNJFsp for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 21:40:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC0E940281
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC0E940281
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA96187E77; Sat,  5 Nov 2022 21:40:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s1lqiquwT1At for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 21:42:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28114605F6
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 28114605F6
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 21:42:21 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E18A21BF203;
+ Sat,  5 Nov 2022 21:42:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1orQvi-00FaCi-UI; Sat, 05 Nov 2022 22:42:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:32:03 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2e773b2752c03cd0906a24078e274ed7cdbcfc71
-X-Git-Newrev: 4c3b867a17b3797cbd54ea8cbd2e1910af0ad67b
-X-Patchwork-Hint: ignore
-Message-Id: <20221105214006.DA96187E77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/go: security bump
- to version 1.18.3
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221026193658.245255-1-fontaine.fabrice@gmail.com>
+Date: Sat, 05 Nov 2022 22:42:18 +0100
+In-Reply-To: <20221026193658.245255-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 26 Oct 2022 21:36:58 +0200")
+Message-ID: <87mt95krid.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/expat: security bump to version
+ 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c3b867a17b3797cbd54ea8cbd2e1910af0ad67b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-go1.18.3 includes security fixes to the crypto/rand, crypto/tls, os/exec,
-and path/filepath packages, as well as bug fixes to the compiler, and the
-crypto/tls and text/template/parse packages.
+ > Expat 2.5.0 has been released earlier today. Most importantly, this
+ > release fixes CVE-2022-43680: a heap use-after-free vulnerability after
+ > overeager destruction of a shared DTD in function
+ > XML_ExternalEntityParserCreate in out-of-memory situations, with
+ > expected impact of denial of service or potentially arbitrary code
+ > execution.
 
-https://go.dev/doc/devel/release#go1.18
+ > https://blog.hartwork.org/posts/expat-2-5-0-released
+ > https://github.com/libexpat/libexpat/blob/R_2_5_0/expat/Changes
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d3e3728405fb3df5b3d523b3d81aecf0834f1a63)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 6a9480ff99..45af1fc06f 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  2c44d03ea2c34092137ab919ba602f2c261a038d08eb468528a3f3a28e5667e2  go1.18.2.src.tar.gz
-+sha256  0012386ddcbb5f3350e407c679923811dbd283fcdc421724931614a842ecbc2d  go1.18.3.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f9445c7dd3..6767b1481d 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.18.2
-+GO_VERSION = 1.18.3
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Committed to 2022.08.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
