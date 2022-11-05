@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 375B3C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8110C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCA6C607CA;
-	Mon,  5 Dec 2022 11:53:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCA6C607CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 860BB60C24;
+	Mon,  5 Dec 2022 11:54:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 860BB60C24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RJ90luJbYqRf; Mon,  5 Dec 2022 11:53:53 +0000 (UTC)
+	with ESMTP id vhErQt-GI0c1; Mon,  5 Dec 2022 11:54:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 133096059E;
-	Mon,  5 Dec 2022 11:53:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 133096059E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0807F1BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id B946C60BC9;
+	Mon,  5 Dec 2022 11:54:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B946C60BC9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F2751BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B2F9405C0
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B2F9405C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id E51B441688
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E51B441688
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lRzkhgrEQAej for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b7lUX8R2Ni7x for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BB2440569
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BB2440569
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF95041679
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF95041679
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99A3B85B9B; Mon,  5 Dec 2022 11:26:05 +0000 (UTC)
+ id DF44F85BBE; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 21:19:22 +0100
+Date: Sat, 5 Nov 2022 19:23:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a10f8e21100420026666c171b38d279ec2fecc5
-X-Git-Newrev: d4f5dff4a3c73c5d0a1f57e131cc44d697f4c77f
+X-Git-Oldrev: 54fd5f74f19d1e83d7c4571fc1b766c733072b94
+X-Git-Newrev: 8c8a463a71c6ebaa34c339b1efc3e33c9306f450
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112605.99A3B85B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-socketio: bump to version
- 5.7.2
+Message-Id: <20221205112606.DF44F85BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ssdp-responder: minor update of
+ help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,51 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4f5dff4a3c73c5d0a1f57e131cc44d697f4c77f
+commit: https://git.buildroot.net/buildroot/commit/?id=8c8a463a71c6ebaa34c339b1efc3e33c9306f450
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-socketio/python-socketio.hash | 4 ++--
- package/python-socketio/python-socketio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ssdp-responder/Config.in | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
-index 40e74cef96..abdcc3a5b7 100644
---- a/package/python-socketio/python-socketio.hash
-+++ b/package/python-socketio/python-socketio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-socketio/json
--md5  0507825ca4bd6527cbaed81ec5767bfe  python-socketio-5.4.0.tar.gz
--sha256  ca807c9e1f168e96dea412d64dd834fb47c470d27fd83da0504aa4b248ba2544  python-socketio-5.4.0.tar.gz
-+md5  e63369252a9d383cbfc503337b864733  python-socketio-5.7.2.tar.gz
-+sha256  92395062d9db3c13d30e7cdedaa0e1330bba78505645db695415f9a3c628d097  python-socketio-5.7.2.tar.gz
- # Locally computed sha256 checksums
- sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index f23342b776..aecff55ef4 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/ssdp-responder/Config.in b/package/ssdp-responder/Config.in
+index df57546eed..8b5dfe67a6 100644
+--- a/package/ssdp-responder/Config.in
++++ b/package/ssdp-responder/Config.in
+@@ -7,14 +7,16 @@ config BR2_PACKAGE_SSDP_RESPONDER
+ 	  targeted more at embedded systems that need to announce
+ 	  themselves to Windows systems.
  
--PYTHON_SOCKETIO_VERSION = 5.4.0
--PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/72/70/9b992f4b8adfcbf0724c079c18629d83f20b36fb0eb64d4fdf874054becf
-+PYTHON_SOCKETIO_VERSION = 5.7.2
-+PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ee/56/294629986bf6cea96e0edb3933a7f2fac7a079d12909e893903a2effc670
- PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+-	  ssdpd is a stand-alone UNIX, no external dependencies but the
+-	  standard C library.  It has a built-in web server for serving
+-	  the UPnP XML description which Windows use to present the
+-	  icon, by default an InternetGatewayDevice is announced.
++	  The project consists of ssdpd and ssdp-scan.  The former is a
++	  stand-alone UNIX daemon, it has no dependencies but a standard
++	  C library.  It comes with built-in web server for serving the
++	  UPnP XML description on port 1901, the XML is used by Windows
++	  to present the icon, by default an InternetGatewayDevice is
++	  announced.
+ 
+-	  Also included is ssdp-scan, a tool similar to mdns-scan, which
+-	  continuously scans for SSDP capable hosts on the network.
+-	  Take care only to use for debugging since it scans the network
+-	  quite aggressively.
++	  ssdp-scan is a tool, similar to mdns-scan, to find other SSDP
++	  capable hosts on the network.  Take care to only use it for
++	  debugging, or quicker device discovery operations, since it
++	  scans the network quite aggressively.
+ 
+ 	  https://github.com/troglobit/ssdp-responder/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
