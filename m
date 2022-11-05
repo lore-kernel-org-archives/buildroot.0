@@ -4,83 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4446DC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B483C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1CA5403C2;
-	Sat,  5 Nov 2022 20:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1CA5403C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id B48254032A;
+	Sat,  5 Nov 2022 20:28:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B48254032A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gzCKAL9cXU8V; Sat,  5 Nov 2022 20:24:09 +0000 (UTC)
+	with ESMTP id LaEMeXyKkjD2; Sat,  5 Nov 2022 20:28:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA5E140222;
-	Sat,  5 Nov 2022 20:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA5E140222
+	by smtp2.osuosl.org (Postfix) with ESMTP id B727640222;
+	Sat,  5 Nov 2022 20:28:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B727640222
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A86EA1BF283
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:24:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BEB8C1BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 834C840222
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834C840222
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9669340222
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:28:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9669340222
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0b2A87KlL2dQ for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 20:24:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C42D0400D9
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com
- [IPv6:2607:f8b0:4864:20::a35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C42D0400D9
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:24:05 +0000 (UTC)
-Received: by mail-vk1-xa35.google.com with SMTP id g16so4378307vkl.11
- for <buildroot@buildroot.org>; Sat, 05 Nov 2022 13:24:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=fybBPXf+AWvT+dqT9px+Oje2nJj6uTxHGeRu2khXXoo=;
- b=Aai232vzLfq6lfVHL0qWmtt4NhfqhwFRfHJgO4mzOqUwkTjEzgcreroQA/zanmUu5v
- 4b8JEYLLi8MoBoPqPPXn41X0fsEdusC3KwlpG/9xLY2ipSzEHdIUUO6P+rjoMzf4CV/D
- UwQaUWvjiEPs/46qTp4/xENAwQxNR9zcJ0/OJoeYAfXx90Ei4QXnjxoPNN8OSEiFy0ER
- VjbLEL9bD9u6nDYmEPuf/kJlFIyOcsRn5rZt/9MmGFDPNo+obRGyj9BXs1dy2JMQGlSg
- YR+WGHK8HQynjfUIOAWZuR3c7GURqg4WK2OnFeqUJVlBlhyW+ktrGKO3Y1WMxK8SS+yF
- 2pTw==
-X-Gm-Message-State: ACrzQf2FyYsamOKr1mzEvx0B1Eg72VlRAnL5f9yakK48pa3Pqe4MSfuM
- C2kbXSzYyPvU1gucZ7+wem1GcRsBcmuzVCM26w0sQqzstyw=
-X-Google-Smtp-Source: AMsMyM7uOml0mzVws25iMbR4eJd3891MO6lFw/s93DYrPx4SJSZd2hURpZTAJrLMLLJwAI//yKBM0cncSsmkj6PXKT8=
-X-Received: by 2002:a1f:5981:0:b0:3a6:6655:831f with SMTP id
- n123-20020a1f5981000000b003a66655831fmr22516397vkb.12.1667679844610; Sat, 05
- Nov 2022 13:24:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221104235727.587650-1-unixmania@gmail.com>
- <20221104235727.587650-3-unixmania@gmail.com>
- <20221105114433.2a5e6b09@tuxfamily.org>
-In-Reply-To: <20221105114433.2a5e6b09@tuxfamily.org>
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sat, 5 Nov 2022 17:23:53 -0300
-Message-ID: <CAJ4jsacyrm_vy13vFbX0sR9K991LeVa=iJsQeevo_V9+OkSA_g@mail.gmail.com>
-To: Thomas Huth <huth@tuxfamily.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=fybBPXf+AWvT+dqT9px+Oje2nJj6uTxHGeRu2khXXoo=;
- b=GHE+S2zS6lTtizaGOtgD4qhPk7yninbI1AqqchgeUn7nUasyDCc32/hfcOw/a9vilW
- u2scKptxb16FanIkLyiazS89nJaOxLUflDPSXFehUFDy3X7KrNDjkpEEQgBUBNJ54Y0z
- ciIIVNqbmwS6e55FGs5yO7p00Jmy90ZHWGv7YQbHhDkt7p12cBSvNi7GppcL8u8LqEjJ
- i7DpCEoaTXiLAgmwbqUa8qH39AuntdCX9WUmWRlq/U5LFPYw3z4EMwMeWo4o5a9GLXh0
- a2UgMH+FhPPJjsf8l0S+48nvq9YpOAf7XyeMJI2wXWxYYd8CFi8sCRlsBC+2asvqEJQu
- m14g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GHE+S2zS
-Subject: Re: [Buildroot] [PATCH 2/3] package/qemu: select FDT for custom
- targets too
+ with ESMTP id VxOtrWQDjg3B for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 20:28:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70209400D9
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:28:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70209400D9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5CF1F87E21; Sat,  5 Nov 2022 20:28:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 5 Nov 2022 21:20:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b21e2f216b08135366c7d9ba1eb087f6bdaba482
+X-Git-Newrev: b1ebbb919aebdfb1cc984803d2dee554edb4672e
+X-Patchwork-Hint: ignore
+Message-Id: <20221105202833.5CF1F87E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docopt-cpp: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,61 +55,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Nov 5, 2022 at 7:44 AM Thomas Huth <huth@tuxfamily.org> wrote:
->
-> Am Fri,  4 Nov 2022 20:57:26 -0300
-> schrieb unixmania@gmail.com:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Custom targets selects system and Linux user-land emulation, which in
-> > their turn require FDT. Move the BR2_PACKAGE_QEMU_FDT selection to the
-> > BR2_PACKAGE_QEMU_HAS_EMULS hidden boolean, to cover all cases.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> >  package/qemu/Config.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> > index 8b8a999885..9e0cbd4acf 100644
-> > --- a/package/qemu/Config.in
-> > +++ b/package/qemu/Config.in
-> > @@ -95,7 +95,6 @@ comment "... or you can select emulator families to enable, below:"
-> >  config BR2_PACKAGE_QEMU_SYSTEM
-> >       bool "Enable all systems emulation"
-> >       depends on !BR2_STATIC_LIBS # dtc
-> > -     select BR2_PACKAGE_QEMU_FDT
-> >       help
-> >         Say 'y' to build all system emulators/virtualisers that QEMU
-> >         supports.
-> > @@ -121,6 +120,7 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
-> >  config BR2_PACKAGE_QEMU_HAS_EMULS
-> >       def_bool y
-> >       depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER || BR2_PACKAGE_QEMU_CUSTOM_TARGETS != ""
-> > +     select BR2_PACKAGE_QEMU_FDT
->
-> Technically, I think you don't need FDT if you are only compiling the
-> linux-user targets ... so maybe it would be better to add this to the
-> BR2_PACKAGE_QEMU_CUSTOM_TARGETS switch instead?
->
->  Thomas
+commit: https://git.buildroot.net/buildroot/commit/?id=b1ebbb919aebdfb1cc984803d2dee554edb4672e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_PACKAGE_QEMU_CUSTOM_TARGETS is a string, so adding a "select
-BR2_PACKAGE_QEMU_FDT" does not have any effect.
+Fix the following static build failure raised since the addition of the
+package in commit 43f96ced67c9a1f84d3f0edf5cd632178eb176b8:
 
-A better solution for the case in which only linux-user targets are
-selected requires a more complex approach. I will submit a separate
-patch for this purpose. Meanwhile, let's put this series on hold.
+[ 66%] Linking CXX shared library libdocopt.so
+ld (ld-elf2flt): -shared used without passing a shared library ID
 
--- 
-Carlos Santos <unixmania@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/834a0209c8165b3208ebf8654cb6cf8e3568b671
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...t-use-BUILD_SHARED_LIBS-where-appropriate.patch | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+
+diff --git a/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch b/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch
+new file mode 100644
+index 0000000000..77206d5208
+--- /dev/null
++++ b/package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch
+@@ -0,0 +1,87 @@
++From 6d3b803d2b0e4bf8703bbfa51a67f378d6bd59f6 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Th=C3=A9o=20DELRIEU?= <theo.delrieu@tanker.io>
++Date: Tue, 19 Nov 2019 14:58:59 +0100
++Subject: [PATCH] only build one target, use BUILD_SHARED_LIBS where
++ appropriate
++
++[Retrieved from:
++https://github.com/docopt/docopt.cpp/commit/6d3b803d2b0e4bf8703bbfa51a67f378d6bd59f6]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 39 ++++++---------------------------------
++ 1 file changed, 6 insertions(+), 33 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index feff32e..14c3420 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -34,33 +34,15 @@ set(docopt_HEADERS
++ #============================================================================
++ # Compile targets
++ #============================================================================
++-if(MSVC OR XCODE)
++-    # MSVC requires __declspec() attributes, which are achieved via the 
++-    # DOCOPT_DLL and DOCOPT_EXPORTS macros below. Since those macros are only
++-    # defined when building a shared library, we must build the shared and
++-    # static libraries completely separately.
++-    # Xcode does not support libraries with only object files as sources.
++-    # See https://cmake.org/cmake/help/v3.0/command/add_library.html?highlight=add_library
++-    add_library(docopt SHARED ${docopt_SOURCES} ${docopt_HEADERS})
++-    add_library(docopt_s STATIC ${docopt_SOURCES} ${docopt_HEADERS})
++-else()
++-    # If not using MSVC or Xcode, we will create an intermediate object target
++-    # to avoid compiling the source code twice.
++-    add_library(docopt_o OBJECT ${docopt_SOURCES} ${docopt_HEADERS})
++-    set_target_properties(docopt_o PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
++-
++-    add_library(docopt SHARED $<TARGET_OBJECTS:docopt_o>)
++-	set_target_properties(docopt PROPERTIES
++-			VERSION ${PROJECT_VERSION}
++-			SOVERSION ${PROJECT_VERSION_MAJOR}
++-			)
++-    add_library(docopt_s STATIC $<TARGET_OBJECTS:docopt_o>)
++-endif()
+++add_library(docopt ${docopt_SOURCES} ${docopt_HEADERS})
+++set_target_properties(docopt PROPERTIES
+++  VERSION ${PROJECT_VERSION}
+++  SOVERSION ${PROJECT_VERSION_MAJOR}
+++)
++ 
++ target_include_directories(docopt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}> $<INSTALL_INTERFACE:include/docopt>)
++-target_include_directories(docopt_s PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}> $<INSTALL_INTERFACE:include/docopt>)
++ 
++-if(MSVC)
+++if(MSVC AND BUILD_SHARED_LIBS)
++     # DOCOPT_DLL: Must be specified when building *and* when using the DLL.
++     #             That's what the "PUBLIC" means.
++     # DOCOPT_EXPORTS: Must use __declspec(dllexport) when building the DLL.
++@@ -69,11 +51,6 @@ if(MSVC)
++                                       PRIVATE DOCOPT_EXPORTS)
++ endif()
++ 
++-if(NOT MSVC)
++-	set_target_properties(docopt PROPERTIES OUTPUT_NAME docopt)
++-	set_target_properties(docopt_s PROPERTIES OUTPUT_NAME docopt)
++-endif()
++-
++ if(USE_BOOST_REGEX)
++ 	add_definitions("-DDOCTOPT_USE_BOOST_REGEX")
++ 	# This is needed on Linux, where linking a static library into docopt.so
++@@ -82,9 +59,6 @@ if(USE_BOOST_REGEX)
++     find_package(Boost 1.53 REQUIRED COMPONENTS regex)
++     include_directories(${Boost_INCLUDE_DIRS})
++     target_link_libraries(docopt ${Boost_LIBRARIES})
++-	if(WITH_STATIC)
++-		target_link_libraries(docopt_s ${Boost_LIBRARIES})
++-	endif()
++ endif()
++ 
++ #============================================================================
++@@ -120,7 +94,6 @@ set(export_name "docopt-targets")
++ install(TARGETS docopt EXPORT ${export_name} DESTINATION ${CMAKE_INSTALL_LIBDIR})
++ 
++ # Development package
++-install(TARGETS docopt_s EXPORT ${export_name} DESTINATION ${CMAKE_INSTALL_LIBDIR})
++ install(FILES ${docopt_HEADERS} DESTINATION include/docopt)
++ 
++ # CMake Package
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
