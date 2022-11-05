@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2709BC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 22:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8B4BC433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 22:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7267408EA;
-	Sat,  5 Nov 2022 22:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7267408EA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57316408D9;
+	Sat,  5 Nov 2022 22:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57316408D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HgbUZYYSW1kO; Sat,  5 Nov 2022 22:12:13 +0000 (UTC)
+	with ESMTP id xxy3qUv9yXoS; Sat,  5 Nov 2022 22:12:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FD0B408D8;
-	Sat,  5 Nov 2022 22:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FD0B408D8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E5531BF86D
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBDBE408DA;
+	Sat,  5 Nov 2022 22:12:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDBE408DA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D7DDB1BF3FD
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9DDC40323
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA14381A46
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 22:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9DDC40323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA14381A46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FZfozeRH8TPx for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 22:11:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rllZS2u_sDd9 for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 22:11:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C514740330
+ by smtp1.osuosl.org (Postfix) with ESMTP id F40C181A50
  for <buildroot@buildroot.org>; Sat,  5 Nov 2022 22:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C514740330
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F40C181A50
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2A4687F40; Sat,  5 Nov 2022 22:11:07 +0000 (UTC)
+ id E406287F40; Sat,  5 Nov 2022 22:11:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 23:08:12 +0100
+Date: Sat, 5 Nov 2022 23:08:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4fb03b795c1c08912f470b49c0aac41975c7ce8d
-X-Git-Newrev: f30a4a75afd1c2701ea9b59d085ca9d718397ebb
+X-Git-Oldrev: 133a37d810a66f22e793efe2654645c743902ed0
+X-Git-Newrev: 6177018855a0794903e619b1e6d84617da07772f
 X-Patchwork-Hint: ignore
-Message-Id: <20221105221107.B2A4687F40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-wtforms: bump
- to version 3.0.1
+Message-Id: <20221105221107.E406287F40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-zlmdb: bump to
+ version 22.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,50 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f30a4a75afd1c2701ea9b59d085ca9d718397ebb
+commit: https://git.buildroot.net/buildroot/commit/?id=6177018855a0794903e619b1e6d84617da07772f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Add new host-python-babel build dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wtforms/python-wtforms.hash | 4 ++--
- package/python-wtforms/python-wtforms.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-zlmdb/python-zlmdb.hash | 4 ++--
+ package/python-zlmdb/python-zlmdb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wtforms/python-wtforms.hash b/package/python-wtforms/python-wtforms.hash
-index ed9bfd1a23..12b980de02 100644
---- a/package/python-wtforms/python-wtforms.hash
-+++ b/package/python-wtforms/python-wtforms.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/wtforms/json
--md5  2b6ea167a71c6becf20f0934417fd06c  WTForms-2.3.3.tar.gz
--sha256  81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c  WTForms-2.3.3.tar.gz
-+md5  509a985769df13938c8307b55a614773  WTForms-3.0.1.tar.gz
-+sha256  6b351bbb12dd58af57ffef05bc78425d08d1914e0fd68ee14143b7ade023c5bc  WTForms-3.0.1.tar.gz
+diff --git a/package/python-zlmdb/python-zlmdb.hash b/package/python-zlmdb/python-zlmdb.hash
+index d98dc7d12a..1ae5d72efa 100644
+--- a/package/python-zlmdb/python-zlmdb.hash
++++ b/package/python-zlmdb/python-zlmdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/zlmdb/json
+-md5  d730a394b74108933a65c9fbe76aba36  zlmdb-22.3.1.tar.gz
+-sha256  0d416a47b1ee627186af8e5c99e5246f6b277df44ba5c6bb67e947eabf948e5a  zlmdb-22.3.1.tar.gz
++md5  1e217f3228cb4c2303f06461b79e593e  zlmdb-22.6.1.tar.gz
++sha256  aff353121c2eed3c18e53c82358c41932a21bf882995ee3a79c6eb1ae4c95397  zlmdb-22.6.1.tar.gz
  # Locally computed sha256 checksums
- sha256  cf40d60ff34f6b2b68a53d220f8b66567b5ac8dd1119b37b62fd15e9518fe59b  LICENSE.rst
- sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-diff --git a/package/python-wtforms/python-wtforms.mk b/package/python-wtforms/python-wtforms.mk
-index 23280a6fe5..65b5748b6b 100644
---- a/package/python-wtforms/python-wtforms.mk
-+++ b/package/python-wtforms/python-wtforms.mk
-@@ -4,11 +4,12 @@
+ sha256  8a139bf325dcca11e0e476ce537bf791a6cfbeed8899a9b6ddc55238e180d230  LICENSE
+diff --git a/package/python-zlmdb/python-zlmdb.mk b/package/python-zlmdb/python-zlmdb.mk
+index a040622d9d..d20ac9e016 100644
+--- a/package/python-zlmdb/python-zlmdb.mk
++++ b/package/python-zlmdb/python-zlmdb.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WTFORMS_VERSION = 2.3.3
-+PYTHON_WTFORMS_VERSION = 3.0.1
- PYTHON_WTFORMS_SOURCE = WTForms-$(PYTHON_WTFORMS_VERSION).tar.gz
--PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/dd/3f/f25d26b1c66896e2876124a12cd8be8f606abf4e1890a20f3ca04e4a1555
-+PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/9a/7d/d4aa68f5bfcb91dd61a7faf0e862512ae7b3d531c41f24c217910aec0559
- PYTHON_WTFORMS_SETUP_TYPE = setuptools
- PYTHON_WTFORMS_LICENSE = BSD-3-Clause
- PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst docs/license.rst
-+PYTHON_WTFORMS_DEPENDENCIES = host-python-babel
- 
- $(eval $(python-package))
+-PYTHON_ZLMDB_VERSION = 22.3.1
++PYTHON_ZLMDB_VERSION = 22.6.1
+ PYTHON_ZLMDB_SOURCE = zlmdb-$(PYTHON_ZLMDB_VERSION).tar.gz
+-PYTHON_ZLMDB_SITE = https://files.pythonhosted.org/packages/71/87/bb3cebd5312e670e33551317c7fc5e4b6a4a9af39075a71cd541b32cc0bf
++PYTHON_ZLMDB_SITE = https://files.pythonhosted.org/packages/97/15/992e61a18cb64b573814c9d92676b22d522f2cc2ea79ff78b834bd392b80
+ PYTHON_ZLMDB_SETUP_TYPE = setuptools
+ PYTHON_ZLMDB_LICENSE = MIT
+ PYTHON_ZLMDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
