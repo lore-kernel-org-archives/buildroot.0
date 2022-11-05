@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58428C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19EFAC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0299040903;
-	Sat,  5 Nov 2022 16:50:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0299040903
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8FAE81756;
+	Sat,  5 Nov 2022 16:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FAE81756
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xon8aYUKsuAD; Sat,  5 Nov 2022 16:50:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F421A81497;
+	Sat,  5 Nov 2022 16:50:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F421A81497
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A9151BF870
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52AB9403A8
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52AB9403A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rIkuAJbtf2Ld; Sat,  5 Nov 2022 16:50:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83BDC408DB;
-	Sat,  5 Nov 2022 16:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83BDC408DB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 549981BF38C
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3077B40320
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3077B40320
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LDuFnl6oleR8 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 18EcyZFQdL9F for <buildroot@lists.busybox.net>;
  Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C196400D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43D64402C5
  for <buildroot@buildroot.org>; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C196400D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D64402C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C7EC87C52; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
+ id 32E9C87C34; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 17:49:53 +0100
+Date: Sat, 5 Nov 2022 17:48:32 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 4eefbbcb90d0a2dbd4535d31a29c697dd5f3552c
-X-Git-Newrev: 30f8cc4700c89b1b5cadd720993ddfe1f486989e
+X-Git-Oldrev: bb070db122ad702b1fdfba596d8e90fbc7835ffb
+X-Git-Newrev: 4eefbbcb90d0a2dbd4535d31a29c697dd5f3552c
 X-Patchwork-Hint: ignore
-Message-Id: <20221105165017.3C7EC87C52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/poppler: security
- bump to version 22.10.0
+Message-Id: <20221105165017.32E9C87C34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/imagemagick:
+ security bump to version 7.1.0-51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30f8cc4700c89b1b5cadd720993ddfe1f486989e
+commit: https://git.buildroot.net/buildroot/commit/?id=4eefbbcb90d0a2dbd4535d31a29c697dd5f3552c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- Fix CVE-2022-38784: Poppler prior to and including 22.08.0 contains an
-  integer overflow in the JBIG2 decoder
-  (JBIG2Stream::readTextRegionSeg() in JBIGStream.cc). Processing a
-  specially crafted PDF file or JBIG2 image could lead to a crash or the
-  execution of arbitrary code. This is similar to the vulnerability
-  described by CVE-2022-38171 in Xpdf.
-- Drop patch (already in version)
+Fix CVE-2022-3213: A heap buffer overflow issue was found in
+ImageMagick. When an application processes a malformed TIFF file, it
+could lead to undefined behavior or a crash causing a denial of
+service.
 
-https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-22.10.0/NEWS
+https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bd35c0f363c3192d70b111baba14b40370a206d7)
+(cherry picked from commit c5b1a0b34a02759ab4ac3a28b01fe50c1b9d2ff2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tjmp-h-when-WITH_JPEG-yes-and-WITH_PNG-no.patch | 27 ----------------------
- package/poppler/poppler.hash                       |  2 +-
- package/poppler/poppler.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 29 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poppler/0001-Include-setjmp-h-when-WITH_JPEG-yes-and-WITH_PNG-no.patch b/package/poppler/0001-Include-setjmp-h-when-WITH_JPEG-yes-and-WITH_PNG-no.patch
-deleted file mode 100644
-index 40af6a2e00..0000000000
---- a/package/poppler/0001-Include-setjmp-h-when-WITH_JPEG-yes-and-WITH_PNG-no.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 3ea6bca90d87d3f91556205c4e58ca425c6ac437 Mon Sep 17 00:00:00 2001
--From: Marco Genasci <fedeliallalinea@gmail.com>
--Date: Sun, 12 Dec 2021 10:23:37 +0100
--Subject: [PATCH] Include setjmp.h when WITH_JPEG=yes and WITH_PNG=no
--
--[Retrieved from:
--https://gitlab.freedesktop.org/poppler/poppler/-/commit/3ea6bca90d87d3f91556205c4e58ca425c6ac437]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- poppler/ImageEmbeddingUtils.cc | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/poppler/ImageEmbeddingUtils.cc b/poppler/ImageEmbeddingUtils.cc
--index 5c50f1269..c26b9eb2a 100644
----- a/poppler/ImageEmbeddingUtils.cc
--+++ b/poppler/ImageEmbeddingUtils.cc
--@@ -16,6 +16,7 @@
-- extern "C" {
-- #    include <jpeglib.h>
-- }
--+#    include <csetjmp>
-- #endif
-- #ifdef ENABLE_LIBPNG
-- #    include <png.h>
---- 
--GitLab
--
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index cf6c537063..93681e04af 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index ff0f3e26c6..8988dad5da 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  acb840c2c1ec07d07e53c57c4b3a1ff3e3ee2d888d44e1e9f2f01aaf16814de7  poppler-21.12.0.tar.xz
-+sha256  04e40fad924a6de62e63017a6fd4c04696c1f526dedc2ba5ef275cedf646292a  poppler-22.10.0.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index b54262e7c4..02ccf742ac 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
+ # Locally computed
+-sha256  3df6ca6dff15a4e8a20b4593c60285a59e38890440494d91a344e5c0e2bb3eec  imagemagick-7.1.0-45.tar.gz
++sha256  4333ef2fe63f2510988af82b726f5b1919ebd54037ea6674566c69fcceb67e11  imagemagick-7.1.0-51.tar.gz
+ sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 893606ff01..6bdf24c1e8 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POPPLER_VERSION = 21.12.0
-+POPPLER_VERSION = 22.10.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = https://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+-IMAGEMAGICK_VERSION = 7.1.0-45
++IMAGEMAGICK_VERSION = 7.1.0-51
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
