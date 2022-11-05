@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19EFAC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAA30C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 16:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8FAE81756;
-	Sat,  5 Nov 2022 16:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FAE81756
+	by smtp1.osuosl.org (Postfix) with ESMTP id 633A581F22;
+	Sat,  5 Nov 2022 16:50:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 633A581F22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xon8aYUKsuAD; Sat,  5 Nov 2022 16:50:41 +0000 (UTC)
+	with ESMTP id gHiEqFuLvx3b; Sat,  5 Nov 2022 16:50:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F421A81497;
-	Sat,  5 Nov 2022 16:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F421A81497
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75D3A81F6F;
+	Sat,  5 Nov 2022 16:50:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75D3A81F6F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A9151BF870
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8B2B61BF38C
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52AB9403A8
+ by smtp4.osuosl.org (Postfix) with ESMTP id B23F9402C5
  for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 16:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52AB9403A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B23F9402C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 18EcyZFQdL9F for <buildroot@lists.busybox.net>;
+ with ESMTP id YIPjr4WAgg5s for <buildroot@lists.busybox.net>;
  Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43D64402C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id B05134035D
  for <buildroot@buildroot.org>; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D64402C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B05134035D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32E9C87C34; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
+ id 9FCAC87C34; Sat,  5 Nov 2022 16:50:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 17:48:32 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bb070db122ad702b1fdfba596d8e90fbc7835ffb
-X-Git-Newrev: 4eefbbcb90d0a2dbd4535d31a29c697dd5f3552c
+Date: Sat, 5 Nov 2022 17:48:04 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 60bbfb8a51d45a45ecccab87522dff0b230db376
+X-Git-Newrev: 6f23fc7776eec6ed5e6dcb8a54402c37018eaaea
 X-Patchwork-Hint: ignore
-Message-Id: <20221105165017.32E9C87C34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/imagemagick:
+Message-Id: <20221105165017.9FCAC87C34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/imagemagick:
  security bump to version 7.1.0-51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4eefbbcb90d0a2dbd4535d31a29c697dd5f3552c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6f23fc7776eec6ed5e6dcb8a54402c37018eaaea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 Fix CVE-2022-3213: A heap buffer overflow issue was found in
 ImageMagick. When an application processes a malformed TIFF file, it
