@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2F1C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F5FC433FE
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 20:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E55F460888;
-	Sat,  5 Nov 2022 20:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55F460888
+	by smtp3.osuosl.org (Postfix) with ESMTP id C352860B20;
+	Sat,  5 Nov 2022 20:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C352860B20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HUf77RWHR6Rj; Sat,  5 Nov 2022 20:09:36 +0000 (UTC)
+	with ESMTP id MkNIoVbeNaQX; Sat,  5 Nov 2022 20:09:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A142607F4;
-	Sat,  5 Nov 2022 20:09:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A142607F4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 15F5E1BF283
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB3BD60AC6;
+	Sat,  5 Nov 2022 20:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3BD60AC6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F1BC1BF283
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2A4681E0D
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2A4681E0D
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF02460671
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 20:09:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF02460671
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2vtO1352ydWL for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C5B281E02
- for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C5B281E02
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7DF287DEF; Sat,  5 Nov 2022 20:09:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:09:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b79d735139282ecf052dc89d4c221bbd16447112
-X-Git-Newrev: 0ad4301f608a270b6f463ebd91684cde0f584ebd
-X-Patchwork-Hint: ignore
-Message-Id: <20221105200932.E7DF287DEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/botan: add host-python3 dependency
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ozkP2InmVTUZ for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 20:09:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BE4760592
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7BE4760592
+ for <buildroot@buildroot.org>; Sat,  5 Nov 2022 20:09:42 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3CC72100005;
+ Sat,  5 Nov 2022 20:09:39 +0000 (UTC)
+Date: Sat, 5 Nov 2022 21:09:38 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221105210938.665cfe86@windsurf>
+In-Reply-To: <20221104101639.24364-1-fontaine.fabrice@gmail.com>
+References: <20221104101639.24364-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667678979;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BTgJgWPu2yxmYuq1/bH3i+GRXWxvFzv7Y/itk8fatyc=;
+ b=MVI9sU3YIoi1jijF25W/OI9tKhL8nkq7Dvdz8ghEpSwONWNhuHSUqFPpNx0uKoLGs2JmOT
+ L431VNbxpVYxVNjkax1wKMZ4jp1dd+qAq5aBz9ZBQSwuIOUbDzM/Fubuin3x85MdgRH+Xw
+ 5bFKb+ab1P3kxwnGULW1cTfq8Sg7t0KJ2zCIPpGx7beUt9kbBXs4ylbdd+itPaiDlbYdsV
+ jkoWP2Z8PSE07hBUDMf7n3RxM6wIdL73+j70S5FPVgxhtp+ngIzS0gIXDzL3EMEZQPepgO
+ KDvojAbigUefHSUIyX8rUxrjtwpx8rwUhHj5DNSAnRkfQW7jvzjmVSCr3+xBrg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MVI9sU3Y
+Subject: Re: [Buildroot] [PATCH 1/1] package/botan: add host-python3
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,43 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ad4301f608a270b6f463ebd91684cde0f584ebd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  4 Nov 2022 11:16:39 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-add host-python3 dependency to avoid the following build failure raised
-since the addition of the package in commit
-e43da7bb32285bbd41b38a379aef77132d149df7:
+> add host-python3 dependency to avoid the following build failure raised
+> since the addition of the package in commit
+> e43da7bb32285bbd41b38a379aef77132d149df7:
+> 
+> (cd /home/autobuild/autobuild/instance-19/output-1/build/botan-2.19.2; PATH="/home/autobuild/autobuild/instance-19/output-1/host/bin:/home/autobuild/autobuild/instance-19/output-1/host/sbin:/home/autobuild/make:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ./configure.py --cpu="m68k" --disable-cc-tests --os=linux --cc=gcc --cc-bin="/home/autobuild/autobuild/instance-19/output-1/host/bin/m68k-linux-g++" --prefix=/usr --without-documentation --extra-libs=atomic --disable-shared-library --enable-static-library --no-autoload --without-stack-protector --without-os-feature=getauxval --with-boost --with-sqlite --with-zlib --disable-altivec --disable-neon)
+> /usr/bin/env: 'python': No such file or directory
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/91eb6d03ee899bc1034efc5ac7d1fe78961d37ca
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/botan/botan.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-(cd /home/autobuild/autobuild/instance-19/output-1/build/botan-2.19.2; PATH="/home/autobuild/autobuild/instance-19/output-1/host/bin:/home/autobuild/autobuild/instance-19/output-1/host/sbin:/home/autobuild/make:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ./configure.py --cpu="m68k" --disable-cc-tests --os=linux --cc=gcc --cc-bin="/home/autobuild/autobuild/instance-19/output-1/host/bin/m68k-linux-g++" --prefix=/usr --without-documentation --extra-libs=atomic --disable-shared-library --enable-static-library --no-autoload --without-stack-protector --without-os-feature=getauxval --with-boost --with-sqlite --with-zlib --disable-altivec --disable-neon)
-/usr/bin/env: 'python': No such file or directory
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/91eb6d03ee899bc1034efc5ac7d1fe78961d37ca
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/botan/botan.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index b26ee4c66e..b0ebe594b1 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -13,6 +13,7 @@ BOTAN_CPE_ID_VENDOR = botan_project
- 
- BOTAN_INSTALL_STAGING = YES
- 
-+BOTAN_DEPENDENCIES = host-python3
- BOTAN_CONF_OPTS = \
- 	--cpu=$(BR2_ARCH) \
- 	--disable-cc-tests \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
