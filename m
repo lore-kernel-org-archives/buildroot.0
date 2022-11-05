@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC90CC64ED9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DEEC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F37242A32;
-	Mon, 20 Feb 2023 21:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F37242A32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BDA442A3F;
+	Mon, 20 Feb 2023 21:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BDA442A3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ga1XQlE2PxWP; Mon, 20 Feb 2023 21:04:28 +0000 (UTC)
+	with ESMTP id a-msQ_bD8UR7; Mon, 20 Feb 2023 21:04:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FBC94014B;
-	Mon, 20 Feb 2023 21:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FBC94014B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BC5F42A43;
+	Mon, 20 Feb 2023 21:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BC5F42A43
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 194BB1BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 19E111BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5D076109A
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA02861048
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D076109A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA02861048
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ohSZtm-ycQOj for <buildroot@lists.busybox.net>;
+ with ESMTP id 1hcqF44Ko-EH for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECDA561020
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECDA561020
+ by smtp3.osuosl.org (Postfix) with ESMTP id 568FB61067
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 568FB61067
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8E458648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+ id 531E4828C8; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:38:44 +0100
+Date: Sat, 5 Nov 2022 23:35:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: adf4d6f7295b08b177a01d177a3f0a54e1f20f4c
-X-Git-Newrev: c153a318ae203913cb2211964ca35c6880a68552
+X-Git-Oldrev: 958c166837a484e2a9515342c49e93dca734d726
+X-Git-Newrev: ca6f38a340bf7eaac76aafcdf7dd78f5c61b0ba6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.E8E458648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libqb: disable tests
+Message-Id: <20230220205147.531E4828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libuhttpd: fix build
+ with wolfssl >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,112 +64,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c153a318ae203913cb2211964ca35c6880a68552
+commit: https://git.buildroot.net/buildroot/commit/?id=ca6f38a340bf7eaac76aafcdf7dd78f5c61b0ba6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable tests to avoid the following build failure when check is
-enabled:
+Fix the following build failure with wolfssl raised since bump to
+version 5.2.0 in commit 14e0c4de719a0d63192cc5de66a608f75297f37d and
+https://github.com/wolfSSL/wolfssl/commit/33cb8231481d5beb46b57511c2630aba36028256:
 
-libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
-   11 | #include <gnu/lib-names.h>
-      |          ^~~~~~~~~~~~~~~~~
-
-This build failure is raised since bump to version 2.0.6 in commit
-2ee1bd7bb2e8d01f4ddca3fb1127ec729be1c9bf and
-https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c: In function 'handle_wolfssl_asn_error':
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:339:10: error: 'ASN_NTRU_KEY_E' undeclared (first use in this function); did you mean 'ASN_ECC_KEY_E'?
+  339 |     case ASN_NTRU_KEY_E:
+      |          ^~~~~~~~~~~~~~
+      |          ASN_ECC_KEY_E
 
 Fixes:
- - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
+ - http://autobuild.buildroot.org/results/3261b0035c8aadd1b62538b53e03af1cd8a7b312
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libqb/0001-Add-disable-tests-option.patch | 62 +++++++++++++++++++++++
- package/libqb/libqb.mk                            |  3 ++
- 2 files changed, 65 insertions(+)
+ .../0001-add-compatibility-for-wolfssl-5-0.patch   | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/libqb/0001-Add-disable-tests-option.patch b/package/libqb/0001-Add-disable-tests-option.patch
+diff --git a/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
 new file mode 100644
-index 0000000000..1afb05520d
+index 0000000000..7da7199e7e
 --- /dev/null
-+++ b/package/libqb/0001-Add-disable-tests-option.patch
-@@ -0,0 +1,62 @@
-+From 051d9cfe8f365e30affc6476ed79b9e04a6b15ad Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 4 Nov 2022 00:27:50 +0100
-+Subject: [PATCH] Add --disable-tests option
++++ b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
+@@ -0,0 +1,30 @@
++From 73aa4ef762b2de67bc8c7c260bd36b34fdb91e63 Mon Sep 17 00:00:00 2001
++From: "Sergey V. Lobanov" <sergey@lobanov.in>
++Date: Mon, 3 Jan 2022 19:36:52 +0300
++Subject: [PATCH] add compatibility for wolfssl >= 5.0
 +
-+Add --disable-tests to allow the user to disable tests. As a
-+side-effect, this will avoid the following build failure when check is
-+found:
++NTRU support has been removed in wolfssl 5.0 so it is required to
++mask NTRU specific code if wolfssl >= 5.0
 +
-+libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
-+   11 | #include <gnu/lib-names.h>
-+      |          ^~~~~~~~~~~~~~~~~
-+
-+This build failure is raised since version 2.0.5 and
-+https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
-+
++Signed-off-by: Sergey V. Lobanov <sergey at lobanov.in>
++[Retrieved from:
++https://github.com/zhaojh329/ssl/commit/73aa4ef762b2de67bc8c7c260bd36b34fdb91e63]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ClusterLabs/libqb/pull/475]
 +---
-+ Makefile.am  | 6 +++++-
-+ configure.ac | 5 +++++
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
++ openssl.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index a08b1d2..6a710a0 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -39,7 +39,11 @@ ACLOCAL_AMFLAGS		= -I m4
-+ 
-+ dist_doc_DATA		= COPYING INSTALL README.markdown
-+ 
-+-SUBDIRS			= include lib doxygen2man docs tools tests examples
-++SUBDIRS			= include lib doxygen2man docs tools examples
-++
-++if ENABLE_TESTS
-++SUBDIRS			+= tests
-++endif
-+ 
-+ dist-clean-local:
-+ 	rm -f .snapshot-version autoconf automake autoheader
-+diff --git a/configure.ac b/configure.ac
-+index ac44b7e..4946008 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -562,6 +562,11 @@ AC_ARG_WITH([force-sockets-config-file],
-+ 	[ FORCESOCKETSFILE="$withval" ],
-+ 	[ FORCESOCKETSFILE="$sysconfdir/libqb/force-filesystem-sockets" ])
-+ 
-++AC_ARG_ENABLE([tests],
-++  [AS_HELP_STRING([--disable-tests],[disable tests])],,
-++  [ enable_tests="yes" ])
-++AM_CONDITIONAL([ENABLE_TESTS], [test x$enable_tests = xyes])
-++
-+ AC_ARG_ENABLE([install-tests],
-+   [AS_HELP_STRING([--enable-install-tests],[install tests])],,
-+   [ enable_install_tests="no" ])
-+-- 
-+2.35.1
-+
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index 0f409fd646..65d68181ee 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
-@@ -12,6 +12,9 @@ LIBQB_LICENSE = LGPL-2.1+
- LIBQB_LICENSE_FILES = COPYING
- LIBQB_CPE_ID_VENDOR = clusterlabs
- LIBQB_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LIBQB_AUTORECONF = YES
-+LIBQB_CONF_OPTS = --disable-tests
- LIBQB_DEPENDENCIES = libxml2
- 
- # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++diff --git a/src/ssl/openssl.c b/src/ssl/openssl.c
++index 5a49267..278bab5 100644
++--- a/src/ssl/openssl.c
+++++ b/src/ssl/openssl.c
++@@ -336,7 +336,9 @@ static bool handle_wolfssl_asn_error(void *ssl, int r,
++     case ASN_SIG_HASH_E:
++     case ASN_SIG_KEY_E:
++     case ASN_DH_KEY_E:
+++#if LIBWOLFSSL_VERSION_HEX < 0x05000000
++     case ASN_NTRU_KEY_E:
+++#endif
++     case ASN_CRIT_EXT_E:
++     case ASN_ALT_NAME_E:
++     case ASN_NO_PEM_HEADER:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
