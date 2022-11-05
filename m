@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34169C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 08:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7ECC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Nov 2022 08:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAF37607C0;
-	Sat,  5 Nov 2022 08:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAF37607C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 684B2404EB;
+	Sat,  5 Nov 2022 08:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 684B2404EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jb0DaQRuv6Aq; Sat,  5 Nov 2022 08:03:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yLSQ_ZFHJYQu; Sat,  5 Nov 2022 08:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF80960AB7;
-	Sat,  5 Nov 2022 08:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF80960AB7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 848DD4046A;
+	Sat,  5 Nov 2022 08:04:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 848DD4046A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE8D11BF28E
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 08:03:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CAADA1BF28E
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 08:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9CB382106
- for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 08:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9CB382106
+ by smtp1.osuosl.org (Postfix) with ESMTP id B357582106
+ for <buildroot@lists.busybox.net>; Sat,  5 Nov 2022 08:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B357582106
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r0t5s_KJJiKQ for <buildroot@lists.busybox.net>;
- Sat,  5 Nov 2022 08:03:55 +0000 (UTC)
+ with ESMTP id 4nhiAbwGNkzb for <buildroot@lists.busybox.net>;
+ Sat,  5 Nov 2022 08:04:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCAEA8141D
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CCAEA8141D
- for <buildroot@busybox.net>; Sat,  5 Nov 2022 08:03:54 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id d26so18514749eje.10
- for <buildroot@busybox.net>; Sat, 05 Nov 2022 01:03:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A8388141D
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7A8388141D
+ for <buildroot@busybox.net>; Sat,  5 Nov 2022 08:04:04 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id a5so10561151edb.11
+ for <buildroot@busybox.net>; Sat, 05 Nov 2022 01:04:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=CGREyMWB/3Qg5j38GLcnPvCAPHjRI8sveXDwalBKqxQ=;
- b=Dum5h/gsIKKile2+oqQ1w5yl9MWe8sfVj/sipAo7WuKXHlpXRYIxZZsYs3jEj2nIJD
- fT96eCrVCPccTP9Y56ax++jYHg+OCHHszW35JeR6GVy0h7VC3L2K6h5QR1FZAUqsiqYM
- eWFLKVAGic9JjSPF/0CN85eVypm6hh5/KEyF6kYuPX/MoIDu9cwnEuymmlR0YG5gSfoJ
- Ur8Ua+6bzT5ArpXj0gGlWcQvn4pOMLpdj73VVyXlTE5i65JtRogcT2sxSvZZt/LZRShg
- x+h5pn11un6Z5ClXOJBF3eaSQRT4ZPBB9xiQgez/xm95pID/Voiem8zGwT/XuDeg+QgD
- lxOw==
-X-Gm-Message-State: ACrzQf1UkLIzLkPKcRzam5+ZOiCK9v6kIgJoVEVcz7GQLgkMGGUNalp+
- 6+H/jlLEByEOPNYqEHpt9fNcn8JSWVU=
-X-Google-Smtp-Source: AMsMyM5RllAXPFCopMci/3PvcHN2grnEY7EGYrT7FLUVGvb/V6xRvMTFb7sUAnTk3cXGfyASA146MA==
-X-Received: by 2002:a17:907:80d:b0:73d:a576:dfbd with SMTP id
- wv13-20020a170907080d00b0073da576dfbdmr37961248ejb.402.1667635432943; 
- Sat, 05 Nov 2022 01:03:52 -0700 (PDT)
+ bh=9Z2rxrz9tW6yJ/s246SuPH82w+Cs8Pq9B3nYB0zf9Gk=;
+ b=Sl2X/g1AAwXswqtvNoW0Y65EhOjY+gS+RUv5VXbhDnVYdURGhcXN8fJyr75qSowVdI
+ pRp6k4psQNYXnW80gD0zRFJzNNCLZOS+/G5wMy+U4vIY8rdbdC7uSeEvLTqc7zveECGc
+ m7NbbnXG8auZpGjrSb2OQBDv9VKfAqbbbiQUC+ofCWseduQBa1o9Z17n9mfO8cMm4kVR
+ B3F8Tia/o5fhWL1SUJ+VTa/L12IeGv8+2uC2BkYyUFavtvx7jN38YRxi2cQoDMZqbtIf
+ X2K9oxFEENMiE2Qh6+QTx46CGqVVvvrcBwB+8TOoEywj0rzhWiX5l/ZBdDvhd887SX3s
+ gwGg==
+X-Gm-Message-State: ACrzQf0CiIczFHaXiemuUmonqwkSyziynUp+U4X7mbaoL03HL0EThHNs
+ +8C5TuZLyHWrd+ecHakzYcIHcP9Gs24=
+X-Google-Smtp-Source: AMsMyM5d39/FnBotcDziHMjywrWauuDZCiJkVWGCJAeM+LKt5pthHLdrQD12H0qsdijFIWhJ7feE8g==
+X-Received: by 2002:a50:9992:0:b0:461:6cde:ccdd with SMTP id
+ m18-20020a509992000000b004616cdeccddmr38891756edb.402.1667635442608; 
+ Sat, 05 Nov 2022 01:04:02 -0700 (PDT)
 Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- h11-20020aa7c60b000000b00461aaa39efbsm864031edq.0.2022.11.05.01.03.51
+ hg11-20020a1709072ccb00b007a8de84ce36sm560765ejc.206.2022.11.05.01.04.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 05 Nov 2022 01:03:52 -0700 (PDT)
+ Sat, 05 Nov 2022 01:04:02 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat,  5 Nov 2022 09:03:48 +0100
-Message-Id: <20221105080348.1228426-1-francois.perrad@gadz.org>
+Date: Sat,  5 Nov 2022 09:03:57 +0100
+Message-Id: <20221105080357.1228447-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CGREyMWB/3Qg5j38GLcnPvCAPHjRI8sveXDwalBKqxQ=;
- b=n3T4srM9h+Q4T5bVt4MJlsnuDL7bLFMV22CfqwzEdv8si7Hl/njPEj6sgAEoDoPIzr
- wgbvTrLYuCO+jFvim4SJ/MxPBTkMrjmlCSu0QeKwhEnSLJOax1/mlmMTni3unJknppGe
- rLaM//u5uNu2ue3QOLLh4QD+JS/SM/nlTVTWPbY3NmniEZ/DCClMoBgiTtn7Iv7KuIzC
- oRd2UgdjaLdx26zEYBWiYusN7cnn53h/SKgC99X/7MAKUIZvgEI1zFyYaBc9EuvzSh6z
- v0UpUjsPoFuFzPt7v7Az9RwjaSVD2FC8vyFrXknMZQxf4cvY0Ym/eRlIFhkcVTva8htJ
- UF/A==
+ bh=9Z2rxrz9tW6yJ/s246SuPH82w+Cs8Pq9B3nYB0zf9Gk=;
+ b=TSPiuqtaNMC+QDiMle3bDj7UivN4IdVRLCnNbNBQ7Pv6w6IctzpPptK9GTlPFm/21K
+ ymtIJU2l1m4Hs++Nhnrc4uQJpcy7KyfjWaqoh3Ch1XTBYFrH56QKJxOG+SufB7uethcf
+ Cyd4MSCQApESkDAraQjcY7H/DbYJyfy7zHxTbf5ocRW3tA6EZt2Nnu9eFMgSCez89iUC
+ sbYWt00Ixt+lGEKv5MbBQi+OTZIPiWHRXVtfwMkuk/Y2q+MmBqfniRU9XW+6gCatlpFm
+ 3/DY4YJ+MniEVAJDt/rsa4S8pyD0bmIcr4TpS6By1cBW1qhqualax2H49cH+u4Xuz9qM
+ 2zNg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n3T4srM9
-Subject: [Buildroot] [PATCH] package/gdk-pixbuf: bump to version 2.42.10
+ header.a=rsa-sha256 header.s=20210112 header.b=TSPiuqta
+Subject: [Buildroot] [PATCH] package/pango: bump to version 1.50.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,33 +101,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 35084a50a..23a7c3fc0 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,3 +1,3 @@
--# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.9.sha256sum
--sha256  28f7958e7bf29a32d4e963556d241d0a41a6786582ff6a5ad11665e0347fc962  gdk-pixbuf-2.42.9.tar.xz
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.10.sha256sum
-+sha256  ee9b6c75d13ba096907a2e3c6b27b61bcd17f5c7ebeab5a5b439d2f2e39fe44b  gdk-pixbuf-2.42.10.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 4a513effb..561e19156 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index cbd391db2..d073526cf 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.10.sha256sum
+-sha256  7e5d2f1e40854d24a9a2c4d093bafe75dcdbeccdf1de43e4437332eabed64966  pango-1.50.10.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.11.sha256sum
++sha256  8800f812d89ee61388188703203f3a7878963c22f8695aaf1fa0a1a1428d17ae  pango-1.50.11.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 649f3398c..a61473431 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- GDK_PIXBUF_VERSION_MAJOR = 2.42
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).9
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.1+
+ PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).10
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).11
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.37.2
 
