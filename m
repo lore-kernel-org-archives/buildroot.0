@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 588DFC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 10:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3F9CC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 10:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4E6F60B28;
-	Sun,  6 Nov 2022 10:04:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4E6F60B28
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85A4760769;
+	Sun,  6 Nov 2022 10:05:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85A4760769
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JD1r7oHk6d0i; Sun,  6 Nov 2022 10:04:57 +0000 (UTC)
+	with ESMTP id zZxWJu22kskR; Sun,  6 Nov 2022 10:05:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F7D660AC6;
-	Sun,  6 Nov 2022 10:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F7D660AC6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 244691BF5AA
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:04:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F9CA60B2C;
+	Sun,  6 Nov 2022 10:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F9CA60B2C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F2C51BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3F4F60AAE
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3F4F60AAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7997540535
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:04:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7997540535
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uI71PeglaxNH for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 10:04:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x3YngpzQT9bb for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 10:04:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DEE060769
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0DEE060769
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 10:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DD2340529
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8DD2340529
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 10:04:46 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 811B3FF80B;
- Sun,  6 Nov 2022 10:04:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 904F7E0002;
+ Sun,  6 Nov 2022 10:04:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1orcW4-00Ft9Y-Ab; Sun, 06 Nov 2022 11:04:36 +0100
+ id 1orcW9-00Ft9g-BU; Sun, 06 Nov 2022 11:04:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 References: <20221026132634.999254-1-giulio.benetti@benettiengineering.com>
- <20221026132634.999254-5-giulio.benetti@benettiengineering.com>
-Date: Sun, 06 Nov 2022 11:04:36 +0100
-In-Reply-To: <20221026132634.999254-5-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Wed, 26 Oct 2022 15:26:31 +0200")
-Message-ID: <87wn88jt57.fsf@dell.be.48ers.dk>
+ <20221026132634.999254-6-giulio.benetti@benettiengineering.com>
+Date: Sun, 06 Nov 2022 11:04:41 +0100
+In-Reply-To: <20221026132634.999254-6-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 26 Oct 2022 15:26:32 +0200")
+Message-ID: <87sfiwjt52.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/7] package/rtl8723ds: disable package for
- s390x architecture
+Subject: Re: [Buildroot] [PATCH 5/7] package/rtl8812au-aircrack-ng: disable
+ package for s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,7 +81,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Committed to 2022.08.x, thanks.
+Committed to 2022.08.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
