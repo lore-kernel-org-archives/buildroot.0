@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DC46C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 078BCC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E277C81A73;
-	Sun,  6 Nov 2022 15:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E277C81A73
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FAA040150;
+	Sun,  6 Nov 2022 15:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FAA040150
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ao3TBb7uUd0j; Sun,  6 Nov 2022 15:48:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mLVCSzVZOkTH; Sun,  6 Nov 2022 15:48:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19DF881A58;
-	Sun,  6 Nov 2022 15:48:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19DF881A58
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AFDB1BF287
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:48:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92C6D400E7;
+	Sun,  6 Nov 2022 15:48:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92C6D400E7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 34DF31BF287
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12E8C81A58
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:48:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E8C81A58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E7A640629
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E7A640629
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z7KICQ6-2ISZ for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 15:48:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M5zvs3F-l1G8 for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 15:48:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F9B5819ED
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F9B5819ED
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:48:36 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id y6so7119675iof.9
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:48:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB3E40591
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ABB3E40591
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:48:37 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id 5so5573819wmo.1
+ for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:48:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=46YEeqMd3GIhTDJ01cQtW77oZIWZCaUP8IN1WInBbQw=;
- b=TW7Jvuie9X362oO1UjKqeGipg9/9FkmuBCASHo5YD4aXJoeK08RD2FkE2WxUd2yYtd
- pBDmgvH9WJGLZImRUis+L1XPNE1YaKpzZG/KLOsqyhZyusQmPQY4YHgyH803NwbiCEfo
- 3/IPWo8MKCCffF1y3z+Rv/j5JuChGDJBNLEMGf7LFce3ZbEv0inchMw/fQJ1ToIlOe59
- OjWsQsSPZQI9EWiR9Ta5+XBdpHc2FZH83qnSizwKm0jnERSyns/eCCeRpUlELztCSGF4
- U5B6bWTL8nPA9T097qz01LkC2mf9ua7hxoPEOYoJYWgjBtCGB7at7c0pT8mhhxNLPPpN
- o4Ig==
-X-Gm-Message-State: ACrzQf3FSUGrjtWVs91XBR+RxMPTnW8eZmBqBuJ6xVabvfQM+9Ay03R4
- tzoyvM4bu3InWAS+R0P2l9yTSadtnI+7Sw==
-X-Google-Smtp-Source: AMsMyM7TCGAoxLKRtOE1sHCadSLtFyqdcWgFUT+kJK2OtLVx9AdCCGEe8wuMm95VqZOoTaU0NsHBdA==
-X-Received: by 2002:a05:6638:4784:b0:349:ec6c:e133 with SMTP id
- cq4-20020a056638478400b00349ec6ce133mr27204622jab.1.1667749714616; 
- Sun, 06 Nov 2022 07:48:34 -0800 (PST)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- p3-20020a0566380e8300b00374f99a3de5sm1806890jas.63.2022.11.06.07.48.33
+ bh=lU720D86YTeaKqSCGyMh75R/0d9/5FkMVtTmdiKfMrw=;
+ b=51bfe519+1DnKgIOzvO1d3pmpxoqpidHDvffw0FHl7xKXxe14yBlG0TltylHmbLGa9
+ ZBWRmRxNNPPnkudg2PztQ7CuWGCW8tJlTDpMPX84Xe0MqXaIS15JLehfMBcb/u6LPU4R
+ bEptuXaanK4oq3YAtru3/Oswtreze5vI3ox5SW7hK+oELDeCJB9OCuAAVI2NJRwoCEyf
+ 6eam2KApIYKOwC7w5KBt4YYkkyq0XdnbWPH8Bk6qTSBsOKHo7BAEcIah+Wwe5eNtALl1
+ gLZlm/E5j4gNCv2Y8341bEuubRyNwZAz/pb7CuEh1olrU4tamtZRSpvrL9xrK0v3Dx/c
+ KgWw==
+X-Gm-Message-State: ACrzQf1MlLTbNmGIobJyyxwDmbkA4R05lzXaG00ZynMXpTD3sGwdp6Mo
+ 3Qk/T2jCiiPr2PoOSqUiPik1vrnlVM8=
+X-Google-Smtp-Source: AMsMyM56LKFgbi5r4f7qXL7S5xX4HwiJy0zlaQAJDUh7oZj7oML3dYPJHl/w0RMFZsX4r7mdVEklPg==
+X-Received: by 2002:a1c:5454:0:b0:3cf:7521:3543 with SMTP id
+ p20-20020a1c5454000000b003cf75213543mr23887663wmi.172.1667749715419; 
+ Sun, 06 Nov 2022 07:48:35 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ g12-20020adffc8c000000b0022cd96b3ba6sm5714285wrr.90.2022.11.06.07.48.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sun, 06 Nov 2022 07:48:34 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Nov 2022 08:48:32 -0700
-Message-Id: <20221106154832.310618-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun,  6 Nov 2022 16:48:31 +0100
+Message-Id: <20221106154831.293218-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=46YEeqMd3GIhTDJ01cQtW77oZIWZCaUP8IN1WInBbQw=;
- b=PGDvV5hl9X8Mm+/U/0DaL3HjwSLh3cPBPGgLbC4VBHwOac5VfdweIQU7whjzR7MZrT
- 398dsgQJgzy8cNKPM50mh9XWX0zaX14vcaU6ipbKf62KRRqv/ioJ5y727PDTRz25eoDR
- y5k0grG4dlHH/r8DKjba+74fl+j/lstQ/RxPDGmWTLoJkNvjaYujQrcJ7gskD/pWcB/9
- rXZCCpVjRq42FD24MJwIOA8M36/zVbfa86IfRP7rHcmVmOQ+WLopyKhBrmb8KMvuxG97
- XR6EuForxdEc+LPtBSM6pZcD8cadsnt2N/pmcdrIgFKRLLcq/dvtXnuIwRgVdxbpGa+m
- 8dEA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=lU720D86YTeaKqSCGyMh75R/0d9/5FkMVtTmdiKfMrw=;
+ b=O45hJvwe0yGsk9PnHXXfEubeE13Kxa8epM65x1JLv9E1pVGaRhueR8A1JEpFCMdZLb
+ nrGqNCXpKtv2X3ru396r/aoOVxsIlT5z+7+dQ3hrx1a5supdo3A8wLEHCBwpOxhGYEnU
+ PIkD23Jb1DpkAqiVcR29F8N/BSHLWH9kmjOM9SqW1PIjAkE4gjEPjlCgmvrp+7oZdW2m
+ dfxD8GIolpq6e7IHgq0auocKTPsPlGhX4RfP9V1qn99nrrO6BbWx4ANT7zzYHMaKplBh
+ SsnG4LL6xoSZvEK8C1jZgMwyGYiZglnEtRXRA9rsY/MkbQlLc/pBysUpHgszgSR2qVzd
+ n06A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PGDvV5hl
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.64.0
+ header.a=rsa-sha256 header.s=20210112 header.b=O45hJvwe
+Subject: [Buildroot] [PATCH 1/1] package/s6-linux-init: bump to version
+ 1.0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,44 +95,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This bump will fix the following build failure raised since bump of
+skalibs to version 2.12.0.1 in commit
+0f7bfc80814e90918b9527cab4cbf6afedd22195 thanks to
+https://github.com/skarnet/s6-linux-init/commit/6696cee3bd309f61fc6c945ef747262a845e9267
+
+In file included from src/shutdown/hpr_shutdown.c:8:
+src/shutdown/hpr.h:20:40: error: unknown type name 'tain_t'; did you mean 'tain'?
+   20 | extern int hpr_shutdown (unsigned int, tain_t const *, unsigned int) ;
+      |                                        ^~~~~~
+      |                                        tain
+
+Update hash of COPYING (update in year with
+https://github.com/skarnet/s6-linux-init/commit/42a91a98b780759257862642c764c2102237fea6)
+
+https://github.com/skarnet/s6-linux-init/blob/v1.0.8.0/NEWS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4382beeb0f94d583ba605c70a47f34b45c76e311
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
+ package/s6-linux-init/s6-linux-init.hash | 4 ++--
+ package/s6-linux-init/s6-linux-init.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 60d9ae9436..2a76f32874 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.63.3/meson-0.63.3.tar.gz.asc
--sha256  519c0932e1a8b208741f0fdce90aa5c0b528dd297cf337009bf63539846ac056  meson-0.63.3.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.64.0/meson-0.64.0.tar.gz.asc
-+sha256  c5e27e091c2a35b9049e152a6535045ebbd057253aeb67856de6ecbb7b917bab  meson-0.64.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 3ca483c289..06ca555d12 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+index 23f02d5359..f70a4f87b5 100644
+--- a/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  29e368516b1a3c61a6d1f8680645cc122a2e02127debec91738f170a3b93b8c5  s6-linux-init-1.0.6.3.tar.gz
+-sha256  4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
++sha256  92055a7964cf66604066ad964a2c2392ee7c5e64821be03146c1341e0d8c3dc6  s6-linux-init-1.0.8.0.tar.gz
++sha256  1898df1e8703bd9c1350d2ec3397880b9b4c1451038a9ce5e1c4b2e58622da39  COPYING
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index 95595368de..6aec220de4 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.63.3
-+MESON_VERSION = 0.64.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-S6_LINUX_INIT_VERSION = 1.0.6.3
++S6_LINUX_INIT_VERSION = 1.0.8.0
+ S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+ S6_LINUX_INIT_LICENSE = ISC
+ S6_LINUX_INIT_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
