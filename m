@@ -1,86 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A8DC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 505F8C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED08681363;
-	Sun,  6 Nov 2022 15:56:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED08681363
+	by smtp2.osuosl.org (Postfix) with ESMTP id D45334013E;
+	Sun,  6 Nov 2022 15:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D45334013E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id svL1JqWcDBev; Sun,  6 Nov 2022 15:56:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YTstmvTICyDT; Sun,  6 Nov 2022 15:58:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0643881351;
-	Sun,  6 Nov 2022 15:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0643881351
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 462C81BF287
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:56:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4B63400E7;
+	Sun,  6 Nov 2022 15:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4B63400E7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E0C4D1BF287
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20ACB40321
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:56:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20ACB40321
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBBC5400E7
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBBC5400E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wQThMrCq3_4c for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 15:56:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B28BA402EF
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com
- [IPv6:2607:f8b0:4864:20::f2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B28BA402EF
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:56:13 +0000 (UTC)
-Received: by mail-qv1-xf2c.google.com with SMTP id x13so6635492qvn.6
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:56:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=wSaO6yUgdycEVOd4h/QA+Tsm6+I8GEIrT7tlgeZunmo=;
- b=KX7Hri0M34rzL5NtIlwTWjzRbRag4gobNRv6/W/I4rGPVaU2GI96ZbBY+VuvWzFOeC
- 6JQTynKW8jUA6nhs8vuGW30EuWNmZNesovEjfeX47L7jpCYxdgPwMXtpFT82dy/wHDep
- Q7kRRy8uGXOMFYYJ3WDFa+LKvRmbLGw8i9siK38wP89GGj35+3L1T3yifv2Vy3fUUHa3
- sZmA2Z7QFXtwZwOEXrmS4KZBM8yr5KOwHkxaS6+bXbBIdqogQ8/9nKWov4O0N7Kh0Ze6
- 7wmeEuE4m65UkWmqJ8XfOws6wuDYcUsik9W2YWiH39dlZ9Ysp+BcVRnnLzCRjU5TKHKn
- 4xkg==
-X-Gm-Message-State: ACrzQf0cUa7DDpf3BlFT8mGH2rQwPzp5UUrjHXS8fHOTFDBs1hljzENW
- J6vQq7vRgP5JjMI2EDAc9piR1GOkR4jB/+q7snk=
-X-Google-Smtp-Source: AMsMyM6MHaxOX4rbSXHtq7iVIPfg4+MTSGq42rTEvmDYs6Dc/lPRsmisDr5tob0xt/wueFdQQGG+Hr8nUYQEIbrQTII=
-X-Received: by 2002:ad4:5c47:0:b0:4c4:9b7d:ddd9 with SMTP id
- a7-20020ad45c47000000b004c49b7dddd9mr6505361qva.43.1667750172474; Sun, 06 Nov
- 2022 07:56:12 -0800 (PST)
-MIME-Version: 1.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A299Nwc8gt3M for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 15:58:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF4B4400B8
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AF4B4400B8
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:58:13 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b857:25fc:60e2:657f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 2F1745FF9D;
+ Sun,  6 Nov 2022 16:58:05 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 06 Nov 2022 16:58:04 +0100
+Date: Sun, 6 Nov 2022 16:58:04 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Norbert Lange <nolange79@gmail.com>
+Message-ID: <20221106155804.GA3918838@scaer>
 References: <cover.1666122184.git.yann.morin@orange.com>
- <27491_1666122194_634F01D2_27491_495_1_cf89a104edc507c063e6f4716cc859891b489d27.1666122184.git.yann.morin@orange.com>
-In-Reply-To: <27491_1666122194_634F01D2_27491_495_1_cf89a104edc507c063e6f4716cc859891b489d27.1666122184.git.yann.morin@orange.com>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 6 Nov 2022 16:56:01 +0100
-Message-ID: <CADYdroNgbAUMPUj9O5g=aq_bzBxm-wYbiQ266ZO3Por=oJU1uw@mail.gmail.com>
-To: yann.morin@orange.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=wSaO6yUgdycEVOd4h/QA+Tsm6+I8GEIrT7tlgeZunmo=;
- b=haj1kKUylWlTnBEb3fyEYBDNtyYdyAKAE5lAz/A1p/sfuckmzmMOqyjiFBPgJedtaE
- N8unwvZA2nxcJzYGqjC8Jl8P3iWxhSyOUu7tqcptbZEGa583CXwAMB873LwsmzPP9xLV
- XFfEAi4MZIexjH8JK439qzfOq0EpIWSm0bo32ur0WrjqgxidJhtWIH6HtqFdK6UJ+wpb
- eXVneUttX98uIqnKi7+ZUkCHNWMT09bXAMZ7n7ZqRCpk3ZQLW7UlL/VCURKkQ/HUUqv9
- nh6I+sSQh3nIRyZuFKq8XVW2RsqVAw9zTJU3oaJbA4barAKJUSOReTO9x7x2uc2U6l0h
- KEsQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=haj1kKUy
-Subject: Re: [Buildroot] [PATCH 2/6 v3] package/skeleton-systemd:
- systemd-ify mounting /var tmpfs with ro rootfs
+ <18712_1666122192_634F01D0_18712_304_1_aadcab6f9e8f71b5581c8a15b2773a431bb29ca0.1666122184.git.yann.morin@orange.com>
+ <CADYdroOC6mUR-Hiv8Jqri4-_wO7Grwvgm0C5BjifrtxG6LEb9w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CADYdroOC6mUR-Hiv8Jqri4-_wO7Grwvgm0C5BjifrtxG6LEb9w@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1667750290;
+ bh=CBYObwLyENppaL7/ChMykmRqVJceOJJBcHqcS73nuT0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=rMO2mHIDwxDuKBvkq4KBugkxBTeHQ9EvySYVUJiSIe3P6f6EFCyqSV4eZX6Hkchfd
+ o4hWMVebMtDHp7T0RR5GF+VT7ugzM85CcHR/Um5XQaShYeA9cc6u2EMaMk4d5KTgXz
+ NJt+AyKcuHjNH1a162I84/zC0ZKIrqHHgwWQN4rwIbOF6PWALcukZLRPb+MTdlcBbE
+ yF8Mmeif7U2sWRwd65qPG+vkz4bqwiWNEmjuox9e89aZUkYUdDZSP3IUSdjAPjAZK8
+ fHj1Dl7Z08vFIXubAL4Knj0GmXwalsLHTfX8fLijtm1W1IRMI7nbXpStj1kBWX3xHk
+ dFMdD4/qECckA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rMO2mHID
+Subject: Re: [Buildroot] [PATCH 1/6 v3] package/skeleton-systemd: move /var
+ factory tmpfiles out of /etc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,102 +79,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?UTF-8?B?SmXMgXJlzIFteSBSb3Nlbg==?= <jeremy.rosen@smile.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@smile.fr>, yann.morin@orange.com,
+ =?utf-8?B?SmXMgXJlzIFteQ==?= Rosen <jeremy.rosen@smile.fr>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gRGkuLCAxOC4gT2t0LiAyMDIyIHVtIDIxOjQzIFVociBzY2hyaWViIDx5YW5uLm1vcmluQG9y
-YW5nZS5jb20+Ogo+Cj4gVG8gbW91bnQgb3VyIC92YXIgdG1wZnMgd2hlbiB0aGUgcm9vdGZzIGlz
-IG1vdW50ZWQgcmVhZC1vbmx5IChyZWFsbHksCj4gbm90IHJlbW91bnRlZCByZXFkLXdyaXRlKSwg
-d2UgdXNlIGFuIGVudHJ5IGluIGZzdGFiLgo+Cj4gSG93ZXZlciwgL2V0YyBjb3VsZCBhbHNvIGJl
-IGEgdG1wZnMgKGZvciBmdWxsIHN0YXRlLWxlc3Mgc3lzdGVtcywgb3IKPiBlYXN5IGZhY3Rvcnkt
-cmVzZXQsIHNlZSBbMF0pLiBJdCBhbHNvIHByZXZlbnRzIGVhc2lseSBvcmRldGluZyBvdGhlcgo+
-IHN5c3RlbWQgdW5pdHMgdW50aWwgYWZ0ZXIgL3ZhciBpcyBtb3VudGVkIDVub3QgaW1wb3NzaWJs
-ZSwgYnV0IGxlc3MKPiBlYXN5KS4KPgo+IFNvLCB3ZSByZWdpc3RlciAvdmFyIGFzIGEgc3lzdGVt
-ZCBtb3VudCB1bml0LCBzbyB0aGF0IHdlIGNhbiBhbHNvIGhhdmUKPiB0aGUgL3ZhciBmYWN0b3J5
-IHBvcHVsYXRlZCBhbmQgZnVuY3Rpb25hbCBldmVuIHdoZW4gL2V0YyBpcyBlbXB0eS4gVGhlCj4g
-dmFyLm1vdW50IHVuaXQgaXMgaGVhdmlseSBtb2RlbGxlZCBhZnRlciBzeXN0ZW1kJ3Mgb3duIHRt
-cC5tb3VudCBvbmUsIHNvCj4gd2UgY2FycnkgdGhlIHNhbWUgbGljZW5zZSBmb3IgdGhhdCBmaWxl
-IChpbiBjYXNlIHRoYXQgbWF5IGFwcGx5KS4gV2UgYWRkCj4gYW4gZXhwbGljaXQgcmV2ZXJzZSBk
-ZXBlbmRlbmN5IHRvIHN5c3RlbWQtdG1wZmlsZXMtc2V0dXAuc2VydmljZSwgdG8KPiBlbnN1cmUg
-L3ZhciBpcyBtb3VudGVkIGJlZm9yZSB3ZSB0cnkgdG8gcG9wdWxhdGUgaXQuCj4KPiBUaGlzIGhh
-cyB0d28gc2lkZSBlZmZlY3RzOgo+ICAgLSBhcyBoaW50ZWQgcHJldmlvdXNseSwgaXQgc2ltcGxp
-ZmllcyB3cml0aW5nIG90aGVyIHN5c3RlbWQgdW5pdHMgdG8KPiAgICAgb3JkZXIgdGhlbSBhZnRl
-ciAvdmFyIGlzIG1vdW50ZWQKPiAgIC0gcmVwbGFjZSBpdCB3aXRoIHRoZWlyIG93biwgd2hpY2gg
-bW91bnRzIGFuIGFjdHVhbCBmaWxlc3lzdGVtCj4KPiBbMF0gaHR0cDovLzBwb2ludGVyLmRlL2Js
-b2cvcHJvamVjdHMvc3RhdGVsZXNzLmh0bWwKPgo+IFNpZ25lZC1vZmYtYnk6IFlhbm4gRS4gTU9S
-SU4gPHlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4KPiBDYzogTm9yYmVydCBMYW5nZSA8bm9sYW5nZTc5
-QGdtYWlsLmNvbT4KPiBDYzogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4g
-Q2M6IEplzIFyZcyBbXkgUm9zZW4gPGplcmVteS5yb3NlbkBzbWlsZS5mcj4KPiBbeWFubi5tb3Jp
-bi4xOTk4QGZyZWUuZnI6Cj4gICAtIHNwbGl0IG9yaWdpbmFsIHBhdGNoIGluIHR3bwo+ICAgLSB0
-aGlzIG9uZSBvbmx5IGhhbmRsZXMgY29udmVydGluZyAvdmFyIG1vdW50aW5nIGludG8gYSBzeXN0
-ZW1kIHVuaXQKPiAgIC0gYWRhcHQgY29tbWl0IGxvZyBhY2NvcmRpbmdseQo+IF0KPiBTaWduZWQt
-b2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiAtLS0KPiAg
-Li4uL3NrZWxldG9uLWluaXQtc3lzdGVtZC5tayAgICAgICAgICAgICAgICAgICB8ICAzICsrLQo+
-ICBwYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC92YXIubW91bnQgICAgICAgIHwgMTggKysr
-KysrKysrKysrKysrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgMSBk
-ZWxldGlvbigtKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9za2VsZXRvbi1pbml0LXN5
-c3RlbWQvdmFyLm1vdW50Cj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5
-c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rIGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5
-c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rCj4gaW5kZXggN2I2NjczMmVmNC4uOTcwOTUx
-ZDU1MyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRv
-bi1pbml0LXN5c3RlbWQubWsKPiArKysgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9z
-a2VsZXRvbi1pbml0LXN5c3RlbWQubWsKPiBAQCAtMzAsNyArMzAsNiBAQCBlbHNlCj4gICMgYmFj
-ayB0aGVyZSBieSB0aGUgdG1wZmlsZXMuZCBtZWNoYW5pc20uCj4gIGRlZmluZSBTS0VMRVRPTl9J
-TklUX1NZU1RFTURfUk9PVF9ST19PUl9SVwo+ICAgICAgICAgZWNobyAiL2Rldi9yb290IC8gYXV0
-byBybyAwIDEiID4kKFRBUkdFVF9ESVIpL2V0Yy9mc3RhYgo+IC0gICAgICAgZWNobyAidG1wZnMg
-L3ZhciB0bXBmcyBtb2RlPTE3NzcgMCAwIiA+PiQoVEFSR0VUX0RJUikvZXRjL2ZzdGFiCj4gIGVu
-ZGVmCj4KPiAgZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QUkVfUk9PVEZTX1ZBUgo+IEBA
-IC01Miw2ICs1MSw4IEBAIGRlZmluZSBTS0VMRVRPTl9JTklUX1NZU1RFTURfUFJFX1JPT1RGU19W
-QVIKPiAgICAgICAgICAgICAgICAgICAgICAgICB8fCBleGl0IDE7IFwKPiAgICAgICAgICAgICAg
-ICAgZmk7IFwKPiAgICAgICAgIGRvbmUgPiQoVEFSR0VUX0RJUikvdXNyL2xpYi90bXBmaWxlcy5k
-L2J1aWxkcm9vdC1mYWN0b3J5LmNvbmYKPiArICAgICAgICQoSU5TVEFMTCkgLUQgLW0gMDY0NCAk
-KFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QS0dESVIpL3Zhci5tb3VudCBcCj4gKyAgICAgICAgICAg
-ICAgICQoVEFSR0VUX0RJUikvdXNyL2xpYi9zeXN0ZW1kL3N5c3RlbS92YXIubW91bnQKPiAgZW5k
-ZWYKPiAgU0tFTEVUT05fSU5JVF9TWVNURU1EX1JPT1RGU19QUkVfQ01EX0hPT0tTICs9IFNLRUxF
-VE9OX0lOSVRfU1lTVEVNRF9QUkVfUk9PVEZTX1ZBUgo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-c2tlbGV0b24taW5pdC1zeXN0ZW1kL3Zhci5tb3VudCBiL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1z
-eXN0ZW1kL3Zhci5tb3VudAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
-MC4uNmIxNjVkZmY2ZAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3NrZWxldG9uLWlu
-aXQtc3lzdGVtZC92YXIubW91bnQKPiBAQCAtMCwwICsxLDE4IEBACj4gKyMgU1BEWC1MaWNlbnNl
-LUlkZW50aWZpZXI6IExHUEwtMi4xLW9yLWxhdGVyCj4gKyMgTW9kZWxsZWQgYWZ0ZXIgc3lzdGVt
-ZCdzIHRtcC5tb3VudAo+ICsKPiArW1VuaXRdCj4gK0Rlc2NyaXB0aW9uPUJ1aWxkcm9vdCAvdmFy
-IHRtcGZzCj4gK0RlZmF1bHREZXBlbmRlbmNpZXM9bm8KPiArQ29uZmxpY3RzPXVtb3VudC50YXJn
-ZXQKPiArQmVmb3JlPWJhc2ljLnRhcmdldCBsb2NhbC1mcy50YXJnZXQgdW1vdW50LnRhcmdldCBz
-eXN0ZW1kLXRtcGZpbGVzLXNldHVwLnNlcnZpY2UKCkNoYW5nZSBpdCB0bwpCZWZvcmU9bG9jYWwt
-ZnMudGFyZ2V0IHVtb3VudC50YXJnZXQKCkFsbCBvdGhlciBkZXBlbmRlbmNpZXMgYXJlIGltcGxp
-Y2l0Cgo+ICtBZnRlcj1zd2FwLnRhcmdldAo+ICsKPiArW01vdW50XQo+ICtXaGF0PXRtcGZzCj4g
-K1doZXJlPS92YXIKPiArVHlwZT10bXBmcwo+ICtPcHRpb25zPW1vZGU9MTc3NyxzdHJpY3RhdGlt
-ZSxub3N1aWQsbm9kZXYsc2l6ZT01MCUlLG5yX2lub2Rlcz0xbQo+ICsKPiArW0luc3RhbGxdCj4g
-K1dhbnRlZEJ5PWJhc2ljLnRhcmdldAoKRHJvcCB0aGUgaW5zdGFsbCBzZWN0aW9uLgoKV2hpbGUg
-dGVzdGluZyBzb21lIG90aGVyIG92ZXJsYXkgc29sdXRpb25zIEkgZm91bmQgb3V0IHRoYXQKYSAv
-dmFyIG1vdW50IGNhbnQgYmUgcmVhc29uYWJseSBkaXNhYmxlZC4KV2hhdCBoYXBwZW5zIGlzIHRo
-YXQgYmFzaWMudGFyZ2V0IHdpbGwgcHVsbCBpbiB2YXIubW91bnQsCnRoZSBvbmx5IG9wdGlvbiB0
-byBkaXNhYmxlIGl0IHdvdWxkIGJlIG1hc2tpbmcgdmFyLm1vdW50CgoKPiAtLQo+IDIuMjUuMQo+
-Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCj4KPiBDZSBtZXNzYWdlIGV0IHNlcyBwaWVjZXMgam9pbnRlcyBwZXV2ZW50
-IGNvbnRlbmlyIGRlcyBpbmZvcm1hdGlvbnMgY29uZmlkZW50aWVsbGVzIG91IHByaXZpbGVnaWVl
-cyBldCBuZSBkb2l2ZW50IGRvbmMKPiBwYXMgZXRyZSBkaWZmdXNlcywgZXhwbG9pdGVzIG91IGNv
-cGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kgdm91cyBhdmV6IHJlY3UgY2UgbWVzc2FnZSBwYXIg
-ZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxlcgo+IGEgbCdleHBlZGl0ZXVyIGV0IGxlIGRldHJ1
-aXJlIGFpbnNpIHF1ZSBsZXMgcGllY2VzIGpvaW50ZXMuIExlcyBtZXNzYWdlcyBlbGVjdHJvbmlx
-dWVzIGV0YW50IHN1c2NlcHRpYmxlcyBkJ2FsdGVyYXRpb24sCj4gT3JhbmdlIGRlY2xpbmUgdG91
-dGUgcmVzcG9uc2FiaWxpdGUgc2kgY2UgbWVzc2FnZSBhIGV0ZSBhbHRlcmUsIGRlZm9ybWUgb3Ug
-ZmFsc2lmaWUuIE1lcmNpLgo+Cj4gVGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMgbWF5
-IGNvbnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5mb3JtYXRpb24gdGhhdCBtYXkg
-YmUgcHJvdGVjdGVkIGJ5IGxhdzsKPiB0aGV5IHNob3VsZCBub3QgYmUgZGlzdHJpYnV0ZWQsIHVz
-ZWQgb3IgY29waWVkIHdpdGhvdXQgYXV0aG9yaXNhdGlvbi4KPiBJZiB5b3UgaGF2ZSByZWNlaXZl
-ZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYW5kIGRlbGV0
-ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cy4KPiBBcyBlbWFpbHMgbWF5IGJlIGFs
-dGVyZWQsIE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdlcyB0aGF0IGhhdmUgYmVlbiBt
-b2RpZmllZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuCj4gVGhhbmsgeW91Lgo+CgpHdWVzcyBpIGNh
-bnQgYWNrIGl0IGNvbmRpdGlvbmFsbHksIHNvIGZhcjoKClJldmlld2VkLWJ5OiBOb3JiZXJ0IExh
-bmdlIDxub2xhbmdlNzlAZ21haWwuY29tPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Norbert, All,
+
+On 2022-11-06 16:40 +0100, Norbert Lange spake thusly:
+> Am Di., 18. Okt. 2022 um 21:43 Uhr schrieb <yann.morin@orange.com>:
+[--SNIP--]
+> > diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> > index 795a171809..7b66732ef4 100644
+> > --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> > +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> > @@ -29,7 +29,6 @@ else
+> >  # a real (but empty) directory, and the "factory files" will be copied
+> >  # back there by the tmpfiles.d mechanism.
+> >  define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+> > -       mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+> >         echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+> >         echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
+> >  endef
+> > @@ -38,6 +37,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+> >         rm -rf $(TARGET_DIR)/usr/share/factory/var
+> >         mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
+> >         mkdir -p $(TARGET_DIR)/var
+> > +       mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+> >         for i in $(TARGET_DIR)/usr/share/factory/var/* \
+> >                  $(TARGET_DIR)/usr/share/factory/var/lib/* \
+> >                  $(TARGET_DIR)/usr/share/factory/var/lib/systemd/*; do \
+> > @@ -51,7 +51,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+> >                         printf "C! %s - - - -\n" "$${j}" \
+> >                         || exit 1; \
+> >                 fi; \
+> 
+> From tmpfiles.d docs: "C ... Recursively copy a file or directory, if
+> the destination files or directories do not
+>   exist yet or the destination directory is empty. Note that this
+> command will not descend into subdirectories
+>   if the destination directory already exists and is not empty.
+> Instead, the entire copy operation is skipped."
+> 
+> So all the drama could be just replaced with "C! /var - - - -\n" imho.
+> 
+> (non standard permissions/owner are probably gone either way)
+
+I do remember that I had to explicitly register individual entries
+rather than the directory alone, as that did not work. That was 5+
+years ago (commit 26085bbbd500), and I did not write it down in the
+commit log...
+
+However, it looks like we hit this issue, as hinted in commit
+7e811708f31c (package/skeleton-init-systemd: work around for /var/lib
+not populating), which states:
+
+    It turns out /var/lib will exist, because some part of systemd creates
+    /var/lib/systemd/catalog on boot before tmpfiles runs.
+
+So, we do have a chicken-n-eggs issue, that registering /var as a whole
+does not work.
+
+I'll try to investigate further, and see if that's still the case.
+
+> > -       done >$(TARGET_DIR)/etc/tmpfiles.d/var-factory.conf
+> > +       done >$(TARGET_DIR)/usr/lib/tmpfiles.d/buildroot-factory.conf
+> 
+> How about naming this something like 00-buildroot-var.conf, so hopefully any
+> *.conf that might expect something in /var existing is executed later.
+
+I am totally OK for 00-buildroot-var.conf.
+
+[--SNIP--]
+> Regardless, the changes are an improvement, buildroot is the "distro"
+> and its special sauce
+> should reside inside /usr as much as possible.
+
+Yes, that was my reasoning as well.
+
+> Id highly recommend atleast changing the name to
+> 00-buildroot-var.conf, other than that:
+
+Agreed.
+
+> Acked-by: Norbert Lange <nolange79@gmail.com>
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
