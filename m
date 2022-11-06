@@ -4,68 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E438C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFD3CC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D14AA40201;
-	Sun,  6 Nov 2022 15:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D14AA40201
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64BFD4013E;
+	Sun,  6 Nov 2022 15:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64BFD4013E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FX01SQWTAHHM; Sun,  6 Nov 2022 15:18:17 +0000 (UTC)
+	with ESMTP id Gk6FVaOlOBNI; Sun,  6 Nov 2022 15:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5467400FF;
-	Sun,  6 Nov 2022 15:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5467400FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88074400FF;
+	Sun,  6 Nov 2022 15:23:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88074400FF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39F281BF287
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:18:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7D51E1BF287
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 157BE81A27
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 157BE81A27
+ by smtp1.osuosl.org (Postfix) with ESMTP id 545D981A47
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:23:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545D981A47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W4VAmUyF6xie for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 15:18:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 095AD81A18
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 095AD81A18
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:18:13 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b857:25fc:60e2:657f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 06D5A5FF95;
- Sun,  6 Nov 2022 16:18:06 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 06 Nov 2022 16:18:06 +0100
-Date: Sun, 6 Nov 2022 16:18:06 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20221106151806.GZ3918838@scaer>
-References: <20221103224539.692322-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id Lbl-Cnd_xN5u for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 15:23:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E56481A46
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4E56481A46
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:23:29 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id y6so7094702iof.9
+ for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:23:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=j9IoGT+uVx/W5H+K21zofxSKPLlIv+Thymi6THJkhJ4=;
+ b=GsgjSiT34FTnTZQh0nsdK/0+d/XaFPth25Byf4Bxhf7pkmbJUReVcjiFmgUGg6kUTM
+ AX/3RY0jRaGN+PWxqnp2oHm4eD15eRADFeNIf5oPjI7YyOl++qPF1bMoHX9DJtNz9J9y
+ yFlyz8CpOWo1OR7oQ8/MEIAcCLQs0FxW+6qr1H22/PzL37XYdjXAPbw35yoasxTj9VIQ
+ YnYfhx5JmSKprJl0OZIb77ELTHFz55aVnL0LmhsMPuoqarLPTONB0BM9jzuVAyuCx+bc
+ E5JowxP6xS0YLFqbWHZjUtc3KyP23+N6wwrpeYTD7Ry5OV/MYPKaVrDCLaqE60dRzUm3
+ 7AGA==
+X-Gm-Message-State: ACrzQf1zPHoZg98SJdn17VuCjwplCTqzmh5naiRNOxuSW2P+k/4tPu5f
+ bkKOnQMCQh3+WQG7ITFaBvmCqz9XjRO1xw==
+X-Google-Smtp-Source: AMsMyM5LDItN2jRNPU2DLejXdaude5A1DrFchKS87NJoS4lG7jc9EA1pCfG617eEeMrYsAmC4gULcA==
+X-Received: by 2002:a02:6f54:0:b0:375:76da:1c95 with SMTP id
+ b20-20020a026f54000000b0037576da1c95mr15571583jae.42.1667748208086; 
+ Sun, 06 Nov 2022 07:23:28 -0800 (PST)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ x10-20020a02340a000000b00349d2d52f6asm1728624jae.37.2022.11.06.07.23.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 06 Nov 2022 07:23:27 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  6 Nov 2022 08:23:25 -0700
+Message-Id: <20221106152325.4047133-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221103224539.692322-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1667747892;
- bh=gaCQS52KJA1NzlcBdghQSktmn/Inghduj63+0pMv+Fk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bmSEUZzsg19HqO0ZQ9lUaG7vAPJ9rkVwSYLIOCpu3GNQuZXUnbR3byyz0oLt91gY4
- qpdnp3CvzqWm7cnOZHuff2X6uxhRHDmLWrkEZi6y9EVq0+aZaakkKYYVOvYs5qpb6A
- bYzU51+SQKDa8v4mZ06fdcW1UD7I7uaRqqo9BSFpFH6JzK0cvltf4i4Fyvj6FbexGB
- o/oaBjf3m+tR3+HTsg9f/xL2Gg/dOVUaZ8+v0AF8UBxFFE24tTTTKy2Ht58irguRL/
- YfWWozvJCXbjkR8A3QVNl8yrXvgO/uGxnYSUwrdB58yJXZxTrqd/zlJAD+h7oK7HXH
- ZRka5suEQHDvg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=j9IoGT+uVx/W5H+K21zofxSKPLlIv+Thymi6THJkhJ4=;
+ b=MaonTJHcgyIxuRL6a//svZlq5/oDMjUwgkvotGzsy2qxaCiTYW/cYG82RbAtZmpaZ3
+ k1rkw+XhqdmwxE0MY1yTTFo3rYvVC7+0aJf+qNvEZ6lzkwaqv0kxQgu//h72Lx/4J0+Q
+ GVlBeSvwT63bRhyU/vJZRJ56GMsEMDgLc+xgalIEAqheySWWlgHk7NyOw3XXSfYIxiPI
+ 4MzR/8T+q9+AcXhwqJ+1zFgQf2jebTMbX+QY+L6GcggHspDU33kifwC+/6Ta5RuZd/5h
+ zRstcn1MmTaGupJDhP/4GchM6qQImRC4efOpb+7SB/NsP0vbdQT6z0lp7N0QTjem6JC/
+ Ve9Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bmSEUZzs
-Subject: Re: [Buildroot] [PATCH next 1/2] package/pkg-cargo: provide a
- single definition of CARGO_HOME value
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=MaonTJHc
+Subject: [Buildroot] [PATCH 1/1] package/python-jsonschema: bump to version
+ 4.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,86 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Moritz Bitsch <moritz@h6t.eu>, James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-jsonschema/python-jsonschema.hash | 4 ++--
+ package/python-jsonschema/python-jsonschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2022-11-03 23:45 +0100, Thomas Petazzoni via buildroot spake thusly:
-> Instead of replicating $(HOST_DIR)/share/cargo in several place,
-> define BR_CARGO_HOME. This will help when we'll want to change this
-> location.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-cargo.mk         | 6 ++++--
->  package/suricata/suricata.mk | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-> index f7e3f39503..5923725f5e 100644
-> --- a/package/pkg-cargo.mk
-> +++ b/package/pkg-cargo.mk
-> @@ -20,8 +20,10 @@
->  #
->  ################################################################################
->  
-> +BR_CARGO_HOME = $(HOST_DIR)/share/cargo
-> +
->  PKG_COMMON_CARGO_ENV = \
-> -	CARGO_HOME=$(HOST_DIR)/share/cargo
-> +	CARGO_HOME=$(BR_CARGO_HOME)
->  
->  # __CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS is needed to allow
->  # passing the -Z target-applies-to-host, which is needed together with
-> @@ -79,7 +81,7 @@ $(2)_DOWNLOAD_DEPENDENCIES += host-rustc
->  $(2)_DEPENDENCIES += host-rustc
->  
->  $(2)_DOWNLOAD_POST_PROCESS = cargo
-> -$(2)_DL_ENV += CARGO_HOME=$$(HOST_DIR)/share/cargo
-> +$(2)_DL_ENV += CARGO_HOME=$$(BR_CARGO_HOME)
->  
->  # If building in a sub directory, use that to find the Cargo.toml
->  ifneq ($$($(2)_SUBDIR),)
-> diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-> index 8c38b7c713..72b72cc94d 100644
-> --- a/package/suricata/suricata.mk
-> +++ b/package/suricata/suricata.mk
-> @@ -29,7 +29,7 @@ SURICATA_DEPENDENCIES = \
->  
->  SURICATA_CONF_ENV = \
->  	ac_cv_path_HAVE_SPHINXBUILD=no \
-> -	CARGO_HOME=$(HOST_DIR)/share/cargo \
-> +	CARGO_HOME=$(BR_CARGO_HOME) \
->  	RUST_TARGET=$(RUSTC_TARGET_NAME)
->  
->  SURICATA_CONF_OPTS = \
-> -- 
-> 2.38.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
+index d4c2759811..19b9659d08 100644
+--- a/package/python-jsonschema/python-jsonschema.hash
++++ b/package/python-jsonschema/python-jsonschema.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/jsonschema/json
+-md5  3bc1f63a74fc61bf2847f22cadb0dfff  jsonschema-4.16.0.tar.gz
+-sha256  165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23  jsonschema-4.16.0.tar.gz
++md5  e569b6114d575bdb05cb8ce4676fe458  jsonschema-4.17.0.tar.gz
++sha256  5bfcf2bca16a087ade17e02b282d34af7ccd749ef76241e7f9bd7c0cb8a9424d  jsonschema-4.17.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
+ sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+index 68a25aed58..8cc624886c 100644
+--- a/package/python-jsonschema/python-jsonschema.mk
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JSONSCHEMA_VERSION = 4.16.0
++PYTHON_JSONSCHEMA_VERSION = 4.17.0
+ PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
+-PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/cf/54/8923ba38b5145f2359d57e5516715392491d674c83f446cd4cd133eeb4d6
++PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/3a/3d/0653047b9b2ed03d3e96012bc90cfc96227221193fbedd4dc0cbf5a0e342
+ PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
+ PYTHON_JSONSCHEMA_LICENSE = MIT
+ PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
