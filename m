@@ -4,92 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1A15C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 18:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 986FFC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 18:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3052460B22;
-	Sun,  6 Nov 2022 18:04:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3052460B22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C4A360B2A;
+	Sun,  6 Nov 2022 18:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C4A360B2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfFqMJ8hvMgj; Sun,  6 Nov 2022 18:04:03 +0000 (UTC)
+	with ESMTP id 9B2P3SCWc9-k; Sun,  6 Nov 2022 18:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5972660ADD;
-	Sun,  6 Nov 2022 18:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5972660ADD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 45AA11BF27E
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 18:04:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B297360AE0;
+	Sun,  6 Nov 2022 18:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B297360AE0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CF4A1BF312
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 18:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D0F0817AA
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 18:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D0F0817AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id C61EE40026
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 18:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C61EE40026
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oLm1aPichqS1 for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 18:03:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cjWD9ERNAGa0 for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 18:19:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DC9817A9
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59DC9817A9
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 18:03:59 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id kt23so24836223ejc.7
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 10:03:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435E640448
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
+ [IPv6:2a00:1450:4864:20::234])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 435E640448
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 18:19:54 +0000 (UTC)
+Received: by mail-lj1-x234.google.com with SMTP id u2so13197593ljl.3
+ for <buildroot@buildroot.org>; Sun, 06 Nov 2022 10:19:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mgy2Wi5ewrPmRLk/BzIUasrFJggRlalcgihogOaSCYg=;
- b=t6TSFicA6HjLBkANPIaQRL34vV8/rStQOWnOU61vd8h0RexSFWrzmIDOmklmlalobi
- AR9EgCFEJHUtpiVgoyBhB6lHwUGdwU2LX89hW6uxH2y7+10Dcsy15SHXQXiYqCHDFxXs
- NEi0xa3dcPbLMmRjvMGiT/Vyjh7cJ6/28yy5lVZA5rCXBrxuCmghMHzH3qrgxmCLQHRj
- Samc58CeFMLgSlf0OeGhAwn1ZXHIPCk3w9LueWTdV8JeNfYoD+yq46Cf77qPHmJBqeha
- w0pmqs5z7kAokArvuW9IzGZm26kTfNVcZTr5jM6zgzobSqVpKxFjC/6SK0UfXsMxcyJn
- smOQ==
-X-Gm-Message-State: ACrzQf0wA00o088ZjvpI9yPi2K+ZSU5ii2KlJBYrQc6bPLAXLCh2t1/r
- hRt0g33NmRzczD8EKtcEBesA22vl9iMlrJm/
-X-Google-Smtp-Source: AMsMyM4JGc+aDSGsPCMKzuCTqHJJAmQ5+DLyUGVYAHiI8qy9XPqNm/CihWZMEg97F0w5He8x9dwCFA==
-X-Received: by 2002:a17:907:805:b0:782:1a0d:337f with SMTP id
- wv5-20020a170907080500b007821a0d337fmr44928969ejb.475.1667757837296; 
- Sun, 06 Nov 2022 10:03:57 -0800 (PST)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com.
- [209.85.218.48]) by smtp.gmail.com with ESMTPSA id
- g18-20020a17090604d200b0073dc5bb7c32sm2371850eja.64.2022.11.06.10.03.56
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Nov 2022 10:03:56 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id n12so24802794eja.11
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 10:03:56 -0800 (PST)
-X-Received: by 2002:a17:907:2e0b:b0:7a5:fc2e:dc7 with SMTP id
- ig11-20020a1709072e0b00b007a5fc2e0dc7mr42043685ejc.257.1667757836044; Sun, 06
- Nov 2022 10:03:56 -0800 (PST)
+ h=content-transfer-encoding:organization:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Ge/VP3togs/7apD9SUG2xgHooKFggWtxYBn0mFKM3cI=;
+ b=mx4RK5/0jDC2U4ht7MnV0gY7V/CfU9NYQLkeU78HHnjGVbeceSuNLBiOYglLb+bPl0
+ 1Hoqj9UW/hmD4Ozq9IU/8XwwYbD/o3Ik/Qza2N/EOqfIs+GdlBWmiIBcMO2GXEepLQXc
+ ANIDS9uWC1QXhNWxXoIAM4xPG9/Z9gqKpIHN+ocPREfDQvpd1rvu3rXU9J8MoaoLyrPB
+ 3T6Ojze2GsZZDpY5X3sys40bW44bLovZKX3BixsZKOFvuc82D0O6LntIdq1e+dcPkdKv
+ 8Lre1/3RQfpaD2HfdWDVMnr1C3YLyIpIOFgPX7JWCLNHPZRsA8ft3DkCRfZT53oef6wv
+ izGA==
+X-Gm-Message-State: ACrzQf0xyA8MulipQMsoxCaCvoXOAZh5YAVmL43ztb7XDYb5AqquoH7c
+ cdh5cYzTYnSy2TVQN95yarfIYndWcWg=
+X-Google-Smtp-Source: AMsMyM4fLY7jNk+ltoixQVYa83oBmPkVL8vo25cqvPcwlmifBwfDTgcBTqJaVyCPmNPCuPA3uwTgVA==
+X-Received: by 2002:a2e:3203:0:b0:277:9e5:6cc4 with SMTP id
+ y3-20020a2e3203000000b0027709e56cc4mr4769734ljy.137.1667758791785; 
+ Sun, 06 Nov 2022 10:19:51 -0800 (PST)
+Received: from gimli.lan ([2001:9b0:21f:cc00::af3])
+ by smtp.gmail.com with ESMTPSA id
+ be12-20020a05651c170c00b0027711dbd000sm780325ljb.69.2022.11.06.10.19.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 06 Nov 2022 10:19:51 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  6 Nov 2022 19:19:46 +0100
+Message-Id: <20221106181946.501548-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221105184455.GL3918838@scaer>
+References: <20221105184455.GL3918838@scaer>
 MIME-Version: 1.0
-References: <20221106105309.350587-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20221106105309.350587-1-fontaine.fabrice@gmail.com>
-Date: Sun, 6 Nov 2022 10:03:44 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2pHmjLfKPN0g8rubJi6gd66E4L9y=WMeco9r9b9voRmFg@mail.gmail.com>
-Message-ID: <CA+h8R2pHmjLfKPN0g8rubJi6gd66E4L9y=WMeco9r9b9voRmFg@mail.gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Organization: Addiva Elektronik
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=mgy2Wi5ewrPmRLk/BzIUasrFJggRlalcgihogOaSCYg=;
- b=JmlBcqMk6J49uC7sB8Vmpcxcu58lQ9Mgdi63zaRTiVwUFJ0Mp+VjnNVCcsy+PSWDP2
- Qljl6ckgX2894iGfCnW2NI9KD2Yjg1A9283F1vbH/wuZVm4Hh2Sd5xOj8dRlC/ghUUof
- qMXNS1gCy01Iw/fUTUR6pWaJBeHV2eeltJnt7HfKi6Ai3xUE+5YPJdTbodxQA7OhIigq
- HafqCT46CG+vvMWPfUlhBNnIUgXK2EiB46B4JlsNCmE1Ju4dibnx1Q32xQDRnlS+zdNe
- oVXIm/Zhd5Srt7CYYOIcIpz3KX0061S7Y9Xa+QlFvWfWtGdf6TEiEvyF/G539cAZNtRV
- BktA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=JmlBcqMk
-Subject: Re: [Buildroot] [PATCH 1/1] package/crun: fix musl and uclibc-ng
- builds
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:organization:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=Ge/VP3togs/7apD9SUG2xgHooKFggWtxYBn0mFKM3cI=;
+ b=nLtLJuNZG9YwK2iVx3ogvAxxu3BVuCJZS7s3hOCxdGK60PhIW5r5Pmsh9URMh6y2Fi
+ mHl4Ra0D5WdSAcgzdpj/Zq547H1gpUcFSW5mkXEf8l/8K3xZ5DgNV6E0Pdg5yWymk+ik
+ nzi9BvtBv31LDQwOYI9ifWLvyMkjAUJUa1/CLlItEuFNmNi/u6eIXDxzKHipGnrT5g+n
+ 9d3wkS5EsME/s/dA8QaOzq7wEAi9I+HD1BIBf8lAaM92Iilt/eZMeU0Fjv2m+UfdUrLz
+ QYZ7MPsktApuejxRtPgcKnf9dj1/fm45NxuHnVJARgEg9hFRlvcEmq0qtDsteYfnXR1l
+ 8xKw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=nLtLJuNZ
+Subject: [Buildroot] [PATCH v2 1/1] package/ssdp-responder: fix warnings
+ from check-package and shellcheck
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,27 +98,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+Summary of changes:
 
+ - Fix use of $DAEMON, found by check-package
+   - Expects DAEMON to be name of daemon controlled by script, this
+     causes ripple efects in rest of script
+   - Recommend `chmod a-x`, .mk file installs with `-m 0755`
+ - Fix shellcheck warnings:
+   - Use "$VAR" in case of spaces in filenames
+   - recommend not using $? in if stmt, should use `if start-stop ...`
+   - mismatch in indentation in case-esac
 
-On Sun, Nov 6, 2022 at 2:53 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
-> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-> +CRUN_DEPENDENCIES += argp-standalone
-> +endif
-> +
+Changes since v1:
 
-Lgtm!
+ - Revert introduction of cmd() wrapper for start-stop-daemon, instead
+   call start-stop-daemon directly in start() and stop() functions
 
-Reviewed-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/ssdp-responder/S50ssdpd | 47 +++++++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 20 deletions(-)
+ mode change 100755 => 100644 package/ssdp-responder/S50ssdpd
+
+diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
+old mode 100755
+new mode 100644
+index e33992be91..8654de4f26
+--- a/package/ssdp-responder/S50ssdpd
++++ b/package/ssdp-responder/S50ssdpd
+@@ -1,25 +1,32 @@
+ #!/bin/sh
+ 
+-NAME=ssdpd
+-PIDFILE=/var/run/$NAME.pid
+-DAEMON=/usr/sbin/$NAME
+-CFGFILE=/etc/default/$NAME
++DAEMON=ssdpd
++PIDFILE=/var/run/$DAEMON.pid
++CFGFILE=/etc/default/$DAEMON
+ 
+ DAEMON_ARGS=""
+ 
+ # Read configuration variable file if it is present
+-[ -f $CFGFILE ] && . $CFGFILE
++# shellcheck source=/dev/null
++[ -r "$CFGFILE" ] && . "$CFGFILE"
+ 
++# shellcheck disable=SC2086
+ start() {
+-	printf 'Starting %s: ' "$NAME"
+-	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Starting %s: ' "$DAEMON"
++	if start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ stop() {
+-	printf 'Stopping %s: ' "$NAME"
+-	start-stop-daemon -K -q -p $PIDFILE -x $DAEMON
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Stopping %s: ' "$DAEMON"
++	if start-stop-daemon -K -q -p "$PIDFILE" -x "$DAEMON"; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ restart() {
+@@ -28,15 +35,15 @@ restart() {
+ }
+ 
+ case "$1" in
+-    start|stop|restart)
+-	"$1"
+-	;;
+-    reload)
+-	restart
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop|restart|reload}"
+-	exit 1
++	start|stop|restart)
++		"$1"
++		;;
++	reload)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+ 
+ exit $?
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
