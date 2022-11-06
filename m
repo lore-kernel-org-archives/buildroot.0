@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D79C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 988BFC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:17:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 347ED60888;
-	Sun,  6 Nov 2022 15:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 347ED60888
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F8E940162;
+	Sun,  6 Nov 2022 15:17:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F8E940162
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hHOK1FySRNqE; Sun,  6 Nov 2022 15:13:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vvIn6FOxJgd2; Sun,  6 Nov 2022 15:17:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FA4E6072A;
-	Sun,  6 Nov 2022 15:13:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FA4E6072A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E2F0400FF;
+	Sun,  6 Nov 2022 15:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E2F0400FF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 98B5E1BF287
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:13:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 910B11BF287
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E15C81A27
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:13:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E15C81A27
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C5DA81A27
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5DA81A27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZZl4v9kJNRUi for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 15:13:42 +0000 (UTC)
+ with ESMTP id ugqp2eRiOJZc for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 15:17:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8819681763
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8819681763
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:13:42 +0000 (UTC)
-Received: by mail-io1-xd2a.google.com with SMTP id p141so7100454iod.6
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:13:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22CC481A18
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22CC481A18
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:17:50 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id d123so7089548iof.7
+ for <buildroot@buildroot.org>; Sun, 06 Nov 2022 07:17:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WbjNo3rakfA9xGwT1OUIxG9kUIHJmd5ejMVrXdJeHQ4=;
- b=lezMbECiE/YKuWLFoEP5BBcjSF+DpEOnZWlgftl5Ws5XUyGrxqJbOwiqrE91NUUyex
- CBJzyivmEw0lISvm+H2fSMfbTXL6QkigokihTT2quDgto0YwMeU1sFIYFXLsRjgwyG7Q
- 1T50xdJ97JLEG4AHJWp2sd1+V+vBFECWWKi3MVv/mSbKsHyr39yfMtdhRszmh8/uKjKg
- BBuvy9fyx9GlnIJbjlzYnhhGfwBZPzdio4IlhOGvD5BxVfLugluHEju2gS65F/mkG1gE
- 6fKgfx2FpDBtkF8xa2F6TKMAcjzgObUQPPR9aqrxp9QVdrSWJdgpmGXyJO/yWRc+JEos
- PUzg==
-X-Gm-Message-State: ANoB5pk6s3jUWwJUX0dPM+5p7nxbEu9CYaPUiCducLCqBshvBVvn4OMo
- F939Qv+WwxqWH1fPepbDwYWGqwuuGJKa7w==
-X-Google-Smtp-Source: AA0mqf7Zs6KNPfjIr7zhAG2gsqPPU27GZ7JSKTamz2kTJu9nOqt7m11ag+r262QJD+Gl5dQQP61XCg==
-X-Received: by 2002:a02:b797:0:b0:375:5c6e:b23 with SMTP id
- f23-20020a02b797000000b003755c6e0b23mr220184jam.47.1667747620781; 
- Sun, 06 Nov 2022 07:13:40 -0800 (PST)
+ bh=EoBDqTVV3H+ztFArRrNdw1LYttxNCfa0KF4lQjSjNsQ=;
+ b=JlczFraLvjAwUGF+SekU+sQuBZVkhhyNosCotv+JONrhYRvtq6TXxx19zrmXAfR8UH
+ 66HDYo50TfM1jSKzyfp0HiqjoApr9x/csXclFCCTjSOyveGMzzo5m9HbhPkIUxBewo4H
+ 6sAmbmHZDR3+neSaOq23K4K0rxkN/sUDOWbOXTnqDH+LX8oJUbWrmalfA33/Ufy1DPVl
+ FBMk/87Pw6W2aTFBM03o9q1VPMojmitKfDB8wZ89EFJk1RAjxQ07UxJKVY8hgW96ETCP
+ FxgHD70zjzdgtv3/XQ9J9wRTz4UWwywzZctn6q/kzHngTZX42CHs9X/p1RcOojy7EK1A
+ ilwQ==
+X-Gm-Message-State: ACrzQf2WamhGNd+f0p/TsgNiWzf/IFYdajEa0QLe0YM7R64slzWEmKa5
+ JYDTYsMxENQgwSRq0vDOqTSMmJ+wSGSdrw==
+X-Google-Smtp-Source: AMsMyM6RvQbs9y3rerUPKivwT+Tjrb4bEa1iM0Xr93pGJfng2qdA4PKiUKYFn53dceFLuzfJR7Omqw==
+X-Received: by 2002:a02:cc38:0:b0:375:6182:d220 with SMTP id
+ o24-20020a02cc38000000b003756182d220mr21222443jap.16.1667747868884; 
+ Sun, 06 Nov 2022 07:17:48 -0800 (PST)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- s13-20020a92cb0d000000b002f9652849f6sm1918925ilo.67.2022.11.06.07.13.39
+ c98-20020a02966b000000b00374fbd37c72sm1764656jai.147.2022.11.06.07.17.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Nov 2022 07:13:40 -0800 (PST)
+ Sun, 06 Nov 2022 07:17:48 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Nov 2022 08:13:38 -0700
-Message-Id: <20221106151338.4041049-1-james.hilliard1@gmail.com>
+Date: Sun,  6 Nov 2022 08:17:46 -0700
+Message-Id: <20221106151746.4043006-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WbjNo3rakfA9xGwT1OUIxG9kUIHJmd5ejMVrXdJeHQ4=;
- b=qm5w7OvDzSJSHTQfmHylfJ8ymzZdtQvw0MXUD1QaMdZ86KTJ5uRzGuewbwMvwKNsVn
- 88K0WXftj6x3JUuBzIqbWT7jaOjAKU77LJjXM5BDgZh//uDKGv9+Qn4TvaL8rTzoYt4D
- ZgLf+UbUWqDWqrgxT8poBNTI1cQvrV34KUf8LHJ19nZ/pjtN2m5IODb9eXB8htrHTgIg
- p/eaBm7O8rGDgRxlRMcZU4W/ir1R4JLk5lXeYuw53mo1gw7Q9spazQ5NvxPViEKDLhiL
- EUCXIzobv8z0c9Wgv3ahGAV0//lHPgpwQXVk2KYepOZNjmT7kDa3ieK/S52Eq01cvTTn
- xBcw==
+ bh=EoBDqTVV3H+ztFArRrNdw1LYttxNCfa0KF4lQjSjNsQ=;
+ b=pjgwyfKdql+qQguoyFRqUWnQSjdAA5rwiF0pZBdxhk9BiFwZXKonoUQ+AEsCtMQUIQ
+ XEqjp3jiFas0tftEozN9C6kdIm/5KYHrI4zMo57B6OO8X4944s7MclHo4dhnWDM/jamI
+ it2cDPzjDpv5XX8zS5pK1lOhczz1hzsy0Vl3o+JiCF45tF5lPPtbN/gZYkpohNhcpoAy
+ XJo/fzOAwwo6ERrfzYp1v696isDQL4uAE68FSRVCV+7ePSXsljH5DjdqW7SIQaYJCTiO
+ o/h+xr0XQHSZ6ybqLVBPyibBhibiXtjgn8+Jej41YeZnhwyfZL8D+m5MYWRNpjIz+CHk
+ m5zg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qm5w7OvD
-Subject: [Buildroot] [PATCH 1/1] package/python-weasyprint: bump to version
- 57.1
+ header.a=rsa-sha256 header.s=20210112 header.b=pjgwyfKd
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
+ 65.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-weasyprint/python-weasyprint.hash | 4 ++--
- package/python-weasyprint/python-weasyprint.mk   | 4 ++--
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-index 21e58d3677..4da8ea479a 100644
---- a/package/python-weasyprint/python-weasyprint.hash
-+++ b/package/python-weasyprint/python-weasyprint.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/weasyprint/json
--md5  b270213554d781c86b6c3d390b097f2f  weasyprint-57.0.tar.gz
--sha256  7b6f5cc13819e9a7d8748c1dbf0e8d2444f7a4818a98339f82dccaa822bf911b  weasyprint-57.0.tar.gz
-+md5  bab389bdfb25e03d64591c56367fb344  weasyprint-57.1.tar.gz
-+sha256  397a9d11298f94485ec3b7b68aeef1c6106fb638350126d9d4a64109b73508a0  weasyprint-57.1.tar.gz
- # Locally computed sha256 checksums
- sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-index 9dd364e1c1..d1e5e7983d 100644
---- a/package/python-weasyprint/python-weasyprint.mk
-+++ b/package/python-weasyprint/python-weasyprint.mk
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 2592fc201c..3e4ae01d92 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  9018a18990e7c16159ec3972affba76c  setuptools-65.5.0.tar.gz
+-sha256  512e5536220e38146176efb833d4a62aa726b7bbff82cfbc8ba9eaa3996e0b17  setuptools-65.5.0.tar.gz
++md5  3f062858ddfb5efa564c9c02a30cb104  setuptools-65.5.1.tar.gz
++sha256  e197a19aa8ec9722928f2206f8de752def0e4c9fc6953527360d1c36d94ddb2f  setuptools-65.5.1.tar.gz
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 9dc0a6a38b..3b62221e25 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEASYPRINT_VERSION = 57.0
-+PYTHON_WEASYPRINT_VERSION = 57.1
- PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
--PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/b7/98/cd0df64b306ac901ffd53c50d9d5d79d92cae756b6469fc14771adb39d77
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/32/3f/d305dc714c119e5b11c0ea1ecff9741407b6da90d6b684859d3b3e586692
- PYTHON_WEASYPRINT_SETUP_TYPE = flit
- PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
- PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+-PYTHON_SETUPTOOLS_VERSION = 65.5.0
++PYTHON_SETUPTOOLS_VERSION = 65.5.1
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/c5/41/247814d8b7a044717164c74080725a6c8f3d2b5fc82b34bd825b617df663
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/26/f4/ca5cb6df512f453ad50f78900bf7ec6a5491ee44bb49d0f6f76802dbdd43
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 -- 
 2.34.1
 
