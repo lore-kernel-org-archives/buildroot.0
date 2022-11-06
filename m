@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 297F6C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 22:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 677B6C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 23:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80FB460B43;
-	Sun,  6 Nov 2022 22:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80FB460B43
+	by smtp4.osuosl.org (Postfix) with ESMTP id C515940227;
+	Sun,  6 Nov 2022 23:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C515940227
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ieTgIQ-7ndwd; Sun,  6 Nov 2022 22:20:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FbjF7yItjyx5; Sun,  6 Nov 2022 23:04:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16F5C60ADD;
-	Sun,  6 Nov 2022 22:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16F5C60ADD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 910734018B;
+	Sun,  6 Nov 2022 23:04:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910734018B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D4EB91BF2A5
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 22:20:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F6111BF3C2
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 23:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0C2460ADD
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 22:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0C2460ADD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17E8960608
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 23:04:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17E8960608
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nI2i2P3-P3c6 for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 22:20:47 +0000 (UTC)
+ with ESMTP id vfSw2UZJfKj3 for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 23:04:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 893AD606B0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 893AD606B0
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 22:20:47 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id y16so13767004wrt.12
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 14:20:47 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD954605EC
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DD954605EC
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 23:04:54 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id v7so5936862wmn.0
+ for <buildroot@buildroot.org>; Sun, 06 Nov 2022 15:04:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ejOtgUJ3ZfPfNxA4UrsI6lJtV7mmMucJLSmYpoHjocE=;
- b=guAekhqHWpvEAxuwwUOjSnfRsK7eHoToZwFuyFwqo1o/3c4eUCbtbd22U/D8+Zrfxa
- eHRGrOZ+69U/V9syGdd5qmO+DcIxpJ24ayVwcAk4qlP8jmMszjauRu+8WN+RedutSKTH
- dNWfoxXudwH9MXJxK3FRVsEc8LnSwPI191V7BcpVd+L71Rn1YNjgjPbbRdOtV/HDpClz
- OG6fB2dShJ2Rxkv65GLm0OYOfagftYB9urG+65LwpQi0iPnaMwIrvPhGuAqskZ0XN8ay
- g9hT98WOrDwkhXHGVlUHbW4KxJ2uXR5K4FqS0VY6X7BL3OQRACveCQdvYFsII4jEx2PE
- EulA==
-X-Gm-Message-State: ACrzQf30BsrYZuZtQ6aKCM5MclYCTIvXygeITdhfMoLrsE6ZWujZNDk0
- kEpc0h0ess9LkWi2ARYddE0HCKNY+ho=
-X-Google-Smtp-Source: AMsMyM4+l0Fom0FRLrJAtD5BWKc2s+JMAt9kFPijkOaSUNXhlSGmgZbBZcTyXj8cCO5tHsntGb5lCw==
-X-Received: by 2002:a5d:53cf:0:b0:236:bbc0:236 with SMTP id
- a15-20020a5d53cf000000b00236bbc00236mr27606511wrw.572.1667773245234; 
- Sun, 06 Nov 2022 14:20:45 -0800 (PST)
+ bh=YQTPSkrjaSqPyj8J+mjPzEKRCq7iDM/eynjxc2SYUxA=;
+ b=A7Uam0qsCodVEutKao6gFJcybKnbBdz/BP5ky+OHGVm1uKJ4twkNquaLzAI7X6aN0F
+ K1h+R0vTx0x+p+ZGOkdYgcWWMCzkJJpcw1j5nhfki/P+JFzO1zt9e0XWsfzr0bbhW5pt
+ O3xxG+4+RtHf2VeCt1jHAwf+mTXt47+mDlJv5DZh6FMCOr8et2NbcdY+SmaZbnRRouzk
+ QDKK6eZSa5hWR1bXO1pV66xTYPN9EkaceKyFvaf40SLG3V4nZHjwJ6s3wuDgYX81WGwV
+ 3DKkiBpF/WOjc2fCYZ07xxdQtdGGddyCheffhvlpm420M6zkcY+qBc12fpu7u8oru+7y
+ +O7w==
+X-Gm-Message-State: ACrzQf0Id6mYek8v0A1gj+H6Mm9qsRzw3Fn8mTsmOPqea/ivrXfygHlS
+ D3Q9M14jYTqiQA4grRISZwqGSI6H4j8=
+X-Google-Smtp-Source: AMsMyM7NKQfS4YDlvgneQcHlKvagJUWcP/CLNHOBFV9P4Zjq+V1S4dLLCGS1fUFNq47ZMhQ55TmuWw==
+X-Received: by 2002:a05:600c:538b:b0:3c6:b66d:4027 with SMTP id
+ hg11-20020a05600c538b00b003c6b66d4027mr39682532wmb.146.1667775892471; 
+ Sun, 06 Nov 2022 15:04:52 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- 5-20020a05600c26c500b003b50428cf66sm6125595wmv.33.2022.11.06.14.20.44
+ j13-20020adfea4d000000b0023bb7e4b8b1sm5653438wrn.82.2022.11.06.15.04.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Nov 2022 14:20:44 -0800 (PST)
+ Sun, 06 Nov 2022 15:04:51 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  6 Nov 2022 23:20:42 +0100
-Message-Id: <20221106222042.648813-1-fontaine.fabrice@gmail.com>
+Date: Mon,  7 Nov 2022 00:04:50 +0100
+Message-Id: <20221106230450.970235-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ejOtgUJ3ZfPfNxA4UrsI6lJtV7mmMucJLSmYpoHjocE=;
- b=LBSX3hDDIt7cAEvModPZtbatRpLXxjSfi5mZLimULZB5z730l/8c3ug4vV3qyPUpRt
- EjNQxpLW4eNKqVavvm2sui0BgH+RZD4h8BwBZ9xE3TJtcQaDNVOEh3SqHrXAgJzmM2J1
- i6uvC/3SC/hiso1efd4augAp+3XNGhGcpnti2S7D+jOIAMeUIKu9BwEg9mbdLg/T2N7R
- eXJFhSLspoHjHOq59F4XazZBYBO5I8x0HA4en5gGKkD/YqzJskMQEPLEUgRqXESCP/8y
- gUg+T68lkRrQY5J5vbNpZhLUaJrmnsboxuwxhB26I/GyWIcuL5iM77h2aJk6gkomuWSy
- VMkg==
+ bh=YQTPSkrjaSqPyj8J+mjPzEKRCq7iDM/eynjxc2SYUxA=;
+ b=mTyrwGHxAqqBMQxXH4/zFaHyvLlAtbRAzhMAdDvwYfKyFxkry19+LAbO+Z+ljNAN3X
+ lT1tZ+qqvKlkw4e8CS80pUYB0E0eulYZQg7rwICUkFFpm9bpm5X7gk6Cbp27VNPl6vkF
+ EMQkzYROBpu6XP/GLI88PbeRVwISNZ4FTzJij9+YboiNryr9/WIPs13xSkutXnJX+nhU
+ 7z0YNOUC78QMqp3leb1wlMx0Mj/GhELoGqzf2bdwvTdYTc9kGsdTiP7TUatCAXvCkIYD
+ dUUPzqC3k5m7CWnmZB67fwhVE5CIpmChGymxX8enRVWjj2okezrqNq3KIoyDIQqMyTwY
+ /Pgw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LBSX3hDD
-Subject: [Buildroot] [PATCH 1/1] package/linux-tools: fix static build
+ header.a=rsa-sha256 header.s=20210112 header.b=mTyrwGHx
+Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: fix popt static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,76 +93,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pass TARGET_LDFLAGS (which contains -static) to fix the following static
-build failures with gpio, iio and pci:
+Fix the following static build failure with popt and iconv raised since
+bump to version 1.0.9 in commit 69015ce94ac3ffe7f349ec37868eea0d0ffec90e
+and
+https://sourceforge.net/p/gptfdisk/code/ci/122b58ad82f1a144226d262c87241ee035ed1aff
+(which added an unified Makefile):
 
-  LINK     lsgpio
-/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/10.4.0/../../../../arm-buildroot-linux-musleabi/bin/ld: /home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/10.4.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
-/home/autobuild/autobuild/instance-8/output-1/build/host-gcc-final-10.4.0/build/arm-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
+/home/autobuild/autobuild/instance-0/output-1/host/bin/mips64el-buildroot-linux-uclibc-g++ crc32.o support.o guid.o gptpart.o mbrpart.o basicmbr.o mbr.o gpt.o bsd.o parttypes.o attributes.o diskio.o diskio-unix.o sgdisk.o gptcl.o -static -liconv -lpopt  -o sgdisk
+/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/mips64el-buildroot-linux-uclibc/11.3.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpopt.a(poptint.o): in function `strdup_locale_from_utf8':
+poptint.c:(.text+0x113c): undefined reference to `libiconv_open'
 
-[...]
+As can be seen above, this build failure is raised because -liconv is
+added before -lpopt so use pkgconfig and SGDISK_LDLIBS
 
-  LINK    iio_event_monitor
-/home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/11.3.0/../../../../microblazeel-buildroot-linux-musl/bin/ld: /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
-/home/thomas/autobuild/instance-2/output-1/build/host-gcc-final-11.3.0/build/microblazeel-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:88: undefined reference to `abort'
+The addition of -liconv in LDLIBS could probably be removed in a
+follow-up patch for next branch
 
 Fixes:
- - http://autobuild.buildroot.org/results/f202eb843ef331939f5f12325bdbf2d0d664a7ce
- - http://autobuild.buildroot.org/results/504ec8be1ebd15c5da09f8b90bb723a58d4c58c5
+ - http://autobuild.buildroot.org/results/c9f2c9e737c2dd1cd4c1a08a5e8a48165179282d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-tools/linux-tool-gpio.mk.in | 2 +-
- package/linux-tools/linux-tool-iio.mk.in  | 2 +-
- package/linux-tools/linux-tool-pci.mk.in  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/gptfdisk/gptfdisk.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-gpio.mk.in b/package/linux-tools/linux-tool-gpio.mk.in
-index d5a0dbda38..e825db1b11 100644
---- a/package/linux-tools/linux-tool-gpio.mk.in
-+++ b/package/linux-tools/linux-tool-gpio.mk.in
-@@ -6,7 +6,7 @@
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 0df9cda08f..f3fc930202 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -15,7 +15,8 @@ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
  
- LINUX_TOOLS += gpio
+ GPTFDISK_DEPENDENCIES += util-linux
+ ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
+-GPTFDISK_DEPENDENCIES += popt
++GPTFDISK_DEPENDENCIES += host-pkgconf popt
++GPTFDISK_SGDISK_LDLIBS += `$(PKG_CONFIG_HOST_BINARY) --libs popt`
+ endif
+ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
+ GPTFDISK_DEPENDENCIES += ncurses
+@@ -32,7 +33,8 @@ endif
  
--GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
+ define GPTFDISK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		LDLIBS='$(GPTFDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
++		LDLIBS='$(GPTFDISK_LDLIBS)' \
++		SGDISK_LDLIBS='$(GPTFDISK_SGDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
+ endef
  
- define GPIO_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
-diff --git a/package/linux-tools/linux-tool-iio.mk.in b/package/linux-tools/linux-tool-iio.mk.in
-index a8cc89e830..27ab0ed7ed 100644
---- a/package/linux-tools/linux-tool-iio.mk.in
-+++ b/package/linux-tools/linux-tool-iio.mk.in
-@@ -6,7 +6,7 @@
- 
- LINUX_TOOLS += iio
- 
--IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- define IIO_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
-diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
-index 4ef0368a32..17246f5d7e 100644
---- a/package/linux-tools/linux-tool-pci.mk.in
-+++ b/package/linux-tools/linux-tool-pci.mk.in
-@@ -6,7 +6,7 @@
- 
- LINUX_TOOLS += pci
- 
--PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- define PCI_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
+ define GPTFDISK_INSTALL_TARGET_CMDS
 -- 
 2.35.1
 
