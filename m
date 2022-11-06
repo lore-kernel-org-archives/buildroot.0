@@ -1,89 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5A6FC433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 14:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45B43C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 15:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8526540162;
-	Sun,  6 Nov 2022 14:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8526540162
+	by smtp3.osuosl.org (Postfix) with ESMTP id 924CC60AEB;
+	Sun,  6 Nov 2022 15:03:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 924CC60AEB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 70vfm3oMAyj5; Sun,  6 Nov 2022 15:03:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5E8A6072A;
+	Sun,  6 Nov 2022 15:03:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5E8A6072A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74F1B1BF59F
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:03:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DA3F400B8
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 15:03:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA3F400B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T1dyrQppviCF; Sun,  6 Nov 2022 14:26:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A74F4013E;
-	Sun,  6 Nov 2022 14:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A74F4013E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0823E1BF59F
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 14:26:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5F8940510
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 14:26:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5F8940510
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pdc1La3cQS0S for <buildroot@lists.busybox.net>;
- Sun,  6 Nov 2022 14:26:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEFF54050F
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CEFF54050F
- for <buildroot@buildroot.org>; Sun,  6 Nov 2022 14:26:40 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- ay14-20020a05600c1e0e00b003cf6ab34b61so8153176wmb.2
- for <buildroot@buildroot.org>; Sun, 06 Nov 2022 06:26:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7qjvzv8vhFYYpzbfdc4RzYIXK7mvQX2vtifl/D/4K+c=;
- b=5AuRAB+IszFu7Nx/aKsr4F/qAZKfnZMiyD+7PE7xXmRsoNrUtYbnpnLA73leMkkE2z
- blGxiXmoIj/JmVnrD4PTTiUjgIcYUBTf5swqAhieU+m8Br7NexNIKKMujQkP75UTltPG
- pl/G/7jgFMQ/+zhy2P9y/jbfNwxeHgCdqN9vSoMKIP/rljyk/5jwvP7kvUDMJQJ6ckAY
- Cnp+MrcVWerHoMa4utsUSIAviDPe42bBrEAykFliisjn1eHfGV+t5rlfuMHsdwQdNpTd
- IEiZ3olNED7KLNByDO2bxlhrdPXOiML3/gIMPSs/Ay4d3NtRFsREFh7AGel8nn5M1bAZ
- T1zg==
-X-Gm-Message-State: ACrzQf1Nz0fNKWPH8fDC6S7/MXzRCgd7YaOMRg4Al3xAUCLWg9UWQHwf
- ua1kULqd9EWRjGgFLa2VtF1hf6OM20c=
-X-Google-Smtp-Source: AMsMyM6KNWrM9FuQw6RlXCoxswqV9z143XSPdJ7zoDwz7nJoHPatInvreSAL+0Pk2VvT1J7ZYr5fbQ==
-X-Received: by 2002:a05:600c:3487:b0:3cf:82bc:ec2b with SMTP id
- a7-20020a05600c348700b003cf82bcec2bmr19040383wmq.83.1667744798477; 
- Sun, 06 Nov 2022 06:26:38 -0800 (PST)
-Received: from gleb-linux..
- (cpc76906-dals22-2-0-cust400.20-2.cable.virginm.net. [81.106.81.145])
- by smtp.gmail.com with ESMTPSA id
- m3-20020a05600c4f4300b003b47b80cec3sm9407509wmq.42.2022.11.06.06.26.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Nov 2022 06:26:37 -0800 (PST)
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  6 Nov 2022 14:26:34 +0000
-Message-Id: <20221106142634.875639-1-glex.spb@gmail.com>
-X-Mailer: git-send-email 2.37.2
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tTREwC7rVMqF for <buildroot@lists.busybox.net>;
+ Sun,  6 Nov 2022 15:03:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F03C400FF
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F03C400FF
+ for <buildroot@buildroot.org>; Sun,  6 Nov 2022 15:03:37 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b857:25fc:60e2:657f])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9BD3B5FFA2;
+ Sun,  6 Nov 2022 16:03:30 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 06 Nov 2022 16:03:30 +0100
+Date: Sun, 6 Nov 2022 16:03:30 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20221106150330.GY3918838@scaer>
+References: <20221103224539.692322-1-thomas.petazzoni@bootlin.com>
+ <20221103224539.692322-2-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7qjvzv8vhFYYpzbfdc4RzYIXK7mvQX2vtifl/D/4K+c=;
- b=bBrk7XQFdOV3l4ksCQVZR3IM0j9fmproEDhJx3fv+ZGDcItr+nrtOzr/o2RBtKwldd
- 6ZWWuL53d57j/uZnxwvLPUh87nzxjaY0rOWjwom04X1AY+rDB1RwoXigTFIGtetJPYfY
- I781movNiUpjeoPE9PmmNcKvDRB/0zavjDahmJYLfHLX+5Qyad7XMcCz4n1SZgOGWJhd
- M/0cFlC3GSTHpMCLQuoZeUeDyXY/Jo4GV+H/3Mqi9LibmkWxikFz57j95B7gNcnahtlX
- vK4G0W22thAkGoXPat+qMfz+T0onJlXgTCMeyteelrysVCg+eRGeNy4jOlvCYtMDgamk
- zapw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bBrk7XQF
-Subject: [Buildroot] [PATCH 1/1] Makefile: unexport PERL_MM_OPT
+Content-Disposition: inline
+In-Reply-To: <20221103224539.692322-2-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1667747015;
+ bh=wd1UjgLuE40el8fIkl59EAMseQdOdXIW9gd2n7GG2xs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=tTv5fTpdPpGSdcdr2cch9JmJRClVNwLhod5HUnK+q9wb9HhGevd3ghPYGQsh19dxK
+ aTGY3QyhyOA4ge/r2mF2zn9X55gNA2vC/9eheQC6vBoKbZR0dZzGjO0dnVhjprHLNq
+ LayMbfCuGkTnNo+n3a3csE9JnA38+LHDCdne2bpjSPwVkhnEIv5ceY6hvVpkuzfK9b
+ 45TNuFFs2AoPgs+NCsRW9MRiTQPnNOLey3nhQVBXevrSmEq4AX2yOQu0NjB4l02oB4
+ /K5e+wcEydvtVvpCsCw/4GUBNlj+b7HiUSNIydDB8sGQa6kA0jyDcuo7yTrhuFZnfs
+ mAoKmlhUqrELg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tTv5fTpd
+Subject: Re: [Buildroot] [PATCH next 2/2] package/pkg-cargo: move CARGO_HOME
+ into DL_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,61 +78,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gleb Mazovetskiy <glex.spb@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Moritz Bitsch <moritz@h6t.eu>, James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Compilation of Perl-related packages fails if `PERL_MM_OPT` is defined.
-
-We previously issued an error in this case.
-Instead, simply `unexport` the variable.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
----
- Makefile                             | 3 +++
- support/dependencies/dependencies.sh | 9 ---------
- 2 files changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 7c1c07a2e4..71b622474f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -396,6 +396,9 @@ unexport DESTDIR
- # Causes breakage with packages that needs host-ruby
- unexport RUBYOPT
- 
-+# Compilation of perl-related packages will fail otherwise
-+unexport PERL_MM_OPT
-+
- include package/pkg-utils.mk
- include package/doc-asciidoc.mk
- 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 2b678ae8c4..4b5012b807 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -46,15 +46,6 @@ case ":${PATH:-unset}:" in
- 	;;
- esac
- 
--if test -n "$PERL_MM_OPT" ; then
--	echo
--	echo "You have PERL_MM_OPT defined because Perl local::lib"
--	echo "is installed on your system. Please unset this variable"
--	echo "before starting Buildroot, otherwise the compilation of"
--	echo "Perl related packages will fail"
--	exit 1
--fi
--
- check_prog_host()
- {
- 	prog="$1"
--- 
-2.37.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhvbWFzLCBBbGwsCgpPbiAyMDIyLTExLTAzIDIzOjQ1ICswMTAwLCBUaG9tYXMgUGV0YXp6b25p
+IHZpYSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IENBUkdPX0hPTUUgaXMgd2hlcmUgQ2FyZ28g
+c3RvcmVzIGl0cyBkb3dubG9hZGVkIGFydGVmYWN0cy4gU2VlCj4gaHR0cHM6Ly9kb2MucnVzdC1s
+YW5nLm9yZy9jYXJnby9yZWZlcmVuY2UvZW52aXJvbm1lbnQtdmFyaWFibGVzLmh0bWw6Cj4gCj4g
+ICBDQVJHT19IT01FIOKAlCBDYXJnbyBtYWludGFpbnMgYSBsb2NhbCBjYWNoZSBvZiB0aGUgcmVn
+aXN0cnkgaW5kZXggYW5kCj4gICBvZiBnaXQgY2hlY2tvdXRzIG9mIGNyYXRlcy4gQnkgZGVmYXVs
+dCB0aGVzZSBhcmUgc3RvcmVkIHVuZGVyCj4gICAkSE9NRS8uY2FyZ28gKCVVU0VSUFJPRklMRSVc
+LmNhcmdvIG9uIFdpbmRvd3MpLCBidXQgdGhpcyB2YXJpYWJsZQo+ICAgb3ZlcnJpZGVzIHRoZSBs
+b2NhdGlvbiBvZiB0aGlzIGRpcmVjdG9yeS4gT25jZSBhIGNyYXRlIGlzIGNhY2hlZCBpdAo+ICAg
+aXMgbm90IHJlbW92ZWQgYnkgdGhlIGNsZWFuIGNvbW1hbmQuIEZvciBtb3JlIGRldGFpbHMgcmVm
+ZXIgdG8gdGhlCj4gICBndWlkZS4KPiAKPiBXZSBjdXJyZW50bHkgbWFrZSBpdCBwb2ludCB0byAk
+KEhPU1RfRElSKS9zaGFyZS9jYXJnbywgYnV0IHRoaXMgaGFzIGEKPiBudW1iZXIgb2YgZHJhd2Jh
+Y2tzOgo+IAo+ICAoMSkgSXQgaXMgbm90IHNoYXJlZCBiZXR3ZWVuIEJ1aWxkcm9vdCBidWlsZHMu
+IEVhY2ggQnVpbGRyb290IGJ1aWxkCj4gICAgICB3aWxsIHJlLWRvd25sb2FkIHRoZSBjcmF0ZXMg
+aW5kZXgsIGFuZCB0aGUgY3JhdGVzIHRoZW1zZWx2ZXMsCj4gICAgICB1bmxlc3Mgb2YgY291cnNl
+IHRoZSBmaW5hbCB2ZW5kb3JlZCB0YXJiYWxsIGlzIGFscmVhZHkgdGhlcmUuCj4gCj4gICgyKSBX
+aXRoIEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklFUz15LCBpdCBpcyBldmVuIHdvcnNlOiBDQVJH
+T19IT01FCj4gICAgICBpcyBub3QgZXZlbiBzaGFyZWQgYmV0d2VlbiBwYWNrYWdlcywgYXMgJChI
+T1NUX0RJUikvc2hhcmUvY2FyZ28KPiAgICAgIGlzIHBlciBwYWNrYWdlLiBTbyBlYWNoIHBhY2th
+Z2UgaW4gdGhlIGJ1aWxkIHRoYXQgbmVlZHMgdmVuZG9yaW5nCj4gICAgICBvZiBDYXJnbyBjcmF0
+ZXMgd2lsbCBkb3dubG9hZCB0aGUgY3JhdGVzIGluZGV4IGFuZCB0aGUgY3JhdGVzIGluCj4gICAg
+ICBpdHMgb3duIENBUkdPX0hPTUUgbG9jYXRpb24uCj4gCj4gVG8gc29sdmUgdGhpcywgdGhpcyBj
+b21taXQgbW92ZXMgQ0FSR09fSE9NRSBpbnRvICQoRExfRElSKSwgc28gdGhhdCBpdAo+IGlzIHNo
+YXJlZCBiZXR3ZWVuIGJ1aWxkcyBhbmQgcGFja2FnZXMuCj4gCj4gRXZlbiB0aG91Z2ggbm90IHRo
+ZSBiZXN0L21vc3QgYXV0aG9yaXRhdGl2ZSBzb3VyY2UsCj4gaHR0cHM6Ly9naXRodWIuY29tL3J1
+c3QtbGFuZy9jYXJnby9pc3N1ZXMvNjkzMCBpbmRpY2F0ZXMgdGhhdCB0aGVyZSBpcwo+IGEgbG9j
+ayB3aGVuIGFjY2Vzc2luZyBDQVJHT19IT01FLCBiZWNhdXNlIGEgdXNlciBldmVuIGNvbXBsYWlu
+cyB0aGF0Cj4gdGhpcyBsb2NrIGhhcyBldmVuIGJlY29tZSBtb3JlIGNvYXJzZS1ncmFpbmVkIHRo
+YW4gaXQgdXNlZCB0byBiZQo+ICh3aGljaCBmb3IgdXMgaXMgZmluZSwgaXQganVzdCBtZWFucyB0
+aGF0IHR3byBDYXJnbyBmZXRjaCBvcGVyYXRpb25zCj4gZnJvbSB0d28gZGlmZmVyZW50IHBhY2th
+Z2VzIHdpbGwgYmUgc2VyaWFsaXplZCwgbm90IGEgYmlnIGRlYWwpLgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gLS0t
+Cj4gIHBhY2thZ2UvcGtnLWNhcmdvLm1rIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
+cnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wa2ctY2Fy
+Z28ubWsgYi9wYWNrYWdlL3BrZy1jYXJnby5tawo+IGluZGV4IDU5MjM3MjVmNWUuLmMzZDFlMzQz
+MDkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wa2ctY2FyZ28ubWsKPiArKysgYi9wYWNrYWdlL3Br
+Zy1jYXJnby5tawo+IEBAIC0yMCw3ICsyMCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMKPiAgCj4gLUJSX0NBUkdPX0hPTUUgPSAkKEhPU1RfRElSKS9zaGFyZS9jYXJnbwo+ICtC
+Ul9DQVJHT19IT01FID0gJChETF9ESVIpLy5jYXJnbwoKSSBhbSBub3QgYSBmYW4gb2YgZG90LWRp
+cmVjdG9yaWVzLCBiZWNhdXNlIHRoZXkgZ2V0IGhpZGRlbiwgZXNwZWNpYWxseQpzaW5jZSBCUjJf
+RExfRElSIGNhbiBiZSBzZXQgaW4gdGhlIGVudmlyb25tZW50IGFuZCBwb2ludCB0byBhIGxvbmct
+bGl2ZWQKZGlyZWN0b3J5LgoKSW5zdGVhZCwgSSB3b3VsZCBqdXN0IGNhbGwgaXQgJ2NhcmdvLWhv
+bWUnLiBJZiB0aGF0J3MgT0ssIHdlIGNhbiBjaGFuZ2UKd2hlbiBhcHBseWluZy4uLgoKUmVnYXJk
+cywKWWFubiBFLiBNT1JJTi4KCj4gIFBLR19DT01NT05fQ0FSR09fRU5WID0gXAo+ICAJQ0FSR09f
+SE9NRT0kKEJSX0NBUkdPX0hPTUUpCj4gLS0gCj4gMi4zOC4xCj4gCj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8
+ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04g
+fCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNp
+Z25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEg
+MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
+aGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
+XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
+LS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
