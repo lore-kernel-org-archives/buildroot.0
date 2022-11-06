@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A321C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 10:07:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD666C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 10:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0693181EDE;
-	Sun,  6 Nov 2022 10:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0693181EDE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FA0A40584;
+	Sun,  6 Nov 2022 10:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FA0A40584
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zMtzKnITInHs; Sun,  6 Nov 2022 10:07:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7Z5HZIks0VdL; Sun,  6 Nov 2022 10:07:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33F2681971;
-	Sun,  6 Nov 2022 10:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33F2681971
+	by smtp2.osuosl.org (Postfix) with ESMTP id A112640A2B;
+	Sun,  6 Nov 2022 10:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A112640A2B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0FA431BF8C7
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:06:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13F811BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF95160B2C
- for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF95160B2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0896560B36
+ for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 10:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0896560B36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJjs4AIDRl48 for <buildroot@lists.busybox.net>;
+ with ESMTP id BmrnRu0-J99I for <buildroot@lists.busybox.net>;
  Sun,  6 Nov 2022 10:06:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B8F960B36
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B15C60B42
  for <buildroot@buildroot.org>; Sun,  6 Nov 2022 10:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B8F960B36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B15C60B42
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C02B87FD8; Sun,  6 Nov 2022 10:06:41 +0000 (UTC)
+ id 1490D87FDF; Sun,  6 Nov 2022 10:06:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 6 Nov 2022 11:02:13 +0100
+Date: Sun, 6 Nov 2022 11:02:24 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: acd7b7f0bdea297952139b58acaab45dcaa2c8cf
-X-Git-Newrev: 31d7979f591d8376a82299139c9563b0ba050d16
+X-Git-Oldrev: 31d7979f591d8376a82299139c9563b0ba050d16
+X-Git-Newrev: 4ffa34edc1b26ff038c95bf62eccada4bf0c1492
 X-Patchwork-Hint: ignore
-Message-Id: <20221106100641.0C02B87FD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/rtl8821au:
+Message-Id: <20221106100641.1490D87FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/wilc-driver:
  disable package for s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,35 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31d7979f591d8376a82299139c9563b0ba050d16
+commit: https://git.buildroot.net/buildroot/commit/?id=4ffa34edc1b26ff038c95bf62eccada4bf0c1492
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 s390x doesn't support CONFIG_WIRELESS in Linux so let's disable this
 package for this architecture.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e18cc291bbb1c16401abb1b2b661e4e150092f3)
+(cherry picked from commit 9c2dec7a2ba990233784f0e6baf1cd67d9220f9f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8821au/Config.in | 2 ++
+ package/wilc-driver/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
-index 87c191b22a..3d7bbf643d 100644
---- a/package/rtl8821au/Config.in
-+++ b/package/rtl8821au/Config.in
-@@ -1,8 +1,10 @@
- comment "rtl8821au needs a Linux kernel to be built"
-+	depends on !BR2_s390x
- 	depends on !BR2_LINUX_KERNEL
- 
- config BR2_PACKAGE_RTL8821AU
- 	bool "rtl8821au"
+diff --git a/package/wilc-driver/Config.in b/package/wilc-driver/Config.in
+index 7ed062bb66..7f970bd38b 100644
+--- a/package/wilc-driver/Config.in
++++ b/package/wilc-driver/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WILC_DRIVER
+ 	bool "wilc kernel module"
 +	depends on !BR2_s390x
  	depends on BR2_LINUX_KERNEL
  	help
- 	  rtl8821au wifi driver
+ 	  External kernel module for WILC1000/3000 devices.
+@@ -59,4 +60,5 @@ endif
+ endif
+ 
+ comment "wilc kernel module needs a Linux kernel to be built"
++	depends on !BR2_s390x
+ 	depends on !BR2_LINUX_KERNEL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
