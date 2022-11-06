@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F29B3C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 14:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE49EC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Nov 2022 14:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84BD24013E;
-	Sun,  6 Nov 2022 14:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84BD24013E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD38600BA;
+	Sun,  6 Nov 2022 14:10:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BD38600BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yeAPvzwzUUSc; Sun,  6 Nov 2022 14:09:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TTlRYSJESJ7p; Sun,  6 Nov 2022 14:10:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8BA9400E5;
-	Sun,  6 Nov 2022 14:09:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8BA9400E5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 561951BF59F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BAE160AAE;
+	Sun,  6 Nov 2022 14:10:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BAE160AAE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D0E81BF8B4
  for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 14:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 205B881A4E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2084B60888
  for <buildroot@lists.busybox.net>; Sun,  6 Nov 2022 14:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 205B881A4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2084B60888
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BFGtbi7Nq6wy for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UsvI4Svvct0m for <buildroot@lists.busybox.net>;
  Sun,  6 Nov 2022 14:09:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D45381A47
+ by smtp3.osuosl.org (Postfix) with ESMTP id 541DB60783
  for <buildroot@buildroot.org>; Sun,  6 Nov 2022 14:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D45381A47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 541DB60783
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B67888074; Sun,  6 Nov 2022 14:09:11 +0000 (UTC)
+ id 4071088073; Sun,  6 Nov 2022 14:09:11 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Nov 2022 15:07:49 +0100
+Date: Sun, 6 Nov 2022 15:06:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ddca0ccb90967977c2db8c966c205568cf4cb93
-X-Git-Newrev: c6103c844a5a9ec711cb3cc81ae784ec593382e3
+X-Git-Oldrev: 88d2135a7ad7ed899ef1f2fec070407810f8055d
+X-Git-Newrev: 3ddca0ccb90967977c2db8c966c205568cf4cb93
 X-Patchwork-Hint: ignore
-Message-Id: <20221106140911.4B67888074@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: add
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+Message-Id: <20221106140911.4071088073@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mupdf: fix CVE-2021-4216
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +62,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6103c844a5a9ec711cb3cc81ae784ec593382e3
+commit: https://git.buildroot.net/buildroot/commit/?id=3ddca0ccb90967977c2db8c966c205568cf4cb93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Uboot host tools require openssl. So enable BR2_TARGET_UBOOT_NEEDS_OPENSSL.
+A Floating point exception (division-by-zero) flaw was found in Mupdf
+for zero width pages in muraster.c. It is fixed in Mupdf-1.20.0-rc1
+upstream.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233835
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/kontron_smarc_sal28_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ ...-by-zero-for-zero-width-pages-in-muraster.patch | 29 ++++++++++++++++++++++
+ package/mupdf/mupdf.mk                             |  3 +++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index 25846c8cbd..f8515f5b76 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -27,6 +27,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
- BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+diff --git a/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
+new file mode 100644
+index 0000000000..099a3fdbab
+--- /dev/null
++++ b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
+@@ -0,0 +1,29 @@
++From 22c47acbd52949421f8c7cb46ea1556827d0fcbf Mon Sep 17 00:00:00 2001
++From: Sebastian Rasmussen <sebras@gmail.com>
++Date: Tue, 18 Jan 2022 20:33:10 +0100
++Subject: [PATCH] Bug 704834: Fix division by zero for zero width pages in
++ muraster.
++
++[Retrieved from:
++https://github.com/ArtifexSoftware/mupdf/commit/22c47acbd52949421f8c7cb46ea1556827d0fcbf]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ source/tools/muraster.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/source/tools/muraster.c b/source/tools/muraster.c
++index c2ceb62f2e..97f4ae2633 100644
++--- a/source/tools/muraster.c
+++++ b/source/tools/muraster.c
++@@ -1003,8 +1003,9 @@ initialise_banding(fz_context *ctx, render_details *render, int color)
++ 
++ 	w = render->ibounds.x1 - render->ibounds.x0;
++ 	min_band_mem = (size_t)bpp * w * min_band_height;
++-	reps = (int)(max_band_memory / min_band_mem);
++-	if (reps < 1)
+++	if (min_band_mem > 0)
+++		reps = (int)(max_band_memory / min_band_mem);
+++	if (min_band_mem == 0 || reps < 1)
++ 		reps = 1;
++ 
++ 	/* Adjust reps to even out the work between threads */
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 56ea7cc507..e86ba1e73f 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -28,6 +28,9 @@ MUPDF_IGNORE_CVES += CVE-2021-3407
+ # 0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
+ MUPDF_IGNORE_CVES += CVE-2021-37220
+ 
++# 0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
++MUPDF_IGNORE_CVES += CVE-2021-4216
++
+ # The pkg-config name for gumbo-parser is `gumbo`.
+ MUPDF_PKG_CONFIG_PACKAGES = \
+ 	freetype2 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
