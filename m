@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2057AC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A127AC433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAED781A16;
-	Mon,  7 Nov 2022 22:17:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAED781A16
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B3B481403;
+	Mon,  7 Nov 2022 22:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B3B481403
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jY9h9OmA_plG; Mon,  7 Nov 2022 22:17:31 +0000 (UTC)
+	with ESMTP id EcRWV727Zi0C; Mon,  7 Nov 2022 22:17:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 085AA81991;
-	Mon,  7 Nov 2022 22:17:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 085AA81991
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C86E61BF954
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6777F81A18;
+	Mon,  7 Nov 2022 22:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6777F81A18
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F0AA61BF25F
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B18DA81A18
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA1114148F
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:17:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B18DA81A18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA1114148F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P5xPUiIp6c9D for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K9Kcdf7vJye9 for <buildroot@lists.busybox.net>;
  Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D75EC81403
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF1254049A
  for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D75EC81403
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1254049A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BFA4988169; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
+ id 99FA988167; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:16:34 +0100
+Date: Mon, 7 Nov 2022 23:16:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9894ed686a1ee749a1a7ef9e990dd6b161f8816c
-X-Git-Newrev: cbf420706397408b493282b3827397191d7a733e
+X-Git-Oldrev: d1688c60f42b0186b8147aa58d35649e704b36cb
+X-Git-Newrev: 7927694514a19ed3259582ac0fad93a11b7a8ad3
 X-Patchwork-Hint: ignore
-Message-Id: <20221107221713.BFA4988169@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-jsonschema:
- bump to version 4.17.0
+Message-Id: <20221107221713.99FA988167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-weasyprint:
+ bump to version 57.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbf420706397408b493282b3827397191d7a733e
+commit: https://git.buildroot.net/buildroot/commit/?id=7927694514a19ed3259582ac0fad93a11b7a8ad3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jsonschema/python-jsonschema.hash | 4 ++--
- package/python-jsonschema/python-jsonschema.mk   | 4 ++--
+ package/python-weasyprint/python-weasyprint.hash | 4 ++--
+ package/python-weasyprint/python-weasyprint.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
-index d4c2759811..19b9659d08 100644
---- a/package/python-jsonschema/python-jsonschema.hash
-+++ b/package/python-jsonschema/python-jsonschema.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jsonschema/json
--md5  3bc1f63a74fc61bf2847f22cadb0dfff  jsonschema-4.16.0.tar.gz
--sha256  165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23  jsonschema-4.16.0.tar.gz
-+md5  e569b6114d575bdb05cb8ce4676fe458  jsonschema-4.17.0.tar.gz
-+sha256  5bfcf2bca16a087ade17e02b282d34af7ccd749ef76241e7f9bd7c0cb8a9424d  jsonschema-4.17.0.tar.gz
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
+index 21e58d3677..4da8ea479a 100644
+--- a/package/python-weasyprint/python-weasyprint.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/weasyprint/json
+-md5  b270213554d781c86b6c3d390b097f2f  weasyprint-57.0.tar.gz
+-sha256  7b6f5cc13819e9a7d8748c1dbf0e8d2444f7a4818a98339f82dccaa822bf911b  weasyprint-57.0.tar.gz
++md5  bab389bdfb25e03d64591c56367fb344  weasyprint-57.1.tar.gz
++sha256  397a9d11298f94485ec3b7b68aeef1c6106fb638350126d9d4a64109b73508a0  weasyprint-57.1.tar.gz
  # Locally computed sha256 checksums
- sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
- sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
-diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
-index 68a25aed58..8cc624886c 100644
---- a/package/python-jsonschema/python-jsonschema.mk
-+++ b/package/python-jsonschema/python-jsonschema.mk
+ sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+index 9dd364e1c1..d1e5e7983d 100644
+--- a/package/python-weasyprint/python-weasyprint.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JSONSCHEMA_VERSION = 4.16.0
-+PYTHON_JSONSCHEMA_VERSION = 4.17.0
- PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
--PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/cf/54/8923ba38b5145f2359d57e5516715392491d674c83f446cd4cd133eeb4d6
-+PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/3a/3d/0653047b9b2ed03d3e96012bc90cfc96227221193fbedd4dc0cbf5a0e342
- PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
- PYTHON_JSONSCHEMA_LICENSE = MIT
- PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
+-PYTHON_WEASYPRINT_VERSION = 57.0
++PYTHON_WEASYPRINT_VERSION = 57.1
+ PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+-PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/b7/98/cd0df64b306ac901ffd53c50d9d5d79d92cae756b6469fc14771adb39d77
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/32/3f/d305dc714c119e5b11c0ea1ecff9741407b6da90d6b684859d3b3e586692
+ PYTHON_WEASYPRINT_SETUP_TYPE = flit
+ PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+ PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
