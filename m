@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD492C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3EAC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E8D442AB1;
-	Mon, 20 Feb 2023 21:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E8D442AB1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B46842A67;
+	Mon, 20 Feb 2023 21:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B46842A67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vDnpFXN3hGU9; Mon, 20 Feb 2023 21:09:32 +0000 (UTC)
+	with ESMTP id AodPePr8VTcr; Mon, 20 Feb 2023 21:09:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B6DF42AC0;
-	Mon, 20 Feb 2023 21:09:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B6DF42AC0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4192D1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1AF642A64;
+	Mon, 20 Feb 2023 21:09:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1AF642A64
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 14EF11BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B5A040C0F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B5A040C0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F57A610AD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F57A610AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sxpCQMDTJp8a for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 30GP1W6xCagW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FF7140AA5
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FF7140AA5
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE4B261089
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE4B261089
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 490E386494; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+ id CA9ED828C8; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:58:46 +0100
+Date: Mon, 7 Nov 2022 22:17:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0910ada70b7194596c6ace0cb06b303173c13de7
-X-Git-Newrev: a0d1c6288a9adfb54dc9d98b8c4f5531eb4c9cba
+X-Git-Oldrev: eeede611f81d8f83b72e4a6671cd7d1e46b266b0
+X-Git-Newrev: 2c4828568d6c5e4f1efb5b7d83ec6254d23ccdfa
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205150.490E386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mdio-tools: needs fork
+Message-Id: <20230220205148.CA9ED828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_plus: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +63,174 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0d1c6288a9adfb54dc9d98b8c4f5531eb4c9cba
+commit: https://git.buildroot.net/buildroot/commit/?id=2c4828568d6c5e4f1efb5b7d83ec6254d23ccdfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure raised since the addition of the package
-in commit 8fdf8731e727dc5c2d4080d7a56e1d71dc25e533:
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-mdio.c: In function 'mdio_modprobe':
-mdio.c:738:15: error: implicit declaration of function 'fork' [-Werror=implicit-function-declaration]
-  738 |         pid = fork();
-      |               ^~~~
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
+
+This defconfig did not even have an entry in the DEVELOPERS file.
 
 Fixes:
- - http://autobuild.buildroot.org/results/c53aaeaa34dd4d6d9a57da196687beecaeed9fe2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499140
+
+Cc: Shyam Saini <shyam.saini@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mdio-tools/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ board/orangepi/orangepi-plus/boot.cmd     |  8 ------
+ board/orangepi/orangepi-plus/genimage.cfg | 36 -------------------------
+ board/orangepi/orangepi-plus/readme.txt   | 29 --------------------
+ configs/orangepi_plus_defconfig           | 44 -------------------------------
+ 4 files changed, 117 deletions(-)
 
-diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
-index f24c1a6974..237f4454cc 100644
---- a/package/mdio-tools/Config.in
-+++ b/package/mdio-tools/Config.in
-@@ -1,12 +1,15 @@
- comment "mdio-tools needs a Linux kernel to be built"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_LINUX_KERNEL
- 
- comment "mdio-tools needs a toolchain w/ headers >= 5.1"
-+	depends on BR2_USE_MMU
- 	depends on BR2_LINUX_KERNEL
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 
- config BR2_PACKAGE_MDIO_TOOLS
- 	bool "mdio-tools"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 	select BR2_PACKAGE_LIBMNL
+diff --git a/board/orangepi/orangepi-plus/boot.cmd b/board/orangepi/orangepi-plus/boot.cmd
+deleted file mode 100644
+index 1a378cb918..0000000000
+--- a/board/orangepi/orangepi-plus/boot.cmd
++++ /dev/null
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
+-
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-plus.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-plus/genimage.cfg b/board/orangepi/orangepi-plus/genimage.cfg
+deleted file mode 100644
+index 1ca30258dc..0000000000
+--- a/board/orangepi/orangepi-plus/genimage.cfg
++++ /dev/null
+@@ -1,36 +0,0 @@
+-# Minimal SD card image for the OrangePi Plus\Plus2
+-#
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-orangepi-plus.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 10M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/orangepi/orangepi-plus/readme.txt b/board/orangepi/orangepi-plus/readme.txt
+deleted file mode 100644
+index 7f871bcfab..0000000000
+--- a/board/orangepi/orangepi-plus/readme.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-OrangePi Plus/Plus2
+-
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the OrangePi Plus/Plus2. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-How to build it
+-===============
+-
+-Configure Buildroot:
+-
+-    $ make orangepi_plus_defconfig
+-
+-Compile everything and build the SD card image:
+-
+-    $ make
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/orangepi_plus_defconfig b/configs/orangepi_plus_defconfig
+deleted file mode 100644
+index 11d7486486..0000000000
+--- a/configs/orangepi_plus_defconfig
++++ /dev/null
+@@ -1,44 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# System configuration
+-BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Plus"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Plus"
+-
+-# Bootloaders
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_plus"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-plus/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-plus/genimage.cfg"
+-
+-# Additional tools
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
