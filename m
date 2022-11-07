@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6358C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14118C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8437C41D0A;
-	Mon, 20 Feb 2023 21:09:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8437C41D0A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B864E42A24;
+	Mon, 20 Feb 2023 21:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B864E42A24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mVKrsWE5i4gE; Mon, 20 Feb 2023 21:09:04 +0000 (UTC)
+	with ESMTP id oMCjLH4SjmEN; Mon, 20 Feb 2023 21:09:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0144342A26;
-	Mon, 20 Feb 2023 21:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0144342A26
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1637E1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DECC342AB1;
+	Mon, 20 Feb 2023 21:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DECC342AB1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EEFF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E28540C1B
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E28540C1B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67E10610AB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67E10610AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 93K36GhfM3QU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OAMNlv029daM for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CB9940C42
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CB9940C42
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2486B61094
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2486B61094
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0506B86495; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ id 14781828C8; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 12:46:57 +0100
+Date: Mon, 7 Nov 2022 22:17:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c
-X-Git-Newrev: cf14df13358ddd1b06709924a84f87dfa711cceb
+X-Git-Oldrev: b93307815031399d9178b4a9be8628ed19d2d4b7
+X-Git-Newrev: 347c1087388d7782e6865f112f195e6780d473a7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205150.0506B86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/efivar: fix build with
- musl libc
+Message-Id: <20230220205148.14781828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/arm_juno: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,213 +63,390 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf14df13358ddd1b06709924a84f87dfa711cceb
+commit: https://git.buildroot.net/buildroot/commit/?id=347c1087388d7782e6865f112f195e6780d473a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Backport upstream patch to fix build with musl libc.
-This patch is only a requirement since efivar 38 and was applied
-upstream shortly after the 38 version tag.
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
+
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
 Fixes:
-http://autobuild.buildroot.net/results/c49d894b109d68e2624074eab8b939fefa3b42ef/
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234498972
+
+Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0004-efisecdb-fix-build-with-musl-libc.patch   | 185 +++++++++++++++++++++
- 1 file changed, 185 insertions(+)
+ DEVELOPERS                          |   4 -
+ board/arm/juno/linux-juno-defconfig | 169 ------------------------------------
+ board/arm/juno/readme.txt           | 134 ----------------------------
+ configs/arm_juno_defconfig          |  23 -----
+ 4 files changed, 330 deletions(-)
 
-diff --git a/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch b/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch
-new file mode 100644
-index 0000000000..9815a9d0cf
---- /dev/null
-+++ b/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch
-@@ -0,0 +1,185 @@
-+From cece3ffd5be2f8641eb694513f2b73e5eb97ffd3 Mon Sep 17 00:00:00 2001
-+From: Natanael Copa <ncopa@alpinelinux.org>
-+Date: Fri, 28 Jan 2022 12:13:30 +0100
-+Subject: [PATCH] efisecdb: fix build with musl libc
-+
-+Refactor code to use POSIX atexit(3) instead of the GNU specific
-+on_exit(3).
-+
-+Resolves: #197
-+Resolves: #202
-+Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
-+[Erico: backport from upstream commit
-+cece3ffd5be2f8641eb694513f2b73e5eb97ffd3]
-+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-+---
-+ src/compiler.h |  2 --
-+ src/efisecdb.c | 68 +++++++++++++++++++-------------------------------
-+ 2 files changed, 26 insertions(+), 44 deletions(-)
-+
-+diff --git a/src/compiler.h b/src/compiler.h
-+index e2f18f0..d95fb01 100644
-+--- a/src/compiler.h
-++++ b/src/compiler.h
-+@@ -7,8 +7,6 @@
-+ #ifndef COMPILER_H_
-+ #define COMPILER_H_
-+ 
-+-#include <sys/cdefs.h>
-+-
-+ /* GCC version checking borrowed from glibc. */
-+ #if defined(__GNUC__) && defined(__GNUC_MINOR__)
-+ #  define GNUC_PREREQ(maj,min) \
-+diff --git a/src/efisecdb.c b/src/efisecdb.c
-+index f882373..6bd5ad9 100644
-+--- a/src/efisecdb.c
-++++ b/src/efisecdb.c
-+@@ -25,6 +25,10 @@
-+ extern char *optarg;
-+ extern int optind, opterr, optopt;
-+ 
-++static efi_secdb_t *secdb = NULL;
-++static list_t infiles;
-++static list_t actions;
-++
-+ struct hash_param {
-+ 	char *name;
-+ 	efi_secdb_type_t algorithm;
-+@@ -187,12 +191,11 @@ add_action(list_t *list, action_type_t action_type, const efi_guid_t *owner,
-+ }
-+ 
-+ static void
-+-free_actions(int status UNUSED, void *actionsp)
-++free_actions(void)
-+ {
-+-	list_t *actions = (list_t *)actionsp;
-+ 	list_t *pos, *tmp;
-+ 
-+-	for_each_action_safe(pos, tmp, actions) {
-++	for_each_action_safe(pos, tmp, &actions) {
-+ 		action_t *action = list_entry(pos, action_t, list);
-+ 
-+ 		list_del(&action->list);
-+@@ -202,12 +205,11 @@ free_actions(int status UNUSED, void *actionsp)
-+ }
-+ 
-+ static void
-+-free_infiles(int status UNUSED, void *infilesp)
-++free_infiles(void)
-+ {
-+-	list_t *infiles = (list_t *)infilesp;
-+ 	list_t *pos, *tmp;
-+ 
-+-	for_each_ptr_safe(pos, tmp, infiles) {
-++	for_each_ptr_safe(pos, tmp, &infiles) {
-+ 		ptrlist_t *entry = list_entry(pos, ptrlist_t, list);
-+ 
-+ 		list_del(&entry->list);
-+@@ -216,27 +218,12 @@ free_infiles(int status UNUSED, void *infilesp)
-+ }
-+ 
-+ static void
-+-maybe_free_secdb(int status UNUSED, void *voidp)
-++maybe_free_secdb(void)
-+ {
-+-	efi_secdb_t **secdbp = (efi_secdb_t **)voidp;
-+-
-+-	if (secdbp == NULL || *secdbp == NULL)
-++	if (secdb == NULL)
-+ 		return;
-+ 
-+-	efi_secdb_free(*secdbp);
-+-}
-+-
-+-static void
-+-maybe_do_unlink(int status, void *filep)
-+-{
-+-	char **file = (char **)filep;
-+-
-+-	if (status == 0)
-+-		return;
-+-	if (file == NULL || *file == NULL)
-+-		return;
-+-
-+-	unlink(*file);
-++	efi_secdb_free(secdb);
-+ }
-+ 
-+ static void
-+@@ -323,15 +310,6 @@ parse_input_files(list_t *infiles, char **outfile, efi_secdb_t **secdb,
-+ 	return status;
-+ }
-+ 
-+-/*
-+- * These need to be static globals so that they're not on main's stack when
-+- * on_exit() fires.
-+- */
-+-static efi_secdb_t *secdb = NULL;
-+-static list_t infiles;
-+-static list_t actions;
-+-static char *outfile = NULL;
-+-
-+ int
-+ main(int argc, char *argv[])
-+ {
-+@@ -351,6 +329,7 @@ main(int argc, char *argv[])
-+ 	bool do_sort_data = false;
-+ 	bool sort_descending = false;
-+ 	int status = 0;
-++	char *outfile = NULL;
-+ 
-+ 	const char sopts[] = ":aAc:dfg:h:i:Lo:rs:t:v?";
-+ 	const struct option lopts[] = {
-+@@ -376,10 +355,9 @@ main(int argc, char *argv[])
-+ 	INIT_LIST_HEAD(&infiles);
-+ 	INIT_LIST_HEAD(&actions);
-+ 
-+-	on_exit(free_actions, &actions);
-+-	on_exit(free_infiles, &infiles);
-+-	on_exit(maybe_free_secdb, &secdb);
-+-	on_exit(maybe_do_unlink, &outfile);
-++	atexit(free_actions);
-++	atexit(free_infiles);
-++	atexit(maybe_free_secdb);
-+ 
-+ 	/*
-+ 	 * parse the command line.
-+@@ -587,24 +565,30 @@ sort_err:
-+ 	outfd = open(outfile, flags, 0600);
-+ 	if (outfd < 0) {
-+ 		char *tmpoutfile = outfile;
-+-		if (errno == EEXIST)
-+-			outfile = NULL;
-++		if (errno != EEXIST)
-++			unlink(outfile);
-+ 		err(1, "could not open \"%s\"", tmpoutfile);
-+ 	}
-+ 
-+ 	rc = ftruncate(outfd, 0);
-+-	if (rc < 0)
-++	if (rc < 0) {
-++		unlink(outfile);
-+ 		err(1, "could not truncate output file \"%s\"", outfile);
-++	}
-+ 
-+ 	void *output;
-+ 	size_t size = 0;
-+ 	rc = efi_secdb_realize(secdb, &output, &size);
-+-	if (rc < 0)
-++	if (rc < 0) {
-++		unlink(outfile);
-+ 		secdb_err(1, "could not realize signature list");
-++	}
-+ 
-+ 	rc = write(outfd, output, size);
-+-	if (rc < 0)
-++	if (rc < 0) {
-++		unlink(outfile);
-+ 		err(1, "could not write signature list");
-++	}
-+ 
-+ 	close(outfd);
-+ 	xfree(output);
-+-- 
-+2.37.3
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b099ce2f62..94d1338880 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1221,10 +1221,6 @@ F:	support/testing/tests/package/test_python_scipy.py
+ N:	Gustavo Heinz <gustavo@gsthnz.com>
+ F:	package/python-m2crypto/
+ 
+-N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+-F:	configs/arm_juno_defconfig
+-F:	board/arm/juno/
+-
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	board/terasic/de10nano_cyclone5/
+ F:	configs/terasic_de10nano_cyclone5_defconfig
+diff --git a/board/arm/juno/linux-juno-defconfig b/board/arm/juno/linux-juno-defconfig
+deleted file mode 100644
+index 64598d21a1..0000000000
+--- a/board/arm/juno/linux-juno-defconfig
++++ /dev/null
+@@ -1,169 +0,0 @@
+-CONFIG_SMP=y
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_FHANDLE=y
+-CONFIG_AUDIT=y
+-CONFIG_NO_HZ_IDLE=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_BSD_PROCESS_ACCT_V3=y
+-CONFIG_TASKSTATS=y
+-CONFIG_TASK_DELAY_ACCT=y
+-CONFIG_TASK_XACCT=y
+-CONFIG_TASK_IO_ACCOUNTING=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_MEMCG=y
+-CONFIG_MEMCG_SWAP=y
+-CONFIG_MEMCG_KMEM=y
+-CONFIG_CGROUP_HUGETLB=y
+-CONFIG_SCHED_AUTOGROUP=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_KALLSYMS_ALL=y
+-CONFIG_PROFILING=y
+-CONFIG_JUMP_LABEL=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_ARCH_VEXPRESS=y
+-CONFIG_PCI=y
+-CONFIG_PCI_MSI=y
+-CONFIG_PCI_HOST_GENERIC=y
+-CONFIG_PCIEPORTBUS=y
+-CONFIG_HOTPLUG_PCI_PCIE=y
+-CONFIG_HOTPLUG_PCI=y
+-CONFIG_NR_CPUS=6
+-CONFIG_PREEMPT=y
+-CONFIG_KSM=y
+-CONFIG_TRANSPARENT_HUGEPAGE=y
+-CONFIG_CMA=y
+-CONFIG_CMDLINE="console=ttyAMA0"
+-CONFIG_COMPAT=y
+-CONFIG_CPU_IDLE=y
+-CONFIG_ARM_CPUIDLE=y
+-CONFIG_CPU_FREQ=y
+-CONFIG_CPU_FREQ_GOV_USERSPACE=y
+-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+-CONFIG_CPU_FREQ_GOV_INTERACTIVE=y
+-CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
+-CONFIG_ARM_DT_BL_CPUFREQ=y
+-CONFIG_ARM_SCPI_CPUFREQ=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_BPF_JIT=y
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_ATA=y
+-CONFIG_SATA_AHCI=y
+-CONFIG_SATA_AHCI_PLATFORM=y
+-CONFIG_AHCI_XGENE=y
+-CONFIG_PATA_PLATFORM=y
+-CONFIG_PATA_OF_PLATFORM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_TUN=y
+-CONFIG_SKY2=y
+-CONFIG_SMC91X=y
+-CONFIG_SMSC911X=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_SERIO_AMBAKMI=y
+-CONFIG_LEGACY_PTY_COUNT=16
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_SERIAL_OF_PLATFORM=y
+-CONFIG_SERIAL_XILINX_PS_UART=y
+-CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_DESIGNWARE_PLATFORM=y
+-CONFIG_I2C_SLAVE=y
+-CONFIG_SPI=y
+-CONFIG_SPI_PL022=y
+-CONFIG_PTP_1588_CLOCK=m
+-CONFIG_GPIO_PL061=y
+-CONFIG_GPIO_XGENE=y
+-CONFIG_POWER_RESET_XGENE=y
+-CONFIG_POWER_RESET_SYSCON=y
+-CONFIG_REGULATOR=y
+-CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_REGULATOR_VEXPRESS=m
+-CONFIG_DRM=y
+-CONFIG_DRM_I2C_NXP_TDA998X=y
+-CONFIG_DRM_ARM=y
+-CONFIG_DRM_HDLCD=y
+-CONFIG_DRM_VIRTUAL_HDLCD=y
+-CONFIG_FB_ARMCLCD=y
+-CONFIG_LOGO=y
+-CONFIG_USB=y
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_HCD_PLATFORM=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_OHCI_HCD_PLATFORM=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_ISP1760=y
+-CONFIG_NOP_USB_XCEIV=y
+-CONFIG_USB_ULPI=y
+-CONFIG_MMC=y
+-CONFIG_MMC_ARMMMCI=y
+-CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_SDHCI_PLTFM=y
+-CONFIG_MMC_SPI=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_EFI=y
+-CONFIG_RTC_DRV_PL030=y
+-CONFIG_RTC_DRV_PL031=y
+-CONFIG_DMADEVICES=y
+-CONFIG_PL330_DMA=y
+-CONFIG_COMMON_CLK_SCPI=y
+-CONFIG_ARM_TIMER_SP804=y
+-CONFIG_MAILBOX=y
+-CONFIG_ARM_MHU=y
+-CONFIG_PHY_XGENE=y
+-CONFIG_ARM_SCPI_PROTOCOL=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_FANOTIFY=y
+-CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
+-CONFIG_QUOTA=y
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_FUSE_FS=y
+-CONFIG_CUSE=y
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_HUGETLBFS=y
+-CONFIG_EFIVAR_FS=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_VIRTUALIZATION=y
+-CONFIG_KVM=y
+-CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DEBUG_KERNEL=y
+-CONFIG_LOCKUP_DETECTOR=y
+-CONFIG_SECURITY=y
+-CONFIG_CRYPTO_ANSI_CPRNG=y
+-CONFIG_ARM64_CRYPTO=y
+-CONFIG_CRYPTO_SHA1_ARM64_CE=y
+-CONFIG_CRYPTO_SHA2_ARM64_CE=y
+-CONFIG_CRYPTO_GHASH_ARM64_CE=y
+-CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
+-CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
+-CONFIG_SOUND=y
+-CONFIG_SND=y
+-CONFIG_SND_SOC=y
+-CONFIG_SND_SIMPLE_CARD=y
+-CONFIG_SND_DESIGNWARE_I2S=y
+-CONFIG_CMA=y
+-CONFIG_CMA_SIZE_MBYTES=64
+diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
+deleted file mode 100644
+index b292d9636d..0000000000
+--- a/board/arm/juno/readme.txt
++++ /dev/null
+@@ -1,134 +0,0 @@
+-ARM Juno r1/r0
+-
+-Intro
+-=====
+-
+-These instructions apply to all models of the ARM Juno:
+-  - Juno r0 (does not support PCIe)
+-  - Juno r1 (supports PCIe)
+-  - Juno r2 (Big Cluster with A72)
+-
+-Buildroot will generate the kernel image, device tree blob, bootloader binaries
+-and a minimal root filesystem.
+-
+-How to build it
+-===============
+-
+-Configure Buildroot
+--------------------
+-
+-Configuring Buildroot is pretty simple, just execute:
+-
+-  $ make arm_juno_defconfig
+-
+-Build the rootfs, kernel and DTB
+---------------------------------
+-
+-Note: you will need to have access to the network, since Buildroot will
+-download the packages' sources.
+-
+-You may now build your rootfs with:
+-
+-  $ make
+-
+-(This may take a while)
+-
+-Result of the build
+--------------------
+-
+-After building, you should obtain this tree:
+-
+-    output/images/
+-    +-- rootfs.tar
+-    +-- juno.dtb (if Juno r0 is used)
+-    +-- juno-r1.dtb (if Juno r1 is used)
+-    +-- juno-r2.dtb (if Juno r2 is used)
+-    +-- Image
+-    +-- bl1.bin
+-    +-- bl2.bin
+-    +-- bl2u.bin
+-    +-- bl31.bin
+-    +-- fip.bin
+-    +-- scp-fw.bin
+-    +-- u-boot.bin
+-
+-Preparing your rootfs
+-======================
+-
+-Format your pen drive as a ext3 filesystem by executing:
+-
+-   $ mkfs.ext3 /dev/<your device>
+-
+-Preparing your rootfs
+-======================
+-
+-Format your pen drive as a ext3 filesystem by executing:
+-
+-   $ mkfs.ext3 /dev/<your device>
+-
+-Installing your rootfs
+-======================
+-
+-After mounting the pen drive please execute the following:
+-
+-   $ sudo tar -xvf output/images/rootfs.tar -C <pen drive mount path>
+-
+-When completed make sure to unmount the device:
+-
+-   $ umount <pen drive mount path>
+-
+-Insert the pen drive in one of the ARM Juno' USB type A connectors.
+-
+-Configure *.dtb in the boot configuration for Juno r0
+-=====================================================
+-
+-SITE1/HBI0262B/images.txt
+-.....
+-NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
+-NOR3ADDRESS: 0x00C00000          ;Image Flash Address
+-NOR3FILE: \SOFTWARE\juno.dtb     ;Image File Name
+-NOR3NAME: board.dtb              ;Specify Image name to preserve file extension
+-NOR3LOAD: 00000000               ;Image Load Address
+-NOR3ENTRY: 00000000              ;Image Entry Point
+-......
+-
+-Configure *.dtb in the boot configuration for Juno r1
+-=====================================================
+-
+-SITE1/HBI0262C/images.txt
+-......
+-NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
+-NOR3ADDRESS: 0x00C00000          ;Image Flash Address
+-NOR3FILE: \SOFTWARE\juno-r1.dtb  ;Image File Name
+-NOR3NAME: board.dtb              ;Specify target filename to preserve file extension
+-NOR3LOAD: 00000000               ;Image Load Address
+-NOR3ENTRY: 00000000              ;Image Entry Point
+-......
+-
+-Configure *.dtb in the boot configuration for Juno r2
+-=====================================================
+-
+-SITE1/HBI0262D/images.txt
+-......
+-NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
+-NOR3ADDRESS: 0x02000000          ;Image Flash Address
+-NOR3FILE: \SOFTWARE\juno-r2.dtb  ;Image File Name
+-NOR3NAME: board.dtb              ;Specify target filename to preserve file extension
+-NOR3LOAD: 00000000               ;Image Load Address
+-NOR3ENTRY: 00000000              ;Image Entry Point
+-......
+-
+-Installing kernel image and DTB
+-===============================
+-
+-1. Connect to the ARM Juno UART0 and execute USB_ON in the terminal
+-2. Connect a USB cable between your PC and ARM Juno USB type B connector
+-   A mass storage device should appear in your desktop.
+-3. Open the software/ folder
+-4. Copy the 'Image' file to software/
+-5. Copy the 'juno-r1.dtb' (r1), 'juno.dtb' (r0) or juno-r2.dtb (r2) file to software/
+-6. Copy the bootloader binaries (bl1.bin and fip.bin) to software/
+-7. Press the red button in the front pannel of ARM Juno
+-
+-At this time, the board will erase the Flash entry for each new item and
+-replace it with the lastest ones.
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+deleted file mode 100644
+index 5832986779..0000000000
+--- a/configs/arm_juno_defconfig
++++ /dev/null
+@@ -1,23 +0,0 @@
+-BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+-BR2_TARGET_GENERIC_HOSTNAME="juno-buildroot"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno by Buildroot"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.4"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
+-BR2_TARGET_VEXPRESS_FIRMWARE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
