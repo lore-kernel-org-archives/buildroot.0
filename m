@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07048C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0628C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1AA4408DB;
-	Mon, 20 Feb 2023 21:08:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1AA4408DB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 938AF4174C;
+	Mon, 20 Feb 2023 21:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 938AF4174C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1bz308eo6Fde; Mon, 20 Feb 2023 21:08:36 +0000 (UTC)
+	with ESMTP id RpHmAQ0R15Sv; Mon, 20 Feb 2023 21:08:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09C2E4154A;
-	Mon, 20 Feb 2023 21:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09C2E4154A
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0AA241702;
+	Mon, 20 Feb 2023 21:08:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0AA241702
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20B151BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0D5E91BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 224C56107F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B5D8610A8
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 224C56107F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B5D8610A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V8nPl3wqSgKT for <buildroot@lists.busybox.net>;
+ with ESMTP id Zg5SwEnXBGZE for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5074761095
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91E7961026
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5074761095
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91E7961026
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EF41828C8; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+ id 7D853828C8; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:28 +0100
+Date: Mon, 7 Nov 2022 22:17:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: daf3c6661f823e566b6310042884c36c1d73f1de
-X-Git-Newrev: fa274e01e335c75684425a682b3dd8823d284da9
+X-Git-Oldrev: f6f323b1ae74e91c6c66b562e99d2c27dcbb5988
+X-Git-Newrev: 4e7dfe20bb8cf0cccfbd177321eff73e82c8d940
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.4EF41828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/friendlyarm_nanopc_t4:
+Message-Id: <20230220205148.7D853828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/friendlyarm_nanopi_m4:
  remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,14 +58,14 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4867450600816220362=="
+Content-Type: multipart/mixed; boundary="===============7490338242287434479=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4867450600816220362==
+--===============7490338242287434479==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa274e01e335c75684425a682b3dd8823d284da9
+commit: https://git.buildroot.net/buildroot/commit/?id=4e7dfe20bb8cf0cccfbd177321eff73e82c8d940
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 This defconfig has been failing to build for several months, with
@@ -78,60 +78,53 @@ defconfig.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499048
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499052
 
 Cc: Suniel Mahesh <sunil@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                |  2 --
- board/friendlyarm/nanopc-t4/extlinux.conf |  4 ---
- board/friendlyarm/nanopc-t4/genimage.cfg  | 39 -----------------------
- board/friendlyarm/nanopc-t4/post-build.sh |  5 ---
- board/friendlyarm/nanopc-t4/readme.txt    | 45 --------------------------
- configs/friendlyarm_nanopc_t4_defconfig   | 53 -------------------------------
- 6 files changed, 148 deletions(-)
+ DEVELOPERS                                |  1 -
+ board/friendlyarm/nanopi-m4/extlinux.conf |  4 ---
+ board/friendlyarm/nanopi-m4/genimage.cfg  | 39 -----------------------
+ board/friendlyarm/nanopi-m4/post-build.sh |  5 ---
+ board/friendlyarm/nanopi-m4/readme.txt    | 45 --------------------------
+ configs/friendlyarm_nanopi_m4_defconfig   | 53 -------------------------------
+ 6 files changed, 147 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 37d2e3854f..427fce235d 100644
+index 30582cb648..eca6cccfe8 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2745,14 +2745,12 @@ F:	package/powertop/
- 
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/firefly/
--F:	board/friendlyarm/nanopc-t4
- F:	board/friendlyarm/nanopi-m4
- F:	board/orangepi/orangepi-rk3399
- F:	board/pine64/rockpro64
+@@ -2749,7 +2749,6 @@ F:	board/pine64/rockpro64
  F:	board/radxa/rockpi-4
  F:	board/radxa/rockpi-n8
  F:	board/radxa/rockpi-n10
--F:	configs/friendlyarm_nanopc_t4_defconfig
- F:	configs/friendlyarm_nanopi_m4_defconfig
+-F:	configs/friendlyarm_nanopi_m4_defconfig
  F:	configs/orangepi_rk3399_defconfig
  F:	configs/roc_pc_rk3399_defconfig
-diff --git a/board/friendlyarm/nanopc-t4/extlinux.conf b/board/friendlyarm/nanopc-t4/extlinux.conf
+ F:	configs/rock_pi_4_defconfig
+diff --git a/board/friendlyarm/nanopi-m4/extlinux.conf b/board/friendlyarm/nanopi-m4/extlinux.conf
 deleted file mode 100644
-index 31c6b30d32..0000000000
---- a/board/friendlyarm/nanopc-t4/extlinux.conf
+index fb24f09eb1..0000000000
+--- a/board/friendlyarm/nanopi-m4/extlinux.conf
 +++ /dev/null
 @@ -1,4 +0,0 @@
--label RK3399_NanoPC_T4 linux
+-label RK3399_NANOPI_M4 linux
 -  kernel /Image
--  devicetree /rk3399-nanopc-t4.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rootwait
-diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
+-  devicetree /rk3399-nanopi-m4.dtb
+-  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
+diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
 deleted file mode 100644
-index 1787322260..0000000000
---- a/board/friendlyarm/nanopc-t4/genimage.cfg
+index 3e6818eab9..0000000000
+--- a/board/friendlyarm/nanopi-m4/genimage.cfg
 +++ /dev/null
 @@ -1,39 +0,0 @@
 -image boot.vfat {
 -	vfat {
 -		files = {
 -			"Image",
--			"rk3399-nanopc-t4.dtb",
+-			"rk3399-nanopi-m4.dtb",
 -			"extlinux"
 -		}
 -	}
@@ -166,10 +159,10 @@ index 1787322260..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/friendlyarm/nanopc-t4/post-build.sh b/board/friendlyarm/nanopc-t4/post-build.sh
+diff --git a/board/friendlyarm/nanopi-m4/post-build.sh b/board/friendlyarm/nanopi-m4/post-build.sh
 deleted file mode 100755
 index ba29375c05..0000000000
---- a/board/friendlyarm/nanopc-t4/post-build.sh
+--- a/board/friendlyarm/nanopi-m4/post-build.sh
 +++ /dev/null
 @@ -1,5 +0,0 @@
 -#!/bin/sh
@@ -177,18 +170,18 @@ index ba29375c05..0000000000
 -BOARD_DIR="$(dirname $0)"
 -
 -install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopc-t4/readme.txt b/board/friendlyarm/nanopc-t4/readme.txt
+diff --git a/board/friendlyarm/nanopi-m4/readme.txt b/board/friendlyarm/nanopi-m4/readme.txt
 deleted file mode 100644
-index 0989c6cc1e..0000000000
---- a/board/friendlyarm/nanopc-t4/readme.txt
+index 0553bf8377..0000000000
+--- a/board/friendlyarm/nanopi-m4/readme.txt
 +++ /dev/null
 @@ -1,45 +0,0 @@
--FriendlyARM NANOPC-T4
+-FriendlyARM NANOPI-M4
 -=====================
 -
 -Build:
 -
--  $ make friendlyarm_nanopc_t4_defconfig
+-  $ make friendlyarm_nanopi_m4_defconfig
 -  $ make
 -
 -Files created in output directory
@@ -201,7 +194,7 @@ index 0989c6cc1e..0000000000
 -├── extlinux
 -├── idbloader.img
 -├── Image
--├── rk3399-nanopc-t4.dtb
+-├── rk3399-nanopi-m4.dtb
 -├── rootfs.ext2
 -├── rootfs.ext4 -> rootfs.ext2
 -├── rootfs.tar
@@ -225,13 +218,13 @@ index 0989c6cc1e..0000000000
 -
 -Login:
 -------
--Apply power and press the PWR button for 3 sec. Enter 'root' as login user, and the prompt is ready.
+-Enter 'root' as login user, and the prompt is ready.
 -
--https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/npc_t4.html
-diff --git a/configs/friendlyarm_nanopc_t4_defconfig b/configs/friendlyarm_nanopc_t4_defconfig
+-https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/nanopi_m4.html
+diff --git a/configs/friendlyarm_nanopi_m4_defconfig b/configs/friendlyarm_nanopi_m4_defconfig
 deleted file mode 100644
-index 2f7c53904e..0000000000
---- a/configs/friendlyarm_nanopc_t4_defconfig
+index 9c3f58f200..0000000000
+--- a/configs/friendlyarm_nanopi_m4_defconfig
 +++ /dev/null
 @@ -1,53 +0,0 @@
 -# Architecture
@@ -256,7 +249,7 @@ index 2f7c53904e..0000000000
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopc-t4-rk3399"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-m4-rk3399"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
@@ -272,12 +265,12 @@ index 2f7c53904e..0000000000
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopc-t4"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-m4"
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -
 -# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="nanopc-t4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPC-T4"
+-BR2_TARGET_GENERIC_HOSTNAME="nanopi-m4"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to NANOPI-M4"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -285,10 +278,10 @@ index 2f7c53904e..0000000000
 -BR2_PACKAGE_HOST_MTOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopc-t4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopc-t4/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m4/genimage.cfg"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-m4/post-build.sh"
 
---===============4867450600816220362==
+--===============7490338242287434479==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -299,4 +292,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4867450600816220362==--
+--===============7490338242287434479==--
