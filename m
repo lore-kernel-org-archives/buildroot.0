@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE410C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:07:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AED5C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61E20408AC;
-	Mon, 20 Feb 2023 21:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61E20408AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B16E42A97;
+	Mon, 20 Feb 2023 21:07:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B16E42A97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xzWPmK3stxq9; Mon, 20 Feb 2023 21:07:26 +0000 (UTC)
+	with ESMTP id VMKW16-ACod8; Mon, 20 Feb 2023 21:07:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B60AA42A9E;
-	Mon, 20 Feb 2023 21:07:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B60AA42A9E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2208C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B672742AA7;
+	Mon, 20 Feb 2023 21:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B672742AA7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 238D41BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0F89411A3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0F89411A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EA5E61040
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EA5E61040
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fTVaUL9YGPVp for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cn1q0_WrVB1U for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E541140C2A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EED961072
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E541140C2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EED961072
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2EEA8648F; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+ id 36D2886494; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:56 +0100
+Date: Mon, 7 Nov 2022 22:17:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a0763bc283fda0117b920fe8fae29c9e8cc48737
-X-Git-Newrev: 08b6ce741a0d5309368e7bb7b41951a27ebe85f4
+X-Git-Oldrev: a086bd267f1b2e5c211e705b977b17df1c20867b
+X-Git-Newrev: 97ee98d157fb244966094f23e9e2b52a33748fb8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.E2EEA8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_rk3399:
+Message-Id: <20230220205148.36D2886494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/bananapi_m2_plus:
  remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,14 +58,12 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4132709615150005905=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4132709615150005905==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=08b6ce741a0d5309368e7bb7b41951a27ebe85f4
+commit: https://git.buildroot.net/buildroot/commit/?id=97ee98d157fb244966094f23e9e2b52a33748fb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 This defconfig has been failing to build for several months, with
@@ -78,59 +76,58 @@ defconfig.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499144
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499005
 
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>
+Cc: Mike Harmony <mike.harmony@snapav.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                   |  2 -
- board/orangepi/orangepi-rk3399/extlinux.conf |  4 --
- board/orangepi/orangepi-rk3399/genimage.cfg  | 38 -------------------
- board/orangepi/orangepi-rk3399/post-build.sh |  5 ---
- board/orangepi/orangepi-rk3399/readme.txt    | 56 ----------------------------
- configs/orangepi_rk3399_defconfig            | 53 --------------------------
- 6 files changed, 158 deletions(-)
+ DEVELOPERS                          |  4 ----
+ board/sinovoip/m2-plus/boot.cmd     |  7 -------
+ board/sinovoip/m2-plus/genimage.cfg | 34 ----------------------------------
+ configs/bananapi_m2_plus_defconfig  | 30 ------------------------------
+ 4 files changed, 75 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f366426125..89a72bc923 100644
+index b77f4ff68c..9e3c919a14 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2732,12 +2732,10 @@ F:	package/powertop/
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/firefly/
- F:	board/friendlyarm/nanopi-m4
--F:	board/orangepi/orangepi-rk3399
- F:	board/pine64/rockpro64
- F:	board/radxa/rockpi-4
- F:	board/radxa/rockpi-n8
- F:	board/radxa/rockpi-n10
--F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rock_pi_4_defconfig
- F:	configs/rock_pi_n8_defconfig
-diff --git a/board/orangepi/orangepi-rk3399/extlinux.conf b/board/orangepi/orangepi-rk3399/extlinux.conf
+@@ -2142,10 +2142,6 @@ F:	configs/licheepi_zero_defconfig
+ N:	Mike Frampton <mikeframpo@gmail.com>
+ F:	package/qcom-db410c-firmware/
+ 
+-N:	Mike Harmony <mike.harmony@snapav.com>
+-F:	board/sinovoip/m2-plus/
+-F:	configs/bananapi_m2_plus_defconfig
+-
+ N:	Mikhail Boiko <mikhailboiko85@gmail.com>
+ F:	package/libfribidi/
+ 
+diff --git a/board/sinovoip/m2-plus/boot.cmd b/board/sinovoip/m2-plus/boot.cmd
 deleted file mode 100644
-index 157c6a715e..0000000000
---- a/board/orangepi/orangepi-rk3399/extlinux.conf
+index d22464a1c1..0000000000
+--- a/board/sinovoip/m2-plus/boot.cmd
 +++ /dev/null
-@@ -1,4 +0,0 @@
--label RK3399_ORANGEPI linux
--  kernel /Image
--  devicetree /rk3399-orangepi.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
+@@ -1,7 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-mmc dev 0
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/sinovoip/m2-plus/genimage.cfg b/board/sinovoip/m2-plus/genimage.cfg
 deleted file mode 100644
-index a02166172f..0000000000
---- a/board/orangepi/orangepi-rk3399/genimage.cfg
+index 9311e026dd..0000000000
+--- a/board/sinovoip/m2-plus/genimage.cfg
 +++ /dev/null
-@@ -1,38 +0,0 @@
+@@ -1,34 +0,0 @@
 -image boot.vfat {
 -	vfat {
 -		files = {
--			"Image",
--			"rk3399-orangepi.dtb",
--			"extlinux"
+-			"zImage",
+-			"sun8i-h3-bananapi-m2-plus.dtb",
+-			"boot.scr"
 -		}
 -	}
 -
@@ -139,172 +136,63 @@ index a02166172f..0000000000
 -
 -image sdcard.img {
 -	hdimage {
--		partition-table-type = "gpt"
 -	}
 -
--	partition loader1 {
--		image = "idbloader.img"
--		offset = 32K
--	}
--
--	partition loader2 {
--		image = "u-boot.itb"
--		offset = 8M
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
 -	}
 -
 -	partition boot {
--		partition-type-uuid = F
+-		partition-type = 0xC
 -		bootable = "true"
 -		image = "boot.vfat"
--		offset = 16M
 -	}
 -
 -	partition rootfs {
+-		partition-type = 0x83
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/orangepi/orangepi-rk3399/post-build.sh b/board/orangepi/orangepi-rk3399/post-build.sh
-deleted file mode 100755
-index ba29375c05..0000000000
---- a/board/orangepi/orangepi-rk3399/post-build.sh
-+++ /dev/null
-@@ -1,5 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/orangepi/orangepi-rk3399/readme.txt b/board/orangepi/orangepi-rk3399/readme.txt
+diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
 deleted file mode 100644
-index 197e1fb448..0000000000
---- a/board/orangepi/orangepi-rk3399/readme.txt
+index 77a403ce81..0000000000
+--- a/configs/bananapi_m2_plus_defconfig
 +++ /dev/null
-@@ -1,56 +0,0 @@
--Orangepi Rk3399
--================
--http://www.orangepi.org/Orange%20Pi%20RK3399/
--
--Build:
--======
--  $ make orangepi_rk3399_defconfig
--  $ make
--
--Files created in output directory
--=================================
--
--output/images
--
--├── bl31.elf
--├── boot.vfat
--├── extlinux
--├── idbloader.img
--├── Image
--├── rk3399-orangepi.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--├── u-boot.bin
--└── u-boot.itb
--
--Creating bootable SD card:
--==========================
--
--Simply invoke (as root)
--
--sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device.
--
--Booting:
--========
--Orangepi-RK3399 by default boots from emmc. For SD card boot to
--happen, emmc should be empty. If emmc happens to have any bootable
--image then erase emmc so that bootrom will look for a proper image in SD.
--
--emmc can be erased once after booted into linux as shown in below link.
--
--https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
--
--Serial console:
-----------------
--
--Baudrate for this board is 1500000.
--
--Login:
--------
--Enter 'root' as login user, and the prompt is ready.
--
--https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/orangepi.html
-diff --git a/configs/orangepi_rk3399_defconfig b/configs/orangepi_rk3399_defconfig
-deleted file mode 100644
-index bcce35febd..0000000000
---- a/configs/orangepi_rk3399_defconfig
-+++ /dev/null
-@@ -1,53 +0,0 @@
--# Architecture
--BR2_aarch64=y
--BR2_cortex_a72_a53=y
--
--# Linux headers same as kernel, a 5.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
--
--# Bootloader
+@@ -1,30 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sinovoip/m2-plus/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-# BR2_TARGET_ROOTFS_TAR is not set
 -BR2_TARGET_UBOOT=y
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-rk3399"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-orangepi"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="orangepi-rk3399"
--BR2_TARGET_GENERIC_ISSUE="Welcome to ORANGEPI-RK3399"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sinovoip/m2-plus/boot.cmd"
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-rk3399/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-rk3399/post-build.sh"
-
---===============4132709615150005905==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4132709615150005905==--
