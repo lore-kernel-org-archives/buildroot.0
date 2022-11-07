@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A5BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F75C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECE0D60C01;
-	Mon,  5 Dec 2022 11:57:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECE0D60C01
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89CA481D24;
+	Mon,  5 Dec 2022 11:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89CA481D24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NV3kIpi472D4; Mon,  5 Dec 2022 11:57:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pYhY8bh-rqtx; Mon,  5 Dec 2022 11:57:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37A1960A47;
-	Mon,  5 Dec 2022 11:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37A1960A47
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 18B7C1BF8C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1F6B813AE;
+	Mon,  5 Dec 2022 11:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1F6B813AE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 466711BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86D7B4060C
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D7B4060C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1BA741694
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1BA741694
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2LTO2p8jnhJy for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KOONIzaPdw6c for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B3C9405E6
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B3C9405E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id B398241677
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B398241677
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76975857AA; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+ id A48F685BA3; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:05:33 +0100
+Date: Mon, 7 Nov 2022 23:19:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90572af5a930345ed7ad3001889db4e83e94dcb3
-X-Git-Newrev: 96a9097ca814942951a4530ff294efedfed65036
+X-Git-Oldrev: ad26215165564259c5ddc3f0cae349f736523f8c
+X-Git-Newrev: e6cecea3c3a985fe65f16a71d2e3eb2dd3705d60
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.76975857AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-webpy: bump to version 0.62
+Message-Id: <20221205112608.A48F685BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest: bump to version
+ 7.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96a9097ca814942951a4530ff294efedfed65036
+commit: https://git.buildroot.net/buildroot/commit/?id=e6cecea3c3a985fe65f16a71d2e3eb2dd3705d60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License file was accidentially removed in latest release but project
-is still public domain licensed.
-
-Details:
-https://github.com/webpy/webpy/commit/04bf405dd86485c8f3774c526e6a869a1eb73408
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-webpy/python-webpy.hash | 6 ++----
- package/python-webpy/python-webpy.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/python-pytest/python-pytest.hash | 4 ++--
+ package/python-pytest/python-pytest.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
-index ed3da6b1ab..540771a244 100644
---- a/package/python-webpy/python-webpy.hash
-+++ b/package/python-webpy/python-webpy.hash
-@@ -1,5 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/web.py/json
--md5  4e7ec89e7ae1e938d01fff01ba752606  web.py-0.40.tar.gz
--sha256  dc5e42ffbc42d77d07f75b7acca9975a3368ae609774e49ddebb497a784131f3  web.py-0.40.tar.gz
--# Locally computed sha256 checksums
--sha256  791bf6e9419435f114a19fc6519ff33738021eb3c41b18490943230ab0894df9  LICENSE.txt
-+md5  cd2c0296ceffa1acb96ae5315214eb42  web.py-0.62.tar.gz
-+sha256  5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e  web.py-0.62.tar.gz
-diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
-index 187a481286..06d4ae039b 100644
---- a/package/python-webpy/python-webpy.mk
-+++ b/package/python-webpy/python-webpy.mk
-@@ -4,11 +4,10 @@
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+index c2ead0aa64..2ae1e61ed4 100644
+--- a/package/python-pytest/python-pytest.hash
++++ b/package/python-pytest/python-pytest.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest/json
+-md5  4a98001581a18d4084cb5027fdb1467d  pytest-7.1.2.tar.gz
+-sha256  a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45  pytest-7.1.2.tar.gz
++md5  49decbade40109f9c6970df60c22a230  pytest-7.2.0.tar.gz
++sha256  c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59  pytest-7.2.0.tar.gz
+ # Locally computer sha256
+ sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+index 85d762ac8b..1794582dd3 100644
+--- a/package/python-pytest/python-pytest.mk
++++ b/package/python-pytest/python-pytest.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBPY_VERSION = 0.40
-+PYTHON_WEBPY_VERSION = 0.62
- PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
--PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/e3/23/ed84b174add09153329c6357984c8433e2f350de91c3859fa48c3cdbf7dc
-+PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/cd/6e/338a060bb5b52ee8229bdada422eaa5f71b13f8d33467f37f870ed2cae4b
- PYTHON_WEBPY_SETUP_TYPE = setuptools
- PYTHON_WEBPY_LICENSE = Public Domain
--PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
+-PYTHON_PYTEST_VERSION = 7.1.2
++PYTHON_PYTEST_VERSION = 7.2.0
+ PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+-PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/4e/1f/34657c6ac56f3c58df650ba41f8ffb2620281ead8e11bcdc7db63cf72a78
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/0b/21/055f39bf8861580b43f845f9e8270c7786fe629b2f8562ff09007132e2e7
+ PYTHON_PYTEST_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_LICENSE = MIT
+ PYTHON_PYTEST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
