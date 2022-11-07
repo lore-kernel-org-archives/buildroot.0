@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD9FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2670AC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF93C42B1C;
-	Mon, 20 Feb 2023 21:12:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF93C42B1C
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEEBB42A1A;
+	Mon, 20 Feb 2023 21:12:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEEBB42A1A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jb0ub17PIuq4; Mon, 20 Feb 2023 21:12:30 +0000 (UTC)
+	with ESMTP id wtA3lByhCuU3; Mon, 20 Feb 2023 21:12:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C07A42AAB;
-	Mon, 20 Feb 2023 21:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C07A42AAB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F75B42B1D;
+	Mon, 20 Feb 2023 21:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F75B42B1D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 156DF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 070411BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F27661089
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5D6F61094
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F27661089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D6F61094
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s0vNuCCCqfQs for <buildroot@lists.busybox.net>;
+ with ESMTP id n1w66yh95hwb for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FF31610A1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FF31610A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id E985A6100B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E985A6100B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B45D8648F; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ id D71EB86494; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:13:21 +0100
+Date: Mon, 7 Nov 2022 22:17:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e71ef565e720e56c51eed6933f6d87331193837f
-X-Git-Newrev: 2d3c06435b24bac849bb31fcd24f56d45b191f47
+X-Git-Oldrev: 2c4828568d6c5e4f1efb5b7d83ec6254d23ccdfa
+X-Git-Newrev: a0763bc283fda0117b920fe8fae29c9e8cc48737
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205149.5B45D8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/s6-linux-init: bump to
- version 1.0.8.0
+Message-Id: <20230220205148.D71EB86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_prime: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,66 +57,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d3c06435b24bac849bb31fcd24f56d45b191f47
+commit: https://git.buildroot.net/buildroot/commit/?id=a0763bc283fda0117b920fe8fae29c9e8cc48737
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bump will fix the following build failure raised since bump of
-skalibs to version 2.12.0.1 in commit
-0f7bfc80814e90918b9527cab4cbf6afedd22195 thanks to
-https://github.com/skarnet/s6-linux-init/commit/6696cee3bd309f61fc6c945ef747262a845e9267
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-In file included from src/shutdown/hpr_shutdown.c:8:
-src/shutdown/hpr.h:20:40: error: unknown type name 'tain_t'; did you mean 'tain'?
-   20 | extern int hpr_shutdown (unsigned int, tain_t const *, unsigned int) ;
-      |                                        ^~~~~~
-      |                                        tain
-
-Update hash of COPYING (update in year with
-https://github.com/skarnet/s6-linux-init/commit/42a91a98b780759257862642c764c2102237fea6)
-
-https://github.com/skarnet/s6-linux-init/blob/v1.0.8.0/NEWS
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
 Fixes:
- - http://autobuild.buildroot.org/results/4382beeb0f94d583ba605c70a47f34b45c76e311
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499141
+
+Cc: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/s6-linux-init/s6-linux-init.hash | 4 ++--
- package/s6-linux-init/s6-linux-init.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                 |  2 --
+ board/orangepi/orangepi-prime/boot.cmd     |  6 ----
+ board/orangepi/orangepi-prime/genimage.cfg | 40 ------------------------
+ board/orangepi/orangepi-prime/readme.txt   | 37 ----------------------
+ configs/orangepi_prime_defconfig           | 50 ------------------------------
+ 5 files changed, 135 deletions(-)
 
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index 23f02d5359..f70a4f87b5 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  29e368516b1a3c61a6d1f8680645cc122a2e02127debec91738f170a3b93b8c5  s6-linux-init-1.0.6.3.tar.gz
--sha256  4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
-+sha256  92055a7964cf66604066ad964a2c2392ee7c5e64821be03146c1341e0d8c3dc6  s6-linux-init-1.0.8.0.tar.gz
-+sha256  1898df1e8703bd9c1350d2ec3397880b9b4c1451038a9ce5e1c4b2e58622da39  COPYING
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index 95595368de..6aec220de4 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_LINUX_INIT_VERSION = 1.0.6.3
-+S6_LINUX_INIT_VERSION = 1.0.8.0
- S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
- S6_LINUX_INIT_LICENSE = ISC
- S6_LINUX_INIT_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ec8df84fa8..f366426125 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1303,7 +1303,6 @@ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+ F:	board/orangepi/orangepi-lite2/
+ F:	board/orangepi/orangepi-one-plus
+-F:	board/orangepi/orangepi-prime/
+ F:	board/orangepi/orangepi-win/
+ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+@@ -1318,7 +1317,6 @@ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/orangepi_lite2_defconfig
+ F:	configs/orangepi_one_plus_defconfig
+-F:	configs/orangepi_prime_defconfig
+ F:	configs/orangepi_win_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+diff --git a/board/orangepi/orangepi-prime/boot.cmd b/board/orangepi/orangepi-prime/boot.cmd
+deleted file mode 100644
+index 34887880d8..0000000000
+--- a/board/orangepi/orangepi-prime/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-prime.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-prime/genimage.cfg b/board/orangepi/orangepi-prime/genimage.cfg
+deleted file mode 100644
+index dde9a6485f..0000000000
+--- a/board/orangepi/orangepi-prime/genimage.cfg
++++ /dev/null
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-h5-orangepi-prime.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/orangepi/orangepi-prime/readme.txt b/board/orangepi/orangepi-prime/readme.txt
+deleted file mode 100644
+index 5811884d4d..0000000000
+--- a/board/orangepi/orangepi-prime/readme.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Orangepi Prime. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-Orangepi Prime link:
+-http://www.orangepi.org/OrangePiPrime/
+-
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Prime
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-How to build
+-============
+-
+-    $ make orangepi_prime_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your Orangepi Prime and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
+deleted file mode 100644
+index f8f958c67b..0000000000
+--- a/configs/orangepi_prime_defconfig
++++ /dev/null
+@@ -1,50 +0,0 @@
+-BR2_aarch64=y
+-BR2_cortex_a53=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Firmware
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_prime"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-prime"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Prime"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-prime/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
