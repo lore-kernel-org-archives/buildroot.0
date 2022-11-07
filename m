@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13EBDC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B3FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A81A542A6A;
-	Mon, 20 Feb 2023 21:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A81A542A6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EE6F41D49;
+	Mon, 20 Feb 2023 21:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EE6F41D49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B35susPp9mtO; Mon, 20 Feb 2023 21:10:27 +0000 (UTC)
+	with ESMTP id D5YMlq7WYXpp; Mon, 20 Feb 2023 21:10:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05FAF42A72;
-	Mon, 20 Feb 2023 21:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05FAF42A72
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06A8D1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 063C142A72;
+	Mon, 20 Feb 2023 21:10:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 063C142A72
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 06C311BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B17840AA5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B17840AA5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FE18610B0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FE18610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uNb2MshVTTEL for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kRzA9fVCA3mc for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADCA0409D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F57561067
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADCA0409D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F57561067
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A991A86495; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ id 14BE08648F; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Nov 2022 14:34:58 +0100
+Date: Mon, 7 Nov 2022 23:06:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 707938d6848ce945e07ca779748b49b27bdaf222
-X-Git-Newrev: 66653be5b85f6cbfceac51d95180f785f921b681
+X-Git-Oldrev: ea38acd17d88b9eaf853313398c772b94338ad47
+X-Git-Newrev: a38682dd54dde976836c37dcc30ec24baa474690
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205149.A991A86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/rock_pi_n10: remove
- defconfig
+Message-Id: <20230220205149.14BE08648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gptfdisk: fix popt
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,257 +59,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5643140698709005197=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5643140698709005197==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=66653be5b85f6cbfceac51d95180f785f921b681
+commit: https://git.buildroot.net/buildroot/commit/?id=a38682dd54dde976836c37dcc30ec24baa474690
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+Fix the following static build failure with popt and iconv raised since
+bump to version 1.0.9 in commit 69015ce94ac3ffe7f349ec37868eea0d0ffec90e
+and
+https://sourceforge.net/p/gptfdisk/code/ci/122b58ad82f1a144226d262c87241ee035ed1aff
+(which added an unified Makefile):
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+/home/autobuild/autobuild/instance-0/output-1/host/bin/mips64el-buildroot-linux-uclibc-g++ crc32.o support.o guid.o gptpart.o mbrpart.o basicmbr.o mbr.o gpt.o bsd.o parttypes.o attributes.o diskio.o diskio-unix.o sgdisk.o gptcl.o -static -liconv -lpopt  -o sgdisk
+/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/mips64el-buildroot-linux-uclibc/11.3.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpopt.a(poptint.o): in function `strdup_locale_from_utf8':
+poptint.c:(.text+0x113c): undefined reference to `libiconv_open'
+
+As can be seen above, this build failure is raised because -liconv is
+added before -lpopt so use pkgconfig and SGDISK_LDLIBS
+
+The addition of -liconv in LDLIBS could probably be removed in a
+follow-up patch for next branch
 
 Fixes:
+ - http://autobuild.buildroot.org/results/c9f2c9e737c2dd1cd4c1a08a5e8a48165179282d
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3259671399
-
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                           |  2 --
- board/radxa/rockpi-n10/extlinux.conf |  4 ---
- board/radxa/rockpi-n10/genimage.cfg  | 39 -----------------------
- board/radxa/rockpi-n10/post-build.sh |  5 ---
- board/radxa/rockpi-n10/readme.txt    | 61 ------------------------------------
- configs/rock_pi_n10_defconfig        | 55 --------------------------------
- 6 files changed, 166 deletions(-)
+ package/gptfdisk/gptfdisk.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ae20554f91..bd76ddca28 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2731,9 +2731,7 @@ N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/friendlyarm/nanopi-m4
- F:	board/pine64/rockpro64
- F:	board/radxa/rockpi-n8
--F:	board/radxa/rockpi-n10
- F:	configs/rock_pi_n8_defconfig
--F:	configs/rock_pi_n10_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-toolchain/
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 0df9cda08f..f3fc930202 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -15,7 +15,8 @@ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
  
-diff --git a/board/radxa/rockpi-n10/extlinux.conf b/board/radxa/rockpi-n10/extlinux.conf
-deleted file mode 100644
-index b6a4c97cd9..0000000000
---- a/board/radxa/rockpi-n10/extlinux.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--label RK3399_ROCK_PI_N10 linux
--  kernel /Image
--  devicetree /rk3399pro-rock-pi-n10.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p4 rw rootwait
-diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
-deleted file mode 100644
-index fe6fa3f8f9..0000000000
---- a/board/radxa/rockpi-n10/genimage.cfg
-+++ /dev/null
-@@ -1,39 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"rk3399pro-rock-pi-n10.dtb",
--			"extlinux"
--		}
--	}
--
--	size = 112M
--}
--
--image sdcard.img {
--	hdimage {
--		partition-table-type = "gpt"
--	}
--
--	partition loader1 {
--		image = "idbloader.img"
--		offset = 32K
--	}
--
--	partition loader2 {
--		image = "u-boot.itb"
--		offset = 8M
--	}
--
--	partition boot {
--		partition-type-uuid = F
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 16M
--	}
--
--	partition rootfs {
--		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/radxa/rockpi-n10/post-build.sh b/board/radxa/rockpi-n10/post-build.sh
-deleted file mode 100755
-index ba29375c05..0000000000
---- a/board/radxa/rockpi-n10/post-build.sh
-+++ /dev/null
-@@ -1,5 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/radxa/rockpi-n10/readme.txt b/board/radxa/rockpi-n10/readme.txt
-deleted file mode 100644
-index 49decbb3d9..0000000000
---- a/board/radxa/rockpi-n10/readme.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--RADXA ROCKPI-N10
--================
--https://wiki.radxa.com/RockpiN10
--
--Build:
--======
--  $ make rock_pi_n10_defconfig
--  $ make
--
--Files created in output directory
--=================================
--
--output/images
--.
--├── bl31.elf
--├── boot.vfat
--├── extlinux
--├── idbloader.img
--├── Image
--├── rk3399pro-rock-pi-n10.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--├── u-boot.bin
--└── u-boot.itb
--
--Creating bootable SD card:
--==========================
--
--Simply invoke (as root)
--
--sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device.
--
--Booting:
--========
--
--Serial console:
-----------------
--RockPi-N10 has a 40-pin GPIO header. The pin layout is as follows:
--
--pin 6:  gnd
--pin 8:  tx
--pin 10: rx
--
--Baudrate for this board is 1500000.
--
--The boot order on rockpi-n10 is emmc, sd. If emmc contains a valid Image, the board
--always boots from emmc. To boot from SD, erase emmc as per the guide:
--
--https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
--
--Login:
--------
--Enter 'root' as login user, and the prompt is ready.
--
--wiki link:
------------
--https://wiki.amarulasolutions.com/bsp/rockchip/rk3399pro/rock-pi-n10.html
-diff --git a/configs/rock_pi_n10_defconfig b/configs/rock_pi_n10_defconfig
-deleted file mode 100644
-index c622839c89..0000000000
---- a/configs/rock_pi_n10_defconfig
-+++ /dev/null
-@@ -1,55 +0,0 @@
--# Architecture
--BR2_aarch64=y
--BR2_cortex_a72_a53=y
--
--# Linux headers same as kernel, a 5.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n10-rk3399pro"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.2"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399pro-rock-pi-n10"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="rockpi-n10"
--BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N10"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="160M"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-n10/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-n10/post-build.sh"
-
---===============5643140698709005197==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ GPTFDISK_DEPENDENCIES += util-linux
+ ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
+-GPTFDISK_DEPENDENCIES += popt
++GPTFDISK_DEPENDENCIES += host-pkgconf popt
++GPTFDISK_SGDISK_LDLIBS += `$(PKG_CONFIG_HOST_BINARY) --libs popt`
+ endif
+ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
+ GPTFDISK_DEPENDENCIES += ncurses
+@@ -32,7 +33,8 @@ endif
+ 
+ define GPTFDISK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		LDLIBS='$(GPTFDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
++		LDLIBS='$(GPTFDISK_LDLIBS)' \
++		SGDISK_LDLIBS='$(GPTFDISK_SGDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
+ endef
+ 
+ define GPTFDISK_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5643140698709005197==--
