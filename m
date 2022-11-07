@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A127AC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C6FC433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B3B481403;
-	Mon,  7 Nov 2022 22:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B3B481403
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24C1D414C6;
+	Mon,  7 Nov 2022 22:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24C1D414C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EcRWV727Zi0C; Mon,  7 Nov 2022 22:17:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eCYSjmOGPiF5; Mon,  7 Nov 2022 22:17:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6777F81A18;
-	Mon,  7 Nov 2022 22:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6777F81A18
+	by smtp4.osuosl.org (Postfix) with ESMTP id 045D7410E4;
+	Mon,  7 Nov 2022 22:17:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 045D7410E4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F0AA61BF25F
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:17:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0715F1BF955
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA1114148F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3CB141496
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:17:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA1114148F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3CB141496
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K9Kcdf7vJye9 for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
+ with ESMTP id Wq4dFcPhA746 for <buildroot@lists.busybox.net>;
+ Mon,  7 Nov 2022 22:17:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF1254049A
+ by smtp4.osuosl.org (Postfix) with ESMTP id EED6B410C5
  for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1254049A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EED6B410C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99FA988167; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
+ id DD52B88107; Mon,  7 Nov 2022 22:17:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:16:26 +0100
+Date: Mon, 7 Nov 2022 23:16:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d1688c60f42b0186b8147aa58d35649e704b36cb
-X-Git-Newrev: 7927694514a19ed3259582ac0fad93a11b7a8ad3
+X-Git-Oldrev: db7089edd4cc9e0e12d149c55a719abcdf7d144f
+X-Git-Newrev: 9afa3e3c7d073643c325a948358550caf9a6f8f3
 X-Patchwork-Hint: ignore
-Message-Id: <20221107221713.99FA988167@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-weasyprint:
- bump to version 57.1
+Message-Id: <20221107221713.DD52B88107@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/meson: bump to version
+ 0.64.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7927694514a19ed3259582ac0fad93a11b7a8ad3
+commit: https://git.buildroot.net/buildroot/commit/?id=9afa3e3c7d073643c325a948358550caf9a6f8f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-weasyprint/python-weasyprint.hash | 4 ++--
- package/python-weasyprint/python-weasyprint.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-index 21e58d3677..4da8ea479a 100644
---- a/package/python-weasyprint/python-weasyprint.hash
-+++ b/package/python-weasyprint/python-weasyprint.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/weasyprint/json
--md5  b270213554d781c86b6c3d390b097f2f  weasyprint-57.0.tar.gz
--sha256  7b6f5cc13819e9a7d8748c1dbf0e8d2444f7a4818a98339f82dccaa822bf911b  weasyprint-57.0.tar.gz
-+md5  bab389bdfb25e03d64591c56367fb344  weasyprint-57.1.tar.gz
-+sha256  397a9d11298f94485ec3b7b68aeef1c6106fb638350126d9d4a64109b73508a0  weasyprint-57.1.tar.gz
- # Locally computed sha256 checksums
- sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-index 9dd364e1c1..d1e5e7983d 100644
---- a/package/python-weasyprint/python-weasyprint.mk
-+++ b/package/python-weasyprint/python-weasyprint.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 60d9ae9436..2a76f32874 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.63.3/meson-0.63.3.tar.gz.asc
+-sha256  519c0932e1a8b208741f0fdce90aa5c0b528dd297cf337009bf63539846ac056  meson-0.63.3.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.64.0/meson-0.64.0.tar.gz.asc
++sha256  c5e27e091c2a35b9049e152a6535045ebbd057253aeb67856de6ecbb7b917bab  meson-0.64.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 3ca483c289..06ca555d12 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WEASYPRINT_VERSION = 57.0
-+PYTHON_WEASYPRINT_VERSION = 57.1
- PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
--PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/b7/98/cd0df64b306ac901ffd53c50d9d5d79d92cae756b6469fc14771adb39d77
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/32/3f/d305dc714c119e5b11c0ea1ecff9741407b6da90d6b684859d3b3e586692
- PYTHON_WEASYPRINT_SETUP_TYPE = flit
- PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
- PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+-MESON_VERSION = 0.63.3
++MESON_VERSION = 0.64.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
