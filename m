@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5A8BC6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E420C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D372408E3;
-	Mon, 20 Feb 2023 20:54:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D372408E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10B4341A65;
+	Mon, 20 Feb 2023 20:54:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B4341A65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kR2ZhKmJiRNR; Mon, 20 Feb 2023 20:54:13 +0000 (UTC)
+	with ESMTP id lHOx4EG2kOxL; Mon, 20 Feb 2023 20:54:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10B9241CE1;
-	Mon, 20 Feb 2023 20:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B9241CE1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05DFE1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D164A41CBA;
+	Mon, 20 Feb 2023 20:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D164A41CBA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C2631BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F084261081
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F084261081
+ by smtp4.osuosl.org (Postfix) with ESMTP id 726164194F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 726164194F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i8ekCigeyeGu for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gT1qIxzRA9ed for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E773161033
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E773161033
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF6C04192D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF6C04192D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5D058648F; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+ id AE26786496; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:03:30 +0100
+Date: Mon, 7 Nov 2022 22:17:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1a95fcbebf5955de48dd7f57dfc27708739968da
-X-Git-Newrev: 82480ee22bdfae6f7d399975722b5c125749d8c7
+X-Git-Oldrev: d968cab0bd673311a87a8fc5187b1701200719de
+X-Git-Newrev: 60361bfabeaead7b262c6b918a5e3962a9e32f31
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205145.E5D058648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ipmitool: fix static
- build with readline
+Message-Id: <20230220205148.AE26786496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/friendlyarm_nanopi_r1:
+ remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,103 +57,522 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82480ee22bdfae6f7d399975722b5c125749d8c7
+commit: https://git.buildroot.net/buildroot/commit/?id=60361bfabeaead7b262c6b918a5e3962a9e32f31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following static build failure with readline raised since bump
-to version 1.8.19 in commit 8317065ecb4979fe43c466f7e5a7f6dc281bd10d and
-https://github.com/ipmitool/ipmitool/commit/63dd71c39c9bf522ad3a785dd001737a285458eb:
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-configure:15125: /tmp/instance-0/output-1/host/bin/armeb-buildroot-linux-musleabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g0  -static -Wall -Wextra -std=gnu11 -pedantic -Wformat -Wformat-nonliteral -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lreadline   -lcrypto >&5
-/tmp/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/11.3.0/../../../../armeb-buildroot-linux-musleabi/bin/ld: /tmp/instance-0/output-1/host/armeb-buildroot-linux-musleabi/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
-display.c:(.text+0x80fc): undefined reference to `tputs'
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dabc6a4f49d464c129ac6bc3710011678142fcbe
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499056
+
+Cc: Davide Viti <zinosat@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...01-configure.ac-fix-readline-static-build.patch | 49 ++++++++++++++++++++++
- package/ipmitool/ipmitool.mk                       |  2 +-
- 2 files changed, 50 insertions(+), 1 deletion(-)
+ DEVELOPERS                                         |   2 -
+ board/friendlyarm/nanopi-r1/boot.cmd               |   8 -
+ board/friendlyarm/nanopi-r1/genimage.cfg           |  37 -----
+ .../nanopi-r1/kernel/linux-extras.config           |   2 -
+ .../nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts        | 170 ---------------------
+ board/friendlyarm/nanopi-r1/readme.txt             |  29 ----
+ .../nanopi-r1/uboot/nanopi_r1_defconfig            |  22 ---
+ .../nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts         | 102 -------------
+ configs/friendlyarm_nanopi_r1_defconfig            |  49 ------
+ 9 files changed, 421 deletions(-)
 
-diff --git a/package/ipmitool/0001-configure.ac-fix-readline-static-build.patch b/package/ipmitool/0001-configure.ac-fix-readline-static-build.patch
-new file mode 100644
-index 0000000000..e3d4349502
---- /dev/null
-+++ b/package/ipmitool/0001-configure.ac-fix-readline-static-build.patch
-@@ -0,0 +1,49 @@
-+From 9836e2211ba8b3035a1d390bbf6a0eebe4c2439d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 3 Nov 2022 17:19:09 +0100
-+Subject: [PATCH] configure.ac: fix readline static build
-+
-+Use pkg-config to retrieve readline dependencies such as ncurses to
-+avoid the following static build when readline is built with ncurses
-+support (which is raised since version 1.8.19 and
-+https://github.com/ipmitool/ipmitool/commit/63dd71c39c9bf522ad3a785dd001737a285458eb):
-+
-+** Unable to build Solaris 9 x86 IPMI interface support!
-+checking for library containing readline... no
-+configure: error: ** Unable to find readline required by ipmishell.
-+
-+[...]
-+
-+configure:15125: /tmp/instance-0/output-1/host/bin/armeb-buildroot-linux-musleabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g0  -static -Wall -Wextra -std=gnu11 -pedantic -Wformat -Wformat-nonliteral -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lreadline   -lcrypto >&5
-+/tmp/instance-0/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/11.3.0/../../../../armeb-buildroot-linux-musleabi/bin/ld: /tmp/instance-0/output-1/host/armeb-buildroot-linux-musleabi/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
-+display.c:(.text+0x80fc): undefined reference to `tputs'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/dabc6a4f49d464c129ac6bc3710011678142fcbe
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ipmitool/ipmitool/pull/374]
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d6ba62b..4ee1be8 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -624,7 +624,11 @@ AC_ARG_ENABLE([ipmishell],
-+ 
-+ dnl check for readline library to enable ipmi shell
-+ if test "x$xenable_ipmishell" = "xyes"; then
-+-	AC_SEARCH_LIBS([readline], [readline edit], [have_readline=yes])
-++	PKG_PROG_PKG_CONFIG
-++	PKG_CHECK_MODULES([READLINE], [readline],
-++		[LIBS="$LIBS $READLINE_LIBS" have_readline=yes],
-++		[AC_SEARCH_LIBS([readline], [readline edit], [have_readline=yes])]
-++	)
-+ 	if test "x$have_readline" != "xyes"; then
-+ 		AC_MSG_ERROR([** Unable to find readline required by ipmishell.])
-+ 		xenable_ipmishell=no
-+-- 
-+2.35.1
-+
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index 0b8befffcd..ebd8f9b337 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -34,7 +34,7 @@ IPMITOOL_CONF_OPTS += --disable-intf-usb
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0c9f885808..45cf302386 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -721,8 +721,6 @@ N:	David Pierret <david.pierret@smile.fr>
+ F:	package/bat/
  
- ifeq ($(BR2_PACKAGE_IPMITOOL_IPMISHELL),y)
--IPMITOOL_DEPENDENCIES += readline
-+IPMITOOL_DEPENDENCIES += host-pkgconf readline
- IPMITOOL_CONF_OPTS += --enable-ipmishell
- else
- IPMITOOL_CONF_OPTS += --disable-ipmishell
+ N:	Davide Viti <zinosat@gmail.com>
+-F:	board/friendlyarm/nanopi-r1/
+-F:	configs/friendlyarm_nanopi_r1_defconfig
+ F:	package/flann/
+ F:	package/python-paho-mqtt/
+ F:	package/qhull/
+diff --git a/board/friendlyarm/nanopi-r1/boot.cmd b/board/friendlyarm/nanopi-r1/boot.cmd
+deleted file mode 100644
+index 9f0cdbfe51..0000000000
+--- a/board/friendlyarm/nanopi-r1/boot.cmd
++++ /dev/null
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
+-
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-r1.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-r1/genimage.cfg b/board/friendlyarm/nanopi-r1/genimage.cfg
+deleted file mode 100644
+index a180311cae..0000000000
+--- a/board/friendlyarm/nanopi-r1/genimage.cfg
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# Minimal SD card image for the NanoPi M1
+-#
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-nanopi-r1.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 10M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/board/friendlyarm/nanopi-r1/kernel/linux-extras.config b/board/friendlyarm/nanopi-r1/kernel/linux-extras.config
+deleted file mode 100644
+index 206b3810a7..0000000000
+--- a/board/friendlyarm/nanopi-r1/kernel/linux-extras.config
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# USB ethernet
+-CONFIG_USB_RTL8152=y
+diff --git a/board/friendlyarm/nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts b/board/friendlyarm/nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts
+deleted file mode 100644
+index ca15a57bee..0000000000
+--- a/board/friendlyarm/nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts
++++ /dev/null
+@@ -1,170 +0,0 @@
+-/*
+- * Copyright (C) 2019 Igor Pecovnik <igor@armbian.com>
+- *
+- * This file is dual-licensed: you can use it either under the terms
+- * of the GPL or the X11 license, at your option. Note that this dual
+- * licensing only applies to this file, and not this project as a
+- * whole.
+- *
+- *  a) This file is free software; you can redistribute it and/or
+- *     modify it under the terms of the GNU General Public License as
+- *     published by the Free Software Foundation; either version 2 of the
+- *     License, or (at your option) any later version.
+- *
+- *     This file is distributed in the hope that it will be useful,
+- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *     GNU General Public License for more details.
+- *
+- * Or, alternatively,
+- *
+- *  b) Permission is hereby granted, free of charge, to any person
+- *     obtaining a copy of this software and associated documentation
+- *     files (the "Software"), to deal in the Software without
+- *     restriction, including without limitation the rights to use,
+- *     copy, modify, merge, publish, distribute, sublicense, and/or
+- *     sell copies of the Software, and to permit persons to whom the
+- *     Software is furnished to do so, subject to the following
+- *     conditions:
+- *
+- *     The above copyright notice and this permission notice shall be
+- *     included in all copies or substantial portions of the Software.
+- *
+- *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+- *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+- *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+- *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+- *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+- *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+- *     OTHER DEALINGS IN THE SOFTWARE.
+- */
+-
+-#include "sun8i-h3-nanopi.dtsi"
+-
+-/ {
+-	model = "FriendlyElec NanoPi-R1";
+-	compatible = "friendlyarm,nanopi-r1", "allwinner,sun8i-h3";
+-
+-	aliases {
+-		serial1 = &uart3;
+-		ethernet0 = &emac;
+-		ethernet1 = &emac;
+-		ethernet2 = &sdio_wifi;
+-	};
+-
+-	wifi_pwrseq: wifi_pwrseq {
+-		compatible = "mmc-pwrseq-simple";
+-		pinctrl-names = "default";
+-		reset-gpios = <&r_pio 0 7 GPIO_ACTIVE_LOW>; /* PL7 */
+-	};
+-
+-	reg_gmac_3v3: gmac-3v3 {
+-		compatible = "regulator-fixed";
+-		regulator-name = "gmac-3v3";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		startup-delay-us = <100000>;
+-		enable-active-high;
+-		gpio = <&pio 3 6 GPIO_ACTIVE_HIGH>;
+-	};
+-
+-	leds {
+-		/delete-node/ status;
+-		/delete-node/ pwr;
+-		led1 {
+-			label = "LED1";
+-			gpios = <&pio 0 10 GPIO_ACTIVE_HIGH>;
+-			linux,default-trigger = "heartbeat";
+-		};
+-
+-		led2 {
+-			label = "LED2";
+-			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>;
+-			default-state = "off";
+-			linux,default-trigger = "netdev";
+-		};
+-
+-		led3 {
+-			label = "LED3";
+-			gpios = <&pio 0 9 GPIO_ACTIVE_HIGH>;
+-			default-state = "off";
+-			linux,default-trigger = "netdev";
+-		};
+-	};
+-
+-	r_gpio_keys {
+-		compatible = "gpio-keys";
+-		input-name = "k1";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&sw_r_npi>;
+-
+-		/delete-node/ k1;
+-		reset {
+-			label = "reset";
+-			linux,code = <BTN_1>;
+-			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
+-		};
+-	};
+-};
+-
+-&emac {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&emac_rgmii_pins>;
+-	phy-supply = <&reg_gmac_3v3>;
+-	phy-handle = <&ext_rgmii_phy>;
+-	phy-mode = "rgmii";
+-
+-	status = "okay";
+-};
+-
+-&external_mdio {
+-	ext_rgmii_phy: ethernet-phy@1 {
+-		compatible = "ethernet-phy-ieee802.3-c22";
+-		reg = <7>;
+-	};
+-};
+-
+-&mmc1 {
+-	vmmc-supply = <&reg_vcc3v3>;
+-	vqmmc-supply = <&reg_vcc3v3>;
+-	mmc-pwrseq = <&wifi_pwrseq>;
+-	bus-width = <4>;
+-	non-removable;
+-	status = "okay";
+-
+-	sdio_wifi: sdio_wifi@1 {
+-		reg = <1>;
+-		compatible = "brcm,bcm4329-fmac";
+-		interrupt-parent = <&pio>;
+-		interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 / EINT10 */
+-		interrupt-names = "host-wake";
+-	};
+-};
+-
+-&mmc2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mmc2_8bit_pins>;
+-	vmmc-supply = <&reg_vcc3v3>;
+-	vqmmc-supply = <&reg_vcc3v3>;
+-	bus-width = <8>;
+-	non-removable;
+-	status = "okay";
+-};
+-
+-&ohci0 {
+-	status = "okay";
+-};
+-
+-&ohci1 {
+-	status = "okay";
+-};
+-
+-&usb_otg {
+-	dr_mode = "peripheral";
+-	status = "okay";
+-};
+-
+-&usbphy {
+-	status = "okay";
+-};
+diff --git a/board/friendlyarm/nanopi-r1/readme.txt b/board/friendlyarm/nanopi-r1/readme.txt
+deleted file mode 100644
+index fa3114fc83..0000000000
+--- a/board/friendlyarm/nanopi-r1/readme.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-NanoPi R1
+-
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the NanoPi R1. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-How to build it
+-===============
+-
+-Configure Buildroot:
+-
+-    $ make friendlyarm_nanopi_r1_defconfig
+-
+-Compile everything and build the SD card image:
+-
+-    $ make
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig b/board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig
+deleted file mode 100644
+index e028b41a46..0000000000
+--- a/board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig
++++ /dev/null
+@@ -1,22 +0,0 @@
+-CONFIG_ARM=y
+-CONFIG_ARCH_SUNXI=y
+-CONFIG_SPL=y
+-CONFIG_MACH_SUN8I_H3=y
+-CONFIG_DRAM_CLK=408
+-CONFIG_DRAM_ZQ=3881979
+-CONFIG_DRAM_ODT_EN=y
+-CONFIG_MACPWR="PD6"
+-# CONFIG_VIDEO_DE2 is not set
+-CONFIG_NR_DRAM_BANKS=1
+-# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
+-CONFIG_CONSOLE_MUX=y
+-CONFIG_SYS_CLK_FREQ=480000000
+-# CONFIG_CMD_FLASH is not set
+-# CONFIG_SPL_DOS_PARTITION is not set
+-# CONFIG_SPL_EFI_PARTITION is not set
+-CONFIG_DEFAULT_DEVICE_TREE="sun8i-h3-nanopi-r1"
+-CONFIG_SUN8I_EMAC=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_SYS_USB_EVENT_POLL_VIA_INT_QUEUE=y
+-CONFIG_MMC_SUNXI_SLOT_EXTRA=2
+diff --git a/board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts b/board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts
+deleted file mode 100644
+index 9c3c574e0f..0000000000
+--- a/board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts
++++ /dev/null
+@@ -1,102 +0,0 @@
+-/*
+- * Copyright (C) 2019 Igor Pecovnik <igor@armbian.com>
+- *
+- * This file is dual-licensed: you can use it either under the terms
+- * of the GPL or the X11 license, at your option. Note that this dual
+- * licensing only applies to this file, and not this project as a
+- * whole.
+- *
+- *  a) This file is free software; you can redistribute it and/or
+- *     modify it under the terms of the GNU General Public License as
+- *     published by the Free Software Foundation; either version 2 of the
+- *     License, or (at your option) any later version.
+- *
+- *     This file is distributed in the hope that it will be useful,
+- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *     GNU General Public License for more details.
+- *
+- * Or, alternatively,
+- *
+- *  b) Permission is hereby granted, free of charge, to any person
+- *     obtaining a copy of this software and associated documentation
+- *     files (the "Software"), to deal in the Software without
+- *     restriction, including without limitation the rights to use,
+- *     copy, modify, merge, publish, distribute, sublicense, and/or
+- *     sell copies of the Software, and to permit persons to whom the
+- *     Software is furnished to do so, subject to the following
+- *     conditions:
+- *
+- *     The above copyright notice and this permission notice shall be
+- *     included in all copies or substantial portions of the Software.
+- *
+- *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+- *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+- *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+- *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+- *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+- *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+- *     OTHER DEALINGS IN THE SOFTWARE.
+- */
+-
+-#include "sun8i-h3-nanopi.dtsi"
+-
+-/ {
+-	model = "FriendlyARM NanoPi R1";
+-	compatible = "friendlyarm,nanopi-neo", "allwinner,sun8i-h3";
+-
+-	reg_gmac_3v3: gmac-3v3 {
+-		compatible = "regulator-fixed";
+-		pinctrl-names = "default";
+-		regulator-name = "gmac-3v3";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		startup-delay-us = <100000>;
+-		enable-active-high;
+-		gpio = <&pio 3 6 GPIO_ACTIVE_HIGH>;
+-	};
+-
+-};
+-
+-&ehci0 {
+-	status = "okay";
+-};
+-
+-&pio {
+-	gmac_power_pin_nanopi: gmac_power_pin@0 {
+-		pins = "PD6";
+-		function = "gpio_out";
+-	};
+-};
+-
+-&ohci0 {
+-	status = "okay";
+-};
+-
+-&mmc2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mmc2_8bit_pins>;
+-	vmmc-supply = <&reg_vcc3v3>;
+-	bus-width = <8>;
+-	non-removable;
+-	cap-mmc-hw-reset;
+-	status = "okay";
+-};
+-
+-&emac {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&emac_rgmii_pins>;
+-	phy-supply = <&reg_gmac_3v3>;
+-	phy-handle = <&ext_rgmii_phy>;
+-	phy-mode = "rgmii";
+-
+-	status = "okay";
+-};
+-
+-&external_mdio {
+-	ext_rgmii_phy: ethernet-phy@1 {
+-		compatible = "ethernet-phy-ieee802.3-c22";
+-		reg = <7>;
+-	};
+-};
+diff --git a/configs/friendlyarm_nanopi_r1_defconfig b/configs/friendlyarm_nanopi_r1_defconfig
+deleted file mode 100644
+index 8b03f6dd00..0000000000
+--- a/configs/friendlyarm_nanopi_r1_defconfig
++++ /dev/null
+@@ -1,49 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# System configuration
+-BR2_TARGET_GENERIC_HOSTNAME="nanopi-r1"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi R1"
+-
+-# Bootloaders
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts"
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-r1/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/friendlyarm/nanopi-r1/kernel/linux-extras.config"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/friendlyarm/nanopi-r1/kernel/sun8i-h3-nanopi-r1.dts"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-r1"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-r1/genimage.cfg"
+-# BR2_TARGET_ROOTFS_TAR is not set
+-
+-# Additional tools
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
