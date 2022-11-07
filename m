@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C6CC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B96F6C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12BB881911;
-	Mon,  7 Nov 2022 22:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12BB881911
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xHwgUscKqib1; Mon,  7 Nov 2022 22:10:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49E058146D;
-	Mon,  7 Nov 2022 22:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49E058146D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B6681BF25F
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:10:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6938340329
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:10:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6938340329
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65FE94063E;
+	Mon,  7 Nov 2022 22:11:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65FE94063E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVloTEd978Ei for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 22:10:21 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NeFVZSncVKSC; Mon,  7 Nov 2022 22:11:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A67F740329;
+	Mon,  7 Nov 2022 22:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A67F740329
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E1C811BF25F
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:10:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC4FA410C5
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC4FA410C5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gqqd5jHez9kT for <buildroot@lists.busybox.net>;
+ Mon,  7 Nov 2022 22:10:57 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 548C04031F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80FBD410BE
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 548C04031F
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:10:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80FBD410BE
+ for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:10:57 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9F7F31BF209;
- Mon,  7 Nov 2022 22:10:18 +0000 (UTC)
-Date: Mon, 7 Nov 2022 23:10:17 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221107231017.776896ab@windsurf>
-In-Reply-To: <20221107172718.8203-1-fontaine.fabrice@gmail.com>
-References: <20221107172718.8203-1-fontaine.fabrice@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id BCCB91BF205;
+ Mon,  7 Nov 2022 22:10:55 +0000 (UTC)
+Date: Mon, 7 Nov 2022 23:10:55 +0100
+To: Gleb Mazovetskiy <glex.spb@gmail.com>
+Message-ID: <20221107231055.0dfc3241@windsurf>
+In-Reply-To: <20221106142634.875639-1-glex.spb@gmail.com>
+References: <20221106142634.875639-1-glex.spb@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1667859019;
+ d=bootlin.com; s=gm1; t=1667859056;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=t69M4iHTUkiK9KX9rW165IbI2Uf1LbMNMAj7BntGDwI=;
- b=Lz1maVCjzAFCA/KNOKBMjyZm8O0xj/ww9xBrvNJhy0N6x0X4+s6e+BrDi0mD1h/pxP26TV
- gHum6iIVX0f2sAMCzJ9XlN6xPiUZtO5YhTxlJrjb4LxIVYxjxhTUwQKf1dcDDvXu3FAvRL
- Lqc4vHdbtLUOToB5LYsflox+D2nONj6CTfmmPZbjxx3jD3+lSgJFL+6KWujESWSgHSNODQ
- 7qVchcH/5BbcGzVBHp73cptvpUbFciCobHTz67XcdSudk09DE+a3YLLvUw6dA9IJK/H/v3
- DWq1hdk4nLGnDh5cZBHzi/oHKqmWHreQF/uVtbXXd1xkxz6HIJEBCC/2rJj84w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=FdhIt00VHAJQW0lqY9LhU0/cxGwa4CrZK18QWIPUS0o=;
+ b=VxOhvPZjrl0wINoIr7WE0MsHooRMXeLHSvCMVrjw801RsTB65cVzT1FIhq0gyR14pqMaj/
+ BrMYMzj2XJ9FPI8SulQbJB88E0kJKTWz2wrMZbfIBccYYnfzvg1XTQ8OxqkCZelLL7Y5QG
+ wi/R3/8lX7ureoTxNIJdJV4uq0SelzKKF8be/ftaS7lEHmY4EA3aisl/YEP0RkZvb2B02V
+ 5wnG2jiRkCXQa1knph2u7Nei63keR811YC2MzbCa8QZSgsqk8rJtbAZK2Qr+JYnAE4vrPM
+ NDkAT77n2Ax8tfRap21fxfPBZMjBKseaA/aH9sKES44xlncJsIQPndsu6tkl1g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Lz1maVCj
-Subject: Re: [Buildroot] [PATCH v2,1/1] package/libkcapi: fix uclibc build
+ header.s=gm1 header.b=VxOhvPZj
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: unexport PERL_MM_OPT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +77,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Tan En De <ende.tan@starfivetech.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  7 Nov 2022 18:27:18 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun,  6 Nov 2022 14:26:34 +0000
+Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
 
-> Fix the following uclibc build failure raised since bump to version
-> 1.4.0 in commit 06a9dc3528847ec6c12a9b6188d4106e086eabe5 and
-> https://github.com/smuellerDD/libkcapi/commit/12f19b9a1dd308117f83e8cb33e28e3c040710a0:
+> Compilation of Perl-related packages fails if `PERL_MM_OPT` is defined.
 > 
-> lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
-> lib/kcapi-kernel-if.c:196:26: error: conversion to 'int' from 'size_t' {aka 'unsigned int'} may change the sign of the result [-Werror=sign-conversion]
->   196 |         msg.msg_iovlen = kcapi_downcast_int(iovlen);
->       |                          ^~~~~~~~~~~~~~~~~~
+> We previously issued an error in this case.
+> Instead, simply `unexport` the variable.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/eccf4b84670b5ef0fdd68b46338edf5043c7cc0d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 > ---
-> Changes v1 -> v2 (after review of Tan En De):
->  - Use upstream patch
+>  Makefile                             | 3 +++
+>  support/dependencies/dependencies.sh | 9 ---------
+>  2 files changed, 3 insertions(+), 9 deletions(-)
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
