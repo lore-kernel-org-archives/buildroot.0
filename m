@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61009C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75221C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1C09410C5;
-	Mon,  7 Nov 2022 22:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1C09410C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2839E81A0D;
+	Mon,  7 Nov 2022 22:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2839E81A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hg_VMq3cAyJG; Mon,  7 Nov 2022 22:11:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vkYmdsN6my99; Mon,  7 Nov 2022 22:11:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFE3D40290;
-	Mon,  7 Nov 2022 22:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFE3D40290
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44466819F5;
+	Mon,  7 Nov 2022 22:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44466819F5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E193A1BF954
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:11:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2605C1BF954
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD375818AC
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD375818AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EF7D818AC
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EF7D818AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QBJfVBJVflMj for <buildroot@lists.busybox.net>;
+ with ESMTP id TaET8rjrDmD5 for <buildroot@lists.busybox.net>;
  Mon,  7 Nov 2022 22:11:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEB1F8146D
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEB1F8146D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 050118188B
+ for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:11:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 050118188B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAB8F88112; Mon,  7 Nov 2022 22:11:20 +0000 (UTC)
+ id E8FDF88114; Mon,  7 Nov 2022 22:11:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:10:47 +0100
+Date: Mon, 7 Nov 2022 23:11:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8450b769187087751f83cbefcf0a88f70d9da670
-X-Git-Newrev: f7a6011f78044e782c5ef19d1f5abb3b6fd9e435
+X-Git-Oldrev: f7a6011f78044e782c5ef19d1f5abb3b6fd9e435
+X-Git-Newrev: d1688c60f42b0186b8147aa58d35649e704b36cb
 X-Patchwork-Hint: ignore
-Message-Id: <20221107221120.DAB8F88112@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Makefile: unexport PERL_MM_OPT
+Message-Id: <20221107221120.E8FDF88114@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wayland-protocols:
+ bump to version 1.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7a6011f78044e782c5ef19d1f5abb3b6fd9e435
+commit: https://git.buildroot.net/buildroot/commit/?id=d1688c60f42b0186b8147aa58d35649e704b36cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Compilation of Perl-related packages fails if `PERL_MM_OPT` is defined.
-
-We previously issued an error in this case.
-Instead, simply `unexport` the variable.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile                             | 3 +++
- support/dependencies/dependencies.sh | 9 ---------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 6 +++---
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7c1c07a2e4..71b622474f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -396,6 +396,9 @@ unexport DESTDIR
- # Causes breakage with packages that needs host-ruby
- unexport RUBYOPT
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 4717523dc2..8884babbc0 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2022-October/042466.html
+-sha256  9046f10a425d4e2a00965a03acfb6b3fb575a56503ac72c2b86821c69653375c  wayland-protocols-1.27.tar.xz
+-sha512  c0a49bc46c663c9f602998dfe2e184c09756790fbcc7acbc2bf9d9cf8f7d6dcdd00259b768222a30e5d134e6f97f7f4faf252947b544e8b32f53278b70da0390  wayland-protocols-1.27.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2022-November/042490.html
++sha256  c7659fb6bf14905e68ef605f898de60d1c066bf66dbea92798573dddec1535b6  wayland-protocols-1.28.tar.xz
++sha512  092454c6a7e5cc47729de49e9061fb91dfdc5610859e17c495642806ca14dcfb3850a5d3a7459ddb70b2adb08d2590d4b0f92c3a97600e48598682d59adb102f  wayland-protocols-1.28.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 2510d7c04e..830136ce06 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Compilation of perl-related packages will fail otherwise
-+unexport PERL_MM_OPT
-+
- include package/pkg-utils.mk
- include package/doc-asciidoc.mk
- 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 2b678ae8c4..4b5012b807 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -46,15 +46,6 @@ case ":${PATH:-unset}:" in
- 	;;
- esac
- 
--if test -n "$PERL_MM_OPT" ; then
--	echo
--	echo "You have PERL_MM_OPT defined because Perl local::lib"
--	echo "is installed on your system. Please unset this variable"
--	echo "before starting Buildroot, otherwise the compilation of"
--	echo "Perl related packages will fail"
--	exit 1
--fi
--
- check_prog_host()
- {
- 	prog="$1"
+-WAYLAND_PROTOCOLS_VERSION = 1.27
++WAYLAND_PROTOCOLS_VERSION = 1.28
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
