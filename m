@@ -1,53 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48B7C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 06:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 692D8C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 07:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0EF5B40360;
-	Mon,  7 Nov 2022 06:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EF5B40360
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEA8660AC3;
+	Mon,  7 Nov 2022 07:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA8660AC3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c4NXAgtCaluh; Mon,  7 Nov 2022 06:38:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bd6aGhh9qF_R; Mon,  7 Nov 2022 07:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 420644023D;
-	Mon,  7 Nov 2022 06:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 420644023D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 75D4C1BF2C0
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 06:38:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1444360A99;
+	Mon,  7 Nov 2022 07:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1444360A99
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 71E701BF419
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 07:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 511C84023D
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 06:38:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 511C84023D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 469B860A99
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 07:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 469B860A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cATGVIr2gWrY for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 06:38:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xNEDANmhCEyY for <buildroot@lists.busybox.net>;
+ Mon,  7 Nov 2022 07:52:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5DDD400C4
-Received: from serv15.avernis.de (15-133.avernis.de
- [IPv6:2a01:4f8:151:30a2::cafe])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A5DDD400C4
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 06:38:46 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id 50358BDE3664
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 07:38:43 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F4BD605B7
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3F4BD605B7
+ for <buildroot@buildroot.org>; Mon,  7 Nov 2022 07:52:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 90DED40006;
+ Mon,  7 Nov 2022 07:52:01 +0000 (UTC)
+Date: Mon, 7 Nov 2022 08:52:00 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20221107085200.4b2eb2ed@windsurf>
+In-Reply-To: <20221106150330.GY3918838@scaer>
+References: <20221103224539.692322-1-thomas.petazzoni@bootlin.com>
+ <20221103224539.692322-2-thomas.petazzoni@bootlin.com>
+ <20221106150330.GY3918838@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Mon, 07 Nov 2022 06:38:43 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot <buildroot@buildroot.org>
-Message-ID: <a68289a542b9c7e28e8486e4b8b58070@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] RFC: package/boost: build failure
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1667807522;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BxBseEfR4mmxtWnVZblUdstQlWM9eSRynPJJK0oXtsw=;
+ b=p7qWycHZCVN/HfW7WTAlnz34NgCCjwN1PWZgV9A+rdcNPA1p1ET3EiyOTDk/QEpEQ9YF/M
+ OL/EGGlBgE8CIShuORL7+yaWZREcn8kYGtXFvgZrOJtC7VHJqmsQvnSieMZsahqMYrQgyc
+ UmAGv/5EMPuaVK3xyf+HxVtsQq9mz5RSz9YhdpJlM4pfl81pyaiE1zPs44mc4OZDWr6ueX
+ DO0bRavMiuDxbHZb5wTr5rfHX7N2Z4u4rxC7lGPjWLb50yj+DDirk4PpNGLeNSPGz2tMHq
+ fYZRIvatjDtX8H7pCHGQk/A5nfXRk5QnSFPpxyZ4rynv24z+eb0l7QKoXJpfbA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=p7qWycHZ
+Subject: Re: [Buildroot] [PATCH next 2/2] package/pkg-cargo: move CARGO_HOME
+ into DL_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +78,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Moritz Bitsch <moritz@h6t.eu>, James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dear all,
+Hello,
 
-package/boost currently fails to build for certain architectures (64bit 
-w/ 128bit integer processing), resulting in the following build failure 
-[1]:
+On Sun, 6 Nov 2022 16:03:30 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-/home/autobuild/autobuild/instance-4/output-1/host/mips64-buildroot-linux-gnu/sysroot/usr/include/boost/intrusive/hashtable.hpp: 
-In static member function 'static std::size_t 
-boost::intrusive::prime_list_holder<Dummy>::position(std::size_t, 
-std::size_t)':
-/home/autobuild/autobuild/instance-4/output-1/host/mips64-buildroot-linux-gnu/sysroot/usr/include/boost/intrusive/hashtable.hpp:222:69: 
-error: 'sizes' was not declared in this scope; did you mean 'size'?
-   222 |          return fastmod_u32(hash, inv_sizes32[size_index], 
-uint32_t(sizes[size_index]));
-       |                                                                  
-    ^~~~~
-       |                                                                  
-    size
+> I am not a fan of dot-directories, because they get hidden, especially
+> since BR2_DL_DIR can be set in the environment and point to a long-lived
+> directory.
+> 
+> Instead, I would just call it 'cargo-home'. If that's OK, we can change
+> when applying...
 
-The development branch of boost/intrusive contains a fix for this 
-failure which, unfortunately, is rather longish [2]. Easy extraction of 
-the relevant part of the patch is not possible, due to massive changes 
-to the whole code.
+I don't feel strongly about it. I used .cargo because that's how the
+default CARGO_HOME folder is named in one's $HOME directory. Also, it
+makes sure there is no potential conflict with an hypothetical
+cargo-home package. But overall, I agree that I also don't like it
+being hidden. We could also name it br-cargo-home, so that it doesn't
+really look like a package download directory.
 
-I can think of three options to deal with this issue:
+But really, I don't feel strongly about it and $(DL_DIR)/cargo-home
+works fine for me.
 
-   (1) Use the commit [2] as is, even if it changes more than the failing 
-code
-   (2) Create a custom diff for prime_list_holder::position()
-   (3) Live with the failure until boost 1.81 is released
+Thanks!
 
-Incidence rate of (3) is low; numbers (1) and (2) both deviate from the 
-Buildroot preferred approach, so my question would be: how to proceed 
-here?
-
-Kind regards,
-Andreas
-
-[1] 
-http://autobuild.buildroot.net/results/6cb/6cbc0672f3c5046405793d8cdc8f961d2ffb1d3e
-[2] 
-https://github.com/boostorg/intrusive/commit/825aedad557b7e3bb27614335b6ced16887103de
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
