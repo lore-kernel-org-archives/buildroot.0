@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC14C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:13:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB69EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9735740935;
-	Mon, 20 Feb 2023 21:13:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9735740935
+	by smtp4.osuosl.org (Postfix) with ESMTP id 961B742AB2;
+	Mon, 20 Feb 2023 21:14:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 961B742AB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yxve-so3wnDs; Mon, 20 Feb 2023 21:13:53 +0000 (UTC)
+	with ESMTP id qO1oPVn1Y7mK; Mon, 20 Feb 2023 21:14:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 242A041735;
-	Mon, 20 Feb 2023 21:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 242A041735
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B9B41BF956
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF71842AF2;
+	Mon, 20 Feb 2023 21:14:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF71842AF2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 044C11BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C071A414F1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C071A414F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4CCD610A1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4CCD610A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DpXMM4noFUIe for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wNfqo-j1Vdp7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0F8641162
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0F8641162
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0374761020
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0374761020
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E59486494; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+ id EE6BA828C8; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:13:10 +0100
+Date: Mon, 7 Nov 2022 22:17:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2f0e82c4ef8bc02bf8b2ada7bf5daf940d4e4cac
-X-Git-Newrev: 6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
+X-Git-Oldrev: 08b6ce741a0d5309368e7bb7b41951a27ebe85f4
+X-Git-Newrev: 5099a1058d93821399ea758c5227e1fbbe6f76de
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205150.9E59486494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ntfs-3g: security bump
- to version 2022.10.3
+Message-Id: <20230220205148.EE6BA828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_win: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,56 +57,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
+commit: https://git.buildroot.net/buildroot/commit/?id=5099a1058d93821399ea758c5227e1fbbe6f76de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
-2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
-local attacker can exploit this if the ntfs-3g binary is setuid root. A
-physically proximate attacker can exploit this if NTFS-3G software is
-configured to execute upon attachment of an external storage device.
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
-https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499145
+
+Cc: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ntfs-3g/ntfs-3g.hash | 2 +-
- package/ntfs-3g/ntfs-3g.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                               |  2 --
+ board/orangepi/orangepi-win/boot.cmd     |  6 ----
+ board/orangepi/orangepi-win/genimage.cfg | 40 --------------------------
+ board/orangepi/orangepi-win/readme.txt   | 37 ------------------------
+ configs/orangepi_win_defconfig           | 48 --------------------------------
+ 5 files changed, 133 deletions(-)
 
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 89bce73559..3fcba6af4d 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
-+sha256  f20e36ee68074b845e3629e6bced4706ad053804cbaf062fbae60738f854170c  ntfs-3g_ntfsprogs-2022.10.3.tgz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 64800c5eeb..62c515d50f 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NTFS_3G_VERSION = 2022.5.17
-+NTFS_3G_VERSION = 2022.10.3
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPTS = --disable-ldconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 89a72bc923..81e6cd54ab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1303,7 +1303,6 @@ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+ F:	board/orangepi/orangepi-lite2/
+ F:	board/orangepi/orangepi-one-plus
+-F:	board/orangepi/orangepi-win/
+ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+ F:	configs/amarula_vyasa_rk3288_defconfig
+@@ -1317,7 +1316,6 @@ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/orangepi_lite2_defconfig
+ F:	configs/orangepi_one_plus_defconfig
+-F:	configs/orangepi_win_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
+diff --git a/board/orangepi/orangepi-win/boot.cmd b/board/orangepi/orangepi-win/boot.cmd
+deleted file mode 100644
+index 2ddb769d6d..0000000000
+--- a/board/orangepi/orangepi-win/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-a64-orangepi-win.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-win/genimage.cfg b/board/orangepi/orangepi-win/genimage.cfg
+deleted file mode 100644
+index 98fd1a033d..0000000000
+--- a/board/orangepi/orangepi-win/genimage.cfg
++++ /dev/null
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-a64-orangepi-win.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/orangepi/orangepi-win/readme.txt b/board/orangepi/orangepi-win/readme.txt
+deleted file mode 100644
+index 93adddd86b..0000000000
+--- a/board/orangepi/orangepi-win/readme.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Orangepi Win/Win Plus. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-Orangepi Win/Win Plus link:
+-http://www.orangepi.org/OrangePiWin_WinPlus/
+-
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Win
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-How to build
+-============
+-
+-    $ make orangepi_win_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your Orangepi Win/Win Plus and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
+deleted file mode 100644
+index 715ff3b711..0000000000
+--- a/configs/orangepi_win_defconfig
++++ /dev/null
+@@ -1,48 +0,0 @@
+-BR2_aarch64=y
+-BR2_cortex_a53=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-
+-# Firmware
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_win"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-win/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-orangepi-win"
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Win/Win Plus"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-win/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
