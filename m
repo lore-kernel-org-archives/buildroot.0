@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37065C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52343C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6513817AF;
-	Mon,  7 Nov 2022 21:19:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6513817AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id D31C540876;
+	Mon,  7 Nov 2022 21:19:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D31C540876
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DJIjdzW9CJ4E; Mon,  7 Nov 2022 21:19:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JU7Q9OW5fZNT; Mon,  7 Nov 2022 21:19:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB4B881826;
-	Mon,  7 Nov 2022 21:19:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB4B881826
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A57761BF27A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A46240554;
+	Mon,  7 Nov 2022 21:19:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A46240554
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A8E081BF954
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8472C8187F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83A6D60BEF
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8472C8187F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83A6D60BEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0PIfQxkfaQKI for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xta_EoA36FoZ for <buildroot@lists.busybox.net>;
  Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 762FD81412
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FAD560BCC
  for <buildroot@buildroot.org>; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 762FD81412
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FAD560BCC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64473880C1; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
+ id 7D55E880BE; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:19 +0100
+Date: Mon, 7 Nov 2022 22:17:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 347c1087388d7782e6865f112f195e6780d473a7
-X-Git-Newrev: ef832cd8551c6bbebe2f56a21a5dd4f1f54aa495
+X-Git-Oldrev: a086bd267f1b2e5c211e705b977b17df1c20867b
+X-Git-Newrev: 97ee98d157fb244966094f23e9e2b52a33748fb8
 X-Patchwork-Hint: ignore
-Message-Id: <20221107211910.64473880C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/bananapi_m1: remove defconfig
+Message-Id: <20221107211910.7D55E880BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/bananapi_m2_plus: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,7 +62,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef832cd8551c6bbebe2f56a21a5dd4f1f54aa495
+commit: https://git.buildroot.net/buildroot/commit/?id=97ee98d157fb244966094f23e9e2b52a33748fb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig has been failing to build for several months, with
@@ -75,55 +75,57 @@ defconfig.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499003
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499005
 
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Mike Harmony <mike.harmony@snapav.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                              |  1 -
- board/bananapi/bananapi-m1/boot.cmd     |  7 -------
- board/bananapi/bananapi-m1/genimage.cfg | 34 ------------------------------
- board/bananapi/bananapi-m1/readme.txt   | 37 ---------------------------------
- configs/bananapi_m1_defconfig           | 29 --------------------------
- 5 files changed, 108 deletions(-)
+ DEVELOPERS                          |  4 ----
+ board/sinovoip/m2-plus/boot.cmd     |  7 -------
+ board/sinovoip/m2-plus/genimage.cfg | 34 ----------------------------------
+ configs/bananapi_m2_plus_defconfig  | 30 ------------------------------
+ 4 files changed, 75 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 94d1338880..90c2d2ba21 100644
+index b77f4ff68c..9e3c919a14 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1318,7 +1318,6 @@ F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
--F:	configs/bananapi_m1_defconfig
- F:	configs/bananapi_m64_defconfig
- F:	configs/engicam_imx6qdl_icore_defconfig
- F:	configs/engicam_imx6qdl_icore_qt5_defconfig
-diff --git a/board/bananapi/bananapi-m1/boot.cmd b/board/bananapi/bananapi-m1/boot.cmd
+@@ -2142,10 +2142,6 @@ F:	configs/licheepi_zero_defconfig
+ N:	Mike Frampton <mikeframpo@gmail.com>
+ F:	package/qcom-db410c-firmware/
+ 
+-N:	Mike Harmony <mike.harmony@snapav.com>
+-F:	board/sinovoip/m2-plus/
+-F:	configs/bananapi_m2_plus_defconfig
+-
+ N:	Mikhail Boiko <mikhailboiko85@gmail.com>
+ F:	package/libfribidi/
+ 
+diff --git a/board/sinovoip/m2-plus/boot.cmd b/board/sinovoip/m2-plus/boot.cmd
 deleted file mode 100644
-index 0cf6f4d63e..0000000000
---- a/board/bananapi/bananapi-m1/boot.cmd
+index d22464a1c1..0000000000
+--- a/board/sinovoip/m2-plus/boot.cmd
 +++ /dev/null
 @@ -1,7 +0,0 @@
 -setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 -
 -mmc dev 0
 -fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun7i-a20-bananapi.dtb
+-fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
 -
 -bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/bananapi/bananapi-m1/genimage.cfg b/board/bananapi/bananapi-m1/genimage.cfg
+diff --git a/board/sinovoip/m2-plus/genimage.cfg b/board/sinovoip/m2-plus/genimage.cfg
 deleted file mode 100644
-index ce62fbf712..0000000000
---- a/board/bananapi/bananapi-m1/genimage.cfg
+index 9311e026dd..0000000000
+--- a/board/sinovoip/m2-plus/genimage.cfg
 +++ /dev/null
 @@ -1,34 +0,0 @@
 -image boot.vfat {
 -	vfat {
 -		files = {
 -			"zImage",
--			"sun7i-a20-bananapi.dtb",
+-			"sun8i-h3-bananapi-m2-plus.dtb",
 -			"boot.scr"
 -		}
 -	}
@@ -153,81 +155,39 @@ index ce62fbf712..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/bananapi/bananapi-m1/readme.txt b/board/bananapi/bananapi-m1/readme.txt
+diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
 deleted file mode 100644
-index 382ba63c49..0000000000
---- a/board/bananapi/bananapi-m1/readme.txt
+index 77a403ce81..0000000000
+--- a/configs/bananapi_m2_plus_defconfig
 +++ /dev/null
-@@ -1,37 +0,0 @@
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Bananapi M1. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--Bananapi M1 link:
--http://www.banana-pi.org/m1.html
--
--Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M1
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--How to build
--============
--
--    $ make bananapi_m1_defconfig
--    $ make
--
--Note: you will need access to the internet to download the required
--sources.
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--  $ sudo sync
--
--Insert the micro SDcard in your Bananapi M1 and power it up. The console
--is on the serial line, 115200 8N1.
-diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
-deleted file mode 100644
-index 23da363345..0000000000
---- a/configs/bananapi_m1_defconfig
-+++ /dev/null
-@@ -1,29 +0,0 @@
+@@ -1,30 +0,0 @@
 -BR2_arm=y
 -BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sinovoip/m2-plus/genimage.cfg"
 -BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.12"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
 -BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
+-# BR2_TARGET_ROOTFS_TAR is not set
 -BR2_TARGET_UBOOT=y
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sinovoip/m2-plus/boot.cmd"
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
