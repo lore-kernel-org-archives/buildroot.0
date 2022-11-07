@@ -4,51 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F04C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 17:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6F19C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 17:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC17781412;
-	Mon,  7 Nov 2022 17:01:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC17781412
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B3E781753;
+	Mon,  7 Nov 2022 17:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B3E781753
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J68EAnxG-qY7; Mon,  7 Nov 2022 17:01:15 +0000 (UTC)
+	with ESMTP id z0NvJr3MBX79; Mon,  7 Nov 2022 17:10:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE4A1813E2;
-	Mon,  7 Nov 2022 17:01:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE4A1813E2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 28F291BF2B4
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 17:01:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40A2981457;
+	Mon,  7 Nov 2022 17:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A2981457
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 14E0A1BF2EF
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 17:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F1204031C
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 17:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F1204031C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E327181457
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 17:10:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E327181457
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t8jIUk_BEfuy for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 17:01:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDF904030D
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BDF904030D
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 17:01:08 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (1)
-Received: from zm (pub-52.182.29.194.multiplay.pl [194.29.182.52])
- by server220076.nazwa.pl (Postfix) with ESMTP id 803A61BD8C6;
- Mon,  7 Nov 2022 18:01:05 +0100 (CET)
-References: <20221107091658.25974-1-marek.metelski@grinn-global.com>
-User-agent: mu4e 1.8.11; emacs 28.2
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-To: Marek Metelski <marek.metelski@grinn-global.com>
-Date: Mon, 07 Nov 2022 17:58:37 +0100
-In-reply-to: <20221107091658.25974-1-marek.metelski@grinn-global.com>
-Message-ID: <878rkmsnqm.fsf@grinn-global.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uy7nON3sq4rg for <buildroot@lists.busybox.net>;
+ Mon,  7 Nov 2022 17:10:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D83F8137F
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D83F8137F
+ for <buildroot@busybox.net>; Mon,  7 Nov 2022 17:10:54 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id w14so17204173wru.8
+ for <buildroot@busybox.net>; Mon, 07 Nov 2022 09:10:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NPsH7bpyarnxUWBy5bO0oi+yQMnm2aok5L9wYw8qrmQ=;
+ b=BesfUSHMobVSlHIifYFA7tVzw2rPwWU+enghDclrcpxagHWDkq0usWNfJD6VIOS/uD
+ i2Ta8+qLfCdfI/WoHbHvM7wXyKualhRcbxQ/EJbIOEEnR0zjwwa+30i16R+FkXAObamV
+ HM24IZljObAM3uPoT+AFuywf0EeUsTlw8pFkXsBtvyX7RnAZ5XcQWBUt4u9Rp8g9xFPL
+ kkY3gYFXiBszaK9vxJgaR9/2FkFOfGIKkUNT3O0o77umLUtfOcuGZa18LlN4YpsQ3Sju
+ o3nKhSIwqkf8mdj4ib6LJ3gqYjbQNNxUU8nP83owPeQwQqUN5R9dr8f1rBiFDskOyZI4
+ SW+g==
+X-Gm-Message-State: ACrzQf1MRpE11KY4e9v5EBTte5xJsQAGV24q4uqf24ydrvXx3rLh39RV
+ 1BgcGxaTVnSFPsisGexo+qUEm3s2eFk=
+X-Google-Smtp-Source: AMsMyM7vJ8ZQbVc24kIFOp7VgWwcRMKZFxyNZVzKJL1XdmRG1MuH0JJJeXE+PP7VnSGZZI2DkjqwoA==
+X-Received: by 2002:adf:fc12:0:b0:236:9b2e:4843 with SMTP id
+ i18-20020adffc12000000b002369b2e4843mr31742249wrr.620.1667841052586; 
+ Mon, 07 Nov 2022 09:10:52 -0800 (PST)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ bk28-20020a0560001d9c00b002365b759b65sm7983794wrb.86.2022.11.07.09.10.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Nov 2022 09:10:51 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  7 Nov 2022 18:10:44 +0100
+Message-Id: <20221107171044.1239145-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gitlab-runner: fix
- inconsistency of systemd and sysv daemons
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NPsH7bpyarnxUWBy5bO0oi+yQMnm2aok5L9wYw8qrmQ=;
+ b=j8kN/0E/H9fHXQhpXoGwXtr5RxGSw9LZVutgGIiFjM/YofgnUpo/jaP5ZLNCOOYvwG
+ Iw3/KKpzenwLoUGR3P+PdaBdV0lKwKeiwk8a7qKVnnA3sAfdGE/SeplazYh8REnx74or
+ +K0ncwnHic02ekPUK0acHpxDqUx83vHHoevSQO9A/20o9iH1JE0WTJHaOnaxrly1qEIY
+ OFD9ZBM8owhoJXZvAmlgH/l2UHg+2p7IQOS2hvbXHOJR8WnwD7nwGLqgvufbLuFIUGwm
+ PeJK/D+9w0PpFu8kvzYhQj3ZcaqIWxiJwBxiPXObg/k1oEJV9nK4xq0wuplIUlDm4Fky
+ /hVQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=j8kN/0E/
+Subject: [Buildroot] [PATCH] package/lua-cffi: bump to version 0.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,56 +94,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TWFyZWsgTWV0ZWxza2kgPG1hcmVrLm1ldGVsc2tpQGdyaW5uLWdsb2JhbC5jb20+IHdyaXRlczoK
-Cj4gQ29weSBkZWZhdWx0ICRERUFNT05fQVJHUyBmcm9tIHN5c3RlbWQgc2VydmljZSB0byBzeXN2
-IGluaXQgc2NyaXB0Lgo+Cj4gTWFrZSBHSVRMQUJfUlVOTkVSX1VTRVIgaG9tZSBkaXJlY3Rvcnkg
-dGhlIHNhbWUgYXMgZGVmYXVsdAo+IC0td29yay1kaXJlY3RvcnkgKC1kKSBmbGFnLgo+Cj4gUnVu
-IHN5c3YgZGFlbW9uIHByb2Nlc3MgdXNpbmcgcm9vdCB1c2VyIChyZW1vdmUgLWMgb3B0aW9uKQo+
-IFRoaXMgaXMgbmVlZGVkIHRvIGNvcnJlY3RseSBhY2Nlc3MgY29uZmlnIGZpbGVzIGFzIHNwZWNp
-ZmllZC4KPiBTeXN0ZW0gYWNjZXNzIGNhbiBzdGlsbCBiZSBsaW1pdGVkIHdpdGggZ2l0bGFiLXJ1
-bm5lciBgLS11c2VyYCBmbGFnLgo+Cj4gVXNlIHNhbWUgJERBRU1PTl9BUkdTIHZhcmlhYmxlIG5h
-bWUgc28gaXQgY2FuIGJlIG92ZXJ3cml0dGVuIGluCj4gL2V0Yy9kZWZhdWx0L2dpdGxhYi1ydW5u
-ZXIgZW52aXJvbm1lbnQgZmlsZSBpbiBib3RoIGNhc2VzLgo+Cj4gU2lnbmVkLW9mZi1ieTogTWFy
-ZWsgTWV0ZWxza2kgPG1hcmVrLm1ldGVsc2tpQGdyaW5uLWdsb2JhbC5jb20+CgpSZXZpZXdlZC1i
-eTogTWFyY2luIE5pZXN0cm9qIDxtLm5pZXN0cm9qQGdyaW5uLWdsb2JhbC5jb20+Cgo+IC0tLQo+
-ICBwYWNrYWdlL2dpdGxhYi1ydW5uZXIvUzk1Z2l0bGFiLXJ1bm5lciB8IDYgKysrLS0tCj4gIHBh
-Y2thZ2UvZ2l0bGFiLXJ1bm5lci9naXRsYWItcnVubmVyLm1rIHwgMyArLS0KPiAgMiBmaWxlcyBj
-aGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9naXRsYWItcnVubmVyL1M5NWdpdGxhYi1ydW5uZXIgYi9wYWNrYWdlL2dpdGxhYi1y
-dW5uZXIvUzk1Z2l0bGFiLXJ1bm5lcgo+IGluZGV4IDJhNTBlNzE1MWEuLjczOWFkZjE3ODMgMTAw
-NjQ0Cj4gLS0tIGEvcGFja2FnZS9naXRsYWItcnVubmVyL1M5NWdpdGxhYi1ydW5uZXIKPiArKysg
-Yi9wYWNrYWdlL2dpdGxhYi1ydW5uZXIvUzk1Z2l0bGFiLXJ1bm5lcgo+IEBAIC0zLDcgKzMsNyBA
-QAo+ICBEQUVNT049ImdpdGxhYi1ydW5uZXIiCj4gIFBJREZJTEU9Ii92YXIvcnVuLyREQUVNT04u
-cGlkIgo+Cj4gLUdJVExBQl9SVU5ORVJfQVJHUz0icnVuIgo+ICtEQUVNT05fQVJHUz0icnVuIC0t
-c3lzbG9nIC0tdXNlciBnaXRsYWItcnVubmVyIC1kIC92YXIvbGliL2dpdGxhYi1ydW5uZXIgLWMg
-L2V0Yy9naXRsYWItcnVubmVyL2NvbmZpZy50b21sIgo+Cj4gICMgc2hlbGxjaGVjayBzb3VyY2U9
-L2Rldi9udWxsCj4gIFsgLXIgIi9ldGMvZGVmYXVsdC8kREFFTU9OIiBdICYmIC4gIi9ldGMvZGVm
-YXVsdC8kREFFTU9OIgo+IEBAIC0xMSw4ICsxMSw4IEBAIEdJVExBQl9SVU5ORVJfQVJHUz0icnVu
-Igo+ICBzdGFydCgpIHsKPiAgCXByaW50ZiAnU3RhcnRpbmcgJXM6ICcgIiREQUVNT04iCj4gIAkj
-IHNoZWxsY2hlY2sgZGlzYWJsZT1TQzIwODYgIyB3ZSBuZWVkIHRoZSB3b3JkIHNwbGl0dGluZwo+
-IC0Jc3RhcnQtc3RvcC1kYWVtb24gLVMgLXEgLW0gLWIgLXAgIiRQSURGSUxFIiAtYyAiJERBRU1P
-TjokREFFTU9OIiAteCAiL3Vzci9iaW4vJERBRU1PTiIgXAo+IC0JCS0tICRHSVRMQUJfUlVOTkVS
-X0FSR1MKPiArCXN0YXJ0LXN0b3AtZGFlbW9uIC1TIC1xIC1tIC1iIC1wICIkUElERklMRSIgLXgg
-Ii91c3IvYmluLyREQUVNT04iIFwKPiArCQktLSAkREFFTU9OX0FSR1MKPiAgCXN0YXR1cz0kPwo+
-ICAJaWYgWyAiJHN0YXR1cyIgLWVxIDAgXTsgdGhlbgo+ICAJCWVjaG8gIk9LIgo+IGRpZmYgLS1n
-aXQgYS9wYWNrYWdlL2dpdGxhYi1ydW5uZXIvZ2l0bGFiLXJ1bm5lci5tayBiL3BhY2thZ2UvZ2l0
-bGFiLXJ1bm5lci9naXRsYWItcnVubmVyLm1rCj4gaW5kZXggZmRlNzc2ZTYzMS4uOTU0MjI3NTEz
-NSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dpdGxhYi1ydW5uZXIvZ2l0bGFiLXJ1bm5lci5tawo+
-ICsrKyBiL3BhY2thZ2UvZ2l0bGFiLXJ1bm5lci9naXRsYWItcnVubmVyLm1rCj4gQEAgLTEyLDkg
-KzEyLDggQEAgR0lUTEFCX1JVTk5FUl9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ICBHSVRMQUJf
-UlVOTkVSX0xERkxBR1MgPSBcCj4gIAktWCBnaXRsYWIuY29tL2dpdGxhYi1vcmcvZ2l0bGFiLXJ1
-bm5lci9jb21tb24uVkVSU0lPTj0kKEdJVExBQl9SVU5ORVJfVkVSU0lPTikKPgo+IC0jIERvbid0
-IHJ1biBnaXRsYWIgcnVubmVyIGFzIHJvb3QuCj4gIGRlZmluZSBHSVRMQUJfUlVOTkVSX1VTRVJT
-Cj4gLQlnaXRsYWItcnVubmVyIC0xIGdpdGxhYi1ydW5uZXIgLTEgKiAvdmFyL3J1bi9kYnVzIC9i
-aW4vZmFsc2UgLSBHaXRsYWIgUnVubmVyCj4gKwlnaXRsYWItcnVubmVyIC0xIGdpdGxhYi1ydW5u
-ZXIgLTEgKiAvdmFyL2xpYi9naXRsYWItcnVubmVyIC9iaW4vZmFsc2UgLSBHaXRsYWIgUnVubmVy
-Cj4gIGVuZGVmCj4KPiAgZGVmaW5lIEdJVExBQl9SVU5ORVJfSU5TVEFMTF9JTklUX1NZU1YKCgot
-LQpNYXJjaW4gTmllc3Ryw7NqCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua-cffi/lua-cffi.hash | 2 +-
+ package/lua-cffi/lua-cffi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/lua-cffi/lua-cffi.hash b/package/lua-cffi/lua-cffi.hash
+index a532c6c7b..e71019993 100644
+--- a/package/lua-cffi/lua-cffi.hash
++++ b/package/lua-cffi/lua-cffi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c30080d6309167f86d1a96d3ee33f33ef52e884052b7feac140b8c52db10ad7a  lua-cffi-0.2.1.tar.gz
++sha256  34fb4eea7a0abec2095f08596f604ac01c81b979bead7d2f5cb084b3e2b46cbc  lua-cffi-0.2.2.tar.gz
+ sha256  f5653a4d5864a3920ea1e07dacfd646067314be647598f0acaaf685beaa2e396  COPYING.md
+diff --git a/package/lua-cffi/lua-cffi.mk b/package/lua-cffi/lua-cffi.mk
+index 964f49f03..ac351f7f9 100644
+--- a/package/lua-cffi/lua-cffi.mk
++++ b/package/lua-cffi/lua-cffi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CFFI_VERSION = 0.2.1
++LUA_CFFI_VERSION = 0.2.2
+ LUA_CFFI_SITE = $(call github,q66,cffi-lua,v$(LUA_CFFI_VERSION))
+ LUA_CFFI_LICENSE = MIT
+ LUA_CFFI_LICENSE_FILES = COPYING.md
+-- 
+2.37.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
