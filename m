@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 770EEC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399F0C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FAA141D4B;
-	Mon, 20 Feb 2023 21:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FAA141D4B
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3E9D40469;
+	Mon, 20 Feb 2023 21:01:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3E9D40469
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ClAqce6Hp8FY; Mon, 20 Feb 2023 21:00:36 +0000 (UTC)
+	with ESMTP id KbrqxHSXkrbQ; Mon, 20 Feb 2023 21:01:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5015429C0;
-	Mon, 20 Feb 2023 21:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5015429C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 10BB31BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39F8C41D1F;
+	Mon, 20 Feb 2023 21:00:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39F8C41D1F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14A511BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E3296107C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E3296107C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F9B640C32
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F9B640C32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rqHsJ-fNvO7O for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NV6v_NrS3MBE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 866A161073
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 866A161073
+ by smtp2.osuosl.org (Postfix) with ESMTP id 454C340C1B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 454C340C1B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 833538648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+ id 4283486495; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 19:09:54 +0100
+Date: Mon, 7 Nov 2022 22:17:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: adc1c5d8f14f69a62a2a4260465363ab120816ab
-X-Git-Newrev: c6aed2126b9c4cbae2a3f770e6d9029b44daa957
+X-Git-Oldrev: 97ee98d157fb244966094f23e9e2b52a33748fb8
+X-Git-Newrev: daf3c6661f823e566b6310042884c36c1d73f1de
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.833538648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdcadec: remove
- package
+Message-Id: <20230220205148.4283486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/bananapi_m64: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,138 +63,201 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6aed2126b9c4cbae2a3f770e6d9029b44daa957
+commit: https://git.buildroot.net/buildroot/commit/?id=daf3c6661f823e566b6310042884c36c1d73f1de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Quoting https://github.com/foo86/dcadec
+This defconfig has been failing to build for several months, with
+nobody stepping up to fix it. It's time to drop it.
 
-"This program is deprecated!
-
- This decoder has been fully integrated into FFmpeg master branch and
- further development will continue there. Using FFmpeg for DTS decoding
- is now recommended."
-
-lbdcadec has had no commit oin the past 7+ years now.
+See
+https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
+for a notification on August 6, 2022 about the issues with this
+defconfig.
 
 Fixes:
-http://autobuild.buildroot.net/results/1e63586c91a2670ecac2940f6e9840e6801c32f3/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998@free.fr: amend commit log with age of last activity]
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499008
+
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                 |  8 ++++++++
- DEVELOPERS                       |  1 -
- package/Config.in                |  1 -
- package/libdcadec/Config.in      |  7 -------
- package/libdcadec/libdcadec.hash |  3 ---
- package/libdcadec/libdcadec.mk   | 33 ---------------------------------
- 6 files changed, 8 insertions(+), 45 deletions(-)
+ DEVELOPERS                               |  1 -
+ board/bananapi/bananapi-m64/boot.cmd     |  6 ----
+ board/bananapi/bananapi-m64/genimage.cfg | 40 -------------------------
+ board/bananapi/bananapi-m64/readme.txt   | 37 -----------------------
+ configs/bananapi_m64_defconfig           | 50 --------------------------------
+ 5 files changed, 134 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0e63d59a98..7458fa331e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_PACKAGE_LIBDCADEC
-+	bool "package was deprecated upstream, use ffmpeg instead"
-+	select BR2_LEGACY
-+	help
-+	  This decoder has been fully integrated into FFmpeg master
-+	  branch and further development will continue there. Using
-+	  FFmpeg for DTS decoding is now recommended.
-+
- config BR2_KERNEL_HEADERS_5_17
- 	bool "kernel headers version 5.17.x are no longer supported"
- 	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 7d27936992..2613624f4b 100644
+index 9e3c919a14..37d2e3854f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -363,7 +363,6 @@ F:	package/libcdio/
- F:	package/libcec/
- F:	package/libcodec2/
- F:	package/libcrossguid/
--F:	package/libdcadec/
- F:	package/libdeflate/
- F:	package/libdrm/
- F:	package/libdvbcsa/
-diff --git a/package/Config.in b/package/Config.in
-index 238d7813f0..aef80f9ab0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1785,7 +1785,6 @@ menu "Multimedia"
- 	source "package/libbluray/Config.in"
- 	source "package/libcamera/Config.in"
- 	source "package/libcamera-apps/Config.in"
--	source "package/libdcadec/Config.in"
- 	source "package/libdvbcsa/Config.in"
- 	source "package/libdvbpsi/Config.in"
- 	source "package/libdvbsi/Config.in"
-diff --git a/package/libdcadec/Config.in b/package/libdcadec/Config.in
+@@ -1314,7 +1314,6 @@ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+-F:	configs/bananapi_m64_defconfig
+ F:	configs/engicam_imx6qdl_icore_defconfig
+ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_defconfig
+diff --git a/board/bananapi/bananapi-m64/boot.cmd b/board/bananapi/bananapi-m64/boot.cmd
 deleted file mode 100644
-index 2687a18187..0000000000
---- a/package/libdcadec/Config.in
+index d35c9b0b2c..0000000000
+--- a/board/bananapi/bananapi-m64/boot.cmd
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_LIBDCADEC
--	bool "libdcadec"
--	help
--	  dcadec is a free DTS Coherent Acoustics decoder with support
--	  for HD extensions.
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 -
--	  https://github.com/foo86/dcadec
-diff --git a/package/libdcadec/libdcadec.hash b/package/libdcadec/libdcadec.hash
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-a64-bananapi-m64.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
 deleted file mode 100644
-index 3c3e80e8a3..0000000000
---- a/package/libdcadec/libdcadec.hash
+index e922c0dba2..0000000000
+--- a/board/bananapi/bananapi-m64/genimage.cfg
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  ed9d207fde3e8d576f3af8b0d1235b3371e315175757173689104efcaebf0d44  libdcadec-0.2.0.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
-diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-a64-bananapi-m64.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/bananapi/bananapi-m64/readme.txt b/board/bananapi/bananapi-m64/readme.txt
 deleted file mode 100644
-index a3579ad632..0000000000
---- a/package/libdcadec/libdcadec.mk
+index 0dec3e52ee..0000000000
+--- a/board/bananapi/bananapi-m64/readme.txt
 +++ /dev/null
-@@ -1,33 +0,0 @@
--################################################################################
--#
--# libdcadec
--#
--################################################################################
+@@ -1,37 +0,0 @@
+-Intro
+-=====
 -
--LIBDCADEC_VERSION = 0.2.0
--LIBDCADEC_SITE = $(call github,foo86,dcadec,v$(LIBDCADEC_VERSION))
--LIBDCADEC_LICENSE = LGPL-2.1+
--LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
--LIBDCADEC_INSTALL_STAGING = YES
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Bananapi M64. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
 -
--ifeq ($(BR2_STATIC_LIBS),)
--LIBDCADEC_SHARED = CONFIG_SHARED=1
--endif
+-Bananapi M64 link:
+-http://www.banana-pi.org/m64.html
 -
--define LIBDCADEC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
--		$(LIBDCADEC_SHARED) -C $(@D)
--endef
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M64
 -
--define LIBDCADEC_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		$(LIBDCADEC_SHARED) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
--endef
+-This configuration uses U-Boot mainline and kernel mainline.
 -
--define LIBDCADEC_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		$(LIBDCADEC_SHARED) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
--endef
+-How to build
+-============
 -
--$(eval $(generic-package))
+-    $ make bananapi_m64_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your Bananapi M64 and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+deleted file mode 100644
+index b93332ed21..0000000000
+--- a/configs/bananapi_m64_defconfig
++++ /dev/null
+@@ -1,50 +0,0 @@
+-BR2_aarch64=y
+-BR2_cortex_a53=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Firmware
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boot.cmd"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-
+-# Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M64"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
