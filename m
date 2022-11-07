@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC909C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00A42C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 647BF42AE1;
-	Mon, 20 Feb 2023 21:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 647BF42AE1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9981B40309;
+	Mon, 20 Feb 2023 21:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9981B40309
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x81pLlqlkLgT; Mon, 20 Feb 2023 21:11:08 +0000 (UTC)
+	with ESMTP id zTJiz1PtQ13R; Mon, 20 Feb 2023 21:11:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E304642AA6;
-	Mon, 20 Feb 2023 21:11:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E304642AA6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3A31BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B35042AF0;
+	Mon, 20 Feb 2023 21:11:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B35042AF0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1787A1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8460A610B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8460A610B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF835411A1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF835411A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Lgpd5M6PmIH for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2iiSqTTGRlii for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB1ED61099
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB1ED61099
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11B5F40C11
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11B5F40C11
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9573186494; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 07AAD86495; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:42 +0100
+Date: Mon, 7 Nov 2022 23:05:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 24bb61071269f5446b6a1a5aaa89e5439e51940a
-X-Git-Newrev: 5f7a517f5c156666cef58dec429bfffd4ae41e81
+X-Git-Oldrev: 5099a1058d93821399ea758c5227e1fbbe6f76de
+X-Git-Newrev: ea38acd17d88b9eaf853313398c772b94338ad47
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.9573186494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/friendlyarm_nanopi_neo4: remove defconfig
+Message-Id: <20230220205149.07AAD86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/boost: backport
+ development branch changes to fix MIPS64 build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,233 +56,587 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5760456185341348156=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5760456185341348156==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5f7a517f5c156666cef58dec429bfffd4ae41e81
+commit: https://git.buildroot.net/buildroot/commit/?id=ea38acd17d88b9eaf853313398c772b94338ad47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+Backport from Boost/intrusive development branch. Fixes issue introduced with
+version 1.80.
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+Issue: https://github.com/boostorg/intrusive/issues/79
+Fixes: http://autobuild.buildroot.net/results/6cb/6cbc0672f3c5046405793d8cdc8f961d2ffb1d3e
 
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499054
-
-Cc: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                  |  2 --
- board/friendlyarm/nanopi-neo4/extlinux.conf |  4 ---
- board/friendlyarm/nanopi-neo4/genimage.cfg  | 22 ------------
- board/friendlyarm/nanopi-neo4/post-build.sh |  5 ---
- board/friendlyarm/nanopi-neo4/readme.txt    | 53 ---------------------------
- configs/friendlyarm_nanopi_neo4_defconfig   | 55 -----------------------------
- 6 files changed, 141 deletions(-)
+ .../boost/0001-Improve-modfunc-performance.patch   | 551 +++++++++++++++++++++
+ 1 file changed, 551 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7442d3a6ee..27482d095a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1896,8 +1896,6 @@ F:	utils/config
- F:	utils/diffconfig
- 
- N:	Marek Belisko <marek.belisko@open-nandra.com>
--F:	board/friendlyarm/nanopi-neo4/
--F:	configs/friendlyarm_nanopi_neo4_defconfig
- F:	package/libatasmart/
- F:	package/polkit/
- F:	package/sg3_utils/
-diff --git a/board/friendlyarm/nanopi-neo4/extlinux.conf b/board/friendlyarm/nanopi-neo4/extlinux.conf
-deleted file mode 100644
-index 91eef67fb9..0000000000
---- a/board/friendlyarm/nanopi-neo4/extlinux.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--label NanoPi Neo4 linux
--  kernel /boot/Image
--  devicetree /boot/rk3399-nanopi-neo4.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/friendlyarm/nanopi-neo4/genimage.cfg b/board/friendlyarm/nanopi-neo4/genimage.cfg
-deleted file mode 100644
-index 966c869273..0000000000
---- a/board/friendlyarm/nanopi-neo4/genimage.cfg
-+++ /dev/null
-@@ -1,22 +0,0 @@
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot-tpl-spl-dtb {
--		in-partition-table = "no"
--		image = "idbloader.img"
--		offset = 32K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 8M
--		size = 30M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/friendlyarm/nanopi-neo4/post-build.sh b/board/friendlyarm/nanopi-neo4/post-build.sh
-deleted file mode 100755
-index 1f5ff6a611..0000000000
---- a/board/friendlyarm/nanopi-neo4/post-build.sh
-+++ /dev/null
-@@ -1,5 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopi-neo4/readme.txt b/board/friendlyarm/nanopi-neo4/readme.txt
-deleted file mode 100644
-index 7c04a52806..0000000000
---- a/board/friendlyarm/nanopi-neo4/readme.txt
-+++ /dev/null
-@@ -1,53 +0,0 @@
--Intro
--=====
--
--NanoPi Neo4 is a RK3399 SoC based ARM64 board.
--
--
--Official wiki: http://wiki.friendlyarm.com/wiki/index.php/NanoPi_NEO4
--Mainline wiki: https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/neo4.html
--
--Build
--=====
--
--Run NanoPi Neo4 configuration
--
--  $ make friendlyarm_nanopi_neo4_defconfig
--
--To build, run make comamnd.
--
--  $ make
--
--Files created in output directory
--=================================
--
--output/images
--
--├── bl31.bin
--├── bl31.elf
--├── Image
--├── rk3399-nanopi-neo4.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--├── u-boot.bin
--├── u-boot.itb
--├── u-boot-spl-dtb.bin
--├── u-boot-tpl-dtb.bin
--├── u-boot-tpl-dtb.img
--└── u-boot-tpl-spl-dtb.img
--
--Creating bootable SD card:
--=========================
--
--Simply invoke (as root)
--
--  # dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device
--
--Serial console
----------------
--
--Baudrate for this board is 1500000
-diff --git a/configs/friendlyarm_nanopi_neo4_defconfig b/configs/friendlyarm_nanopi_neo4_defconfig
-deleted file mode 100644
-index a11872ef2a..0000000000
---- a/configs/friendlyarm_nanopi_neo4_defconfig
-+++ /dev/null
-@@ -1,55 +0,0 @@
--# Architecture
--BR2_aarch64=y
--BR2_cortex_a72_a53=y
--
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-neo4-rk3399"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.18"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-neo4"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="NanoPi Neo4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPi Neo4!"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="70M"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo4/post-build.sh"
-
---===============5760456185341348156==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/boost/0001-Improve-modfunc-performance.patch b/package/boost/0001-Improve-modfunc-performance.patch
+new file mode 100644
+index 0000000000..9cf5d8387e
+--- /dev/null
++++ b/package/boost/0001-Improve-modfunc-performance.patch
+@@ -0,0 +1,551 @@
++From 825aedad557b7e3bb27614335b6ced16887103de Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Ion=20Gazta=C3=B1aga?= <igaztanaga@gmail.com>
++Date: Mon, 7 Nov 2022 00:16:44 +0100
++Subject: [PATCH 1/1] Improve "modfunc" performance Fixes #79
++ ("boost/intrusive/hashtable.hpp: build failure (undeclared indentifier)")
++
++Backport from Boost development branch to fix issues with some architectures
++(64-bit with 128-bit processing, where size_t != unsigned long). In this case,
++code is enabled that causes a build failure.
++
++Upstream: https://github.com/boostorg/intrusive/commit/825aedad557b7e3bb27614335b6ced16887103de
++Issue: https://github.com/boostorg/intrusive/issues/79
++Fixes: http://autobuild.buildroot.net/results/6cb/6cbc0672f3c5046405793d8cdc8f961d2ffb1d3e
++
++Signed-off-by: Andreas Ziegler <br015@umbiko.net>
++---
++ include/boost/intrusive/hashtable.hpp | 235 ++++++++++++++++----------
++ 1 file changed, 145 insertions(+), 90 deletions(-)
++
++diff --git a/include/boost/intrusive/hashtable.hpp b/include/boost/intrusive/hashtable.hpp
++index b8bc877..688fb9b 100644
++--- a/boost/intrusive/hashtable.hpp
+++++ b/boost/intrusive/hashtable.hpp
++@@ -2,6 +2,7 @@
++ //
++ // (C) Copyright Ion Gaztanaga  2006-2022
++ // (C) Copyright 2022 Joaquin M Lopez Munoz.
+++// (C) Copyright 2022 Christian Mazakas
++ //
++ // Distributed under the Boost Software License, Version 1.0.
++ //    (See accompanying file LICENSE_1_0.txt or copy at
++@@ -84,11 +85,6 @@ namespace intrusive {
++ 
++ /// @cond
++ 
++-#if !defined(BOOST_NO_INT64_T)&&\
++-    (defined(BOOST_HAS_INT128) || (defined(_MSC_VER) && defined(_WIN64)))
++-#define BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT
++-#endif
++-
++ //We only support LLP64(Win64) or LP64(most Unix) data models
++ #ifdef _WIN64  //In 64 bit windows sizeof(size_t) == sizeof(unsigned long long)
++ #  define BOOST_INTRUSIVE_SIZE_C(NUMBER) NUMBER##ULL
++@@ -98,7 +94,6 @@ namespace intrusive {
++ #  define BOOST_INTRUSIVE_64_BIT_SIZE_T (((((ULONG_MAX>>16)>>16)>>16)>>15) != 0)
++ #endif
++ 
++-
++ template<int Dummy = 0>
++ struct prime_list_holder
++ {
++@@ -167,11 +162,11 @@ struct prime_list_holder
++    {  return prime_list[std::ptrdiff_t(n)]; }
++ 
++    template<std::size_t SizeIndex>
++-   BOOST_INTRUSIVE_FORCEINLINE static std::size_t modfunc(std::size_t hash) { return hash % prime_list[SizeIndex]; }
+++   BOOST_INTRUSIVE_FORCEINLINE static std::size_t modfunc(std::size_t hash) { return hash % SizeIndex; }
++ 
++    static std::size_t(*const positions[])(std::size_t);
++ 
++-   #if defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++   #if BOOST_INTRUSIVE_64_BIT_SIZE_T
++    static const uint64_t inv_sizes32[];
++    static const std::size_t inv_sizes32_size;
++    #endif
++@@ -185,17 +180,20 @@ struct prime_list_holder
++    BOOST_INTRUSIVE_FORCEINLINE static std::size_t size(std::size_t size_index)
++    {   return prime_list_holder<>::size_from_index(size_index);  }
++ 
++-   #if defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++   #if BOOST_INTRUSIVE_64_BIT_SIZE_T
++    // https://github.com/lemire/fastmod
++ 
++-
++    BOOST_INTRUSIVE_FORCEINLINE static uint64_t mul128_u32(uint64_t lowbits, uint32_t d)
++    {
++       #if defined(_MSC_VER)
++-      return __umulh(lowbits, d);
+++         return __umulh(lowbits, d);
+++      #elif defined(BOOST_HAS_INT128)
+++         return static_cast<uint64_t>((uint128_type(lowbits) * d) >> 64);
++       #else
++-      __extension__ typedef unsigned __int128 ext_uint128_t;
++-      return (ext_uint128_t(lowbits) * d) >> 64;
+++         uint64_t r1 = (lowbits & UINT32_MAX) * d;
+++         uint64_t r2 = (lowbits >> 32) * d;
+++         r2 += r1 >> 32;
+++         return r2 >> 32;
++       #endif
++    }
++ 
++@@ -204,51 +202,67 @@ struct prime_list_holder
++       uint64_t lowbits = M * a;
++       return (uint32_t)(mul128_u32(lowbits, d));
++    }
++-   #endif // defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++   #endif // BOOST_INTRUSIVE_64_BIT_SIZE_T
++ 
++    BOOST_INTRUSIVE_FORCEINLINE static std::size_t position(std::size_t hash,std::size_t size_index)
++    {
++-      #if defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT) && BOOST_INTRUSIVE_64_BIT_SIZE_T
++-         const std::size_t sizes_under_32bit = sizeof(inv_sizes32)/sizeof(inv_sizes32[0]);
+++      #if BOOST_INTRUSIVE_64_BIT_SIZE_T
+++         BOOST_CONSTEXPR_OR_CONST std::size_t sizes_under_32bit = sizeof(inv_sizes32)/sizeof(inv_sizes32[0]);
++          if(BOOST_LIKELY(size_index < sizes_under_32bit)){
++             return fastmod_u32( uint32_t(hash)+uint32_t(hash>>32)
++                               , inv_sizes32[size_index]
++                               , uint32_t(prime_list[size_index])  );
++          }
++          else{
++-            return positions[size_index-sizes_under_32bit](hash);
+++            return positions[size_index](hash);
++          }
++-      #elif defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
++-         return fastmod_u32(hash, inv_sizes32[size_index], uint32_t(sizes[size_index]));
++       #else
++          return positions[size_index](hash);
++-      #endif // defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++      #endif // BOOST_INTRUSIVE_64_BIT_SIZE_T
++   }
++ };
++ 
++ template<int Dummy>
++ std::size_t(* const prime_list_holder<Dummy>::positions[])(std::size_t) =
++ {
++-   #if !defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
++-   modfunc< 0>,modfunc< 1>,modfunc< 2>,modfunc< 3>,modfunc< 4>,
++-   modfunc< 5>,modfunc< 6>,modfunc< 7>,modfunc< 8>,modfunc< 9>,
++-   modfunc<10>,modfunc<11>,modfunc<12>,modfunc<13>,modfunc<14>,
++-   modfunc<15>,modfunc<16>,modfunc<17>,modfunc<18>,modfunc<19>,
++-   modfunc<20>,modfunc<21>,modfunc<22>,modfunc<23>,modfunc<24>,
++-   modfunc<25>,modfunc<26>,modfunc<27>,modfunc<28>,modfunc<29>,
++-   modfunc<30>,
++-   #endif
++-   # if BOOST_INTRUSIVE_64_BIT_SIZE_T
++-               modfunc<31>,modfunc<32>,modfunc<33>,modfunc<34>,
++-   modfunc<35>,modfunc<36>,modfunc<37>,modfunc<38>,modfunc<39>,
++-   modfunc<40>,modfunc<41>,modfunc<42>,modfunc<43>,modfunc<44>,
++-   modfunc<45>,modfunc<46>,modfunc<47>,modfunc<48>,modfunc<49>,
++-   modfunc<50>,modfunc<51>,modfunc<52>,modfunc<53>,modfunc<54>,
++-   modfunc<55>,modfunc<56>,modfunc<57>,modfunc<58>,modfunc<59>,
++-   modfunc<60>,modfunc<61>,modfunc<62>,modfunc<63>
++-   # else
++-   modfunc<31>
++-   # endif
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(3)>,                     modfunc<BOOST_INTRUSIVE_SIZE_C(7)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(11)>,                    modfunc<BOOST_INTRUSIVE_SIZE_C(17)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(29)>,                    modfunc<BOOST_INTRUSIVE_SIZE_C(53)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(97)>,                    modfunc<BOOST_INTRUSIVE_SIZE_C(193)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(389)>,                   modfunc<BOOST_INTRUSIVE_SIZE_C(769)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1543)>,                  modfunc<BOOST_INTRUSIVE_SIZE_C(3079)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6151)>,                  modfunc<BOOST_INTRUSIVE_SIZE_C(12289)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(24593)>,                 modfunc<BOOST_INTRUSIVE_SIZE_C(49157)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(98317)>,                 modfunc<BOOST_INTRUSIVE_SIZE_C(196613)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(393241)>,                modfunc<BOOST_INTRUSIVE_SIZE_C(786433)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1572869)>,               modfunc<BOOST_INTRUSIVE_SIZE_C(3145739)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6291469)>,               modfunc<BOOST_INTRUSIVE_SIZE_C(12582917)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(25165843)>,              modfunc<BOOST_INTRUSIVE_SIZE_C(50331653)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(100663319)>,             modfunc<BOOST_INTRUSIVE_SIZE_C(201326611)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(402653189)>,             modfunc<BOOST_INTRUSIVE_SIZE_C(805306457)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1610612741)>,            //0-30 indexes
+++#if BOOST_INTRUSIVE_64_BIT_SIZE_T
+++   //Taken from Boost.MultiIndex code, thanks to Joaquin M. Lopez Munoz.
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(3221225473)>,            //<- 32 bit values stop here (index 31)
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6442450939)>,            modfunc<BOOST_INTRUSIVE_SIZE_C(12884901893)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(25769803751)>,           modfunc<BOOST_INTRUSIVE_SIZE_C(51539607551)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(103079215111)>,          modfunc<BOOST_INTRUSIVE_SIZE_C(206158430209)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(412316860441)>,          modfunc<BOOST_INTRUSIVE_SIZE_C(824633720831)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1649267441651)>,         modfunc<BOOST_INTRUSIVE_SIZE_C(3298534883309)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6597069766657)>,         modfunc<BOOST_INTRUSIVE_SIZE_C(13194139533299)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(26388279066623)>,        modfunc<BOOST_INTRUSIVE_SIZE_C(52776558133303)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(105553116266489)>,       modfunc<BOOST_INTRUSIVE_SIZE_C(211106232532969)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(422212465066001)>,       modfunc<BOOST_INTRUSIVE_SIZE_C(844424930131963)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1688849860263953)>,      modfunc<BOOST_INTRUSIVE_SIZE_C(3377699720527861)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6755399441055731)>,      modfunc<BOOST_INTRUSIVE_SIZE_C(13510798882111483)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(27021597764222939)>,     modfunc<BOOST_INTRUSIVE_SIZE_C(54043195528445957)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(108086391056891903)>,    modfunc<BOOST_INTRUSIVE_SIZE_C(216172782113783843)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(432345564227567621)>,    modfunc<BOOST_INTRUSIVE_SIZE_C(864691128455135207)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(1729382256910270481)>,   modfunc<BOOST_INTRUSIVE_SIZE_C(3458764513820540933)>,
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(6917529027641081903)>,   modfunc<BOOST_INTRUSIVE_SIZE_C(9223372036854775783)> //(index 63)
+++#else
+++   modfunc<BOOST_INTRUSIVE_SIZE_C(2147483647)>             //<- 32 bit stops here (index 31) as ptrdiff_t is signed
+++#endif
++  };
++ 
++ template<int Dummy>
++@@ -298,7 +312,7 @@ const std::size_t prime_list_holder<Dummy>::prime_list_size
++    = sizeof(prime_list) / sizeof(std::size_t);
++ 
++ 
++-#if defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++#if BOOST_INTRUSIVE_64_BIT_SIZE_T
++ 
++ template<int Dummy>
++ const uint64_t prime_list_holder<Dummy>::inv_sizes32[] = {
++@@ -340,7 +354,7 @@ template<int Dummy>
++ const std::size_t prime_list_holder<Dummy>::inv_sizes32_size
++    = sizeof(inv_sizes32) / sizeof(uint64_t);
++ 
++-#endif // defined(BOOST_INTRUSIVE_FCA_FASTMOD_SUPPORT)
+++#endif // BOOST_INTRUSIVE_64_BIT_SIZE_T
++ 
++ struct prime_fmod_size : prime_list_holder<>
++ {
++@@ -785,9 +799,9 @@ BOOST_INTRUSIVE_FORCEINLINE std::size_t hash_to_bucket_split(std::size_t hash_va
++ }
++ 
++ template<bool Power2Buckets, bool Incremental>  //fastmod_buckets
++-BOOST_INTRUSIVE_FORCEINLINE std::size_t hash_to_bucket_split(std::size_t hash_value, std::size_t bucket_cnt, std::size_t split, detail::true_)
+++BOOST_INTRUSIVE_FORCEINLINE std::size_t hash_to_bucket_split(std::size_t hash_value, std::size_t , std::size_t split, detail::true_)
++ {
++-   return prime_fmod_size::position(hash_value, split); (void)bucket_cnt;
+++   return prime_fmod_size::position(hash_value, split);
++ }
++ 
++ //!This metafunction will obtain the type of a bucket
++@@ -1473,6 +1487,10 @@ struct bucket_hash_t
++       , bucket_plus_vtraits_t(BOOST_MOVE_BASE(bucket_plus_vtraits_t, other))
++    {}
++ 
+++   template<class K>
+++   BOOST_INTRUSIVE_FORCEINLINE std::size_t priv_hash(const K &k) const
+++   {  return this->base_t::operator()(k);  }
+++
++    BOOST_INTRUSIVE_FORCEINLINE const hasher &priv_hasher() const
++    {  return this->base_t::get();  }
++ 
++@@ -1747,8 +1765,17 @@ struct hashtable_size_wrapper
++    typedef const size_traits & size_traits_const_t;
++    typedef       size_traits & size_traits_t;
++ 
++-   BOOST_INTRUSIVE_FORCEINLINE size_traits_const_t priv_size_traits() const
++-   {  return size_traits_; }
+++   BOOST_INTRUSIVE_FORCEINLINE SizeType get_hashtable_size_wrapper_size() const
+++   {  return size_traits_.get_size(); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void set_hashtable_size_wrapper_size(SizeType s)
+++   {  size_traits_.set_size(s); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void inc_hashtable_size_wrapper_size()
+++   {  size_traits_.increment(); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void dec_hashtable_size_wrapper_size()
+++   {  size_traits_.decrement(); }
++ 
++    BOOST_INTRUSIVE_FORCEINLINE size_traits_t priv_size_traits()
++    {  return size_traits_; }
++@@ -1780,7 +1807,19 @@ struct hashtable_size_wrapper<DeriveFrom, SizeType, false>
++    typedef size_traits size_traits_const_t;
++    typedef size_traits size_traits_t;
++ 
++-   BOOST_INTRUSIVE_FORCEINLINE size_traits priv_size_traits() const
+++   BOOST_INTRUSIVE_FORCEINLINE SizeType get_hashtable_size_wrapper_size() const
+++   {  return 0u; }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void set_hashtable_size_wrapper_size(SizeType)
+++   {}
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void inc_hashtable_size_wrapper_size()
+++   {}
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void dec_hashtable_size_wrapper_size()
+++   {}
+++
+++   BOOST_INTRUSIVE_FORCEINLINE size_traits priv_size_traits()
++    {  return size_traits(); }
++ };
++ 
++@@ -1815,14 +1854,14 @@ struct hashdata_internal
++    public:
++    static const bool linear_buckets = 0 != (BoolFlags & hash_bool_flags::linear_buckets_pos);
++    typedef typename get_hashtable_size_wrapper_bucket
++-      <ValueTraits, VoidOrKeyOfValue, VoidOrKeyHash, VoidOrKeyEqual, BucketTraits, SizeType, BoolFlags>::type internal_type;
++-
++-   typedef typename internal_type::key_equal                key_equal;
++-   typedef typename internal_type::hasher                   hasher;
+++      <ValueTraits, VoidOrKeyOfValue, VoidOrKeyHash, VoidOrKeyEqual, BucketTraits, SizeType, BoolFlags>::type split_bucket_hash_equal_t;
+++   
+++   typedef typename split_bucket_hash_equal_t::key_equal                key_equal;
+++   typedef typename split_bucket_hash_equal_t::hasher                   hasher;
++    typedef bucket_plus_vtraits
++       <ValueTraits, BucketTraits, linear_buckets>           bucket_plus_vtraits_t;
++    typedef SizeType                                         size_type;
++-   typedef typename internal_type::size_traits              split_traits;
+++   typedef typename split_bucket_hash_equal_t::size_traits              split_traits;
++    typedef typename bucket_plus_vtraits_t::bucket_ptr       bucket_ptr;
++    typedef typename bucket_plus_vtraits_t::const_value_traits_ptr   const_value_traits_ptr;
++    typedef typename bucket_plus_vtraits_t::siterator        siterator;
++@@ -1866,23 +1905,20 @@ struct hashdata_internal
++ 
++    hashdata_internal( const ValueTraits &val_traits, const bucket_traits &b_traits
++                     , const hasher & h, const key_equal &e)
++-      :  internal_type(val_traits, b_traits, h, e)
+++      : split_bucket_hash_equal_t(val_traits, b_traits, h, e)
++    {}
++ 
++    BOOST_INTRUSIVE_FORCEINLINE hashdata_internal(BOOST_RV_REF(hashdata_internal) other)
++-      : internal_type(BOOST_MOVE_BASE(internal_type, other))
+++      : split_bucket_hash_equal_t(BOOST_MOVE_BASE(split_bucket_hash_equal_t, other))
++    {}
++ 
++-   BOOST_INTRUSIVE_FORCEINLINE typename internal_type::size_traits_t priv_split_traits()
++-   {  return this->priv_size_traits();  }
++-
++-   BOOST_INTRUSIVE_FORCEINLINE typename internal_type::size_traits_const_t priv_split_traits() const
+++   BOOST_INTRUSIVE_FORCEINLINE typename split_bucket_hash_equal_t::size_traits_t priv_split_traits()
++    {  return this->priv_size_traits();  }
++ 
++    ~hashdata_internal()
++    {  this->priv_clear_buckets();  }
++ 
++-   using internal_type::priv_clear_buckets;
+++   using split_bucket_hash_equal_t::priv_clear_buckets;
++ 
++    void priv_clear_buckets()
++    {
++@@ -1907,7 +1943,17 @@ struct hashdata_internal
++ 
++    //public functions
++    BOOST_INTRUSIVE_FORCEINLINE SizeType split_count() const BOOST_NOEXCEPT
++-   {  return this->priv_split_traits().get_size();  }
+++   {  return this->split_bucket_hash_equal_t::get_hashtable_size_wrapper_size();  }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void split_count(SizeType s) BOOST_NOEXCEPT
+++   {  this->split_bucket_hash_equal_t::set_hashtable_size_wrapper_size(s);  }
+++
+++   //public functions
+++   BOOST_INTRUSIVE_FORCEINLINE void inc_split_count() BOOST_NOEXCEPT
+++   {  this->split_bucket_hash_equal_t::inc_hashtable_size_wrapper_size();  }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void dec_split_count() BOOST_NOEXCEPT
+++   {  this->split_bucket_hash_equal_t::dec_hashtable_size_wrapper_size();  }
++ 
++    BOOST_INTRUSIVE_FORCEINLINE static SizeType initial_split_from_bucket_count(SizeType bc) BOOST_NOEXCEPT
++    {
++@@ -1983,10 +2029,7 @@ struct hashdata_internal
++    {  return (priv_hash_to_nbucket)(hash_value, fastmod_buckets_t());  }
++ 
++    BOOST_INTRUSIVE_FORCEINLINE size_type priv_hash_to_nbucket(std::size_t hash_value, detail::true_) const  //fastmod_buckets_t
++-   {
++-      return static_cast<size_type>(hash_to_bucket_split<power_2_buckets, incremental>
++-         (hash_value, this->priv_usable_bucket_count(), this->split_count(), detail::true_()));
++-   }
+++   {  return static_cast<size_type>(prime_fmod_size::position(hash_value, this->split_count()));  }
++ 
++    BOOST_INTRUSIVE_FORCEINLINE size_type priv_hash_to_nbucket(std::size_t hash_value, detail::false_) const //!fastmod_buckets_t
++    {
++@@ -1994,7 +2037,6 @@ struct hashdata_internal
++          (hash_value, this->priv_usable_bucket_count(), this->split_count(), detail::false_()));
++    }
++ 
++-
++    BOOST_INTRUSIVE_FORCEINLINE iterator iterator_to(reference value, detail::false_) BOOST_NOEXCEPT
++    {
++       return iterator( siterator(this->priv_value_to_node_ptr(value))
++@@ -2083,8 +2125,8 @@ struct hashdata_internal
++          , this->priv_value_traits_ptr());
++    }
++ 
++-   using internal_type::end;
++-   using internal_type::cend;
+++   using split_bucket_hash_equal_t::end;
+++   using split_bucket_hash_equal_t::cend;
++ 
++    local_iterator end(size_type n) BOOST_NOEXCEPT
++    {  return local_iterator(this->priv_bucket_lend(n), this->priv_value_traits_ptr());  }
++@@ -2322,19 +2364,32 @@ class hashtable_impl
++    public:
++    typedef insert_commit_data_impl<store_hash> insert_commit_data;
++ 
+++   private:
++    void default_init_actions()
++    {
++       this->priv_set_sentinel_bucket();
++       this->priv_init_buckets_and_cache();
++-      this->priv_size_traits().set_size(size_type(0));
+++      this->priv_size_count(size_type(0));
++       size_type bucket_sz = this->bucket_count();
++       BOOST_INTRUSIVE_INVARIANT_ASSERT(bucket_sz != 0);
++       //Check power of two bucket array if the option is activated
++       BOOST_INTRUSIVE_INVARIANT_ASSERT
++          (!power_2_buckets || (0 == (bucket_sz & (bucket_sz - 1))));
++-      this->priv_split_traits().set_size(this->initial_split_from_bucket_count(bucket_sz));
+++      this->split_count(this->initial_split_from_bucket_count(bucket_sz));
++    }
++ 
+++   BOOST_INTRUSIVE_FORCEINLINE SizeType priv_size_count() const BOOST_NOEXCEPT
+++   {  return this->internal_type::get_hashtable_size_wrapper_size(); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void priv_size_count(SizeType s) BOOST_NOEXCEPT
+++   {  this->internal_type::set_hashtable_size_wrapper_size(s); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void priv_size_inc() BOOST_NOEXCEPT
+++   {  this->internal_type::inc_hashtable_size_wrapper_size(); }
+++
+++   BOOST_INTRUSIVE_FORCEINLINE void priv_size_dec() BOOST_NOEXCEPT
+++   {  this->internal_type::dec_hashtable_size_wrapper_size(); }
+++
++    public:
++ 
++    //! <b>Requires</b>: buckets must not be being used by any other resource.
++@@ -2403,10 +2458,10 @@ class hashtable_impl
++    {
++       this->priv_swap_cache(x);
++       x.priv_init_cache();
++-      this->priv_size_traits().set_size(x.priv_size_traits().get_size());
++-      x.priv_size_traits().set_size(size_type(0));
++-      this->priv_split_traits().set_size(x.split_count());
++-      x.priv_split_traits().set_size(size_type(0));
+++      this->priv_size_count(x.priv_size_count());
+++      x.priv_size_count(size_type(0));
+++      this->split_count(x.split_count());
+++      x.split_count(size_type(0));
++    }
++ 
++    //! <b>Effects</b>: Equivalent to swap.
++@@ -2524,7 +2579,7 @@ class hashtable_impl
++    size_type size() const BOOST_NOEXCEPT
++    {
++       BOOST_IF_CONSTEXPR(constant_time_size)
++-         return this->priv_size_traits().get_size();
+++         return this->priv_size_count();
++       else{
++          std::size_t len = 0;
++          std::size_t bucket_cnt = this->bucket_count();
++@@ -2798,7 +2853,7 @@ class hashtable_impl
++    //!   After a successful rehashing insert_commit_data remains valid.
++    iterator insert_unique_commit(reference value, const insert_commit_data &commit_data) BOOST_NOEXCEPT
++    {
++-      this->priv_size_traits().increment();
+++      this->priv_size_inc();
++       node_ptr const n = this->priv_value_to_node_ptr(value);
++       BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(!safemode_or_autounlink || slist_node_algorithms::unique(n));
++       node_functions_t::store_hash(n, commit_data.get_hash(), store_hash_t());
++@@ -2890,7 +2945,7 @@ class hashtable_impl
++       //Get the bucket number and local iterator for both iterators
++       const bucket_ptr bp = this->priv_get_bucket_ptr(i);
++       this->priv_erase_node(*bp, i.slist_it(), this->make_node_disposer(disposer), optimize_multikey_t());
++-      this->priv_size_traits().decrement();
+++      this->priv_size_dec();
++       this->priv_erasure_update_cache(bp);
++    }
++ 
++@@ -2931,7 +2986,7 @@ class hashtable_impl
++          size_type const num_erased = (size_type)this->priv_erase_node_range
++             ( before_first_local_it, first_bucket_num, last_local_it, last_bucket_num
++             , this->make_node_disposer(disposer), optimize_multikey_t());
++-         this->priv_size_traits().set_size(size_type(this->priv_size_traits().get_size()-num_erased));
+++         this->priv_size_count(size_type(this->priv_size_count()-num_erased));
++          this->priv_erasure_update_cache_range(first_bucket_num, last_bucket_num);
++       }
++    }
++@@ -3001,7 +3056,7 @@ class hashtable_impl
++                   (this->priv_value_from_siterator(it), h, key, equal_func, compare_hash_t()));
++             slist_node_algorithms::unlink_after_and_dispose(prev.pointed_node(), it.pointed_node(), this->make_node_disposer(disposer));
++          }
++-         this->priv_size_traits().set_size(size_type(this->priv_size_traits().get_size()-cnt));
+++         this->priv_size_count(size_type(this->priv_size_count()-cnt));
++          this->priv_erasure_update_cache();
++       }
++ 
++@@ -3020,7 +3075,7 @@ class hashtable_impl
++    void clear() BOOST_NOEXCEPT
++    {
++       this->priv_clear_buckets_and_cache();
++-      this->priv_size_traits().set_size(size_type(0));
+++      this->priv_size_count(size_type(0));
++    }
++ 
++    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
++@@ -3045,7 +3100,7 @@ class hashtable_impl
++             --num_buckets;
++             slist_node_algorithms::detach_and_dispose(b->get_node_ptr(), d);
++          }
++-         this->priv_size_traits().set_size(size_type(0));
+++         this->priv_size_count(size_type(0));
++       }
++       this->priv_init_cache();
++    }
++@@ -3339,7 +3394,7 @@ class hashtable_impl
++    //!
++    //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
++    BOOST_INTRUSIVE_FORCEINLINE size_type bucket(const key_type& k) const
++-   {  return this->bucket(k, this->priv_hasher());   }
+++   {  return this->priv_hash_to_nbucket(this->priv_hash(k));   }
++ 
++    //! <b>Requires</b>: "hash_func" must be a hash function that induces
++    //!   the same hash values as the stored hasher. The difference is that
++@@ -3520,7 +3575,7 @@ class hashtable_impl
++          if((ret = split_idx < bucket_cnt)){
++             const std::size_t bucket_to_rehash = split_idx - bucket_cnt/2u;
++             bucket_type &old_bucket = this->priv_bucket(bucket_to_rehash);
++-            this->priv_split_traits().increment();
+++            this->inc_split_count();
++ 
++             //Anti-exception stuff: if an exception is thrown while
++             //moving elements from old_bucket to the target bucket, all moved
++@@ -3553,7 +3608,7 @@ class hashtable_impl
++          bucket_type &target_bucket = this->priv_bucket(target_bucket_num);
++          bucket_type &source_bucket = this->priv_bucket(split_idx-1u);
++          slist_node_algorithms::transfer_after(target_bucket.get_node_ptr(), source_bucket.get_node_ptr());
++-         this->priv_split_traits().decrement();
+++         this->dec_split_count();
++          this->priv_insertion_update_cache(target_bucket_num);
++       }
++       return ret;
++@@ -3763,8 +3818,8 @@ class hashtable_impl
++       ArrayDisposer rollback2(old_buckets[0], nd, old_bucket_count);
++ 
++       //Put size in a safe value for rollback exception
++-      size_type const size_backup = this->priv_size_traits().get_size();
++-      this->priv_size_traits().set_size(0);
+++      size_type const size_backup = this->priv_size_count();
+++      this->priv_size_count(0);
++       //Put cache to safe position
++       this->priv_init_cache();
++       this->priv_unset_sentinel_bucket();
++@@ -3826,8 +3881,8 @@ class hashtable_impl
++          }
++       }
++ 
++-      this->priv_size_traits().set_size(size_backup);
++-      this->priv_split_traits().set_size(split);
+++      this->priv_size_count(size_backup);
+++      this->split_count(split);
++       if(&new_bucket_traits != &this->priv_bucket_traits())
++          this->priv_bucket_traits() = new_bucket_traits;
++       this->priv_set_sentinel_bucket();
++@@ -3927,8 +3982,8 @@ class hashtable_impl
++       this->priv_hasher() = src.priv_hasher();
++       this->priv_equal()  = src.priv_equal();
++       rollback.release();
++-      this->priv_size_traits().set_size(src.priv_size_traits().get_size());
++-      this->priv_split_traits().set_size(dst_bucket_count);
+++      this->priv_size_count(src.priv_size_count());
+++      this->split_count(dst_bucket_count);
++       this->priv_set_cache_bucket_num(0u);
++       this->priv_erasure_update_cache();
++    }
++@@ -3946,7 +4001,7 @@ class hashtable_impl
++          , n, optimize_multikey_t());
++       //Update cache and increment size if needed
++       this->priv_insertion_update_cache(bucket_num);
++-      this->priv_size_traits().increment();
+++      this->priv_size_inc();
++       slist_node_algorithms::link_after(prev.pointed_node(), n);
++       return this->build_iterator(siterator(n), this->priv_bucket_ptr(bucket_num));
++    }
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5760456185341348156==--
