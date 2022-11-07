@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE06CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD9FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 535FF42AF5;
-	Mon, 20 Feb 2023 21:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535FF42AF5
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF93C42B1C;
+	Mon, 20 Feb 2023 21:12:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF93C42B1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1hQUsa-HCZKw; Mon, 20 Feb 2023 21:12:17 +0000 (UTC)
+	with ESMTP id jb0ub17PIuq4; Mon, 20 Feb 2023 21:12:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BED5342B0D;
-	Mon, 20 Feb 2023 21:12:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BED5342B0D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 325301BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C07A42AAB;
+	Mon, 20 Feb 2023 21:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C07A42AAB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 156DF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE57F40C1C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE57F40C1C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F27661089
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F27661089
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MRVOHoLq3xs7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s0vNuCCCqfQs for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C5E440C1D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C5E440C1D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FF31610A1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FF31610A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A04D8648F; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 5B45D8648F; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:30 +0100
+Date: Mon, 7 Nov 2022 23:13:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fa274e01e335c75684425a682b3dd8823d284da9
-X-Git-Newrev: c56314f4f9a648148eebc6b86d1c28ff9986dbae
+X-Git-Oldrev: e71ef565e720e56c51eed6933f6d87331193837f
+X-Git-Newrev: 2d3c06435b24bac849bb31fcd24f56d45b191f47
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.5A04D8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/friendlyarm_nanopi_a64: remove defconfig
+Message-Id: <20230220205149.5B45D8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/s6-linux-init: bump to
+ version 1.0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,215 +56,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c56314f4f9a648148eebc6b86d1c28ff9986dbae
+commit: https://git.buildroot.net/buildroot/commit/?id=2d3c06435b24bac849bb31fcd24f56d45b191f47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+This bump will fix the following build failure raised since bump of
+skalibs to version 2.12.0.1 in commit
+0f7bfc80814e90918b9527cab4cbf6afedd22195 thanks to
+https://github.com/skarnet/s6-linux-init/commit/6696cee3bd309f61fc6c945ef747262a845e9267
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+In file included from src/shutdown/hpr_shutdown.c:8:
+src/shutdown/hpr.h:20:40: error: unknown type name 'tain_t'; did you mean 'tain'?
+   20 | extern int hpr_shutdown (unsigned int, tain_t const *, unsigned int) ;
+      |                                        ^~~~~~
+      |                                        tain
+
+Update hash of COPYING (update in year with
+https://github.com/skarnet/s6-linux-init/commit/42a91a98b780759257862642c764c2102237fea6)
+
+https://github.com/skarnet/s6-linux-init/blob/v1.0.8.0/NEWS
 
 Fixes:
+ - http://autobuild.buildroot.org/results/4382beeb0f94d583ba605c70a47f34b45c76e311
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499049
-
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                |  2 --
- board/friendlyarm/nanopi-a64/boot.cmd     |  6 ----
- board/friendlyarm/nanopi-a64/genimage.cfg | 40 -------------------------
- board/friendlyarm/nanopi-a64/readme.txt   | 37 -----------------------
- configs/friendlyarm_nanopi_a64_defconfig  | 50 -------------------------------
- 5 files changed, 135 deletions(-)
+ package/s6-linux-init/s6-linux-init.hash | 4 ++--
+ package/s6-linux-init/s6-linux-init.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 427fce235d..30582cb648 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1301,7 +1301,6 @@ F:	board/amarula/
- F:	board/asus/
- F:	board/bananapi/
- F:	board/engicam/
--F:	board/friendlyarm/nanopi-a64/
- F:	board/friendlyarm/nanopi-neo2/
- F:	board/olimex/a33_olinuxino/
- F:	board/olimex/a64-olinuxino/
-@@ -1319,7 +1318,6 @@ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
- F:	configs/engicam_imx6qdl_icore_rqs_defconfig
- F:	configs/engicam_imx6ul_geam_defconfig
- F:	configs/engicam_imx6ul_isiot_defconfig
--F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/friendlyarm_nanopi_neo2_defconfig
- F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
-diff --git a/board/friendlyarm/nanopi-a64/boot.cmd b/board/friendlyarm/nanopi-a64/boot.cmd
-deleted file mode 100644
-index 446bd85672..0000000000
---- a/board/friendlyarm/nanopi-a64/boot.cmd
-+++ /dev/null
-@@ -1,6 +0,0 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-a64-nanopi-a64.dtb
--
--booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-a64/genimage.cfg b/board/friendlyarm/nanopi-a64/genimage.cfg
-deleted file mode 100644
-index 6907314149..0000000000
---- a/board/friendlyarm/nanopi-a64/genimage.cfg
-+++ /dev/null
-@@ -1,40 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"sun50i-a64-nanopi-a64.dtb",
--			"boot.scr"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition spl {
--		in-partition-table = "no"
--		image = "sunxi-spl.bin"
--		offset = 8K
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 40K
--		size = 1M # 1MB - 40KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/friendlyarm/nanopi-a64/readme.txt b/board/friendlyarm/nanopi-a64/readme.txt
-deleted file mode 100644
-index 88c4e661cb..0000000000
---- a/board/friendlyarm/nanopi-a64/readme.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Nanopi A64. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--Nanopi A64 link:
--http://nanopi.io/nanopi-a64.html
--
--Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/FriendlyARM+Nanopi+A64
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--How to build
--============
--
--    $ make friendlyarm_nanopi_a64_defconfig
--    $ make
--
--Note: you will need access to the internet to download the required
--sources.
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--  $ sudo sync
--
--Insert the micro SDcard in your Nanopi A64 and power it up. The console
--is on the serial line, 115200 8N1.
-diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
-deleted file mode 100644
-index 4df22b2a2f..0000000000
---- a/configs/friendlyarm_nanopi_a64_defconfig
-+++ /dev/null
-@@ -1,50 +0,0 @@
--BR2_aarch64=y
--BR2_cortex_a53=y
--BR2_ARM_FPU_VFPV4=y
--
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_a64"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi A64"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-a64/genimage.cfg"
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+index 23f02d5359..f70a4f87b5 100644
+--- a/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  29e368516b1a3c61a6d1f8680645cc122a2e02127debec91738f170a3b93b8c5  s6-linux-init-1.0.6.3.tar.gz
+-sha256  4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
++sha256  92055a7964cf66604066ad964a2c2392ee7c5e64821be03146c1341e0d8c3dc6  s6-linux-init-1.0.8.0.tar.gz
++sha256  1898df1e8703bd9c1350d2ec3397880b9b4c1451038a9ce5e1c4b2e58622da39  COPYING
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index 95595368de..6aec220de4 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-S6_LINUX_INIT_VERSION = 1.0.6.3
++S6_LINUX_INIT_VERSION = 1.0.8.0
+ S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+ S6_LINUX_INIT_LICENSE = ISC
+ S6_LINUX_INIT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
