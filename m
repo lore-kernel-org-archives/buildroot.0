@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B17C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84AFC433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39572813BE;
-	Mon,  7 Nov 2022 21:20:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39572813BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AD6A40299;
+	Mon,  7 Nov 2022 21:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AD6A40299
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6_N2bwntPZFi; Mon,  7 Nov 2022 21:20:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tHKqwj3LPBgw; Mon,  7 Nov 2022 21:20:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1A180F73;
-	Mon,  7 Nov 2022 21:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1A180F73
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 933F41BF27A
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF87F40256;
+	Mon,  7 Nov 2022 21:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF87F40256
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 308F81BF27A
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D42560BF0
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D42560BF0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FA0F4054E
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA0F4054E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WGZfT5zGhPaC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sOnwpQXpzihf for <buildroot@lists.busybox.net>;
  Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8C9360BD9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8773440554
  for <buildroot@buildroot.org>; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8C9360BD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8773440554
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9F8D880BE; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
+ id 7140B880C3; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:33 +0100
+Date: Mon, 7 Nov 2022 22:17:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c56314f4f9a648148eebc6b86d1c28ff9986dbae
-X-Git-Newrev: 4f7b44cfcb10cf2d1c71a35b89d61da04ae32e2c
+X-Git-Oldrev: ef832cd8551c6bbebe2f56a21a5dd4f1f54aa495
+X-Git-Newrev: a086bd267f1b2e5c211e705b977b17df1c20867b
 X-Patchwork-Hint: ignore
-Message-Id: <20221107211910.A9F8D880BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/friendlyarm_nanopi_m1: remove
- defconfig
+Message-Id: <20221107211910.7140B880C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/bananapi_m1_plus: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +62,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f7b44cfcb10cf2d1c71a35b89d61da04ae32e2c
+commit: https://git.buildroot.net/buildroot/commit/?id=a086bd267f1b2e5c211e705b977b17df1c20867b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig has been failing to build for several months, with
@@ -74,48 +73,66 @@ https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
 for a notification on August 6, 2022 about the issues with this
 defconfig.
 
-This defconfig did not even have an entry in the DEVELOPERS file.
-
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499050
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499004
 
+Cc: Filip Skoneczny <fskoneczny@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/friendlyarm/nanopi-m1/boot.cmd     |  8 ------
- board/friendlyarm/nanopi-m1/genimage.cfg | 37 --------------------------
- board/friendlyarm/nanopi-m1/readme.txt   | 29 --------------------
- configs/friendlyarm_nanopi_m1_defconfig  | 45 --------------------------------
- 4 files changed, 119 deletions(-)
+ DEVELOPERS                                         |  4 --
+ board/sinovoip/m1-plus/boot.cmd                    |  5 --
+ board/sinovoip/m1-plus/genimage.cfg                | 38 -------------
+ board/sinovoip/m1-plus/linux-wifi.fragment         | 10 ----
+ ...7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch | 39 -------------
+ board/sinovoip/m1-plus/post-build.sh               |  4 --
+ board/sinovoip/m1-plus/readme.txt                  | 64 ----------------------
+ .../brcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt    |  1 -
+ .../lib/firmware/brcm/brcmfmac43362-sdio.txt       | 56 -------------------
+ configs/bananapi_m1_plus_defconfig                 | 45 ---------------
+ 10 files changed, 266 deletions(-)
 
-diff --git a/board/friendlyarm/nanopi-m1/boot.cmd b/board/friendlyarm/nanopi-m1/boot.cmd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 90c2d2ba21..b77f4ff68c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1004,10 +1004,6 @@ F:	configs/freescale_imx6ullevk_defconfig
+ N:	Falco Hyfing <hyfinglists@gmail.com>
+ F:	package/python-pymodbus/
+ 
+-N:	Filip Skoneczny <fskoneczny@gmail.com>
+-F:	board/sinovoip/m1-plus
+-F:	configs/bananapi_m1_plus_defconfig
+-
+ N:	Florian Fainelli <f.fainelli@gmail.com>
+ F:	package/cpulimit/
+ 
+diff --git a/board/sinovoip/m1-plus/boot.cmd b/board/sinovoip/m1-plus/boot.cmd
 deleted file mode 100644
-index b4d612ede7..0000000000
---- a/board/friendlyarm/nanopi-m1/boot.cmd
+index 4829996474..0000000000
+--- a/board/sinovoip/m1-plus/boot.cmd
 +++ /dev/null
-@@ -1,8 +0,0 @@
+@@ -1,5 +0,0 @@
 -setenv fdt_high ffffffff
--
 -setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
 -fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-m1.dtb
--
+-fatload mmc 0 $fdt_addr_r sun7i-a20-bananapi-m1-plus.dtb
 -bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-m1/genimage.cfg b/board/friendlyarm/nanopi-m1/genimage.cfg
+diff --git a/board/sinovoip/m1-plus/genimage.cfg b/board/sinovoip/m1-plus/genimage.cfg
 deleted file mode 100644
-index 3b2b82ce96..0000000000
---- a/board/friendlyarm/nanopi-m1/genimage.cfg
+index 18a549e631..0000000000
+--- a/board/sinovoip/m1-plus/genimage.cfg
 +++ /dev/null
-@@ -1,37 +0,0 @@
--# Minimal SD card image for the NanoPi M1
--#
+@@ -1,38 +0,0 @@
+-# Minimal SD card image for the Banana Pi M1+
+-# Based on the Banana Pro genimage.cfg
+-
 -image boot.vfat {
 -	vfat {
 -		files = {
 -			"zImage",
--			"sun8i-h3-nanopi-m1.dtb",
+-			"sun7i-a20-bananapi-m1-plus.dtb",
 -			"boot.scr"
 -		}
 -	}
@@ -146,19 +163,90 @@ index 3b2b82ce96..0000000000
 -		size = 512M
 -	}
 -}
-diff --git a/board/friendlyarm/nanopi-m1/readme.txt b/board/friendlyarm/nanopi-m1/readme.txt
+diff --git a/board/sinovoip/m1-plus/linux-wifi.fragment b/board/sinovoip/m1-plus/linux-wifi.fragment
 deleted file mode 100644
-index 6a34c4239d..0000000000
---- a/board/friendlyarm/nanopi-m1/readme.txt
+index 5576d738ad..0000000000
+--- a/board/sinovoip/m1-plus/linux-wifi.fragment
 +++ /dev/null
-@@ -1,29 +0,0 @@
--NanoPi M1
+@@ -1,10 +0,0 @@
+-# Networking support
+-CONFIG_WIRELESS=y
+-CONFIG_CFG80211=y
+-CONFIG_CFG80211_WEXT=y
+-CONFIG_RFKILL=y
+-
+-# Network device support
+-CONFIG_WLAN=y
+-CONFIG_WLAN_VENDOR_BROADCOM=y
+-CONFIG_BRCMFMAC=m
+diff --git a/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch b/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch
+deleted file mode 100644
+index b01b6b2829..0000000000
+--- a/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 58bae4096a7bf8d5d3bfbddb82cb37dd0561c938 Mon Sep 17 00:00:00 2001
+-From: Filip Skoneczny <fskoneczny@gmail.com>
+-Date: Sun, 10 Jan 2021 19:07:14 +0100
+-Subject: [PATCH] ARM: dts: sun7i: bananapi-m1-plus: Disable OOB IRQ for brcm
+- wifi module
+-
+-    Based on 23bc805.
+-    BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
+-
+-Signed-off-by: Filip Skoneczny <fskoneczny@gmail.com>
+----
+- arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts | 11 ++++++++---
+- 1 file changed, 8 insertions(+), 3 deletions(-)
+-
+-diff --git a/arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts b/arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts
+-index 32d5d45a35c0..97f9987f51d7 100644
+---- a/arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts
+-+++ b/arch/arm/boot/dts/sun7i-a20-bananapi-m1-plus.dts
+-@@ -193,9 +193,14 @@ &mmc3 {
+- 	brcmf: wifi@1 {
+- 		reg = <1>;
+- 		compatible = "brcm,bcm4329-fmac";
+--		interrupt-parent = <&pio>;
+--		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+--		interrupt-names = "host-wake";
+-+		/*
+-+		 * OOB interrupt support is broken ATM, drv probe failing with:
+-+		 * ieee80211 phy0: brcmf_attach: dongle is not responding: err=-110
+-+		 *
+-+		 * interrupt-parent = <&pio>;
+-+		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+-+		 * interrupt-names = "host-wake";
+-+		 */
+- 	};
+- };
+- 
+--- 
+-2.25.1
+-
+diff --git a/board/sinovoip/m1-plus/post-build.sh b/board/sinovoip/m1-plus/post-build.sh
+deleted file mode 100755
+index 4ee6fa3bc4..0000000000
+--- a/board/sinovoip/m1-plus/post-build.sh
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#!/bin/sh
+-
+-# Remove all but the brcmfmac43362 firmware files
+-find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
+diff --git a/board/sinovoip/m1-plus/readme.txt b/board/sinovoip/m1-plus/readme.txt
+deleted file mode 100644
+index ae647c21a9..0000000000
+--- a/board/sinovoip/m1-plus/readme.txt
++++ /dev/null
+@@ -1,64 +0,0 @@
+-Banana Pi M1+
 -
 -Intro
 -=====
 -
 -This default configuration will allow you to start experimenting with the
--buildroot environment for the NanoPi M1. With the current configuration
+-Buildroot environment for the Banana Pi M1+. With the current configuration
 -it will bring-up the board, and allow access through the serial console.
 -
 -How to build it
@@ -166,11 +254,11 @@ index 6a34c4239d..0000000000
 -
 -Configure Buildroot:
 -
--    $ make friendlyarm_nanopi_m1_defconfig
+-  $ make bananapi_m1_plus_defconfig
 -
 -Compile everything and build the SD card image:
 -
--    $ make
+-  $ make
 -
 -How to write the SD card
 -========================
@@ -180,58 +268,163 @@ index 6a34c4239d..0000000000
 -
 -Copy the bootable "sdcard.img" onto an SD card with "dd":
 -
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-diff --git a/configs/friendlyarm_nanopi_m1_defconfig b/configs/friendlyarm_nanopi_m1_defconfig
+-  $ dd if=output/images/sdcard.img of=/dev/sdX
+-
+-Notes:
+-  - replace 'sdX' with the actual device with your micro SD card
+-  - you may need to be root to do that (use 'sudo')
+-
+-Insert the micro SD card in your Banana Pi M1+ and power it up. The console
+-is on the debug TTL UART, 115200 8N1.
+-
+-Ethernet
+-==========
+-
+-  # udhcpc -i eth0
+-
+-Wifi
+-==========
+-
+-  # wpa_passphrase YOUR_SSID >> /etc/wpa_supplicant.conf
+-  (enter the wifi password and press enter)
+-  # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+-  # udhcpc -i wlan0
+-
+-Note:
+-  - replace 'YOUR_SSID' with the actual SSID from your access point
+-
+-Audio
+-==========
+-
+-For this example you need package alsa-utils.
+-
+-Connect a headphone to the 3.5mm jack (TRRS). Note, that the Banana Pi M1+
+-has an on-board microphone, too.
+-
+-  # amixer cset name='Power Amplifier DAC Playback Switch' on
+-  # amixer cset name='Power Amplifier Mute Switch' on
+-  # amixer cset name='Power Amplifier Volume' 42
+diff --git a/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt b/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt
+deleted file mode 120000
+index 93947975ee..0000000000
+--- a/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.sinovoip,bpi-m1-plus.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-brcmfmac43362-sdio.txt
+\ No newline at end of file
+diff --git a/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt b/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
 deleted file mode 100644
-index 18cfcb261e..0000000000
---- a/configs/friendlyarm_nanopi_m1_defconfig
+index 14a554fdd8..0000000000
+--- a/board/sinovoip/m1-plus/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
++++ /dev/null
+@@ -1,56 +0,0 @@
+-#AP6210_NVRAM_V1.2_03192013
+-manfid=0x2d0
+-prodid=0x492
+-vendid=0x14e4
+-devid=0x4343
+-boardtype=0x0598
+-
+-# Board Revision is P307, same nvram file can be used for P304, P305, P306 and P307 as the tssi pa params used are same
+-#Please force the automatic RX PER data to the respective board directory if not using P307 board, for e.g. for P305 boards force the data into the following directory /projects/BCM43362/a1_labdata/boardtests/results/sdg_rev0305
+-boardrev=0x1307
+-boardnum=777
+-xtalfreq=26000
+-boardflags=0x80201
+-boardflags2=0x80
+-sromrev=3
+-wl0id=0x431b
+-macaddr=00:90:4c:07:71:12
+-aa2g=1
+-ag0=2
+-maxp2ga0=74
+-cck2gpo=0x2222
+-ofdm2gpo=0x44444444
+-mcs2gpo0=0x6666
+-mcs2gpo1=0x6666
+-pa0maxpwr=56
+-
+-#P207 PA params
+-#pa0b0=5447
+-#pa0b1=-658
+-#pa0b2=-175
+-
+-#Same PA params for P304,P305, P306, P307
+-
+-pa0b0=5447
+-pa0b1=-607
+-pa0b2=-160
+-pa0itssit=62
+-pa1itssit=62
+-
+-
+-cckPwrOffset=5
+-ccode=0
+-rssismf2g=0xa
+-rssismc2g=0x3
+-rssisav2g=0x7
+-triso2g=0
+-noise_cal_enable_2g=0
+-noise_cal_po_2g=0
+-swctrlmap_2g=0x04040404,0x02020202,0x02020202,0x010101,0x1ff
+-temp_add=29767
+-temp_mult=425
+-
+-btc_flags=0x6
+-btc_params0=5000
+-btc_params1=1000
+-btc_params6=63
+diff --git a/configs/bananapi_m1_plus_defconfig b/configs/bananapi_m1_plus_defconfig
+deleted file mode 100644
+index 271124f79a..0000000000
+--- a/configs/bananapi_m1_plus_defconfig
 +++ /dev/null
 @@ -1,45 +0,0 @@
--# Architecture
 -BR2_arm=y
 -BR2_cortex_a7=y
--BR2_ARM_FPU_VFPV4=y
--
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--
--# System configuration
--BR2_TARGET_GENERIC_HOSTNAME="nanopi-m1"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1"
--
--# Bootloaders
+-BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_GLOBAL_PATCH_DIR="board/sinovoip/m1-plus/patches"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+-BR2_TARGET_GENERIC_HOSTNAME="bananapi"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_ROOTFS_OVERLAY="board/sinovoip/m1-plus/rootfs_overlay"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/sinovoip/m1-plus/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sinovoip/m1-plus/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.3"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sinovoip/m1-plus/linux-wifi.fragment"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi-m1-plus"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_PACKAGE_LINUX_FIRMWARE=y
+-BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
+-BR2_PACKAGE_IW=y
+-BR2_PACKAGE_WPA_SUPPLICANT=y
+-BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+-BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-# BR2_TARGET_ROOTFS_TAR is not set
 -BR2_TARGET_UBOOT=y
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m1_plus"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-m1/boot.cmd"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-m1"
--
--# Filesystem
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m1/genimage.cfg"
--# BR2_TARGET_ROOTFS_TAR is not set
--
--# Additional tools
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sinovoip/m1-plus/boot.cmd"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
