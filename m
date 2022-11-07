@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E06DFC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF753C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 21:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CF5240612;
-	Mon,  7 Nov 2022 21:20:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CF5240612
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83027818D4;
+	Mon,  7 Nov 2022 21:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83027818D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nhSdab1CkUpx; Mon,  7 Nov 2022 21:20:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KGHKTcni92DM; Mon,  7 Nov 2022 21:20:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 78BC740338;
-	Mon,  7 Nov 2022 21:20:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78BC740338
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 391301BF954
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83D218187F;
+	Mon,  7 Nov 2022 21:20:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83D218187F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FEA31BF27A
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CD4F60BCC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9EB0A8188B
  for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 21:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CD4F60BCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EB0A8188B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9MVwvXtmxU-4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Oxl09v-W4iRc for <buildroot@lists.busybox.net>;
  Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9921160BD6
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF830817D3
  for <buildroot@buildroot.org>; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9921160BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF830817D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88B48880C0; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
+ id 9F9DB880C3; Mon,  7 Nov 2022 21:19:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:26 +0100
+Date: Mon, 7 Nov 2022 22:17:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97ee98d157fb244966094f23e9e2b52a33748fb8
-X-Git-Newrev: daf3c6661f823e566b6310042884c36c1d73f1de
+X-Git-Oldrev: fa274e01e335c75684425a682b3dd8823d284da9
+X-Git-Newrev: c56314f4f9a648148eebc6b86d1c28ff9986dbae
 X-Patchwork-Hint: ignore
-Message-Id: <20221107211910.88B48880C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/bananapi_m64: remove defconfig
+Message-Id: <20221107211910.9F9DB880C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/friendlyarm_nanopi_a64: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daf3c6661f823e566b6310042884c36c1d73f1de
+commit: https://git.buildroot.net/buildroot/commit/?id=c56314f4f9a648148eebc6b86d1c28ff9986dbae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig has been failing to build for several months, with
@@ -75,54 +76,62 @@ defconfig.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499008
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499049
 
 Cc: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                               |  1 -
- board/bananapi/bananapi-m64/boot.cmd     |  6 ----
- board/bananapi/bananapi-m64/genimage.cfg | 40 -------------------------
- board/bananapi/bananapi-m64/readme.txt   | 37 -----------------------
- configs/bananapi_m64_defconfig           | 50 --------------------------------
- 5 files changed, 134 deletions(-)
+ DEVELOPERS                                |  2 --
+ board/friendlyarm/nanopi-a64/boot.cmd     |  6 ----
+ board/friendlyarm/nanopi-a64/genimage.cfg | 40 -------------------------
+ board/friendlyarm/nanopi-a64/readme.txt   | 37 -----------------------
+ configs/friendlyarm_nanopi_a64_defconfig  | 50 -------------------------------
+ 5 files changed, 135 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e3c919a14..37d2e3854f 100644
+index 427fce235d..30582cb648 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1314,7 +1314,6 @@ F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
--F:	configs/bananapi_m64_defconfig
- F:	configs/engicam_imx6qdl_icore_defconfig
- F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+@@ -1301,7 +1301,6 @@ F:	board/amarula/
+ F:	board/asus/
+ F:	board/bananapi/
+ F:	board/engicam/
+-F:	board/friendlyarm/nanopi-a64/
+ F:	board/friendlyarm/nanopi-neo2/
+ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+@@ -1319,7 +1318,6 @@ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
  F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-diff --git a/board/bananapi/bananapi-m64/boot.cmd b/board/bananapi/bananapi-m64/boot.cmd
+ F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_isiot_defconfig
+-F:	configs/friendlyarm_nanopi_a64_defconfig
+ F:	configs/friendlyarm_nanopi_neo2_defconfig
+ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+diff --git a/board/friendlyarm/nanopi-a64/boot.cmd b/board/friendlyarm/nanopi-a64/boot.cmd
 deleted file mode 100644
-index d35c9b0b2c..0000000000
---- a/board/bananapi/bananapi-m64/boot.cmd
+index 446bd85672..0000000000
+--- a/board/friendlyarm/nanopi-a64/boot.cmd
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 -
 -fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-a64-bananapi-m64.dtb
+-fatload mmc 0 $fdt_addr_r sun50i-a64-nanopi-a64.dtb
 -
 -booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
+diff --git a/board/friendlyarm/nanopi-a64/genimage.cfg b/board/friendlyarm/nanopi-a64/genimage.cfg
 deleted file mode 100644
-index e922c0dba2..0000000000
---- a/board/bananapi/bananapi-m64/genimage.cfg
+index 6907314149..0000000000
+--- a/board/friendlyarm/nanopi-a64/genimage.cfg
 +++ /dev/null
 @@ -1,40 +0,0 @@
 -image boot.vfat {
 -	vfat {
 -		files = {
 -			"Image",
--			"sun50i-a64-bananapi-m64.dtb",
+-			"sun50i-a64-nanopi-a64.dtb",
 -			"boot.scr"
 -		}
 -	}
@@ -158,31 +167,31 @@ index e922c0dba2..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/bananapi/bananapi-m64/readme.txt b/board/bananapi/bananapi-m64/readme.txt
+diff --git a/board/friendlyarm/nanopi-a64/readme.txt b/board/friendlyarm/nanopi-a64/readme.txt
 deleted file mode 100644
-index 0dec3e52ee..0000000000
---- a/board/bananapi/bananapi-m64/readme.txt
+index 88c4e661cb..0000000000
+--- a/board/friendlyarm/nanopi-a64/readme.txt
 +++ /dev/null
 @@ -1,37 +0,0 @@
 -Intro
 -=====
 -
 -This default configuration will allow you to start experimenting with the
--buildroot environment for the Bananapi M64. With the current configuration
+-buildroot environment for the Nanopi A64. With the current configuration
 -it will bring-up the board, and allow access through the serial console.
 -
--Bananapi M64 link:
--http://www.banana-pi.org/m64.html
+-Nanopi A64 link:
+-http://nanopi.io/nanopi-a64.html
 -
 -Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M64
+-https://openedev.amarulasolutions.com/display/ODWIKI/FriendlyARM+Nanopi+A64
 -
 -This configuration uses U-Boot mainline and kernel mainline.
 -
 -How to build
 -============
 -
--    $ make bananapi_m64_defconfig
+-    $ make friendlyarm_nanopi_a64_defconfig
 -    $ make
 -
 -Note: you will need access to the internet to download the required
@@ -199,12 +208,12 @@ index 0dec3e52ee..0000000000
 -  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 -  $ sudo sync
 -
--Insert the micro SDcard in your Bananapi M64 and power it up. The console
+-Insert the micro SDcard in your Nanopi A64 and power it up. The console
 -is on the serial line, 115200 8N1.
-diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
 deleted file mode 100644
-index b93332ed21..0000000000
---- a/configs/bananapi_m64_defconfig
+index 4df22b2a2f..0000000000
+--- a/configs/friendlyarm_nanopi_a64_defconfig
 +++ /dev/null
 @@ -1,50 +0,0 @@
 -BR2_aarch64=y
@@ -227,7 +236,7 @@ index b93332ed21..0000000000
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_a64"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
@@ -237,7 +246,7 @@ index b93332ed21..0000000000
 -BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boot.cmd"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
 -
 -# Kernel
 -BR2_LINUX_KERNEL=y
@@ -245,18 +254,18 @@ index b93332ed21..0000000000
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -
 -# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M64"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi A64"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-a64/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
