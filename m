@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2F67C47089
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA320C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:08:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D4F681403;
-	Mon,  5 Dec 2022 12:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D4F681403
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TaKj4iF52O7d; Mon,  5 Dec 2022 12:08:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F90081778;
-	Mon,  5 Dec 2022 12:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F90081778
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B4E5D1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02EF64167C
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02EF64167C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 528C54022A;
+	Mon,  5 Dec 2022 12:08:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 528C54022A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RH2znobhIWSs for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oePWJbz725ZL; Mon,  5 Dec 2022 12:08:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 360F240231;
+	Mon,  5 Dec 2022 12:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 360F240231
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5269A1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27BA5408B0
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27BA5408B0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id USjti-3dG1eJ for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D252B4169E
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D252B4169E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EF094063F
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF094063F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C7A9E85BBE; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+ id 442C385B9E; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 22:51:19 +0100
+Date: Mon, 7 Nov 2022 23:16:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e25d03979c5323bcad5b8f6be58d0e054950c6ca
-X-Git-Newrev: ad87a519cd3f75ce3a001aa47474f8056e89b275
+X-Git-Oldrev: 9894ed686a1ee749a1a7ef9e990dd6b161f8816c
+X-Git-Newrev: cbf420706397408b493282b3827397191d7a733e
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112611.C7A9E85BBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 22.6.3
+Message-Id: <20221205112608.442C385B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jsonschema: bump to version
+ 4.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,198 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad87a519cd3f75ce3a001aa47474f8056e89b275
+commit: https://git.buildroot.net/buildroot/commit/?id=cbf420706397408b493282b3827397191d7a733e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream:
-https://github.com/intel/media-driver/commit/be887135b89eee5b6c19c3381bf65649037fd66b
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...d-check-for-backtrace-3-via-FindBacktrace.patch | 150 ---------------------
- package/intel-mediadriver/intel-mediadriver.hash   |   2 +-
- package/intel-mediadriver/intel-mediadriver.mk     |   2 +-
- 3 files changed, 2 insertions(+), 152 deletions(-)
+ package/python-jsonschema/python-jsonschema.hash | 4 ++--
+ package/python-jsonschema/python-jsonschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/intel-mediadriver/0001-build-check-for-backtrace-3-via-FindBacktrace.patch b/package/intel-mediadriver/0001-build-check-for-backtrace-3-via-FindBacktrace.patch
-deleted file mode 100644
-index 46d843924e..0000000000
---- a/package/intel-mediadriver/0001-build-check-for-backtrace-3-via-FindBacktrace.patch
-+++ /dev/null
-@@ -1,150 +0,0 @@
--From 08ad0e3da9f9ab48e423d0aea2af9605190aafe7 Mon Sep 17 00:00:00 2001
--From: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
--Date: Mon, 31 Oct 2022 16:41:43 -0700
--Subject: [PATCH] build: check for backtrace(3) via FindBacktrace
--
--Fixes: #1533
--
--Change-Id: I81bcdb5e65c26f94b174af9b5e6218c14601c50f
--Signed-off-by: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
--
--Downloaded from upstream PR:
--https://github.com/intel/media-driver/pull/1536
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- media_driver/media_top_cmake.cmake            | 11 +++++-
-- .../common/os/osservice/media_srcs.cmake      |  3 ++
-- .../linux/common/os/osservice/mos_compat.h.in | 35 +++++++++++++++++++
-- .../os/osservice/mos_utilities_specific.cpp   |  4 ++-
-- 4 files changed, 51 insertions(+), 2 deletions(-)
-- create mode 100644 media_softlet/linux/common/os/osservice/mos_compat.h.in
--
--diff --git a/media_driver/media_top_cmake.cmake b/media_driver/media_top_cmake.cmake
--index 1a8b3b242..e71c8630d 100755
----- a/media_driver/media_top_cmake.cmake
--+++ b/media_driver/media_top_cmake.cmake
--@@ -22,6 +22,10 @@ project( media )
-- 
-- find_package(PkgConfig)
-- find_package(X11)
--+find_package(Backtrace)
--+
--+# to get access to generated header files
--+include_directories(${CMAKE_BINARY_DIR})
-- 
-- bs_set_if_undefined(LIB_NAME iHD_drv_video)
-- 
--@@ -381,10 +385,15 @@ set_target_properties(${LIB_NAME} PROPERTIES LINK_FLAGS ${MEDIA_LINK_FLAGS})
-- set_target_properties(${LIB_NAME}        PROPERTIES PREFIX "")
-- set_target_properties(${LIB_NAME_STATIC} PROPERTIES PREFIX "")
-- 
--+set(MEDIA_LINK_EXTERNAL_LIBS "${PKG_PCIACCESS_LIBRARIES} m pthread dl")
--+if(Backtrace_FOUND)
--+    set(MEDIA_LINK_EXTERNAL_LIBS "${MEDIA_LINK_EXTERNAL_LIBS} ${Backtrace_LIBRARY}")
--+endif()
--+
-- bs_ufo_link_libraries_noBsymbolic(
--     ${LIB_NAME}
--     "${INCLUDED_LIBS}"
---    "${PKG_PCIACCESS_LIBRARIES} m pthread dl"
--+    "${MEDIA_LINK_EXTERNAL_LIBS}"
-- )
-- 
-- if (NOT DEFINED INCLUDED_LIBS OR "${INCLUDED_LIBS}" STREQUAL "")
--diff --git a/media_softlet/linux/common/os/osservice/media_srcs.cmake b/media_softlet/linux/common/os/osservice/media_srcs.cmake
--index e90c502f3..4e8aad1d8 100644
----- a/media_softlet/linux/common/os/osservice/media_srcs.cmake
--+++ b/media_softlet/linux/common/os/osservice/media_srcs.cmake
--@@ -18,12 +18,15 @@
-- # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-- # OTHER DEALINGS IN THE SOFTWARE.
-- 
--+configure_file(${CMAKE_CURRENT_LIST_DIR}/mos_compat.h.in ${CMAKE_BINARY_DIR}/mos_compat.h)
--+
-- set(TMP_SOURCES_
--     ${CMAKE_CURRENT_LIST_DIR}/mos_util_debug_specific.cpp
--     ${CMAKE_CURRENT_LIST_DIR}/mos_utilities_specific.cpp
-- )
-- 
-- set(TMP_HEADERS_
--+    ${CMAKE_BINARY_DIR}/mos_compat.h
--     ${CMAKE_CURRENT_LIST_DIR}/mos_utilities_specific.h
--     ${CMAKE_CURRENT_LIST_DIR}/mos_util_debug_specific.h
-- )
--diff --git a/media_softlet/linux/common/os/osservice/mos_compat.h.in b/media_softlet/linux/common/os/osservice/mos_compat.h.in
--new file mode 100644
--index 000000000..4a04febe5
----- /dev/null
--+++ b/media_softlet/linux/common/os/osservice/mos_compat.h.in
--@@ -0,0 +1,35 @@
--+/*
--+* Copyright (c) 2022, Intel Corporation
--+*
--+* Permission is hereby granted, free of charge, to any person obtaining a
--+* copy of this software and associated documentation files (the "Software"),
--+* to deal in the Software without restriction, including without limitation
--+* the rights to use, copy, modify, merge, publish, distribute, sublicense,
--+* and/or sell copies of the Software, and to permit persons to whom the
--+* Software is furnished to do so, subject to the following conditions:
--+*
--+* The above copyright notice and this permission notice shall be included
--+* in all copies or substantial portions of the Software.
--+*
--+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
--+* OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
--+* THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
--+* OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
--+* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
--+* OTHER DEALINGS IN THE SOFTWARE.
--+*/
--+
--+#ifndef __MOS_COMPAT_H__
--+#define __MOS_COMPAT_H__
--+
--+// clib implementations (musl, uClibc) might provide backtrace(3)
--+// in different header files or not provide it all and rely on external
--+// implementations. So, we need to detect which header to be used.
--+#cmakedefine01 Backtrace_FOUND
--+#if Backtrace_FOUND
--+#include <${Backtrace_HEADER}>
--+#endif
--+
--+#endif // __MOS_COMPAT_H__
--+
--diff --git a/media_softlet/linux/common/os/osservice/mos_utilities_specific.cpp b/media_softlet/linux/common/os/osservice/mos_utilities_specific.cpp
--index 305a0e01c..02555837a 100644
----- a/media_softlet/linux/common/os/osservice/mos_utilities_specific.cpp
--+++ b/media_softlet/linux/common/os/osservice/mos_utilities_specific.cpp
--@@ -34,13 +34,13 @@
-- #include <signal.h>
-- #include <unistd.h>  // fork
-- #include <algorithm>
---#include <execinfo.h> // backtrace
-- #include <sys/types.h>
-- #include <sys/stat.h>  // fstat
-- #include <sys/ipc.h>  // System V IPC
-- #include <sys/types.h>
-- #include <sys/sem.h>
-- #include <sys/mman.h>
--+#include "mos_compat.h" // libc variative definitions: backtrace
-- #include "mos_user_setting.h"
-- #include "mos_utilities_specific.h"
-- #include "mos_utilities.h"
--@@ -2492,6 +2492,7 @@ void MosUtilities::MosTraceEvent(
--                 MOS_FreeMemory(pTraceBuf);
--             }
--         }
--+#if Backtrace_FOUND
--         if (m_mosTraceFilter(TR_KEY_CALL_STACK))
--         {
--             // reserve space for header and stack size field.
--@@ -2511,6 +2512,7 @@ void MosUtilities::MosTraceEvent(
--                 size_t ret = write(MosUtilitiesSpecificNext::m_mosTraceFd, traceBuf, nLen);
--             }
--         }
--+#endif
--     }
--     return;
-- }
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index a42a7841d5..0a42475400 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a59c4c9facf567ccbea3aab36b150d961c56e48461283a2aa7c438a311b4d2d0  intel-media-22.6.2.tar.gz
-+sha256  f42c41dce7ab4213e21f6599cd0602e5ab40a8182ec286bfc0a16547721dff7a  intel-media-22.6.3.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index e46241ffee..27f3193929 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
+index d4c2759811..19b9659d08 100644
+--- a/package/python-jsonschema/python-jsonschema.hash
++++ b/package/python-jsonschema/python-jsonschema.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/jsonschema/json
+-md5  3bc1f63a74fc61bf2847f22cadb0dfff  jsonschema-4.16.0.tar.gz
+-sha256  165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23  jsonschema-4.16.0.tar.gz
++md5  e569b6114d575bdb05cb8ce4676fe458  jsonschema-4.17.0.tar.gz
++sha256  5bfcf2bca16a087ade17e02b282d34af7ccd749ef76241e7f9bd7c0cb8a9424d  jsonschema-4.17.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
+ sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+index 68a25aed58..8cc624886c 100644
+--- a/package/python-jsonschema/python-jsonschema.mk
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.6.2
-+INTEL_MEDIADRIVER_VERSION = 22.6.3
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-PYTHON_JSONSCHEMA_VERSION = 4.16.0
++PYTHON_JSONSCHEMA_VERSION = 4.17.0
+ PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
+-PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/cf/54/8923ba38b5145f2359d57e5516715392491d674c83f446cd4cd133eeb4d6
++PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/3a/3d/0653047b9b2ed03d3e96012bc90cfc96227221193fbedd4dc0cbf5a0e342
+ PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
+ PYTHON_JSONSCHEMA_LICENSE = MIT
+ PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
