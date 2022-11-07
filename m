@@ -4,81 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56458C43217
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99755C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0527940635;
-	Mon,  7 Nov 2022 22:36:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0527940635
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22F4740635;
+	Mon,  7 Nov 2022 22:41:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22F4740635
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e1Lvh15jPWp0; Mon,  7 Nov 2022 22:36:02 +0000 (UTC)
+	with ESMTP id hE6pWYVzmahn; Mon,  7 Nov 2022 22:41:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F13474031F;
-	Mon,  7 Nov 2022 22:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F13474031F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A6AE1BF25F
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:35:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E2724026A;
+	Mon,  7 Nov 2022 22:41:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E2724026A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C7341BF25F
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24ADC81336
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:35:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24ADC81336
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34EF64014B
+ for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34EF64014B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fVPG7nZnPUgl for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 22:35:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kHxtPBC4WIJQ for <buildroot@lists.busybox.net>;
+ Mon,  7 Nov 2022 22:41:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF4F381331
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF4F381331
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:35:57 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id d20so18473840ljc.12
- for <buildroot@buildroot.org>; Mon, 07 Nov 2022 14:35:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4288140329
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4288140329
+ for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:41:28 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id y16so18274065wrt.12
+ for <buildroot@buildroot.org>; Mon, 07 Nov 2022 14:41:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ovDrgtEfOjD48rqi8P3Rmo+VKXitzL5M3YVoNFHjr74=;
- b=Il7ciyM4+kjRCpLNBBM6oDAEJASE4NjxOXjnGqEWmm9xle2WGNsktqMx3OuVldKdDW
- VuvJTkwPsva+9kuHmOhvbDpoxBw7Q/j2w7m+h6qT5ulp3JNbdxy5AVjdGqiOEG9Tc/gD
- p+nwDdGvXRcUDOo9faz07MTh5fdHn+Dg38iRbESMb8XrmQ2d5gAO59+Eib5q+GCc9XAY
- vHlQuVjlKKkXVHp1mOQXjyyWcnDHq7CHNL9WlJs1vMYOM8B9/SykqLhlYYNZtryPWEEK
- +/MNU8Oveu0kBfIBWTRvN3mvaCbTgnGN55e30l0IB/WnCC7KO/ocmPB/eaG2ugYB2VRU
- DiNw==
-X-Gm-Message-State: ACrzQf0nw4hQrkNq6GcjjE4WpWReV47xuzSHcTR6YmWTvN6UGRSWc7e1
- PniZrOZL21xGHCe6L3oo0rFHkdEBGzJ90VCCDg4=
-X-Google-Smtp-Source: AMsMyM4QbBPuyiqVO9okx/PMxIDZTlrw2xbZgTB0cp8GRJqqAPovkjf00D7mLQZVGzzhWskLYaLefOGWoW2DHAPU9NE=
-X-Received: by 2002:a2e:8ed2:0:b0:26c:5cf3:cc89 with SMTP id
- e18-20020a2e8ed2000000b0026c5cf3cc89mr6141933ljl.483.1667860555622; Mon, 07
- Nov 2022 14:35:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20221106222042.648813-1-fontaine.fabrice@gmail.com>
- <20221107230925.73bb92d9@windsurf>
-In-Reply-To: <20221107230925.73bb92d9@windsurf>
+ bh=AFoz82krAoXNqYX+4TNO806bunvLD1iFDr84EKVQswI=;
+ b=K4H16wNC7l6ORJxY95yRbEsFBVQJWR9uz1kLnPhLCJyjwqQVUTDYDtEmRyA73YPU2z
+ lMXwnehPA8sEMsWk3aNXKxlWpAX92m78kfAaw2MVIWr6bKkH73KubClzmH0RkwmEUZEU
+ GgSjftcuncm4/3tH8z6+oIi19WwqV0suhsSQp0FzrvQo36MJOGtVeFq7qaXnDE9WfuX2
+ LGgjo/TO3X17Xkd6UIB8NCKvcWodDl3SnF3xOqz40rXS7sMy5EjpXIweybNlrnNISB6m
+ rF8gz5dFsq/x4ehSPOgoUhdI3kbaQq47Qv7Ogxml87jB7mC3/wOb8sSbVgNuxUZWp30M
+ geUg==
+X-Gm-Message-State: ACrzQf0Ygjb3dvgj57AMKWSpoNuzqawKdPMT2YJVovG0Cip3fL2geXvf
+ 8PdgWYqnKW7VAsSY/GwN4QDsbWGJzAQ=
+X-Google-Smtp-Source: AMsMyM46laHVcY0zLT61aOqn+j2Ex9ItnX+01lzrEUqPXFrQntn3AJaj+uY1Fd88gFNPMnImjJIkog==
+X-Received: by 2002:a05:6000:114d:b0:236:4a87:2c25 with SMTP id
+ d13-20020a056000114d00b002364a872c25mr636177wrx.19.1667860886020; 
+ Mon, 07 Nov 2022 14:41:26 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ v11-20020a05600c12cb00b003cf75f56105sm10318408wmd.41.2022.11.07.14.41.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Nov 2022 14:41:25 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 7 Nov 2022 23:35:43 +0100
-Message-ID: <CAPi7W83h9UyvLgf834At4_wxUXq7xXyYxyDVXcz0=T_9caJRZw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Mon,  7 Nov 2022 23:41:05 +0100
+Message-Id: <20221107224105.461499-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=ovDrgtEfOjD48rqi8P3Rmo+VKXitzL5M3YVoNFHjr74=;
- b=ISwVLbvN+XNjUjO7eaoKvci8A9c+y1vMvPBxSu1Un483SVjw+KxMRhmb7LS/GIiEpO
- 0SITJeLGhuSLfU6PTTURDKVOX4yk5c1wA4FF5+IvG+lDWaRzSFa42C29Y8M/Ow7geSqz
- ZSQn+D4aUntxCE1DYnfETCE1TmPRLVdt7DLWy6H5DlkPomQTVGDlKabQpgIGIzH4yP6c
- +OhY4F98x5DQE7JG0yNuMw47LjlUV+KUWAiAgGJttQq0NP/9vUl+BJ5hI7laz/Br0ZlP
- 58HoA3ThMcMTe+s3NLtTrbLnjhRQwp8QOrBlzXmDr4uB080RUbPLmxnS6rHnLJe5H6Km
- lRng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=AFoz82krAoXNqYX+4TNO806bunvLD1iFDr84EKVQswI=;
+ b=fPYhmlG4MAl2bTnKiphxpcvUgHsXeAp+G+8lgk0NfITvzYJ4kRBpxbZmE3t0VdvHaJ
+ FrtaoA0FXMs3IPu3adaHc536xr4ohUFPo8ZccTc/Kt3qb+7p7Vb+/s894ZlDNKgCRNgg
+ kx936FhbUlaMdzuuLfD+qqJg2Ru9L6WAypX8bWJctr9h8ZchGLWEtxjFG/+cNsBjdrsj
+ jSkqQYm55q8x5FXgCHgxWxbTiBLeRa/SwMZzYfZnhPqHAuOXVtvuzqkiyt2y+MkD+/6q
+ pAzy+mOrYac706ZH1gqX5ChWjWUmXe7qc3NsEgV2HV3E76Ps1aRC7Yy+z+OEMG/+LJww
+ 2DmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ISwVLbvN
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools: fix static build
+ header.a=rsa-sha256 header.s=20210112 header.b=fPYhmlG4
+Subject: [Buildroot] [PATCH 1/1] package/libkcapi: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,181 +93,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7989236035914716658=="
+Cc: Tan En De <ende.tan@starfivetech.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7989236035914716658==
-Content-Type: multipart/alternative; boundary="000000000000f3ede005ece90b25"
+Fix the following musl build failure (disabling -Werror seems to be the
+only "solution": https://github.com/smuellerDD/libkcapi/issues/136):
 
---000000000000f3ede005ece90b25
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
+lib/kcapi-kernel-if.c:212:12: error: unsigned conversion from 'long int' to 'long unsigned int' changes value from '-4' to '4294967292' [-Werror=sign-conversion]
+  212 |   header = CMSG_NXTHDR(&msg, header);
+      |            ^~~~~~~~~~~
 
-Le lun. 7 nov. 2022 =C3=A0 23:09, Thomas Petazzoni <thomas.petazzoni@bootli=
-n.com>
-a =C3=A9crit :
+Fixes:
+ - http://autobuild.buildroot.org/results/c789d43e71e6075e297bef58d888228a89055bbc
 
-> On Sun,  6 Nov 2022 23:20:42 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Pass TARGET_LDFLAGS (which contains -static) to fix the following stati=
-c
-> > build failures with gpio, iio and pci:
-> >
-> >   LINK     lsgpio
-> >
-> /home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-=
-linux-musleabi/10.4.0/../../../../arm-buildroot-linux-musleabi/bin/ld:
-> /home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-=
-linux-musleabi/10.4.0/libgcc.a(_dvmd_lnx.o):
-> in function `__aeabi_ldiv0':
-> >
-> /home/autobuild/autobuild/instance-8/output-1/build/host-gcc-final-10.4.0=
-/build/arm-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/lib1f=
-uncs.S:1499:
-> undefined reference to `raise'
-> >
-> > [...]
-> >
-> >   LINK    iio_event_monitor
-> >
-> /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buil=
-droot-linux-musl/11.3.0/../../../../microblazeel-buildroot-linux-musl/bin/l=
-d:
-> /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buil=
-droot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o):
-> in function `size_of_encoded_value':
-> >
-> /home/thomas/autobuild/instance-2/output-1/build/host-gcc-final-11.3.0/bu=
-ild/microblazeel-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:88=
-:
-> undefined reference to `abort'
-> >
-> > Fixes:
-> >  -
-> http://autobuild.buildroot.org/results/f202eb843ef331939f5f12325bdbf2d0d6=
-64a7ce
-> >  -
-> http://autobuild.buildroot.org/results/504ec8be1ebd15c5da09f8b90bb723a58d=
-4c58c5
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/linux-tools/linux-tool-gpio.mk.in | 2 +-
-> >  package/linux-tools/linux-tool-iio.mk.in  | 2 +-
-> >  package/linux-tools/linux-tool-pci.mk.in  | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> Applied to master, thanks. However, aren't some of the other
-> linux-tools also affected by a similar issue (tmon, cpupower, etc.) ?
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../libkcapi/0002-Add-disable-werror.patch    | 46 +++++++++++++++++++
+ package/libkcapi/libkcapi.mk                  |  1 +
+ 2 files changed, 47 insertions(+)
+ create mode 100644 package/libkcapi/0002-Add-disable-werror.patch
 
-Nope, tmon was already fixed in commit
-2cbcdbf0add46da55020eb56b5e4b974b44e958b.
-The other ones can't be built statically.
-
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
-Best Regards,
-
-Fabrice
-
---000000000000f3ede005ece90b25
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 7 nov. 2022 =C3=A0=C2=A0=
-23:09, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com"=
->thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px=
- solid rgb(204,204,204);padding-left:1ex">On Sun,=C2=A0 6 Nov 2022 23:20:42=
- +0100<br>
-Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
-=3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; Pass TARGET_LDFLAGS (which contains -static) to fix the following stat=
-ic<br>
-&gt; build failures with gpio, iio and pci:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0LINK=C2=A0 =C2=A0 =C2=A0lsgpio<br>
-&gt; /home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildro=
-ot-linux-musleabi/10.4.0/../../../../arm-buildroot-linux-musleabi/bin/ld: /=
-home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-lin=
-ux-musleabi/10.4.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0&#39;:<=
-br>
-&gt; /home/autobuild/autobuild/instance-8/output-1/build/host-gcc-final-10.=
-4.0/build/arm-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/li=
-b1funcs.S:1499: undefined reference to `raise&#39;<br>
-&gt; <br>
-&gt; [...]<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0LINK=C2=A0 =C2=A0 iio_event_monitor<br>
-&gt; /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-b=
-uildroot-linux-musl/11.3.0/../../../../microblazeel-buildroot-linux-musl/bi=
-n/ld: /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-=
-buildroot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o): in function `size_of_en=
-coded_value&#39;:<br>
-&gt; /home/thomas/autobuild/instance-2/output-1/build/host-gcc-final-11.3.0=
-/build/microblazeel-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h=
-:88: undefined reference to `abort&#39;<br>
-&gt; <br>
-&gt; Fixes:<br>
-&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/f202eb843ef3=
-31939f5f12325bdbf2d0d664a7ce" rel=3D"noreferrer" target=3D"_blank">http://a=
-utobuild.buildroot.org/results/f202eb843ef331939f5f12325bdbf2d0d664a7ce</a>=
-<br>
-&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/504ec8be1ebd=
-15c5da09f8b90bb723a58d4c58c5" rel=3D"noreferrer" target=3D"_blank">http://a=
-utobuild.buildroot.org/results/504ec8be1ebd15c5da09f8b90bb723a58d4c58c5</a>=
-<br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 package/linux-tools/<a href=3D"http://linux-tool-gpio.mk.in" rel=
-=3D"noreferrer" target=3D"_blank">linux-tool-gpio.mk.in</a> | 2 +-<br>
-&gt;=C2=A0 package/linux-tools/<a href=3D"http://linux-tool-iio.mk.in" rel=
-=3D"noreferrer" target=3D"_blank">linux-tool-iio.mk.in</a>=C2=A0 | 2 +-<br>
-&gt;=C2=A0 package/linux-tools/<a href=3D"http://linux-tool-pci.mk.in" rel=
-=3D"noreferrer" target=3D"_blank">linux-tool-pci.mk.in</a>=C2=A0 | 2 +-<br>
-&gt;=C2=A0 3 files changed, 3 insertions(+), 3 deletions(-)<br>
-<br>
-Applied to master, thanks. However, aren&#39;t some of the other<br>
-linux-tools also affected by a similar issue (tmon, cpupower, etc.) ?<br></=
-blockquote><div>=C2=A0</div><div>Nope, tmon was already fixed in commit 2cb=
-cdbf0add46da55020eb56b5e4b974b44e958b.</div><div>The other ones can&#39;t b=
-e built statically.</div><div><br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
-ding-left:1ex">
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, CTO, Bootlin<br>
-Embedded Linux and Kernel engineering<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br></blockquote><div><br></div><div>Best Regards,</div><d=
-iv><br></div><div>Fabrice <br></div></div></div>
-
---000000000000f3ede005ece90b25--
-
---===============7989236035914716658==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libkcapi/0002-Add-disable-werror.patch b/package/libkcapi/0002-Add-disable-werror.patch
+new file mode 100644
+index 0000000000..4f2f55f145
+--- /dev/null
++++ b/package/libkcapi/0002-Add-disable-werror.patch
+@@ -0,0 +1,46 @@
++From c27b154f03ad7e94447c7114d73aee60f0098093 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 7 Nov 2022 13:38:06 +0100
++Subject: [PATCH] Add --disable-werror
++
++Allow the user to disable -Werror through --disable-werror
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++[Retrieved from:
++https://github.com/smuellerDD/libkcapi/commit/c27b154f03ad7e94447c7114d73aee60f0098093]
++---
++ Makefile.am  | 5 ++++-
++ configure.ac | 3 +++
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 1c95d3d..cddedac 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -2,7 +2,10 @@ ACLOCAL_AMFLAGS = -I m4
++ AUTOMAKE_OPTIONS = subdir-objects
++ lib_LTLIBRARIES = libkcapi.la
++ 
++-COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -Werror -std=gnu99 -Wconversion
+++COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -std=gnu99 -Wconversion
+++if ENABLE_WERROR
+++COMMON_CPPFLAGS += -Werror
+++endif
++ COMMON_LDFLAGS =  -Wl,-z,relro,-z,now
++ 
++ libtool: $(LIBTOOL_DEPS)
++diff --git a/configure.ac b/configure.ac
++index cb910e2..e230577 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -76,6 +76,9 @@ AX_ADD_FORTIFY_SOURCE
++ 
++ AC_CHECK_API_VERSION
++ 
+++AC_ARG_ENABLE([werror], [AS_HELP_STRING([--disable-werror], [Disable -Werror])], [with_werror=$enableval], [with_werror=yes])
+++AM_CONDITIONAL([ENABLE_WERROR], [test "x$with_werror" = "xyes"])
+++
++ AC_ARG_ENABLE([kcapi-test], [AS_HELP_STRING([--enable-kcapi-test], [Compile kcapi test program])], [with_kcapi_test=$enableval])
++ AM_CONDITIONAL([ENABLE_KCAPI_TEST], [test "x$with_kcapi_test" = "xyes"])
++ 
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index e88928a74d..c6251c286c 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
+ 	ac_cv_path_DB2PDF="" \
+ 	ac_cv_path_DB2PS="" \
+ 	ac_cv_path_XMLTO=""
++LIBKCAPI_CONF_OPTS = --disable-werror
+ LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_ASYM),y)
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7989236035914716658==--
