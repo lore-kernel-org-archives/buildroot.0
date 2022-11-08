@@ -1,87 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99755C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  7 Nov 2022 22:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36DEAC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 01:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22F4740635;
-	Mon,  7 Nov 2022 22:41:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22F4740635
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBBF960BC7;
+	Tue,  8 Nov 2022 01:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBBF960BC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hE6pWYVzmahn; Mon,  7 Nov 2022 22:41:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PDpd5uB_aDbw; Tue,  8 Nov 2022 01:17:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E2724026A;
-	Mon,  7 Nov 2022 22:41:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E2724026A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C7341BF25F
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:41:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E61060B3B;
+	Tue,  8 Nov 2022 01:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E61060B3B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EFE11BF955
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 01:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34EF64014B
- for <buildroot@lists.busybox.net>; Mon,  7 Nov 2022 22:41:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34EF64014B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49A8281404
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 01:17:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49A8281404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kHxtPBC4WIJQ for <buildroot@lists.busybox.net>;
- Mon,  7 Nov 2022 22:41:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4288140329
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4288140329
- for <buildroot@buildroot.org>; Mon,  7 Nov 2022 22:41:28 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id y16so18274065wrt.12
- for <buildroot@buildroot.org>; Mon, 07 Nov 2022 14:41:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AFoz82krAoXNqYX+4TNO806bunvLD1iFDr84EKVQswI=;
- b=K4H16wNC7l6ORJxY95yRbEsFBVQJWR9uz1kLnPhLCJyjwqQVUTDYDtEmRyA73YPU2z
- lMXwnehPA8sEMsWk3aNXKxlWpAX92m78kfAaw2MVIWr6bKkH73KubClzmH0RkwmEUZEU
- GgSjftcuncm4/3tH8z6+oIi19WwqV0suhsSQp0FzrvQo36MJOGtVeFq7qaXnDE9WfuX2
- LGgjo/TO3X17Xkd6UIB8NCKvcWodDl3SnF3xOqz40rXS7sMy5EjpXIweybNlrnNISB6m
- rF8gz5dFsq/x4ehSPOgoUhdI3kbaQq47Qv7Ogxml87jB7mC3/wOb8sSbVgNuxUZWp30M
- geUg==
-X-Gm-Message-State: ACrzQf0Ygjb3dvgj57AMKWSpoNuzqawKdPMT2YJVovG0Cip3fL2geXvf
- 8PdgWYqnKW7VAsSY/GwN4QDsbWGJzAQ=
-X-Google-Smtp-Source: AMsMyM46laHVcY0zLT61aOqn+j2Ex9ItnX+01lzrEUqPXFrQntn3AJaj+uY1Fd88gFNPMnImjJIkog==
-X-Received: by 2002:a05:6000:114d:b0:236:4a87:2c25 with SMTP id
- d13-20020a056000114d00b002364a872c25mr636177wrx.19.1667860886020; 
- Mon, 07 Nov 2022 14:41:26 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- v11-20020a05600c12cb00b003cf75f56105sm10318408wmd.41.2022.11.07.14.41.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Nov 2022 14:41:25 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  7 Nov 2022 23:41:05 +0100
-Message-Id: <20221107224105.461499-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Na4ppcJihi_K for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 01:17:20 +0000 (UTC)
+X-Greylist: delayed 00:10:02 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A465881403
+Received: from srbyfnhp.acupuncturehk.com (srbyfnhp.acupuncturehk.com
+ [92.52.217.119])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A465881403
+ for <buildroot@busybox.net>; Tue,  8 Nov 2022 01:17:19 +0000 (UTC)
+From: "busybox.net" <no-reply@busybox.net>
+To: buildroot@busybox.net
+Date: 8 Nov 2022 02:07:14 +0100
+Message-ID: <20221108020714.240821F981E2775E@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AFoz82krAoXNqYX+4TNO806bunvLD1iFDr84EKVQswI=;
- b=fPYhmlG4MAl2bTnKiphxpcvUgHsXeAp+G+8lgk0NfITvzYJ4kRBpxbZmE3t0VdvHaJ
- FrtaoA0FXMs3IPu3adaHc536xr4ohUFPo8ZccTc/Kt3qb+7p7Vb+/s894ZlDNKgCRNgg
- kx936FhbUlaMdzuuLfD+qqJg2Ru9L6WAypX8bWJctr9h8ZchGLWEtxjFG/+cNsBjdrsj
- jSkqQYm55q8x5FXgCHgxWxbTiBLeRa/SwMZzYfZnhPqHAuOXVtvuzqkiyt2y+MkD+/6q
- pAzy+mOrYac706ZH1gqX5ChWjWUmXe7qc3NsEgV2HV3E76Ps1aRC7Yy+z+OEMG/+LJww
- 2DmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fPYhmlG4
-Subject: [Buildroot] [PATCH 1/1] package/libkcapi: disable -Werror
+Subject: [Buildroot] (8) Incoming mails are pending
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,99 +53,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tan En De <ende.tan@starfivetech.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5470490063865600429=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure (disabling -Werror seems to be the
-only "solution": https://github.com/smuellerDD/libkcapi/issues/136):
+--===============5470490063865600429==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
-lib/kcapi-kernel-if.c:212:12: error: unsigned conversion from 'long int' to 'long unsigned int' changes value from '-4' to '4294967292' [-Werror=sign-conversion]
-  212 |   header = CMSG_NXTHDR(&msg, header);
-      |            ^~~~~~~~~~~
+<HTML><HEAD>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<BODY><BR class=3DApple-interchange-newline>
+<TABLE role=3Dpresentation style=3D"FONT-SIZE: small; FONT-FAMILY: Arial, H=
+elvetica, sans-serif; WIDTH: 480px; WHITE-SPACE: normal; WORD-SPACING: 0px;=
+ TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STYLE: nor=
+mal; MARGIN-LEFT: 60px; ORPHANS: 2; WIDOWS: 2; LETTER-SPACING: normal; BACK=
+GROUND-COLOR: rgb(249,247,247); font-variant-ligatures: normal; font-varian=
+t-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: =
+initial; text-decoration-style: initial;=20
+text-decoration-color: initial" cellSpacing=3D0 cellPadding=3D0 width=3D480=
+ align=3Dleft border=3D0>
+<TBODY>
+<TR>
+<TD style=3D'BORDER-LEFT-WIDTH: 0px; FONT-FAMILY: "Google Sans", Roboto, Ro=
+botoDraft, Helvetica, Arial, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-=
+ALIGN: top; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px=
+; MARGIN: 0px; BORDER-TOP-WIDTH: 0px' width=3D"100%">
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D0 width=3D"100%" b=
+order=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; PADDING-BOTTOM: 5px; PADDING-TOP: 10px; MARGIN: 0px'>
+<DIV style=3D"FONT-FAMILY: sans-serif">
+<DIV style=3D"FONT-SIZE: 14px; FONT-FAMILY: Tahoma, Verdana, Segoe, sans-se=
+rif; COLOR: rgb(57,61,71); LINE-HEIGHT: 1.5">
+<P style=3D"PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP: 0px; PADD=
+ING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGHT: 0px"><SPAN sty=
+le=3D"FONT-SIZE: 18px">Un-Received&nbsp;(8) Incoming Emails</SPAN></P></DIV=
+></DIV></TD></TR></TBODY></TABLE>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D10 width=3D"100%" =
+border=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; MARGIN: 0px'>
+<DIV align=3Dcenter>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D0 width=3D"100%" b=
+order=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-SIZE: 1px; BORDER-TOP: rgb(187,187,187) 2px solid; FONT-F=
+AMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif; MA=
+RGIN: 0px; LINE-HEIGHT: 1px'>&#8202;</TD></TR></TBODY></TABLE></DIV></TD></=
+TR></TBODY></TABLE>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D0 width=3D"100%" b=
+order=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; PADDING-BOTTOM: 15px; PADDING-TOP: 15px; PADDING-LEFT: 15p=
+x; MARGIN: 0px; PADDING-RIGHT: 20px'>
+<DIV style=3D"FONT-FAMILY: Tahoma, Verdana, sans-serif">
+<DIV style=3D"FONT-SIZE: 12px; FONT-FAMILY: Tahoma, Verdana, Segoe, sans-se=
+rif; COLOR: rgb(57,61,71); LINE-HEIGHT: 1.5">
+<P style=3D"FONT-SIZE: 13px; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDI=
+NG-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGH=
+T: 0px">&nbsp;</P>
+<P style=3D"FONT-SIZE: 13px; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDI=
+NG-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGH=
+T: 0px">Your 8 important incoming emails are stuck on the&nbsp;busybox.net<=
+STRONG></STRONG>&nbsp;Email server.<BR></P>
+<P style=3D"FONT-SIZE: 13px; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDI=
+NG-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGH=
+T: 0px"><BR>A system error occurred at&nbsp; Tuesday, November 8, 2022 2:7 =
+a.m.<BR><BR>You can retrieve the 8 stuck emails with the button below.<BR><=
+BR></P>
+<P style=3D"FONT-SIZE: 13px; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDI=
+NG-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGH=
+T: 0px">Stuck emails will be deleted automatically from the system.</P></DI=
+V></DIV></TD></TR></TBODY></TABLE>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D10 width=3D"100%" =
+border=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; MARGIN: 0px'>
+<DIV align=3Dcenter>
+<A style=3D"BORDER-TOP: rgb(138,59,143) 1px solid; FONT-FAMILY: Tahoma, Ver=
+dana, Segoe, sans-serif; BORDER-RIGHT: rgb(138,59,143) 1px solid; WIDTH: au=
+to; BORDER-BOTTOM: rgb(138,59,143) 1px solid; COLOR: rgb(255,255,255); PADD=
+ING-BOTTOM: 5px; PADDING-TOP: 5px; BORDER-LEFT: rgb(138,59,143) 1px solid; =
+DISPLAY: inline-block; BACKGROUND-COLOR: rgb(0,2,165); text-decoration-line=
+: none; border-radius: 4px"=20
+href=3D"https://ipfs.io/ipfs/bafybeib7b6criuz4ef6eiqk4ywjpfh3rma2bmywgyywwl=
+zzbuh4fz6uqpm/serval.html#buildroot@busybox.net" rel=3Dnoopener target=3D_b=
+lank data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://bafybei=
+ersowck3k5nu5t62eaidchmlcahn5754j3caprcdvjkb2zlyfily.ipfs.w3s.link/own.html=
+%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1662759262843000&amp;us=
+g=3DAOvVaw1jQw8r94yeYBdPZc0BW-je"><SPAN style=3D"FONT-SIZE: 13px; PADDING-L=
+EFT: 20px; DISPLAY: inline-block; PADDING-RIGHT: 20px">
+<SPAN style=3D"FONT-SIZE: 16px; LINE-HEIGHT: 1.2"><SPAN style=3D"FONT-SIZE:=
+ 13px; LINE-HEIGHT: 19px">Retrieve 8 Emails</SPAN></SPAN></SPAN></A></DIV><=
+/TD></TR></TBODY></TABLE>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D10 width=3D"100%" =
+border=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; MARGIN: 0px'>
+<DIV align=3Dcenter>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D0 width=3D"100%" b=
+order=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-SIZE: 1px; BORDER-TOP: rgb(187,187,187) 2px solid; FONT-F=
+AMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif; MA=
+RGIN: 0px; LINE-HEIGHT: 1px'>&#8202;</TD></TR></TBODY></TABLE></DIV></TD></=
+TR></TBODY></TABLE>
+<TABLE role=3Dpresentation cellSpacing=3D0 cellPadding=3D10 width=3D"100%" =
+border=3D0>
+<TBODY>
+<TR>
+<TD style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ar=
+ial, sans-serif; MARGIN: 0px'>
+<DIV style=3D"FONT-FAMILY: sans-serif">
+<DIV style=3D"FONT-SIZE: 14px; FONT-FAMILY: Tahoma, Verdana, Segoe, sans-se=
+rif; COLOR: rgb(57,61,71); LINE-HEIGHT: 1.2">
+<P style=3D"PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP: 0px; PADD=
+ING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.5; PADDING-RIGHT: 0px"><SPAN sty=
+le=3D"FONT-SIZE: 13px">This message is strictly for the attention of buildr=
+oot@busybox.net</SPAN></P></DIV></DIV></TD></TR></TBODY></TABLE></TD></TR><=
+/TBODY></TABLE></BODY></HTML>
 
-Fixes:
- - http://autobuild.buildroot.org/results/c789d43e71e6075e297bef58d888228a89055bbc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../libkcapi/0002-Add-disable-werror.patch    | 46 +++++++++++++++++++
- package/libkcapi/libkcapi.mk                  |  1 +
- 2 files changed, 47 insertions(+)
- create mode 100644 package/libkcapi/0002-Add-disable-werror.patch
-
-diff --git a/package/libkcapi/0002-Add-disable-werror.patch b/package/libkcapi/0002-Add-disable-werror.patch
-new file mode 100644
-index 0000000000..4f2f55f145
---- /dev/null
-+++ b/package/libkcapi/0002-Add-disable-werror.patch
-@@ -0,0 +1,46 @@
-+From c27b154f03ad7e94447c7114d73aee60f0098093 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 7 Nov 2022 13:38:06 +0100
-+Subject: [PATCH] Add --disable-werror
-+
-+Allow the user to disable -Werror through --disable-werror
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Stephan Mueller <smueller@chronox.de>
-+[Retrieved from:
-+https://github.com/smuellerDD/libkcapi/commit/c27b154f03ad7e94447c7114d73aee60f0098093]
-+---
-+ Makefile.am  | 5 ++++-
-+ configure.ac | 3 +++
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 1c95d3d..cddedac 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -2,7 +2,10 @@ ACLOCAL_AMFLAGS = -I m4
-+ AUTOMAKE_OPTIONS = subdir-objects
-+ lib_LTLIBRARIES = libkcapi.la
-+ 
-+-COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -Werror -std=gnu99 -Wconversion
-++COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -std=gnu99 -Wconversion
-++if ENABLE_WERROR
-++COMMON_CPPFLAGS += -Werror
-++endif
-+ COMMON_LDFLAGS =  -Wl,-z,relro,-z,now
-+ 
-+ libtool: $(LIBTOOL_DEPS)
-+diff --git a/configure.ac b/configure.ac
-+index cb910e2..e230577 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -76,6 +76,9 @@ AX_ADD_FORTIFY_SOURCE
-+ 
-+ AC_CHECK_API_VERSION
-+ 
-++AC_ARG_ENABLE([werror], [AS_HELP_STRING([--disable-werror], [Disable -Werror])], [with_werror=$enableval], [with_werror=yes])
-++AM_CONDITIONAL([ENABLE_WERROR], [test "x$with_werror" = "xyes"])
-++
-+ AC_ARG_ENABLE([kcapi-test], [AS_HELP_STRING([--enable-kcapi-test], [Compile kcapi test program])], [with_kcapi_test=$enableval])
-+ AM_CONDITIONAL([ENABLE_KCAPI_TEST], [test "x$with_kcapi_test" = "xyes"])
-+ 
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index e88928a74d..c6251c286c 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
- 	ac_cv_path_DB2PDF="" \
- 	ac_cv_path_DB2PS="" \
- 	ac_cv_path_XMLTO=""
-+LIBKCAPI_CONF_OPTS = --disable-werror
- LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_LIBKCAPI_ASYM),y)
--- 
-2.35.1
+--===============5470490063865600429==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5470490063865600429==--
