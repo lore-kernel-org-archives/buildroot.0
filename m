@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79DA1C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CEF9C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2881160E58;
-	Tue,  8 Nov 2022 20:28:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2881160E58
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCCE2409A5;
+	Tue,  8 Nov 2022 20:28:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCCE2409A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RZRwN6o7iDar; Tue,  8 Nov 2022 20:27:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ovP5DQVdllfD; Tue,  8 Nov 2022 20:28:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3887960D93;
-	Tue,  8 Nov 2022 20:27:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3887960D93
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8D2C41559;
+	Tue,  8 Nov 2022 20:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8D2C41559
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1C881BF3C6
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9994F1BF3C6
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAA3381DF1
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAA3381DF1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81F7281DF1
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81F7281DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 981C-IyPpiH0 for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 555AF81CAF
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 555AF81CAF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43F70811AD; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
+ with ESMTP id 7ue46xEku7VG for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 20:27:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1385F81CAF
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1385F81CAF
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:27:27 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3B948E0009;
+ Tue,  8 Nov 2022 20:27:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1osVBt-000VQ1-EK; Tue, 08 Nov 2022 21:27:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:16:48 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9ceed7b07737e77f4cd1fa91952bdca5c24bfd22
-X-Git-Newrev: dcad3b2d601741321fd9d9c8f0f02fc09db8f12e
-X-Patchwork-Hint: ignore
-Message-Id: <20221108202717.43F70811AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/f2fs-tools: add
- lz4 and lzo optional dependencies
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221029204023.162302-1-fontaine.fabrice@gmail.com>
+Date: Tue, 08 Nov 2022 21:27:25 +0100
+In-Reply-To: <20221029204023.162302-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Oct 2022 22:40:23 +0200")
+Message-ID: <8735atgpjm.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/lldpd: security bump to version
+ 1.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,158 +64,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcad3b2d601741321fd9d9c8f0f02fc09db8f12e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-lz4 and lzo are optional dependencies (enabled by default) since bump to
-version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
+ > - Fix heap overflow when reading SONMP. CVE-2021-43612.
+ > - https://vincentbernat.github.io/lldpd/ is redirecting to
+ >   https://lldpd.github.io/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 952fa08764acc8d78985d2cc91d37112324b67cb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-configure-ac-fix-cross-compilation.patch  | 88 ++++++++++++++++++++++
- package/f2fs-tools/f2fs-tools.mk                   | 18 ++++-
- 2 files changed, 105 insertions(+), 1 deletion(-)
+ > https://github.com/lldpd/lldpd/blob/1.0.15/NEWS
 
-diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-new file mode 100644
-index 0000000000..0e3d4da191
---- /dev/null
-+++ b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-@@ -0,0 +1,88 @@
-+From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
-+From: Nick Hainke <vincent@systemli.org>
-+Date: Mon, 4 Jul 2022 11:29:19 +0200
-+Subject: configure.ac: fix cross compilation
-+
-+AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
-+to disable lz4 and lzo2 manually.
-+
-+Fixes errors in the form of:
-+  Package f2fsck is missing dependencies for the following libraries:
-+  liblz4.so.1
-+  liblzo2.so.2
-+
-+Signed-off-by: Nick Hainke <vincent@systemli.org>
-+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 34 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ea39461..dbe9ad3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
-+ 	[],
-+ 	[with_blkid=check])
-+ 
-++AC_ARG_WITH([lzo2],
-++	[AS_HELP_STRING([--without-lzo2],
-++	  [Ignore presence of liblzo2 and disable lzo2 support])],
-++	[],
-++	[with_lzo2=check])
-++
-++AC_ARG_WITH([lz4],
-++	[AS_HELP_STRING([--without-lz4],
-++	  [Ignore presence of liblz4 and disable lz4 support])],
-++	[],
-++	[with_lz4=check])
-++
-+ # Checks for programs.
-+ AC_PROG_CC
-+ AM_PROG_AR
-+@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
-+         fi
-+ 	], -lblkid)])
-+ 
-+-AC_CHECK_LIB([lzo2], [main],
-+-	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-+-		AC_DEFINE([HAVE_LIBLZO2], [1],
-+-		[Define if you have liblzo2])
-+-	], [], [])
-++AS_IF([test "x$with_lzo2" != xno],
-++	[AC_CHECK_LIB([lzo2], [main],
-++		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-++			AC_DEFINE([HAVE_LIBLZO2], [1],
-++			[Define if you have liblzo2])
-++		],
-++		[if test "x$with_lzo2" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lzo2 was given, but test for lzo2 failed])
-++        fi
-++	], -llzo2)])
-+ 
-+-AC_CHECK_LIB([lz4], [main],
-+-	[AC_SUBST([liblz4_LIBS], ["-llz4"])
-+-		AC_DEFINE([HAVE_LIBLZ4], [1],
-+-		[Define if you have liblz4])
-+-	], [], [])
-++AS_IF([test "x$with_lz4" != xno],
-++	[AC_CHECK_LIB([lz4], [main],
-++		[AC_SUBST([liblz4_LIBS], ["-llz4"])
-++			AC_DEFINE([HAVE_LIBLZ4], [1],
-++			[Define if you have liblz4])
-++		],
-++		[if test "x$with_lz4" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lz4 was given, but test for lz4 failed])
-++        fi
-++	], -llz4)])
-+ 
-+ AS_IF([test "x$with_selinux" != xno],
-+ 	[AC_CHECK_LIB([selinux], [getcon],
-+-- 
-+cgit 
-+
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 2c4ee9185b..60f1004d77 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -22,6 +22,20 @@ else
- F2FS_TOOLS_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lz4
-+F2FS_TOOLS_DEPENDENCIES += lz4
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lz4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lzo2
-+F2FS_TOOLS_DEPENDENCIES += lzo
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lzo2
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
- # util-linux is a dependency already, no need to list it again
- F2FS_TOOLS_CONF_OPTS += --with-blkid
-@@ -34,7 +48,9 @@ endif
- # blkid support even if we have host-util-linux
- HOST_F2FS_TOOLS_CONF_OPTS = \
- 	--without-selinux \
--	--without-blkid
-+	--without-blkid \
-+	--without-lz4 \
-+	--without-lzo2
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.08.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
