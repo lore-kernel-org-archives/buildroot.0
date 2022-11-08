@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C358C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6608AC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C949F416FA;
-	Tue,  8 Nov 2022 19:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C949F416FA
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0E0060E1E;
+	Tue,  8 Nov 2022 19:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0E0060E1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9-HT_j2d8Fw4; Tue,  8 Nov 2022 19:39:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a4NOwwZ3L6dg; Tue,  8 Nov 2022 19:40:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C226D416EF;
-	Tue,  8 Nov 2022 19:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C226D416EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48D47606FF;
+	Tue,  8 Nov 2022 19:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48D47606FF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D4BD1BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:39:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F5881BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 188B180D41
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:39:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 188B180D41
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B57181257
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B57181257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EjKEsBw9l_6t for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 19:39:49 +0000 (UTC)
+ with ESMTP id FF6OkISK11MD for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 19:39:57 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08BDC80C80
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 08BDC80C80
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:39:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A8AD80FB6
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A8AD80FB6
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:39:57 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DAB8E1BF20B;
- Tue,  8 Nov 2022 19:39:45 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id EBA8B20005;
+ Tue,  8 Nov 2022 19:39:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1osURk-000ROG-UD; Tue, 08 Nov 2022 20:39:44 +0100
+ id 1osURs-000ROe-Pu; Tue, 08 Nov 2022 20:39:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20221026210334.565454-1-fontaine.fabrice@gmail.com>
-Date: Tue, 08 Nov 2022 20:39:44 +0100
-In-Reply-To: <20221026210334.565454-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 26 Oct 2022 23:03:33 +0200")
-Message-ID: <87v8npi6bj.fsf@dell.be.48ers.dk>
+ <20221026210334.565454-2-fontaine.fabrice@gmail.com>
+Date: Tue, 08 Nov 2022 20:39:52 +0100
+In-Reply-To: <20221026210334.565454-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 26 Oct 2022 23:03:34 +0200")
+Message-ID: <87r0ydi6bb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/shapelib: add
- SHAPELIB_CPE_ID_VENDOR
+Subject: Re: [Buildroot] [PATCH 2/2] package/shapelib: fix CVE-2022-0699
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,8 +72,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:osgeo:shapelib is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aosgeo%3Ashapelib
+ > A double-free condition exists in contrib/shpsort.c of shapelib 1.5.0
+ > and older releases. This issue may allow an attacker to cause a denial
+ > of service or have other unspecified impact via control over malloc.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
