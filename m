@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5BD9C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD3E6C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87A5181E81;
-	Tue,  8 Nov 2022 20:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87A5181E81
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FD0560E31;
+	Tue,  8 Nov 2022 20:29:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FD0560E31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F2Nj2xsMmz-e; Tue,  8 Nov 2022 20:28:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id koOrBUYLrYqN; Tue,  8 Nov 2022 20:29:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 213BA81E79;
-	Tue,  8 Nov 2022 20:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 213BA81E79
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D8AEB1BF3C6
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6A2660E0D;
+	Tue,  8 Nov 2022 20:29:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6A2660E0D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5710B1BF3C6
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFDEE404C1
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFDEE404C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32F3A60E0D
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:29:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32F3A60E0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lX-TFvlf-KJx for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XO5DbxOOX1Qd for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 20:29:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C24D6403B7
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C24D6403B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A89560D93
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A89560D93
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1EEB8121C; Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
+ id 5AB6481249; Tue,  8 Nov 2022 20:29:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:21:50 +0100
+Date: Tue, 8 Nov 2022 21:29:26 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 67d3eec6b92c0c385636d35ae7b3c5b837233baa
-X-Git-Newrev: ec2d20690dea7cadf1468852708ea5ebce7e8f8f
+X-Git-Oldrev: adef0f5a569a63382c650d18acae42ac1f70c274
+X-Git-Newrev: b46ec8cc56861039da0df33152a18b8f3edc9d5b
 X-Patchwork-Hint: ignore
-Message-Id: <20221108202823.B1EEB8121C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/f2fs-tools: add
- lz4 and lzo optional dependencies
+Message-Id: <20221108202935.5AB6481249@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/jack2: bump to
+ version 1.9.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,152 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec2d20690dea7cadf1468852708ea5ebce7e8f8f
+commit: https://git.buildroot.net/buildroot/commit/?id=b46ec8cc56861039da0df33152a18b8f3edc9d5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-lz4 and lzo are optional dependencies (enabled by default) since bump to
-version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
+https://github.com/jackaudio/jack2/releases/tag/v1.9.21
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 952fa08764acc8d78985d2cc91d37112324b67cb)
+(cherry picked from commit c0a13b667b8587816734c432c2e691d4c3ed9763)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-configure-ac-fix-cross-compilation.patch  | 88 ++++++++++++++++++++++
- package/f2fs-tools/f2fs-tools.mk                   | 18 ++++-
- 2 files changed, 105 insertions(+), 1 deletion(-)
+ package/jack2/jack2.hash | 2 +-
+ package/jack2/jack2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-new file mode 100644
-index 0000000000..0e3d4da191
---- /dev/null
-+++ b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
-@@ -0,0 +1,88 @@
-+From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
-+From: Nick Hainke <vincent@systemli.org>
-+Date: Mon, 4 Jul 2022 11:29:19 +0200
-+Subject: configure.ac: fix cross compilation
-+
-+AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
-+to disable lz4 and lzo2 manually.
-+
-+Fixes errors in the form of:
-+  Package f2fsck is missing dependencies for the following libraries:
-+  liblz4.so.1
-+  liblzo2.so.2
-+
-+Signed-off-by: Nick Hainke <vincent@systemli.org>
-+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 34 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ea39461..dbe9ad3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
-+ 	[],
-+ 	[with_blkid=check])
-+ 
-++AC_ARG_WITH([lzo2],
-++	[AS_HELP_STRING([--without-lzo2],
-++	  [Ignore presence of liblzo2 and disable lzo2 support])],
-++	[],
-++	[with_lzo2=check])
-++
-++AC_ARG_WITH([lz4],
-++	[AS_HELP_STRING([--without-lz4],
-++	  [Ignore presence of liblz4 and disable lz4 support])],
-++	[],
-++	[with_lz4=check])
-++
-+ # Checks for programs.
-+ AC_PROG_CC
-+ AM_PROG_AR
-+@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
-+         fi
-+ 	], -lblkid)])
-+ 
-+-AC_CHECK_LIB([lzo2], [main],
-+-	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-+-		AC_DEFINE([HAVE_LIBLZO2], [1],
-+-		[Define if you have liblzo2])
-+-	], [], [])
-++AS_IF([test "x$with_lzo2" != xno],
-++	[AC_CHECK_LIB([lzo2], [main],
-++		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
-++			AC_DEFINE([HAVE_LIBLZO2], [1],
-++			[Define if you have liblzo2])
-++		],
-++		[if test "x$with_lzo2" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lzo2 was given, but test for lzo2 failed])
-++        fi
-++	], -llzo2)])
-+ 
-+-AC_CHECK_LIB([lz4], [main],
-+-	[AC_SUBST([liblz4_LIBS], ["-llz4"])
-+-		AC_DEFINE([HAVE_LIBLZ4], [1],
-+-		[Define if you have liblz4])
-+-	], [], [])
-++AS_IF([test "x$with_lz4" != xno],
-++	[AC_CHECK_LIB([lz4], [main],
-++		[AC_SUBST([liblz4_LIBS], ["-llz4"])
-++			AC_DEFINE([HAVE_LIBLZ4], [1],
-++			[Define if you have liblz4])
-++		],
-++		[if test "x$with_lz4" != xcheck; then
-++			AC_MSG_FAILURE(
-++                [--with-lz4 was given, but test for lz4 failed])
-++        fi
-++	], -llz4)])
-+ 
-+ AS_IF([test "x$with_selinux" != xno],
-+ 	[AC_CHECK_LIB([selinux], [getcon],
-+-- 
-+cgit 
-+
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index 2c4ee9185b..60f1004d77 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -22,6 +22,20 @@ else
- F2FS_TOOLS_CONF_OPTS += --without-selinux
- endif
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index 6361473cf7..c98971ca1c 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  915ad2900992159bdb729b9fc4ea134b962ce32b2df0b384fee40a2c5808835d  jack2-1.9.20.tar.gz
++sha256  8b044a40ba5393b47605a920ba30744fdf8bf77d210eca90d39c8637fe6bc65d  jack2-1.9.21.tar.gz
+ sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 9d6a3b6479..f7683304a6 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lz4
-+F2FS_TOOLS_DEPENDENCIES += lz4
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lz4
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+F2FS_TOOLS_CONF_OPTS += --with-lzo2
-+F2FS_TOOLS_DEPENDENCIES += lzo
-+else
-+F2FS_TOOLS_CONF_OPTS += --without-lzo2
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
- # util-linux is a dependency already, no need to list it again
- F2FS_TOOLS_CONF_OPTS += --with-blkid
-@@ -34,7 +48,9 @@ endif
- # blkid support even if we have host-util-linux
- HOST_F2FS_TOOLS_CONF_OPTS = \
- 	--without-selinux \
--	--without-blkid
-+	--without-blkid \
-+	--without-lz4 \
-+	--without-lzo2
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-JACK2_VERSION = 1.9.20
++JACK2_VERSION = 1.9.21
+ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
