@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09146C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:41:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35ECAC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B11A416F9;
-	Tue,  8 Nov 2022 19:41:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B11A416F9
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF4FF60E3A;
+	Tue,  8 Nov 2022 19:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF4FF60E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0iBYcOzJKsF1; Tue,  8 Nov 2022 19:41:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TF9kQcEKhP3d; Tue,  8 Nov 2022 19:42:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72D6B40236;
-	Tue,  8 Nov 2022 19:41:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D6B40236
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0979960E2C;
+	Tue,  8 Nov 2022 19:42:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0979960E2C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D0A71BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:41:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 110341BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9D6140236
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9D6140236
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEF7740236
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:41:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEF7740236
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P60yybSOLpvv for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 19:41:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD9EA40218
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:41:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9EA40218
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB9A488249; Tue,  8 Nov 2022 19:41:33 +0000 (UTC)
+ with ESMTP id 3m8YcDAcgm73 for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 19:41:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A799440218
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A799440218
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:41:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A4BEEFF804;
+ Tue,  8 Nov 2022 19:41:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1osUTZ-000RXj-MA; Tue, 08 Nov 2022 20:41:37 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 20:39:03 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 2acbcd1cc69f8ea08235214bb74080b5bd07a8a0
-X-Git-Newrev: 7f15ebaa75e2444fc671bb3b1fb0ec227c67ac60
-X-Patchwork-Hint: ignore
-Message-Id: <20221108194133.CB9A488249@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/shapelib: add
- SHAPELIB_CPE_ID_VENDOR
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221026212122.592457-1-fontaine.fabrice@gmail.com>
+Date: Tue, 08 Nov 2022 20:41:37 +0100
+In-Reply-To: <20221026212122.592457-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 26 Oct 2022 23:21:22 +0200")
+Message-ID: <87mt91i68e.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/faad2: bump to version 2.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,39 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f15ebaa75e2444fc671bb3b1fb0ec227c67ac60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-cpe:2.3:a:osgeo:shapelib is a valid CPE identifier for this package:
+ > https://github.com/knik0/faad2/releases/tag/2.10.1
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aosgeo%3Ashapelib
+Committed to 2022.08.x and 2022.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1545a88f9d5a694eed1a01dc0220ec1dabf5cabe)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shapelib/shapelib.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index bedd15dc35..52f9584e19 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -8,6 +8,7 @@ SHAPELIB_VERSION = 1.5.0
- SHAPELIB_SITE = http://download.osgeo.org/shapelib
- SHAPELIB_LICENSE = MIT or LGPL-2.0
- SHAPELIB_LICENSE_FILES = web/license.html COPYING
-+SHAPELIB_CPE_ID_VENDOR = osgeo
- SHAPELIB_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
