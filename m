@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8082AC433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98964C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2479D41727;
-	Tue,  8 Nov 2022 19:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2479D41727
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42EA560E49;
+	Tue,  8 Nov 2022 19:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42EA560E49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y1H-UcKXRh-j; Tue,  8 Nov 2022 19:58:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B3xvii0Ru-Nu; Tue,  8 Nov 2022 19:58:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3BFD41713;
-	Tue,  8 Nov 2022 19:58:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3BFD41713
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A62E1BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:58:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E0DE60E3A;
+	Tue,  8 Nov 2022 19:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E0DE60E3A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EB9E1BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62839416D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0583881A3B
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62839416D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0583881A3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KILLhuHzsMAD for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eP6lQhXnPvfw for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 19:58:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04F474168D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3521481B23
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04F474168D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3521481B23
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E476D802AB; Tue,  8 Nov 2022 19:58:09 +0000 (UTC)
+ id 1E7F5802AB; Tue,  8 Nov 2022 19:58:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 20:48:28 +0100
+Date: Tue, 8 Nov 2022 20:54:52 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f0047fab8241caca963da1f9010c8315754766f7
-X-Git-Newrev: 6490a079d866270649f7d123d6858ad1df756733
+X-Git-Oldrev: d1b2edc4114baca76b50ad03a492f34f9eda2263
+X-Git-Newrev: c11a7a40022d4d0de0408988e542e5056b7eeabc
 X-Patchwork-Hint: ignore
-Message-Id: <20221108195809.E476D802AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] libcurl: security bump to
- version 7.86.0
+Message-Id: <20221108195810.1E7F5802AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/lz4: fix static
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,175 +63,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6490a079d866270649f7d123d6858ad1df756733
+commit: https://git.buildroot.net/buildroot/commit/?id=c11a7a40022d4d0de0408988e542e5056b7eeabc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Version 7.85.0 fixes CVE-2022-35252: When curl retrieves and parses
-cookies from an HTTP(S) server, it accepts cookies using control codes
-(byte values below 32). When cookies that contain such control codes are
-later sent back to an HTTP(S) server, it might make the server return a
-400 response. Effectively allowing a "sister site" to deny service to
-siblings.
+Fix the following static build failure raised since bump to version
+1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
 
-Drop upstream patches and autoreconf.
+compiling dynamic library 1.9.4
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/crt1.o: in function `_start':
+(.text+0x1c): undefined reference to `main'
 
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+ - http://autobuild.buildroot.org/results/9187852fb7a869bf5595275d47929632659a4407
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 400b63432ed0b0c2dee889cf4f2fed88c56a0eb5)
+(cherry picked from commit 85c20ffa95a145e418e82f7a7106a857b5230a1e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...include-sched-h-if-available-to-fix-build.patch | 30 ----------
- ...heck-for-the-stdatomic.h-header-in-config.patch | 70 ----------------------
- package/libcurl/libcurl.hash                       |  2 +-
- package/libcurl/libcurl.mk                         |  4 +-
- 4 files changed, 2 insertions(+), 104 deletions(-)
+ .../lz4/0001-build-Support-BUILD_SHARED-no.patch   | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch b/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
-deleted file mode 100644
-index b5f0a87218..0000000000
---- a/package/libcurl/0001-easy_lock-h-include-sched-h-if-available-to-fix-build.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From e2e7f54b7bea521fa8373095d0f43261a720cda0 Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Mon, 27 Jun 2022 08:46:21 +0200
--Subject: [PATCH] easy_lock.h: include sched.h if available to fix build
--
--Patched-by: Harry Sintonen
--
--Closes #9054
--
--[Retrieved from:
--https://github.com/curl/curl/commit/e2e7f54b7bea521fa8373095d0f43261a720cda0]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/easy_lock.h | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/lib/easy_lock.h b/lib/easy_lock.h
--index 819f50ce815b8..1f54289ceb2d3 100644
----- a/lib/easy_lock.h
--+++ b/lib/easy_lock.h
--@@ -36,6 +36,9 @@
-- 
-- #elif defined (HAVE_ATOMIC)
-- #include <stdatomic.h>
--+#if defined(HAVE_SCHED_YIELD)
--+#include <sched.h>
--+#endif
-- 
-- #define curl_simple_lock atomic_bool
-- #define CURL_SIMPLE_LOCK_INIT false
-diff --git a/package/libcurl/0002-configure-check-for-the-stdatomic.h-header-in-config.patch b/package/libcurl/0002-configure-check-for-the-stdatomic.h-header-in-config.patch
-deleted file mode 100644
-index 083238819b..0000000000
---- a/package/libcurl/0002-configure-check-for-the-stdatomic.h-header-in-config.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From a68074b5db2a1fb637853b808e5b263c2ce9cbdd Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Tue, 28 Jun 2022 08:37:22 +0200
--Subject: [PATCH] configure: check for the stdatomic.h header in configure
--
--... and only set HAVE_ATOMIC if that header exists since we use
--typedefes set in it.
--
--Reported-by: Ryan Schmidt
--Fixes #9059
--Closes #9060
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit a68074b5db2a1fb637853b808e5b263c2ce9cbdd
--
-- m4/curl-functions.m4 | 36 +++++++++++++++++++-----------------
-- 1 file changed, 19 insertions(+), 17 deletions(-)
--
--diff --git a/m4/curl-functions.m4 b/m4/curl-functions.m4
--index ec406f56aed8..f3e12a53a9fd 100644
----- a/m4/curl-functions.m4
--+++ b/m4/curl-functions.m4
--@@ -6570,24 +6570,26 @@ AC_DEFUN([CURL_COVERAGE],[
-- ])
-- 
-- dnl CURL_ATOMIC
---dnl --------------------------------------------------
---dnl Check if _Atomic works
--+dnl -------------------------------------------------------------
--+dnl Check if _Atomic works. But only check if stdatomic.h exists.
-- dnl
-- AC_DEFUN([CURL_ATOMIC],[
---  AC_MSG_CHECKING([if _Atomic is available])
---  AC_COMPILE_IFELSE([
---    AC_LANG_PROGRAM([[
---      $curl_includes_unistd
---    ]],[[
---      _Atomic int i = 0;
---    ]])
---  ],[
---    AC_MSG_RESULT([yes])
---    AC_DEFINE_UNQUOTED(HAVE_ATOMIC, 1,
---      [Define to 1 if you have _Atomic support.])
---    tst_atomic="yes"
---  ],[
---    AC_MSG_RESULT([no])
---    tst_atomic="no"
--+  AC_CHECK_HEADERS(stdatomic.h, [
--+    AC_MSG_CHECKING([if _Atomic is available])
--+    AC_COMPILE_IFELSE([
--+      AC_LANG_PROGRAM([[
--+        $curl_includes_unistd
--+      ]],[[
--+        _Atomic int i = 0;
--+      ]])
--+    ],[
--+      AC_MSG_RESULT([yes])
--+      AC_DEFINE_UNQUOTED(HAVE_ATOMIC, 1,
--+        [Define to 1 if you have _Atomic support.])
--+      tst_atomic="yes"
--+    ],[
--+      AC_MSG_RESULT([no])
--+      tst_atomic="no"
--+    ])
--   ])
-- ])
---- 
--2.35.1
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 672591e470..c0e2378cac 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
- # https://curl.se/download/curl-7.84.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  2d118b43f547bfe5bae806d8d47b4e596ea5b25a6c1f080aef49fbcd817c5db8  curl-7.84.0.tar.xz
-+sha256  2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b  curl-7.86.0.tar.xz
- sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dc0f1230f1..fda7ed83e2 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.84.0
-+LIBCURL_VERSION = 7.86.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -15,8 +15,6 @@ LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_CPE_ID_PRODUCT = libcurl
- LIBCURL_INSTALL_STAGING = YES
--# We are patching configure.ac
--LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM support because it uses fork(), which doesn't work
- # on non-MMU platforms. Moreover, this authentication method is
+diff --git a/package/lz4/0001-build-Support-BUILD_SHARED-no.patch b/package/lz4/0001-build-Support-BUILD_SHARED-no.patch
+new file mode 100644
+index 0000000000..d2d8639a3b
+--- /dev/null
++++ b/package/lz4/0001-build-Support-BUILD_SHARED-no.patch
+@@ -0,0 +1,42 @@
++From 5ccbd38277989ae6a728171d59ae03bad6f2f4d5 Mon Sep 17 00:00:00 2001
++From: Fotis Xenakis <foxen@windowslive.com>
++Date: Tue, 13 Sep 2022 20:09:36 +0300
++Subject: [PATCH] build: Support BUILD_SHARED=no
++
++Since e585a438c714652e866a59371b287f52aa4d2dc3, the BUILD_SHARED
++Makefile variable only takes effect for the install target (i.e. the
++shared libraries always built). This restores the original behaviour.
++
++[Retrieved from:
++https://github.com/lz4/lz4/commit/5ccbd38277989ae6a728171d59ae03bad6f2f4d5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/Makefile | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/lib/Makefile b/lib/Makefile
++index 06503cb2a..ee262c0df 100644
++--- a/lib/Makefile
+++++ b/lib/Makefile
++@@ -112,17 +112,21 @@ liblz4-dll.o: liblz4-dll.rc
++ 	$(WINDRES) -i liblz4-dll.rc -o liblz4-dll.o
++ 
++ $(LIBLZ4): $(SRCFILES) liblz4-dll.o
+++ifeq ($(BUILD_SHARED),yes)
++ 	@echo compiling dynamic library $(LIBVER)
++ 	$(CC) $(FLAGS) -DLZ4_DLL_EXPORT=1 -shared $^ -o dll/$@.dll -Wl,--out-implib,dll/$(LIBLZ4_EXP)
+++endif
++ 
++ else   # not windows
++ 
++ $(LIBLZ4): $(SRCFILES)
+++ifeq ($(BUILD_SHARED),yes)
++ 	@echo compiling dynamic library $(LIBVER)
++ 	$(CC) $(FLAGS) -shared $^ -fPIC -fvisibility=hidden $(SONAME_FLAGS) -o $@
++ 	@echo creating versioned links
++ 	$(LN_SF) $@ liblz4.$(SHARED_EXT_MAJOR)
++ 	$(LN_SF) $@ liblz4.$(SHARED_EXT)
+++endif
++ 
++ endif
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
