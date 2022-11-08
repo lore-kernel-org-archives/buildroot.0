@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF6BAC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CC44C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E35A4174E;
-	Tue,  8 Nov 2022 20:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E35A4174E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1ECA840502;
+	Tue,  8 Nov 2022 20:02:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ECA840502
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ndJkR0colcFt; Tue,  8 Nov 2022 20:02:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lUR6RPiOu3FW; Tue,  8 Nov 2022 20:02:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4479641759;
-	Tue,  8 Nov 2022 20:02:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4479641759
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CCB711BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:02:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 361174048D;
+	Tue,  8 Nov 2022 20:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 361174048D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 714A01BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A659E4173B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 589864048D
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:02:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A659E4173B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589864048D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T1L2Pe6ptQBY for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AsG11EDQWrKQ for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 20:02:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FF7C4032C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BA0C4047C
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FF7C4032C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BA0C4047C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B57980741; Tue,  8 Nov 2022 20:02:12 +0000 (UTC)
+ id 46C3F8071F; Tue,  8 Nov 2022 20:02:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:01:32 +0100
+Date: Tue, 8 Nov 2022 20:59:29 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0eb111baae3046103cf7058e49762342ddc873fb
-X-Git-Newrev: dff8703ca251425cdf0d37438c797a970c59659a
+X-Git-Oldrev: c11a7a40022d4d0de0408988e542e5056b7eeabc
+X-Git-Newrev: faddef26a9d12701e872d32b18263227f9246f0b
 X-Patchwork-Hint: ignore
-Message-Id: <20221108200212.5B57980741@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/zsh: security
- bump to version 5.9
+Message-Id: <20221108200212.46C3F8071F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/samba4: security
+ bump version to 4.15.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,116 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dff8703ca251425cdf0d37438c797a970c59659a
+commit: https://git.buildroot.net/buildroot/commit/?id=faddef26a9d12701e872d32b18263227f9246f0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Security and bug fix release with several feature additions.
+Added patch from Gentoo to fix uClibc build:
+access.c:(.text+0x1e8): undefined reference to `innetgr'
 
-https://zsh.sourceforge.io/releases.html
+Release notes:
+https://www.samba.org/samba/history/samba-4.15.8.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://www.samba.org/samba/history/samba-4.15.9.html
+o CVE-2022-2031:  Samba AD users can bypass certain restrictions associated with
+                  changing passwords.
+                  https://www.samba.org/samba/security/CVE-2022-2031.html
+
+o CVE-2022-32744: Samba AD users can forge password change requests for any user.
+                  https://www.samba.org/samba/security/CVE-2022-32744.html
+
+o CVE-2022-32745: Samba AD users can crash the server process with an LDAP add
+                  or modify request.
+                  https://www.samba.org/samba/security/CVE-2022-32745.html
+
+o CVE-2022-32746: Samba AD users can induce a use-after-free in the server
+                  process with an LDAP add or modify request.
+                  https://www.samba.org/samba/security/CVE-2022-32746.html
+
+o CVE-2022-32742: Server memory information leak via SMB1.
+                  https://www.samba.org/samba/security/CVE-2022-32742.html
+
+https://www.samba.org/samba/history/samba-4.15.10.html
+
+https://www.samba.org/samba/history/samba-4.15.11.html
+o CVE-2022-3437:  There is a limited write heap buffer overflow in the GSSAPI
+                  unwrap_des() and unwrap_des3() routines of Heimdal (included
+                  in Samba).
+                  https://www.samba.org/samba/security/CVE-2022-3437.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 21531fa31a8cc49054f4af15f8556f4cb08daa7f)
+(cherry picked from commit 8941d02bf1da1574b8db65a104566a080e85308b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.hash | 2 +-
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...05-samba-4.16.2-fix-build-without-innetgr.patch | 34 ++++++++++++++++++++++
+ package/samba4/samba4.hash                         |  4 +--
+ package/samba4/samba4.mk                           |  2 +-
+ 3 files changed, 37 insertions(+), 3 deletions(-)
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 5c661ded25..e04aa388d3 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b6973520bace600b4779200269b1e5d79e5f505ac4952058c11ad5bbf0dd9919  zsh-5.8.1.tar.xz
-+sha256  9b8d1ecedd5b5e81fbf1918e876752a7dd948e05c1a0dba10ab863842d45acd5  zsh-5.9.tar.xz
- sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index c5ab7c2fae..4d46cfe1fa 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
+diff --git a/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch b/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch
+new file mode 100644
+index 0000000000..b338596d7a
+--- /dev/null
++++ b/package/samba4/0005-samba-4.16.2-fix-build-without-innetgr.patch
+@@ -0,0 +1,34 @@
++# Gentoo bug 855047
++
++Fixes uClibc build when uClibc was build without netgroup support.
++Upstream enables netgroup support based on getdomainname() being
++present:
++https://github.com/samba-team/samba/commit/f179184a2be2ddd38f463fcc12252f8d24e529f8#diff-b8d1bc25b89846e70ecb61cb296a8f5c50c9a0a1b62e46790fae81aa9d5bfaaeR632
++
++Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/net-fs/samba/files/samba-4.16.2-fix-musl-without-innetgr.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/lib/util/access.c
+++++ b/lib/util/access.c
++@@ -115,7 +115,7 @@ static bool string_match(const char *tok,const char *s)
++ 			return true;
++ 		}
++ 	} else if (tok[0] == '@') { /* netgroup: look it up */
++-#ifdef HAVE_NETGROUP
+++#if defined(HAVE_NETGROUP) && defined(HAVE_INNETGR)
++ 		DATA_BLOB tmp;
++ 		char *mydomain = NULL;
++ 		char *hostname = NULL;
++--- a/source3/auth/user_util.c
+++++ b/source3/auth/user_util.c
++@@ -135,7 +135,7 @@ static void store_map_in_gencache(TALLOC_CTX *ctx, const char *from, const char
++
++ bool user_in_netgroup(TALLOC_CTX *ctx, const char *user, const char *ngname)
++ {
++-#ifdef HAVE_NETGROUP
+++#if defined(HAVE_NETGROUP) && defined(HAVE_INNETGR)
++ 	char nis_domain_buf[256];
++ 	const char *nis_domain = NULL;
++ 	char *lowercase_user = NULL;
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index ac28c35614..f845a31290 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.7.tar.asc
+-sha256  76d0096c16ed0265b337d5731f3c0b32eed3adab6fa8b7585c055b287cd05d6b  samba-4.15.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.11.tar.asc
++sha256  2f305980d49c7723cbef281fff2b81a2eeafae51e58b5172bb43d9693ef8953b  samba-4.15.11.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c90fdd006c..814bf0bbaa 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSH_VERSION = 5.8.1
-+ZSH_VERSION = 5.9
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
+-SAMBA4_VERSION = 4.15.7
++SAMBA4_VERSION = 4.15.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
