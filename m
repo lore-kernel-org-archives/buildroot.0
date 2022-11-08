@@ -1,56 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95BD5C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7671EC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 289AB81E7F;
-	Tue,  8 Nov 2022 19:56:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 289AB81E7F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 186D1416D2;
+	Tue,  8 Nov 2022 19:57:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 186D1416D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jmgTVjoNb3R; Tue,  8 Nov 2022 19:56:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tOJ5CvjkvRXa; Tue,  8 Nov 2022 19:57:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46BD381B3E;
-	Tue,  8 Nov 2022 19:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46BD381B3E
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCC65416D1;
+	Tue,  8 Nov 2022 19:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCC65416D1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CCA51BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:56:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E244B1BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1901560E31
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1901560E31
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA6D260E31
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA6D260E31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oryPjlM6aZkv for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 19:56:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E699860E2C
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E699860E2C
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:56:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0BDBB100007;
- Tue,  8 Nov 2022 19:56:08 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1osUhc-000SpN-5S; Tue, 08 Nov 2022 20:56:08 +0100
+ with ESMTP id 9FfgVBug5U_l for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 19:56:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E754D60E2C
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E754D60E2C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D593880035; Tue,  8 Nov 2022 19:56:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221028164800.16655-1-fontaine.fabrice@gmail.com>
-Date: Tue, 08 Nov 2022 20:56:08 +0100
-In-Reply-To: <20221028164800.16655-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 28 Oct 2022 18:48:00 +0200")
-Message-ID: <871qqdi5k7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lz4: fix static build
+To: buildroot@buildroot.org
+Date: Tue, 8 Nov 2022 20:53:21 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 4e747cf8a48926be321396d7bde98f6b6d7cb234
+X-Git-Newrev: 2b61eaee9bbad9a9efda4e968ef43037d57083cb
+X-Patchwork-Hint: ignore
+Message-Id: <20221108195658.D593880035@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/lz4: fix
+ LZ4_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,32 +57,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b61eaee9bbad9a9efda4e968ef43037d57083cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > Fix the following static build failure raised since bump to version
- > 1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
+cpe:2.3:a:yann_collet:lz4, which was added by commit
+63332c33aa0771532807fd2684d4eee4eb952435, was never a valid CPE
+identifier for this package:
 
- > compiling dynamic library 1.9.4
- > /home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
- > /home/giuliobenetti/autobuild/run/instance-0/output-1/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/crt1.o:
- > in function `_start':
- > (.text+0x1c): undefined reference to `main'
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ayann_collet%3Alz4
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9187852fb7a869bf5595275d47929632659a4407
+cpe:2.3:a:lz4_project:lz4 is a valid CPE identifier for this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alz4_project%3Alz4
 
-Committed to 2022.08.x and 2022.02.x, thanks.
+While at it, also drop the note added by commit
+45db4bb08e3e550db483d8745fe8aaede2fa7e98
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ae29bb28808dbafd39d39e850820b3f063329f66)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lz4/lz4.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 9b9b6198c3..541a03473a 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -9,13 +9,7 @@ LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+ LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
+-LZ4_CPE_ID_VENDOR = yann_collet
+-
+-# CVE-2014-4715 is misclassified (by our CVE tracker) as affecting version
+-# 1.9.2, while in fact this issue has been fixed since lz4-r130:
+-# https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08
+-# See https://github.com/lz4/lz4/issues/818
+-LZ4_IGNORE_CVES += CVE-2014-4715
++LZ4_CPE_ID_VENDOR = lz4_project
+ 
+ # 0001-Fix-potential-memory-corruption-with-negative-memmov.patch
+ LZ4_IGNORE_CVES += CVE-2021-3520
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
