@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260CBC433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E7CC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D26CA40A6E;
-	Tue,  8 Nov 2022 20:03:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D26CA40A6E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7005A60E49;
+	Tue,  8 Nov 2022 20:03:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7005A60E49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1enOdpSe7dAP; Tue,  8 Nov 2022 20:03:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4UrkaZpJtxKT; Tue,  8 Nov 2022 20:03:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 052034048D;
-	Tue,  8 Nov 2022 20:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 052034048D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4AA291BF422
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F01D60E31;
+	Tue,  8 Nov 2022 20:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F01D60E31
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CB201BF957
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 268694048D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 388C460E31
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 268694048D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 388C460E31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DRBh3ZLOw56h for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KPpHZYX67mX9 for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 20:03:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AF044047C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6393960E00
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF044047C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6393960E00
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 489EC80DA1; Tue,  8 Nov 2022 20:03:21 +0000 (UTC)
+ id 5355280DA4; Tue,  8 Nov 2022 20:03:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:00:10 +0100
+Date: Tue, 8 Nov 2022 21:00:55 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 09322d970b1f5486aa2f146dcfd9123debbb9de0
-X-Git-Newrev: 70abf9b69b55d90a67158865b87fee81ffb5e731
+X-Git-Oldrev: 70abf9b69b55d90a67158865b87fee81ffb5e731
+X-Git-Newrev: 4b0fb3fffae13bdfb87cdf9bb0d647c87786b138
 X-Patchwork-Hint: ignore
-Message-Id: <20221108200321.489EC80DA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/wolfssl: security
- bump to version 5.5.2
+Message-Id: <20221108200321.5355280DA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/zsh: security
+ bump to version 5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70abf9b69b55d90a67158865b87fee81ffb5e731
+commit: https://git.buildroot.net/buildroot/commit/?id=4b0fb3fffae13bdfb87cdf9bb0d647c87786b138
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-In the case that the WOLFSSL_CALLBACKS macro is set when building
-wolfSSL, there is a potential heap over read of 5 bytes when handling
-TLS 1.3 client connections. This heap over read is limited to wolfSSL
-builds explicitly setting the macro WOLFSSL_CALLBACKS, the feature does
-not get turned on by any other build options. The macro
-WOLFSSL_CALLBACKS is intended for debug use only, but if having it
-enabled in production, users are recommended to disable
-WOLFSSL_CALLBACKS. Users enabling WOLFSSL_CALLBACKS are recommended to
-update their version of wolfSSL. CVE 2022-42905
+Security and bug fix release with several feature additions.
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.5.2-stable
+https://zsh.sourceforge.io/releases.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 18b5d6205db7547d633d6ac4ea8ba4fdd81ecc35)
+(cherry picked from commit 21531fa31a8cc49054f4af15f8556f4cb08daa7f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
+ package/zsh/zsh.hash | 2 +-
+ package/zsh/zsh.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 3849ffb9fc..65d77ca659 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  97339e6956c90e7c881ba5c748dd04f7c30e5dbe0c06da765418c51375a6dee3  wolfssl-5.5.1.tar.gz
-+sha256  49c6195462cae034efe6c86268824ba515682508a5f5199358d56a4168a82cf0  wolfssl-5.5.2.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 95d4f47952..d9fa72ccf4 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 5c661ded25..e04aa388d3 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b6973520bace600b4779200269b1e5d79e5f505ac4952058c11ad5bbf0dd9919  zsh-5.8.1.tar.xz
++sha256  9b8d1ecedd5b5e81fbf1918e876752a7dd948e05c1a0dba10ab863842d45acd5  zsh-5.9.tar.xz
+ sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 8e6f713780..e790bf4c5e 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WOLFSSL_VERSION = 5.5.1
-+WOLFSSL_VERSION = 5.5.2
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
+-ZSH_VERSION = 5.8.1
++ZSH_VERSION = 5.9
+ ZSH_SITE = http://www.zsh.org/pub
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
