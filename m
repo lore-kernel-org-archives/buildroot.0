@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD1EC433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E60FC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:27:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95EB481EA0;
-	Tue,  8 Nov 2022 20:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95EB481EA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14A3C60E3A;
+	Tue,  8 Nov 2022 20:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14A3C60E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bF5qf7Tosd4J; Tue,  8 Nov 2022 20:22:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aeGzz69j8TV3; Tue,  8 Nov 2022 20:27:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C972F81E94;
-	Tue,  8 Nov 2022 20:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C972F81E94
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 066C81BF3C6
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:22:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DECC260D93;
+	Tue,  8 Nov 2022 20:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DECC260D93
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 782F01BF3C6
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5211414E5
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5211414E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51BDB404C1
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51BDB404C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hn-XOZ-GOvj0 for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 20:22:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E5B40951
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A4E5B40951
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:22:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8EA0B60002;
- Tue,  8 Nov 2022 20:22:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1osV6q-000V56-Mn; Tue, 08 Nov 2022 21:22:12 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XFAMdML0_DM4 for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E8D2403B7
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E8D2403B7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3B45E81192; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221029170023.219493-1-fontaine.fabrice@gmail.com>
- <20221029170023.219493-2-fontaine.fabrice@gmail.com>
-Date: Tue, 08 Nov 2022 21:22:12 +0100
-In-Reply-To: <20221029170023.219493-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Oct 2022 19:00:23 +0200")
-Message-ID: <877d05gpsb.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/f2fs-tools: fix build with lz4
- 1.9.4
+To: buildroot@buildroot.org
+Date: Tue, 8 Nov 2022 21:16:40 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3497886980ab00336449fdcb4334b4a2ab3a958e
+X-Git-Newrev: 9ceed7b07737e77f4cd1fa91952bdca5c24bfd22
+X-Patchwork-Hint: ignore
+Message-Id: <20221108202717.3B45E81192@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/f2fs-tools: bump
+ to version 1.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,31 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9ceed7b07737e77f4cd1fa91952bdca5c24bfd22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix the following build failure raised since bump of lz4 to version
- > 1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
+Update indention in hash file (two spaces)
 
- > compress.c: In function 'lz4_compress_init':
- > compress.c:36:42: error: 'LZ4_STREAMSIZE_U64' undeclared (first use in this function); did you mean 'LZ4_STREAMSIZE'?
- >    36 | #define LZ4_STREAMSIZE                  (LZ4_STREAMSIZE_U64 * sizeof(long long))
- >       |                                          ^~~~~~~~~~~~~~~~~~
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9267b0f14d3d5f4715bad444f44eae47d9d5627c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/f2fs-tools/f2fs-tools.hash | 2 +-
+ package/f2fs-tools/f2fs-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/ca8b6646322a4cb911fad5fb9cb38046743609bf
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2022.08.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/f2fs-tools/f2fs-tools.hash b/package/f2fs-tools/f2fs-tools.hash
+index 8fc0242269..8d5ff31f0d 100644
+--- a/package/f2fs-tools/f2fs-tools.hash
++++ b/package/f2fs-tools/f2fs-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  619263d4e2022152a1472c1d912eaae104f20bd227ce0bb9d41d1d6608094bd1  f2fs-tools-1.14.0.tar.gz
++sha256  147d471040b44900283ce2c935f1d35d13d7f40008e7cb8fab2b69f54da01a4f  f2fs-tools-1.15.0.tar.gz
+ sha256  662abb3a8a80b36ae7036c289dd1e03b361ee5dd2e6fd5211d0d8d029146449f  COPYING
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index ced283d25d..2c4ee9185b 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-F2FS_TOOLS_VERSION = 1.14.0
++F2FS_TOOLS_VERSION = 1.15.0
+ F2FS_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+ F2FS_TOOLS_DEPENDENCIES = host-pkgconf util-linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
