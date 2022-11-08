@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEC2C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6A3C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4802B60E62;
-	Tue,  8 Nov 2022 20:27:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4802B60E62
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE27581CAF;
+	Tue,  8 Nov 2022 20:27:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE27581CAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9WZmvAlpx7x3; Tue,  8 Nov 2022 20:27:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5_dybOr76bD4; Tue,  8 Nov 2022 20:27:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDAA60E58;
-	Tue,  8 Nov 2022 20:27:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EDAA60E58
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 841FB1BF957
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCC6581DF1;
+	Tue,  8 Nov 2022 20:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCC6581DF1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9258E1BF95C
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6040E60D93
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DCD741559
  for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6040E60D93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DCD741559
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R14xSWIfGEBm for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ulkYp0XCrsud for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68ADE60D67
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61F4F409A5
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68ADE60D67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61F4F409A5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57851811C5; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
+ id 4DF54811C4; Tue,  8 Nov 2022 20:27:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:27:08 +0100
+Date: Tue, 8 Nov 2022 21:16:58 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9c38bc7befbe0f5568865441a64ed8914a6b4606
-X-Git-Newrev: 0e352bdc90c879571d201bad2fc642646b5f1d77
+X-Git-Oldrev: dcad3b2d601741321fd9d9c8f0f02fc09db8f12e
+X-Git-Newrev: 9c38bc7befbe0f5568865441a64ed8914a6b4606
 X-Patchwork-Hint: ignore
-Message-Id: <20221108202717.57851811C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/lldpd: security
- bump to version 1.0.15
+Message-Id: <20221108202717.4DF54811C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/f2fs-tools: fix
+ build with lz4 1.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e352bdc90c879571d201bad2fc642646b5f1d77
+commit: https://git.buildroot.net/buildroot/commit/?id=9c38bc7befbe0f5568865441a64ed8914a6b4606
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-- Fix heap overflow when reading SONMP. CVE-2021-43612.
-- https://vincentbernat.github.io/lldpd/ is redirecting to
-  https://lldpd.github.io/
+Fix the following build failure raised since bump of lz4 to version
+1.9.4 in commit 1f54af8c4f814bfc0993756b82575ad581ce5318:
 
-https://github.com/lldpd/lldpd/blob/1.0.15/NEWS
+compress.c: In function 'lz4_compress_init':
+compress.c:36:42: error: 'LZ4_STREAMSIZE_U64' undeclared (first use in this function); did you mean 'LZ4_STREAMSIZE'?
+   36 | #define LZ4_STREAMSIZE                  (LZ4_STREAMSIZE_U64 * sizeof(long long))
+      |                                          ^~~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ca8b6646322a4cb911fad5fb9cb38046743609bf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 62e082ec4d58e117697324938b9833c057116710)
+(cherry picked from commit c999e540dd233f8cb52eee4c35373cd6603aea97)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lldpd/Config.in  | 2 +-
- package/lldpd/lldpd.hash | 4 ++--
- package/lldpd/lldpd.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ ...2-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
-index 9a9517b5b0..3e0446986f 100644
---- a/package/lldpd/Config.in
-+++ b/package/lldpd/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LLDPD
- 	  lldpd is an ISC-licensed implementation of LLDP for various
- 	  Unixes. It also supports some proprietary protocols.
- 
--	  https://vincentbernat.github.io/lldpd/
-+	  https://lldpd.github.io/
- 
- if BR2_PACKAGE_LLDPD
- 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 6e809b2796..6db5ca98f1 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.9.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.15.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  6b64eb3125952b1e33472198b054e8aa0dee45f45d3d4be22789090a474949f5  lldpd-1.0.9.tar.gz
-+sha256  f7fe3a130be98a19c491479ef60f36b8ee41a9e6bc4d7f2c41033f63956a3126  lldpd-1.0.15.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index b88dd002e4..dd6f8dcf5d 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LLDPD_VERSION = 1.0.9
-+LLDPD_VERSION = 1.0.15
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
+diff --git a/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch b/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
+new file mode 100644
+index 0000000000..b43def6bb7
+--- /dev/null
++++ b/package/f2fs-tools/0002-f2fs-tools-fix-build-error-on-lz4-1-9-4.patch
+@@ -0,0 +1,34 @@
++From 19f77c6f6277a274434d6d8883f50e7955c6a8db Mon Sep 17 00:00:00 2001
++From: Jaegeuk Kim <jaegeuk@kernel.org>
++Date: Mon, 29 Aug 2022 11:03:35 -0700
++Subject: f2fs-tools: fix build error on lz4-1.9.4
++
++LZ4_STREAMSIZE_U64 is undefined in new lz4 lib.
++
++Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
++[Retrieved from:
++https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=19f77c6f6277a274434d6d8883f50e7955c6a8db]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ fsck/compress.c | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
++
++diff --git a/fsck/compress.c b/fsck/compress.c
++index b413492..b15f0a4 100644
++--- a/fsck/compress.c
+++++ b/fsck/compress.c
++@@ -32,10 +32,7 @@
++ #ifdef HAVE_LIBLZ4
++ #define LZ4_MEMORY_USAGE		14
++ #define LZ4_MAX_INPUT_SIZE		0x7E000000 /* 2 113 929 216 bytes */
++-#ifndef LZ4_STREAMSIZE
++-#define LZ4_STREAMSIZE			(LZ4_STREAMSIZE_U64 * sizeof(long long))
++-#endif
++-#define LZ4_MEM_COMPRESS		LZ4_STREAMSIZE
+++#define LZ4_MEM_COMPRESS		sizeof(LZ4_stream_t)
++ #define LZ4_ACCELERATION_DEFAULT	1
++ #define LZ4_WORK_SIZE			ALIGN_UP(LZ4_MEM_COMPRESS, 8)
++ #endif
++-- 
++cgit 
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
