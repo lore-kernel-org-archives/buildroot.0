@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D7F5C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 236E0C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 060AA40A6E;
-	Tue,  8 Nov 2022 20:07:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 060AA40A6E
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7FAA81E77;
+	Tue,  8 Nov 2022 20:08:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7FAA81E77
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uF1NlIkTtTwA; Tue,  8 Nov 2022 20:08:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD7A181DFB;
+	Tue,  8 Nov 2022 20:07:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD7A181DFB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 486491BF957
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:07:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24F4D404D8
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24F4D404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDLGzBQkEYww; Tue,  8 Nov 2022 20:07:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BBF640A83;
-	Tue,  8 Nov 2022 20:07:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BBF640A83
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 44F211BF3C6
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:07:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B17D60E3A
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:07:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B17D60E3A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SnWuBzNa-w-w for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z1AJ0_JzHmlA for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 20:07:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9CC260E2C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01D40403B7
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:07:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9CC260E2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01D40403B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D280B80FA8; Tue,  8 Nov 2022 20:07:36 +0000 (UTC)
+ id E112180FAB; Tue,  8 Nov 2022 20:07:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:02:56 +0100
+Date: Tue, 8 Nov 2022 21:07:18 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 4b0fb3fffae13bdfb87cdf9bb0d647c87786b138
-X-Git-Newrev: 822050f03406f8fc65ac8ecb1194dd643597954a
+X-Git-Oldrev: 822050f03406f8fc65ac8ecb1194dd643597954a
+X-Git-Newrev: 67d3eec6b92c0c385636d35ae7b3c5b837233baa
 X-Patchwork-Hint: ignore
-Message-Id: <20221108200736.D280B80FA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/php: security
- bump version to 8.1.12
+Message-Id: <20221108200736.E112180FAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] DEVELOPERS: add Bernd
+ Kuhls to package rsync
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=822050f03406f8fc65ac8ecb1194dd643597954a
+commit: https://git.buildroot.net/buildroot/commit/?id=67d3eec6b92c0c385636d35ae7b3c5b837233baa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
-
-Changelog: https://www.php.net/ChangeLog-8.php#8.1.12
-
-Fixes:
-- CVE-2022-31630: http://bugs.php.net/81739
-- CVE-2022-37454: http://bugs.php.net/81738
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 66c05c24baf17b98b7168bd950fbf40d25223247)
+(cherry picked from commit 098db8b4d5649345f983e7601d60a1fc30836e1d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c4c42a2c7d..bf81ebf3e8 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  3005198d7303f87ab31bc30695de76e8ad62783f806b6ab9744da59fe41cc5bd  php-8.1.11.tar.xz
-+sha256  08243359e2204d842082269eedc15f08d2eca726d0e65b93fb11f4bfc51bbbab  php-8.1.12.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7136fd9744..a400a38af7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.1.11
-+PHP_VERSION = 8.1.12
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 81f33fe117..74a9839b3c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -445,6 +445,7 @@ F:	package/python-pyicu/
+ F:	package/python-pylru/
+ F:	package/python-requests-oauthlib/
+ F:	package/python-slob/
++F:	package/rsync/
+ F:	package/rtmpdump/
+ F:	package/samba4/
+ F:	package/softether/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
