@@ -1,121 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BA1C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 21:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5EACC433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 21:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1BE560E49;
-	Tue,  8 Nov 2022 21:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1BE560E49
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14D2881E20;
+	Tue,  8 Nov 2022 21:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14D2881E20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aCJJSTwU33gj; Tue,  8 Nov 2022 21:20:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jySwDvNtx5vl; Tue,  8 Nov 2022 21:48:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4ABD60E69;
-	Tue,  8 Nov 2022 21:20:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4ABD60E69
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7A7CB1BF5EA
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 21:20:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F23181E1C;
+	Tue,  8 Nov 2022 21:48:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F23181E1C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 581401BF5EA
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 21:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 549854024A
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 21:20:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 549854024A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39C83403B7
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 21:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39C83403B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SFLPygutL9fW for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 21:20:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NXCka9IPwRYh for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 21:48:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDF54023E
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EBDF54023E
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 21:20:22 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h/UpvXdB5RJGainyEWks4TBGSZYJLkdkt68IMkHUbe1mqz2NoGc1OBOc+aZYHn0B1e6u17SeDu9BCtxC5PcrSChSx77S+LJkL7AfRohcZluRaa+t7d35tzwpLIke3bfCw6d3ghH7CDNpYlXHx+xdZ+zXfnExxKGEioSe5rIaGgQ5P25geTGQYNiwFxVKfa1sQV7vHOjTA/2wEoySTgh3nqCy70fAQZtt+ddmA+dEjcXZcfYIZTnljILf05Q33pfjdfOB4XxZqUufWdwqagnwHq79+4j5jtcOL5pO0hQ2S7ACbQhXn3TnLv5EQQoYD0xfc0xNy1CYtmRmcSdK/fPOmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4qxZgz2hkZcKqGC+PDQb90iNLPXWrCKumxDB4Ei05aQ=;
- b=BnjBae3vEGpsY/Mnd51M9qHFqUD7gT6UmuLcBiPqGQEDTY4N/4rulbOYUuSjJNvZsedDLmlmBS4lTHI59MKEMSHy+2FNY2SQEGnfy5/3P8SBR7Knw7kQ8roDtu95VexQUubTkvWx7kqQ3EEzy+XtBkWreIqUWoussBpJWflOI/30C8QolpoVF2UVi1QMWW4GpyWR4xlja7Q0lHMH9pXW5Bzu164v3BEgnyCKb7ZIpkFEyqlTYMaBmmYx1HtYPL69TNlGBpNZk0Mld1h7pK5agmFwPvs2dn7mhUh4+aH4ydOJyS+gZZxxm+Xk9c6mR+hWxVEEly+VtizNTyEd2Lz2cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from DS7PR03CA0114.namprd03.prod.outlook.com (2603:10b6:5:3b7::29)
- by PH7PR12MB7793.namprd12.prod.outlook.com (2603:10b6:510:270::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 21:20:19 +0000
-Received: from DM6NAM11FT108.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::c8) by DS7PR03CA0114.outlook.office365.com
- (2603:10b6:5:3b7::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26 via Frontend
- Transport; Tue, 8 Nov 2022 21:20:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT108.mail.protection.outlook.com (10.13.172.95) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Tue, 8 Nov 2022 21:20:19 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 14:12:13 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 14:12:13 -0600
-Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Tue, 8 Nov 2022 14:12:13 -0600
-To: <buildroot@buildroot.org>
-Date: Tue, 8 Nov 2022 13:11:59 -0700
-Message-ID: <20221108201159.5395-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.17.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43E2740138
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 43E2740138
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 21:48:34 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id x16so8172298ilm.5
+ for <buildroot@buildroot.org>; Tue, 08 Nov 2022 13:48:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=RuRuUfHlB5uTXeikv8xQ62IQpD2NZKfdhoYZ0676XGU=;
+ b=UhOXvf7rq+o6OKk3CCCCBw8cHXP+S3s9t7nAMRHELJon/xeaK60ULtdCVfeP1DC2lf
+ Mk7Mbz8ERiPIFI/97dcRcjrWzKRig6qSirTM/o5+392IBgTsp5HC1PPGCaoSkbfOiLMK
+ zVhYuxhIeNXapIAyWrwbb6DqeIkGpgAkEJ0bLqri/8x5Rg6mNWs+MdoLv/0heKkmM+lJ
+ AXcQM35sRY37m85jYcbFIGHJIwcyauvTpBFWvOYf9ZcUS3h+RIG55waE6/a75J5hyvoE
+ d9BWnJVAwa7u5IfHP8o1AHYG95gj7aRJLtw6yIA1W7z7Ez+r7YuMVHPZFGIOufwqcj0Q
+ A3MQ==
+X-Gm-Message-State: ACrzQf0q25sShZpzo6XNSCX3P4q8ksrLhlBsBCA2PMctWWVPxquuGGKz
+ IOhqzesVgKFX+hoFYb/TGDWX5IHT5TalWQ==
+X-Google-Smtp-Source: AMsMyM4zjoSM+qmGQbuASnzRgB1yd6Wws1/8j8gjoXTJpIBc65eo3RLgJ/plXgExSneXste1LtRAQw==
+X-Received: by 2002:a92:6701:0:b0:300:b5b5:87f7 with SMTP id
+ b1-20020a926701000000b00300b5b587f7mr27932893ilc.303.1667944112896; 
+ Tue, 08 Nov 2022 13:48:32 -0800 (PST)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ q6-20020a02c8c6000000b00374f8a0ed3csm4110233jao.103.2022.11.08.13.48.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 08 Nov 2022 13:48:32 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  8 Nov 2022 14:48:26 -0700
+Message-Id: <20221108214826.3564056-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT108:EE_|PH7PR12MB7793:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3bce8258-06a1-4a41-0acd-08dac1cf09f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x2yXjoHDfWzhp6j2hj6EnETQ07jaHzNSeoTvWIKc1zwNr6VHAzunfLqBcwpIbXdiXNyvM2G0wR/AW4ImfJIfmbRBqrKufyHMOPqaATHIRFnV7NUo42ZoEwX5frc3dnT+AW1EgGUKYV/NBbQp5CVLrZUZi0GgOUCIKFhmfQw0ceLFfFs+kpJ8plguCWEHyUIy1D/klUnzpuNqa4/nkQGa/+r2xAlqJV85uTXb7BPEmbQc+veUGB9Od/U9usEqdk/6AChPd1YLF7dZlJZmP8f9GEgrdOTO6+gPnrlx8gOVi0QXrZwhh2x9p1v1Ng2OmW4YRX01vClFklk99JfWcojz2kyaR96rSfKAxsVzG4mF8TEhlQ7xF0TPBlCO5UdFEI8ltm5Y37sVTpnolnH+NE81L97RI7FNQ0Rza+x1SG6kRPTHJcZ3418X3OGvLPtZQr8NU0dC2TGFfJbr7AuW8HY80Gtw3ZNLRglmvB3rkUzgZYFBetNrCqtZCYBq9Nn/m7DRIxuS94Sh7IVFtsZbTd5AiwgmQcYSF5HmqSWYFKXdgXEIoFPtRad3wIR3sdiZnTtxb4Isl7vs/zmS869v7q944QmvB7lE/CrFAqj6IKfHVb879mG6potsTCU/hQDGxBnxAWV6+8YTIJLqkFknWThzm+sWXPf4LOeDc8eMWRlEPUhXO8yaN60kYxf3WXoil70YWfqTLaoM2K1Oksa9c5jxaFv8bptcc7AmmrNWBXTn8B6uuDtT7uc/QE3iW0bPtKkrZFw8yVSFe+XXkLbZpcN2MSgdCqX6BcXnJqAq5KrFVXO8pHOOIvfgDxxARIMhMzFa
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230022)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199015)(46966006)(36840700001)(40470700004)(36756003)(356005)(81166007)(86362001)(82740400003)(83380400001)(40480700001)(40460700003)(44832011)(4744005)(2906002)(186003)(6666004)(1076003)(426003)(47076005)(336012)(36860700001)(26005)(70206006)(4326008)(8676002)(2616005)(316002)(6916009)(54906003)(70586007)(82310400005)(8936002)(478600001)(5660300002)(41300700001)(36900700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 21:20:19.5075 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bce8258-06a1-4a41-0acd-08dac1cf09f6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT108.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7793
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4qxZgz2hkZcKqGC+PDQb90iNLPXWrCKumxDB4Ei05aQ=;
- b=AUHLP4pLaf4fd6VZh3TAFhY5scKTdJLfJg7Uz81fDnN97l+eu+yNOH6BMR1l6QHqc/ZILtZmqzx4qEhbAN7Yb9niYFLL+jvSfbRtTUZclS4BPFd+G8KQJN0QxvjZeR2IHnzuIhBMiYZoIlDGCwVo/EpQDFGJ6AOHx6l8nhSQEnU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=AUHLP4pL
-Subject: [Buildroot] [PATCH v1 1/1] boot/uboot/uboot.mk: add stripped
- u-boot.elf support
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=RuRuUfHlB5uTXeikv8xQ62IQpD2NZKfdhoYZ0676XGU=;
+ b=bO3tTN8+nAVtCAwl8Mdm8Aa9lk6zzRHBHwsDXOrpA8Kq95rVa+OiLvBGxyAgrKL0tI
+ 1lW7UDTcpO96FpWsRkgu3u439t2tlhis2r2CdS350xUd/rJAANj7kB6Lop/jyUFRlAjy
+ gSLl4kQX6qDg2lkI/biL+w0Vgnb6XOrVExIgfm1QxkSY38lwc99E0xnzxh0kXmt2U3k2
+ IB/vk9xOaiOD+Ut2SCU51kQvPD1+aOpqSQvDuXsWS1lRzc+YW9J96wj2moD18IbvsZvD
+ SAskuTesQCzuZEqJEoSkUn3vpypGkb2DFcb3zX2LyUW2PXKcvaSTHa3dl+g8t+SzJNkZ
+ Vtxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=bO3tTN8+
+Subject: [Buildroot] [PATCH v2 1/1] package/python-twisted: bump to version
+ 22.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -127,39 +94,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If a user requests a u-boot binary in elf format,
-they may actually want the stripped u-boot.elf version.
-This patch provides the stripped u-boot.elf binary.
+Remove inaccurate comment that claims twisted and treq version/site
+variables are shared. They are not shared and the packages aren't
+always updated at the same time.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2:
+  - remove bogus comment about twisted/treq versions/site variables being shared
+---
+ package/python-treq/python-treq.mk         | 3 ---
+ package/python-twisted/python-twisted.hash | 4 ++--
+ package/python-twisted/python-twisted.mk   | 7 ++-----
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 0439ec5e4b..216efc5a13 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -53,7 +53,7 @@ UBOOT_BINS += u-boot.dtb
- endif
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 8995bf2cfe..57dc50ee74 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,6 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
--UBOOT_BINS += u-boot
-+UBOOT_BINS += u-boot u-boot.elf
- # To make elf usable for debuging on ARC use special target
- ifeq ($(BR2_arc),y)
- UBOOT_MAKE_TARGET += mdbtrick
+-# When bumping this package, make sure to also verify if the
+-# python-twisted package still works and to update its hash,
+-# as they share the same version/site variables.
+ PYTHON_TREQ_VERSION = 22.2.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+ PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/cd/c8/b68ab17d994133baf6edbcb5551ba81e1494bdc6d5e21a9d4f3bc4315140
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 63da0125b8..36612ff5e7 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
+-sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
++md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
++sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
+ # Locally computed sha256
+ sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 8a89d3dc82..398baed2a8 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,12 +4,9 @@
+ #
+ ################################################################################
+ 
+-# When bumping this package, make sure to also verify if the
+-# python-treq package still works and to update its hash,
+-# as they share the same version/site variables.
+-PYTHON_TWISTED_VERSION = 22.2.0
++PYTHON_TWISTED_VERSION = 22.10.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
