@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3878FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DDEC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2D8A42ABF;
-	Mon, 20 Feb 2023 21:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2D8A42ABF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3040342B54;
+	Mon, 20 Feb 2023 21:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3040342B54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QVdAUK4aqt0A; Mon, 20 Feb 2023 21:14:48 +0000 (UTC)
+	with ESMTP id vEYVX4AbdX1V; Mon, 20 Feb 2023 21:15:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E187642B4C;
-	Mon, 20 Feb 2023 21:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E187642B4C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1761BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D704A42B50;
+	Mon, 20 Feb 2023 21:15:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D704A42B50
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 120701BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15FB641162
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15FB641162
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA7E061075
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA7E061075
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2WllB78WcYPm for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qkN_XPuj9smo for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E97FE40C14
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E97FE40C14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E8E1610A0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8E1610A0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEB7581979; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+ id 6780E86496; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:52:15 +0100
+Date: Tue, 8 Nov 2022 08:40:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a0aad05cbf20c8e09834e9e1d78a3376cb89910b
-X-Git-Newrev: 191fa1718f7f61ad9846a37c6f0c86a3b713e81c
+X-Git-Oldrev: 2d3c06435b24bac849bb31fcd24f56d45b191f47
+X-Git-Newrev: 9f6c257638cf2598cad123afa8cdbf84437de072
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205150.CEB7581979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-net-ssleay: bump
- to version 1.93_01
+Message-Id: <20230220205149.6780E86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libkcapi: disable
+ -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,130 +64,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=191fa1718f7f61ad9846a37c6f0c86a3b713e81c
+commit: https://git.buildroot.net/buildroot/commit/?id=9f6c257638cf2598cad123afa8cdbf84437de072
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Refresh patch
-- Drop -lz from Makefile with libressl as this is the only solution for
-  now: https://github.com/radiator-software/p5-net-ssleay/issues/399
-- License has been clarified to be Artistic-2.0 since version 1.86.11:
-  https://github.com/radiator-software/p5-net-ssleay/commit/aa4a0206d6d2a5ac2998dd9d6a8c5b88902c04de
-- This bump will fix the following build failure with libressl:
+Fix the following musl build failure (disabling -Werror seems to be the
+only "solution": https://github.com/smuellerDD/libkcapi/issues/136):
 
-  In file included from /home/autobuild/autobuild/instance-11/output-1/host/armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/perl5/5.34.1/armeb-linux/CORE/perl.h:5748,
-                   from SSLeay.xs:141:
-  SSLeay.xs: In function 'XS_Net__SSLeay_SESSION_get_master_key':
-  SSLeay.xs:5569:37: error: invalid use of incomplete typedef 'SSL_SESSION' {aka 'struct ssl_session_st'}
-   5569 |      sv_setpvn(ST(0), (const char*)s->master_key, s->master_key_length);
-        |                                     ^~
-
-https://metacpan.org/release/CHRISN/Net-SSLeay-1.93_01/changes
+lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
+lib/kcapi-kernel-if.c:212:12: error: unsigned conversion from 'long int' to 'long unsigned int' changes value from '-4' to '4294967292' [-Werror=sign-conversion]
+  212 |   header = CMSG_NXTHDR(&msg, header);
+      |            ^~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/71337cc496727f2b1173c055d706c5bfc2f5d2bc
+ - http://autobuild.buildroot.org/results/c789d43e71e6075e297bef58d888228a89055bbc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../perl-net-ssleay/0001-fix-build-system.patch    | 30 +++++++++++-----------
- package/perl-net-ssleay/perl-net-ssleay.hash       |  6 ++---
- package/perl-net-ssleay/perl-net-ssleay.mk         | 13 +++++++---
- 3 files changed, 28 insertions(+), 21 deletions(-)
+ package/libkcapi/0002-Add-disable-werror.patch | 46 ++++++++++++++++++++++++++
+ package/libkcapi/libkcapi.mk                   |  1 +
+ 2 files changed, 47 insertions(+)
 
-diff --git a/package/perl-net-ssleay/0001-fix-build-system.patch b/package/perl-net-ssleay/0001-fix-build-system.patch
-index a6cd0f9ceb..a5ccf464ba 100644
---- a/package/perl-net-ssleay/0001-fix-build-system.patch
-+++ b/package/perl-net-ssleay/0001-fix-build-system.patch
-@@ -8,29 +8,29 @@ paths, since they are missing the destdir; Buildroot compilers
- and linkers already know where to search, anyway.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[Fabrice: update for 1.93_01]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -durN perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm
----- perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-04-01 08:08:37.000000000 +0200
--+++ perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-07-13 00:38:46.281380282 +0200
--@@ -37,14 +37,18 @@
--         exit 0; # according http://wiki.cpantesters.org/wiki/CPANAuthorNotes this is best-practice when "missing library"
-+--- perl-net-ssleay-1.64.orig/Makefile.PL	2014-04-01 08:08:37.000000000 +0200
-++++ perl-net-ssleay-1.64/Makefile.PL	2014-07-13 00:38:46.281380282 +0200
-+@@ -192,12 +192,16 @@
-+         exit MISSING_PREREQ;
-      }
-  
---    $self->check_openssl_version($prefix, $exec);
-+-    check_openssl_version($prefix, $exec);
- +# Does not work for cross-compilation.
- +# In Buildroot, we do have a supported version.
--+#    $self->check_openssl_version($prefix, $exec);
--     my $opts = $self->ssleay_get_build_opts($prefix, $exec);
-- 
--     $self->makemaker_args(
-++#    check_openssl_version($prefix, $exec);
-+     my %args = (
-          CCCDLFLAGS => $opts->{cccdlflags},
-          OPTIMIZE => $opts->{optimize},
---        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
---        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-+-        INC => qq{-I"$opts->{inc_path}"},
-+-        LIBS => join(' ', (map '-L'.maybe_quote($_), @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
- +# Buildroot already has the correct include and library search paths.
--+#        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
--+#        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-++#        INC => qq{-I"$opts->{inc_path}"},
-++#        LIBS => join(' ', (map '-L'.maybe_quote($_), @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
- +        LIBS => join(' ', (map {"-l$_"} @{$opts->{lib_links}})),
-      );
-- 
--     if ( $self->prompt(
-+     # From HMBRAND to handle multple version of OPENSSL installed
-+     if (my $lp = join " " => map '-L'.maybe_quote($_), @{$opts->{lib_paths} || []})
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
-index 7502a60ad1..9caff68edd 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.hash
-+++ b/package/perl-net-ssleay/perl-net-ssleay.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  d602bdce4e0531c6efc276e3e429ca69  Net-SSLeay-1.85.tar.gz
--sha256  9d8188b9fb1cae3bd791979c20554925d5e94a138d00414f1a6814549927b0c8  Net-SSLeay-1.85.tar.gz
-+md5  c73821e9790b3bdb3471d9b8faf48bbb  Net-SSLeay-1.93_01.tar.gz
-+sha256  876d022fbc719631b11d6bb4b6e78db3c19bbca578093c376c8f9900a4432aa3  Net-SSLeay-1.93_01.tar.gz
- 
- # computed by scancpan
--sha256  b55065185a2172d9f2ea2dd87c18c206ea3dc45a64e5f3deb3eee34d839dc822  LICENSE
-+sha256  685e534b60d4e2b4fbb1a259a83b5a86e877a919bbb9efc95994276f706a3a71  LICENSE
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 80ce8b9cc7..8b7b2b973b 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PERL_NET_SSLEAY_VERSION = 1.85
-+PERL_NET_SSLEAY_VERSION = 1.93_01
- PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
--PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
-+PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CH/CHRISN
- PERL_NET_SSLEAY_DEPENDENCIES = openssl
--PERL_NET_SSLEAY_LICENSE = OpenSSL
-+PERL_NET_SSLEAY_LICENSE = Artistic-2.0
- PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
- PERL_NET_SSLEAY_DISTNAME = Net-SSLeay
- 
-@@ -24,4 +24,11 @@ define PERL_NET_SSLEAY_FIX_MAKEFILE
- endef
- PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
- 
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+define PERL_NET_SSLEAY_DROP_ZLIB_MAKEFILE
-+	$(SED) "s/-lz//" $(@D)/Makefile
-+endef
-+PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_DROP_ZLIB_MAKEFILE
-+endif
+diff --git a/package/libkcapi/0002-Add-disable-werror.patch b/package/libkcapi/0002-Add-disable-werror.patch
+new file mode 100644
+index 0000000000..4f2f55f145
+--- /dev/null
++++ b/package/libkcapi/0002-Add-disable-werror.patch
+@@ -0,0 +1,46 @@
++From c27b154f03ad7e94447c7114d73aee60f0098093 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 7 Nov 2022 13:38:06 +0100
++Subject: [PATCH] Add --disable-werror
 +
- $(eval $(perl-package))
++Allow the user to disable -Werror through --disable-werror
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++[Retrieved from:
++https://github.com/smuellerDD/libkcapi/commit/c27b154f03ad7e94447c7114d73aee60f0098093]
++---
++ Makefile.am  | 5 ++++-
++ configure.ac | 3 +++
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 1c95d3d..cddedac 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -2,7 +2,10 @@ ACLOCAL_AMFLAGS = -I m4
++ AUTOMAKE_OPTIONS = subdir-objects
++ lib_LTLIBRARIES = libkcapi.la
++ 
++-COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -Werror -std=gnu99 -Wconversion
+++COMMON_CPPFLAGS = -Wextra -Wall -pedantic -fwrapv --param ssp-buffer-size=4 -O2 -std=gnu99 -Wconversion
+++if ENABLE_WERROR
+++COMMON_CPPFLAGS += -Werror
+++endif
++ COMMON_LDFLAGS =  -Wl,-z,relro,-z,now
++ 
++ libtool: $(LIBTOOL_DEPS)
++diff --git a/configure.ac b/configure.ac
++index cb910e2..e230577 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -76,6 +76,9 @@ AX_ADD_FORTIFY_SOURCE
++ 
++ AC_CHECK_API_VERSION
++ 
+++AC_ARG_ENABLE([werror], [AS_HELP_STRING([--disable-werror], [Disable -Werror])], [with_werror=$enableval], [with_werror=yes])
+++AM_CONDITIONAL([ENABLE_WERROR], [test "x$with_werror" = "xyes"])
+++
++ AC_ARG_ENABLE([kcapi-test], [AS_HELP_STRING([--enable-kcapi-test], [Compile kcapi test program])], [with_kcapi_test=$enableval])
++ AM_CONDITIONAL([ENABLE_KCAPI_TEST], [test "x$with_kcapi_test" = "xyes"])
++ 
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index e88928a74d..c6251c286c 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -15,6 +15,7 @@ LIBKCAPI_CONF_ENV = \
+ 	ac_cv_path_DB2PDF="" \
+ 	ac_cv_path_DB2PS="" \
+ 	ac_cv_path_XMLTO=""
++LIBKCAPI_CONF_OPTS = --disable-werror
+ LIBKCAPI_MAKE_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBKCAPI_ASYM),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
