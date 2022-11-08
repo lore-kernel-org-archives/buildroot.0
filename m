@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DBEC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396B3C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 19:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27E7181E74;
-	Tue,  8 Nov 2022 19:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27E7181E74
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFAD581E80;
+	Tue,  8 Nov 2022 19:49:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFAD581E80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nEjqG_iiNL32; Tue,  8 Nov 2022 19:47:48 +0000 (UTC)
+	with ESMTP id RoTgwqqDNrAB; Tue,  8 Nov 2022 19:49:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 587388135C;
-	Tue,  8 Nov 2022 19:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 587388135C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07D691BF422
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:47:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F6A981E74;
+	Tue,  8 Nov 2022 19:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6A981E74
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F9F31BF422
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4E0540A83
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4E0540A83
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6674B81E79
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 19:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6674B81E79
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F7M32-3qcZS2 for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 19:47:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2C3040A91
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 19:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2C3040A91
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C9F197FB0F; Tue,  8 Nov 2022 19:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qF_ckHrdDBAl for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 19:48:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EE7581350
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5EE7581350
+ for <buildroot@busybox.net>; Tue,  8 Nov 2022 19:48:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B36EF20004;
+ Tue,  8 Nov 2022 19:48:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1osUac-000SC2-ON; Tue, 08 Nov 2022 20:48:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 20:41:18 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 8db8c313318f95f90d9143b5144ee10847b8d838
-X-Git-Newrev: 83f8cfb1e7f325c562fd8b4aed09f47dbc340afc
-X-Patchwork-Hint: ignore
-Message-Id: <20221108194744.C9F197FB0F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/faad2: bump to
- version 2.10.1
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+References: <7568ca93d2d360efc2c6096406b8d9af533dec86.1667154015.git.baruch@tkos.co.il>
+Date: Tue, 08 Nov 2022 20:48:54 +0100
+In-Reply-To: <7568ca93d2d360efc2c6096406b8d9af533dec86.1667154015.git.baruch@tkos.co.il>
+ (Baruch Siach via buildroot's message of "Sun, 30 Oct 2022 20:20:15
+ +0200")
+Message-ID: <87iljpi5w9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/libcurl: fix crypto backend
+ selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +65,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f8cfb1e7f325c562fd8b4aed09f47dbc340afc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+>>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
-https://github.com/knik0/faad2/releases/tag/2.10.1
+ > Since version 7.77 --with-ssl that used to select OpenSSL renamed to
+ > --with-openssl. --without-ssl changed to mean no crypto backend.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9376ed7bc46ebed9f97899cface0cd9b386292ba)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/faad2/faad2.hash | 2 +-
- package/faad2/faad2.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Only in version 7.86 setting both --without-ssl and some other crypto
+ > parameter became a hard configure error.
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index 2eb11d73aa..3a9c36df00 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0c6d9636c96f95c7d736f097d418829ced8ec6dbd899cc6cc82b728480a84bfb  faad2-2.10.0.tar.gz
-+sha256  4c16c71295ca0cbf7c3dfe98eb11d8fa8d0ac3042e41604cfd6cc11a408cf264  faad2-2.10.1.tar.gz
- sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index d085c814bd..eecab35af8 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FAAD2_VERSION = 2.10.0
--FAAD2_SITE = $(call github,knik0,faad2,$(subst .,_,$(FAAD2_VERSION)))
-+FAAD2_VERSION = 2.10.1
-+FAAD2_SITE = $(call github,knik0,faad2,$(FAAD2_VERSION))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
- FAAD2_CPE_ID_VENDOR = audiocoding
+ > Update OpenSSL selection parameter, and add --without-ssl explicitly for
+ > the case of no selected crypto backend.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/05e9cb71619e640849c27b2984d0df671a9f86c5/
+ > http://autobuild.buildroot.net/results/5a4a905de2a232a38916f03278d0a3cbd8a29711/
+ > http://autobuild.buildroot.net/results/4432314aa13d4acc8fce27f79177f82298ae0626/
+
+ > Cc: Matt Weber <matthew.weber@collins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed to 2022.08.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
