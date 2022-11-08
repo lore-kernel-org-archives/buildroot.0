@@ -1,88 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C0C6C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 07:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B6C6C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 07:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8E8640A02;
-	Tue,  8 Nov 2022 07:36:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8E8640A02
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7E9F60C08;
+	Tue,  8 Nov 2022 07:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7E9F60C08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RmvEq2IwXfGI; Tue,  8 Nov 2022 07:36:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mCPu3LcmGula; Tue,  8 Nov 2022 07:38:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4992F402E7;
-	Tue,  8 Nov 2022 07:36:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4992F402E7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5121B1BF35E
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 07:36:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4FB360ACF;
+	Tue,  8 Nov 2022 07:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4FB360ACF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EA911BF35E
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 07:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27D48402E7
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 07:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27D48402E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 665F960AE4
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 07:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 665F960AE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aEfVGFyAVF94 for <buildroot@lists.busybox.net>;
- Tue,  8 Nov 2022 07:36:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9029C402E1
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9029C402E1
- for <buildroot@buildroot.org>; Tue,  8 Nov 2022 07:36:36 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id h9so19593846wrt.0
- for <buildroot@buildroot.org>; Mon, 07 Nov 2022 23:36:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gwopxemDnIKzalBs2c9bOpyleX0ZSCETPT3ICNVW7h4=;
- b=r7EqVsMdxf5GUEDyeALnvraCPgqPWuOJKnihc0tEyXXwDREHsqx94PdA4cl5kLRJ3i
- SXGUZCGFLwCLQatpPvsTHZeSs8sUcwhPJnuhBHf4YeEqRRCYEaRm0nBM9OkPpssPyNGT
- 7EqQuSjwxWZ6nhB9Oxtz/kkcviI8RiEHHUY3QFHrBciXKqKPYKayuaDw42y7hE+0Qq6y
- idRujXuG0XPLfVwXfrHCEpRHX6ygWuci9kZuSdODqXfSUvvUp+j0lYhISCEL0UCmboTO
- Db5jlnHziP4Pt04v1aIloBsOd79kQZepqVhaAQlqjCiQmXxjUyh7Y1idZhZEYvbLhhiO
- qk0A==
-X-Gm-Message-State: ACrzQf0Oov/+wKLxEGVefPa0UHx0VmmX2C9OIVDq1+6iElulCBhIxCvw
- 4xI2pL31C7PEU9C/VT4D9KpTqq5jFrI=
-X-Google-Smtp-Source: AMsMyM6OQwrJwkB8LZW6NtY7CzfYXSN+w0VLJUsfBcXP+w5uNxqaaLG86MIvcPSco+JpfU/pAJ/AgQ==
-X-Received: by 2002:a5d:6d89:0:b0:236:6e52:4fa with SMTP id
- l9-20020a5d6d89000000b002366e5204famr34404132wrs.395.1667892993867; 
- Mon, 07 Nov 2022 23:36:33 -0800 (PST)
-Received: from hthiery.kontron.local ([213.135.10.150])
- by smtp.gmail.com with ESMTPSA id
- bs17-20020a056000071100b002364c77bcacsm9454256wrb.38.2022.11.07.23.36.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Nov 2022 23:36:33 -0800 (PST)
-From: Heiko Thiery <heiko.thiery@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  8 Nov 2022 08:36:07 +0100
-Message-Id: <20221108073606.166060-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kw2wn9QTRimK for <buildroot@lists.busybox.net>;
+ Tue,  8 Nov 2022 07:38:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C12460ACF
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3C12460ACF
+ for <buildroot@buildroot.org>; Tue,  8 Nov 2022 07:38:41 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3C1D8240006;
+ Tue,  8 Nov 2022 07:38:38 +0000 (UTC)
+Date: Tue, 8 Nov 2022 08:38:37 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221108083837.67014205@windsurf>
+In-Reply-To: <CAPi7W83h9UyvLgf834At4_wxUXq7xXyYxyDVXcz0=T_9caJRZw@mail.gmail.com>
+References: <20221106222042.648813-1-fontaine.fabrice@gmail.com>
+ <20221107230925.73bb92d9@windsurf>
+ <CAPi7W83h9UyvLgf834At4_wxUXq7xXyYxyDVXcz0=T_9caJRZw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gwopxemDnIKzalBs2c9bOpyleX0ZSCETPT3ICNVW7h4=;
- b=OR4zbK/MJqyt691J90uaGDyebAww9u5z7QIMYsog+2E/B3r7bhYAzeKC+LO0io+8Vd
- 2vRwy83bwPiyAvczKEjS7FoEUMXzSui2rTnR3rky6sNZUT4HkE6xWJic9YXcGWQZ8b59
- oeiarPHVsKlQ3nS/o7CO60y5jrmT9NFkEzc6FroE0GPIV0xor+66d3jhOVssmiEz0OeL
- 0pzOEFoBISKk1cHG/IAryaoIAzAR4NWv20SnfAf/s5OGzoDqEN25JiAV4MrwPW24ECPt
- 3+4tcf8ZhLNyiNViwiJscXOu24FklBQL/4BRmVXfAi48AgwspwlwJs+7VZTcqlOf0TzE
- rQSQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OR4zbK/M
-Subject: [Buildroot] [PATCH v2] configs/kontron_bl_imx8mm_defconfig: bump
- U-boot to 2022.10
+ d=bootlin.com; s=gm1; t=1667893118;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=D5cr2v67tQDHyaqCnNxBx2HgebKuNuswI3zqhMkjY6c=;
+ b=JlG/8vskagRGZTVOnscKDXb40WUyuvsDvaWhMLKX/rCkjHbfN+mX/9B7JFx8Q9tahEwBn6
+ Vz06A74QNDh+rXQ2Qb4UOaXEaZrvxJdsHskvhTvEuDLLg52u/By78uq9n/SR440mu7R7Mx
+ F2KPLVxU2F6OsMTuaLEo8XGTaL3M3qFuqZMH7bigMHdp5D223Hpl9tMwaekz7jDNb7J+Sl
+ 7l0K+H66CLFqw5A+rjcjkSYpa0z91R0jEifhj5QeYm0IO52PBEat/LnLCjndv3qjJREYX8
+ QtqXxvOnTpOKGg2sngjsNjoNKUUzFfJI0ibNz4FMhAJtLtkbVg8qOEJK8KbIkg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JlG/8vsk
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,53 +77,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The U-Boot makefile for the host tools does not handle the
-compiler/linker options properly. There are some patches [1][2] that fixes
-that issue already applied in the newer U-Boot version 2022.10. So we have to
-bump U-Boot to fix an autobuilder fail.
+On Mon, 7 Nov 2022 23:35:43 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
+> > Applied to master, thanks. However, aren't some of the other
+> > linux-tools also affected by a similar issue (tmon, cpupower, etc.) ?
+> 
+> Nope, tmon was already fixed in commit
+> 2cbcdbf0add46da55020eb56b5e4b974b44e958b.
+> The other ones can't be built statically.
 
-[1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
-[2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
+ACK, thanks for the feedback!
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- configs/kontron_bl_imx8mm_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index ff376662e9..240cb52245 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
- BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
- BR2_TARGET_UBOOT_SPL=y
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
