@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D62D5C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5BD9C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Nov 2022 20:28:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 731E040A6E;
-	Tue,  8 Nov 2022 20:28:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 731E040A6E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LeEN5Vsm3RiJ; Tue,  8 Nov 2022 20:28:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41F2D40AA5;
-	Tue,  8 Nov 2022 20:28:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41F2D40AA5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EB55D1BF3C6
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6D6E81E7D
- for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6D6E81E7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87A5181E81;
+	Tue,  8 Nov 2022 20:28:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87A5181E81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KynGom0SXMBC for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F2Nj2xsMmz-e; Tue,  8 Nov 2022 20:28:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 213BA81E79;
+	Tue,  8 Nov 2022 20:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 213BA81E79
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D8AEB1BF3C6
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFDEE404C1
+ for <buildroot@lists.busybox.net>; Tue,  8 Nov 2022 20:28:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFDEE404C1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lX-TFvlf-KJx for <buildroot@lists.busybox.net>;
  Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D613281E78
+ by smtp2.osuosl.org (Postfix) with ESMTP id C24D6403B7
  for <buildroot@buildroot.org>; Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D613281E78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C24D6403B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C66CE8122C; Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
+ id B1EEB8121C; Tue,  8 Nov 2022 20:28:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Nov 2022 21:26:51 +0100
+Date: Tue, 8 Nov 2022 21:21:50 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 378b3917978a9ebaf45a556312a95a23259b9535
-X-Git-Newrev: adef0f5a569a63382c650d18acae42ac1f70c274
+X-Git-Oldrev: 67d3eec6b92c0c385636d35ae7b3c5b837233baa
+X-Git-Newrev: ec2d20690dea7cadf1468852708ea5ebce7e8f8f
 X-Patchwork-Hint: ignore
-Message-Id: <20221108202823.C66CE8122C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/lldpd: security
- bump to version 1.0.15
+Message-Id: <20221108202823.B1EEB8121C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/f2fs-tools: add
+ lz4 and lzo optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,152 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adef0f5a569a63382c650d18acae42ac1f70c274
+commit: https://git.buildroot.net/buildroot/commit/?id=ec2d20690dea7cadf1468852708ea5ebce7e8f8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-- Fix heap overflow when reading SONMP. CVE-2021-43612.
-- https://vincentbernat.github.io/lldpd/ is redirecting to
-  https://lldpd.github.io/
-
-https://github.com/lldpd/lldpd/blob/1.0.15/NEWS
+lz4 and lzo are optional dependencies (enabled by default) since bump to
+version 1.14.0 in commit cf566658f28f3e4b362cc8f9235e6b7768af355c and
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b585244e726c1024f7b842033689992a383808cc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 62e082ec4d58e117697324938b9833c057116710)
+(cherry picked from commit 952fa08764acc8d78985d2cc91d37112324b67cb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lldpd/Config.in  | 2 +-
- package/lldpd/lldpd.hash | 4 ++--
- package/lldpd/lldpd.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-configure-ac-fix-cross-compilation.patch  | 88 ++++++++++++++++++++++
+ package/f2fs-tools/f2fs-tools.mk                   | 18 ++++-
+ 2 files changed, 105 insertions(+), 1 deletion(-)
 
-diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
-index 9a9517b5b0..3e0446986f 100644
---- a/package/lldpd/Config.in
-+++ b/package/lldpd/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LLDPD
- 	  lldpd is an ISC-licensed implementation of LLDP for various
- 	  Unixes. It also supports some proprietary protocols.
+diff --git a/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+new file mode 100644
+index 0000000000..0e3d4da191
+--- /dev/null
++++ b/package/f2fs-tools/0001-configure-ac-fix-cross-compilation.patch
+@@ -0,0 +1,88 @@
++From 32e7d272344024c216f155c3463dd2d548f3fafd Mon Sep 17 00:00:00 2001
++From: Nick Hainke <vincent@systemli.org>
++Date: Mon, 4 Jul 2022 11:29:19 +0200
++Subject: configure.ac: fix cross compilation
++
++AC_CHECK_LIB seems to not work correctly with OpenWrt. Add possibility
++to disable lz4 and lzo2 manually.
++
++Fixes errors in the form of:
++  Package f2fsck is missing dependencies for the following libraries:
++  liblz4.so.1
++  liblzo2.so.2
++
++Signed-off-by: Nick Hainke <vincent@systemli.org>
++Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
++[Retrieved from:
++https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=32e7d272344024c216f155c3463dd2d548f3fafd]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 44 ++++++++++++++++++++++++++++++++++----------
++ 1 file changed, 34 insertions(+), 10 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index ea39461..dbe9ad3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -50,6 +50,18 @@ AC_ARG_WITH([blkid],
++ 	[],
++ 	[with_blkid=check])
++ 
+++AC_ARG_WITH([lzo2],
+++	[AS_HELP_STRING([--without-lzo2],
+++	  [Ignore presence of liblzo2 and disable lzo2 support])],
+++	[],
+++	[with_lzo2=check])
+++
+++AC_ARG_WITH([lz4],
+++	[AS_HELP_STRING([--without-lz4],
+++	  [Ignore presence of liblz4 and disable lz4 support])],
+++	[],
+++	[with_lz4=check])
+++
++ # Checks for programs.
++ AC_PROG_CC
++ AM_PROG_AR
++@@ -71,17 +83,29 @@ AS_IF([test "x$with_blkid" != xno],
++         fi
++ 	], -lblkid)])
++ 
++-AC_CHECK_LIB([lzo2], [main],
++-	[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
++-		AC_DEFINE([HAVE_LIBLZO2], [1],
++-		[Define if you have liblzo2])
++-	], [], [])
+++AS_IF([test "x$with_lzo2" != xno],
+++	[AC_CHECK_LIB([lzo2], [main],
+++		[AC_SUBST([liblzo2_LIBS], ["-llzo2"])
+++			AC_DEFINE([HAVE_LIBLZO2], [1],
+++			[Define if you have liblzo2])
+++		],
+++		[if test "x$with_lzo2" != xcheck; then
+++			AC_MSG_FAILURE(
+++                [--with-lzo2 was given, but test for lzo2 failed])
+++        fi
+++	], -llzo2)])
++ 
++-AC_CHECK_LIB([lz4], [main],
++-	[AC_SUBST([liblz4_LIBS], ["-llz4"])
++-		AC_DEFINE([HAVE_LIBLZ4], [1],
++-		[Define if you have liblz4])
++-	], [], [])
+++AS_IF([test "x$with_lz4" != xno],
+++	[AC_CHECK_LIB([lz4], [main],
+++		[AC_SUBST([liblz4_LIBS], ["-llz4"])
+++			AC_DEFINE([HAVE_LIBLZ4], [1],
+++			[Define if you have liblz4])
+++		],
+++		[if test "x$with_lz4" != xcheck; then
+++			AC_MSG_FAILURE(
+++                [--with-lz4 was given, but test for lz4 failed])
+++        fi
+++	], -llz4)])
++ 
++ AS_IF([test "x$with_selinux" != xno],
++ 	[AC_CHECK_LIB([selinux], [getcon],
++-- 
++cgit 
++
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 2c4ee9185b..60f1004d77 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -22,6 +22,20 @@ else
+ F2FS_TOOLS_CONF_OPTS += --without-selinux
+ endif
  
--	  https://vincentbernat.github.io/lldpd/
-+	  https://lldpd.github.io/
++ifeq ($(BR2_PACKAGE_LZ4),y)
++F2FS_TOOLS_CONF_OPTS += --with-lz4
++F2FS_TOOLS_DEPENDENCIES += lz4
++else
++F2FS_TOOLS_CONF_OPTS += --without-lz4
++endif
++
++ifeq ($(BR2_PACKAGE_LZO),y)
++F2FS_TOOLS_CONF_OPTS += --with-lzo2
++F2FS_TOOLS_DEPENDENCIES += lzo
++else
++F2FS_TOOLS_CONF_OPTS += --without-lzo2
++endif
++
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+ # util-linux is a dependency already, no need to list it again
+ F2FS_TOOLS_CONF_OPTS += --with-blkid
+@@ -34,7 +48,9 @@ endif
+ # blkid support even if we have host-util-linux
+ HOST_F2FS_TOOLS_CONF_OPTS = \
+ 	--without-selinux \
+-	--without-blkid
++	--without-blkid \
++	--without-lz4 \
++	--without-lzo2
  
- if BR2_PACKAGE_LLDPD
- 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 6e809b2796..6db5ca98f1 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.9.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.15.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  6b64eb3125952b1e33472198b054e8aa0dee45f45d3d4be22789090a474949f5  lldpd-1.0.9.tar.gz
-+sha256  f7fe3a130be98a19c491479ef60f36b8ee41a9e6bc4d7f2c41033f63956a3126  lldpd-1.0.15.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index b88dd002e4..dd6f8dcf5d 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LLDPD_VERSION = 1.0.9
-+LLDPD_VERSION = 1.0.15
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
