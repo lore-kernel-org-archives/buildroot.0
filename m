@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF630C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Nov 2022 22:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A9B7C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Nov 2022 22:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5515E40463;
-	Wed,  9 Nov 2022 22:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5515E40463
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9C0E403F9;
+	Wed,  9 Nov 2022 22:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9C0E403F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id llJcZpd6AkkF; Wed,  9 Nov 2022 22:05:16 +0000 (UTC)
+	with ESMTP id 6uVAdbCjjcVF; Wed,  9 Nov 2022 22:05:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86936400EC;
-	Wed,  9 Nov 2022 22:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86936400EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 245404010C;
+	Wed,  9 Nov 2022 22:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 245404010C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4DE841BF308
- for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D0FB91BF308
+ for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2089A400EC
- for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2089A400EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9B574010C
+ for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9B574010C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xtTCOfvZrv21 for <buildroot@lists.busybox.net>;
- Wed,  9 Nov 2022 22:05:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB8EC40018
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB8EC40018
- for <buildroot@buildroot.org>; Wed,  9 Nov 2022 22:05:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 95D81FF803;
- Wed,  9 Nov 2022 22:05:08 +0000 (UTC)
-Date: Wed, 9 Nov 2022 23:05:07 +0100
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20221109230507.39d8f8d8@windsurf>
-In-Reply-To: <20221019051823.26706-1-neal.frager@amd.com>
-References: <20221019051823.26706-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668031509;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WNa1aftHyboZRZDJaTJhWCVISANq550qxgg98kX2TXk=;
- b=G4LYjA+odHEobB8x0mbdcEre7L2COW5yQlhT9ZZ4FfIvYI6Yt/mx5pOsGtCXS6rWcaGqcQ
- 7Fjkaukcc3dxqXoxjJheRYZI+3RqREyEHy2AqFbyTxO7OLAVRI+RvktAmMzFoaWIhLLntc
- xLAscjvGeggayBnMlRhF3yJYLh6fxW/RAyA5pr3cEQwNR58u5S1IGRK0hQM/O/wFMHFUiq
- yJdT9gq2F9qnEiVAnfUq3mk9qApB9ADhElbi43fNi1cnrtd0oViwUrFLdyncEhdcwcUT7S
- adq4Lw7ofKCx2QwXq4Gte3DWmbOkN5h5YrPopj8N94RzBW6v0vcMUM5TwHFL/Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G4LYjA+o
-Subject: Re: [Buildroot] [PATCH v1 1/3] configs/zynq_zc706_defconfig: bump
- to Xilinx 2022.2
+ with ESMTP id J9vV5DFCXKJ7 for <buildroot@lists.busybox.net>;
+ Wed,  9 Nov 2022 22:05:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD5E340018
+ for <buildroot@buildroot.org>; Wed,  9 Nov 2022 22:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD5E340018
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AC686827E3; Wed,  9 Nov 2022 22:05:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 9 Nov 2022 23:05:23 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c1c32fc61779fa25fdba662012803a14f6c4687d
+X-Git-Newrev: a85f5f2a412db894fdf548e10d12e7c56eda9107
+X-Patchwork-Hint: ignore
+Message-Id: <20221109220534.AC686827E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tpm2-pkcs11: bump
+ version to 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,34 +58,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: luca.ceresoli@bootlin.com, ju.o@free.fr, michal.simek@amd.com,
- giulio.benetti@benettiengineering.com, Neal Frager <neal.frager@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 18 Oct 2022 23:18:21 -0600
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a85f5f2a412db894fdf548e10d12e7c56eda9107
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This patch bumps the zc706 to Xilinx release 2022.2.
-> 
-> Xilinx 2022.2 includes:
-> - U-Boot 2022.01 bug fixes
-> - Linux bump to Linux 5.15.36 with bug fixes
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  configs/zynq_zc706_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
+ package/tpm2-pkcs11/tpm2-pkcs11.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-All three patches applied to our next branch. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+index 1d5bcc7a54..b027bad72a 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  078a445ed0e9f5009675a162b4b7b88f3520436cfbc791bb2249f37bd1f475bd  tpm2-pkcs11-1.7.0.tar.gz
++sha256  79f28899047defd6b4b72b7268dd56abf27774954022315f818c239af33e05bd  tpm2-pkcs11-1.8.0.tar.gz
+ sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+index adb5a46f56..9d61340775 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+@@ -4,14 +4,15 @@
+ #
+ ################################################################################
+ 
+-TPM2_PKCS11_VERSION = 1.7.0
++TPM2_PKCS11_VERSION = 1.8.0
+ TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
+ TPM2_PKCS11_LICENSE = BSD-2-Clause
+ TPM2_PKCS11_LICENSE_FILES = LICENSE
+ TPM2_PKCS11_DEPENDENCIES = host-pkgconf libyaml openssl sqlite tpm2-tss
+ 
+ TPM2_PKCS11_CONF_OPTS += \
+-		--disable-hardening
++		--disable-hardening \
++		--disable-ptool-checks
+ 
+ # Fix tpm.c:746:5: error: 'for' loop initial declarations are only allowed in C99 mode
+ # Fix implicit declaration of function 'strnlen'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
