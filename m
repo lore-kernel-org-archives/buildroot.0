@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25284C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1235C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB79A4026C;
-	Mon,  5 Dec 2022 11:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB79A4026C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rCRSCyExDo7K; Mon,  5 Dec 2022 11:57:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B8A841673;
-	Mon,  5 Dec 2022 11:57:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B8A841673
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16A6F1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68BA040528
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68BA040528
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D15A40522;
+	Mon,  5 Dec 2022 11:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D15A40522
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZcOrbHgYgurI for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SnEN5jGcUgHC; Mon,  5 Dec 2022 11:57:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4AF84055E;
+	Mon,  5 Dec 2022 11:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4AF84055E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 35F9D1BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFF1A41691
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFF1A41691
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mL6_6gp5gqsh for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B63B405B5
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B63B405B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id E771E4168D
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E771E4168D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 465F5857AA; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+ id E55F985BA3; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:05:33 +0100
+Date: Wed, 9 Nov 2022 23:05:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 964eccb839eb169e8b3d883693dc921793287c8a
-X-Git-Newrev: 32c0a8de28bfef8a418aafcfa3913ccab0d15be7
+X-Git-Oldrev: c1c32fc61779fa25fdba662012803a14f6c4687d
+X-Git-Newrev: a85f5f2a412db894fdf548e10d12e7c56eda9107
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.465F5857AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-txtorcon: bump to version
- 22.0.0
+Message-Id: <20221205112608.E55F985BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tpm2-pkcs11: bump version to 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c0a8de28bfef8a418aafcfa3913ccab0d15be7
+commit: https://git.buildroot.net/buildroot/commit/?id=a85f5f2a412db894fdf548e10d12e7c56eda9107
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
+ package/tpm2-pkcs11/tpm2-pkcs11.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index 220b5fb23e..9c8e3599ea 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5  dbb53821a3ce3e921e09c5de4f722fdb  txtorcon-21.1.0.tar.gz
--sha256  aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6  txtorcon-21.1.0.tar.gz
-+md5  17a84954a4ba13fa6ee443129bdc401a  txtorcon-22.0.0.tar.gz
-+sha256  89a1b65e32a4b369d67e6c166387fbc468cc5d05227448d239a5e7e9718aa053  txtorcon-22.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index acf586cb8c..c17d5da074 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+index 1d5bcc7a54..b027bad72a 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  078a445ed0e9f5009675a162b4b7b88f3520436cfbc791bb2249f37bd1f475bd  tpm2-pkcs11-1.7.0.tar.gz
++sha256  79f28899047defd6b4b72b7268dd56abf27774954022315f818c239af33e05bd  tpm2-pkcs11-1.8.0.tar.gz
+ sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+index adb5a46f56..9d61340775 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+@@ -4,14 +4,15 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 21.1.0
-+PYTHON_TXTORCON_VERSION = 22.0.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/eb/43/2426009377cef519c53bdc8969590cb100e9fd745846859963c881c6d176
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/47/ca/7941660345c769637a97bdbaf25202460fbab35eead55c538fb1fe61b71e
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-TPM2_PKCS11_VERSION = 1.7.0
++TPM2_PKCS11_VERSION = 1.8.0
+ TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
+ TPM2_PKCS11_LICENSE = BSD-2-Clause
+ TPM2_PKCS11_LICENSE_FILES = LICENSE
+ TPM2_PKCS11_DEPENDENCIES = host-pkgconf libyaml openssl sqlite tpm2-tss
+ 
+ TPM2_PKCS11_CONF_OPTS += \
+-		--disable-hardening
++		--disable-hardening \
++		--disable-ptool-checks
+ 
+ # Fix tpm.c:746:5: error: 'for' loop initial declarations are only allowed in C99 mode
+ # Fix implicit declaration of function 'strnlen'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
