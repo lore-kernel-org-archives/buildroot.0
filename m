@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 357FDC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  9 Nov 2022 22:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF630C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Nov 2022 22:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6397403EA;
-	Wed,  9 Nov 2022 22:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6397403EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5515E40463;
+	Wed,  9 Nov 2022 22:05:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5515E40463
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id focOnDfLihnC; Wed,  9 Nov 2022 22:04:41 +0000 (UTC)
+	with ESMTP id llJcZpd6AkkF; Wed,  9 Nov 2022 22:05:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6E0C403D6;
-	Wed,  9 Nov 2022 22:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6E0C403D6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4CCF31BF955
- for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:04:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86936400EC;
+	Wed,  9 Nov 2022 22:05:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86936400EC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DE841BF308
+ for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23FCB81801
- for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23FCB81801
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2089A400EC
+ for <buildroot@lists.busybox.net>; Wed,  9 Nov 2022 22:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2089A400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iayuy2qWmjCY for <buildroot@lists.busybox.net>;
- Wed,  9 Nov 2022 22:04:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5F00817EB
- for <buildroot@buildroot.org>; Wed,  9 Nov 2022 22:04:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5F00817EB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B409B82774; Wed,  9 Nov 2022 22:04:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Nov 2022 22:55:19 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 35bd9333252c90ca7ecac132f84d43f828eeffeb
-X-Git-Newrev: bebf31edc682b5c8b040d36f0ebdd93ca470ee40
-X-Patchwork-Hint: ignore
-Message-Id: <20221109220409.B409B82774@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynq_microzed_defconfig: bump to Xilinx 2022.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xtTCOfvZrv21 for <buildroot@lists.busybox.net>;
+ Wed,  9 Nov 2022 22:05:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB8EC40018
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EB8EC40018
+ for <buildroot@buildroot.org>; Wed,  9 Nov 2022 22:05:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 95D81FF803;
+ Wed,  9 Nov 2022 22:05:08 +0000 (UTC)
+Date: Wed, 9 Nov 2022 23:05:07 +0100
+To: Neal Frager via buildroot <buildroot@buildroot.org>
+Message-ID: <20221109230507.39d8f8d8@windsurf>
+In-Reply-To: <20221019051823.26706-1-neal.frager@amd.com>
+References: <20221019051823.26706-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668031509;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WNa1aftHyboZRZDJaTJhWCVISANq550qxgg98kX2TXk=;
+ b=G4LYjA+odHEobB8x0mbdcEre7L2COW5yQlhT9ZZ4FfIvYI6Yt/mx5pOsGtCXS6rWcaGqcQ
+ 7Fjkaukcc3dxqXoxjJheRYZI+3RqREyEHy2AqFbyTxO7OLAVRI+RvktAmMzFoaWIhLLntc
+ xLAscjvGeggayBnMlRhF3yJYLh6fxW/RAyA5pr3cEQwNR58u5S1IGRK0hQM/O/wFMHFUiq
+ yJdT9gq2F9qnEiVAnfUq3mk9qApB9ADhElbi43fNi1cnrtd0oViwUrFLdyncEhdcwcUT7S
+ adq4Lw7ofKCx2QwXq4Gte3DWmbOkN5h5YrPopj8N94RzBW6v0vcMUM5TwHFL/Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=G4LYjA+o
+Subject: Re: [Buildroot] [PATCH v1 1/3] configs/zynq_zc706_defconfig: bump
+ to Xilinx 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +78,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: luca.ceresoli@bootlin.com, ju.o@free.fr, michal.simek@amd.com,
+ giulio.benetti@benettiengineering.com, Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bebf31edc682b5c8b040d36f0ebdd93ca470ee40
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 18 Oct 2022 23:18:21 -0600
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-This patch bumps the microzed to Xilinx release 2022.2.
+> This patch bumps the zc706 to Xilinx release 2022.2.
+> 
+> Xilinx 2022.2 includes:
+> - U-Boot 2022.01 bug fixes
+> - Linux bump to Linux 5.15.36 with bug fixes
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  configs/zynq_zc706_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Xilinx 2022.2 includes:
-- U-Boot 2022.01 bug fixes
-- Linux bump to Linux 5.15.36 with bug fixes
+All three patches applied to our next branch. Thanks!
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/zynq_microzed_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 5f3fc5e6ab..459a3a40bc 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-microzed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
