@@ -1,84 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED40C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 10:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A09C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 11:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3288F403B3;
-	Thu, 10 Nov 2022 10:51:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3288F403B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08C4D60EA6;
+	Thu, 10 Nov 2022 11:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08C4D60EA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ncyg2-0sero0; Thu, 10 Nov 2022 10:51:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a6VOZzJSFSJL; Thu, 10 Nov 2022 11:18:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83028402F6;
-	Thu, 10 Nov 2022 10:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83028402F6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 012391BF842
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:51:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CF6860E5F;
+	Thu, 10 Nov 2022 11:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CF6860E5F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 53B871BF423
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 11:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D056F402F6
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:51:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D056F402F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A3E2410A3
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 11:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A3E2410A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eTXwsVuh8HjX for <buildroot@lists.busybox.net>;
- Thu, 10 Nov 2022 10:51:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 594004010C
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 594004010C
- for <buildroot@buildroot.org>; Thu, 10 Nov 2022 10:51:12 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id a13so2529109edj.0
- for <buildroot@buildroot.org>; Thu, 10 Nov 2022 02:51:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=dF4jeiZO3KqKdKUkZ4FqdBBzJ1TPgwdAmLcJHE1AO0U=;
- b=u+Mzf94v51ZPXRrshCrzwEG7FfULt7MairjxIUuFp+cqW135brlTdcbQB0Ayxjns7d
- R/DD11x4rIkArytB99KaSZdYFx8qnO3u9hRE4BdvRtKtDhkcFFO/E6dpJJ5aeaYH7jaG
- jbFNiNYGzs1ryMYCnvoZv76PNqtVlVe/GLa+lz1T1juu3K+FgRYM2Eddazd71/fuEvxV
- M1mC7DxM47gBEfohR+bWhZ0K5nN2IwGGyykyWtcii+7LcvhrKjqtpDwku3glMIocoa5k
- nYTkr0WG5hBbohHngvq19f1RH0LVIQEtYLjbVQfleuq/lODlFs2HjbSB+OvpvWajjiKG
- l5CA==
-X-Gm-Message-State: ACrzQf3DDp0/iMQQv2k8bdZlSERpwl14C8VoURC94+1DHzU3UJp2jtuV
- NBD2qNdPL3KgqqXS9EF7UvI4ZDSW38XTFOWBAymuvjtWkIY=
-X-Google-Smtp-Source: AMsMyM7Wtfcm7ywdP2O/pZ/z5qxvNmNKKGXl2c4pE+uCh2Pr0k8sYWJ5R37cER0Zwk8rzFJ8b2kRM8y8XF/IESbMej0=
-X-Received: by 2002:aa7:cc13:0:b0:453:52dc:1bbf with SMTP id
- q19-20020aa7cc13000000b0045352dc1bbfmr62703858edt.30.1668077470442; Thu, 10
- Nov 2022 02:51:10 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9wTf6XKgvzIw for <buildroot@lists.busybox.net>;
+ Thu, 10 Nov 2022 11:18:22 +0000 (UTC)
+X-Greylist: delayed 00:06:59 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7525740896
+Received: from forward107o.mail.yandex.net (forward107o.mail.yandex.net
+ [37.140.190.210])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7525740896
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 11:18:20 +0000 (UTC)
+Received: from forward103q.mail.yandex.net (forward103q.mail.yandex.net
+ [IPv6:2a02:6b8:c0e:50:0:640:b21c:d009])
+ by forward107o.mail.yandex.net (Yandex) with ESMTP id 255A76AFEE25
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 14:11:13 +0300 (MSK)
+Received: from vla5-1ef2161cc1d7.qloud-c.yandex.net
+ (vla5-1ef2161cc1d7.qloud-c.yandex.net
+ [IPv6:2a02:6b8:c18:3607:0:640:1ef2:161c])
+ by forward103q.mail.yandex.net (Yandex) with ESMTP id 2161056A0002
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 14:11:13 +0300 (MSK)
+Received: by vla5-1ef2161cc1d7.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
+ id 6hmK98isul-BCZWQ0BV; Thu, 10 Nov 2022 14:11:12 +0300
+X-Yandex-Fwd: 1
+From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
+ <leo@yuriev.ru>
+To: buildroot@buildroot.org
+Date: Thu, 10 Nov 2022 14:11:08 +0300
+Message-Id: <20221110111109.99724-1-leo@yuriev.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <11be86d8-4ce4-1ec5-41e5-ab8a9b8cacf5@grandegger.com>
-In-Reply-To: <11be86d8-4ce4-1ec5-41e5-ab8a9b8cacf5@grandegger.com>
-From: Juan Carrano <juan.carrano@ebee.berlin>
-Date: Thu, 10 Nov 2022 11:50:59 +0100
-Message-ID: <CAH2v1AqXqyY+N5SThrq4DAy6Y3yaFDKcWcGF3C2kR3F8ZQAD_A@mail.gmail.com>
-To: Wolfgang Grandegger <wg@grandegger.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ebee-berlin.20210112.gappssmtp.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=dF4jeiZO3KqKdKUkZ4FqdBBzJ1TPgwdAmLcJHE1AO0U=;
- b=u0cjKvHnJQC/7BpT91385EagMzInH9+HNPSnLxnhPaNiSgvu5RqvfRORqeIcPHK8ug
- UZ+ul1evXKLUfEXlWmQnuIG5XLjaVYgRcxUAA4pm+84QD1wnBVTZ4WdCQiLiWeKkeUZn
- u60kh/Slu4GBiltkHH3A7RQUhm5HbwCTyZowhFG7ikCKfwgS4KIvBng1f08VIRwaAJVW
- ta5DUmozV28Owejpa/AmSMpPFyIReoMTTYbMreMGha4jP+KydeeCyZVbf/2AsHa0Z2hc
- 49Tjh6RVaAr4rfOXOevHO+79FadLlaS3G+Pug8OXqCFic0sUSabhVm4uv4xQrs8470jQ
- s32A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=ebee-berlin.20210112.gappssmtp.com
- header.i=@ebee-berlin.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=u0cjKvHn
-Subject: Re: [Buildroot] Defining package env variables in external.mk
+ d=yuriev.ru; s=mail; t=1668078672; 
+ bh=U75v463cqW/XYPePS9ZH1OCjGLy113bsN/hSqQGXUSI=;
+ h=Message-Id:Date:Cc:Subject:To:From;
+ b=gMjIVCqMq7b395WZpnJP2vLwS3tbfAtjpNTun1SBff2/GR8Z4P8O1woWwcYidq2ud
+ OFXKBZ9VZwPoW5xWz7C2xtJmYarLpx9dNN46KbtToecCanydg8hbeSqEBz5CCEVYmB
+ r3UrSQ5a4QiFMKb3kUzO4+9aXZEHogycoRfbx0rc=
+X-Mailman-Original-Authentication-Results: vla5-1ef2161cc1d7.qloud-c.yandex.net; dkim=pass header.i=@yuriev.ru
+Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.11.13
+ "Swashplate"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,27 +76,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
+ =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Wolfgang,
-
-This works because Make variables are lazily evaluated by default so
-this sort of monkey-patching works.
-
-Now, not being a BR dev myself I'd also like to know whether the devs
-condone this sort of hack. I have used it myself too and helps to keep
-down the number of modifications in the main tree and in the external.
-The thing is that it can break if the original MK file changes too
-much, but from what I see that is not so usual.
-
-Regards,
-
-Juan.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBpcyBzdGFibGUgYnVnZml4IHJlbGVhc2Ugb2YgbGlibWRieCwgaW4gRmFtaWx5IEdsb3J5
+IGFuZAppbiBtZW1vcnkgb2YgQm9yaXMgWXVyaWV2ICh0aGUgaW52ZW50b3Igb2YgSGVsaWNvcHRl
+ciBhbmQKU3dhc2hwbGF0ZSBpbiAxOTExKSBvbiBoaXMgMTMzcmQgYmlydGhkYXkuCgpJdCBpcyBy
+ZWFzb25hYmxlIHRvIGJhY2twb3J0IHRoaXMgcGF0Y2ggdG8gYWxsIGFwcGxpY2FibGUgcmVsZWFz
+ZXMvYnJhbmNoZXMgb2YgQnVpbGRyb290LgoKUmVsZWFzZSBub3RlcyBmb3IgdjAuMTEuMTMKLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCkZpeGVzOgoKIC0gRml4ZWQgYnVpbGRzIHdpdGggb2xk
+ZXIgbGliYyB2ZXJzaW9ucyBhZnRlciB1c2luZyBgZmNudGw2NCgpYCAoYmFja3BvcnQpLgogLSBG
+aXhlZCBidWlsZHMgd2l0aCAgb2xkZXIgYHN0ZGF0b21pYy5oYCB2ZXJzaW9ucywKICAgd2hlcmUg
+dGhlIGBBVE9NSUNfKl9MT0NLX0ZSRUVgIG1hY3JvcyBtaXN0YWtlbmx5IHJlZGVmaW5lZCB1c2lu
+ZyBmdW5jdGlvbnMgKGJhY2twb3J0KS4KIC0gQWRkZWQgd29ya2Fyb3VuZCBmb3IgYG1yZW1hcCgp
+YCBkZWZlY3QgdG8gYXZvaWQgYXNzZXJ0aW9uIGZhaWx1cmUgKGJhY2twb3J0KS4KIC0gV29ya2Fy
+b3VuZCBmb3IgYGVuY3J5cHRmc2AgYnVnKHMpIGluIHRoZSBgY29weV9maWxlX3JhbmdlYCBpbXBs
+ZW1lbnRhdGlvbiAgKGJhY2twb3J0KS4KIC0gRml4ZWQgdW5leHBlY3RlZCBgTURCWF9CVVNZYCBm
+cm9tIGBtZGJ4X2Vudl9zZXRfb3B0aW9uKClgLCBgbWRieF9lbnZfc2V0X3N5bmNieXRlcygpYAog
+ICBhbmQgYG1kYnhfZW52X3NldF9zeW5jcGVyaW9kKClgIChiYWNrcG9ydCkuCiAtIENNYWtlIHJl
+cXVpcmVtZW50cyBsb3dlcmVkIHRvIHZlcnNpb24gMy4wLjIgKGJhY2twb3J0KS4KIC0gQWRkZWQg
+YWRtb25pdGlvbiBvZiBpbnNlY3VyZSBmb3IgUklTQy1WIChiYWNrcG9ydCkuCgpNaW5vcnM6Cgog
+LSBNaW5vciBjbGFyaWZpY2F0aW9uIG91dHB1dCBvZiBgLS1oZWxwYCBmb3IgYG1kYnhfdGVzdGAg
+KGJhY2twb3J0KS4KIC0gQWRkZWQgYWRtb25pdGlvbiBvZiBpbnNlY3VyZSBmb3IgUklTQy1WIChi
+YWNrcG9ydCkuCiAtIFN0b2NoYXN0aWMgc2NyaXB0cyBhbmQgQ01ha2UgZmlsZXMgc3luY2hyb25p
+emVkIHdpdGggdGhlIGBkZXZlbGAgYnJhbmNoLgogLSBVc2UgYC0tZG9udC1jaGVjay1yYW0tc2l6
+ZWAgZm9yIHNtYWxsLXRlc3RzIG1ha2UtdGFyZ2V0cyAoYmFja3BvcnQpLgoKVGhlIGNvbXBsZXRl
+IENoYW5nZUxvZzogaHR0cHM6Ly9naXRmbGljLnJ1L3Byb2plY3QvZXJ0aGluay9saWJtZGJ4L2Js
+b2I/ZmlsZT1DaGFuZ2VMb2cubWQKClNpZ25lZC1vZmYtYnk6INCb0LXQvtC90LjQtCDQrtGA0YzQ
+tdCyIChMZW9uaWQgWXVyaWV2KSA8bGVvQHl1cmlldi5ydT4KLS0tCiBwYWNrYWdlL2xpYm1kYngv
+bGlibWRieC5oYXNoIHwgMiArLQogcGFja2FnZS9saWJtZGJ4L2xpYm1kYngubWsgICB8IDIgKy0K
+IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2ggYi9wYWNrYWdlL2xpYm1kYngvbGli
+bWRieC5oYXNoCmluZGV4IDc5YWYxODk2MzMuLmUzZmIzMDk0NjEgMTAwNjQ0Ci0tLSBhL3BhY2th
+Z2UvbGlibWRieC9saWJtZGJ4Lmhhc2gKKysrIGIvcGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFz
+aApAQCAtMSw1ICsxLDUgQEAKICMgSGFzaGVzIGZyb206IGh0dHBzOi8vbGlibWRieC5kcWRrZmEu
+cnUvcmVsZWFzZS9TSEEyNTZTVU1TCi1zaGEyNTYgIGRkZThmMzYyNjUwOWJiNzY0YjE3YzkzZmUw
+NjI5Mzg5NjI1Y2I1MDM2MjUwMmViMWMyN2NhMjA4MzQyZjM4OTQgIGxpYm1kYngtYW1hbGdhbWF0
+ZWQtMC4xMS4xMi50YXIueHoKK3NoYTI1NiAgOTQ0OWZkMzU3MTE5ZTE5OTAyMzYzYWI5MDEzNGQ4
+MmM5YTcxM2I3MDYzOTRjMmExMzg5YjViYjQ3ODdiNTE2NCAgbGlibWRieC1hbWFsZ2FtYXRlZC0w
+LjExLjEzLnRhci54egogCiAjIExvY2FsbHkgY2FsY3VsYXRlZAogc2hhMjU2ICAzMTBmZTI1Yzg1
+OGE5NTE1ZmM4YzhkN2QxZjI0YTY3Yzk0OTZmODRhOTFlMGEwZTQxZWE5OTc1YjEzNzFlNTY5ICBM
+SUNFTlNFCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tayBiL3BhY2thZ2Uv
+bGlibWRieC9saWJtZGJ4Lm1rCmluZGV4IGFjMWEzYTBkNmYuLmExMzllMDYyZjYgMTAwNjQ0Ci0t
+LSBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lm1rCisrKyBiL3BhY2thZ2UvbGlibWRieC9saWJt
+ZGJ4Lm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotTElC
+TURCWF9WRVJTSU9OID0gMC4xMS4xMgorTElCTURCWF9WRVJTSU9OID0gMC4xMS4xMwogTElCTURC
+WF9TT1VSQ0UgPSBsaWJtZGJ4LWFtYWxnYW1hdGVkLSQoTElCTURCWF9WRVJTSU9OKS50YXIueHoK
+IExJQk1EQlhfU0lURSA9IGh0dHBzOi8vbGlibWRieC5kcWRrZmEucnUvcmVsZWFzZQogTElCTURC
+WF9TVVBQT1JUU19JTl9TT1VSQ0VfQlVJTEQgPSBOTwotLSAKMi4zNC4xCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
