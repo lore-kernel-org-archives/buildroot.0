@@ -1,41 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EBA0C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 07:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E898C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 07:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BEED4401C2;
-	Thu, 10 Nov 2022 07:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEED4401C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF1F1410BD;
+	Thu, 10 Nov 2022 07:58:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF1F1410BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HJ4zqPFlDuEF; Thu, 10 Nov 2022 07:56:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1RE-_3FODyyL; Thu, 10 Nov 2022 07:58:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F017D40156;
-	Thu, 10 Nov 2022 07:56:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F017D40156
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 406691BF5A3
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 07:56:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 996C141061;
+	Thu, 10 Nov 2022 07:57:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 996C141061
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DCC1B1BF5A3
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 07:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B89281465
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 07:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B89281465
+ by smtp3.osuosl.org (Postfix) with ESMTP id C62C960C13
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 07:57:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C62C960C13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y0NWjYlmTyVU for <buildroot@lists.busybox.net>;
- Thu, 10 Nov 2022 07:56:43 +0000 (UTC)
-X-Greylist: delayed 00:06:40 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EADC281420
-Received: from mailproxy03.manitu.net (mailproxy03.manitu.net
- [IPv6:2a00:1828:1000:1108::2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EADC281420
- for <buildroot@buildroot.org>; Thu, 10 Nov 2022 07:56:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rku30y2IV06b for <buildroot@lists.busybox.net>;
+ Thu, 10 Nov 2022 07:57:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0F2A6066D
+Received: from mailproxy01.manitu.net (mailproxy01.manitu.net [217.11.48.65])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F0F2A6066D
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 07:57:55 +0000 (UTC)
 Received: from [IPV6:2003:c4:d718:4800:13e4:5f80:9e24:9265]
  (p200300c4d718480013e45f809e249265.dip0.t-ipconnect.de
  [IPv6:2003:c4:d718:4800:13e4:5f80:9e24:9265])
@@ -43,18 +42,18 @@ Received: from [IPV6:2003:c4:d718:4800:13e4:5f80:9e24:9265]
  key-exchange X25519 server-signature RSA-PSS (4096 bits))
  (No client certificate requested)
  (Authenticated sender: wg@grandegger.com)
- by mailproxy03.manitu.net (Postfix) with ESMTPSA id 49B5D12A01B4;
- Thu, 10 Nov 2022 08:49:59 +0100 (CET)
-Message-ID: <651aba63-797e-a11c-8380-a331361a5678@grandegger.com>
-Date: Thu, 10 Nov 2022 08:49:58 +0100
+ by mailproxy01.manitu.net (Postfix) with ESMTPSA id CFC7A12601D0;
+ Thu, 10 Nov 2022 08:57:53 +0100 (CET)
+Message-ID: <aa502317-dc31-159b-e125-a5468f6b6aab@grandegger.com>
+Date: Thu, 10 Nov 2022 08:57:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
 Content-Language: en-US
 To: buildroot@buildroot.org
 From: Wolfgang Grandegger <wg@grandegger.com>
-Subject: [Buildroot] [PATCH v2] package/udisks: add config option to support
- mounting in, /media
+Subject: [Buildroot] [PATCH v3] package/udisks: add config option to support
+ mounting in /media
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,6 +80,9 @@ for backward compatibility with udisks1.
 
 Changes since v1:
 - explicitly disable the option if not selected
+
+Changes since v2:
+- fix typo in subject
 
   package/udisks/Config.in | 10 ++++++++++
   package/udisks/udisks.mk |  7 ++++++-
