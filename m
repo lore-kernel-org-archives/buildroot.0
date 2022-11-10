@@ -4,63 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84BF4C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 10:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED40C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 10:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CBAF40481;
-	Thu, 10 Nov 2022 10:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CBAF40481
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3288F403B3;
+	Thu, 10 Nov 2022 10:51:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3288F403B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JJg-E9VHJeZH; Thu, 10 Nov 2022 10:26:36 +0000 (UTC)
+	with ESMTP id Ncyg2-0sero0; Thu, 10 Nov 2022 10:51:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F8AA4019B;
-	Thu, 10 Nov 2022 10:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F8AA4019B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B11051BF842
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:26:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83028402F6;
+	Thu, 10 Nov 2022 10:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83028402F6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 012391BF842
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CA4D812A5
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CA4D812A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id D056F402F6
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D056F402F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b1tXExicgFhi for <buildroot@lists.busybox.net>;
- Thu, 10 Nov 2022 10:26:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF8FB81303
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF8FB81303
- for <buildroot@busybox.net>; Thu, 10 Nov 2022 10:26:31 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 68362440EA2
- for <buildroot@busybox.net>; Thu, 10 Nov 2022 12:23:59 +0200 (IST)
-References: <3e8e93e9eed117bc7e49580fd77e254eee237a99.1668060990.git.baruch@tkos.co.il>
-User-agent: mu4e 1.8.10; emacs 27.1
-To: buildroot@busybox.net
-Date: Thu, 10 Nov 2022 12:15:53 +0200
-In-reply-to: <3e8e93e9eed117bc7e49580fd77e254eee237a99.1668060990.git.baruch@tkos.co.il>
-Message-ID: <87a64zumuk.fsf@tarshish>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eTXwsVuh8HjX for <buildroot@lists.busybox.net>;
+ Thu, 10 Nov 2022 10:51:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 594004010C
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 594004010C
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 10:51:12 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id a13so2529109edj.0
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 02:51:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dF4jeiZO3KqKdKUkZ4FqdBBzJ1TPgwdAmLcJHE1AO0U=;
+ b=u+Mzf94v51ZPXRrshCrzwEG7FfULt7MairjxIUuFp+cqW135brlTdcbQB0Ayxjns7d
+ R/DD11x4rIkArytB99KaSZdYFx8qnO3u9hRE4BdvRtKtDhkcFFO/E6dpJJ5aeaYH7jaG
+ jbFNiNYGzs1ryMYCnvoZv76PNqtVlVe/GLa+lz1T1juu3K+FgRYM2Eddazd71/fuEvxV
+ M1mC7DxM47gBEfohR+bWhZ0K5nN2IwGGyykyWtcii+7LcvhrKjqtpDwku3glMIocoa5k
+ nYTkr0WG5hBbohHngvq19f1RH0LVIQEtYLjbVQfleuq/lODlFs2HjbSB+OvpvWajjiKG
+ l5CA==
+X-Gm-Message-State: ACrzQf3DDp0/iMQQv2k8bdZlSERpwl14C8VoURC94+1DHzU3UJp2jtuV
+ NBD2qNdPL3KgqqXS9EF7UvI4ZDSW38XTFOWBAymuvjtWkIY=
+X-Google-Smtp-Source: AMsMyM7Wtfcm7ywdP2O/pZ/z5qxvNmNKKGXl2c4pE+uCh2Pr0k8sYWJ5R37cER0Zwk8rzFJ8b2kRM8y8XF/IESbMej0=
+X-Received: by 2002:aa7:cc13:0:b0:453:52dc:1bbf with SMTP id
+ q19-20020aa7cc13000000b0045352dc1bbfmr62703858edt.30.1668077470442; Thu, 10
+ Nov 2022 02:51:10 -0800 (PST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1668075839;
- bh=ess31pwWwim71D24dZCAgA2WALIa+X0/Ft+p3iDKr5M=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=NIY0d5UQFZY6UVhHbY3awuuekQcWAusLlQ8ebwWZlA1V6Fh1nv40Ng5esMYdF/XC/
- RCmLOeaztxlEobUutPuK2BD4NRTb0yAgHAclsC4smqXN3G8YvSljyXx4eT/ONCTTKi
- 31K3i7j1OZW1dYlJy6TdBKMi5cjtzT/Go09bXda+7oWHPTUC9BhyqSgKNNloDWrab2
- 2JFl0wlThTLs/MzvQWc7Si2eSu6nf1OwkgxM8NOR37esaoK6Q2kNwjQ4HSJ64feJ6k
- SIgazPaXiIat1d8bN9RCSX6WdNMTAcEcBK8Xwn65/4fungwRbSFIieTuslmX5SVnaP
- lZaN9OfLjRy7g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=NIY0d5UQ
-Subject: Re: [Buildroot] [PATCH] package/socat: support OpenSSL only
+References: <11be86d8-4ce4-1ec5-41e5-ab8a9b8cacf5@grandegger.com>
+In-Reply-To: <11be86d8-4ce4-1ec5-41e5-ab8a9b8cacf5@grandegger.com>
+From: Juan Carrano <juan.carrano@ebee.berlin>
+Date: Thu, 10 Nov 2022 11:50:59 +0100
+Message-ID: <CAH2v1AqXqyY+N5SThrq4DAy6Y3yaFDKcWcGF3C2kR3F8ZQAD_A@mail.gmail.com>
+To: Wolfgang Grandegger <wg@grandegger.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ebee-berlin.20210112.gappssmtp.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=dF4jeiZO3KqKdKUkZ4FqdBBzJ1TPgwdAmLcJHE1AO0U=;
+ b=u0cjKvHnJQC/7BpT91385EagMzInH9+HNPSnLxnhPaNiSgvu5RqvfRORqeIcPHK8ug
+ UZ+ul1evXKLUfEXlWmQnuIG5XLjaVYgRcxUAA4pm+84QD1wnBVTZ4WdCQiLiWeKkeUZn
+ u60kh/Slu4GBiltkHH3A7RQUhm5HbwCTyZowhFG7ikCKfwgS4KIvBng1f08VIRwaAJVW
+ ta5DUmozV28Owejpa/AmSMpPFyIReoMTTYbMreMGha4jP+KydeeCyZVbf/2AsHa0Z2hc
+ 49Tjh6RVaAr4rfOXOevHO+79FadLlaS3G+Pug8OXqCFic0sUSabhVm4uv4xQrs8470jQ
+ s32A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ebee-berlin.20210112.gappssmtp.com
+ header.i=@ebee-berlin.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=u0cjKvHn
+Subject: Re: [Buildroot] Defining package env variables in external.mk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,61 +90,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Buildroot list,
+Hi Wolfgang,
 
-On Thu, Nov 10 2022, Baruch Siach wrote:
-> socat is not compatible with libressl.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/6f0204004c52f762d6e3cb3064238d7eb3646038/
+This works because Make variables are lazily evaluated by default so
+this sort of monkey-patching works.
 
-This issue only shows up in the 'next' branch where we have socat
-version 1.7.4.4 which includes upstream commit 15e38be2f52 ("Fixed
-SIGSEGV of OpenSSL on exit()") that exposes the issue. The (unused)
-reference to OPENSSL_INIT_SETTINGS is there even in the previous 1.7.4.3
-version that is in 'master'.
+Now, not being a BR dev myself I'd also like to know whether the devs
+condone this sort of hack. I have used it myself too and helps to keep
+down the number of modifications in the main tree and in the external.
+The thing is that it can break if the original MK file changes too
+much, but from what I see that is not so usual.
 
-Note though that this patch applies to 'next', but conflicts with commit
-934ec83e9d0 ("package/socat: disable openssl for static build") in
-'master'. If this patch is applied to 'next' it will cause conflict when
-'next' merges into 'master'.
+Regards,
 
-Let me know if you want a patch against 'master' instead.
-
-baruch
-
->
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/socat/socat.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-> index 0414c8adc855..639b3d302847 100644
-> --- a/package/socat/socat.mk
-> +++ b/package/socat/socat.mk
-> @@ -31,7 +31,7 @@ SOCAT_DEPENDENCIES = host-autoconf
->  # incompatibile license (GPL-3.0+)
->  SOCAT_CONF_OPTS = --disable-readline
->  
-> -ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
->  SOCAT_DEPENDENCIES += openssl
->  else
->  SOCAT_CONF_OPTS += --disable-openssl
-
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Juan.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
