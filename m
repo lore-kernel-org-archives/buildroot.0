@@ -1,82 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EAC6C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 10:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B409C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 10 Nov 2022 10:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E708081AD7;
-	Thu, 10 Nov 2022 10:01:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E708081AD7
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAE8540376;
+	Thu, 10 Nov 2022 10:14:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAE8540376
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7ywFAFT2Jssu; Thu, 10 Nov 2022 10:14:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6535340481;
+	Thu, 10 Nov 2022 10:14:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6535340481
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA5F81BF842
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:13:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8537B81BA9
+ for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8537B81BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KStqCEiedZqN; Thu, 10 Nov 2022 10:01:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39B9781948;
-	Thu, 10 Nov 2022 10:01:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39B9781948
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5248B1BF3D2
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:01:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39AF5402D1
- for <buildroot@lists.busybox.net>; Thu, 10 Nov 2022 10:01:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39AF5402D1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UDFH7d53Xkpa for <buildroot@lists.busybox.net>;
- Thu, 10 Nov 2022 10:01:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 110674029D
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com
- [IPv6:2607:f8b0:4864:20::b2d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 110674029D
- for <buildroot@buildroot.org>; Thu, 10 Nov 2022 10:01:53 +0000 (UTC)
-Received: by mail-yb1-xb2d.google.com with SMTP id 131so1753182ybl.3
- for <buildroot@buildroot.org>; Thu, 10 Nov 2022 02:01:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=2nq+NM0Py4DZNDYz5tCTer5KhFHXkTCRzCDDD+YJfjE=;
- b=QPaqjtkDBX+flucxMj/oWI7G4Z8t1wMxTQRfSG4YAecTHOCylH9BxdbG/r+uN3HBFx
- 0FVQPc4wuR0LhlT5lfmzRskuZkrUUX/bqn7cHIOaCmIvHCaW6X6SD2LPs9WVucG41cku
- p7pBtmaV2SdHCpH3zWU9vy9vviVq8ocIjTy+h9vBYz8j4v2Lerbcpdgd+n4NQ4Ienbk8
- rIr7sWJsm/27pEMr+3Z6GVzc52ndlYlPovtdXQaYTT/NpHVv24e8oCLkdoavRSpNhTXI
- kShCE6vwkhbBfQtIepoc4/tdHL2YFTgOqqKXvWBdcWfsucJqmdCQcJDoosp6zbAsiJuU
- 4cOg==
-X-Gm-Message-State: ANoB5plAig5u6OTvSk0UKXHGi5Atms+BBvq+3A7ZSNstm3UO83xpHOq3
- cCTUVOaLmO0XHNW7kOzEQlnsn76cz9MZ3BIXXfF4mqIzLM0=
-X-Google-Smtp-Source: AA0mqf5f0dLYhElvn35ecX9JjxutWzZm45JYLjl5/EwY5811ng2r9gTwWDQrILtuyW9gEPMXweNTPztLxa8L59VFmdo=
-X-Received: by 2002:a25:2c2:0:b0:6dc:ffba:8d70 with SMTP id
- 185-20020a2502c2000000b006dcffba8d70mr1281982ybc.110.1668074512603; Thu, 10
- Nov 2022 02:01:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20221011084946.2276735-1-nunes.erico@gmail.com>
-In-Reply-To: <20221011084946.2276735-1-nunes.erico@gmail.com>
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 10 Nov 2022 11:01:41 +0100
-Message-ID: <CAK4VdL2JLMZvb6oE7gkZxt_VaccQOy+f1OkNnG4paHkkmMmNyQ@mail.gmail.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yYCbosTC_C39 for <buildroot@lists.busybox.net>;
+ Thu, 10 Nov 2022 10:13:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 651588195C
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 651588195C
+ for <buildroot@buildroot.org>; Thu, 10 Nov 2022 10:13:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 186351814B9; Thu, 10 Nov 2022 11:13:55 +0100 (CET)
 To: buildroot@buildroot.org
+Date: Thu, 10 Nov 2022 11:13:15 +0100
+Message-Id: <20221110101319.181388-1-buildroot@heine.tech>
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :from:to:cc:subject:date:message-id:reply-to;
- bh=2nq+NM0Py4DZNDYz5tCTer5KhFHXkTCRzCDDD+YJfjE=;
- b=UgVbC0ZTAB2v+jcS3mj8e0pigE5dJmOT57MPdnb6KW0SCkdNNltEVGlw9e2Y9zKAlQ
- 2KeobGiB672s2VN1rT6UR6vhY+5n1N13fU2VNWy3IW4f6ILLW2z+/ROUkrEqgoZlF/+T
- MFNO+C7gU2w+eL7Br/z9RxwkDNd1amknJmFDrc6O6G/alDhsqw7h8+Id4b/j8+S9+Koz
- Fk2oMvglYVCTnGsV42bGwLoHy7CB+P0ZEaG23k4mbLJxkvAzLGKUPnN3tzPXDZ9vaXPn
- 5VnD2zcqrsYt3e2vZXVrI8XkoUaZt406l1juU3b4LQHpVVCkP9WNXniYw1gPVCbjZXb7
- f16A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UgVbC0ZT
-Subject: Re: [Buildroot] [PATCH] package/efivar: fix build with musl libc
+ d=heine.tech; s=dkim; 
+ t=1668075235; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=wtdzqrNSVdYfkIQMMYD+Gb16EIzHvy+XfADxxw5qCQY=;
+ b=i4Vk8KsV+M3sV5onfujI3NnBtcY8HnxYCpWh9hvSs6TflXlf8FmizuiWxSHEG/IHeJ5tZ8
+ w5oI0M7XMXYDXHfm1XAB3f7JnxG78Rz2L433ir8FurDif4duEa8VH09UUGaGczTY3vU16b
+ UGjIF04V5mm+ouUJu0JhtSlDq0i3Jzg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=i4Vk8KsV
+Subject: [Buildroot] [PATCH] package/swupdate: add libubootenv as dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,29 +64,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+when using BR2_PER_PACKAGE_DIRECTORIES and configuring swupdate to
+use buildroot the build fails because libubootenv is not a dependency.
 
-On Tue, Oct 11, 2022 at 10:49 AM Erico Nunes <nunes.erico@gmail.com> wrote:
->
-> Backport upstream patch to fix build with musl libc.
-> This patch is only a requirement since efivar 38 and was applied
-> upstream shortly after the 38 version tag.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/c49d894b109d68e2624074eab8b939fefa3b42ef/
+Fixes:
+bootloader/uboot.c:23:10: fatal error: libuboot.h: No such file or directory
+   23 | #include <libuboot.h>
 
-Looks like this patch was missed in the queue and that issue is still
-generating daily autobuilder failures. Could someone take a look
-please?
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
 
-Thanks
+observed on buildroot 2022.08.1 so I guess older version might also need the fix.
+CC: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/swupdate/swupdate.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Erico
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index bfc161d490..ed0c1e56a8 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -81,6 +81,10 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
++SWUPDATE_DEPENDENCIES += libubootenv
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
+ SWUPDATE_DEPENDENCIES += liburiparser
+ SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
