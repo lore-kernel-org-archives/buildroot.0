@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5136BC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D32CC6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAFF741CFE;
-	Mon, 20 Feb 2023 20:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAFF741CFE
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF61D41CF1;
+	Mon, 20 Feb 2023 20:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF61D41CF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wolaMzrMKiqA; Mon, 20 Feb 2023 20:54:54 +0000 (UTC)
+	with ESMTP id OYczcuMSBZtA; Mon, 20 Feb 2023 20:55:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A56B841CF8;
-	Mon, 20 Feb 2023 20:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A56B841CF8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19CBF1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BB6D41CFF;
+	Mon, 20 Feb 2023 20:55:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BB6D41CFF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 23ED31BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 04E8F61084
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04E8F61084
+ by smtp4.osuosl.org (Postfix) with ESMTP id A45864192D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A45864192D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mSOf8xYowmAk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vIHHxMUhq7q3 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CBB861048
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CBB861048
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB93441947
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB93441947
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AB7E8648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+ id B5D9A86496; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:05:11 +0100
+Date: Fri, 11 Nov 2022 21:19:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c
-X-Git-Newrev: 0a7a5641597c5c3d0978906fb8cf93eb153425a3
+X-Git-Oldrev: 66653be5b85f6cbfceac51d95180f785f921b681
+X-Git-Newrev: 223516b51e1a45fa86dc1ac959aed93c7434afa4
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.0AB7E8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/multipath-tools:
- security bump to version 0.9.3
+Message-Id: <20230220205149.B5D9A86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/kontron_bl_imx8mm:
+ U-Boot needs util-linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,63 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a7a5641597c5c3d0978906fb8cf93eb153425a3
+commit: https://git.buildroot.net/buildroot/commit/?id=223516b51e1a45fa86dc1ac959aed93c7434afa4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Fixes:
 
-- CVE-2022-41974: Authorization bypass
-- CVE-2022-41973: Symlink attack
+/usr/bin/ld: cannot find -lgnutls
+/usr/bin/ld: cannot find -luuid
+collect2: error: ld returned 1 exit status
 
-For more details, see the writeup:
-https://www.qualys.com/2022/10/24/leeloo-multipath/leeloo-multipath.txt
+when building U-Boot.
 
-Update README.md hash after license-unrelated changes:
+Fixes:
 
-git shortlog 0.9.0..0.9.3 -- README.md
-Konstantin Kharlamov (1):
-      README.md: mention libreadline and libedit optional deps
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3301821264
 
-Xose Vazquez Perez (4):
-      multipath-tools: update devel repo info in README.md
-      multipath-tools: add ALUA info to README.md
-      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
-      multipath-tools: add more info for NetApp RDAC arrays
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/multipath-tools/multipath-tools.hash | 4 ++--
- package/multipath-tools/multipath-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/kontron_bl_imx8mm_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index df0d24fb74..6f893d37ce 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
-+sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
-+sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index f3ce3ca8b8..ec5d853644 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MULTIPATH_TOOLS_VERSION = 0.9.0
-+MULTIPATH_TOOLS_VERSION = 0.9.3
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
- 
- MULTIPATH_TOOLS_LICENSE = \
+diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
+index ff376662e9..13ed1a2078 100644
+--- a/configs/kontron_bl_imx8mm_defconfig
++++ b/configs/kontron_bl_imx8mm_defconfig
+@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
+ BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
+ BR2_TARGET_UBOOT_SPL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
