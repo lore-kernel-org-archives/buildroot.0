@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F33B1C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 819B2C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A983181DED;
-	Mon,  5 Dec 2022 12:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A983181DED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B1A140546;
+	Mon,  5 Dec 2022 12:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B1A140546
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y7JekIXm1n4g; Mon,  5 Dec 2022 12:10:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3kUlUHSfG2vI; Mon,  5 Dec 2022 12:10:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAFD081D02;
-	Mon,  5 Dec 2022 12:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAFD081D02
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66E5B4052D;
+	Mon,  5 Dec 2022 12:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66E5B4052D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 000B61BF955
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 38C331BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC10D40650
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8414040527
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC10D40650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8414040527
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8S1dK7ABbS2l for <buildroot@lists.busybox.net>;
+ with ESMTP id oLN4rswKYJkH for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 287954052D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A00A405AB
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 287954052D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A00A405AB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B7C685B9E; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ id 062A285B9B; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:51:11 +0100
+Date: Fri, 11 Nov 2022 23:49:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b5e209ed076f69fb0a8305b7a91e6d1b2bb73f76
-X-Git-Newrev: b0b7fba64259140b9903a284b9b26a47a9a6315c
+X-Git-Oldrev: 4028ee71743a25af172809e098e4c8eb61bf55f4
+X-Git-Newrev: ddcd8af91f78d9e1ebddd88564e6535d3c4d6f79
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112609.1B7C685B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiosignal: bump to version
- 1.3.1
+Message-Id: <20221205112609.062A285B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/socat: support OpenSSL only
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0b7fba64259140b9903a284b9b26a47a9a6315c
+commit: https://git.buildroot.net/buildroot/commit/?id=ddcd8af91f78d9e1ebddd88564e6535d3c4d6f79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+socat is not compatible with libressl since version 1.7.4.4 which
+includes upstream commit 15e38be2f52 ("Fixed SIGSEGV of OpenSSL on
+exit()").
+
+Fixes:
+http://autobuild.buildroot.net/results/6f0204004c52f762d6e3cb3064238d7eb3646038/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiosignal/python-aiosignal.hash | 4 ++--
- package/python-aiosignal/python-aiosignal.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/socat/socat.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-aiosignal/python-aiosignal.hash b/package/python-aiosignal/python-aiosignal.hash
-index f2a09749b8..061816a66e 100644
---- a/package/python-aiosignal/python-aiosignal.hash
-+++ b/package/python-aiosignal/python-aiosignal.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiosignal/json
--md5  011700c3acc576a3a38deade6a4860cb  aiosignal-1.2.0.tar.gz
--sha256  78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2  aiosignal-1.2.0.tar.gz
-+md5  2a15f4008b899377590cef4773020902  aiosignal-1.3.1.tar.gz
-+sha256  54cd96e15e1649b75d6c87526a6ff0b6c1b0dd3459f43d9ca11d48c339b68cfc  aiosignal-1.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
-diff --git a/package/python-aiosignal/python-aiosignal.mk b/package/python-aiosignal/python-aiosignal.mk
-index e0436e973e..ffd581cfba 100644
---- a/package/python-aiosignal/python-aiosignal.mk
-+++ b/package/python-aiosignal/python-aiosignal.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 28ea72e5a7..3074d777fc 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -31,7 +31,7 @@ SOCAT_DEPENDENCIES = host-autoconf
+ # incompatibile license (GPL-3.0+)
+ SOCAT_CONF_OPTS = --disable-readline
  
--PYTHON_AIOSIGNAL_VERSION = 1.2.0
-+PYTHON_AIOSIGNAL_VERSION = 1.3.1
- PYTHON_AIOSIGNAL_SOURCE = aiosignal-$(PYTHON_AIOSIGNAL_VERSION).tar.gz
--PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/27/6b/a89fbcfae70cf53f066ec22591938296889d3cc58fec1e1c393b10e8d71d
-+PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ae/67/0952ed97a9793b4958e5736f6d2b346b414a2cd63e82d05940032f45b32f
- PYTHON_AIOSIGNAL_SETUP_TYPE = setuptools
- PYTHON_AIOSIGNAL_LICENSE = Apache-2.0
- PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE
+-ifeq ($(BR2_PACKAGE_OPENSSL):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL):$(BR2_STATIC_LIBS),y:)
+ SOCAT_DEPENDENCIES += openssl
+ else
+ SOCAT_CONF_OPTS += --disable-openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
