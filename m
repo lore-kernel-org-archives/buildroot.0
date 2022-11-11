@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A898CC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 13:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF9CC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 13:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F9D560FA8;
-	Fri, 11 Nov 2022 13:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F9D560FA8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IML4DfLLKqet; Fri, 11 Nov 2022 13:35:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31BA660F9D;
-	Fri, 11 Nov 2022 13:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31BA660F9D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 20A5B1BF966
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 13:35:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F060C40BDE
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 13:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F060C40BDE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2293340BEA;
+	Fri, 11 Nov 2022 13:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2293340BEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GhjMUl632p2C for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s40ZrKDz-cMP; Fri, 11 Nov 2022 13:35:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08DFB40BDE;
+	Fri, 11 Nov 2022 13:35:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08DFB40BDE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BBD21BF860
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 13:35:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56A7641600
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 13:35:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A7641600
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cmdIZoK1G3As for <buildroot@lists.busybox.net>;
  Fri, 11 Nov 2022 13:35:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3AA240BDC
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF6A24156C
  for <buildroot@buildroot.org>; Fri, 11 Nov 2022 13:35:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3AA240BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF6A24156C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1EAF82CFA; Fri, 11 Nov 2022 13:35:21 +0000 (UTC)
+ id DD02782CFC; Fri, 11 Nov 2022 13:35:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Nov 2022 14:34:54 +0100
+Date: Fri, 11 Nov 2022 14:34:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5370ec74516495a4ac6c0bc9780b8e92a2f1e6b1
-X-Git-Newrev: 707938d6848ce945e07ca779748b49b27bdaf222
+X-Git-Oldrev: 707938d6848ce945e07ca779748b49b27bdaf222
+X-Git-Newrev: 66653be5b85f6cbfceac51d95180f785f921b681
 X-Patchwork-Hint: ignore
-Message-Id: <20221111133521.D1EAF82CFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock_pi_4: remove defconfig
+Message-Id: <20221111133521.DD02782CFC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/rock_pi_n10: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,14 +58,14 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7962499275863164682=="
+Content-Type: multipart/mixed; boundary="===============8276611666698728798=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7962499275863164682==
+--===============8276611666698728798==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=707938d6848ce945e07ca779748b49b27bdaf222
+commit: https://git.buildroot.net/buildroot/commit/?id=66653be5b85f6cbfceac51d95180f785f921b681
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig has been failing to build for several months, with
@@ -78,55 +78,54 @@ defconfig.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3259671395
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3259671399
 
 Cc: Suniel Mahesh <sunil@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                         |  2 --
- board/radxa/rockpi-4/extlinux.conf |  4 ---
- board/radxa/rockpi-4/genimage.cfg  | 39 ------------------------
- board/radxa/rockpi-4/post-build.sh |  5 ----
- board/radxa/rockpi-4/readme.txt    | 61 --------------------------------------
- configs/rock_pi_4_defconfig        | 55 ----------------------------------
+ DEVELOPERS                           |  2 --
+ board/radxa/rockpi-n10/extlinux.conf |  4 ---
+ board/radxa/rockpi-n10/genimage.cfg  | 39 -----------------------
+ board/radxa/rockpi-n10/post-build.sh |  5 ---
+ board/radxa/rockpi-n10/readme.txt    | 61 ------------------------------------
+ configs/rock_pi_n10_defconfig        | 55 --------------------------------
  6 files changed, 166 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c282a867ce..ae20554f91 100644
+index ae20554f91..bd76ddca28 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2730,10 +2730,8 @@ F:	package/powertop/
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
+@@ -2731,9 +2731,7 @@ N:	Suniel Mahesh <sunil@amarulasolutions.com>
  F:	board/friendlyarm/nanopi-m4
  F:	board/pine64/rockpro64
--F:	board/radxa/rockpi-4
  F:	board/radxa/rockpi-n8
- F:	board/radxa/rockpi-n10
--F:	configs/rock_pi_4_defconfig
+-F:	board/radxa/rockpi-n10
  F:	configs/rock_pi_n8_defconfig
- F:	configs/rock_pi_n10_defconfig
+-F:	configs/rock_pi_n10_defconfig
  F:	configs/rockpro64_defconfig
-diff --git a/board/radxa/rockpi-4/extlinux.conf b/board/radxa/rockpi-4/extlinux.conf
+ F:	package/arm-gnu-toolchain/
+ 
+diff --git a/board/radxa/rockpi-n10/extlinux.conf b/board/radxa/rockpi-n10/extlinux.conf
 deleted file mode 100644
-index 83374f174a..0000000000
---- a/board/radxa/rockpi-4/extlinux.conf
+index b6a4c97cd9..0000000000
+--- a/board/radxa/rockpi-n10/extlinux.conf
 +++ /dev/null
 @@ -1,4 +0,0 @@
--label RK3399_ROCK_PI_4 linux
+-label RK3399_ROCK_PI_N10 linux
 -  kernel /Image
--  devicetree /rk3399-rock-pi-4.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
+-  devicetree /rk3399pro-rock-pi-n10.dtb
+-  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p4 rw rootwait
+diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
 deleted file mode 100644
-index 9f64e96970..0000000000
---- a/board/radxa/rockpi-4/genimage.cfg
+index fe6fa3f8f9..0000000000
+--- a/board/radxa/rockpi-n10/genimage.cfg
 +++ /dev/null
 @@ -1,39 +0,0 @@
 -image boot.vfat {
 -	vfat {
 -		files = {
 -			"Image",
--			"rk3399-rock-pi-4.dtb",
+-			"rk3399pro-rock-pi-n10.dtb",
 -			"extlinux"
 -		}
 -	}
@@ -161,10 +160,10 @@ index 9f64e96970..0000000000
 -		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/radxa/rockpi-4/post-build.sh b/board/radxa/rockpi-4/post-build.sh
+diff --git a/board/radxa/rockpi-n10/post-build.sh b/board/radxa/rockpi-n10/post-build.sh
 deleted file mode 100755
 index ba29375c05..0000000000
---- a/board/radxa/rockpi-4/post-build.sh
+--- a/board/radxa/rockpi-n10/post-build.sh
 +++ /dev/null
 @@ -1,5 +0,0 @@
 -#!/bin/sh
@@ -172,38 +171,32 @@ index ba29375c05..0000000000
 -BOARD_DIR="$(dirname $0)"
 -
 -install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/radxa/rockpi-4/readme.txt b/board/radxa/rockpi-4/readme.txt
+diff --git a/board/radxa/rockpi-n10/readme.txt b/board/radxa/rockpi-n10/readme.txt
 deleted file mode 100644
-index 1db7569ed9..0000000000
---- a/board/radxa/rockpi-4/readme.txt
+index 49decbb3d9..0000000000
+--- a/board/radxa/rockpi-n10/readme.txt
 +++ /dev/null
 @@ -1,61 +0,0 @@
--RADXA ROCK_PI_4
+-RADXA ROCKPI-N10
 -================
--https://rockpi.org/rockpi4
--
--ROCK Pi 4 is a Single Board Computer (SBC) from radxa. This guide is valid
--for the below models:
--- ROCK PI 4 Model A
--- ROCK PI 4 Model B
--- ROCK PI 4 Model C
+-https://wiki.radxa.com/RockpiN10
 -
 -Build:
 -======
--  $ make rock_pi_4_defconfig
+-  $ make rock_pi_n10_defconfig
 -  $ make
 -
 -Files created in output directory
 -=================================
 -
 -output/images
--
+-.
 -├── bl31.elf
 -├── boot.vfat
 -├── extlinux
 -├── idbloader.img
 -├── Image
--├── rk3399-rock-pi-4.dtb
+-├── rk3399pro-rock-pi-n10.dtb
 -├── rootfs.ext2
 -├── rootfs.ext4 -> rootfs.ext2
 -├── rootfs.tar
@@ -225,7 +218,7 @@ index 1db7569ed9..0000000000
 -
 -Serial console:
 ----------------
--RockPi4 has a 40-pin GPIO header. The pin layout is as follows:
+-RockPi-N10 has a 40-pin GPIO header. The pin layout is as follows:
 -
 -pin 6:  gnd
 -pin 8:  tx
@@ -233,24 +226,30 @@ index 1db7569ed9..0000000000
 -
 -Baudrate for this board is 1500000.
 -
+-The boot order on rockpi-n10 is emmc, sd. If emmc contains a valid Image, the board
+-always boots from emmc. To boot from SD, erase emmc as per the guide:
+-
+-https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
+-
 -Login:
 -------
 -Enter 'root' as login user, and the prompt is ready.
 -
--Wiki link:
--https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/rock-pi-4.html
-diff --git a/configs/rock_pi_4_defconfig b/configs/rock_pi_4_defconfig
+-wiki link:
+-----------
+-https://wiki.amarulasolutions.com/bsp/rockchip/rk3399pro/rock-pi-n10.html
+diff --git a/configs/rock_pi_n10_defconfig b/configs/rock_pi_n10_defconfig
 deleted file mode 100644
-index 401a59bac4..0000000000
---- a/configs/rock_pi_4_defconfig
+index c622839c89..0000000000
+--- a/configs/rock_pi_n10_defconfig
 +++ /dev/null
 @@ -1,55 +0,0 @@
 -# Architecture
 -BR2_aarch64=y
 -BR2_cortex_a72_a53=y
 -
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+-# Linux headers same as kernel, a 5.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
 -
 -# Firmware
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
@@ -268,7 +267,7 @@ index 401a59bac4..0000000000
 -BR2_TARGET_UBOOT_CUSTOM_GIT=y
 -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n10-rk3399pro"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
@@ -281,27 +280,27 @@ index 401a59bac4..0000000000
 -# Kernel
 -BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.46"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.2"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-pi-4"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399pro-rock-pi-n10"
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -
 -# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="rockpi4"
--BR2_TARGET_GENERIC_ISSUE="Welcome to ROCK_PI_4"
+-BR2_TARGET_GENERIC_HOSTNAME="rockpi-n10"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N10"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="96M"
+-BR2_TARGET_ROOTFS_EXT2_SIZE="160M"
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
 -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-4/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-4/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-n10/genimage.cfg"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-n10/post-build.sh"
 
---===============7962499275863164682==
+--===============8276611666698728798==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -312,4 +311,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7962499275863164682==--
+--===============8276611666698728798==--
