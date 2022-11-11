@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397E4C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02B79C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4CCD42AA9;
-	Mon, 20 Feb 2023 21:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4CCD42AA9
+	by smtp4.osuosl.org (Postfix) with ESMTP id A033B40278;
+	Mon, 20 Feb 2023 21:08:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A033B40278
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EJvnCMeBrwES; Mon, 20 Feb 2023 21:08:08 +0000 (UTC)
+	with ESMTP id auGeDfwXFLnQ; Mon, 20 Feb 2023 21:08:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4137C42AB2;
-	Mon, 20 Feb 2023 21:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4137C42AB2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61110410C6;
+	Mon, 20 Feb 2023 21:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61110410C6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BF831BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15D941BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 298C640C31
+ by smtp2.osuosl.org (Postfix) with ESMTP id 297B440C2A
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298C640C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 297B440C2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AfprcIahq-BS for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ with ESMTP id EHVm5uk_N-4l for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0A0C40C1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 058A840C2E
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0A0C40C1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 058A840C2E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD37286494; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ id E72EF86494; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Nov 2022 23:50:53 +0100
+Date: Fri, 11 Nov 2022 23:52:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dfbdb72103dff293fc7688872de91aaa9469d559
-X-Git-Newrev: a378178cdd93a7b8d2c83d091b61478440f331a0
+X-Git-Oldrev: e62cf8d9025506ebcb9c1b1d3bb49523474851eb
+X-Git-Newrev: 57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205149.CD37286494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lxc: fix systemd build
+Message-Id: <20230220205149.E72EF86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wavemon: fix kernel
+ header collision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +64,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a378178cdd93a7b8d2c83d091b61478440f331a0
+commit: https://git.buildroot.net/buildroot/commit/?id=57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following systemd build failure raised since bump to version
-5.0.1 in commit db19998035701d08bf1b5fd366e0b5aa9adb8e57:
+Fix the following build failure raised since bump to version 0.9.4 in
+commit 5cae1a0d675eca41125b6430157d3d0d78d1220c:
 
-../src/lxc/cgroups/cgfsng.c: In function 'unpriv_systemd_create_scope':
-../src/lxc/cgroups/cgfsng.c:1234:104: error: incompatible type for argument 10 of 'sd_bus_call_method_asyncv'
- r = sd_bus_call_method_asyncv(bus, NULL, DESTINATION, PATH, INTERFACE, "Subscribe", NULL, NULL, NULL, NULL);
-                                                                                                       ^~~~
+In file included from iw_if.h:26:0,
+                 from conf.c:19:
+/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/linux/if.h:71:2: error: redeclaration of enumerator 'IFF_UP'
+  IFF_UP    = 1<<0,  /* sysfs */
+  ^
+/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/net/if.h:44:5: note: previous definition of 'IFF_UP' was here
+     IFF_UP = 0x1,  /* Interface is up.  */
+     ^
 
 Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261449
+ - http://autobuild.buildroot.org/results/cbdf3e0cf0bee8f1b076581768c24155afc320d9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ll_method_async-to-replace-the-asyncv-one.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ .../0001-iw_if.h-don-t-include-linux-if.h.patch    | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch b/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch
+diff --git a/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
 new file mode 100644
-index 0000000000..22013cb363
+index 0000000000..95f54e4b7f
 --- /dev/null
-+++ b/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch
-@@ -0,0 +1,47 @@
-+From b0abedf60b40adf0f2fb3cf9dfee4bc601f7b39f Mon Sep 17 00:00:00 2001
-+From: Chen Qi <Qi.Chen@windriver.com>
-+Date: Thu, 25 Aug 2022 05:45:53 -0700
-+Subject: [PATCH] use sd_bus_call_method_async to replace the asyncv one
++++ b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
+@@ -0,0 +1,41 @@
++From 4ac1482bb40376e47805c3737dfed60abb1dd3b4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 22 Dec 2021 00:39:35 +0100
++Subject: [PATCH] iw_if.h: don't include linux/if.h (#109)
 +
-+The sd_bus_call_method_asyncv's 10th parameter is of type
-+va_list and supplying NULL when invoking it causes compilation
-+error. Just replace it with the async one.
++Don't include linux/if.h to avoid the following build failure:
 +
-+Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
-+[Retrieved from:
-+https://github.com/lxc/lxc/commit/b0abedf60b40adf0f2fb3cf9dfee4bc601f7b39f]
++In file included from iw_if.h:31:0,
++                 from conf.c:19:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h: At top level:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:143:8: error: redefinition of 'struct ifmap'
++ struct ifmap {
++        ^
++In file included from iw_if.h:26:0,
++                 from conf.c:19:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/net/if.h:111:8: note: originally defined here
++ struct ifmap
++        ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a6ee162cf04b70b144b54e1ca4b7b2421071c50c
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/uoaerg/wavemon/commit/4ac1482bb40376e47805c3737dfed60abb1dd3b4]
 +---
-+ meson.build              | 4 ++--
-+ src/lxc/cgroups/cgfsng.c | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
++ iw_if.h | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+diff --git a/meson.build b/meson.build
-+index 21955a0504..f8bdcf4e83 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -295,9 +295,9 @@ if not want_sd_bus.disabled()
-+         has_sd_bus = false
-+     endif
++diff --git a/iw_if.h b/iw_if.h
++index 9e7fa89..6607e0b 100644
++--- a/iw_if.h
+++++ b/iw_if.h
++@@ -28,7 +28,6 @@
++ #include <net/ethernet.h>
++ #include <sys/types.h>
++ #include <sys/socket.h>
++-#include <linux/if.h>
 + 
-+-    if not cc.has_function('sd_bus_call_method_asyncv', prefix: '#include <systemd/sd-bus.h>', dependencies: libsystemd) 
-++    if not cc.has_function('sd_bus_call_method_async', prefix: '#include <systemd/sd-bus.h>', dependencies: libsystemd) 
-+         if not sd_bus_optional
-+-            error('libsystemd misses required sd_bus_call_method_asyncv function')
-++            error('libsystemd misses required sd_bus_call_method_async function')
-+         endif
-+ 
-+         has_sd_bus = false
-+diff --git a/src/lxc/cgroups/cgfsng.c b/src/lxc/cgroups/cgfsng.c
-+index 8a3615893f..d90e5385e1 100644
-+--- a/src/lxc/cgroups/cgfsng.c
-++++ b/src/lxc/cgroups/cgfsng.c
-+@@ -1232,7 +1232,7 @@ static int unpriv_systemd_create_scope(struct cgroup_ops *ops, struct lxc_conf *
-+ 	if (r < 0)
-+ 		return log_error(SYSTEMD_SCOPE_FAILED, "Failed to connect to user bus: %s", strerror(-r));
-+ 
-+-	r = sd_bus_call_method_asyncv(bus, NULL, DESTINATION, PATH, INTERFACE, "Subscribe", NULL, NULL, NULL, NULL);
-++	r = sd_bus_call_method_async(bus, NULL, DESTINATION, PATH, INTERFACE, "Subscribe", NULL, NULL, NULL);
-+ 	if (r < 0)
-+ 		return log_error(SYSTEMD_SCOPE_FAILED, "Failed to subscribe to signals: %s", strerror(-r));
-+ 
++ /* Definitions from linux/ieee80211.h (not necessarily part of distro headers) */
++ #define WLAN_CAPABILITY_ESS		(1<<0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
