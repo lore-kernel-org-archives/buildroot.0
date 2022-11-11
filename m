@@ -1,66 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5737FC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 20:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A72FC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 21:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC7C740204;
-	Fri, 11 Nov 2022 20:53:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC7C740204
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A43840017;
+	Fri, 11 Nov 2022 21:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A43840017
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6SlTLwURe9yg; Fri, 11 Nov 2022 20:53:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7Amt520z1rlP; Fri, 11 Nov 2022 21:58:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 205224017C;
-	Fri, 11 Nov 2022 20:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 205224017C
+	by smtp4.osuosl.org (Postfix) with ESMTP id E14BD4184F;
+	Fri, 11 Nov 2022 21:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E14BD4184F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B62861BF42C
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 20:53:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DFC5E1BF589
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 21:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91F6B607A1
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 20:53:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91F6B607A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA88C60B44
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 21:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA88C60B44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fH-b73emkQhU for <buildroot@lists.busybox.net>;
- Fri, 11 Nov 2022 20:53:26 +0000 (UTC)
+ with ESMTP id KAMmjiCrrvFB for <buildroot@lists.busybox.net>;
+ Fri, 11 Nov 2022 21:58:06 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F32FE605AD
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F32FE605AD
- for <buildroot@buildroot.org>; Fri, 11 Nov 2022 20:53:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AF3D60B55
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4AF3D60B55
+ for <buildroot@buildroot.org>; Fri, 11 Nov 2022 21:58:06 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D1A26100004;
- Fri, 11 Nov 2022 20:53:22 +0000 (UTC)
-Date: Fri, 11 Nov 2022 21:53:21 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20221111215321.7cfdbc46@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ by mail.gandi.net (Postfix) with ESMTPA id 2DF3D20003;
+ Fri, 11 Nov 2022 21:58:04 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Fri, 11 Nov 2022 22:57:59 +0100
+Message-Id: <20221111215759.358116-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221111215759.358116-1-thomas.petazzoni@bootlin.com>
+References: <20221111215759.358116-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668200003;
+ d=bootlin.com; s=gm1; t=1668203884;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=Iux88aiKI3mHsC/O1jVTcWGqquyYO46c5LdT+jH+H2g=;
- b=dHJDm9r8QZAAnHoJ40x1iW+W1RErabhKIy/fKhSl/loYWGDzsIRWcysR7986KwhB+IJ9AO
- rf3mLG/NzogV1eAjJLfSQ5izC/JkbKBTmVKopJthEAPUX5n73G4vqiozTkFh4bkcalKHKH
- L0+LFisLblYxZfFLN0Vfr9toXdmzet+DGDPVKCvQPDA80wZhRLGPjIrWzeDM6vrcph1aLQ
- GiqwjlQPW8flUv0LT2tiXuVPQXevfu1SDl/qJ1vJnQmCPyfermlxOtMhxC0jp7GI0uKU5q
- zcJHeUvr0ayDfJw7sUx78HXCMiJGiF4wgjIFH+pabAA49INOjASCzzNhWCbJpA==
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FRXz8HOc1yjqFFrHnKAdaNG4WXOd79ACLWQDN+AaBX4=;
+ b=Cvs5UhW+u+TvAaMH4xgwUU8/gJwFsN1+82ZpJ8B+vHlLY4LcTy/tuToDMQUbvF+yoOER7S
+ u/QxPPAb1p56O6CMAhdUGVT5DddE6wyvU/0e+gDKEXSIPQUHcPu/qUWpyuudp1ClCWHufB
+ 0or3sOv79AxIHGb/r5QEnrYTI7HIc9/M0aLKZXlZ1ijnnd9BODWilakAcKqbAG8cTy6cw8
+ MEKCLNUL+RWjYISTShpYJzNG2yDCYhoc5CDgs73dtOvpfn7ohSKIU9ChnnjOCZO8gv4Vno
+ l0ipWByLWhnu40tfZmFfztJ1XFkJ28hc5So54uWXW1UK2GdmLXSdvvZ+m2dbcw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dHJDm9r8
-Subject: [Buildroot] Remaining issue with Dracut runtime tests
+ header.s=gm1 header.b=Cvs5UhW+
+Subject: [Buildroot] [PATCH 2/2] utils/genrandconfig: disallow configs with
+ BR2_XTENSA_CUSTOM=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,42 +77,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
+When BR2_XTENSA_CUSTOM=y is used with the internal toolchain, an
+overlay file is mandatory, which genrandconfig can't provide. So we
+simply disallow such configurations.
 
-Even after your recent Dracut runtime tests fixes there is still one issue:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-======================================================================
-FAIL: test_run (tests.fs.test_cpio.TestCpioDracutUclibcMergedUsr)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/fs/test_cpio.py", line 105, in test_run
-    self.check_dracut()
-  File "/builds/buildroot.org/buildroot/support/testing/tests/fs/test_cpio.py", line 60, in check_dracut
-    self.assertNotEqual(out.find("usr/lib/libz.so"), -1)
-AssertionError: -1 == -1
-----------------------------------------------------------------------
-
-See:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261241
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261239
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261236
-
-Could you have a look?
-
-Thanks!
-
-Thomas
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index f19a405685..9c6c2b359c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -304,6 +304,11 @@ def fixup_config(sysinfo, configfile):
+     # No C library for internal toolchain
+     if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
+         return False
++    # Xtensa custom cores require an overlay file with internal
++    # toolchains
++    if 'BR2_XTENSA_CUSTOM=y' in configlines and \
++       'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
++        return False
+ 
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.38.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
