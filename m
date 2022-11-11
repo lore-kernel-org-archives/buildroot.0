@@ -4,61 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12714C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 19:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF93BC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 19:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7315F418AC;
-	Fri, 11 Nov 2022 19:15:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7315F418AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A50C418AA;
+	Fri, 11 Nov 2022 19:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A50C418AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WEYBtlhlTO11; Fri, 11 Nov 2022 19:15:23 +0000 (UTC)
+	with ESMTP id tfdJpXDEStEC; Fri, 11 Nov 2022 19:51:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 539F4418AD;
-	Fri, 11 Nov 2022 19:15:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 539F4418AD
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4FB04187A;
+	Fri, 11 Nov 2022 19:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4FB04187A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3F0471BF5DA
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 19:15:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 93B1C1BF5DA
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 19:51:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1950E418AD
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 19:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1950E418AD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E24A4187A
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 19:51:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E24A4187A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id crcu5oklxQuD for <buildroot@lists.busybox.net>;
- Fri, 11 Nov 2022 19:15:18 +0000 (UTC)
+ with ESMTP id BbcH1YmqobEL for <buildroot@lists.busybox.net>;
+ Fri, 11 Nov 2022 19:51:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5B95418AC
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5B95418AC
- for <buildroot@buildroot.org>; Fri, 11 Nov 2022 19:15:17 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.170.13.176])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 55A8B2003F2;
- Fri, 11 Nov 2022 20:15:13 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E93BD417CA
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E93BD417CA
+ for <buildroot@buildroot.org>; Fri, 11 Nov 2022 19:51:18 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id e189so4305226iof.1
+ for <buildroot@buildroot.org>; Fri, 11 Nov 2022 11:51:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PUffZqDFKua7kCzWo0Gef3HR9JaTN3/r6iA/VV5QXbA=;
+ b=HojBy29trlAoWFbxgfG1r8Et2hQWaYyq+sXKgePyh8NNZ7fjGaUS3dIQ3YDw9uAMz7
+ oi1Z+TDzqbIB0sj0ym2QBlEZ6NOc4ZpJfIf0tgKPXEHMsSE6v7qw3qPBYUO91ucx+yp8
+ PS995VRLAAwdiV0EYjDVcHZrx9aJHr6yU3D3bwa8OsRXApdvxusMQhW7T61R2JJ/Ft43
+ bfJzz7rDtRI4GwQrTNlQcygWz74YxPO2OqeXM1HlLgsRPG8y0nULMBU4J6Gi7mQTtfTO
+ 6XZV37vd97BvJai51/4b+ynvaMVXqhSuSa7aJxATGUf2b644QZslR+TcpEXLO0oVC1vy
+ myIw==
+X-Gm-Message-State: ANoB5pnpDVVVsgG9ppNF4q+Y4Lmjw5Tmzx/95yZI9kwGrw0SGLZfOQhG
+ dx0KbknnNvqc22g+eOpeNNMamgJP45l6Zw==
+X-Google-Smtp-Source: AA0mqf6dbVGMzwDpcvkuOKOTdafndsUW6TZI3UMviNUz2MKYy7b/WI91/JvGvA+mOA6gPsx/PBNSNw==
+X-Received: by 2002:a02:a08b:0:b0:375:9838:239f with SMTP id
+ g11-20020a02a08b000000b003759838239fmr1464131jah.179.1668196277614; 
+ Fri, 11 Nov 2022 11:51:17 -0800 (PST)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ p23-20020a056638217700b0036348f096acsm1079307jak.6.2022.11.11.11.51.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 11 Nov 2022 11:51:16 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Nov 2022 20:14:58 +0100
-Message-Id: <20221111191458.1292483-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.38.1
+Date: Fri, 11 Nov 2022 12:51:15 -0700
+Message-Id: <20221111195115.3918675-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668194114;
- bh=QplZi47M7/3ylWGCFFfAtQTRR4TVa/l+jJOQ1USoabw=;
- h=From:To:Cc:Subject:Date:From;
- b=dvypwG4IoatVkLYVjPsZywaIvn1TovoI/sq199CRIVqguMGms3WD7NXfAU6qs7GvB
- fCiWtszZtOY6L6bAcnoHVRYN482e3neZUekUTWhQ1u1/vQh2e4gPdipkltTH2TelFA
- C3OFm889b+jSz+h7hBQ8eoFBCw+dFPo6pgBo79Bj2K652+2EWzSPVh5+Kp2FC98AAX
- KYgyaOXnwIALSi/vg8Wzi+1UpUTlzVrq0sFuHplfjNGROaaNvVUNlRt4XnPbXeCANL
- BNOaaKIvC98RUhJI+zmnQAbbWlws7GMeub8IdlgWHjOXDbnFp9YVLRaLA7IWt+dnrs
- wjVbm9zltHSfg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PUffZqDFKua7kCzWo0Gef3HR9JaTN3/r6iA/VV5QXbA=;
+ b=YJ/Y9RnXbMWAKSf5HToTPFYFHcM50HOQeJohHUiy3TAFsDwrANjaPUD6YD2fcBZSk/
+ o9cgEAKtih0NYs29c0M/6Ff3mZbvxPnqBMaNg+VIARanEyhZdrbLjOZfJvRSQldBEnEZ
+ qvQPunSODLB+txquIsNS1fNwrQJY+Q9zlqVC/7++LiXtJzMZjtuxnQu6Zh+WEzzpRLdT
+ wIA819DuVPbKWyDAltgPAmdlZMuGaz0LL4U2kSShngx+cMZpTWfVflRMCG+rC+4hefpp
+ juqejFdaLM9lVv7bKIbZeKXpx4mPUpYknEkhh4jworD66ajMJg0gyU/vWl/qa4ZPdIpN
+ Xfyg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dvypwG4I
-Subject: [Buildroot] [PATCH next 1/1] package/octave: bump to version 7.3.0
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YJ/Y9RnX
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,62 +93,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 7.2.0, see:
-https://octave.org/news/release/2022/11/02/octave-7.3.0-released.html
+Add support for new optional bluez5-backend-native-mm and readline
+config options.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Commit tested on branch next at commit a85f5f2, with commands:
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    ./utils/test-pkg -p octave
-    ...
-    6 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-    support/testing/run-tests \
-        -d dl \
-        -o output_folder \
-        tests.package.test_octave.TestOctave
-    ...
-    OK
----
- package/octave/octave.hash | 2 +-
- package/octave/octave.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/octave/octave.hash b/package/octave/octave.hash
-index 81d7311eeb..9696f2a00a 100644
---- a/package/octave/octave.hash
-+++ b/package/octave/octave.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  009388289b82fdcc920a2371355049cb6958c735ee9aa3893a256df4a6bf7515  octave-7.2.0.tar.lz
-+sha256  fdb32602252289e068431329add2eed146e6f26301cbb5fc4412f9d972db9475  octave-7.3.0.tar.lz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index b28617438a..647f988a3f 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 9bead47bd9..4585534569 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  32a6db3f42f00eb95a07369160a614420443ca4f4e90ac628db8ca508e08538e  pipewire-0.3.59.tar.bz2
++sha256  8164eb53c9eafedfa22fe1adc4b8e38f3173c6f33695c735a17ed1a3d43c664e  pipewire-0.3.60.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index d7ae07170d..9fef605878 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OCTAVE_VERSION = 7.2.0
-+OCTAVE_VERSION = 7.3.0
- OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
- OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
- OCTAVE_LICENSE = GPL-3.0+
+-PIPEWIRE_VERSION = 0.3.59
++PIPEWIRE_VERSION = 0.3.60
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -105,6 +105,12 @@ endif
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
+ PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
+ PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
++ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
++PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=enabled
++PIPEWIRE_DEPENDENCIES += modem-manager
++else
++PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=disabled
++endif
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=enabled
+ PIPEWIRE_DEPENDENCIES += opus
+@@ -189,7 +195,10 @@ PIPEWIRE_CONF_OPTS += -Dlibpulse=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
++PIPEWIRE_CONF_OPTS += -Dreadline=enabled
+ PIPEWIRE_DEPENDENCIES += readline
++else
++PIPEWIRE_CONF_OPTS += -Dreadline=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL2),y)
 -- 
-2.38.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
