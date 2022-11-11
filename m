@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A68AC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 10:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A75C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Nov 2022 10:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 254164031D;
-	Fri, 11 Nov 2022 10:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 254164031D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 159BE41742;
+	Fri, 11 Nov 2022 10:59:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 159BE41742
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 47UrfGRkDP-6; Fri, 11 Nov 2022 10:59:00 +0000 (UTC)
+	with ESMTP id 2c6ZjlKEqD3t; Fri, 11 Nov 2022 10:59:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22D76402CE;
-	Fri, 11 Nov 2022 10:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22D76402CE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 45CBD1BF2C8
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 10:58:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8F09416A9;
+	Fri, 11 Nov 2022 10:59:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8F09416A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 038121BF2C8
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 10:58:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 203CF4049E
- for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 10:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 203CF4049E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3B0160B26
+ for <buildroot@lists.busybox.net>; Fri, 11 Nov 2022 10:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3B0160B26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s59uD5cwXN0y for <buildroot@lists.busybox.net>;
- Fri, 11 Nov 2022 10:58:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q5brMpnve8eC for <buildroot@lists.busybox.net>;
+ Fri, 11 Nov 2022 10:58:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A85E400BB
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A85E400BB
- for <buildroot@buildroot.org>; Fri, 11 Nov 2022 10:58:34 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id v1so5955435wrt.11
- for <buildroot@buildroot.org>; Fri, 11 Nov 2022 02:58:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C3860A84
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F1C3860A84
+ for <buildroot@buildroot.org>; Fri, 11 Nov 2022 10:58:35 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ t25-20020a1c7719000000b003cfa34ea516so5349603wmi.1
+ for <buildroot@buildroot.org>; Fri, 11 Nov 2022 02:58:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jQpyyau4JFDz9/jfAi28rHiM5XQ+8Vn1Sbgn44zibG8=;
- b=Xe8wM1MhGWsPn3V6jjDrgnJMET8EuZEaSZxqmX8OPHjetjeEGcl3PZm2dvIwQ2ckAX
- r3DdDkgEa45ZNRNwFJD+MHzqi4WQveIAhSXRnwFbC/f07iUjAclX80LfiC96lgIqPZ3l
- HOxeejhWegZ/IhPuCQ9zSqgl3OAR4QeqmcgNXC3Cq9KgzUKBV13R2rbXTCZbBz+6drJb
- oq7ruH5eA8fCYlqktSkatnU+8E+/PCw3l4jEQGXeFHFDgrTn97LMcdFxjzCtoCiaL6AW
- 0qvimU/Iyi3omI6ZynPS8hRF8gioMXuIL+YddM+SEPHYqSRAShGBstkAjLusR5+sv3mK
- 6f1Q==
-X-Gm-Message-State: ANoB5pm/5hnkKwJbWMAQJXmiVt8Zp6wamDm32E1cDQ2BR26K2t3fk6Lf
- 3j7KezIvxFMgUxVh3Hx9XIb813q2Zfg=
-X-Google-Smtp-Source: AA0mqf5mmGaYFaeu3GjTjEj2n39kUp9RvFm4Id2a2b75/9xgDzA+GL0Q0dbE1lrzogwUPJsdAfMH6w==
-X-Received: by 2002:adf:f745:0:b0:22e:2b7:f215 with SMTP id
- z5-20020adff745000000b0022e02b7f215mr873300wrp.512.1668164312649; 
- Fri, 11 Nov 2022 02:58:32 -0800 (PST)
+ bh=JjXCEhQqUAcEvyj7bAUw3NqiRedEPEgvDrATlPRZIKk=;
+ b=phDZmeXrpgnJ1UJpHG1AyTflqB/ss01h9D3eJDaqJ8dWh+36lDDt+bttzDCTn2nV5L
+ BOFQUSB7+EfAfUs/WvXz+FXIWaMrdnS5Dl+51u/Ye/odSQbLWkwGS3gFNHzNLg3BK62H
+ 3MnIVf5JdfkGEfKFpCyHcObIImvVEQRFfNDlonrdSAkSQocEO3+sTb8RVCCQCJU+tQuf
+ NZvUB1532+y21JVz+ZVrZec1fWCcfMZ3Yc4DKNI92kSSaWgB82YQuxgkOOP0aLLimbim
+ plSGHhDYeEoYWgsCZJINsSj+XQavKOWCIMSIMDYJm4ga9pnkkBTPnqo/PbAg5QerLmgn
+ 1W/g==
+X-Gm-Message-State: ANoB5pmF4tRlSaAl8IuPW6Fj0wwSpgFOulDAZJsnE18uv0L8AkmyUfnX
+ DgldgWrZQbotkueKkpDyO9PcDv7o5qw=
+X-Google-Smtp-Source: AA0mqf6euDwCwheoTIXc7ZrDodGAAPW2a8mTUz8X0lqZf0x14fZ4mLAWQesKSsk5S9PJTxyFIFIU3A==
+X-Received: by 2002:a05:600c:5554:b0:3cf:9be3:8d26 with SMTP id
+ iz20-20020a05600c555400b003cf9be38d26mr852730wmb.185.1668164314045; 
+ Fri, 11 Nov 2022 02:58:34 -0800 (PST)
 Received: from lano-work.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- q10-20020adff94a000000b0022cc6b8df5esm1627594wrr.7.2022.11.11.02.58.32
+ q10-20020adff94a000000b0022cc6b8df5esm1627594wrr.7.2022.11.11.02.58.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Nov 2022 02:58:32 -0800 (PST)
+ Fri, 11 Nov 2022 02:58:33 -0800 (PST)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Nov 2022 11:57:55 +0100
-Message-Id: <20221111105757.552459-3-nolange79@gmail.com>
+Date: Fri, 11 Nov 2022 11:57:56 +0100
+Message-Id: <20221111105757.552459-4-nolange79@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221111105757.552459-1-nolange79@gmail.com>
 References: <20221111105757.552459-1-nolange79@gmail.com>
@@ -73,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jQpyyau4JFDz9/jfAi28rHiM5XQ+8Vn1Sbgn44zibG8=;
- b=GWmjQIN8iueq9CilD2wlIflrPPC5PkcDJCJPu29fhhOPj+z/8qvnqarFsMBfksgqIm
- BbuFjH/Bkf1n1VBj3oloV8cIKaXJarHJ/xtkKeQv8nkzNdg0lR5xvKbEKSGEC35fu0cF
- +cFqoHGx9FQMqQPU1mj/uc6GaFHqBD5hR4E0DbNDXd5ywHkIfuRlE5vWi9UxDQd8+Vls
- cy8VVfafdw1nQAyydpYs79QhbiRgHG6GihhttSlJqvJw+IvzYgr0s4cPGNPXl0CUoqU/
- I1ZMwntDa1mIJDfdvKs+D1ryd7PbUoO3IUWX09mPCbtTzhSV8kRgghRyI+a/lFsYpi2p
- V0rA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=JjXCEhQqUAcEvyj7bAUw3NqiRedEPEgvDrATlPRZIKk=;
+ b=oBoO4HutlHXDe0dXqByYDfQihcgXEi1YRJa8GGC8YtdxVGHWz5fvZXGLEOuo2mBoGB
+ 1D0LGsbjaoG5wfQ4Zh5lHQLZw8LMDLlG/DymXTV1JSqws+z8FtELWWVUt48ZafwPvAz1
+ l6X7iNxxQxo702P7mkHqMl9lmsnlaAxGrEVYheFT4sEtaV0TMJan2Ngx6/hhbI/mr6/S
+ GSWSRd9Q2jrPyW8zN8QjZKBA7e92qmaIH22cq8ph0KrYPp+cXkrnwW3EHFct/eJaEJ/P
+ 5HwDTr2InY1thCvwJ6LsGPAGc/V+pEcsZMB9bvC/pX8hjuiyoS37GnaNeTSvt14QBwoF
+ ltFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GWmjQIN8
-Subject: [Buildroot] [PATCH v7 3/4] package/systemd: support dnssec if
- openssl is available
+ header.a=rsa-sha256 header.s=20210112 header.b=oBoO4Hut
+Subject: [Buildroot] [PATCH v7 4/4] system: Warn if systemd is used with
+ kernel < 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,58 +97,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: james.hilliard1@gmail.com, Norbert Lange <nolange79@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
+Cc: james.hilliard1@gmail.com, Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set -Ddefault-dnssec=allow-downgrade if openssl is available as both
-openssl and gcrypt are now supported for dnssec.
+To quote the README:
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-
----
-v6->v7:
-
-*   split off as its own patch
-*   seems that the change was done at v250 or earlier
+> Kernel versions below 4.15 have significant gaps in functionality and
+> are not recommended for use with this version of systemd. Taint flag
+> 'old-kernel' will be set. Systemd will most likely still function, but
+> upstream support and testing are limited.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ system/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 78632992fd..4d6000201b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -241,9 +241,9 @@ endif
+diff --git a/system/Config.in b/system/Config.in
+index 24a0e941e3..7c4e1c1140 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -141,6 +141,15 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and targe
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+ 		!BR2_HOST_GCC_AT_LEAST_5
  
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- SYSTEMD_DEPENDENCIES += libgcrypt
--SYSTEMD_CONF_OPTS += -Ddefault-dnssec=allow-downgrade -Dgcrypt=true
-+SYSTEMD_CONF_OPTS += -Dgcrypt=true
- else
--SYSTEMD_CONF_OPTS += -Ddefault-dnssec=no -Dgcrypt=false
-+SYSTEMD_CONF_OPTS += -Dgcrypt=false
- endif
- 
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
-@@ -313,6 +313,12 @@ else
- SYSTEMD_CONF_OPTS += -Dselinux=false
- endif
- 
-+ifneq ($(BR2_PACKAGE_LIBGCRYPT)$(BR2_PACKAGE_LIBOPENSSL),)
-+SYSTEMD_CONF_OPTS += -Ddefault-dnssec=allow-downgrade
-+else
-+SYSTEMD_CONF_OPTS += -Ddefault-dnssec=no
-+endif
++comment "systemd highly recommends headers >= 4.15"
++	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on BR2_HOST_GCC_AT_LEAST_5
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
- SYSTEMD_CONF_OPTS += -Dhwdb=true
- define SYSTEMD_BUILD_HWDB
+ config BR2_INIT_NONE
+ 	bool "None"
+ 	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
 -- 
 2.35.1
 
