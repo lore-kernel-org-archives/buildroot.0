@@ -1,88 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4233C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 21:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C69C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 21:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C3EC400DB;
-	Sat, 12 Nov 2022 21:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C3EC400DB
+	by smtp4.osuosl.org (Postfix) with ESMTP id A810240914;
+	Sat, 12 Nov 2022 21:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A810240914
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bev-4ZbDgqon; Sat, 12 Nov 2022 21:20:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zODkPoxl7301; Sat, 12 Nov 2022 21:36:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 498EF4055D;
-	Sat, 12 Nov 2022 21:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 498EF4055D
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAB61408FD;
+	Sat, 12 Nov 2022 21:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAB61408FD
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ECFA1BF36F
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:20:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B2DD1BF36F
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 469BD400DB
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:20:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 469BD400DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3773400DB
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:36:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3773400DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3-Q6jwiXlCun for <buildroot@lists.busybox.net>;
- Sat, 12 Nov 2022 21:20:44 +0000 (UTC)
+ with ESMTP id 0DGnEb2wUZP9 for <buildroot@lists.busybox.net>;
+ Sat, 12 Nov 2022 21:36:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45CAF4013D
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 45CAF4013D
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 21:20:44 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- v124-20020a1cac82000000b003cf7a4ea2caso7841930wme.5
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 13:20:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F65B40012
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5F65B40012
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 21:36:53 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id r12so13442111lfp.1
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 13:36:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EClTt0jhxdKCmT2w8AXXKBiX4Nt232RSKnJ6+LD29aA=;
- b=hMqcu2xS5Knl+vysS2ExaudmtwVS1zVtDAcNlnhEC01ANqHsZcQrSa+xFSysunkBjO
- RqUXTNrGHD+ExAwNZJ1HaEd3mTMV6hBZ65wot1mgOv9H8BL5V+7VIHYjj0Gzs2RkYssp
- Zag+2UkdVhD9Rw9pdEf4yibeWJ2VmMK7j3MsoZlUiRMHUOGYKviXUYFktJ+E3u01bGvm
- ZFa7bayDC3WGhWhT3ENE5rA5vGMUCGGTx3Qe6naBzKaJre7MYD9HnpgEn1cnZ+kKKn6D
- eaivecM+7minL7fdaaCIg2Joi58vt2K1CvWJUiRp0No16F3r5+EBq6KItBQyINHM/lrQ
- 4sfA==
-X-Gm-Message-State: ANoB5pnEZLsscfuobrqVl/AAj6RszwTtOl21WQuSntUAf6K/3rhTGobF
- Wa+ABZUYzFKt2MdBzk5OpqT84wYOI3Y=
-X-Google-Smtp-Source: AA0mqf72pzn8q2tC4blobhHa+JAScZ+j2rdFuG8vGBfcJVUL3prElJXCtKFfsrZt+7Cm4873MLUiEw==
-X-Received: by 2002:a05:600c:6d3:b0:3cf:7716:8954 with SMTP id
- b19-20020a05600c06d300b003cf77168954mr4661188wmn.57.1668288041964; 
- Sat, 12 Nov 2022 13:20:41 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- e24-20020a5d5958000000b002356c051b9csm5145299wri.66.2022.11.12.13.20.41
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=G2plker7xrVJ0uGQ4Vw4Tk02YvUwfnG9KvgGJMJoVD0=;
+ b=ankcGyQyAcuDsUoz0aPtjF+Fhz8doFrIEayqPEMu89CUxPGLMKbo455HAuGO8Q6KLW
+ dy1zlShg7eurZb7SThhnqR/czoj23eif0MZe2cz5J2zW4xZ4rowX89f5ZxAA8kydz3t7
+ i2IEGfQELtezKjtHQq+afbT3SEwD/49/KVSAP7743pfOsNf0+dUPbmQd5rMnlJro/1/N
+ 0PPSKLhFLKOhT0Lw7Wp+vSSo1VIvb9GbzFP+md6lF6Ql3DTA3GMJu06/vjriQXb4N03C
+ f3Z+jD9eY1wDZYS2F+u5hZ1h1r+LO7Ev2wyYzufJp54uN2b2r2lwTxIRMSFh3Dxm9dd6
+ uVMQ==
+X-Gm-Message-State: ANoB5pmiALdufXOHAF5hmThUc1SVWLhF6ziU/QL3hlu1fWw2mQEjt+92
+ /EBjvn7WExEITvwlsp8XD1ngPaDzPv73oQ==
+X-Google-Smtp-Source: AA0mqf6zuPiUh4bK2XmBDtBbk4zU22cjHbxFpi1hMyfggKeRQEAB0vRAuxRhe09mTBtZz9UxZlTJfQ==
+X-Received: by 2002:ac2:4e13:0:b0:4b3:ec7a:6752 with SMTP id
+ e19-20020ac24e13000000b004b3ec7a6752mr2715225lfr.79.1668289011227; 
+ Sat, 12 Nov 2022 13:36:51 -0800 (PST)
+Received: from [10.0.196.136] ([98.128.186.104])
+ by smtp.gmail.com with ESMTPSA id
+ p24-20020a2eb118000000b002772b70c1acsm1120969ljl.21.2022.11.12.13.36.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Nov 2022 13:20:41 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 12 Nov 2022 22:20:34 +0100
-Message-Id: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ Sat, 12 Nov 2022 13:36:50 -0800 (PST)
+Message-ID: <de28802b9f14d311c4d98d0bde650c86178b84c7.camel@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Date: Sat, 12 Nov 2022 22:36:50 +0100
+In-Reply-To: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
+References: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EClTt0jhxdKCmT2w8AXXKBiX4Nt232RSKnJ6+LD29aA=;
- b=mvu9Ux/DZio9SIrFsrDiliXOb5N8dqCPFzuro98s1qGtk2TYcqy2Uxb5BSuGSgBguu
- +ABftJaSQ5t8A9GaSNPUGyNiL1F5U/k2AeEHfRfgg4LHYaqw/6hInvco1EtlXyEG9D+R
- h44Kit7PplZwh92ftKPpavl3oKDZT3+ilCu95HGCsPQoLwq9vRMNRdgv2rBE2N1y+vs0
- UwuHPS8fjFc5kUEdXi2pNf2QRxO/VKbHyg5Ei0XgIMcD0VoazxO/0CqOaaBCHc9EnH6E
- 2lNaExHQ8MYh8RvEx/adM0VeICbHDpXoTG+TXVZXedOQgbfbLe93MFKgfx6UzqQyu//P
- iReA==
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=G2plker7xrVJ0uGQ4Vw4Tk02YvUwfnG9KvgGJMJoVD0=;
+ b=QPYwsg4gYJGXJZV+mheB6p55OULzgJcAwobKaKHEO4NQLvCRYvec5+Em7jfkv6uZ9x
+ 5wg/dI728zp67rn8ExOUdL+6NvFfRQIIoPO/Z0wUYC8sMP3zJ9WoMHi/tZsyRjSJZpD1
+ aimgMAPnirxrZ2Ji5pbeixTEj4grF1J8UABcH2aOySwvl/1UzdnNJHJo5pS4nBSadByL
+ 3C8aDe7pfn1Yk4PgwpgHoD69bgfhROI7Ta5wd1Sal43mNB4DvGx+fqtRcT3O8IasMlVm
+ SPzpo9L912Mprp9dLGoVE8FFKJgVvYX206OlhS+w2t4ErSGqrV1XdDUpipYceWMh+wZR
+ qh+g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mvu9Ux/D
-Subject: [Buildroot] [PATCH 1/1] package/mdio-tools: needs fork
+ header.a=rsa-sha256 header.s=20210112 header.b=QPYwsg4g
+Subject: Re: [Buildroot] [PATCH 1/1] package/mdio-tools: needs fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,53 +96,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Marko <robimarko@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Robert Marko <robimarko@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since the addition of the package
-in commit 8fdf8731e727dc5c2d4080d7a56e1d71dc25e533:
-
-mdio.c: In function 'mdio_modprobe':
-mdio.c:738:15: error: implicit declaration of function 'fork' [-Werror=implicit-function-declaration]
-  738 |         pid = fork();
-      |               ^~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/c53aaeaa34dd4d6d9a57da196687beecaeed9fe2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mdio-tools/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
-index f24c1a6974..237f4454cc 100644
---- a/package/mdio-tools/Config.in
-+++ b/package/mdio-tools/Config.in
-@@ -1,12 +1,15 @@
- comment "mdio-tools needs a Linux kernel to be built"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_LINUX_KERNEL
- 
- comment "mdio-tools needs a toolchain w/ headers >= 5.1"
-+	depends on BR2_USE_MMU
- 	depends on BR2_LINUX_KERNEL
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 
- config BR2_PACKAGE_MDIO_TOOLS
- 	bool "mdio-tools"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 	select BR2_PACKAGE_LIBMNL
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU2F0LCAyMDIyLTExLTEyIGF0IDIyOjIwICswMTAwLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3Rl
+Ogo+IEZpeGVzOgo+IMKgLQo+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRz
+L2M1M2FhZWFhMzRkZDRkNmQ5YTU3ZGExOTY2ODdiZWVjYWVlZDlmZTIKPiAKPiBTaWduZWQtb2Zm
+LWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KClJldmll
+d2VkLWJ5OiBKb2FjaGltIFdpYmVyZyA8dHJvZ2xvYml0QGdtYWlsLmNvbT4KCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
