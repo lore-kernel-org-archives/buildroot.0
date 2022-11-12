@@ -4,67 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F17F4C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 20:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4233C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 21:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D1E9400DB;
-	Sat, 12 Nov 2022 20:32:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D1E9400DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C3EC400DB;
+	Sat, 12 Nov 2022 21:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C3EC400DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2r1lpLqd6JHQ; Sat, 12 Nov 2022 20:32:52 +0000 (UTC)
+	with ESMTP id bev-4ZbDgqon; Sat, 12 Nov 2022 21:20:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CD3640147;
-	Sat, 12 Nov 2022 20:32:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CD3640147
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 241C01BF397
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 20:32:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 498EF4055D;
+	Sat, 12 Nov 2022 21:20:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 498EF4055D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5ECFA1BF36F
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E772181E32
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 20:32:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E772181E32
+ by smtp2.osuosl.org (Postfix) with ESMTP id 469BD400DB
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 469BD400DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dxdXexZslKOl for <buildroot@lists.busybox.net>;
- Sat, 12 Nov 2022 20:32:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFD5981E20
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFD5981E20
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 20:32:48 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 90C7E60003;
- Sat, 12 Nov 2022 20:32:45 +0000 (UTC)
-Date: Sat, 12 Nov 2022 21:32:44 +0100
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20221112213244.161b83fe@windsurf>
-In-Reply-To: <20221110102313.182828-1-buildroot@heine.tech>
-References: <20221110102313.182828-1-buildroot@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3-Q6jwiXlCun for <buildroot@lists.busybox.net>;
+ Sat, 12 Nov 2022 21:20:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45CAF4013D
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 45CAF4013D
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 21:20:44 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ v124-20020a1cac82000000b003cf7a4ea2caso7841930wme.5
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 13:20:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EClTt0jhxdKCmT2w8AXXKBiX4Nt232RSKnJ6+LD29aA=;
+ b=hMqcu2xS5Knl+vysS2ExaudmtwVS1zVtDAcNlnhEC01ANqHsZcQrSa+xFSysunkBjO
+ RqUXTNrGHD+ExAwNZJ1HaEd3mTMV6hBZ65wot1mgOv9H8BL5V+7VIHYjj0Gzs2RkYssp
+ Zag+2UkdVhD9Rw9pdEf4yibeWJ2VmMK7j3MsoZlUiRMHUOGYKviXUYFktJ+E3u01bGvm
+ ZFa7bayDC3WGhWhT3ENE5rA5vGMUCGGTx3Qe6naBzKaJre7MYD9HnpgEn1cnZ+kKKn6D
+ eaivecM+7minL7fdaaCIg2Joi58vt2K1CvWJUiRp0No16F3r5+EBq6KItBQyINHM/lrQ
+ 4sfA==
+X-Gm-Message-State: ANoB5pnEZLsscfuobrqVl/AAj6RszwTtOl21WQuSntUAf6K/3rhTGobF
+ Wa+ABZUYzFKt2MdBzk5OpqT84wYOI3Y=
+X-Google-Smtp-Source: AA0mqf72pzn8q2tC4blobhHa+JAScZ+j2rdFuG8vGBfcJVUL3prElJXCtKFfsrZt+7Cm4873MLUiEw==
+X-Received: by 2002:a05:600c:6d3:b0:3cf:7716:8954 with SMTP id
+ b19-20020a05600c06d300b003cf77168954mr4661188wmn.57.1668288041964; 
+ Sat, 12 Nov 2022 13:20:41 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ e24-20020a5d5958000000b002356c051b9csm5145299wri.66.2022.11.12.13.20.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 12 Nov 2022 13:20:41 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 12 Nov 2022 22:20:34 +0100
+Message-Id: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668285165;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=yiUSuKSKAUFTT7qgiFNLlOEEkUl6weQZk0l2i3ISOCE=;
- b=ZLAnok6HnZ+rqbNw5ud0iTwvRSfIS4uWebZNmiFcSz8OI41rB51Lcqi3R27nyK3rwb5pas
- TTRnv5lN1PvMnEUzfaYCdTaYGn8r9RR+9mjpZQztGE7q6q4aWIF/QDJVTR+J6/Cv0a9l3C
- z9YQeYgMfoA16GHnyisoWSOJc/B/n/OpZzFneydx5POFVBznHlc7ntq3fwEtutPbjBXeNo
- 6bmMk6RDOfsXC+VFgXKveMIZmgTsNufji/h34nb4sjTnZ7tgYIqshEJVi6RnGQs7TEBfGx
- GXPxZGlb14G5e3GLa1tTt1NWY6Zub0viQy0tDwuP9FS2W/LRCC1uwfBit45fww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZLAnok6H
-Subject: Re: [Buildroot] [PATCH v2] package/swupdate: add libubootenv as
- dependency
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EClTt0jhxdKCmT2w8AXXKBiX4Nt232RSKnJ6+LD29aA=;
+ b=mvu9Ux/DZio9SIrFsrDiliXOb5N8dqCPFzuro98s1qGtk2TYcqy2Uxb5BSuGSgBguu
+ +ABftJaSQ5t8A9GaSNPUGyNiL1F5U/k2AeEHfRfgg4LHYaqw/6hInvco1EtlXyEG9D+R
+ h44Kit7PplZwh92ftKPpavl3oKDZT3+ilCu95HGCsPQoLwq9vRMNRdgv2rBE2N1y+vs0
+ UwuHPS8fjFc5kUEdXi2pNf2QRxO/VKbHyg5Ei0XgIMcD0VoazxO/0CqOaaBCHc9EnH6E
+ 2lNaExHQ8MYh8RvEx/adM0VeICbHDpXoTG+TXVZXedOQgbfbLe93MFKgfx6UzqQyu//P
+ iReA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=mvu9Ux/D
+Subject: [Buildroot] [PATCH 1/1] package/mdio-tools: needs fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Robert Marko <robimarko@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Michael,
+Fix the following build failure raised since the addition of the package
+in commit 8fdf8731e727dc5c2d4080d7a56e1d71dc25e533:
 
-On Thu, 10 Nov 2022 11:23:12 +0100
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+mdio.c: In function 'mdio_modprobe':
+mdio.c:738:15: error: implicit declaration of function 'fork' [-Werror=implicit-function-declaration]
+  738 |         pid = fork();
+      |               ^~~~
 
-> when using BR2_PER_PACKAGE_DIRECTORIES and configuring swupdate to
-> use uboot the build fails because libubootenv is not a dependency.
-> 
-> Fixes:
-> bootloader/uboot.c:23:10: fatal error: libuboot.h: No such file or directory
->    23 | #include <libuboot.h>
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Fixes:
+ - http://autobuild.buildroot.org/results/c53aaeaa34dd4d6d9a57da196687beecaeed9fe2
 
-Could you provide a bit more details? Your change is only making sure
-libubootenv is built before swupdate *if* libubootenv is eanbled in the
-Buildroot configuration. This would mean libubootenv is an optional
-dependency of swupdate.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mdio-tools/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-But your commit log seems to imply otherwise.
-
-We are not seeing any build errors on swupdate in our autobuilders.
-Could you provide an example Buildroot configuration that exhibits the
-issue?
-
-Thanks
-
-Thomas
+diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
+index f24c1a6974..237f4454cc 100644
+--- a/package/mdio-tools/Config.in
++++ b/package/mdio-tools/Config.in
+@@ -1,12 +1,15 @@
+ comment "mdio-tools needs a Linux kernel to be built"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_LINUX_KERNEL
+ 
+ comment "mdio-tools needs a toolchain w/ headers >= 5.1"
++	depends on BR2_USE_MMU
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 
+ config BR2_PACKAGE_MDIO_TOOLS
+ 	bool "mdio-tools"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 	select BR2_PACKAGE_LIBMNL
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
