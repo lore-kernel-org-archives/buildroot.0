@@ -1,90 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C69C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 21:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7675CC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 21:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A810240914;
-	Sat, 12 Nov 2022 21:37:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A810240914
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DCD040556;
+	Sat, 12 Nov 2022 21:37:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DCD040556
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zODkPoxl7301; Sat, 12 Nov 2022 21:36:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RiPFa-O_wgUI; Sat, 12 Nov 2022 21:37:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAB61408FD;
-	Sat, 12 Nov 2022 21:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAB61408FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FDFA4055E;
+	Sat, 12 Nov 2022 21:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FDFA4055E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B2DD1BF36F
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:36:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BD4B1BF36F
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3773400DB
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:36:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3773400DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB998400DB
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 21:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB998400DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0DGnEb2wUZP9 for <buildroot@lists.busybox.net>;
- Sat, 12 Nov 2022 21:36:53 +0000 (UTC)
+ with ESMTP id R8i_5rTbqMUK for <buildroot@lists.busybox.net>;
+ Sat, 12 Nov 2022 21:37:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F65B40012
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F65B40012
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 21:36:53 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id r12so13442111lfp.1
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 13:36:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE08840012
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE08840012
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 21:37:10 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id z14so10918951wrn.7
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 13:37:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=mime-version:user-agent:content-transfer-encoding:references
- :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=G2plker7xrVJ0uGQ4Vw4Tk02YvUwfnG9KvgGJMJoVD0=;
- b=ankcGyQyAcuDsUoz0aPtjF+Fhz8doFrIEayqPEMu89CUxPGLMKbo455HAuGO8Q6KLW
- dy1zlShg7eurZb7SThhnqR/czoj23eif0MZe2cz5J2zW4xZ4rowX89f5ZxAA8kydz3t7
- i2IEGfQELtezKjtHQq+afbT3SEwD/49/KVSAP7743pfOsNf0+dUPbmQd5rMnlJro/1/N
- 0PPSKLhFLKOhT0Lw7Wp+vSSo1VIvb9GbzFP+md6lF6Ql3DTA3GMJu06/vjriQXb4N03C
- f3Z+jD9eY1wDZYS2F+u5hZ1h1r+LO7Ev2wyYzufJp54uN2b2r2lwTxIRMSFh3Dxm9dd6
- uVMQ==
-X-Gm-Message-State: ANoB5pmiALdufXOHAF5hmThUc1SVWLhF6ziU/QL3hlu1fWw2mQEjt+92
- /EBjvn7WExEITvwlsp8XD1ngPaDzPv73oQ==
-X-Google-Smtp-Source: AA0mqf6zuPiUh4bK2XmBDtBbk4zU22cjHbxFpi1hMyfggKeRQEAB0vRAuxRhe09mTBtZz9UxZlTJfQ==
-X-Received: by 2002:ac2:4e13:0:b0:4b3:ec7a:6752 with SMTP id
- e19-20020ac24e13000000b004b3ec7a6752mr2715225lfr.79.1668289011227; 
- Sat, 12 Nov 2022 13:36:51 -0800 (PST)
-Received: from [10.0.196.136] ([98.128.186.104])
- by smtp.gmail.com with ESMTPSA id
- p24-20020a2eb118000000b002772b70c1acsm1120969ljl.21.2022.11.12.13.36.50
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SoWouiyg8sdoub2noFMB3mZYnrseE48lb5dviEKbTt4=;
+ b=VPms00OwdaJBmTjP1UezWuieRfqja5MuPzLpSndDnlIB53Ad9Fu8aldZNPJ5FF9/Lc
+ WFf1iYJjCS8+YhjbcpPTrpCTSin5gYizg/CUWwqoln5EmLjgOyoSf5/DZDKU96sXjxxe
+ LsjWSSjvTeq6SEWiLMEn6x51dMcU0TruGCdAf5iHREPBW7Myb7OJHjBVdhqg5KL5S7gO
+ NMtM8BU4FGJFAXfMO1b8BsSnUVz5eHBJdevjuy6gPM4BpOjJA9GkckZnECRJEHgVLzN2
+ bP0R4pIQ5CAgs7lvM2lrVAkAwkrAhRJ2BJ1HOvAtVUBWwQqTJ8ZSS3XQO772cxO7mVRm
+ ecCw==
+X-Gm-Message-State: ANoB5pla+MBrHnlPyoYiQ7aPXhM6miWmM7yAXNH+rtJSfXlfVPxURXTc
+ 0bXL3ik+SFADCO7v15i+lhRrbUL2Vuo=
+X-Google-Smtp-Source: AA0mqf77sHmgSkxc/7DZvFkh4wBxKO04Pbr59gKSDwHO7rS9aXcaRK/V4q0iN+Tvkw0Ry2AEQ2YR6Q==
+X-Received: by 2002:a5d:4a8f:0:b0:236:c206:fd6b with SMTP id
+ o15-20020a5d4a8f000000b00236c206fd6bmr4208883wrq.56.1668289028600; 
+ Sat, 12 Nov 2022 13:37:08 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ k34-20020a05600c1ca200b003b47b80cec3sm14698367wms.42.2022.11.12.13.37.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Nov 2022 13:36:50 -0800 (PST)
-Message-ID: <de28802b9f14d311c4d98d0bde650c86178b84c7.camel@gmail.com>
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Date: Sat, 12 Nov 2022 22:36:50 +0100
-In-Reply-To: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
-References: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
-User-Agent: Evolution 3.44.4-0ubuntu1 
+ Sat, 12 Nov 2022 13:37:08 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 12 Nov 2022 22:36:55 +0100
+Message-Id: <20221112213655.110226-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=mime-version:user-agent:content-transfer-encoding:references
- :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
- :date:message-id:reply-to;
- bh=G2plker7xrVJ0uGQ4Vw4Tk02YvUwfnG9KvgGJMJoVD0=;
- b=QPYwsg4gYJGXJZV+mheB6p55OULzgJcAwobKaKHEO4NQLvCRYvec5+Em7jfkv6uZ9x
- 5wg/dI728zp67rn8ExOUdL+6NvFfRQIIoPO/Z0wUYC8sMP3zJ9WoMHi/tZsyRjSJZpD1
- aimgMAPnirxrZ2Ji5pbeixTEj4grF1J8UABcH2aOySwvl/1UzdnNJHJo5pS4nBSadByL
- 3C8aDe7pfn1Yk4PgwpgHoD69bgfhROI7Ta5wd1Sal43mNB4DvGx+fqtRcT3O8IasMlVm
- SPzpo9L912Mprp9dLGoVE8FFKJgVvYX206OlhS+w2t4ErSGqrV1XdDUpipYceWMh+wZR
- qh+g==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=SoWouiyg8sdoub2noFMB3mZYnrseE48lb5dviEKbTt4=;
+ b=eArXeeJUhMVuTRmpQa/pTh5fcVZR+cQ9em9MCgq/zeySkusyN/1817u/xSPrfllZuH
+ lUZGfEDRvoXEycWiqGHLyDjPlSc04KLCSXnukM8N65efxKxHhZ6dPO66Q3Rer1Rd4gLZ
+ RERY6vtii2CZMOBH88oPt+5YMbnZR5EiX/FJxWY5V7qIoCrMXGaUC39SaiD0XTVmDK5n
+ Fq+mk5gcCJNz1CbLmF+NkJuMbZZgRrsfEM9A5mTboRwVh9li7/YWaTbQmELaJ8h1TfUG
+ EImJdQI/Hk4/M3ROSMu4vL03sl75LdpA1AjjryoHvihaUs6HANcsTbXXyeYloahT8h+W
+ rmNA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=QPYwsg4g
-Subject: Re: [Buildroot] [PATCH 1/1] package/mdio-tools: needs fork
+ header.a=rsa-sha256 header.s=20210112 header.b=eArXeeJU
+Subject: [Buildroot] [PATCH 1/1] package/ntfs-3g: security bump to version
+ 2022.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,17 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Marko <robimarko@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAyMDIyLTExLTEyIGF0IDIyOjIwICswMTAwLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3Rl
-Ogo+IEZpeGVzOgo+IMKgLQo+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRz
-L2M1M2FhZWFhMzRkZDRkNmQ5YTU3ZGExOTY2ODdiZWVjYWVlZDlmZTIKPiAKPiBTaWduZWQtb2Zm
-LWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KClJldmll
-d2VkLWJ5OiBKb2FjaGltIFdpYmVyZyA8dHJvZ2xvYml0QGdtYWlsLmNvbT4KCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
+2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
+local attacker can exploit this if the ntfs-3g binary is setuid root. A
+physically proximate attacker can exploit this if NTFS-3G software is
+configured to execute upon attachment of an external storage device.
+
+https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
+https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ntfs-3g/ntfs-3g.hash | 2 +-
+ package/ntfs-3g/ntfs-3g.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 89bce73559..3fcba6af4d 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
++sha256  f20e36ee68074b845e3629e6bced4706ad053804cbaf062fbae60738f854170c  ntfs-3g_ntfsprogs-2022.10.3.tgz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 64800c5eeb..62c515d50f 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NTFS_3G_VERSION = 2022.5.17
++NTFS_3G_VERSION = 2022.10.3
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
