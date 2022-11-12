@@ -1,72 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D116CC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 10:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BCD0C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 12 Nov 2022 12:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C78A402FE;
-	Sat, 12 Nov 2022 10:16:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C78A402FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51F0A4067F;
+	Sat, 12 Nov 2022 12:34:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51F0A4067F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wC2PhUPUcGi1; Sat, 12 Nov 2022 10:15:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rEmsV30N8_T3; Sat, 12 Nov 2022 12:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 434EA4027A;
-	Sat, 12 Nov 2022 10:15:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 434EA4027A
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1BD04035D;
+	Sat, 12 Nov 2022 12:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1BD04035D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 124021BF4D7
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 10:15:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F19BA1BF82C
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 12:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E603A4027A
- for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 10:15:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E603A4027A
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCFF640232
+ for <buildroot@lists.busybox.net>; Sat, 12 Nov 2022 12:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCFF640232
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 76k9mppmPCZi for <buildroot@lists.busybox.net>;
- Sat, 12 Nov 2022 10:15:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1C24401B2
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A1C24401B2
- for <buildroot@buildroot.org>; Sat, 12 Nov 2022 10:15:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:12bc:32e:ad2a:4f42])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 83BDC19F593;
- Sat, 12 Nov 2022 11:15:46 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 12 Nov 2022 11:15:46 +0100
-Date: Sat, 12 Nov 2022 11:15:46 +0100
+ with ESMTP id Z_D1-d7KqH6R for <buildroot@lists.busybox.net>;
+ Sat, 12 Nov 2022 12:34:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81AF7400CB
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81AF7400CB
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 12:34:35 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id a14so9681680wru.5
+ for <buildroot@buildroot.org>; Sat, 12 Nov 2022 04:34:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=nAodoGc9YtaY+J9te7t6mG5xrWYC5t8302CxwE9xgsc=;
+ b=fKklPMGV58BhYFabXEIPb/dfdGnQ/EGMvFa33+spKwiA3xOp/HNkvMLFjveWfFussK
+ qUxocfNlXeUlIUc0MFYwl5AxWg6meVtG/rVDMcXUse+CfgWUrNEktmIWJrrHQ7LR//WU
+ S3wHI3Cog5fZG8Mxd7H1bVEIbOae/9Uju/zcVj7JLlCqSEf2c3+sDpLbi9nMp3aekluC
+ /bXR7V6tKY1ct+53ZR+UgYmZ3MJcKsodqYpN/xV6bemE2DGW2yVXnTk1oypRl78uiueH
+ jJO9iiaZQVUhmlVHjnqJxleZi/hcDh723t9xGjG5pBDEMVbJRcYXsgSe6VZKJc/gLBaR
+ fyAQ==
+X-Gm-Message-State: ANoB5pkM0qk4mL61i75w5qHvxcRLvvr6Z3NNk5zN43h08xBWjzDYc50B
+ /8x/UQEG0UuR19+iXy7Yo2ih9WyEABE=
+X-Google-Smtp-Source: AA0mqf7Omu+gFLGMEalW+PqJx200QkLBb5ymyT98GjywiY5bBRxPMNiqJ2/hcrNpsuovEjIyGRsT4A==
+X-Received: by 2002:a05:6000:71e:b0:238:c1d5:332f with SMTP id
+ bs30-20020a056000071e00b00238c1d5332fmr3526226wrb.37.1668256473599; 
+ Sat, 12 Nov 2022 04:34:33 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:12bc:32e:ad2a:4f42])
+ by smtp.gmail.com with ESMTPSA id
+ p10-20020a05600c358a00b003c6b70a4d69sm6714810wmq.42.2022.11.12.04.34.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 12 Nov 2022 04:34:33 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thierry Bultel <thierry.bultel@linatsea.fr>,
- Adam Duskett <aduskett@gmail.com>
-Message-ID: <20221112101546.GB2123054@scaer>
-References: <20221111215321.7cfdbc46@windsurf> <20221112090731.GA2123054@scaer>
+To: buildroot@buildroot.org
+Date: Sat, 12 Nov 2022 13:34:32 +0100
+Message-Id: <20221112123432.1075333-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221112090731.GA2123054@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668248150;
- bh=DZCVh6AzBpHaTArZSXn/qyCIsFOTKVIRTLRvVOGERec=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=l7JLT/sK5VhZHJuZvOjUiNJWqD9SurcQxhLYr2rI9RaVSDIlm1iKXP0vm7NGze+ee
- Z8FUHe8PMgfZY5kqqFRkbxhwPYT8LxPopyzlk0cdnnwOIdfvgys21LOqBYxTBwztDy
- z+zVdP5z7FiMQ4tL5pGkNpXZ+iFnc63kMvDqUodFRlPtFLEEr++HSzn3lBlxkIBfQH
- DDBdBsyMw1itGFMc3Tp9wyCK838wgSHOW7nvHubPaY2nL7q2my81jTg9UDkInNP4qb
- MO/yO7ev/08lKS+bY1vrv6Bx5+WT14eo30QDx296dexwbr25JXczq4GriMQc1wT+iX
- nN0hVdjEithdQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=nAodoGc9YtaY+J9te7t6mG5xrWYC5t8302CxwE9xgsc=;
+ b=eE1s7bhB+TxG0MydNSIAE4Cvt/VvWz49+IaBa7xVt72Rup/+vvW2EYCxeRTTxGkUm3
+ 0XiW99ozAIZ69yXiD/Uk3cZDZKH2J9J5pVnixEXubjk9Sga+YedlX7YidGAv3TmCGCW+
+ Sc8KSi6fv2msj7tFCCKTi7yxahfkIlj4tfS6tCRDHCMU7cg2darLzbtkZ6Y/FcUsbuS5
+ ALA2+oEn7Ixy2LQw79nMvMNW4N818nxJzvPWmhA+WXLvquMMMG5gjrbv65Xyz7HYFCBI
+ hinRNxazg/FeNwryFpGnTF9M+2WTNw4/PWMoedZY0DoMpFlheHPRzjpuPoEER3WZYD/A
+ mAZg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=l7JLT/sK
-Subject: Re: [Buildroot] Remaining issue with Dracut runtime tests
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=eE1s7bhB
+Subject: [Buildroot] [PATCH] package/dbus-broker: audit support needs
+ libcap-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,42 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Norbert Lange <nolange79@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+Since v14 in 2018, audit support has needed libcap-ng.
 
-On 2022-11-12 10:07 +0100, Yann E. MORIN spake thusly:
-> On 2022-11-11 21:53 +0100, Thomas Petazzoni spake thusly:
-> > Even after your recent Dracut runtime tests fixes there is still one issue:
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261241
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261239
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261236
-> > Could you have a look?
-> The error occurs because we can't find usr/lib/libz.so in the list of
-> files in the cpio archive:
-[--SNIP--]
-> Final data point: as usual, the tests run OK here: libz is in /usr/lib,
-> and /lib is a symlink to /usr/lib, exactly as expected.
+Fixes:
+    http://autobuild.buildroot.org/results/43abdb85cc2f386d427cec1cfa876e20e3509cb8/
 
-I was able to reproduce the issue by running in our reference build
-iamge, registry.gitlab.com/buildroot.org/buildroot/base:20220206.1756
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+---
+ package/dbus-broker/Config.in      | 1 +
+ package/dbus-broker/dbus-broker.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-This is a good starting point; now, we can investigate further.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/dbus-broker/Config.in b/package/dbus-broker/Config.in
+index c7206232da..aa6584c392 100644
+--- a/package/dbus-broker/Config.in
++++ b/package/dbus-broker/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_DBUS_BROKER
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	depends on BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBCAP_NG if BR2_PACKAGE_AUDIT
+ 	help
+ 	  Linux D-Bus Message Broker.
+ 
+diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
+index c0a58de9ad..e82b79220d 100644
+--- a/package/dbus-broker/dbus-broker.mk
++++ b/package/dbus-broker/dbus-broker.mk
+@@ -28,7 +28,8 @@ DBUS_BROKER_DEPENDENCIES = expat systemd
+ DBUS_BROKER_CONF_OPTS = -Dlauncher=true
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+-DBUS_BROKER_DEPENDENCIES += audit
++# libcap-ng selected from Config.in
++DBUS_BROKER_DEPENDENCIES += audit libcap-ng
+ DBUS_BROKER_CONF_OPTS += -Daudit=true
+ else
+ DBUS_BROKER_CONF_OPTS += -Daudit=false
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
