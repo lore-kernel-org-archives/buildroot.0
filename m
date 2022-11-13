@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF3C3C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A76BFC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:18:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 806EA40920;
-	Mon, 20 Feb 2023 21:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 806EA40920
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A1E04098E;
+	Mon, 20 Feb 2023 21:18:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A1E04098E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lkBiLs2tJU0H; Mon, 20 Feb 2023 21:18:41 +0000 (UTC)
+	with ESMTP id A3RcwVBzLF94; Mon, 20 Feb 2023 21:18:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D7C1415D5;
-	Mon, 20 Feb 2023 21:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D7C1415D5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2337D1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08F6742CD5;
+	Mon, 20 Feb 2023 21:18:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F6742CD5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A0341BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E276341594
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E276341594
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59939610BB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59939610BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VPAHt3R7k4Ij for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RCO5mGMTct5G for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DDD14156D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DDD14156D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1481461098
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1481461098
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BA81828C8; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+ id 0F308828C8; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Nov 2022 21:44:04 +0100
+Date: Sun, 13 Nov 2022 14:31:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7928c51bf625333102358ed1c9d84efe3e6bdc01
-X-Git-Newrev: b7368099ae9767a57ec72fcfbb29a5d85ac7bcf7
+X-Git-Oldrev: cf14df13358ddd1b06709924a84f87dfa711cceb
+X-Git-Newrev: 4e63809d8d7ed873f320c61fc0eb7e0f64250acf
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.1BA81828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sdl: add upstream
- security fix for CVE-2022-34568
+Message-Id: <20230220205150.0F308828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/kontron_bl_imx8mm_defconfig: bump U-boot to 2022.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,69 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7368099ae9767a57ec72fcfbb29a5d85ac7bcf7
+commit: https://git.buildroot.net/buildroot/commit/?id=4e63809d8d7ed873f320c61fc0eb7e0f64250acf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-SDL v1.2 was discovered to contain a use-after-free via the XFree function
-at /src/video/x11/SDL_x11yuv.c.
+Commit 223516b51e1a (configs/kontron_bl_imx8mm: U-Boot needs util-linux)
+added the needed dependency against host-util-linux, but missed an
+earlier comment about u-boot still failing [0]
 
-https://github.com/advisories/GHSA-wr7h-5wm3-p3h4
+The U-Boot makefile for the host tools does not handle the
+compiler/linker options properly. There are some patches [1][2] that fixes
+that issue already applied in the newer U-Boot version 2022.10. So we have to
+bump U-Boot to fix an autobuilder failure.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
+
+[0] https://lore.kernel.org/buildroot/CAEyMn7Y3UgT-8dYY5rbnzcPfbGmqRVXG=joWx1fSSCC=WiFzbg@mail.gmail.com/
+[1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
+[2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr:
+  - update commit log with reference to [0]
+  - slightly tweak commit log
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-SDL_x11yuv.c-fix-possible-use-after-free.patch | 28 ++++++++++++++++++++++
- package/sdl/sdl.mk                                 |  3 +++
- 2 files changed, 31 insertions(+)
+ configs/kontron_bl_imx8mm_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch b/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-new file mode 100644
-index 0000000000..d7858d0f96
---- /dev/null
-+++ b/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-@@ -0,0 +1,28 @@
-+From d7e00208738a0bc6af302723fe64908ac35b777b Mon Sep 17 00:00:00 2001
-+From: Ozkan Sezer <sezeroz@gmail.com>
-+Date: Sat, 18 Jun 2022 14:55:00 +0300
-+Subject: [PATCH] SDL_x11yuv.c: fix possible use-after-free
-+
-+Fixes: https://github.com/libsdl-org/SDL-1.2/issues/863
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/video/x11/SDL_x11yuv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/video/x11/SDL_x11yuv.c b/src/video/x11/SDL_x11yuv.c
-+index 62698dfd..0d5754e3 100644
-+--- a/src/video/x11/SDL_x11yuv.c
-++++ b/src/video/x11/SDL_x11yuv.c
-+@@ -374,8 +374,8 @@ SDL_Overlay *X11_CreateYUVOverlay(_THIS, int width, int height, Uint32 format, S
-+ #ifdef PITCH_WORKAROUND
-+ 		if ( hwdata->image != NULL && hwdata->image->pitches[0] != (width*bpp) ) {
-+ 			/* Ajust overlay width according to pitch */ 
-+-			XFree(hwdata->image);
-+ 			width = hwdata->image->pitches[0] / bpp;
-++			XFree(hwdata->image);
-+ 			hwdata->image = SDL_NAME(XvCreateImage)(GFX_Display, xv_port, format,
-+ 								0, width, height);
-+ 		}
-+-- 
-+2.30.2
-+
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 7389cd3edb..462600debb 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -13,6 +13,9 @@ SDL_CPE_ID_VENDOR = libsdl
- SDL_CPE_ID_PRODUCT = simple_directmedia_layer
- SDL_INSTALL_STAGING = YES
- 
-+# 0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-+SDL_IGNORE_CVES += CVE-2022-34568
-+
- # we're patching configure.in, but package cannot autoreconf with our version of
- # autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
- define SDL_RUN_AUTOGEN
+diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
+index 13ed1a2078..240cb52245 100644
+--- a/configs/kontron_bl_imx8mm_defconfig
++++ b/configs/kontron_bl_imx8mm_defconfig
+@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
