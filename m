@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3598FC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04689C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC9B44022B;
-	Sun, 13 Nov 2022 16:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC9B44022B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mb_dq6d4SmF2; Sun, 13 Nov 2022 16:03:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6AF7401EF;
-	Sun, 13 Nov 2022 16:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6AF7401EF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F12491BF86C
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:02:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA48360BC9
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:02:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA48360BC9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 905C1605AD;
+	Sun, 13 Nov 2022 16:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 905C1605AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GZs-ClMC3yye for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id twgP9a1LQmFp; Sun, 13 Nov 2022 16:03:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D0C260746;
+	Sun, 13 Nov 2022 16:03:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D0C260746
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 08D381BF86D
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:02:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF683405B5
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:02:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF683405B5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zq13G5uqbjRZ for <buildroot@lists.busybox.net>;
  Sun, 13 Nov 2022 16:02:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F53D60BC5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 962EF405A8
  for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F53D60BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962EF405A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79E6B836B7; Sun, 13 Nov 2022 16:02:46 +0000 (UTC)
+ id 84A37836B8; Sun, 13 Nov 2022 16:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 16:48:19 +0100
+Date: Sun, 13 Nov 2022 16:53:18 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 47e8cc8e8ef7c64799495888fb16e92578f7dbf6
-X-Git-Newrev: 15698f61d94513430aa2fd690ed98bb97d08aa12
+X-Git-Oldrev: 15698f61d94513430aa2fd690ed98bb97d08aa12
+X-Git-Newrev: c6c6dde9c0470aab4839523fa68d7ebe55477a2e
 X-Patchwork-Hint: ignore
-Message-Id: <20221113160246.79E6B836B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] DEVELOPERS: add Giulio
- Benetti to rtl8188eu package
+Message-Id: <20221113160246.84A37836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/iwd: drop dbus
+ check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15698f61d94513430aa2fd690ed98bb97d08aa12
+commit: https://git.buildroot.net/buildroot/commit/?id=c6c6dde9c0470aab4839523fa68d7ebe55477a2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Since 6f5f6bc dbus is selected when iwd is selected.
+It is only a runtime dependency, so drop the build
+dependency.
+
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d64fff456890941f6bbe220d37f021437e0e0d0)
+(cherry picked from commit 5b3b2d80f4cf586d360ff696c3dacbd4cb48fdc4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/iwd/iwd.mk | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 74a9839b3c..681a1ff9f7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1147,6 +1147,7 @@ F:	package/nfs-utils/
- F:	package/python-uvloop/
- F:	package/qt5/
- F:	package/rockchip-mali/
-+F:	package/rtl8188eu/
- F:	package/rtl8189es/
- F:	package/rtl8723bu/
- F:	package/rtl8723ds/
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index d179e46ebf..346977dedf 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -15,16 +15,11 @@ IWD_SELINUX_MODULES = networkmanager
+ 
+ IWD_CONF_OPTS = \
+ 	--disable-manual-pages \
+-	--enable-external-ell
++	--enable-external-ell \
++	--enable-dbus-policy \
++	--with-dbus-datadir=/usr/share
+ IWD_DEPENDENCIES = ell
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-IWD_CONF_OPTS += --enable-dbus-policy --with-dbus-datadir=/usr/share
+-IWD_DEPENDENCIES += dbus
+-else
+-IWD_CONF_OPTS += --disable-dbus-policy
+-endif
+-
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ # iwd client depends on readline (GPL-3.0+)
+ IWD_LICENSE += , GPL-3.0+ (client)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
