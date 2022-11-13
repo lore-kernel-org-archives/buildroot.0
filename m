@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39AA9C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6609C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBD4760BAB;
-	Sun, 13 Nov 2022 14:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD4760BAB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79DF481331;
+	Sun, 13 Nov 2022 14:34:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79DF481331
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iW0ML5afokYf; Sun, 13 Nov 2022 14:34:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 940AB81332;
+	Sun, 13 Nov 2022 14:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 940AB81332
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 99A101BF414
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 73B6A60BAB
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B6A60BAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tj2K89DLiD-w; Sun, 13 Nov 2022 14:33:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8E2F60692;
-	Sun, 13 Nov 2022 14:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8E2F60692
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96EB01BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71A04403A8
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71A04403A8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hYH1pZM8i8Mt for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id keOkeI_165Wt for <buildroot@lists.busybox.net>;
  Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F0DB403C7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F30A6068F
  for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F0DB403C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F30A6068F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A6E683616; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
+ id 3DAB483619; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:15:51 +0100
+Date: Sun, 13 Nov 2022 15:26:20 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 73e41cd6739b3afb54073733e7818c03ae72be3b
-X-Git-Newrev: ec043f103ab41cb647d5ab76872b696c6250f3b2
+X-Git-Oldrev: 54eeba1f78ed891ddc13044ce97503fe33e57c52
+X-Git-Newrev: 7183a41d6a62c9907815e999ac11962bd7a6cf07
 X-Patchwork-Hint: ignore
-Message-Id: <20221113143351.2A6E683616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- toolchain/toolchain-buildroot: introduce BR2_TOOLCHAIN_BUILDROOT_NONE
+Message-Id: <20221113143351.3DAB483619@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/numactl: use
+ official license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,95 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec043f103ab41cb647d5ab76872b696c6250f3b2
+commit: https://git.buildroot.net/buildroot/commit/?id=7183a41d6a62c9907815e999ac11962bd7a6cf07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-In the internal toolchain backend, we have a choice..endchoice block
-to allow the user to select the C library, between glibc, uClibc and
-musl.
+Use official license files available since version 2.0.13 and
+https://github.com/numactl/numactl/commit/b4d36f6a34b045a67ed5c0314ec26f5514f4ee44
 
-However, there are situations were no C library at all is
-supported. In this case, the choice does not appear, and does not
-allow to see the Config.in comments that are within the
-choice..endchoice block and that may explain why no C library is
-available.
-
-For example, on RISC-V 32-bit, the only C library supported is glibc,
-and the minimum kernel header version required by glibc on this
-architecture is 5.4.0. In a future commit, we are going to add this
-dependency on glibc (to fix build issues on configurations that have
-headers < 5.4.0). But since glibc is the only supported C library on
-RISC-V 32-bit, it means that the choice..endchoice for the C library
-contains no entry, preventing from seeing the Config.in comment.
-
-To address this issue, this commit adds a "dummy"
-BR2_TOOLCHAIN_BUILDROOT_NONE option that shows up in the
-choice..endchoice only when no C library is available. Thanks to this,
-the choice..endchoice is never empty, and the Config.in comments can
-be seen.
-
-If the user keeps BR2_TOOLCHAIN_BUILDROOT_NONE selected, then the
-build will anyway abort early because package/Makefile.in has a check
-to verify that a C library is selected, and aborts the build if not.
-
-Some could say that the problem should be resolved by instead
-preventing the selection of headers < 5.4.0 on RISC-V 32-bit, but that
-is difficult to do as the user can choose a custom header version, or
-simply specific that (s)he wants to use the headers of the kernel
-being built. In those situations, it's difficult to prevent selecting
-headers < 5.4.0.
-
-Prevent random configurations from triggering a build failure in our
-autobuilders, by excluding that symbol from accepted configuration.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: update genrandconfig]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e1550ef755c90ccaa63b9d4ed805e1f85f73142f)
+(cherry picked from commit 702a60a2962172d725b210da42da2289a219a83f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 12 ++++++++++++
- utils/genrandconfig                     |  4 ++++
- 2 files changed, 16 insertions(+)
+ package/numactl/numactl.hash | 3 ++-
+ package/numactl/numactl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 154cf69ef1..daadeac09c 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -81,6 +81,18 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
- 	  https://www.musl-libc.org/
- 
-+config BR2_TOOLCHAIN_BUILDROOT_NONE
-+	bool "none"
-+	depends on !BR2_PACKAGE_UCLIBC_SUPPORTS && \
-+		!BR2_PACKAGE_GLIBC_SUPPORTS && \
-+		!BR2_PACKAGE_MUSL_SUPPORTS
-+	help
-+	  This option is visible if no C library is available for the
-+	  currently selected configuration. If you select this option,
-+	  the build will refuse to start as Buildroot needs a C
-+	  library to build a toolchain. Change your configuration
-+	  settings to make sure one of the C libraries is selected.
-+
- endchoice
- 
- config BR2_TOOLCHAIN_BUILDROOT_LIBC
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index e43452d5b7..257fe7b520 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -301,6 +301,10 @@ def fixup_config(sysinfo, configfile):
-     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
-        'BR2_PACKAGE_FLANN=y\n' in configlines:
-         return False
-+    # No C library for internal toolchain
-+    if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
-+        return False
-+
-     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
-        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
-         return False
+diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
+index 802175d360..a261eab9d0 100644
+--- a/package/numactl/numactl.hash
++++ b/package/numactl/numactl.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
+-sha256  e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575  README.md
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..6ff94091e9 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -7,7 +7,7 @@
+ NUMACTL_VERSION = 2.0.14
+ NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
+ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+-NUMACTL_LICENSE_FILES = README.md
++NUMACTL_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
