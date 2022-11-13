@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 764D1C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50F2AC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C23B81331;
-	Sun, 13 Nov 2022 14:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C23B81331
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9052403C7;
+	Sun, 13 Nov 2022 14:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9052403C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CUb8FXd58aHE; Sun, 13 Nov 2022 14:34:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dh9wp5tWXxle; Sun, 13 Nov 2022 14:34:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4527D81455;
-	Sun, 13 Nov 2022 14:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4527D81455
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E21B1BF86D
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2B5C40474;
+	Sun, 13 Nov 2022 14:34:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2B5C40474
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A33301BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8717B80F59
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8717B80F59
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EEE26068F
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EEE26068F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4CDjAlPND8ae for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WsJf29lybXji for <buildroot@lists.busybox.net>;
  Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D0E480CE0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65FAA60881
  for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D0E480CE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65FAA60881
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BB9E83616; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
+ id 518738361B; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:32:29 +0100
+Date: Sun, 13 Nov 2022 15:30:34 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 340184d56e2788d5fdec6f98d9d25dab49d76bb6
-X-Git-Newrev: 3e2debfc2dea1c25e2a403fc9ccba63f70cd7abf
+X-Git-Oldrev: e9f8776830fb7e513d60f52e045c7b164a47e621
+X-Git-Newrev: 340184d56e2788d5fdec6f98d9d25dab49d76bb6
 X-Patchwork-Hint: ignore
-Message-Id: <20221113143351.5BB9E83616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/pkg-cmake.mk:
- MakeFiles -> Makefiles
+Message-Id: <20221113143351.518738361B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] Force cmake packages to
+ use makefiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e2debfc2dea1c25e2a403fc9ccba63f70cd7abf
+commit: https://git.buildroot.net/buildroot/commit/?id=340184d56e2788d5fdec6f98d9d25dab49d76bb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Fixes:
-CMake Error: Could not create named generator Unix MakeFiles
+Force cmake packages to use the "Unix Makefiles" generator
+in case CMAKE_GENERATOR is set in the host environment. This
+patch further isolates the buildroot build environment from
+the host.
 
-Generators
-  Green Hills MULTI            = Generates Green Hills MULTI files
-                                 (experimental, work-in-progress).
-* Unix Makefiles               = Generates standard UNIX makefiles.
-  Ninja                        = Generates build.ninja files.
-  Ninja Multi-Config           = Generates build-<Config>.ninja files.
-  Watcom WMake                 = Generates Watcom WMake makefiles.
-  CodeBlocks - Ninja           = Generates CodeBlocks project files.
-  CodeBlocks - Unix Makefiles  = Generates CodeBlocks project files.
-  CodeLite - Ninja             = Generates CodeLite project files.
-  CodeLite - Unix Makefiles    = Generates CodeLite project files.
-  Eclipse CDT4 - Ninja         = Generates Eclipse CDT 4.0 project files.
-  Eclipse CDT4 - Unix Makefiles= Generates Eclipse CDT 4.0 project files.
-  Kate - Ninja                 = Generates Kate project files.
-  Kate - Unix Makefiles        = Generates Kate project files.
-  Sublime Text 2 - Ninja       = Generates Sublime Text 2 project files.
-  Sublime Text 2 - Unix Makefiles
-                               = Generates Sublime Text 2 project files.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 68b68518a8cc372cd6bfb34414a91311e7266044)
+(cherry picked from commit a5d8582e37b8b7440a71d4cad68e85bebc4aec6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index db9fdebb8d..8c375779cb 100644
+index 081960b5bf..db9fdebb8d 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -88,7 +88,7 @@ define $(2)_CONFIGURE_CMDS
+@@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
  	rm -f CMakeCache.txt && \
  	PATH=$$(BR_PATH) \
  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
--		-G"Unix MakeFiles" \
-+		-G"Unix Makefiles" \
++		-G"Unix MakeFiles" \
  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
  		-DCMAKE_INSTALL_PREFIX="/usr" \
  		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
-@@ -119,7 +119,7 @@ define $(2)_CONFIGURE_CMDS
+@@ -118,6 +119,7 @@ define $(2)_CONFIGURE_CMDS
  	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
  	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
--		-G"Unix MakeFiles" \
-+		-G"Unix Makefiles" \
++		-G"Unix MakeFiles" \
  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
