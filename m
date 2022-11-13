@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE670C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:53:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82DCBC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BC0C60C01;
-	Sun, 13 Nov 2022 21:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BC0C60C01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1EDAD405A7;
+	Sun, 13 Nov 2022 21:54:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EDAD405A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LMgwvSJEOBQW; Sun, 13 Nov 2022 21:53:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1yUbqOhI3BlH; Sun, 13 Nov 2022 21:54:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DAAC60BEA;
-	Sun, 13 Nov 2022 21:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DAAC60BEA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD65F1BF3AF
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 440EF405B1;
+	Sun, 13 Nov 2022 21:54:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 440EF405B1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 108741BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B80EC407D7
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B80EC407D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id E06534058B
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E06534058B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9wZIglHcssyL for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I9i2CnLlPLYe for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 21:54:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 818EC4069B
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 818EC4069B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17CFC405A4
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17CFC405A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FDA283837; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
+ id 0765983846; Sun, 13 Nov 2022 21:54:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:51:40 +0100
+Date: Sun, 13 Nov 2022 22:53:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b0b7fba64259140b9903a284b9b26a47a9a6315c
-X-Git-Newrev: 16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
+X-Git-Oldrev: 16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
+X-Git-Newrev: 3a96199ca1132dc75fbc20130fee40c2491d011a
 X-Patchwork-Hint: ignore
-Message-Id: <20221113215245.6FDA283837@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-twisted: bump
- to version 22.10.0
+Message-Id: <20221113215424.0765983846@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/udisks: add config
+ option to support mounting in /media
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,66 +64,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
+commit: https://git.buildroot.net/buildroot/commit/?id=3a96199ca1132dc75fbc20130fee40c2491d011a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove inaccurate comment that claims twisted and treq version/site
-variables are shared. They are not shared and the packages aren't
-always updated at the same time.
+Support mounting in /media instead of /run/media for compatibility
+with the Filesystem Hierarchy Standard (FHS). This is also required
+for backward compatibility with udisks1.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-treq/python-treq.mk         | 3 ---
- package/python-twisted/python-twisted.hash | 4 ++--
- package/python-twisted/python-twisted.mk   | 7 ++-----
- 3 files changed, 4 insertions(+), 10 deletions(-)
+ package/udisks/Config.in | 10 ++++++++++
+ package/udisks/udisks.mk |  7 ++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-index 8995bf2cfe..57dc50ee74 100644
---- a/package/python-treq/python-treq.mk
-+++ b/package/python-treq/python-treq.mk
-@@ -4,9 +4,6 @@
- #
- ################################################################################
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index a3a0f82144..7def58c3a6 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -49,3 +49,13 @@ comment "udisks needs a toolchain with dynamic library, locale, wchar, threads,
  
--# When bumping this package, make sure to also verify if the
--# python-twisted package still works and to update its hash,
--# as they share the same version/site variables.
- PYTHON_TREQ_VERSION = 22.2.0
- PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
- PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/cd/c8/b68ab17d994133baf6edbcb5551ba81e1494bdc6d5e21a9d4f3bc4315140
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 63da0125b8..36612ff5e7 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
--sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
-+md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
-+sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
- # Locally computed sha256
- sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 8a89d3dc82..398baed2a8 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,12 +4,9 @@
- #
- ################################################################################
+ comment "udisks can't be built with Optimize for fast"
+ 	depends on BR2_OPTIMIZE_FAST
++
++if BR2_PACKAGE_UDISKS
++
++config BR2_PACKAGE_UDISKS_FHS_MEDIA
++	bool "Mount devices in /media instead of /run/media"
++	help
++	  Support mounting in /media for compatibility with the
++	  Filesystem Hierarchy Standard (FHS)
++
++endif
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index 959333d01f..840f552b04 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -29,7 +29,6 @@ UDISKS_CONF_OPTS = \
+ 	--disable-acl \
+ 	--disable-bcache \
+ 	--disable-btrfs \
+-	--disable-fhs-media \
+ 	--disable-introspection \
+ 	--disable-iscsi \
+ 	--disable-lsm \
+@@ -40,4 +39,10 @@ UDISKS_CONF_OPTS = \
+ 	--disable-vdo \
+ 	--disable-zram
  
--# When bumping this package, make sure to also verify if the
--# python-treq package still works and to update its hash,
--# as they share the same version/site variables.
--PYTHON_TWISTED_VERSION = 22.2.0
-+PYTHON_TWISTED_VERSION = 22.10.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_UDISKS_FHS_MEDIA),y)
++UDISKS_CONF_OPTS += --enable-fhs-media
++else
++UDISKS_CONF_OPTS += --disable-fhs-media
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
