@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2670AC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A55E8C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEEBB42A1A;
-	Mon, 20 Feb 2023 21:12:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEEBB42A1A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4800D42A02;
+	Mon, 20 Feb 2023 21:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4800D42A02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wtA3lByhCuU3; Mon, 20 Feb 2023 21:12:44 +0000 (UTC)
+	with ESMTP id qffVQ79_T7d1; Mon, 20 Feb 2023 21:12:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F75B42B1D;
-	Mon, 20 Feb 2023 21:12:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F75B42B1D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 070411BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FEEA42B20;
+	Mon, 20 Feb 2023 21:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FEEA42B20
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AF0C1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5D6F61094
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D6F61094
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFA93414ED
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFA93414ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n1w66yh95hwb for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KmoAmydjbMSN for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E985A6100B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E985A6100B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DC0440C21
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DC0440C21
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D71EB86494; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 78D9486494; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:53 +0100
+Date: Sun, 13 Nov 2022 22:00:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2c4828568d6c5e4f1efb5b7d83ec6254d23ccdfa
-X-Git-Newrev: a0763bc283fda0117b920fe8fae29c9e8cc48737
+X-Git-Oldrev: b44f6c2f303ef03f563edd159b1c88d1cf118ed5
+X-Git-Newrev: 9cd084b54e2223e49c37962b0cbefae7bea26ef5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.D71EB86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_prime: remove
- defconfig
+Message-Id: <20230220205150.78D9486494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/systemd: fix build
+ with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,216 +56,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6284984612046307509=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0763bc283fda0117b920fe8fae29c9e8cc48737
+--===============6284984612046307509==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9cd084b54e2223e49c37962b0cbefae7bea26ef5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+systemd does not build with -Ofast (at least with gcc-12), leading to
+build errors like:
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+    ../src/shared/condition.c: In function ‘condition_dump_list’:
+    ../src/shared/condition.c:1227:33: error: ‘%s’ directive argument is null [-Werror=format-overflow=]
+     1227 |                 "%s\t%s: %s%s%s %s\n",
+          |                                 ^~
+    cc1: some warnings being treated as errors
+
+It is not really clear what the reason is, but it smells like a compiler
+error.
+
+Indeed, the failing format is passed to an fprintf, and the parameter
+corresponding to the failing %s directive is a call to a function
+which prototype is defined but the implementation only comes later in
+the same compilation unit, but is the result of macro expansion, which
+yields a function definition like:
+
+    const char foo_to_string(foo_type i) {
+        if (i < 0 || i >= (foo_type) ELEMENTSOF(foo_table))
+            return NULL;
+        return foo_table[i]
+    }
+
+(where ELEMENTSOF(x) is a macros arounf sizeof(x) to determine the
+number of elements in the array foo_table).
+
+However, in the failing case, foo_table is a static const array indexed
+with constants from an enum, and foo_to_string() is only ever called
+with variables that are only ever set to one of those enum values.
+
+Since -Ofast is also explicitly documented as breaking otehrwise
+conformant programs, we're not going to debug further the reason for the
+build failure.
+
+Instead, just revert to the best alternate optimisation level. We chose
+-O3, as -Ofast is based on -O3 with breaking optimisation flags.
+
+With -O3, the build succeeds.
 
 Fixes:
+    http://autobuild.buildroot.org/results/3ffaa9b3ecacc6ac326be78196af1ad613f195ed/ (sparc64)
+    http://autobuild.buildroot.org/results/3f6ae2e503dd1539e4240f344865da4881879204/ (arm)
+    http://autobuild.buildroot.org/results/68c17056490d441c7f862349e9c7e471b4570162/ (ppc64)
+    ...
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234499141
-
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Sen Hastings <sen@phobosdpl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  2 --
- board/orangepi/orangepi-prime/boot.cmd     |  6 ----
- board/orangepi/orangepi-prime/genimage.cfg | 40 ------------------------
- board/orangepi/orangepi-prime/readme.txt   | 37 ----------------------
- configs/orangepi_prime_defconfig           | 50 ------------------------------
- 5 files changed, 135 deletions(-)
+ package/systemd/systemd.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ec8df84fa8..f366426125 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1303,7 +1303,6 @@ F:	board/olimex/a33_olinuxino/
- F:	board/olimex/a64-olinuxino/
- F:	board/orangepi/orangepi-lite2/
- F:	board/orangepi/orangepi-one-plus
--F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
-@@ -1318,7 +1317,6 @@ F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
- F:	configs/orangepi_lite2_defconfig
- F:	configs/orangepi_one_plus_defconfig
--F:	configs/orangepi_prime_defconfig
- F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
-diff --git a/board/orangepi/orangepi-prime/boot.cmd b/board/orangepi/orangepi-prime/boot.cmd
-deleted file mode 100644
-index 34887880d8..0000000000
---- a/board/orangepi/orangepi-prime/boot.cmd
-+++ /dev/null
-@@ -1,6 +0,0 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--
--fatload mmc 0 $kernel_addr_r Image
--fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-prime.dtb
--
--booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-prime/genimage.cfg b/board/orangepi/orangepi-prime/genimage.cfg
-deleted file mode 100644
-index dde9a6485f..0000000000
---- a/board/orangepi/orangepi-prime/genimage.cfg
-+++ /dev/null
-@@ -1,40 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"sun50i-h5-orangepi-prime.dtb",
--			"boot.scr"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition spl {
--		in-partition-table = "no"
--		image = "sunxi-spl.bin"
--		offset = 8K
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 40K
--		size = 1M # 1MB - 40KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/orangepi/orangepi-prime/readme.txt b/board/orangepi/orangepi-prime/readme.txt
-deleted file mode 100644
-index 5811884d4d..0000000000
---- a/board/orangepi/orangepi-prime/readme.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Orangepi Prime. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--Orangepi Prime link:
--http://www.orangepi.org/OrangePiPrime/
--
--Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Prime
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--How to build
--============
--
--    $ make orangepi_prime_defconfig
--    $ make
--
--Note: you will need access to the internet to download the required
--sources.
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--  $ sudo sync
--
--Insert the micro SDcard in your Orangepi Prime and power it up. The console
--is on the serial line, 115200 8N1.
-diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
-deleted file mode 100644
-index f8f958c67b..0000000000
---- a/configs/orangepi_prime_defconfig
-+++ /dev/null
-@@ -1,50 +0,0 @@
--BR2_aarch64=y
--BR2_cortex_a53=y
--BR2_ARM_FPU_VFPV4=y
--
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_prime"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-prime/boot.cmd"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-prime"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Prime"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-prime/genimage.cfg"
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1d7452de19..b42f6a502b 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -90,6 +90,11 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dumount-path=/usr/bin/umount \
+ 	-Dutmp=false
+ 
++SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
++ifeq ($(BR2_OPTIMIZE_FAST),y)
++SYSTEMD_CFLAGS += -O3
++endif
++
+ ifeq ($(BR2_nios2),y)
+ # Nios2 ld emits warnings, make warnings not to be treated as errors
+ SYSTEMD_LDFLAGS = $(TARGET_LDFLAGS) -Wl,--no-fatal-warnings
+
+--===============6284984612046307509==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6284984612046307509==--
