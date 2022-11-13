@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFCAC43217
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A5BBC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCA1D4055D;
-	Sun, 13 Nov 2022 14:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCA1D4055D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46E4981446;
+	Sun, 13 Nov 2022 14:35:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46E4981446
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xj3qduBVXJ4x; Sun, 13 Nov 2022 14:35:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OBrpjpFsH2hx; Sun, 13 Nov 2022 14:35:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC86740585;
-	Sun, 13 Nov 2022 14:34:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC86740585
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B9BC41BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9FD81430;
+	Sun, 13 Nov 2022 14:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B9FD81430
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C7D6C1BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D20C4057F
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D20C4057F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A3A1381427
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3A1381427
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uahU9nBdJTEV for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OVUkwXkbpGXL for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 14:35:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 452A84020B
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 452A84020B
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1A5681441
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:35:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1A5681441
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33A3483618; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
+ id C09208363F; Sun, 13 Nov 2022 14:35:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:15:58 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: ec043f103ab41cb647d5ab76872b696c6250f3b2
-X-Git-Newrev: 54eeba1f78ed891ddc13044ce97503fe33e57c52
+Date: Sun, 13 Nov 2022 15:26:47 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 026a69328b9d8038f6b005d85a1d7c5d7616050a
+X-Git-Newrev: 80951e9cd323560ef937e18959023300357b1710
 X-Patchwork-Hint: ignore
-Message-Id: <20221113143351.33A3483618@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/glibc: headers >=
- 5.4 needed on RISC-V 32-bit
+Message-Id: <20221113143503.C09208363F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/numactl: use
+ official license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54eeba1f78ed891ddc13044ce97503fe33e57c52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=80951e9cd323560ef937e18959023300357b1710
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Since glibc 2.33 (upstream commit
-7a55dd3fb6d2c307a002a16776be84310b9c8989), headers >= 5.4.0 are needed
-to build glibc for RISC-V 32-bit. Indeed
-sysdeps/unix/sysv/linux/riscv/configure.ac contains:
+Use official license files available since version 2.0.13 and
+https://github.com/numactl/numactl/commit/b4d36f6a34b045a67ed5c0314ec26f5514f4ee44
 
-if test $libc_cv_riscv_int_abi = ilp32; then
-  arch_minimum_kernel=5.4.0
-fi
-
-In order to take into account this dependency, we add the appropriate
-logic in package/glibc/Config.in and
-toolchain/toolchain-buildroot/Config.in.
-
-This change means that if headers < 5.4.0 are selected, then no C
-library at all will be available for RISC-V 32-bit, as glibc is the
-only C library supporting RISC-V 32-bit currently. However, thanks to
-the recent addition of BR2_TOOLCHAIN_BUILDROOT_NONE, the
-choice...endchoice for the C library selection will not be empty,
-allowing the user to see the Config.in comment explaining why glibc
-can't be selected.
-
-Therefore, technically this commit does prevent from creating a
-configuration with RISC-V 32-bit and headers < 5.4.0, but it will have
-BR2_TOOLCHAIN_BUILDROOT_NONE=y, which is catched by
-package/Makefile.in, which aborts the build early on pointing out that
-the configuration is invalid.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/5ca49b2732f68eccb5276e7112f7f496dcc514ee/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2b3f0153bb5accd1f543a43088a8cf792cda95fc)
+(cherry picked from commit 702a60a2962172d725b210da42da2289a219a83f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/Config.in                 | 1 +
- toolchain/toolchain-buildroot/Config.in | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/numactl/numactl.hash | 3 ++-
+ package/numactl/numactl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index ba9f691d80..8bd529d25d 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -34,6 +34,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_RISCV_32
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index daadeac09c..bf874f1ea7 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -63,6 +63,10 @@ comment "glibc on RISC-V 64-bit needs a toolchain w/ headers >= 5.0"
- 	depends on BR2_RISCV_64
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- 
-+comment "glibc on RISC-V 32-bit needs a toolchain w/ headers >= 5.4"
-+	depends on BR2_RISCV_32
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+
- comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
- 	depends on BR2_arc
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
+index 802175d360..a261eab9d0 100644
+--- a/package/numactl/numactl.hash
++++ b/package/numactl/numactl.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
+-sha256  e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575  README.md
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index cf9c759693..6ff94091e9 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -7,7 +7,7 @@
+ NUMACTL_VERSION = 2.0.14
+ NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
+ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+-NUMACTL_LICENSE_FILES = README.md
++NUMACTL_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
+ NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
