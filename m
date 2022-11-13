@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE12C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6EB6C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:59:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBF2E4057F;
-	Sun, 13 Nov 2022 14:35:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBF2E4057F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E58960BB0;
+	Sun, 13 Nov 2022 14:59:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E58960BB0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BeCA9EuA_f5I; Sun, 13 Nov 2022 14:59:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52E11607F6;
+	Sun, 13 Nov 2022 14:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52E11607F6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 054531BF267
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:59:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E16DE404A1
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E16DE404A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dwR2z8G4Bfkf; Sun, 13 Nov 2022 14:35:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1940E4055D;
-	Sun, 13 Nov 2022 14:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1940E4055D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EADE91BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:35:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D18B181427
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:35:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D18B181427
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o-EYzwhNownp for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 14:35:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA4A081446
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:35:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA4A081446
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA87283671; Sun, 13 Nov 2022 14:35:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:30:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 5146b9943d986a811cf5b728faf8d7a8ce7bcf8a
-X-Git-Newrev: ae830d4ebd98a933b904b5e13b0d9376e8b84b2c
-X-Patchwork-Hint: ignore
-Message-Id: <20221113143503.DA87283671@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Force cmake packages to
- use makefiles
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vPUQ19qgP22P for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 14:59:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BA544048F
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7BA544048F
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:59:51 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:f76c:17ea:8df1:99cc])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7DF2413F88E;
+ Sun, 13 Nov 2022 15:59:45 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 13 Nov 2022 15:59:45 +0100
+Date: Sun, 13 Nov 2022 15:59:45 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221113145945.GH2123054@scaer>
+References: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221112212034.5472-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1668351588;
+ bh=PVzet3QduQRnjCLXk/jTuYLfL2cAGTncrOxnj+7nI3M=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=tdO6DdJU/UNWv/EaD0cuRtsEN62cKz0u1zvf1125oULEPd8twZeUT6wbneqpL0zeH
+ ybilBs0NBDOQCwcWcUYQeSf3rHN/AkMSibEU3s28OfbKQM1XHf/rq0QY32ZBB+Itxe
+ yMQwSurea8hvZ/aBbvphuITpmInuU8hnAcZUJ2ONhmmZZa+8SclIhXuXp/AGL7NsLj
+ 2rDBIX8VyWXUqmm1yhm7UKLY0gHeaxD6hzv3RbWq0CtXmea7d1FEluzA8DfR0PFAdO
+ mITuXHNteyVYNygp19VFzKfMHkF12f1MhsXEWMWgtXa0m7QyZHw0LRMd9H9Fmd3A6V
+ aIjims8pmjOEA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tdO6DdJU
+Subject: Re: [Buildroot] [PATCH 1/1] package/mdio-tools: needs fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +76,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Robert Marko <robimarko@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae830d4ebd98a933b904b5e13b0d9376e8b84b2c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Fabrice, All,
 
-Force cmake packages to use the "Unix Makefiles" generator
-in case CMAKE_GENERATOR is set in the host environment. This
-patch further isolates the buildroot build environment from
-the host.
+On 2022-11-12 22:20 +0100, Fabrice Fontaine spake thusly:
+> Fix the following build failure raised since the addition of the package
+> in commit 8fdf8731e727dc5c2d4080d7a56e1d71dc25e533:
+> 
+> mdio.c: In function 'mdio_modprobe':
+> mdio.c:738:15: error: implicit declaration of function 'fork' [-Werror=implicit-function-declaration]
+>   738 |         pid = fork();
+>       |               ^~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c53aaeaa34dd4d6d9a57da196687beecaeed9fe2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a5d8582e37b8b7440a71d4cad68e85bebc4aec6c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 3b1db35fb6..fc6ce4921d 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-G"Unix MakeFiles" \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
-@@ -117,6 +118,7 @@ define $(2)_CONFIGURE_CMDS
- 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-G"Unix MakeFiles" \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/mdio-tools/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
+> index f24c1a6974..237f4454cc 100644
+> --- a/package/mdio-tools/Config.in
+> +++ b/package/mdio-tools/Config.in
+> @@ -1,12 +1,15 @@
+>  comment "mdio-tools needs a Linux kernel to be built"
+> +	depends on BR2_USE_MMU
+>  	depends on !BR2_LINUX_KERNEL
+>  
+>  comment "mdio-tools needs a toolchain w/ headers >= 5.1"
+> +	depends on BR2_USE_MMU
+>  	depends on BR2_LINUX_KERNEL
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+>  
+>  config BR2_PACKAGE_MDIO_TOOLS
+>  	bool "mdio-tools"
+> +	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_LINUX_KERNEL
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+>  	select BR2_PACKAGE_LIBMNL
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
