@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47B24C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 17:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4FDEC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 17:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEE74405A0;
-	Sun, 13 Nov 2022 17:00:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEE74405A0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FxKvjuERPEcQ; Sun, 13 Nov 2022 17:00:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0452B404A3;
-	Sun, 13 Nov 2022 17:00:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0452B404A3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 721D41BF2FE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:59:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CA6180DCC
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:59:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CA6180DCC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AC2C80EE3;
+	Sun, 13 Nov 2022 17:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AC2C80EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EidWH9XfeGKe for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Uc2u9ckyK6U1; Sun, 13 Nov 2022 17:00:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4E7480DCC;
+	Sun, 13 Nov 2022 17:00:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4E7480DCC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 745431BF40B
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:59:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59E714032F
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:59:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E714032F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sua15ItcwDlV for <buildroot@lists.busybox.net>;
  Sun, 13 Nov 2022 16:59:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69C4180DAB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A253402EF
  for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69C4180DAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A253402EF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57F6E8375A; Sun, 13 Nov 2022 16:59:47 +0000 (UTC)
+ id 4477583755; Sun, 13 Nov 2022 16:59:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 17:55:01 +0100
+Date: Sun, 13 Nov 2022 17:48:51 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: f732be4b1f2b2a38730683d4014081e202dbec36
-X-Git-Newrev: 2e96a4c983edaef79a9d274f7bc7b6b99299f3b6
+X-Git-Oldrev: ff790138ef447f1426c09798b7e0b05202c65555
+X-Git-Newrev: 3db40bf45c918f0aa317fe1a001d94c8e773593c
 X-Patchwork-Hint: ignore
-Message-Id: <20221113165947.57F6E8375A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/umtprd: add patch
- to fix output_dir make dependency
+Message-Id: <20221113165947.4477583755@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] utils/genrandconfig:
+ handle a10disp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,82 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e96a4c983edaef79a9d274f7bc7b6b99299f3b6
+commit: https://git.buildroot.net/buildroot/commit/?id=3db40bf45c918f0aa317fe1a001d94c8e773593c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Object file targets need to depend on the output_dir target.
+a10disp will raise the following build failure with a mainline kernel:
 
-Upstream commit:
-https://github.com/viveris/uMTP-Responder/commit/d84216a678edaca81c0899318231cdcca2100d38
+cp: cannot stat '/home/autobuild/autobuild/instance-0/output-1/build/linux-5.17.15/include/video/sunxi_disp_ioctl.h': No such file or directory
 
 Fixes:
-- http://autobuild.buildroot.net/results/c7ce975d398190fc191ccc03813f8ec0b3464c7d/
-- http://autobuild.buildroot.net/results/0331fb9cf2748b16440ef830d09452a9812f5217/
-- http://autobuild.buildroot.net/results/a1b1de9e2f764ce22f23d8a8ea88f7ddcf2969a9/
-- http://autobuild.buildroot.net/results/7c7dbe03d769dc5f155fc14102f6591855605640/
-- http://autobuild.buildroot.net/results/6cd90b7877520669d9ab9c9fadc9fa36912963b4/
-- http://autobuild.buildroot.net/results/186689fc9637ae1a8330d7e19057cd1b3c9a841c/
+ - http://autobuild.buildroot.org/results/1f2607d6adece4d5dfe17fbdb032a2d228fc030f
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9f1a357452d473e384f28a37d3e4ba4146519160)
+(cherry picked from commit bada3ae53f051e3788bdacb8483cd386c2f4a419)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-output_dir-make-dependency.patch      | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ utils/genrandconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/umtprd/0001-Fix-output_dir-make-dependency.patch b/package/umtprd/0001-Fix-output_dir-make-dependency.patch
-new file mode 100644
-index 0000000000..fcbca6b000
---- /dev/null
-+++ b/package/umtprd/0001-Fix-output_dir-make-dependency.patch
-@@ -0,0 +1,46 @@
-+From d84216a678edaca81c0899318231cdcca2100d38 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Mon, 17 Oct 2022 16:39:56 -0600
-+Subject: [PATCH] Fix output_dir make dependency
-+
-+Object file targets need to depend on the output_dir target.
-+
-+Fixes:
-+make --shuffle=reverse -j1
-+cc -o obj/mtp_op_truncateobject.o src/mtp_operations/mtp_op_truncateobject.c -c  -I./inc -lpthread -Wall -O3
-+Assembler messages:
-+Fatal error: can't create obj/mtp_op_truncateobject.o: No such file or directory
-+make: *** [Makefile:19: obj/mtp_op_truncateobject.o] Error 1 shuffle=reverse
-+
-+[paul@crapouillou.net: Backport from upstream commit d84216a]
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+---
-+ Makefile | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 7c98b63..c28e186 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -7,15 +7,15 @@ objects := $(sources:src/%.c=obj/%.o)
-+ ops_sources := $(wildcard src/mtp_operations/*.c)
-+ ops_objects := $(ops_sources:src/mtp_operations/%.c=obj/%.o)
-+ 
-+-all: output_dir umtprd
-++all: umtprd
-+ 
-+ umtprd: $(objects) $(ops_objects)
-+ 	${CC} -o $@    $^ $(LDFLAGS) -lpthread
-+ 
-+-$(objects): obj/%.o: src/%.c
-++$(objects): obj/%.o: src/%.c | output_dir
-+ 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
-+ 
-+-$(ops_objects): obj/%.o: src/mtp_operations/%.c
-++$(ops_objects): obj/%.o: src/mtp_operations/%.c | output_dir
-+ 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
-+ 
-+ output_dir:
-+-- 
-+2.35.1
-+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 257fe7b520..f19a405685 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -308,6 +308,8 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
+         return False
++    if 'BR2_PACKAGE_A10DISP=y\n' in configlines:
++        return False
+ 
+     if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
+        'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
