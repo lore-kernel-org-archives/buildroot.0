@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B155C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F9F9C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09BED41CCE;
-	Mon, 20 Feb 2023 20:56:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09BED41CCE
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF06A41D0C;
+	Mon, 20 Feb 2023 20:56:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF06A41D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E8DIl53uIwAI; Mon, 20 Feb 2023 20:56:31 +0000 (UTC)
+	with ESMTP id Iu429p8SxHXN; Mon, 20 Feb 2023 20:56:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD64041D2B;
-	Mon, 20 Feb 2023 20:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD64041D2B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E0FB1BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id A047E41D32;
+	Mon, 20 Feb 2023 20:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A047E41D32
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C0DD61BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47C3F61088
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47C3F61088
+ by smtp4.osuosl.org (Postfix) with ESMTP id F38454194F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F38454194F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dggbEAi5wW-7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uVb4_FPAcpZE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A0456100B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A0456100B
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA69E41947
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA69E41947
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 294CF8648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+ id DA7DE86495; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 23:08:10 +0100
+Date: Sun, 13 Nov 2022 22:56:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e7930708a3b1e429ea605f4544564b29313b0a7b
-X-Git-Newrev: b9dd9ee857ec59e35552efe46a173eebc50659d2
+X-Git-Oldrev: 191fa1718f7f61ad9846a37c6f0c86a3b713e81c
+X-Git-Newrev: b3ab978703e0597b4bdf17d3e32cf0357db8315c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.294CF8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_gdb.py: drop version-specific tests
+Message-Id: <20230220205150.DA7DE86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libvncserver: fix
+ CVE-2020-29260
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,156 +64,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9dd9ee857ec59e35552efe46a173eebc50659d2
+commit: https://git.buildroot.net/buildroot/commit/?id=b3ab978703e0597b4bdf17d3e32cf0357db8315c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Back when support/testing/tests/package/test_gdb was introduced, there
-was a significant difference in how gdb < 10 and gdb >= 10 were
-handled in gdb.mk, which explained why we were testing both gdb 9.x
-and gdb 11.x.
+libvncclient v0.9.13 was discovered to contain a memory leak via the
+function rfbClientCleanup().
 
-However, support for gdb 9.x has now been dropped, and we only support
-gdb >= 10.x, so testing gdb 9.x and 11.x separately no longer make
-much sense. In addition:
-
- - other GDB tests in the same file already test the default version,
- which is now 11.x, meaning we in fact have duplicated tests between
- the ones testing the default version and the ones testing 11.x
- specifically
-
- - GDB 9.x has been removed, which means all the tests testing GDB 9.x
- are failing, with a Config.in.legacy build error.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828456 (TestGdbHostOnly9x)
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828454 (TestGdbHostGdbserver9x)
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828451 (TestGdbHostGdbTarget9x)
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_gdb.py | 108 ------------------------------
- 1 file changed, 108 deletions(-)
+ ...nt-free-vncRec-memory-in-rfbClientCleanup.patch | 28 ++++++++++++++++++++++
+ package/libvncserver/libvncserver.mk               |  3 +++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/support/testing/tests/package/test_gdb.py b/support/testing/tests/package/test_gdb.py
-index a7b0870644..4712162349 100644
---- a/support/testing/tests/package/test_gdb.py
-+++ b/support/testing/tests/package/test_gdb.py
-@@ -91,114 +91,6 @@ class TestGdbFullTarget(BaseGdb):
-         self.verify_gdb()
+diff --git a/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch b/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
+new file mode 100644
+index 0000000000..7658c112f3
+--- /dev/null
++++ b/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
+@@ -0,0 +1,28 @@
++From bef41f6ec4097a8ee094f90a1b34a708fbd757ec Mon Sep 17 00:00:00 2001
++From: Christian Beier <info@christianbeier.net>
++Date: Sat, 21 Nov 2020 12:52:31 +0100
++Subject: [PATCH] libvncclient: free vncRec memory in rfbClientCleanup()
++
++Otherwise we leak memory. Spotted by Ramin Farajpour Cami
++<ramin.blackhat@gmail.com>, thanks!
++
++[Retrieved from:
++https://github.com/LibVNC/libvncserver/commit/bef41f6ec4097a8ee094f90a1b34a708fbd757ec]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libvncclient/vncviewer.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libvncclient/vncviewer.c b/libvncclient/vncviewer.c
++index d6b91f02b..0a1bdcf6a 100644
++--- a/libvncclient/vncviewer.c
+++++ b/libvncclient/vncviewer.c
++@@ -534,6 +534,8 @@ void rfbClientCleanup(rfbClient* client) {
++     client->clientData = next;
++   }
++ 
+++  free(client->vncRec);
+++
++   if (client->sock != RFB_INVALID_SOCKET)
++     rfbCloseSocket(client->sock);
++   if (client->listenSock != RFB_INVALID_SOCKET)
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index ead809d19c..8f24e2d098 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -14,6 +14,9 @@ LIBVNCSERVER_INSTALL_STAGING = YES
+ LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
+ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
  
- 
--class TestGdbHostOnly9x(BaseGdb):
--    config = \
--        infra.basetest.MINIMAL_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--
--
--class TestGdbHostGdbserver9x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        BR2_PACKAGE_GDB=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdbserver()
--
--
--class TestGdbHostGdbTarget9x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_9_2=y
--        BR2_PACKAGE_GDB=y
--        BR2_PACKAGE_GDB_DEBUGGER=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdb()
--
--
--class TestGdbHostOnly11x(BaseGdb):
--    config = \
--        infra.basetest.MINIMAL_CONFIG + \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--
--
--class TestGdbHostGdbserver11x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        BR2_PACKAGE_GDB=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdbserver()
--
--
--class TestGdbHostGdbTarget11x(BaseGdb):
--    config = \
--        """
--        BR2_arm=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
--        BR2_PACKAGE_HOST_GDB=y
--        BR2_GDB_VERSION_11=y
--        BR2_PACKAGE_GDB=y
--        BR2_PACKAGE_GDB_DEBUGGER=y
--        BR2_TARGET_ROOTFS_CPIO=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--
--    def test_run(self):
--        self.verify_host_gdb()
--        self.boot()
--        self.verify_gdb()
--
--
- class TestGdbArc(BaseGdb):
-     config = \
-         """
++# 0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2020-29260
++
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
