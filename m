@@ -1,63 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1998C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE69C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 13:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A9524029B;
-	Sun, 13 Nov 2022 11:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A9524029B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkPSWK43IgrJ; Sun, 13 Nov 2022 11:56:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8EB5A40165;
-	Sun, 13 Nov 2022 11:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EB5A40165
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28FC71BF42E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:56:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03825819F3
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:56:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03825819F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F09281406;
+	Sun, 13 Nov 2022 13:34:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F09281406
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8jB8i4QdPQzH for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 11:56:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A32F5819ED
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A32F5819ED
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:56:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPA id 019AC1814B9; Sun, 13 Nov 2022 12:56:33 +0100 (CET)
-In-Reply-To: <20221112213244.161b83fe@windsurf>
-Date: Sun, 13 Nov 2022 12:56:33 +0100
-To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Message-ID: <6cff8-6370db80-5-75c4db80@248833567>
-User-Agent: SOGoMail 5.7.1
-X-Last-TLS-Session-Version: None
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1668340594; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to;
- bh=6qzvZu4/TiyraOOSBXg7MS0BXab1p9wQPJ+Ner1qCrI=;
- b=t8ehnZ5+E3OcrAVTvI16d1d7BAdRobJS5nEAxjsY6Zn0enZFtFLkzQ7zUPlMmvXXiie3RP
- ThX+m+dXf+LvnhgBWkBSjDmYwVGD9Gj/eottmQDoFiwgcnSmdJ4j5rV5+hbpRWnX1PDh8x
- dKjqQ1yPnLRyBXIE3QvhT6/ycEcXZBI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=t8ehnZ5+
-Subject: Re: [Buildroot] 
- =?utf-8?q?=5BPATCH_v2=5D_package/swupdate=3A__add_li?=
- =?utf-8?q?bubootenv_as_dependency?=
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XTYRdsmcencB; Sun, 13 Nov 2022 13:34:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DD17813D7;
+	Sun, 13 Nov 2022 13:34:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DD17813D7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 60C751BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 13:34:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49B5C4042B
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 13:34:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49B5C4042B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1X0cL5xzCsmF for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 13:34:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9241A40165
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 13:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9241A40165
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7C89B83530; Sun, 13 Nov 2022 13:34:22 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 13 Nov 2022 14:31:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cf14df13358ddd1b06709924a84f87dfa711cceb
+X-Git-Newrev: 4e63809d8d7ed873f320c61fc0eb7e0f64250acf
+X-Patchwork-Hint: ignore
+Message-Id: <20221113133422.7C89B83530@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/kontron_bl_imx8mm_defconfig: bump
+ U-boot to 2022.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,66 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=4e63809d8d7ed873f320c61fc0eb7e0f64250acf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Saturday, November 12, 2022 21:32 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Commit 223516b51e1a (configs/kontron_bl_imx8mm: U-Boot needs util-linux)
+added the needed dependency against host-util-linux, but missed an
+earlier comment about u-boot still failing [0]
 
-> Hello Michael,
-> 
-> On Thu, 10 Nov 2022 11:23:12 +0100
-> Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > when using BR2_PER_PACKAGE_DIRECTORIES and configuring swupdate to
-> > use uboot the build fails because libubootenv is not a dependency.
-> > 
-> > Fixes:
-> > bootloader/uboot.c:23:10: fatal error: libuboot.h: No such file or directory
-> >    23 | #include <libuboot.h>
-> > 
-> > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> 
-> Could you provide a bit more details? Your change is only making sure
-> libubootenv is built before swupdate *if* libubootenv is eanbled in the
-> Buildroot configuration. This would mean libubootenv is an optional
-> dependency of swupdate.
-> 
-> But your commit log seems to imply otherwise.
+The U-Boot makefile for the host tools does not handle the
+compiler/linker options properly. There are some patches [1][2] that fixes
+that issue already applied in the newer U-Boot version 2022.10. So we have to
+bump U-Boot to fix an autobuilder failure.
 
-(I just noticed this is also broken when building without PPD if libubootenv is not accidentially built before swupdate)
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
 
-swupdate has many optional dependencies like libgpiod, libcurl, zstd, zlib (see it's Config.in description).
-All off them are not configurable from the buildroot kconfig but from the swupdate config
-(see make swupdate-menuconfig). So for all other mentioned optional dependencies there is already
-the "if available depend on it" switch set but not for libubootenv.
+[0] https://lore.kernel.org/buildroot/CAEyMn7Y3UgT-8dYY5rbnzcPfbGmqRVXG=joWx1fSSCC=WiFzbg@mail.gmail.com/
+[1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
+[2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
 
-(Interestingly most of the other dependencies also have a "HAVE_*" configure flag when building swupdate.
-For libubootenv I didn't see one.)
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr:
+  - update commit log with reference to [0]
+  - slightly tweak commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/kontron_bl_imx8mm_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To reproduce you just need to add 
-
-CONFIG_UBOOT=y
-CONFIG_BOOTLOADER_DEFAULT_NONE=y
-
-to package/swupdate/swupdate.config an try to build swupdate.
-
-> 
-> We are not seeing any build errors on swupdate in our autobuilders.
-> Could you provide an example Buildroot configuration that exhibits the
-> issue?
-
-Are the autobuilders trying different swupdate-defconfigs? Then this should turn up...
-
-Regards,
-Michael
-
+diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
+index 13ed1a2078..240cb52245 100644
+--- a/configs/kontron_bl_imx8mm_defconfig
++++ b/configs/kontron_bl_imx8mm_defconfig
+@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
