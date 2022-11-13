@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50F2AC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D26D2C43217
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9052403C7;
-	Sun, 13 Nov 2022 14:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9052403C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74D2740474;
+	Sun, 13 Nov 2022 14:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74D2740474
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dh9wp5tWXxle; Sun, 13 Nov 2022 14:34:32 +0000 (UTC)
+	with ESMTP id sZrXJvgh3u4v; Sun, 13 Nov 2022 14:34:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2B5C40474;
-	Sun, 13 Nov 2022 14:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2B5C40474
+	by smtp4.osuosl.org (Postfix) with ESMTP id 514D64048F;
+	Sun, 13 Nov 2022 14:34:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 514D64048F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A33301BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D3DB91BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EEE26068F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DC8660BAB
  for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EEE26068F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DC8660BAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WsJf29lybXji for <buildroot@lists.busybox.net>;
+ with ESMTP id AJDiE2vdWvKJ for <buildroot@lists.busybox.net>;
  Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65FAA60881
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5942560692
  for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65FAA60881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5942560692
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 518738361B; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
+ id 47B618361A; Sun, 13 Nov 2022 14:33:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 15:30:34 +0100
+Date: Sun, 13 Nov 2022 15:28:45 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: e9f8776830fb7e513d60f52e045c7b164a47e621
-X-Git-Newrev: 340184d56e2788d5fdec6f98d9d25dab49d76bb6
+X-Git-Oldrev: 7183a41d6a62c9907815e999ac11962bd7a6cf07
+X-Git-Newrev: e9f8776830fb7e513d60f52e045c7b164a47e621
 X-Patchwork-Hint: ignore
-Message-Id: <20221113143351.518738361B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] Force cmake packages to
- use makefiles
+Message-Id: <20221113143351.47B618361A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/mxml: bump to
+ version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=340184d56e2788d5fdec6f98d9d25dab49d76bb6
+commit: https://git.buildroot.net/buildroot/commit/?id=e9f8776830fb7e513d60f52e045c7b164a47e621
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Force cmake packages to use the "Unix Makefiles" generator
-in case CMAKE_GENERATOR is set in the host environment. This
-patch further isolates the buildroot build environment from
-the host.
+Update hash of NOTICE (update in year:
+https://github.com/michaelrsweet/mxml/commit/d32818a16ceb352b8889f95ec7ff65575ad2e4f2)
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+https://github.com/michaelrsweet/mxml/releases/tag/v3.3.1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a5d8582e37b8b7440a71d4cad68e85bebc4aec6c)
+(cherry picked from commit f67480040b575fb225fcc2cd79c7a5408ef253b1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mxml/mxml.hash | 4 ++--
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 081960b5bf..db9fdebb8d 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-G"Unix MakeFiles" \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
-@@ -118,6 +119,7 @@ define $(2)_CONFIGURE_CMDS
- 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-G"Unix MakeFiles" \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 38056f4c3a..412977dff0 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  7cf976366f9e8e4f8cff7d35a59bcf6201c769fce9e58015d64f4b6de1fe3dd8  mxml-3.3.tar.gz
++sha256  0c663ed1fe393b5619f80101798202eea43534abd7c8aff389022fd8c1dacc32  mxml-3.3.1.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+-sha256  ed63aec4c75b9c21a5156b40052138032269bd27fd6f4bc0c51389807cdc7db9  NOTICE
++sha256  7dedb0043b0bbed7880bcc9724b3a3dae4d5ab2dce98a7904703109572b626e3  NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 88d35cb7ee..d224cf5308 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MXML_VERSION = 3.3
++MXML_VERSION = 3.3.1
+ MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
+ MXML_LICENSE = Apache-2.0 with exceptions
+ MXML_LICENSE_FILES = LICENSE NOTICE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
