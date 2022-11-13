@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6521C4708C
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0B99C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8307A402C8;
-	Mon,  5 Dec 2022 11:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8307A402C8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A2FC60A47;
+	Mon,  5 Dec 2022 11:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A2FC60A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sQQ0b83zDvih; Mon,  5 Dec 2022 11:58:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3X7DO5-HZXR2; Mon,  5 Dec 2022 11:58:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49DFC402D4;
-	Mon,  5 Dec 2022 11:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49DFC402D4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CE271BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 976D3600CD;
+	Mon,  5 Dec 2022 11:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 976D3600CD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 199C51BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B686A4060E
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B686A4060E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3981141578
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3981141578
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4DgFtKGXjCPl for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9yDCjkMh3Y0G for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8406B405EB
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8406B405EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A8B4415FE
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A8B4415FE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B44C85B9E; Mon,  5 Dec 2022 11:26:06 +0000 (UTC)
+ id 2607985BA3; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:05:33 +0100
+Date: Sun, 13 Nov 2022 22:51:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 619bbe3e3745955e1abdd95748b6b30859815bf4
-X-Git-Newrev: 90572af5a930345ed7ad3001889db4e83e94dcb3
+X-Git-Oldrev: b0b7fba64259140b9903a284b9b26a47a9a6315c
+X-Git-Newrev: 16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112606.6B44C85B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wcwidth: bump to version
- 0.2.5
+Message-Id: <20221205112609.2607985BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-twisted: bump to version
+ 22.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,52 +64,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90572af5a930345ed7ad3001889db4e83e94dcb3
+commit: https://git.buildroot.net/buildroot/commit/?id=16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to format change during move:
-https://github.com/jquast/wcwidth/commit/4baf950b88a28a9fe21d132e088b4ffc58e66276
+Remove inaccurate comment that claims twisted and treq version/site
+variables are shared. They are not shared and the packages aren't
+always updated at the same time.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wcwidth/python-wcwidth.hash | 8 ++++----
- package/python-wcwidth/python-wcwidth.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-treq/python-treq.mk         | 3 ---
+ package/python-twisted/python-twisted.hash | 4 ++--
+ package/python-twisted/python-twisted.mk   | 7 ++-----
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/package/python-wcwidth/python-wcwidth.hash b/package/python-wcwidth/python-wcwidth.hash
-index ed1d2cd61f..216182c2ed 100644
---- a/package/python-wcwidth/python-wcwidth.hash
-+++ b/package/python-wcwidth/python-wcwidth.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wcwidth/json
--md5  b32584cd6084b4a8c81df13a2a6b4351  wcwidth-0.1.9.tar.gz
--sha256  ee73862862a156bf77ff92b09034fc4825dd3af9cf81bc5b360668d425f3c5f1  wcwidth-0.1.9.tar.gz
--# Locally computed
--sha256  0eddcc52cd3ef5d30798b8d43a14d3f0f1dcf0a6e4c1d0f2e177c44ce85bb69c  LICENSE.txt
-+md5  a07a75f99d316e14838ac760c831ea37  wcwidth-0.2.5.tar.gz
-+sha256  c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83  wcwidth-0.2.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  70b98a95a2144eb70af8017fa8c6d95ce247e40867436e8bc649e137fe13d21a  LICENSE
-diff --git a/package/python-wcwidth/python-wcwidth.mk b/package/python-wcwidth/python-wcwidth.mk
-index ccbd0e99ca..a170a8e395 100644
---- a/package/python-wcwidth/python-wcwidth.mk
-+++ b/package/python-wcwidth/python-wcwidth.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 8995bf2cfe..57dc50ee74 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,6 @@
  #
  ################################################################################
  
--PYTHON_WCWIDTH_VERSION = 0.1.9
-+PYTHON_WCWIDTH_VERSION = 0.2.5
- PYTHON_WCWIDTH_SOURCE = wcwidth-$(PYTHON_WCWIDTH_VERSION).tar.gz
--PYTHON_WCWIDTH_SITE = https://pypi.python.org/packages/25/9d/0acbed6e4a4be4fc99148f275488580968f44ddb5e69b8ceb53fc9df55a0
-+PYTHON_WCWIDTH_SITE = https://files.pythonhosted.org/packages/89/38/459b727c381504f361832b9e5ace19966de1a235d73cdbdea91c771a1155
- PYTHON_WCWIDTH_SETUP_TYPE = setuptools
- PYTHON_WCWIDTH_LICENSE = MIT
--PYTHON_WCWIDTH_LICENSE_FILES = LICENSE.txt
-+PYTHON_WCWIDTH_LICENSE_FILES = LICENSE
+-# When bumping this package, make sure to also verify if the
+-# python-twisted package still works and to update its hash,
+-# as they share the same version/site variables.
+ PYTHON_TREQ_VERSION = 22.2.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+ PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/cd/c8/b68ab17d994133baf6edbcb5551ba81e1494bdc6d5e21a9d4f3bc4315140
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 63da0125b8..36612ff5e7 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
+-sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
++md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
++sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
+ # Locally computed sha256
+ sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 8a89d3dc82..398baed2a8 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,12 +4,9 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
+-# When bumping this package, make sure to also verify if the
+-# python-treq package still works and to update its hash,
+-# as they share the same version/site variables.
+-PYTHON_TWISTED_VERSION = 22.2.0
++PYTHON_TWISTED_VERSION = 22.10.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
