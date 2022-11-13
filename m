@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF74AC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 10:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5449CC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EFE281292;
-	Sun, 13 Nov 2022 10:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EFE281292
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD78160B30;
+	Sun, 13 Nov 2022 11:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD78160B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IC8N6Q0uOJ3C; Sun, 13 Nov 2022 10:09:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xTjYuTgjuJHi; Sun, 13 Nov 2022 11:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64CBB812AB;
-	Sun, 13 Nov 2022 10:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64CBB812AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1072C60864;
+	Sun, 13 Nov 2022 11:09:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1072C60864
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C5EAF1BF47E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 10:09:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 014211BF42E
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A11B84020B
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 10:09:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A11B84020B
+ by smtp2.osuosl.org (Postfix) with ESMTP id D08D94048F
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08D94048F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PMC05P9SLtIg for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 10:09:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE4F940140
-Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE4F940140
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 10:09:21 +0000 (UTC)
-Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1ou9vS-0007cP-KX; Sun, 13 Nov 2022 13:09:19 +0300
-From: Maxim Kochetkov <fido_max@inbox.ru>
+ with ESMTP id uCMm9ikptpCM for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 11:09:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97B934020B
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97B934020B
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:09:04 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id o4so12369599wrq.6
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 03:09:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YJy+K1KqGUxca3/rRMi09Zps7iCKQ2BDaQ6WWGqqGdE=;
+ b=oB4SNd6IR7Cc/yPMlLz2yALoppkgsRe7frSpbFqRm+0bnu5Q939WDL4XzNeolnVTM/
+ 36c6ZQZLLpFwtAiEc+lGFvXSO7ugsKyDivCz3GcYDmHG/4Bjm/2b/FzpsQTYEJ+E617Y
+ fP/v2STGXzutq+3CvtU5RMY6yHVbHj7I//wZ22tB7yigp6Kt5JuyGmmCIdlFQnrXKhSS
+ bs1FDN7IWevylAe0fOT4sPeZrVLIrAgOfdvTG7AEIOP7WBy4PRQUVduMcZsXwy7Fo91h
+ iJ5Sm3vWhVQwu6ipwMzz1Yl72Na/gbkiQk09lBXDom0JMxFgcpY6uqFjyHVxRFwAAO+4
+ sS2w==
+X-Gm-Message-State: ANoB5plBUII8Jo3gLS5NBQh1wtsNlxZH0ywKGah7axcdf8qpOzMPjtnw
+ Kc/uDKxyV0J75ZIQ/vRic6zkgfLnzIw=
+X-Google-Smtp-Source: AA0mqf60ZLA00EmpbP58wbKnCzyQQXkzuQSHSbdcr2Pp1/DrSAFjQ1JZQhwhZLXsZ1M2ckMkDngq5A==
+X-Received: by 2002:adf:e80a:0:b0:236:593f:2ab3 with SMTP id
+ o10-20020adfe80a000000b00236593f2ab3mr5485404wrm.356.1668337742669; 
+ Sun, 13 Nov 2022 03:09:02 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:f76c:17ea:8df1:99cc])
+ by smtp.gmail.com with ESMTPSA id
+ k34-20020a05600c1ca200b003b47b80cec3sm16289791wms.42.2022.11.13.03.09.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 13 Nov 2022 03:09:02 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 13:09:14 +0300
-Message-Id: <20221113100914.1012977-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.37.2
+Date: Sun, 13 Nov 2022 12:09:01 +0100
+Message-Id: <20221113110901.4065729-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD9143903447CF85CF5092F15731B949002ECF52CCFBA4658E0182A05F5380850404C228DA9ACA6FE27E7FE5ABD441B2A7794A5B572095DDF8CE43F7E46C385883FC2338AB5A00FFB05
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7876E9C5582D2D91DEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006379703D7D5B138802D8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D83603AC821117B541C18A97909A717B3C6F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC292D688DDAD4E7BC389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC860910C30DCD593B1F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B779389CF6F126FEC75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A52A08A48D3EEC0D60115812CDD2E2F1E67B59EC67646AC6BB4EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF50F2237FE565727C05
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34CC972AA0E2E780C436F8A8FFAD5BF5AE76F755E0DBFDD50D755706497CCE70B183BF0C62D8C36E931D7E09C32AA3244C8C83339E2100B1C8225C2ED3A1ED476C30452B15D76AEC14729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj8JpecWJC8nUr5Q7/IxJXIg==
-X-Mailru-Sender: 689FA8AB762F7393CC2E0F076E87284E19EB43465878E4AA92BE3D8E9C3F973498CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; s=mail4; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=0pDB+Yu6hQm2UwEz8s92vVNWFYOsJyvBcFLOTHSdz7g=; 
- t=1668334161;x=1668424161; 
- b=mBdeZ2DXSGyCw+89hIF6sjCosyY2jMMvzWcdJQwibuwXvgGZvzRftMa/FnR/b5ciepVgku7A8aBS/UdnXnBjTqo286vXby905p43Lzx/CZe/k9fn35Ql28xADuMjEQh7MXZyNTNe3P/p4Qcpo+7rOFs0ud0Q4UzP1jaHlA7HMeYq2iqxxi4/ygD3UcIWlPExCfOY4al8Es69HOR618RBoCqzXvA8ZYhG7evxQDZvSwokZSfPKkl3RMRGjEBfwGNEERwLWEpHzZxnDW89PO6WPcb7h2R0E+9H9jXipUoGAxyD5eJba7nOsisEqTSSFKWH6P31JjE2rpFN6GISCtmu4w==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=YJy+K1KqGUxca3/rRMi09Zps7iCKQ2BDaQ6WWGqqGdE=;
+ b=kdUz/Rk7v1lT2pLZdIK4dcO6i2Yv7Mup9ULhoxhdMMUm2AMQKLGNDJfPnczvYvRRqg
+ vVwa1nVOnsK1RtW6uJTKQk6mrYn7W8eB4SKAr3UAv53XOattz+aUdwkObgelDFYuznef
+ XSJ9fgwZ/Fd87Pr1xG63ueoNmRCsiSHUHvx7x709LcJa8TbuIddz8tsG9xQ6GVlI7Sco
+ YVn4AHLfM+K7u1Pm5H7IDxd752CEc/3B32RZ51bLY1bPbT/tIWsAaBIb20bj7ylqKebu
+ a2MwL1OLMrWXRDkRy8U/ydHg48WLoaLj/bwTSRe8AxrYVqD4ddtHw4HVi/am0KayZJaX
+ Rv6A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=mBdeZ2DX
-X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.3.2
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kdUz/Rk7
+Subject: [Buildroot] [PATCH] package/systemd: fix build with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,130 +93,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Norbert Lange <nolange79@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All patches are merged into upstream, so drop them.
-
-https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.3.2/NEWS
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- ...e-forced-static-linking-of-liblwgeom.patch | 31 ----------------
- ...kefile.in-do-not-force-static-linkin.patch | 35 -------------------
- package/postgis/postgis.hash                  |  2 +-
- package/postgis/postgis.mk                    |  2 +-
- 4 files changed, 2 insertions(+), 68 deletions(-)
- delete mode 100644 package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch
- delete mode 100644 package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
-
-diff --git a/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch b/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch
-deleted file mode 100644
-index 4329c9cd80..0000000000
---- a/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 845c18c1288b7a96592901baadb198f96dd71c46 Mon Sep 17 00:00:00 2001
--From: fidomax <adobegitler@gmail.com>
--Date: Tue, 26 Jan 2021 09:49:19 +0300
--Subject: [PATCH] Disable forced static linking of liblwgeom
--
--In case of shared libs build fails:
--ld: cannot find -lgeos_c
--ld: attempted static link of dynamic object `/usr/lib/libproj.so'
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
--Fetch from: https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b.patch
-----
-- loader/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/loader/Makefile.in b/loader/Makefile.in
--index 9aebfe07f..9a0c90d3a 100644
----- a/loader/Makefile.in
--+++ b/loader/Makefile.in
--@@ -44,7 +44,7 @@ ICONV_CFLAGS=@ICONV_CFLAGS@
-- 
-- # liblwgeom
-- LIBLWGEOM=../liblwgeom/liblwgeom.la
---LDFLAGS += -static $(LIBLWGEOM)
--+LDFLAGS += $(LIBLWGEOM)
-- 
-- # GTK includes and libraries
-- GTK_CFLAGS = @GTK_CFLAGS@ @IGE_MAC_CFLAGS@
---- 
--2.30.0
--
-diff --git a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch b/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
-deleted file mode 100644
-index 756a7c10dd..0000000000
---- a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 29c33c483e22a4445d870739187d128df0f11f60 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Wed, 27 Jul 2022 15:12:40 +0200
--Subject: [PATCH] raster/loader/Makefile.in: do not force static linking
--
--This is similar to commit
--https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b,
--but applied to raster/loader. It ensures that if only shared variants
--of the libraries are available, the link still works. If you force
---static and only shared variants of some of the libraries are
--available, the link fails with "d: attempted static link of dynamic
--object XYZ".
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/postgis/postgis/pull/702
-----
-- raster/loader/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/raster/loader/Makefile.in b/raster/loader/Makefile.in
--index 3df47a96f..d0a408333 100644
----- a/raster/loader/Makefile.in
--+++ b/raster/loader/Makefile.in
--@@ -36,7 +36,7 @@ PGSQL_BINDIR=@PGSQL_BINDIR@
-- 
-- RT_CORE=../rt_core
-- 
---LIBLWGEOM_LDFLAGS= -static ../../liblwgeom/liblwgeom.la
--+LIBLWGEOM_LDFLAGS= ../../liblwgeom/liblwgeom.la
-- LIBLWGEOM_CFLAGS=-I../../liblwgeom
-- LIBGDAL_CFLAGS=@LIBGDAL_CFLAGS@
-- LIBGDAL_LDFLAGS=@LIBGDAL_LDFLAGS@
---- 
--2.37.1
--
-diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
-index 9569ca71dd..8550a57939 100644
---- a/package/postgis/postgis.hash
-+++ b/package/postgis/postgis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  18cf3d013f45b1aa8ed59d78bc707e9e125e250d8f0615396ae9bfe3dd7c3d7c  postgis-3.2.2.tar.gz
-+sha256  9a2a219da005a1730a39d1959a1c7cec619b1efb009b65be80ffc25bad299068  postgis-3.3.2.tar.gz
- sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index e6ea52bf7a..4148180adf 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGIS_VERSION = 3.2.2
-+POSTGIS_VERSION = 3.3.2
- POSTGIS_SITE = https://download.osgeo.org/postgis/source
- # parallel build issues
- POSTGIS_MAKE = $(MAKE1)
--- 
-2.37.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+c3lzdGVtZCBkb2VzIG5vdCBidWlsZCB3aXRoIC1PZmFzdCAoYXQgbGVhc3Qgd2l0aCBnY2MtMTIp
+LCBsZWFkaW5nIHRvCmJ1aWxkIGVycm9ycyBsaWtlOgoKICAgIC4uL3NyYy9zaGFyZWQvY29uZGl0
+aW9uLmM6IEluIGZ1bmN0aW9uIOKAmGNvbmRpdGlvbl9kdW1wX2xpc3TigJk6CiAgICAuLi9zcmMv
+c2hhcmVkL2NvbmRpdGlvbi5jOjEyMjc6MzM6IGVycm9yOiDigJglc+KAmSBkaXJlY3RpdmUgYXJn
+dW1lbnQgaXMgbnVsbCBbLVdlcnJvcj1mb3JtYXQtb3ZlcmZsb3c9XQogICAgIDEyMjcgfCAgICAg
+ICAgICAgICAgICAgIiVzXHQlczogJXMlcyVzICVzXG4iLAogICAgICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIF5+CiAgICBjYzE6IHNvbWUgd2FybmluZ3MgYmVpbmcgdHJl
+YXRlZCBhcyBlcnJvcnMKCkl0IGlzIG5vdCByZWFsbHkgY2xlYXIgd2hhdCB0aGUgcmVhc29uIGlz
+LCBidXQgaXQgc21lbGxzIGxpa2UgYSBjb21waWxlcgplcnJvci4KCkluZGVlZCwgdGhlIGZhaWxp
+bmcgZm9ybWF0IGlzIHBhc3NlZCB0byBhbiBmcHJpbnRmLCBhbmQgdGhlIHBhcmFtZXRlcgpjb3Jy
+ZXNwb25kaW5nIHRvIHRoZSBmYWlsaW5nICVzIGRpcmVjdGl2ZSBpcyBhIGNhbGwgdG8gYSBmdW5j
+dGlvbgp3aGljaCBwcm90b3R5cGUgaXMgZGVmaW5lZCBidXQgdGhlIGltcGxlbWVudGF0aW9uIG9u
+bHkgY29tZXMgbGF0ZXIgaW4KdGhlIHNhbWUgY29tcGlsYXRpb24gdW5pdCwgYnV0IGlzIHRoZSBy
+ZXN1bHQgb2YgbWFjcm8gZXhwYW5zaW9uLCB3aGljaAp5aWVsZHMgYSBmdW5jdGlvbiBkZWZpbnRp
+b24gbGlrZToKCiAgICBjb25zdCBjaGFyIGZvb190b19zdHJpbmcoZm9vX3R5cGUgaSkgewogICAg
+ICAgIGlmIChpIDwgMCB8fCBpID49IChmb29fdHlwZSkgRUxFTUVOVFNPRihmb29fdGFibGUpKQog
+ICAgICAgICAgICByZXR1cm4gTlVMTDsKICAgICAgICByZXR1cm4gZm9vX3RhYmxlW2ldCiAgICB9
+Cgood2hlcmUgRUxFTUVOVFNPRih4KSBpcyBhIG1hY3JvcyBhcm91bmYgc2l6ZW9mKHgpIHRvIGRl
+dGVybWluZSB0aGUKbnVtYmVyIG9mIGVsZW1lbnRzIGluIHRoZSBhcnJheSBmb29fdGFibGUpLgoK
+SG93ZXZlciwgaW4gdGhlIGZhaWxpbmcgY2FzZSwgZm9vX3RhYmxlIGlzIGEgc3RhdGljIGNvbnN0
+IGFycmF5IGluZGV4ZWQKd2l0aCBjb25zdGFudHMgZnJvbSBhbiBlbnVtLCBhbmQgZm9vX3RvX3N0
+cmluZygpIGlzIG9ubHkgZXZlciBjYWxsZWQKd2l0aCB2YXJpYWJsZXMgdGhhdCBhcmUgb25seSBl
+dmVyIHNldCB0byBvbmUgb2YgdGhvc2UgZW51bSB2YWx1ZXMuCgpTaW5jZSAtT2Zhc3QgaXMgYWxz
+byBleHBsaWNpdGx5IGRvY3VtZW50ZWQgYXMgYnJlYWtpbmcgb3RlaHJ3aXNlCmNvbmZvcm1hbnQg
+cHJvZ3JhbXMsIHdlJ3JlIG5vdCBnb2luZyB0byBkZWJ1ZyBmdXJ0aGVyIHRoZSByZWFzb24gZm9y
+IHRoZQpidWlsZCBmYWlsdXJlLgoKSW5zdGVhZCwganVzdCByZXZlcnQgdG8gdGhlIGJlc3QgYWx0
+ZXJuYXRlIG9wdGltaXNhdGlvbiBsZXZlbC4gV2UgY2hvc2UKLU8zLCBhcyAtT2Zhc3QgaXMgYmFz
+ZWQgb24gLU8zIHdpdGggYnJlYWtpbmcgb3B0aW1pc2F0aW9uIGZsYWdzLgoKV2l0aCAtTzMsIHRo
+ZSBidWlsZCBzdWNjZWVkcy4KCkZpeGVzOgogICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qu
+b3JnL3Jlc3VsdHMvM2ZmYWE5YjNlY2FjYzZhYzMyNmJlNzgxOTZhZjFhZDYxM2YxOTVlZC8gKHNw
+YXJjNjQpCiAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8zZjZhZTJl
+NTAzZGQxNTM5ZTQyNDBmMzQ0ODY1ZGE0ODgxODc5MjA0LyAoYXJtKQogICAgaHR0cDovL2F1dG9i
+dWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNjhjMTcwNTY0OTBkNDQxYzdmODYyMzQ5ZTljN2U0
+NzFiNDU3MDE2Mi8gKHBwYzY0KQogICAgLi4uCgpTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklO
+IDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KQ2M6IE5vcmJlcnQgTGFuZ2UgPG5vbGFuZ2U3OUBn
+bWFpbC5jb20+CkNjOiBTZW4gSGFzdGluZ3MgPHNlbkBwaG9ib3NkcGwuY29tPgotLS0KIHBhY2th
+Z2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIHwgNSArKysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0
+aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIGIvcGFja2Fn
+ZS9zeXN0ZW1kL3N5c3RlbWQubWsKaW5kZXggMWQ3NDUyZGUxOS4uYjQyZjZhNTAyYiAxMDA2NDQK
+LS0tIGEvcGFja2FnZS9zeXN0ZW1kL3N5c3RlbWQubWsKKysrIGIvcGFja2FnZS9zeXN0ZW1kL3N5
+c3RlbWQubWsKQEAgLTkwLDYgKzkwLDExIEBAIFNZU1RFTURfQ09ORl9PUFRTICs9IFwKIAktRHVt
+b3VudC1wYXRoPS91c3IvYmluL3Vtb3VudCBcCiAJLUR1dG1wPWZhbHNlCiAKK1NZU1RFTURfQ0ZM
+QUdTID0gJChUQVJHRVRfQ0ZMQUdTKQoraWZlcSAoJChCUjJfT1BUSU1JWkVfRkFTVCkseSkKK1NZ
+U1RFTURfQ0ZMQUdTICs9IC1PMworZW5kaWYKKwogaWZlcSAoJChCUjJfbmlvczIpLHkpCiAjIE5p
+b3MyIGxkIGVtaXRzIHdhcm5pbmdzLCBtYWtlIHdhcm5pbmdzIG5vdCB0byBiZSB0cmVhdGVkIGFz
+IGVycm9ycwogU1lTVEVNRF9MREZMQUdTID0gJChUQVJHRVRfTERGTEFHUykgLVdsLC0tbm8tZmF0
+YWwtd2FybmluZ3MKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
