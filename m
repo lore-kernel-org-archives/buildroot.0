@@ -4,67 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A5EC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC00C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:32:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA86440575;
-	Sun, 13 Nov 2022 14:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA86440575
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91D9F4055D;
+	Sun, 13 Nov 2022 14:32:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91D9F4055D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WwjUdFq_xSUF; Sun, 13 Nov 2022 14:30:21 +0000 (UTC)
+	with ESMTP id i1wWg35yuDw1; Sun, 13 Nov 2022 14:32:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B64240165;
-	Sun, 13 Nov 2022 14:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B64240165
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F8A81BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:30:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8DB24020B;
+	Sun, 13 Nov 2022 14:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8DB24020B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C64C51BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1B2340165
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:30:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B2340165
+ by smtp4.osuosl.org (Postfix) with ESMTP id A091540890
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:32:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A091540890
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yBfa1q_reTFl for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 14:30:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C12DC40017
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C12DC40017
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:30:16 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 886A6240003;
- Sun, 13 Nov 2022 14:30:13 +0000 (UTC)
-Date: Sun, 13 Nov 2022 15:30:11 +0100
-To: "Frager, Neal" <neal.frager@amd.com>
-Message-ID: <20221113153011.38f22043@windsurf>
-In-Reply-To: <0C68589E-3CD4-45B3-9664-016BB50D510B@amd.com>
-References: <20220506191229.6154E85C61@busybox.osuosl.org>
- <20221111214345.419477ef@windsurf>
- <0C68589E-3CD4-45B3-9664-016BB50D510B@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZvPmgaxYYAcX for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 14:32:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A444B4088E
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A444B4088E
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:32:42 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 768921C0003;
+ Sun, 13 Nov 2022 14:32:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouE2J-005MXa-Jn; Sun, 13 Nov 2022 15:32:39 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20221030190028.3632333-1-james.hilliard1@gmail.com>
+Date: Sun, 13 Nov 2022 15:32:39 +0100
+In-Reply-To: <20221030190028.3632333-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sun, 30 Oct 2022 13:00:28 -0600")
+Message-ID: <875yfirkl4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668349814;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3S3qydrwkVjgsqVyhRcZQL8obY7d6SOogJqmN7PLsKg=;
- b=aNObhF7Xah9zNH0aRmzYhrrCl46zRPSQfgZXIzCSdIhK3mZ44mkJ8F90hxDwhvG+mIFIAA
- rfNYHT76+s45pi5BP44RESKfLF1LnUlq1sXdwGmHrZ2Qj17hoa8Mdh9JfmmluAcaV63G8T
- H3DKCRKbCkuWZssOGnSoUtKliWf4arN3vfATJQ8kI3tfI6ytmj7ENvw7RwI0Vg2EIZNygk
- sJ5RsWdpJ9S4+/46auN22Sv2mqkmE8sziVuO1BDqquuhhM67k66mLvEFj5ts4WgVPl88B4
- pOxgR6ApdgbsY8SrFFV7eRl3kr81uUPXx3iolkpVtxnjiUTiF371nPh/gl4cKg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aNObhF7X
-Subject: Re: [Buildroot] [git commit] add configs/zynqmp_kria_kv260_defconfig
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cmake.mk: MakeFiles ->
+ Makefiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,28 +64,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 12 Nov 2022 07:57:48 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-> If not solved by then, I can look at it when I am back on Monday.
+ > Fixes:
+ > CMake Error: Could not create named generator Unix MakeFiles
 
-No worries, it can wait until Monday, for sure!
+ > Generators
+ >   Green Hills MULTI            = Generates Green Hills MULTI files
+ >                                  (experimental, work-in-progress).
+ > * Unix Makefiles               = Generates standard UNIX makefiles.
+ >   Ninja                        = Generates build.ninja files.
+ >   Ninja Multi-Config           = Generates build-<Config>.ninja files.
+ >   Watcom WMake                 = Generates Watcom WMake makefiles.
+ >   CodeBlocks - Ninja           = Generates CodeBlocks project files.
+ >   CodeBlocks - Unix Makefiles  = Generates CodeBlocks project files.
+ >   CodeLite - Ninja             = Generates CodeLite project files.
+ >   CodeLite - Unix Makefiles    = Generates CodeLite project files.
+ >   Eclipse CDT4 - Ninja         = Generates Eclipse CDT 4.0 project files.
+ >   Eclipse CDT4 - Unix Makefiles= Generates Eclipse CDT 4.0 project files.
+ >   Kate - Ninja                 = Generates Kate project files.
+ >   Kate - Unix Makefiles        = Generates Kate project files.
+ >   Sublime Text 2 - Ninja       = Generates Sublime Text 2 project files.
+ >   Sublime Text 2 - Unix Makefiles
+ >                                = Generates Sublime Text 2 project files.
 
-Best regards,
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Thomas
+Committed to 2022.08.x and 2022.02.x, thanks.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
