@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5449CC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27256C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD78160B30;
-	Sun, 13 Nov 2022 11:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD78160B30
+	by smtp4.osuosl.org (Postfix) with ESMTP id 767424091F;
+	Sun, 13 Nov 2022 11:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 767424091F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xTjYuTgjuJHi; Sun, 13 Nov 2022 11:09:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z4d-tGEYDr3L; Sun, 13 Nov 2022 11:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1072C60864;
-	Sun, 13 Nov 2022 11:09:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1072C60864
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 014211BF42E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:09:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F2B1408F2;
+	Sun, 13 Nov 2022 11:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F2B1408F2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D55DC1BF42E
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D08D94048F
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:09:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08D94048F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7F694090D
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7F694090D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uCMm9ikptpCM for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 11:09:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97B934020B
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 97B934020B
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:09:04 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id o4so12369599wrq.6
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 03:09:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=YJy+K1KqGUxca3/rRMi09Zps7iCKQ2BDaQ6WWGqqGdE=;
- b=oB4SNd6IR7Cc/yPMlLz2yALoppkgsRe7frSpbFqRm+0bnu5Q939WDL4XzNeolnVTM/
- 36c6ZQZLLpFwtAiEc+lGFvXSO7ugsKyDivCz3GcYDmHG/4Bjm/2b/FzpsQTYEJ+E617Y
- fP/v2STGXzutq+3CvtU5RMY6yHVbHj7I//wZ22tB7yigp6Kt5JuyGmmCIdlFQnrXKhSS
- bs1FDN7IWevylAe0fOT4sPeZrVLIrAgOfdvTG7AEIOP7WBy4PRQUVduMcZsXwy7Fo91h
- iJ5Sm3vWhVQwu6ipwMzz1Yl72Na/gbkiQk09lBXDom0JMxFgcpY6uqFjyHVxRFwAAO+4
- sS2w==
-X-Gm-Message-State: ANoB5plBUII8Jo3gLS5NBQh1wtsNlxZH0ywKGah7axcdf8qpOzMPjtnw
- Kc/uDKxyV0J75ZIQ/vRic6zkgfLnzIw=
-X-Google-Smtp-Source: AA0mqf60ZLA00EmpbP58wbKnCzyQQXkzuQSHSbdcr2Pp1/DrSAFjQ1JZQhwhZLXsZ1M2ckMkDngq5A==
-X-Received: by 2002:adf:e80a:0:b0:236:593f:2ab3 with SMTP id
- o10-20020adfe80a000000b00236593f2ab3mr5485404wrm.356.1668337742669; 
- Sun, 13 Nov 2022 03:09:02 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:f76c:17ea:8df1:99cc])
- by smtp.gmail.com with ESMTPSA id
- k34-20020a05600c1ca200b003b47b80cec3sm16289791wms.42.2022.11.13.03.09.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Nov 2022 03:09:02 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y4e989SH_rhb for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 11:42:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E52D408F2
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E52D408F2
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:42:29 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout02.t-online.de (Postfix) with SMTP id 40C415E76;
+ Sun, 13 Nov 2022 12:42:27 +0100 (CET)
+Received: from fli4l.lan.fli4l ([91.58.5.168]) by fwd72.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1ouBNX-1r48qv0; Sun, 13 Nov 2022 12:42:24 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58874)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1ouBNX-0007Fg-25;
+ Sun, 13 Nov 2022 12:42:23 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 12:09:01 +0100
-Message-Id: <20221113110901.4065729-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+Date: Sun, 13 Nov 2022 12:42:22 +0100
+Message-Id: <20221113114223.4016247-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221113114223.4016247-1-bernd.kuhls@t-online.de>
+References: <20221113114223.4016247-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=YJy+K1KqGUxca3/rRMi09Zps7iCKQ2BDaQ6WWGqqGdE=;
- b=kdUz/Rk7v1lT2pLZdIK4dcO6i2Yv7Mup9ULhoxhdMMUm2AMQKLGNDJfPnczvYvRRqg
- vVwa1nVOnsK1RtW6uJTKQk6mrYn7W8eB4SKAr3UAv53XOattz+aUdwkObgelDFYuznef
- XSJ9fgwZ/Fd87Pr1xG63ueoNmRCsiSHUHvx7x709LcJa8TbuIddz8tsG9xQ6GVlI7Sco
- YVn4AHLfM+K7u1Pm5H7IDxd752CEc/3B32RZ51bLY1bPbT/tIWsAaBIb20bj7ylqKebu
- a2MwL1OLMrWXRDkRy8U/ydHg48WLoaLj/bwTSRe8AxrYVqD4ddtHw4HVi/am0KayZJaX
- Rv6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kdUz/Rk7
-Subject: [Buildroot] [PATCH] package/systemd: fix build with -Ofast
+X-TOI-EXPURGATEID: 150726::1668339744-01449CE0-20E6673B/0/0 CLEAN NORMAL
+X-TOI-MSGID: 010f097d-a91e-4ee0-972d-6c5b1f83e056
+Subject: [Buildroot] [PATCH/next 2/3] package/intel-mediasdk: bump version
+ to 22.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,60 +68,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-c3lzdGVtZCBkb2VzIG5vdCBidWlsZCB3aXRoIC1PZmFzdCAoYXQgbGVhc3Qgd2l0aCBnY2MtMTIp
-LCBsZWFkaW5nIHRvCmJ1aWxkIGVycm9ycyBsaWtlOgoKICAgIC4uL3NyYy9zaGFyZWQvY29uZGl0
-aW9uLmM6IEluIGZ1bmN0aW9uIOKAmGNvbmRpdGlvbl9kdW1wX2xpc3TigJk6CiAgICAuLi9zcmMv
-c2hhcmVkL2NvbmRpdGlvbi5jOjEyMjc6MzM6IGVycm9yOiDigJglc+KAmSBkaXJlY3RpdmUgYXJn
-dW1lbnQgaXMgbnVsbCBbLVdlcnJvcj1mb3JtYXQtb3ZlcmZsb3c9XQogICAgIDEyMjcgfCAgICAg
-ICAgICAgICAgICAgIiVzXHQlczogJXMlcyVzICVzXG4iLAogICAgICAgICAgfCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIF5+CiAgICBjYzE6IHNvbWUgd2FybmluZ3MgYmVpbmcgdHJl
-YXRlZCBhcyBlcnJvcnMKCkl0IGlzIG5vdCByZWFsbHkgY2xlYXIgd2hhdCB0aGUgcmVhc29uIGlz
-LCBidXQgaXQgc21lbGxzIGxpa2UgYSBjb21waWxlcgplcnJvci4KCkluZGVlZCwgdGhlIGZhaWxp
-bmcgZm9ybWF0IGlzIHBhc3NlZCB0byBhbiBmcHJpbnRmLCBhbmQgdGhlIHBhcmFtZXRlcgpjb3Jy
-ZXNwb25kaW5nIHRvIHRoZSBmYWlsaW5nICVzIGRpcmVjdGl2ZSBpcyBhIGNhbGwgdG8gYSBmdW5j
-dGlvbgp3aGljaCBwcm90b3R5cGUgaXMgZGVmaW5lZCBidXQgdGhlIGltcGxlbWVudGF0aW9uIG9u
-bHkgY29tZXMgbGF0ZXIgaW4KdGhlIHNhbWUgY29tcGlsYXRpb24gdW5pdCwgYnV0IGlzIHRoZSBy
-ZXN1bHQgb2YgbWFjcm8gZXhwYW5zaW9uLCB3aGljaAp5aWVsZHMgYSBmdW5jdGlvbiBkZWZpbnRp
-b24gbGlrZToKCiAgICBjb25zdCBjaGFyIGZvb190b19zdHJpbmcoZm9vX3R5cGUgaSkgewogICAg
-ICAgIGlmIChpIDwgMCB8fCBpID49IChmb29fdHlwZSkgRUxFTUVOVFNPRihmb29fdGFibGUpKQog
-ICAgICAgICAgICByZXR1cm4gTlVMTDsKICAgICAgICByZXR1cm4gZm9vX3RhYmxlW2ldCiAgICB9
-Cgood2hlcmUgRUxFTUVOVFNPRih4KSBpcyBhIG1hY3JvcyBhcm91bmYgc2l6ZW9mKHgpIHRvIGRl
-dGVybWluZSB0aGUKbnVtYmVyIG9mIGVsZW1lbnRzIGluIHRoZSBhcnJheSBmb29fdGFibGUpLgoK
-SG93ZXZlciwgaW4gdGhlIGZhaWxpbmcgY2FzZSwgZm9vX3RhYmxlIGlzIGEgc3RhdGljIGNvbnN0
-IGFycmF5IGluZGV4ZWQKd2l0aCBjb25zdGFudHMgZnJvbSBhbiBlbnVtLCBhbmQgZm9vX3RvX3N0
-cmluZygpIGlzIG9ubHkgZXZlciBjYWxsZWQKd2l0aCB2YXJpYWJsZXMgdGhhdCBhcmUgb25seSBl
-dmVyIHNldCB0byBvbmUgb2YgdGhvc2UgZW51bSB2YWx1ZXMuCgpTaW5jZSAtT2Zhc3QgaXMgYWxz
-byBleHBsaWNpdGx5IGRvY3VtZW50ZWQgYXMgYnJlYWtpbmcgb3RlaHJ3aXNlCmNvbmZvcm1hbnQg
-cHJvZ3JhbXMsIHdlJ3JlIG5vdCBnb2luZyB0byBkZWJ1ZyBmdXJ0aGVyIHRoZSByZWFzb24gZm9y
-IHRoZQpidWlsZCBmYWlsdXJlLgoKSW5zdGVhZCwganVzdCByZXZlcnQgdG8gdGhlIGJlc3QgYWx0
-ZXJuYXRlIG9wdGltaXNhdGlvbiBsZXZlbC4gV2UgY2hvc2UKLU8zLCBhcyAtT2Zhc3QgaXMgYmFz
-ZWQgb24gLU8zIHdpdGggYnJlYWtpbmcgb3B0aW1pc2F0aW9uIGZsYWdzLgoKV2l0aCAtTzMsIHRo
-ZSBidWlsZCBzdWNjZWVkcy4KCkZpeGVzOgogICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-b3JnL3Jlc3VsdHMvM2ZmYWE5YjNlY2FjYzZhYzMyNmJlNzgxOTZhZjFhZDYxM2YxOTVlZC8gKHNw
-YXJjNjQpCiAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8zZjZhZTJl
-NTAzZGQxNTM5ZTQyNDBmMzQ0ODY1ZGE0ODgxODc5MjA0LyAoYXJtKQogICAgaHR0cDovL2F1dG9i
-dWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNjhjMTcwNTY0OTBkNDQxYzdmODYyMzQ5ZTljN2U0
-NzFiNDU3MDE2Mi8gKHBwYzY0KQogICAgLi4uCgpTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklO
-IDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KQ2M6IE5vcmJlcnQgTGFuZ2UgPG5vbGFuZ2U3OUBn
-bWFpbC5jb20+CkNjOiBTZW4gSGFzdGluZ3MgPHNlbkBwaG9ib3NkcGwuY29tPgotLS0KIHBhY2th
-Z2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIHwgNSArKysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0
-aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIGIvcGFja2Fn
-ZS9zeXN0ZW1kL3N5c3RlbWQubWsKaW5kZXggMWQ3NDUyZGUxOS4uYjQyZjZhNTAyYiAxMDA2NDQK
-LS0tIGEvcGFja2FnZS9zeXN0ZW1kL3N5c3RlbWQubWsKKysrIGIvcGFja2FnZS9zeXN0ZW1kL3N5
-c3RlbWQubWsKQEAgLTkwLDYgKzkwLDExIEBAIFNZU1RFTURfQ09ORl9PUFRTICs9IFwKIAktRHVt
-b3VudC1wYXRoPS91c3IvYmluL3Vtb3VudCBcCiAJLUR1dG1wPWZhbHNlCiAKK1NZU1RFTURfQ0ZM
-QUdTID0gJChUQVJHRVRfQ0ZMQUdTKQoraWZlcSAoJChCUjJfT1BUSU1JWkVfRkFTVCkseSkKK1NZ
-U1RFTURfQ0ZMQUdTICs9IC1PMworZW5kaWYKKwogaWZlcSAoJChCUjJfbmlvczIpLHkpCiAjIE5p
-b3MyIGxkIGVtaXRzIHdhcm5pbmdzLCBtYWtlIHdhcm5pbmdzIG5vdCB0byBiZSB0cmVhdGVkIGFz
-IGVycm9ycwogU1lTVEVNRF9MREZMQUdTID0gJChUQVJHRVRfTERGTEFHUykgLVdsLC0tbm8tZmF0
-YWwtd2FybmluZ3MKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index da4286ae23..0807d6de7e 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  21a54b752c6b84f032b53a3e328d29f05a448b39f4c18f75fe4e79bb219dc40e  intel-mediasdk-22.6.0.tar.gz
++sha256  8b9bbe1631c9df8cb670d9e1cc66ae79b21520d26519d929e0a264da9f4c0924  intel-mediasdk-22.6.2.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 30fddfbcfd..67c6683ec0 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MEDIASDK_VERSION = 22.6.0
++INTEL_MEDIASDK_VERSION = 22.6.2
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
