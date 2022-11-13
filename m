@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20EB7C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB20C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7B7942D04;
-	Mon, 20 Feb 2023 21:19:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7B7942D04
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3799E41728;
+	Mon, 20 Feb 2023 21:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3799E41728
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YLoqB8VNqkKv; Mon, 20 Feb 2023 21:19:08 +0000 (UTC)
+	with ESMTP id W6iOq9IlrZ_4; Mon, 20 Feb 2023 21:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A180242CFF;
-	Mon, 20 Feb 2023 21:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A180242CFF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1EC811BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 297634136C;
+	Mon, 20 Feb 2023 21:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 297634136C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 02D601BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22B1C40C11
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22B1C40C11
+ by smtp3.osuosl.org (Postfix) with ESMTP id 907D4610A5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 907D4610A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rhARW75Fncwk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bZfg4809vrKI for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53BB640C14
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53BB640C14
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8654610B7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8654610B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E0C386494; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+ id B2EAB828C8; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Nov 2022 22:20:43 +0100
+Date: Sun, 13 Nov 2022 22:37:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ea3e1696776187b55bbcaa49072cda49a43c32f5
-X-Git-Newrev: 75cb8a490200e2480d1dcc2a2e59de0a575c1531
+X-Git-Oldrev: 6465c79166fed0c9a9b99a15d34c555a3141344f
+X-Git-Newrev: c81da5e41c8b8863920a1f0416e4f7f4d22788bf
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.3E0C386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: don't
- build igh-ethercat drivers
+Message-Id: <20230220205150.B2EAB828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: disallow
+ configs with BR2_XTENSA_CUSTOM=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,93 +57,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75cb8a490200e2480d1dcc2a2e59de0a575c1531
+commit: https://git.buildroot.net/buildroot/commit/?id=c81da5e41c8b8863920a1f0416e4f7f4d22788bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-igh-ethercat comes with a small number of patched Linux kernel network
-drivers, which aim at replacing the ones available in upstream Linux
-kernel. All those drivers are provided only for specific kernel
-releases. For example:
-
-r8169-2.6.24-ethercat.c
-r8169-2.6.24-orig.c
-r8169-2.6.27-ethercat.c
-r8169-2.6.27-orig.c
-r8169-2.6.28-ethercat.c
-r8169-2.6.28-orig.c
-r8169-2.6.29-ethercat.c
-r8169-2.6.29-orig.c
-r8169-2.6.31-ethercat.c
-r8169-2.6.31-orig.c
-r8169-2.6.32-ethercat.c
-r8169-2.6.32-orig.c
-r8169-2.6.33-ethercat.c
-r8169-2.6.33-orig.c
-r8169-2.6.35-ethercat.c
-r8169-2.6.35-orig.c
-r8169-2.6.36-ethercat.c
-r8169-2.6.36-orig.c
-r8169-2.6.37-ethercat.c
-r8169-2.6.37-orig.c
-r8169-3.10-ethercat.c
-r8169-3.10-orig.c
-r8169-3.12-ethercat.c
-r8169-3.12-orig.c
-r8169-3.14-ethercat.c
-r8169-3.14-orig.c
-r8169-3.16-ethercat.c
-r8169-3.16-orig.c
-r8169-3.2-ethercat.c
-r8169-3.2-orig.c
-r8169-3.4-ethercat.c
-r8169-3.4-orig.c
-r8169-3.6-ethercat.c
-r8169-3.6-orig.c
-r8169-3.8-ethercat.c
-r8169-3.8-orig.c
-r8169-4.4-ethercat.c
-r8169-4.4-orig.c
-
-Obviously, this doesn't play well with the random configuration
-testing done by utils/genrandconfig. This commit avoids this issue by
-making sure we never build any of those drivers as part of the
-genrandconfig generated configurations.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/07b7475d780c067d99ee5618a5fd2bb024a5b4e7/
+When BR2_XTENSA_CUSTOM=y is used with the internal toolchain, an
+overlay file is mandatory, which genrandconfig can't provide. So we
+simply disallow such configurations.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- utils/genrandconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 9c6c2b359c..eccd3a228e 100755
+index f19a405685..9c6c2b359c 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -629,6 +629,13 @@ def fixup_config(sysinfo, configfile):
-         configlines.append('BR2_PACKAGE_XVISOR_USE_DEFCONFIG=y\n')
-         configlines.remove('BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n')
+@@ -304,6 +304,11 @@ def fixup_config(sysinfo, configfile):
+     # No C library for internal toolchain
+     if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
+         return False
++    # Xtensa custom cores require an overlay file with internal
++    # toolchains
++    if 'BR2_XTENSA_CUSTOM=y' in configlines and \
++       'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
++        return False
  
-+    # Don't build igh-ethercat driver as they are highly
-+    # kernel-version specific
-+    for opt in ['8139TOO', 'E100', 'E1000', 'E1000E', 'R8169']:
-+        optstr = 'BR2_PACKAGE_IGH_ETHERCAT_%s=y\n' % opt
-+        if optstr in configlines:
-+            configlines.remove(optstr)
-+
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
- 
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
