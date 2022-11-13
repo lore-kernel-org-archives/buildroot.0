@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D437C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE670C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 155598143D;
-	Sun, 13 Nov 2022 21:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 155598143D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z4fBbJtnihyz; Sun, 13 Nov 2022 21:52:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 474CF81424;
-	Sun, 13 Nov 2022 21:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 474CF81424
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ABB9B1BF3AF
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86D5360BEA
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D5360BEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BC0C60C01;
+	Sun, 13 Nov 2022 21:53:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BC0C60C01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S6pEtPycoZXi for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 21:52:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6776260BDD
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6776260BDD
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:52:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BAAFEE0002;
- Sun, 13 Nov 2022 21:52:42 +0000 (UTC)
-Date: Sun, 13 Nov 2022 22:52:41 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221113225241.7e78bd5a@windsurf>
-In-Reply-To: <20221108175129.727174-1-fontaine.fabrice@gmail.com>
-References: <20221108175129.727174-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668376362;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CcQhwz2zpukhE4r63KzUSBq1TUd6DXDrFOSnGPKf9X0=;
- b=E880lkCp3ra+OqdG/5iBhO9+0TH7ULH8Y7PLeF88IxDCXc8gx9sn2igchqNMV+HgVgd6k8
- 16iARC/LrmizOent1S6ItG2sSR2A0xjEqXwU4uVyI/jyu9zdorkBTpITxUZ0TsGLq1MZl2
- ISo8GMpqnVQ+tiSeGgfaPICl9IEicD0m9YopKzIV6zj1sKi9dBBJYxIpt/ECf+og3rYgXY
- Cwc7jm5JTIjbSSOTZSJg51sZqSeAYL87OzEvK+E1LqDORVPxdht9jgfilhShSvRHqoqdGt
- RmeO1d54lvjPHegELPx9V9AtaO/6ueL1V1Yjd/hitEpB0Kg7p9DNGhQNtC2YsQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=E880lkCp
-Subject: Re: [Buildroot] [PATCH 1/1] package/perl-net-ssleay: bump to
- version 1.93_01
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LMgwvSJEOBQW; Sun, 13 Nov 2022 21:53:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DAAC60BEA;
+	Sun, 13 Nov 2022 21:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DAAC60BEA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD65F1BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B80EC407D7
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B80EC407D7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9wZIglHcssyL for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 818EC4069B
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 818EC4069B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6FDA283837; Sun, 13 Nov 2022 21:52:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 13 Nov 2022 22:51:40 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b0b7fba64259140b9903a284b9b26a47a9a6315c
+X-Git-Newrev: 16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
+X-Patchwork-Hint: ignore
+Message-Id: <20221113215245.6FDA283837@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-twisted: bump
+ to version 22.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,48 +58,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  8 Nov 2022 18:51:29 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=16cf45d5ddfbeec3a715a36d3cdd3f75929104bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> - Refresh patch
-> - Drop -lz from Makefile with libressl as this is the only solution for
->   now: https://github.com/radiator-software/p5-net-ssleay/issues/399
-> - License has been clarified to be Artistic-2.0 since version 1.86.11:
->   https://github.com/radiator-software/p5-net-ssleay/commit/aa4a0206d6d2a5ac2998dd9d6a8c5b88902c04de
-> - This bump will fix the following build failure with libressl:
-> 
->   In file included from /home/autobuild/autobuild/instance-11/output-1/host/armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/perl5/5.34.1/armeb-linux/CORE/perl.h:5748,
->                    from SSLeay.xs:141:
->   SSLeay.xs: In function 'XS_Net__SSLeay_SESSION_get_master_key':
->   SSLeay.xs:5569:37: error: invalid use of incomplete typedef 'SSL_SESSION' {aka 'struct ssl_session_st'}
->    5569 |      sv_setpvn(ST(0), (const char*)s->master_key, s->master_key_length);
->         |                                     ^~
-> 
-> https://metacpan.org/release/CHRISN/Net-SSLeay-1.93_01/changes
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/71337cc496727f2b1173c055d706c5bfc2f5d2bc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-fix-build-system.patch               | 30 +++++++++----------
->  package/perl-net-ssleay/perl-net-ssleay.hash  |  6 ++--
->  package/perl-net-ssleay/perl-net-ssleay.mk    | 13 ++++++--
->  3 files changed, 28 insertions(+), 21 deletions(-)
+Remove inaccurate comment that claims twisted and treq version/site
+variables are shared. They are not shared and the packages aren't
+always updated at the same time.
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-treq/python-treq.mk         | 3 ---
+ package/python-twisted/python-twisted.hash | 4 ++--
+ package/python-twisted/python-twisted.mk   | 7 ++-----
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 8995bf2cfe..57dc50ee74 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,6 @@
+ #
+ ################################################################################
+ 
+-# When bumping this package, make sure to also verify if the
+-# python-twisted package still works and to update its hash,
+-# as they share the same version/site variables.
+ PYTHON_TREQ_VERSION = 22.2.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+ PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/cd/c8/b68ab17d994133baf6edbcb5551ba81e1494bdc6d5e21a9d4f3bc4315140
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 63da0125b8..36612ff5e7 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5  fd252d0b895ca2ab81b5b1454073d890  Twisted-22.2.0.tar.gz
+-sha256  57f32b1f6838facb8c004c89467840367ad38e9e535f8252091345dba500b4f2  Twisted-22.2.0.tar.gz
++md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
++sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
+ # Locally computed sha256
+ sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 8a89d3dc82..398baed2a8 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,12 +4,9 @@
+ #
+ ################################################################################
+ 
+-# When bumping this package, make sure to also verify if the
+-# python-treq package still works and to update its hash,
+-# as they share the same version/site variables.
+-PYTHON_TWISTED_VERSION = 22.2.0
++PYTHON_TWISTED_VERSION = 22.10.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/40/8b/56e8870d412c550b3ff2d6714ee212c7e80a6634f4e720c3a26a983e7b46
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
