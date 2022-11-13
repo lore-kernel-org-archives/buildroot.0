@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 117F2C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB332C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADF2641CF5;
-	Mon, 20 Feb 2023 20:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADF2641CF5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E02141CA3;
+	Mon, 20 Feb 2023 20:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E02141CA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4bZjccMsy2uj; Mon, 20 Feb 2023 20:55:49 +0000 (UTC)
+	with ESMTP id nGH9UsLkMgc4; Mon, 20 Feb 2023 20:56:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 796DE41D10;
-	Mon, 20 Feb 2023 20:55:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 796DE41D10
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13AC01BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A05E41D14;
+	Mon, 20 Feb 2023 20:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A05E41D14
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BDC5A1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A874240C13
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A874240C13
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10B7A419C5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B7A419C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZBtVdsLvEkeH for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qa0aCHBPoPkC for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF0684010E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF0684010E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F09A41990
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F09A41990
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEFA08648F; Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+ id 1B5A086496; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Nov 2022 22:31:17 +0100
+Date: Sun, 13 Nov 2022 14:57:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: acae82e8a13ca97c354c94cedd2a59f89fba2ee6
-X-Git-Newrev: 0ceeb39303267400d6335e3c687ce1f73d9e6dcc
+X-Git-Oldrev: 4e63809d8d7ed873f320c61fc0eb7e0f64250acf
+X-Git-Newrev: 51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205145.BEFA08648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pixman: security bump
- version to 0.42.2
+Message-Id: <20230220205150.1B5A086496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] packages/sudo: explicitly set
+ with-tzdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,59 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4104776639912801619=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ceeb39303267400d6335e3c687ce1f73d9e6dcc
+--===============4104776639912801619==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-October/003228.html
-https://lists.x.org/archives/xorg-announce/2022-November/003249.html
+sudo's configure script looks up on the host to determine the path to
+the timezone data location. That fails in cross-compilation.
 
-Fixes CVE-2022-44638:
-https://lists.x.org/archives/xorg-announce/2022-November/003251.html
+This is used to sanitise the TZ envirnment variable at runtime, and is
+not used at buildtime (except to be stored as a string in the program).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+We can tell sudo where the tz data will be, which we do when the tzdata
+package is enabled, and we can tell it not to use it at all (to not pass
+TZ down to sudo-ed executions) othwerwise.
+
+Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
+[yann.morin.1998@free.fr: rewrite and extend commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pixman/pixman.hash | 6 +++---
- package/pixman/pixman.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sudo/sudo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
-index 1af632a9f4..78407bf048 100644
---- a/package/pixman/pixman.hash
-+++ b/package/pixman/pixman.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-April/003043.html
--sha256  da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e  pixman-0.40.0.tar.xz
--sha512  8a60edb113d68791b41bd90b761ff7b3934260cb3dada3234c9351416f61394e4157353bc4d61b8f6c2c619de470f6feefffb4935bfcf79d291ece6285de7270  pixman-0.40.0.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003228.html
-+sha256  5747d2ec498ad0f1594878cc897ef5eb6c29e91c53b899f7f71b506785fc1376  pixman-0.42.2.tar.xz
-+sha512  3476e2676e66756b1af61b1e532cd80c985c191fb7956eb01702b419726cce99e79163b7f287f74f66414680e7396d13c3fee525cd663f12b6ac4877070ff4e8  pixman-0.42.2.tar.xz
- 
- # Locally computed
- sha256  fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793  COPYING
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 3f65f0484d..6e6d787d27 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIXMAN_VERSION = 0.40.0
-+PIXMAN_VERSION = 0.42.2
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.xz
- PIXMAN_SITE = https://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_LICENSE = MIT
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 1826f72017..28cfcbb1e2 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -16,6 +16,7 @@ SUDO_SELINUX_MODULES = sudo
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+ SUDO_CONF_OPTS = \
++	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
+ 	--without-lecture \
+ 	--without-sendmail \
+ 	--without-umask \
+
+--===============4104776639912801619==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4104776639912801619==--
