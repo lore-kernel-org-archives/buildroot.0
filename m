@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35B6CC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E644C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4671404E7;
-	Sun, 13 Nov 2022 21:18:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4671404E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4128405A4;
+	Sun, 13 Nov 2022 21:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4128405A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XYTvc39pKLhG; Sun, 13 Nov 2022 21:18:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RRn6op1EiTO2; Sun, 13 Nov 2022 21:18:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8201440474;
-	Sun, 13 Nov 2022 21:17:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8201440474
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 49EBC1BF3AF
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:17:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4E51405A2;
+	Sun, 13 Nov 2022 21:18:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4E51405A2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 249191BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E20440474
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:17:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E20440474
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8E88813C2
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8E88813C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SJiw97Vnjhh8 for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 21:17:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08BA040345
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:17:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08BA040345
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8C13837B6; Sun, 13 Nov 2022 21:17:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:13:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f0e82c4ef8bc02bf8b2ada7bf5daf940d4e4cac
-X-Git-Newrev: 6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
-X-Patchwork-Hint: ignore
-Message-Id: <20221113211756.E8C13837B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ntfs-3g: security bump to version
- 2022.10.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kPCIET2niPUw for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 21:18:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84DF8813BF
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 84DF8813BF
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:18:02 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2ABD560002;
+ Sun, 13 Nov 2022 21:17:59 +0000 (UTC)
+Date: Sun, 13 Nov 2022 22:17:58 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221113221758.54889e0b@windsurf>
+In-Reply-To: <20221112213655.110226-1-fontaine.fabrice@gmail.com>
+References: <20221112213655.110226-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668374279;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aD7nQrY7t3Dq3GpZvDh7kKANJuurcUEx3HEkYJRDGFM=;
+ b=ZFEv+ihEZZF1I/qwhCARGx9CSJlr9YK3xcOcF5KUFfRN74tHZeAnc1O2h2pDd2ES6VGi4v
+ 6cYGVcQhUU1hB5bp7IdPR71+20O2IF39JGv2UWVJJ75uUjiTlGuYA/bQeFXa7BHCr+5gsy
+ CSawA3KEHrk/Hqt8/wG9v71TxXc7b96F/Tm7cjEz45BicP5Wiqxv9Xf2++FoqoGLg/XjFR
+ iKFORtS4I/vBFHAKQmo2q33+XUGqAytD6PMsoFLGC7255hDO6R0CRWGvmrScdVHsFNyrHy
+ Lh91RwQyN/OkukPklbhWgx5b6sMYR3e7b1AmB+c2ugwDtqGhXbwYe4jH8dKqtA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZFEv+ihE
+Subject: Re: [Buildroot] [PATCH 1/1] package/ntfs-3g: security bump to
+ version 2022.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 12 Nov 2022 22:36:55 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
-2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
-local attacker can exploit this if the ntfs-3g binary is setuid root. A
-physically proximate attacker can exploit this if NTFS-3G software is
-configured to execute upon attachment of an external storage device.
+> Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
+> 2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
+> local attacker can exploit this if the ntfs-3g binary is setuid root. A
+> physically proximate attacker can exploit this if NTFS-3G software is
+> configured to execute upon attachment of an external storage device.
+> 
+> https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
+> https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/ntfs-3g/ntfs-3g.hash | 2 +-
+>  package/ntfs-3g/ntfs-3g.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
-https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ntfs-3g/ntfs-3g.hash | 2 +-
- package/ntfs-3g/ntfs-3g.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 89bce73559..3fcba6af4d 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
-+sha256  f20e36ee68074b845e3629e6bced4706ad053804cbaf062fbae60738f854170c  ntfs-3g_ntfsprogs-2022.10.3.tgz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 64800c5eeb..62c515d50f 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NTFS_3G_VERSION = 2022.5.17
-+NTFS_3G_VERSION = 2022.10.3
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPTS = --disable-ldconfig
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
