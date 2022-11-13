@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E8FFC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 15:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F06DAC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 15:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E29D40575;
-	Sun, 13 Nov 2022 15:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E29D40575
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8863860BB5;
+	Sun, 13 Nov 2022 15:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8863860BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p11C_TdSGDtX; Sun, 13 Nov 2022 15:11:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ywmEJtzb4jAZ; Sun, 13 Nov 2022 15:12:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3614D404A1;
-	Sun, 13 Nov 2022 15:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3614D404A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE42760BAB;
+	Sun, 13 Nov 2022 15:12:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE42760BAB
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3558E1BF2FE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 15:11:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FC881BF2FE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 15:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10CD78175E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 15:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CD78175E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AA828175E
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 15:12:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AA828175E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xroB4ZKvE9Jx for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 15:11:22 +0000 (UTC)
+ with ESMTP id S8rxWpzwcoQV for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 15:12:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F233081757
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 15:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F233081757
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C20681757
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 15:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C20681757
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6F738368A; Sun, 13 Nov 2022 15:11:21 +0000 (UTC)
+ id 7B8DF83697; Sun, 13 Nov 2022 15:12:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 16:09:39 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 3e2debfc2dea1c25e2a403fc9ccba63f70cd7abf
-X-Git-Newrev: 47e8cc8e8ef7c64799495888fb16e92578f7dbf6
+Date: Sun, 13 Nov 2022 16:10:01 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d30bd21b5e4a11e43b16cafe36fcd6f5cb0ca180
+X-Git-Newrev: be05e009f00ecd4ba174c7ebced206d3327421a9
 X-Patchwork-Hint: ignore
-Message-Id: <20221113151121.D6F738368A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/musl: fixup the
+Message-Id: <20221113151230.7B8DF83697@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/musl: fixup the
  dynamic loader symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47e8cc8e8ef7c64799495888fb16e92578f7dbf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=be05e009f00ecd4ba174c7ebced206d3327421a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 The musl Makefile installs the dynamic loader as a symlink to libc.so
 with the following rule:
@@ -119,7 +119,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 44c79da6f7..30c3c2fbc0 100644
+index b89945e3be..a07041c02d 100644
 --- a/package/musl/musl.mk
 +++ b/package/musl/musl.mk
 @@ -60,12 +60,14 @@ endef
