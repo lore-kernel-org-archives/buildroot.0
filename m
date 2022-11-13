@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06A94C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DDEC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A14F81766;
-	Sun, 13 Nov 2022 14:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A14F81766
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AAE040165;
+	Sun, 13 Nov 2022 14:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AAE040165
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gAEg8K07FqDR; Sun, 13 Nov 2022 14:02:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YOs_8zo5IaRF; Sun, 13 Nov 2022 14:12:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B073381765;
-	Sun, 13 Nov 2022 14:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B073381765
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8AF91BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:02:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A096240496;
+	Sun, 13 Nov 2022 14:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A096240496
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8B0C1BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00BB681764
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:02:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00BB681764
+ by smtp2.osuosl.org (Postfix) with ESMTP id C43E840496
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C43E840496
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w79Qsmskt_Z9 for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 14:02:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PTqoN_6_NwjD for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 14:12:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34E2981763
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34E2981763
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDE1840165
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:12:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDE1840165
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 205BA835CE; Sun, 13 Nov 2022 14:02:38 +0000 (UTC)
+ id CAE49835DA; Sun, 13 Nov 2022 14:12:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 14:57:41 +0100
+Date: Sun, 13 Nov 2022 15:09:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e63809d8d7ed873f320c61fc0eb7e0f64250acf
-X-Git-Newrev: 51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3
+X-Git-Oldrev: 9c333176a3dae8aa4fa5468e3345d71bc10c44ca
+X-Git-Newrev: 0910ada70b7194596c6ace0cb06b303173c13de7
 X-Patchwork-Hint: ignore
-Message-Id: <20221113140238.205BA835CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] packages/sudo: explicitly set with-tzdir
+Message-Id: <20221113141213.CAE49835DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/imagemagick: utilities now need
+ C++ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +58,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7771424151513411855=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7771424151513411855==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3
+commit: https://git.buildroot.net/buildroot/commit/?id=0910ada70b7194596c6ace0cb06b303173c13de7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sudo's configure script looks up on the host to determine the path to
-the timezone data location. That fails in cross-compilation.
+Since upstream commit
+https://github.com/ImageMagick/ImageMagick/commit/07f3b487f9860fd4eb9422f1a906d0fe83b6fd1c
+(which first appeared in version 7.1.0-47), ImageMagick forces the
+need of a C++ compiler to build its utilities. Despite the request of
+Bernd Kuhls to revert this change, upstream declined.
 
-This is used to sanitise the TZ envirnment variable at runtime, and is
-not used at buildtime (except to be stored as a string in the program).
+Since this change is causing build failures in our autobuilders, our
+only choice is to follow the choice of upstream, and disable building
+the utilities when C++ support is not available.
 
-We can tell sudo where the tz data will be, which we do when the tzdata
-package is enabled, and we can tell it not to use it at all (to not pass
-TZ down to sudo-ed executions) othwerwise.
+Fixes:
 
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
-[yann.morin.1998@free.fr: rewrite and extend commit log]
+  http://autobuild.buildroot.net/results/4283235d697408cf2e70be5e3769dbe6ebb9ddae/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sudo/sudo.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 1826f72017..28cfcbb1e2 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -16,6 +16,7 @@ SUDO_SELINUX_MODULES = sudo
- # This is to avoid sudo's make install from chown()ing files which fails
- SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
-+	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
- 	--without-lecture \
- 	--without-sendmail \
- 	--without-umask \
-
---===============7771424151513411855==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 6bdf24c1e8..8a2ec460d5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -178,6 +178,12 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++IMAGEMAGICK_CONF_OPTS += --with-utilities
++else
++IMAGEMAGICK_CONF_OPTS += --without-utilities
++endif
++
+ HOST_IMAGEMAGICK_CONF_OPTS = \
+ 	--disable-opencl \
+ 	--disable-openmp \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7771424151513411855==--
