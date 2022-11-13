@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66FFBC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42680C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09D7342D27;
-	Mon, 20 Feb 2023 21:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09D7342D27
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA85F419C5;
+	Mon, 20 Feb 2023 21:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA85F419C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LXzepmuFhAW6; Mon, 20 Feb 2023 21:20:31 +0000 (UTC)
+	with ESMTP id VhqWt_rK4v4y; Mon, 20 Feb 2023 21:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80EB041703;
-	Mon, 20 Feb 2023 21:20:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80EB041703
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19F9B1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67FA342D28;
+	Mon, 20 Feb 2023 21:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67FA342D28
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B0341BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5045741597
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5045741597
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9AAD610C6
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9AAD610C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nR4w8LU__I1L for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t_NJXVV7Mo7O for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7318A4158C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7318A4158C
+ by smtp3.osuosl.org (Postfix) with ESMTP id B5499610B2
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5499610B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70EC686494; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+ id A940E8648F; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Nov 2022 22:51:34 +0100
+Date: Sun, 13 Nov 2022 22:32:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 124fc473dd9298facc6f9fd58dd59a706550e29b
-X-Git-Newrev: 08a013d25a09d07a3e7a89b1afbb20da206a383d
+X-Git-Oldrev: 6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
+X-Git-Newrev: 6465c79166fed0c9a9b99a15d34c555a3141344f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.70EC686494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8189es: bump to
- latest version to fix build failure with Linux >= 6.0
+Message-Id: <20230220205150.A940E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arch/arch.mk.xtensa: relax
+ check on overlay file to apply only to internal toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,116 +57,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08a013d25a09d07a3e7a89b1afbb20da206a383d
+commit: https://git.buildroot.net/buildroot/commit/?id=6465c79166fed0c9a9b99a15d34c555a3141344f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop local patch that has been upstreamed[0] and drop the endianness
-handling too since from this commit[1] on it's handled by using Linux
-macro __LITTLE_ENDIAN.
+Commit 4cbf7336914f25478aea943456ba7dc3c892c21a ("arch/xtensa: custom
+configuration requires an overlay") added a check in
+arch/arch.mk.xtensa to bail out if a custom Xtensa core is selected
+but not overlay file is provided. While this is indeed a perfectly
+valid check to make when building an internal toolchain, with an
+external toolchain it's entirely possible to build with no overlay
+file: the toolchain already exists, and there's no overlay to be
+applied in the context of the Buildroot build.
 
-[0]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/4a555ffb77a5947814b6c7f330968318e265c496
-[1]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/b3da33576da5359d85c7cfe82716c9a08a592aff
+And indeed commit 4cbf7336914f25478aea943456ba7dc3c892c21a broke some
+of the runtime test cases that use a custom Xtensa core configuration,
+with no overlay, to test the toolchains.bootlin.com Xtensa external
+toolchain. By relaxing the check to only apply to internal toolchain
+configurations, we fix those test cases.
+
+It is to be noted that this still allows a configuration where gdb gets
+built for a custom core, but with no overlay, so basically that means
+the fsf variant, which can lead to build or run failures that
+4cbf7336914f attempted to fix to begin with. This still covers the
+most common cases.
+
+Finally, it also means being able to build a kernel with no overlay, but
+this is offset by the fact that the kernel may be already patched with
+an overlay (as it is possible to specify a custom kernel), which is most
+probably what people using a custom core would have.
 
 Fixes:
-http://autobuild.buildroot.net/results/6178fbfbe9fe762645b1907c4ceb032a00e75a89/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261966
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261963
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr: extend commit log with last two paragraphs]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ve-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 40 ----------------------
- package/rtl8189es/rtl8189es.hash                   |  2 +-
- package/rtl8189es/rtl8189es.mk                     | 10 ++----
- 3 files changed, 3 insertions(+), 49 deletions(-)
+ arch/arch.mk.xtensa | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index dc4deff9f1..0000000000
---- a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4a555ffb77a5947814b6c7f330968318e265c496 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 28 Sep 2022 21:17:17 +0200
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Upstream status: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83]
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 8fcb7bd..e4664e9 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -2239,6 +2238,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- ########### this part for *.mk ############################
---- 
--2.34.1
--
-diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
-index d897e5e6c2..44d73e60f0 100644
---- a/package/rtl8189es/rtl8189es.hash
-+++ b/package/rtl8189es/rtl8189es.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  74325014c1a8503b3a7e48ad06997baddad8c1dae86bb79f4368532cc3e75fb2  rtl8189es-39c17661136da48f8e9c644194dce6a7f5076896.tar.gz
-+sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189es-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
-diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
-index cddcb195f9..6acc409e73 100644
---- a/package/rtl8189es/rtl8189es.mk
-+++ b/package/rtl8189es/rtl8189es.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index 7b6c59cecd..75145e725f 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -1,6 +1,6 @@
+ BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
  
--RTL8189ES_VERSION = 39c17661136da48f8e9c644194dce6a7f5076896
-+RTL8189ES_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
- RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
- RTL8189ES_LICENSE = GPL-2.0
+-ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
++ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM)$(BR2_TOOLCHAIN_BUILDROOT):$(BR_ARCH_XTENSA_OVERLAY_FILE),yyy:)
+ $(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
+ endif
  
--# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
--RTL8189ES_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
--# Set endianness
--RTL8189ES_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
--
- RTL8189ES_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8189ES=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	KSRC=$(LINUX_DIR) \
--	USER_EXTRA_CFLAGS="$(RTL8189ES_USER_EXTRA_CLAGS)"
-+	KSRC=$(LINUX_DIR)
- 
- define RTL8189ES_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
