@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B0C4C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 20:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD21C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 20:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFEA540343;
-	Sun, 13 Nov 2022 20:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFEA540343
+	by smtp2.osuosl.org (Postfix) with ESMTP id 292774059C;
+	Sun, 13 Nov 2022 20:59:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 292774059C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ah0E4-hMWiI5; Sun, 13 Nov 2022 20:59:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XPg_iYBZo7pw; Sun, 13 Nov 2022 20:59:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5FB040242;
-	Sun, 13 Nov 2022 20:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5FB040242
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5E621BF267
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 20:59:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D3BA404ED;
+	Sun, 13 Nov 2022 20:59:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D3BA404ED
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4337D1BF267
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 20:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FB0540242
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 20:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB0540242
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10061812B1
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 20:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10061812B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XrW4-9rBEPf6 for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 20:59:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E77D401E2
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 20:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E77D401E2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C8ED8378B; Sun, 13 Nov 2022 20:59:10 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 21:59:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 515319b86f17ea5a2ce3e51c9063bac9f9e00a01
-X-Git-Newrev: b44f6c2f303ef03f563edd159b1c88d1cf118ed5
-X-Patchwork-Hint: ignore
-Message-Id: <20221113205910.1C8ED8378B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matchbox-starup-monitor: fix build
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9rg19g0RvlMf for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 20:59:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B788F812A7
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B788F812A7
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 20:59:43 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0008FFF802;
+ Sun, 13 Nov 2022 20:59:40 +0000 (UTC)
+Date: Sun, 13 Nov 2022 21:59:40 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20221113215940.7793ff4d@windsurf>
+In-Reply-To: <20221112220537.2521750-1-yann.morin.1998@free.fr>
+References: <20221112220537.2521750-1-yann.morin.1998@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668373181;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9T4+1p91Db2qJM3OLL8DrNQKzTVdhsWA+bU8Aagd5g0=;
+ b=dkHeo4omObB+GZ8mP4ereqwqVj9Kr7uwgbKsR3Syaq3I488+gQRB5Qi/Fw95n/Otc7/KN+
+ wIkOKulJd39kd1ZH5Q+IffkbSfgk2ts3adG+GVZGAM/BeJ6pbBDaLTNX7TiEjGWtKHr6TL
+ hO+37oU/qA8DT1AOSgt6IiY4MSrmBMcQ1IdCb4PJcOyIUweY/xWT9a5UZSnKl8Yk9dpdMx
+ HvFDIXGGke2IDpRI1saOws0pMxf0b58YuBJAk5ji8mY4cR8/WeBqIFZ9vPxVxjzx2gwJ2A
+ NsID4jYqFgpgZcrWKhabXt+MVWPHFS0H2S4A4H+6mCof/lfLdt4qk3nvUaQwTA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dkHeo4om
+Subject: Re: [Buildroot] [PATCH] package/matchbox-starup-monitor: fix build
  without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,60 +78,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b44f6c2f303ef03f563edd159b1c88d1cf118ed5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 12 Nov 2022 23:05:37 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-matchbox-startup-monitor is an ageing package, and uses an old
-configure.ac with archaic constructs. This had generated a configure
-script that incorrectly tries to look for and validate a C++ compiler:
+> matchbox-startup-monitor is an ageing package, and uses an old
+> configure.ac with archaic constructs. This had generated a configure
+> script that incorrectly tries to look for and validate a C++ compiler:
+> 
+>     checking for powerpc64le-buildroot-linux-gnu-g++... no
+>     checking whether we are using the GNU C++ compiler... no
+>     checking whether no accepts -g... no
+>     checking dependency style of no... none
+>     checking how to run the C++ preprocessor... /lib/cpp
+>     configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+> 
+> Calling autoreconf fixes the issue, as the generated configure no longer
+> tries to look for a C++ compiler at all anymore. Running autoreconf does
+> not add any new dependency, as they are already in the dependency chain
+> via other packages.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/223/223f43dd76ee907c5f25c4fee94a0f5d75614dd5/
+> 
+> See also similar changes:
+>     9993a36f5e12 package/pamtester: fix build without C++
+>     c05cc5de868c package/madplay: needs autoreconf
+>     eae18d01abc7 libmad: needs autoreconf
+>     43274dd3e0da package/libid3tag: needs autoreconf
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox-startup-monitor/matchbox-startup-monitor.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-    checking for powerpc64le-buildroot-linux-gnu-g++... no
-    checking whether we are using the GNU C++ compiler... no
-    checking whether no accepts -g... no
-    checking dependency style of no... none
-    checking how to run the C++ preprocessor... /lib/cpp
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+Meh, matchbox. Unfortunately, I pushed before spotting the typo in the
+commit title, so it will stay forever :)
 
-Calling autoreconf fixes the issue, as the generated configure no longer
-tries to look for a C++ compiler at all anymore. Running autoreconf does
-not add any new dependency, as they are already in the dependency chain
-via other packages.
+Applied to master, thanks!
 
-Fixes:
-    http://autobuild.buildroot.org/results/223/223f43dd76ee907c5f25c4fee94a0f5d75614dd5/
-
-See also similar changes:
-    9993a36f5e12 package/pamtester: fix build without C++
-    c05cc5de868c package/madplay: needs autoreconf
-    eae18d01abc7 libmad: needs autoreconf
-    43274dd3e0da package/libid3tag: needs autoreconf
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/matchbox-startup-monitor/matchbox-startup-monitor.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
-index c80e75332c..cd2ae4162f 100644
---- a/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
-+++ b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
-@@ -11,4 +11,9 @@ MATCHBOX_STARTUP_MONITOR_LICENSE = GPL-2.0+
- MATCHBOX_STARTUP_MONITOR_LICENSE_FILES = COPYING
- MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
- 
-+# Obsolete constructs in the archaic configure.ac generated an outworn
-+# configure script that incorrectly searches a C++ compiler. Regenerate
-+# the autoconf machinery to avoid failures without a C++ compiler.
-+MATCHBOX_STARTUP_MONITOR_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
