@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59B2AC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD27EC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCF9940979;
-	Sun, 13 Nov 2022 16:05:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF9940979
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C7A040979;
+	Sun, 13 Nov 2022 16:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C7A040979
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 06Ccdgmeujkv; Sun, 13 Nov 2022 16:05:35 +0000 (UTC)
+	with ESMTP id Yt6RUj-2qL-C; Sun, 13 Nov 2022 16:10:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB0C840946;
-	Sun, 13 Nov 2022 16:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB0C840946
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9B801BF2FE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:04:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 451B640946;
+	Sun, 13 Nov 2022 16:10:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 451B640946
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 980701BF2FE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:10:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80E7260759
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:04:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E7260759
+ by smtp2.osuosl.org (Postfix) with ESMTP id 809DE4049A
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:10:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 809DE4049A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3W49JNc_EztS for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 16:04:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 484BE60746
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 484BE60746
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33889836EA; Sun, 13 Nov 2022 16:04:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nYrtl16zAme2 for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 16:10:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 663C940424
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 663C940424
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:10:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 42A7CC0002;
+ Sun, 13 Nov 2022 16:10:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouFZD-005R1C-AO; Sun, 13 Nov 2022 17:10:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 16:57:41 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 16361553911ca48bce1b043d6f18486b6fdcd1ed
-X-Git-Newrev: 7f0b5e0cb71b9ba4f93432e67f670162e2a5c058
-X-Patchwork-Hint: ignore
-Message-Id: <20221113160416.33889836EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/paho-mqtt-c: bump
- to version 1.3.11
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20221030215458.3773991-1-james.hilliard1@gmail.com>
+Date: Sun, 13 Nov 2022 17:10:43 +0100
+In-Reply-To: <20221030215458.3773991-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sun, 30 Oct 2022 15:54:58 -0600")
+Message-ID: <877czyq1h8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/gawk: fix double free during
+ kernel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +64,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f0b5e0cb71b9ba4f93432e67f670162e2a5c058
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Service release. Issues resolved:
-https://github.com/eclipse/paho.mqtt.c/milestone/18?closed=1
+ > Backport an upstream patch to fix a crash during kernel build.
+ > Details: https://bugs.gentoo.org/868567
 
-https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.11
+ > Fixes:
+ >   GEN     /home/buildroot/buildroot/output/build/linux-6.0.6/tools/objtool/arch/x86/lib/inat-tables.c
+ > free(): double free detected in tcache 2
+ > Aborted
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9f0a5cd606f260d85f1a74a3af5fbf2b11edae3c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 931bf5b9c8..1949abdf1a 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  c70db96e66adacae411d5d875fbb08bca6ff9945de3d215b3af93cbd22792db5  paho-mqtt-c-1.3.10.tar.gz
-+sha256  d7bba3f8b8978802e11e2b1f28e96e6b7f4ed5d8a268af52a4d3b1bcbd1db16b  paho-mqtt-c-1.3.11.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 1b6fc5785c..30daf863ad 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.10
-+PAHO_MQTT_C_VERSION = 1.3.11
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+This presumably only triggers after our recent update to gawk 5.2.0?
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
