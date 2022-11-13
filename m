@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61383C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24013C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 11:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFA6460B9E;
-	Sun, 13 Nov 2022 11:43:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFA6460B9E
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADA3B819D1;
+	Sun, 13 Nov 2022 11:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADA3B819D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tHC0Ievge_0x; Sun, 13 Nov 2022 11:43:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FToje-56ad64; Sun, 13 Nov 2022 11:51:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E342960ADE;
-	Sun, 13 Nov 2022 11:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E342960ADE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DB6C61BF42E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:42:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5C7F81911;
+	Sun, 13 Nov 2022 11:51:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5C7F81911
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CCE051BF42E
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFEFF4091F
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFEFF4091F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B568440165
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 11:51:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B568440165
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NvOAWHPmK9bi for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 11:42:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1330D408D9
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1330D408D9
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:42:28 +0000 (UTC)
-Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
- by mailout06.t-online.de (Postfix) with SMTP id CB7A27DA9;
- Sun, 13 Nov 2022 12:42:25 +0100 (CET)
-Received: from fli4l.lan.fli4l ([91.58.5.168]) by fwd77.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1ouBNX-0j0FGL0; Sun, 13 Nov 2022 12:42:24 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58874)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1ouBNX-0007Fg-1t;
- Sun, 13 Nov 2022 12:42:23 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k9pBhkG_rtOQ for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 11:51:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C31F840127
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 11:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C31F840127
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AF64C83454; Sun, 13 Nov 2022 11:51:00 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 12:42:21 +0100
-Message-Id: <20221113114223.4016247-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1668339744-88EA281F-321DC014/0/0 CLEAN NORMAL
-X-TOI-MSGID: c8e03dd9-162b-48ed-9edb-a993fb0fbcf8
-Subject: [Buildroot] [PATCH/next 1/3] package/libdrm: bump version to 2.4.114
+Date: Sun, 13 Nov 2022 12:46:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c
+X-Git-Newrev: cf14df13358ddd1b06709924a84f87dfa711cceb
+X-Patchwork-Hint: ignore
+Message-Id: <20221113115100.AF64C83454@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/efivar: fix build with musl libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +56,219 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-November/003250.html
+commit: https://git.buildroot.net/buildroot/commit/?id=cf14df13358ddd1b06709924a84f87dfa711cceb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Backport upstream patch to fix build with musl libc.
+This patch is only a requirement since efivar 38 and was applied
+upstream shortly after the 38 version tag.
+
+Fixes:
+http://autobuild.buildroot.net/results/c49d894b109d68e2624074eab8b939fefa3b42ef/
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0004-efisecdb-fix-build-with-musl-libc.patch   | 185 +++++++++++++++++++++
+ 1 file changed, 185 insertions(+)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index a47e169bed..387beadc3f 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2022-August/369983.html
--sha256  7fd7eb2967f63beb4606f22d50e277d993480d05ef75dd88a9bd8e677323e5e1  libdrm-2.4.113.tar.xz
--sha512  fca9834ce090f63ce6dc6d04491a2c5e86162fdddfc8ea70d55a6cdeb401be656388aae1577e58f463a78d8dc502be0a641908784819874e20bbec9a39a057e0  libdrm-2.4.113.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003250.html
-+sha256  3049cf843a47d12e5eeefbc3be3496d782fa09f42346bf0b7defe3d1e598d026  libdrm-2.4.114.tar.xz
-+sha512  8dcd4be5674e3ea2ab4394fa8f461914e5aa7f4f57a2f448c5216d84ee6682e16b45eafabf97b7d9f5c062183d9a6bf3f0c97499d4cb01c19807a51209a0f644  libdrm-2.4.114.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 34bd678c5a..56366b6c48 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.113
-+LIBDRM_VERSION = 2.4.114
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.34.1
-
+diff --git a/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch b/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000000..9815a9d0cf
+--- /dev/null
++++ b/package/efivar/0004-efisecdb-fix-build-with-musl-libc.patch
+@@ -0,0 +1,185 @@
++From cece3ffd5be2f8641eb694513f2b73e5eb97ffd3 Mon Sep 17 00:00:00 2001
++From: Natanael Copa <ncopa@alpinelinux.org>
++Date: Fri, 28 Jan 2022 12:13:30 +0100
++Subject: [PATCH] efisecdb: fix build with musl libc
++
++Refactor code to use POSIX atexit(3) instead of the GNU specific
++on_exit(3).
++
++Resolves: #197
++Resolves: #202
++Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
++[Erico: backport from upstream commit
++cece3ffd5be2f8641eb694513f2b73e5eb97ffd3]
++Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
++---
++ src/compiler.h |  2 --
++ src/efisecdb.c | 68 +++++++++++++++++++-------------------------------
++ 2 files changed, 26 insertions(+), 44 deletions(-)
++
++diff --git a/src/compiler.h b/src/compiler.h
++index e2f18f0..d95fb01 100644
++--- a/src/compiler.h
+++++ b/src/compiler.h
++@@ -7,8 +7,6 @@
++ #ifndef COMPILER_H_
++ #define COMPILER_H_
++ 
++-#include <sys/cdefs.h>
++-
++ /* GCC version checking borrowed from glibc. */
++ #if defined(__GNUC__) && defined(__GNUC_MINOR__)
++ #  define GNUC_PREREQ(maj,min) \
++diff --git a/src/efisecdb.c b/src/efisecdb.c
++index f882373..6bd5ad9 100644
++--- a/src/efisecdb.c
+++++ b/src/efisecdb.c
++@@ -25,6 +25,10 @@
++ extern char *optarg;
++ extern int optind, opterr, optopt;
++ 
+++static efi_secdb_t *secdb = NULL;
+++static list_t infiles;
+++static list_t actions;
+++
++ struct hash_param {
++ 	char *name;
++ 	efi_secdb_type_t algorithm;
++@@ -187,12 +191,11 @@ add_action(list_t *list, action_type_t action_type, const efi_guid_t *owner,
++ }
++ 
++ static void
++-free_actions(int status UNUSED, void *actionsp)
+++free_actions(void)
++ {
++-	list_t *actions = (list_t *)actionsp;
++ 	list_t *pos, *tmp;
++ 
++-	for_each_action_safe(pos, tmp, actions) {
+++	for_each_action_safe(pos, tmp, &actions) {
++ 		action_t *action = list_entry(pos, action_t, list);
++ 
++ 		list_del(&action->list);
++@@ -202,12 +205,11 @@ free_actions(int status UNUSED, void *actionsp)
++ }
++ 
++ static void
++-free_infiles(int status UNUSED, void *infilesp)
+++free_infiles(void)
++ {
++-	list_t *infiles = (list_t *)infilesp;
++ 	list_t *pos, *tmp;
++ 
++-	for_each_ptr_safe(pos, tmp, infiles) {
+++	for_each_ptr_safe(pos, tmp, &infiles) {
++ 		ptrlist_t *entry = list_entry(pos, ptrlist_t, list);
++ 
++ 		list_del(&entry->list);
++@@ -216,27 +218,12 @@ free_infiles(int status UNUSED, void *infilesp)
++ }
++ 
++ static void
++-maybe_free_secdb(int status UNUSED, void *voidp)
+++maybe_free_secdb(void)
++ {
++-	efi_secdb_t **secdbp = (efi_secdb_t **)voidp;
++-
++-	if (secdbp == NULL || *secdbp == NULL)
+++	if (secdb == NULL)
++ 		return;
++ 
++-	efi_secdb_free(*secdbp);
++-}
++-
++-static void
++-maybe_do_unlink(int status, void *filep)
++-{
++-	char **file = (char **)filep;
++-
++-	if (status == 0)
++-		return;
++-	if (file == NULL || *file == NULL)
++-		return;
++-
++-	unlink(*file);
+++	efi_secdb_free(secdb);
++ }
++ 
++ static void
++@@ -323,15 +310,6 @@ parse_input_files(list_t *infiles, char **outfile, efi_secdb_t **secdb,
++ 	return status;
++ }
++ 
++-/*
++- * These need to be static globals so that they're not on main's stack when
++- * on_exit() fires.
++- */
++-static efi_secdb_t *secdb = NULL;
++-static list_t infiles;
++-static list_t actions;
++-static char *outfile = NULL;
++-
++ int
++ main(int argc, char *argv[])
++ {
++@@ -351,6 +329,7 @@ main(int argc, char *argv[])
++ 	bool do_sort_data = false;
++ 	bool sort_descending = false;
++ 	int status = 0;
+++	char *outfile = NULL;
++ 
++ 	const char sopts[] = ":aAc:dfg:h:i:Lo:rs:t:v?";
++ 	const struct option lopts[] = {
++@@ -376,10 +355,9 @@ main(int argc, char *argv[])
++ 	INIT_LIST_HEAD(&infiles);
++ 	INIT_LIST_HEAD(&actions);
++ 
++-	on_exit(free_actions, &actions);
++-	on_exit(free_infiles, &infiles);
++-	on_exit(maybe_free_secdb, &secdb);
++-	on_exit(maybe_do_unlink, &outfile);
+++	atexit(free_actions);
+++	atexit(free_infiles);
+++	atexit(maybe_free_secdb);
++ 
++ 	/*
++ 	 * parse the command line.
++@@ -587,24 +565,30 @@ sort_err:
++ 	outfd = open(outfile, flags, 0600);
++ 	if (outfd < 0) {
++ 		char *tmpoutfile = outfile;
++-		if (errno == EEXIST)
++-			outfile = NULL;
+++		if (errno != EEXIST)
+++			unlink(outfile);
++ 		err(1, "could not open \"%s\"", tmpoutfile);
++ 	}
++ 
++ 	rc = ftruncate(outfd, 0);
++-	if (rc < 0)
+++	if (rc < 0) {
+++		unlink(outfile);
++ 		err(1, "could not truncate output file \"%s\"", outfile);
+++	}
++ 
++ 	void *output;
++ 	size_t size = 0;
++ 	rc = efi_secdb_realize(secdb, &output, &size);
++-	if (rc < 0)
+++	if (rc < 0) {
+++		unlink(outfile);
++ 		secdb_err(1, "could not realize signature list");
+++	}
++ 
++ 	rc = write(outfd, output, size);
++-	if (rc < 0)
+++	if (rc < 0) {
+++		unlink(outfile);
++ 		err(1, "could not write signature list");
+++	}
++ 
++ 	close(outfd);
++ 	xfree(output);
++-- 
++2.37.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
