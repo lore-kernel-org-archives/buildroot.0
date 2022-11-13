@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A99C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 13:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00A4C43217
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 14:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 866EE40890;
-	Sun, 13 Nov 2022 13:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 866EE40890
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vUYus7eymvgt; Sun, 13 Nov 2022 13:36:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 509214088D;
-	Sun, 13 Nov 2022 13:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 509214088D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C77AF1BF2CE
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 13:36:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A34B260B2B
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 13:36:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A34B260B2B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 051AB60BAA;
+	Sun, 13 Nov 2022 14:02:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 051AB60BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rainWfA84nnY for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 13:36:03 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bDqZpYbpLVVw; Sun, 13 Nov 2022 14:02:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 371F460B2B;
+	Sun, 13 Nov 2022 14:02:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371F460B2B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AD221BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:02:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C9AC40881
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 14:02:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C9AC40881
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z97blohUBHsA for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 14:02:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39404607AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96E5E40879
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 39404607AA
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 13:36:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 96E5E40879
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 14:02:12 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:f76c:17ea:8df1:99cc])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EF49C13F8CC;
- Sun, 13 Nov 2022 14:35:57 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 425AC13F8CC;
+ Sun, 13 Nov 2022 15:02:07 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 13 Nov 2022 14:35:57 +0100
-Date: Sun, 13 Nov 2022 14:35:57 +0100
+ Sun, 13 Nov 2022 15:02:06 +0100
+Date: Sun, 13 Nov 2022 15:02:06 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20221113133557.GE2123054@scaer>
-References: <20221108073606.166060-1-heiko.thiery@gmail.com>
+To: Nuno =?utf-8?Q?Gon=C3=A7alves?= <nunog@fr24.com>
+Message-ID: <20221113140206.GF2123054@scaer>
+References: <20221110140054.252389-1-nunog@fr24.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221108073606.166060-1-heiko.thiery@gmail.com>
+In-Reply-To: <20221110140054.252389-1-nunog@fr24.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668346560;
- bh=1VVtVDJ4jFuU7TE67OTKbx74wjxfbhjVP8bdp6KupAQ=;
+ d=free.fr; s=smtp-20201208; t=1668348129;
+ bh=GD7PQYyanUz6sqp+27xFZksA1koBoBszkZP5YXaIOFU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UzS4Dl+miuodS2qsEeJzAg7xMSM+SrSXH080BY/PXjX2v4DCASqSi01N8jpZZ6UF/
- 3KIzFxU1DiJZCjD7jk3nC39xBf7Ge4yybdAPlF9mJ+lsr83v3NTPhvQZpqXcrQuQkT
- uFA4N8fwMPKzHO+HDuzLD1R0Tb7BwoJSC1wB7SxBDN1UqpofbOnas0u/NiMsIiwwGw
- 3sk8XVC/+e71yEbktUaZ5M1PGsxbiJvs3BKkDIXLsgCn+bSt2cMbqriWAOLPwRXaV8
- Emu2ukObbDcYkmVGyNdFmnRx9EtkIFgZ5pd0eRW6CIAXbBGDI1bbq0aZ1MOUyzugA5
- +WSjbQJvJRwGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=VbjYVd3M9ee6RhMFHs6eDUEfMjXJ5sz+fYs3eIwqNJ9eRs+2fdp8kSGMXl3kfx737
+ Cj3dfU42WrxV7uEtAUSFfXfMu8APVmQdasX7ilBt1E/yLHctZjGUJQA8HrgXQfZl28
+ S3+rZ/Ip1/dSYLVZh+3ty11GodaI9zGZw7hSyK1ZcggGTUzfSz11ald8xly2nzW7I0
+ bGO8+ZrWUtR12h6wJdZStl5Fwp+RnWWOetXHfx9rHWgpSUWA+jiuejzIU2NBHuWnn0
+ U6Pv4KCQKYcr3OyZCNIv89HoPnYEGadsTMz0zVTy7xzYmIwzabXQToAX/6FprKmrBS
+ Nw21iR8s4wNIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UzS4Dl+m
-Subject: Re: [Buildroot] [PATCH v2] configs/kontron_bl_imx8mm_defconfig:
- bump U-boot to 2022.10
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VbjYVd3M
+Subject: Re: [Buildroot] [PATCH 1/2] packages/sudo: explicitly set with-tzdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,77 +77,39 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Heiko, All,
-
-On 2022-11-08 08:36 +0100, Heiko Thiery spake thusly:
-> The U-Boot makefile for the host tools does not handle the
-> compiler/linker options properly. There are some patches [1][2] that fixes
-> that issue already applied in the newer U-Boot version 2022.10. So we have to
-> bump U-Boot to fix an autobuilder fail.
-> 
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
-> 
-> [1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
-> [2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
-> 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  configs/kontron_bl_imx8mm_defconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-> index ff376662e9..240cb52245 100644
-> --- a/configs/kontron_bl_imx8mm_defconfig
-> +++ b/configs/kontron_bl_imx8mm_defconfig
-> @@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> @@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
->  BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-> +BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
-
-Thomas already pushed a commit of hos own with jut that hunk, but given
-the explanations you provided in this patch, I take it that it will not
-be enough, so:
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->  BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
->  BR2_TARGET_UBOOT_SPL=y
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TnVubywgQWxsLAoKT24gMjAyMi0xMS0xMCAxNDowMCArMDAwMCwgTnVubyBHb27Dp2FsdmVzIHZp
+YSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IElmIFRaREFUQSBpcyBidWlsdCB0aGVuIHVzZSBh
+Y3R1YWwgem9uZWluZm8gcGF0aC4KPiAKPiBPdGhlcndpc2UgZXhwbGljaXRseSBkaXNhYmxlIGl0
+IHRvIGF2b2lkIGluY2x1ZGluZyB0aGUgaG9zdCBwYXRoLgo+IAo+IFNpZ25lZC1vZmYtYnk6IE51
+bm8gR29uw6dhbHZlcyA8bnVub2dAZnIyNC5jb20+CgpCb3RoIGFwcGxpZWQgdG8gbWFzdGVyLCBh
+ZnRlciBleHBhbmRpbmcgdGhlIGNvbW1pdCBsb2dzLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUu
+IE1PUklOLgoKPiAtLS0KPiAgcGFja2FnZS9zdWRvL3N1ZG8ubWsgfCAxICsKPiAgMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3Vkby9zdWRv
+Lm1rIGIvcGFja2FnZS9zdWRvL3N1ZG8ubWsKPiBpbmRleCAxODI2ZjcyMDE3Li4yOGNmY2JiMWUy
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvc3Vkby9zdWRvLm1rCj4gKysrIGIvcGFja2FnZS9zdWRv
+L3N1ZG8ubWsKPiBAQCAtMTYsNiArMTYsNyBAQCBTVURPX1NFTElOVVhfTU9EVUxFUyA9IHN1ZG8K
+PiAgIyBUaGlzIGlzIHRvIGF2b2lkIHN1ZG8ncyBtYWtlIGluc3RhbGwgZnJvbSBjaG93bigpaW5n
+IGZpbGVzIHdoaWNoIGZhaWxzCj4gIFNVRE9fSU5TVEFMTF9UQVJHRVRfT1BUUyA9IElOU1RBTExf
+T1dORVI9IiIgREVTVERJUj0iJChUQVJHRVRfRElSKSIgaW5zdGFsbAo+ICBTVURPX0NPTkZfT1BU
+UyA9IFwKPiArCS0td2l0aC10emRpcj0kKGlmICQoQlIyX1BBQ0tBR0VfVFpEQVRBKSwvdXNyL3No
+YXJlL3pvbmVpbmZvLG5vKSBcCj4gIAktLXdpdGhvdXQtbGVjdHVyZSBcCj4gIAktLXdpdGhvdXQt
+c2VuZG1haWwgXAo+ICAJLS13aXRob3V0LXVtYXNrIFwKPiAtLSAKPiAyLjM4LjEKPiAKPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0t
+LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
+LS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFT
+Q0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29m
+dHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8
+CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAg
+ICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8
+IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
+LS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
