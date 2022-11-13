@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9EF7C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9427BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 21:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A5EC405A2;
-	Sun, 13 Nov 2022 21:01:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A5EC405A2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3328781430;
+	Sun, 13 Nov 2022 21:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3328781430
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bMU1eEDBywud; Sun, 13 Nov 2022 21:01:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XBxozgkVT-ao; Sun, 13 Nov 2022 21:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98B534058B;
-	Sun, 13 Nov 2022 21:01:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98B534058B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 206801BF406
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:01:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31B6881428;
+	Sun, 13 Nov 2022 21:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31B6881428
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A4521BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06DE24086E
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06DE24086E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D396F81428
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 21:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D396F81428
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cYfIJx7qQXCQ for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 21:01:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DFB7404E7
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5DFB7404E7
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:01:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EB2F4FF805;
- Sun, 13 Nov 2022 21:01:32 +0000 (UTC)
-Date: Sun, 13 Nov 2022 22:01:31 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20221113220131.710a51e4@windsurf>
-In-Reply-To: <20221113110901.4065729-1-yann.morin.1998@free.fr>
-References: <20221113110901.4065729-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668373293;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2A3kkH53KlZrmdWkQPnQ/kvQ9dWI+SU33aaQF5qs5Hg=;
- b=e9labSNjYGERJimd2FQu/BvdZuh15zhQbcii0yPEqsDAAW/5SgeikPT4iLYQZeCKLxgsZ0
- d/kgW/bo+p270L4PQhN2Rxi2eO4hinuRQROjfl5yC8ffGV/ojAVUNrkpyzBx/1UHqoNOnf
- LhmJSkUW6YiQwPzMTmnS9EM9RXUYOsHs5/BvH7+im/7ZbPKJsmN6rTN+gYdnWiC/HjwEGR
- yCP99ZEPf2+vj6XVh1kSFeTQZF2iXIMFTxlxxqRj9fMewt0gaSBC5szVl9fwv+YFBHq9zG
- O++0+MxHNuvZr2IPv0JhSCjbTC/Eg3e1IhERCMkhqNKHCdRaYTa8AfLyGsc3DQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=e9labSNj
-Subject: Re: [Buildroot] [PATCH] package/systemd: fix build with -Ofast
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EW_37X7ekrAN for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 21:11:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D219C81398
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 21:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D219C81398
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B41048379E; Sun, 13 Nov 2022 21:11:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 13 Nov 2022 22:10:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9cd084b54e2223e49c37962b0cbefae7bea26ef5
+X-Git-Newrev: a4f5ed5a7cf035d448c49edd8d106a09ce945170
+X-Patchwork-Hint: ignore
+Message-Id: <20221113211123.B41048379E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dracut: workaround breakage on
+ non-merged-usr hosts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,57 +58,111 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAxMyBOb3YgMjAyMiAxMjowOTowMSArMDEwMAoiWWFubiBFLiBNT1JJTiIgPHlhbm4u
-bW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKCj4gc3lzdGVtZCBkb2VzIG5vdCBidWlsZCB3aXRo
-IC1PZmFzdCAoYXQgbGVhc3Qgd2l0aCBnY2MtMTIpLCBsZWFkaW5nIHRvCj4gYnVpbGQgZXJyb3Jz
-IGxpa2U6Cj4gCj4gICAgIC4uL3NyYy9zaGFyZWQvY29uZGl0aW9uLmM6IEluIGZ1bmN0aW9uIOKA
-mGNvbmRpdGlvbl9kdW1wX2xpc3TigJk6Cj4gICAgIC4uL3NyYy9zaGFyZWQvY29uZGl0aW9uLmM6
-MTIyNzozMzogZXJyb3I6IOKAmCVz4oCZIGRpcmVjdGl2ZSBhcmd1bWVudCBpcyBudWxsIFstV2Vy
-cm9yPWZvcm1hdC1vdmVyZmxvdz1dCj4gICAgICAxMjI3IHwgICAgICAgICAgICAgICAgICIlc1x0
-JXM6ICVzJXMlcyAlc1xuIiwKPiAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIF5+Cj4gICAgIGNjMTogc29tZSB3YXJuaW5ncyBiZWluZyB0cmVhdGVkIGFzIGVycm9y
-cwo+IAo+IEl0IGlzIG5vdCByZWFsbHkgY2xlYXIgd2hhdCB0aGUgcmVhc29uIGlzLCBidXQgaXQg
-c21lbGxzIGxpa2UgYSBjb21waWxlcgo+IGVycm9yLgo+IAo+IEluZGVlZCwgdGhlIGZhaWxpbmcg
-Zm9ybWF0IGlzIHBhc3NlZCB0byBhbiBmcHJpbnRmLCBhbmQgdGhlIHBhcmFtZXRlcgo+IGNvcnJl
-c3BvbmRpbmcgdG8gdGhlIGZhaWxpbmcgJXMgZGlyZWN0aXZlIGlzIGEgY2FsbCB0byBhIGZ1bmN0
-aW9uCj4gd2hpY2ggcHJvdG90eXBlIGlzIGRlZmluZWQgYnV0IHRoZSBpbXBsZW1lbnRhdGlvbiBv
-bmx5IGNvbWVzIGxhdGVyIGluCj4gdGhlIHNhbWUgY29tcGlsYXRpb24gdW5pdCwgYnV0IGlzIHRo
-ZSByZXN1bHQgb2YgbWFjcm8gZXhwYW5zaW9uLCB3aGljaAo+IHlpZWxkcyBhIGZ1bmN0aW9uIGRl
-ZmludGlvbiBsaWtlOgo+IAo+ICAgICBjb25zdCBjaGFyIGZvb190b19zdHJpbmcoZm9vX3R5cGUg
-aSkgewo+ICAgICAgICAgaWYgKGkgPCAwIHx8IGkgPj0gKGZvb190eXBlKSBFTEVNRU5UU09GKGZv
-b190YWJsZSkpCj4gICAgICAgICAgICAgcmV0dXJuIE5VTEw7Cj4gICAgICAgICByZXR1cm4gZm9v
-X3RhYmxlW2ldCj4gICAgIH0KPiAKPiAod2hlcmUgRUxFTUVOVFNPRih4KSBpcyBhIG1hY3JvcyBh
-cm91bmYgc2l6ZW9mKHgpIHRvIGRldGVybWluZSB0aGUKPiBudW1iZXIgb2YgZWxlbWVudHMgaW4g
-dGhlIGFycmF5IGZvb190YWJsZSkuCj4gCj4gSG93ZXZlciwgaW4gdGhlIGZhaWxpbmcgY2FzZSwg
-Zm9vX3RhYmxlIGlzIGEgc3RhdGljIGNvbnN0IGFycmF5IGluZGV4ZWQKPiB3aXRoIGNvbnN0YW50
-cyBmcm9tIGFuIGVudW0sIGFuZCBmb29fdG9fc3RyaW5nKCkgaXMgb25seSBldmVyIGNhbGxlZAo+
-IHdpdGggdmFyaWFibGVzIHRoYXQgYXJlIG9ubHkgZXZlciBzZXQgdG8gb25lIG9mIHRob3NlIGVu
-dW0gdmFsdWVzLgo+IAo+IFNpbmNlIC1PZmFzdCBpcyBhbHNvIGV4cGxpY2l0bHkgZG9jdW1lbnRl
-ZCBhcyBicmVha2luZyBvdGVocndpc2UKPiBjb25mb3JtYW50IHByb2dyYW1zLCB3ZSdyZSBub3Qg
-Z29pbmcgdG8gZGVidWcgZnVydGhlciB0aGUgcmVhc29uIGZvciB0aGUKPiBidWlsZCBmYWlsdXJl
-LgoKSSB0aGluayBpdCB3b3VsZCBzdGlsbCBtYWtlIHNlbnNlIHRvIHJlcG9ydCB0aGUgYnVnIHRv
-IGdjYyB1cHN0cmVhbS4KCj4gSW5zdGVhZCwganVzdCByZXZlcnQgdG8gdGhlIGJlc3QgYWx0ZXJu
-YXRlIG9wdGltaXNhdGlvbiBsZXZlbC4gV2UgY2hvc2UKPiAtTzMsIGFzIC1PZmFzdCBpcyBiYXNl
-ZCBvbiAtTzMgd2l0aCBicmVha2luZyBvcHRpbWlzYXRpb24gZmxhZ3MuCj4gCj4gV2l0aCAtTzMs
-IHRoZSBidWlsZCBzdWNjZWVkcy4KPiAKPiBGaXhlczoKPiAgICAgaHR0cDovL2F1dG9idWlsZC5i
-dWlsZHJvb3Qub3JnL3Jlc3VsdHMvM2ZmYWE5YjNlY2FjYzZhYzMyNmJlNzgxOTZhZjFhZDYxM2Yx
-OTVlZC8gKHNwYXJjNjQpCj4gICAgIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1
-bHRzLzNmNmFlMmU1MDNkZDE1MzllNDI0MGYzNDQ4NjVkYTQ4ODE4NzkyMDQvIChhcm0pCj4gICAg
-IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzY4YzE3MDU2NDkwZDQ0MWM3
-Zjg2MjM0OWU5YzdlNDcxYjQ1NzAxNjIvIChwcGM2NCkKPiAgICAgLi4uCj4gCj4gU2lnbmVkLW9m
-Zi1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+Cj4gQ2M6IE5vcmJl
-cnQgTGFuZ2UgPG5vbGFuZ2U3OUBnbWFpbC5jb20+Cj4gQ2M6IFNlbiBIYXN0aW5ncyA8c2VuQHBo
-b2Jvc2RwbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIHwgNSArKysr
-Kwo+ICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCgpCdXQgYW55d2F5OiBhcHBsaWVk
-IHRvIG1hc3RlciwgdGhhbmtzIQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJv
-b3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3Rs
-aW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=a4f5ed5a7cf035d448c49edd8d106a09ce945170
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+dracut is not really ready to be installed with a non-/ prefix, and it
+has a lot of hard-coded assumptions that it is going to run on the host
+for which it is goign to generate an initramfs; for example, it
+hard-codes calls to /lib/dracut/some-file in some of its modules. It
+also uses the host system layout to decide whether it needs a
+merged-usr or not.
+
+Furthermore, dracut populates the temporary directory which content will
+be used to generate the cpio, with a bunch of files, even before calling
+any of the dracut modules.
+
+The name for that temporary directory is not predictable (looks like the
+output of 'mktemp -d dracut.XXXXXX', with names like dracut.1Vfn9F seen
+while debugging).
+
+As a consequence, we can't prepare the temporary directory with the
+proper symlinks beforehand.
+
+So, we provide a very-early module of our own, that will (hopefully) run
+before any other module, to fixup the messed-up layout prepared by
+dracut. This module moves the content of /lib, /bin, and /sbin, out and
+into their counterparts in /usr, and creates the usual symlinks.
+
+When we do not require a merged-usr, then we have nothing to do, so the
+module checks for /lib being a symlink, as the hint that we want a
+merged-usr or not.
+
+Note: currently, we've seen nothing that dracut installed in /bin or
+/sbin, but for trying to be future-proof, we also handle them; this
+causes a spurious warning:
+    mv: cannot stat '..../build/buildroot-fs/cpio/tmp/dracut.YQnzNP/initramfs/bin/*': No such file or directory
+
+Since there are already quite a bunch of similar failures in the
+official modules bundled in dracut, an extra such issue or two should
+not be too scary...
+
+Fixes:
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261241
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261239
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261236
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dracut/dracut.mk                  |  2 ++
+ package/dracut/merged-usr-module-setup.sh | 26 ++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 742a073a36..597492bc5e 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -22,6 +22,8 @@ HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+ # "ld-musl-x.so" symlinks, respectively - else the init process cannot
+ # start
+ define HOST_DRACUT_POST_INSTALL_LIBC_LINKS_MODULE
++	$(INSTALL) -D -m 0755 package/dracut/merged-usr-module-setup.sh \
++		$(HOST_DIR)/lib/dracut/modules.d/0000-merged-usr/module-setup.sh
+ 	$(INSTALL) -D -m 0755 package/dracut/libc-links-module-setup.sh \
+ 		$(HOST_DIR)/lib/dracut/modules.d/05libc-links/module-setup.sh
+ endef
+diff --git a/package/dracut/merged-usr-module-setup.sh b/package/dracut/merged-usr-module-setup.sh
+new file mode 100644
+index 0000000000..6dc0e7ca7b
+--- /dev/null
++++ b/package/dracut/merged-usr-module-setup.sh
+@@ -0,0 +1,26 @@
++#!/bin/bash
++
++check() {
++    [ -L "${dracutsysrootdir?}/lib" ]
++}
++
++depends() {
++    return 0
++}
++
++install() {
++    # dracut pre-installs a set of files before calling any of
++    # the modules, and dracut also messes up host vs. target
++    # system, so on a non-merged-usr host, it will prepare a
++    # non-merged-usr initramfs, even though the current config
++    # is for a merged-usr system.
++    # So undo its borkage.
++    for dir in lib bin sbin; do
++        mkdir -p "${initdir?}/usr/${dir}"
++        if [ -d "${initdir?}/${dir}" ]; then
++            mv "${initdir?}/${dir}/"* "${initdir?}/usr/${dir}"
++            rm -rf "${initdir?}/${dir}"
++            ln -s "usr/${dir}" "${initdir?}/${dir}"
++        fi
++    done
++}
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
