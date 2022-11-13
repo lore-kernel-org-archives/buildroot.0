@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B764C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36CECC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8AA442B2A;
-	Mon, 20 Feb 2023 21:13:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8AA442B2A
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDDAC415CB;
+	Mon, 20 Feb 2023 21:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDDAC415CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SeRQMidvHceR; Mon, 20 Feb 2023 21:13:11 +0000 (UTC)
+	with ESMTP id NASbtSB_Ytco; Mon, 20 Feb 2023 21:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C0F242B34;
-	Mon, 20 Feb 2023 21:13:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C0F242B34
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19D621BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EB6242B13;
+	Mon, 20 Feb 2023 21:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EB6242B13
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 233C01BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADF3D61099
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF3D61099
+ by smtp2.osuosl.org (Postfix) with ESMTP id C29DE414F7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C29DE414F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5xl_FaubWmwP for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cHLL5xIAA2Aw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A87A6109E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A87A6109E
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB8E440C19
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB8E440C19
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BB3F828C8; Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+ id C2B3186496; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:09:56 +0100
+Date: Sun, 13 Nov 2022 22:44:40 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 68c143419336139fcf5dccd8289f410be4285550
-X-Git-Newrev: 21747875f90cb3345b6927ded9fffb7582cf06a1
+X-Git-Oldrev: c81da5e41c8b8863920a1f0416e4f7f4d22788bf
+X-Git-Newrev: a0aad05cbf20c8e09834e9e1d78a3376cb89910b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205149.3BB3F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libkcapi: fix uclibc
- build
+Message-Id: <20230220205150.C2B3186496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vlc: fix opengl
+ library check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,88 +64,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21747875f90cb3345b6927ded9fffb7582cf06a1
+commit: https://git.buildroot.net/buildroot/commit/?id=a0aad05cbf20c8e09834e9e1d78a3376cb89910b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following uclibc build failure raised since bump to version
-1.4.0 in commit 06a9dc3528847ec6c12a9b6188d4106e086eabe5 and
-https://github.com/smuellerDD/libkcapi/commit/12f19b9a1dd308117f83e8cb33e28e3c040710a0:
-
-lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
-lib/kcapi-kernel-if.c:196:26: error: conversion to 'int' from 'size_t' {aka 'unsigned int'} may change the sign of the result [-Werror=sign-conversion]
-  196 |         msg.msg_iovlen = kcapi_downcast_int(iovlen);
-      |                          ^~~~~~~~~~~~~~~~~~
-
 Fixes:
- - http://autobuild.buildroot.org/results/eccf4b84670b5ef0fdd68b46338edf5043c7cc0d
+http://autobuild.buildroot.net/results/9710753984a38b8c6f83a136b39c3bc320ba558b/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...01-lib-kcapi-kernel-if.c-fix-uclibc-build.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ .../vlc/0012-opengl-missing-library-check.patch    | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/libkcapi/0001-lib-kcapi-kernel-if.c-fix-uclibc-build.patch b/package/libkcapi/0001-lib-kcapi-kernel-if.c-fix-uclibc-build.patch
+diff --git a/package/vlc/0012-opengl-missing-library-check.patch b/package/vlc/0012-opengl-missing-library-check.patch
 new file mode 100644
-index 0000000000..818150dafb
+index 0000000000..3a28fe34e3
 --- /dev/null
-+++ b/package/libkcapi/0001-lib-kcapi-kernel-if.c-fix-uclibc-build.patch
-@@ -0,0 +1,55 @@
-+From 4d9bbc866682bdf46c78047dca02230372620295 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 6 Nov 2022 17:05:14 +0100
-+Subject: [PATCH] lib/kcapi-kernel-if.c: fix uclibc build
++++ b/package/vlc/0012-opengl-missing-library-check.patch
+@@ -0,0 +1,57 @@
++From 4ab41404cb85684125d73977cadebf83bbc246f5 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>
++Date: Sat, 22 Jan 2022 11:34:38 +0200
++Subject: [PATCH] opengl: missing library check
 +
-+Fix the following uclibc build failure raised since version 1.4.0 and
-+https://github.com/smuellerDD/libkcapi/commit/12f19b9a1dd308117f83e8cb33e28e3c040710a0:
++Traditionally the presence of the header file was not considered
++sufficient, though this was somewhat forgotten with the prevalence of
++pkg-config.
 +
-+lib/kcapi-kernel-if.c: In function '_kcapi_common_send_meta':
-+lib/kcapi-kernel-if.c:196:26: error: conversion to 'int' from 'size_t' {aka 'unsigned int'} may change the sign of the result [-Werror=sign-conversion]
-+  196 |         msg.msg_iovlen = kcapi_downcast_int(iovlen);
-+      |                          ^~~~~~~~~~~~~~~~~~
++However most libraries have portable headers, while the shared library
++is platform-dependent. It is common for the header to be present while
++the library is absent with "multilib" installations (i.e. Linux
++installation with multiple architectures).
 +
-+Indeed, uclibc has the same behavior than musl when __WORDSIZE != 32
-+even if it defines __GLIBC__:
-+https://github.com/wbx-github/uclibc-ng/blob/ab1dd83bec59c9e65c31efd6e887182948f627be/libc/sysdeps/linux/common/bits/socket.h
++Downloaded from upstream commit:
++https://code.videolan.org/videolan/vlc/-/commit/4ab41404cb85684125d73977cadebf83bbc246f5
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/eccf4b84670b5ef0fdd68b46338edf5043c7cc0d
-+
-+Signed-off-by: Tan En De <ende.tan@linux.starfivetech.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Stephan Mueller <smueller@chronox.de>
-+[Retrieved from:
-+https://github.com/smuellerDD/libkcapi/commit/4d9bbc866682bdf46c78047dca02230372620295]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ lib/kcapi-kernel-if.c | 8 ++------
-+ 1 file changed, 2 insertions(+), 6 deletions(-)
++ configure.ac | 9 ++++++---
++ 1 file changed, 6 insertions(+), 3 deletions(-)
 +
-+diff --git a/lib/kcapi-kernel-if.c b/lib/kcapi-kernel-if.c
-+index d7b10bf..b4d7f74 100644
-+--- a/lib/kcapi-kernel-if.c
-++++ b/lib/kcapi-kernel-if.c
-+@@ -119,7 +119,7 @@ int _kcapi_common_accept(struct kcapi_handle *handle)
-+ 	return 0;
-+ }
-+ 
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !(defined(__UCLIBC__) && __WORDSIZE == 32)
-+ static inline size_t kcapi_downcast_int(size_t in)
-+ {
-+ 	return in;
-+@@ -564,11 +564,7 @@ ssize_t _kcapi_common_recv_data(struct kcapi_handle *handle,
-+ 	msg.msg_controllen = 0;
-+ 	msg.msg_flags = 0;
-+ 	msg.msg_iov = iov;
-+-#ifdef __GLIBC__
-+-	msg.msg_iovlen = iovlen;
-+-#else
-+-	msg.msg_iovlen = (int)iovlen;
-+-#endif
-++	msg.msg_iovlen = kcapi_downcast_int(iovlen);
-+ 	ret = recvmsg(*_kcapi_get_opfd(handle), &msg, 0);
-+ 	if (ret < 0)
-+ 		ret = -errno;
++diff --git a/configure.ac b/configure.ac
++index 2f50808d597..0d57fadbf8b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3169,7 +3169,6 @@ have_gl="no"
++ PKG_CHECK_MODULES([GL], [gl], [
++   have_gl="yes"
++ ], [
++-  AC_MSG_CHECKING([for OpenGL])
++   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
++ #ifdef _WIN32
++ # include <GL/glew.h>
++@@ -3179,13 +3178,17 @@ PKG_CHECK_MODULES([GL], [gl], [
++     [int t0 = GL_TEXTURE0;]])
++   ], [
++     GL_CFLAGS=""
++-    have_gl="yes"
++     AS_IF([test "${SYS}" != "mingw32"], [
++-      GL_LIBS="-lGL"
+++      AC_CHECK_LIB([GL], [glTexture2D], [
+++        have_gl="yes"
+++        GL_LIBS="-lGL"
+++      ])
++     ], [
+++      have_gl="yes"
++       GL_LIBS="-lopengl32"
++     ])
++   ])
+++  AC_MSG_CHECKING([for OpenGL])
++   AC_MSG_RESULT([${have_gl}])
++ ])
++ AM_CONDITIONAL([HAVE_GL], [test "${have_gl}" = "yes"])
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
