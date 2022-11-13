@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77EBAC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4150C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Nov 2022 16:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03D8B40151;
-	Sun, 13 Nov 2022 16:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03D8B40151
+	by smtp3.osuosl.org (Postfix) with ESMTP id 931AD60BC9;
+	Sun, 13 Nov 2022 16:49:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 931AD60BC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cNmrQIcVjnYP; Sun, 13 Nov 2022 16:48:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YgfaOA4CDDug; Sun, 13 Nov 2022 16:49:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8A5040352;
-	Sun, 13 Nov 2022 16:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8A5040352
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E9ACA1BF40B
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:48:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E23E6607AA;
+	Sun, 13 Nov 2022 16:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23E6607AA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 955211BF2FE
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D08C440498
- for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08C440498
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70BA4607AA
+ for <buildroot@lists.busybox.net>; Sun, 13 Nov 2022 16:49:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70BA4607AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Sm381mUVCQL for <buildroot@lists.busybox.net>;
- Sun, 13 Nov 2022 16:48:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3EE240253
- for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3EE240253
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C02CC83735; Sun, 13 Nov 2022 16:48:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id maSOK0hYPX4S for <buildroot@lists.busybox.net>;
+ Sun, 13 Nov 2022 16:49:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BDAD605A2
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6BDAD605A2
+ for <buildroot@buildroot.org>; Sun, 13 Nov 2022 16:49:19 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B16AB1C0008;
+ Sun, 13 Nov 2022 16:49:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouGAW-005TU1-Tr; Sun, 13 Nov 2022 17:49:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 17:42:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f55f66f59a11c68d71cabc6a20e3c808f739e2a3
-X-Git-Newrev: 275cb4d2dbf6f416a293176318c76fc32ebc1319
-X-Patchwork-Hint: ignore
-Message-Id: <20221113164817.C02CC83735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wpa_supplicant:
- fix static build issue with zlib-ng
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220918162850.25720-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Nov 2022 17:49:16 +0100
+In-Reply-To: <20220918162850.25720-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Sep 2022 18:28:50 +0200")
+Message-ID: <87fsemol4j.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: handle a10disp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,117 +63,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=275cb4d2dbf6f416a293176318c76fc32ebc1319
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Hostapd/wpa_s uses 'crc32' name for IEEE802.11 CRC-32 routine. This name
-is too generic. Buildroot autobuilder detected configurations that failed
-to build due to the naming conflict with zlib-ng.
+ > a10disp will raise the following build failure with a mainline kernel:
+ > cp: cannot stat
+ > '/home/autobuild/autobuild/instance-0/output-1/build/linux-5.17.15/include/video/sunxi_disp_ioctl.h':
+ > No such file or directory
 
-Add wpa_supplicant part of the upstream patch that renames 'crc32'
-function to a less generic 'ieee80211_crc32' name.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/1f2607d6adece4d5dfe17fbdb032a2d228fc030f
 
-Fixes: http://autobuild.buildroot.net/results/ac19975f0bf77f4a8ca574c374092ba81cd5a332/
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27e66d77c10b3ae3142a5ff8631ba81ce9cf70dc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ant-use-a-less-generic-name-for-IEEE802.1.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+Committed to 2022.08.x and 2022.02.x, thanks.
 
-diff --git a/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch b/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
-new file mode 100644
-index 0000000000..a8637111bb
---- /dev/null
-+++ b/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
-@@ -0,0 +1,79 @@
-+From c8af2e431b47d7d900e0c7359705aaa1096d302a Mon Sep 17 00:00:00 2001
-+From: Sergey Matyukevich <geomatsi@gmail.com>
-+Date: Fri, 16 Sep 2022 23:18:50 +0300
-+Subject: [PATCH] wpa_supplicant: use a less generic name for IEEE802.11 CRC-32 routine
-+
-+Hostapd uses 'crc32' name for IEEE802.11 CRC-32 routine. This name is
-+too generic. Buildroot autobuilder detected build configuration that
-+failed to build due to the naming conflict: static linking with openssl
-+using zlib-ng as a zlib provider, e.g. see:
-+- http://autobuild.buildroot.net/results/9901df820d3afa4cde78e8ad6d62cb8ce7e69fdb/
-+- http://autobuild.buildroot.net/results/ac19975f0bf77f4a8ca574c374092ba81cd5a332/
-+
-+Use a less generic name ieee80211_crc32 for IEEE802.11 CRC-32 routine
-+to avoid such naming conflicts.
-+
-+Upstream: https://w1.fi/cgit/hostap/commit/?id=0c7b3814ca6070a8e930dea09fde08b4058a4ca6
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+---
-+ src/ap/hostapd.c     | 3 ++-
-+ src/ap/neighbor_db.c | 2 +-
-+ src/utils/crc32.c    | 2 +-
-+ src/utils/crc32.h    | 2 +-
-+ 4 files changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/ap/hostapd.c b/src/ap/hostapd.c
-+index 4b88641a2..56c8fb90e 100644
-+--- a/src/ap/hostapd.c
-++++ b/src/ap/hostapd.c
-+@@ -1230,7 +1230,8 @@ static int hostapd_setup_bss(struct hostapd_data *hapd, int first)
-+ 	 * Short SSID calculation is identical to FCS and it is defined in
-+ 	 * IEEE P802.11-REVmd/D3.0, 9.4.2.170.3 (Calculating the Short-SSID).
-+ 	 */
-+-	conf->ssid.short_ssid = crc32(conf->ssid.ssid, conf->ssid.ssid_len);
-++	conf->ssid.short_ssid = ieee80211_crc32(conf->ssid.ssid,
-++						conf->ssid.ssid_len);
-+ 
-+ 	if (!hostapd_drv_none(hapd)) {
-+ 		wpa_printf(MSG_DEBUG, "Using interface %s with hwaddr " MACSTR
-+diff --git a/src/ap/neighbor_db.c b/src/ap/neighbor_db.c
-+index 229edd2a9..ef17634c3 100644
-+--- a/src/ap/neighbor_db.c
-++++ b/src/ap/neighbor_db.c
-+@@ -136,7 +136,7 @@ int hostapd_neighbor_set(struct hostapd_data *hapd, const u8 *bssid,
-+ 
-+ 	os_memcpy(entry->bssid, bssid, ETH_ALEN);
-+ 	os_memcpy(&entry->ssid, ssid, sizeof(entry->ssid));
-+-	entry->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
-++	entry->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
-+ 
-+ 	entry->nr = wpabuf_dup(nr);
-+ 	if (!entry->nr)
-+diff --git a/src/utils/crc32.c b/src/utils/crc32.c
-+index 12d9e2a70..371254994 100644
-+--- a/src/utils/crc32.c
-++++ b/src/utils/crc32.c
-+@@ -72,7 +72,7 @@ static const u32 crc32_table[256] = {
-+ };
-+ 
-+ 
-+-u32 crc32(const u8 *frame, size_t frame_len)
-++u32 ieee80211_crc32(const u8 *frame, size_t frame_len)
-+ {
-+ 	size_t i;
-+ 	u32 crc;
-+diff --git a/src/utils/crc32.h b/src/utils/crc32.h
-+index dc31399be..71a19dc5f 100644
-+--- a/src/utils/crc32.h
-++++ b/src/utils/crc32.h
-+@@ -9,6 +9,6 @@
-+ #ifndef CRC32_H
-+ #define CRC32_H
-+ 
-+-u32 crc32(const u8 *frame, size_t frame_len);
-++u32 ieee80211_crc32(const u8 *frame, size_t frame_len);
-+ 
-+ #endif /* CRC32_H */
-+-- 
-+2.37.1
-+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
