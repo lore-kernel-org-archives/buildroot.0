@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8870C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC14C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DCD0408FA;
-	Mon, 20 Feb 2023 21:13:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCD0408FA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9735740935;
+	Mon, 20 Feb 2023 21:13:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9735740935
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BAwZR12704-f; Mon, 20 Feb 2023 21:13:39 +0000 (UTC)
+	with ESMTP id Yxve-so3wnDs; Mon, 20 Feb 2023 21:13:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37CD84136C;
-	Mon, 20 Feb 2023 21:13:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37CD84136C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12AD51BF94D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 242A041735;
+	Mon, 20 Feb 2023 21:13:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 242A041735
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B9B41BF956
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B83BF610B3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B83BF610B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id C071A414F1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C071A414F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PocbMa7j46mh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DpXMM4noFUIe for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17A9C61075
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17A9C61075
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0F8641162
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0F8641162
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05B7086494; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 9E59486494; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 22:17:14 +0100
+Date: Sun, 13 Nov 2022 22:13:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ce38e455bb61ad2f4219a2c7da8b68d07dd0b180
-X-Git-Newrev: b93307815031399d9178b4a9be8628ed19d2d4b7
+X-Git-Oldrev: 2f0e82c4ef8bc02bf8b2ada7bf5daf940d4e4cac
+X-Git-Newrev: 6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205148.05B7086494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/amarula_a64_relic:
- remove defconfig
+Message-Id: <20230220205150.9E59486494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ntfs-3g: security bump
+ to version 2022.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,343 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b93307815031399d9178b4a9be8628ed19d2d4b7
+commit: https://git.buildroot.net/buildroot/commit/?id=6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This defconfig has been failing to build for several months, with
-nobody stepping up to fix it. It's time to drop it.
+Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
+2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
+local attacker can exploit this if the ntfs-3g binary is setuid root. A
+physically proximate attacker can exploit this if NTFS-3G software is
+configured to execute upon attachment of an external storage device.
 
-See
-https://lore.kernel.org/buildroot/20220806224338.0159e15c@windsurf/
-for a notification on August 6, 2022 about the issues with this
-defconfig.
+https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
+https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
 
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3234498966
-
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                         |  1 -
- board/amarula/a64-relic/extlinux.conf              |  4 -
- board/amarula/a64-relic/genimage.cfg               | 11 ---
- board/amarula/a64-relic/post-build.sh              |  4 -
- board/amarula/a64-relic/readme.txt                 | 90 ----------------------
- .../lib/firmware/brcm/brcmfmac4330-sdio.txt        | 83 --------------------
- configs/amarula_a64_relic_defconfig                | 63 ---------------
- 7 files changed, 256 deletions(-)
+ package/ntfs-3g/ntfs-3g.hash | 2 +-
+ package/ntfs-3g/ntfs-3g.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9bd98da5ef..b099ce2f62 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1320,7 +1320,6 @@ F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
--F:	configs/amarula_a64_relic_defconfig
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
- F:	configs/bananapi_m1_defconfig
-diff --git a/board/amarula/a64-relic/extlinux.conf b/board/amarula/a64-relic/extlinux.conf
-deleted file mode 100644
-index 9f469846bc..0000000000
---- a/board/amarula/a64-relic/extlinux.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--label linux-4.17.0-rc3
--  kernel /Image
--  devicetree /sun50i-a64-amarula-relic.dtb
--  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
-diff --git a/board/amarula/a64-relic/genimage.cfg b/board/amarula/a64-relic/genimage.cfg
-deleted file mode 100644
-index 58b607f5fb..0000000000
---- a/board/amarula/a64-relic/genimage.cfg
-+++ /dev/null
-@@ -1,11 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"sun50i-a64-amarula-relic.dtb",
--			"extlinux"
--		}
--	}
--
--	size = 64M
--}
-diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
-deleted file mode 100755
-index ec20fca7d9..0000000000
---- a/board/amarula/a64-relic/post-build.sh
-+++ /dev/null
-@@ -1,4 +0,0 @@
--#!/bin/sh
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-deleted file mode 100644
-index 77f79e3094..0000000000
---- a/board/amarula/a64-relic/readme.txt
-+++ /dev/null
-@@ -1,90 +0,0 @@
--Amarula A64 Relic
--================
--
--Amarula A64-Relic is an Allwinner A64 based IoT device, which supports:
--- Allwinner A64 Cortex-A53
--- Mali-400MP2 GPU
--- AXP803 PMIC
--- 1GB DDR3 RAM
--- 8GB eMMC
--- AP6330 Wifi/BLE
--- MIPI-DSI
--- CSI: OV5640 sensor
--- USB OTG
--- 12V DC power supply
--
--Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/Amarual+A64-Relic
--
--Build
--=====
--
--  $ make amarula_a64_relic_defconfig
--
--  $ make
--
--build files at output/images/:
--  - sunxi-spl.bin
--  - u-boot.itb
--  - Image
--  - sun50i-a64-amarula-relic.dtb
--  - boot.vfat
--  - rootfs.ext4
--
--Write eMMC
--=========
--
--The board comes with an operating system preloaded on the eMMC.
--To replace it with the Buildroot-built system, take the following
--steps
--
--1. Connect the board UART with host and open minicom(ttyUSBx/115200N8)
--
--2. Supply 12V DC for power-on the board.
--
--3. Interrupt U-Boot by pressing enter
--
--4. Create GPT partitions
--  => mmc dev 1
--  => gpt write mmc 1 $partitions
--
--5. Connect the board USB-OTG with USB slot on the host.
--
--6. Initiate fastboot
--  => fastboot 0
--
--7. Write images from host onto eMMC using fastboot
--  $ cd output/images
--  $ sudo fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
--  $ sudo fastboot -i 0x1f3a flash loader2 u-boot.itb
--  $ sudo fastboot -i 0x1f3a flash esp boot.vfat
--  $ sudo fastboot -i 0x1f3a flash system rootfs.ext4
--
--Update eMMC during Development
--==============================
--
--During development, reflashing the entire filesystem image at every
--change is time consuming. A useful alternative is to directly access
--over USB the filesystem stored on the eMMC, using the USB Mass Storage
--capability of U-Boot. To achieve this:
--
--1. Build U-Boot by enabling UMS
--   $ make uboot-menuconfig
--   (select CONFIG_CMD_USB_MASS_STORAGE=y)
--
--2. Follow all 6 steps from 'Write eMMC' and mount eMMC on host
--    => mmc dev 1
--    => ums 0 mmc 1
--
--WiFi
--====
--
-- # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
--   (type password and enter)
-- # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-- # udhcpc -i wlan0
-- # ping google.com
--
----
--Jagan Teki <jagan@amarulasolutions.com>
--29-Jun-2018
-diff --git a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-deleted file mode 100644
-index d095f24c26..0000000000
---- a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-+++ /dev/null
-@@ -1,83 +0,0 @@
--#AP6330_NVRAM_V1.0_20121130
--#Sample variables file for BCM94330 SD FC AGB board
--manfid=0x2d0
--prodid=0x0547
--vendid=0x14e4
--devid=0x4360
--boardtype=0x05e1
--boardrev=0x1202
--boardflags=0x0080200
--nocrc=1
--xtalfreq=26000
--boardnum=22
--macaddr=00:90:4c:c5:12:38
--ag0=254
--aa2g=1
--ccode=ALL
--pa0itssit=0x20
--pa0b0=5587
--pa0b1=-633
--pa0b2=-158
--rssismf2g=0xa
--rssismc2g=0x3
--rssisav2g=0x7
--#rssi params for 5GHz
--rssismf5g=0x4
--rssismc5g=0x3
--rssisav5g=0x7
--#PA parameters for lower a-band
--pa1lob0=4748
--pa1lob1=-566
--pa1lob2=-180
--#PA parameters for midband
--pa1b0=4762
--pa1b1=-593
--pa1b2=-172
--#PA parameters for high band
--#pa1hib0=4596
--pa1hib0=4666
--pa1hib1=-619
--pa1hib2=-163
--rxpo5g=0
--maxp2ga0=74
--maxp5ga0=66
--maxp5gla0=66
--maxp5gha0=66
--# 2.4G Tx Power offsets
--cck2gpo=0x2222
--ofdm2gpo=0x44444444
--mcs2gpo0=0x6666
--mcs2gpo1=0x6666
--# 5G Tx Power offsets
--ofdm5gpo=0x44444444
--ofdm5glpo=0x44444444
--ofdm5ghpo=0x44444444
--mcs5gpo0=0x6666
--mcs5gpo1=0x6666
--mcs5glpo0=0x6666
--mcs5glpo1=0x6666
--mcs5ghpo0=0x6666
--mcs5ghpo1=0x6666
--sromrev=3
--il0macaddr=00:90:4c:c5:12:38
--wl0id=0x431b
--cckPwrOffset=4
--swctrlmap_2g=0x44844484,0x42824282,0x40804484,0x18282,0x1ff
--triso5g=0
--swctrlmap_5g=0x00100010,0x20202020,0x20202020,0x14202,0x0f0
--rfreg033=0x19
--rfreg033_cck=0x1f
--dacrate2g=160
--dacrate5g=160
--txalpfbyp2g=1
--bphyscale=17
--cckPwrIdxCorr=-15
--pacalidx2g=50
--#pacalidx5g=20
--noise_cal_ref_2g=53
--noise_cal_po_2g=0
--noise_cal_ref_5g=52
--noise_cal_po_5g=5,0,0
--# 4330 OOB parameter: High level trigger
--muxenab=0x10
--
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-deleted file mode 100644
-index 304a3ef824..0000000000
---- a/configs/amarula_a64_relic_defconfig
-+++ /dev/null
-@@ -1,63 +0,0 @@
--BR2_aarch64=y
--BR2_cortex_a53=y
--BR2_ARM_FPU_VFPV4=y
--
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="amarula_a64_relic"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,v1.0a)/linux-amarula_v1.0a.tar.gz"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-amarula-relic"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_ISSUE="Welcome to Amarula A64-Relic"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_ANDROID_TOOLS=y
--BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
--BR2_ROOTFS_OVERLAY="board/amarula/a64-relic/rootfs_overlay"
--
--# wireless firmware
--BR2_PACKAGE_LINUX_FIRMWARE=y
--BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
--
--# wireless tools
--BR2_PACKAGE_IW=y
--BR2_PACKAGE_WPA_SUPPLICANT=y
--BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
--BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
--BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 89bce73559..3fcba6af4d 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
++sha256  f20e36ee68074b845e3629e6bced4706ad053804cbaf062fbae60738f854170c  ntfs-3g_ntfsprogs-2022.10.3.tgz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 64800c5eeb..62c515d50f 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NTFS_3G_VERSION = 2022.5.17
++NTFS_3G_VERSION = 2022.10.3
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
