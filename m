@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2A6C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA56AC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7EEA4031E;
-	Mon, 14 Nov 2022 22:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7EEA4031E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 720B680BF6;
+	Mon, 14 Nov 2022 22:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 720B680BF6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id haicXuGcv9PP; Mon, 14 Nov 2022 22:13:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC41780B4D;
+	Mon, 14 Nov 2022 22:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC41780B4D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F2F291BF36D
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCC7D40217
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCC7D40217
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QzG8yf1u-Qtc; Mon, 14 Nov 2022 22:13:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2157340155;
-	Mon, 14 Nov 2022 22:13:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2157340155
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9494D1BF36D
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C61E401DF
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C61E401DF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t5LkhWmvfE80 for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1iSvTEuX1zPH for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994EB40012
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 994EB40012
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:13:32 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9AFBC240006;
  Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A67F401C7
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A67F401C7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61ADE83B13; Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 23:12:34 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e37c110bead8b7b35cd97915673fa785ccb39f2d
-X-Git-Newrev: a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
-X-Patchwork-Hint: ignore
-Message-Id: <20221114221329.61ADE83B13@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uhubctl: bump to
- version 2.5.0
+Date: Mon, 14 Nov 2022 23:13:28 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20221114231328.49ff0fa6@windsurf>
+In-Reply-To: <20221111191458.1292483-1-ju.o@free.fr>
+References: <20221111191458.1292483-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668464009;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=pBL6N64BVqdzrOKi4/bVRT0XEUP7zb/hcC8Y8SENm3M=;
+ b=kCKTfBwfHGoXKEfBOqbWW+3v7E79OSs+44Aq5zySZK2gE1ql1OM6Ur11nGaEFIpmBCCpNL
+ 3uzVkt8aXtLFkCsfzjLCpVJVAALEk9oJ0vRetSxQvzjytyiIwv1kylwYfFnVtF/jamQAuO
+ Q43fIlo99Y5RH/1gluNUz08wsi2edfTsiHopoKC/8vIKSuHOqjeSpcEa8zaOVGyq+YWov9
+ l3VaUfHgpN+8i0Hg4X43xUgCSGxZN6HogImsO8oC9pQnz3OXGPVuyAyGBiObWubqizyVxz
+ 5iUPfAfHe/aU2+AS9opeyLMreMV+7526qnbZEjKEjL0ICpznad16B5VeTVieuw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kCKTfBwf
+Subject: Re: [Buildroot] [PATCH next 1/1] package/octave: bump to version
+ 7.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,48 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 11 Nov 2022 20:14:58 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-Update LICENSE file hash for copyright year update.
+> For change log since 7.2.0, see:
+> https://octave.org/news/release/2022/11/02/octave-7.3.0-released.html
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Commit tested on branch next at commit a85f5f2, with commands:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uhubctl/uhubctl.hash | 4 ++--
- package/uhubctl/uhubctl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
-index c696d70f6c..8a4581b84c 100644
---- a/package/uhubctl/uhubctl.hash
-+++ b/package/uhubctl/uhubctl.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
--sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
-+sha256  d4452252f7862f7a45dd9c62f2ea7cd3a57ab5f5ab0e54a857d4c695699bbba3  uhubctl-2.5.0.tar.gz
-+sha256  5eb09049fafa91347386daf769223ba2ee6914cb26ab95b86854ad6edea49b5d  LICENSE
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
-index 3429d7d151..f9815409ae 100644
---- a/package/uhubctl/uhubctl.mk
-+++ b/package/uhubctl/uhubctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UHUBCTL_VERSION = 2.4.0
-+UHUBCTL_VERSION = 2.5.0
- UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
- UHUBCTL_LICENSE = GPL-2.0
- UHUBCTL_LICENSE_FILES = LICENSE COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
