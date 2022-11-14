@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D08C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 07:25:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C607C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 07:25:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 930DA8139F;
-	Mon, 14 Nov 2022 07:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 930DA8139F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B47581386;
+	Mon, 14 Nov 2022 07:25:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B47581386
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MRkfoRy971pT; Mon, 14 Nov 2022 07:25:04 +0000 (UTC)
+	with ESMTP id akP1xbfvwqg5; Mon, 14 Nov 2022 07:25:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9414812D2;
-	Mon, 14 Nov 2022 07:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9414812D2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F39381BF8A8
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:24:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B315817A9;
+	Mon, 14 Nov 2022 07:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B315817A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A7B71BF3A7
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC6A6812D2
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:24:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC6A6812D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8394660D87
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8394660D87
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k24PnOJLwiyp for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yJ0FQwfcijoA for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 07:24:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED44E812C6
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2EF260D80
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 07:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED44E812C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2EF260D80
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB4B1838DD; Mon, 14 Nov 2022 07:24:33 +0000 (UTC)
+ id D0C6B838DC; Mon, 14 Nov 2022 07:24:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 08:16:49 +0100
+Date: Mon, 14 Nov 2022 08:15:56 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 0104466a2c80a59d89fa654907383acd1103906a
-X-Git-Newrev: 6bb48a9abb918b0d9caaaf83c1be21d0999314ae
+X-Git-Oldrev: ad97ecaee3429487927ce3138f31f46eed207cae
+X-Git-Newrev: 0104466a2c80a59d89fa654907383acd1103906a
 X-Patchwork-Hint: ignore
-Message-Id: <20221114072433.DB4B1838DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/multipath-tools:
- security bump to version 0.9.3
+Message-Id: <20221114072433.D0C6B838DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/libidn2: fix
+ build with libunistring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bb48a9abb918b0d9caaaf83c1be21d0999314ae
+commit: https://git.buildroot.net/buildroot/commit/?id=0104466a2c80a59d89fa654907383acd1103906a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Fixes the following security issues:
+Fix the following build failure with libunistring raised since the
+addition of the package in commit
+ffb85a4a16df94e4980057a194e5fdc3c8332e32:
 
-- CVE-2022-41974: Authorization bypass
-- CVE-2022-41973: Symlink attack
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: warning: libunistring.so.2, needed by ../lib/.libs/libidn2.so, not found (try using -rpath or -rpath-link)
+/home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../lib/.libs/libidn2.so: undefined reference to `u8_strconv_to_encoding'
 
-For more details, see the writeup:
-https://www.qualys.com/2022/10/24/leeloo-multipath/leeloo-multipath.txt
+[...]
 
-Update README.md hash after license-unrelated changes:
+aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
 
-git shortlog 0.9.0..0.9.3 -- README.md
-Konstantin Kharlamov (1):
-      README.md: mention libreadline and libedit optional deps
+Fixes:
+ - http://autobuild.buildroot.org/results/30ac50512cd4b4cb3ecc97514a72d1f316a1b33a
+ - http://autobuild.buildroot.org/results/c225ff4ef007b9a3ca56e6b601687aaa33699675
 
-Xose Vazquez Perez (4):
-      multipath-tools: update devel repo info in README.md
-      multipath-tools: add ALUA info to README.md
-      multipath-tools: add basic info on how to use multipath-tools with NVMe devices
-      multipath-tools: add more info for NetApp RDAC arrays
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0a7a5641597c5c3d0978906fb8cf93eb153425a3)
+(cherry picked from commit a9e5b0255d47babf45f1f6e13dccf65bbbc9f84c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/multipath-tools/multipath-tools.hash | 4 ++--
- package/multipath-tools/multipath-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libidn2/libidn2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index df0d24fb74..6f893d37ce 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256  d6d1d819a53d076a91828ede42d9786451a471c4b71ca3fd25d04ad5413e3f95  multipath-tools-0.9.0.tar.gz
-+sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
--sha256  fb0a5d2008c609fec129d2ffd01dd7f65f0e3868bcf465b6fda76e25ff896ce9  README.md
-+sha256  1e6095ac219062b8ddb2416d2a3cc40560619cd6b3ba609f5602bbd320413be0  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index f3ce3ca8b8..ec5d853644 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index 19fbe4aafd..778e26225e 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -13,10 +13,12 @@ LIBIDN2_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LIBIDN2_CONF_OPTS = --without-included-libunistring
+ LIBIDN2_INSTALL_STAGING = YES
  
--MULTIPATH_TOOLS_VERSION = 0.9.0
-+MULTIPATH_TOOLS_VERSION = 0.9.3
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+ LIBIDN2_DEPENDENCIES += libunistring
++LIBIDN2_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr/lib
+ endif
  
- MULTIPATH_TOOLS_LICENSE = \
+ ifeq ($(BR2_PACKAGE_LIBIDN2_BINARY),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
