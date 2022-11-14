@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D4CC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 15:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7696C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 15:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A241408C4;
-	Mon, 14 Nov 2022 15:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A241408C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 829AB40A49;
+	Mon, 14 Nov 2022 15:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 829AB40A49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZJaBJ3zmqy10; Mon, 14 Nov 2022 15:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BrgWwqRvoL0M; Mon, 14 Nov 2022 15:52:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C09A3415D7;
-	Mon, 14 Nov 2022 15:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C09A3415D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0752C1BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD0B740A88;
+	Mon, 14 Nov 2022 15:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD0B740A88
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 152E41BF94B
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 15:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5C6D408C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4E0E40A13
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 15:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5C6D408C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4E0E40A13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Yj5mgZDjobU for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 15:51:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GA5Gugfqm_Nr for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 15:51:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAB49408AD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E94DC409D9
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 15:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAB49408AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94DC409D9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C121083951; Mon, 14 Nov 2022 15:51:33 +0000 (UTC)
+ id D6C3383954; Mon, 14 Nov 2022 15:51:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 16:30:18 +0100
+Date: Mon, 14 Nov 2022 16:42:54 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 779681a530da511589dc5f577ff825205c7dbf47
-X-Git-Newrev: a91cc9e565b805a2744b3865a42c7cb31dc64982
+X-Git-Oldrev: 7c737fbe6d7fa542bbcaa43bf40fa9b134870dcf
+X-Git-Newrev: e829ece969c2e41de63466a138036ed89e5c160a
 X-Patchwork-Hint: ignore
-Message-Id: <20221114155133.C121083951@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/swupdate: specify
- SWU_VER during build
+Message-Id: <20221114155133.D6C3383954@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/botan: add
+ host-python3 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a91cc9e565b805a2744b3865a42c7cb31dc64982
+commit: https://git.buildroot.net/buildroot/commit/?id=e829ece969c2e41de63466a138036ed89e5c160a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-The swupdate build process uses SWU_VER as part of the build commandline
-for compiling objects to define the value for use in globals.h (see also
-Makefile.flags).
+add host-python3 dependency to avoid the following build failure raised
+since the addition of the package in commit
+e43da7bb32285bbd41b38a379aef77132d149df7:
 
-This value is also used to communicate capabilities to lua handlers
-(see upstream 0f38ff186e76c55c8d00ccb53739a29bcca91445).
+(cd /home/autobuild/autobuild/instance-19/output-1/build/botan-2.19.2; PATH="/home/autobuild/autobuild/instance-19/output-1/host/bin:/home/autobuild/autobuild/instance-19/output-1/host/sbin:/home/autobuild/make:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ./configure.py --cpu="m68k" --disable-cc-tests --os=linux --cc=gcc --cc-bin="/home/autobuild/autobuild/instance-19/output-1/host/bin/m68k-linux-g++" --prefix=/usr --without-documentation --extra-libs=atomic --disable-shared-library --enable-static-library --no-autoload --without-stack-protector --without-os-feature=getauxval --with-boost --with-sqlite --with-zlib --disable-altivec --disable-neon)
+/usr/bin/env: 'python': No such file or directory
 
-When swupdate gets built, SWU_VER defaults to using `git describe` to
-determine the version. This, unfortunately, picks up the version of the
-Buildroot checkout and not the actual version of swupdate.
+Fixes:
+ - http://autobuild.buildroot.org/results/91eb6d03ee899bc1034efc5ac7d1fe78961d37ca
 
-Now, specify SWU_VER as part of the make options to override the
-calculated value so the proper version is reported.
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0b4a9930124f7fb4c7bfae281db900905006a2da)
+(cherry picked from commit 0ad4301f608a270b6f463ebd91684cde0f584ebd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 1 +
+ package/botan/botan.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index b2f50d2b71..2f618b2e79 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -209,6 +209,7 @@ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
- SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index b26ee4c66e..b0ebe594b1 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -13,6 +13,7 @@ BOTAN_CPE_ID_VENDOR = botan_project
  
- SWUPDATE_MAKE_OPTS = \
-+	SWU_VER="$(SWUPDATE_VERSION) (Buildroot $(BR2_VERSION_FULL))"
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
- 	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
+ BOTAN_INSTALL_STAGING = YES
+ 
++BOTAN_DEPENDENCIES = host-python3
+ BOTAN_CONF_OPTS = \
+ 	--cpu=$(BR2_ARCH) \
+ 	--disable-cc-tests \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
