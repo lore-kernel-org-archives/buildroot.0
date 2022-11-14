@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52FCEC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 15:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B147EC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 16:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 045228149E;
-	Mon, 14 Nov 2022 15:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 045228149E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 500D3815AD;
+	Mon, 14 Nov 2022 16:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 500D3815AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id odORc3PJMILc; Mon, 14 Nov 2022 15:52:44 +0000 (UTC)
+	with ESMTP id Dj09CzzMT-Xi; Mon, 14 Nov 2022 16:05:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44A4381467;
-	Mon, 14 Nov 2022 15:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44A4381467
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91AD281362;
+	Mon, 14 Nov 2022 16:05:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91AD281362
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2454B1BF2C5
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 15:51:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F2211BF32B
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0083681306
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 15:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0083681306
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A10781362
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:05:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A10781362
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i1HDhkVe7dWp for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 15:51:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AA068145B
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 15:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA068145B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC72E83958; Mon, 14 Nov 2022 15:51:33 +0000 (UTC)
+ with ESMTP id nsPn9VKDec5n for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 16:05:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05FE38135F
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 05FE38135F
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 16:05:04 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EE4701BF215;
+ Mon, 14 Nov 2022 16:05:02 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oubxF-0070Ro-JR; Mon, 14 Nov 2022 17:05:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 16:44:34 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 9bcf96f48d995af76ac25f681844777b5c22d7ba
-X-Git-Newrev: 97eae21f340660b58946e3ce0f6f9dee92509394
-X-Patchwork-Hint: ignore
-Message-Id: <20221114155133.EC72E83958@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/multipath-tools:
- add MULTIPATH_TOOLS_CPE_ID_VENDOR
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221105205239.300732-1-fontaine.fabrice@gmail.com>
+Date: Mon, 14 Nov 2022 17:05:01 +0100
+In-Reply-To: <20221105205239.300732-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 5 Nov 2022 21:52:39 +0100")
+Message-ID: <87edu5jzde.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/gsl: fix powerpc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +63,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97eae21f340660b58946e3ce0f6f9dee92509394
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-cpe:2.3:a:opensvc:multipath-tools is a valid CPE identifier for this
-package:
+ > Fix the following powerpc build failures on:
+ >  - musl raised because fpu_control.h is not available:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopensvc%3Amultipath-tools
+ > In file included from fp.c:8:
+ > fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
+ >    21 | #include <fpu_control.h>
+ >       |          ^~~~~~~~~~~~~~~
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit adf4d6f7295b08b177a01d177a3f0a54e1f20f4c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/multipath-tools/multipath-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ >  - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
+ >    set:
 
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index ec5d853644..df3d5138e8 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -18,6 +18,7 @@ MULTIPATH_TOOLS_LICENSE_FILES = \
- 	LICENSES/LGPL-2.0 \
- 	LICENSES/LGPL-2.1 \
- 	README.md
-+MULTIPATH_TOOLS_CPE_ID_VENDOR = opensvc
- 
- MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
- MULTIPATH_TOOLS_MAKE_OPTS = \
+ >    In file included from fp.c:8:
+ > fp-gnuppc.c: In function 'gsl_ieee_set_mode':
+ > fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
+ >    53 |       mode |= _FPU_RC_NEAREST ;
+ >       |               ^~~~~~~~~~~~~~~
+
+ > These build failures are raised since the addition of the package in
+ > commit 9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
+ >  - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.08.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
