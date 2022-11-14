@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 614F0C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 07:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C98C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 07:16:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2C5060D68;
-	Mon, 14 Nov 2022 07:11:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2C5060D68
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nEQJY1edde_u; Mon, 14 Nov 2022 07:11:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3943F60D65;
-	Mon, 14 Nov 2022 07:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3943F60D65
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0024F1BF3A7
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:10:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC49F409D6
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC49F409D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57F9E409D9;
+	Mon, 14 Nov 2022 07:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57F9E409D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LNIoxsTwCZoF for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 07:10:57 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nZreuTkzahS1; Mon, 14 Nov 2022 07:16:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 864E4409D6;
+	Mon, 14 Nov 2022 07:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 864E4409D6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BE70A1BF3A7
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:16:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2EDF408F1
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 07:16:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2EDF408F1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B65vFWm3hwwZ for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 07:16:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABF5A409D3
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABF5A409D3
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 07:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57A8C408F3
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57A8C408F3
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 07:16:27 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A126640009;
- Mon, 14 Nov 2022 07:10:53 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2F20EFF805;
+ Mon, 14 Nov 2022 07:16:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ouTcK-0060rN-OW; Mon, 14 Nov 2022 08:10:52 +0100
+ id 1ouThe-0061AS-U1; Mon, 14 Nov 2022 08:16:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221103174818.1469409-1-fontaine.fabrice@gmail.com>
-Date: Mon, 14 Nov 2022 08:10:52 +0100
-In-Reply-To: <20221103174818.1469409-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 3 Nov 2022 18:48:18 +0100")
-Message-ID: <87bkpam2o3.fsf@dell.be.48ers.dk>
+References: <20221103135159.825586-1-fontaine.fabrice@gmail.com>
+Date: Mon, 14 Nov 2022 08:16:22 +0100
+In-Reply-To: <20221103135159.825586-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 3 Nov 2022 14:51:59 +0100")
+Message-ID: <877czym2ex.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/procps-ng: fix build without
- __NR_pidfd_open
+Subject: Re: [Buildroot] [PATCH 1/1] package/libidn2: fix build with
+ libunistring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,19 +72,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure without __NR_pidfd_open raised since
- > bump to version 3.3.17 in commit
- > cc28c7aa6df7798ce5ca79d6d1c7c2eb115ba220 and
- > https://gitlab.com/procps-ng/procps/-/commit/c8384e682c1cfb3b2dc797e0f8a3cbaaccf7a3da:
+ > Fix the following build failure with libunistring raised since the
+ > addition of the package in commit
+ > ffb85a4a16df94e4980057a194e5fdc3c8332e32:
 
- > pgrep.c: In function 'pidfd_open':
- > pgrep.c:748:17: error: '__NR_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
- >   748 |  return syscall(__NR_pidfd_open, pid, flags);
- >       |                 ^~~~~~~~~~~~~~~
- >       |                 pidfd_open
+ > /home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
+ > warning: libunistring.so.2, needed by ../lib/.libs/libidn2.so, not
+ > found (try using -rpath or -rpath-link)
+ > /home/autobuild/autobuild/instance-2/output-1/per-package/libidn2/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
+ > ../lib/.libs/libidn2.so: undefined reference to
+ > `u8_strconv_to_encoding'
+
+ > [...]
+
+ > aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/f23a5156e641b2ebdd673973dec0f9c87760c688
+ >  - http://autobuild.buildroot.org/results/30ac50512cd4b4cb3ecc97514a72d1f316a1b33a
+ >  - http://autobuild.buildroot.org/results/c225ff4ef007b9a3ca56e6b601687aaa33699675
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
