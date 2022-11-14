@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D87C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 20:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47355C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 199568130E;
-	Mon, 14 Nov 2022 20:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 199568130E
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2E11812E5;
+	Mon, 14 Nov 2022 21:14:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2E11812E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I09aGujTzshH; Mon, 14 Nov 2022 20:59:00 +0000 (UTC)
+	with ESMTP id Mq3NC_1_Q_7Q; Mon, 14 Nov 2022 21:14:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50D3880DAB;
-	Mon, 14 Nov 2022 20:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50D3880DAB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DB451BF299
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 20:58:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D219681257;
+	Mon, 14 Nov 2022 21:14:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D219681257
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E0DC1BF296
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8624640052
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 20:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8624640052
+ by smtp2.osuosl.org (Postfix) with ESMTP id 764B2402B1
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 764B2402B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 85LOHTYQcdYP for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 20:58:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X8d-S3BRYr1q for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 21:14:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75CEF40002
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 20:58:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75CEF40002
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94ACF400F8
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94ACF400F8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61C4783A43; Mon, 14 Nov 2022 20:58:56 +0000 (UTC)
+ id 818AE83A53; Mon, 14 Nov 2022 21:14:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 21:58:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3ab978703e0597b4bdf17d3e32cf0357db8315c
-X-Git-Newrev: ec9519831ed5d5698c787b48d2ab952525cacb93
+Date: Mon, 14 Nov 2022 22:14:05 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: cd25808d7d3b292f61043d612c2e34aab5a422fd
+X-Git-Newrev: cb51a0c9136a8f8fea92c1c60dbf4c0e9203b2a8
 X-Patchwork-Hint: ignore
-Message-Id: <20221114205856.61C4783A43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/zynqmp/kria/kv260/kv260.sh: fix
- u-boot.itb without CONFIG_MULTI_DTB_FIT option
+Message-Id: <20221114211425.818AE83A53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-firmware: bump
+ to version 20221012
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,35 +64,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec9519831ed5d5698c787b48d2ab952525cacb93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=cb51a0c9136a8f8fea92c1c60dbf4c0e9203b2a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch fixes the kv260.sh to generate a working u-boot.itb
-now that the CONFIG_MULTI_DTB_FIT u-boot option is no longer used.
+Update brcmfmac4356-sdio.vamrs,rock960.txt filename to
+brcmfmac4356-sdio.AP6356S.txt due to rename:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/brcm?id=4ffcf980a535c1f26aa994ecf64a1b9d1ed6216e
 
-This is a follow-up fix of
-515319b86f17ea5a2ce3e51c9063bac9f9e00a01 ("board/zynqmp/kria/kv260/uboot.fragment:
-remove unnecessary CONFIG_MULTI_DTB_FIT option") to fix the build of:
+Update WHENCE file hash due to date/firmware file updates.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3310463281
+Add missing LICENSE.ice_enhanced and LICENCE.moxa hashes.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/zynqmp/kria/kv260/kv260.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-firmware/linux-firmware.hash | 6 ++++--
+ package/linux-firmware/linux-firmware.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
-index e3467f3068..e891852009 100755
---- a/board/zynqmp/kria/kv260/kv260.sh
-+++ b/board/zynqmp/kria/kv260/kv260.sh
-@@ -8,5 +8,5 @@
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 382e9cb2ba..d81223e311 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  5938ee717b2023b48f6bfcf344b40ddc947e3e22c0bc36d4c3418f90fea68182  linux-firmware-20220310.tar.xz
++sha256  e9d174af729511c8cccb60ec4e0b223b3c44b67d813b42d1ab9813acfa667fa5  linux-firmware-20221012.tar.xz
  
- UBOOT_DIR=$4
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -14,9 +14,11 @@ sha256  a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061  LICENC
+ sha256  ae0db6cc4db33941148df0f67de53e76a77b1b5a46b3165edb7040aa2750015f  LICENCE.cypress
+ sha256  60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83  LICENCE.fw_sst_0f28
+ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENCE.ibt_firmware
++sha256  8c45a83562a69f7ac4207e4cb5c0063af2e545791b3947bc81dc82305481c15c  LICENSE.ice_enhanced
+ sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
+ sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
+ sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
++sha256  59ae206c89108905ebdc9ad4c9336526bd2c0d50fbf988c21e8c2a82719d42a4  LICENCE.moxa
+ sha256  2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c  LICENCE.qat_firmware
+ sha256  4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822  LICENCE.qla2xxx
+ sha256  d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd  LICENCE.ralink-firmware.txt
+@@ -33,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  75afdb5d45a21ff95ff7aa82d67bc42a83830f2def98ea937c01d6e7603d76f9  WHENCE
++sha256  6857749e23d6a2853e5d33f6d6012a60d5baa2b4d51b5f8c6799d00d68733841  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 64d096df14..ea97166d93 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
-+fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
- ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
+-LINUX_FIRMWARE_VERSION = 20220310
++LINUX_FIRMWARE_VERSION = 20221012
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
+@@ -643,7 +643,7 @@ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac4373.bin \
+ 	brcm/brcmfmac4330-sdio.Prowise-PT301.txt \
+ 	brcm/brcmfmac4356-pcie.gpd-win-pocket.txt \
+-	brcm/brcmfmac4356-sdio.vamrs,rock960.txt
++	brcm/brcmfmac4356-sdio.AP6356S.txt
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
