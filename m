@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBF6BC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2A6C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6715380B2B;
-	Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6715380B2B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hi6fFQbbDmN5; Mon, 14 Nov 2022 22:13:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C7FE80ACE;
-	Mon, 14 Nov 2022 22:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C7FE80ACE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BAB91BF36D
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 444F940155
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 444F940155
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7EEA4031E;
+	Mon, 14 Nov 2022 22:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7EEA4031E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2dv2SN_K6Zs0 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QzG8yf1u-Qtc; Mon, 14 Nov 2022 22:13:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2157340155;
+	Mon, 14 Nov 2022 22:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2157340155
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9494D1BF36D
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C61E401DF
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C61E401DF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t5LkhWmvfE80 for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C30040012
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A67F401C7
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C30040012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A67F401C7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A6E483ABB; Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
+ id 61ADE83B13; Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 23:13:20 +0100
+Date: Mon, 14 Nov 2022 23:12:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
-X-Git-Newrev: b2bf6853c11fffb5621632d60f1d3d5ee71e8c0d
+X-Git-Oldrev: e37c110bead8b7b35cd97915673fa785ccb39f2d
+X-Git-Newrev: a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
 X-Patchwork-Hint: ignore
-Message-Id: <20221114221329.6A6E483ABB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/octave: bump to
- version 7.3.0
+Message-Id: <20221114221329.61ADE83B13@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uhubctl: bump to
+ version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2bf6853c11fffb5621632d60f1d3d5ee71e8c0d
+commit: https://git.buildroot.net/buildroot/commit/?id=a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since 7.2.0, see:
-https://octave.org/news/release/2022/11/02/octave-7.3.0-released.html
+Update LICENSE file hash for copyright year update.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/octave/octave.hash | 2 +-
- package/octave/octave.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uhubctl/uhubctl.hash | 4 ++--
+ package/uhubctl/uhubctl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/octave/octave.hash b/package/octave/octave.hash
-index 81d7311eeb..9696f2a00a 100644
---- a/package/octave/octave.hash
-+++ b/package/octave/octave.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+index c696d70f6c..8a4581b84c 100644
+--- a/package/uhubctl/uhubctl.hash
++++ b/package/uhubctl/uhubctl.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  009388289b82fdcc920a2371355049cb6958c735ee9aa3893a256df4a6bf7515  octave-7.2.0.tar.lz
-+sha256  fdb32602252289e068431329add2eed146e6f26301cbb5fc4412f9d972db9475  octave-7.3.0.tar.lz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index b28617438a..647f988a3f 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
+-sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
+-sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
++sha256  d4452252f7862f7a45dd9c62f2ea7cd3a57ab5f5ab0e54a857d4c695699bbba3  uhubctl-2.5.0.tar.gz
++sha256  5eb09049fafa91347386daf769223ba2ee6914cb26ab95b86854ad6edea49b5d  LICENSE
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+index 3429d7d151..f9815409ae 100644
+--- a/package/uhubctl/uhubctl.mk
++++ b/package/uhubctl/uhubctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OCTAVE_VERSION = 7.2.0
-+OCTAVE_VERSION = 7.3.0
- OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
- OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
- OCTAVE_LICENSE = GPL-3.0+
+-UHUBCTL_VERSION = 2.4.0
++UHUBCTL_VERSION = 2.5.0
+ UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
+ UHUBCTL_LICENSE = GPL-2.0
+ UHUBCTL_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
