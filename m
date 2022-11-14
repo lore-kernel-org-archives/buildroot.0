@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01094C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 16:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B961C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 16:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A84C340A49;
-	Mon, 14 Nov 2022 16:17:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A84C340A49
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF14817D3;
+	Mon, 14 Nov 2022 16:17:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF14817D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SlkFzToh2c_Q; Mon, 14 Nov 2022 16:17:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eDvHtKJnWq_z; Mon, 14 Nov 2022 16:17:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCE18402E5;
-	Mon, 14 Nov 2022 16:17:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCE18402E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF67E817A4;
+	Mon, 14 Nov 2022 16:17:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF67E817A4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A96E91BF32B
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:16:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DBB321BF32B
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8453A4030F
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8453A4030F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B726940306
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:16:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B726940306
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E4oeJclEyQUF for <buildroot@lists.busybox.net>;
+ with ESMTP id K1l4J0W_obKV for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 16:16:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71D6A40306
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D19440300
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 16:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71D6A40306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D19440300
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E89083950; Mon, 14 Nov 2022 16:16:45 +0000 (UTC)
+ id 51C4B83966; Mon, 14 Nov 2022 16:16:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 17:07:19 +0100
+Date: Mon, 14 Nov 2022 17:03:13 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: df4c1fd409b88335abe1157718ee97114630d334
-X-Git-Newrev: 46725fcf0711d43aa8692ff20a221ea480c77c1b
+X-Git-Oldrev: 1dae583e3e73d3d53b0b064398e4a57edf1bba52
+X-Git-Newrev: df4c1fd409b88335abe1157718ee97114630d334
 X-Patchwork-Hint: ignore
-Message-Id: <20221114161645.5E89083950@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/linux-tools: perf
- needs threads
+Message-Id: <20221114161645.51C4B83966@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/gsl: fix powerpc
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46725fcf0711d43aa8692ff20a221ea480c77c1b
+commit: https://git.buildroot.net/buildroot/commit/?id=df4c1fd409b88335abe1157718ee97114630d334
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Fix the following build failure raised (at least) since linux 4.0 and
-https://github.com/torvalds/linux/commit/459a3df76c99124fd222586be7f10f862547e7a9:
+Fix the following powerpc build failures on:
+ - musl raised because fpu_control.h is not available:
 
-  CC      /home/autobuild/autobuild/instance-2/output-1/build/linux-6.0.1/tools/perf/builtin-bench.o
-In file included from builtin-bench.c:22:
-bench/bench.h:66:10: fatal error: pthread.h: No such file or directory
-   66 | #include <pthread.h>
-      |          ^~~~~~~~~~~
+In file included from fp.c:8:
+fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
+   21 | #include <fpu_control.h>
+      |          ^~~~~~~~~~~~~~~
 
-Fies:
- - http://autobuild.buildroot.org/results/b6abd641f528101e74f9af33e54ccefe0731148f
+ - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
+   set:
+
+   In file included from fp.c:8:
+fp-gnuppc.c: In function 'gsl_ieee_set_mode':
+fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
+   53 |       mode |= _FPU_RC_NEAREST ;
+      |               ^~~~~~~~~~~~~~~
+
+These build failures are raised since the addition of the package in
+commit 9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
+ - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 958c166837a484e2a9515342c49e93dca734d726)
+(cherry picked from commit 94e47000c27c447de45e7190fbe8d3ef24d7df04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../0001-configure.ac-fix-build-on-powerpc.patch   | 53 ++++++++++++++++++++++
+ package/gsl/gsl.mk                                 |  2 +
+ 2 files changed, 55 insertions(+)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 82e62f826e..8a0b6d5802 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -47,14 +47,15 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
+diff --git a/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
+new file mode 100644
+index 0000000000..13f6da4588
+--- /dev/null
++++ b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
+@@ -0,0 +1,53 @@
++From 84e62d57b90b41a0c96bb9fb6ec61ecaac76a1ab Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Nov 2022 21:31:36 +0100
++Subject: [PATCH] configure.ac: fix build on powerpc
++
++Fix the following powerpc build failures on:
++ - musl raised because fpu_control.h is not available:
++
++In file included from fp.c:8:
++fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
++   21 | #include <fpu_control.h>
++      |          ^~~~~~~~~~~~~~~
++
++ - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
++   set:
++
++   In file included from fp.c:8:
++fp-gnuppc.c: In function 'gsl_ieee_set_mode':
++fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
++   53 |       mode |= _FPU_RC_NEAREST ;
++      |               ^~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
++ - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index bfd9ca30..1ee6dca0 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -389,6 +389,14 @@ if test "$ac_cv_c_ieee_interface" = "gnux86" ; then
++    fi
++ fi
++ 
+++if test "$ac_cv_c_ieee_interface" = "gnuppc" ; then
+++    AC_CACHE_CHECK([for _FPU_RC_NEAREST], ac_cv_c__fpu_rc_nearest,
+++    [ac_cv_c__fpu_rc_nearest=no
+++    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fpu_control.h>
+++]], [[ unsigned short mode = _FPU_RC_NEAREST ; ]])],[ac_cv_c__fpu_rc_nearest="yes"],[ac_cv_c_ieee_interface=unknown])
+++    ])
+++fi
+++
++ ac_tr_ieee_interface=HAVE_`echo $ac_cv_c_ieee_interface | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`_IEEE_INTERFACE
++ AC_DEFINE_UNQUOTED($ac_tr_ieee_interface,1,[IEEE Interface Type])
++ 
++-- 
++2.35.1
++
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index 416955b72c..3604f9836c 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
+@@ -10,6 +10,8 @@ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPL-3.0
+ GSL_LICENSE_FILES = COPYING
+ GSL_CONFIG_SCRIPTS = gsl-config
++# We're patching configure.ac
++GSL_AUTORECONF = YES
  
- 	  These tools are available only from kernel version 4.20.
- 
--comment "perf needs a toolchain w/ dynamic library"
-+comment "perf needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	bool "perf"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LINUX_TOOLS
- 	help
- 	  perf (sometimes "Perf Events" or perf tools, originally
+ # uClibc pretends to have fenv support as it installs <fenv.h>, but in
+ # practice, it only implements it for i386. Problem reported upstream
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
