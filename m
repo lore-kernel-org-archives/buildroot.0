@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC63C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F1DC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 990794032E;
-	Mon,  5 Dec 2022 12:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 990794032E
+	by smtp4.osuosl.org (Postfix) with ESMTP id E25A241685;
+	Mon,  5 Dec 2022 12:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E25A241685
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jbYVobjCYnYg; Mon,  5 Dec 2022 12:11:24 +0000 (UTC)
+	with ESMTP id KcKYYYPeCNKi; Mon,  5 Dec 2022 12:11:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F8774048F;
-	Mon,  5 Dec 2022 12:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F8774048F
+	by smtp4.osuosl.org (Postfix) with ESMTP id E34734169B;
+	Mon,  5 Dec 2022 12:11:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E34734169B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12BA01BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10AE81BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBD0D408CA
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD0D408CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49CD2405FD
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49CD2405FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4VF0l9M8diL0 for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ with ESMTP id MK08hlGCPFmV for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 287B3405FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9302F408A5
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 287B3405FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9302F408A5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 108E885BA2; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ id 8F97985B9B; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 22:50:49 +0100
+Date: Mon, 14 Nov 2022 23:12:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ddcd8af91f78d9e1ebddd88564e6535d3c4d6f79
-X-Git-Newrev: b5e209ed076f69fb0a8305b7a91e6d1b2bb73f76
+X-Git-Oldrev: e37c110bead8b7b35cd97915673fa785ccb39f2d
+X-Git-Newrev: a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112609.108E885BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-frozenlist: bump to version
- 1.3.3
+Message-Id: <20221205112609.8F97985B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uhubctl: bump to version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e209ed076f69fb0a8305b7a91e6d1b2bb73f76
+commit: https://git.buildroot.net/buildroot/commit/?id=a4aaac0684add37f65fdf69512cdb04ec8f5ef0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Update LICENSE file hash for copyright year update.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-frozenlist/python-frozenlist.hash | 4 ++--
- package/python-frozenlist/python-frozenlist.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/uhubctl/uhubctl.hash | 4 ++--
+ package/uhubctl/uhubctl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
-index 4d1ac3b411..04a3a44e89 100644
---- a/package/python-frozenlist/python-frozenlist.hash
-+++ b/package/python-frozenlist/python-frozenlist.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/frozenlist/json
--md5  6ac017ba79ac7a1491e47e89012efeab  frozenlist-1.3.1.tar.gz
--sha256  3a735e4211a04ccfa3f4833547acdf5d2f863bfeb01cfd3edaffbc251f15cec8  frozenlist-1.3.1.tar.gz
-+md5  14e9ffd849c6a1dfa3c6b1fb1ff77b14  frozenlist-1.3.3.tar.gz
-+sha256  58bcc55721e8a90b88332d6cd441261ebb22342e238296bb330968952fbb3a6a  frozenlist-1.3.3.tar.gz
- # Locally computed sha256 checksums
- sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
-diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
-index 51b5d42832..88833b0465 100644
---- a/package/python-frozenlist/python-frozenlist.mk
-+++ b/package/python-frozenlist/python-frozenlist.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+index c696d70f6c..8a4581b84c 100644
+--- a/package/uhubctl/uhubctl.hash
++++ b/package/uhubctl/uhubctl.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
+-sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
++sha256  d4452252f7862f7a45dd9c62f2ea7cd3a57ab5f5ab0e54a857d4c695699bbba3  uhubctl-2.5.0.tar.gz
++sha256  5eb09049fafa91347386daf769223ba2ee6914cb26ab95b86854ad6edea49b5d  LICENSE
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+index 3429d7d151..f9815409ae 100644
+--- a/package/uhubctl/uhubctl.mk
++++ b/package/uhubctl/uhubctl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FROZENLIST_VERSION = 1.3.1
-+PYTHON_FROZENLIST_VERSION = 1.3.3
- PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
--PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/8a/95/229aacfe85daa28e2792481a98c336bc30d3729533e6a44db537880aca21
-+PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/e9/10/d629476346112b85c912527b9080944fd2c39a816c2225413dbc0bb6fcc0
- PYTHON_FROZENLIST_SETUP_TYPE = setuptools
- PYTHON_FROZENLIST_LICENSE = Apache-2.0
- PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
+-UHUBCTL_VERSION = 2.4.0
++UHUBCTL_VERSION = 2.5.0
+ UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
+ UHUBCTL_LICENSE = GPL-2.0
+ UHUBCTL_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
