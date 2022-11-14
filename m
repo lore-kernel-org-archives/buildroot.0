@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D382C47089
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9F0C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 089594051B;
-	Mon,  5 Dec 2022 12:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 089594051B
+	by smtp2.osuosl.org (Postfix) with ESMTP id D53D14059E;
+	Mon,  5 Dec 2022 12:14:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D53D14059E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ezw6TzkL7u26; Mon,  5 Dec 2022 12:14:00 +0000 (UTC)
+	with ESMTP id 4fUjMZEqcufD; Mon,  5 Dec 2022 12:14:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 232DE40523;
-	Mon,  5 Dec 2022 12:13:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 232DE40523
+	by smtp2.osuosl.org (Postfix) with ESMTP id C48AC4052D;
+	Mon,  5 Dec 2022 12:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C48AC4052D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D44D1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 234B11BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64056408E8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9105B408F1
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64056408E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9105B408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iv8NLfAYJoiJ for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+ with ESMTP id 6GUURdxAJV0N for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D02D84056A
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D02D84056A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10B0840616
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10B0840616
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BCF2285B9B; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+ id 04E5785B9B; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 23:14:46 +0100
+Date: Mon, 14 Nov 2022 23:22:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bc283a7bc8967fe7d38205ac8ffe966d035dafc2
-X-Git-Newrev: 1718c2ba6a4db1461b2490aa42ca4f0a2112adae
+X-Git-Oldrev: 12c430f880f9255529d8c53cdb59f4178d2cd8f4
+X-Git-Newrev: 5f94d91ed8e486e43b7fcf58b040d26960589eb2
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112609.BCF2285B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgis: bump version to 3.3.2
+Message-Id: <20221205112610.04E5785B9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,122 +63,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1718c2ba6a4db1461b2490aa42ca4f0a2112adae
+commit: https://git.buildroot.net/buildroot/commit/?id=5f94d91ed8e486e43b7fcf58b040d26960589eb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All patches are merged into upstream, so drop them.
+This is a header only library which is required by the latest version
+of zxing-cpp.
 
-https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.3.2/NEWS
+Include paths and pc file are based off of debian libstb package.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...isable-forced-static-linking-of-liblwgeom.patch | 31 -------------------
- ...er-Makefile.in-do-not-force-static-linkin.patch | 35 ----------------------
- package/postgis/postgis.hash                       |  2 +-
- package/postgis/postgis.mk                         |  2 +-
- 4 files changed, 2 insertions(+), 68 deletions(-)
+ DEVELOPERS            |  1 +
+ package/Config.in     |  1 +
+ package/stb/Config.in |  6 ++++++
+ package/stb/stb.hash  |  3 +++
+ package/stb/stb.mk    | 21 +++++++++++++++++++++
+ package/stb/stb.pc    |  8 ++++++++
+ 6 files changed, 40 insertions(+)
 
-diff --git a/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch b/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch
-deleted file mode 100644
-index 4329c9cd80..0000000000
---- a/package/postgis/0001-Disable-forced-static-linking-of-liblwgeom.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 845c18c1288b7a96592901baadb198f96dd71c46 Mon Sep 17 00:00:00 2001
--From: fidomax <adobegitler@gmail.com>
--Date: Tue, 26 Jan 2021 09:49:19 +0300
--Subject: [PATCH] Disable forced static linking of liblwgeom
--
--In case of shared libs build fails:
--ld: cannot find -lgeos_c
--ld: attempted static link of dynamic object `/usr/lib/libproj.so'
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
--Fetch from: https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b.patch
-----
-- loader/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/loader/Makefile.in b/loader/Makefile.in
--index 9aebfe07f..9a0c90d3a 100644
----- a/loader/Makefile.in
--+++ b/loader/Makefile.in
--@@ -44,7 +44,7 @@ ICONV_CFLAGS=@ICONV_CFLAGS@
-- 
-- # liblwgeom
-- LIBLWGEOM=../liblwgeom/liblwgeom.la
---LDFLAGS += -static $(LIBLWGEOM)
--+LDFLAGS += $(LIBLWGEOM)
-- 
-- # GTK includes and libraries
-- GTK_CFLAGS = @GTK_CFLAGS@ @IGE_MAC_CFLAGS@
---- 
--2.30.0
--
-diff --git a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch b/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
-deleted file mode 100644
-index 756a7c10dd..0000000000
---- a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 29c33c483e22a4445d870739187d128df0f11f60 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Wed, 27 Jul 2022 15:12:40 +0200
--Subject: [PATCH] raster/loader/Makefile.in: do not force static linking
--
--This is similar to commit
--https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b,
--but applied to raster/loader. It ensures that if only shared variants
--of the libraries are available, the link still works. If you force
---static and only shared variants of some of the libraries are
--available, the link fails with "d: attempted static link of dynamic
--object XYZ".
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/postgis/postgis/pull/702
-----
-- raster/loader/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/raster/loader/Makefile.in b/raster/loader/Makefile.in
--index 3df47a96f..d0a408333 100644
----- a/raster/loader/Makefile.in
--+++ b/raster/loader/Makefile.in
--@@ -36,7 +36,7 @@ PGSQL_BINDIR=@PGSQL_BINDIR@
-- 
-- RT_CORE=../rt_core
-- 
---LIBLWGEOM_LDFLAGS= -static ../../liblwgeom/liblwgeom.la
--+LIBLWGEOM_LDFLAGS= ../../liblwgeom/liblwgeom.la
-- LIBLWGEOM_CFLAGS=-I../../liblwgeom
-- LIBGDAL_CFLAGS=@LIBGDAL_CFLAGS@
-- LIBGDAL_LDFLAGS=@LIBGDAL_LDFLAGS@
---- 
--2.37.1
--
-diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
-index 9569ca71dd..8550a57939 100644
---- a/package/postgis/postgis.hash
-+++ b/package/postgis/postgis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  18cf3d013f45b1aa8ed59d78bc707e9e125e250d8f0615396ae9bfe3dd7c3d7c  postgis-3.2.2.tar.gz
-+sha256  9a2a219da005a1730a39d1959a1c7cec619b1efb009b65be80ffc25bad299068  postgis-3.3.2.tar.gz
- sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index e6ea52bf7a..4148180adf 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGIS_VERSION = 3.2.2
-+POSTGIS_VERSION = 3.3.2
- POSTGIS_SITE = https://download.osgeo.org/postgis/source
- # parallel build issues
- POSTGIS_MAKE = $(MAKE1)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d27936992..bc026da4aa 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1418,6 +1418,7 @@ F:	package/rtl8192eu/
+ F:	package/serd/
+ F:	package/sord/
+ F:	package/sratom/
++F:	package/stb/
+ F:	package/zchunk/
+ F:	support/testing/tests/package/sample_python_rtoml.py
+ F:	support/testing/tests/package/test_python_rtoml.py
+diff --git a/package/Config.in b/package/Config.in
+index 238d7813f0..52004de075 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1600,6 +1600,7 @@ menu "Graphics"
+ 	source "package/pixman/Config.in"
+ 	source "package/poppler/Config.in"
+ 	source "package/powervr/Config.in"
++	source "package/stb/Config.in"
+ 	source "package/tiff/Config.in"
+ 	source "package/unclutter-xfixes/Config.in"
+ 	source "package/waffle/Config.in"
+diff --git a/package/stb/Config.in b/package/stb/Config.in
+new file mode 100644
+index 0000000000..41014d242b
+--- /dev/null
++++ b/package/stb/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_STB
++	bool "stb"
++	help
++	  Single-file image and audio processing libraries for C/C++.
++
++	  https://github.com/nothings/stb
+diff --git a/package/stb/stb.hash b/package/stb/stb.hash
+new file mode 100644
+index 0000000000..097ad3424f
+--- /dev/null
++++ b/package/stb/stb.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  c47cf5abe21e1d620afccd159c23fe71dfa86eb270015a7646a4f79e9bfd5503  stb-8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55.tar.gz
++sha256  bebfe904b14301657e4e5d655c811d51fd31b97c455b9cc2d8600d6bac6cff63  LICENSE
+diff --git a/package/stb/stb.mk b/package/stb/stb.mk
+new file mode 100644
+index 0000000000..59358aec26
+--- /dev/null
++++ b/package/stb/stb.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# stb
++#
++################################################################################
++
++STB_VERSION = 8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55
++STB_SITE = $(call github,nothings,stb,$(STB_VERSION))
++STB_LICENSE = Public Domain or MIT
++STB_LICENSE_FILES = LICENSE
++STB_INSTALL_STAGING = YES
++STB_INSTALL_TARGET = NO
++
++define STB_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/stb
++	$(INSTALL) -m 0644 $(@D)/*.h $(STAGING_DIR)/usr/include/stb
++	$(INSTALL) -D -m 0644 $(STB_PKGDIR)/stb.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/stb.pc
++endef
++
++$(eval $(generic-package))
+diff --git a/package/stb/stb.pc b/package/stb/stb.pc
+new file mode 100644
+index 0000000000..165b6da94a
+--- /dev/null
++++ b/package/stb/stb.pc
+@@ -0,0 +1,8 @@
++prefix=/usr
++libdir=${prefix}/lib
++includedir=${prefix}/include
++
++Name: stb
++Description: single-file image and audio processing libraries for C/C++
++Version: 0.0
++Cflags: -I${includedir}/stb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
