@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F76AC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD9E4C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E986E402B1;
-	Mon, 14 Nov 2022 22:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E986E402B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8348940484;
+	Mon, 14 Nov 2022 22:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8348940484
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zaEjcev4uHPL; Mon, 14 Nov 2022 22:26:47 +0000 (UTC)
+	with ESMTP id K-duYVLFjfUA; Mon, 14 Nov 2022 22:26:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0EB8740155;
-	Mon, 14 Nov 2022 22:26:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EB8740155
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 571041BF36D
+	by smtp2.osuosl.org (Postfix) with ESMTP id A28EA40217;
+	Mon, 14 Nov 2022 22:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A28EA40217
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C8B301BF36D
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31699812CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0D714086A
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31699812CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D714086A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eophA9j_neGA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLj0ug4Qkibb for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CA7180B2B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B43DF40325
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CA7180B2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B43DF40325
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A4F283B9A; Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
+ id A2D6983B9A; Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 23:25:54 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b6bf83a79b08fe2fe029fcb203f5a91c456dd063
-X-Git-Newrev: 8aaa05d5583ac1874b29aa972ce21d9f36c3de2a
+Date: Mon, 14 Nov 2022 21:25:09 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: f0975a19dd24813bbbc9e70ee81edf479eb66ec0
+X-Git-Newrev: 4613d5d513579517dcaa004b469ceb0234027ce3
 X-Patchwork-Hint: ignore
-Message-Id: <20221114222643.4A4F283B9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/mupdf: fix
- CVE-2021-4216
+Message-Id: <20221114222643.A2D6983B9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/zlib-ng: fix
+ build without neon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,71 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aaa05d5583ac1874b29aa972ce21d9f36c3de2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4613d5d513579517dcaa004b469ceb0234027ce3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-A Floating point exception (division-by-zero) flaw was found in Mupdf
-for zero width pages in muraster.c. It is fixed in Mupdf-1.20.0-rc1
-upstream.
+Fix the following build failure without NEON probably raised since bump
+to version 1.9.9-b1 in commit 1f7b12a0b4572d7e763c431a63c22cfb912b8b14
+and
+https://github.com/zlib-ng/zlib-ng/commit/ec02ecf104e1d3f1836a908a359f20aa93494df5:
+
+In file included from /home/autobuild/autobuild/instance-4/output-1/build/zlib-ng-2.0.6/arch/arm/adler32_neon.c:11:
+/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/include/arm_neon.h:31:2: error: #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+   31 | #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+      |  ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8260762632cde9eb5bc2154084680b5bec034aa6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3ddca0ccb90967977c2db8c966c205568cf4cb93)
+(cherry picked from commit 88d2135a7ad7ed899ef1f2fec070407810f8055d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-by-zero-for-zero-width-pages-in-muraster.patch | 29 ++++++++++++++++++++++
- package/mupdf/mupdf.mk                             |  3 +++
- 2 files changed, 32 insertions(+)
+ package/zlib-ng/zlib-ng.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
-new file mode 100644
-index 0000000000..099a3fdbab
---- /dev/null
-+++ b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
-@@ -0,0 +1,29 @@
-+From 22c47acbd52949421f8c7cb46ea1556827d0fcbf Mon Sep 17 00:00:00 2001
-+From: Sebastian Rasmussen <sebras@gmail.com>
-+Date: Tue, 18 Jan 2022 20:33:10 +0100
-+Subject: [PATCH] Bug 704834: Fix division by zero for zero width pages in
-+ muraster.
-+
-+[Retrieved from:
-+https://github.com/ArtifexSoftware/mupdf/commit/22c47acbd52949421f8c7cb46ea1556827d0fcbf]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ source/tools/muraster.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/source/tools/muraster.c b/source/tools/muraster.c
-+index c2ceb62f2e..97f4ae2633 100644
-+--- a/source/tools/muraster.c
-++++ b/source/tools/muraster.c
-+@@ -1003,8 +1003,9 @@ initialise_banding(fz_context *ctx, render_details *render, int color)
-+ 
-+ 	w = render->ibounds.x1 - render->ibounds.x0;
-+ 	min_band_mem = (size_t)bpp * w * min_band_height;
-+-	reps = (int)(max_band_memory / min_band_mem);
-+-	if (reps < 1)
-++	if (min_band_mem > 0)
-++		reps = (int)(max_band_memory / min_band_mem);
-++	if (min_band_mem == 0 || reps < 1)
-+ 		reps = 1;
-+ 
-+ 	/* Adjust reps to even out the work between threads */
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 56ea7cc507..e86ba1e73f 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -28,6 +28,9 @@ MUPDF_IGNORE_CVES += CVE-2021-3407
- # 0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
- MUPDF_IGNORE_CVES += CVE-2021-37220
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 938acd4181..aa65d8437d 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -18,9 +18,15 @@ ZLIB_NG_CONF_OPTS += \
+ 	-DZLIB_COMPAT=1 \
+ 	-DZLIB_ENABLE_TESTS=OFF
  
-+# 0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
-+MUPDF_IGNORE_CVES += CVE-2021-4216
+-# Enable NEON and ACLE on ARM
++# Enable ACLE on ARM
+ ifeq ($(BR2_arm),y)
+-ZLIB_NG_CONF_OPTS += -DWITH_ACLE=1 -DWITH_NEON=1
++ZLIB_NG_CONF_OPTS += -DWITH_ACLE=1
++endif
 +
- # The pkg-config name for gumbo-parser is `gumbo`.
- MUPDF_PKG_CONFIG_PACKAGES = \
- 	freetype2 \
++ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_aarch64),y)
++ZLIB_NG_CONF_OPTS += -DWITH_NEON=ON
++else
++ZLIB_NG_CONF_OPTS += -DWITH_NEON=OFF
+ endif
+ 
+ ifeq ($(BR2_powerpc_power8),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
