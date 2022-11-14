@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77190C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CBFAC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8DBC813E1;
-	Mon, 14 Nov 2022 21:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8DBC813E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBD0A6058D;
+	Mon, 14 Nov 2022 21:35:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD0A6058D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SrR0yyCT7vfG; Mon, 14 Nov 2022 21:31:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MM_EnX8W5u-i; Mon, 14 Nov 2022 21:35:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 205F381359;
-	Mon, 14 Nov 2022 21:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 205F381359
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E6D8E1BF296
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:31:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0168C605A2;
+	Mon, 14 Nov 2022 21:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0168C605A2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 846F31BF296
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFF074035C
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:31:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFF074035C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CCAC605A2
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:35:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CCAC605A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eCsX6BUsZ2yt for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 21:31:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 702C14035B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 702C14035B
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:31:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6FB78FF803;
- Mon, 14 Nov 2022 21:31:41 +0000 (UTC)
-Date: Mon, 14 Nov 2022 22:31:40 +0100
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Message-ID: <20221114223140.49169eef@windsurf>
-In-Reply-To: <20221012202317.2898868-1-thomas.petazzoni@bootlin.com>
-References: <20221012202317.2898868-1-thomas.petazzoni@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668461501;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BxaEy787sqniyOd8g51z+Kb2p8I43MlATGFYk1POhi0=;
- b=OLCymyRCavnN2BV+sbEg8iULpOKCz7JF11gO0dqkuZ/B4X8Ps21Rbh0kHO5UQ9v5ECRYix
- QljfYsv4VnXzL5AHya7w4q+7Xr3tnaygEUXbTdL2nFRdsFOoH7ENa9iuJunWmATEPGA41i
- fa7HyYRUH6/mAvCr3rKAdu1KWS25IZGCeFEUxyAvLwoRJLhWjCtgF7w6H1YnH/rlgcD7fk
- QgzZTfVsykC5+axkdjn5aTTT4Qp37ZCqZBU3lZ4LBMoZFF69hi0dyeyWh6035C8kq/3uDi
- b1nuAjsIzReLznwGLtJri+e1E2wwl/MXgkiHskjxQks7WD16xNQ+wZJ1kP+62g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OLCymyRC
-Subject: Re: [Buildroot] [PATCH 1/2] package/lttng-modules: enable
- CONFIG_FTRACE in kernel configuration
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dXSi_vw6XiPi for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 21:35:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63DEE6058D
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:35:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63DEE6058D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4DACB83A95; Mon, 14 Nov 2022 21:35:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 14 Nov 2022 22:35:02 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 01fec1b37265fdbd2e89f0217bccd35275e32f98
+X-Git-Newrev: d31447bce49e44e5085fb333528fe70772fc01d2
+X-Patchwork-Hint: ignore
+Message-Id: <20221114213531.4DACB83A95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/usbredir: bump to
+ version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,32 +58,142 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?Q2zDqW1l?= =?UTF-8?B?bnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAxMiBPY3QgMjAyMiAyMjoyMzoxNiArMDIwMApUaG9tYXMgUGV0YXp6b25pIHZpYSBi
-dWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90ZToKCj4gVGhlIGJ1aWxkIG9m
-IGx0dG5nLW1vZHVsZXMgd2lsbCBmYWlsIGlmIHRoZSBrZXJuZWwgZG9lcyBub3QgaGF2ZQo+IENP
-TkZJR19UUkFDRVBPSU5UUyBlbmFibGVkLiBIb3dldmVyLCBDT05GSUdfVFJBQ0VQT0lOVFMgaXMg
-YQo+IHByb21wdC1sZXNzIG9wdGlvbiwgYW5kIHRoZSBtb3N0IGdlbmVyaWMgb3B0aW9uIHRoYXQg
-ZG9lcyBlbmFibGUKPiBDT05GSUdfVFJBQ0VQT0lOVFMgaXMgQ09ORklHX0ZUUkFDRS4KPiAKPiBJ
-biBhZGRpdGlvbiwgQ09ORklHX0ZUUkFDRSB3aWxsIGFsc28gZW5hYmxlIENPTkZJR19TVEFDS1RS
-QUNFLCB3aGljaAo+IGlzIG5lZWRlZCBvbiBDUFUgYXJjaGl0ZWN0dXJlcyB0aGF0IGRvbid0IHBy
-b3ZpZGUgdGhlIFNUQUNLV0FMSwo+IG1lY2hhbmlzbSBpbiB0aGUga2VybmVsLCBhcyBpcyB0aGUg
-Y2FzZSBvbiBBUk0gMzItYml0IGZvciBleGFtcGxlLgo+IAo+IFRoZXJlZm9yZSwgbGV0J3MgZW5h
-YmxlIENPTkZJR19GVFJBQ0Ugd2hlbiBidWlsZGluZyBsdHRuZy1tb2R1bGVzLgo+IAo+IENjOiBD
-bMOpbWVudCBMw6lnZXIgPGNsZW1lbnQubGVnZXJAYm9vdGxpbi5jb20+Cj4gUmVwb3J0ZWQtYnk6
-IENsw6ltZW50IEzDqWdlciA8Y2xlbWVudC5sZWdlckBib290bGluLmNvbT4KPiBTaWduZWQtb2Zm
-LWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IC0t
-LQo+ICBwYWNrYWdlL2x0dG5nLW1vZHVsZXMvbHR0bmctbW9kdWxlcy5tayB8IDEgKwo+ICAxIGZp
-bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCkJvdGggYXBwbGllZCB0byBuZXh0IQoKVGhvbWFz
-Ci0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtl
-cm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=d31447bce49e44e5085fb333528fe70772fc01d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+usbredirserver was dropped by
+https://gitlab.freedesktop.org/spice/usbredir/-/commit/f4ffdce329305da2803684776f7659083a530819
+
+Add an option to enable tools (and usbredirect binary) as a replacement
+to usbredirserver
+
+https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.13.0/ChangeLog.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy               |  8 ++++++++
+ package/usbredir/Config.in     | 18 +++++++++++++-----
+ package/usbredir/usbredir.hash |  4 ++--
+ package/usbredir/usbredir.mk   | 22 ++++++++--------------
+ 4 files changed, 31 insertions(+), 21 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0e63d59a98..17f0858e70 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2022.11"
+ 
++config BR2_PACKAGE_USBREDIR_SERVER
++	bool "usbredirserver removed"
++	select BR2_LEGACY
++	help
++	  usbredirserver has been dropped by upstream since version
++	  0.13.0. usbredir tools (which include usbredirect binary) can
++	  be used as a replacement.
++
+ config BR2_KERNEL_HEADERS_5_17
+ 	bool "kernel headers version 5.17.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+index 8ce180a884..6de6227e5c 100644
+--- a/package/usbredir/Config.in
++++ b/package/usbredir/Config.in
+@@ -15,18 +15,26 @@ config BR2_PACKAGE_USBREDIR
+ 	  protocol.
+ 
+ 	  Note: only the library is installed, not the utilities. Say
+-	  'y' below if you want the server too.
++	  'y' below if you want the tools too.
+ 
+ 	  http://www.spice-space.org/page/UsbRedir
+ 
+ if BR2_PACKAGE_USBREDIR
+ 
+-config BR2_PACKAGE_USBREDIR_SERVER
+-	bool "usbredirserver on target"
++config BR2_PACKAGE_USBREDIR_TOOLS
++	bool "enable tools"
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  If you want to serve usbredir requests on your target, say
+-	  'y' here to have the usbredir server on the target.
++	  'y' here to have the tools built and installed on the target
++	  (including usbredirect binary).
+ 
+-	  Note: the server is not required to use the library.
++	  Note: the tools are not required to use the library.
++
++comment "tools needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR
+ 
+ endif
+diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+index f738c36690..577e08efba 100644
+--- a/package/usbredir/usbredir.hash
++++ b/package/usbredir/usbredir.hash
+@@ -1,5 +1,5 @@
+-# https://spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz.sha256sum
+-sha256  fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d  usbredir-0.12.0.tar.xz
++# https://spice-space.org/download/usbredir/usbredir-0.13.0.tar.xz.sha256sum
++sha256  4ba6faa02c0ae6deeb4c53883d66ab54b3a5899bead42ce4ded9568b9a7dc46e  usbredir-0.13.0.tar.xz
+ 
+ # Hash for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+index 6792a3e758..325e7313aa 100644
+--- a/package/usbredir/usbredir.mk
++++ b/package/usbredir/usbredir.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USBREDIR_VERSION = 0.12.0
++USBREDIR_VERSION = 0.13.0
+ USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
+ USBREDIR_SITE = http://spice-space.org/download/usbredir
+ USBREDIR_LICENSE = LGPL-2.1+ (libraries)
+@@ -14,21 +14,15 @@ USBREDIR_DEPENDENCIES = host-pkgconf libusb
+ USBREDIR_CONF_OPTS = \
+ 	-Dgit_werror=disabled \
+ 	-Dstack_protector=disabled \
+-	-Dtests=disabled \
+-	-Dtools=disabled
+-
+-ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
++	-Dtests=disabled
+ 
++ifeq ($(BR2_PACKAGE_USBREDIR_TOOLS),y)
+ USBREDIR_LICENSE += , GPL-2.0+ (program)
+ USBREDIR_LICENSE_FILES += COPYING
+-
+-else # BR2_PACKAGE_USBREDIR_SERVER != y
+-
+-define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
+-	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
+-endef
+-USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
+-
+-endif # BR2_PACKAGE_USBREDIR_SERVER
++USBREDIR_DEPENDENCIES += libglib2
++USBREDIR_CONF_OPTS += -Dtools=enabled
++else
++USBREDIR_CONF_OPTS += -Dtools=disabled
++endif
+ 
+ $(eval $(meson-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
