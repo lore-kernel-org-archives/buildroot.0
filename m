@@ -1,59 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71AA5C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 19:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF2FFC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 19:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE81415EA;
-	Mon, 14 Nov 2022 19:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AE81415EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60DC4404C8;
+	Mon, 14 Nov 2022 19:38:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60DC4404C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4CDEowSnmJvx; Mon, 14 Nov 2022 19:37:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q4YRlQGv_pS6; Mon, 14 Nov 2022 19:38:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC4D415E1;
-	Mon, 14 Nov 2022 19:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CC4D415E1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98C8440399;
+	Mon, 14 Nov 2022 19:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98C8440399
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B17E1BF2A6
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 19:37:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF5D71BF2A6
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 19:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03C4F81388
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 19:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03C4F81388
+ by smtp1.osuosl.org (Postfix) with ESMTP id D87C4813C3
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 19:38:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D87C4813C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZP_TlppR-ap4 for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 19:37:22 +0000 (UTC)
+ with ESMTP id HtMw3aEYIEoR for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 19:38:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF36881336
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF36881336
- for <buildroot@busybox.net>; Mon, 14 Nov 2022 19:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E936381388
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E936381388
+ for <buildroot@busybox.net>; Mon, 14 Nov 2022 19:38:16 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9379E40006;
- Mon, 14 Nov 2022 19:37:18 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B90BCC0003;
+ Mon, 14 Nov 2022 19:38:13 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oufGd-0079yD-2g; Mon, 14 Nov 2022 20:37:15 +0100
+ id 1oufHY-007A14-J0; Mon, 14 Nov 2022 20:38:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Baruch Siach via buildroot <buildroot@buildroot.org>
 References: <996e9db6fa29e5b1c59d7ecf3e84da781bace4ee.1667288516.git.baruch@tkos.co.il>
-Date: Mon, 14 Nov 2022 20:37:15 +0100
-In-Reply-To: <996e9db6fa29e5b1c59d7ecf3e84da781bace4ee.1667288516.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Tue, 1 Nov 2022 09:41:54
+ <fe30717bf4f0096985334e3e23fd1f1573eb53f9.1667288516.git.baruch@tkos.co.il>
+Date: Mon, 14 Nov 2022 20:38:12 +0100
+In-Reply-To: <fe30717bf4f0096985334e3e23fd1f1573eb53f9.1667288516.git.baruch@tkos.co.il>
+ (Baruch Siach via buildroot's message of "Tue, 1 Nov 2022 09:41:55
  +0200")
-Message-ID: <871qq5jpjo.fsf@dell.be.48ers.dk>
+Message-ID: <87wn7xiaxn.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] package/socat: fix printf feature
- detection
+Subject: Re: [Buildroot] [PATCH 2/3] package/socat: disable openssl for
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,11 +74,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
- > socal configure uses AC_TRY_RUN to detect printf features. This does not
- > work for cross compilation.
-
- > All C libraries we use support C99 snprintf. Only glibc and uClibc
- > support the deprecated Z modifier.
+ > socal configure script does not take the zlib dependency into account
+ > when linking with libssl. This break static link. There is not easy way
+ > to add zlib dependency, so just disable openssl for static builds.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
