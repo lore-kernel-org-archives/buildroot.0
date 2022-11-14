@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E9FAC4321E
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 16:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E06C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 16:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97F1260E22;
-	Mon, 14 Nov 2022 16:18:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97F1260E22
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F91C40A65;
+	Mon, 14 Nov 2022 16:19:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F91C40A65
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3IYPWRjAEgwA; Mon, 14 Nov 2022 16:19:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59237402E5;
+	Mon, 14 Nov 2022 16:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59237402E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D37F1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:18:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC9B3607D1
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:18:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC9B3607D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w20lzhZqaUCE; Mon, 14 Nov 2022 16:18:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B121460E1B;
-	Mon, 14 Nov 2022 16:18:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B121460E1B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFB6A1BF8A8
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:18:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB50580BD5
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 16:18:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB50580BD5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pxdior2-1TDJ for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SmiP148MqFOm for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 16:18:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E20CE80AC5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C24C60776
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 16:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E20CE80AC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C24C60776
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE97B83984; Mon, 14 Nov 2022 16:18:34 +0000 (UTC)
+ id EE8A983989; Mon, 14 Nov 2022 16:18:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 17:03:20 +0100
+Date: Mon, 14 Nov 2022 17:12:38 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 935a5e77ef7aa2aa938a6cf7a7275eb3f6555fb6
-X-Git-Newrev: 0216becf87d8030f9cb8a1fadead994fa9df67cf
+X-Git-Oldrev: 92e0365a4a24fae71577bac176681cc0c662b615
+X-Git-Newrev: 9e4dab0b6dd5dc0461822dbd6128d36821b5bcd5
 X-Patchwork-Hint: ignore
-Message-Id: <20221114161834.CE97B83984@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gsl: fix powerpc
- build
+Message-Id: <20221114161834.EE8A983989@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libuhttpd: fix
+ build with wolfssl >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,114 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0216becf87d8030f9cb8a1fadead994fa9df67cf
+commit: https://git.buildroot.net/buildroot/commit/?id=9e4dab0b6dd5dc0461822dbd6128d36821b5bcd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following powerpc build failures on:
- - musl raised because fpu_control.h is not available:
+Fix the following build failure with wolfssl raised since bump to
+version 5.2.0 in commit 14e0c4de719a0d63192cc5de66a608f75297f37d and
+https://github.com/wolfSSL/wolfssl/commit/33cb8231481d5beb46b57511c2630aba36028256:
 
-In file included from fp.c:8:
-fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
-   21 | #include <fpu_control.h>
-      |          ^~~~~~~~~~~~~~~
-
- - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
-   set:
-
-   In file included from fp.c:8:
-fp-gnuppc.c: In function 'gsl_ieee_set_mode':
-fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
-   53 |       mode |= _FPU_RC_NEAREST ;
-      |               ^~~~~~~~~~~~~~~
-
-These build failures are raised since the addition of the package in
-commit 9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c: In function 'handle_wolfssl_asn_error':
+/home/buildroot/autobuild/instance-0/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:339:10: error: 'ASN_NTRU_KEY_E' undeclared (first use in this function); did you mean 'ASN_ECC_KEY_E'?
+  339 |     case ASN_NTRU_KEY_E:
+      |          ^~~~~~~~~~~~~~
+      |          ASN_ECC_KEY_E
 
 Fixes:
- - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
- - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
+ - http://autobuild.buildroot.org/results/3261b0035c8aadd1b62538b53e03af1cd8a7b312
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 94e47000c27c447de45e7190fbe8d3ef24d7df04)
+(cherry picked from commit ca6f38a340bf7eaac76aafcdf7dd78f5c61b0ba6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-configure.ac-fix-build-on-powerpc.patch   | 53 ++++++++++++++++++++++
- package/gsl/gsl.mk                                 |  2 +
- 2 files changed, 55 insertions(+)
+ .../0001-add-compatibility-for-wolfssl-5-0.patch   | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
+diff --git a/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
 new file mode 100644
-index 0000000000..13f6da4588
+index 0000000000..7da7199e7e
 --- /dev/null
-+++ b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-@@ -0,0 +1,53 @@
-+From 84e62d57b90b41a0c96bb9fb6ec61ecaac76a1ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Nov 2022 21:31:36 +0100
-+Subject: [PATCH] configure.ac: fix build on powerpc
++++ b/package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch
+@@ -0,0 +1,30 @@
++From 73aa4ef762b2de67bc8c7c260bd36b34fdb91e63 Mon Sep 17 00:00:00 2001
++From: "Sergey V. Lobanov" <sergey@lobanov.in>
++Date: Mon, 3 Jan 2022 19:36:52 +0300
++Subject: [PATCH] add compatibility for wolfssl >= 5.0
 +
-+Fix the following powerpc build failures on:
-+ - musl raised because fpu_control.h is not available:
++NTRU support has been removed in wolfssl 5.0 so it is required to
++mask NTRU specific code if wolfssl >= 5.0
 +
-+In file included from fp.c:8:
-+fp-gnuppc.c:21:10: fatal error: fpu_control.h: No such file or directory
-+   21 | #include <fpu_control.h>
-+      |          ^~~~~~~~~~~~~~~
-+
-+ - glibc raised because _FPU_RC_NEAREST is undefined if _SOFT_FLOAT is
-+   set:
-+
-+   In file included from fp.c:8:
-+fp-gnuppc.c: In function 'gsl_ieee_set_mode':
-+fp-gnuppc.c:53:15: error: '_FPU_RC_NEAREST' undeclared (first use in this function)
-+   53 |       mode |= _FPU_RC_NEAREST ;
-+      |               ^~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d73e116c81bf16d2e55fced215d6bd3b382fef10
-+ - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
-+
++Signed-off-by: Sergey V. Lobanov <sergey at lobanov.in>
++[Retrieved from:
++https://github.com/zhaojh329/ssl/commit/73aa4ef762b2de67bc8c7c260bd36b34fdb91e63]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ configure.ac | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
++ openssl.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index bfd9ca30..1ee6dca0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -389,6 +389,14 @@ if test "$ac_cv_c_ieee_interface" = "gnux86" ; then
-+    fi
-+ fi
-+ 
-++if test "$ac_cv_c_ieee_interface" = "gnuppc" ; then
-++    AC_CACHE_CHECK([for _FPU_RC_NEAREST], ac_cv_c__fpu_rc_nearest,
-++    [ac_cv_c__fpu_rc_nearest=no
-++    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fpu_control.h>
-++]], [[ unsigned short mode = _FPU_RC_NEAREST ; ]])],[ac_cv_c__fpu_rc_nearest="yes"],[ac_cv_c_ieee_interface=unknown])
-++    ])
-++fi
-++
-+ ac_tr_ieee_interface=HAVE_`echo $ac_cv_c_ieee_interface | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`_IEEE_INTERFACE
-+ AC_DEFINE_UNQUOTED($ac_tr_ieee_interface,1,[IEEE Interface Type])
-+ 
-+-- 
-+2.35.1
-+
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-index 416955b72c..3604f9836c 100644
---- a/package/gsl/gsl.mk
-+++ b/package/gsl/gsl.mk
-@@ -10,6 +10,8 @@ GSL_INSTALL_STAGING = YES
- GSL_LICENSE = GPL-3.0
- GSL_LICENSE_FILES = COPYING
- GSL_CONFIG_SCRIPTS = gsl-config
-+# We're patching configure.ac
-+GSL_AUTORECONF = YES
- 
- # uClibc pretends to have fenv support as it installs <fenv.h>, but in
- # practice, it only implements it for i386. Problem reported upstream
++diff --git a/src/ssl/openssl.c b/src/ssl/openssl.c
++index 5a49267..278bab5 100644
++--- a/src/ssl/openssl.c
+++++ b/src/ssl/openssl.c
++@@ -336,7 +336,9 @@ static bool handle_wolfssl_asn_error(void *ssl, int r,
++     case ASN_SIG_HASH_E:
++     case ASN_SIG_KEY_E:
++     case ASN_DH_KEY_E:
+++#if LIBWOLFSSL_VERSION_HEX < 0x05000000
++     case ASN_NTRU_KEY_E:
+++#endif
++     case ASN_CRIT_EXT_E:
++     case ASN_ALT_NAME_E:
++     case ASN_NO_PEM_HEADER:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
