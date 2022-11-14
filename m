@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59233C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 11:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ECC6C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:00:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 129A4813DE;
-	Mon,  5 Dec 2022 11:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 129A4813DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF6B34056A;
+	Mon,  5 Dec 2022 11:59:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF6B34056A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l4h3-OKgfTJB; Mon,  5 Dec 2022 11:59:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yr1nT7YZXU6F; Mon,  5 Dec 2022 11:59:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59090813E4;
-	Mon,  5 Dec 2022 11:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59090813E4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11AC81BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB52B401DC;
+	Mon,  5 Dec 2022 11:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB52B401DC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 161961BF955
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 231D54062A
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 231D54062A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B2BC4168D
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B2BC4168D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h8xGg5C8b16l for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jSMv9yr2gA2H for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BE64405FB
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BE64405FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACB844167A
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACB844167A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03483857AA; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+ id A502B85BBE; Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:01:07 +0100
+Date: Mon, 14 Nov 2022 23:14:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd2757bd76d2bc2411e67a27a25b8ab55d40bdb7
-X-Git-Newrev: 785ea2179c40040cc0087b7b635dc3a78dd11f42
+X-Git-Oldrev: b2bf6853c11fffb5621632d60f1d3d5ee71e8c0d
+X-Git-Newrev: 58d1032f96a565320dc043254cf2ade1950ec0aa
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112607.03483857AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.50.11
+Message-Id: <20221205112609.A502B85BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=785ea2179c40040cc0087b7b635dc3a78dd11f42
+commit: https://git.buildroot.net/buildroot/commit/?id=58d1032f96a565320dc043254cf2ade1950ec0aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Add support for new optional bluez5-backend-native-mm and readline
+config options.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index cbd391db20..d073526cf7 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.10.sha256sum
--sha256  7e5d2f1e40854d24a9a2c4d093bafe75dcdbeccdf1de43e4437332eabed64966  pango-1.50.10.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.11.sha256sum
-+sha256  8800f812d89ee61388188703203f3a7878963c22f8695aaf1fa0a1a1428d17ae  pango-1.50.11.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 649f3398cf..a61473431e 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 9bead47bd9..4585534569 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  32a6db3f42f00eb95a07369160a614420443ca4f4e90ac628db8ca508e08538e  pipewire-0.3.59.tar.bz2
++sha256  8164eb53c9eafedfa22fe1adc4b8e38f3173c6f33695c735a17ed1a3d43c664e  pipewire-0.3.60.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index d7ae07170d..9fef605878 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).10
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).11
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-PIPEWIRE_VERSION = 0.3.59
++PIPEWIRE_VERSION = 0.3.60
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -105,6 +105,12 @@ endif
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
+ PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
+ PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
++ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
++PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=enabled
++PIPEWIRE_DEPENDENCIES += modem-manager
++else
++PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=disabled
++endif
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=enabled
+ PIPEWIRE_DEPENDENCIES += opus
+@@ -189,7 +195,10 @@ PIPEWIRE_CONF_OPTS += -Dlibpulse=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
++PIPEWIRE_CONF_OPTS += -Dreadline=enabled
+ PIPEWIRE_DEPENDENCIES += readline
++else
++PIPEWIRE_CONF_OPTS += -Dreadline=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL2),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
