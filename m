@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D1BC43217
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E975C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CD28607DE;
-	Mon, 14 Nov 2022 21:16:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD28607DE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04777607DE;
+	Mon, 14 Nov 2022 21:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04777607DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 25Iry1Bk-56y; Mon, 14 Nov 2022 21:16:06 +0000 (UTC)
+	with ESMTP id lwOorTFWDEv0; Mon, 14 Nov 2022 21:16:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C8CE60709;
-	Mon, 14 Nov 2022 21:16:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C8CE60709
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E0C2E1BF296
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1680760AED;
+	Mon, 14 Nov 2022 21:16:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1680760AED
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 08E0A1BF8A8
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:16:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C923A402B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4A294033A
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C923A402B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4A294033A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZlaSCrChzhyP for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HzEBWWsvtLq3 for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10300400F8
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10300400F8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05EB04006E
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05EB04006E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F26F783A85; Mon, 14 Nov 2022 21:16:02 +0000 (UTC)
+ id E89BD83A82; Mon, 14 Nov 2022 21:16:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 22:14:53 +0100
+Date: Mon, 14 Nov 2022 22:14:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3d6aa73ada756b8291a16413b36a952a8d93225d
-X-Git-Newrev: 01fec1b37265fdbd2e89f0217bccd35275e32f98
+X-Git-Oldrev: cb51a0c9136a8f8fea92c1c60dbf4c0e9203b2a8
+X-Git-Newrev: 3d6aa73ada756b8291a16413b36a952a8d93225d
 X-Patchwork-Hint: ignore
-Message-Id: <20221114211602.F26F783A85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lttng-modules: bump to
- 2.13.7
+Message-Id: <20221114211602.E89BD83A82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lttng-modules: enable
+ CONFIG_FTRACE in kernel configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5800042357207639668=="
+Content-Type: multipart/mixed; boundary="===============8355912170998722375=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5800042357207639668==
+--===============8355912170998722375==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01fec1b37265fdbd2e89f0217bccd35275e32f98
+commit: https://git.buildroot.net/buildroot/commit/?id=3d6aa73ada756b8291a16413b36a952a8d93225d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is the latest point release in the stable 2.13 branch (currently
-the latest stable branch available).
+The build of lttng-modules will fail if the kernel does not have
+CONFIG_TRACEPOINTS enabled. However, CONFIG_TRACEPOINTS is a
+prompt-less option, and the most generic option that does enable
+CONFIG_TRACEPOINTS is CONFIG_FTRACE.
+
+In addition, CONFIG_FTRACE will also enable CONFIG_STACKTRACE, which
+is needed on CPU architectures that don't provide the STACKWALK
+mechanism in the kernel, as is the case on ARM 32-bit for example.
+
+Therefore, let's enable CONFIG_FTRACE when building lttng-modules.
 
 Cc: Clément Léger <clement.leger@bootlin.com>
 Reported-by: Clément Léger <clement.leger@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lttng-modules/lttng-modules.hash | 4 ++--
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lttng-modules/lttng-modules.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index fb253c9bf6..e685cc3367 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,5 +1,5 @@
--# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.1.tar.bz2.sha256
--sha256  a7c86d91c9bbe66d27f025aa04b8cfc6d7785ed2fc7ef774930800ee44d7f343  lttng-modules-2.13.1.tar.bz2
-+# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.7.tar.bz2.sha256
-+sha256  5a99679df7903160cbde3918fee5af90ffafc90fc96ccdefaa57cf230492b234  lttng-modules-2.13.7.tar.bz2
- 
- # Hash for license files
- sha256  d72921266bc8452a8789f8a04a82755373990d00b7e0b0f1a8edb8f854e94d1c  LICENSES/LGPL-2.1
 diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 97cda53f08..416833f4ef 100644
+index d527bc19ef..97cda53f08 100644
 --- a/package/lttng-modules/lttng-modules.mk
 +++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -14,6 +14,7 @@ LTTNG_MODULES_MODULE_MAKE_OPTS = CONFIG_LTTNG=m CONFIG_LTTNG_CLOCK_PLUGIN_TEST=m
  
--LTTNG_MODULES_VERSION = 2.13.1
-+LTTNG_MODULES_VERSION = 2.13.7
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+ define LTTNG_MODULES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_KPROBES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
+ endef
+ 
+ $(eval $(kernel-module))
 
---===============5800042357207639668==
+--===============8355912170998722375==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -117,4 +111,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5800042357207639668==--
+--===============8355912170998722375==--
