@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E1BFC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB79CC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D99AA42ADC;
-	Mon, 20 Feb 2023 21:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D99AA42ADC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BBA242AED;
+	Mon, 20 Feb 2023 21:21:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BBA242AED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kzLMqNkrrKqP; Mon, 20 Feb 2023 21:21:13 +0000 (UTC)
+	with ESMTP id JwoC6E60MXpa; Mon, 20 Feb 2023 21:21:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6612142D3A;
-	Mon, 20 Feb 2023 21:21:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6612142D3A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3A7D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 378C842A5A;
+	Mon, 20 Feb 2023 21:21:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 378C842A5A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B4CA1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B10441947
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B10441947
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC897610B2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC897610B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bHJeUSiZg1M8 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uSAJ6rBhtrgu for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E91E4192D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E91E4192D
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB08D6109E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB08D6109E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BED086496; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E61E0828C8; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 11:44:58 +0100
+Date: Mon, 14 Nov 2022 21:58:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0939cecb401fa3a4227649b36bc4298790544928
-X-Git-Newrev: 2890f308b5e884b2cbf9db3ccfd7ea7e0f4b0ddb
+X-Git-Oldrev: b3ab978703e0597b4bdf17d3e32cf0357db8315c
+X-Git-Newrev: ec9519831ed5d5698c787b48d2ab952525cacb93
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205240.7BED086496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
- version 0.0.3
+Message-Id: <20230220205150.E61E0828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ board/zynqmp/kria/kv260/kv260.sh: fix u-boot.itb without
+ CONFIG_MULTI_DTB_FIT option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2890f308b5e884b2cbf9db3ccfd7ea7e0f4b0ddb
+commit: https://git.buildroot.net/buildroot/commit/?id=ec9519831ed5d5698c787b48d2ab952525cacb93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Libcamera recently started to tag releases, so use the version tag instead
-of raw commit hash.
+This patch fixes the kv260.sh to generate a working u-boot.itb
+now that the CONFIG_MULTI_DTB_FIT u-boot option is no longer used.
 
-Signed-off-by: Daniel Semkowicz <dse@thaumatec.com>
-Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This is a follow-up fix of
+515319b86f17ea5a2ce3e51c9063bac9f9e00a01 ("board/zynqmp/kria/kv260/uboot.fragment:
+remove unnecessary CONFIG_MULTI_DTB_FIT option") to fix the build of:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3310463281
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/zynqmp/kria/kv260/kv260.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 68c9c1f005..033e318910 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  59318208a9c1b183cacaf5a7175568d8a9fa094f2dd8c9794269bb6e9636986e  libcamera-ba6435930f08e802cffc688d90f156a8959a0f86-br1.tar.gz
-+sha256  d7100286616550aca487b46ae9de2a70bb471352a332b8214901b4148739990f  libcamera-v0.0.3-br1.tar.gz
+diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
+index e3467f3068..e891852009 100755
+--- a/board/zynqmp/kria/kv260/kv260.sh
++++ b/board/zynqmp/kria/kv260/kv260.sh
+@@ -8,5 +8,5 @@
  
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 9c03d3a3b3..8979a43aca 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ UBOOT_DIR=$4
  
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = ba6435930f08e802cffc688d90f156a8959a0f86
-+LIBCAMERA_VERSION = v0.0.3
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
+-fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
++fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
+ ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
