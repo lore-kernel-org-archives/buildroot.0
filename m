@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E9C2C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D1BC43217
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 21:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB64C402B1;
-	Mon, 14 Nov 2022 21:14:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB64C402B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CD28607DE;
+	Mon, 14 Nov 2022 21:16:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD28607DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZeGLQpJKvN3Y; Mon, 14 Nov 2022 21:14:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 25Iry1Bk-56y; Mon, 14 Nov 2022 21:16:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E165A4031E;
-	Mon, 14 Nov 2022 21:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E165A4031E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C8CE60709;
+	Mon, 14 Nov 2022 21:16:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C8CE60709
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E275B1BF296
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:14:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E0C2E1BF296
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD4FE402B1
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD4FE402B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id C923A402B1
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C923A402B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aM0_o6mt9t6X for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 21:14:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1B20400F8
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A1B20400F8
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:14:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BE685E0006;
- Mon, 14 Nov 2022 21:14:43 +0000 (UTC)
-Date: Mon, 14 Nov 2022 22:14:42 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221114221442.35b5f019@windsurf>
-In-Reply-To: <20221012183907.1651460-1-james.hilliard1@gmail.com>
-References: <20221012183907.1651460-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668460484;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wXUu0TVlfZ9KP7oWAWSPLbyAIkRq4HeL5PgHTrWYN1k=;
- b=lhJ6sCHGmfr8D0ZwGML4Tu7Bvt33ywfoLfyte+bQCL0qM5o9h4dQHMzjtrVh/kBnS/wNY5
- qABXqIaPvP8slrRci3FhtTofMMH36QRzA6WSnYXULVoVAIjiPx+BIg2PaCWKEIFeesB4XZ
- xDZ088fdMd8AT/rzWmDeovtpSFHMdMp/gGKYxU/V9NZNfrEAkCZtYnN3V7ve30B1z30wTj
- X2AcVeDnnrOxK1gwYiFQgqbiizKuiIFubVSAaQ30kQq1L9S1R1/NMOftosmPO98EgJcTNx
- dRZd/8IVSSkG3EZHyBkl74orVZ3Uvud25Kmg8RALLl1qJ5HU8lOB6gDa00Y3hg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lhJ6sCHG
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: bump to version
- 20221012
+ with ESMTP id ZlaSCrChzhyP for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10300400F8
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 21:16:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10300400F8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F26F783A85; Mon, 14 Nov 2022 21:16:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 14 Nov 2022 22:14:53 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 3d6aa73ada756b8291a16413b36a952a8d93225d
+X-Git-Newrev: 01fec1b37265fdbd2e89f0217bccd35275e32f98
+X-Patchwork-Hint: ignore
+Message-Id: <20221114211602.F26F783A85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lttng-modules: bump to
+ 2.13.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +58,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5800042357207639668=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 12 Oct 2022 12:39:07 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+--===============5800042357207639668==
+Content-Type: text/plain
 
-> Update brcmfmac4356-sdio.vamrs,rock960.txt filename to
-> brcmfmac4356-sdio.AP6356S.txt due to rename:
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/brcm?id=4ffcf980a535c1f26aa994ecf64a1b9d1ed6216e
-> 
-> Update WHENCE file hash due to date/firmware file updates.
-> 
-> Add missing LICENSE.ice_enhanced and LICENCE.moxa hashes.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/linux-firmware/linux-firmware.hash | 6 ++++--
->  package/linux-firmware/linux-firmware.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=01fec1b37265fdbd2e89f0217bccd35275e32f98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+This is the latest point release in the stable 2.13 branch (currently
+the latest stable branch available).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cc: Clément Léger <clement.leger@bootlin.com>
+Reported-by: Clément Léger <clement.leger@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lttng-modules/lttng-modules.hash | 4 ++--
+ package/lttng-modules/lttng-modules.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index fb253c9bf6..e685cc3367 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,5 +1,5 @@
+-# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.1.tar.bz2.sha256
+-sha256  a7c86d91c9bbe66d27f025aa04b8cfc6d7785ed2fc7ef774930800ee44d7f343  lttng-modules-2.13.1.tar.bz2
++# From https://lttng.org/files/lttng-modules/lttng-modules-2.13.7.tar.bz2.sha256
++sha256  5a99679df7903160cbde3918fee5af90ffafc90fc96ccdefaa57cf230492b234  lttng-modules-2.13.7.tar.bz2
+ 
+ # Hash for license files
+ sha256  d72921266bc8452a8789f8a04a82755373990d00b7e0b0f1a8edb8f854e94d1c  LICENSES/LGPL-2.1
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 97cda53f08..416833f4ef 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.13.1
++LTTNG_MODULES_VERSION = 2.13.7
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+
+--===============5800042357207639668==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5800042357207639668==--
