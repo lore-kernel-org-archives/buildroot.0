@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D31EC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 10:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC42C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 10:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E976C40319;
-	Mon, 14 Nov 2022 10:27:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E976C40319
+	by smtp4.osuosl.org (Postfix) with ESMTP id A41F14091F;
+	Mon, 14 Nov 2022 10:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41F14091F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3lMaK2vk6m2J; Mon, 14 Nov 2022 10:27:38 +0000 (UTC)
+	with ESMTP id 5ybB6aykR2li; Mon, 14 Nov 2022 10:27:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3518402C1;
-	Mon, 14 Nov 2022 10:27:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3518402C1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93E941BF8A8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AFC640907;
+	Mon, 14 Nov 2022 10:27:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AFC640907
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B3C3B1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 10:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 703854049C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B3B1402C1
  for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 10:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 703854049C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B3B1402C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bSmBAfrzj13C for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yOGr-K0fy1g1 for <buildroot@lists.busybox.net>;
  Mon, 14 Nov 2022 10:27:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA5F440155
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99664402AA
  for <buildroot@buildroot.org>; Mon, 14 Nov 2022 10:27:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA5F440155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99664402AA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A87F83915; Mon, 14 Nov 2022 10:27:21 +0000 (UTC)
+ id 87EF783912; Mon, 14 Nov 2022 10:27:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Nov 2022 11:25:29 +0100
+Date: Mon, 14 Nov 2022 11:21:14 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 647e433e5ed06240cd13eb3b67dd1f4dd94121f5
-X-Git-Newrev: 72c53e5fbd802c4999cd9d066902ba9c40af89ca
+X-Git-Oldrev: 6bb48a9abb918b0d9caaaf83c1be21d0999314ae
+X-Git-Newrev: ca38b2af94e8e08d10181778968d5097851e3589
 X-Patchwork-Hint: ignore
-Message-Id: <20221114102721.9A87F83915@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/rsync: force
- HAVE_C99_VSNPRINTF to "yes"
+Message-Id: <20221114102721.87EF783912@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x]
+ support/testing/tests/package/test_python_flask*: increase time after
+ server startup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72c53e5fbd802c4999cd9d066902ba9c40af89ca
+commit: https://git.buildroot.net/buildroot/commit/?id=ca38b2af94e8e08d10181778968d5097851e3589
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-We know the system will have a modern-enough C library that implements
-the required snprintf() functionality. Since the configure stage can't
-detect the system's capabilities (because it is cross-compiling), let's
-hard-code the decision.
+It seems like on Gitlab CI, the runners are quite slow, and the Flask
+server does not startup in the 15 seconds we give it. So increase this
+to 30 seconds before trying to contact the Flask server.
 
-As a result, rsync won't be linking in its own copy of snprintf().
+Hopefully fixes:
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/3249828594
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0b17cd017e8b946d718c81f0e38fd570e6a6bc0d)
+(cherry picked from commit 3884cfc0571abc19b35b2f161f6c8c009847a0bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/rsync.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ support/testing/tests/package/test_python_flask.py              | 2 +-
+ support/testing/tests/package/test_python_flask_expects_json.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index e288033b98..0d311aa167 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -11,6 +11,9 @@ RSYNC_LICENSE_FILES = COPYING
- RSYNC_CPE_ID_VENDOR = samba
- RSYNC_SELINUX_MODULES = rsync
- RSYNC_DEPENDENCIES = zlib popt
-+# We know that our C library is modern enough for C99 vsnprintf(). Since
-+# configure can't detect this, we tell configure that vsnprintf() is safe.
-+RSYNC_CONF_ENV = rsync_cv_HAVE_C99_VSNPRINTF=yes
- RSYNC_CONF_OPTS = \
- 	--with-included-zlib=no \
- 	--with-included-popt=no \
+diff --git a/support/testing/tests/package/test_python_flask.py b/support/testing/tests/package/test_python_flask.py
+index ef5d96bae9..9d8587e918 100644
+--- a/support/testing/tests/package/test_python_flask.py
++++ b/support/testing/tests/package/test_python_flask.py
+@@ -21,7 +21,7 @@ class TestPythonPy3Flask(TestPythonPackageBase):
+         _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
+ 
+         # Give enough time for the flask server to start up
+-        time.sleep(15)
++        time.sleep(30)
+ 
+         cmd = "wget -q -O - http://127.0.0.1:5000/"
+         output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
+diff --git a/support/testing/tests/package/test_python_flask_expects_json.py b/support/testing/tests/package/test_python_flask_expects_json.py
+index 5576cba2b4..91b8bf21b7 100644
+--- a/support/testing/tests/package/test_python_flask_expects_json.py
++++ b/support/testing/tests/package/test_python_flask_expects_json.py
+@@ -31,7 +31,7 @@ class TestPythonPy3FlaskExpectsJson(TestPythonPackageBase):
+         _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
+ 
+         # Give enough time for the flask server to start up
+-        time.sleep(15)
++        time.sleep(30)
+ 
+         self.try_json("""{"email": "test", "name": "test"}""", 200)
+         self.try_json("""{"email": "test", "name": 2}""", 400)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
