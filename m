@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA56AC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F57C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 720B680BF6;
-	Mon, 14 Nov 2022 22:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 720B680BF6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C4654086E;
+	Mon, 14 Nov 2022 22:14:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C4654086E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id haicXuGcv9PP; Mon, 14 Nov 2022 22:13:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l8IsAiVHlyRw; Mon, 14 Nov 2022 22:14:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC41780B4D;
-	Mon, 14 Nov 2022 22:13:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC41780B4D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 321474086B;
+	Mon, 14 Nov 2022 22:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 321474086B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F2F291BF36D
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BD2C41BF36D
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCC7D40217
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCC7D40217
+ by smtp2.osuosl.org (Postfix) with ESMTP id A464E40155
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A464E40155
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1iSvTEuX1zPH for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 22:13:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994EB40012
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 994EB40012
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:13:32 +0000 (UTC)
+ with ESMTP id JTsXB4aYPrjT for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 22:14:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 976F940012
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 976F940012
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:14:19 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9AFBC240006;
- Mon, 14 Nov 2022 22:13:29 +0000 (UTC)
-Date: Mon, 14 Nov 2022 23:13:28 +0100
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20221114231328.49ff0fa6@windsurf>
-In-Reply-To: <20221111191458.1292483-1-ju.o@free.fr>
-References: <20221111191458.1292483-1-ju.o@free.fr>
+ by mail.gandi.net (Postfix) with ESMTPSA id 6DF7D40007;
+ Mon, 14 Nov 2022 22:14:17 +0000 (UTC)
+Date: Mon, 14 Nov 2022 23:14:16 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221114231416.7e012568@windsurf>
+In-Reply-To: <20221111195115.3918675-1-james.hilliard1@gmail.com>
+References: <20221111195115.3918675-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668464009;
+ d=bootlin.com; s=gm1; t=1668464057;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=pBL6N64BVqdzrOKi4/bVRT0XEUP7zb/hcC8Y8SENm3M=;
- b=kCKTfBwfHGoXKEfBOqbWW+3v7E79OSs+44Aq5zySZK2gE1ql1OM6Ur11nGaEFIpmBCCpNL
- 3uzVkt8aXtLFkCsfzjLCpVJVAALEk9oJ0vRetSxQvzjytyiIwv1kylwYfFnVtF/jamQAuO
- Q43fIlo99Y5RH/1gluNUz08wsi2edfTsiHopoKC/8vIKSuHOqjeSpcEa8zaOVGyq+YWov9
- l3VaUfHgpN+8i0Hg4X43xUgCSGxZN6HogImsO8oC9pQnz3OXGPVuyAyGBiObWubqizyVxz
- 5iUPfAfHe/aU2+AS9opeyLMreMV+7526qnbZEjKEjL0ICpznad16B5VeTVieuw==
+ bh=79hVoOYbCoVxsTkn4jtp7w2lnGJt15qJPHb6VbKHhxk=;
+ b=DLYp7k92VhR/SncQsUZLzld1/V0sSMioMR/gjcHxHreAvZzc5cPWKkfMr1EOXAZwG2sSZH
+ +rB6JcVCKkGtF0eTR63uzqxxluz7NKWgLkhLBDY9VvIS6bztrDFVeSBxUVgde7cI+bLks3
+ afPO6q8OW2RIdnSnfWk8Ro3wRVphYwn2g0C2d4rbKMFHeHzqBQZyvNJe59vtiszquIgZQ7
+ rTKQQBXfps0pg4OS/xvvi3z/JXV+KkKm56VhWltuUffWTi1qP+8ZT7yVd0pz/+gM3HcihS
+ 2KxdpCM/6YBrSe16Jds7YSCVyteEgUm0RD4+D/Vfv/B1J+TObYP6ciMeKCBmVg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kCKTfBwf
-Subject: Re: [Buildroot] [PATCH next 1/1] package/octave: bump to version
- 7.3.0
+ header.s=gm1 header.b=DLYp7k92
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,15 +83,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 11 Nov 2022 20:14:58 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+On Fri, 11 Nov 2022 12:51:15 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> For change log since 7.2.0, see:
-> https://octave.org/news/release/2022/11/02/octave-7.3.0-released.html
+> Add support for new optional bluez5-backend-native-mm and readline
+> config options.
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
-> Commit tested on branch next at commit a85f5f2, with commands:
+>  package/pipewire/pipewire.hash |  2 +-
+>  package/pipewire/pipewire.mk   | 11 ++++++++++-
+>  2 files changed, 11 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
