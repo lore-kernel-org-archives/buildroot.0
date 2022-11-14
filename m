@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C450DC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F76AC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 22:26:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 686A740890;
-	Mon, 14 Nov 2022 22:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 686A740890
+	by smtp2.osuosl.org (Postfix) with ESMTP id E986E402B1;
+	Mon, 14 Nov 2022 22:26:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E986E402B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0T_n26tKaE34; Mon, 14 Nov 2022 22:26:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zaEjcev4uHPL; Mon, 14 Nov 2022 22:26:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B39A40879;
-	Mon, 14 Nov 2022 22:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B39A40879
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EB8740155;
+	Mon, 14 Nov 2022 22:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EB8740155
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19C511BF36D
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 571041BF36D
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 025E8812CA
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 025E8812CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31699812CA
+ for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 22:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31699812CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y-2rkB31X6ee for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 22:26:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E7FC80B2B
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E7FC80B2B
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:26:14 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AF00A100007;
- Mon, 14 Nov 2022 22:26:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ouhu6-007pjj-JN; Mon, 14 Nov 2022 23:26:10 +0100
+ with ESMTP id eophA9j_neGA for <buildroot@lists.busybox.net>;
+ Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CA7180B2B
+ for <buildroot@buildroot.org>; Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CA7180B2B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4A4F283B9A; Mon, 14 Nov 2022 22:26:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221106133821.677548-1-fontaine.fabrice@gmail.com>
-Date: Mon, 14 Nov 2022 23:26:10 +0100
-In-Reply-To: <20221106133821.677548-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 6 Nov 2022 14:38:21 +0100")
-Message-ID: <87a64ti35p.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mupdf: fix CVE-2021-4216
+To: buildroot@buildroot.org
+Date: Mon, 14 Nov 2022 23:25:54 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: b6bf83a79b08fe2fe029fcb203f5a91c456dd063
+X-Git-Newrev: 8aaa05d5583ac1874b29aa972ce21d9f36c3de2a
+X-Patchwork-Hint: ignore
+Message-Id: <20221114222643.4A4F283B9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mupdf: fix
+ CVE-2021-4216
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +57,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8aaa05d5583ac1874b29aa972ce21d9f36c3de2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > A Floating point exception (division-by-zero) flaw was found in Mupdf
- > for zero width pages in muraster.c. It is fixed in Mupdf-1.20.0-rc1
- > upstream.
+A Floating point exception (division-by-zero) flaw was found in Mupdf
+for zero width pages in muraster.c. It is fixed in Mupdf-1.20.0-rc1
+upstream.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3ddca0ccb90967977c2db8c966c205568cf4cb93)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-by-zero-for-zero-width-pages-in-muraster.patch | 29 ++++++++++++++++++++++
+ package/mupdf/mupdf.mk                             |  3 +++
+ 2 files changed, 32 insertions(+)
 
-Committed to 2022.08.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
+new file mode 100644
+index 0000000000..099a3fdbab
+--- /dev/null
++++ b/package/mupdf/0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
+@@ -0,0 +1,29 @@
++From 22c47acbd52949421f8c7cb46ea1556827d0fcbf Mon Sep 17 00:00:00 2001
++From: Sebastian Rasmussen <sebras@gmail.com>
++Date: Tue, 18 Jan 2022 20:33:10 +0100
++Subject: [PATCH] Bug 704834: Fix division by zero for zero width pages in
++ muraster.
++
++[Retrieved from:
++https://github.com/ArtifexSoftware/mupdf/commit/22c47acbd52949421f8c7cb46ea1556827d0fcbf]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ source/tools/muraster.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/source/tools/muraster.c b/source/tools/muraster.c
++index c2ceb62f2e..97f4ae2633 100644
++--- a/source/tools/muraster.c
+++++ b/source/tools/muraster.c
++@@ -1003,8 +1003,9 @@ initialise_banding(fz_context *ctx, render_details *render, int color)
++ 
++ 	w = render->ibounds.x1 - render->ibounds.x0;
++ 	min_band_mem = (size_t)bpp * w * min_band_height;
++-	reps = (int)(max_band_memory / min_band_mem);
++-	if (reps < 1)
+++	if (min_band_mem > 0)
+++		reps = (int)(max_band_memory / min_band_mem);
+++	if (min_band_mem == 0 || reps < 1)
++ 		reps = 1;
++ 
++ 	/* Adjust reps to even out the work between threads */
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 56ea7cc507..e86ba1e73f 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -28,6 +28,9 @@ MUPDF_IGNORE_CVES += CVE-2021-3407
+ # 0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
+ MUPDF_IGNORE_CVES += CVE-2021-37220
+ 
++# 0005-Bug-704834-Fix-division-by-zero-for-zero-width-pages-in-muraster.patch
++MUPDF_IGNORE_CVES += CVE-2021-4216
++
+ # The pkg-config name for gumbo-parser is `gumbo`.
+ MUPDF_PKG_CONFIG_PACKAGES = \
+ 	freetype2 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
