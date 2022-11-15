@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25721C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 11:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D43C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 12:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B622A40597;
-	Tue, 15 Nov 2022 11:11:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B622A40597
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC5F860D88;
+	Tue, 15 Nov 2022 12:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC5F860D88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B3QYnMbjywQX; Tue, 15 Nov 2022 11:11:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ISc9g3xcypvn; Tue, 15 Nov 2022 12:49:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A59EA40A89;
-	Tue, 15 Nov 2022 11:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A59EA40A89
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3CA36066D;
+	Tue, 15 Nov 2022 12:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3CA36066D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 544621BF94B
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 11:10:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 603E41BF348
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:49:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30CF860B06
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 11:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30CF860B06
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45B2E6066D
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45B2E6066D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t7GpU_NMKKLg for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 11:10:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4610960669
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 11:10:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4610960669
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3570883C2F; Tue, 15 Nov 2022 11:10:58 +0000 (UTC)
+ with ESMTP id 1Feltc1XjLLf for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 12:49:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01E3260C0B
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01E3260C0B
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 12:49:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2DB7A240002;
+ Tue, 15 Nov 2022 12:49:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouvNZ-008cmF-WB; Tue, 15 Nov 2022 13:49:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 12:02:23 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 9cac8cea76b5ba7b6133a6b7880c99a108e57ab2
-X-Git-Newrev: 580f76e85b5bc5cd8b1ccba0e3bcb19a0b5bc8ea
-X-Patchwork-Hint: ignore
-Message-Id: <20221115111058.3570883C2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/linux-tools: fix
- static build
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20221111201945.2DB4282D5B@busybox.osuosl.org>
+Date: Tue, 15 Nov 2022 13:49:29 +0100
+In-Reply-To: <20221111201945.2DB4282D5B@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Fri, 11 Nov 2022 21:19:10 +0100")
+Message-ID: <87o7t8gz6u.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] configs/kontron_bl_imx8mm: U-Boot
+ needs util-linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,81 +64,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=580f76e85b5bc5cd8b1ccba0e3bcb19a0b5bc8ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Pass TARGET_LDFLAGS (which contains -static) to fix the following static
-build failures with gpio, iio and pci:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=223516b51e1a45fa86dc1ac959aed93c7434afa4
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  LINK     lsgpio
-/home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/10.4.0/../../../../arm-buildroot-linux-musleabi/bin/ld: /home/autobuild/autobuild/instance-8/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/10.4.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
-/home/autobuild/autobuild/instance-8/output-1/build/host-gcc-final-10.4.0/build/arm-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
+ > Fixes:
 
-[...]
+ > /usr/bin/ld: cannot find -lgnutls
+ > /usr/bin/ld: cannot find -luuid
+ > collect2: error: ld returned 1 exit status
 
-  LINK    iio_event_monitor
-/home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/11.3.0/../../../../microblazeel-buildroot-linux-musl/bin/ld: /home/thomas/autobuild/instance-2/output-1/host/lib/gcc/microblazeel-buildroot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
-/home/thomas/autobuild/instance-2/output-1/build/host-gcc-final-11.3.0/build/microblazeel-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:88: undefined reference to `abort'
+ > when building U-Boot.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f202eb843ef331939f5f12325bdbf2d0d664a7ce
- - http://autobuild.buildroot.org/results/504ec8be1ebd15c5da09f8b90bb723a58d4c58c5
+ > Fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a29e7fb6765c0a08a3276a11a4da54dfdbdca703)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-tools/linux-tool-gpio.mk.in | 2 +-
- package/linux-tools/linux-tool-iio.mk.in  | 2 +-
- package/linux-tools/linux-tool-pci.mk.in  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/3301821264
 
-diff --git a/package/linux-tools/linux-tool-gpio.mk.in b/package/linux-tools/linux-tool-gpio.mk.in
-index d5a0dbda38..e825db1b11 100644
---- a/package/linux-tools/linux-tool-gpio.mk.in
-+++ b/package/linux-tools/linux-tool-gpio.mk.in
-@@ -6,7 +6,7 @@
- 
- LINUX_TOOLS += gpio
- 
--GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- define GPIO_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
-diff --git a/package/linux-tools/linux-tool-iio.mk.in b/package/linux-tools/linux-tool-iio.mk.in
-index a8cc89e830..27ab0ed7ed 100644
---- a/package/linux-tools/linux-tool-iio.mk.in
-+++ b/package/linux-tools/linux-tool-iio.mk.in
-@@ -6,7 +6,7 @@
- 
- LINUX_TOOLS += iio
- 
--IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- define IIO_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
-diff --git a/package/linux-tools/linux-tool-pci.mk.in b/package/linux-tools/linux-tool-pci.mk.in
-index 4ef0368a32..17246f5d7e 100644
---- a/package/linux-tools/linux-tool-pci.mk.in
-+++ b/package/linux-tools/linux-tool-pci.mk.in
-@@ -6,7 +6,7 @@
- 
- LINUX_TOOLS += pci
- 
--PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+PCI_MAKE_OPTS = $(LINUX_MAKE_FLAGS) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- define PCI_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/pci/Makefile >/dev/null 2>&1 ; then \
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2022.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
