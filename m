@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44132C43217
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 12:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E37CFC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 12:55:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7F6D60C14;
-	Tue, 15 Nov 2022 12:54:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7F6D60C14
+	by smtp1.osuosl.org (Postfix) with ESMTP id 909258133C;
+	Tue, 15 Nov 2022 12:55:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 909258133C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jz958F73d5Nb; Tue, 15 Nov 2022 12:54:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i_1NcTENapx5; Tue, 15 Nov 2022 12:55:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C21F60BAF;
-	Tue, 15 Nov 2022 12:54:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C21F60BAF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3A7D61BF94B
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:54:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C77F681323;
+	Tue, 15 Nov 2022 12:55:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C77F681323
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 080331BF348
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D90D4021B
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D90D4021B
+ by smtp2.osuosl.org (Postfix) with ESMTP id D86664010C
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D86664010C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oIhpHhk6BTV9 for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 12:54:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wmddT656HtwH for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 12:55:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7402740238
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 12:54:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7402740238
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09B7E4048E
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 12:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09B7E4048E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 601A983C45; Tue, 15 Nov 2022 12:54:02 +0000 (UTC)
+ id EDD6683C48; Tue, 15 Nov 2022 12:55:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 13:52:52 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 76b180425cb02ba7d533c22b37286ec1a6e9471f
-X-Git-Newrev: 885b5940f7963ca011611205602ed2d4323405f5
+Date: Tue, 15 Nov 2022 13:51:46 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 48cd67d587a80a84b6d8c2cdcc97a5b736fdd4e4
+X-Git-Newrev: c87b45c01ea5eab3cc9573139b6b83fdb9e93761
 X-Patchwork-Hint: ignore
-Message-Id: <20221115125402.601A983C45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- configs/kontron_bl_imx8mm_defconfig: bump U-boot to 2022.10
+Message-Id: <20221115125523.EDD6683C48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wavemon: fix
+ kernel header collision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=885b5940f7963ca011611205602ed2d4323405f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c87b45c01ea5eab3cc9573139b6b83fdb9e93761
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit 223516b51e1a (configs/kontron_bl_imx8mm: U-Boot needs util-linux)
-added the needed dependency against host-util-linux, but missed an
-earlier comment about u-boot still failing [0]
+Fix the following build failure raised since bump to version 0.9.4 in
+commit 5cae1a0d675eca41125b6430157d3d0d78d1220c:
 
-The U-Boot makefile for the host tools does not handle the
-compiler/linker options properly. There are some patches [1][2] that fixes
-that issue already applied in the newer U-Boot version 2022.10. So we have to
-bump U-Boot to fix an autobuilder failure.
+In file included from iw_if.h:26:0,
+                 from conf.c:19:
+/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/linux/if.h:71:2: error: redeclaration of enumerator 'IFF_UP'
+  IFF_UP    = 1<<0,  /* sysfs */
+  ^
+/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/net/if.h:44:5: note: previous definition of 'IFF_UP' was here
+     IFF_UP = 0x1,  /* Interface is up.  */
+     ^
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
+Fixes:
+ - http://autobuild.buildroot.org/results/cbdf3e0cf0bee8f1b076581768c24155afc320d9
 
-[0] https://lore.kernel.org/buildroot/CAEyMn7Y3UgT-8dYY5rbnzcPfbGmqRVXG=joWx1fSSCC=WiFzbg@mail.gmail.com/
-[1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
-[2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-[yann.morin.1998@free.fr:
-  - update commit log with reference to [0]
-  - slightly tweak commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4e63809d8d7ed873f320c61fc0eb7e0f64250acf)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/kontron_bl_imx8mm_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0001-iw_if.h-don-t-include-linux-if.h.patch    | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index 13ed1a2078..240cb52245 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
+new file mode 100644
+index 0000000000..95f54e4b7f
+--- /dev/null
++++ b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
+@@ -0,0 +1,41 @@
++From 4ac1482bb40376e47805c3737dfed60abb1dd3b4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 22 Dec 2021 00:39:35 +0100
++Subject: [PATCH] iw_if.h: don't include linux/if.h (#109)
++
++Don't include linux/if.h to avoid the following build failure:
++
++In file included from iw_if.h:31:0,
++                 from conf.c:19:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h: At top level:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:143:8: error: redefinition of 'struct ifmap'
++ struct ifmap {
++        ^
++In file included from iw_if.h:26:0,
++                 from conf.c:19:
++/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/net/if.h:111:8: note: originally defined here
++ struct ifmap
++        ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a6ee162cf04b70b144b54e1ca4b7b2421071c50c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/uoaerg/wavemon/commit/4ac1482bb40376e47805c3737dfed60abb1dd3b4]
++---
++ iw_if.h | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/iw_if.h b/iw_if.h
++index 9e7fa89..6607e0b 100644
++--- a/iw_if.h
+++++ b/iw_if.h
++@@ -28,7 +28,6 @@
++ #include <net/ethernet.h>
++ #include <sys/types.h>
++ #include <sys/socket.h>
++-#include <linux/if.h>
++ 
++ /* Definitions from linux/ieee80211.h (not necessarily part of distro headers) */
++ #define WLAN_CAPABILITY_ESS		(1<<0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
