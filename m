@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C859DC43219
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E6ABC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7748460E2A;
-	Tue, 15 Nov 2022 13:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7748460E2A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ocH7-4KjHmUH; Tue, 15 Nov 2022 13:03:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAB3360D88;
-	Tue, 15 Nov 2022 13:03:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAB3360D88
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CE4B51BF348
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5548415DF
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5548415DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FB734042F;
+	Tue, 15 Nov 2022 13:10:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FB734042F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EmFSeUDnftFB for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C825415A3
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C825415A3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A82A83C69; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XlcsYv-QqrEG; Tue, 15 Nov 2022 13:10:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AE06415E1;
+	Tue, 15 Nov 2022 13:10:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AE06415E1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC0431BF319
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:10:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1994814BB
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1994814BB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DUxk8DtniiBU for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 13:10:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 892A48144B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 892A48144B
+ for <buildroot@busybox.net>; Tue, 15 Nov 2022 13:10:23 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EF129E000E;
+ Tue, 15 Nov 2022 13:10:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouvhi-008eOF-Qr; Tue, 15 Nov 2022 14:10:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 13:55:29 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c87b45c01ea5eab3cc9573139b6b83fdb9e93761
-X-Git-Newrev: 2a6da8d48660027c48a007394b10369e277b3741
-X-Patchwork-Hint: ignore
-Message-Id: <20221115130300.8A82A83C69@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] packages/sudo: explicitly
- set with-tzdir
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+References: <a165e1785fec7f9b4ce3e38f1282c5ab87bff511.1668366594.git.baruch@tkos.co.il>
+Date: Tue, 15 Nov 2022 14:10:18 +0100
+In-Reply-To: <a165e1785fec7f9b4ce3e38f1282c5ab87bff511.1668366594.git.baruch@tkos.co.il>
+ (Baruch Siach via buildroot's message of "Sun, 13 Nov 2022 21:09:54
+ +0200")
+Message-ID: <87y1scfjnp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] boot/arm-trusted-firmware: fix SSP disable
+ in v2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +65,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3790429379758746473=="
+Cc: buildroot@busybox.net, Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3790429379758746473==
-Content-Type: text/plain
+>>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a6da8d48660027c48a007394b10369e277b3741
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+ > ATF version 2.2 and older does not disable SSP when
+ > ENABLE_STACK_PROTECTOR is not set. This is because the compiler enables
+ > SSP by default, and ATF does not pass -fno-stack-protector to the
+ > compiler. Upstream commit 7af195e29a42 ("Disable stack protection
+ > explicitly") fixed the issue for v2.3 and newer.
 
-sudo's configure script looks up on the host to determine the path to
-the timezone data location. That fails in cross-compilation.
+ > Add -fno-stack-protector in CFLAGS when
+ > BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set to fix older ATF
+ > versions.
 
-This is used to sanitise the TZ envirnment variable at runtime, and is
-not used at buildtime (except to be stored as a string in the program).
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/3301821171
 
-We can tell sudo where the tz data will be, which we do when the tzdata
-package is enabled, and we can tell it not to use it at all (to not pass
-TZ down to sudo-ed executions) othwerwise.
+ > Cc: Dick Olsson <hi@senzilla.io>
+ > Cc: Sergey Matyukevich <geomatsi@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
-[yann.morin.1998@free.fr: rewrite and extend commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sudo/sudo.mk | 1 +
- 1 file changed, 1 insertion(+)
+Committed to 2022.08.x and 2022.02.x, thanks.
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 54901943cd..67af546cfc 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -16,6 +16,7 @@ SUDO_SELINUX_MODULES = sudo
- # This is to avoid sudo's make install from chown()ing files which fails
- SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
-+	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
- 	--without-lecture \
- 	--without-sendmail \
- 	--without-umask \
-
---===============3790429379758746473==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3790429379758746473==--
