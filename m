@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC718C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 08:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3A8BC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 08:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BBD04051E;
-	Tue, 15 Nov 2022 08:19:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BBD04051E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FC8C60BF2;
+	Tue, 15 Nov 2022 08:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC8C60BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZeBiqdFcXFEM; Tue, 15 Nov 2022 08:19:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GCWPepchslOM; Tue, 15 Nov 2022 08:19:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5114640363;
-	Tue, 15 Nov 2022 08:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5114640363
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4A1160BE9;
+	Tue, 15 Nov 2022 08:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A1160BE9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A80B1BF232
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C3F591BF232
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1214540363
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1214540363
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EE49408F2
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE49408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hwLdgRow46xn for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 08:19:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAEAB40352
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAEAB40352
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 08:19:30 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 556FB60005;
- Tue, 15 Nov 2022 08:19:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ourAE-008Lnr-A0; Tue, 15 Nov 2022 09:19:26 +0100
+ with ESMTP id Tkighc2Axfla for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8014740863
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8014740863
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B57183C06; Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221106230450.970235-1-fontaine.fabrice@gmail.com>
-Date: Tue, 15 Nov 2022 09:19:26 +0100
-In-Reply-To: <20221106230450.970235-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 7 Nov 2022 00:04:50 +0100")
-Message-ID: <871qq4iq9d.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gptfdisk: fix popt static build
+To: buildroot@buildroot.org
+Date: Tue, 15 Nov 2022 09:18:55 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 8ffe4e6d66450839dba2be11a4538d77e873c58d
+X-Git-Newrev: 9cac8cea76b5ba7b6133a6b7880c99a108e57ab2
+X-Patchwork-Hint: ignore
+Message-Id: <20221115081953.6B57183C06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/gptfdisk: fix
+ popt static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9cac8cea76b5ba7b6133a6b7880c99a108e57ab2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > Fix the following static build failure with popt and iconv raised since
- > bump to version 1.0.9 in commit 69015ce94ac3ffe7f349ec37868eea0d0ffec90e
- > and
- > https://sourceforge.net/p/gptfdisk/code/ci/122b58ad82f1a144226d262c87241ee035ed1aff
- > (which added an unified Makefile):
+Fix the following static build failure with popt and iconv raised since
+bump to version 1.0.9 in commit 69015ce94ac3ffe7f349ec37868eea0d0ffec90e
+and
+https://sourceforge.net/p/gptfdisk/code/ci/122b58ad82f1a144226d262c87241ee035ed1aff
+(which added an unified Makefile):
 
- > /home/autobuild/autobuild/instance-0/output-1/host/bin/mips64el-buildroot-linux-uclibc-g++
- > crc32.o support.o guid.o gptpart.o mbrpart.o basicmbr.o mbr.o gpt.o
- > bsd.o parttypes.o attributes.o diskio.o diskio-unix.o sgdisk.o gptcl.o
- > -static -liconv -lpopt -o sgdisk
- > /home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/mips64el-buildroot-linux-uclibc/11.3.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld:
- > /home/autobuild/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpopt.a(poptint.o):
- > in function `strdup_locale_from_utf8':
- > poptint.c:(.text+0x113c): undefined reference to `libiconv_open'
+/home/autobuild/autobuild/instance-0/output-1/host/bin/mips64el-buildroot-linux-uclibc-g++ crc32.o support.o guid.o gptpart.o mbrpart.o basicmbr.o mbr.o gpt.o bsd.o parttypes.o attributes.o diskio.o diskio-unix.o sgdisk.o gptcl.o -static -liconv -lpopt  -o sgdisk
+/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/mips64el-buildroot-linux-uclibc/11.3.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpopt.a(poptint.o): in function `strdup_locale_from_utf8':
+poptint.c:(.text+0x113c): undefined reference to `libiconv_open'
 
- > As can be seen above, this build failure is raised because -liconv is
- > added before -lpopt so use pkgconfig and SGDISK_LDLIBS
+As can be seen above, this build failure is raised because -liconv is
+added before -lpopt so use pkgconfig and SGDISK_LDLIBS
 
- > The addition of -liconv in LDLIBS could probably be removed in a
- > follow-up patch for next branch
+The addition of -liconv in LDLIBS could probably be removed in a
+follow-up patch for next branch
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c9f2c9e737c2dd1cd4c1a08a5e8a48165179282d
+Fixes:
+ - http://autobuild.buildroot.org/results/c9f2c9e737c2dd1cd4c1a08a5e8a48165179282d
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a38682dd54dde976836c37dcc30ec24baa474690)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gptfdisk/gptfdisk.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Committed to 2022.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 0df9cda08f..f3fc930202 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -15,7 +15,8 @@ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
+ 
+ GPTFDISK_DEPENDENCIES += util-linux
+ ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
+-GPTFDISK_DEPENDENCIES += popt
++GPTFDISK_DEPENDENCIES += host-pkgconf popt
++GPTFDISK_SGDISK_LDLIBS += `$(PKG_CONFIG_HOST_BINARY) --libs popt`
+ endif
+ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
+ GPTFDISK_DEPENDENCIES += ncurses
+@@ -32,7 +33,8 @@ endif
+ 
+ define GPTFDISK_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		LDLIBS='$(GPTFDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
++		LDLIBS='$(GPTFDISK_LDLIBS)' \
++		SGDISK_LDLIBS='$(GPTFDISK_SGDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
+ endef
+ 
+ define GPTFDISK_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
