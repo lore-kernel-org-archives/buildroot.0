@@ -1,52 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05519C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62AC8C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9852360C14;
-	Tue, 15 Nov 2022 13:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9852360C14
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E27740A63;
+	Tue, 15 Nov 2022 13:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E27740A63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pThW9ghifntW; Tue, 15 Nov 2022 13:30:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fBxnhZmm2pR0; Tue, 15 Nov 2022 13:43:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA20560E45;
-	Tue, 15 Nov 2022 13:30:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA20560E45
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49607409E2;
+	Tue, 15 Nov 2022 13:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49607409E2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D3EE1BF94B
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:30:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DC2171BF319
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38F8B60DDF
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38F8B60DDF
+ by smtp3.osuosl.org (Postfix) with ESMTP id A546760E2B
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:43:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A546760E2B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6fd--98anh07 for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6423960675
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6423960675
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5427E83CC5; Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:29:14 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 398e5f58a3d3c4e41509655ab32d65977dbfd4f5
-X-Git-Newrev: 3a0993251bdd009813dbdbed41b7a0b1a33cca10
-X-Patchwork-Hint: ignore
-Message-Id: <20221115133041.5427E83CC5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- board/zynqmp/kria/kv260/kv260.sh: fix u-boot.itb without
- CONFIG_MULTI_DTB_FIT option
+ with ESMTP id p3ZgUxnNtvhu for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 13:43:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 805A160E26
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 805A160E26
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:43:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9886324000F;
+ Tue, 15 Nov 2022 13:43:36 +0000 (UTC)
+Date: Tue, 15 Nov 2022 14:43:35 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20221115144335.6efcf3fb@windsurf>
+In-Reply-To: <8735akgynk.fsf@dell.be.48ers.dk>
+References: <20221111224011.430289-1-thomas.petazzoni@bootlin.com>
+ <8735akgynk.fsf@dell.be.48ers.dk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668519817;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wk378mk9G0spKpK47p6qArYoBkKyAyPogBge0m5cp8E=;
+ b=Z17BxlOA/SF6ZIm6TKr9htcwSkNrCTxAzwPVjJTMg4/3JBquTNyQyAXvhSHFVC849qnvhR
+ nYV62XXaznenjNlz7JK3ei9WweVNqJhcMSlZDPIkTopaJuB9WBrTNxAf8iTEo+VbpdDVPy
+ Z7TRnUw3KQlL/XdVsj/erGeBZIoiLXE18I/wbo3QcSBNOXsEV4qq4N+DGtyFQmV1o0EoJu
+ Ep7Gbt0zhNTWqOOXKBeAECaZEonydAMKyQNwowbm4Gtvqzv8QN9v3ZHlMf7zO/lFfOcEh5
+ Qsq8Bv798UxviJjuxilaGN4F5KPizpYe48jXtyFZHhF5VslS7y41rspaNECTwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Z17BxlOA
+Subject: Re: [Buildroot] [PATCH] package/imagemagick: utilities now need C++
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +77,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a0993251bdd009813dbdbed41b7a0b1a33cca10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+On Tue, 15 Nov 2022 14:01:03 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-This patch fixes the kv260.sh to generate a working u-boot.itb
-now that the CONFIG_MULTI_DTB_FIT u-boot option is no longer used.
+> Is imagemagick without the utilities useful?
 
-This is a follow-up fix of
-515319b86f17ea5a2ce3e51c9063bac9f9e00a01 ("board/zynqmp/kria/kv260/uboot.fragment:
-remove unnecessary CONFIG_MULTI_DTB_FIT option") to fix the build of:
+It has a library. Not sure how widely used it is, though. dvdauthor,
+libvips, php-imagick have it as a build time dependency, so I suppose
+(but didn't check) that they link with the library.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3310463281
+Best regards,
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ec9519831ed5d5698c787b48d2ab952525cacb93)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/zynqmp/kria/kv260/kv260.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
-index e3467f3068..e891852009 100755
---- a/board/zynqmp/kria/kv260/kv260.sh
-+++ b/board/zynqmp/kria/kv260/kv260.sh
-@@ -8,5 +8,5 @@
- 
- UBOOT_DIR=$4
- 
--fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
-+fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
- ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
