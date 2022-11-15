@@ -1,94 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9567CC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 23:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D359C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 23:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3C0D4024A;
-	Tue, 15 Nov 2022 23:48:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3C0D4024A
+	by smtp2.osuosl.org (Postfix) with ESMTP id A35CC40B58;
+	Tue, 15 Nov 2022 23:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A35CC40B58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FZetFpmZlufD; Tue, 15 Nov 2022 23:48:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6jFVOvrNW2dd; Tue, 15 Nov 2022 23:53:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B590541736;
-	Tue, 15 Nov 2022 23:48:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B590541736
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8D8451BF421
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 23:48:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFD9F40445;
+	Tue, 15 Nov 2022 23:53:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFD9F40445
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EA701BF421
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 23:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67F6241736
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 23:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67F6241736
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1942D40445
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 23:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1942D40445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q-bk_MDm_F65 for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 23:48:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 646BB41734
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
- [IPv6:2607:f8b0:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 646BB41734
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 23:48:07 +0000 (UTC)
-Received: by mail-pl1-x62d.google.com with SMTP id io19so14866674plb.8
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 15:48:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=MulrlUCY1lQgKuhKCGm7VfRXnEMP2ic+r8vDEkMejP0=;
- b=NDAQwQMGLeYFYpbkEgSQktY7eEjCZEjRBNHKNK6n90rlYviSXysVjxt9o/69nFUf6+
- wkK9FNFWSdcOy2xnt3gyAPeVZEImAVqQpsF36mzJCrx2/uTAN7CPyupihurgchL/mG6R
- lpIIa36QBEbMLVEQoXbGk00ZwqrIknb53eJqAWEDm42RT/N0k1vo7rjJuBkKdmtPhHG6
- d1UnsJE8In6u6ALUu9DP2kMP3A/D6/erCsy40GdObj1pDuyqF0OgugAR3gee2AEe4EjY
- 2/yrtOxM7WaTuu887P6i6XLLleKTlABBPC5ms0N4pu4A9xXjlnrIsZ6IOHPulsswMW1Y
- +05g==
-X-Gm-Message-State: ANoB5pn6aOW21/NAoSmLHt+bI1fElrlq1/4nGmtItiDt3S+f6vTG0iTt
- Kb8C1LE3Byso2HazgW+BAFw=
-X-Google-Smtp-Source: AA0mqf7ZNGyHJSTjlz5laUk86z27o1IGIhQQ8Rh4w0SNH9i0PGeN7AzTM2Px2xHHsbXSs3a8OQ+nJA==
-X-Received: by 2002:a17:902:7201:b0:186:9c2b:3a39 with SMTP id
- ba1-20020a170902720100b001869c2b3a39mr6390167plb.115.1668556086670; 
- Tue, 15 Nov 2022 15:48:06 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
- by smtp.googlemail.com with ESMTPSA id
- n13-20020a170902e54d00b0017f73dc1549sm10597735plf.263.2022.11.15.15.48.05
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 15 Nov 2022 15:48:06 -0800 (PST)
-Message-ID: <76b0ac3b-7bd4-f9f5-8191-7c39380dda64@gmail.com>
-Date: Tue, 15 Nov 2022 15:48:04 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org,
- Markus Mayer <markus.mayer@broadcom.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220917211719.251791-1-fontaine.fabrice@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220917211719.251791-1-fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8nO4BXlLDn0q for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 23:53:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2916A40424
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com
+ [148.163.156.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2916A40424
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 23:53:01 +0000 (UTC)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+ by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 2AFNTMJX000915; Tue, 15 Nov 2022 15:52:58 -0800
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3kvmg4829n-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 15 Nov 2022 15:52:58 -0800
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com
+ [10.225.0.209])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 36E314008A;
+ Tue, 15 Nov 2022 23:52:57 +0000 (UTC)
+Received: from de02arcdev2.internal.synopsys.com
+ (de02arcdev2.internal.synopsys.com [10.225.41.245])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id E7A58A005D;
+ Tue, 15 Nov 2022 23:52:53 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+To: buildroot@buildroot.org
+Date: Wed, 16 Nov 2022 00:52:33 +0100
+Message-Id: <20221115235235.74897-1-abrodkin@synopsys.com>
+X-Mailer: git-send-email 2.16.2
+X-Proofpoint-ORIG-GUID: zIixbKXOSCwIeQR2xNYjaBFST8G8QRIg
+X-Proofpoint-GUID: zIixbKXOSCwIeQR2xNYjaBFST8G8QRIg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
+ policy=outbound_active_cloned score=0
+ malwarescore=0 clxscore=1011 adultscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=385 priorityscore=1501
+ impostorscore=0 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211150164
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=MulrlUCY1lQgKuhKCGm7VfRXnEMP2ic+r8vDEkMejP0=;
- b=KIvcDqof0lSsdp/1KNm0U7Lf14eBIlBnA/ZrZ2jqQTFKcvAl4GqqWhKVrh5a3RmIjF
- JgX5YpVDMIPcXDb/+06HXz1gy6uXtN4hMhrwZrIHvqV5KXUqf9uFByea0OsHRSOzmdxB
- kxZX6hQGe9rGIxRJqDuuLrKe+Ctr6pSO7phiVM5DkCbgJh6VjDFgIh0LuFbVR+yHlFes
- YG16k2+2OFBxkYWjgn7ilmMt7/fXscm84EFY/TpDkka21Wotfqk1mU6YwCKZgDSi6SKZ
- aT0BIX4OhFGYvtAv9lDF9kue9sR873aeR2wG5d1evp0cxHcp7S2TmsyRlyibzDJFDBQc
- 67ug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KIvcDqof
-Subject: Re: [Buildroot] [PATCH 1/1] package/popt: bump to version 1.19
+ d=synopsys.com; h=from : to : cc :
+ subject : date : message-id; s=pfptdkimsnps;
+ bh=2hiGalqpblxyliBgeiZxRvV7XUiMOSI7MhknsM3VvWs=;
+ b=JKMt4soQiM1ZBjcSMStAWn2As+x5cG8SB76l7+CFeNn4Tl58QbHEyfq79AI29P452W4r
+ d+pl7+XIlcod2TAqgwVfsVDFiUT5IYU7Jka9/KyMW9jmBkhkOh4K3f6Pey9/7O9K/+NW
+ Uj0EYxTRI6Kzhr1xDhsHMqvl2KD+diE1pqK0tw2tx0LeVmKlBM2PKY6Nr0yEOTAd1T9L
+ As5OSJ9RCKw+e4H2cVhyagcZBScLXCz2CcajrOx803NyszaYsZ2K4H+FXGXnOtby15xx
+ gqIzuqYwoaWu1yeNZw28Pa5Cw/fTtaGgkWZodu2QT/EjAA/d9rSZ5UWZ3jTold9wYTGT wQ== 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=synopsys.com; s=mail; 
+ t=1668556378; bh=Dp1Q+O2H0+FR8Hn8ofFayyXPHxZV/gFYrFNaM6SUzOY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=jSycSOUZBztprJM07KLq42yVIOXJpPs686Yrr1GzpeBrb0KV6H9GiDlqOGqMZGTfu
+ yUsdA/Rgq/hOsLd4dVGdYiTJHP8/PmURcIUgAxwI2SJecD8bHguG0nu6cM5UC23qfI
+ VZwU8vd1YpMJ+bMHdo4YvrGE9RpgO4yn88xJ7FhVCNilRlJSKHo+6D8end9Md4lul+
+ tQ8EZhpdpSwPS1SqbHcbWVV0gFkuobq8rqvwTITkUHjrtJ35IhMez0F4OfAFl7NGGd
+ +fHRpA0SyMdlXuJ/PjRAJa4s7EcjzN8bVIjPXaiBg/7C1GYPszXKS8fWrrRuznDnXk
+ shmY8qoyJK2xw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=JKMt4soQ; 
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=mail header.b=jSycSOUZ
+Subject: [Buildroot] [PATCH 0/2] Enable (or rather fix) glibc for ARC700
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,59 +108,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+It's been waiting for a long time and now under pressure of possible
+removal of ARC700 support from Buildroot that change is finally
+being published.
 
-On 9/17/22 14:17, Fabrice Fontaine wrote:
-> - Drop patches (already in version) and so autoreconf
-> - Update hash of COPYING (license adjusted to use the original, straight
->    MIT variant:
->    https://github.com/rpm-software-management/popt/commit/dcec86df3cfc96d3dd3a3e9f7f1086b768d2d88f)
-> 
-> https://github.com/rpm-software-management/popt/compare/popt-1.18-release...popt-1.19-release
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Among other things it will fix annoying build failures for ARC700,
+which now became so much visible since Buildroot switched to glibc
+as its default C library, see [1].
 
-We recently upgraded from buildroot 2022.08 to 2022.11-rc1 which 
-contains this change of yours and this causes gptfdisk's sgdisk to not 
-be able to open the devices passed as argument, steps to reproduce would 
-be as simple as:
+[1] https://git.buildroot.net/buildroot/commit/?id=4057e36ca9665edd5248512e4edba2c243b8f4be
 
-# sgdisk -p /dev/sda
-Problem opening  for reading! Error is 2.
-The specified file does not exist!
+Sergey Matyukevich (2):
+  package/glibc: add support for ARC700
+  configs/snps_arc700_nsim_defconfig: add ARC700 target for nSIM
 
-Markus looked at the strace output and found the following:
+ board/synopsys/nsim/readme.txt                     |  43 +++++
+ configs/snps_arc700_nsim_defconfig                 |  18 ++
+ .../glibc/0003-ARC-Synopsys-ARC700-support.patch   | 208 +++++++++++++++++++++
+ 3 files changed, 269 insertions(+)
+ create mode 100644 board/synopsys/nsim/readme.txt
+ create mode 100644 configs/snps_arc700_nsim_defconfig
+ create mode 100644 package/glibc/0003-ARC-Synopsys-ARC700-support.patch
 
-strace -f sgdisk -p /dev/sda
-[...]
-brk(NULL)                               = 0x5581f4d000
-brk(0x5581f6e000)                       = 0x5581f6e000
-brk(0x5581f8f000)                       = 0x5581f8f000
-openat(AT_FDCWD, "", O_RDONLY)          = -1 ENOENT (No such file or 
-directory)
-write(2, "Problem opening ", 16Problem opening )        = 16
-write(2, " for reading! Error is ", 23 for reading! Error is ) = 23
-write(2, "2", 12)                        = 1
-write(2, ".\n", 2.
-)                      = 2
-write(2, "The specified file does not exis"..., 35The specified file 
-does not exist!
-) = 35
-exit_group(2)                           = ?
-+++ exited with 2 +++
-
-the openat() system call is passed an empty string which is the reason 
-for sgdisk to fail opening the specified device. Reverting libpopt back 
-to 1.18 but keeping everything else the same resolves the issue.
-
-Is this is a known problem? Thanks!
 -- 
-Florian
+2.16.2
 
 _______________________________________________
 buildroot mailing list
