@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968CEC43219
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A1AC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D0C840A63;
-	Tue, 15 Nov 2022 13:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D0C840A63
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6A7F40A8A;
+	Tue, 15 Nov 2022 13:27:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A7F40A8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4eVA05lENWh0; Tue, 15 Nov 2022 13:27:09 +0000 (UTC)
+	with ESMTP id 30EKpjRk-o7e; Tue, 15 Nov 2022 13:27:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C0FC409F9;
-	Tue, 15 Nov 2022 13:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C0FC409F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 61F4D1BF94D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 094E340A99;
+	Tue, 15 Nov 2022 13:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 094E340A99
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BB4F1BF951
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E3A340A63
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56BEE403EC
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E3A340A63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BEE403EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wlue-a3nbY4Y for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SXNYG1wuhbfS for <buildroot@lists.busybox.net>;
  Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83624409F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B38040872
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83624409F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B38040872
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E2DE83CA1; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
+ id 3A29F83CA0; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:22:33 +0100
+Date: Tue, 15 Nov 2022 14:06:19 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 19a07fbe5fa155cc9702d6875ce465783d31dd89
-X-Git-Newrev: 868734d040ad0bacd059682649efb4469d53664e
+X-Git-Oldrev: 72842461de91209709d2055ed7377a441d5cb3cd
+X-Git-Newrev: 7fcd29cb57c50b8e9dea84878b8b54e4fed0ec3c
 X-Patchwork-Hint: ignore
-Message-Id: <20221115132631.6E2DE83CA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] utils/genrandconfig:
- disallow configs with BR2_XTENSA_CUSTOM=y
+Message-Id: <20221115132631.3A29F83CA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x]
+ boot/arm-trusted-firmware: fix SSP disable in v2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=868734d040ad0bacd059682649efb4469d53664e
+commit: https://git.buildroot.net/buildroot/commit/?id=7fcd29cb57c50b8e9dea84878b8b54e4fed0ec3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-When BR2_XTENSA_CUSTOM=y is used with the internal toolchain, an
-overlay file is mandatory, which genrandconfig can't provide. So we
-simply disallow such configurations.
+ATF version 2.2 and older does not disable SSP when
+ENABLE_STACK_PROTECTOR is not set. This is because the compiler enables
+SSP by default, and ATF does not pass -fno-stack-protector to the
+compiler. Upstream commit 7af195e29a42 ("Disable stack protection
+explicitly") fixed the issue for v2.3 and newer.
 
+Add -fno-stack-protector in CFLAGS when
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set to fix older ATF
+versions.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3301821171
+
+Cc: Dick Olsson <hi@senzilla.io>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c81da5e41c8b8863920a1f0416e4f7f4d22788bf)
+(cherry picked from commit 5e330ff030d11193ce716822c932c2a6b0f109c9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index f19a405685..9c6c2b359c 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -304,6 +304,11 @@ def fixup_config(sysinfo, configfile):
-     # No C library for internal toolchain
-     if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
-         return False
-+    # Xtensa custom cores require an overlay file with internal
-+    # toolchains
-+    if 'BR2_XTENSA_CUSTOM=y' in configlines and \
-+       'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
-+        return False
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 6225d60560..af31d59f67 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -67,11 +67,17 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
++else
++ARM_TRUSTED_FIRMWARE_CFLAGS += -fno-stack-protector
++endif
++
++ifeq ($(BR2_PIC_PIE),y)
++ARM_TRUSTED_FIRMWARE_CFLAGS += -fno-PIE
+ endif
  
-     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
-        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
+ ARM_TRUSTED_FIRMWARE_MAKE_ENV += \
+ 	$(TARGET_MAKE_ENV) \
+-	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE")
++	CFLAGS="$(ARM_TRUSTED_FIRMWARE_CFLAGS)"
+ 
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
