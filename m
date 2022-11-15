@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB26FC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968CEC43219
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ACB440951;
-	Tue, 15 Nov 2022 13:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ACB440951
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D0C840A63;
+	Tue, 15 Nov 2022 13:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D0C840A63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sr0ROFH2qBcQ; Tue, 15 Nov 2022 13:26:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4eVA05lENWh0; Tue, 15 Nov 2022 13:27:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 450204047D;
-	Tue, 15 Nov 2022 13:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 450204047D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C96B1BF94B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C0FC409F9;
+	Tue, 15 Nov 2022 13:27:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C0FC409F9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 61F4D1BF94D
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 38AC881455
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E3A340A63
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38AC881455
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E3A340A63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OqQVJXec0k38 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wlue-a3nbY4Y for <buildroot@lists.busybox.net>;
  Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EC7C8131B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83624409F9
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EC7C8131B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83624409F9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EB9F83CA2; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
+ id 6E2DE83CA1; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:18:46 +0100
+Date: Tue, 15 Nov 2022 14:22:33 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: ebe54c8ae06b815cac6d9028a733f63c7e4ca2be
-X-Git-Newrev: 0f2ee83a48e1328b1b34fe482ba6feac63d42d35
+X-Git-Oldrev: 19a07fbe5fa155cc9702d6875ce465783d31dd89
+X-Git-Newrev: 868734d040ad0bacd059682649efb4469d53664e
 X-Patchwork-Hint: ignore
-Message-Id: <20221115132631.4EB9F83CA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/dbus-broker:
- audit support needs libcap-ng
+Message-Id: <20221115132631.6E2DE83CA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] utils/genrandconfig:
+ disallow configs with BR2_XTENSA_CUSTOM=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f2ee83a48e1328b1b34fe482ba6feac63d42d35
+commit: https://git.buildroot.net/buildroot/commit/?id=868734d040ad0bacd059682649efb4469d53664e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Since v14 in 2018, audit support has needed libcap-ng.
+When BR2_XTENSA_CUSTOM=y is used with the internal toolchain, an
+overlay file is mandatory, which genrandconfig can't provide. So we
+simply disallow such configurations.
 
-Fixes:
-    http://autobuild.buildroot.org/results/43abdb85cc2f386d427cec1cfa876e20e3509cb8/
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2f0e82c4ef8bc02bf8b2ada7bf5daf940d4e4cac)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c81da5e41c8b8863920a1f0416e4f7f4d22788bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus-broker/Config.in      | 1 +
- package/dbus-broker/dbus-broker.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/dbus-broker/Config.in b/package/dbus-broker/Config.in
-index c7206232da..aa6584c392 100644
---- a/package/dbus-broker/Config.in
-+++ b/package/dbus-broker/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_DBUS_BROKER
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
- 	depends on BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBCAP_NG if BR2_PACKAGE_AUDIT
- 	help
- 	  Linux D-Bus Message Broker.
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index f19a405685..9c6c2b359c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -304,6 +304,11 @@ def fixup_config(sysinfo, configfile):
+     # No C library for internal toolchain
+     if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y' in configlines:
+         return False
++    # Xtensa custom cores require an overlay file with internal
++    # toolchains
++    if 'BR2_XTENSA_CUSTOM=y' in configlines and \
++       'BR2_TOOLCHAIN_BUILDROOT=y' in configlines:
++        return False
  
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 85c3f75a3b..536ee64a71 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -28,7 +28,8 @@ DBUS_BROKER_DEPENDENCIES = expat systemd
- DBUS_BROKER_CONF_OPTS = -Dlauncher=true
- 
- ifeq ($(BR2_PACKAGE_AUDIT),y)
--DBUS_BROKER_DEPENDENCIES += audit
-+# libcap-ng selected from Config.in
-+DBUS_BROKER_DEPENDENCIES += audit libcap-ng
- DBUS_BROKER_CONF_OPTS += -Daudit=true
- else
- DBUS_BROKER_CONF_OPTS += -Daudit=false
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
