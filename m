@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E37CFC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 12:55:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E6DC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 12:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 909258133C;
-	Tue, 15 Nov 2022 12:55:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 909258133C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03FA381A9C;
+	Tue, 15 Nov 2022 12:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03FA381A9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i_1NcTENapx5; Tue, 15 Nov 2022 12:55:27 +0000 (UTC)
+	with ESMTP id m7iA2ZG3N547; Tue, 15 Nov 2022 12:55:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C77F681323;
-	Tue, 15 Nov 2022 12:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C77F681323
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 080331BF348
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FF0B8132D;
+	Tue, 15 Nov 2022 12:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FF0B8132D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 247161BF348
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D86664010C
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D86664010C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00A168132D
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 12:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00A168132D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wmddT656HtwH for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 12:55:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09B7E4048E
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 12:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09B7E4048E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDD6683C48; Tue, 15 Nov 2022 12:55:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Z3H0wIVyHl4 for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 12:55:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B6D28131A
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B6D28131A
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 12:55:48 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0C7E61C0004;
+ Tue, 15 Nov 2022 12:55:45 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ouvTd-008dRt-1J; Tue, 15 Nov 2022 13:55:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 13:51:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 48cd67d587a80a84b6d8c2cdcc97a5b736fdd4e4
-X-Git-Newrev: c87b45c01ea5eab3cc9573139b6b83fdb9e93761
-X-Patchwork-Hint: ignore
-Message-Id: <20221115125523.EDD6683C48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wavemon: fix
- kernel header collision
+To: Nuno =?utf-8?Q?Gon=C3=A7alves?= via buildroot <buildroot@buildroot.org>
+References: <20221110140054.252389-1-nunog@fr24.com>
+Date: Tue, 15 Nov 2022 13:55:45 +0100
+In-Reply-To: <20221110140054.252389-1-nunog@fr24.com> ("Nuno =?utf-8?Q?Gon?=
+ =?utf-8?Q?=C3=A7alves?= via
+ buildroot"'s message of "Thu, 10 Nov 2022 14:00:53 +0000")
+Message-ID: <87bkp8gywe.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] packages/sudo: explicitly set with-tzdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,86 +64,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Nuno =?utf-8?Q?Gon=C3=A7alves?= <nunog@fr24.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c87b45c01ea5eab3cc9573139b6b83fdb9e93761
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Fix the following build failure raised since bump to version 0.9.4 in
-commit 5cae1a0d675eca41125b6430157d3d0d78d1220c:
-
-In file included from iw_if.h:26:0,
-                 from conf.c:19:
-/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/linux/if.h:71:2: error: redeclaration of enumerator 'IFF_UP'
-  IFF_UP    = 1<<0,  /* sysfs */
-  ^
-/home/buildroot/autobuild/instance-1/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/net/if.h:44:5: note: previous definition of 'IFF_UP' was here
-     IFF_UP = 0x1,  /* Interface is up.  */
-     ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/cbdf3e0cf0bee8f1b076581768c24155afc320d9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 57a1ce00a2c9f4b4b988f41b15ad01c6abc2a99c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-iw_if.h-don-t-include-linux-if.h.patch    | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
-new file mode 100644
-index 0000000000..95f54e4b7f
---- /dev/null
-+++ b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
-@@ -0,0 +1,41 @@
-+From 4ac1482bb40376e47805c3737dfed60abb1dd3b4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 22 Dec 2021 00:39:35 +0100
-+Subject: [PATCH] iw_if.h: don't include linux/if.h (#109)
-+
-+Don't include linux/if.h to avoid the following build failure:
-+
-+In file included from iw_if.h:31:0,
-+                 from conf.c:19:
-+/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h: At top level:
-+/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:143:8: error: redefinition of 'struct ifmap'
-+ struct ifmap {
-+        ^
-+In file included from iw_if.h:26:0,
-+                 from conf.c:19:
-+/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/net/if.h:111:8: note: originally defined here
-+ struct ifmap
-+        ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a6ee162cf04b70b144b54e1ca4b7b2421071c50c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/uoaerg/wavemon/commit/4ac1482bb40376e47805c3737dfed60abb1dd3b4]
-+---
-+ iw_if.h | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/iw_if.h b/iw_if.h
-+index 9e7fa89..6607e0b 100644
-+--- a/iw_if.h
-++++ b/iw_if.h
-+@@ -28,7 +28,6 @@
-+ #include <net/ethernet.h>
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+-#include <linux/if.h>
-+ 
-+ /* Definitions from linux/ieee80211.h (not necessarily part of distro headers) */
-+ #define WLAN_CAPABILITY_ESS		(1<<0)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIk51bm8iID09IE51bm8gR29uw6dhbHZlcyB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gSWYgVFpEQVRBIGlzIGJ1aWx0IHRoZW4gdXNlIGFj
+dHVhbCB6b25laW5mbyBwYXRoLgogPiBPdGhlcndpc2UgZXhwbGljaXRseSBkaXNhYmxlIGl0IHRv
+IGF2b2lkIGluY2x1ZGluZyB0aGUgaG9zdCBwYXRoLgoKID4gU2lnbmVkLW9mZi1ieTogTnVubyBH
+b27Dp2FsdmVzIDxudW5vZ0BmcjI0LmNvbT4KCkNvbW1pdHRlZCB0byAyMDIyLjA4LnggYW5kIDIw
+MjIuMDIueCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
