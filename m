@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C6DC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A82ACC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:03:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DEA781BF5;
-	Tue, 15 Nov 2022 13:02:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DEA781BF5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f4qVxy1A6UOd; Tue, 15 Nov 2022 13:02:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 764DF81BA9;
-	Tue, 15 Nov 2022 13:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 764DF81BA9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 240F91BF94D
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:01:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2BE74136C
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:01:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2BE74136C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 420FA415ED;
+	Tue, 15 Nov 2022 13:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 420FA415ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VEQuz1LZpzJE for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 13:01:52 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kuLQ-hLtUQ9v; Tue, 15 Nov 2022 13:03:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E3D2415DA;
+	Tue, 15 Nov 2022 13:03:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E3D2415DA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 93F961BF348
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D4D84051D
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D4D84051D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id opA-cuhRyq3U for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14598410C3
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:01:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14598410C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id B391340481
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B391340481
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01B1A83C55; Tue, 15 Nov 2022 13:01:52 +0000 (UTC)
+ id A339983C6B; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 13:55:05 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 280119afcb333f459435da3b407254ce49fb2b2a
-X-Git-Newrev: 2e7f3dcc8e12da71a323d0616880570600c2b5ef
+Date: Tue, 15 Nov 2022 13:56:23 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 278806d6f94389c52cf9cd261098d75d74560ab4
+X-Git-Newrev: eecfe810a6ab5b70dd387b46907f70c6a77ad56d
 X-Patchwork-Hint: ignore
-Message-Id: <20221115130152.01B1A83C55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] packages/sudo: explicitly
- set enable-tmpfiles.d
+Message-Id: <20221115130300.A339983C6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/imagemagick:
+ utilities now need C++ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +58,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6385336512532374492=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6385336512532374492==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=eecfe810a6ab5b70dd387b46907f70c6a77ad56d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e7f3dcc8e12da71a323d0616880570600c2b5ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+Since upstream commit
+https://github.com/ImageMagick/ImageMagick/commit/07f3b487f9860fd4eb9422f1a906d0fe83b6fd1c
+(which first appeared in version 7.1.0-47), ImageMagick forces the
+need of a C++ compiler to build its utilities. Despite the request of
+Bernd Kuhls to revert this change, upstream declined.
 
-sudo's configure script looks up on the host to determine the path where
-to install its systemd tmpfiles. That is incorrect in cross-compilation.
+Since this change is causing build failures in our autobuilders, our
+only choice is to follow the choice of upstream, and disable building
+the utilities when C++ support is not available.
 
-We can explicitly tell sudo where to install its tmpfiles, which we do
-when systemd is enabled (in Buildroot, systemd-tmpfiles is always
-enabled when systemd is), or we can tell it not to install tmpfiles at
-all, which we do otherwise.
+Fixes:
 
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
-[yann.morin.1998@free.fr: reword and extend commit log]
+  http://autobuild.buildroot.net/results/4283235d697408cf2e70be5e3769dbe6ebb9ddae/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9c333176a3dae8aa4fa5468e3345d71bc10c44ca)
+(cherry picked from commit 0910ada70b7194596c6ace0cb06b303173c13de7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sudo/sudo.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 28cfcbb1e2..8e237bd36a 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -17,6 +17,7 @@ SUDO_SELINUX_MODULES = sudo
- SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
- 	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
-+	--enable-tmpfiles.d=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib/tmpfiles.d,no) \
- 	--without-lecture \
- 	--without-sendmail \
- 	--without-umask \
-
---===============6385336512532374492==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 6bdf24c1e8..8a2ec460d5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -178,6 +178,12 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++IMAGEMAGICK_CONF_OPTS += --with-utilities
++else
++IMAGEMAGICK_CONF_OPTS += --without-utilities
++endif
++
+ HOST_IMAGEMAGICK_CONF_OPTS = \
+ 	--disable-opencl \
+ 	--disable-openmp \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6385336512532374492==--
