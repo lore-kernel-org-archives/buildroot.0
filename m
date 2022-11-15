@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A1AC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90291C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:27:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6A7F40A8A;
-	Tue, 15 Nov 2022 13:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A7F40A8A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4041E8131B;
+	Tue, 15 Nov 2022 13:27:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4041E8131B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30EKpjRk-o7e; Tue, 15 Nov 2022 13:27:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZA7_bY1mjPM0; Tue, 15 Nov 2022 13:27:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 094E340A99;
-	Tue, 15 Nov 2022 13:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 094E340A99
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75C7681455;
+	Tue, 15 Nov 2022 13:27:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75C7681455
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7BB4F1BF951
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F88D1BF319
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56BEE403EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89E02403EC
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BEE403EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89E02403EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SXNYG1wuhbfS for <buildroot@lists.busybox.net>;
+ with ESMTP id CyXSEHXTa0FY for <buildroot@lists.busybox.net>;
  Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B38040872
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A3D44094B
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B38040872
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A3D44094B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A29F83CA0; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
+ id 58FB583CA5; Tue, 15 Nov 2022 13:26:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:06:19 +0100
+Date: Tue, 15 Nov 2022 14:19:32 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 72842461de91209709d2055ed7377a441d5cb3cd
-X-Git-Newrev: 7fcd29cb57c50b8e9dea84878b8b54e4fed0ec3c
+X-Git-Oldrev: 0f2ee83a48e1328b1b34fe482ba6feac63d42d35
+X-Git-Newrev: fde124c8477f9a91ae56a2a3050c26292b6a2260
 X-Patchwork-Hint: ignore
-Message-Id: <20221115132631.3A29F83CA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- boot/arm-trusted-firmware: fix SSP disable in v2.2
+Message-Id: <20221115132631.58FB583CA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/ntfs-3g: security
+ bump to version 2022.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fcd29cb57c50b8e9dea84878b8b54e4fed0ec3c
+commit: https://git.buildroot.net/buildroot/commit/?id=fde124c8477f9a91ae56a2a3050c26292b6a2260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-ATF version 2.2 and older does not disable SSP when
-ENABLE_STACK_PROTECTOR is not set. This is because the compiler enables
-SSP by default, and ATF does not pass -fno-stack-protector to the
-compiler. Upstream commit 7af195e29a42 ("Disable stack protection
-explicitly") fixed the issue for v2.3 and newer.
+Fix CVE-2022-40284: A buffer overflow was discovered in NTFS-3G before
+2022.10.3. Crafted metadata in an NTFS image can cause code execution. A
+local attacker can exploit this if the ntfs-3g binary is setuid root. A
+physically proximate attacker can exploit this if NTFS-3G software is
+configured to execute upon attachment of an external storage device.
 
-Add -fno-stack-protector in CFLAGS when
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set to fix older ATF
-versions.
+https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-v4w8-jv3w-7prm
+https://github.com/tuxera/ntfs-3g/releases/tag/2022.10.3
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3301821171
-
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5e330ff030d11193ce716822c932c2a6b0f109c9)
+(cherry picked from commit 6facb6fa1022a6bc5aa6fbdbaf20b1a57f420259)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/ntfs-3g/ntfs-3g.hash | 2 +-
+ package/ntfs-3g/ntfs-3g.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 6225d60560..af31d59f67 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -67,11 +67,17 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
-+else
-+ARM_TRUSTED_FIRMWARE_CFLAGS += -fno-stack-protector
-+endif
-+
-+ifeq ($(BR2_PIC_PIE),y)
-+ARM_TRUSTED_FIRMWARE_CFLAGS += -fno-PIE
- endif
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 89bce73559..3fcba6af4d 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  0489fbb6972581e1b417ab578d543f6ae522e7fa648c3c9b49c789510fd5eb93  ntfs-3g_ntfsprogs-2022.5.17.tgz
++sha256  f20e36ee68074b845e3629e6bced4706ad053804cbaf062fbae60738f854170c  ntfs-3g_ntfsprogs-2022.10.3.tgz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 64800c5eeb..62c515d50f 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ARM_TRUSTED_FIRMWARE_MAKE_ENV += \
- 	$(TARGET_MAKE_ENV) \
--	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE")
-+	CFLAGS="$(ARM_TRUSTED_FIRMWARE_CFLAGS)"
- 
- ifeq ($(BR2_ARM_CPU_ARMV7A),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
+-NTFS_3G_VERSION = 2022.5.17
++NTFS_3G_VERSION = 2022.10.3
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
