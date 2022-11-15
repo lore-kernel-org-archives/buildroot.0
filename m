@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BCCCC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C859DC43219
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:03:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 217AC40354;
-	Tue, 15 Nov 2022 13:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 217AC40354
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7748460E2A;
+	Tue, 15 Nov 2022 13:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7748460E2A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ocH7-4KjHmUH; Tue, 15 Nov 2022 13:03:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAB3360D88;
+	Tue, 15 Nov 2022 13:03:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAB3360D88
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CE4B51BF348
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5548415DF
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5548415DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kOrExLcCpe-a; Tue, 15 Nov 2022 13:03:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D01484033A;
-	Tue, 15 Nov 2022 13:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D01484033A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9ABB11BF94B
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 837E481B25
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 837E481B25
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ewbhHhoUx1MK for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EmFSeUDnftFB for <buildroot@lists.busybox.net>;
  Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A600180E42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C825415A3
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A600180E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C825415A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9620483C6A; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
+ id 8A82A83C69; Tue, 15 Nov 2022 13:03:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 13:55:33 +0100
+Date: Tue, 15 Nov 2022 13:55:29 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2a6da8d48660027c48a007394b10369e277b3741
-X-Git-Newrev: 278806d6f94389c52cf9cd261098d75d74560ab4
+X-Git-Oldrev: c87b45c01ea5eab3cc9573139b6b83fdb9e93761
+X-Git-Newrev: 2a6da8d48660027c48a007394b10369e277b3741
 X-Patchwork-Hint: ignore
-Message-Id: <20221115130300.9620483C6A@busybox.osuosl.org>
+Message-Id: <20221115130300.8A82A83C69@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x] packages/sudo: explicitly
- set enable-tmpfiles.d
+ set with-tzdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +58,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1421266477068060153=="
+Content-Type: multipart/mixed; boundary="===============3790429379758746473=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1421266477068060153==
+--===============3790429379758746473==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=278806d6f94389c52cf9cd261098d75d74560ab4
+commit: https://git.buildroot.net/buildroot/commit/?id=2a6da8d48660027c48a007394b10369e277b3741
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-sudo's configure script looks up on the host to determine the path where
-to install its systemd tmpfiles. That is incorrect in cross-compilation.
+sudo's configure script looks up on the host to determine the path to
+the timezone data location. That fails in cross-compilation.
 
-We can explicitly tell sudo where to install its tmpfiles, which we do
-when systemd is enabled (in Buildroot, systemd-tmpfiles is always
-enabled when systemd is), or we can tell it not to install tmpfiles at
-all, which we do otherwise.
+This is used to sanitise the TZ envirnment variable at runtime, and is
+not used at buildtime (except to be stored as a string in the program).
+
+We can tell sudo where the tz data will be, which we do when the tzdata
+package is enabled, and we can tell it not to use it at all (to not pass
+TZ down to sudo-ed executions) othwerwise.
 
 Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
-[yann.morin.1998@free.fr: reword and extend commit log]
+[yann.morin.1998@free.fr: rewrite and extend commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9c333176a3dae8aa4fa5468e3345d71bc10c44ca)
+(cherry picked from commit 51d3902af72d74cf5bf7c1246e4bf41cfc5e55f3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/sudo/sudo.mk | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 67af546cfc..44a17dd348 100644
+index 54901943cd..67af546cfc 100644
 --- a/package/sudo/sudo.mk
 +++ b/package/sudo/sudo.mk
-@@ -17,6 +17,7 @@ SUDO_SELINUX_MODULES = sudo
+@@ -16,6 +16,7 @@ SUDO_SELINUX_MODULES = sudo
+ # This is to avoid sudo's make install from chown()ing files which fails
  SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
  SUDO_CONF_OPTS = \
- 	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
-+	--enable-tmpfiles.d=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib/tmpfiles.d,no) \
++	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
  	--without-lecture \
  	--without-sendmail \
  	--without-umask \
 
---===============1421266477068060153==
+--===============3790429379758746473==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -109,4 +111,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1421266477068060153==--
+--===============3790429379758746473==--
