@@ -1,85 +1,134 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20765C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 14 Nov 2022 23:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE7CC43217
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 07:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B262608D8;
-	Mon, 14 Nov 2022 23:32:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B262608D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E299408C4;
+	Tue, 15 Nov 2022 07:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E299408C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-H4QZD10a3h; Mon, 14 Nov 2022 23:32:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Iz1h_yXBDw1w; Tue, 15 Nov 2022 07:21:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EACA60758;
-	Mon, 14 Nov 2022 23:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EACA60758
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A78C408AD;
+	Tue, 15 Nov 2022 07:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A78C408AD
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA6071BF284
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 23:32:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C51061BF293
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 07:21:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A413B402B1
- for <buildroot@lists.busybox.net>; Mon, 14 Nov 2022 23:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A413B402B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F0FD404AF
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 07:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F0FD404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sN2WiUVhJxV0 for <buildroot@lists.busybox.net>;
- Mon, 14 Nov 2022 23:32:09 +0000 (UTC)
+ with ESMTP id MkR2Vr2ktpGQ for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 07:21:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0F9440120
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
- [IPv6:2607:f8b0:4864:20::1031])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0F9440120
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 23:32:09 +0000 (UTC)
-Received: by mail-pj1-x1031.google.com with SMTP id gw22so11758643pjb.3
- for <buildroot@buildroot.org>; Mon, 14 Nov 2022 15:32:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=h8f0LF1knJxhBvs5Sjd612HZ2apgN9GRjQTqlThtyT8=;
- b=q5ThVM8FXQ2v7a2PyAE71kUsRkkKl0laIZG1emGTZIorheNS3GFkcxhylPQc+PLgjU
- +alr6plLTcwAixhw/Vj1oN1tmC4EEH3C6cCLptuoiwrXD8QVdJvvBFa2EgNBVllEuVqJ
- O51xhD66eEcAtmrTyQ70Ru8hyMEsqfRZVC80l3OeWDUvcG4WO5bNQsEEEe93Rb/sWo7z
- ymQS9WNZA2Xx10oUUfcAk7PRc/voi8821Hp+158ydGI25uScktZiA2lRDiD/14Mxa5Uw
- jXFTce7gckMmgSWAjETilEjYrlkgwHp3Jlx/v1eL1SJCJDXobPFjm/gbU62QNrfhCazr
- oKyA==
-X-Gm-Message-State: ANoB5plH8O8vBahqqHm8RuCrjFbI+IquQZW5B+rCCcImkeZ8/Usr5wOH
- UT/BpuLl5ULIOZ4HKNgwb6eOgHs4xG/Ywh2Q+IMSDg31DMaL0Q==
-X-Google-Smtp-Source: AA0mqf44Q6w6XEaRSk9SwzVPCbO5t16JaKpoA9lLBnrOtA8K0BkZFiTS1k4XK5+GC+NmK0Dn780RGQzage3lOOaPfLA=
-X-Received: by 2002:a17:903:40ca:b0:187:1acd:4be2 with SMTP id
- t10-20020a17090340ca00b001871acd4be2mr1506866pld.16.1668468729083; Mon, 14
- Nov 2022 15:32:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C34EE404A0
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com
+ (mail-am0eur02on20602.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe13::602])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C34EE404A0
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 07:21:07 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AmqbW+z/9qhX1pD284GhxTrWogEH7WFw+4V1lblBCHYFwcx6SB41L56kMvjxA5J+o8s0DTwSH1TEb8KqI0qz7nHqTZnfDy3j0m1vZpIeTP6kAlldHANE7EdGAsaqWI6u/RaTd3manW+uu0svRlMnrTw/Dejz58dR+op/TscugFLRVP9NT9QUc3UXnl87CWmcT63xSfR4911UBH61kwQ3bdapbkLb6HsuApeGsRM91U3tGfDHt5ESbjtIAWMvbdqyFBqTrEa/wuJMQUil5UJvvZAkaLoDau9A31+HiwD4aILEDzPUJFNYU49xt/YvH4G/KMHN3nGScCuTyXdoSL73+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qyd5099EXeRnqE/OTAGFq77//QTd1c0fEehZjNUT4cc=;
+ b=AcBHz68rnmEKNO8XUxwV9pqy4sDdpFJH4q6y5SJFn0fdjMQwhX3GcyanGDNz2atm/szsx8gm1Snxc40qVqUX5h9XXSteSFcgzywLT0ewQAY3Yd0czpzNdZG4/9ewoNcQ3O3E/U9IrAgx9zC5h4/BOUTvX4OmG8fLTOmY2lPCuN6aEI5cSQjQSHDBZMag87M6hKBF97Xqwi8qNy84OUabbSa0+vqjfDsgU2VQxTJd0ld7IeXrpwmuKMtONEfZ1YOH42fV+gDq2My4xAhEqDdh36IhSisUCUr3iVTUkSrusoIFqMS82KUEUp8/j9BlrSHT98MEfEsRuWBbZmjWgKFnNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vimar.com; dmarc=pass action=none header.from=vimar.com;
+ dkim=pass header.d=vimar.com; arc=none
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com (2603:10a6:20b:39a::21)
+ by DU0PR08MB8953.eurprd08.prod.outlook.com (2603:10a6:10:464::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.6; Tue, 15 Nov
+ 2022 07:21:04 +0000
+Received: from AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::30b6:bfb2:7464:18d5]) by AS8PR08MB6870.eurprd08.prod.outlook.com
+ ([fe80::30b6:bfb2:7464:18d5%4]) with mapi id 15.20.5834.007; Tue, 15 Nov 2022
+ 07:21:04 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: BR2_DL_DIR permissions
+Thread-Index: AQHY+MK61Qd9vLC+W06jUq9eBdwRsA==
+Date: Tue, 15 Nov 2022 07:21:04 +0000
+Message-ID: <AS8PR08MB6870E377EFDB1E28448EBF5581049@AS8PR08MB6870.eurprd08.prod.outlook.com>
+Accept-Language: it-IT, en-US
+Content-Language: it-IT
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR08MB6870:EE_|DU0PR08MB8953:EE_
+x-ms-office365-filtering-correlation-id: 6ea15a5c-c6c5-480a-3d49-08dac6d9f504
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VoefleThPv13R3+ArrYvfivEBzg8GnPaOYCLE29pHj25KBM1A2AIkBP7c9bSfNjzCGlB4l7ZN0kYUoH/5hw+U/m9ZSLhidh7gtTJsb5/8QPfFhVqfdU7BVbx7Gq1WKKDkoxmCT72Di4qc5CBDb9utpdwbHZbO/H/Dknes9cqnhvsI5JQ0Zbp3pDk3j+sPT+O6yOIlnsiED7eH5aOelPB5MEbPaHeJNfzYmmy/opysrJXdSruf5rStc2xizWQu6y//iuJGTPuymqK2OKo9p+ZVVwCzYmUFCr9F5IYH1kFIPrX4EgDmQXbZv+AvZ2/e8aePa/jQgGGshlpziezzrSAC7Y69E33nBOq7qdHlKqgR+k9ow7J5EpkB/pIqIFYtQZpU/sRAIkVcGXRAEFuUXWkJgMsaYT7ahF2n3ApYaW43kCGfZlJOFmFMNe9sBdIUG2rlY/ETRBv9aHY4JlSh6/WTTS5WXNf2+UXK9St4W1/f3nzdd/ew93WozJw+8WZhAuVo6aB9h69VE9B2i1gjSz8RXRNCouMNwugPPnXIBZdeXDy7k7tewmq6ngLH7yu9WA93pCdm9XB2DI7WcMJIm7eWMG7XiGclQ9kg9m/2Fuczx547u5RQAcTmh70L5iR48wevoDEcucXcCuT/9tlh06WSWvKvOVBqNM0t7VoYNQ0rcvAZX9oH/xdUFV8j2MoiQHA0MdwMygr3q8RuFlrHp/HjNiAdbes0dTy3uZ4Qg2qEklWXjFXJn0Gs0VJdMA6CnN6auA14VtTYRsEA8ZFp14hOhjG9qYu0KHUHJI70gRQs/U=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR08MB6870.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(136003)(366004)(39850400004)(396003)(376002)(346002)(451199015)(66446008)(66556008)(66946007)(91956017)(76116006)(66476007)(64756008)(122000001)(38100700002)(38070700005)(52536014)(2906002)(8936002)(8676002)(7116003)(5660300002)(41300700001)(83380400001)(71200400001)(478600001)(6506007)(33656002)(7696005)(9686003)(26005)(55016003)(186003)(6916009)(316002)(86362001)(21314003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wxZGHhLeRplE5BeH9wvUhWyUHDyOsFdkLb7ftE0Zt6p992rKDjc+HyDva4?=
+ =?iso-8859-1?Q?8IV24Pa4Mv5YVMUiER/7v0oPiwEYelJGqDrumSO/7Bl92HjWGA44Gq4zvj?=
+ =?iso-8859-1?Q?2zZjBLJoHlnpbdrdvwYo9dngstl1QY3MbPA2mqV277mN+5eb1a9UeaXq3Q?=
+ =?iso-8859-1?Q?qPA4RJdLlzG4BXs7Fjp1sIrn/A7emm3+wqtZmUJFxcQA33+eRPds6XQrK/?=
+ =?iso-8859-1?Q?6Q6hio+zrMQbrACxHYbJzWV//mC3mvonrOVhUWM27UcdQd9GWpNMjRkS30?=
+ =?iso-8859-1?Q?wZXImNUI4FOf+NznbshIxNaJtgsDXb/gA5OWtIDUuAn7BsFiLTi0E1yymi?=
+ =?iso-8859-1?Q?Y14vXeAxyXRi00Ay0ggVlFUMYmO+OesHT/MiuNo4Xa58jBPrCFlkEXmCAr?=
+ =?iso-8859-1?Q?3RS/fi8f5FbDlKz0FuuCjbzlRYzi/qbBaJissSiCCsgjUqhnMwpFDTrTTU?=
+ =?iso-8859-1?Q?s8dln3Q66YHVsYRuz6CZf2kVX5m+8MJaH7xhQ94LENGAECXlFAZT95bwIz?=
+ =?iso-8859-1?Q?e7iWl/fvOyq+y/Cw3RR9ZRLJs04+eGU0IM/EBduFWob2t71q8feMP9tsYH?=
+ =?iso-8859-1?Q?hVg6EPj/jBhC5YGHsiNF5P5NlD1z2Yq3AZZS3XHxSvuD+xcwsGFNXjzXOS?=
+ =?iso-8859-1?Q?PxWY5d+bBFZHYqaQA0AeBdEj6pS3JQvUz1zZuRf767vvBnENWm9QmKgPpV?=
+ =?iso-8859-1?Q?nQKPO4Bl4GaJBwfC5pcH38pWGPLoRxsMOFfA7Dm2cMIkJRrWO7+Fa4oK7k?=
+ =?iso-8859-1?Q?fveh4DZY5TgRsYxVq3n2OxSToHRAvuncOz9fLOV8ah2jXWdHIgUyqEGxqh?=
+ =?iso-8859-1?Q?I97BRpAE3vSY3mtwvH8imRX++3myn42rfHY02dUHe9s5X0GSKAkrIHDsqi?=
+ =?iso-8859-1?Q?4huqJCS2xySY0QqSRQ3tAkA25w8trcVi4Pv3EmEv9znNhxAsnj2vEE19Mb?=
+ =?iso-8859-1?Q?AzJGorI2d191wzSlwncO1TOlyS/ZegrBHN5KhKlw6i8yrmii+0aBSsG/RI?=
+ =?iso-8859-1?Q?gjG21BUTPDHMNEPtWb20Tj7icYo11BHE7QoiAmPB1ispf4cER09ijkn5Zc?=
+ =?iso-8859-1?Q?VaGL0zJl7UFPsqz96j3v5znKXyUa1ckYISG7/GDUqODgH+meQp7Py8at9b?=
+ =?iso-8859-1?Q?qZXa5P8zZbIUPhrKypPS+8Qnd6KbzhWOtt799v0x+oKbh9dRkJO8wS+4ar?=
+ =?iso-8859-1?Q?DnfS9+iq+EVa0M/F/+wB+VvPH9SdLIKHkLCwxzuXPVymeXhRkfBOx9Amdt?=
+ =?iso-8859-1?Q?gPsknBGX0cIG5edbtR96lXQrYk616kNbbWoOaEfgTVCUAtU8gfwgSThQm8?=
+ =?iso-8859-1?Q?0eyyzzMKfjDKDvOsJiU3Cs+YU3vvGACGuzqEEPZzICg2FstPHnFFceZ4uw?=
+ =?iso-8859-1?Q?niguGO/WgrSkEs3ko/LbZ7viBZqNMHSALloaOVWaamyNHy/gn1GKx4RPSI?=
+ =?iso-8859-1?Q?STCRhKsXkchdW6hAIP39RPOAoKNhHyaV7SNGz4HkPX7y0OoDco+Bjqpmwf?=
+ =?iso-8859-1?Q?GbLcbko2xz4Di5iGm+J8iAfsaWrmglZm2PKJf3SM381i2rgJRbXMk0oUNY?=
+ =?iso-8859-1?Q?k9IRQULXGAGnY+/XkXBHAO8s6MQ0/OwcCgo91Lz0p6q9dfjzhTpR89xmKY?=
+ =?iso-8859-1?Q?r8wSXGURB7qsuh0vZneCoAmfuhBL2lCO7p?=
 MIME-Version: 1.0
-References: <20221107022458.3448020-1-james.hilliard1@gmail.com>
- <20221107022458.3448020-2-james.hilliard1@gmail.com>
- <20221114234532.3aa355df@windsurf>
-In-Reply-To: <20221114234532.3aa355df@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 14 Nov 2022 19:31:56 -0400
-Message-ID: <CADvTj4rSeSPp3C0QFF3Ey2q8CvF_s0Y04_jOckj0d_huUp-ehA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-OriginatorOrg: vimar.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR08MB6870.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ea15a5c-c6c5-480a-3d49-08dac6d9f504
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 07:21:04.6932 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a1f008bc-d59b-4c66-8f87-60fd9af15c7f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uIRq8WCDPzF22ulzEQhrEhfB4NZyHMS+U/7R/Ny0aEMh3qzeBmZXcdJ9dj1tBwaRmFCtcLvrZxKc9OcoyJQp9Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8953
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=h8f0LF1knJxhBvs5Sjd612HZ2apgN9GRjQTqlThtyT8=;
- b=HJrdidH/CNcJH4o7lRB9AYliwbphnwT2MW7Rmg6GLkRw6pEldT0vSEy9ApP7OnIswc
- z8urW0DVOwEFmGeWbzPZ3/Mp8vJjd17D9WmQzDXxpZdjftNZplajM/sFhVaBP4vQfga7
- aKfM+TagPtY8t160U9T5DbfoXzISqhe5KmPvO8+Ese9OArtqW4Bew9WQGpQbpzKj5pT/
- umf8UWujJ8RJ1Efnd0/62BhbRDgE+3BHGz8HFxrRZH9lucWLImMFx6EyO1vleLqAAHJJ
- CVjP9us+LtND2aeP/HMFXOjbS/NzDuIZ190s5Ojx+H/1U4txV0a7GXuBKXQwUmPVifns
- aOuA==
+ d=vimar.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qyd5099EXeRnqE/OTAGFq77//QTd1c0fEehZjNUT4cc=;
+ b=PKasw/3HmyTcbnLnXIary9A3nL+RVH9NO1DH/rgCGEDH3kMeVSNILVKMlxja5pHVYv2vcrnIUD/EP70Ag2OqTQBXl1HBloibQOUAjMi3D7DKmdA+F3sVSFVKYcX9n4qtO+yHNdZfxXcdK6gxcerFIvgzrDMUfRsIR2nDLkmAXxM=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HJrdidH/
-Subject: Re: [Buildroot] [PATCH 2/3] package/zxing-cpp: bump to version 1.4.0
+ dkim=pass (1024-bit key,
+ unprotected) header.d=vimar.com header.i=@vimar.com header.a=rsa-sha256
+ header.s=selector1 header.b=PKasw/3H
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vimar.com;
+Subject: [Buildroot] BR2_DL_DIR permissions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,93 +140,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Pesce Luca via buildroot <buildroot@buildroot.org>
+Reply-To: Pesce Luca <Luca.Pesce@vimar.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Nov 14, 2022 at 6:45 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Sun,  6 Nov 2022 19:24:57 -0700
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > -ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> > -ZXING_CPP_DEPENDENCIES += libiconv
-> > +ifeq ($(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI)$(BR2_PACKAGE_OPENCV4_LIB_HIGHGUI),y)
-> > +ifeq ($(BR2_PACKAGE_OPENCV3),y)
-> > +ZXING_CPP_DEPENDENCIES += opencv3
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_OPENCV4),y)
-> > +ZXING_CPP_DEPENDENCIES += opencv4
-> > +endif
-> > +ZXING_CPP_CONF_OPTS += -DCMAKE_REQUIRE_FIND_PACKAGE_OpenCV=TRUE
-> > +else
-> > +ZXING_CPP_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_OpenCV=TRUE
-> >  endif
-> >
-> > -ifeq ($(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI),y)
-> > -ZXING_CPP_DEPENDENCIES += opencv3
-> > -ZXING_CPP_CONF_OPTS += -DBUILD_OPENCV=ON
-> > +ifeq ($(BR2_PACKAGE_PYTHON3)$(BR2_PACKAGE_PYTHON_PYBIND),y)
->
-> Are you sure this is correct? I believe it should be:
->
-> ifeq ($(BR2_PACKAGE_PYTHON3)$(BR2_PACKAGE_PYTHON_PYBIND),yy)
+Hi all,
+    it seems that it is not possible to setup a rw BR2_DL_DIR location shared
+among users of the same group on a host machine (e.g. a build server used by many
+users, all belonging to a certain "developers" group).
 
-Fixed in v2:
-https://patchwork.ozlabs.org/project/buildroot/patch/20221114232254.3970611-1-james.hilliard1@gmail.com/
+Buildroot's root Makefile imposes 'umask 0022' (REQ_UMASK = 0022), which means
+that every file/folder created by BR will have no write perm for the group, including
+the per-package download directories under BR2_DL_DIR (which will have drwxr-xr-x perms).
+These are writeable just for the owner - the user that issued the first build
+that populated the per-package dl dir for the first time (say user A).
+Thus, if a BR package changes its version (e.g. for buildroot update), and
+another user (say user B, in the same group of A) starts a build, BR fails the
+creation of package-xxx.tar.gz inside the dl dir, because user B has no write
+permissions on that path.
 
->
-> or:
->
-> ifeq ($(BR2_PACKAGE_PYTHON3),y)
->
-> since anyway pybind is guaranteed to be available when python3 is
-> enabled, since you select it.
->
-> > +ZXING_CPP_DEPENDENCIES += python3 python-pybind
-> > +ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=ON
-> > +else
-> > +ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_QT5BASE),y)
-> > +ZXING_CPP_DEPENDENCIES += qt5base
-> > +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5MULTIMEDIA),yy)
-> > +ZXING_CPP_DEPENDENCIES += qt5declarative qt5multimedia
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5MULTIMEDIA),yyy)
-> > +ZXING_CPP_CONF_OPTS += -DCMAKE_REQUIRE_FIND_PACKAGE_Qt5=TRUE
+A possible solution would be to chmod 775 the dl dir inside dl-wrapper script,
+after the actual download, like it already does for the tmpf file (output file
+of the download backend).
+A more radical solution would be to change that global REQ_UMASK value to 0002,
+or to change the root Makefile logic in order to set umask only if the system
+one is more restrictive than 0022 (it seems to me that the default umask on
+moderm distros is 0002, so keeping it intact, without resetting it, would suffice).
 
-This makes all the qt5 components here required:
-https://github.com/zxing-cpp/zxing-cpp/blob/v1.4.0/example/CMakeLists.txt#L29
+I am not really aware of BR's internals on file permissions management, so any
+thought or comment on this would be highly appreciated.
 
-One qt5 feature requires BR2_PACKAGE_QT5BASE_GUI:
-https://github.com/zxing-cpp/zxing-cpp/blob/v1.4.0/example/CMakeLists.txt#L33
-
-The other requires BR2_PACKAGE_QT5DECLARATIVE_QUICK and
-BR2_PACKAGE_QT5MULTIMEDIA but not BR2_PACKAGE_QT5BASE_GUI:
-https://github.com/zxing-cpp/zxing-cpp/blob/v1.4.0/example/CMakeLists.txt#L38
-
->
-> it's a bit confusing what's happening here. Why are the dependencies
-> different than the condition used to enable Qt support?
-
-Also added a comment in v2:
-https://patchwork.ozlabs.org/project/buildroot/patch/20221114232254.3970611-1-james.hilliard1@gmail.com/
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+Thanks and regards,
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
