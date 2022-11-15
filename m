@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 532A4C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05519C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:30:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AD6460E26;
-	Tue, 15 Nov 2022 13:30:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AD6460E26
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9852360C14;
+	Tue, 15 Nov 2022 13:30:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9852360C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bVp76el3WfUJ; Tue, 15 Nov 2022 13:30:44 +0000 (UTC)
+	with ESMTP id pThW9ghifntW; Tue, 15 Nov 2022 13:30:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 443EE60C14;
-	Tue, 15 Nov 2022 13:30:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 443EE60C14
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F3241BF319
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA20560E45;
+	Tue, 15 Nov 2022 13:30:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA20560E45
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D3EE1BF94B
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B5298140C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38F8B60DDF
  for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B5298140C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38F8B60DDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NaCuvFtB-7iY for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6fd--98anh07 for <buildroot@lists.busybox.net>;
  Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 59EB581388
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6423960675
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59EB581388
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6423960675
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 499F583CC3; Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
+ id 5427E83CC5; Tue, 15 Nov 2022 13:30:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:29:07 +0100
+Date: Tue, 15 Nov 2022 14:29:14 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: f3bc8807428924d78eb1df695a7016ad361b89e4
-X-Git-Newrev: 398e5f58a3d3c4e41509655ab32d65977dbfd4f5
+X-Git-Oldrev: 398e5f58a3d3c4e41509655ab32d65977dbfd4f5
+X-Git-Newrev: 3a0993251bdd009813dbdbed41b7a0b1a33cca10
 X-Patchwork-Hint: ignore
-Message-Id: <20221115133041.499F583CC3@busybox.osuosl.org>
+Message-Id: <20221115133041.5427E83CC5@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.08.x]
- board/zynqmp/kria/kv260/uboot.fragment: remove unnecessary
+ board/zynqmp/kria/kv260/kv260.sh: fix u-boot.itb without
  CONFIG_MULTI_DTB_FIT option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,37 +64,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=398e5f58a3d3c4e41509655ab32d65977dbfd4f5
+commit: https://git.buildroot.net/buildroot/commit/?id=3a0993251bdd009813dbdbed41b7a0b1a33cca10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-This patch removes the CONFIG_MULTI_DTB_FIT u-boot option for the
-zynqmp_kria_kv260_defconfig as it is not necessary.  The post build
-kv260.sh creates the proper u-boot.itb without needing this option.
+This patch fixes the kv260.sh to generate a working u-boot.itb
+now that the CONFIG_MULTI_DTB_FIT u-boot option is no longer used.
 
-Fixes:
+This is a follow-up fix of
+515319b86f17ea5a2ce3e51c9063bac9f9e00a01 ("board/zynqmp/kria/kv260/uboot.fragment:
+remove unnecessary CONFIG_MULTI_DTB_FIT option") to fix the build of:
 
   https://gitlab.com/buildroot.org/buildroot/-/jobs/3310463281
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 515319b86f17ea5a2ce3e51c9063bac9f9e00a01)
+(cherry picked from commit ec9519831ed5d5698c787b48d2ab952525cacb93)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynqmp/kria/kv260/uboot.fragment | 1 -
- 1 file changed, 1 deletion(-)
+ board/zynqmp/kria/kv260/kv260.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
-index 874eb470ac..0ed560c411 100644
---- a/board/zynqmp/kria/kv260/uboot.fragment
-+++ b/board/zynqmp/kria/kv260/uboot.fragment
-@@ -1,7 +1,6 @@
- CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
- CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
- CONFIG_DTB_RESELECT=y
--CONFIG_MULTI_DTB_FIT=y
- CONFIG_DMA=y
- CONFIG_XILINX_DPDMA=y
- CONFIG_PHY=y
+diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
+index e3467f3068..e891852009 100755
+--- a/board/zynqmp/kria/kv260/kv260.sh
++++ b/board/zynqmp/kria/kv260/kv260.sh
+@@ -8,5 +8,5 @@
+ 
+ UBOOT_DIR=$4
+ 
+-fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
++fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
+ ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
