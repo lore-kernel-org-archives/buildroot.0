@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A2CC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C91FC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 13:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 344D6409F9;
-	Tue, 15 Nov 2022 13:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 344D6409F9
+	by smtp3.osuosl.org (Postfix) with ESMTP id C619660E2A;
+	Tue, 15 Nov 2022 13:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C619660E2A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2gpcdo2xubGr; Tue, 15 Nov 2022 13:25:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f9l648_W97c3; Tue, 15 Nov 2022 13:26:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51186409E2;
-	Tue, 15 Nov 2022 13:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51186409E2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16FEE1BF319
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:25:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E763F60DDF;
+	Tue, 15 Nov 2022 13:25:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E763F60DDF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 450DF1BF319
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD982409E2
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:25:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD982409E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2101660C14
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 13:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2101660C14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rbW4UxQKz8uZ for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 13:25:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZKnT6wQg1NQ5 for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 13:25:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02EBF409EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCAB560BAF
  for <buildroot@buildroot.org>; Tue, 15 Nov 2022 13:25:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02EBF409EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCAB560BAF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E41B783C7B; Tue, 15 Nov 2022 13:25:18 +0000 (UTC)
+ id C8E6283C79; Tue, 15 Nov 2022 13:25:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 14:21:42 +0100
+Date: Tue, 15 Nov 2022 14:17:07 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 4e8d2508c4b303625b008fa043227607f5c88bb2
-X-Git-Newrev: f5c143672f1554e53bd46ccbb82cd0d4242f8d8c
+X-Git-Oldrev: 62fa9463c6c6eb57479544a779274822ae40cf51
+X-Git-Newrev: bf18c5bcfda9b4c1b52a3c8e847fe68b62510cf3
 X-Patchwork-Hint: ignore
-Message-Id: <20221115132518.E41B783C7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] arch/arch.mk.xtensa:
- relax check on overlay file to apply only to internal toolchains
+Message-Id: <20221115132518.C8E6283C79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/matchbox-startup-monitor: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5c143672f1554e53bd46ccbb82cd0d4242f8d8c
+commit: https://git.buildroot.net/buildroot/commit/?id=bf18c5bcfda9b4c1b52a3c8e847fe68b62510cf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit 4cbf7336914f25478aea943456ba7dc3c892c21a ("arch/xtensa: custom
-configuration requires an overlay") added a check in
-arch/arch.mk.xtensa to bail out if a custom Xtensa core is selected
-but not overlay file is provided. While this is indeed a perfectly
-valid check to make when building an internal toolchain, with an
-external toolchain it's entirely possible to build with no overlay
-file: the toolchain already exists, and there's no overlay to be
-applied in the context of the Buildroot build.
+matchbox-startup-monitor is an ageing package, and uses an old
+configure.ac with archaic constructs. This had generated a configure
+script that incorrectly tries to look for and validate a C++ compiler:
 
-And indeed commit 4cbf7336914f25478aea943456ba7dc3c892c21a broke some
-of the runtime test cases that use a custom Xtensa core configuration,
-with no overlay, to test the toolchains.bootlin.com Xtensa external
-toolchain. By relaxing the check to only apply to internal toolchain
-configurations, we fix those test cases.
+    checking for powerpc64le-buildroot-linux-gnu-g++... no
+    checking whether we are using the GNU C++ compiler... no
+    checking whether no accepts -g... no
+    checking dependency style of no... none
+    checking how to run the C++ preprocessor... /lib/cpp
+    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-It is to be noted that this still allows a configuration where gdb gets
-built for a custom core, but with no overlay, so basically that means
-the fsf variant, which can lead to build or run failures that
-4cbf7336914f attempted to fix to begin with. This still covers the
-most common cases.
-
-Finally, it also means being able to build a kernel with no overlay, but
-this is offset by the fact that the kernel may be already patched with
-an overlay (as it is possible to specify a custom kernel), which is most
-probably what people using a custom core would have.
+Calling autoreconf fixes the issue, as the generated configure no longer
+tries to look for a C++ compiler at all anymore. Running autoreconf does
+not add any new dependency, as they are already in the dependency chain
+via other packages.
 
 Fixes:
+    http://autobuild.buildroot.org/results/223/223f43dd76ee907c5f25c4fee94a0f5d75614dd5/
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261966
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3282261963
+See also similar changes:
+    9993a36f5e12 package/pamtester: fix build without C++
+    c05cc5de868c package/madplay: needs autoreconf
+    eae18d01abc7 libmad: needs autoreconf
+    43274dd3e0da package/libid3tag: needs autoreconf
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: extend commit log with last two paragraphs]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6465c79166fed0c9a9b99a15d34c555a3141344f)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b44f6c2f303ef03f563edd159b1c88d1cf118ed5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/arch.mk.xtensa | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/matchbox-startup-monitor/matchbox-startup-monitor.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-index 7b6c59cecd..75145e725f 100644
---- a/arch/arch.mk.xtensa
-+++ b/arch/arch.mk.xtensa
-@@ -1,6 +1,6 @@
- BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+diff --git a/package/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
+index c80e75332c..cd2ae4162f 100644
+--- a/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
++++ b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
+@@ -11,4 +11,9 @@ MATCHBOX_STARTUP_MONITOR_LICENSE = GPL-2.0+
+ MATCHBOX_STARTUP_MONITOR_LICENSE_FILES = COPYING
+ MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
  
--ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
-+ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM)$(BR2_TOOLCHAIN_BUILDROOT):$(BR_ARCH_XTENSA_OVERLAY_FILE),yyy:)
- $(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
- endif
- 
++# Obsolete constructs in the archaic configure.ac generated an outworn
++# configure script that incorrectly searches a C++ compiler. Regenerate
++# the autoconf machinery to avoid failures without a C++ compiler.
++MATCHBOX_STARTUP_MONITOR_AUTORECONF = YES
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
