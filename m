@@ -1,51 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3A8BC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 08:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08BFEC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 15 Nov 2022 08:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FC8C60BF2;
-	Tue, 15 Nov 2022 08:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC8C60BF2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 940A84059B;
+	Tue, 15 Nov 2022 08:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 940A84059B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GCWPepchslOM; Tue, 15 Nov 2022 08:19:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YmNQF2XYXJFp; Tue, 15 Nov 2022 08:48:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4A1160BE9;
-	Tue, 15 Nov 2022 08:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A1160BE9
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5BD0405B2;
+	Tue, 15 Nov 2022 08:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5BD0405B2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C3F591BF232
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5015B1BF232
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EE49408F2
- for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE49408F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2179F4091B
+ for <buildroot@lists.busybox.net>; Tue, 15 Nov 2022 08:48:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2179F4091B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tkighc2Axfla for <buildroot@lists.busybox.net>;
- Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8014740863
- for <buildroot@buildroot.org>; Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8014740863
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B57183C06; Tue, 15 Nov 2022 08:19:53 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Nov 2022 09:18:55 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 8ffe4e6d66450839dba2be11a4538d77e873c58d
-X-Git-Newrev: 9cac8cea76b5ba7b6133a6b7880c99a108e57ab2
-X-Patchwork-Hint: ignore
-Message-Id: <20221115081953.6B57183C06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/gptfdisk: fix
- popt static build
+ with ESMTP id 7kjd6tBo4_H5 for <buildroot@lists.busybox.net>;
+ Tue, 15 Nov 2022 08:48:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D738340913
+Received: from eu-smtp-delivery-151.mimecast.com
+ (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D738340913
+ for <buildroot@buildroot.org>; Tue, 15 Nov 2022 08:48:02 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-59-Nz1oG5iSMS6UznH-D4w-xA-1; Tue, 15 Nov 2022 08:47:59 +0000
+X-MC-Unique: Nz1oG5iSMS6UznH-D4w-xA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 15 Nov
+ 2022 08:47:59 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 15 Nov 2022 08:47:59 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Victor Dumas' <dumasv.dev@gmail.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH v4] support/scripts/fix-rpath: parallelize
+ patching files
+Thread-Index: AQHY5HrdYtmBeLLF50murzSrfjEf/q4/0tWQ
+Date: Tue, 15 Nov 2022 08:47:58 +0000
+Message-ID: <9d9a3bbf2cfd4f60b82a47087ef8ecba@AcuMS.aculab.com>
+References: <20221019124017.427199-1-dumasv.dev@gmail.com>
+ <20221020115512.483686-1-dumasv.dev@gmail.com>
+In-Reply-To: <20221020115512.483686-1-dumasv.dev@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH v4] support/scripts/fix-rpath: parallelize
+ patching files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,66 +79,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cac8cea76b5ba7b6133a6b7880c99a108e57ab2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+From: Victor Dumas
+> Sent: 20 October 2022 12:55
+> 
+> Using "xargs" instead of "while read" loop allows for the patching of files to be parallelized
+> This significantly reduces the amount of time it takes to fix all the paths.
+> On a larger RFS(~300MB) this script was taking 5 minutes, it now only takes about 30s on a 12 core
+> machine
+...
+> +    # Limit the number of cores used
+> +    procs=$(echo -e "$(($(nproc)-2)) \n 1" | sort -n | tail -n1)
+> +    find "${rootdir}" ${find_args[@]} | xargs -0 -r -P ${procs} -I {} bash -c "patch_file
+> '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
 
-Fix the following static build failure with popt and iconv raised since
-bump to version 1.0.9 in commit 69015ce94ac3ffe7f349ec37868eea0d0ffec90e
-and
-https://sourceforge.net/p/gptfdisk/code/ci/122b58ad82f1a144226d262c87241ee035ed1aff
-(which added an unified Makefile):
+Are you sure that all versions of xargs the script needs to
+run on support -P ?
 
-/home/autobuild/autobuild/instance-0/output-1/host/bin/mips64el-buildroot-linux-uclibc-g++ crc32.o support.o guid.o gptpart.o mbrpart.o basicmbr.o mbr.o gpt.o bsd.o parttypes.o attributes.o diskio.o diskio-unix.o sgdisk.o gptcl.o -static -liconv -lpopt  -o sgdisk
-/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/mips64el-buildroot-linux-uclibc/11.3.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpopt.a(poptint.o): in function `strdup_locale_from_utf8':
-poptint.c:(.text+0x113c): undefined reference to `libiconv_open'
+Having xargs run 'bash -c "command" ...' and the quoting also looks odd.
+I presume there is some reason xargs can't just run patrch_file.
 
-As can be seen above, this build failure is raised because -liconv is
-added before -lpopt so use pkgconfig and SGDISK_LDLIBS
+	David
 
-The addition of -liconv in LDLIBS could probably be removed in a
-follow-up patch for next branch
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Fixes:
- - http://autobuild.buildroot.org/results/c9f2c9e737c2dd1cd4c1a08a5e8a48165179282d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a38682dd54dde976836c37dcc30ec24baa474690)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gptfdisk/gptfdisk.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 0df9cda08f..f3fc930202 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -15,7 +15,8 @@ GPTFDISK_TARGETS_$(BR2_PACKAGE_GPTFDISK_CGDISK) += cgdisk
- 
- GPTFDISK_DEPENDENCIES += util-linux
- ifeq ($(BR2_PACKAGE_GPTFDISK_SGDISK),y)
--GPTFDISK_DEPENDENCIES += popt
-+GPTFDISK_DEPENDENCIES += host-pkgconf popt
-+GPTFDISK_SGDISK_LDLIBS += `$(PKG_CONFIG_HOST_BINARY) --libs popt`
- endif
- ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
- GPTFDISK_DEPENDENCIES += ncurses
-@@ -32,7 +33,8 @@ endif
- 
- define GPTFDISK_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		LDLIBS='$(GPTFDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
-+		LDLIBS='$(GPTFDISK_LDLIBS)' \
-+		SGDISK_LDLIBS='$(GPTFDISK_SGDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
- endef
- 
- define GPTFDISK_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
