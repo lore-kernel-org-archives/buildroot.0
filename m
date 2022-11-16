@@ -4,64 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E53BC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 00:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C13A3C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 01:16:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 825B560F30;
-	Wed, 16 Nov 2022 00:41:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 825B560F30
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33CAA60F37;
+	Wed, 16 Nov 2022 01:16:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33CAA60F37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wMd3oBP0RXjP; Wed, 16 Nov 2022 00:41:03 +0000 (UTC)
+	with ESMTP id D3-4iUSPeSbD; Wed, 16 Nov 2022 01:16:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1AF060F2D;
-	Wed, 16 Nov 2022 00:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1AF060F2D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FB9D60F34;
+	Wed, 16 Nov 2022 01:16:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FB9D60F34
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 081AA1BF8C7
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:41:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C0241BF4DD
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 01:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3D7481E64
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:41:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3D7481E64
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3735981E60
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 01:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3735981E60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id teHa2Yc6miFj for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 00:40:58 +0000 (UTC)
+ with ESMTP id bruj_4SLlUXf for <buildroot@lists.busybox.net>;
+ Wed, 16 Nov 2022 01:16:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2277881E62
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2277881E62
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 00:40:57 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.88.137])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D20381E32
+Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D20381E32
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 01:15:59 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.88.137])
  by Aruba Outgoing Smtp  with ESMTPSA
- id v6U3oaEsj1ARav6U4omXG9; Wed, 16 Nov 2022 01:40:56 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed, 16 Nov 2022 01:40:55 +0100
-Message-Id: <20221116004055.706479-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id v71xo6ySa1jfKv71yoWUbM; Wed, 16 Nov 2022 02:15:58 +0100
+Message-ID: <d6d839d9-7e68-6be2-7c38-98ad1294ffd2@benettiengineering.com>
+Date: Wed, 16 Nov 2022 02:15:57 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfO7iGSkAVKZ3iEF1e2rsPSPA05Z0aMcoCgxs52l4BXDhHPzJrYasmGHSnJ5D1ywRTBbH1VMpFxbg5Lksk0nVzA7D5kW6lN9bLKSPRBPZn9/poxfUi5WE
- 0mX3o8XocaANKWwxRxHzelzFswXB7gvIH6lo+/ADEC6sIJvhuxfIu/YKjCoj9nzZfGbBN2OGOd4k4FLURkCDly9JjYiANF7ED4UOXLVfKauIO43m7rqIwHOp
- DVBg9HXOxWUJJHjr0i0QjePe5M8lMymPG4emVeK3lZg8JcfJqT0P39k1uCCAs2MJkL9q9D6jRWOdZ0AmSDWXMw==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20221019134823.12594-1-giulio.benetti@benettiengineering.com>
+ <20221030210615.49866828@windsurf>
+ <901ec05a-8d90-8658-29ac-381f50ae0eaa@benettiengineering.com>
+In-Reply-To: <901ec05a-8d90-8658-29ac-381f50ae0eaa@benettiengineering.com>
+X-CMAE-Envelope: MS4xfIz6M6U/AHIHp0Mt35OwBjMK50XRPB2obAHVmZQPlgYSDiBR1f1/vLjLAwb5tL6IEmStjmhTZPl2i7r3R8aJGkFO3qQBt++QqfosLY0aI5Mb7KhzNsAm
+ YG14AXY2GxjVyD7Hng/GsUw+g0vh0idirRwszds5NBOfXtDQ4iH8xfh01x+jRQheJCDjK5UtqhYgcu8r+hLJIJmaviLQM+sv5clf8PQ6bLV9AAqWWQFS3oRd
+ JykZK6Qi0LtKZC18P6CYCVkiIAx1MRMs2pVwKH0GSnTV+VB8kM9w1H7OMCg/jjQqz6TOW9Hps7OEGLa0rGr2wA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1668559256; bh=u/r7aqzWPOahlZ3ZkzBY4HVh2zCxzIPDk7Gmcz5TfvA=;
- h=From:To:Subject:Date:MIME-Version;
- b=lnzVrKUHgBneePYTKcs9GoIouLOqaJJDPVYP43gi4rBQ63QAFscfwwsd6COVyD0oe
- /EKuyxUKHHVUKd5JF6Cs4liYXZF0vYABnORMdlrSfowEoD0vitQOJspJ6CGwR+gmk/
- 8+g9S5RA5Ucsq5/Dm+B/mSlsQFkO4xhGKuBNLj+UNvkOgFRZmYPz8gV506D8raFlkR
- VT/bEsmUyLiGGKuFwygYcLOxbHRtz1l7NtDlbFsB+MUx9Hm1wCnQi9LhSO0grwhGkK
- CGpf0uOUvTciJDD1QvGHZ4rUwolqZAEKcYkIO9Vg9m8byFOZYKGiSUbyORn2/ULAep
- PeuvFKknqDxcA==
+ t=1668561358; bh=XzXffWIG29/eE4shUUGlR0mrEQsrbAFTBXhi/dC708U=;
+ h=Date:MIME-Version:Subject:From:To:Content-Type;
+ b=O6dl76uCcsQeuDfpreGe9EIrD5kNQp7xmw9yH9S5IxcTbq5xhP2LBrxTKvXyCMyHf
+ DwSIe9ByUvb0CffYz45plzbLfB5v68gSZK1xGiRlUhuIqXidZDEORX5vLM18szSpsP
+ wBP5Xch4y07YTOdA2CRI1beqUK4oxVz4LqD35sFMZH/IoT4Te8812VdmW072tCAh9V
+ mmmyaPz6AYXFNLmVUbL4F69nNPsL0CBRU4aFGA64EmODLTkPkEoM0Oy2UEVRnPb5XY
+ a/VHkFWszYmHzq4zY8NrWk9vPzKwmK/wWIUMc967DbufMpIaxYJJc3yK5k4EgEDMyY
+ Ixkwtqqv0ecsg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=lnzVrKUH
-Subject: [Buildroot] [PATCH] package/rtl8189es: bump to latest version to
- fix build failure with Linux >= 6.0
+ header.a=rsa-sha256 header.s=a1 header.b=O6dl76uC
+Subject: Re: [Buildroot] [PATCH v2] package/rtl8188eu: remove wrong
+ description in Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,116 +79,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop local patch that has been upstreamed[0] and drop the endianness
-handling too since from this commit[1] on it's handled by using Linux
-macro __LITTLE_ENDIAN.
-
-[0]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/4a555ffb77a5947814b6c7f330968318e265c496
-[1]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/b3da33576da5359d85c7cfe82716c9a08a592aff
-
-Fixes:
-http://autobuild.buildroot.net/results/6178fbfbe9fe762645b1907c4ceb032a00e75a89/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 40 -------------------
- package/rtl8189es/rtl8189es.hash              |  2 +-
- package/rtl8189es/rtl8189es.mk                | 10 +----
- 3 files changed, 3 insertions(+), 49 deletions(-)
- delete mode 100644 package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-
-diff --git a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index dc4deff9f1..0000000000
---- a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4a555ffb77a5947814b6c7f330968318e265c496 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 28 Sep 2022 21:17:17 +0200
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Upstream status: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83]
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 8fcb7bd..e4664e9 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -2239,6 +2238,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- ########### this part for *.mk ############################
---- 
--2.34.1
--
-diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
-index d897e5e6c2..44d73e60f0 100644
---- a/package/rtl8189es/rtl8189es.hash
-+++ b/package/rtl8189es/rtl8189es.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  74325014c1a8503b3a7e48ad06997baddad8c1dae86bb79f4368532cc3e75fb2  rtl8189es-39c17661136da48f8e9c644194dce6a7f5076896.tar.gz
-+sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189es-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
-diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
-index cddcb195f9..6acc409e73 100644
---- a/package/rtl8189es/rtl8189es.mk
-+++ b/package/rtl8189es/rtl8189es.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
- 
--RTL8189ES_VERSION = 39c17661136da48f8e9c644194dce6a7f5076896
-+RTL8189ES_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
- RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
- RTL8189ES_LICENSE = GPL-2.0
- 
--# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
--RTL8189ES_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
--# Set endianness
--RTL8189ES_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
--
- RTL8189ES_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8189ES=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	KSRC=$(LINUX_DIR) \
--	USER_EXTRA_CFLAGS="$(RTL8189ES_USER_EXTRA_CLAGS)"
-+	KSRC=$(LINUX_DIR)
- 
- define RTL8189ES_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMTYvMTEvMjIgMDE6MzMsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIFRob21hcywgTHVj
+YSwKPiAKPiBPbiAzMC8xMC8yMiAyMTowNiwgVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290
+IHdyb3RlOgo+PiBPbiBXZWQsIDE5IE9jdCAyMDIyIDE1OjQ4OjIzICswMjAwCj4+IEdpdWxpbyBC
+ZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90ZToKPj4K
+Pj4+IFRoaXMgcnRsODE4OGV1IGRyaXZlciBpcyBub3QgdGhlIHNhbWUgYXMgdGhlIG9uZSBpbiBt
+YWlubGluZSBMaW51eCB0aGF0Cj4+PiBzdGlsbCBoYXMgcGVuZGluZyB3b3JrIHRvIGJlIGRvbmUg
+dGhhdCBpbiB0aGlzIGRyaXZlciBpcyBkb25lLCBjaGVjazoKPj4+IGh0dHBzOi8vZ2l0Lmtlcm5l
+bC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL2Ry
+aXZlcnMvc3RhZ2luZy9yODE4OGV1L1RPRE8KPj4+IHNwZWNpZmljYWxseToKPj4+ICogU3dpdGNo
+IHRvIHVzZSBMSUI4MDIxMS4KPj4+ICogU3dpdGNoIHRvIHVzZSBNQUM4MDIxMS4KPj4+ICogU3dp
+dGNoIHRvIHVzZSBDRkc4MDIxMS4KPj4+IFNvIGxldCdzIHJlbW92ZSB0aGUgZGVzY3JpcHRpb24g
+dGhhdCBpcyBub3QgdmFsaWQgYW55bW9yZS4KPj4+Cj4+PiBTdWdnZXN0ZWQtYnk6IEx1Y2EgQ2Vy
+ZXNvbGkgPGx1Y2EuY2VyZXNvbGlAYm9vdGxpbi5jb20+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBHaXVs
+aW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPj4+IC0t
+LQo+Pj4gVjEtPlYyOgo+Pj4gKiBpbXByb3ZlIENvbmZpZy5pbiBkZXNjcmlwdGlvbiBhcyBwb2lu
+dGVkIGJ5IEx1Y2EgQ2VyZXNvbGkKPj4+IC0tLQo+Pj4gwqAgcGFja2FnZS9ydGw4MTg4ZXUvQ29u
+ZmlnLmluIHwgNyArKysrLS0tCj4+PiDCoCAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCsp
+LCAzIGRlbGV0aW9ucygtKQo+Pj4KPj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3J0bDgxODhldS9D
+b25maWcuaW4gYi9wYWNrYWdlL3J0bDgxODhldS9Db25maWcuaW4KPj4+IGluZGV4IDc2ZDkwODUy
+OTcuLjJmYWIxZmQ1YzAgMTAwNjQ0Cj4+PiAtLS0gYS9wYWNrYWdlL3J0bDgxODhldS9Db25maWcu
+aW4KPj4+ICsrKyBiL3BhY2thZ2UvcnRsODE4OGV1L0NvbmZpZy5pbgo+Pj4gQEAgLTQsOSArNCwx
+MCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUlRMODE4OEVVCj4+PiDCoMKgwqDCoMKgIGRlcGVuZHMg
+b24gQlIyX0xJTlVYX0tFUk5FTAo+Pj4gwqDCoMKgwqDCoCBoZWxwCj4+PiDCoMKgwqDCoMKgwqDC
+oCBBIHN0YW5kYWxvbmUgZHJpdmVyIGZvciB0aGUgUlRMODE4OEVVIFVTQiBXaS1GaSBhZGFwdGVy
+Lgo+Pj4gLcKgwqDCoMKgwqAgVGhpcyBpcyBuZWVkZWQgb25seSBmb3IgTGludXgga2VybmVscyBi
+ZWZvcmUgMy4xMi4KPj4+IC3CoMKgwqDCoMKgIFNpbmNlIDMuMTIsIHRoZXJlIGlzIGEgKHN0YWdp
+bmcpIGRyaXZlciBpbiBtYWlubGluZSwgd2l0aCBhCj4+PiAtwqDCoMKgwqDCoCBzaW1pbGFyIGNv
+ZGViYXNlLgo+Pj4gK8KgwqDCoMKgwqAgVGhpcyBydGw4MTg4ZXUgZHJpdmVyIGlzIG5vdCB0aGUg
+c2FtZSBhcyB0aGUgb25lIGluIG1haW5saW5lCj4+PiArwqDCoMKgwqDCoCBMaW51eCB0aGF0IHN0
+aWxsIGhhcyBwZW5kaW5nIHdvcmsgdG8gYmUgZG9uZSB0aGF0IGluIHRoaXMKPj4+ICvCoMKgwqDC
+oMKgIGRyaXZlciBpcyBkb25lLCBjaGVjazoKPj4+ICsgICAgICAKPj4+IGh0dHBzOi8vZ2l0Lmtl
+cm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVl
+L2RyaXZlcnMvc3RhZ2luZy9yODE4OGV1L1RPRE8KPj4KPj4gSSBkb24ndCBzZWUgYW55IHRoaW5n
+IGluIHRoaXMgVE9ETyB0aGF0IGV4cGxhaW5zIHdoeSB0aGUgb3V0LW9mLXRyZWUKPj4gZHJpdmVy
+IGlzIGJldHRlciB0aGFuIHRoZSBtYWlubGluZSBkcml2ZXIuCj4+Cj4+IFRoZSBvdXQtb2YtdHJl
+ZSBkcml2ZXIgaGFzIGJlZW4gaW50ZWdyYXRlZCBpbnRvIGRyaXZlcnMvc3RhZ2luZy8sIGFuZAo+
+PiB0aGlzIFRPRE8gZmlsZSBsaXN0cyB3aGF0IHNob3VsZCBiZSBpbXByb3ZlZCBpbiB0aGUgZHJp
+dmVyIHNvIHRoYXQgaXQKPj4gY2FuIGJlIGdyYWR1YXRlZCB0byBtb3ZlIG91dHNpZGUgb2YgZHJp
+dmVycy9zdGFnaW5nLyBpbnRvIHRoZSBwcm9wZXIKPj4gZHJpdmVycy9uZXQvd2lyZWxlc3MvIGxv
+Y2F0aW9uLgo+Pgo+PiBJIGRvbid0IHNlZSBhbnl0aGluZyBpbiB0aGlzIFRPRE8gdGhhdCBpbmRp
+Y2F0ZXMgdGhhdCB0aGUgb3V0LW9mLXRyZWUKPj4gZHJpdmVyIGhhcyAibW9yZSBmZWF0dXJlcyIg
+dGhhbiB0aGUgbWFpbmxpbmUgZHJpdmVyLCBzbyB0byBtZSB0aGUKPj4gQ29uZmlnLmluIGhlbHAg
+dGV4dCBzdGlsbCBtYWtlcyBzZW5zZS4KPj4KPj4gQ291bGQgeW91IGdpdmUgc29tZSBtb3JlIGRl
+dGFpbHM/Cj4gCj4gVGhlIFRPRE8gZmlsZVswXSBpcyBvdXRkYXRlZCBiZWNhdXNlIGl0IHN0YXRl
+cyB0aGF0Ogo+ICogU3dpdGNoIHRvIHVzZSBMSUI4MDIxMS4KPiAqIFN3aXRjaCB0byB1c2UgTUFD
+ODAyMTEuCj4gKiBTd2l0Y2ggdG8gdXNlIENGRzgwMjExLgo+IGFyZSBzdGlsbCBwZW5kaW5nLCBi
+dXQgaXQncyB0cnVlIG5vdCBiZWNhdXNlIGlmIHdlIGNoZWNrIHRoZSBLY29uZmlnWzFdCj4gd2Ug
+ZmluZCAnZGVwZW5kcyBvbiBDRkc4MDIxMScgYW5kIExJQjgwMjExLiBBbHNvIGlmIHdlIGNoZWNr
+IGZvcgo+IGllZWU4MDIxMV8qKCkgY2FsbHNlIGludCBkcml2ZXJzL3N0YWdpbmcvcjgxODhldSBm
+b2xkZXIgd2UgZmluZCBhIGxvdCBvZgo+IGNhbGxzLiBTbyBJIHRoaW5rIHRoaXMgbW9kdWxlIGlz
+IG9ubHkgYSBjb3B5IG9mIHRoZSBMaW51eCBkcml2ZXIgdGhhdAo+IGNhbiB3b3JrIGFzIHNwZWNp
+ZmllZCBpbiB0aGUgYWN0dWFsIGhlbHAod2l0aCBMaW51eCB2ZXJzaW9uIGJlZm9yZSAzLjEyLgo+
+IAo+IERvZXMgaXQgbWF5YmUgbWFrZSBzZW5zZSB0byBhZGQgaW4gdGhlIGhlbHAgc2VjdGlvbjoK
+PiBgYGAKPiBJZiB1c2luZyBMaW51eCAzLjEyKyBpdCdzIHJlY29tbWVuZGVkIHRvIHVzZSBMaW51
+eCBkcml2ZXIKPiBgYGAKPiA/Cj4gT3Igd2UgY2FuIHJlbmFtZSB0aGUgcGFja2FnZSBuYW1lIHdp
+dGggdGhlIHN1ZmZpeCAtbGVnYWN5Pwo+IAo+IFJlZ2FyZGluZyB0aGUgb3RoZXIgd2lmaSBkcml2
+ZXJzIEkndmUgY2hlY2tlZCBhbmQgdGhleSBhcmUgbm90IHN1cHBvcnRlZAo+IGluIExpbnV4LCBu
+b3Igc3RhZ2luZyBub3IgbmV0L3dpcmVsZXNzLCBleGNlcHQgcnRsODcyM2J1WzJdLCBzbyBtYXli
+ZSBpdAo+IG1ha2VzIHNlbnNlIHRvIGRyb3AgcnRsODcyM2J1IHBhY2thZ2UuCgpQYXJkb24sIG5v
+dCBkcm9wIHRoZSBwYWNrYWdlLCBidXQgdG8gaW1wcm92ZSBoZWxwIHNlY3Rpb24gcG9pbnRpbmcg
+dGhhdAppcyBmb3IgTGludXggdmVyc2lvbih0byBjaGVjayB3aGVuIExpbnV4IGRyaXZlciBoYXMg
+YmVlbiBhZGRlZCkgYW5kCmVuY291cmFnZSB0aGUgdXNlIG9mIExpbnV4IGRyaXZlciBvdGhlcndp
+c2UuCgpCZXN0IHJlZ2FyZHMKLS0gCkdpdWxpbyBCZW5ldHRpCkNFTy9DVE9AQmVuZXR0aSBFbmdp
+bmVlcmluZyBzYXMKCj4gCj4gV2hhdCBkbyB5b3UgdGhpbms/Cj4gCj4gWzBdOiAKPiBodHRwczov
+L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5n
+aXQvdHJlZS9kcml2ZXJzL3N0YWdpbmcvcjgxODhldS9UT0RPCj4gWzFdOiAKPiBodHRwczovL2dp
+dC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQv
+dHJlZS9kcml2ZXJzL3N0YWdpbmcvcjgxODhldS9LY29uZmlnCj4gWzJdOiAKPiBodHRwczovL2dp
+dC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQv
+dHJlZS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bDh4eHh1L3J0bDh4eHh1Xzg3MjNi
+LmMjbjIzOAo+IAo+IFRoYW5rIHlvdQo+IEJlc3QgcmVnYXJkcwoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
