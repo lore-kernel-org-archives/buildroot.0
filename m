@@ -1,72 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7F5C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 00:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E53BC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 00:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3942240B4E;
-	Wed, 16 Nov 2022 00:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3942240B4E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 825B560F30;
+	Wed, 16 Nov 2022 00:41:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 825B560F30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qN9sUy707LQ9; Wed, 16 Nov 2022 00:33:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wMd3oBP0RXjP; Wed, 16 Nov 2022 00:41:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E41E40424;
-	Wed, 16 Nov 2022 00:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E41E40424
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2CD271BF8C7
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:33:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1AF060F2D;
+	Wed, 16 Nov 2022 00:41:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1AF060F2D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 081AA1BF8C7
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0748B402BB
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0748B402BB
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3D7481E64
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 00:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3D7481E64
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WLZpcyOQRK4m for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 00:33:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id teHa2Yc6miFj for <buildroot@lists.busybox.net>;
+ Wed, 16 Nov 2022 00:40:58 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDC70402B2
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDC70402B2
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 00:33:28 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.88.137])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2277881E62
+Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2277881E62
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 00:40:57 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.88.137])
  by Aruba Outgoing Smtp  with ESMTPSA
- id v6Moo6NQk1jfKv6MpoWIgI; Wed, 16 Nov 2022 01:33:27 +0100
-Message-ID: <901ec05a-8d90-8658-29ac-381f50ae0eaa@benettiengineering.com>
-Date: Wed, 16 Nov 2022 01:33:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20221019134823.12594-1-giulio.benetti@benettiengineering.com>
- <20221030210615.49866828@windsurf>
-Content-Language: en-US
+ id v6U3oaEsj1ARav6U4omXG9; Wed, 16 Nov 2022 01:40:56 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221030210615.49866828@windsurf>
-X-CMAE-Envelope: MS4xfEvGq+UGfGjtmlkfWZegv6sovUqBdmDdSd6E1U49wqQxUvfRI+TefEXMvdCigfNmJi09DmMzWDiJEpaVYz+0lG+r75I4fzMlRpVl6bG6L3V+JoNjmkY7
- /ubIFXHXRxZn6Kq5YX+mkPIjUmgelEV0pxDqCebaXGnxqznx7Kmu5HbhnjoXH+VUy+BavP0nQTyYoAkTpWYV6K3SRaR91zWz1GKX9S0dG7Bzgyf1++HC+Xpb
- ckJreHsVH+BMkBCMGWVCQAlxYJubvb4OzK7U0tmPKq/TQyVU1+eVWJ2SXpWSUKgLcVdlKekjMBVpLgpS7px3Qw==
+To: buildroot@buildroot.org
+Date: Wed, 16 Nov 2022 01:40:55 +0100
+Message-Id: <20221116004055.706479-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfO7iGSkAVKZ3iEF1e2rsPSPA05Z0aMcoCgxs52l4BXDhHPzJrYasmGHSnJ5D1ywRTBbH1VMpFxbg5Lksk0nVzA7D5kW6lN9bLKSPRBPZn9/poxfUi5WE
+ 0mX3o8XocaANKWwxRxHzelzFswXB7gvIH6lo+/ADEC6sIJvhuxfIu/YKjCoj9nzZfGbBN2OGOd4k4FLURkCDly9JjYiANF7ED4UOXLVfKauIO43m7rqIwHOp
+ DVBg9HXOxWUJJHjr0i0QjePe5M8lMymPG4emVeK3lZg8JcfJqT0P39k1uCCAs2MJkL9q9D6jRWOdZ0AmSDWXMw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1668558807; bh=xuT/W66TXGVMcBT2JsXnhq+CluMwRIU/hvXwB8AuPhc=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=PVJdDsGlRaynzJUSXI22xA+lTE0qhJmjiUXLLecgTsLOEcwyQU2+yqtPTFqBoGYRo
- bTcv2SmQPKh84hY+D82iVnhWYaf+irZte8iXT0VHnSjTaPGkAJURbOudUsvj0aRvcH
- /anOr6LC3xys1xTyW92E1VUAQFdEyQV/QdxSpAF6H9WXFjCkZR+baA+5zPDD7ipyY1
- CBKxJlQvkUHXXeOMbE2A/phDFk65dXvAvYlltGF/d3ZGFyD4vJCdI3qIgqnxdmJ01j
- sMOZDnsiIEMpGKcenJhNEA59FFSzTQlqSDkSn5aLfNPyIAqeP9fhGphI/LcNn+Ll69
- GvkicUu/7s3EQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1668559256; bh=u/r7aqzWPOahlZ3ZkzBY4HVh2zCxzIPDk7Gmcz5TfvA=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=lnzVrKUHgBneePYTKcs9GoIouLOqaJJDPVYP43gi4rBQ63QAFscfwwsd6COVyD0oe
+ /EKuyxUKHHVUKd5JF6Cs4liYXZF0vYABnORMdlrSfowEoD0vitQOJspJ6CGwR+gmk/
+ 8+g9S5RA5Ucsq5/Dm+B/mSlsQFkO4xhGKuBNLj+UNvkOgFRZmYPz8gV506D8raFlkR
+ VT/bEsmUyLiGGKuFwygYcLOxbHRtz1l7NtDlbFsB+MUx9Hm1wCnQi9LhSO0grwhGkK
+ CGpf0uOUvTciJDD1QvGHZ4rUwolqZAEKcYkIO9Vg9m8byFOZYKGiSUbyORn2/ULAep
+ PeuvFKknqDxcA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=PVJdDsGl
-Subject: Re: [Buildroot] [PATCH v2] package/rtl8188eu: remove wrong
- description in Config.in
+ header.a=rsa-sha256 header.s=a1 header.b=lnzVrKUH
+Subject: [Buildroot] [PATCH] package/rtl8189es: bump to latest version to
+ fix build failure with Linux >= 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,101 +73,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Luca,
+Drop local patch that has been upstreamed[0] and drop the endianness
+handling too since from this commit[1] on it's handled by using Linux
+macro __LITTLE_ENDIAN.
 
-On 30/10/22 21:06, Thomas Petazzoni via buildroot wrote:
-> On Wed, 19 Oct 2022 15:48:23 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> This rtl8188eu driver is not the same as the one in mainline Linux that
->> still has pending work to be done that in this driver is done, check:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/TODO
->> specifically:
->> * Switch to use LIB80211.
->> * Switch to use MAC80211.
->> * Switch to use CFG80211.
->> So let's remove the description that is not valid anymore.
->>
->> Suggested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->> V1->V2:
->> * improve Config.in description as pointed by Luca Ceresoli
->> ---
->>   package/rtl8188eu/Config.in | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
->> index 76d9085297..2fab1fd5c0 100644
->> --- a/package/rtl8188eu/Config.in
->> +++ b/package/rtl8188eu/Config.in
->> @@ -4,9 +4,10 @@ config BR2_PACKAGE_RTL8188EU
->>   	depends on BR2_LINUX_KERNEL
->>   	help
->>   	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
->> -	  This is needed only for Linux kernels before 3.12.
->> -	  Since 3.12, there is a (staging) driver in mainline, with a
->> -	  similar codebase.
->> +	  This rtl8188eu driver is not the same as the one in mainline
->> +	  Linux that still has pending work to be done that in this
->> +	  driver is done, check:
->> +	  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/TODO
-> 
-> I don't see any thing in this TODO that explains why the out-of-tree
-> driver is better than the mainline driver.
-> 
-> The out-of-tree driver has been integrated into drivers/staging/, and
-> this TODO file lists what should be improved in the driver so that it
-> can be graduated to move outside of drivers/staging/ into the proper
-> drivers/net/wireless/ location.
-> 
-> I don't see anything in this TODO that indicates that the out-of-tree
-> driver has "more features" than the mainline driver, so to me the
-> Config.in help text still makes sense.
-> 
-> Could you give some more details?
+[0]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/4a555ffb77a5947814b6c7f330968318e265c496
+[1]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/b3da33576da5359d85c7cfe82716c9a08a592aff
 
-The TODO file[0] is outdated because it states that:
-* Switch to use LIB80211.
-* Switch to use MAC80211.
-* Switch to use CFG80211.
-are still pending, but it's true not because if we check the Kconfig[1]
-we find 'depends on CFG80211' and LIB80211. Also if we check for
-ieee80211_*() callse int drivers/staging/r8188eu folder we find a lot of
-calls. So I think this module is only a copy of the Linux driver that
-can work as specified in the actual help(with Linux version before 3.12.
+Fixes:
+http://autobuild.buildroot.net/results/6178fbfbe9fe762645b1907c4ceb032a00e75a89/
 
-Does it maybe make sense to add in the help section:
-```
-If using Linux 3.12+ it's recommended to use Linux driver
-```
-?
-Or we can rename the package name with the suffix -legacy?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 40 -------------------
+ package/rtl8189es/rtl8189es.hash              |  2 +-
+ package/rtl8189es/rtl8189es.mk                | 10 +----
+ 3 files changed, 3 insertions(+), 49 deletions(-)
+ delete mode 100644 package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
 
-Regarding the other wifi drivers I've checked and they are not supported
-in Linux, nor staging nor net/wireless, except rtl8723bu[2], so maybe it
-makes sense to drop rtl8723bu package.
-
-What do you think?
-
-[0]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/TODO
-[1]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/Kconfig
-[2]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8723b.c#n238
-
-Thank you
-Best regards
+diff --git a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
+deleted file mode 100644
+index dc4deff9f1..0000000000
+--- a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4a555ffb77a5947814b6c7f330968318e265c496 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Wed, 28 Sep 2022 21:17:17 +0200
+-Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
+- end of EXTRA_FLAGS assignment
+-
+-At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
+-since it's assigned at the beginning of the Makefile. For example it's not
+-possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
+-allow to build these modules for big endian architectures. So let's move
+-the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
+-EXTRA_CFLAGS assignment.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-[Upstream status: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83]
+----
+- Makefile | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 8fcb7bd..e4664e9 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,4 +1,3 @@
+--EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
+- EXTRA_CFLAGS += -O1
+- #EXTRA_CFLAGS += -O3
+- #EXTRA_CFLAGS += -Wall
+-@@ -2239,6 +2238,8 @@ ifneq ($(USER_MODULE_NAME),)
+- MODULE_NAME := $(USER_MODULE_NAME)
+- endif
+- 
+-+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
+-+
+- ifneq ($(KERNELRELEASE),)
+- 
+- ########### this part for *.mk ############################
+--- 
+-2.34.1
+-
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index d897e5e6c2..44d73e60f0 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  74325014c1a8503b3a7e48ad06997baddad8c1dae86bb79f4368532cc3e75fb2  rtl8189es-39c17661136da48f8e9c644194dce6a7f5076896.tar.gz
++sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189es-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index cddcb195f9..6acc409e73 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -4,20 +4,14 @@
+ #
+ ################################################################################
+ 
+-RTL8189ES_VERSION = 39c17661136da48f8e9c644194dce6a7f5076896
++RTL8189ES_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
+ 
+-# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
+-RTL8189ES_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
+-# Set endianness
+-RTL8189ES_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+-
+ RTL8189ES_MODULE_MAKE_OPTS = \
+ 	CONFIG_RTL8189ES=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+-	KSRC=$(LINUX_DIR) \
+-	USER_EXTRA_CFLAGS="$(RTL8189ES_USER_EXTRA_CLAGS)"
++	KSRC=$(LINUX_DIR)
+ 
+ define RTL8189ES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
