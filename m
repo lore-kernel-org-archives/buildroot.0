@@ -1,59 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2446EC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 18:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00455C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 21:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D997818B5;
-	Wed, 16 Nov 2022 18:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D997818B5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eH9GG__nVKuN; Wed, 16 Nov 2022 18:05:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B438E81551;
-	Wed, 16 Nov 2022 18:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B438E81551
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 71D2B1BF487
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 18:05:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B3C54182A
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 18:05:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B3C54182A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5149E41899;
+	Wed, 16 Nov 2022 21:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5149E41899
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 86USmgabAbV8 for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 18:05:02 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EUMUWk0PEyXU; Wed, 16 Nov 2022 21:21:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EE8A41743;
+	Wed, 16 Nov 2022 21:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EE8A41743
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0ED371BF402
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD8F140132
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD8F140132
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qJheu_oePDPA for <buildroot@lists.busybox.net>;
+ Wed, 16 Nov 2022 21:21:11 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D83B417C4
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8D83B417C4
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 18:05:02 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout09.t-online.de (Postfix) with SMTP id 20D7EDBCD;
- Wed, 16 Nov 2022 19:04:56 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.191.22]) by fwd85.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1ovMmK-1Wwp0b0; Wed, 16 Nov 2022 19:04:52 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35332)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1ovMmK-00035L-0G;
- Wed, 16 Nov 2022 19:04:52 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B85E400D9
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9B85E400D9
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 21:21:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id C418F1C0003;
+ Wed, 16 Nov 2022 21:21:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Nov 2022 19:04:52 +0100
-Message-Id: <20221116180452.700415-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 16 Nov 2022 22:21:05 +0100
+Message-Id: <20221116212105.702408-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
+References: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1668621892-2D8B7EA1-8F6356E2/0/0 CLEAN NORMAL
-X-TOI-MSGID: 853d6c4e-7a04-4bfb-92c4-e9debc917212
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix uClibc build
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1668633669;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ziVudG33kroLOZMWJ+4v5tlJFadP5ujqpmhc5qYfZCo=;
+ b=hrXu2L5Wk047be5fI/qu6Sl/nfs4z03F3Hs4oH7tLsmz/s5ctTQLjedXUirZLB2BobIhY7
+ QDl8q/1v6NIgkjA4R/tAAvQmQQ8QmTY6Ts4uuMP1pE5IBVkyq+ezGkWlZlyGwbbhLN4ddl
+ tQvuxcSe9/RNTnoSDTsz60SzHpblrIzA/55oSFlZVgutHoKK7IhuAXuG81C7hzmhf8/maM
+ hF9zG9DmW6iy2xMDaBI8TPj6n+XS5zKQAEkjpJBj7FvbaOP4WzYceIZ2riDmqA0+q8XzNA
+ RIC2cUmK/yEKyoRkDmFYCq1/HTyzTvZfaRMLsutYxcOqMel+Ppn5Al+nIoYlvg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hrXu2L5W
+Subject: [Buildroot] [PATCH 2/2] utils/genrandconfig: don't build
+ igh-ethercat drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,60 +75,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TW92ZWQgdGhlIHV0aWwvY29tcGlsZXIuaCBpbmNsdWRlIHRvIHV0aWwvbWFjcm9zLmggZHVlIHRv
-IHVwc3RyZWFtCmNvbW1pdCB3aGljaCBhZGRlZCBzdGF0aWNfYXNzZXJ0KCkgdG8gc3JjL3V0aWwv
-bWFjcm9zLmgKaHR0cHM6Ly9jZ2l0LmZyZWVkZXNrdG9wLm9yZy9tZXNhL21lc2EvY29tbWl0L3Ny
-Yy91dGlsL21hY3Jvcy5oP2g9MjIuMiZpZD1mMTAyMzU3MWU4Y2U3Y2NiNmVjN2JjMTE1MjQwY2I3
-NmFlZjNlNWU1CgpQbGVhc2Ugbm90ZSB0aGF0IHRoaXMgcGF0Y2ggY2FuIGJlIHJlbW92ZWQgd2hl
-biBidWlsZHJvb3QgdG9vbGNoYWlucwphcmUgdXBkYXRlZCB0byB1Q2xpYmMgMS4wLjQyOgpodHRw
-czovL2NnaXQudWNsaWJjLW5nLm9yZy9jZ2kvY2dpdC91Y2xpYmMtbmcuZ2l0L2NvbW1pdC8/aD12
-MS4wLjQyJmlkPTAzZmJkOTQxZTk0Mzk3NmJiOTJjYjM5Mjg4MmMyZmY3ZWMyMTg3MDQKCkZpeGVz
-OgpodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9hNTUvYTU1ZDY5ODBmYWFk
-OGI1MDYzZjhmNGY4Yjg5NDY3MDYxZDQ0YTJhZS8KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
-IDxiZXJuZC5rdWhsc0B0LW9ubGluZS5kZT4KLS0tCiBwYWNrYWdlL21lc2EzZC8wMDA0LUZpeC11
-Q2xpYmMtYnVpbGQucGF0Y2ggfCAzNyArKysrKysrKysrKystLS0tLS0tLS0tCiAxIGZpbGUgY2hh
-bmdlZCwgMjEgaW5zZXJ0aW9ucygrKSwgMTYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9tZXNhM2QvMDAwNC1GaXgtdUNsaWJjLWJ1aWxkLnBhdGNoIGIvcGFja2FnZS9tZXNhM2Qv
-MDAwNC1GaXgtdUNsaWJjLWJ1aWxkLnBhdGNoCmluZGV4IDcwZmY1ZTJiNGMuLmM4YzgyZmUwZGMg
-MTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbWVzYTNkLzAwMDQtRml4LXVDbGliYy1idWlsZC5wYXRjaAor
-KysgYi9wYWNrYWdlL21lc2EzZC8wMDA0LUZpeC11Q2xpYmMtYnVpbGQucGF0Y2gKQEAgLTE4LDI5
-ICsxOCwyMiBAQCBGaXhlcyBidWlsZCBlcnJvcnMgd2l0aCB1Q2xpYmMgYW5kIGdjYy05LjMuMDoK
-ICBmdW5jdGlvbiDigJhzdGF0aWNfYXNzZXJ04oCZIFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9u
-LWRlY2xhcmF0aW9uXSAxMDEgfAogIHN0YXRpY19hc3NlcnQoQVJSQVlfU0laRShlZ2xfcGxhdGZv
-cm1zKSA9PSBfRUdMX05VTV9QTEFURk9STVMsCiAKKy4uL3NyYy91dGlsL21hY3Jvcy5oOjc0OjQ6
-IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbgorIOKAmHN0YXRpY19hc3Nl
-cnTigJkgWy1XZXJyb3I9aW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCisgICA3NCB8ICAg
-IHN0YXRpY19hc3NlcnQoY29uZCwgI2NvbmQpOyBcCisgICAgICB8ICAgIF5+fn5+fn5+fn5+fn4K
-KwogUGF0Y2ggc2VudCB1cHN0cmVhbToKIGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9t
-ZXNhL21lc2EvLS9tZXJnZV9yZXF1ZXN0cy8xMzg5OAogCiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBL
-dWhscyA8YmVybmQua3VobHNAdC1vbmxpbmUuZGU+CiAtLS0KLSBzcmMvZWdsL21haW4vZWdsZGlz
-cGxheS5jIHwgIDEgKwotIHNyYy91dGlsL2NvbXBpbGVyLmggICAgICAgfCAxMCArKysrKysrKysr
-Cisgc3JjL3V0aWwvY29tcGlsZXIuaCB8IDEwICsrKysrKysrKysKKyBzcmMvdXRpbC9tYWNyb3Mu
-aCAgIHwgIDEgKwogIDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKQogCi1kaWZmIC0t
-Z2l0IGEvc3JjL2VnbC9tYWluL2VnbGRpc3BsYXkuYyBiL3NyYy9lZ2wvbWFpbi9lZ2xkaXNwbGF5
-LmMKLWluZGV4IDEzMWZjMjI3ODZmOS4uZDNlMmJiOTZlMmY2IDEwMDY0NAotLS0tIGEvc3JjL2Vn
-bC9tYWluL2VnbGRpc3BsYXkuYwotKysrIGIvc3JjL2VnbC9tYWluL2VnbGRpc3BsYXkuYwotQEAg
-LTQyLDYgKzQyLDcgQEAKLSAjZW5kaWYKLSAjaW5jbHVkZSA8ZmNudGwuaD4KLSAjaW5jbHVkZSAi
-YzExL3RocmVhZHMuaCIKLSsjaW5jbHVkZSAidXRpbC9jb21waWxlci5oIgotICNpbmNsdWRlICJ1
-dGlsL21hY3Jvcy5oIgotICNpbmNsdWRlICJ1dGlsL29zX2ZpbGUuaCIKLSAjaW5jbHVkZSAidXRp
-bC91X2F0b21pYy5oIgogZGlmZiAtLWdpdCBhL3NyYy91dGlsL2NvbXBpbGVyLmggYi9zcmMvdXRp
-bC9jb21waWxlci5oCi1pbmRleCBkMTg0YWQ0NTVhZjkuLmI1YzU2ODA3YWNjNiAxMDA2NDQKK2lu
-ZGV4IGQxODRhZDQ1NWFmLi5iNWM1NjgwN2FjYyAxMDA2NDQKIC0tLSBhL3NyYy91dGlsL2NvbXBp
-bGVyLmgKICsrKyBiL3NyYy91dGlsL2NvbXBpbGVyLmgKIEBAIC0zNiw2ICszNiwxNiBAQApAQCAt
-NjAsNiArNTMsMTggQEAgaW5kZXggZDE4NGFkNDU1YWY5Li5iNWM1NjgwN2FjYzYgMTAwNjQ0CiAg
-I2luY2x1ZGUgInV0aWwvbWFjcm9zLmgiCiAgCiAgCitkaWZmIC0tZ2l0IGEvc3JjL3V0aWwvbWFj
-cm9zLmggYi9zcmMvdXRpbC9tYWNyb3MuaAoraW5kZXggMjJiMTgzMDM4MjYuLjhmNzNlZTcyNjkz
-IDEwMDY0NAorLS0tIGEvc3JjL3V0aWwvbWFjcm9zLmgKKysrKyBiL3NyYy91dGlsL21hY3Jvcy5o
-CitAQCAtMjcsNiArMjcsNyBAQAorICNpbmNsdWRlIDxzdGRpby5oPgorICNpbmNsdWRlIDxhc3Nl
-cnQuaD4KKyAjaW5jbHVkZSA8c3RkaW50Lmg+CisrI2luY2x1ZGUgInV0aWwvY29tcGlsZXIuaCIK
-KyAKKyAvKiBDb21wdXRlIHRoZSBzaXplIG9mIGFuIGFycmF5ICovCisgI2lmbmRlZiBBUlJBWV9T
-SVpFCiAtLSAKLUdpdExhYgorMi4zNC4xCiAKLS0gCjIuMzQuMQoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+igh-ethercat comes with a small number of patched Linux kernel network
+drivers, which aim at replacing the ones available in upstream Linux
+kernel. All those drivers are provided only for specific kernel
+releases. For example:
+
+r8169-2.6.24-ethercat.c
+r8169-2.6.24-orig.c
+r8169-2.6.27-ethercat.c
+r8169-2.6.27-orig.c
+r8169-2.6.28-ethercat.c
+r8169-2.6.28-orig.c
+r8169-2.6.29-ethercat.c
+r8169-2.6.29-orig.c
+r8169-2.6.31-ethercat.c
+r8169-2.6.31-orig.c
+r8169-2.6.32-ethercat.c
+r8169-2.6.32-orig.c
+r8169-2.6.33-ethercat.c
+r8169-2.6.33-orig.c
+r8169-2.6.35-ethercat.c
+r8169-2.6.35-orig.c
+r8169-2.6.36-ethercat.c
+r8169-2.6.36-orig.c
+r8169-2.6.37-ethercat.c
+r8169-2.6.37-orig.c
+r8169-3.10-ethercat.c
+r8169-3.10-orig.c
+r8169-3.12-ethercat.c
+r8169-3.12-orig.c
+r8169-3.14-ethercat.c
+r8169-3.14-orig.c
+r8169-3.16-ethercat.c
+r8169-3.16-orig.c
+r8169-3.2-ethercat.c
+r8169-3.2-orig.c
+r8169-3.4-ethercat.c
+r8169-3.4-orig.c
+r8169-3.6-ethercat.c
+r8169-3.6-orig.c
+r8169-3.8-ethercat.c
+r8169-3.8-orig.c
+r8169-4.4-ethercat.c
+r8169-4.4-orig.c
+
+Obviously, this doesn't play well with the random configuration
+testing done by utils/genrandconfig. This commit avoids this issue by
+making sure we never build any of those drivers as part of the
+genrandconfig generated configurations.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/07b7475d780c067d99ee5618a5fd2bb024a5b4e7/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 9c6c2b359c..eccd3a228e 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -629,6 +629,13 @@ def fixup_config(sysinfo, configfile):
+         configlines.append('BR2_PACKAGE_XVISOR_USE_DEFCONFIG=y\n')
+         configlines.remove('BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n')
+ 
++    # Don't build igh-ethercat driver as they are highly
++    # kernel-version specific
++    for opt in ['8139TOO', 'E100', 'E1000', 'E1000E', 'R8169']:
++        optstr = 'BR2_PACKAGE_IGH_ETHERCAT_%s=y\n' % opt
++        if optstr in configlines:
++            configlines.remove(optstr)
++
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
+ 
+-- 
+2.38.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
