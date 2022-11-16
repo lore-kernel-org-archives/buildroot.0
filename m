@@ -1,84 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03C5EC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 12:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57DDCC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 12:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9642160B48;
-	Wed, 16 Nov 2022 12:57:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9642160B48
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8DE5812A7;
+	Wed, 16 Nov 2022 12:58:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8DE5812A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YAevEs7oEja0; Wed, 16 Nov 2022 12:57:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Eqk3jualKHVK; Wed, 16 Nov 2022 12:58:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3498360B73;
-	Wed, 16 Nov 2022 12:57:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3498360B73
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E22E61BF232
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 12:57:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8D6281249;
+	Wed, 16 Nov 2022 12:58:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D6281249
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BD9141BF232
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 12:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCD9B60B73
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 12:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCD9B60B73
+ by smtp4.osuosl.org (Postfix) with ESMTP id 978B6417AC
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 12:58:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 978B6417AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9M1Ker0OXd59 for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 12:57:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98A0260B48
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
- [IPv6:2607:f8b0:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 98A0260B48
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 12:57:37 +0000 (UTC)
-Received: by mail-pg1-x52c.google.com with SMTP id b62so16607034pgc.0
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 04:57:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ifbk5V8+5zkaCvC85BwbWyUmeInRsbmcTE0rl1bD8Gg=;
- b=7X8sMzJOlAjijiZ78VEJHk/Db361RstM6nWNJryJCZ8LHJLt9LJIUOdx0xx2zMuvO9
- 0Fvk69yJdXUZtiUMKQiNLEiFeHG/1jUmOBn84uIj8d9QIoqv/9d5EanUe9MK359oVc10
- ZPtyq9Y9KK5fKJRxRFLef2fnsqLXG27V9j9L4W7xD170XalyqF/bC8uzXYygs923ctCz
- UbdTObt2A161Vu4k/Dl0a07PaOz+lj0+obkkIFx67VdKdkOddRCdMeIStBmB6ldk/GaA
- xAVtVD4XMG5Y3iAPqa8/IVT41LjJQn9S+crDWe3slkIkUuffy5adQWrVXRvXP7H5esqJ
- eMVQ==
-X-Gm-Message-State: ANoB5pn01ae25N1lwVNsbI52bzMgUWMtnfZbdh3l0Bo1jnrUj+I8xYZ9
- dk0WBAgSQeyWwWF3gGi1NqI0o3UkeBR3ELs/1+KszQFJ
-X-Google-Smtp-Source: AA0mqf7NgVEo5WSqUCjttuc5KEq9mkNcjbYI43xqpI0YzcStKZuxVvyS9l0HLb213wGGxWZjeV/7j3OQXlQWRR3zmH4=
-X-Received: by 2002:a63:1e05:0:b0:434:911a:301 with SMTP id
- e5-20020a631e05000000b00434911a0301mr20991940pge.50.1668603456855; Wed, 16
- Nov 2022 04:57:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20220918122239.189147-1-arnout@mind.be>
-In-Reply-To: <20220918122239.189147-1-arnout@mind.be>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 16 Nov 2022 09:57:20 -0300
-Message-ID: <CAOMZO5CqhKB5nAeZW6jg888SPu7T3PbbqtmaOaAwmHgaAkPSLw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=ifbk5V8+5zkaCvC85BwbWyUmeInRsbmcTE0rl1bD8Gg=;
- b=gGHSb0qxGil3E3+R51T5irddhFcvE7MyQSFRgEOwZt+zmKTu3u4NJFMvn1g3b56YQL
- b9PxEkoDYKsP4lP+W98cDwEaCLEO1uo8CdwEtnzpa0pZxFmAtbo3KhlNpAIGKbiZXTeQ
- FLAMU8wT6IKUWzlrAs3qjGfitagnRniMCCwVzty/TeQuhYqOzFCvCfnko12FE7Rh7LVE
- 9MWrqO8dQx3IIAUKhKC2g7weFPgoLehT3Bo4VviSlXD4FA8ELRvqLVCmFI113DRQUZgI
- oFA5o6mIiAySVk+JXHdrUtECb15+2ulzhqtajM7BtdMnqs8UaQGzLKdmLtg8TQI79h2F
- DhUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gGHSb0qx
-Subject: Re: [Buildroot] [PATCH] package/pkg-golang.mk: add osusergo and
- netgo tags in static builds
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b1oFkz_Y5_Kl for <buildroot@lists.busybox.net>;
+ Wed, 16 Nov 2022 12:58:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 090A4417A8
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 12:58:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 090A4417A8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E8B6183D02; Wed, 16 Nov 2022 12:58:37 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 16 Nov 2022 13:58:00 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ec9519831ed5d5698c787b48d2ab952525cacb93
+X-Git-Newrev: 90f2700c09359b5f7627a1632bdcff911a6c5576
+X-Patchwork-Hint: ignore
+Message-Id: <20221116125837.E8B6183D02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.11-rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,46 +56,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=90f2700c09359b5f7627a1632bdcff911a6c5576
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Sep 18, 2022 at 9:23 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> CGO (the Go language C bindings) normally links dynamically with the C
-> libraries. It seems that passing -extldflags=-static is not sufficient
-> to make sure they link statically. As a result, a build using CGO will
-> fail with
->
-> runtime.gcdata: missing Go type information for global symbol .dynsym: size 72
->
-> There are two modules in the standard Go library that can use CGO:
-> os/user and net. Both of these have pure Go versions, however, which can
-> be selected with the osusergo and netgo tags. Since these two are
-> standard library modules that get used in almost all Go programs, pass
-> those flags in the common infrastructure.
->
-> It's not entirely clear if this is always the case or only depending on
-> the specific way CGO is used. In the former case, we could instead
-> disable CGO globally if static libs are enabled. However, it turns out
-> that this doesn't solve the problem completely anyway (delve still fails
-> to link, with different errors). Also, it is possible that other cgo
-> modules do still work. Therefore, just stick to adding the osusergo and
-> netgo tags.
->
-> Fixes:
->  - crucible:
->    http://autobuild.buildroot.net/results/c2f/c2f29f55b461899e8e15c0494578304e6f74bf51/
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 26 ++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 58 insertions(+), 11 deletions(-)
 
-I am still getting reports about crucible failure.
-
-Do you plan to apply this patch?
-
-Thanks
+diff --git a/CHANGES b/CHANGES
+index 3090466d2e..abee6d9fac 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,29 @@
++2022.11-rc2, released November 16th, 2022
++
++	Fixes all over the tree.
++
++	Removed defconfigs: Amarule a64 relic, ARM Juno, Bananapi M1 /
++	M1 plus / M2 plus / M64, FriendlyARM NanoPC T4 / A64 / M1 / M1
++	plus / M4 / Neo2 / Neo4 / Neo plus2 / R1 / Orangepi PC2 / Plus
++	/ Prime / rk3399 / Win, Rock PC rk3399 / PI4 / N10.
++
++	Updated/fixed packages: alsa-utils, arm-trusted-firmware,
++	bdwgc, boost, botan, ca-certificates, crun, dbus-broker,
++	docopt-cpp, dracut, efivar, freeipmi, gawk, gensio, gptfdisk,
++	gsl, guile, imagemagick, ipmitool, libidn2, libkcapi,
++	libopenssl, libqb, libuhttpd, libvncserver, linux,
++	linux-tools, lxc, makedumpfile, matchbox-startup-monitor,
++	mdio-tools, multipath-tools, mupdf, ntfs-3g, numactl,
++	perl-net-ssleay, pixman, procps-ng, rpi-userland, rsync,
++	s6-linux-init, socat, strongswan, sudo, swupdate, systemd,
++	udisks, vlc, wavemon, wolfssl, zlib-ng
++
++	Removed packages: libdcadec
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15121: make nconfig failes with nvidia drivers and mesa3d selected
++
+ 2022.11-rc1, released November 3rd, 2022
+ 
+ 	Fixes all over the tree and new features.
+diff --git a/Makefile b/Makefile
+index 7c1c07a2e4..b2f342f4a8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.11-rc1
++export BR2_VERSION := 2022.11-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1667490600
++BR2_VERSION_EPOCH = 1668603000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 98a4d3a28e..9f2a81eb2b 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.11-rc1.tar.gz">buildroot-2022.11-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.11-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11-rc2.tar.gz">buildroot-2022.11-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.11-rc1.tar.xz">buildroot-2022.11-rc1.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.11-rc1.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11-rc2.tar.xz">buildroot-2022.11-rc2.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c228c1f1e6..ba6e85f2e3 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.11-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 November 2022</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>2022.11-rc2 has been released with more cleanups and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11-rc2">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.11-rc2.tar.xz">2022.11-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
