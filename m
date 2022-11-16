@@ -1,69 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00455C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 21:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37E25C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 21:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5149E41899;
-	Wed, 16 Nov 2022 21:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5149E41899
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA67C81DE1;
+	Wed, 16 Nov 2022 21:21:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA67C81DE1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EUMUWk0PEyXU; Wed, 16 Nov 2022 21:21:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LlHrBPEmjnFd; Wed, 16 Nov 2022 21:21:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EE8A41743;
-	Wed, 16 Nov 2022 21:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EE8A41743
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0ED371BF402
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAC2681CA7;
+	Wed, 16 Nov 2022 21:21:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC2681CA7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E3991BF8C7
  for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD8F140132
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD8F140132
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CB8641743
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB8641743
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qJheu_oePDPA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4-yg7dcnEQ1D for <buildroot@lists.busybox.net>;
  Wed, 16 Nov 2022 21:21:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B85E400D9
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E3B141742
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9B85E400D9
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E3B141742
  for <buildroot@buildroot.org>; Wed, 16 Nov 2022 21:21:10 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id C418F1C0003;
- Wed, 16 Nov 2022 21:21:08 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 9CBD81C0006;
+ Wed, 16 Nov 2022 21:21:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Nov 2022 22:21:05 +0100
-Message-Id: <20221116212105.702408-2-thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Nov 2022 22:21:04 +0100
+Message-Id: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
-References: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668633669;
+ d=bootlin.com; s=gm1; t=1668633667;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ziVudG33kroLOZMWJ+4v5tlJFadP5ujqpmhc5qYfZCo=;
- b=hrXu2L5Wk047be5fI/qu6Sl/nfs4z03F3Hs4oH7tLsmz/s5ctTQLjedXUirZLB2BobIhY7
- QDl8q/1v6NIgkjA4R/tAAvQmQQ8QmTY6Ts4uuMP1pE5IBVkyq+ezGkWlZlyGwbbhLN4ddl
- tQvuxcSe9/RNTnoSDTsz60SzHpblrIzA/55oSFlZVgutHoKK7IhuAXuG81C7hzmhf8/maM
- hF9zG9DmW6iy2xMDaBI8TPj6n+XS5zKQAEkjpJBj7FvbaOP4WzYceIZ2riDmqA0+q8XzNA
- RIC2cUmK/yEKyoRkDmFYCq1/HTyzTvZfaRMLsutYxcOqMel+Ppn5Al+nIoYlvg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=t0GstKt5E4stToPl4X0JuWZP+UbAwUupNBbyDZmzjhc=;
+ b=Q7WFCzDBOB82yAoEe7WIBd53odkIKAG5n6yW7AQShOibo1g0nG7Y4nvlynntcU4TrP5jvj
+ m24isE7OOffY1nRke85sAk5pB9NvCnrdhPC8Y1A5H+siMEDv1ZWYJxPuc30JmlR7cBrWpJ
+ O07DQZrXyzDHGLqnQNBY6K8xsUiRqmem6BGi3BvFqpiYjBI73qBdcd5PLaqRGBWX+9/rbZ
+ oF5IpP80QKRCF4oNitCG+mZx6Ps75E10r7GCIRxFJ+bObEgglNWyCrQqCswC/Oh8Q+EOMZ
+ CGbjNXgTfQO//z6nK5EeguTye1ApsNPp/y+DvF8E9ZhCkhW4gz8eRVnksWFBIw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hrXu2L5W
-Subject: [Buildroot] [PATCH 2/2] utils/genrandconfig: don't build
- igh-ethercat drivers
+ header.s=gm1 header.b=Q7WFCzDB
+Subject: [Buildroot] [PATCH 1/2] package/igh-ethercat: bump to latest Git
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,82 +80,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-igh-ethercat comes with a small number of patched Linux kernel network
-drivers, which aim at replacing the ones available in upstream Linux
-kernel. All those drivers are provided only for specific kernel
-releases. For example:
-
-r8169-2.6.24-ethercat.c
-r8169-2.6.24-orig.c
-r8169-2.6.27-ethercat.c
-r8169-2.6.27-orig.c
-r8169-2.6.28-ethercat.c
-r8169-2.6.28-orig.c
-r8169-2.6.29-ethercat.c
-r8169-2.6.29-orig.c
-r8169-2.6.31-ethercat.c
-r8169-2.6.31-orig.c
-r8169-2.6.32-ethercat.c
-r8169-2.6.32-orig.c
-r8169-2.6.33-ethercat.c
-r8169-2.6.33-orig.c
-r8169-2.6.35-ethercat.c
-r8169-2.6.35-orig.c
-r8169-2.6.36-ethercat.c
-r8169-2.6.36-orig.c
-r8169-2.6.37-ethercat.c
-r8169-2.6.37-orig.c
-r8169-3.10-ethercat.c
-r8169-3.10-orig.c
-r8169-3.12-ethercat.c
-r8169-3.12-orig.c
-r8169-3.14-ethercat.c
-r8169-3.14-orig.c
-r8169-3.16-ethercat.c
-r8169-3.16-orig.c
-r8169-3.2-ethercat.c
-r8169-3.2-orig.c
-r8169-3.4-ethercat.c
-r8169-3.4-orig.c
-r8169-3.6-ethercat.c
-r8169-3.6-orig.c
-r8169-3.8-ethercat.c
-r8169-3.8-orig.c
-r8169-4.4-ethercat.c
-r8169-4.4-orig.c
-
-Obviously, this doesn't play well with the random configuration
-testing done by utils/genrandconfig. This commit avoids this issue by
-making sure we never build any of those drivers as part of the
-genrandconfig generated configurations.
+The current version 1.5.2 dates back from 2013, so it is extremely
+old. The latest master branch of igh-ethercat contains numerous fixes,
+including fixes to ensure that it builds with recent Linux kernel
+releases. Backporting the individual patches fixing those issues on a
+9 year old release would be too much effort, so we propose to simply
+bump the version to the latest available in the Git master branch.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/07b7475d780c067d99ee5618a5fd2bb024a5b4e7/
+  http://autobuild.buildroot.net/results/4dc9b71c805a8156bcf8f398edd3a30f2b6ac6da/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/genrandconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/igh-ethercat/igh-ethercat.hash |  3 +--
+ package/igh-ethercat/igh-ethercat.mk   | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 9c6c2b359c..eccd3a228e 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -629,6 +629,13 @@ def fixup_config(sysinfo, configfile):
-         configlines.append('BR2_PACKAGE_XVISOR_USE_DEFCONFIG=y\n')
-         configlines.remove('BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n')
+diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
+index c77627ee56..88548bf23e 100644
+--- a/package/igh-ethercat/igh-ethercat.hash
++++ b/package/igh-ethercat/igh-ethercat.hash
+@@ -1,5 +1,4 @@
+-# From http://etherlab.org/download/ethercat/ethercat-1.5.2.tar.bz2.md5
+-md5  6b4001f8d975865d74a0b108b3bdda3d  ethercat-1.5.2.tar.bz2
+ # Locally computed
++sha256  eb13a0f7f073ad54589c4f41829d9e995b37b26fbc7fcd05e3adb5e201e6feb4  igh-ethercat-2e2cef6131895336f87c57c18fe78ae01a90d3de.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index 9fcfb4f6f2..1041ba0758 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
  
-+    # Don't build igh-ethercat driver as they are highly
-+    # kernel-version specific
-+    for opt in ['8139TOO', 'E100', 'E1000', 'E1000E', 'R8169']:
-+        optstr = 'BR2_PACKAGE_IGH_ETHERCAT_%s=y\n' % opt
-+        if optstr in configlines:
-+            configlines.remove(optstr)
+-IGH_ETHERCAT_VERSION = 1.5.2
+-IGH_ETHERCAT_SITE = http://etherlab.org/download/ethercat
+-IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
++IGH_ETHERCAT_VERSION = 2e2cef6131895336f87c57c18fe78ae01a90d3de
++IGH_ETHERCAT_SITE = $(call gitlab,etherlab.org,ethercat,$(IGH_ETHERCAT_VERSION))
+ IGH_ETHERCAT_LICENSE = GPL-2.0 (IgH EtherCAT master), LGPL-2.1 (libraries)
+ IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
++# Fetching from Git
++IGH_ETHERCAT_AUTORECONF = YES
+ 
+ IGH_ETHERCAT_INSTALL_STAGING = YES
+ 
+@@ -21,5 +22,11 @@ IGH_ETHERCAT_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+ 
++# Needed to make autoreconf happy
++define IGH_ETHERCAT_CREATE_CHANGELOG
++	touch $(@D)/ChangeLog
++endef
++IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
 +
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
- 
+ $(eval $(kernel-module))
+ $(eval $(autotools-package))
 -- 
 2.38.1
 
