@@ -1,66 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37E25C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 21:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F4E3C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 22:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA67C81DE1;
-	Wed, 16 Nov 2022 21:21:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA67C81DE1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LlHrBPEmjnFd; Wed, 16 Nov 2022 21:21:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAC2681CA7;
-	Wed, 16 Nov 2022 21:21:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC2681CA7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E3991BF8C7
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CB8641743
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 21:21:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB8641743
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7387417A8;
+	Wed, 16 Nov 2022 22:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7387417A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4-yg7dcnEQ1D for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 21:21:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E3B141742
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9E3B141742
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 21:21:10 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 9CBD81C0006;
- Wed, 16 Nov 2022 21:21:07 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ynZzG8PlcdWQ; Wed, 16 Nov 2022 22:07:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0A444176C;
+	Wed, 16 Nov 2022 22:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0A444176C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8E911BF473
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 22:07:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A459040150
+ for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 22:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A459040150
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v_fY12XtnC-T for <buildroot@lists.busybox.net>;
+ Wed, 16 Nov 2022 22:07:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8656C4011A
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8656C4011A
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 22:07:39 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id bs21so32386294wrb.4
+ for <buildroot@buildroot.org>; Wed, 16 Nov 2022 14:07:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=AyN1fCdbFrAjm1rIs3xd1jOlkFyQ/ZphebbTjHtXdh8=;
+ b=l4Nscrxbf+uRBGO6aHiIivZjNi9Hz0uAnJ623FvNinhoObbTJ5sNMyf6y+002imfQU
+ o/nNCGqWq2nz7R06vr7QNP+Uj4ZvbsUP/ZQ54XMtMVL9JfadAUATnLdIB5UOnxBrirgw
+ ezaNxcuUZR3M4MPKHyjrDXyimy8DYuv58uqNGwKc4o+Rub+VjBV3G3bSa6ilBs4GaXpv
+ 28WM3ICEFywKFpycbEr5fV/SxSmj4VKO+mxk8me+nrL9b9wNSh+sFrywlaLDRby4fYXJ
+ IAzuWVyQlabeUn+nYM5aBb8nq0em1npsfmG3Gocuj7/L+lelq3ce95Dx2azNDO5AdYm8
+ 0vGA==
+X-Gm-Message-State: ANoB5pk4HYDTGpIokA7fF7QyL31sf4UcG6BYIqPPQe7qgQ86KH203Pem
+ 88Sy8tIr5796/DUPkEdG/8kCuueH1mM=
+X-Google-Smtp-Source: AA0mqf5UA70wy7B7hJwgAmT4QIB4k5ptNpGkXl+BRz5ATR3b9nz0VX1BAYoJ8cau/TmHZV74G8oChg==
+X-Received: by 2002:a5d:420e:0:b0:236:7034:cd48 with SMTP id
+ n14-20020a5d420e000000b002367034cd48mr14661710wrq.418.1668636457169; 
+ Wed, 16 Nov 2022 14:07:37 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bj19-20020a0560001e1300b0022cdb687bf9sm20123135wrb.0.2022.11.16.14.07.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Nov 2022 14:07:36 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Nov 2022 22:21:04 +0100
-Message-Id: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.38.1
+Date: Wed, 16 Nov 2022 23:07:34 +0100
+Message-Id: <20221116220734.7229-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1668633667;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=t0GstKt5E4stToPl4X0JuWZP+UbAwUupNBbyDZmzjhc=;
- b=Q7WFCzDBOB82yAoEe7WIBd53odkIKAG5n6yW7AQShOibo1g0nG7Y4nvlynntcU4TrP5jvj
- m24isE7OOffY1nRke85sAk5pB9NvCnrdhPC8Y1A5H+siMEDv1ZWYJxPuc30JmlR7cBrWpJ
- O07DQZrXyzDHGLqnQNBY6K8xsUiRqmem6BGi3BvFqpiYjBI73qBdcd5PLaqRGBWX+9/rbZ
- oF5IpP80QKRCF4oNitCG+mZx6Ps75E10r7GCIRxFJ+bObEgglNWyCrQqCswC/Oh8Q+EOMZ
- CGbjNXgTfQO//z6nK5EeguTye1ApsNPp/y+DvF8E9ZhCkhW4gz8eRVnksWFBIw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q7WFCzDB
-Subject: [Buildroot] [PATCH 1/2] package/igh-ethercat: bump to latest Git
- commit
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=AyN1fCdbFrAjm1rIs3xd1jOlkFyQ/ZphebbTjHtXdh8=;
+ b=jWLTT4MzmIMEDMDFQUc/FowjUdLYXBhgXlSKIpVnEiiokwYYXnhFzoBmYNkYrt2/wS
+ ctbcdzCLhI31BJ6gLekJ3/GAj/nx6Q8Zd7WGvlk0P2j3fSzyAezJfxNSvux3rAj+5WnT
+ 8OihxTRwGthZt4L0asMHPS6zbp4hpmJm3rcYkB7Mm8vudCH/6Dv9mdcA6OxP442YLkhw
+ ZIpCxgJtdj8p1CV4HRzz9/MBQynGKFSczX6qjgiguUdj5DSURpOGJ1S6ZlGf3cj34Dit
+ kNGI+j6CQzwJhM0af+bzah7GKr/mVz4qH0L8dH81cy+n6ev1Sr0EpUw/PyO7xo3EqJxo
+ TDFw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jWLTT4Mz
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
+ 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,76 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The current version 1.5.2 dates back from 2013, so it is extremely
-old. The latest master branch of igh-ethercat contains numerous fixes,
-including fixes to ensure that it builds with recent Linux kernel
-releases. Backporting the individual patches fixing those issues on a
-9 year old release would be too much effort, so we propose to simply
-bump the version to the latest available in the Git master branch.
+Backported #8403: Fixed multiple client side input validation issues
+(CVE-2022-39316, CVE-2022-39317, CVE-2022-39318, CVE-2022-39319,
+CVE-2022-39320, CVE-2022-41877, CVE-2022-39347)
 
-Fixes:
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.9.0
 
-  http://autobuild.buildroot.net/results/4dc9b71c805a8156bcf8f398edd3a30f2b6ac6da/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/igh-ethercat/igh-ethercat.hash |  3 +--
- package/igh-ethercat/igh-ethercat.mk   | 13 ++++++++++---
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
-index c77627ee56..88548bf23e 100644
---- a/package/igh-ethercat/igh-ethercat.hash
-+++ b/package/igh-ethercat/igh-ethercat.hash
-@@ -1,5 +1,4 @@
--# From http://etherlab.org/download/ethercat/ethercat-1.5.2.tar.bz2.md5
--md5  6b4001f8d975865d74a0b108b3bdda3d  ethercat-1.5.2.tar.bz2
- # Locally computed
-+sha256  eb13a0f7f073ad54589c4f41829d9e995b37b26fbc7fcd05e3adb5e201e6feb4  igh-ethercat-2e2cef6131895336f87c57c18fe78ae01a90d3de.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index 9fcfb4f6f2..1041ba0758 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 94d0746d40..f6adc05312 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.8.1.tar.gz.sha256
+-sha256  ea8903b29914134202a972c06052432678c89cb5eebcc8f5a41553030c97376b  freerdp-2.8.1.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.9.0.tar.gz.sha256
++sha256  fcf71cf5b09c5c2636341ba212f34b8fb728246ea28e08caf6cef8b4a96184b7  freerdp-2.9.0.tar.gz
+ 
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index ae844c589e..fb0e6920cf 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IGH_ETHERCAT_VERSION = 1.5.2
--IGH_ETHERCAT_SITE = http://etherlab.org/download/ethercat
--IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
-+IGH_ETHERCAT_VERSION = 2e2cef6131895336f87c57c18fe78ae01a90d3de
-+IGH_ETHERCAT_SITE = $(call gitlab,etherlab.org,ethercat,$(IGH_ETHERCAT_VERSION))
- IGH_ETHERCAT_LICENSE = GPL-2.0 (IgH EtherCAT master), LGPL-2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
-+# Fetching from Git
-+IGH_ETHERCAT_AUTORECONF = YES
- 
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
-@@ -21,5 +22,11 @@ IGH_ETHERCAT_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e) \
- 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
-+# Needed to make autoreconf happy
-+define IGH_ETHERCAT_CREATE_CHANGELOG
-+	touch $(@D)/ChangeLog
-+endef
-+IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
-+
- $(eval $(kernel-module))
- $(eval $(autotools-package))
+-FREERDP_VERSION = 2.8.1
++FREERDP_VERSION = 2.9.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 -- 
-2.38.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
