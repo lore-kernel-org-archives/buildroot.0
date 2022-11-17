@@ -1,87 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 198D6C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 16 Nov 2022 22:29:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFFFFC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 00:15:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89DB441879;
-	Wed, 16 Nov 2022 22:29:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89DB441879
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CE9E82004;
+	Thu, 17 Nov 2022 00:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CE9E82004
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vAwYh6SKNZbb; Wed, 16 Nov 2022 22:29:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KbU8VQHwCpDA; Thu, 17 Nov 2022 00:15:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7167F4184D;
-	Wed, 16 Nov 2022 22:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7167F4184D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A15982008;
+	Thu, 17 Nov 2022 00:15:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A15982008
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C5AE61BF473
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 22:29:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05A781BF954
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 00:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0DB04011A
- for <buildroot@lists.busybox.net>; Wed, 16 Nov 2022 22:29:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0DB04011A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D531840136
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 00:15:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D531840136
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rlPtoeq7FAe9 for <buildroot@lists.busybox.net>;
- Wed, 16 Nov 2022 22:29:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66201400B8
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 66201400B8
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 22:29:13 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id d9so27660229wrm.13
- for <buildroot@buildroot.org>; Wed, 16 Nov 2022 14:29:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=uayWjq0JeX9BO7uIEUwkFypZ4WzC0O7IhD9KU3L8HXI=;
- b=gkNsCyefUTHjSNlE8Sq2QDPtIrL1DREXC1dgu2QLUTcyFonZtkkomVU0M6vHSQPEEO
- lY0IyL8dHC87TJiUziteaUmnTYOMvf7Vxgvc/gf3yqQBi3007tzk6YV/Rp9X0U4bQiQU
- pqdafFEyz0/Y/0OtJR5gKizOxFlWFTB4pnpOnaSl2uusqdMLGm250w9h5ri278D841fi
- rPki/tKnErL+2VgtYwZoO0f8/J7DdTYzd7xDXs+2Z+WFiqOBwNIQhfa40oLZo8p4986a
- Hs0E6FUvEW3MnB4ZI/cIxI2UiZpeTOzv0YK83vWtmwXt/d8fY3TmI6PySpnCdKw615ZA
- N+aQ==
-X-Gm-Message-State: ANoB5pkCkMf8PajDlkrvQ2U6TvXIwtzzs69FoRPEoZA04aKhtsiifj83
- 55QRQqxq2OtFCYDDVnSoPS8Ootdpa7Q=
-X-Google-Smtp-Source: AA0mqf7YCd2IfG5w7F2lzUbdLHttYy6RFCVcP4hPPGpgTawoMizUX1ffiR246c5FdLTw9u8/IjUoGQ==
-X-Received: by 2002:a5d:58c3:0:b0:238:8896:7876 with SMTP id
- o3-20020a5d58c3000000b0023888967876mr15076280wrf.645.1668637751387; 
- Wed, 16 Nov 2022 14:29:11 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- f19-20020a05600c4e9300b003cfd4a50d5asm3730272wmq.34.2022.11.16.14.29.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Nov 2022 14:29:10 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 16 Nov 2022 23:29:08 +0100
-Message-Id: <20221116222908.26711-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id uHv1hHwWV3Q9 for <buildroot@lists.busybox.net>;
+ Thu, 17 Nov 2022 00:15:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F12C5400B8
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F12C5400B8
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 00:15:15 +0000 (UTC)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AH0FBIP071549;
+ Wed, 16 Nov 2022 18:15:11 -0600
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AH0FBfw011499
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Wed, 16 Nov 2022 18:15:11 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 16
+ Nov 2022 18:15:11 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 16 Nov 2022 18:15:11 -0600
+Received: from uda0393673 (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+ by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AH0FBXb069587;
+ Wed, 16 Nov 2022 18:15:11 -0600
+Received: from a0393673 by uda0393673 with local (Exim 4.95)
+ (envelope-from <gadiyar@ti.com>) id 1ovSYh-007MC2-ER;
+ Wed, 16 Nov 2022 18:15:11 -0600
+To: <buildroot@buildroot.org>
+Date: Wed, 16 Nov 2022 18:15:08 -0600
+Message-ID: <20221117001511.1753592-1-gadiyar@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uayWjq0JeX9BO7uIEUwkFypZ4WzC0O7IhD9KU3L8HXI=;
- b=cozG/SuE0ybosro9OUgJHC67yk3Eyd/ZJOOgDRsbwYeIvbNbEszoNRtZtg+hKmwQDY
- 4YET0GVh6d9peMtr4ANXIXPMXUX7BDj6cbqYZP+ChULTHhYS8eVFI2aOEl376JAxNYCD
- orJNk0bZhkBLBru9sEklm4WuUOc7yNKLiCFF+VTqkQ5dKLByCNNKzZo/M+GXX7o8i+Sr
- LVU+yYJRN+B8cEebaYB7sfvKxJsezzt1hNVEu1V3LbZe0WteeD38PVwcX7MFYR0csUz8
- d2gSlAsnD7E9a1ZWah6YWpfQvpusPKEDiTbsJNJxdffsm+mGHjpDwZXkxgZLQRVFYZaa
- fOpw==
+ d=ti.com; s=ti-com-17Q1; t=1668644111;
+ bh=QmZuo+ybpJATn2bpmaua7kc43aQHD4tS1HhThTxnJDU=;
+ h=From:To:CC:Subject:Date;
+ b=VCWfLVA61/QYnzx6Arhp3MKhZEV7InAlntkZiNWjoIFOX2W7LoItenXXfJBpYn6xb
+ QQMEsZGIfVyNFEJDWs8DrrMX5AMTjpCrfs+22XI8sO4aWk8sAqWIZDmR4Ml2sMRHPR
+ 3lB+GOB7EdBhdY43F6EzkL6PPqlDw4PQxNHvJuNI=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cozG/SuE
-Subject: [Buildroot] [PATCH 1/1] package/rsync: fix configure options
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=VCWfLVA6
+Subject: [Buildroot] [PATCH v6 0/3] add support for TI's AM64x boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,55 +85,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Anand Gadiyar via buildroot <buildroot@buildroot.org>
+Reply-To: Anand Gadiyar <gadiyar@ti.com>
+Cc: Bryan Brattlof <bb@ti.com>, Xuanhao Shi <X15000177@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>, Andrew Davis <afd@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rename configure options to avoid the following build failure raised
-since bump to version 3.2.5 in commit
-ae2807821d897c16141d003f646475fee9e77cba:
+This series introduces support for TI's AM64x SK boards.
 
-./simd-checksum-x86_64.cpp: In function 'uint32_t get_checksum1_cpp(char*, int32_t)':
-./simd-checksum-x86_64.cpp:89:52: error: multiversioning needs 'ifunc' which is not supported on this target
-   89 | __attribute__ ((target("default"))) MVSTATIC int32 get_checksum1_avx2_64(schar* buf, int32 len, int32 i, uint32* ps1, uint32* ps2) { return i; }
-      |                                                    ^~~~~~~~~~~~~~~~~~~~~
-./simd-checksum-x86_64.cpp:480:1: error: use of multiversioned function without a default
-  480 | }
-      | ^
-If you can't fix the issue, re-run ./configure with --disable-roll-simd.
+We would like to add support for the AM62x SK as well, but are
+currently blocked by availability of some firmware. That's still
+on the list, as is the SK-TDA4VM. We should also be able to
+enable the beagleboard-ai64 alongside that at the same time.
 
-Fixes:
- - http://autobuild.buildroot.org/results/069da8e585da2e51bfd4f475cc12b9a134954b08
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rsync/rsync.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This series was previously sent out by Xuanhao in August and
+was reviewed by Giulio Benetti up to v5 (Thanks!).
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 7ff7ca6eef..8c7ad462ac 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -17,12 +17,12 @@ RSYNC_CONF_ENV = rsync_cv_HAVE_C99_VSNPRINTF=yes
- RSYNC_CONF_OPTS = \
- 	--with-included-zlib=no \
- 	--with-included-popt=no \
--	--disable-simd \
-+	--disable-roll-simd \
- 	--disable-openssl \
- 	--disable-xxhash \
- 	--disable-zstd \
- 	--disable-lz4 \
--	--disable-asm
-+	--disable-md5-asm
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
- RSYNC_DEPENDENCIES += acl
+This series addresses further review comments for v5 from Romain
+Naour. Thanks for the review Romain!
+
+Andrew Davis acked the previous series, except for one new change
+that I've addressed in this version.
+
+I addressed all of Romain's comments except one - I couldn't get
+the sha256sum for the k3-image-gen package to be updated in the
+source repository, so for now it's still manually computed. I'll
+see what I can do about getting the repository owners to generate
+these automatically at release time.
+
+Changes in v6:
+- rebased to latest next branch and retested
+- updated u-boot and kernel to latest released versions as of today
+From Andrew's comments:
+- added a new SOC_TYPE option for k3-image-gen, as requested by Andrew
+  Davis in a review comment.
+From Romain's comments:
+- use "if" instead of "depends on" for sub-options
+- move TI K3 R5 Loader defconfig selection to Kconfig
+- use $(HOST_DIR) instead of $(HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR)
+- Retain Xuanhao's gmail ID in the MAINTAINERs file, but drop his TI
+  email from CC list as it will be inactive till he rejoins TI
+- Add a plain-text license file into the k3-image-gen repository and use
+  it instead of the HTML manifest file. Confirmed that this is still
+  BSD-3-Clause license.
+- Add comments in the ti-k3-image-gen.mk file for a couple of options
+
+Changes in v5:
+- None (resubmission of Xuanhao's series)
+
+Changes in v4:
+- rebased to latest master and retested
+- dropped OPTEE CUSTOM* options as we don't need them.
+
+Changes in v3:
+- Fix boot/ti-k3-r5-loader package's build options and dependencies.
+- Fix boot/ti-k3-image-gen package's config
+- Add more details in board/ti/am64x_sk's readme
+- Trim configs/am64x_sk's toolchain options and 
+  fix uboot and genimage dependencies.
+- Remove board/ti/am62x_sk and configs/am62x_sk for now due to some
+  firmware dependency problems. Will be added back in the future.
+
+Changes in v2:
+- Revert arm-gnu-toolchain back to version 10.x due to a bug.
+  When the pre-packaged GCC was built, it could be targeting
+  a newer x86_64 architecture than the processor being used.
+- Add boot/ti-k3-r5-loader package that builds a separate U-Boot
+  for the R5 cores on TI's K3 devices.
+- Add boot/ti-k3-image-gen package that builds the full boot binary
+  tiboot3.bin from the spl built from ti-k3-r5-loader.
+- Add board/ti directory to include sdcard config and board information
+  for AM64x_sk and AM62x_sk boards.
+- Add the Buildroot defconfigs for AM64x_sk and AM62x_sk.
+- Add to DEVELOPERS list.
+
+Xuanhao Shi (3):
+  boot/ti-k3-r5-loader: add new package
+  boot/ti-k3-image-gen: add new package
+  board/ti/am64x_sk: add new board
+
+ DEVELOPERS                                | 12 ++++++
+ board/ti/am64x_sk/genimage.cfg            | 27 +++++++++++++
+ board/ti/am64x_sk/readme.txt              | 49 +++++++++++++++++++++++
+ boot/Config.in                            |  2 +
+ boot/ti-k3-image-gen/Config.in            | 24 +++++++++++
+ boot/ti-k3-image-gen/ti-k3-image-gen.hash |  2 +
+ boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 40 ++++++++++++++++++
+ boot/ti-k3-r5-loader/Config.in            | 14 +++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |  2 +
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk   | 45 +++++++++++++++++++++
+ configs/am64x_sk_defconfig                | 45 +++++++++++++++++++++
+ 11 files changed, 262 insertions(+)
+ create mode 100644 board/ti/am64x_sk/genimage.cfg
+ create mode 100644 board/ti/am64x_sk/readme.txt
+ create mode 100644 boot/ti-k3-image-gen/Config.in
+ create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
+ create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
+ create mode 100644 boot/ti-k3-r5-loader/Config.in
+ create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+ create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+ create mode 100644 configs/am64x_sk_defconfig
+
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
