@@ -1,54 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14FDC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 13:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 889B4C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 14:04:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 323B141932;
-	Thu, 17 Nov 2022 13:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 323B141932
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20CF881E82;
+	Thu, 17 Nov 2022 14:04:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20CF881E82
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PVEOvtlTBICq; Thu, 17 Nov 2022 13:56:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cmj6Pcmv0f9S; Thu, 17 Nov 2022 14:04:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E01E4192D;
-	Thu, 17 Nov 2022 13:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E01E4192D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53D7D81E20;
+	Thu, 17 Nov 2022 14:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53D7D81E20
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D0EB61BF580
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 13:56:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05F0A1BF580
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 14:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B830E4192D
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 13:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B830E4192D
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDE93415E3
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 14:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDE93415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z3Em_vq5Z-Xp for <buildroot@lists.busybox.net>;
- Thu, 17 Nov 2022 13:56:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01B034192C
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 01B034192C
- for <buildroot@buildroot.org>; Thu, 17 Nov 2022 13:56:14 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 47A4B20012
- for <buildroot@buildroot.org>; Thu, 17 Nov 2022 13:56:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1ovfND-00BkWs-9j
- for buildroot@buildroot.org; Thu, 17 Nov 2022 14:56:11 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id AfZ0mQd7O40U for <buildroot@lists.busybox.net>;
+ Thu, 17 Nov 2022 14:04:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FECC400D2
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
+ [IPv6:2607:f8b0:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8FECC400D2
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 14:04:10 +0000 (UTC)
+Received: by mail-pf1-x433.google.com with SMTP id b185so1848033pfb.9
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 06:04:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GVy3IIfhJJENCrp4poA/jUp49Pg8ACjvvb2xN1GcpuI=;
+ b=emhZ9Q54DoK+fwUf7+njd0EVyYZxLWRcUbF7Aa+UZvx/WzOIIWvQ9AzBJDrB/djqsr
+ WT0AR7wXEvG6RBTZgRMkTv//W5hcxLpMgXztwEK4YqK6JkhPuOId17FO5fMhBhn+8p4s
+ 3dICiPf1AYWW0rcjJC7ArVbauvjzKbBCPdf19eJpPbZQMrLX1h9Vaf6JKB+RRl/fKdRd
+ ijr2C94Dvy6XJLGZdiTUOq8W5bwTElJIPK9ZnC9UsWd7Lz+SqFg/ef4XrO1YvVfndYvB
+ 0iEjeFYoJ+gJyNYMDnIxZ0Q0E7GCggMeWpiN3fwM+NkvMn8bhxkLSdAQ0Gm7VKOh50Ca
+ YjHQ==
+X-Gm-Message-State: ANoB5pk7Ys44PwbSpdt73mbPZBuZuL/pxs/cOLH4NaFUen8+ovMCZ+3E
+ sQES8NMeiB4juKcpZFtDnjwde23F3XAAAgzn
+X-Google-Smtp-Source: AA0mqf7W+PoNmGRmIfA/0+Z30O5CgKMzRQyP4TUtDHXAp8j6V3pz+coyQbR0MXut7gMdyXwwZwWkFQ==
+X-Received: by 2002:a05:6a00:1696:b0:53e:6656:d829 with SMTP id
+ k22-20020a056a00169600b0053e6656d829mr3097380pfc.63.1668693849672; 
+ Thu, 17 Nov 2022 06:04:09 -0800 (PST)
+Received: from localhost.lan (fp93c05d70.chbd116.ap.nuro.jp. [147.192.93.112])
+ by smtp.gmail.com with ESMTPSA id
+ n62-20020a622741000000b0056b88187374sm1152955pfn.85.2022.11.17.06.04.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Nov 2022 06:04:09 -0800 (PST)
+From: Yimin Gu <ustcymgu@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Nov 2022 14:56:11 +0100
-Message-ID: <87r0y1d6ro.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date: Thu, 17 Nov 2022 23:03:48 +0900
+Message-Id: <20221117140349.27692-1-ustcymgu@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2022.02.7 released
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GVy3IIfhJJENCrp4poA/jUp49Pg8ACjvvb2xN1GcpuI=;
+ b=ZC1PfTieZWQB69AaJEuga35jIyRYixRkLoe3ZiIJQKq9RMZbX8U6zKGukJDzq6d4r8
+ uTJgW19uLkuZdU57nKztNmTtWywm7jMIgFnE/cHmIdgkTyIIVev7WjlIaG9zlwarqnhA
+ 8eouAZZXoahBeduX6gZ9PdHfWZmVHN4JrxXI4mwh0jEF0yuDSgKL5Lv81b90kDtyClDk
+ dppmTgQurR9CQL3XaAKJuNvPPhcxs5/2xmA/IGk/Bn64jT6bg4GmrtOwVgrnvlnX4uMh
+ bJb89Hz3e88rO1o0O2hqa+YXKSE9tUCCJAaVVlKKjd/h9ZT6qnNMnCuiwV4n6hBvl8gn
+ SPYw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ZC1PfTie
+Subject: [Buildroot] [PATCH 0/1] arch/riscv: RISC-V 32-bit NO MMU support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,59 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Yimin Gu <ustcymgu@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Mark Corbin <mark@dibsco.co.uk>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
-MjIuMDIuNyBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjcudGFyLmd6CgpvcgoKaHR0cDovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjcudGFyLnh6CgpPciBnZXQg
-aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
-dCAyMDIyLjAyLjcgaXMgYSBidWdmaXggcmVsZWFzZSBvbiB0aGUgY3VycmVudCBsb25nIHRlcm0K
-cmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9ydGFudCAvIHNlY3VyaXR5IHJlbGF0ZWQg
-aXNzdWVzCmRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjIuMDIuNiByZWxlYXNlLgoKLSBTZWN1cml0
-eSBmaXhlcyBmb3IgYmluZCwgZGFya2h0dHBkLCBkYnVzLCBkaGNwLCBkbnNtYXNxLCBleHBhdCwK
-ICBmcmVlcmRwLCBnbywgZ3J1YjIsIGltYWdlbWFnaWNrLCBsaWJjdXJsLCBsaWJmcmliaWQsIGxp
-Ym9zaXAyLAogIGxpYnRhc24xLCBsaWJ2bmNzZXJ2ZXIsIGxpYnhtbDIsIGxsZHBkLCBscnppcCwg
-bXNtdHAsIG11bHRpcGF0aC10b29scywKICBtdXBkZiwgbm9kZWpzLCBudGZzLTNnLCBvcGVudm10
-b29scywgcGhwLCBwaXhtYW4sIHBvcHBsZXIsCiAgcHl0aG9uLWRqYW5nbywgcHl0aG9uMywgc2Ft
-YmE0LCBzaGFwZWxpYiwgc3F1YXNoZnMsIHNxdWlkLCBzdHJvbmdzd2FuLAogIHN1ZG8sIHZpbSwg
-d29sZnNzbCwgd3Bld2Via2l0LCB6c2gKCi0gRml4ZXMgZm9yIGRvd25sb2FkL2NvbXBpbGF0aW9u
-L3J1bnRpbWUvbGljZW5zZSBpc3N1ZXMgaW4KICBhcm0tdHJ1c3RlZC1maXJtd2FyZSwgYm90YW4s
-IGNvbGxlY3RkLCBkb2NrZXItY2xpLCBkb2NrZXItZW5naW5lLAogIGV4ZmF0cHJvZ3MsIGYyZnMt
-dG9vbHMsIGZhYWQyLCBmZm1wZWcsIGdudXRscywgZ3BzZCwgZ3NsLCBnc3Qtb214LAogIGdzdDEt
-ZGV2dG9vbHMsIGdzdDEtbGliYXYsIGdzdDEtcGx1Z2lucy1iYWQsIGdzdDEtcGx1Z2lucy1iYXNl
-LAogIGdzdDEtcGx1Z2lucy1nb29kLCBnc3QxLXBsdWdpbnMtdWdseSwgZ3N0MS1weXRob24sIGdz
-dDEtcnRzcC1zZXJ2ZXIsCiAgZ3N0MS12YWFwaSwgZ3N0cmVhbWVyMSwgZ3N0cmVhbWVyMS1lZGl0
-aW5nLXNlcnZpY2VzLCBoZHBhcm0sIGhvc3RhcGQsCiAgaXdkLCBqYWNrMiwgbGliYnBmLCBsaWJp
-ZG4yLCBsaWJtZGJ4LCBsaWJvcGVuc3NsLCBsaWJwbmcsCiAgbGlidG9ycmVudC1yYXN0ZXJiYXIs
-IGxpYnVodHRwZCwgbGludXgsIGxpbnV4LXRvb2xzLCBsejQsCiAgbWF0Y2hib3gtc3RhcnR1cC1t
-b25pdG9yLCBtdXNsLCBtdi1kZHItbWFydmVsbCwgbXhtbCwgbnVtYWN0bCwKICBwYWhvLW1xdHQt
-YywgcGVybC1uZXQtc3NsZWF5LCBwcm9jcHMtbmcsIHJwaS11c2VybGFuZCwgcnN5bmMsCiAgcnRs
-ODE4OWVzLCBydGw4MTg5ZnMsIHJ0bDg3MjNidSwgcnRsODgxMmF1LWFpcmNyYWNrLW5nLCBydGw4
-ODIxYXUsCiAgcnRsXzQzMywgc29jYXQsIHNxbGl0ZSwgc3d1cGRhdGUsIHVjbGliYy1uZy10ZXN0
-LCB1ZGlza3MsIHVmdHAsIHVoZCwKICB1bXRwcmQsIHdhdmVtb24sIHdpcmVndWFyZC1saW51eC1j
-b21wYXQsIHdwYV9zdXBwbGljYW50LCB6bGliLW5nCgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhl
-IENIQU5HRVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3BsYWlu
-L0NIQU5HRVM/aWQ9MjAyMi4wMi43CgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJl
-IHN0cm9uZ2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUg
-cGVvcGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIw
-MjIuMDIuNi4uCgogICAgNjUJRmFicmljZSBGb250YWluZQogICAgMTUJSmFtZXMgSGlsbGlhcmQK
-ICAgIDExCVRob21hcyBQZXRhenpvbmkKICAgICA5CUNocmlzdGlhbiBTdGV3YXJ0CiAgICAgOQlH
-aXVsaW8gQmVuZXR0aQogICAgIDkJUGV0ZXIgS29yc2dhYXJkCiAgICAgOAlCYXJ1Y2ggU2lhY2gK
-ICAgICA3CUJlcm5kIEt1aGxzCiAgICAgNAlOdW5vIEdvbsOnYWx2ZXMKICAgICA0CVlhbm4gRS4g
-TU9SSU4KICAgICAzCUxhbmcgRGFuaWVsCiAgICAgMwlOZWFsIEZyYWdlcgogICAgIDMJeWFubi5t
-b3JpbkBvcmFuZ2UuY29tCiAgICAgMglGcmFuY29pcyBQZXJyYWQKICAgICAyCVNlcmdleSBNYXR5
-dWtldmljaAogICAgIDIJU3RlZmFuIEFnbmVyCiAgICAgMglXb2xmZ2FuZyBHcmFuZGVnZ2VyCiAg
-ICAgMQlBZHJpYW4gUGVyZXogZGUgQ2FzdHJvCiAgICAgMQlBbGV4YW5kZXIgRWdvcmVua292CiAg
-ICAgMQlIZWlrbyBUaGllcnkKICAgICAxCUpvZWwgU3RhbmxleQogICAgIDEJTWFya3VzIE1heWVy
-CiAgICAgMQlNaWNoYWVsIE5vc3Rob2ZmCiAgICAgMQlQYXVsIENlcmN1ZWlsCiAgICAgMQlQZXRy
-IFZvcmVsCiAgICAgMQlUaW0gR292ZXIKICAgICAxCVRvYmlhcyBXYWxkZWtyYW56CiAgICAgMQlW
-aW5jZW50IEZhemlvCiAgICAgMQlXYWxkZW1hciBCcm9ka29yYgogICAgIDEJV29vZHkgRG91Z2xh
-c3MKICAgICAxCdCb0LXQvtC90LjQtCDQrtGA0YzQtdCyIChMZW9uaWQgWXVyaWV2KQoKLS0gCkJ5
-ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The following patch adds support for 32-bit RISC-V No-MMU build.
+Currently for No-MMU RISC-V, only 64-bit is supported. There're no
+substancial changes in code but macros and compiling options. Uclibc,
+elf2flt, and the kernel need to be patched. 
+This is based on damien-lemoal/buildroot which first added 64-bit No-MMU
+support, and my earlier porting attempt regymm/buildroot. 
+As a lot of FPGA-based RISC-V cores are 32-bit and many of the low ones
+are without MMU, this can bring Linux to cores as light as RV32IMA.
+For this reason, only the minimum required extensions are enabled in the
+buildroot and kernel configurations. 
+
+Yimin Gu (1):
+  arch/riscv: RISC-V 32-bit NO MMU support
+
+ arch/Config.in.riscv                          |    2 -
+ board/riscv/nommu/patches/linux-headers       |    1 +
+ ...imental-RISC-V-32-bit-No-MMU-support.patch | 1355 +++++++++++++++++
+ configs/qemu_riscv32_nommu_virt_defconfig     |   19 +
+ package/Makefile.in                           |   13 +-
+ ...ed-RISC-V-32-bit-compilation-support.patch |   74 +
+ .../uclibc/0001-RISC-V-32-bit-support.patch   |  145 ++
+ package/uclibc/Config.in                      |    2 +
+ 8 files changed, 1607 insertions(+), 4 deletions(-)
+ create mode 120000 board/riscv/nommu/patches/linux-headers
+ create mode 100644 board/riscv/nommu/patches/linux/5.19/0001-Experimental-RISC-V-32-bit-No-MMU-support.patch
+ create mode 100644 configs/qemu_riscv32_nommu_virt_defconfig
+ create mode 100644 package/elf2flt/0006-Added-RISC-V-32-bit-compilation-support.patch
+ create mode 100644 package/uclibc/0001-RISC-V-32-bit-support.patch
+
+-- 
+2.38.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
