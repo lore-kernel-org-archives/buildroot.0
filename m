@@ -1,50 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53663C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 09:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D12AC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 13:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C543641852;
-	Thu, 17 Nov 2022 09:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C543641852
+	by smtp2.osuosl.org (Postfix) with ESMTP id A95F640B23;
+	Thu, 17 Nov 2022 13:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A95F640B23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r1lvfwTBMTAx; Thu, 17 Nov 2022 09:45:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wv_Dvc2bwGjD; Thu, 17 Nov 2022 13:21:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9C34186E;
-	Thu, 17 Nov 2022 09:45:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9C34186E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C42C21BF420
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 09:45:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4D5A404C1;
+	Thu, 17 Nov 2022 13:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4D5A404C1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D93C1BF580
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 13:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C93D60D93
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 09:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C93D60D93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26163404C1
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 13:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26163404C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8pYl9MxaV2VX for <buildroot@lists.busybox.net>;
- Thu, 17 Nov 2022 09:45:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A5F060B43
- for <buildroot@buildroot.org>; Thu, 17 Nov 2022 09:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A5F060B43
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8C2383D9E; Thu, 17 Nov 2022 09:45:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 17 Nov 2022 10:44:53 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 283cba61d15b32739aea8ad0505ddb4cd267fd1e
-X-Git-Newrev: d036dc6ec873f50a24e73d8dbdafecb3b4098909
-X-Patchwork-Hint: ignore
-Message-Id: <20221117094536.E8C2383D9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.7
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yVGA_K6ypFqR for <buildroot@lists.busybox.net>;
+ Thu, 17 Nov 2022 13:21:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA090404B3
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CA090404B3
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 13:21:41 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id j16so2709678lfe.12
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 05:21:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ua5kRrV27I/TkZf0NeQ6ww/X9irrSkM70Y1DpVhMfZI=;
+ b=6vG2o9PCbqSUYj4Lm6Eu7jfDE7Oq3MvWBhvzL3sNXdf5rD03It5bDcTj52mpMScvMV
+ EJkkSh7c73jNqE03XX0z7womVx7VhLpdhKWtnHduJmmHo4ixHmJNstmx/se1QxTOzXwT
+ 4NeFDJnFmyS2StWFRQ+2iSYVyU8JO3+okFRDNy++ASNAIY9/YJvk/kWHW2oPq8PqR1Xi
+ G1M3ey27ID1q648BeXirrqUMKLrqyJIdQpUF+LVewuZhpxg62LVwEFq+OI97NlU1TluQ
+ cLK49/59HlvzCZ2VquZnR76oAA3EGJY/Jgc4fYwqVmp8w2yA8MDUKQbp/af7YDNvKTdW
+ G0Mw==
+X-Gm-Message-State: ANoB5pklkRVtdbUlgQWzTRSArtnUj8L5xKgsJcI0SW36CDPiVpRH6mSV
+ IQwWuybSpk3HkH/EmgLWYVAzlawvqIGKgXkVL4h9KdoS88k=
+X-Google-Smtp-Source: AA0mqf6aLK92tAJEdS1OHPV5T4y/yFzbYPvBdRXVzDwK0lb/5e0HzZwHuan7QAyCKpsXLr03KfQ/itYHFfHmkgFVR24=
+X-Received: by 2002:ac2:4bcd:0:b0:49f:fd94:f107 with SMTP id
+ o13-20020ac24bcd000000b0049ffd94f107mr825302lfq.602.1668691299522; Thu, 17
+ Nov 2022 05:21:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20221019124017.427199-1-dumasv.dev@gmail.com>
+ <20221020115512.483686-1-dumasv.dev@gmail.com>
+ <9d9a3bbf2cfd4f60b82a47087ef8ecba@AcuMS.aculab.com>
+ <15715b05-79a5-d542-2dcb-4c921c090463@theobroma-systems.com>
+In-Reply-To: <15715b05-79a5-d542-2dcb-4c921c090463@theobroma-systems.com>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Thu, 17 Nov 2022 13:21:28 +0000
+Message-ID: <CADjhFRDsjYAViaAz08x=rHSd00x=3JQRYNmMN3bU9OMEJUDCOA@mail.gmail.com>
+To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ua5kRrV27I/TkZf0NeQ6ww/X9irrSkM70Y1DpVhMfZI=;
+ b=LzgGW5cCK6v2JC0IAk8Db9rpO+gxISJsuYfDB1FXhQBwL2H8gubxus6IV8Jtrrfsjc
+ oiHlFWbPJtI6aW6GQ64YqVaxB1Tm9bgzYHkQ81leky5AhFG2zVopuCG8O7tr7dz32ZVU
+ XwO98A49YH21vVNj5l/NNeeeoRdOJZhvMuY0LXWOLeMseNMdmrBfJHfo9rnD++oKdcRO
+ epjFA9dd1+tmgZh0mbMWgE60LRxsX3Pfz8YIYaKptT5QUiV0t554sg895E+0jORtBnLj
+ BReg8cA5o7YnfQdiFBXbCgANwJko8I6ceJHRvFt02uhobioe3PEmLUugvEdJOl5BTD7s
+ U/zQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=LzgGW5cC
+Subject: Re: [Buildroot] [PATCH v4] support/scripts/fix-rpath: parallelize
+ patching files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,95 +93,222 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Victor Dumas <dumasv.dev@gmail.com>, David Laight <David.Laight@aculab.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============0193480379740995133=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d036dc6ec873f50a24e73d8dbdafecb3b4098909
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+--===============0193480379740995133==
+Content-Type: multipart/alternative; boundary="00000000000025dc5c05edaa7825"
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 35 +++++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 38 insertions(+), 3 deletions(-)
+--00000000000025dc5c05edaa7825
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/CHANGES b/CHANGES
-index 055b262d7a..87d4e7c472 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,38 @@
-+2022.02.7, released November 17th, 2022
-+
-+	Important / security related fixes.
-+
-+	Defconfig: Pine64: Change to mainline ATF to fix build
-+	issue, Zynqmp zcu102 / zcu106: Fix pmufw reset issue
-+
-+	Updated/fixed packages: arm-trusted-firmware, bind, botan,
-+	collectd, darkhttpd, dbus, dhcp, dnsmasq, docker-cli,
-+	docker-engine, exfatprogs, expat, f2fs-tools, faad2, ffmpeg,
-+	freerdp, gnutls, go, gpsd, grub2, gsl, gst-omx, gst1-devtools,
-+	gst1-libav, gst1-plugins-bad, gst1-plugins-base,
-+	gst1-plugins-good, gst1-plugins-ugly, gst1-python,
-+	gst1-rtsp-server, gst1-vaapi, gstreamer1,
-+	gstreamer1-editing-services, hdparm, hostapd, imagemagick,
-+	iwd, jack2, libbpf, libcurl, libfribi, libidn2, libinput,
-+	libmdbx, libopenssl, libosip2, libpng, libtasn1,
-+	libtorrent-rasterbar, libuhttpd, libvncserver, libxml2, linux,
-+	linux-tools, lldpd, lrzip, lz4, matchbox-startup-monitor,
-+	msmtp, multipath-tools, mupdf, musl, mv-ddr-marvell, mxml,
-+	nodejs, ntfs-3g, numactl, openvmtools, oracle-mysql,
-+	paho-mqtt-c, perl-net-ssleay, php, pixman, poppler, procps-ng,
-+	python-django, python3, qdecoder, rpi-userland, rsync,
-+	rtl8189es, rtl8189fs, rtl8723bu, rtl8812au-aircrack-ng,
-+	rtl8821au, rtl_433, samba4, shapelib, socat, squid, sqlite,
-+	squashfs, strongswan, sudo, swupdate, timescaledb, u-boot,
-+	uclibc-ng-test, udisks, uftp, uhd, umtprd, vim, wavemon,
-+	wireguard-linux-compat, wolfssl, wpa_supplicant, wpewebkit,
-+	zlib-ng, zsh
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15026: package/udisks: install to staging
-+	#15061: Node.js Package fails to build against musl i386
-+
- 2022.02.6, released October 2nd, 2022
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 03f2154f9f..7340b6b607 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02.6
-+export BR2_VERSION := 2022.02.7
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1664739000
-+BR2_VERSION_EPOCH = 1668678000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 8ff587100c..6195166cc8 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.02.6'
-+RELEASE='2022.02.7'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+Rather than doing it via a shell script and xargs -P, consider doing
+parallelization in a submake, similar to how we handle parallel glibc
+locale generation:
+https://github.com/buildroot/buildroot/blob/master/support/misc/gen-glibc-locales.mk
+https://github.com/buildroot/buildroot/blob/bc9b716296f37e0e3e47fd34c8991e92b6baeebd/Makefile#L655-L656
+
+This approach will reuse the make job server.
+
+You'd need to assign the results of the find to a variable and then create
+a target for each of the files using something like
+
+$(foreach file,$(FILES),$(eval $(call make-fix-rpath-target,$(file))))
+
+
+On Tue, Nov 15, 2022 at 9:24 AM Quentin Schulz via buildroot <
+buildroot@buildroot.org> wrote:
+
+> Hi David,
+>
+> On 11/15/22 09:47, David Laight wrote:
+> > From: Victor Dumas
+> >> Sent: 20 October 2022 12:55
+> >>
+> >> Using "xargs" instead of "while read" loop allows for the patching of
+> files to be parallelized
+> >> This significantly reduces the amount of time it takes to fix all the
+> paths.
+> >> On a larger RFS(~300MB) this script was taking 5 minutes, it now only
+> takes about 30s on a 12 core
+> >> machine
+> > ...
+> >> +    # Limit the number of cores used
+> >> +    procs=$(echo -e "$(($(nproc)-2)) \n 1" | sort -n | tail -n1)
+> >> +    find "${rootdir}" ${find_args[@]} | xargs -0 -r -P ${procs} -I {}
+> bash -c "patch_file
+> >> '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
+> >
+> > Are you sure that all versions of xargs the script needs to
+> > run on support -P ?
+> >
+>
+> --max-procs was part of the initial commit of xargs in findutils in
+> 1996, c.f.:
+>
+> https://git.savannah.gnu.org/cgit/findutils.git/commit/?id=c030b5ee33bbec3c93cddc3ca9ebec14c24dbe07
+>
+> It is also supported in its initial commit in Busybox:
+>
+> https://git.busybox.net/busybox/commit/?id=92a61c1206572f4a6e55baa24e7cdd4f180d4b64
+>
+> The only question is about BSD support (since pkgs.org returns that all
+> other distros are using find-utils/busybox basically) since they are
+> using something else (toybox, heirloom, ...?).
+>
+> Do we actually have a list of operating systems that are "officially"
+> supported?
+>
+> > Having xargs run 'bash -c "command" ...' and the quoting also looks odd.
+> > I presume there is some reason xargs can't just run patrch_file.
+> >
+>
+> IIRC, you can't call a shell function from xargs directly.
+>
+> Cheers,
+> Quentin
+>
+> >       David
+> >
+> > -
+> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
+> MK1 1PT, UK
+> > Registration No: 1397386 (Wales)
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> >
+> https://urldefense.com/v3/__https://lists.buildroot.org/mailman/listinfo/buildroot__;!!OOPJP91ZZw!mrCuxJUbX9qAxmtZDc6047Tt9_CuDKxXgPQu86pqCMlg_9auvbbJCmj2U4UdX_OnaO0U9ecmUu0-uHnkJjFiEXoSX0FyA8U_YtvT0A$
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--00000000000025dc5c05edaa7825
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Rather than doing it via a shell script and xargs -P,=
+ consider doing parallelization in a submake, similar to how we handle para=
+llel glibc locale generation:</div><div></div><div><a href=3D"https://githu=
+b.com/buildroot/buildroot/blob/master/support/misc/gen-glibc-locales.mk">ht=
+tps://github.com/buildroot/buildroot/blob/master/support/misc/gen-glibc-loc=
+ales.mk</a></div><div><a href=3D"https://github.com/buildroot/buildroot/blo=
+b/bc9b716296f37e0e3e47fd34c8991e92b6baeebd/Makefile#L655-L656">https://gith=
+ub.com/buildroot/buildroot/blob/bc9b716296f37e0e3e47fd34c8991e92b6baeebd/Ma=
+kefile#L655-L656</a></div><div><br></div><div>This approach will reuse the =
+make job server.</div><div><br></div><div>You&#39;d need to assign the resu=
+lts of the find to a variable and then create a target for each of the file=
+s using something like<br></div><div><pre class=3D"gmail-lang-bash gmail-s-=
+code-block"><code class=3D"gmail-hljs gmail-language-bash">$(foreach file,$=
+(FILES),$(<span class=3D"gmail-hljs-built_in">eval</span> $(call make-fix-r=
+path-target,$(file))))<br></code></pre></div></div><br><div class=3D"gmail_=
+quote"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Nov 15, 2022 at 9:24 A=
+M Quentin Schulz via buildroot &lt;<a href=3D"mailto:buildroot@buildroot.or=
+g">buildroot@buildroot.org</a>&gt; wrote:<br></div><blockquote class=3D"gma=
+il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
+04,204);padding-left:1ex">Hi David,<br>
+<br>
+On 11/15/22 09:47, David Laight wrote:<br>
+&gt; From: Victor Dumas<br>
+&gt;&gt; Sent: 20 October 2022 12:55<br>
+&gt;&gt;<br>
+&gt;&gt; Using &quot;xargs&quot; instead of &quot;while read&quot; loop all=
+ows for the patching of files to be parallelized<br>
+&gt;&gt; This significantly reduces the amount of time it takes to fix all =
+the paths.<br>
+&gt;&gt; On a larger RFS(~300MB) this script was taking 5 minutes, it now o=
+nly takes about 30s on a 12 core<br>
+&gt;&gt; machine<br>
+&gt; ...<br>
+&gt;&gt; +=C2=A0 =C2=A0 # Limit the number of cores used<br>
+&gt;&gt; +=C2=A0 =C2=A0 procs=3D$(echo -e &quot;$(($(nproc)-2)) \n 1&quot; =
+| sort -n | tail -n1)<br>
+&gt;&gt; +=C2=A0 =C2=A0 find &quot;${rootdir}&quot; ${find_args[@]} | xargs=
+ -0 -r -P ${procs} -I {} bash -c &quot;patch_file<br>
+&gt;&gt; &#39;${PATCHELF}&#39; &#39;${rootdir}&#39; &#39;${sanitize_extra_a=
+rgs}&#39; $@&quot; _ {}<br>
+&gt; <br>
+&gt; Are you sure that all versions of xargs the script needs to<br>
+&gt; run on support -P ?<br>
+&gt; <br>
+<br>
+--max-procs was part of the initial commit of xargs in findutils in <br>
+1996, c.f.:<br>
+<a href=3D"https://git.savannah.gnu.org/cgit/findutils.git/commit/?id=3Dc03=
+0b5ee33bbec3c93cddc3ca9ebec14c24dbe07" rel=3D"noreferrer" target=3D"_blank"=
+>https://git.savannah.gnu.org/cgit/findutils.git/commit/?id=3Dc030b5ee33bbe=
+c3c93cddc3ca9ebec14c24dbe07</a><br>
+<br>
+It is also supported in its initial commit in Busybox:<br>
+<a href=3D"https://git.busybox.net/busybox/commit/?id=3D92a61c1206572f4a6e5=
+5baa24e7cdd4f180d4b64" rel=3D"noreferrer" target=3D"_blank">https://git.bus=
+ybox.net/busybox/commit/?id=3D92a61c1206572f4a6e55baa24e7cdd4f180d4b64</a><=
+br>
+<br>
+The only question is about BSD support (since <a href=3D"http://pkgs.org" r=
+el=3D"noreferrer" target=3D"_blank">pkgs.org</a> returns that all <br>
+other distros are using find-utils/busybox basically) since they are <br>
+using something else (toybox, heirloom, ...?).<br>
+<br>
+Do we actually have a list of operating systems that are &quot;officially&q=
+uot; <br>
+supported?<br>
+<br>
+&gt; Having xargs run &#39;bash -c &quot;command&quot; ...&#39; and the quo=
+ting also looks odd.<br>
+&gt; I presume there is some reason xargs can&#39;t just run patrch_file.<b=
+r>
+&gt; <br>
+<br>
+IIRC, you can&#39;t call a shell function from xargs directly.<br>
+<br>
+Cheers,<br>
+Quentin<br>
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0David<br>
+&gt; <br>
+&gt; -<br>
+&gt; Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, =
+MK1 1PT, UK<br>
+&gt; Registration No: 1397386 (Wales)<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
+@buildroot.org</a><br>
+&gt; <a href=3D"https://urldefense.com/v3/__https://lists.buildroot.org/mai=
+lman/listinfo/buildroot__;!!OOPJP91ZZw!mrCuxJUbX9qAxmtZDc6047Tt9_CuDKxXgPQu=
+86pqCMlg_9auvbbJCmj2U4UdX_OnaO0U9ecmUu0-uHnkJjFiEXoSX0FyA8U_YtvT0A$" rel=3D=
+"noreferrer" target=3D"_blank">https://urldefense.com/v3/__https://lists.bu=
+ildroot.org/mailman/listinfo/buildroot__;!!OOPJP91ZZw!mrCuxJUbX9qAxmtZDc604=
+7Tt9_CuDKxXgPQu86pqCMlg_9auvbbJCmj2U4UdX_OnaO0U9ecmUu0-uHnkJjFiEXoSX0FyA8U_=
+YtvT0A$</a><br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
+
+--00000000000025dc5c05edaa7825--
+
+--===============0193480379740995133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0193480379740995133==--
