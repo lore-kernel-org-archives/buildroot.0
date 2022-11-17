@@ -1,74 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B9AC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 19:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202FEC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 17 Nov 2022 19:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6EF681ECB;
-	Thu, 17 Nov 2022 19:24:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6EF681ECB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97CBF418F4;
+	Thu, 17 Nov 2022 19:45:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97CBF418F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YCLXNd7LGX-k; Thu, 17 Nov 2022 19:24:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j3sh1olO6Cjj; Thu, 17 Nov 2022 19:45:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB4781E70;
-	Thu, 17 Nov 2022 19:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB4781E70
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D99CC1BF3D7
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 19:24:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79A5C417D0;
+	Thu, 17 Nov 2022 19:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A5C417D0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 654811BF3D7
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 19:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B505781E70
- for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 19:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B505781E70
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C63F417D0
+ for <buildroot@lists.busybox.net>; Thu, 17 Nov 2022 19:45:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C63F417D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j1BriuSFqw1M for <buildroot@lists.busybox.net>;
- Thu, 17 Nov 2022 19:24:46 +0000 (UTC)
-X-Greylist: delayed 00:05:05 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D4B481E68
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D4B481E68
- for <buildroot@buildroot.org>; Thu, 17 Nov 2022 19:24:45 +0000 (UTC)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1MYNaE-1oQWQu3QLC-00VOvb; Thu, 17 Nov 2022 20:19:34 +0100
-Message-ID: <4418d046-678f-912c-8c44-348cc82c9f06@vivier.eu>
-Date: Thu, 17 Nov 2022 20:19:33 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pTIb_-KN5mUC for <buildroot@lists.busybox.net>;
+ Thu, 17 Nov 2022 19:45:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD3B4175E
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3AD3B4175E
+ for <buildroot@buildroot.org>; Thu, 17 Nov 2022 19:45:07 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.88.137])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id vkosoCMVUEclovkosoTm6R; Thu, 17 Nov 2022 20:45:06 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu, 17 Nov 2022 20:45:05 +0100
+Message-Id: <20221117194505.949846-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: fr
-To: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>, buildroot@buildroot.org
-References: <20220904095237.1401885-1-laurent@vivier.eu>
- <20220904095237.1401885-3-laurent@vivier.eu>
- <10716f6f-5738-5dbb-d0e7-6711331835d1@kaod.org>
-From: Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <10716f6f-5738-5dbb-d0e7-6711331835d1@kaod.org>
-X-Provags-ID: V03:K1:2+0ZExuDOjDlCoCvyutfai2G2ovN5CIiIqJ1jgh0DXdduQmnMy2
- SZS86MhdPZYS3exDEFcmb746+14ueFUVdogIgR9cY1d/ujhIimnUsQF2MWRPD1DscNeU1h2
- p7vp8uiczuW4qi6bL5vXgqnHHNFzf8CMs92axAqu+egIm7pHeV2s+JGsYt2oZ35g3IRhdav
- m+uzKvwjHoE+QfZMBqCgw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2kcsp+CiCaA=:uAMaoNVWlO25YB1JCwTkxF
- ZQFBrpEI3Zipz3DRcKR/+u8yWTpmqUBraHcHQbUzSRuRPyv6k6AE5pyaO5b5/oVyLn6Dm27dw
- c2nihUiZ/kpEHtgZ2A7PvI7v5QQFGxgDbnzHBST8Ns+HPRgBQqztXfDy6+Mo0Owds/LYdr9i1
- rgLi7JFjY+XQILh8cYB5kGQ9Efd3nEFnv71V6NihF29WW6fqf7Bid+ePMbeM2bU3muYR4HQBG
- 66lAedW+KgoIr05qeMjG7fWEUWRmncmztkMhlrTgKNV5/md8TqFcC2c82ppUBx7OUO2EswN80
- qItSjzojVB60neoMFUpVyfsPsqL75CcLcryPa/AGbQ3Ma9QjqKReI3As5/X6MjEC0+Brd2CQG
- nBXjtDpF2TQF+fcXFZNnyUVTHRe+0i3Ev00xgN2W7cIo+4maL3Q02eQVIwAau37dGs8ZRZxHc
- ykzHDxPbcOxbGY1qJwwgm0Q/I/+AC3y6al8hYUeZvjczkik8KfurN75FxkpOPxX6lt0Rna4w+
- U8a2OGSOIsa6rxwmzETPASepI2FcGJMkGr2sExh5IijnJQk0YS0gPowV+hfVJCrQPBl3mLtN1
- +gB6pV3czd+vf0D67V4lK7PeQWeE9nGe1bwB6DrXlN539kBPhQKZOcDzUTE05CYKJCd+avJwq
- pv/FWus+Z7xCldCbqDokaUhBcFkfjVjd4gX6lQnSsdiq5BeeEJBnL9eUvZw0fXAWlyIe7LWUt
- 1FswdTNF1w7NOZsiZ6VrtE92Nsh/rrNXZc39iu97cl6r9Fpt1uScNdabFU4uBO0XO0pXF8P77
- hd4TNNX
-Subject: Re: [Buildroot] [PATCH v5 2/2] board/qemu/m68k-virt: Add virt-m68k
- linux config
+X-CMAE-Envelope: MS4xfMqthbKd74nd0BopO+kT7oWHEMQ50+mGjC8JCVFTFWp1GOiwtZIWwNbFibOjuPW4w+5jNeGBgQIyM57DDRwaInsn/rwUYDm5mCLEJgotV/YbllKnlict
+ slifA21zHcdIIUcXbmjQat58hVS3MV/r6m4z3ObW2li6tqVw30n6+zhPbe+uZ0Wav/kGBFF2ZST9D2Em+IXCrdfYjpR8Lv35HtumGBweVve7jLFwaxQvRWF4
+ HzGhB7JLVgu7Lil2k0y2mBDskC5yW09+OCl/EnvA4GpbYy1vsMV8UiscT0g6/sw2pIlIN1SnL//+PvhL/oQFiticDQBSLasMauk0Yi1Q8ZCT6EhRR0byU3md
+ VjfUJcQH
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1668714306; bh=1ZKPLcCqZPyr5UugoIeEy3ZYTqXeSg42GBkUZYWXsCE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Ndwd9yQGkV4X519sqBr9vKWyaeuDK8Cx8njhCkqoFcTkWkBaDcex7MqOqgwsXLkzf
+ WK4ryDdvW1ThoYrAEeebT5og0z8R/okhGgktFQtf92stH5/7K+VFsreJhahnpAvmXV
+ 7wS9yr9WIwt3m9AlxfvswHb7W7l8AkJNWvBOCwW6dV//aPPTsM11B0HsFs6Lwe2qWX
+ GzUg5q7PykimUo/s4qY0CATUi56VptJib7JuJeXXMFHYVFur7JUOuecHvt3XrSwdxP
+ hkUEbghrkUirS0igmqCky7pCARw/I72bvPtY8G67WfWE2ZlAb5innvQ/31WSBUycSX
+ KP7rJFsx6ezKg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Ndwd9yQG
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure with make
+ 4.3.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,24 +74,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMTcvMTEvMjAyMiDDoCAxOTowMCwgQ8OpZHJpYyBMZSBHb2F0ZXIgYSDDqWNyaXTCoDoKPiBI
-ZWxsbyBMYXVyZW50LAo+IAo+IE9uIDkvNC8yMiAxMTo1MiwgTGF1cmVudCBWaXZpZXIgd3JvdGU6
-Cj4+IEJ1aWxkIGEgNS4xOSAoZmlyc3QgdmVyc2lvbiB3aXRoIHRoZSBtNjhrIHZpcnQgbWFjaGlu
-ZSkga2VybmVsCj4+IGZvciAicWVtdS1zeXN0ZW0tbTY4ayAtTSB2aXJ0IiBtYWNoaW5lLgo+Pgo+
-PiBTaWduZWQtb2ZmLWJ5OiBMYXVyZW50IFZpdmllciA8bGF1cmVudEB2aXZpZXIuZXU+Cj4+IC0t
-LQo+PiDCoCBERVZFTE9QRVJTwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMiArCj4+IMKgIGJvYXJkL3FlbXUvbTY4ay12
-aXJ0L2NvbmZpZy5saW51eMKgwqDCoMKgwqDCoMKgwqDCoCB8IDg5ICsrKysrKysrKysrKysrKysr
-KysrKysKPiAKPiBXaHkgbm90IHVzZSB0aGUgbGludXggdmlydF9kZWZjb25maWcgPwoKQmVjYXVz
-ZSBpdCBkb2Vzbid0IGhhdmUgYWxsIHRoZSBuZWVkZWQgb3B0aW9ucyB0byBrZXhlYyBhIGtlcm5l
-bCBhbmQgdG8gdXNlIFJBSUQvTFZNL0RldmljZSBNYXBwZXIKClRoYW5rcywKTGF1cmVudApfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Make 4.3.91 doesn't allow to safely override Simple Expanded Variables, so
+let's add a patch pending upstream[0] to make those variable Conditional
+Expanded.
+
+[0]: https://bugzilla.mozilla.org/show_bug.cgi?id=1801182
+
+Fixes:
+http://autobuild.buildroot.net/results/1074143dbea60567cd83be0a23f7c0214d470de9/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...w-overriding-OS_ARCH-OS_TEST-and-OS_.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch
+
+diff --git a/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch b/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch
+new file mode 100644
+index 0000000000..7b3abea307
+--- /dev/null
++++ b/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch
+@@ -0,0 +1,45 @@
++From a1a5f3afea2ee59bdbb7a74eb2d7f82b635dbd1a Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 17 Nov 2022 20:38:48 +0100
++Subject: [PATCH] Bug 1801182 - Allow overriding OS_ARCH, OS_TEST and
++ OS_RELEASE in Makefile
++
++Starting from Make 4.3.91 simple expanded variables can't be safely
++overriden via command line anymore, so let's use conditional expanded
++variables to override OS_ARCH, OS_TEST and OS_RELEASE.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Upstream status: https://bugzilla.mozilla.org/show_bug.cgi?id=1801182]
++---
++ nss/coreconf/arch.mk | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/nss/coreconf/arch.mk b/nss/coreconf/arch.mk
++index 17e9faeac..85aac9341 100644
++--- a/nss/coreconf/arch.mk
+++++ b/nss/coreconf/arch.mk
++@@ -20,17 +20,17 @@
++ # Macros for getting the OS architecture
++ #
++ 
++-OS_ARCH := $(subst /,_,$(shell uname -s))
+++OS_ARCH ?= $(subst /,_,$(shell uname -s))
++ 
++ #
++ # Attempt to differentiate between sparc and x86 Solaris
++ #
++ 
++-OS_TEST := $(shell uname -m)
+++OS_TEST ?= $(shell uname -m)
++ ifeq ($(OS_TEST),i86pc)
++-    OS_RELEASE := $(shell uname -r)_$(OS_TEST)
+++    OS_RELEASE ?= $(shell uname -r)_$(OS_TEST)
++ else
++-    OS_RELEASE := $(shell uname -r)
+++    OS_RELEASE ?= $(shell uname -r)
++ endif
++ 
++ 
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
