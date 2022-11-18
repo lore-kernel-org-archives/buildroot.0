@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5255EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 18 Nov 2022 14:15:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A467EC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 18 Nov 2022 15:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0A27610AA;
-	Fri, 18 Nov 2022 14:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0A27610AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id F17B94198F;
+	Fri, 18 Nov 2022 15:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F17B94198F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4We-zcy3pdCj; Fri, 18 Nov 2022 14:15:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pUY4zo7Zzusn; Fri, 18 Nov 2022 15:55:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECA8610A5;
-	Fri, 18 Nov 2022 14:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ECA8610A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8F9C416BE;
+	Fri, 18 Nov 2022 15:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8F9C416BE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 24A3C1BF966
- for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 14:14:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 39E3B1BF592
+ for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 15:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C97F94179D
- for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 14:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C97F94179D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DBC2416BE
+ for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 15:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DBC2416BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 930uw1yKeadW for <buildroot@lists.busybox.net>;
- Fri, 18 Nov 2022 14:14:46 +0000 (UTC)
+ with ESMTP id 4SXQQUdreWMK for <buildroot@lists.busybox.net>;
+ Fri, 18 Nov 2022 15:55:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A0884179B
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A0884179B
- for <buildroot@buildroot.org>; Fri, 18 Nov 2022 14:14:45 +0000 (UTC)
-Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue106
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MxmFk-1p9hwE0CVi-00zCdk; Fri, 18
- Nov 2022 15:14:40 +0100
-From: Laurent Vivier <laurent@vivier.eu>
-To: buildroot@buildroot.org
-Date: Fri, 18 Nov 2022 15:14:35 +0100
-Message-Id: <20221118141435.1084565-4-laurent@vivier.eu>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118141435.1084565-1-laurent@vivier.eu>
-References: <20221118141435.1084565-1-laurent@vivier.eu>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7724E41626
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7724E41626
+ for <buildroot@buildroot.org>; Fri, 18 Nov 2022 15:55:44 +0000 (UTC)
+Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
+ (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MC2o9-1oo2xK2PK1-00COJJ; Fri, 18 Nov 2022 16:55:39 +0100
+Message-ID: <88b60aea-117a-4b1a-2323-ac0b4ce1db33@vivier.eu>
+Date: Fri, 18 Nov 2022 16:55:38 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:g+xTcb+86fBoiONn3BDipw9YfZYSvKdWl+WQ0/iTkT6Gv8h3rsC
- XbPE86eXeRz6bg8CuxenhsoKkF7zT2z7KzwMNZihxwcl7xQNDgf8hrLk8FtrVBqhROWq4/b
- J0cphvcPyrbXLiu0vo1+n8FR6C4sZ9skTuFq4JUZ8tr+anS+pC8UKFqMxTz6RB9/GeI5OhK
- skturwjSJoebphoskk+aw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F58+b+wKivI=:jOZ5rOnoWNwmeVcscWTXY2
- gs0z6vn8FgIKIxVHGOj5C3Wp/iSBwvYT1QgyNOvo6PrPdSfr8mIXgKfgXE7kBfkvku2pjFBZa
- Bi+dOlLs+TgkctPJvt5W9XbzI/KTbUy+amGhiUFst537JvXg4bk2R90CwGUEWtreQt9Lv4oDg
- emFmJftq+0cON3iKttahBo6dVT52YtWQoGaKvfio6oW2OUhygFusgV5nJLnPIiYsWLzdDMHpV
- scV8EGa1r6qTqQ59sU2/uPDCc0LYOs1F1sj4BktTjP0wAzHY8kQRLFnVFXyRELydC/HHILSdU
- I++UPEgQ2frVr12M+Uovcn+BiknsrQMyBGvQyDucMTpiG96IfZws2dIo6paqRbHHZv4afK6GM
- mkPAWxZBE9HvQAze/Of9k8ijIZfubIuo/4w9p6x/GuCQWW6y81J4PYqsHt/wztzC7TUEFsqVP
- sRP44rejWfqmHV3AuzW56PCarcHyjGvb/GPlL78Kwwp0IxtuVt7/TchZsIOYyvFBC6IZ/MkXR
- biWC+aWmzqR8eWt1QQ9+1R6n+cKh2CEmLVve6tQQNJDmUdSupimdf55m/xVQvmqrMazTUyBCK
- ZyQD4a1ZWbU8H/uLTtEHJQF2JeZDzWkb36YyMXslm+neBZDTFNCIUYIgocaleMHb+/pg7qkSc
- ViIN/DymdrlfFQdYgaNuhmSggyh7lV2871RPfwui4ovaEOfmybi0Hyzj341j84rT3Oe0C5eFT
- BCxMDzTcSpDasp8m2SNG62aQaMRJ2BoZWU1DGaWxt5l+peoUYNuZ2jyzos4idsHNuxZi9NHwv
- 8SMA4bs
-Subject: [Buildroot] [PATCH v7 3/3] support/scripts/boot-qemu-image.py:
- manage petitboot interface
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: fr
+To: buildroot@buildroot.org
+References: <20221118141435.1084565-1-laurent@vivier.eu>
+From: Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <20221118141435.1084565-1-laurent@vivier.eu>
+X-Provags-ID: V03:K1:T56jpSIcGxdJn5O9Mm4KaTF2fm6+oMsVu0rAjNjrftDd0T5L5nd
+ +wEpAEs2UC2mY29kYozLX8dD3euWMxWn5zbq/JCL/bV88TNHUGEeLhginVbvT3Tx5r7QiRN
+ vnifcbjwZy41Gmro/FxqbNY2vn2qpokVo97NtFByCNftKo7U4JHlgJtAwjhW8cRUWEK3Rq7
+ JZJ1BwopYu72BqMa6l51w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:snx8ZNN5iKU=:Y2g7wPjjKdCYTWP4yTDWXU
+ vdDXz4+eR/ssf2vM7907syucH3rKUpsE3CRBeDcE8ALezCIXAyHRdmaWbSyHZFCvsYcl39Q4x
+ mTG6QNNlxf2mrKkpWOFfI4taMxYZj9xBG8kDZiLBYSKjlu7xDm8TASrbMU6HgOy3eMCZSkn2q
+ MXzIrB+/WOXLrmhMQC9eTKbSYmqUm61xXNps0WUf8GbNyd5z3gwhbf5BHDH9qTtp/QC36LgHz
+ uhFC45ZWfh2OusfM3TjVeeF2egI2dnyDBzGj/E53KgQ3vON3etu603et354UxdnH0DbE0ADTD
+ VbuN34J0XFGfgQkLp9zE5ZJNNDIoifEVb3VL1D5+uU3KPaJzeIWrBQY/kWAL9gsBz1GiRkrI5
+ P6ACB29MRo1rWe0Nk3kXdEEIe4voUvNXG78m18F7FhCaVwt4ogupWHxjxE+Nj0S87a5D5KL7Z
+ KOW0EnDTwyM/3HDaqU3v/I1cR1Yu3gow1XJufeFfKMKUwrl38GNKJDTie+GSvkqB2J/RiMzs5
+ dGgLb/u2Y209Dy4E/cCqnoZ8kd6vE3Swh5NA3TEGQwfNS8D7rReLdEXk5PsAfhhmc/IZ0kKlr
+ z9Et1MFwXNy1cE2rTe0u2lxQvu4ac42BwZhcGmoB1gBeq+YgAZIO8Q1oDJExOiZs+BW3VT0v2
+ P+122zoR98yGRLSiS/hhZBqkWM5DC4ZH4gTd0ENKKJBH6HpgLNaYMq/AWqEtCdsRCHnAu/hjs
+ mcGcBkSm7n1RO9a+MB/qTtEYu7v/swFlYPWlZDy3XLawHd/oBiptb8DmvAQ2tmoEWoFSBUgxq
+ h1Rp2SX
+Subject: Re: [Buildroot] [PATCH v7 0/3] package: add petitboot to use with
+ qemu-system-m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,88 +79,31 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Laurent Vivier <laurent@vivier.eu>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+ =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Petitboot doesn't start a shell but a GUI.
-Manage the menu to switch to the shell.
-Use "poweroff -f" as we don't have init
-
-Enable the test for qemu_m68K_virt.
-
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- configs/qemu_m68k_virt_petitboot_defconfig |  5 +++++
- support/scripts/boot-qemu-image.py         | 13 ++++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
-index 5ddd9837161f..c83827855f07 100644
---- a/configs/qemu_m68k_virt_petitboot_defconfig
-+++ b/configs/qemu_m68k_virt_petitboot_defconfig
-@@ -8,6 +8,8 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_MERGED_USR=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyGF0"
- BR2_ROOTFS_OVERLAY="package/petitboot/fs-overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
-@@ -24,3 +26,6 @@ BR2_PACKAGE_RSYNC=y
- BR2_PACKAGE_PETITBOOT=y
- BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_XZ=y
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
-index ba50ea69ee9a..8dd3b4c654e1 100755
---- a/support/scripts/boot-qemu-image.py
-+++ b/support/scripts/boot-qemu-image.py
-@@ -36,7 +36,7 @@ def main():
-     time.sleep(1)
- 
-     try:
--        child.expect(["buildroot login:"], timeout=600)
-+        idx = child.expect(["buildroot login:", "Exit to shell"], timeout=600)
-     except pexpect.EOF as e:
-         # Some emulations require a fork of qemu-system, which may be
-         # missing on the system, and is not provided by Buildroot.
-@@ -55,7 +55,11 @@ def main():
-         print("System did not boot in time, exiting.")
-         sys.exit(1)
- 
--    child.sendline("root\r")
-+    if idx == 0:
-+        child.sendline("root\r")
-+    elif idx == 1:
-+        time.sleep(1)
-+        child.sendline("\r")
- 
-     try:
-         child.expect(["# "], timeout=600)
-@@ -66,7 +70,10 @@ def main():
-         print("Timeout while waiting for shell")
-         sys.exit(1)
- 
--    child.sendline("poweroff\r")
-+    if idx == 0:
-+        child.sendline("poweroff\r")
-+    elif idx == 1:
-+        child.sendline("poweroff -f\r")
- 
-     try:
-         child.expect(["System halted"], timeout=600)
--- 
-2.38.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgMTgvMTEvMjAyMiDDoCAxNToxNCwgTGF1cmVudCBWaXZpZXIgYSDDqWNyaXTCoDoKPiBxZW11
+LXN5c3RlbS1tNjhrIGhhcyBpbnRyb2R1Y2VkIGluIHY2LjAgYSBuZXcgcHVyZSB2aXJ0dWFsIG1h
+Y2hpbmUKPiB0aGF0IGlzIG5vdyBzdXBwb3J0ZWQgYnkgbGludXggdjUuMTkuCj4gCj4gVGhlIGdv
+YWwgb2YgdGhpcyBzZXJpZXMgaXMgdG8gcHJvdmlkZSBwZXRpdGJvb3QgYXMgYW4gZW1iZWRkZWQg
+Ym9vdGxvYWRlcgo+IGZvciBpdCAobGlrZSBpdCBpcyBmb3IgdGhlIElCTSBzcGFwciBtYWNoaW5l
+KS4KPiAKPiBUaGUgZmlyc3QgcGF0Y2ggaW50cm9kdWNlcyBwZXRpdGJvb3QgcGFja2FnZSwgdGhl
+IHNlY29uZCBwYXRjaCB0aGUKPiBjb25maWd1cmF0aW9uIHRvIGJ1aWxkIGJ1aWxkcm9vdCB3aXRo
+IHBldGl0Ym9vdCBmb3IgdGhlIFFFTVUgbWFjaGluZS4KPiAKPiBZb3UgY2FuIHRlc3QgaXQgd2l0
+aDoKPiAKPiAgICBxZW11LXN5c3RlbS1tNjhrIC1NIHZpcnQgLWtlcm5lbCBpbWFnZXMvdm1saW51
+eCBcCj4gICAgICAgICAgICAgICAgICAgICAtaW5pdHJkIGltYWdlcy9yb290ZnMuY3Bpby54eiBc
+Cj4gICAgICAgICAgICAgICAgICAgICAtYXBwZW5kICJjb25zb2xlPXR0eUdGMCIgLS1ub2dyYXBo
+aWMKPiAKPiBTaWduZWQtb2ZmLWJ5OiBMYXVyZW50IFZpdmllciA8bGF1cmVudEB2aXZpZXIuZXU+
+Cj4gCj4gdjc6Cj4gICAgLSBzZXQgQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RP
+TV81XzE5PXkKPiAgICAtIGZpeCBlcnJvcnMgcmVwb3J0ZWQgYnkgY2hlY2stcGFja2FnZQo+ICAg
+IC0gYWRkIGdpdGxhYiB0ZXN0aW5nIChDw6lkcmljKQo+ICAgIC0gdXBkYXRlIGJvb3QtcWVtdS1p
+bWFnZS5weSB0byBzdXBwb3J0IHBldGl0Ym9vdAoKUUVNVSB0ZXN0aW5nIHJlc3VsdCB3aXRoIGdp
+dGxhYjoKCmh0dHBzOi8vZ2l0bGFiLmNvbS9sYXVyZW50X3Zpdmllci9idWlsZHJvb3QvLS9waXBl
+bGluZXMvNjk4ODM4NjM4CgpUaGFua3MsCkxhdXJlbnQKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
