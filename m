@@ -1,68 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF73EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 18 Nov 2022 14:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9320CC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 18 Nov 2022 14:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6825B8216E;
-	Fri, 18 Nov 2022 14:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6825B8216E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 263DA6108C;
+	Fri, 18 Nov 2022 14:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 263DA6108C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ttx5nPhtWOkw; Fri, 18 Nov 2022 14:14:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PkGxyEU3I8FR; Fri, 18 Nov 2022 14:15:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB29820F3;
-	Fri, 18 Nov 2022 14:14:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CB29820F3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11EBF1BF2B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4618860ACF;
+	Fri, 18 Nov 2022 14:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4618860ACF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F4E21BF2B3
  for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 14:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE91A820F3
- for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 14:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE91A820F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 674DF4179D
+ for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 14:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 674DF4179D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rM0TPRcrSpXe for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CCIsqZT_v6Zx for <buildroot@lists.busybox.net>;
  Fri, 18 Nov 2022 14:14:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5D3B81FF1
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A5D3B81FF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FE7D41778
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FE7D41778
  for <buildroot@buildroot.org>; Fri, 18 Nov 2022 14:14:44 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue106
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MhClw-1pQ7pf1AEE-00eNy0; Fri, 18
- Nov 2022 15:14:37 +0100
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MWjQU-1oTWuF14Yq-00X3Lq; Fri, 18
+ Nov 2022 15:14:39 +0100
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Fri, 18 Nov 2022 15:14:32 +0100
-Message-Id: <20221118141435.1084565-1-laurent@vivier.eu>
+Date: Fri, 18 Nov 2022 15:14:34 +0100
+Message-Id: <20221118141435.1084565-3-laurent@vivier.eu>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221118141435.1084565-1-laurent@vivier.eu>
+References: <20221118141435.1084565-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:rM1pCRZnXy4h0ypu/Ecy6WtXDwyvWcAaNIB0XFEIttmuhCvQTQG
- QuXzbbkvgHzBYuUj3bp7QG5MhQAKwfePC0IwTeiXa8o9Trx3wZ1qlvRCwuAxqjNEM97DCUk
- oo9L/NuR2y89bNsawxE5iQaV/RrmLOCpndm0vfeAT5KsCN7SgkONoZDiwG+bDmgFYny9lIT
- NHSufyq+swTrpO9DVqP2Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kx1pLtHK31E=:FaMxG8ueOGRBS0KSOFOLio
- tN+SWBWWUYmR4oQEVRVwnJuE0DuSR03m+pVg9JIuRiNgLehY2ctTeP6y5RE/G+OtvLEA/a8+d
- 43Xt0drX9r3Vn0RKkdiOKTKvPRoBs9u4Xk9/BSXdS47bDFNmytDSnugOoFm+O++kvI/eWNx7E
- FjkRpxEzvm7cB7+hlayIy09M8y1BGfG1s6AEsOwWYa0kWnSHvWMRvj6YPOZtBR0fsCujjnmdc
- onJlURbNNvhSfqXbhwRg0HHCD3fywSAr2oZrJichVo5RFDQaEBOPlw1sHLr5NKK5RfLXPNysF
- 1m2/sKC4P+GaR2Xl2B4QBrCB9xylBh5UngCIHb3+Knc1VA2gzS9+X916xBXxQ1Wl8slAoPWkn
- Yx97425fLNR3aKBXT4GvJ+JLae62WmQxRLwYFEhUM7DfgbOU6hEIJ1TpJkx7O3WdDXQ455/yr
- 7hYjAx26mHddsrNsnzEYyBmzCJczqOdmU+o5By216q2uvE5ZKbkREu1phXkENHMXGs/Bjyt/2
- F/nCOv2a/y/s12A9Ob9+GQxnObgt8dZ1UrsTF3RbwrY1LMT4Y/BTtWAkNfPQDbS6FJZzDx3LD
- 7sIVcvoDVSCiEvAqoc/Nc16m7Sh6si8UbCIvT6BtSWRVAhdaotizkJY5lXOlB5HPJvDtZghrY
- VecKBtWjyRNmwb85nJtGHRmVZMZIS77fCnMwsJ3O7VxlvarTzNUl7n8g0KGBU/coaws0wJqMK
- YJ1+ty7EmdVzVqiJAEUNwEJunBjruhCzl+EBeqGoJEKI4UaAF0ckb+oSQ9EpIYuChovg7ktFz
- wTgs6jC
-Subject: [Buildroot] [PATCH v7 0/3] package: add petitboot to use with
- qemu-system-m68k
+X-Provags-ID: V03:K1:hEMynzBo6CQHmyrwVSBqM6qxPe/3rdkUYv0uNaSEEGSoCFapBaY
+ BNzZHc7uSfJLQYbstFv/6ZAFh7TuvLfBbbgzCJY6rSBDJEimxrgTZlf87BuuSN/IOVR9+el
+ tFeXGem6RN2NtZ0ZI00H1JXXYqwexfT8Ye4ELiwFMCbx2Lutl39c40f1QGWrPq8RViInJ2K
+ RZVYKDgfj7e3tAiuazs6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OCrDAGbOijg=:QeWRA6HX6HQzhqbzLN2Zgg
+ BYtLkfJop2RvWDvVJhc6JYdU9wnYmsLMR79vMeJJKtOa+RXgkjIxL/qi0AWd+I6Zrj9bsUaW7
+ P+lwOfEQIuY1hzg2rsLgKur82gVKAfQ0QPR9ED0LG9IiLmCyn8DQZr04fbinIn+6p0ry/Z+7B
+ o4FkvyVk4qkDMG+wYjt1UZ5egi27BHbM46OV7cSCSnwHMfdWOPf1pJEXUTEeVFz6zMUgnPq4+
+ RYdfeHYIrcHXmRwaygeIT8vYy2EXyH4C1+ivD1xTIEoI9Vaq/9uC9y3CBA0KuyGmNYY7Pdxcp
+ AXl1UrK0vHEPu5UQr74QRNDl8ERiWcOrYMqwqCMPuhBvKcRWphu/zplOivfkKVbScZqFv+qfe
+ fphqliGynXR+Ro35OJV7s4ZU7deYIanB+UkRAl7PcyzOHBUxG4hk53LqE3RbpEao/ashFc2/x
+ nfqwPzPDvk26ZhQkf5LMLHZHl7mlkFZUmVjwR0dNAaaRs+6LR+0GNCn+r8r/z6vgl79sKhL3m
+ WAUPM7WhQpDyJ4w+I7H4/N8YAo8qmu2ua+7befMIG1C8qKia8qMMDvD2L6ZG4b5xBUMAw2zS3
+ 8jd7hahb8+w4iIhHKC4df+7wIeR9FrK/+jjXy6McQqgDMEtniGufINibQ2puYymrBI9+HNQ15
+ 1ON62EsYv/u545sKyln6/5hihSAktBAFaVLWej0dSrBQOXoR00wLfoiTO5rcpWJQVhCXi5kRu
+ oSXb8njEfA4SfVIEIvvVZmxvXib+yDDOfsp6Gelo5tXFprcV1O9jwyW2JZgSknMxAqudzuvTp
+ ILk9/G7
+Subject: [Buildroot] [PATCH v7 2/3] board/qemu/m68k-virt: Add virt-m68k
+ linux config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,76 +80,180 @@ Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
  =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Laurent Vivier <laurent@vivier.eu>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cWVtdS1zeXN0ZW0tbTY4ayBoYXMgaW50cm9kdWNlZCBpbiB2Ni4wIGEgbmV3IHB1cmUgdmlydHVh
-bCBtYWNoaW5lCnRoYXQgaXMgbm93IHN1cHBvcnRlZCBieSBsaW51eCB2NS4xOS4KClRoZSBnb2Fs
-IG9mIHRoaXMgc2VyaWVzIGlzIHRvIHByb3ZpZGUgcGV0aXRib290IGFzIGFuIGVtYmVkZGVkIGJv
-b3Rsb2FkZXIKZm9yIGl0IChsaWtlIGl0IGlzIGZvciB0aGUgSUJNIHNwYXByIG1hY2hpbmUpLgoK
-VGhlIGZpcnN0IHBhdGNoIGludHJvZHVjZXMgcGV0aXRib290IHBhY2thZ2UsIHRoZSBzZWNvbmQg
-cGF0Y2ggdGhlCmNvbmZpZ3VyYXRpb24gdG8gYnVpbGQgYnVpbGRyb290IHdpdGggcGV0aXRib290
-IGZvciB0aGUgUUVNVSBtYWNoaW5lLgoKWW91IGNhbiB0ZXN0IGl0IHdpdGg6CgogIHFlbXUtc3lz
-dGVtLW02OGsgLU0gdmlydCAta2VybmVsIGltYWdlcy92bWxpbnV4IFwKICAgICAgICAgICAgICAg
-ICAgIC1pbml0cmQgaW1hZ2VzL3Jvb3Rmcy5jcGlvLnh6IFwKICAgICAgICAgICAgICAgICAgIC1h
-cHBlbmQgImNvbnNvbGU9dHR5R0YwIiAtLW5vZ3JhcGhpYwoKU2lnbmVkLW9mZi1ieTogTGF1cmVu
-dCBWaXZpZXIgPGxhdXJlbnRAdml2aWVyLmV1PgoKdjc6CiAgLSBzZXQgQlIyX1BBQ0tBR0VfSE9T
-VF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE5PXkKICAtIGZpeCBlcnJvcnMgcmVwb3J0ZWQgYnkg
-Y2hlY2stcGFja2FnZQogIC0gYWRkIGdpdGxhYiB0ZXN0aW5nIChDw6lkcmljKQogIC0gdXBkYXRl
-IGJvb3QtcWVtdS1pbWFnZS5weSB0byBzdXBwb3J0IHBldGl0Ym9vdAoKdjY6CiAgLSByZWJhc2UK
-CnY1OgogIC0gcmVtb3ZlIEJSMl9DQ0FDSEVfRElSLCBCUjJfUEFDS0FHRV9EVEMgYW5kIEJSMl9Q
-QUNLQUdFX0RUQ19QUk9HUkFNUwoKdjQ6CiAgLSBhZGRyZXNzIFRob21hcycgY29tbWVudHMKICAt
-IHJlbW92ZSBwZXRpdGJvb3QtbXRkIGNvbmZpZyBhcyBsaWJmbGFzaCBpcyBub3QgYXZhaWxhYmxl
-Cgp2MzogdjI6IHYxOgogIC0gZmlyc3QgdmVyc2lvbiwgSSBtZXNzZWQgdXAgd2l0aCBsaXN0IHN1
-YnNjcmlwdGlvbiBhbmQgZ2l0LXB1Ymxpc2guLi4KCkxhdXJlbnQgVml2aWVyICgzKToKICBwYWNr
-YWdlOiBhZGQgcGV0aXRib290CiAgYm9hcmQvcWVtdS9tNjhrLXZpcnQ6IEFkZCB2aXJ0LW02OGsg
-bGludXggY29uZmlnCiAgc3VwcG9ydC9zY3JpcHRzL2Jvb3QtcWVtdS1pbWFnZS5weTogbWFuYWdl
-IHBldGl0Ym9vdCBpbnRlcmZhY2UKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICB8ICA1ICsrCiBib2FyZC9xZW11L202OGstdmlydC9jb25maWcubGludXggICAg
-ICAgICAgICB8IDg5ICsrKysrKysrKysrKysrKysrKysrCiBib2FyZC9xZW11L202OGstdmlydC9y
-ZWFkbWUudHh0ICAgICAgICAgICAgICB8ICA1ICsrCiBjb25maWdzL3FlbXVfbTY4a192aXJ0X3Bl
-dGl0Ym9vdF9kZWZjb25maWcgICB8IDMxICsrKysrKysKIHBhY2thZ2UvQ29uZmlnLmluICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9rZXhlYy9Db25maWcuaW4gICAg
-ICAgICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9wZXRpdGJvb3QvNjMtbWQtcmFpZC1h
-cnJheXMucnVsZXMgICAgfCA0MSArKysrKysrKysKIHBhY2thZ2UvcGV0aXRib290LzY1LW1kLWlu
-Y3JlbWVudGFsLnJ1bGVzICAgIHwgNjkgKysrKysrKysrKysrKysrCiBwYWNrYWdlL3BldGl0Ym9v
-dC82Ni1hZGQtc2ctbW9kdWxlLnJ1bGVzICAgICB8ICAyICsKIHBhY2thZ2UvcGV0aXRib290L0Nv
-bmZpZy5pbiAgICAgICAgICAgICAgICAgIHwgMjMgKysrKysKIHBhY2thZ2UvcGV0aXRib290L1Mx
-NHNpbGVuY2UtY29uc29sZSAgICAgICAgIHwgIDkgKysKIHBhY2thZ2UvcGV0aXRib290L1MxNXBi
-LWRpc2NvdmVyICAgICAgICAgICAgIHwgMzggKysrKysrKysrCiBwYWNrYWdlL3BldGl0Ym9vdC9m
-cy1vdmVybGF5L2V0Yy9pbml0dGFiICAgICB8IDM0ICsrKysrKysrCiBwYWNrYWdlL3BldGl0Ym9v
-dC9mcy1vdmVybGF5L2V0Yy9sb2NhbGUgICAgICB8ICAxICsKIHBhY2thZ2UvcGV0aXRib290L2Zz
-LW92ZXJsYXkvaW5pdCAgICAgICAgICAgIHwgIDggKysKIHBhY2thZ2UvcGV0aXRib290L2tleGVj
-LXJlc3RhcnQgICAgICAgICAgICAgIHwgIDggKysKIHBhY2thZ2UvcGV0aXRib290L3BldGl0Ym9v
-dC1jb25zb2xlLXVpLnJ1bGVzIHwgIDYgKysKIHBhY2thZ2UvcGV0aXRib290L3BldGl0Ym9vdC5o
-YXNoICAgICAgICAgICAgIHwgIDIgKwogcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rICAg
-ICAgICAgICAgICAgfCA3NyArKysrKysrKysrKysrKysrKwogcGFja2FnZS9wZXRpdGJvb3QvcmVt
-b3ZhYmxlLWV2ZW50LXBvbGwucnVsZXMgfCAgNCArCiBwYWNrYWdlL3BldGl0Ym9vdC9zaGVsbF9j
-b25maWcgICAgICAgICAgICAgICB8IDE5ICsrKysrCiBwYWNrYWdlL3BldGl0Ym9vdC9zaGVsbF9w
-cm9maWxlICAgICAgICAgICAgICB8ICAyICsKIHN1cHBvcnQvc2NyaXB0cy9ib290LXFlbXUtaW1h
-Z2UucHkgICAgICAgICAgIHwgMTMgKystCiAyMyBmaWxlcyBjaGFuZ2VkLCA0ODUgaW5zZXJ0aW9u
-cygrKSwgNCBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9xZW11L202OGst
-dmlydC9jb25maWcubGludXgKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9xZW11L202OGstdmly
-dC9yZWFkbWUudHh0CiBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9xZW11X202OGtfdmlydF9w
-ZXRpdGJvb3RfZGVmY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJvb3Qv
-NjMtbWQtcmFpZC1hcnJheXMucnVsZXMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BldGl0
-Ym9vdC82NS1tZC1pbmNyZW1lbnRhbC5ydWxlcwogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
-cGV0aXRib290LzY2LWFkZC1zZy1tb2R1bGUucnVsZXMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL3BldGl0Ym9vdC9Db25maWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3BldGl0
-Ym9vdC9TMTRzaWxlbmNlLWNvbnNvbGUKIGNyZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3BldGl0
-Ym9vdC9TMTVwYi1kaXNjb3ZlcgogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290
-L2ZzLW92ZXJsYXkvZXRjL2luaXR0YWIKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BldGl0
-Ym9vdC9mcy1vdmVybGF5L2V0Yy9sb2NhbGUKIGNyZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3Bl
-dGl0Ym9vdC9mcy1vdmVybGF5L2luaXQKIGNyZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3BldGl0
-Ym9vdC9rZXhlYy1yZXN0YXJ0CiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJvb3Qv
-cGV0aXRib290LWNvbnNvbGUtdWkucnVsZXMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Bl
-dGl0Ym9vdC9wZXRpdGJvb3QuaGFzaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRi
-b290L3BldGl0Ym9vdC5tawogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290L3Jl
-bW92YWJsZS1ldmVudC1wb2xsLnJ1bGVzCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRp
-dGJvb3Qvc2hlbGxfY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA3NTUgcGFja2FnZS9wZXRpdGJvb3Qv
-c2hlbGxfcHJvZmlsZQoKLS0gCjIuMzguMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Build a 5.19 (first version with the m68k virt machine) kernel
+for "qemu-system-m68k -M virt" machine.
+
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ DEVELOPERS                                 |  2 +
+ board/qemu/m68k-virt/config.linux          | 89 ++++++++++++++++++++++
+ board/qemu/m68k-virt/readme.txt            |  5 ++
+ configs/qemu_m68k_virt_petitboot_defconfig | 26 +++++++
+ 4 files changed, 122 insertions(+)
+ create mode 100644 board/qemu/m68k-virt/config.linux
+ create mode 100644 board/qemu/m68k-virt/readme.txt
+ create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 70cb9ee68ca9..4fc33fd862d6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1741,6 +1741,8 @@ F:	package/open-lldp/
+ 
+ N:	Laurent Vivier <laurent@vivier.eu>
+ F:	package/petitboot/
++F:	board/qemu/m68k-virt/
++F:	configs/qemu_m68k_virt_petitboot_defconfig
+ 
+ N:	Lee Jones <lee.jones@linaro.org>
+ F:	boot/afboot-stm32/
+diff --git a/board/qemu/m68k-virt/config.linux b/board/qemu/m68k-virt/config.linux
+new file mode 100644
+index 000000000000..88edb9b1eb3f
+--- /dev/null
++++ b/board/qemu/m68k-virt/config.linux
+@@ -0,0 +1,89 @@
++CONFIG_LOCALVERSION="-virt"
++CONFIG_SYSVIPC=y
++CONFIG_CGROUPS=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_RDMA=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_KEXEC=y
++CONFIG_BOOTINFO_PROC=y
++CONFIG_VIRT=y
++CONFIG_PROC_HARDWARE=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_AMIGA_PARTITION=y
++CONFIG_ATARI_PARTITION=y
++CONFIG_MAC_PARTITION=y
++CONFIG_BSD_DISKLABEL=y
++CONFIG_MINIX_SUBPARTITION=y
++CONFIG_SOLARIS_X86_PARTITION=y
++CONFIG_UNIXWARE_DISKLABEL=y
++CONFIG_LDM_PARTITION=y
++CONFIG_LDM_DEBUG=y
++CONFIG_SUN_PARTITION=y
++CONFIG_SYSV68_PARTITION=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_CGROUP_NET_PRIO=y
++CONFIG_CGROUP_NET_CLASSID=y
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_SCSI_VIRTIO=y
++CONFIG_MD=y
++CONFIG_MD_LINEAR=y
++CONFIG_MD_MULTIPATH=y
++CONFIG_MD_FAULTY=y
++CONFIG_BLK_DEV_DM=y
++CONFIG_DM_UNSTRIPED=y
++CONFIG_DM_CRYPT=y
++CONFIG_DM_SNAPSHOT=y
++CONFIG_DM_THIN_PROVISIONING=y
++CONFIG_DM_CACHE=y
++CONFIG_DM_WRITECACHE=y
++CONFIG_DM_EBS=y
++CONFIG_DM_ERA=y
++CONFIG_DM_CLONE=y
++CONFIG_DM_MIRROR=y
++CONFIG_DM_RAID=y
++CONFIG_DM_ZERO=y
++CONFIG_NETDEVICES=y
++CONFIG_VIRTIO_NET=y
++CONFIG_INPUT_MOUSEDEV=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_DRM=y
++CONFIG_DRM_VIRTIO_GPU=y
++CONFIG_FB=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_VIRTIO=y
++CONFIG_VIRT_DRIVERS=y
++CONFIG_VIRTIO_INPUT=y
++CONFIG_EXT4_FS=y
++CONFIG_AUTOFS_FS=y
++CONFIG_ISO9660_FS=y
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_UDF_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_9P_FS=y
++CONFIG_9P_FS_POSIX_ACL=y
++CONFIG_9P_FS_SECURITY=y
++CONFIG_EARLY_PRINTK=y
+diff --git a/board/qemu/m68k-virt/readme.txt b/board/qemu/m68k-virt/readme.txt
+new file mode 100644
+index 000000000000..714b74c70ea1
+--- /dev/null
++++ b/board/qemu/m68k-virt/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++ qemu-system-m68k -M virt -kernel output/images/vmlinux -initrd output/images/rootfs.cpio.xz -append "console=ttyGF0" --nographic # qemu_m68k_virt_petitboot_defconfig
++
++The petiboot menu will appear in the terminal where QEMU has been started.
+diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
+new file mode 100644
+index 000000000000..5ddd9837161f
+--- /dev/null
++++ b/configs/qemu_m68k_virt_petitboot_defconfig
+@@ -0,0 +1,26 @@
++BR2_m68k=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_CCACHE=y
++BR2_RELRO_NONE=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_ROOTFS_MERGED_USR=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyGF0"
++BR2_ROOTFS_OVERLAY="package/petitboot/fs-overlay"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-virt/config.linux"
++BR2_LINUX_KERNEL_XZ=y
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KEXEC=y
++BR2_PACKAGE_KEXEC_ZLIB=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_NET_TOOLS=y
++BR2_PACKAGE_NETCAT=y
++BR2_PACKAGE_RSYNC=y
++BR2_PACKAGE_PETITBOOT=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_XZ=y
+-- 
+2.38.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
