@@ -1,64 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B567C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 12:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D037C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 13:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9A2D4017E;
-	Sat, 19 Nov 2022 12:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9A2D4017E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9332760B9D;
+	Sat, 19 Nov 2022 13:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9332760B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k_j1AWBwNRda; Sat, 19 Nov 2022 12:05:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i23i09zzBSAD; Sat, 19 Nov 2022 13:47:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B262640191;
-	Sat, 19 Nov 2022 12:05:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B262640191
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A83E1BF306
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 12:05:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B811B60AD7;
+	Sat, 19 Nov 2022 13:47:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B811B60AD7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 63D671BF2BA
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA31940191
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 12:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA31940191
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C17160AD7
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C17160AD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hciEmed5NPhK for <buildroot@lists.busybox.net>;
- Sat, 19 Nov 2022 12:05:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32CB840167
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 32CB840167
- for <buildroot@buildroot.org>; Sat, 19 Nov 2022 12:05:37 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.171.233.114])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 188195FFA0;
- Sat, 19 Nov 2022 13:05:31 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 19 Nov 2022 13:05:18 +0100
-Message-Id: <20221119120518.645972-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.38.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OVf2oqrIQ5Du for <buildroot@lists.busybox.net>;
+ Sat, 19 Nov 2022 13:46:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E83FC60AAC
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E83FC60AAC
+ for <buildroot@buildroot.org>; Sat, 19 Nov 2022 13:46:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E5E7120008;
+ Sat, 19 Nov 2022 13:46:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1owOBK-003TJd-MH; Sat, 19 Nov 2022 14:46:54 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221116220734.7229-1-fontaine.fabrice@gmail.com>
+Date: Sat, 19 Nov 2022 14:46:54 +0100
+In-Reply-To: <20221116220734.7229-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Nov 2022 23:07:34 +0100")
+Message-ID: <87r0xz6oq9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668859533;
- bh=xUIKcYiCHUjSAh1t/Q5nS581w8/9sOgdeWsv20TdGWc=;
- h=From:To:Cc:Subject:Date:From;
- b=IUofxQAtPpBYjQbu4BwB6XqCbLMAL+TaJSCoqXcDvIb8U4vX3+7Y0sJDax00r1Fcw
- GAbpqG+Oetj4GeFM2UDJW4pgK6yMuDL2JbTlw/FnMAjx1qRucIIcdjhMQkgh6o0HlJ
- /2A/1VAuQdHuk4tMH4370qQkfwIZh+uD7cjCwv3VhIsRvgxyxhyvtItS0GS1ccKH57
- DblvgUqdVwBB8nEtgVjaLuqnr3YNJi2OBSY0zDq7XwFx6V36HQqqaggmZMCoFp/Qg8
- DcCqfsRt8t4Ujy4+d4aUJWSH1FkoV0AiiWr5EEGikXsSiuVNtOBIwlUvWmH00TiM6p
- HPkqUBjkMdqzg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IUofxQAt
-Subject: [Buildroot] [PATCH next 1/1] package/z3: new package
+Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
+ version 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,245 +64,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Z3, also known as the Z3 Theorem Prover, is a cross-platform
-satisfiability modulo theories (SMT) solver.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-https://github.com/Z3Prover/z3
+ > Backported #8403: Fixed multiple client side input validation issues
+ > (CVE-2022-39316, CVE-2022-39317, CVE-2022-39318, CVE-2022-39319,
+ > CVE-2022-39320, CVE-2022-41877, CVE-2022-39347)
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch next at commit 5f94d91 with commands:
+ > https://github.com/FreeRDP/FreeRDP/releases/tag/2.9.0
 
-    make check-package
-    ...
-    [No warning generated by this patch]
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-    python -m flake8 support/testing/tests/package/test_z3.py
-    [no-output]
+Committed, thanks.
 
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_z3.TestZ3
-    ...
-    OK
-
-    ./utils/test-pkg -a -p z3
-    ...
-    44 builds, 26 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- DEVELOPERS                                    |  2 +
- package/Config.in                             |  1 +
- package/z3/Config.in                          | 23 ++++++++++
- package/z3/z3.hash                            |  3 ++
- package/z3/z3.mk                              | 22 ++++++++++
- support/testing/tests/package/test_z3.py      | 43 +++++++++++++++++++
- .../test_z3/rootfs-overlay/root/z3test.py     | 21 +++++++++
- .../test_z3/rootfs-overlay/root/z3test.smt2   |  8 ++++
- 8 files changed, 123 insertions(+)
- create mode 100644 package/z3/Config.in
- create mode 100644 package/z3/z3.hash
- create mode 100644 package/z3/z3.mk
- create mode 100644 support/testing/tests/package/test_z3.py
- create mode 100755 support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
- create mode 100644 support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bc026da4aa..fb6b329087 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1697,6 +1697,7 @@ F:	package/python-gnupg/
- F:	package/python-pyalsa/
- F:	package/riscv-isa-sim/
- F:	package/tinycompress/
-+F:	package/z3/
- F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
-@@ -1708,6 +1709,7 @@ F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_pyalsa.py
-+F:	support/testing/tests/package/test_z3.py
- 
- N:	Julien Viard de Galbert <julien@vdg.name>
- F:	package/dieharder/
-diff --git a/package/Config.in b/package/Config.in
-index 52004de075..c3b540bd22 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2189,6 +2189,7 @@ menu "Miscellaneous"
- 	source "package/wine/Config.in"
- 	source "package/xmrig/Config.in"
- 	source "package/xutil_util-macros/Config.in"
-+	source "package/z3/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/z3/Config.in b/package/z3/Config.in
-new file mode 100644
-index 0000000000..a3f57f7f88
---- /dev/null
-+++ b/package/z3/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_Z3
-+	bool "z3"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
-+	# z3 needs fenv.h which is not provided by uclibc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-+	depends on !BR2_nios2
-+	help
-+	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
-+	  satisfiability modulo theories (SMT) solver.
-+
-+	  https://github.com/Z3Prover/z3
-+
-+if BR2_PACKAGE_Z3
-+
-+config BR2_PACKAGE_Z3_PYTHON
-+	bool "Python bindings"
-+	select BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+
-+endif
-diff --git a/package/z3/z3.hash b/package/z3/z3.hash
-new file mode 100644
-index 0000000000..d38c5f1971
---- /dev/null
-+++ b/package/z3/z3.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
-+sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
-diff --git a/package/z3/z3.mk b/package/z3/z3.mk
-new file mode 100644
-index 0000000000..2252e05395
---- /dev/null
-+++ b/package/z3/z3.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# z3
-+#
-+################################################################################
-+
-+Z3_VERSION = 4.11.2
-+Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
-+Z3_LICENSE = MIT
-+Z3_LICENSE_FILES = LICENSE.txt
-+Z3_INSTALL_STAGING = YES
-+Z3_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+ifeq ($(BR2_PACKAGE_Z3_PYTHON),y)
-+Z3_CONF_OPTS += \
-+	-DCMAKE_INSTALL_PYTHON_PKG_DIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	-DZ3_BUILD_PYTHON_BINDINGS=ON
-+else
-+Z3_CONF_OPTS += -DZ3_BUILD_PYTHON_BINDINGS=OFF
-+endif
-+
-+$(eval $(cmake-package))
-diff --git a/support/testing/tests/package/test_z3.py b/support/testing/tests/package/test_z3.py
-new file mode 100644
-index 0000000000..01aa81b1b6
---- /dev/null
-+++ b/support/testing/tests/package/test_z3.py
-@@ -0,0 +1,43 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestZ3(infra.basetest.BRTest):
-+    # Need to use a different toolchain than the default due to
-+    # z3 requiring fenv.h not provided by uclibc.
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
-+        BR2_PACKAGE_Z3=y
-+        BR2_PACKAGE_Z3_PYTHON=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           # overlay to add a z3 smt and python test scripts
-+           infra.filepath("tests/package/test_z3/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check program executes
-+        cmd = "z3 --version"
-+        self.assertRunOk(cmd)
-+
-+        # Run a basic smt2 example
-+        cmd = "z3 /root/z3test.smt2"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "unsat")
-+
-+        # Run a basic python example
-+        cmd = "/root/z3test.py"
-+        self.assertRunOk(cmd, timeout=10)
-diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-new file mode 100755
-index 0000000000..6ac53b98c5
---- /dev/null
-+++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-@@ -0,0 +1,21 @@
-+#! /usr/bin/env python3
-+
-+from z3 import *
-+
-+x = Real('x')
-+y = Real('y')
-+z = Real('z')
-+s = Solver()
-+
-+s.add(3 * x + 2 * y - z == 1)
-+s.add(2 * x - 2 * y + 4 * z == -2)
-+s.add(-x + y / 2 - z == 0)
-+
-+check = s.check()
-+model = s.model()
-+
-+print(check)
-+print(model)
-+
-+assert check == sat
-+assert model[x] == 1 and model[y] == -2 and model[z] == -2
-diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2 b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
-new file mode 100644
-index 0000000000..08df9e27a2
---- /dev/null
-+++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
-@@ -0,0 +1,8 @@
-+; From https://smtlib.cs.uiowa.edu/examples.shtml
-+; Basic Boolean example
-+(set-option :print-success false)
-+(set-logic QF_UF)
-+(declare-const p Bool)
-+(assert (and p (not p)))
-+(check-sat) ; returns 'unsat'
-+(exit)
 -- 
-2.38.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
