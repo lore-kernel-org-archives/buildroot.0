@@ -1,92 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E2BC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 17:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD8BFC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 22:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1565060DF9;
-	Sat, 19 Nov 2022 17:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1565060DF9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7F7641754;
+	Sat, 19 Nov 2022 22:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7F7641754
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQT5-roLz9H0; Sat, 19 Nov 2022 17:16:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i-C54TvgbUNn; Sat, 19 Nov 2022 22:22:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57B9460DF4;
-	Sat, 19 Nov 2022 17:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57B9460DF4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E56B1BF292
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 17:16:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C4A54175C;
+	Sat, 19 Nov 2022 22:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C4A54175C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B37051BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 22:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 155718137E
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 17:16:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 155718137E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C7CF4175C
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 22:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C7CF4175C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 01KRG3cE8FA3 for <buildroot@lists.busybox.net>;
- Sat, 19 Nov 2022 17:16:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C420981383
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C420981383
- for <buildroot@busybox.net>; Sat, 19 Nov 2022 17:16:14 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id cl5so13923640wrb.9
- for <buildroot@busybox.net>; Sat, 19 Nov 2022 09:16:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Slz3ovETvRJ6t5bnuergkl15A99wgyUNMiI8NDWyqN0=;
- b=mOiAoutZdodnbh9QDq936Bb/e/mWcDPqFYI5QfBzqV0yiH+5TTsHdNAMB/GmP70D/9
- wBSgzSKezE6ccbtrkb6vwCz/Bsz7GclR5tnGnyRx4WNwG29+OyOM1WgLJls2SQ/wK9Z3
- Q9/Cz37rz54yZcjXA4IFNeeaYdGEWLci+LnyoQpCSaBnohGFCXuNj38N+H9NelNZBsz+
- jiCp3ORcvjMen/hjgz2g2ATAwBvSUw/Iv/fFt2k4/r6ctyiu6oL889f0NGs/0fe2eK8z
- B+iyS3wi2X395dUBjlDoj77ripoDTsP5cLVMx8gsHFUfLbQTasLk6elcChwb6ro4ZZk2
- tcIg==
-X-Gm-Message-State: ANoB5pnQJTZkco+V4P/n1+SBtNqYkHJaOTsdu9KV/KTiq45GGxKuF21u
- kBIlf5fiDAs1jiPdFKFXA/0uqSMDeZk=
-X-Google-Smtp-Source: AA0mqf6G+5dCrt1DV7pJHaIHjibRAKvnrp056zjOa3b3PqVaNTJyGwcVBbq24VcXo3nKjGK01vr3tQ==
-X-Received: by 2002:a5d:4106:0:b0:236:6fd6:1af3 with SMTP id
- l6-20020a5d4106000000b002366fd61af3mr7215651wrp.306.1668878173046; 
- Sat, 19 Nov 2022 09:16:13 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- g17-20020a05600c311100b003cf4ec90938sm8854383wmo.21.2022.11.19.09.16.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 19 Nov 2022 09:16:12 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 19 Nov 2022 18:15:48 +0100
-Message-Id: <20221119171549.26487-3-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221119171549.26487-1-francois.perrad@gadz.org>
-References: <20221119171549.26487-1-francois.perrad@gadz.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T_9QogUo1GZK for <buildroot@lists.busybox.net>;
+ Sat, 19 Nov 2022 22:22:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4184741754
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4184741754
+ for <buildroot@buildroot.org>; Sat, 19 Nov 2022 22:22:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 944E8100004;
+ Sat, 19 Nov 2022 22:22:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1owWEN-003kJn-DW; Sat, 19 Nov 2022 23:22:35 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 19 Nov 2022 23:22:34 +0100
+Message-Id: <20221119222234.892983-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Slz3ovETvRJ6t5bnuergkl15A99wgyUNMiI8NDWyqN0=;
- b=i/zJ5thIchgwg1J1rjNKWRh8KUOZZdO4O3YApGm9hNgKG8HJ3SiTsFUuCFbeSxjhJH
- pqsWRuuX1AIdgaa4qhIKVOfnpU5WX0Qiz+GDD20JW3/f9RiUo9g7o9CMb/PEiMS4NzZX
- mlcxSHuPEf18cjXXGGltJN8llGL3gwmdlCZVauSMGusYz7b1skIKu/gak8iw30VyEYw5
- /drg9m12RB1+0Kbko6RpBIfaWgDmqu6y7qb139ZwuNRh8FmFPWpRRLqAwZ55+gTufZQY
- OL/l4Db+txtsUUDrG8MIySoMRsc1Ov7dZIbJGFzRhNnTI/3/tGdQFU1tq0AfNbraVBxz
- AFKg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=i/zJ5thI
-Subject: [Buildroot] [PATCH 2/3] configs/ls1028ardb: add video with Cadence
- DP firmware
+Subject: [Buildroot] [PATCH] package/nginx: add upstream security fix for
+ CVE-2022-4174{1, 2}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,61 +60,363 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/freescale/ls1028ardb/readme.txt                    | 9 +++++++++
- .../rootfs_overlay/boot/extlinux/extlinux.conf           | 2 +-
- configs/ls1028ardb_defconfig                             | 3 +++
- 3 files changed, 13 insertions(+), 1 deletion(-)
+Fixes the following security issues:
 
-diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
-index 93396a419..2dd2e2d84 100644
---- a/board/freescale/ls1028ardb/readme.txt
-+++ b/board/freescale/ls1028ardb/readme.txt
-@@ -58,3 +58,12 @@ To boot your newly created system:
- - put a DB9F cable into the UART1 Port and connect using a terminal
-   emulator at 115200 bps, 8n1;
- - power on the board.
+- CVE-2022-41741: Memory corruption in the ngx_http_mp4_module
+- CVE-2022-41742: Memory disclosure in the ngx_http_mp4_module
+
+https://mailman.nginx.org/archives/list/nginx-announce@nginx.org/message/RBRRON6PYBJJM2XIAPQBFBVLR4Q6IHRA/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0011-Mp4-disabled-duplicate-atoms.patch   | 315 ++++++++++++++++++
+ package/nginx/nginx.mk                        |   3 +
+ 2 files changed, 318 insertions(+)
+ create mode 100644 package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
+
+diff --git a/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch b/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
+new file mode 100644
+index 0000000000..7baa810b56
+--- /dev/null
++++ b/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
+@@ -0,0 +1,315 @@
++From 6b022a5556af22b6e18532e547a6ae46b0d8c6ea Mon Sep 17 00:00:00 2001
++From: Roman Arutyunyan <arut@nginx.com>
++Date: Wed, 19 Oct 2022 10:53:17 +0300
++Subject: [PATCH] Mp4: disabled duplicate atoms.
 +
-+The Cadence DP (Display Port) firmware must loaded from uboot with the following commands:
++Most atoms should not appear more than once in a container.  Previously,
++this was not enforced by the module, which could result in worker process
++crash, memory corruption and disclosure.
 +
-+  => ext2load mmc 0 0x80000000 /boot/ls1028a-dp-fw.bin
-+  102464 bytes read in 24 ms (4.1 MiB/s)
-+  => hdp load 0x80000000 0x2000
-+  Loading hdp firmware from 0x0000000080000000 offset 0x0000000000002000
-+  Loading hdp firmware Complete
-+  => boot
-diff --git a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-index c08ddde10..bd6c7c95c 100644
---- a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-+++ b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -1,4 +1,4 @@
- label ls1028ardb-buildroot
-   kernel /boot/Image
-   devicetree /boot/fsl-ls1028a-rdb.dtb
--  append root=/dev/mmcblk0p1 rootwait
-+  append root=/dev/mmcblk0p1 rootwait video=1920x1080-32@60 cma=256M
-diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-index 22b9eb426..1bc84f7b8 100644
---- a/configs/ls1028ardb_defconfig
-+++ b/configs/ls1028ardb_defconfig
-@@ -26,6 +26,9 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/http/modules/ngx_http_mp4_module.c | 147 +++++++++++++++++++++++++
++ 1 file changed, 147 insertions(+)
++
++diff --git a/src/http/modules/ngx_http_mp4_module.c b/src/http/modules/ngx_http_mp4_module.c
++index 9c3f627f..4eff01e9 100644
++--- a/src/http/modules/ngx_http_mp4_module.c
+++++ b/src/http/modules/ngx_http_mp4_module.c
++@@ -1121,6 +1121,12 @@ ngx_http_mp4_read_ftyp_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++         return NGX_ERROR;
++     }
++ 
+++    if (mp4->ftyp_atom.buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 ftyp atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
++ 
++     ftyp_atom = ngx_palloc(mp4->request->pool, atom_size);
++@@ -1179,6 +1185,12 @@ ngx_http_mp4_read_moov_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++         return NGX_DECLINED;
++     }
++ 
+++    if (mp4->moov_atom.buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 moov atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     conf = ngx_http_get_module_loc_conf(mp4->request, ngx_http_mp4_module);
++ 
++     if (atom_data_size > mp4->buffer_size) {
++@@ -1246,6 +1258,12 @@ ngx_http_mp4_read_mdat_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mdat atom");
++ 
+++    if (mp4->mdat_atom.buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 mdat atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     data = &mp4->mdat_data_buf;
++     data->file = &mp4->file;
++     data->in_file = 1;
++@@ -1372,6 +1390,12 @@ ngx_http_mp4_read_mvhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mvhd atom");
++ 
+++    if (mp4->mvhd_atom.buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 mvhd atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom_header = ngx_mp4_atom_header(mp4);
++     mvhd_atom = (ngx_mp4_mvhd_atom_t *) atom_header;
++     mvhd64_atom = (ngx_mp4_mvhd64_atom_t *) atom_header;
++@@ -1637,6 +1661,13 @@ ngx_http_mp4_read_tkhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_TKHD_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 tkhd atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->tkhd_size = atom_size;
++     trak->movie_duration = duration;
++ 
++@@ -1676,6 +1707,12 @@ ngx_http_mp4_read_mdia_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_MDIA_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 mdia atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->mdia_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -1799,6 +1836,13 @@ ngx_http_mp4_read_mdhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_MDHD_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 mdhd atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->mdhd_size = atom_size;
++     trak->timescale = timescale;
++     trak->duration = duration;
++@@ -1862,6 +1906,12 @@ ngx_http_mp4_read_hdlr_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_HDLR_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 hdlr atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->hdlr_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -1890,6 +1940,12 @@ ngx_http_mp4_read_minf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_MINF_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 minf atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->minf_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -1933,6 +1989,15 @@ ngx_http_mp4_read_vmhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
+++        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
+++    {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
+++                      mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->vmhd_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -1964,6 +2029,15 @@ ngx_http_mp4_read_smhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
+++        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
+++    {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
+++                      mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->smhd_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -1995,6 +2069,12 @@ ngx_http_mp4_read_dinf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_DINF_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 dinf atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->dinf_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -2023,6 +2103,12 @@ ngx_http_mp4_read_stbl_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_STBL_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stbl atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->stbl_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -2144,6 +2230,12 @@ ngx_http_mp4_read_stsd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++ 
++     trak = ngx_mp4_last_trak(mp4);
++ 
+++    if (trak->out[NGX_HTTP_MP4_STSD_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stsd atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     atom = &trak->stsd_atom_buf;
++     atom->temporary = 1;
++     atom->pos = atom_header;
++@@ -2212,6 +2304,13 @@ ngx_http_mp4_read_stts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_end = atom_table + entries * sizeof(ngx_mp4_stts_entry_t);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STTS_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stts atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->time_to_sample_entries = entries;
++ 
++     atom = &trak->stts_atom_buf;
++@@ -2480,6 +2579,13 @@ ngx_http_mp4_read_stss_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++                    "sync sample entries:%uD", entries);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STSS_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stss atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->sync_samples_entries = entries;
++ 
++     atom_table = atom_header + sizeof(ngx_http_mp4_stss_atom_t);
++@@ -2678,6 +2784,13 @@ ngx_http_mp4_read_ctts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++                    "composition offset entries:%uD", entries);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_CTTS_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 ctts atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->composition_offset_entries = entries;
++ 
++     atom_table = atom_header + sizeof(ngx_mp4_ctts_atom_t);
++@@ -2881,6 +2994,13 @@ ngx_http_mp4_read_stsc_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_end = atom_table + entries * sizeof(ngx_mp4_stsc_entry_t);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STSC_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stsc atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->sample_to_chunk_entries = entries;
++ 
++     atom = &trak->stsc_atom_buf;
++@@ -3213,6 +3333,13 @@ ngx_http_mp4_read_stsz_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++                    "sample uniform size:%uD, entries:%uD", size, entries);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STSZ_ATOM].buf) {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stsz atom in \"%s\"", mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->sample_sizes_entries = entries;
++ 
++     atom_table = atom_header + sizeof(ngx_mp4_stsz_atom_t);
++@@ -3396,6 +3523,16 @@ ngx_http_mp4_read_stco_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_end = atom_table + entries * sizeof(uint32_t);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
+++        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
+++    {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stco/co64 atom in \"%s\"",
+++                      mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->chunks = entries;
++ 
++     atom = &trak->stco_atom_buf;
++@@ -3602,6 +3739,16 @@ ngx_http_mp4_read_co64_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
++     atom_end = atom_table + entries * sizeof(uint64_t);
++ 
++     trak = ngx_mp4_last_trak(mp4);
+++
+++    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
+++        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
+++    {
+++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+++                      "duplicate mp4 stco/co64 atom in \"%s\"",
+++                      mp4->file.name.data);
+++        return NGX_ERROR;
+++    }
+++
++     trak->chunks = entries;
++ 
++     atom = &trak->co64_atom_buf;
++-- 
++2.30.2
++
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index ba01c7e016..62ea379ffc 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -19,6 +19,9 @@ NGINX_CONF_OPTS = \
+ 	--with-cpp="$(TARGET_CC)" \
+ 	--with-ld-opt="$(TARGET_LDFLAGS)"
  
-+# Target package
-+BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
++# 0011-Mp4-disabled-duplicate-atoms.patch
++NGINX_IGNORE_CVES += CVE-2022-41741 CVE-2022-41742
 +
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+ # www-data user and group are used for nginx. Because these user and group
+ # are already set by buildroot, it is not necessary to redefine them.
+ # See system/skeleton/etc/passwd
 -- 
-2.37.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
