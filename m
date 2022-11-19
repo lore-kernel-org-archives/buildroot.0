@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2901C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 13:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71127C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 13:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98DD260AD7;
-	Sat, 19 Nov 2022 13:48:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98DD260AD7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18D7F60BDA;
+	Sat, 19 Nov 2022 13:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D7F60BDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5QPyxtYFdwAb; Sat, 19 Nov 2022 13:48:09 +0000 (UTC)
+	with ESMTP id v5yB9I_X8EtW; Sat, 19 Nov 2022 13:48:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C238E60B9D;
-	Sat, 19 Nov 2022 13:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C238E60B9D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F4F01BF2BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D88860AD7;
+	Sat, 19 Nov 2022 13:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D88860AD7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A0191BF865
  for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B4B660AF8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 762594015A
  for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B4B660AF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 762594015A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OhNO9-G576-Q for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WTsbLpIa0kaL for <buildroot@lists.busybox.net>;
  Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A280D60BDA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9ACC240121
  for <buildroot@buildroot.org>; Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A280D60BDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ACC240121
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9022F83CEA; Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
+ id 85DB483CE5; Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Nov 2022 14:47:21 +0100
+Date: Sat, 19 Nov 2022 14:46:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35c2ee69a51a343f2e5c1f88eeb8c7064922ded4
-X-Git-Newrev: e8b5feee87be5157e93665011b3c350f6996dfcc
+X-Git-Oldrev: dd7279973981926f878c8988df8a187a56caff1d
+X-Git-Newrev: 35c2ee69a51a343f2e5c1f88eeb8c7064922ded4
 X-Patchwork-Hint: ignore
-Message-Id: <20221119134806.9022F83CEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsync: fix configure options
+Message-Id: <20221119134806.85DB483CE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freerdp: security bump to version
+ 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,50 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8b5feee87be5157e93665011b3c350f6996dfcc
+commit: https://git.buildroot.net/buildroot/commit/?id=35c2ee69a51a343f2e5c1f88eeb8c7064922ded4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename configure options to avoid the following build failure raised
-since bump to version 3.2.5 in commit
-ae2807821d897c16141d003f646475fee9e77cba:
+Backported #8403: Fixed multiple client side input validation issues
+(CVE-2022-39316, CVE-2022-39317, CVE-2022-39318, CVE-2022-39319,
+CVE-2022-39320, CVE-2022-41877, CVE-2022-39347)
 
-./simd-checksum-x86_64.cpp: In function 'uint32_t get_checksum1_cpp(char*, int32_t)':
-./simd-checksum-x86_64.cpp:89:52: error: multiversioning needs 'ifunc' which is not supported on this target
-   89 | __attribute__ ((target("default"))) MVSTATIC int32 get_checksum1_avx2_64(schar* buf, int32 len, int32 i, uint32* ps1, uint32* ps2) { return i; }
-      |                                                    ^~~~~~~~~~~~~~~~~~~~~
-./simd-checksum-x86_64.cpp:480:1: error: use of multiversioned function without a default
-  480 | }
-      | ^
-If you can't fix the issue, re-run ./configure with --disable-roll-simd.
-
-Fixes:
- - http://autobuild.buildroot.org/results/069da8e585da2e51bfd4f475cc12b9a134954b08
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.9.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/rsync.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 7ff7ca6eef..8c7ad462ac 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -17,12 +17,12 @@ RSYNC_CONF_ENV = rsync_cv_HAVE_C99_VSNPRINTF=yes
- RSYNC_CONF_OPTS = \
- 	--with-included-zlib=no \
- 	--with-included-popt=no \
--	--disable-simd \
-+	--disable-roll-simd \
- 	--disable-openssl \
- 	--disable-xxhash \
- 	--disable-zstd \
- 	--disable-lz4 \
--	--disable-asm
-+	--disable-md5-asm
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 94d0746d40..f6adc05312 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.8.1.tar.gz.sha256
+-sha256  ea8903b29914134202a972c06052432678c89cb5eebcc8f5a41553030c97376b  freerdp-2.8.1.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.9.0.tar.gz.sha256
++sha256  fcf71cf5b09c5c2636341ba212f34b8fb728246ea28e08caf6cef8b4a96184b7  freerdp-2.9.0.tar.gz
  
- ifeq ($(BR2_PACKAGE_ACL),y)
- RSYNC_DEPENDENCIES += acl
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index ae844c589e..fb0e6920cf 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.8.1
++FREERDP_VERSION = 2.9.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
