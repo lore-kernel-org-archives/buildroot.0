@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71127C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 13:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E891BC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 13:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18D7F60BDA;
-	Sat, 19 Nov 2022 13:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D7F60BDA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A5B260B9D;
+	Sat, 19 Nov 2022 13:55:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A5B260B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v5yB9I_X8EtW; Sat, 19 Nov 2022 13:48:22 +0000 (UTC)
+	with ESMTP id OLPsZKdvol-8; Sat, 19 Nov 2022 13:55:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D88860AD7;
-	Sat, 19 Nov 2022 13:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D88860AD7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9A0191BF865
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:48:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C486860B70;
+	Sat, 19 Nov 2022 13:55:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C486860B70
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E93081BF2BA
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 762594015A
- for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 762594015A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C463460B70
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 13:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C463460B70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WTsbLpIa0kaL for <buildroot@lists.busybox.net>;
- Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9ACC240121
- for <buildroot@buildroot.org>; Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ACC240121
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85DB483CE5; Sat, 19 Nov 2022 13:48:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PrvScmODolLk for <buildroot@lists.busybox.net>;
+ Sat, 19 Nov 2022 13:55:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FCE60B30
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41FCE60B30
+ for <buildroot@buildroot.org>; Sat, 19 Nov 2022 13:55:35 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id E60C3C2C3E
+ for <buildroot@buildroot.org>; Sat, 19 Nov 2022 13:45:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A8EAD60005;
+ Sat, 19 Nov 2022 13:45:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1owO9f-003T8p-Fq; Sat, 19 Nov 2022 14:45:11 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Nov 2022 14:46:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd7279973981926f878c8988df8a187a56caff1d
-X-Git-Newrev: 35c2ee69a51a343f2e5c1f88eeb8c7064922ded4
-X-Patchwork-Hint: ignore
-Message-Id: <20221119134806.85DB483CE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freerdp: security bump to version
- 2.9.0
+Date: Sat, 19 Nov 2022 14:45:10 +0100
+Message-Id: <20221119134510.826956-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/xterm: security bump to patch 376
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +62,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35c2ee69a51a343f2e5c1f88eeb8c7064922ded4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security issue:
 
-Backported #8403: Fixed multiple client side input validation issues
-(CVE-2022-39316, CVE-2022-39317, CVE-2022-39318, CVE-2022-39319,
-CVE-2022-39320, CVE-2022-41877, CVE-2022-39347)
+CVE-2022-45063: xterm before 375 allows code execution via font ops, e.g.,
+because an OSC 50 response may have Ctrl-g and therefore lead to command
+execution within the vi line-editing mode of Zsh:
 
-https://github.com/FreeRDP/FreeRDP/releases/tag/2.9.0
+https://www.openwall.com/lists/oss-security/2022/11/10/1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Additionally, patch 376 fixes a null pointer access issue:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022942
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freerdp/freerdp.hash | 4 ++--
- package/freerdp/freerdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xterm/xterm.hash | 2 +-
+ package/xterm/xterm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 94d0746d40..f6adc05312 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,5 +1,5 @@
--# From https://pub.freerdp.com/releases/freerdp-2.8.1.tar.gz.sha256
--sha256  ea8903b29914134202a972c06052432678c89cb5eebcc8f5a41553030c97376b  freerdp-2.8.1.tar.gz
-+# From https://pub.freerdp.com/releases/freerdp-2.9.0.tar.gz.sha256
-+sha256  fcf71cf5b09c5c2636341ba212f34b8fb728246ea28e08caf6cef8b4a96184b7  freerdp-2.9.0.tar.gz
- 
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index 3f6ec765ce..12cd2e639b 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
++sha256  1e5bb7aad068fb31d6d3cbb77f80c7ad1526cd4c956a4ddcf2c5cf28af5334e1  xterm-376.tgz
  # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index ae844c589e..fb0e6920cf 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
+ sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 95984f1cf9..d01b608d99 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREERDP_VERSION = 2.8.1
-+FREERDP_VERSION = 2.9.0
- FREERDP_SITE = https://pub.freerdp.com/releases
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+-XTERM_VERSION = 371
++XTERM_VERSION = 376
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
