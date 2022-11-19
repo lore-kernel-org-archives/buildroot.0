@@ -4,90 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49C1C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 18 Nov 2022 22:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2639DC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 19 Nov 2022 00:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CF29610F6;
-	Fri, 18 Nov 2022 22:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CF29610F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE9B261118;
+	Sat, 19 Nov 2022 00:14:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE9B261118
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dh5-qhAHviKy; Fri, 18 Nov 2022 22:25:48 +0000 (UTC)
+	with ESMTP id ym1IZlaHEimF; Sat, 19 Nov 2022 00:14:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7689A610A6;
-	Fri, 18 Nov 2022 22:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7689A610A6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12A611BF358
- for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 22:25:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03F12610FC;
+	Sat, 19 Nov 2022 00:14:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03F12610FC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EA211BF5E0
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 00:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2218822D0
- for <buildroot@lists.busybox.net>; Fri, 18 Nov 2022 22:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2218822D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 735384107D
+ for <buildroot@lists.busybox.net>; Sat, 19 Nov 2022 00:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 735384107D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Cy9jkq-3Fpb for <buildroot@lists.busybox.net>;
- Fri, 18 Nov 2022 22:25:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wLIv3fa2YZ5l for <buildroot@lists.busybox.net>;
+ Sat, 19 Nov 2022 00:14:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45645822CD
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com
- [IPv6:2607:f8b0:4864:20::835])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 45645822CD
- for <buildroot@buildroot.org>; Fri, 18 Nov 2022 22:25:44 +0000 (UTC)
-Received: by mail-qt1-x835.google.com with SMTP id e15so4088480qts.1
- for <buildroot@buildroot.org>; Fri, 18 Nov 2022 14:25:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8E2B404F0
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
+ [IPv6:2607:f8b0:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8E2B404F0
+ for <buildroot@buildroot.org>; Sat, 19 Nov 2022 00:14:03 +0000 (UTC)
+Received: by mail-pl1-x630.google.com with SMTP id p12so5927390plq.4
+ for <buildroot@buildroot.org>; Fri, 18 Nov 2022 16:14:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=NVSUsGOr5sAoIfRgHf7/7vgNGPwmjC1NCKeIHmVilCk=;
- b=Q+BbbDwYErJI4/tWxsnCxPQdg/NIhHKVJYf64h1ANtDdAoHEAE443OkKMzvUrD/iA+
- 88PcTMS4kIEgKj8smTyY/iWccWbCBGCSzsEPRSFAzwUr9tGAZbX6Yd3rFoarZBMd7rW4
- 8kiVnY89RTsCQn0j5Dgip0L4U84e+0cYOj9b8CA6S7JYaRjNIXXSOdapr2DMY7Y/9vQA
- bF91ldRtrJkpJuprtQ+C00DYpUH7PXcTUZaRJRoC7K/fIe1ltn1dmLJyfzDgOe1eqMLZ
- 9JC6nM+5HM36Udhao8vuE6L5ehgD1XrdxE010CzNVSJ/htc1OU0f96aXnOIGduvrq1Qk
- S9xQ==
-X-Gm-Message-State: ANoB5pniSzwS5NK5tpYzPbXBL1fhS0uLtJ4vDsCswJmJXN8vBdsWv6La
- 374/waw6oDcgP2aZleOwND4=
-X-Google-Smtp-Source: AA0mqf4N7L7g/6oQA3vmX9EJqZK+i4E30Vqhvm4yzBPceQGV4GWG0CIDUMb6I1PNIFXYg7kzP80Rvg==
-X-Received: by 2002:ac8:5204:0:b0:3a5:6a35:bac8 with SMTP id
- r4-20020ac85204000000b003a56a35bac8mr8519024qtn.615.1668810343008; 
- Fri, 18 Nov 2022 14:25:43 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
- by smtp.googlemail.com with ESMTPSA id
- cp9-20020a05622a420900b003a527d29a41sm2668073qtb.75.2022.11.18.14.25.41
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 18 Nov 2022 14:25:42 -0800 (PST)
-Message-ID: <0f7c25cd-ed40-e158-dc5e-457995ab10ec@gmail.com>
-Date: Fri, 18 Nov 2022 14:25:37 -0800
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8KdZ3+9G+c0HB3eyDCXmnHRD14VxmQD6QYMpuX+Jy20=;
+ b=611HFDa2+eFR0FOd96SF3QMwxOxPXAAfaHmTZePrbK8bPly1Chcy9vQ0RR4bjYAvVR
+ tJfDV0pkNJF8c0A+4HMjy9Bi7IwNtFQvdRlVOpT4RHcjsqlSABMUgUvDdP0gNfl4vPcd
+ ua9I+UBlwL7Lq2mBSuEdhJJKW8qSETAtqN/NhIkrxycaZacP4OM51jobk6z4Mxb6DX93
+ I1GkbUw1xI62s16XnUeuxllZpj3dynhElmJL/6RniZc0qMLbiAdivTUzEx6g3LMuJVem
+ kNqp7lE4VIKyIWQh+wL4XgnuiQcw8bsO6zl2xRHD1EFsBI3Ddi3RfGnMbI9+KQZg6VDn
+ S7Qg==
+X-Gm-Message-State: ANoB5pnxC7De9fDl27IijS1PYtrZZR2G2oX7WercZQOl4v2/E8lIjUhX
+ ZOujo8I14pk5BbSzXHfWD/onaUmJMP4=
+X-Google-Smtp-Source: AA0mqf5V8yZu3bebgUBvLjxGI0mIPfwKbJTKZsmVNDAqOEab+kMiLjIkagEE2j8nuxLNx0O7TinFjQ==
+X-Received: by 2002:a17:902:bd94:b0:186:b063:339 with SMTP id
+ q20-20020a170902bd9400b00186b0630339mr1870327pls.70.1668816842824; 
+ Fri, 18 Nov 2022 16:14:02 -0800 (PST)
+Received: from solsona.cg.shawcable.net ([2604:3d09:c74:2000::821c])
+ by smtp.gmail.com with ESMTPSA id
+ 2-20020a620602000000b0056b6c7a17c6sm3885484pfg.12.2022.11.18.16.14.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Nov 2022 16:14:02 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 18 Nov 2022 17:13:57 -0700
+Message-Id: <20221119001357.27940-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20221116171156.112638-1-fontaine.fabrice@gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221116171156.112638-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=NVSUsGOr5sAoIfRgHf7/7vgNGPwmjC1NCKeIHmVilCk=;
- b=SYfLwO3fRYpzTwRQSPhCD6BfTsA3ZhP4Osi9rkQqQ4D2Fry/5gGUrM0TlSXDS+xn/U
- uW9PZiQTVNp+6fwnlpQKgnR29PcfkSmn4x3lGWjybMuxXLTJPnXCjUNodw4pX2bMdliY
- jvIMWg9tU9cb3c3a6F+C84ahIF7g149XWXOD75y0htCnsfrCCAZcrDGUI3QQ78SrtqYC
- 97ytJnhIpODVoommR54vmilB33pYHG1ospA052kFtLp+/8xcYL9QiZaSLE4yN/piKNtM
- FG8Iyx01oct3yPgALIZ0808cvDrjXEAQn9jwckpJp4M3ctPDiYooUbRCGgauFqP/pfUM
- XEnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8KdZ3+9G+c0HB3eyDCXmnHRD14VxmQD6QYMpuX+Jy20=;
+ b=K9WKEAceS3iieqTm1xd9AhlRtqROB5Cc3nUKMWdv5HwRic2c5b/sogI8ZModJmR7Oq
+ hauokJSVUWm+DbxqZhNkQjegsCRPOW4PJmt/SS1IJiRD8D9zKI/ic5Dpe3kxqjoNdYwg
+ mrHCRpAYlkcbRPzhEzQWN45Mew+qCAV0rJAmz2ii2aL00jEgTOFgqOwFDe65yREIQL82
+ Xs/MGh5u0CLNJZwZjLM0tUOkdl2lnh5jw220tPCIgte8qKq6lrizuygaKybtZcnC0eDt
+ ZyJx34U2afOWPkPDCsiRHuov3okp2X4rXWfm1CI07ihxCTRNnRjSfS78opgtHI4AxnIY
+ RfeQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=SYfLwO3f
-Subject: Re: [Buildroot] [PATCH 1/1] package/gptfdisk: fix runtime failure
- with popt 1.19
+ header.a=rsa-sha256 header.s=20210112 header.b=K9WKEAce
+Subject: [Buildroot] [PATCH 1/1] package/sdl2_ttf: bump version to 2.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,31 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Peter Thompson <peter.macleod.thompson@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/16/22 09:11, Fabrice Fontaine wrote:
-> Fix the following runtime failure raised since bump of popt to version
-> 1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
-> 
-> Problem opening  for reading! Error is 2.
-> The specified file does not exist!
-> 
-> Fixes:
->   - No autobuilder failure
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
+---
+ package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+ package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Fixes: 895bfba93f6e ("package/popt: bump to version 1.19")
-
-Thanks a lot Fabrice!
+diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
+index a490b002b6..937dba13e7 100644
+--- a/package/sdl2_ttf/sdl2_ttf.hash
++++ b/package/sdl2_ttf/sdl2_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7234eb8883514e019e7747c703e4a774575b18d435c22a4a29d068cb768a2251  SDL2_ttf-2.0.18.tar.gz
+-sha256  e211dfe7e2c36e64048be886fe3f2bbba8732ce4dd77b596a355d3abbec775a4  COPYING.txt
++sha256 78cdad51f3cc3ada6932b1bb6e914b33798ab970a1e817763f22ddbfd97d0c57  SDL2_ttf-2.20.1.tar.gz
++sha256 28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5  LICENSE.txt
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 054e327fac..4b44b0fc41 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_TTF_VERSION = 2.0.18
++SDL2_TTF_VERSION = 2.20.1
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
 -- 
-Florian
+2.20.1
 
 _______________________________________________
 buildroot mailing list
