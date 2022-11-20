@@ -1,67 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B92E0C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5DBC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 12:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4465D410A3;
-	Sun, 20 Nov 2022 09:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4465D410A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96B634058B;
+	Sun, 20 Nov 2022 12:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96B634058B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 62WqRZOk374I; Sun, 20 Nov 2022 12:39:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0DF14023F;
+	Sun, 20 Nov 2022 12:39:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0DF14023F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C01941BF381
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 12:39:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1A5740932
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 12:39:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1A5740932
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e6MTU9AaX90x; Sun, 20 Nov 2022 09:27:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E13C409E6;
-	Sun, 20 Nov 2022 09:27:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E13C409E6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CED3C1BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:27:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9CDA81F6C
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9CDA81F6C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4xvOW0eIf0m4 for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 09:27:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE1D481F3F
- for <buildroot@uclibc.org>; Sun, 20 Nov 2022 09:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE1D481F3F
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id DE1D883F32; Sun, 20 Nov 2022 09:27:12 +0000 (UTC)
-From: bugzilla@busybox.net
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bpMumttJucrK for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 12:39:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4902B40919
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4902B40919
+ for <buildroot@uclibc.org>; Sun, 20 Nov 2022 12:39:00 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1owjb7-000217-1S
+ for buildroot@uclibc.org; Sun, 20 Nov 2022 13:38:57 +0100
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sun, 20 Nov 2022 09:27:12 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: INVALID
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc resolution bug_status
-Message-ID: <bug-15136-163-PNCqBjKPdY@https.bugs.busybox.net/>
-In-Reply-To: <bug-15136-163@https.bugs.busybox.net/>
-References: <bug-15136-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15136] kgfiegfiwuegfiuweifgiwuegferwf
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Nov 2022 12:52:41 +0100
+Message-ID: <pan$46e69$9b1a6193$44c9cd85$9a8f98e@ID-313208.user.individual.net>
+References: <20221120073635.E473781FEF__12689.1224341065$1668929821$gmane$org@smtp1.osuosl.org>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2022-11-19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,19 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15136
+Am Sun, 20 Nov 2022 07:36:30 -0000 schrieb Thomas Petazzoni via buildroot:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+>     arm      |        libudfread-1.1.2        | NOK |
+>     http://autobuild.buildroot.net/results/
+78b5333b6d3cd5850cb6d3ea927a024d7bd7ec31
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998@free.fr
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+Hi,
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+trying to debug this build error
+
+src/udfread.c:108:3: error: #error no atomic operation support
+  108 | # error no atomic operation support
+      |   ^~~~~
+src/udfread.c: In function '_read_subdir':
+src/udfread.c:1104:14: error: implicit declaration of function 
+'atomic_pointer_compare_and_exchange' [-Werror=implicit-function-
+declaration]
+ 1104 |         if (!atomic_pointer_compare_and_exchange(&dir->subdirs, 
+NULL, subdirs)) {
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I reached a dead end trying to understand the logic of atomic operations 
+in gcc and buildroot. The toolchain seems to have everything needed:
+
+$ grep "ATOMIC\|SYNC" .config | grep TOOLCHAIN
+BR2_TOOLCHAIN_HAS_SYNC_1=y
+BR2_TOOLCHAIN_HAS_SYNC_2=y
+BR2_TOOLCHAIN_HAS_SYNC_4=y
+BR2_TOOLCHAIN_HAS_ATOMIC=y
+
+although gcc lacks the necessary defines
+
+$ output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-
+gcc-11.3.0.br_real -E -dM - < /dev/null | grep SYNC
+$
+
+in particular __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 which libudfread checks 
+for:
+
+https://code.videolan.org/videolan/libudfread/-/blob/master/src/
+udfread.c#L63
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
