@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FCC5C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 11:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC71DC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 13:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8501F607F7;
-	Sun, 20 Nov 2022 11:17:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8501F607F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 344E9401F1;
+	Sun, 20 Nov 2022 13:56:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 344E9401F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9fqy-p4qd84k; Sun, 20 Nov 2022 11:17:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4KwHYtSf5mvS; Sun, 20 Nov 2022 13:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B96D9607C1;
-	Sun, 20 Nov 2022 11:17:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B96D9607C1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD83E1BF3F3
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 11:17:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2487640117;
+	Sun, 20 Nov 2022 13:56:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2487640117
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B19FD1BF475
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 13:56:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B65B281EFD
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 11:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B65B281EFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 869E840143
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 13:56:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 869E840143
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ER8FwIAsyvoV for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 11:17:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7279A81EF8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7279A81EF8
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 11:17:12 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net (unknown
- [IPv6:2a01:e0a:43e:e970:8763:f5a3:4adf:bb86])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E8BD7B0057F;
- Sun, 20 Nov 2022 12:17:05 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LTLGQJttqSNs for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A9324010C
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A9324010C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 522B183FD2; Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 12:16:56 +0100
-Message-Id: <20221120111656.8253-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221119224225.589941-1-ju.o@free.fr>
-References: <20221119224225.589941-1-ju.o@free.fr>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668943030;
- bh=dMxa9BZ3YuJvIoZDMQ5sIm5H4IBw0AcyGcANhkoTjHw=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=RJ00nB7z/UzUC0CkegVcoPMx+VqSU0CwBv0vNx+E8cEMD+tqdN+BUaNbhcHbYhzKz
- fjPX52CfYBow0yNFNZ7RXxiZnRSUIZP6SkoiIb84JwbbG0Z7vZb445VyGuyhSUutaO
- 1blPFpQ326N+tVMogaMPrGhTaU8qi1+0J8SH1EJsVerSkAOmkChucKqfu0JsySRlWZ
- r2br1iRN96K1YGG39nhNIZVBA1VuYwj1jBHhEJLe83VoIpftUFiwD5vYzl5q4LTIf1
- Gy8gTQjfm/K/+6E6VeT3zj56DwRP/3+WZmPH9xxTkZbkokcQjRFAQB9sB5s4ObG6Y5
- j0KhyNo/LTFUw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RJ00nB7z
-Subject: [Buildroot] [PATCH next 7/7]
- support/testing/tests/package/test_python_magic_wormhole.py: new runtime
- test
+Date: Sun, 20 Nov 2022 14:54:58 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4f4f2877fcd76ec3b1b3ad56d235ad3bd375e071
+X-Git-Newrev: 2ad68ff8df71a485085b0b83ff494081e4d926b7
+X-Patchwork-Hint: ignore
+Message-Id: <20221120135623.522B183FD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/z3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,50 +56,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2ad68ff8df71a485085b0b83ff494081e4d926b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Z3, also known as the Z3 Theorem Prover, is a cross-platform
+satisfiability modulo theories (SMT) solver.
+
+https://github.com/Z3Prover/z3
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+[yann.morin.1998@free.fr:
+  - python bindings 'depends on' python, not 'select' it
+  - fix check-package in test_z3.py
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Note: This patch email was blocked by smtp spam filter. Resending.
----
- DEVELOPERS                                    |  1 +
- .../package/test_python_magic_wormhole.py     | 62 +++++++++++++++++++
- 2 files changed, 63 insertions(+)
- create mode 100644 support/testing/tests/package/test_python_magic_wormhole.py
+ DEVELOPERS                                         |  2 +
+ package/Config.in                                  |  1 +
+ package/z3/Config.in                               | 23 +++++++++++
+ package/z3/z3.hash                                 |  3 ++
+ package/z3/z3.mk                                   | 22 +++++++++++
+ support/testing/tests/package/test_z3.py           | 44 ++++++++++++++++++++++
+ .../package/test_z3/rootfs-overlay/root/z3test.py  | 21 +++++++++++
+ .../test_z3/rootfs-overlay/root/z3test.smt2        |  8 ++++
+ 8 files changed, 124 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 86e68b3044..80ee4a0d08 100644
+index bc026da4aa..fb6b329087 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1715,6 +1715,7 @@ F:	support/testing/tests/package/test_ola/
+@@ -1697,6 +1697,7 @@ F:	package/python-gnupg/
+ F:	package/python-pyalsa/
+ F:	package/riscv-isa-sim/
+ F:	package/tinycompress/
++F:	package/z3/
+ F:	package/zynaddsubfx/
+ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
+@@ -1708,6 +1709,7 @@ F:	support/testing/tests/package/test_ola/
  F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_hkdf.py
  F:	support/testing/tests/package/test_python_gnupg.py
-+F:	support/testing/tests/package/test_python_magic_wormhole.py
  F:	support/testing/tests/package/test_python_pyalsa.py
- F:	support/testing/tests/package/test_python_spake2.py
++F:	support/testing/tests/package/test_z3.py
  
-diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in b/package/Config.in
+index c448e8bd97..7b18859d02 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2190,6 +2190,7 @@ menu "Miscellaneous"
+ 	source "package/wine/Config.in"
+ 	source "package/xmrig/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
++	source "package/z3/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
+diff --git a/package/z3/Config.in b/package/z3/Config.in
 new file mode 100644
-index 0000000000..d6541a2480
+index 0000000000..55b0e8bb3b
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_magic_wormhole.py
-@@ -0,0 +1,62 @@
++++ b/package/z3/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_Z3
++	bool "z3"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
++	# z3 needs fenv.h which is not provided by uclibc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
++	depends on !BR2_nios2
++	help
++	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
++	  satisfiability modulo theories (SMT) solver.
++
++	  https://github.com/Z3Prover/z3
++
++if BR2_PACKAGE_Z3
++
++config BR2_PACKAGE_Z3_PYTHON
++	bool "Python bindings"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++
++endif
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+new file mode 100644
+index 0000000000..d38c5f1971
+--- /dev/null
++++ b/package/z3/z3.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
++sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+new file mode 100644
+index 0000000000..2252e05395
+--- /dev/null
++++ b/package/z3/z3.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# z3
++#
++################################################################################
++
++Z3_VERSION = 4.11.2
++Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
++Z3_LICENSE = MIT
++Z3_LICENSE_FILES = LICENSE.txt
++Z3_INSTALL_STAGING = YES
++Z3_SUPPORTS_IN_SOURCE_BUILD = NO
++
++ifeq ($(BR2_PACKAGE_Z3_PYTHON),y)
++Z3_CONF_OPTS += \
++	-DCMAKE_INSTALL_PYTHON_PKG_DIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	-DZ3_BUILD_PYTHON_BINDINGS=ON
++else
++Z3_CONF_OPTS += -DZ3_BUILD_PYTHON_BINDINGS=OFF
++endif
++
++$(eval $(cmake-package))
+diff --git a/support/testing/tests/package/test_z3.py b/support/testing/tests/package/test_z3.py
+new file mode 100644
+index 0000000000..71b074a587
+--- /dev/null
++++ b/support/testing/tests/package/test_z3.py
+@@ -0,0 +1,44 @@
 +import os
 +
-+from tests.package.test_python import TestPythonPackageBase
++import infra.basetest
 +
 +
-+class TestPythonPy3MagicWormhole(TestPythonPackageBase):
-+    __test__ = True
++class TestZ3(infra.basetest.BRTest):
 +    # Need to use a different toolchain than the default due to
-+    # python-cryptography using Rust (not available with uclibc)
++    # z3 requiring fenv.h not provided by uclibc.
 +    config = \
 +        """
 +        BR2_arm=y
@@ -126,55 +206,76 @@ index 0000000000..d6541a2480
 +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY=y
++        BR2_PACKAGE_Z3=y
++        BR2_PACKAGE_Z3_PYTHON=y
++        BR2_ROOTFS_OVERLAY="{}"
 +        BR2_TARGET_ROOTFS_CPIO=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    timeout = 60
-+
-+    def twistd_cmd(self, command):
-+        s = "twistd"
-+        s += " --pidfile=/tmp/{}.pid".format(command)
-+        s += " --logfile=/tmp/{}.log".format(command)
-+        s += " {}".format(command)
-+
-+        return s
++        """.format(
++           # overlay to add a z3 smt and python test scripts
++           infra.filepath("tests/package/test_z3/rootfs-overlay"))
 +
 +    def test_run(self):
-+        code = "123-hello-buildroot"
-+        text = "Hello Buildroot!"
-+
-+        relay_url = "ws://localhost:4000/v1"
-+        transit_helper = "tcp:localhost:4001"
-+
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5", kernel="builtin",
-+                           options=["-initrd", img])
-+
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
 +        self.emulator.login()
 +
-+        cmd = self.twistd_cmd("wormhole-mailbox")
-+        self.assertRunOk(cmd, timeout=30)
++        # Check program executes
++        cmd = "z3 --version"
++        self.assertRunOk(cmd)
 +
-+        cmd = self.twistd_cmd("transitrelay")
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        wormhole_cmd = "wormhole --relay-url={} --transit-helper={}".format(
-+            relay_url, transit_helper)
-+
-+        cmd = wormhole_cmd + " send --code={} --text=\"{}\" & ".format(code, text)
-+        cmd += "sleep 25"
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        cmd = wormhole_cmd + " receive {}".format(code)
-+        output, exit_code = self.emulator.run(cmd, timeout=35)
++        # Run a basic smt2 example
++        cmd = "z3 /root/z3test.smt2"
++        output, exit_code = self.emulator.run(cmd)
 +        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], text)
--- 
-2.38.1
-
++        self.assertEqual(output[0], "unsat")
++
++        # Run a basic python example
++        cmd = "/root/z3test.py"
++        self.assertRunOk(cmd, timeout=10)
+diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
+new file mode 100755
+index 0000000000..98b8e57b56
+--- /dev/null
++++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
+@@ -0,0 +1,21 @@
++#! /usr/bin/env python3
++
++import z3
++
++x = z3.Real('x')
++y = z3.Real('y')
++z = z3.Real('z')
++s = z3.Solver()
++
++s.add(3 * x + 2 * y - z == 1)
++s.add(2 * x - 2 * y + 4 * z == -2)
++s.add(-x + y / 2 - z == 0)
++
++check = s.check()
++model = s.model()
++
++print(check)
++print(model)
++
++assert check == z3.sat
++assert model[x] == 1 and model[y] == -2 and model[z] == -2
+diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2 b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
+new file mode 100644
+index 0000000000..08df9e27a2
+--- /dev/null
++++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
+@@ -0,0 +1,8 @@
++; From https://smtlib.cs.uiowa.edu/examples.shtml
++; Basic Boolean example
++(set-option :print-success false)
++(set-logic QF_UF)
++(declare-const p Bool)
++(assert (and p (not p)))
++(check-sat) ; returns 'unsat'
++(exit)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
