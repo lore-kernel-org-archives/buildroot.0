@@ -1,83 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB68C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDB86C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 10:05:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D6660ABB;
-	Sun, 20 Nov 2022 09:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2D6660ABB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FCB740493;
+	Sun, 20 Nov 2022 10:05:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FCB740493
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HH_0FxnW1RiS; Sun, 20 Nov 2022 09:50:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qt4KYW-q3S_S; Sun, 20 Nov 2022 10:05:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9633607F6;
-	Sun, 20 Nov 2022 09:50:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9633607F6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C302400E7;
+	Sun, 20 Nov 2022 10:05:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C302400E7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9AE01BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:50:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CCC4E1BF47F
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 10:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8530B607F6
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:50:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8530B607F6
+ by smtp3.osuosl.org (Postfix) with ESMTP id A703060A8B
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 10:05:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A703060A8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HfT_RIXxUJjs for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 09:50:11 +0000 (UTC)
+ with ESMTP id p8Ca6MXltToI for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 10:05:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F1306079E
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F1306079E
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:50:11 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id h193so8684814pgc.10
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 01:50:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=RXY7DHa0ZNyVHQe3UP3nqQOtwTBPZNja8TsvcaZd038=;
- b=IcnzTpWVlXEOSvAiDiMxJotUq8XfQyhPeDc5AB2Je4V5oHnGFMt7f1Z91KrrEok97c
- gGi3OTqrBFGg7HiCARgfWkt8BgadnzcJOEbR5vwi256KZL2jpnnGahGePxhVHXsE6tD/
- gcJRTuKd0K6OYdSHd38FHPvNCcFMhER4Ml4n/71td7zJiicwJkMDWa3zijVvHL7Um5Td
- dvPCfJDmgdN0ttTrbjvcR2OToDS+G8/c1m8uoTyM/rbskUcdZ12+75F8FA5OrPN2ew39
- psm7PIzkrzz7dVQ9O+1O6LoWdug3UE6Nsm+egs0LsXg0hUlUZxBUyYDv95viOg1dYhYz
- uvjQ==
-X-Gm-Message-State: ANoB5plJufIa/tOjGtMFnjvMeIRFwbwIMlj4kWTSj6S9gSO0F+Xkv5Hc
- PbCKysdX9e/BH340rIefmBxh6rKPqEuO2cI6FCiHI4VQe2s=
-X-Google-Smtp-Source: AA0mqf5RAO33quOOIp1d1opRfSLGD6BkBsldm+kIlJy3ue7YYF4dnBwtawfLrsRD0tq22dba3DX56S1LvqiERa9EyaM=
-X-Received: by 2002:a63:117:0:b0:476:f43d:913e with SMTP id
- 23-20020a630117000000b00476f43d913emr13367223pgb.386.1668937810707; Sun, 20
- Nov 2022 01:50:10 -0800 (PST)
-MIME-Version: 1.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 403746080A
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 403746080A
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 10:05:40 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:78ad:17ab:4254:8d91])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1A4A9200412;
+ Sun, 20 Nov 2022 11:05:35 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 20 Nov 2022 11:05:34 +0100
+Date: Sun, 20 Nov 2022 11:05:34 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221120100534.GA2516@scaer>
 References: <20221119233706.52949-1-fontaine.fabrice@gmail.com>
  <20221120090945.GQ2123054@scaer>
-In-Reply-To: <20221120090945.GQ2123054@scaer>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Nov 2022 10:49:59 +0100
-Message-ID: <CAPi7W82K7qD7swXOjSo=wH7OEHYEU8GJwmX+=3OJGxx9G2jQzg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=RXY7DHa0ZNyVHQe3UP3nqQOtwTBPZNja8TsvcaZd038=;
- b=G68mM9Vm1dxKop2NsSm8X+5vN4yHtAajqiAeulZQakK+eGlH81izkHG8/iQ7BPpqLm
- Z5wjTxykz32C+iS/O0u23lyEG0GtyiIW98SlspaN+CDAGuud57Oe9qwFTnK5KcGv3ozA
- aj+cwvyhETtW5w9MuLFCiSLBc4DDikFyVo93Qlkj9pIYCTQXMnnPZCNLbfGaxitAlXBm
- eyBOyQHbAIHKqDKgzc3L7VE5YK0qDZzFeEd7cY3sVES7g+LmgYQUJiW8crGcVwxJhLtj
- m+Mw77SZdnYJ1c4zFHYnxCYjvGsMpuwzdoF5mCQvb6YjpBGKtoXMxO+jeZ/PQvqf5ReX
- +iKw==
+ <CAPi7W82K7qD7swXOjSo=wH7OEHYEU8GJwmX+=3OJGxx9G2jQzg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAPi7W82K7qD7swXOjSo=wH7OEHYEU8GJwmX+=3OJGxx9G2jQzg@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1668938737;
+ bh=gxnCmb2dmk80r+xUpBGnjDS1NInYjKZ+6aJbvqjblQ4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=EAbtYOxYrdm9UnkBwFQlYZyPhfxV/5lzqo12hPZyYWWLpQtsxMY29Ojl5boKrn0PE
+ HEP0O6K2jM076IHLXvuzpmfS4EJWvN0pIlMjMFcOu0+4eUvg8+L4AGxD8Y2Hx61Ek+
+ yfmogN8Psaxq4SV7B7jU/T/bXHAv5E7/uM1fGDcdDi6BLM7K/VxaPuOE1jlRCkjbPd
+ op6+k5L2mn2kSh1sG78SKUSelVAfW7PEXt5YOQyIkd41tmh8C9ytW4XvxRxMGiY1Wf
+ 7CdYnTJTOXdBdKCzwbSYg2y2g9N5aoSs9XH777eBYE5KWZigQC9Oh9q4GZrWMK4SYH
+ HKVBvpNk2JFiA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=G68mM9Vm
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EAbtYOxY
 Subject: Re: [Buildroot] [PATCH 1/1] package/sysstat: security bump to
  version 12.6.1
 X-BeenThere: buildroot@buildroot.org
@@ -92,306 +80,115 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4205067857712578211=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4205067857712578211==
-Content-Type: multipart/alternative; boundary="0000000000005c0bcc05ede3dd21"
-
---0000000000005c0bcc05ede3dd21
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Yann,
-
-Le dim. 20 nov. 2022 =C3=A0 10:09, Yann E. MORIN <yann.morin.1998@free.fr> =
-a
-=C3=A9crit :
-
-> Fabrice, All,
->
-> On 2022-11-20 00:37 +0100, Fabrice Fontaine spake thusly:
-> > Fix CVE-2022-39377: sysstat is a set of system performance tools for th=
-e
-> > Linux operating system. On 32 bit systems, in versions 9.1.16 and newer
-> > but prior to 12.7.1, allocate_structures contains a size_t overflow in
->
-> As you quote the NVD description, it states that versions lower than
-> 12.7.1 are impacted, yet you only bump to 12.6.1.
->
-
-12.7.1 is a development version:
-http://sebastien.godard.pagesperso-orange.fr/
-
-
->
-> Also, the pointer you provided to the changelog does not mention
-> CVE-2022-39377. Besides, github warns that it is not part of the
->
-
-Changelog is mentioning GHSL-2022-074 (a.k.a. CVE-2022-39377):
-
-2022/11/06: Version 12.6.1 - Sebastien Godard (sysstat <at> orange.fr)
-* Fix possible overflow in sa_common.c (GHSL-2022-074).
-
-
-> sysstat repository (/!\ This commit does not belong to any branch on
-> this repository, and may belong to a fork outside of the repository).
->
-> Can you double-check, please: if 12.6.1 indeed fixes the issue, then
-> extend the commit log with the appropriate references; if not then we
-> should bump to 12.7.1.
->
-
-And finally, here is the commit that fixes the issue on 12.6.1:
-https://github.com/sysstat/sysstat/commit/c1e631eddc50c04e4dcea169ba396bee2=
-bd6b0ab
-
-
->
-> Regards,
-> Yann E. MORIN.
->
-> > sa_common.c. The allocate_structures function insufficiently checks
-> > bounds before arithmetic multiplication, allowing for an overflow in th=
-e
-> > size allocated for the buffer representing system activities. This issu=
-e
-> > may lead to Remote Code Execution (RCE).
-> >
-> >
-> https://github.com/sysstat/sysstat/security/advisories/GHSA-q8r6-g56f-9w7=
-x
-> > https://github.com/sysstat/sysstat/blob/v12.6.1/CHANGES
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/sysstat/sysstat.hash | 4 ++--
-> >  package/sysstat/sysstat.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.has=
-h
-> > index b573f312c6..b47f000e57 100644
-> > --- a/package/sysstat/sysstat.hash
-> > +++ b/package/sysstat/sysstat.hash
-> > @@ -1,5 +1,5 @@
-> >  # From: http://sebastien.godard.pagesperso-orange.fr/download.html
-> > -sha1  1e38bc029979def730ae1fb1e39f631bd1a3bc73  sysstat-12.4.2.tar.xz
-> > +sha1  a730982e0c2d4964a0022c1509f3ea0a345402bc  sysstat-12.6.1.tar.xz
-> >  # Locally calculated
-> > -sha256
-> 3701b2c1883d50eb384d7b95ce5b6df0a71fdcb3c23f96cb58098d1bcffa018f
-> sysstat-12.4.2.tar.xz
-> > +sha256
-> 18ff5a4e149e2568e43385637f72437fe6bafcc1322a93d13d1981e9464a0342
-> sysstat-12.6.1.tar.xz
-> >  sha256
-> db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  COPYING
-> > diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-> > index 6948f6b390..377396d986 100644
-> > --- a/package/sysstat/sysstat.mk
-> > +++ b/package/sysstat/sysstat.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >
-> #########################################################################=
-#######
-> >
-> > -SYSSTAT_VERSION =3D 12.4.2
-> > +SYSSTAT_VERSION =3D 12.6.1
-> >  SYSSTAT_SOURCE =3D sysstat-$(SYSSTAT_VERSION).tar.xz
-> >  SYSSTAT_SITE =3D http://pagesperso-orange.fr/sebastien.godard
-> >  SYSSTAT_CONF_OPTS =3D --disable-file-attr
-> > --
-> > 2.35.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------=
-------'
->
-
-Best Regards,
-
-Fabrice
-
---0000000000005c0bcc05ede3dd21
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Yann,<br></div><br><div class=3D"gmail_qu=
-ote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim. 20 nov. 2022 =C3=A0=
-=C2=A010:09, Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">y=
-ann.morin.1998@free.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cla=
-ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
-rgb(204,204,204);padding-left:1ex">Fabrice, All,<br>
-<br>
-On 2022-11-20 00:37 +0100, Fabrice Fontaine spake thusly:<br>
-&gt; Fix CVE-2022-39377: sysstat is a set of system performance tools for t=
-he<br>
-&gt; Linux operating system. On 32 bit systems, in versions 9.1.16 and newe=
-r<br>
-&gt; but prior to 12.7.1, allocate_structures contains a size_t overflow in=
-<br>
-<br>
-As you quote the NVD description, it states that versions lower than<br>
-12.7.1 are impacted, yet you only bump to 12.6.1.<br></blockquote><div><br>=
-</div><div>12.7.1 is a development version: <a href=3D"http://sebastien.god=
-ard.pagesperso-orange.fr/">http://sebastien.godard.pagesperso-orange.fr/</a=
-></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0=
-px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-Also, the pointer you provided to the changelog does not mention<br>
-CVE-2022-39377. Besides, github warns that it is not part of the<br></block=
-quote><div><br></div><div>Changelog is mentioning GHSL-2022-074 (a.k.a. CVE=
--2022-39377):<br></div><div><br></div><div><table class=3D"gmail-highlight =
-gmail-tab-size gmail-js-file-line-container gmail-js-code-nav-container gma=
-il-js-tagsearch-file"><tbody><tr><td id=3D"gmail-LC3" class=3D"gmail-blob-c=
-ode gmail-blob-code-inner gmail-js-file-line">2022/11/06: Version 12.6.1 - =
-Sebastien Godard (sysstat &lt;at&gt; <a href=3D"http://orange.fr">orange.fr=
-</a>)</td>
-        </tr>
-        <tr>
-          </tr></tbody></table>	* Fix possible overflow in sa_common.c (GHS=
-L-2022-074).</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-sysstat repository (/!\ This commit does not belong to any branch on<br>
-this repository, and may belong to a fork outside of the repository).<br>
-<br>
-Can you double-check, please: if 12.6.1 indeed fixes the issue, then<br>
-extend the commit log with the appropriate references; if not then we<br>
-should bump to 12.7.1.<br></blockquote><div><br></div><div>And finally, her=
-e is the commit that fixes the issue on 12.6.1:</div><div><a href=3D"https:=
-//github.com/sysstat/sysstat/commit/c1e631eddc50c04e4dcea169ba396bee2bd6b0a=
-b">https://github.com/sysstat/sysstat/commit/c1e631eddc50c04e4dcea169ba396b=
-ee2bd6b0ab</a></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt; sa_common.c. The allocate_structures function insufficiently checks<br=
->
-&gt; bounds before arithmetic multiplication, allowing for an overflow in t=
-he<br>
-&gt; size allocated for the buffer representing system activities. This iss=
-ue<br>
-&gt; may lead to Remote Code Execution (RCE).<br>
-&gt; <br>
-&gt; <a href=3D"https://github.com/sysstat/sysstat/security/advisories/GHSA=
--q8r6-g56f-9w7x" rel=3D"noreferrer" target=3D"_blank">https://github.com/sy=
-sstat/sysstat/security/advisories/GHSA-q8r6-g56f-9w7x</a><br>
-&gt; <a href=3D"https://github.com/sysstat/sysstat/blob/v12.6.1/CHANGES" re=
-l=3D"noreferrer" target=3D"_blank">https://github.com/sysstat/sysstat/blob/=
-v12.6.1/CHANGES</a><br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 package/sysstat/sysstat.hash | 4 ++--<br>
-&gt;=C2=A0 package/sysstat/<a href=3D"http://sysstat.mk" rel=3D"noreferrer"=
- target=3D"_blank">sysstat.mk</a>=C2=A0 =C2=A0| 2 +-<br>
-&gt;=C2=A0 2 files changed, 3 insertions(+), 3 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.ha=
-sh<br>
-&gt; index b573f312c6..b47f000e57 100644<br>
-&gt; --- a/package/sysstat/sysstat.hash<br>
-&gt; +++ b/package/sysstat/sysstat.hash<br>
-&gt; @@ -1,5 +1,5 @@<br>
-&gt;=C2=A0 # From: <a href=3D"http://sebastien.godard.pagesperso-orange.fr/=
-download.html" rel=3D"noreferrer" target=3D"_blank">http://sebastien.godard=
-.pagesperso-orange.fr/download.html</a><br>
-&gt; -sha1=C2=A0 1e38bc029979def730ae1fb1e39f631bd1a3bc73=C2=A0 sysstat-12.=
-4.2.tar.xz<br>
-&gt; +sha1=C2=A0 a730982e0c2d4964a0022c1509f3ea0a345402bc=C2=A0 sysstat-12.=
-6.1.tar.xz<br>
-&gt;=C2=A0 # Locally calculated<br>
-&gt; -sha256=C2=A0 3701b2c1883d50eb384d7b95ce5b6df0a71fdcb3c23f96cb58098d1b=
-cffa018f=C2=A0 sysstat-12.4.2.tar.xz<br>
-&gt; +sha256=C2=A0 18ff5a4e149e2568e43385637f72437fe6bafcc1322a93d13d1981e9=
-464a0342=C2=A0 sysstat-12.6.1.tar.xz<br>
-&gt;=C2=A0 sha256=C2=A0 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3d=
-ff411b1c2fc73=C2=A0 COPYING<br>
-&gt; diff --git a/package/sysstat/<a href=3D"http://sysstat.mk" rel=3D"nore=
-ferrer" target=3D"_blank">sysstat.mk</a> b/package/sysstat/<a href=3D"http:=
-//sysstat.mk" rel=3D"noreferrer" target=3D"_blank">sysstat.mk</a><br>
-&gt; index 6948f6b390..377396d986 100644<br>
-&gt; --- a/package/sysstat/<a href=3D"http://sysstat.mk" rel=3D"noreferrer"=
- target=3D"_blank">sysstat.mk</a><br>
-&gt; +++ b/package/sysstat/<a href=3D"http://sysstat.mk" rel=3D"noreferrer"=
- target=3D"_blank">sysstat.mk</a><br>
-&gt; @@ -4,7 +4,7 @@<br>
-&gt;=C2=A0 #<br>
-&gt;=C2=A0 ################################################################=
-################<br>
-&gt;=C2=A0 <br>
-&gt; -SYSSTAT_VERSION =3D 12.4.2<br>
-&gt; +SYSSTAT_VERSION =3D 12.6.1<br>
-&gt;=C2=A0 SYSSTAT_SOURCE =3D sysstat-$(SYSSTAT_VERSION).tar.xz<br>
-&gt;=C2=A0 SYSSTAT_SITE =3D <a href=3D"http://pagesperso-orange.fr/sebastie=
-n.godard" rel=3D"noreferrer" target=3D"_blank">http://pagesperso-orange.fr/=
-sebastien.godard</a><br>
-&gt;=C2=A0 SYSSTAT_CONF_OPTS =3D --disable-file-attr<br>
-&gt; -- <br>
-&gt; 2.35.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
-|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br></blockquote><div><br></div><div>Best Regards,</div><div><=
-br></div><div>Fabrice <br></div></div></div>
-
---0000000000005c0bcc05ede3dd21--
-
---===============4205067857712578211==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4205067857712578211==--
+RmFicmljZSwgQWxsLAoKT24gMjAyMi0xMS0yMCAxMDo0OSArMDEwMCwgRmFicmljZSBGb250YWlu
+ZSBzcGFrZSB0aHVzbHk6Cj4gTGXCoGRpbS4gMjAgbm92LiAyMDIyIMOgwqAxMDowOSwgWWFubiBF
+LiBNT1JJTiA8IFsxXXlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiBhIMOpY3JpdMKgOgo+ICAgQXMg
+eW91IHF1b3RlIHRoZSBOVkQgZGVzY3JpcHRpb24sIGl0IHN0YXRlcyB0aGF0IHZlcnNpb25zIGxv
+d2VyIHRoYW4KPiAgIDEyLjcuMSBhcmUgaW1wYWN0ZWQsIHlldCB5b3Ugb25seSBidW1wIHRvIDEy
+LjYuMS4KPiAxMi43LjEgaXMgYSBkZXZlbG9wbWVudCB2ZXJzaW9uOiBbMl1odHRwOi8vc2ViYXN0
+aWVuLmdvZGFyZC5wYWdlc3BlcnNvLW9yYW5nZS5mci8KPiAKPiAgIEFsc28sIHRoZSBwb2ludGVy
+IHlvdSBwcm92aWRlZCB0byB0aGUgY2hhbmdlbG9nIGRvZXMgbm90IG1lbnRpb24KPiAgIENWRS0y
+MDIyLTM5Mzc3LiBCZXNpZGVzLCBnaXRodWIgd2FybnMgdGhhdCBpdCBpcyBub3QgcGFydCBvZiB0
+aGUKPiBDaGFuZ2Vsb2cgaXMgbWVudGlvbmluZyBHSFNMLTIwMjItMDc0IChhLmsuYS4gQ1ZFLTIw
+MjItMzkzNzcpOgo+IDIwMjIvMTEvMDY6IFZlcnNpb24gMTIuNi4xIC0gU2ViYXN0aWVuIEdvZGFy
+ZCAoc3lzc3RhdCA8YXQ+IFszXW9yYW5nZS5mcikKPiAqIEZpeCBwb3NzaWJsZSBvdmVyZmxvdyBp
+biBzYV9jb21tb24uYyAoR0hTTC0yMDIyLTA3NCkuCgpJdCdzIHJhdGhlciBoYXJkIHRvIGNvcnJl
+bGF0ZSAiR0hTTC0yMDIyLTA3NCIgd2l0aCAiQ1ZFLTIwMjItMzkzNzciLiA7LSkKCk9LLCBjYW4g
+eW91IG1lbnRpb24gYm90aCBpbmZvIGluIHRoZSBjb21taXQgbG9nIHdoZW4geW91IHJlc3Bpbj8K
+Cj4gICBzeXNzdGF0IHJlcG9zaXRvcnkgKC8hXCBUaGlzIGNvbW1pdCBkb2VzIG5vdCBiZWxvbmcg
+dG8gYW55IGJyYW5jaCBvbgo+ICAgdGhpcyByZXBvc2l0b3J5LCBhbmQgbWF5IGJlbG9uZyB0byBh
+IGZvcmsgb3V0c2lkZSBvZiB0aGUgcmVwb3NpdG9yeSkuCj4gCj4gICBDYW4geW91IGRvdWJsZS1j
+aGVjaywgcGxlYXNlOiBpZiAxMi42LjEgaW5kZWVkIGZpeGVzIHRoZSBpc3N1ZSwgdGhlbgo+ICAg
+ZXh0ZW5kIHRoZSBjb21taXQgbG9nIHdpdGggdGhlIGFwcHJvcHJpYXRlIHJlZmVyZW5jZXM7IGlm
+IG5vdCB0aGVuIHdlCj4gICBzaG91bGQgYnVtcCB0byAxMi43LjEuCj4gCj4gQW5kIGZpbmFsbHks
+IGhlcmUgaXMgdGhlIGNvbW1pdCB0aGF0IGZpeGVzIHRoZSBpc3N1ZSBvbiAxMi42LjE6Cj4gWzRd
+aHR0cHM6Ly9naXRodWIuY29tL3N5c3N0YXQvc3lzc3RhdC9jb21taXQvYzFlNjMxZWRkYzUwYzA0
+ZTRkY2VhMTY5YmEzOTZiZWUyYmQ2YjBhYgoKVGhhdCdzIGFnYWluIHdlaXJkLCBiZWNhdXNlIGdp
+dGh1YiBzdGlsbCB3YXJucyB0aGF0IHRoZSByZWZlcmVuY2VkCmNvbW1pdCBpcyBub3QgcGFydCBv
+ZiBhbnkgYnJhbmNoIGluIHRoZSBzeXNzdGF0IHJlcG9zaXRvcnkuLi4KCkkgZG9uJ3Qga25vdyBo
+b3cgeW91IGNhbWUgdXAgd2l0aCB0aGF0IGNvbW1pdCwgYnV0IEkgY291bGRmaW5kCjljNGVhZjE1
+MDY2MmFkNDA2MDc5MjMzODlkNDUxOWJjODNiOTM1NDAgaW4gdGhlIHVwc3RyZWFtIHJlcG9zaXRv
+cnkuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAgIFJlZ2FyZHMsCj4gICBZYW5uIEUuIE1P
+UklOLgo+IAo+ICAgPiBzYV9jb21tb24uYy4gVGhlIGFsbG9jYXRlX3N0cnVjdHVyZXMgZnVuY3Rp
+b24gaW5zdWZmaWNpZW50bHkgY2hlY2tzCj4gICA+IGJvdW5kcyBiZWZvcmUgYXJpdGhtZXRpYyBt
+dWx0aXBsaWNhdGlvbiwgYWxsb3dpbmcgZm9yIGFuIG92ZXJmbG93IGluIHRoZQo+ICAgPiBzaXpl
+IGFsbG9jYXRlZCBmb3IgdGhlIGJ1ZmZlciByZXByZXNlbnRpbmcgc3lzdGVtIGFjdGl2aXRpZXMu
+IFRoaXMgaXNzdWUKPiAgID4gbWF5IGxlYWQgdG8gUmVtb3RlIENvZGUgRXhlY3V0aW9uIChSQ0Up
+Lgo+ICAgPgo+ICAgPiBbNV1odHRwczovL2dpdGh1Yi5jb20vc3lzc3RhdC9zeXNzdGF0L3NlY3Vy
+aXR5L2Fkdmlzb3JpZXMvR0hTQS1xOHI2LWc1NmYtOXc3eAo+ICAgPiBbNl1odHRwczovL2dpdGh1
+Yi5jb20vc3lzc3RhdC9zeXNzdGF0L2Jsb2IvdjEyLjYuMS9DSEFOR0VTCj4gICA+Cj4gICA+IFNp
+Z25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPCBbN11mb250YWluZS5mYWJyaWNlQGdtYWls
+LmNvbT4KPiAgID4gLS0tCj4gICA+wqAgcGFja2FnZS9zeXNzdGF0L3N5c3N0YXQuaGFzaCB8IDQg
+KystLQo+ICAgPsKgIHBhY2thZ2Uvc3lzc3RhdC8gWzhdc3lzc3RhdC5ta8KgIMKgfCAyICstCj4g
+ICA+wqAgMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4g
+ICA+Cj4gICA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N5c3N0YXQvc3lzc3RhdC5oYXNoIGIvcGFj
+a2FnZS9zeXNzdGF0L3N5c3N0YXQuaGFzaAo+ICAgPiBpbmRleCBiNTczZjMxMmM2Li5iNDdmMDAw
+ZTU3IDEwMDY0NAo+ICAgPiAtLS0gYS9wYWNrYWdlL3N5c3N0YXQvc3lzc3RhdC5oYXNoCj4gICA+
+ICsrKyBiL3BhY2thZ2Uvc3lzc3RhdC9zeXNzdGF0Lmhhc2gKPiAgID4gQEAgLTEsNSArMSw1IEBA
+Cj4gICA+wqAgIyBGcm9tOiBbOV1odHRwOi8vc2ViYXN0aWVuLmdvZGFyZC5wYWdlc3BlcnNvLW9y
+YW5nZS5mci9kb3dubG9hZC5odG1sCj4gICA+IC1zaGExwqAgMWUzOGJjMDI5OTc5ZGVmNzMwYWUx
+ZmIxZTM5ZjYzMWJkMWEzYmM3M8KgIHN5c3N0YXQtMTIuNC4yLnRhci54ego+ICAgPiArc2hhMcKg
+IGE3MzA5ODJlMGMyZDQ5NjRhMDAyMmMxNTA5ZjNlYTBhMzQ1NDAyYmPCoCBzeXNzdGF0LTEyLjYu
+MS50YXIueHoKPiAgID7CoCAjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICAgPiAtc2hhMjU2wqAgMzcw
+MWIyYzE4ODNkNTBlYjM4NGQ3Yjk1Y2U1YjZkZjBhNzFmZGNiM2MyM2Y5NmNiNTgwOThkMWJjZmZh
+MDE4ZsKgIHN5c3N0YXQtMTIuNC4yLnRhci54ego+ICAgPiArc2hhMjU2wqAgMThmZjVhNGUxNDll
+MjU2OGU0MzM4NTYzN2Y3MjQzN2ZlNmJhZmNjMTMyMmE5M2QxM2QxOTgxZTk0NjRhMDM0MsKgIHN5
+c3N0YXQtMTIuNi4xLnRhci54ego+ICAgPsKgIHNoYTI1NsKgIGRiMjk2ZjJmN2YzNWJjYTNhMTc0
+ZWZiMGViMzkyYjNiMTdiZDk0YjM0MTg1MTQyOWEzZGZmNDExYjFjMmZjNzPCoCBDT1BZSU5HCj4g
+ICA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N5c3N0YXQvIFsxMF1zeXNzdGF0Lm1rIGIvcGFja2Fn
+ZS9zeXNzdGF0LyBbMTFdc3lzc3RhdC5tawo+ICAgPiBpbmRleCA2OTQ4ZjZiMzkwLi4zNzczOTZk
+OTg2IDEwMDY0NAo+ICAgPiAtLS0gYS9wYWNrYWdlL3N5c3N0YXQvIFsxMl1zeXNzdGF0Lm1rCj4g
+ICA+ICsrKyBiL3BhY2thZ2Uvc3lzc3RhdC8gWzEzXXN5c3N0YXQubWsKPiAgID4gQEAgLTQsNyAr
+NCw3IEBACj4gICA+wqAgIwo+ICAgPsKgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICA+wqAK
+PiAgID4gLVNZU1NUQVRfVkVSU0lPTiA9IDEyLjQuMgo+ICAgPiArU1lTU1RBVF9WRVJTSU9OID0g
+MTIuNi4xCj4gICA+wqAgU1lTU1RBVF9TT1VSQ0UgPSBzeXNzdGF0LSQoU1lTU1RBVF9WRVJTSU9O
+KS50YXIueHoKPiAgID7CoCBTWVNTVEFUX1NJVEUgPSBbMTRdaHR0cDovL3BhZ2VzcGVyc28tb3Jh
+bmdlLmZyL3NlYmFzdGllbi5nb2RhcmQKPiAgID7CoCBTWVNTVEFUX0NPTkZfT1BUUyA9IC0tZGlz
+YWJsZS1maWxlLWF0dHIKPiAgID4gLS0KPiAgID4gMi4zNS4xCj4gICA+Cj4gICA+IF9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gICA+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiAgID4gWzE1XWJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gICA+IFsxNl1o
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAK
+PiAgIC0tCj4gICAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+ICAgfMKgIFlhbm4gRS4gTU9SSU7C
+oCB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3Bp
+cmFjeTogfAo+ICAgfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZcKgIERlc2lnbmVyIHwgXCAv
+IENBTVBBSUdOwqAgwqAgwqB8wqAgX19fwqAgwqAgwqAgwqAgwqAgwqAKPiAgIMKgIMKgfAo+ICAg
+fCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOsKgIFjCoCBBR0FJTlNUwqAg
+wqAgwqAgfMKgIFxlL8KgIFRoZXJlIGlzIG5vwqAgfAo+ICAgfCBbMTddaHR0cDovL3ltb3Jpbi5p
+cy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTMKgIMKgIHzCoCDCoHbCoCDCoGNv
+bnNwaXJhY3kuwqAgfAo+ICAgJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
+Xi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKPiAKPiBCZXN0IFJlZ2Fy
+ZHMsCj4gRmFicmljZQo+IAo+IExpbmtzOgo+IDEuIG1haWx0bzp5YW5uLm1vcmluLjE5OThAZnJl
+ZS5mcgo+IDIuIGh0dHA6Ly9zZWJhc3RpZW4uZ29kYXJkLnBhZ2VzcGVyc28tb3JhbmdlLmZyLwo+
+IDMuIGh0dHA6Ly9vcmFuZ2UuZnIKPiA0LiBodHRwczovL2dpdGh1Yi5jb20vc3lzc3RhdC9zeXNz
+dGF0L2NvbW1pdC9jMWU2MzFlZGRjNTBjMDRlNGRjZWExNjliYTM5NmJlZTJiZDZiMGFiCj4gNS4g
+aHR0cHM6Ly9naXRodWIuY29tL3N5c3N0YXQvc3lzc3RhdC9zZWN1cml0eS9hZHZpc29yaWVzL0dI
+U0EtcThyNi1nNTZmLTl3N3gKPiA2LiBodHRwczovL2dpdGh1Yi5jb20vc3lzc3RhdC9zeXNzdGF0
+L2Jsb2IvdjEyLjYuMS9DSEFOR0VTCj4gNy4gbWFpbHRvOmZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
+Y29tCj4gOC4gaHR0cDovL3N5c3N0YXQubWsKPiA5LiBodHRwOi8vc2ViYXN0aWVuLmdvZGFyZC5w
+YWdlc3BlcnNvLW9yYW5nZS5mci9kb3dubG9hZC5odG1sCj4gMTAuIGh0dHA6Ly9zeXNzdGF0Lm1r
+Cj4gMTEuIGh0dHA6Ly9zeXNzdGF0Lm1rCj4gMTIuIGh0dHA6Ly9zeXNzdGF0Lm1rCj4gMTMuIGh0
+dHA6Ly9zeXNzdGF0Lm1rCj4gMTQuIGh0dHA6Ly9wYWdlc3BlcnNvLW9yYW5nZS5mci9zZWJhc3Rp
+ZW4uZ29kYXJkCj4gMTUuIG1haWx0bzpidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IDE2LiBodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAxNy4g
+aHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLwoKPiBfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAoKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
+LS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUu
+IE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycg
+Y29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwg
+LyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBg
+LS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBu
+byAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1B
+SUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
