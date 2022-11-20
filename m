@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D4CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18A94C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 167B842E69;
-	Mon, 20 Feb 2023 21:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 167B842E69
+	by smtp4.osuosl.org (Postfix) with ESMTP id B311A4350E;
+	Mon, 20 Feb 2023 21:25:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B311A4350E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pvGDrsyaJO-P; Mon, 20 Feb 2023 21:25:36 +0000 (UTC)
+	with ESMTP id vsOLSrXHb2BD; Mon, 20 Feb 2023 21:25:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E235343127;
-	Mon, 20 Feb 2023 21:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E235343127
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8162C43422;
+	Mon, 20 Feb 2023 21:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8162C43422
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 149D81BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D5771BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D285610A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1B0E610C2
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D285610A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1B0E610C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2bCtWVT9I8q9 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+ with ESMTP id jgHQg8okVgQQ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95264610C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5D6761067
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95264610C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D6761067
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 878678648F; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+ id CEF3E8648F; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 10:01:14 +0100
+Date: Sun, 20 Nov 2022 17:38:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c0311220fb627db8af4a2cd8c3adb067e8a308d
-X-Git-Newrev: 58ba17c7849056fbeb3b4d652749af32f81e7360
+X-Git-Oldrev: e4ef408e8f738575841c5ffc43504be4c3f6fa56
+X-Git-Newrev: e24033f76ad339b1a66fb5b259b8e28f076de97e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205151.878678648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nodejs: security bump
- to version 16.18.1
+Message-Id: <20230220205151.CEF3E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/systemd: security bump
+ to version v250.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ba17c7849056fbeb3b4d652749af32f81e7360
+commit: https://git.buildroot.net/buildroot/commit/?id=e24033f76ad339b1a66fb5b259b8e28f076de97e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes the following security issue:
 
-DNS rebinding in --inspect via invalid octal IP address (Medium) (CVE-2022-43548)
+- CVE-2022-3821: An off-by-one Error issue was discovered in Systemd in
+  format_timespan() function of time-util.c.  An attacker could supply
+  specific values for time and accuracy that leads to buffer overrun in
+  format_timespan(), leading to a Denial of Service.
+  https://github.com/systemd/systemd/issues/23928
 
-The Node.js rebinding protector for --inspect still allows invalid IP
-address, specifically, the octal format.  An example of an octal IP address
-is 1.09.0.0, the 09 octet is invalid because 9 is not a number in the base 8
-number system.  Browsers such as Firefox (tested on latest version m105)
-will still attempt to resolve this invalid octal address via DNS.  When
-combined with an active --inspect session, such as when using VSCode, an
-attacker can perform DNS rebinding and execute arbitrary code
-
-Update license hash for an update of base64 (MIT license) and a change in
-copyright year:
-
-https://github.com/nodejs/node/commit/8ea9a71b15a953cd0936f7e6aae84c62873a77b5
-https://github.com/nodejs/node/commit/9f14dc1a8f43a9f3755c673009378b798cbdd73b
+Drop now upstream 0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...call-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch | 33 ----------------------
+ package/systemd/systemd.hash                       |  2 +-
+ package/systemd/systemd.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 83e4c271ce..4408782248 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
+diff --git a/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch b/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
+deleted file mode 100644
+index 0934886acb..0000000000
+--- a/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 16c132a6a0389e0eaea70c4ad95dbfd1637ec5ba Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@smile.fr>
+-Date: Fri, 7 Jan 2022 22:25:23 +0100
+-Subject: [PATCH] missing-syscall: define MOVE_MOUNT_T_EMPTY_PATH if missing
+-
+-MOVE_MOUNT_T_EMPTY_PATH has been added to systemd 250 by [1]
+-but it's defined in kernel headers since version 5.2.
+-
+-[1] c7bf079bbc19e3b409acc0c7acc3e14749211fe2
+-
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- src/basic/missing_syscall.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/basic/missing_syscall.h b/src/basic/missing_syscall.h
+-index 8267b1a90c..793d111c55 100644
+---- a/src/basic/missing_syscall.h
+-+++ b/src/basic/missing_syscall.h
+-@@ -569,6 +569,10 @@ static inline int missing_open_tree(
+- #define MOVE_MOUNT_F_EMPTY_PATH 0x00000004 /* Empty from path permitted */
+- #endif
+- 
+-+#ifndef MOVE_MOUNT_T_EMPTY_PATH
+-+#define MOVE_MOUNT_T_EMPTY_PATH 0x00000040 /* Empty to path permitted */
+-+#endif
+-+
+- static inline int missing_move_mount(
+-                 int from_dfd,
+-                 const char *from_pathname,
+--- 
+-2.31.1
+-
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 3572b25965..3b98566f32 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
 @@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v16.17.1/SHASUMS256.txt
--sha256  6721feb4152d56d2c6b358ce397abd5a7f1daf09ee2e25c5021b9b4d3f86a330  node-v16.17.1.tar.xz
-+# From https://nodejs.org/dist/v16.18.1/SHASUMS256.txt
-+sha256  1f8051a88f86f42064f4415fe7a980e59b0a502ecc8def583f6303bc4d445238  node-v16.18.1.tar.xz
- 
- # Hash for license file
--sha256  69090e865afa7c62715b97f0712632d2923bd7a5faba91f94e4e75a2f9219d5e  LICENSE
-+sha256  0bec08634ba79b5404f6b7f92ea850f3c2a06e27e6f83f2267e4f5e55ae33334  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 29a10b900f..367d5d2058 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 16.17.1
-+NODEJS_VERSION = 16.18.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = \
+ # sha256 locally computed
+-sha256  d2bda9d225da11dc9ff48b48e59fc36798d3e66902ed400a9f78fa370c596864  systemd-250.4.tar.gz
++sha256  638a2fc78828765fc97bc73f428205b6dc1d359149b6c6bfe4d2a649cba2cca8  systemd-250.8.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b42f6a502b..30a75b7a40 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 250.4
++SYSTEMD_VERSION = 250.8
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
