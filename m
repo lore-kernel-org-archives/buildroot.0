@@ -1,70 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 036EBC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 14:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70ED6C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 14:17:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 376744089A;
-	Sun, 20 Nov 2022 14:04:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 376744089A
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA5F960BA3;
+	Sun, 20 Nov 2022 14:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA5F960BA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8b7BwWgFPGWf; Sun, 20 Nov 2022 14:04:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NNA9mZht7tWC; Sun, 20 Nov 2022 14:17:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D548F40884;
-	Sun, 20 Nov 2022 14:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D548F40884
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89F9C1BF475
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:04:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F037C60B0F;
+	Sun, 20 Nov 2022 14:17:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F037C60B0F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A25A1BF317
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B92340884
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B92340884
+ by smtp3.osuosl.org (Postfix) with ESMTP id D93ED60B0F
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D93ED60B0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wiglj_twmDgp for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 14:03:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 781A44086B
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 781A44086B
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 14:03:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:78ad:17ab:4254:8d91])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 3BF622003B4;
- Sun, 20 Nov 2022 15:03:53 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Nov 2022 15:03:52 +0100
-Date: Sun, 20 Nov 2022 15:03:52 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20221120140352.GD2516@scaer>
-References: <20221119120518.645972-1-ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LghC8ZSMXmUZ for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 14:17:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 579AD60B0E
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 579AD60B0E
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 14:17:26 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 795B4240006;
+ Sun, 20 Nov 2022 14:17:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1owl8M-004U5G-6M; Sun, 20 Nov 2022 15:17:22 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 20 Nov 2022 15:17:20 +0100
+Message-Id: <20221120141721.1068907-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221119120518.645972-1-ju.o@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668953035;
- bh=3AXUw/I58MMQRvzPpt+AHosJAeqHvcGkyVn8BKkGYy0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=m+YS7z+DO+dcL23U6n2vIL7trvQbdnXllb8EpKjCEDlm231R6F6jaRCOPKJ/H1zSu
- miNL//ldC9NLvf/1jvmG9RWdfWtiZUkWi1tCgp2FUS0vGCL3IH5uLMqWhvNsk/b2EY
- AsObOHhqLYDdDEbE4yckE2+svt83AN91PyXSE3zRf8kzHQQR35LLuwzghUZgBoFEJr
- ypEnWlBdib4jqnq7V57p25VbqIEgT/mgMHaVedf3IDnArZFJWpAIsVM/OJs5np4gsy
- E6m8s4whHicPURTMxZMenf679eCwRMUz1QiHCTGZKGNiQ6cldhLbExlufG4ETHf6KO
- pWr/fqIu+8EGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=m+YS7z+D
-Subject: Re: [Buildroot] [PATCH next 1/1] package/z3: new package
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
+ 16.28.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,101 +61,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
-
-On 2022-11-19 13:05 +0100, Julien Olivain spake thusly:
-> Z3, also known as the Z3 Theorem Prover, is a cross-platform
-> satisfiability modulo theories (SMT) solver.
-> 
-> https://github.com/Z3Prover/z3
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-[--SNIP--]
-> diff --git a/package/z3/Config.in b/package/z3/Config.in
-> new file mode 100644
-> index 0000000000..a3f57f7f88
-> --- /dev/null
-> +++ b/package/z3/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_Z3
-> +	bool "z3"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
-> +	# z3 needs fenv.h which is not provided by uclibc
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> +	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-> +	depends on !BR2_nios2
-> +	help
-> +	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
-> +	  satisfiability modulo theories (SMT) solver.
-> +
-> +	  https://github.com/Z3Prover/z3
-> +
-> +if BR2_PACKAGE_Z3
-> +
-> +config BR2_PACKAGE_Z3_PYTHON
-> +	bool "Python bindings"
-> +	select BR2_PACKAGE_PYTHON3 # runtime
-
-To me, it makes more sense that python bindings depend on python being
-enabled, rather than forcing it. Indeed, if the python is not enabled
-(either manually or because it is not selected by an application), then
-there is no reason to enable it just to provide bindings.
-
-And we do have that construct in at least a few other packages that
-provide python bindings: libftdi1, libiio, ola... So I changed it to
-match.  (yes, there are other packages that use select, but that's not a
-reason to do things better nowadays! ;-) )
-
-[--SNIP--]
-> diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-> new file mode 100755
-> index 0000000000..6ac53b98c5
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-> @@ -0,0 +1,21 @@
-> +#! /usr/bin/env python3
-> +
-> +from z3 import *
-
-Not all of check-package/flake8 tests are run against files in the
-runtime test-suite, but I have a hook that does it, and it reports:
-
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:3:1: F403 'from z3 import *' used; unable to detect undefined names
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:5:5: F405 'Real' may be undefined, or defined from star imports: z3
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:6:5: F405 'Real' may be undefined, or defined from star imports: z3
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:7:5: F405 'Real' may be undefined, or defined from star imports: z3
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:8:5: F405 'Solver' may be undefined, or defined from star imports: z3
-    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:20:17: F405 'sat' may be undefined, or defined from star imports: z3
-    WARNING: 1     F403 'from z3 import *' used; unable to detect undefined names
-    WARNING: 5     F405 'Real' may be undefined, or defined from star imports: z3
-
-So I changed the test to import the whole z3 module, and to prefix
-objects with z3.:
-
-    x = z3.Real('x')
-
-and so on...
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QXN0ZXJpc2sgMTYuMjYuMCBmaXhlZCB0aGUgZm9sbG93aW5nIHNlY3VyaXR5IGlzc3VlczoKCi0g
+W0FTVEVSSVNLLTI5NDc2XSDigJMgcmVzX3N0aXJfc2hha2VuOiBCbGluZCBTU1JGIHZ1bG5lcmFi
+aWxpdGllcwogIGh0dHBzOi8vaXNzdWVzLmFzdGVyaXNrLm9yZy9qaXJhL2Jyb3dzZS9BU1RFUklT
+Sy0yOTQ3NgoKLSBbQVNURVJJU0stMjk4MzhdIOKAkyAke1NRTF9FU0MoKX0gbm90IGNvcnJlY3Rs
+eSBlc2NhcGluZyBhIHRlcm1pbmF0aW5nIFwKICBodHRwczovL2lzc3Vlcy5hc3Rlcmlzay5vcmcv
+amlyYS9icm93c2UvQVNURVJJU0stMjk4MzgKCi0gW0FTVEVSSVNLLTI5ODcyXSDigJMgcmVzX3N0
+aXJfc2hha2VuOiBSZXNvdXJjZSBleGhhdXN0aW9uIHdpdGggbGFyZ2UgZmlsZXMKICBodHRwczov
+L2lzc3Vlcy5hc3Rlcmlzay5vcmcvamlyYS9icm93c2UvQVNURVJJU0stMjk4NzIKCmh0dHBzOi8v
+d3d3LmFzdGVyaXNrLm9yZy9hc3Rlcmlzay1uZXdzL2FzdGVyaXNrLTE2LTI2LTAtbm93LWF2YWls
+YWJsZS8KCkl0IHVuZm9ydHVuYXRlbHkgYWxzbyBpbnRyb2R1Y2VkIGEgY2hhbmdlIHRvIGNoYW5f
+aWF4MiwgYnJlYWtpbmcgYnVpbGRzCndpdGhvdXQgT3BlblNTTDoKaHR0cHM6Ly9naXRodWIuY29t
+L2FzdGVyaXNrL2FzdGVyaXNrL2NvbW1pdC81OWE4Y2RhY2EyZGJiNWVlYjczODJkZmJlNzhjMGMx
+Y2JlZDhjZTZkCgpXaGljaCB3YXMgYWdhaW4gZml4ZWQgaW4gMTYuMjguMDoKaHR0cHM6Ly9naXRo
+dWIuY29tL2FzdGVyaXNrL2FzdGVyaXNrL2NvbW1pdC9mODEyZGZiNjhjNmVkN2FlNTViNGMxNjM3
+MTZmZDFkZGMwNjNmZjU0CgpTbyBidW1wIHRvIDE2LjI4LjA6Cmh0dHBzOi8vd3d3LmFzdGVyaXNr
+Lm9yZy9hc3Rlcmlzay1uZXdzL2FzdGVyaXNrLTE2LTI4LTAtbm93LWF2YWlsYWJsZS8KClRoZSBs
+aWJ4bWwyIHN1cHBvcnQgbm93IHVzZXMgcGtnLWNvbmZpZywgc28gZHJvcCB0aGUgbGlieG1sMi1j
+b25maWcgaGFuZGxpbmc6Cmh0dHBzOi8vZ2l0aHViLmNvbS9hc3Rlcmlzay9hc3Rlcmlzay9jb21t
+aXQvYmY5ZGFmYTdjMjIzMDJiMmYxYTEyYjgyMTZkYTYzMTAyMTE2ZDljOQoKU2lnbmVkLW9mZi1i
+eTogUGV0ZXIgS29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgotLS0KIHBhY2thZ2UvYXN0
+ZXJpc2svYXN0ZXJpc2suaGFzaCB8IDIgKy0KIHBhY2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2subWsg
+ICB8IDcgKystLS0tLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDYgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5oYXNoIGIvcGFj
+a2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5oYXNoCmluZGV4IDg4MGQ2NzU2MmQuLjk3OTJkODJhYzUg
+MTAwNjQ0Ci0tLSBhL3BhY2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2suaGFzaAorKysgYi9wYWNrYWdl
+L2FzdGVyaXNrL2FzdGVyaXNrLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIExvY2FsbHkgY29tcHV0
+ZWQKLXNoYTI1NiAgMGZiODE3OTQzYTI3NmY1ZTU0MGMyYTk0MzJlODg0MWNkMzM5M2U3YzFiZDEy
+NTAwNTVjNjIwOTAyZjZlYWZjOCAgYXN0ZXJpc2stMTYuMjUuMi50YXIuZ3oKK3NoYTI1NiAgNmU5
+YzJmMzUwZGIwMThkZjg1NGIxMzAxNjg3Y2VkODk5M2ZhY2IyNzg3Njk4MzM2ZTU1Y2QxOWUwYWUz
+ZWJmZSAgYXN0ZXJpc2stMTYuMjguMC50YXIuZ3oKIAogIyBzaGExIGZyb206IGh0dHA6Ly9kb3du
+bG9hZHMuYXN0ZXJpc2sub3JnL3B1Yi90ZWxlcGhvbnkvc291bmRzL3JlbGVhc2VzCiAjIHNoYTI1
+NiBsb2NhbGx5IGNvbXB1dGVkCmRpZmYgLS1naXQgYS9wYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNr
+Lm1rIGIvcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5tawppbmRleCA5YjU5OTk3YjgwLi4xODRm
+NDAwMzFmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNrLm1rCisrKyBiL3Bh
+Y2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2subWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIwogCi1BU1RFUklTS19WRVJTSU9OID0gMTYuMjUuMgorQVNURVJJU0tfVkVS
+U0lPTiA9IDE2LjI4LjAKICMgVXNlIHRoZSBnaXRodWIgbWlycm9yOiBpdCdzIGFuIG9mZmljaWFs
+IG1pcnJvciBtYWludGFpbmVkIGJ5IERpZ2l1bSwgYW5kCiAjIHByb3ZpZGVzIHRhcmJhbGxzLCB3
+aGljaCB0aGUgbWFpbiBBc3RlcmlzayBnaXQgdHJlZSAoYmVoaW5kIEdlcnJpdCkgZG9lcyBub3Qu
+CiBBU1RFUklTS19TSVRFID0gJChjYWxsIGdpdGh1Yixhc3Rlcmlzayxhc3RlcmlzaywkKEFTVEVS
+SVNLX1ZFUlNJT04pKQpAQCAtMTE1LDggKzExNSw3IEBAIEFTVEVSSVNLX0NPTkZfT1BUUyArPSAt
+LXdpdGhvdXQtYXZjb2RlYwogQVNURVJJU0tfQ09ORl9PUFRTICs9IC0td2l0aG91dC1zcGFuZHNw
+CiAKIEFTVEVSSVNLX0NPTkZfRU5WID0gXAotCWFjX2N2X2ZpbGVfYnJpZGdlc19icmlkZ2Vfc29m
+dG1peF9pbmNsdWRlX2hyaXJzX2g9dHJ1ZSBcCi0JYWNfY3ZfcGF0aF9DT05GSUdfTElCWE1MMj0k
+KFNUQUdJTkdfRElSKS91c3IvYmluL3htbDItY29uZmlnCisJYWNfY3ZfZmlsZV9icmlkZ2VzX2Jy
+aWRnZV9zb2Z0bWl4X2luY2x1ZGVfaHJpcnNfaD10cnVlCiAKICMgVXNlcyBfX2F0b21pY19mZXRj
+aF9hZGRfNAogaWZlcSAoJChCUjJfVE9PTENIQUlOX0hBU19MSUJBVE9NSUMpLHkpCkBAIC0zMTQs
+OCArMzEzLDYgQEAgSE9TVF9BU1RFUklTS19MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwogIyBzbyBk
+byBub3QgaW5oZXJpdCB0aGUgdGFyZ2V0IHNldHVwLgogSE9TVF9BU1RFUklTS19BVVRPUkVDT05G
+ID0gTk8KIAotSE9TVF9BU1RFUklTS19DT05GX0VOViA9IENPTkZJR19MSUJYTUwyPSQoSE9TVF9E
+SVIpL2Jpbi94bWwyLWNvbmZpZwotCiBIT1NUX0FTVEVSSVNLX0NPTkZfT1BUUyA9IFwKIAktLXdp
+dGhvdXQtbmV3dCBcCiAJLS13aXRob3V0LWN1cnNlcyBcCi0tIAoyLjMwLjIKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
