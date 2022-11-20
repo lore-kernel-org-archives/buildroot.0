@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A397C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10EADC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AF2D42D6A;
-	Mon, 20 Feb 2023 21:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF2D42D6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B07E2402ED;
+	Mon, 20 Feb 2023 21:33:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07E2402ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PgpI8oPHnfIS; Mon, 20 Feb 2023 21:33:16 +0000 (UTC)
+	with ESMTP id IrJNkk2ds1MS; Mon, 20 Feb 2023 21:33:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F10D147E3B;
-	Mon, 20 Feb 2023 21:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F10D147E3B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EB5F1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 818A240199;
+	Mon, 20 Feb 2023 21:33:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 818A240199
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3324E1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92A47415AC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92A47415AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1ED5461088
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ED5461088
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IcwnKpS2QT_n for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KYBvHV2V_THt for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6C1840C42
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6C1840C42
+ by smtp3.osuosl.org (Postfix) with ESMTP id C11C661026
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C11C661026
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D735E86494; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BEF7481979; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 Dec 2022 09:01:16 +0100
+Date: Sun, 20 Nov 2022 12:05:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 45c6747faed26a92b142b19a00062032c5c0f542
-X-Git-Newrev: 15d3648df93d1113b07a63c1264ea4b5ba9662b5
+X-Git-Oldrev: 8f706ebb2cf325565f12b532c84a9d5ebe14d0d2
+X-Git-Newrev: e4ef408e8f738575841c5ffc43504be4c3f6fa56
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.D735E86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Kickoff 2023.02 cycle
+Message-Id: <20230220205151.BEF7481979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sysstat: security bump
+ to version 12.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,27 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15d3648df93d1113b07a63c1264ea4b5ba9662b5
+commit: https://git.buildroot.net/buildroot/commit/?id=e4ef408e8f738575841c5ffc43504be4c3f6fa56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fix CVE-2022-39377: sysstat is a set of system performance tools for the
+Linux operating system. On 32 bit systems, in versions 9.1.16 and newer
+but prior to 12.7.1, allocate_structures contains a size_t overflow in
+sa_common.c. The allocate_structures function insufficiently checks
+bounds before arithmetic multiplication, allowing for an overflow in the
+size allocated for the buffer representing system activities. This issue
+may lead to Remote Code Execution (RCE).
 
-diff --git a/Makefile b/Makefile
-index 89f3648bb7..9c1776eb6c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
+Despite what is written above in the CVE announcement, and as written in
+the Changelog, the fix is also included in version 12.6.1 (12.7.1 is a
+development version):
+    https://github.com/sysstat/sysstat/commit/c1e631eddc50c04e4dcea169ba396bee2bd6b0ab
+
+As a consequence, 12.6.1 is still reported as being affected. Until the
+NVD is updated appropriately, we mark the CVE as ignored with a comment
+that explains why.
+
+Note: that commit is not reachable from any branch in the sysstat
+repository, and Github warns about that, but the commit does belong to
+the upstream repository and is reachable from the 12.6.1 tag (it looks
+like sysstat only pushes tags-with-history for fix releases).
+
+https://github.com/sysstat/sysstat/security/advisories/GHSA-q8r6-g56f-9w7x
+https://github.com/sysstat/sysstat/blob/v12.6.1/CHANGES
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - ignore the CVE, explain why
+  - explain why github warns about the fix commit
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sysstat/sysstat.hash | 4 ++--
+ package/sysstat/sysstat.mk   | 5 ++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index b573f312c6..b47f000e57 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,5 +1,5 @@
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1  1e38bc029979def730ae1fb1e39f631bd1a3bc73  sysstat-12.4.2.tar.xz
++sha1  a730982e0c2d4964a0022c1509f3ea0a345402bc  sysstat-12.6.1.tar.xz
+ # Locally calculated
+-sha256  3701b2c1883d50eb384d7b95ce5b6df0a71fdcb3c23f96cb58098d1bcffa018f  sysstat-12.4.2.tar.xz
++sha256  18ff5a4e149e2568e43385637f72437fe6bafcc1322a93d13d1981e9464a0342  sysstat-12.6.1.tar.xz
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  COPYING
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 6948f6b390..eaf505dc49 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Set and export the version string
--export BR2_VERSION := 2022.11
-+export BR2_VERSION := 2023.02-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1669308000
+-SYSSTAT_VERSION = 12.4.2
++SYSSTAT_VERSION = 12.6.1
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-file-attr
+@@ -14,6 +14,9 @@ SYSSTAT_LICENSE_FILES = COPYING
+ SYSSTAT_CPE_ID_VENDOR = sysstat_project
+ SYSSTAT_SELINUX_MODULES = sysstat
  
++# NVD is not up-to-date; 12.6.1 includes c1e631eddc50, which fixes the issue
++SYSSTAT_IGNORE_CVES += CVE-2022-39377
++
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ SYSSTAT_DEPENDENCIES += lm-sensors
+ SYSSTAT_CONF_OPTS += --enable-sensors
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
