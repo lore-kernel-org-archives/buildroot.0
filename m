@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65214C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0019C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10C0381A6A;
-	Sun, 20 Nov 2022 09:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C0381A6A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 885B340463;
+	Sun, 20 Nov 2022 09:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 885B340463
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7vBIJZ0rhX3U; Sun, 20 Nov 2022 09:05:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pEdJqLIp3Ia7; Sun, 20 Nov 2022 09:05:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57D6B81971;
-	Sun, 20 Nov 2022 09:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57D6B81971
+	by smtp2.osuosl.org (Postfix) with ESMTP id B20DC40143;
+	Sun, 20 Nov 2022 09:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B20DC40143
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66C8E1BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 83E011BF40E
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 500534014A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B224400E7
  for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 500534014A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B224400E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2OVyz4lv43Ls for <buildroot@lists.busybox.net>;
+ with ESMTP id EHThke6SDqBW for <buildroot@lists.busybox.net>;
  Sun, 20 Nov 2022 09:05:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92BFC400E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99B3140143
  for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92BFC400E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99B3140143
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E9BF83EB4; Sun, 20 Nov 2022 09:05:17 +0000 (UTC)
+ id 887A283EB6; Sun, 20 Nov 2022 09:05:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 10:02:41 +0100
+Date: Sun, 20 Nov 2022 10:03:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 58ba17c7849056fbeb3b4d652749af32f81e7360
-X-Git-Newrev: f901a90f57927bf09ccac2dc145c77688501cfe2
+X-Git-Oldrev: f901a90f57927bf09ccac2dc145c77688501cfe2
+X-Git-Newrev: 0cc7c63f91ffadb0835bb57cdb7bfffdf7803add
 X-Patchwork-Hint: ignore
-Message-Id: <20221120090517.7E9BF83EB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: security bump to version
- 4.14.5
+Message-Id: <20221120090517.887A283EB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xterm: security bump to patch 376
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +62,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f901a90f57927bf09ccac2dc145c77688501cfe2
+commit: https://git.buildroot.net/buildroot/commit/?id=0cc7c63f91ffadb0835bb57cdb7bfffdf7803add
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes a number of bugfixes and the security fixes up to xsa-400:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-5/
+Fixes the following security issue:
+
+CVE-2022-45063: xterm before 375 allows code execution via font ops, e.g.,
+because an OSC 50 response may have Ctrl-g and therefore lead to command
+execution within the vi line-editing mode of Zsh:
+
+https://www.openwall.com/lists/oss-security/2022/11/10/1
+
+Additionally, patch 376 fixes a null pointer access issue:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022942
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
+ package/xterm/xterm.hash | 2 +-
+ package/xterm/xterm.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index a81d05e3f7..5637f0e8d9 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
-+sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 03341d4275..169753e89f 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index 3f6ec765ce..12cd2e639b 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
++sha256  1e5bb7aad068fb31d6d3cbb77f80c7ad1526cd4c956a4ddcf2c5cf28af5334e1  xterm-376.tgz
+ # Locally calculated
+ sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 95984f1cf9..d01b608d99 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XEN_VERSION = 4.14.4
-+XEN_VERSION = 4.14.5
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+-XTERM_VERSION = 371
++XTERM_VERSION = 376
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
