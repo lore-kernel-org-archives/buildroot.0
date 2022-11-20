@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2734FC433FE
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E960C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A75374097B;
-	Sun, 20 Nov 2022 09:05:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A75374097B
+	by smtp4.osuosl.org (Postfix) with ESMTP id B38E440982;
+	Sun, 20 Nov 2022 09:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B38E440982
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6hNe_VIJ2cOW; Sun, 20 Nov 2022 09:05:54 +0000 (UTC)
+	with ESMTP id hLaCdNRjizst; Sun, 20 Nov 2022 09:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CA654097E;
-	Sun, 20 Nov 2022 09:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CA654097E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 309C31BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65A4B4098C;
+	Sun, 20 Nov 2022 09:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65A4B4098C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E5E971BF40E
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BCB460ABD
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCB460ABD
+ by smtp2.osuosl.org (Postfix) with ESMTP id BEBBF404ED
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEBBF404ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DzhK-5_6TtPD for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 09:05:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aGpr_VMRRM8t for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 09:05:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E37CA60ABB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CBA840143
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E37CA60ABB
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:05:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5CBA840143
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:05:50 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:c0a9:eda8:8a8b:60c8])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C3BDFB0058E;
- Sun, 20 Nov 2022 10:05:23 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4A85FB0053D;
+ Sun, 20 Nov 2022 10:05:46 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Nov 2022 10:05:23 +0100
-Date: Sun, 20 Nov 2022 10:05:23 +0100
+ Sun, 20 Nov 2022 10:05:46 +0100
+Date: Sun, 20 Nov 2022 10:05:46 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221120090523.GO2123054@scaer>
-References: <20221119105035.415243-1-peter@korsgaard.com>
+Message-ID: <20221120090545.GP2123054@scaer>
+References: <20221119134510.826956-1-peter@korsgaard.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221119105035.415243-1-peter@korsgaard.com>
+In-Reply-To: <20221119134510.826956-1-peter@korsgaard.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668935128;
- bh=UFQ3L6D+OtyK5q0Mou0yzuROz3DKrVexeOaS8yI+Bow=;
+ d=free.fr; s=smtp-20201208; t=1668935148;
+ bh=RmtTWNsFD8MpWwJLeE+BDE/rSLZycpCW5BaHSfhtXP4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=WRrPgmvPmpEbygs/jAxb2RR2hEX+j22MzSQhqd+svlg0caFvaYaSVnUcaXf8FcZDC
- KHpirSl83lLNP0bMFGpqqd19c+zmCE8/Ke9E6bcm6Qncbf8x1qiu1tvPO3Bcp9Vc2G
- jIruD84710u4gEjBQDpM6ATUmNzp5r25o1K+BSyr2NxNOdtVrDfgB70z2CWchmabse
- T/Elg7uW8IpC1PGv0BLh01ujAi0mq3A+YxZFUFyGm6Yhj1eaJNspiLMkDeBhfrInn1
- J2qDccjfm6GOmYaZJC/6fM/ATIgnSqAtT0pOIVo+6vye/rUkOsJFb00maOJxnY316b
- 1JHMRVdmswQQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=te8XTetnZeMyU+7hU6AVOaQ4v5Eni/4xblPnpJqvPA18DcFhD1eT9RlDPFdnL0ImA
+ F8IPP3QK/C0khwASkhBf/5AxRliFtO2enKwecarHPih1s6qG36LQoap+E1L1Hewfyc
+ CRAyx028QujDMH4qpuhSvbj6EWzoSWxVpOAXk53yigi72td2LDlZg4lh72k1kT7MLQ
+ jveBIYL5wlshejGbI8d0XteZTTayBiu/EEmqFNihuvAFeezDOAOY2SH3Lm4c3lf3RZ
+ 6YKlY+ikjRzGJ43v9IsXIhz6PXOOZUZY6s4jD+PewMIoAd7zC3OEGrGcZ9NQSuQAO0
+ xrXQcTjyuXvWw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WRrPgmvP
-Subject: Re: [Buildroot] [PATCH] package/xen: security bump to version 4.14.5
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=te8XTetn
+Subject: Re: [Buildroot] [PATCH] package/xterm: security bump to patch 376
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,18 +76,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>,
- Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Peter, All
 
-On 2022-11-19 11:50 +0100, Peter Korsgaard spake thusly:
-> Includes a number of bugfixes and the security fixes up to xsa-400:
-> https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-5/
+On 2022-11-19 14:45 +0100, Peter Korsgaard spake thusly:
+> Fixes the following security issue:
+> 
+> CVE-2022-45063: xterm before 375 allows code execution via font ops, e.g.,
+> because an OSC 50 response may have Ctrl-g and therefore lead to command
+> execution within the vi line-editing mode of Zsh:
+> 
+> https://www.openwall.com/lists/oss-security/2022/11/10/1
+> 
+> Additionally, patch 376 fixes a null pointer access issue:
+> 
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022942
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -97,32 +105,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/xen/xen.hash | 2 +-
->  package/xen/xen.mk   | 2 +-
+>  package/xterm/xterm.hash | 2 +-
+>  package/xterm/xterm.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-> index a81d05e3f7..5637f0e8d9 100644
-> --- a/package/xen/xen.hash
-> +++ b/package/xen/xen.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
-> +sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
->  sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index 03341d4275..169753e89f 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
+> diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+> index 3f6ec765ce..12cd2e639b 100644
+> --- a/package/xterm/xterm.hash
+> +++ b/package/xterm/xterm.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
+> +sha256  1e5bb7aad068fb31d6d3cbb77f80c7ad1526cd4c956a4ddcf2c5cf28af5334e1  xterm-376.tgz
+>  # Locally calculated
+>  sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
+> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+> index 95984f1cf9..d01b608d99 100644
+> --- a/package/xterm/xterm.mk
+> +++ b/package/xterm/xterm.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -XEN_VERSION = 4.14.4
-> +XEN_VERSION = 4.14.5
->  XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
->  XEN_LICENSE = GPL-2.0
->  XEN_LICENSE_FILES = COPYING
+> -XTERM_VERSION = 371
+> +XTERM_VERSION = 376
+>  XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+>  XTERM_SITE = http://invisible-mirror.net/archives/xterm
+>  XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
 > -- 
 > 2.30.2
 > 
