@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D381EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 16:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC517C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 16:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56D1240359;
-	Sun, 20 Nov 2022 16:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56D1240359
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8605C60BD8;
+	Sun, 20 Nov 2022 16:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8605C60BD8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jkNzBi2UcyTg; Sun, 20 Nov 2022 16:44:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cxumu9XXzLwI; Sun, 20 Nov 2022 16:45:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF04F404AA;
-	Sun, 20 Nov 2022 16:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF04F404AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D7C31BF404
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 16:44:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 867166066D;
+	Sun, 20 Nov 2022 16:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 867166066D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10FB51BF404
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 16:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04A33404AA
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 16:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A33404AA
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFA0B400F2
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 16:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFA0B400F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8OCgqhz-McHd for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 16:44:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F15040359
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F15040359
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 16:44:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ag6ylLhGJ1oO for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 16:45:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83648402F6
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 83648402F6
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 16:45:12 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:78ad:17ab:4254:8d91])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 880632003FF;
- Sun, 20 Nov 2022 17:44:11 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 72FFC2003FF;
+ Sun, 20 Nov 2022 17:45:06 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Nov 2022 17:44:11 +0100
-Date: Sun, 20 Nov 2022 17:44:11 +0100
+ Sun, 20 Nov 2022 17:45:06 +0100
+Date: Sun, 20 Nov 2022 17:45:06 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221120164411.GE2516@scaer>
-References: <20221120141721.1068907-1-peter@korsgaard.com>
+Message-ID: <20221120164506.GF2516@scaer>
+References: <20221120162622.3436538-1-peter@korsgaard.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221120141721.1068907-1-peter@korsgaard.com>
+In-Reply-To: <20221120162622.3436538-1-peter@korsgaard.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668962653;
- bh=s6Wt2vg2fZEINhZELMJ0bhKbftCnQM+XvRBXVFrGeMI=;
+ d=free.fr; s=smtp-20201208; t=1668962710;
+ bh=90/R8FOrgwF0VFjAt+zn8IrzDC5ye33AebYYqXQ35bk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Q2T5C70xwW12FAsntjV06+cvztowZg54ivaAN+fOx4VWlU3aGj0bl7qdRTmgDCYZt
- h/f9PUqTkZuYpqiQLokVtZrNf7RrH9CWet2BjiZqRnvaMilS+6/mbigzFOMAIg8Teg
- rO0PYVD57kzBgEn3yh2vTsnrkMAFveZSYqT7YYhUcru8PG6DKCMmFDqtalKOqjufXr
- Lci6L6cb0o9CIvGJoUlOFszSWw3LuhPemzPTvrxooIba3980UzCxNmz8dZoXXNB8Gg
- 55vd2rgk1sLC67tQTfgvVOg8I9kkA7rZzYtfiAH80w/AlAXuC11wf7zvuP+cZOX40N
- Byt7R+7uBSzrQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Ba8SpbYkyGRVSiU54G1JgjnqS8HIggM8PoV67rs02BD1JxyDZ4UN5RM8ufqHMMIG0
+ e917Z+bMHuhRx5GXyb/xyLvmvYS1Eyn0TEsShfS94GJXhIaw3hdUtsP4nfVU9RJO/d
+ 5xbVAJXKYDKPCHfgd0p9x7SXq3ui/RHElDypE8c8f1iRlpZe16KoujD4K87gKLfl1W
+ yevKpztzPQlkWlycEBMTDqawv1KvJzLecmsQGeHcjxWxDZsbWIh7qwdxzOhpVqqwj2
+ wHf22It9JY5UQcAqHYdDRFt/7+CNtXlcOJV34VlhK0MJ9+/K67+fjf0PVeOAcMni2h
+ 5VbGm8WoumL5w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Q2T5C70x
-Subject: Re: [Buildroot] [PATCH] package/asterisk: security bump to version
- 16.28.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ba8SpbYk
+Subject: Re: [Buildroot] [PATCH] package/systemd: security bump to version
+ v250.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,84 +77,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UGV0ZXIsIEFsbCwKCk9uIDIwMjItMTEtMjAgMTU6MTcgKzAxMDAsIFBldGVyIEtvcnNnYWFyZCBz
-cGFrZSB0aHVzbHk6Cj4gQXN0ZXJpc2sgMTYuMjYuMCBmaXhlZCB0aGUgZm9sbG93aW5nIHNlY3Vy
-aXR5IGlzc3VlczoKPiAKPiAtIFtBU1RFUklTSy0yOTQ3Nl0g4oCTIHJlc19zdGlyX3NoYWtlbjog
-QmxpbmQgU1NSRiB2dWxuZXJhYmlsaXRpZXMKPiAgIGh0dHBzOi8vaXNzdWVzLmFzdGVyaXNrLm9y
-Zy9qaXJhL2Jyb3dzZS9BU1RFUklTSy0yOTQ3Ngo+IAo+IC0gW0FTVEVSSVNLLTI5ODM4XSDigJMg
-JHtTUUxfRVNDKCl9IG5vdCBjb3JyZWN0bHkgZXNjYXBpbmcgYSB0ZXJtaW5hdGluZyBcCj4gICBo
-dHRwczovL2lzc3Vlcy5hc3Rlcmlzay5vcmcvamlyYS9icm93c2UvQVNURVJJU0stMjk4MzgKPiAK
-PiAtIFtBU1RFUklTSy0yOTg3Ml0g4oCTIHJlc19zdGlyX3NoYWtlbjogUmVzb3VyY2UgZXhoYXVz
-dGlvbiB3aXRoIGxhcmdlIGZpbGVzCj4gICBodHRwczovL2lzc3Vlcy5hc3Rlcmlzay5vcmcvamly
-YS9icm93c2UvQVNURVJJU0stMjk4NzIKPiAKPiBodHRwczovL3d3dy5hc3Rlcmlzay5vcmcvYXN0
-ZXJpc2stbmV3cy9hc3Rlcmlzay0xNi0yNi0wLW5vdy1hdmFpbGFibGUvCj4gCj4gSXQgdW5mb3J0
-dW5hdGVseSBhbHNvIGludHJvZHVjZWQgYSBjaGFuZ2UgdG8gY2hhbl9pYXgyLCBicmVha2luZyBi
-dWlsZHMKPiB3aXRob3V0IE9wZW5TU0w6Cj4gaHR0cHM6Ly9naXRodWIuY29tL2FzdGVyaXNrL2Fz
-dGVyaXNrL2NvbW1pdC81OWE4Y2RhY2EyZGJiNWVlYjczODJkZmJlNzhjMGMxY2JlZDhjZTZkCj4g
-Cj4gV2hpY2ggd2FzIGFnYWluIGZpeGVkIGluIDE2LjI4LjA6Cj4gaHR0cHM6Ly9naXRodWIuY29t
-L2FzdGVyaXNrL2FzdGVyaXNrL2NvbW1pdC9mODEyZGZiNjhjNmVkN2FlNTViNGMxNjM3MTZmZDFk
-ZGMwNjNmZjU0Cj4gCj4gU28gYnVtcCB0byAxNi4yOC4wOgo+IGh0dHBzOi8vd3d3LmFzdGVyaXNr
-Lm9yZy9hc3Rlcmlzay1uZXdzL2FzdGVyaXNrLTE2LTI4LTAtbm93LWF2YWlsYWJsZS8KPiAKPiBU
-aGUgbGlieG1sMiBzdXBwb3J0IG5vdyB1c2VzIHBrZy1jb25maWcsIHNvIGRyb3AgdGhlIGxpYnht
-bDItY29uZmlnIGhhbmRsaW5nOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9hc3Rlcmlzay9hc3Rlcmlz
-ay9jb21taXQvYmY5ZGFmYTdjMjIzMDJiMmYxYTEyYjgyMTZkYTYzMTAyMTE2ZDljOQoKQXMgc2Vl
-biBvbiBJUkMsIEkndmUgYWRkZWQgYW4gZXhwbGljaXQgZGVwZW5kZW5jeSB0byBob3N0LXBrZ2Nv
-bmYsCnJhdGhlciB0aGFuIGltcGxpY2l0bHkgaW5oZXJpdCB0aGUgZGVwZW5kZW5jeSBmcm9tIHRo
-ZSBob3N0IHZhcmlhbnQuCgo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJA
-a29yc2dhYXJkLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5u
-IEUuIE1PUklOLgoKPiAtLS0KPiAgcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5oYXNoIHwgMiAr
-LQo+ICBwYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNrLm1rICAgfCA3ICsrLS0tLS0KPiAgMiBmaWxl
-cyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvYXN0ZXJpc2svYXN0ZXJpc2suaGFzaCBiL3BhY2thZ2UvYXN0ZXJpc2svYXN0
-ZXJpc2suaGFzaAo+IGluZGV4IDg4MGQ2NzU2MmQuLjk3OTJkODJhYzUgMTAwNjQ0Cj4gLS0tIGEv
-cGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5oYXNoCj4gKysrIGIvcGFja2FnZS9hc3Rlcmlzay9h
-c3Rlcmlzay5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4gICMgTG9jYWxseSBjb21wdXRlZAo+IC1z
-aGEyNTYgIDBmYjgxNzk0M2EyNzZmNWU1NDBjMmE5NDMyZTg4NDFjZDMzOTNlN2MxYmQxMjUwMDU1
-YzYyMDkwMmY2ZWFmYzggIGFzdGVyaXNrLTE2LjI1LjIudGFyLmd6Cj4gK3NoYTI1NiAgNmU5YzJm
-MzUwZGIwMThkZjg1NGIxMzAxNjg3Y2VkODk5M2ZhY2IyNzg3Njk4MzM2ZTU1Y2QxOWUwYWUzZWJm
-ZSAgYXN0ZXJpc2stMTYuMjguMC50YXIuZ3oKPiAgCj4gICMgc2hhMSBmcm9tOiBodHRwOi8vZG93
-bmxvYWRzLmFzdGVyaXNrLm9yZy9wdWIvdGVsZXBob255L3NvdW5kcy9yZWxlYXNlcwo+ICAjIHNo
-YTI1NiBsb2NhbGx5IGNvbXB1dGVkCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXN0ZXJpc2svYXN0
-ZXJpc2subWsgYi9wYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNrLm1rCj4gaW5kZXggOWI1OTk5N2I4
-MC4uMTg0ZjQwMDMxZiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2FzdGVyaXNrL2FzdGVyaXNrLm1r
-Cj4gKysrIGIvcGFja2FnZS9hc3Rlcmlzay9hc3Rlcmlzay5tawo+IEBAIC00LDcgKzQsNyBAQAo+
-ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+IC1BU1RFUklTS19WRVJTSU9OID0g
-MTYuMjUuMgo+ICtBU1RFUklTS19WRVJTSU9OID0gMTYuMjguMAo+ICAjIFVzZSB0aGUgZ2l0aHVi
-IG1pcnJvcjogaXQncyBhbiBvZmZpY2lhbCBtaXJyb3IgbWFpbnRhaW5lZCBieSBEaWdpdW0sIGFu
-ZAo+ICAjIHByb3ZpZGVzIHRhcmJhbGxzLCB3aGljaCB0aGUgbWFpbiBBc3RlcmlzayBnaXQgdHJl
-ZSAoYmVoaW5kIEdlcnJpdCkgZG9lcyBub3QuCj4gIEFTVEVSSVNLX1NJVEUgPSAkKGNhbGwgZ2l0
-aHViLGFzdGVyaXNrLGFzdGVyaXNrLCQoQVNURVJJU0tfVkVSU0lPTikpCj4gQEAgLTExNSw4ICsx
-MTUsNyBAQCBBU1RFUklTS19DT05GX09QVFMgKz0gLS13aXRob3V0LWF2Y29kZWMKPiAgQVNURVJJ
-U0tfQ09ORl9PUFRTICs9IC0td2l0aG91dC1zcGFuZHNwCj4gIAo+ICBBU1RFUklTS19DT05GX0VO
-ViA9IFwKPiAtCWFjX2N2X2ZpbGVfYnJpZGdlc19icmlkZ2Vfc29mdG1peF9pbmNsdWRlX2hyaXJz
-X2g9dHJ1ZSBcCj4gLQlhY19jdl9wYXRoX0NPTkZJR19MSUJYTUwyPSQoU1RBR0lOR19ESVIpL3Vz
-ci9iaW4veG1sMi1jb25maWcKPiArCWFjX2N2X2ZpbGVfYnJpZGdlc19icmlkZ2Vfc29mdG1peF9p
-bmNsdWRlX2hyaXJzX2g9dHJ1ZQo+ICAKPiAgIyBVc2VzIF9fYXRvbWljX2ZldGNoX2FkZF80Cj4g
-IGlmZXEgKCQoQlIyX1RPT0xDSEFJTl9IQVNfTElCQVRPTUlDKSx5KQo+IEBAIC0zMTQsOCArMzEz
-LDYgQEAgSE9TVF9BU1RFUklTS19MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+ICAjIHNvIGRvIG5v
-dCBpbmhlcml0IHRoZSB0YXJnZXQgc2V0dXAuCj4gIEhPU1RfQVNURVJJU0tfQVVUT1JFQ09ORiA9
-IE5PCj4gIAo+IC1IT1NUX0FTVEVSSVNLX0NPTkZfRU5WID0gQ09ORklHX0xJQlhNTDI9JChIT1NU
-X0RJUikvYmluL3htbDItY29uZmlnCj4gLQo+ICBIT1NUX0FTVEVSSVNLX0NPTkZfT1BUUyA9IFwK
-PiAgCS0td2l0aG91dC1uZXd0IFwKPiAgCS0td2l0aG91dC1jdXJzZXMgXAo+IC0tIAo+IDIuMzAu
-Mgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
-YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4t
-LS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRk
-ZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3
-NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAg
-ICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAg
-QUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEt
-Z2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4g
-IHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0t
-LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Peter, All,
+
+On 2022-11-20 17:26 +0100, Peter Korsgaard spake thusly:
+> Fixes the following security issue:
+> 
+> - CVE-2022-3821: An off-by-one Error issue was discovered in Systemd in
+>   format_timespan() function of time-util.c.  An attacker could supply
+>   specific values for time and accuracy that leads to buffer overrun in
+>   format_timespan(), leading to a Denial of Service.
+>   https://github.com/systemd/systemd/issues/23928
+> 
+> Drop now upstream 0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> ./support/testing/run-tests -k -o output-systemd tests.init.test_systemd
+> 15:35:09 TestInitSystemSystemdRwNetworkd          Starting
+> 15:35:09 TestInitSystemSystemdRwNetworkd          Building
+> 15:43:20 TestInitSystemSystemdRwNetworkd          Building done
+> Downloading to /var/lib/downloads/tmpw7by1nt7
+> Renaming from /var/lib/downloads/tmpw7by1nt7 to /var/lib/downloads/kernel-vexpress-5.10.7
+> Downloading to /var/lib/downloads/tmpxhcetjfv
+> Renaming from /var/lib/downloads/tmpxhcetjfv to /var/lib/downloads/vexpress-v2p-ca9-5.10.7.dtb
+> 15:43:43 TestInitSystemSystemdRwNetworkd          Cleaning up
+> .15:43:43 TestInitSystemSystemdRwIfupdownDbusbrokerDbus Starting
+> 15:43:43 TestInitSystemSystemdRwIfupdownDbusbrokerDbus Building
+> 15:52:10 TestInitSystemSystemdRwIfupdownDbusbrokerDbus Building done
+> 15:52:34 TestInitSystemSystemdRwIfupdownDbusbrokerDbus Cleaning up
+> .15:52:34 TestInitSystemSystemdRwIfupdownDbusbroker Starting
+> 15:52:35 TestInitSystemSystemdRwIfupdownDbusbroker Building
+> 16:00:40 TestInitSystemSystemdRwIfupdownDbusbroker Building done
+> 16:01:04 TestInitSystemSystemdRwIfupdownDbusbroker Cleaning up
+> .16:01:04 TestInitSystemSystemdRwIfupdown          Starting
+> 16:01:05 TestInitSystemSystemdRwIfupdown          Building
+> 16:09:19 TestInitSystemSystemdRwIfupdown          Building done
+> 16:09:43 TestInitSystemSystemdRwIfupdown          Cleaning up
+> .16:09:43 TestInitSystemSystemdRwFull              Starting
+> 16:09:43 TestInitSystemSystemdRwFull              Building
+> 16:21:53 TestInitSystemSystemdRwFull              Building done
+> 16:22:21 TestInitSystemSystemdRwFull              Cleaning up
+> .16:22:21 TestInitSystemSystemdRoNetworkd          Starting
+> 16:22:22 TestInitSystemSystemdRoNetworkd          Building
+> 16:30:55 TestInitSystemSystemdRoNetworkd          Building done
+> 16:31:18 TestInitSystemSystemdRoNetworkd          Cleaning up
+> .16:31:18 TestInitSystemSystemdRoIfupdownDbusbrokerDbus Starting
+> 16:31:19 TestInitSystemSystemdRoIfupdownDbusbrokerDbus Building
+> 16:39:50 TestInitSystemSystemdRoIfupdownDbusbrokerDbus Building done
+> 16:40:13 TestInitSystemSystemdRoIfupdownDbusbrokerDbus Cleaning up
+> .16:40:13 TestInitSystemSystemdRoIfupdownDbusbroker Starting
+> 16:40:14 TestInitSystemSystemdRoIfupdownDbusbroker Building
+> 16:48:58 TestInitSystemSystemdRoIfupdownDbusbroker Building done
+> 16:49:22 TestInitSystemSystemdRoIfupdownDbusbroker Cleaning up
+> .16:49:22 TestInitSystemSystemdRoIfupdown          Starting
+> 16:49:23 TestInitSystemSystemdRoIfupdown          Building
+> 16:58:00 TestInitSystemSystemdRoIfupdown          Building done
+> 16:58:24 TestInitSystemSystemdRoIfupdown          Cleaning up
+> .16:58:24 TestInitSystemSystemdRoFull              Starting
+> 16:58:25 TestInitSystemSystemdRoFull              Building
+> 17:13:14 TestInitSystemSystemdRoFull              Building done
+> 17:13:40 TestInitSystemSystemdRoFull              Cleaning up
+> .
+> ----------------------------------------------------------------------
+> Ran 10 tests in 5911.589s
+> 
+> OK
+> 
+>  ...define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch | 33 -------------------
+>  package/systemd/systemd.hash                  |  2 +-
+>  package/systemd/systemd.mk                    |  2 +-
+>  3 files changed, 2 insertions(+), 35 deletions(-)
+>  delete mode 100644 package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
+> 
+> diff --git a/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch b/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
+> deleted file mode 100644
+> index 0934886acb..0000000000
+> --- a/package/systemd/0001-missing-syscall-define-MOVE_MOUNT_T_EMPTY_PATH-if-mi.patch
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -From 16c132a6a0389e0eaea70c4ad95dbfd1637ec5ba Mon Sep 17 00:00:00 2001
+> -From: Romain Naour <romain.naour@smile.fr>
+> -Date: Fri, 7 Jan 2022 22:25:23 +0100
+> -Subject: [PATCH] missing-syscall: define MOVE_MOUNT_T_EMPTY_PATH if missing
+> -
+> -MOVE_MOUNT_T_EMPTY_PATH has been added to systemd 250 by [1]
+> -but it's defined in kernel headers since version 5.2.
+> -
+> -[1] c7bf079bbc19e3b409acc0c7acc3e14749211fe2
+> -
+> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ----
+> - src/basic/missing_syscall.h | 4 ++++
+> - 1 file changed, 4 insertions(+)
+> -
+> -diff --git a/src/basic/missing_syscall.h b/src/basic/missing_syscall.h
+> -index 8267b1a90c..793d111c55 100644
+> ---- a/src/basic/missing_syscall.h
+> -+++ b/src/basic/missing_syscall.h
+> -@@ -569,6 +569,10 @@ static inline int missing_open_tree(
+> - #define MOVE_MOUNT_F_EMPTY_PATH 0x00000004 /* Empty from path permitted */
+> - #endif
+> - 
+> -+#ifndef MOVE_MOUNT_T_EMPTY_PATH
+> -+#define MOVE_MOUNT_T_EMPTY_PATH 0x00000040 /* Empty to path permitted */
+> -+#endif
+> -+
+> - static inline int missing_move_mount(
+> -                 int from_dfd,
+> -                 const char *from_pathname,
+> --- 
+> -2.31.1
+> -
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 3572b25965..3b98566f32 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,5 +1,5 @@
+>  # sha256 locally computed
+> -sha256  d2bda9d225da11dc9ff48b48e59fc36798d3e66902ed400a9f78fa370c596864  systemd-250.4.tar.gz
+> +sha256  638a2fc78828765fc97bc73f428205b6dc1d359149b6c6bfe4d2a649cba2cca8  systemd-250.8.tar.gz
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+>  sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index b42f6a502b..30a75b7a40 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -19,7 +19,7 @@
+>  # - Diff sysusers.d with the previous version
+>  # - Diff factory/etc/nsswitch.conf with the previous version
+>  #   (details are often sprinkled around in README and manpages)
+> -SYSTEMD_VERSION = 250.4
+> +SYSTEMD_VERSION = 250.8
+>  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = \
+>  	LGPL-2.1+, \
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
