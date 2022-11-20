@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60701C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2392C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02D3F81FA4;
-	Sun, 20 Nov 2022 09:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02D3F81FA4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83BA760ABD;
+	Sun, 20 Nov 2022 09:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83BA760ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hqnVr8ycGObt; Sun, 20 Nov 2022 09:17:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CTkEco9GLbim; Sun, 20 Nov 2022 09:20:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3344F81F6C;
-	Sun, 20 Nov 2022 09:17:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3344F81F6C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 926E4607FE;
+	Sun, 20 Nov 2022 09:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 926E4607FE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 894111BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:17:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82FF31BF40E
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F62740412
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:17:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F62740412
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E5EF4014A
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:20:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E5EF4014A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ECz9ugpZjR4K for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 09:17:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6872B4014A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6872B4014A
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:17:11 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c0a9:eda8:8a8b:60c8])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 84420B00576;
- Sun, 20 Nov 2022 10:17:06 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Nov 2022 10:17:06 +0100
-Date: Sun, 20 Nov 2022 10:17:06 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Alexander Lukichev <alexander.lukichev@gmail.com>
-Message-ID: <20221120091706.GR2123054@scaer>
-References: <20221120090654.312078-1-alexander.lukichev@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221120090654.312078-1-alexander.lukichev@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1668935829;
- bh=ajfoSJD4W6nqI0xSSo8ZjhbWHcXVOvRBkaGtkgcJEOw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QdVZA9F0P1EaEvc4X2Fizx+AdIXjVGsvywtpWZIsH+1X834/jx1C18NC3kzpf9I5C
- 3ZdwkNLikQR93hWJq2xVzN8YpM+qR+WZkaJbLRGJlutFkPbDWO+WCfISewTMxRCJhy
- nRvnHdE7UlrznFHri1U8dmfj/QGKXXJKsTws+lBF4xV8sTAUKtfa9b5E0yxDWvxJ94
- zEX4p3H9VHWgjlg4/Lj4jHwUxk2MvQA/JUBVGMJoWzA5nBZAMyqrvxpbrGa2pbI/2I
- cu82bNpICPDCfe9Q9IQMadfXCkve4Z8g2/hL98je8CWyVX2/RR7tyA9Ob78gsSd7vx
- 1R2EHOxVD3d7A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QdVZA9F0
-Subject: Re: [Buildroot] [PATCH 1/1] package/openpgm: fix build for non-x86
- targets
+ with ESMTP id RgZVXk4CawHg for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B5D9400E7
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B5D9400E7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 581EE83F1D; Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 20 Nov 2022 10:19:31 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 5f94d91ed8e486e43b7fcf58b040d26960589eb2
+X-Git-Newrev: dda1c73bf32a030f340d5a703413704d8d663fad
+X-Patchwork-Hint: ignore
+Message-Id: <20221120092036.581EE83F1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fakeroot: bump to
+ version 1.30.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,103 +57,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Alexander, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dda1c73bf32a030f340d5a703413704d8d663fad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2022-11-20 11:06 +0200, Alexander Lukichev spake thusly:
-> openpgm-5-3-128 has assembly code for x86 that is not guarded by
-> architecture defines. A patch to fix that has been merged upstream
-> some time ago, and the next release will have it. This includes
-> that patch for the time being.
-> 
-> Fixes: http://autobuild.buildroot.net/results/338291e5bf0671cb7ed7a32cc10e546c7a521acc
-> Fixes: http://autobuild.buildroot.net/results/3ab6d7f9ee841fa18c1c220d722b1c06ca1fff30
-> Fixes: http://autobuild.buildroot.net/results/68e840b1fec8f14775cef0b6a14d9b847337324b
-> 
-> Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+remove upstream patch
 
-Applied to master, thanks.
+remove mkdir build-aux (no longer needed, like AUTORECONF)
 
-But see below for a little nit...
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998@free.fr: keep using snapshot.debian.org]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../fakeroot/0001-fix-prototype-generation.patch   | 61 ----------------------
+ package/fakeroot/fakeroot.hash                     |  4 +-
+ package/fakeroot/fakeroot.mk                       |  9 +---
+ 3 files changed, 4 insertions(+), 70 deletions(-)
 
-> ---
->  .../openpgm/0003-fix-build-on-macOS-ARM.patch | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/openpgm/0003-fix-build-on-macOS-ARM.patch
-> 
-> diff --git a/package/openpgm/0003-fix-build-on-macOS-ARM.patch b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-> new file mode 100644
-> index 0000000000..be52fb27a6
-> --- /dev/null
-> +++ b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-> @@ -0,0 +1,34 @@
-> +From 43dfc3e3a66b8e4584eb46219b129197a2428181 Mon Sep 17 00:00:00 2001
-> +From: Michael Cho <cho-m@tuta.io>
-> +Date: Thu, 10 Mar 2022 22:46:29 -0800
-> +Subject: [PATCH] fix build on macOS ARM
-> +
-> +Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-> +[Upstream status: https://github.com/steve-o/openpgm/pull/71]
-
-Pointing to a PR hints that the patch is still pending, but as your
-commit log said it was applied, that did not match. So I checked, and
-indeed the patch is an actual backport.
-
-So I slightly tweaked it to make it obvious it is a backport rather than
-a pending patch.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> +---
-> + openpgm/pgm/cpu.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/openpgm/pgm/cpu.c b/openpgm/pgm/cpu.c
-> +index cbcc988..f5da471 100644
-> +--- a/openpgm/pgm/cpu.c
-> ++++ b/openpgm/pgm/cpu.c
-> +@@ -33,6 +33,7 @@
-> + //#define CPU_DEBUG
-> + 
-> + 
-> ++#if defined(__i386__) || defined(__x86_64__)
-> + #ifndef _MSC_VER
-> + static
-> + void
-> +@@ -59,7 +60,6 @@ _xgetbv(uint32_t xcr) {
-> + #endif
-> + 
-> + 
-> +-#if defined(__i386__) || defined(__x86_64__)
-> + PGM_GNUC_INTERNAL
-> + void
-> + pgm_cpuid (pgm_cpu_t* cpu)
-> +-- 
-> +2.37.2
-> +
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fakeroot/0001-fix-prototype-generation.patch b/package/fakeroot/0001-fix-prototype-generation.patch
+deleted file mode 100644
+index 960bad2129..0000000000
+--- a/package/fakeroot/0001-fix-prototype-generation.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-Subject: Fix prototype generation for openat
+-Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+-Date: 2021-12-30
+-Bug-Debian: https://bugs.debian.org/995393
+-Forwarded: Yes (implicitely)
+-
+-    As jrtc27 pointed out in IRC, ppc64el is more strict than other
+-    architectures when it comes to va_arg handling:
+-
+-        it's that ppc64le uses the elfv2 abi, and for variadic calls you
+-        must reserve space for a parameter save area
+-
+-    So enhance wrapawk to create a proper prototype and argument
+-    handling although it's specific to the openat call. Also add the
+-    missing documentation for the sixth column to wrapfunc.inp.
+-
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+-
+---- a/wrapawk
+-+++ b/wrapawk
+-@@ -37,7 +37,25 @@
+-   argtype=$3;
+-   argname=$4;
+-   MACRO=$5;
+--  if(MACRO){
+-+  openat_extra=$6;
+-+  if(openat_extra){
+-+    print "  {(void(*))&next_" name ", \"" name "\"},"  > structfile;
+-+    print "extern " ret " (*next_" name ")" openat_extra ";" > headerfile;
+-+    print ret " (*next_" name ")" openat_extra "=tmp_" name ";"> deffile;
+-+
+-+    print ret " tmp_" name,  openat_extra "{"           > tmpffile;
+-+    print "  mode_t mode = 0;"                          > tmpffile;
+-+    print "  if (flags & O_CREAT) {"                    > tmpffile;
+-+    print "    va_list args;"                           > tmpffile;
+-+    print "    va_start(args, flags);"                  > tmpffile;
+-+    print "    mode = va_arg(args, int);"               > tmpffile;
+-+    print "    va_end(args);"                           > tmpffile;
+-+    print "  }"                                         > tmpffile;
+-+    print "  load_library_symbols();"                   > tmpffile;
+-+    print "  return  next_" name,  argname ";"          > tmpffile;
+-+    print "}"                                           > tmpffile;
+-+    print ""                                            > tmpffile;
+-+  } else if(MACRO){
+-     print "  {(void(*))&NEXT_" MACRO "_NOARG, " name "_QUOTE},"  > structfile;
+-     print "extern " ret " (*NEXT_" MACRO "_NOARG)" argtype ";" > headerfile;
+-     print ret " (*NEXT_" MACRO "_NOARG)" argtype "=TMP_" MACRO ";"> deffile;
+---- a/wrapfunc.inp
+-+++ b/wrapfunc.inp
+-@@ -9,8 +9,10 @@
+- /**/									  */
+- /* each line of this file lists 4 fields, seperated by a ";".		  */
+- /* The first field is the name of the wrapped function, then it's return  */
+--/* value. After that come the function arguments with types, and the last */
+-+/* value. After that come the function arguments with types, and the fifth */
+- /* field contains the function arguments without types.                   */
+-+/* A sixth field is a special needed when wrapping the openat syscall.    */
+-+/* Otherwise it's like the third (function arguments with types).         */
+- /**/
+- 
+- /* __*xstat are used on glibc systems instead of just *xstat. */
+diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
+index 3d53eeb097..5c50c83e13 100644
+--- a/package/fakeroot/fakeroot.hash
++++ b/package/fakeroot/fakeroot.hash
+@@ -1,4 +1,4 @@
+-# From http://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.26-1.dsc
+-sha256  480a578ffdc5592e73df4c086950d321b4adc78dbdaec56c82e4fe1fb68de8e9  fakeroot_1.26.orig.tar.gz
++# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.30.1-1.dsc
++sha256  32ebb1f421aca0db7141c32a8c104eb95d2b45c393058b9435fbf903dd2b6a75  fakeroot_1.30.1.orig.tar.gz
+ # License files, locally calculated
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 3fadf1c0f0..20c75d6966 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-FAKEROOT_VERSION = 1.26
++FAKEROOT_VERSION = 1.30.1
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
+-FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20210907T092512Z/pool/main/f/fakeroot
++FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20221120T030258Z/pool/main/f/fakeroot
+ 
+ HOST_FAKEROOT_DEPENDENCIES = host-acl
+ # Force capabilities detection off
+@@ -18,9 +18,4 @@ HOST_FAKEROOT_CONF_ENV = \
+ FAKEROOT_LICENSE = GPL-3.0+
+ FAKEROOT_LICENSE_FILES = COPYING
+ 
+-define HOST_FAKEROOT_BUILD_AUX
+-	mkdir -p $(@D)/build-aux
+-endef
+-HOST_FAKEROOT_POST_PATCH_HOOKS += HOST_FAKEROOT_BUILD_AUX
+-
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
