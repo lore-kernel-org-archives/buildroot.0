@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC71DC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 13:56:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 036EBC433FE
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 14:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 344E9401F1;
-	Sun, 20 Nov 2022 13:56:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 344E9401F1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 376744089A;
+	Sun, 20 Nov 2022 14:04:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 376744089A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4KwHYtSf5mvS; Sun, 20 Nov 2022 13:56:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8b7BwWgFPGWf; Sun, 20 Nov 2022 14:04:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2487640117;
-	Sun, 20 Nov 2022 13:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2487640117
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B19FD1BF475
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 13:56:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D548F40884;
+	Sun, 20 Nov 2022 14:04:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D548F40884
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 89F9C1BF475
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:04:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 869E840143
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 13:56:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 869E840143
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B92340884
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 14:04:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B92340884
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LTLGQJttqSNs for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A9324010C
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A9324010C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 522B183FD2; Sun, 20 Nov 2022 13:56:23 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 14:54:58 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4f4f2877fcd76ec3b1b3ad56d235ad3bd375e071
-X-Git-Newrev: 2ad68ff8df71a485085b0b83ff494081e4d926b7
-X-Patchwork-Hint: ignore
-Message-Id: <20221120135623.522B183FD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/z3: new package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wiglj_twmDgp for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 14:03:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 781A44086B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 781A44086B
+ for <buildroot@buildroot.org>; Sun, 20 Nov 2022 14:03:58 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:78ad:17ab:4254:8d91])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 3BF622003B4;
+ Sun, 20 Nov 2022 15:03:53 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 20 Nov 2022 15:03:52 +0100
+Date: Sun, 20 Nov 2022 15:03:52 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20221120140352.GD2516@scaer>
+References: <20221119120518.645972-1-ju.o@free.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221119120518.645972-1-ju.o@free.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1668953035;
+ bh=3AXUw/I58MMQRvzPpt+AHosJAeqHvcGkyVn8BKkGYy0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=m+YS7z+DO+dcL23U6n2vIL7trvQbdnXllb8EpKjCEDlm231R6F6jaRCOPKJ/H1zSu
+ miNL//ldC9NLvf/1jvmG9RWdfWtiZUkWi1tCgp2FUS0vGCL3IH5uLMqWhvNsk/b2EY
+ AsObOHhqLYDdDEbE4yckE2+svt83AN91PyXSE3zRf8kzHQQR35LLuwzghUZgBoFEJr
+ ypEnWlBdib4jqnq7V57p25VbqIEgT/mgMHaVedf3IDnArZFJWpAIsVM/OJs5np4gsy
+ E6m8s4whHicPURTMxZMenf679eCwRMUz1QiHCTGZKGNiQ6cldhLbExlufG4ETHf6KO
+ pWr/fqIu+8EGA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=m+YS7z+D
+Subject: Re: [Buildroot] [PATCH next 1/1] package/z3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,226 +76,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ad68ff8df71a485085b0b83ff494081e4d926b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Julien, All,
 
-Z3, also known as the Z3 Theorem Prover, is a cross-platform
-satisfiability modulo theories (SMT) solver.
+On 2022-11-19 13:05 +0100, Julien Olivain spake thusly:
+> Z3, also known as the Z3 Theorem Prover, is a cross-platform
+> satisfiability modulo theories (SMT) solver.
+> 
+> https://github.com/Z3Prover/z3
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+[--SNIP--]
+> diff --git a/package/z3/Config.in b/package/z3/Config.in
+> new file mode 100644
+> index 0000000000..a3f57f7f88
+> --- /dev/null
+> +++ b/package/z3/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_Z3
+> +	bool "z3"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
+> +	# z3 needs fenv.h which is not provided by uclibc
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+> +	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+> +	depends on !BR2_nios2
+> +	help
+> +	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
+> +	  satisfiability modulo theories (SMT) solver.
+> +
+> +	  https://github.com/Z3Prover/z3
+> +
+> +if BR2_PACKAGE_Z3
+> +
+> +config BR2_PACKAGE_Z3_PYTHON
+> +	bool "Python bindings"
+> +	select BR2_PACKAGE_PYTHON3 # runtime
 
-https://github.com/Z3Prover/z3
+To me, it makes more sense that python bindings depend on python being
+enabled, rather than forcing it. Indeed, if the python is not enabled
+(either manually or because it is not selected by an application), then
+there is no reason to enable it just to provide bindings.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[yann.morin.1998@free.fr:
-  - python bindings 'depends on' python, not 'select' it
-  - fix check-package in test_z3.py
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- package/z3/Config.in                               | 23 +++++++++++
- package/z3/z3.hash                                 |  3 ++
- package/z3/z3.mk                                   | 22 +++++++++++
- support/testing/tests/package/test_z3.py           | 44 ++++++++++++++++++++++
- .../package/test_z3/rootfs-overlay/root/z3test.py  | 21 +++++++++++
- .../test_z3/rootfs-overlay/root/z3test.smt2        |  8 ++++
- 8 files changed, 124 insertions(+)
+And we do have that construct in at least a few other packages that
+provide python bindings: libftdi1, libiio, ola... So I changed it to
+match.  (yes, there are other packages that use select, but that's not a
+reason to do things better nowadays! ;-) )
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bc026da4aa..fb6b329087 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1697,6 +1697,7 @@ F:	package/python-gnupg/
- F:	package/python-pyalsa/
- F:	package/riscv-isa-sim/
- F:	package/tinycompress/
-+F:	package/z3/
- F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
-@@ -1708,6 +1709,7 @@ F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_pyalsa.py
-+F:	support/testing/tests/package/test_z3.py
- 
- N:	Julien Viard de Galbert <julien@vdg.name>
- F:	package/dieharder/
-diff --git a/package/Config.in b/package/Config.in
-index c448e8bd97..7b18859d02 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2190,6 +2190,7 @@ menu "Miscellaneous"
- 	source "package/wine/Config.in"
- 	source "package/xmrig/Config.in"
- 	source "package/xutil_util-macros/Config.in"
-+	source "package/z3/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/z3/Config.in b/package/z3/Config.in
-new file mode 100644
-index 0000000000..55b0e8bb3b
---- /dev/null
-+++ b/package/z3/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_Z3
-+	bool "z3"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
-+	# z3 needs fenv.h which is not provided by uclibc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-+	depends on !BR2_nios2
-+	help
-+	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
-+	  satisfiability modulo theories (SMT) solver.
-+
-+	  https://github.com/Z3Prover/z3
-+
-+if BR2_PACKAGE_Z3
-+
-+config BR2_PACKAGE_Z3_PYTHON
-+	bool "Python bindings"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+
-+endif
-diff --git a/package/z3/z3.hash b/package/z3/z3.hash
-new file mode 100644
-index 0000000000..d38c5f1971
---- /dev/null
-+++ b/package/z3/z3.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
-+sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
-diff --git a/package/z3/z3.mk b/package/z3/z3.mk
-new file mode 100644
-index 0000000000..2252e05395
---- /dev/null
-+++ b/package/z3/z3.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# z3
-+#
-+################################################################################
-+
-+Z3_VERSION = 4.11.2
-+Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
-+Z3_LICENSE = MIT
-+Z3_LICENSE_FILES = LICENSE.txt
-+Z3_INSTALL_STAGING = YES
-+Z3_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+ifeq ($(BR2_PACKAGE_Z3_PYTHON),y)
-+Z3_CONF_OPTS += \
-+	-DCMAKE_INSTALL_PYTHON_PKG_DIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	-DZ3_BUILD_PYTHON_BINDINGS=ON
-+else
-+Z3_CONF_OPTS += -DZ3_BUILD_PYTHON_BINDINGS=OFF
-+endif
-+
-+$(eval $(cmake-package))
-diff --git a/support/testing/tests/package/test_z3.py b/support/testing/tests/package/test_z3.py
-new file mode 100644
-index 0000000000..71b074a587
---- /dev/null
-+++ b/support/testing/tests/package/test_z3.py
-@@ -0,0 +1,44 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestZ3(infra.basetest.BRTest):
-+    # Need to use a different toolchain than the default due to
-+    # z3 requiring fenv.h not provided by uclibc.
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_Z3=y
-+        BR2_PACKAGE_Z3_PYTHON=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           # overlay to add a z3 smt and python test scripts
-+           infra.filepath("tests/package/test_z3/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check program executes
-+        cmd = "z3 --version"
-+        self.assertRunOk(cmd)
-+
-+        # Run a basic smt2 example
-+        cmd = "z3 /root/z3test.smt2"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "unsat")
-+
-+        # Run a basic python example
-+        cmd = "/root/z3test.py"
-+        self.assertRunOk(cmd, timeout=10)
-diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-new file mode 100755
-index 0000000000..98b8e57b56
---- /dev/null
-+++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
-@@ -0,0 +1,21 @@
-+#! /usr/bin/env python3
-+
-+import z3
-+
-+x = z3.Real('x')
-+y = z3.Real('y')
-+z = z3.Real('z')
-+s = z3.Solver()
-+
-+s.add(3 * x + 2 * y - z == 1)
-+s.add(2 * x - 2 * y + 4 * z == -2)
-+s.add(-x + y / 2 - z == 0)
-+
-+check = s.check()
-+model = s.model()
-+
-+print(check)
-+print(model)
-+
-+assert check == z3.sat
-+assert model[x] == 1 and model[y] == -2 and model[z] == -2
-diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2 b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
-new file mode 100644
-index 0000000000..08df9e27a2
---- /dev/null
-+++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.smt2
-@@ -0,0 +1,8 @@
-+; From https://smtlib.cs.uiowa.edu/examples.shtml
-+; Basic Boolean example
-+(set-option :print-success false)
-+(set-logic QF_UF)
-+(declare-const p Bool)
-+(assert (and p (not p)))
-+(check-sat) ; returns 'unsat'
-+(exit)
+[--SNIP--]
+> diff --git a/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
+> new file mode 100755
+> index 0000000000..6ac53b98c5
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py
+> @@ -0,0 +1,21 @@
+> +#! /usr/bin/env python3
+> +
+> +from z3 import *
+
+Not all of check-package/flake8 tests are run against files in the
+runtime test-suite, but I have a hook that does it, and it reports:
+
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:3:1: F403 'from z3 import *' used; unable to detect undefined names
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:5:5: F405 'Real' may be undefined, or defined from star imports: z3
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:6:5: F405 'Real' may be undefined, or defined from star imports: z3
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:7:5: F405 'Real' may be undefined, or defined from star imports: z3
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:8:5: F405 'Solver' may be undefined, or defined from star imports: z3
+    WARNING: support/testing/tests/package/test_z3/rootfs-overlay/root/z3test.py:20:17: F405 'sat' may be undefined, or defined from star imports: z3
+    WARNING: 1     F403 'from z3 import *' used; unable to detect undefined names
+    WARNING: 5     F405 'Real' may be undefined, or defined from star imports: z3
+
+So I changed the test to import the whole z3 module, and to prefix
+objects with z3.:
+
+    x = z3.Real('x')
+
+and so on...
+
+Applied to next, thanks.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
