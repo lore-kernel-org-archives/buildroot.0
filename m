@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 976C4C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E8EC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33FBC42CC9;
-	Mon, 20 Feb 2023 21:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33FBC42CC9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81E4E42E57;
+	Mon, 20 Feb 2023 21:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E4E42E57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QUI1kgY7Rm24; Mon, 20 Feb 2023 21:24:54 +0000 (UTC)
+	with ESMTP id wUb5hjEgjUtt; Mon, 20 Feb 2023 21:25:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D96B342E57;
-	Mon, 20 Feb 2023 21:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D96B342E57
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 258351BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE0C42DC1;
+	Mon, 20 Feb 2023 21:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EE0C42DC1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 251731BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5ACB44159F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ACB44159F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 804AB610D1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 804AB610D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qXaWT04wcXeh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CDlVMvMSCp8o for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8371D4158F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8371D4158F
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3B5A610C4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3B5A610C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 810BC86495; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+ id 93FC681979; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 19:03:39 +0100
+Date: Sun, 20 Nov 2022 10:02:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0fc5c1ccdb11af5185471272ef5eeece81b5e866
-X-Git-Newrev: 6ade5915c1d65b7653125d1cf6952efdd6113806
+X-Git-Oldrev: 58ba17c7849056fbeb3b4d652749af32f81e7360
+X-Git-Newrev: f901a90f57927bf09ccac2dc145c77688501cfe2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205153.810BC86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/roc_pc_rk3399: remove
- defconfig
+Message-Id: <20230220205151.93FC681979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xen: security bump to
+ version 4.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,94 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ade5915c1d65b7653125d1cf6952efdd6113806
+commit: https://git.buildroot.net/buildroot/commit/?id=f901a90f57927bf09ccac2dc145c77688501cfe2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 5370ec74516495a4ac6c0bc9780b8e92a2f1e6b1 was supposed to remove
-the roc_pc_rk3399 defconfig. It actually removed everything related to
-this defconfig, but not the defconfig itself.
+Includes a number of bugfixes and the security fixes up to xsa-400:
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-5/
 
-The build failure this commit was supposed to fix is therefore still
-happening. We fix it up by finally removing the defconfig.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/3372859807
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/roc_pc_rk3399_defconfig | 55 -----------------------------------------
- 1 file changed, 55 deletions(-)
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
-deleted file mode 100644
-index ae7cf19a80..0000000000
---- a/configs/roc_pc_rk3399_defconfig
-+++ /dev/null
-@@ -1,55 +0,0 @@
--# Architecture
--BR2_aarch64=y
--BR2_cortex_a72_a53=y
--
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
--
--# Firmware
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.18"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--
--# Filesystem
--BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
--BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/firefly/roc-rk3399-pc/genimage.cfg"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index a81d05e3f7..5637f0e8d9 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
++sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 03341d4275..169753e89f 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.14.4
++XEN_VERSION = 4.14.5
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
