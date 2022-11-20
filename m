@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9E40C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D4CC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 941BE430F7;
-	Mon, 20 Feb 2023 21:25:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 941BE430F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 167B842E69;
+	Mon, 20 Feb 2023 21:25:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 167B842E69
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jFzIPzkaJvlH; Mon, 20 Feb 2023 21:25:22 +0000 (UTC)
+	with ESMTP id pvGDrsyaJO-P; Mon, 20 Feb 2023 21:25:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3748B42FE4;
-	Mon, 20 Feb 2023 21:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3748B42FE4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A7BB1BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id E235343127;
+	Mon, 20 Feb 2023 21:25:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E235343127
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 149D81BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7AFD415A4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7AFD415A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D285610A4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D285610A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uv9IBgx---7c for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2bCtWVT9I8q9 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF3EB40C42
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF3EB40C42
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95264610C2
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95264610C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC1A586495; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+ id 878678648F; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 23:19:56 +0100
+Date: Sun, 20 Nov 2022 10:01:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 83b4337354014a5425a0ee081b94d4d0991f8d47
-X-Git-Newrev: e3c14de0dfc047817917fb4dbc20c211e751bb3f
+X-Git-Oldrev: 9c0311220fb627db8af4a2cd8c3adb067e8a308d
+X-Git-Newrev: 58ba17c7849056fbeb3b4d652749af32f81e7360
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205153.AC1A586495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dash: fix static with
- shared build
+Message-Id: <20230220205151.878678648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nodejs: security bump
+ to version 16.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,54 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3c14de0dfc047817917fb4dbc20c211e751bb3f
+commit: https://git.buildroot.net/buildroot/commit/?id=58ba17c7849056fbeb3b4d652749af32f81e7360
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When BR2_SHARED_STATIC_LIBS is enabled we pass both --enable-static and
---enable-shared to configure. dash configure.ac only looks for
---enable-static to make the build static. But when linking against
-libedit pkg-config only returns dynamic linking dependencies, so the
-indirect ncurses dependency in not mentioned. The end result is that
-libedit can't find ncurses symbols on link.
+Fixes the following security issue:
 
-BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
-binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
-static only build.
+DNS rebinding in --inspect via invalid octal IP address (Medium) (CVE-2022-43548)
 
-Fixes:
-http://autobuild.buildroot.net/results/137d39cc5ec436759a2fde3f26ce5633e0ad6c2e/
-http://autobuild.buildroot.net/results/55a38e0e45212bf7403d9ccb626c9422e3affe72/
-http://autobuild.buildroot.net/results/8f109f1a04a6a2ff6d8c4c920e499fbaec3f72b9/
+The Node.js rebinding protector for --inspect still allows invalid IP
+address, specifically, the octal format.  An example of an octal IP address
+is 1.09.0.0, the 09 octet is invalid because 9 is not a number in the base 8
+number system.  Browsers such as Firefox (tested on latest version m105)
+will still attempt to resolve this invalid octal address via DNS.  When
+combined with an active --inspect session, such as when using VSCode, an
+attacker can perform DNS rebinding and execute arbitrary code
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Update license hash for an update of base64 (MIT license) and a change in
+copyright year:
+
+https://github.com/nodejs/node/commit/8ea9a71b15a953cd0936f7e6aae84c62873a77b5
+https://github.com/nodejs/node/commit/9f14dc1a8f43a9f3755c673009378b798cbdd73b
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dash/dash.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/nodejs/nodejs.hash | 6 +++---
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index fed3a99551..6efc71e568 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -27,6 +27,10 @@ else
- DASH_CONF_OPTS += --without-libedit
- endif
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 83e4c271ce..4408782248 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v16.17.1/SHASUMS256.txt
+-sha256  6721feb4152d56d2c6b358ce397abd5a7f1daf09ee2e25c5021b9b4d3f86a330  node-v16.17.1.tar.xz
++# From https://nodejs.org/dist/v16.18.1/SHASUMS256.txt
++sha256  1f8051a88f86f42064f4415fe7a980e59b0a502ecc8def583f6303bc4d445238  node-v16.18.1.tar.xz
  
-+ifeq ($(BR2_STATIC_LIBS),)
-+DASH_CONF_OPTS += --disable-static
-+endif
-+
- define DASH_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/dash $(TARGET_DIR)/bin/dash
- endef
+ # Hash for license file
+-sha256  69090e865afa7c62715b97f0712632d2923bd7a5faba91f94e4e75a2f9219d5e  LICENSE
++sha256  0bec08634ba79b5404f6b7f92ea850f3c2a06e27e6f83f2267e4f5e55ae33334  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 29a10b900f..367d5d2058 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 16.17.1
++NODEJS_VERSION = 16.18.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
