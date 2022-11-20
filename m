@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2392C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A616AC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 20 Nov 2022 09:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83BA760ABD;
-	Sun, 20 Nov 2022 09:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83BA760ABD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 493E860ABD;
+	Sun, 20 Nov 2022 09:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 493E860ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CTkEco9GLbim; Sun, 20 Nov 2022 09:20:39 +0000 (UTC)
+	with ESMTP id ZtrjfCIedDz9; Sun, 20 Nov 2022 09:22:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 926E4607FE;
-	Sun, 20 Nov 2022 09:20:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 926E4607FE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 82FF31BF40E
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:20:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F39F607FE;
+	Sun, 20 Nov 2022 09:22:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F39F607FE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9104C1BF40E
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E5EF4014A
- for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:20:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E5EF4014A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7905B81EB4
+ for <buildroot@lists.busybox.net>; Sun, 20 Nov 2022 09:22:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7905B81EB4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RgZVXk4CawHg for <buildroot@lists.busybox.net>;
- Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B5D9400E7
- for <buildroot@buildroot.org>; Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B5D9400E7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 581EE83F1D; Sun, 20 Nov 2022 09:20:36 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 10:19:31 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5f94d91ed8e486e43b7fcf58b040d26960589eb2
-X-Git-Newrev: dda1c73bf32a030f340d5a703413704d8d663fad
-X-Patchwork-Hint: ignore
-Message-Id: <20221120092036.581EE83F1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fakeroot: bump to
- version 1.30.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2boJ0aT_CGBq for <buildroot@lists.busybox.net>;
+ Sun, 20 Nov 2022 09:22:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C40781D35
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C40781D35
+ for <buildroot@busybox.net>; Sun, 20 Nov 2022 09:22:44 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c0a9:eda8:8a8b:60c8])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6F149B0053D;
+ Sun, 20 Nov 2022 10:22:40 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 20 Nov 2022 10:22:40 +0100
+Date: Sun, 20 Nov 2022 10:22:40 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20221120092240.GS2123054@scaer>
+References: <20221118190014.1401088-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221118190014.1401088-1-francois.perrad@gadz.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1668936162;
+ bh=+Fh9li6r3S8/Fkun7UH6ge/Stll4NzSW3yIPXTQ187k=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=A9pB4d5YDRWyV6k3HP7TRNa97JWVfoVr1ceKCpYTmQAKx2EvXEbAWPiLuHRwpV7v4
+ aGIImIVTpSEwjO+6go3j0t7iWlCDjd64M0i6EbVWluZeq61sU2T8ohWcguzXyBUQsz
+ 3zo3mNPt6QQIaAUoTcfXKBeHw/y8WPy3s/hMawY8bul/+y+RE+6wJMf0oV2jPky8UD
+ lyJjWwqqFo5o2DfqQN8hpjPCzAnW9HBK/7C7NFyQoySnKz5becfUMtkK0hOgSHWZGV
+ kTwtOP/0jjZszqbi1RLIsZI+1qILDsA7GxPToOsl1oItGevFqYV/FoHFPYXdsZBAjW
+ JnbxxQpNAKrsA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=A9pB4d5Y
+Subject: Re: [Buildroot] [PATCH] package/fakeroot: bump to version 1.30.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,133 +76,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dda1c73bf32a030f340d5a703413704d8d663fad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-remove upstream patch
-
-remove mkdir build-aux (no longer needed, like AUTORECONF)
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998@free.fr: keep using snapshot.debian.org]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../fakeroot/0001-fix-prototype-generation.patch   | 61 ----------------------
- package/fakeroot/fakeroot.hash                     |  4 +-
- package/fakeroot/fakeroot.mk                       |  9 +---
- 3 files changed, 4 insertions(+), 70 deletions(-)
-
-diff --git a/package/fakeroot/0001-fix-prototype-generation.patch b/package/fakeroot/0001-fix-prototype-generation.patch
-deleted file mode 100644
-index 960bad2129..0000000000
---- a/package/fakeroot/0001-fix-prototype-generation.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--Subject: Fix prototype generation for openat
--Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
--Date: 2021-12-30
--Bug-Debian: https://bugs.debian.org/995393
--Forwarded: Yes (implicitely)
--
--    As jrtc27 pointed out in IRC, ppc64el is more strict than other
--    architectures when it comes to va_arg handling:
--
--        it's that ppc64le uses the elfv2 abi, and for variadic calls you
--        must reserve space for a parameter save area
--
--    So enhance wrapawk to create a proper prototype and argument
--    handling although it's specific to the openat call. Also add the
--    missing documentation for the sixth column to wrapfunc.inp.
--
--Signed-off-by: Joel Stanley <joel@jms.id.au>
--
----- a/wrapawk
--+++ b/wrapawk
--@@ -37,7 +37,25 @@
--   argtype=$3;
--   argname=$4;
--   MACRO=$5;
---  if(MACRO){
--+  openat_extra=$6;
--+  if(openat_extra){
--+    print "  {(void(*))&next_" name ", \"" name "\"},"  > structfile;
--+    print "extern " ret " (*next_" name ")" openat_extra ";" > headerfile;
--+    print ret " (*next_" name ")" openat_extra "=tmp_" name ";"> deffile;
--+
--+    print ret " tmp_" name,  openat_extra "{"           > tmpffile;
--+    print "  mode_t mode = 0;"                          > tmpffile;
--+    print "  if (flags & O_CREAT) {"                    > tmpffile;
--+    print "    va_list args;"                           > tmpffile;
--+    print "    va_start(args, flags);"                  > tmpffile;
--+    print "    mode = va_arg(args, int);"               > tmpffile;
--+    print "    va_end(args);"                           > tmpffile;
--+    print "  }"                                         > tmpffile;
--+    print "  load_library_symbols();"                   > tmpffile;
--+    print "  return  next_" name,  argname ";"          > tmpffile;
--+    print "}"                                           > tmpffile;
--+    print ""                                            > tmpffile;
--+  } else if(MACRO){
--     print "  {(void(*))&NEXT_" MACRO "_NOARG, " name "_QUOTE},"  > structfile;
--     print "extern " ret " (*NEXT_" MACRO "_NOARG)" argtype ";" > headerfile;
--     print ret " (*NEXT_" MACRO "_NOARG)" argtype "=TMP_" MACRO ";"> deffile;
----- a/wrapfunc.inp
--+++ b/wrapfunc.inp
--@@ -9,8 +9,10 @@
-- /**/									  */
-- /* each line of this file lists 4 fields, seperated by a ";".		  */
-- /* The first field is the name of the wrapped function, then it's return  */
---/* value. After that come the function arguments with types, and the last */
--+/* value. After that come the function arguments with types, and the fifth */
-- /* field contains the function arguments without types.                   */
--+/* A sixth field is a special needed when wrapping the openat syscall.    */
--+/* Otherwise it's like the third (function arguments with types).         */
-- /**/
-- 
-- /* __*xstat are used on glibc systems instead of just *xstat. */
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index 3d53eeb097..5c50c83e13 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,4 +1,4 @@
--# From http://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.26-1.dsc
--sha256  480a578ffdc5592e73df4c086950d321b4adc78dbdaec56c82e4fe1fb68de8e9  fakeroot_1.26.orig.tar.gz
-+# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.30.1-1.dsc
-+sha256  32ebb1f421aca0db7141c32a8c104eb95d2b45c393058b9435fbf903dd2b6a75  fakeroot_1.30.1.orig.tar.gz
- # License files, locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 3fadf1c0f0..20c75d6966 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--FAKEROOT_VERSION = 1.26
-+FAKEROOT_VERSION = 1.30.1
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
--FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20210907T092512Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20221120T030258Z/pool/main/f/fakeroot
- 
- HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
-@@ -18,9 +18,4 @@ HOST_FAKEROOT_CONF_ENV = \
- FAKEROOT_LICENSE = GPL-3.0+
- FAKEROOT_LICENSE_FILES = COPYING
- 
--define HOST_FAKEROOT_BUILD_AUX
--	mkdir -p $(@D)/build-aux
--endef
--HOST_FAKEROOT_POST_PATCH_HOOKS += HOST_FAKEROOT_BUILD_AUX
--
- $(eval $(host-autotools-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIyLTExLTE4IDIwOjAwICswMTAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IHJlbW92ZSB1cHN0cmVhbSBwYXRjaAo+IAo+IHJlbW92ZSBta2Rp
+ciBidWlsZC1hdXggKG5vIGxvbmdlciBuZWVkZWQsIGxpa2UgQVVUT1JFQ09ORikKPiAKPiBTaWdu
+ZWQtb2ZmLWJ5OiBGcmFuY29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4KPiAt
+LS0KWy0tU05JUC0tXQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Zha2Vyb290L2Zha2Vyb290Lm1r
+IGIvcGFja2FnZS9mYWtlcm9vdC9mYWtlcm9vdC5tawo+IGluZGV4IDNmYWRmMWMwZi4uNWI0ZmIy
+NmEzIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZmFrZXJvb3QvZmFrZXJvb3QubWsKPiArKysgYi9w
+YWNrYWdlL2Zha2Vyb290L2Zha2Vyb290Lm1rCj4gQEAgLTQsOSArNCw5IEBACj4gICMKPiAgIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLUZBS0VST09UX1ZFUlNJT04gPSAxLjI2Cj4gK0ZB
+S0VST09UX1ZFUlNJT04gPSAxLjMwLjEKPiAgRkFLRVJPT1RfU09VUkNFID0gZmFrZXJvb3RfJChG
+QUtFUk9PVF9WRVJTSU9OKS5vcmlnLnRhci5nego+IC1GQUtFUk9PVF9TSVRFID0gaHR0cHM6Ly9z
+bmFwc2hvdC5kZWJpYW4ub3JnL2FyY2hpdmUvZGViaWFuLzIwMjEwOTA3VDA5MjUxMlovcG9vbC9t
+YWluL2YvZmFrZXJvb3QKPiArRkFLRVJPT1RfU0lURSA9IGh0dHBzOi8vZGViLmRlYmlhbi5vcmcv
+ZGViaWFuL3Bvb2wvbWFpbi9mL2Zha2Vyb290CgpXZSBzdGlsbCB3YW50IHRvIHVzZSBzbmFwc2hv
+dC5kZWJpYW4ub3JnLCBzbyB0aGF0IHdlIGNhbiBzdGlsbCByZXRyaWV2ZQp0aGF0IHRhcmJhbGwg
+aW4gdGhlIGZ1dHVyZSAod2hlbiBubyB0aGVuLWN1cnJlbnQgZGViaWFuIHZlcnNpb24gdXNlIGl0
+CmFueW1vcmUpLiBTbywgSSByZXZlcnRlZCB0byBzLmQubywgdG8gdGhlIGN1cnJlbnQgZGF0ZToK
+ICAgIGh0dHBzOi8vc25hcHNob3QuZGViaWFuLm9yZy9hcmNoaXZlL2RlYmlhbi8yMDIyMTEyMFQw
+MzAyNThaL3Bvb2wvbWFpbi9mL2Zha2Vyb290CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoK
+UmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gIEhPU1RfRkFLRVJPT1RfREVQRU5ERU5DSUVTID0g
+aG9zdC1hY2wKPiAgIyBGb3JjZSBjYXBhYmlsaXRpZXMgZGV0ZWN0aW9uIG9mZgo+IEBAIC0xOCw5
+ICsxOCw0IEBAIEhPU1RfRkFLRVJPT1RfQ09ORl9FTlYgPSBcCj4gIEZBS0VST09UX0xJQ0VOU0Ug
+PSBHUEwtMy4wKwo+ICBGQUtFUk9PVF9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+ICAKPiAtZGVm
+aW5lIEhPU1RfRkFLRVJPT1RfQlVJTERfQVVYCj4gLQlta2RpciAtcCAkKEBEKS9idWlsZC1hdXgK
+PiAtZW5kZWYKPiAtSE9TVF9GQUtFUk9PVF9QT1NUX1BBVENIX0hPT0tTICs9IEhPU1RfRkFLRVJP
+T1RfQlVJTERfQVVYCj4gLQo+ICAkKGV2YWwgJChob3N0LWF1dG90b29scy1wYWNrYWdlKSkKPiAt
+LSAKPiAyLjM3LjIKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
+LS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1U
+aW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cnwg
+KzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8
+ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0t
+LS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3lt
+b3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNv
+bnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0t
+LS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
