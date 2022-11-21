@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A76BFC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20EB7C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:19:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A1E04098E;
-	Mon, 20 Feb 2023 21:18:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A1E04098E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7B7942D04;
+	Mon, 20 Feb 2023 21:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7B7942D04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A3RcwVBzLF94; Mon, 20 Feb 2023 21:18:55 +0000 (UTC)
+	with ESMTP id YLoqB8VNqkKv; Mon, 20 Feb 2023 21:19:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08F6742CD5;
-	Mon, 20 Feb 2023 21:18:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F6742CD5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A0341BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id A180242CFF;
+	Mon, 20 Feb 2023 21:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A180242CFF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EC811BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 59939610BB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59939610BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22B1C40C11
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22B1C40C11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RCO5mGMTct5G for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rhARW75Fncwk for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1481461098
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1481461098
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53BB640C14
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53BB640C14
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F308828C8; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 3E0C386494; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Nov 2022 14:31:20 +0100
+Date: Mon, 21 Nov 2022 22:20:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf14df13358ddd1b06709924a84f87dfa711cceb
-X-Git-Newrev: 4e63809d8d7ed873f320c61fc0eb7e0f64250acf
+X-Git-Oldrev: ea3e1696776187b55bbcaa49072cda49a43c32f5
+X-Git-Newrev: 75cb8a490200e2480d1dcc2a2e59de0a575c1531
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205150.0F308828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/kontron_bl_imx8mm_defconfig: bump U-boot to 2022.10
+Message-Id: <20230220205152.3E0C386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: don't
+ build igh-ethercat drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +56,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e63809d8d7ed873f320c61fc0eb7e0f64250acf
+commit: https://git.buildroot.net/buildroot/commit/?id=75cb8a490200e2480d1dcc2a2e59de0a575c1531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 223516b51e1a (configs/kontron_bl_imx8mm: U-Boot needs util-linux)
-added the needed dependency against host-util-linux, but missed an
-earlier comment about u-boot still failing [0]
+igh-ethercat comes with a small number of patched Linux kernel network
+drivers, which aim at replacing the ones available in upstream Linux
+kernel. All those drivers are provided only for specific kernel
+releases. For example:
 
-The U-Boot makefile for the host tools does not handle the
-compiler/linker options properly. There are some patches [1][2] that fixes
-that issue already applied in the newer U-Boot version 2022.10. So we have to
-bump U-Boot to fix an autobuilder failure.
+r8169-2.6.24-ethercat.c
+r8169-2.6.24-orig.c
+r8169-2.6.27-ethercat.c
+r8169-2.6.27-orig.c
+r8169-2.6.28-ethercat.c
+r8169-2.6.28-orig.c
+r8169-2.6.29-ethercat.c
+r8169-2.6.29-orig.c
+r8169-2.6.31-ethercat.c
+r8169-2.6.31-orig.c
+r8169-2.6.32-ethercat.c
+r8169-2.6.32-orig.c
+r8169-2.6.33-ethercat.c
+r8169-2.6.33-orig.c
+r8169-2.6.35-ethercat.c
+r8169-2.6.35-orig.c
+r8169-2.6.36-ethercat.c
+r8169-2.6.36-orig.c
+r8169-2.6.37-ethercat.c
+r8169-2.6.37-orig.c
+r8169-3.10-ethercat.c
+r8169-3.10-orig.c
+r8169-3.12-ethercat.c
+r8169-3.12-orig.c
+r8169-3.14-ethercat.c
+r8169-3.14-orig.c
+r8169-3.16-ethercat.c
+r8169-3.16-orig.c
+r8169-3.2-ethercat.c
+r8169-3.2-orig.c
+r8169-3.4-ethercat.c
+r8169-3.4-orig.c
+r8169-3.6-ethercat.c
+r8169-3.6-orig.c
+r8169-3.8-ethercat.c
+r8169-3.8-orig.c
+r8169-4.4-ethercat.c
+r8169-4.4-orig.c
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/3267233833
+Obviously, this doesn't play well with the random configuration
+testing done by utils/genrandconfig. This commit avoids this issue by
+making sure we never build any of those drivers as part of the
+genrandconfig generated configurations.
 
-[0] https://lore.kernel.org/buildroot/CAEyMn7Y3UgT-8dYY5rbnzcPfbGmqRVXG=joWx1fSSCC=WiFzbg@mail.gmail.com/
-[1] U-Boot: a638bd349ea43825 (kbuild: add KBUILD_HOSTLDFLAGS to cmd_host-csingle)
-[2] U-Boot: 31a7688cbe0ed5ed (tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls)
+Fixes:
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-[yann.morin.1998@free.fr:
-  - update commit log with reference to [0]
-  - slightly tweak commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  http://autobuild.buildroot.net/results/07b7475d780c067d99ee5618a5fd2bb024a5b4e7/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/kontron_bl_imx8mm_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index 13ed1a2078..240cb52245 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 9c6c2b359c..eccd3a228e 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -629,6 +629,13 @@ def fixup_config(sysinfo, configfile):
+         configlines.append('BR2_PACKAGE_XVISOR_USE_DEFCONFIG=y\n')
+         configlines.remove('BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n')
+ 
++    # Don't build igh-ethercat driver as they are highly
++    # kernel-version specific
++    for opt in ['8139TOO', 'E100', 'E1000', 'E1000E', 'R8169']:
++        optstr = 'BR2_PACKAGE_IGH_ETHERCAT_%s=y\n' % opt
++        if optstr in configlines:
++            configlines.remove(optstr)
++
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
