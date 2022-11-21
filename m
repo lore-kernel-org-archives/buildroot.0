@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CF8C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 20:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9189C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 21:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4242581E43;
-	Mon, 21 Nov 2022 20:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4242581E43
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C2E84109B;
+	Mon, 21 Nov 2022 21:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C2E84109B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IlzC2MbIoi9x; Mon, 21 Nov 2022 20:45:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5MKgYgascftv; Mon, 21 Nov 2022 21:00:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D6A781E29;
-	Mon, 21 Nov 2022 20:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D6A781E29
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0838D409A8;
+	Mon, 21 Nov 2022 21:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0838D409A8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29A391BF34D
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 20:45:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D60BA1BF34D
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 055AB405D2
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 20:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 055AB405D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id AEFDB4046B
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:00:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEFDB4046B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vnpx-nXrK9_e for <buildroot@lists.busybox.net>;
- Mon, 21 Nov 2022 20:45:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2190402F5
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D2190402F5
- for <buildroot@buildroot.org>; Mon, 21 Nov 2022 20:45:39 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:187b:ecdb:c1bc:94df])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A10B113F84C;
- Mon, 21 Nov 2022 21:45:34 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 21 Nov 2022 21:45:34 +0100
-Date: Mon, 21 Nov 2022 21:45:34 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221121204534.GL2516@scaer>
-References: <20221121072444.3980541-1-peter@korsgaard.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221121072444.3980541-1-peter@korsgaard.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1669063536;
- bh=/uYE0TC5r3fE05ul+FmfHJeny+iEmhPE5yIzNZ0Q/HU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cKQkscDFpi9TQbw1jGD+srvbA7MLJEKjXXHY5FnOcTz8sGhQVWkq1QtvXJwOJAbCZ
- lnPgi5q9bynQmI+FT8hA4fyvrg5XacS+MniYo6IXDrwz59Q6PZbylCF0seQ2SbPSHq
- W7bh+gfRRspvFTc+Az6HX8hSn6Hw9MNlSuqdXsca6yiqhGZRgDMMJ8CCr2blCSoIG4
- yj4ijkUxyj/1170Xvu7yTXYfkbis06W5Sj7TvYwX//1KIzF0MqAqgEo2cpN7thB8p8
- bL9V0Y/3tJxORfBRRTl0lTPWkQDEGOQJrMuV8/CX/frnsJoCJrA5DisXptfYwtqq9b
- eIOpWNzTFyY6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cKQkscDF
-Subject: Re: [Buildroot] [PATCH] package/sdl: add upstream security fix for
- CVE-2022-34568
+ with ESMTP id 9ZHJnJ0hStSs for <buildroot@lists.busybox.net>;
+ Mon, 21 Nov 2022 21:00:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB50F402F5
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 21:00:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB50F402F5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A5AB284087; Mon, 21 Nov 2022 21:00:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Nov 2022 21:59:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7368099ae9767a57ec72fcfbb29a5d85ac7bcf7
+X-Git-Newrev: 5852fee868c318f0864bed3238b46348156422b6
+X-Patchwork-Hint: ignore
+Message-Id: <20221121210015.A5AB284087@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: fix build failure with
+ make 4.3.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,96 +56,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5852fee868c318f0864bed3238b46348156422b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-11-21 08:24 +0100, Peter Korsgaard spake thusly:
-> SDL v1.2 was discovered to contain a use-after-free via the XFree function
-> at /src/video/x11/SDL_x11yuv.c.
-> 
-> https://github.com/advisories/GHSA-wr7h-5wm3-p3h4
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Make 4.3.91 doesn't allow to safely override Simple Expanded Variables, so
+let's add a patch pending upstream[0] to make those variable Conditional
+Expanded.
 
-Applied to master, thanks.
+[0]: https://bugzilla.mozilla.org/show_bug.cgi?id=1801182
 
-Regards,
-Yann E. MORIN.
+Fixes:
+http://autobuild.buildroot.net/results/1074143dbea60567cd83be0a23f7c0214d470de9/
 
-> ---
->  ...x11yuv.c-fix-possible-use-after-free.patch | 28 +++++++++++++++++++
->  package/sdl/sdl.mk                            |  3 ++
->  2 files changed, 31 insertions(+)
->  create mode 100644 package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-> 
-> diff --git a/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch b/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-> new file mode 100644
-> index 0000000000..d7858d0f96
-> --- /dev/null
-> +++ b/package/sdl/0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-> @@ -0,0 +1,28 @@
-> +From d7e00208738a0bc6af302723fe64908ac35b777b Mon Sep 17 00:00:00 2001
-> +From: Ozkan Sezer <sezeroz@gmail.com>
-> +Date: Sat, 18 Jun 2022 14:55:00 +0300
-> +Subject: [PATCH] SDL_x11yuv.c: fix possible use-after-free
-> +
-> +Fixes: https://github.com/libsdl-org/SDL-1.2/issues/863
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + src/video/x11/SDL_x11yuv.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/video/x11/SDL_x11yuv.c b/src/video/x11/SDL_x11yuv.c
-> +index 62698dfd..0d5754e3 100644
-> +--- a/src/video/x11/SDL_x11yuv.c
-> ++++ b/src/video/x11/SDL_x11yuv.c
-> +@@ -374,8 +374,8 @@ SDL_Overlay *X11_CreateYUVOverlay(_THIS, int width, int height, Uint32 format, S
-> + #ifdef PITCH_WORKAROUND
-> + 		if ( hwdata->image != NULL && hwdata->image->pitches[0] != (width*bpp) ) {
-> + 			/* Ajust overlay width according to pitch */ 
-> +-			XFree(hwdata->image);
-> + 			width = hwdata->image->pitches[0] / bpp;
-> ++			XFree(hwdata->image);
-> + 			hwdata->image = SDL_NAME(XvCreateImage)(GFX_Display, xv_port, format,
-> + 								0, width, height);
-> + 		}
-> +-- 
-> +2.30.2
-> +
-> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-> index 7389cd3edb..462600debb 100644
-> --- a/package/sdl/sdl.mk
-> +++ b/package/sdl/sdl.mk
-> @@ -13,6 +13,9 @@ SDL_CPE_ID_VENDOR = libsdl
->  SDL_CPE_ID_PRODUCT = simple_directmedia_layer
->  SDL_INSTALL_STAGING = YES
->  
-> +# 0003-SDL_x11yuv.c-fix-possible-use-after-free.patch
-> +SDL_IGNORE_CVES += CVE-2022-34568
-> +
->  # we're patching configure.in, but package cannot autoreconf with our version of
->  # autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
->  define SDL_RUN_AUTOGEN
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch b/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch
+new file mode 100644
+index 0000000000..7b3abea307
+--- /dev/null
++++ b/package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch
+@@ -0,0 +1,45 @@
++From a1a5f3afea2ee59bdbb7a74eb2d7f82b635dbd1a Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 17 Nov 2022 20:38:48 +0100
++Subject: [PATCH] Bug 1801182 - Allow overriding OS_ARCH, OS_TEST and
++ OS_RELEASE in Makefile
++
++Starting from Make 4.3.91 simple expanded variables can't be safely
++overriden via command line anymore, so let's use conditional expanded
++variables to override OS_ARCH, OS_TEST and OS_RELEASE.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Upstream status: https://bugzilla.mozilla.org/show_bug.cgi?id=1801182]
++---
++ nss/coreconf/arch.mk | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/nss/coreconf/arch.mk b/nss/coreconf/arch.mk
++index 17e9faeac..85aac9341 100644
++--- a/nss/coreconf/arch.mk
+++++ b/nss/coreconf/arch.mk
++@@ -20,17 +20,17 @@
++ # Macros for getting the OS architecture
++ #
++ 
++-OS_ARCH := $(subst /,_,$(shell uname -s))
+++OS_ARCH ?= $(subst /,_,$(shell uname -s))
++ 
++ #
++ # Attempt to differentiate between sparc and x86 Solaris
++ #
++ 
++-OS_TEST := $(shell uname -m)
+++OS_TEST ?= $(shell uname -m)
++ ifeq ($(OS_TEST),i86pc)
++-    OS_RELEASE := $(shell uname -r)_$(OS_TEST)
+++    OS_RELEASE ?= $(shell uname -r)_$(OS_TEST)
++ else
++-    OS_RELEASE := $(shell uname -r)
+++    OS_RELEASE ?= $(shell uname -r)
++ endif
++ 
++ 
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
