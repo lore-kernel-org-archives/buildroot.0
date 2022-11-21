@@ -1,65 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDACC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 12:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD2AC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 14:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DECC40910;
-	Mon, 21 Nov 2022 12:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DECC40910
+	by smtp2.osuosl.org (Postfix) with ESMTP id D82B14051C;
+	Mon, 21 Nov 2022 14:49:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82B14051C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bQycslWX-yno; Mon, 21 Nov 2022 12:40:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id echiW2jWZEav; Mon, 21 Nov 2022 14:49:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59753408BE;
-	Mon, 21 Nov 2022 12:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59753408BE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D79D1BF399
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 12:40:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DFE04049E;
+	Mon, 21 Nov 2022 14:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DFE04049E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C65B1BF86C
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 14:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 79556813CB
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 12:40:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79556813CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id E86AE60EB8
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 14:49:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E86AE60EB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tnyPoILdVebJ for <buildroot@lists.busybox.net>;
- Mon, 21 Nov 2022 12:40:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DC1781391
-Received: from smtprelay03.ispgateway.de (smtprelay03.ispgateway.de
- [80.67.18.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0DC1781391
- for <buildroot@busybox.net>; Mon, 21 Nov 2022 12:40:19 +0000 (UTC)
-Received: from [91.21.124.120] (helo=exchange.go-sys.de)
- by smtprelay03.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>) id 1ox66j-0007Xq-Ai
- for buildroot@busybox.net; Mon, 21 Nov 2022 13:41:05 +0100
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.16; Mon, 21
- Nov 2022 13:40:15 +0100
-Received: from go-sys.de (192.168.1.127) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2507.16 via Frontend Transport;
- Mon, 21 Nov 2022 13:40:15 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 21 Nov 2022 13:40:01 +0100
-Message-ID: <20221121124001.24170-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IEhRpfiGu9BF for <buildroot@lists.busybox.net>;
+ Mon, 21 Nov 2022 14:49:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A3DD60B27
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4A3DD60B27
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 14:49:22 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CA0862000B;
+ Mon, 21 Nov 2022 14:49:18 +0000 (UTC)
+Date: Mon, 21 Nov 2022 15:49:17 +0100
+To: "Frager, Neal" <neal.frager@amd.com>
+Message-ID: <20221121154917.59ce2022@booty>
+In-Reply-To: <CH2PR12MB5004C153A3109B9BC5400F46F00A9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221108200704.23955-1-neal.frager@amd.com>
+ <CH2PR12MB5004C153A3109B9BC5400F46F00A9@CH2PR12MB5004.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix sdl_init() error with
- kernel 5.15
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669042159;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=UwX3CxElVk3SzrFHAM8Pfx5hyZdIl+WnT8GlzcLj8ok=;
+ b=mLS4yoQAgX1g0wlefjnKBl9ES7yAh9FgU0jtvgNMPEYcvqKyHY77/gKOtGjekoHm7IqIl1
+ AU+kqyfa19cuuFKs0sOGAPYC3Ih5Qf/3c76EZH4Z/TROiw0NXAGQ04TShLXCo4UgbJXnTq
+ DNsS0RjHgX+2yLfLbw2lsJ+IboHhZA0Oe1dRHCj2/lGiN5GXbBTo1PzsFn2oSDIcyMBcKk
+ sK5MOQAWNIm0opkX30ccI4QDlraSL5cmiumbg3Tk1kFZCjbgVl/yrKtE8bGJI7c0yo6Ast
+ +JZajaZuhnvHolPHFvfZ4x53xYsuOworvg+gfTIo39Jx9sMPUNFoQOIkN7wQ9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mLS4yoQA
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/uboot/uboot.mk: add stripped
+ u-boot.elf support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,96 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes #6421
-Backport from: da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29
+Hello Neal,
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/0001-fix-CRTC-default-mode.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/sdl2/0001-fix-CRTC-default-mode.patch
+On Mon, 21 Nov 2022 09:12:05 +0000
+"Frager, Neal" <neal.frager@amd.com> wrote:
 
-diff --git a/package/sdl2/0001-fix-CRTC-default-mode.patch b/package/sdl2/0001-fix-CRTC-default-mode.patch
-new file mode 100644
-index 0000000000..5efc3f55c2
---- /dev/null
-+++ b/package/sdl2/0001-fix-CRTC-default-mode.patch
-@@ -0,0 +1,66 @@
-+Patch to fix SDL_Init() error with kernel 5.15.x
-+Thanks to Sam Lantinga <slouken@libsdl.org> for his help.
-+Fix: #6421
-+
-+Backported from: da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29
-+
-+Signed-off-by: Michael Fischer <mf@go-sys.de>
-+
-+
-+diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
-+index eae7214551a9..eeeefef2b2c1 100644
-+--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
-++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
-+@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
-+ /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
-+    list of SDL Displays in _this->displays[]  */
-+ static void
-+-KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
-+-
-++KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
-++{
-+     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
-+     SDL_DisplayData *dispdata = NULL;
-+     SDL_VideoDisplay display = {0};
-+@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
-+         drmModeModeInfo *mode = &connector->modes[i];
-+
-+         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
-+-          mode_index = i;
-+-          break;
-++            mode_index = i;
-++            break;
-+         }
-+     }
-+
-+     if (mode_index == -1) {
-+-      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
-+-      goto cleanup;
-++        int current_area, largest_area = 0;
-++
-++        /* Find the preferred mode or the highest resolution mode */
-++        for (i = 0; i < connector->count_modes; i++) {
-++            drmModeModeInfo *mode = &connector->modes[i];
-++
-++            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
-++                mode_index = i;
-++                break;
-++            }
-++
-++            current_area = mode->hdisplay * mode->vdisplay;
-++            if (current_area > largest_area) {
-++                mode_index = i;
-++                largest_area = current_area;
-++            }
-++        }
-++        if (mode_index != -1) {
-++            crtc->mode = connector->modes[mode_index];
-++        }
-++    }
-++
-++    if (mode_index == -1) {
-++        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
-++        goto cleanup;
-+     }
-+
-+     /*********************************************/
+> Hello everyone,
+> 
+> Just a friendly reminder regarding this patch.  Any feedback?
+> 
+> If a user requests a u-boot binary in elf format, they may actually want the stripped u-boot.elf version.
+> This patch provides the stripped u-boot.elf binary.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  boot/uboot/uboot.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk index 0439ec5e4b..216efc5a13 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -53,7 +53,7 @@ UBOOT_BINS += u-boot.dtb  endif
+>  
+>  ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+> -UBOOT_BINS += u-boot
+> +UBOOT_BINS += u-boot u-boot.elf
+
+This assumes BR2_TARGET_UBOOT_FORMAT_ELF will always result in
+building u-boot.elf, but I don't think this is true for all platforms.
+
+At a quick test with a RISC-V build and BR2_TARGET_UBOOT_FORMAT_ELF=y I
+got a failure with your patch applied because u-boot is produced but
+u-boot.elf isn't.
+
 -- 
-2.20.1
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
