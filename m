@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45361C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 21:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF53C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 21:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCFCE409FA;
-	Mon, 21 Nov 2022 21:21:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCFCE409FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8ECE3405F5;
+	Mon, 21 Nov 2022 21:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ECE3405F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lWpMvW3YTYd2; Mon, 21 Nov 2022 21:21:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aCzl8xtlJDwZ; Mon, 21 Nov 2022 21:34:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4026409E7;
-	Mon, 21 Nov 2022 21:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4026409E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id B89EC405EC;
+	Mon, 21 Nov 2022 21:34:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B89EC405EC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 50B611BF34D
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:21:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C36661BF34D
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3962C60F61
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3962C60F61
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B33B60F67
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 21:34:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B33B60F67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ezvWAQcx-mlB for <buildroot@lists.busybox.net>;
- Mon, 21 Nov 2022 21:21:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED35E60F58
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED35E60F58
- for <buildroot@buildroot.org>; Mon, 21 Nov 2022 21:21:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D0EFE20004;
- Mon, 21 Nov 2022 21:21:27 +0000 (UTC)
-Date: Mon, 21 Nov 2022 22:21:26 +0100
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20221121222126.0096d82d@windsurf>
-In-Reply-To: <20221116180452.700415-1-bernd.kuhls@t-online.de>
-References: <20221116180452.700415-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669065688;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=z/3djh4F6itaxSnBYrJTIv8t0ZqmGLQ52F6QIWOTlqY=;
- b=hofKlHpMQrIF0IIDpaqAUvkK9HqHb3znYCXKz3uDInDgmW2OtR95Sa+qiQd8+uTF3F9Qk9
- 2xrxDb0V8O6l8wgztHcpf2o6eWVHA1da/8MXJmNmj17cKOfxVJnWt2HUOK4fQD1l96TzpD
- omXd2ONG/8ou6xHl5o1f1pJ2KfQQ9wrSJR8iZiJFlfeMYoGBbv1SgG7ZM1ga2hgKQbONlV
- h8eBo0/Ircxka04yZnyzWvirwdqz2jmHF21fhwGbM07V5yVWBScXnBpyvm2kkB3h0IYQmt
- ia0wE8WZHFrxtgK36rr3AudUlDJ9YDkVkLh7UMtdxg74VAIyy+d/tE0VJ316Lg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hofKlHpM
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: fix uClibc build
+ with ESMTP id DXwKC-RTBgwi for <buildroot@lists.busybox.net>;
+ Mon, 21 Nov 2022 21:34:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF0BC60F58
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 21:34:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF0BC60F58
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AA971840B4; Mon, 21 Nov 2022 21:34:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Nov 2022 22:21:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 75cb8a490200e2480d1dcc2a2e59de0a575c1531
+X-Git-Newrev: 6ebfe647b6df76016fb8a50b718d60fdff15fe87
+X-Patchwork-Hint: ignore
+Message-Id: <20221121213407.AA971840B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: fix uClibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,39 +57,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0468931754896340513=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 16 Nov 2022 19:04:52 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+--===============0468931754896340513==
+Content-Type: text/plain
 
-> Moved the util/compiler.h include to util/macros.h due to upstream
-> commit which added static_assert() to src/util/macros.h
-> https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.2&id=f1023571e8ce7ccb6ec7bc115240cb76aef3e5e5
-> 
-> Please note that this patch can be removed when buildroot toolchains
-> are updated to uClibc 1.0.42:
-> https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a55/a55d6980faad8b5063f8f4f8b89467061d44a2ae/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/0004-Fix-uClibc-build.patch | 37 ++++++++++++----------
->  1 file changed, 21 insertions(+), 16 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6ebfe647b6df76016fb8a50b718d60fdff15fe87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Moved the util/compiler.h include to util/macros.h due to upstream
+commit which added static_assert() to src/util/macros.h
+https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.2&id=f1023571e8ce7ccb6ec7bc115240cb76aef3e5e5
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Please note that this patch can be removed when buildroot toolchains
+are updated to uClibc 1.0.42:
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
+
+Fixes:
+http://autobuild.buildroot.net/results/a55/a55d6980faad8b5063f8f4f8b89467061d44a2ae/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/0004-Fix-uClibc-build.patch | 37 +++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
+
+diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+index 70ff5e2b4c..c8c82fe0dc 100644
+--- a/package/mesa3d/0004-Fix-uClibc-build.patch
++++ b/package/mesa3d/0004-Fix-uClibc-build.patch
+@@ -18,29 +18,22 @@ Fixes build errors with uClibc and gcc-9.3.0:
+  function ‘static_assert’ [-Werror=implicit-function-declaration] 101 |
+  static_assert(ARRAY_SIZE(egl_platforms) == _EGL_NUM_PLATFORMS,
+ 
++../src/util/macros.h:74:4: error: implicit declaration of function
++ ‘static_assert’ [-Werror=implicit-function-declaration]
++   74 |    static_assert(cond, #cond); \
++      |    ^~~~~~~~~~~~~
++
+ Patch sent upstream:
+ https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/13898
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+- src/egl/main/egldisplay.c |  1 +
+- src/util/compiler.h       | 10 ++++++++++
++ src/util/compiler.h | 10 ++++++++++
++ src/util/macros.h   |  1 +
+  2 files changed, 11 insertions(+)
+ 
+-diff --git a/src/egl/main/egldisplay.c b/src/egl/main/egldisplay.c
+-index 131fc22786f9..d3e2bb96e2f6 100644
+---- a/src/egl/main/egldisplay.c
+-+++ b/src/egl/main/egldisplay.c
+-@@ -42,6 +42,7 @@
+- #endif
+- #include <fcntl.h>
+- #include "c11/threads.h"
+-+#include "util/compiler.h"
+- #include "util/macros.h"
+- #include "util/os_file.h"
+- #include "util/u_atomic.h"
+ diff --git a/src/util/compiler.h b/src/util/compiler.h
+-index d184ad455af9..b5c56807acc6 100644
++index d184ad455af..b5c56807acc 100644
+ --- a/src/util/compiler.h
+ +++ b/src/util/compiler.h
+ @@ -36,6 +36,16 @@
+@@ -60,6 +53,18 @@ index d184ad455af9..b5c56807acc6 100644
+  #include "util/macros.h"
+  
+  
++diff --git a/src/util/macros.h b/src/util/macros.h
++index 22b18303826..8f73ee72693 100644
++--- a/src/util/macros.h
+++++ b/src/util/macros.h
++@@ -27,6 +27,7 @@
++ #include <stdio.h>
++ #include <assert.h>
++ #include <stdint.h>
+++#include "util/compiler.h"
++ 
++ /* Compute the size of an array */
++ #ifndef ARRAY_SIZE
+ -- 
+-GitLab
++2.34.1
+ 
+
+--===============0468931754896340513==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0468931754896340513==--
