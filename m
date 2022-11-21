@@ -1,70 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E1CC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 22:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27AADC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 21 Nov 2022 22:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C468405E6;
-	Mon, 21 Nov 2022 22:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C468405E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B6BA60F58;
+	Mon, 21 Nov 2022 22:50:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B6BA60F58
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MowXT-K287v9; Mon, 21 Nov 2022 22:50:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFF9C60F2E;
+	Mon, 21 Nov 2022 22:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFF9C60F2E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C020C1BF3A9
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 22:50:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8BC1405E9
+ for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 22:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8BC1405E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lQBJ2hViV83f; Mon, 21 Nov 2022 22:13:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 888B8405E3;
-	Mon, 21 Nov 2022 22:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 888B8405E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 504941BF3A9
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 22:13:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DE5D40317
- for <buildroot@lists.busybox.net>; Mon, 21 Nov 2022 22:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DE5D40317
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6irv07ALiQGN for <buildroot@lists.busybox.net>;
- Mon, 21 Nov 2022 22:13:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B394402FD
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B394402FD
- for <buildroot@buildroot.org>; Mon, 21 Nov 2022 22:13:49 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 202A9240002;
- Mon, 21 Nov 2022 22:13:43 +0000 (UTC)
-Date: Mon, 21 Nov 2022 23:13:42 +0100
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20221121231342.50bafc4a@booty>
-In-Reply-To: <20221121201638.30951-1-brandon.maier@collins.com>
-References: <20221121201638.30951-1-brandon.maier@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ebhi35R8fBop for <buildroot@lists.busybox.net>;
+ Mon, 21 Nov 2022 22:50:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91F2C40179
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 91F2C40179
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 22:50:02 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id x5so18058352wrt.7
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 14:50:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=QmWX3N8yEOl3AqhdXck6feisaGn8K9xrko5QVUGTCu0=;
+ b=K5X3h/Rx/huxiF0H/14/mRWRBhb8KL97ZBlmpl1qXye3EI0wUIRVcl6f5N72h+9AH8
+ Yk+DVKrNXZMlfEJSexuVS18wAxyhWET7ZEk0/VmwLpCN40WtS3/HIJDIu5ofzbSe38id
+ YDB4qo/UK/4kMG5o55pb+0reJ7CvYDH/lXV0H/Re6q2APfxdJA4QpMkJoY99XCRbTIlf
+ 5XwxhNLkkDTJ7m8kbBNMUdz25jDhMxw3kp58cZLDhF0udklecl3JwmT/tLtG3w43awVF
+ y+EgxpmTOu7fq5E3M1NIfQCwX75j86YJGs0rXUXbmcHTtKbi2Xg/GiKcSoJsualas218
+ qQTA==
+X-Gm-Message-State: ANoB5pktRbIe2gIJb+NWfBUcpJZfVe/d+h74MVS3s5YeTg5m5gza1te/
+ IfpZ6TAD0OxduYkFK87eB6OxAidH+L5NGw==
+X-Google-Smtp-Source: AA0mqf603pmMB88UYFoTCQ5M+OzmoX0iUB9jFynny7cxRpqWaSY9jlMF0mFOTmx8lEVL5obpaTwQwA==
+X-Received: by 2002:a5d:4ec5:0:b0:241:d782:9047 with SMTP id
+ s5-20020a5d4ec5000000b00241d7829047mr3781437wrv.681.1669071000436; 
+ Mon, 21 Nov 2022 14:50:00 -0800 (PST)
+Received: from gpdmax.. ([2a01:e0a:28f:75b0:2488:d453:b017:99a])
+ by smtp.gmail.com with ESMTPSA id
+ q14-20020a05600c46ce00b003c6c182bef9sm24704877wmo.36.2022.11.21.14.49.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 21 Nov 2022 14:49:59 -0800 (PST)
+From: Anisse Astier <anisse@astier.eu>
+To: buildroot@buildroot.org
+Date: Mon, 21 Nov 2022 23:49:55 +0100
+Message-Id: <20221121224955.951056-1-anisse@astier.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669068824;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aOIYFSY3otmPScxTZU47PtwLospkBhNytIMSNiPyES8=;
- b=fZpneEFlLdeoKQdaDq12eunwPWT4AHmprUcuYyCnR2F83RYNaMMXqqZVvqLjsNxlJVVuky
- lMbX3Z7QHZFYEEhjmOkJSWV4sp54MrujwP328MzhHBhX3VgDHEaCJP6WCnSpFX5sRloMk/
- elJrWA2BkFXZpFQOjLoKhJ8Rjba4ruvMVETgA57h1AOopAXPmRsVDWEOO1lfSmWXb0iQhP
- 1i64LS0Z7w5rceefRefgRzD9ZWHxeBv3WYKw2l0uKHISWu5XiDsZrSXgMNIvKBGZjErHaL
- 26ZLYeDehi7N16EGZ8oW57zQoqmBo1v0ZK6R0QdHyJncUpAUhkEldRcbBVTbQQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fZpneEFl
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot/uboot.mk: fix zynqmp without
- pmufw
+ d=astier-eu.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=QmWX3N8yEOl3AqhdXck6feisaGn8K9xrko5QVUGTCu0=;
+ b=KXAMxWjFi7TbNYg6GCPKounq3e6fRfHnKlSZpofmqFr73m3lMq7JjBXTV8XEO+gugw
+ IV2STbejK7DZ77V5jjIFu26rvbG+MTBF76NaUHuEGe/gKXzpi52E7ykhYDzhGQrSZCsD
+ 0rWU9kyVGW4bk4jScVftadlUUoIzJ+UYKtpC4pqIgfaC8fGu7MEnkKLpJILmqF3EVOuV
+ ZojDhV/nwVOFRCD6t9Pa9+s261nVn+MVet/9q20Ce+BxJuRKBLgoijBEYsyBQEaNNHd7
+ U2NeaGTqrCifh505zW8P3nh52xFnXR8+sD1sfpzMeSF9nRUqHbkH3jR8LdoY9ZTUNJYx
+ JZWQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=astier-eu.20210112.gappssmtp.com
+ header.i=@astier-eu.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=KXAMxWjF
+Subject: [Buildroot] [PATCH v2] package/go: disable cgo support with static
+ libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,81 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Anisse Astier <anisse@astier.eu>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Brandon,
-
-On Mon, 21 Nov 2022 14:16:38 -0600
-Brandon Maier <brandon.maier@collins.com> wrote:
-
-> Commit d07e6b70 (boot/uboot/uboot.mk: add pmufw.elf support) broke
-> configurations where the UBOOT_ZYNQMP_PMUFW was blank. Previously it
-> would set the U-Boot CONFIG_PMUFW_INIT_FILE to the blank string, but now
-> it will set it to ".bin" which causes U-Boot to fail to build.
-> 
-> To fix, disable all the pmufw code if the UBOOT_ZYNQMP_PMUFW is blank.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-
-You are right, this was missed during patch review. Thanks for
-reporting!
-
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 0439ec5e4b..b86248e1f7 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -383,6 +383,7 @@ endef
->  ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
->  
->  UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
-> +ifneq ($(UBOOT_ZYNQMP_PMUFW),)
->  
-
-I don't like an empty line after the ifneq unless we have one before
-_and_ one before the endif too. But this is minor, stylish nitpicking,
-see below for something a bit more interesting.
-
->  ifneq ($(findstring ://,$(UBOOT_ZYNQMP_PMUFW)),)
->  UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
-> @@ -398,6 +399,7 @@ define UBOOT_ZYNQMP_KCONFIG_PMUFW
->  		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
->  	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin")
->  endef
-> +endif # UBOOT_ZYNQMP_PMUFW
->  
->  UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
->  ifneq ($(UBOOT_ZYNQMP_PM_CFG),)
-
-This would be an effective fix for the known cases (empty string, .elf,
-.bin), but it would break again whenever Xilinx or anybody else invents
-another extension. Not likely maybe, but overall I would prefer a fix
-like (untested):
-
- define UBOOT_ZYNQMP_KCONFIG_PMUFW
-+       $(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
-         $(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
--                objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
-+                objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin
-+                $(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin")))
- endef
-
-The above reverts to always setting CONFIG_PMUFW_INIT_FILE to the
-unmodified value of UBOOT_ZYNQMP_PMUFW_PATH as we used to do before
-d07e6b70, then mangles it only in the special "*.elf" case.
-
-Would you mind testing that and sending a patch?
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGdvIHN0ZGxpYiAicGx1Z2luIuKAr3BhY2thZ2UgcmVsaWVzIG9uIGRsZmNuLmggd2hpY2gg
+aXNuJ3QgYXZhaWxhYmxlCndoZW4gd2UgaGF2ZSBCUjJfU1RBVElDX0xJQlM9eS4KClRoaXMgc2hv
+dWxkIGZpeCB0aGlzIGJ1aWxkIGVycm9yIGZyb20gYXV0b2J1aWxkZXJzOgoKL2J1aWxkcm9vdC9i
+dWlsZC9ob3N0LWdvLTEuMTkuMy9zcmMvcGx1Z2luL3BsdWdpbl9kbG9wZW4uZ286MTE6MTA6IGZh
+dGFsIGVycm9yOiBkbGZjbi5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5CiAgIDExIHwgI2lu
+Y2x1ZGUgPGRsZmNuLmg+CgpTaWduZWQtb2ZmLWJ5OiBBbmlzc2UgQXN0aWVyIDxhbmlzc2VAYXN0
+aWVyLmV1PgotLS0KIHBhY2thZ2UvZ28vQ29uZmlnLmluLmhvc3QgfCAxICsKIHBhY2thZ2UvZ28v
+Z28ubWsgICAgICAgICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwg
+MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ28vQ29uZmlnLmluLmhvc3QgYi9w
+YWNrYWdlL2dvL0NvbmZpZy5pbi5ob3N0CmluZGV4IGRlZDAyZDNiM2EuLjllNzlhN2RmZDUgMTAw
+NjQ0Ci0tLSBhL3BhY2thZ2UvZ28vQ29uZmlnLmluLmhvc3QKKysrIGIvcGFja2FnZS9nby9Db25m
+aWcuaW4uaG9zdApAQCAtMjMsNiArMjMsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfSE9TVF9HT19U
+QVJHRVRfQ0dPX0xJTktJTkdfU1VQUE9SVFMKIAkjIEdvIGRvZXNuJ3Qgc3VwcG9ydCBDR08gbGlu
+a2luZyBvbiBNSVBTNjR4IHBsYXRmb3JtcwogCSMgU2VlOiBodHRwczovL2dpdGh1Yi5jb20va2Fy
+YWxhYmUveGdvL2lzc3Vlcy80NgogCWRlcGVuZHMgb24gIUJSMl9taXBzNjQgJiYgIUJSMl9taXBz
+NjRlbAorCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUwogCiAjIEhvc3QgZ28gcGFja2FnZXMg
+c2hvdWxkIGRlcGVuZCBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPX0hPU1RfQVJDSF9TVVBQT1JUUwog
+Y29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfR09fSE9TVF9BUkNIX1NVUFBPUlRTCmRpZmYgLS1naXQg
+YS9wYWNrYWdlL2dvL2dvLm1rIGIvcGFja2FnZS9nby9nby5tawppbmRleCBmZDRjYWEyZTVhLi5k
+NTRiZThjZDc4IDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvL2dvLm1rCisrKyBiL3BhY2thZ2UvZ28v
+Z28ubWsKQEAgLTg3LDcgKzg3LDcgQEAgSE9TVF9HT19UQVJHRVRfRU5WID0gXAogIyBzZXQsIGJ1
+aWxkIGluIGNnbyBzdXBwb3J0IGZvciBhbnkgZ28gcHJvZ3JhbXMgdGhhdCBtYXkgbmVlZCBpdC4g
+IE5vdGUgdGhhdAogIyBhbnkgdGFyZ2V0IHBhY2thZ2UgbmVlZGluZyBjZ28gc3VwcG9ydCBtdXN0
+IGluY2x1ZGUKICMgJ2RlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUycgaW4gaXRz
+IGNvbmZpZyBmaWxlLgotaWZlcSAoJChCUjJfVE9PTENIQUlOX0hBU19USFJFQURTKSx5KQoraWZl
+cSAoJChCUjJfVE9PTENIQUlOX0hBU19USFJFQURTKTokKEJSMl9TVEFUSUNfTElCUykseTopCiBI
+T1NUX0dPX0NHT19FTkFCTEVEID0gMQogZWxzZQogSE9TVF9HT19DR09fRU5BQkxFRCA9IDAKLS0g
+CjIuMzguMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
