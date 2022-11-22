@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A711C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 139ACC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDF636115F;
-	Tue, 22 Nov 2022 21:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDF636115F
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB7C861168;
+	Tue, 22 Nov 2022 21:39:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB7C861168
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vVHOkkVAnF5k; Tue, 22 Nov 2022 21:38:41 +0000 (UTC)
+	with ESMTP id CAXbrXMSkOSr; Tue, 22 Nov 2022 21:39:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3154160FFE;
-	Tue, 22 Nov 2022 21:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3154160FFE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B25C51BF38C
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:38:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E78C16115F;
+	Tue, 22 Nov 2022 21:39:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E78C16115F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B3C11BF38C
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88D2D80F04
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88D2D80F04
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBF10418EE
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBF10418EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8bp1EPqFdDe for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E5D680E17
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E5D680E17
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B6FD8418E; Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 22:38:13 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ea76443a4bca1bcfa0390383870bc21327def6e5
-X-Git-Newrev: 10dbfdec2df187fe29ec3613e1bdc04e14322565
-X-Patchwork-Hint: ignore
-Message-Id: <20221122213837.8B6FD8418E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ssdp-responder: fix
- warnings from check-package and shellcheck
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id opraQcgwcDra for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 21:39:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C44AB4184C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C44AB4184C
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:39:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A717960005;
+ Tue, 22 Nov 2022 21:39:18 +0000 (UTC)
+Date: Tue, 22 Nov 2022 22:39:17 +0100
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <20221122223917.194d51d7@windsurf>
+In-Reply-To: <20221106181946.501548-1-troglobit@gmail.com>
+References: <20221105184455.GL3918838@scaer>
+ <20221106181946.501548-1-troglobit@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669153158;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AlqLwM4BF4m2hRCQ8FT8cpG6p7TOXV11X723LlhLB/M=;
+ b=H1oVzuyf2Y8iEuwh2pytZNYWdjhTjtu+TR4fO3DIs1gsxAmQvCO9m3YxEegnEksGyTRfxo
+ w3dLC8P+F6RmSYx0mmlhP/rHyGM4Vv5dvhQI4YcaSeTkFxmVI/Kq42mM72ALre3lQ9ek6H
+ q0BBy/Y5Dx9lLc5prt/tBB8Qg2HIQN5o/Gq3n+9jekER0nWKkbz4+VPk7IrfySLMGJGRZB
+ tP4Whi7zWJEQx3GjMwe2PfHkAz6alcxA8zP21vQRzEDSNU7iqisinvgdpQktj380eYzvaF
+ LwoYZ/oiniZuI0/dBUzfGELpCi8PrHq6+YUOYq0FFecSgkn5hY0qKClMWsnQHQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=H1oVzuyf
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/ssdp-responder: fix warnings
+ from check-package and shellcheck
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,107 +79,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10dbfdec2df187fe29ec3613e1bdc04e14322565
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun,  6 Nov 2022 19:19:46 +0100
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-Summary of changes:
+> Summary of changes:
+> 
+>  - Fix use of $DAEMON, found by check-package
+>    - Expects DAEMON to be name of daemon controlled by script, this
+>      causes ripple efects in rest of script
+>    - Recommend `chmod a-x`, .mk file installs with `-m 0755`
+>  - Fix shellcheck warnings:
+>    - Use "$VAR" in case of spaces in filenames
+>    - recommend not using $? in if stmt, should use `if start-stop ...`
+>    - mismatch in indentation in case-esac
+> 
+> Changes since v1:
+> 
+>  - Revert introduction of cmd() wrapper for start-stop-daemon, instead
+>    call start-stop-daemon directly in start() and stop() functions
 
- - Fix use of $DAEMON, found by check-package
-   - Expects DAEMON to be name of daemon controlled by script, this
-     causes ripple efects in rest of script
-   - Recommend `chmod a-x`, .mk file installs with `-m 0755`
- - Fix shellcheck warnings:
-   - Use "$VAR" in case of spaces in filenames
-   - recommend not using $? in if stmt, should use `if start-stop ...`
-   - mismatch in indentation in case-esac
+The changes between versions should be...
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ssdp-responder/S50ssdpd | 47 +++++++++++++++++++++++------------------
- 1 file changed, 27 insertions(+), 20 deletions(-)
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> ---
 
-diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
-old mode 100755
-new mode 100644
-index e33992be91..8654de4f26
---- a/package/ssdp-responder/S50ssdpd
-+++ b/package/ssdp-responder/S50ssdpd
-@@ -1,25 +1,32 @@
- #!/bin/sh
- 
--NAME=ssdpd
--PIDFILE=/var/run/$NAME.pid
--DAEMON=/usr/sbin/$NAME
--CFGFILE=/etc/default/$NAME
-+DAEMON=ssdpd
-+PIDFILE=/var/run/$DAEMON.pid
-+CFGFILE=/etc/default/$DAEMON
- 
- DAEMON_ARGS=""
- 
- # Read configuration variable file if it is present
--[ -f $CFGFILE ] && . $CFGFILE
-+# shellcheck source=/dev/null
-+[ -r "$CFGFILE" ] && . "$CFGFILE"
- 
-+# shellcheck disable=SC2086
- start() {
--	printf 'Starting %s: ' "$NAME"
--	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Starting %s: ' "$DAEMON"
-+	if start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
- }
- 
- stop() {
--	printf 'Stopping %s: ' "$NAME"
--	start-stop-daemon -K -q -p $PIDFILE -x $DAEMON
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Stopping %s: ' "$DAEMON"
-+	if start-stop-daemon -K -q -p "$PIDFILE" -x "$DAEMON"; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
- }
- 
- restart() {
-@@ -28,15 +35,15 @@ restart() {
- }
- 
- case "$1" in
--    start|stop|restart)
--	"$1"
--	;;
--    reload)
--	restart
--	;;
--    *)
--	echo "Usage: $0 {start|stop|restart|reload}"
--	exit 1
-+	start|stop|restart)
-+		"$1"
-+		;;
-+	reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
- 
- exit $?
+... here. So that they don't show up in the final commit log.
+
+Applied to next with this fixed. Thanks!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
