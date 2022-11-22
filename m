@@ -4,85 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DE4C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771C9C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F6EA40B78;
-	Tue, 22 Nov 2022 20:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F6EA40B78
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F06E40B83;
+	Tue, 22 Nov 2022 20:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F06E40B83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MzUb0sxKX03J; Tue, 22 Nov 2022 20:17:26 +0000 (UTC)
+	with ESMTP id CVjSFvnMWmhT; Tue, 22 Nov 2022 20:18:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B160403F8;
-	Tue, 22 Nov 2022 20:17:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B160403F8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A88C51BF285
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:17:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0173E40B5A;
+	Tue, 22 Nov 2022 20:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0173E40B5A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AAF51BF285
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8418981FB4
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8418981FB4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63BC360B73
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63BC360B73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o9xaJ4vQrR2V for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 20:17:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2AFA81FB1
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2AFA81FB1
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:17:23 +0000 (UTC)
-Received: from pps.filterd (m0075556.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
- 2AMKChHu045343; Tue, 22 Nov 2022 20:17:19 GMT
-Received: from xnwpv37.utc.com ([167.17.239.17])
- by mx0a-00105401.pphosted.com with ESMTP id 3m13me12jd-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 22 Nov 2022 20:17:18 +0000
-Received: from qusnwaff.utcapp.com (qusnwaff.utcapp.com [10.161.48.102])
- by xnwpv37.utc.com (8.16.1.2/8.16.1.2) with ESMTPS id 2AMKHHnb119859
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 22 Nov 2022 20:17:17 GMT
-Received: from crulimr01.rockwellcollins.com ([10.172.224.19])
- by qusnwaff.utcapp.com (8.16.1.2/8.16.1.2) with ESMTPS id 2AMKHGQG000390
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Tue, 22 Nov 2022 20:17:17 GMT
-X-Received: from kirk.rockwellcollins.lab (kirk.rockwellcollins.lab
- [10.148.204.208])
- by crulimr01.rockwellcollins.com (Postfix) with ESMTP id AF44C60689;
- Tue, 22 Nov 2022 14:17:16 -0600 (CST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a8BRsBQgHxWe for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 20:18:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EABBC60B2F
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EABBC60B2F
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:18:50 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 868151BF204;
+ Tue, 22 Nov 2022 20:18:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1oxZjB-000Cy8-4W; Tue, 22 Nov 2022 21:18:45 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 14:17:01 -0600
-Message-Id: <20221122201701.65681-1-brandon.maier@collins.com>
-X-Mailer: git-send-email 2.38.1
+Date: Tue, 22 Nov 2022 21:18:25 +0100
+Message-Id: <20221122201826.49696-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: 3bZR3WkizeLyjp4tqDbC9Aok4K_Pp0kH
-X-Proofpoint-GUID: 3bZR3WkizeLyjp4tqDbC9Aok4K_Pp0kH
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- suspectscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- bulkscore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211220157
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=POD051818; bh=298md210chVzFj04BwhCIzUtc1BMIzD9z4rXE90ngjY=;
- b=bgyYjeoTeOH0/IIEkmqAsITe1E/1sXiuLda/A7FmKISo0Po6CXPwyKikX1ndNWvFYIyU
- 5kKKcdSdcrB+3thIdx6pX9/4JfeaBzvHaXaXOKIakgqcugFYcpvod8mIytVH2fCcDOc1
- pHuJU32b2OXJwdeH616YmH0DZ9NlbIeqGWboiw5GSLQFdut227hYWNygLKz/RcV6DvRF
- HQMZYmlgw8NtRuOyodajjIn40pRnGPpoqTIcH8Y2YD6EK1Tg0z9SIntjGYINK0sau1Oc
- mOiLcedvzfReVxWIiVY44nuAsYR6gwkIB/mMcdnSKRPKpl2w7SPQ7PgfiB44lb5WhgvX TA== 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=bgyYjeoT
-Subject: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: fix zynqmp without
- pmufw
+Subject: [Buildroot] [PATCH] package/python3: add upstream security fix for
+ CVE-2022-45061
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +61,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Brandon Maier <brandon.maier@collins.com>, Neal Frager <neal.frager@amd.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit d07e6b70 (boot/uboot/uboot.mk: add pmufw.elf support) broke
-configurations where the UBOOT_ZYNQMP_PMUFW was blank. Previously it
-would set the U-Boot CONFIG_PMUFW_INIT_FILE to the blank string, but now
-it will set it to ".bin" which causes U-Boot to fail to build.
+Fixes the following security issue:
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
----
-v2:
-  - support pmufw with any extension
----
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+CVE-2022-45061: An issue was discovered in Python before 3.11.1.  An
+unnecessary quadratic algorithm exists in one path when processing some
+inputs to the IDNA (RFC 3490) decoder, such that a crafted, unreasonably
+long name being presented to the decoder could lead to a CPU denial of
+service.  Hostnames are often supplied by remote servers that could be
+controlled by a malicious actor; in such a scenario, they could trigger
+excessive CPU consumption on the client attempting to make use of an
+attacker-supplied supposed hostname.  For example, the attack payload could
+be placed in the Location header of an HTTP response with status code 302.
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 19e4183927..d037ae9c12 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -394,8 +394,9 @@ UBOOT_ZYNQMP_PMUFW_BASENAME = $(basename $(UBOOT_ZYNQMP_PMUFW_PATH))
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...x-quadratic-time-idna-decoding.-GH-9.patch | 86 +++++++++++++++++++
+ package/python3/python3.mk                    |  3 +
+ 2 files changed, 89 insertions(+)
+ create mode 100644 package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+
+diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+new file mode 100644
+index 0000000000..d281e7261d
+--- /dev/null
++++ b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+@@ -0,0 +1,86 @@
++From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 7 Nov 2022 19:23:16 -0800
++Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
++ (GH-99222)
++
++There was an unnecessary quadratic loop in idna decoding. This restores
++the behavior to linear.
++
++(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
++
++(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
++
++Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
++Co-authored-by: Gregory P. Smith <greg@krypto.org>
++[Peter: drop NEWS.d/*]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/encodings/idna.py                         | 32 +++++++++----------
++ Lib/test/test_codecs.py                       |  6 ++++
++ 2 files changed, 23 insertions(+), 17 deletions(-)
++
++diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
++index ea4058512f..bf98f51336 100644
++--- a/Lib/encodings/idna.py
+++++ b/Lib/encodings/idna.py
++@@ -39,23 +39,21 @@ def nameprep(label):
++ 
++     # Check bidi
++     RandAL = [stringprep.in_table_d1(x) for x in label]
++-    for c in RandAL:
++-        if c:
++-            # There is a RandAL char in the string. Must perform further
++-            # tests:
++-            # 1) The characters in section 5.8 MUST be prohibited.
++-            # This is table C.8, which was already checked
++-            # 2) If a string contains any RandALCat character, the string
++-            # MUST NOT contain any LCat character.
++-            if any(stringprep.in_table_d2(x) for x in label):
++-                raise UnicodeError("Violation of BIDI requirement 2")
++-
++-            # 3) If a string contains any RandALCat character, a
++-            # RandALCat character MUST be the first character of the
++-            # string, and a RandALCat character MUST be the last
++-            # character of the string.
++-            if not RandAL[0] or not RandAL[-1]:
++-                raise UnicodeError("Violation of BIDI requirement 3")
+++    if any(RandAL):
+++        # There is a RandAL char in the string. Must perform further
+++        # tests:
+++        # 1) The characters in section 5.8 MUST be prohibited.
+++        # This is table C.8, which was already checked
+++        # 2) If a string contains any RandALCat character, the string
+++        # MUST NOT contain any LCat character.
+++        if any(stringprep.in_table_d2(x) for x in label):
+++            raise UnicodeError("Violation of BIDI requirement 2")
+++        # 3) If a string contains any RandALCat character, a
+++        # RandALCat character MUST be the first character of the
+++        # string, and a RandALCat character MUST be the last
+++        # character of the string.
+++        if not RandAL[0] or not RandAL[-1]:
+++            raise UnicodeError("Violation of BIDI requirement 3")
++ 
++     return label
++ 
++diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
++index 8edd5ac063..2407567261 100644
++--- a/Lib/test/test_codecs.py
+++++ b/Lib/test/test_codecs.py
++@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
++         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
++         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
++ 
+++    def test_builtin_decode_length_limit(self):
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*1100).decode("idna")
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*70).decode("idna")
+++
++     def test_stream(self):
++         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
++         r.read(3)
++-- 
++2.30.2
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 4131941e11..2e17104102 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
- define UBOOT_ZYNQMP_KCONFIG_PMUFW
- 	$(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
--		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
--	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin")
-+		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin
-+		$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin"),
-+		$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)"))
- endef
++# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
++PYTHON3_IGNORE_CVES += CVE-2022-45061
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
  
- UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
 -- 
-2.38.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
