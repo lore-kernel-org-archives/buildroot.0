@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1948DC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A711C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99B278205D;
-	Tue, 22 Nov 2022 21:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99B278205D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HznK2GkRlVP6; Tue, 22 Nov 2022 21:35:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB95B81FD6;
-	Tue, 22 Nov 2022 21:35:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB95B81FD6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 905FB1BF38C
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:35:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7905461166
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7905461166
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDF636115F;
+	Tue, 22 Nov 2022 21:38:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDF636115F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4edsLJxkt5Yo for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 21:35:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7786460FFE
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7786460FFE
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:35:28 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6C67960006;
- Tue, 22 Nov 2022 21:35:26 +0000 (UTC)
-Date: Tue, 22 Nov 2022 22:35:25 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221122223525.3d833030@windsurf>
-In-Reply-To: <20221031174959.604094-1-james.hilliard1@gmail.com>
-References: <20221031174959.604094-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669152926;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=C7TH+bAsv5VGXBqxaGAUjnD9EIWNLRe0/kGrmjB+MEI=;
- b=DpXh+HXg/2CEhGTohcLHpUuSwhXCjKA8kxs2JKL/xwhJq00/9LVfOGUBFmJ7d7JDvoiGyY
- oZX2nsQID/Xo6xvCcPbd6nduvLOyf2tey5vaW64fpdpxUh7Y7ZFG2OcyXnWTeyiTfsXwQ9
- qnt0dYa60mQCwwXMk2/7EfzELuFXzDY0BFsS4VNwtOa1QmboARHgLWN6rfWh2552Fy4y+H
- HzJcl+Yh64/Dn0g2swt2jUrMXeWBG/a09Dkiw/JBVDalCL5i0Q8Qxz2OzA/Uc5VlAVoLLt
- 5xsEJBh5FA2V4TuzMlYaSvaIDBHfuY//MNaCKZPzYjCPJ1+s7KP9zr/WNZRTNQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DpXh+HXg
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/iwd: add dbus compile time
- dependency
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vVHOkkVAnF5k; Tue, 22 Nov 2022 21:38:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3154160FFE;
+	Tue, 22 Nov 2022 21:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3154160FFE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B25C51BF38C
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:38:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88D2D80F04
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88D2D80F04
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A8bp1EPqFdDe for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E5D680E17
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E5D680E17
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8B6FD8418E; Tue, 22 Nov 2022 21:38:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Nov 2022 22:38:13 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ea76443a4bca1bcfa0390383870bc21327def6e5
+X-Git-Newrev: 10dbfdec2df187fe29ec3613e1bdc04e14322565
+X-Patchwork-Hint: ignore
+Message-Id: <20221122213837.8B6FD8418E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ssdp-responder: fix
+ warnings from check-package and shellcheck
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,43 +58,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 31 Oct 2022 11:49:59 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=10dbfdec2df187fe29ec3613e1bdc04e14322565
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> In 5b3b2d80f4cf586d360ff696c3dacbd4cb48fdc4 we dropped dbus as a build
-> dependency, however we still need it when building with systemd so
-> that the service directory is available via pkg-config.
-> 
-> In addition we can drop --with-dbus-datadir by unconditionally
-> requiring dbus as the datadir will then be fetched from pkg-config.
-> 
-> Fixes:
-> checking D-Bus bus services directory... configure: error: D-Bus bus services directory is required
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v2 -> v3:
->   - always depend on dbus
-> Changes v1 -> v2:
->   - depend on dbus when depending on systemd
-> ---
->  package/iwd/iwd.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Summary of changes:
 
-Applied to master after adding a reference to the autobuilder failure.
-Thanks!
+ - Fix use of $DAEMON, found by check-package
+   - Expects DAEMON to be name of daemon controlled by script, this
+     causes ripple efects in rest of script
+   - Recommend `chmod a-x`, .mk file installs with `-m 0755`
+ - Fix shellcheck warnings:
+   - Use "$VAR" in case of spaces in filenames
+   - recommend not using $? in if stmt, should use `if start-stop ...`
+   - mismatch in indentation in case-esac
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ssdp-responder/S50ssdpd | 47 +++++++++++++++++++++++------------------
+ 1 file changed, 27 insertions(+), 20 deletions(-)
+
+diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
+old mode 100755
+new mode 100644
+index e33992be91..8654de4f26
+--- a/package/ssdp-responder/S50ssdpd
++++ b/package/ssdp-responder/S50ssdpd
+@@ -1,25 +1,32 @@
+ #!/bin/sh
+ 
+-NAME=ssdpd
+-PIDFILE=/var/run/$NAME.pid
+-DAEMON=/usr/sbin/$NAME
+-CFGFILE=/etc/default/$NAME
++DAEMON=ssdpd
++PIDFILE=/var/run/$DAEMON.pid
++CFGFILE=/etc/default/$DAEMON
+ 
+ DAEMON_ARGS=""
+ 
+ # Read configuration variable file if it is present
+-[ -f $CFGFILE ] && . $CFGFILE
++# shellcheck source=/dev/null
++[ -r "$CFGFILE" ] && . "$CFGFILE"
+ 
++# shellcheck disable=SC2086
+ start() {
+-	printf 'Starting %s: ' "$NAME"
+-	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Starting %s: ' "$DAEMON"
++	if start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ stop() {
+-	printf 'Stopping %s: ' "$NAME"
+-	start-stop-daemon -K -q -p $PIDFILE -x $DAEMON
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf 'Stopping %s: ' "$DAEMON"
++	if start-stop-daemon -K -q -p "$PIDFILE" -x "$DAEMON"; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ restart() {
+@@ -28,15 +35,15 @@ restart() {
+ }
+ 
+ case "$1" in
+-    start|stop|restart)
+-	"$1"
+-	;;
+-    reload)
+-	restart
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop|restart|reload}"
+-	exit 1
++	start|stop|restart)
++		"$1"
++		;;
++	reload)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+ 
+ exit $?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
