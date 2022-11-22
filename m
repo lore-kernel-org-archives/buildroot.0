@@ -4,70 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6A45C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80359C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8600481FF0;
-	Tue, 22 Nov 2022 20:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8600481FF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1008E82037;
+	Tue, 22 Nov 2022 20:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1008E82037
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AdbsMCZwCITH; Tue, 22 Nov 2022 20:47:20 +0000 (UTC)
+	with ESMTP id QetEY2f-ZK9t; Tue, 22 Nov 2022 20:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCC5981EF1;
-	Tue, 22 Nov 2022 20:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCC5981EF1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 34DEE1BF285
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:47:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3898D82034;
+	Tue, 22 Nov 2022 20:51:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3898D82034
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E20B41BF285
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECB9241903
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:47:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECB9241903
+ by smtp3.osuosl.org (Postfix) with ESMTP id C434C6114F
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:51:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C434C6114F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dDo4SI38LnCK for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 20:47:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 683AD41902
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 683AD41902
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:47:16 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 77D7F1BF205;
- Tue, 22 Nov 2022 20:47:14 +0000 (UTC)
-Date: Tue, 22 Nov 2022 21:47:13 +0100
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Message-ID: <20221122214713.1359fcac@windsurf>
-In-Reply-To: <20221122190743.2610e8e9@booty>
-References: <20221122053611.44757-1-neal.frager@amd.com>
- <20221122100124.3a441eb7@booty>
- <CH2PR12MB5004DF92B82E671197A06306F00D9@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20221122171315.7a749d61@windsurf> <20221122190743.2610e8e9@booty>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669150034;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=snL6reUDKUGH2/TcJ1ySRu4FtQMJBKZQKf0J7/sA6vc=;
- b=gocWGxTemHWw4VFZavzZqP9fUZyWwQoNzvsv2D5Oye7pl8LyQlq7weBvr8oMOLtrjprkiN
- 90ZB/XeCP+5pDV3OrKeQo7BbiumDKCHMZ+JcHY7XUO2toZzygfLjNt2aHWy0eEPJFTirpo
- 13BOO6pWguCIdm2YUEekLl3SihRvOGZQQ2icSAaMgmaVlZwcgUviw8GPst32sdmhKNyf5Q
- WQR6FAJ9z0IPbwAbKjzSU2J7oXbq+xX2KxYcev7QstSOEuYEZNto/gADmcWinrLPOwTFUn
- yfaFEryGDzImZJmDtcQjqA5GdJCuNfzDHgtskXH9S1V+8yqLz/XTeZ/fT5B1kg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gocWGxTe
-Subject: Re: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: add stripped
- u-boot.elf support
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zuC_9kOQqxyX for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 20:51:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E77061084
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E77061084
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 76E5F8416A; Tue, 22 Nov 2022 20:51:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Nov 2022 21:50:17 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 93d8b7137196278dd1903c4df9ab8751b36cdfd0
+X-Git-Newrev: e803752a7f2e55fae6cf7de86d46f4c699b5767b
+X-Patchwork-Hint: ignore
+Message-Id: <20221122205116.76E5F8416A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
+ to 3.85
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,36 +58,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Frager, Neal" <neal.frager@amd.com>, "Frager,
- Neal via buildroot" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Nov 2022 19:07:43 +0100
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e803752a7f2e55fae6cf7de86d46f4c699b5767b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> I agree with the principle you are proposing.
-> 
-> However, according to the U-Boot source code, u-boot.elf appears as
-> u-boot.bin repackaged into an ELF file. Is "stripped" a correct word
-> for this?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I used "stripped" because that's how Neal described this file.
-
-Based on what you say, perhaps a better option name is:
-
-BR2_TARGET_UBOOT_FORMAT_BIN_ELF
-	bool "u-boot.elf"
-
-Thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 2b34cc1a77..e3c27170e5 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_84_RTM/src/SHA256SUMS
+-sha256  9a387ffe350ff14f001d943f96cc0c064891551d71e1a97a5ddbffe7f1207a25  nss-3.84.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_85_RTM/src/SHA256SUMS
++sha256  afd9d64510b1154debbd6cab3571e9ff64a3373898e03483e4c85cdada13d297  nss-3.85.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 415ca900df..627bea7de8 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.84
++LIBNSS_VERSION = 3.85
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
