@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C131C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:56:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2960C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D866102D;
-	Tue, 22 Nov 2022 22:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2D866102D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56DAF4012F;
+	Tue, 22 Nov 2022 22:56:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56DAF4012F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rvjF3iUfeKkS; Tue, 22 Nov 2022 22:56:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id amLP7hzwOsoO; Tue, 22 Nov 2022 22:56:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11C5C61011;
-	Tue, 22 Nov 2022 22:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11C5C61011
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C35C40528;
+	Tue, 22 Nov 2022 22:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C35C40528
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 319471BF46D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:56:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A0D001BF46D
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AB484191F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67AC94190D
  for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:56:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AB484191F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67AC94190D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gpKJ58Jvz2FX for <buildroot@lists.busybox.net>;
+ with ESMTP id 9mS9SY9yPM2i for <buildroot@lists.busybox.net>;
  Tue, 22 Nov 2022 22:56:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07ABA4190D
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07ABA4190D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 702904191D
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:56:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 702904191D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7C2A84250; Tue, 22 Nov 2022 22:56:05 +0000 (UTC)
+ id 5D43F84250; Tue, 22 Nov 2022 22:56:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 23:53:26 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7464a54bd1c809b2f78b6da9240cd318252b49f8
-X-Git-Newrev: c2b0d606e54a1860a333f364340de6a3ef8b9f5d
+Date: Tue, 22 Nov 2022 23:54:21 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 472b17451c86deccc0dbbcde28a4923a139a56e5
+X-Git-Newrev: b41bb7ce25f57a25c24bc225904d624f68614ba3
 X-Patchwork-Hint: ignore
-Message-Id: <20221122225605.E7C2A84250@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rsync: fix
+Message-Id: <20221122225606.5D43F84250@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/rsync: fix
  configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2b0d606e54a1860a333f364340de6a3ef8b9f5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b41bb7ce25f57a25c24bc225904d624f68614ba3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 Rename configure options to avoid the following build failure raised
 since bump to version 3.2.5 in commit
