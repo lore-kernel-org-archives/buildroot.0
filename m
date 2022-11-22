@@ -4,48 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D35C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 07:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F60C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 09:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12FCD402E8;
-	Tue, 22 Nov 2022 07:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12FCD402E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5736740160;
+	Tue, 22 Nov 2022 09:01:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5736740160
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YsGyCU8hYYTW; Tue, 22 Nov 2022 07:39:39 +0000 (UTC)
+	with ESMTP id inEroJJEnF0j; Tue, 22 Nov 2022 09:01:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28D2E40439;
-	Tue, 22 Nov 2022 07:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28D2E40439
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BBF91BF31A
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 07:39:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79EBE4049E;
+	Tue, 22 Nov 2022 09:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79EBE4049E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C53A21BF30F
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 09:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB3DF81434
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 07:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB3DF81434
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB6CA416D2
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 09:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB6CA416D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zbF5KHTXIm4C for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 07:39:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF37B81432
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 07:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF37B81432
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B9F684155; Tue, 22 Nov 2022 07:39:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 08:38:49 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d036dc6ec873f50a24e73d8dbdafecb3b4098909
-X-Git-Newrev: 3f24e3abba631b29aa44db8a4447288b2ec371ae
-X-Patchwork-Hint: ignore
-Message-Id: <20221122073925.9B9F684155@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- support/testing/tests/fs/test_f2fs: fix test after f2fs-tools bump
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tnwiSBL13OY8 for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 09:01:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BAD4416C9
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1BAD4416C9
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 09:01:28 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F02F21C000A;
+ Tue, 22 Nov 2022 09:01:25 +0000 (UTC)
+Date: Tue, 22 Nov 2022 10:01:24 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221122100124.3a441eb7@booty>
+In-Reply-To: <20221122053611.44757-1-neal.frager@amd.com>
+References: <20221122053611.44757-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669107686;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TUHHGg7XHmXBRZMFQfBY5jrvc2rKUHcfc6RlIeMZ81k=;
+ b=h/LfOF0hG8xrQscxbca6koYw9z/TS66QM1EAkgnxFtjczEyWHkdTav5FYXkeZXhm02u03p
+ UsDlgRwxbUBWHpYTDf3l7M627qpzBX9qkKzsOZcrCFxy7gKW50dYT+q49pNML5+2DnfmSu
+ su/0cCj3jEMnbVZYlgzbmEUnkPDRmtne2ofzUhEzWEJ3Mp3me8RTn4nIX/lqyVhfYORsif
+ ZzVBAWNWQtyRri6NgNmdEIXfXavSu4np/htpbpLoZH9/xFDlvGq6zCPeqKKT+jUjnoiu/U
+ JjNSfgjjV8qlvE1ETmw4I97xZrcluoXvTySFGT49B1uV2wNm1yIIGzz/i9UGBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=h/LfOF0h
+Subject: Re: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: add stripped
+ u-boot.elf support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,92 +77,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f24e3abba631b29aa44db8a4447288b2ec371ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Hello Neal,
 
-In commit
-9267b0f14d3d5f4715bad444f44eae47d9d5627c ("package/f2fs-tools: bump to
-version 1.15.0"), f2fs-tools was bumped from 1.14.0 to 1.15.0.
+On Mon, 21 Nov 2022 22:36:11 -0700
+Neal Frager <neal.frager@amd.com> wrote:
 
-It turns out that this version bump causes the output of dump.f2fs to
-slightly change.
+> If a user requests a u-boot binary in elf format,
+> they may actually want the stripped u-boot.elf version.
+> This patch provides the stripped u-boot.elf binary.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+>   - reduced scope to only 64-bit ARM arch platforms
+>   - non-ARM platforms may not have a u-boot.elf by default
+> ---
+>  boot/uboot/uboot.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 0439ec5e4b..61b3074163 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -54,6 +54,9 @@ endif
+>  
+>  ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+>  UBOOT_BINS += u-boot
+> +ifeq ($(BR2_aarch64),y)
+> +UBOOT_BINS += u-boot.elf
+> +endif
 
-In version 1.14.0, it looked like this:
+Is it really assured that all arm64 do build this file? And that
+u-boot.elf is not useful for other architectures?
 
-Info: Segments per section = 1
-Info: Sections per zone = 1
-Info: sector size = 512
-Info: total sectors = 262144 (128 MB)
-Info: MKFS version
-  "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022"
-Info: FSCK version
-  from "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
-22"
-    to "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
-22"
-Info: superblock features = 0 :
-Info: superblock encrypt level = 0, salt = 00000000000000000000000000000000
-Info: total FS sectors = 262144 (128 MB)
-Info: CKPT version = 70c101c3
-Info: checkpoint state = 181 :  trimmed nat_bits unmount
+Looking at the U-Boot source code, it looks like this file is built if
+CONFIG_REMAKE_ELF is enabled, which seems independent on the
+architecture and happens for some non-arm64 defconfigs as well (e.g.
+netgear_dgnd3700v2_ram_defconfig).
 
-In version 1.15.0, it looked like this:
+At first glance, it looks like we need (yet) another Kconfig knob in
+Buildroot to manage this cleanly. Otherwise in
+UBOOT_INSTALL_IMAGES_CMDS we might just install u-boot.elf if it is
+present,skip it silently otherwise.
 
-Info: MKFS version
-  "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022"
-Info: FSCK version
-  from "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
-22"
-    to "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
-22"
-Info: superblock features = 0 :
-Info: superblock encrypt level = 0, salt = 00000000000000000000000000000000
-Info: Segments per section = 1
-Info: Sections per zone = 1
-Info: total FS sectors = 262144 (128 MB)
-Info: CKPT version = b89f8bb
-Info: checkpoint state = 181 :  trimmed nat_bits unmount
+Not sure which solution is less appealing. :(
 
-You will notice that the message "Info: total sectors = 262144 (128
-MB)" is no longer present, and only "Info: total FS sectors =
-262144 (128 MB)" is not present.
-
-Except our test case was precisely looking for this "Info: total
-sectors" string in the output, causing the test to fail.
-
-We fix this by simply matching on "Info: total FS sectors" now.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884634814
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0214ee94e072f0a0c57c63484e6d2b3f0157c5fb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/tests/fs/test_f2fs.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
-index 2d05a86418..425fbe31ca 100644
---- a/support/testing/tests/fs/test_f2fs.py
-+++ b/support/testing/tests/fs/test_f2fs.py
-@@ -30,7 +30,7 @@ class TestF2FS(infra.basetest.BRTest):
-         img = os.path.join(self.builddir, "images", "rootfs.f2fs")
-         out = infra.run_cmd_on_host(self.builddir, ["host/sbin/dump.f2fs", img])
-         out = out.splitlines()
--        prop = dumpf2fs_getprop(out, "Info: total sectors")
-+        prop = dumpf2fs_getprop(out, "Info: total FS sectors")
-         self.assertEqual(prop, "262144 (128 MB)")
- 
-         kernel = os.path.join(self.builddir, "images", "zImage")
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
