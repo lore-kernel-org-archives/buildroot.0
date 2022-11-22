@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12482C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1FEAC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B6848205B;
-	Tue, 22 Nov 2022 21:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B6848205B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46CC6404C1;
+	Tue, 22 Nov 2022 21:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46CC6404C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0sy6fJcDuUf7; Tue, 22 Nov 2022 21:50:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rMPk-NE8DB1B; Tue, 22 Nov 2022 21:51:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE99D82044;
-	Tue, 22 Nov 2022 21:50:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE99D82044
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C7BD31BF38C
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:50:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8064D40151;
+	Tue, 22 Nov 2022 21:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8064D40151
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 77EB41BF38C
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9484281FE7
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9484281FE7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 538AA40151
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 538AA40151
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RL-zRlfBlDti for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 21:50:16 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4316781FD6
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4316781FD6
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:50:16 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 424E5E0007;
- Tue, 22 Nov 2022 21:50:13 +0000 (UTC)
-Date: Tue, 22 Nov 2022 22:50:12 +0100
-To: Marek Metelski <marek.metelski@grinn-global.com>
-Message-ID: <20221122225012.18ef6ade@windsurf>
-In-Reply-To: <20221107091658.25974-1-marek.metelski@grinn-global.com>
-References: <20221107091658.25974-1-marek.metelski@grinn-global.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669153813;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4ShvPZtGwOyL1KYTFBCtnO5CNZrqwrI4rdQLJ3bPGBc=;
- b=m/U/PUiPXXAX28EvutwKjpmnx6H6+aPEddLyI7SjxSwJFuLsDgXIUn4PVfdNhr1aBhI8xE
- D9yv6kPYp98lgVParYTo7AsQrLnNwjwMlv8AE358CGg25FTV5FC+7lh+wUk+cxJX+KZxJW
- IHe3rRfLPz8XdJI/Use2t+QpFhFhn2JyKtMbFpLE/kHmlQX25WjlFvnhDLjwUfYfx/2sm7
- PP3jg/frxgUHHA2AdtRAIJYCObB5+TdQsc3PgKNsk3+N2bAp91diw15KtMz9qVeTXzGMTj
- 8+S9tAYcp76GiB3s32UM9WEMxbY30GXLod4MufHvLlZGwWCGUJpJU2W8djTKMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=m/U/PUiP
-Subject: Re: [Buildroot] [PATCH 1/1] package/gitlab-runner: fix
- inconsistency of systemd and sysv daemons
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cpE6HSlBUl4g for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 21:51:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 869EF4012F
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 869EF4012F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 74AF5841BD; Tue, 22 Nov 2022 21:51:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Nov 2022 22:50:29 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 10dbfdec2df187fe29ec3613e1bdc04e14322565
+X-Git-Newrev: 4187b38f270cf170334b15b595b88136102eb20b
+X-Patchwork-Hint: ignore
+Message-Id: <20221122215132.74AF5841BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
+ version to 2.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +58,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  7 Nov 2022 10:16:58 +0100
-Marek Metelski <marek.metelski@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4187b38f270cf170334b15b595b88136102eb20b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Copy default $DEAMON_ARGS from systemd service to sysv init script.
-> 
-> Make GITLAB_RUNNER_USER home directory the same as default
-> --work-directory (-d) flag.
-> 
-> Run sysv daemon process using root user (remove -c option)
-> This is needed to correctly access config files as specified.
-> System access can still be limited with gitlab-runner `--user` flag.
-> 
-> Use same $DAEMON_ARGS variable name so it can be overwritten in
-> /etc/default/gitlab-runner environment file in both cases.
-> 
-> Signed-off-by: Marek Metelski <marek.metelski@grinn-global.com>
-> ---
->  package/gitlab-runner/S95gitlab-runner | 6 +++---
->  package/gitlab-runner/gitlab-runner.mk | 3 +--
->  2 files changed, 4 insertions(+), 5 deletions(-)
+Release notes: https://github.com/timescale/timescaledb/releases/tag/2.8.1
 
-Applied to master, thanks.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 8b43d92219..f546b17d0a 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a3403447805bb97f8b6f38dfdc9dde24c24e4389cf7f2348358774605ad2687e  timescaledb-2.8.0.tar.gz
++sha256  22a057c4472d23bf08778932e391f38f350ef0307cf99fb8e279c8245667d3e9  timescaledb-2.8.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 12e5ca7af4..659d07bd0c 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.8.0
++TIMESCALEDB_VERSION = 2.8.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
