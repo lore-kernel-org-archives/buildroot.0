@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E104EC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CF00C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:15:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8413D81E40;
-	Mon,  5 Dec 2022 12:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8413D81E40
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE7F280BA9;
+	Mon,  5 Dec 2022 12:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE7F280BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id clUtoGZ7F1hD; Mon,  5 Dec 2022 12:15:05 +0000 (UTC)
+	with ESMTP id 1uadRWTVcNiK; Mon,  5 Dec 2022 12:15:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B008881E02;
-	Mon,  5 Dec 2022 12:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B008881E02
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F74881E38;
+	Mon,  5 Dec 2022 12:15:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F74881E38
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0AEDC1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17B2C1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD1A540616
+ by smtp2.osuosl.org (Postfix) with ESMTP id E00EB408F3
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD1A540616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E00EB408F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BV70n3Naj3Kq for <buildroot@lists.busybox.net>;
+ with ESMTP id ybluLf8t3EKu for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D459D40613
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98F5A40569
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D459D40613
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F5A40569
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D170285B9E; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
+ id 9128C85BA2; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 09:23:00 +0100
+Date: Tue, 22 Nov 2022 22:50:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5ebfbdbdfc370cd7ef5b0fcc6c8640f1ee23eb6
-X-Git-Newrev: ccf1ee9789b74ff9bd4f0c196eeabbb2e4e5b0d2
+X-Git-Oldrev: 10dbfdec2df187fe29ec3613e1bdc04e14322565
+X-Git-Newrev: 4187b38f270cf170334b15b595b88136102eb20b
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112610.D170285B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sscep: fix empty line at end of
- Config.in
+Message-Id: <20221205112610.9128C85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccf1ee9789b74ff9bd4f0c196eeabbb2e4e5b0d2
+commit: https://git.buildroot.net/buildroot/commit/?id=4187b38f270cf170334b15b595b88136102eb20b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes check-package warning:
+Release notes: https://github.com/timescale/timescaledb/releases/tag/2.8.1
 
-package/sscep/Config.in:9: empty line at end of file
-
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sscep/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sscep/Config.in b/package/sscep/Config.in
-index 8907578062..4b9039c9b2 100644
---- a/package/sscep/Config.in
-+++ b/package/sscep/Config.in
-@@ -6,4 +6,3 @@ config BR2_PACKAGE_SSCEP
- 	  (Cisco System's Simple Certificate Enrollment Protocol).
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 8b43d92219..f546b17d0a 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a3403447805bb97f8b6f38dfdc9dde24c24e4389cf7f2348358774605ad2687e  timescaledb-2.8.0.tar.gz
++sha256  22a057c4472d23bf08778932e391f38f350ef0307cf99fb8e279c8245667d3e9  timescaledb-2.8.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 12e5ca7af4..659d07bd0c 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/certnanny/sscep
--
+-TIMESCALEDB_VERSION = 2.8.0
++TIMESCALEDB_VERSION = 2.8.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
