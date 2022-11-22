@@ -4,136 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97FDEC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 05:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81D08C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 06:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13C7381F04;
-	Tue, 22 Nov 2022 05:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13C7381F04
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2416F81F30;
+	Tue, 22 Nov 2022 06:36:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2416F81F30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1rLt4_v-cgxk; Tue, 22 Nov 2022 05:55:45 +0000 (UTC)
+	with ESMTP id aWB71_sv56xR; Tue, 22 Nov 2022 06:36:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37C3681EF8;
-	Tue, 22 Nov 2022 05:55:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C3681EF8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FB661BF33B
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 05:55:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 432D181F24;
+	Tue, 22 Nov 2022 06:36:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 432D181F24
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E433F1BF333
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 06:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 375954151E
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 05:55:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 375954151E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5B1A60FC0
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 06:36:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B1A60FC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D1sBFd2ubSJN for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 05:55:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g1NEwDy1RWTL for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 06:36:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27CCC414C8
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11on20601.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7eae::601])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27CCC414C8
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 05:55:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YwonbuM36Uxh0pXTrv4pBNf6ippNvJFUbQ8zrY1be3d/6zGoQAmWEtnky3vS+ZRmz7VJJXT1AjbILY6nd8LHFEFSfisrLO7cW64HqBQO9zjHq0cJjF9l6k1hjfgBGDrz3bP8Ugzcpxm4GV7eXIMb0F0f/0WQeUG9ogIjXWAgu58laiWTNQLrfyFHJIl6Kq4h6dcbJtQ8LUGQYM3xHM2cEPhkYqoyjXqqEuHgF7qvw0SwQMEhY9C/XW/MRZP+vNaQsidvePyxU3FLW6hEVhVTmSm42rT/QaPCLnIOc4L22cSpfV2FSE086Et8xrWpHE42HO2ZLQbnWC9334MIzZ7rrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HD5m3p3OpYu1YjFdbMlpYOBIYK+Tp8KoRQkPmRVTJGE=;
- b=RYDWB0perJEq6VQ+Gj/eXEwqGC7JOhpmJg23ruYfyXuBchjbaYbunxMSwxr1chNQT1uZQwDWOUBEPTFvGfm97waB4/VtIia5h13wW8w2HXNSzApaoMEGOSHnyXU0r1oBxB4zGadxtgolYkplG+iXyzkYzufaLDJXnnGnsA+mpXvImUAyYfLetoAaQUP5GPTzIazXdQfWLzqlB8Z125mAcdQQfCXUbmwJAYRFksCERepkEir12RBSkVQgI3GaXMZ7yA9Z06qoc3/IsfVS7v9XDlDjMM84jtQP3FU/dxUHCbCtTweBTAXLHzHD4rSdIMtGuyZH8+r18NMFdA5wgJjHFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by BY5PR12MB4194.namprd12.prod.outlook.com (2603:10b6:a03:210::7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Tue, 22 Nov
- 2022 05:55:36 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::1a65:97e7:c0ee:f986]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::1a65:97e7:c0ee:f986%5]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 05:55:36 +0000
-Content-Type: multipart/mixed;
- boundary="_000_CH2PR12MB500432E6EA26B34FF8AC86E4F00D9CH2PR12MB5004namp_"
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Brandon Maier
- <brandon.maier@collins.com>
-Thread-Topic: [PATCH 1/1] boot/uboot/uboot.mk: fix zynqmp without pmufw
-Thread-Index: AQHY/eY7uhcfbzX2Tk6oN9lt2MWBAa5J8ToAgAB/LXA=
-Date: Tue, 22 Nov 2022 05:55:36 +0000
-Message-ID: <CH2PR12MB500432E6EA26B34FF8AC86E4F00D9@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20221121201638.30951-1-brandon.maier@collins.com>
- <20221121231342.50bafc4a@booty>
-In-Reply-To: <20221121231342.50bafc4a@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: <CH2PR12MB500432E6EA26B34FF8AC86E4F00D9@CH2PR12MB5004.namprd12.prod.outlook.com>
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|BY5PR12MB4194:EE_
-x-ms-office365-filtering-correlation-id: 8697cbb5-873f-4194-afca-08dacc4e2d2f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4QuqhypACx/dBMYKjjtcBXyLjriEQelgm9BuZ43HqRiXvB7meVpy+gb374HoQICwE3kMfJQiNlGQV1Hc+7ccen3lUgf863rEPMy2P0a/LDR53j8l6AR30w+zvAe055ZlyyUTwjBSPNLTe2DfHV3IkA4G307BRP+b9Yu9rz1g5StDhuRGoMLickpF3pBLkWbvjD674jUcHia7Whu8QISC3YNFzWPDBtXtHQsp2mLCf4UlHiRSIDGmI0bDHpQd3thS1Er+EaOp3L+XnFUZaZFwg7cMRRM3IvnAXR5d5JjwQ+c4qJY7foIA3Qfd3BMAWcw18u4V43J3/pirkIcrBYPneCQ8R/4dfzsdrpGY8UfnkfD1TZiGtdjhJ5ux/jPRgew6baQgRHJ6nc4JVgEbkVR6JoTRoM87CXxArztFBXs+LHLmKW1coYsHpky6lWZqKUN7eGMSM9m2zzUDpm1ECL+Skvk+vTOd5pqqAI1j5mrXav3JBf2we6rXb+yntCLX+wku5fmiC099dVIZJdAIo8j2+ChdnQ8njZE8oTkgFK3JA66o9ka+bXGNRBsMfVVmIP9FUD7FgkJL87YUVq4qVjgG161DcUHR1UdjFWrpeOy1ppLLDJO42H5x87Jy3/H2sRSnWX79fNpsflclxXZnLhVVnW819aEWuk6our2riw5NE2bjKDLVxFXmkZ1M7NxNPGhntDf11K++wgtcKROkbfy67g==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(136003)(366004)(39860400002)(346002)(376002)(396003)(451199015)(2906002)(66899015)(66476007)(64756008)(66946007)(76116006)(66556008)(41300700001)(66446008)(86362001)(33656002)(55016003)(38070700005)(110136005)(54906003)(7696005)(122000001)(4326008)(6506007)(38100700002)(5660300002)(71200400001)(8676002)(8936002)(52536014)(26005)(478600001)(186003)(316002)(9686003)(83380400001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YRd8GfZdbD5ltRbtcXYYTCuAO0bl28ECrxluvGx0AlZO+wnt4GdRYewX9hDp?=
- =?us-ascii?Q?LB2mhxtqN6EsItzhxFbeCr5v9HIXCXFG2J1IWAG4PCmac/MMgo7pcqr+5pXF?=
- =?us-ascii?Q?PrY4aXNg0uoLnnUtsaXl4DWbIAffYiRvA4LzVH7u12bQD9WTr0EyxVcL9vEj?=
- =?us-ascii?Q?DGNcEPeGtVcne7kwE6krAhBJEKNmSHoAV3paVienjCIzPo+cE7UDttDsvvP2?=
- =?us-ascii?Q?/todCbc9srwbFHV9zgDB4BNRow1QaKInUh/271VpAe+dNGazHikhYi1QpwYJ?=
- =?us-ascii?Q?/sNXNwdI1GSmuNof05k38tYXJGh/m2VLZqvfTLCOYygzQFNMdO34U/ovskY+?=
- =?us-ascii?Q?cbD4SKqaPzHO+z4V+388evzoUZ1J8j/bv3WVlVHCyGyrzsxcypdeLvzAShEt?=
- =?us-ascii?Q?jakp/az4HjjNUGzdo2XGp4fDOQ/0Pd2W2RLKunkxGdarq//ep/WUycdQGT0A?=
- =?us-ascii?Q?vd5eDWcP6RrHocY0BzJdDh/sPYWrhK0ywcqXwwLBiCUhVO2H1kbFSt9NnDMc?=
- =?us-ascii?Q?gYVkYUnPAPjxYxvqvdbAU7nv/NeuM3fz0T8PuBmFGkxoFXSqOqsaFvmuoPMU?=
- =?us-ascii?Q?McoPpzmuGOLI0QZ9LGroS8301620TDZtQj7iqBSJ6Wv8fK9Zkmmsd/1saXA0?=
- =?us-ascii?Q?diGSGPc0NAfiPZ2BwQtX461QSVn+OZP/0dqe51nXyc6k+CfTHPiZKyztKBml?=
- =?us-ascii?Q?ptboW+tUrT4Bdd7HeKsL3Qe/MDe8mELlX+L7n6NLPYQ+14cJlE4bXGKyZn9I?=
- =?us-ascii?Q?aWupa80oIEniKd/r+BXPy2E7JhJeek4+6TKDZkH0TqXaYfPp2mOBGyAC8nEl?=
- =?us-ascii?Q?ByIAbwa2/vlGCCaGxGSgMy0eqvz8T0boNwxBuaWGNyNwQC7Nt1rYTSBBmSxX?=
- =?us-ascii?Q?exeotVlmZQkXRk7a2Xxs+rr6sTtpvqwUUlmxu766MSaAlr/d+hs+Mi+lM740?=
- =?us-ascii?Q?0QG/Mwy8SUifLrlWn1U6AgdDrGtoyF5FsaW/Fv2+9LjBqhwqgVbWGfcuW6nC?=
- =?us-ascii?Q?uOZWeJxGkd5QSLXZN1gEPAD/Qi5qITip+/mtgNJrF7ovplSysqXW8+QhIgS+?=
- =?us-ascii?Q?4uAcWBxxGRF6HaAch1FpDeLmh8x7PwDBDIM2rDA3zUNVgv4mOiul3GEbmNNj?=
- =?us-ascii?Q?6n40YN766r+b+38jctemqvkSReMNbJds63CqdysWuQtxMWS/cMTaKsEPZQBw?=
- =?us-ascii?Q?4XltmTjJ0L3wW2ebcHnbIK+7WC88I1Q/XoRKOWM4OKKY7J/9Yd8ru8Lt3GIj?=
- =?us-ascii?Q?HKP98rrZkjTVIrP/XJeGsEE2Ql/QatEk5KDsMuNArzcZ92o9z1SJOAfPPSHj?=
- =?us-ascii?Q?I8GOtxQY1gtaFCBgh0wbTgmbsauRzl/iyPfMi8hWxltPd2DnBUjOwTFDXqRL?=
- =?us-ascii?Q?22U1F8WZJwbdw/txELZQ8J1VW27Nd1cQ3/vFAeBAuDGgDKatR2AQB/ytwAIl?=
- =?us-ascii?Q?e88cHeM0xYyaJzPjCnLBI3xBMYj0dQ9vDS4ojmiwgDuEdfJJyw0+76O3e+WL?=
- =?us-ascii?Q?K11V9QJYPscz7gY53Jn1WamP+e+/1wy5me0nG8cyTMwuj4c6VWeWbOMyfK/w?=
- =?us-ascii?Q?5ZntnBdm77s1gruHOvk=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93D7A60FB5
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 93D7A60FB5
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 06:36:51 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id vv4so24242751ejc.2
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 22:36:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Vu77RaefAw3WoNAxKrsbWSbqMvIPjrjytVlscQQPe74=;
+ b=dtC+05hWj6p0fz4ZF/BLDWTgwZIePMClYAl1wrrZ9XH4FQUOkJmyAxgqSvUoU/nAyL
+ /Jx5cMKaQuPi8fRt5v3PfcVNouSdTXaGy8JiH0VUaboYf4oiqZAi+3Ez4CkOp8GfSC1e
+ mHReOOIBVNAoIsRxf9SmdS0OD/3xVmYPSd60lblqaDONr0WpNkULANchbQIFKfnTGB9L
+ ezYXsHHLhUacEFGz+AEFwzpbiM4yBRqwkI8ZnHa1BLSIGn917K7//r3CYojfKj629i2N
+ YXbHstfSfHcTU3nrf+DNNjJ1F7ULKeRQfIpd1CBrVUJq5lH1aqq5e36xKj6URWkbXf+e
+ b/lQ==
+X-Gm-Message-State: ANoB5pmlAmRaMSqinAlPCjWfTl3okS78z++vAgXx10Hhu7/d2OQ7Bc87
+ s2jT5RS1nLtAJsn5BdR2v39p1XSlWNWAKh2P
+X-Google-Smtp-Source: AA0mqf5kUm36JFKbtNsJPHJ9m9bc8xO4k92s0gF77/jo391Qh4IibwuYRp7X/vmQ6iumBzPef/m+dg==
+X-Received: by 2002:a17:906:198d:b0:7a5:f8a5:6f84 with SMTP id
+ g13-20020a170906198d00b007a5f8a56f84mr1889264ejd.569.1669099009472; 
+ Mon, 21 Nov 2022 22:36:49 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com.
+ [209.85.208.48]) by smtp.gmail.com with ESMTPSA id
+ kw10-20020a170907770a00b0078d4ee47c82sm5720261ejc.129.2022.11.21.22.36.48
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 21 Nov 2022 22:36:49 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id b8so8470737edf.11
+ for <buildroot@buildroot.org>; Mon, 21 Nov 2022 22:36:48 -0800 (PST)
+X-Received: by 2002:a50:aa8f:0:b0:469:c5cc:855e with SMTP id
+ q15-20020a50aa8f000000b00469c5cc855emr5034418edc.307.1669099008496; Mon, 21
+ Nov 2022 22:36:48 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8697cbb5-873f-4194-afca-08dacc4e2d2f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 05:55:36.3649 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ni/UcT1neCV1FOEwRPpq1aghXwHFh48ywuibPtCCQImQj4JQ6tZxeT0LIJPjBlc1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4194
+References: <20221121224955.951056-1-anisse@astier.eu>
+In-Reply-To: <20221121224955.951056-1-anisse@astier.eu>
+Date: Mon, 21 Nov 2022 22:36:38 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2okD2ipf1yfS7rUbWLYQZ5+Cz-wJvwL+=3gpvQY3LRQeA@mail.gmail.com>
+Message-ID: <CA+h8R2okD2ipf1yfS7rUbWLYQZ5+Cz-wJvwL+=3gpvQY3LRQeA@mail.gmail.com>
+To: Anisse Astier <anisse@astier.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HD5m3p3OpYu1YjFdbMlpYOBIYK+Tp8KoRQkPmRVTJGE=;
- b=wwUwdKf6woqFA7xLBqm32gcqTccCe8lNaBb0yDhb2PSh41apK0HnyOFsIL8vaHw7iJgdCLPBlLl53dMgmzXO86HnGC3b22jU4UIDuHvvLVy4RxSoqsSlh5VBP/NDRMAQTWu9rduwBQTgXyiIVyqL9Oy9N2tIAeD2mEsi1KdnpGo=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=wwUwdKf6
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot/uboot.mk: fix zynqmp without
- pmufw
+ d=paral.in; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=Vu77RaefAw3WoNAxKrsbWSbqMvIPjrjytVlscQQPe74=;
+ b=ZhrQFSqTmShMp8WMu1atgqN7IpyEuKosjuLjYpbSeopNOFnDhysZ4gdPEBzDLvYhxP
+ QIKJuDxWMBt+1KaVXVOtHJKg1W87Dw/wOo7DwJOPJap/Dqij2qG8mfsxrLdM+vQV83bh
+ D2Jbe8NbY/1V80nRgF6bFt23V+rzIChJRfjB7xZUCBjlIknqo1U+zFTCfqWoIf9JmdXq
+ D4GQKHqZ7hUPR+35d2U/N1OqUVDps69bBrpBoY0j/FmwwXZof96BqcVdabFPRexoe4uD
+ CB9rYWtE36p1TumvWYOmHeNvDVKWAvXSSGZpCEX2AUU9KwoDDiguKa28UCmTZGGsMROI
+ yYJA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=ZhrQFSqT
+Subject: Re: [Buildroot] [PATCH v2] package/go: disable cgo support with
+ static libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,366 +101,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4706970446772166567=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---_000_CH2PR12MB500432E6EA26B34FF8AC86E4F00D9CH2PR12MB5004namp_
-Content-Type: text/plain; charset="us-ascii"
+--===============4706970446772166567==
+Content-Type: multipart/alternative; boundary="0000000000007f26c305ee096503"
+
+--0000000000007f26c305ee096503
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Brandon,
+Reviewed-by: Christian Stewart <christian@paral.in>
 
-> Commit d07e6b70 (boot/uboot/uboot.mk: add pmufw.elf support) broke=20
-> configurations where the UBOOT_ZYNQMP_PMUFW was blank. Previously it=20
-> would set the U-Boot CONFIG_PMUFW_INIT_FILE to the blank string, but=20
-> now it will set it to ".bin" which causes U-Boot to fail to build.
->=20
-> To fix, disable all the pmufw code if the UBOOT_ZYNQMP_PMUFW is blank.
->=20
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Thanks!
 
-> You are right, this was missed during patch review. Thanks for reporting!
 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk index=20
-> 0439ec5e4b..b86248e1f7 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -383,6 +383,7 @@ endef
->  ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
-> =20
->  UBOOT_ZYNQMP_PMUFW =3D $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
-> +ifneq ($(UBOOT_ZYNQMP_PMUFW),)
-> =20
+On Mon, Nov 21, 2022, 2:50 PM Anisse Astier <anisse@astier.eu> wrote:
 
-> I don't like an empty line after the ifneq unless we have one before _and=
-_ one before the endif too. But this is minor, stylish nitpicking, see belo=
-w for something a bit more interesting.
+> The go stdlib "plugin"=E2=80=AFpackage relies on dlfcn.h which isn't avai=
+lable
+> when we have BR2_STATIC_LIBS=3Dy.
+>
+> This should fix this build error from autobuilders:
+>
+> /buildroot/build/host-go-1.19.3/src/plugin/plugin_dlopen.go:11:10: fatal
+> error: dlfcn.h: No such file or directory
+>    11 | #include <dlfcn.h>
+>
+> Signed-off-by: Anisse Astier <anisse@astier.eu>
+> ---
+>  package/go/Config.in.host | 1 +
+>  package/go/go.mk          | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+> index ded02d3b3a..9e79a7dfd5 100644
+> --- a/package/go/Config.in.host
+> +++ b/package/go/Config.in.host
+> @@ -23,6 +23,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>         # Go doesn't support CGO linking on MIPS64x platforms
+>         # See: https://github.com/karalabe/xgo/issues/46
+>         depends on !BR2_mips64 && !BR2_mips64el
+> +       depends on !BR2_STATIC_LIBS
+>
+>  # Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPOR=
+TS
+>  config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index fd4caa2e5a..d54be8cd78 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -87,7 +87,7 @@ HOST_GO_TARGET_ENV =3D \
+>  # set, build in cgo support for any go programs that may need it.  Note
+> that
+>  # any target package needing cgo support must include
+>  # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
+> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
+>  HOST_GO_CGO_ENABLED =3D 1
+>  else
+>  HOST_GO_CGO_ENABLED =3D 0
+> --
+> 2.38.1
+>
+>
 
->  ifneq ($(findstring ://,$(UBOOT_ZYNQMP_PMUFW)),) =20
-> UBOOT_EXTRA_DOWNLOADS +=3D $(UBOOT_ZYNQMP_PMUFW) @@ -398,6 +399,7 @@=20
-> define UBOOT_ZYNQMP_KCONFIG_PMUFW
->  		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $=
-(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
->  	$(call=20
-> KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME)
-> .bin")
->  endef
-> +endif # UBOOT_ZYNQMP_PMUFW
-> =20
->  UBOOT_ZYNQMP_PM_CFG =3D $(call=20
-> qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
->  ifneq ($(UBOOT_ZYNQMP_PM_CFG),)
+--0000000000007f26c305ee096503
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> This would be an effective fix for the known cases (empty string, .elf, .=
-bin), but it would break again whenever Xilinx or anybody else invents anot=
-her extension. Not likely maybe, but overall I would prefer a fix like (unt=
-ested):
+<div dir=3D"auto"><div>Reviewed-by: Christian Stewart &lt;<a href=3D"mailto=
+:christian@paral.in">christian@paral.in</a>&gt;<div dir=3D"auto"><br></div>=
+<div dir=3D"auto">Thanks!</div><br><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Mon, Nov 21, 2022, 2:50 PM Anisse Astier &=
+lt;<a href=3D"mailto:anisse@astier.eu">anisse@astier.eu</a>&gt; wrote:<br><=
+/div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-le=
+ft:1px #ccc solid;padding-left:1ex">The go stdlib &quot;plugin&quot;=E2=80=
+=AFpackage relies on dlfcn.h which isn&#39;t available<br>
+when we have BR2_STATIC_LIBS=3Dy.<br>
+<br>
+This should fix this build error from autobuilders:<br>
+<br>
+/buildroot/build/host-go-1.19.3/src/plugin/plugin_dlopen.go:11:10: fatal er=
+ror: dlfcn.h: No such file or directory<br>
+=C2=A0 =C2=A011 | #include &lt;dlfcn.h&gt;<br>
+<br>
+Signed-off-by: Anisse Astier &lt;<a href=3D"mailto:anisse@astier.eu" target=
+=3D"_blank" rel=3D"noreferrer">anisse@astier.eu</a>&gt;<br>
+---<br>
+=C2=A0package/go/Config.in.host | 1 +<br>
+=C2=A0package/go/<a href=3D"http://go.mk" rel=3D"noreferrer noreferrer" tar=
+get=3D"_blank">go.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 2 +-<br>
+=C2=A02 files changed, 2 insertions(+), 1 deletion(-)<br>
+<br>
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host<br>
+index ded02d3b3a..9e79a7dfd5 100644<br>
+--- a/package/go/Config.in.host<br>
++++ b/package/go/Config.in.host<br>
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS<br=
+>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # Go doesn&#39;t support CGO linking on MIPS64x=
+ platforms<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # See: <a href=3D"https://github.com/karalabe/x=
+go/issues/46" rel=3D"noreferrer noreferrer" target=3D"_blank">https://githu=
+b.com/karalabe/xgo/issues/46</a><br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on !BR2_mips64 &amp;&amp; !BR2_mips64el=
+<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS<br>
+<br>
+=C2=A0# Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUP=
+PORTS<br>
+=C2=A0config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS<br>
+diff --git a/package/go/<a href=3D"http://go.mk" rel=3D"noreferrer noreferr=
+er" target=3D"_blank">go.mk</a> b/package/go/<a href=3D"http://go.mk" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">go.mk</a><br>
+index fd4caa2e5a..d54be8cd78 100644<br>
+--- a/package/go/<a href=3D"http://go.mk" rel=3D"noreferrer noreferrer" tar=
+get=3D"_blank">go.mk</a><br>
++++ b/package/go/<a href=3D"http://go.mk" rel=3D"noreferrer noreferrer" tar=
+get=3D"_blank">go.mk</a><br>
+@@ -87,7 +87,7 @@ HOST_GO_TARGET_ENV =3D \<br>
+=C2=A0# set, build in cgo support for any go programs that may need it.=C2=
+=A0 Note that<br>
+=C2=A0# any target package needing cgo support must include<br>
+=C2=A0# &#39;depends on BR2_TOOLCHAIN_HAS_THREADS&#39; in its config file.<=
+br>
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)<br>
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)<br>
+=C2=A0HOST_GO_CGO_ENABLED =3D 1<br>
+=C2=A0else<br>
+=C2=A0HOST_GO_CGO_ENABLED =3D 0<br>
+-- <br>
+2.38.1<br>
+<br>
+</blockquote></div></div></div>
 
->  define UBOOT_ZYNQMP_KCONFIG_PMUFW
-> +       $(call=20
-> + KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
->         $(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
-> -                objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_B=
-ASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
-> +                objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_B=
-ASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin
-> +                $(call=20
-> + KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME)
-> + .bin")))
->  endef
+--0000000000007f26c305ee096503--
 
-> The above reverts to always setting CONFIG_PMUFW_INIT_FILE to the unmodif=
-ied value of UBOOT_ZYNQMP_PMUFW_PATH as we used to do before d07e6b70, then=
- mangles it only in the special "*.elf" case.
-
-Thank you for catching this issue.  I agree with Luca that this would be a =
-better solution to keep the modification specific to only the special "*.el=
-f" case.
-
-I have nothing further to offer as Luca already provided a very complete re=
-view.  I will mark this patch as reviewed when Luca's feedback has been tak=
-en into account.
-
-Thank you for your support!
-
-Best regards,
-Neal Frager
-AMD
-
---_000_CH2PR12MB500432E6EA26B34FF8AC86E4F00D9CH2PR12MB5004namp_
-Content-Disposition: attachment; filename="winmail.dat"
-Content-Transfer-Encoding: base64
-Content-Type: application/ms-tnef; name="winmail.dat"
-
-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
-H3kvrQ97T7J/fW9+ef+k1q/fsO+x/7U/tB+7H7Y4/7bvqzmlf6aPp5+or72fttr/hXSPGlLqkjk3
-8QbgYxErkd8bgQQgL7EHQCrQeQQgEgH/RVIuPy9MYlAEYQaQCJAcYP52B0AKUGMwJnDEX6okJaD/
-YqM0IRxgL7EiEGN2I8ZB4v8J8J2RGcBicSwiAiAsAgOguTlyc3AFkAcxMyAqJkLPM4CVkmtNRFMg
-eUEhRML/HlBDkUMyZjUmkNUgU7BfoI+Y4AnRMjE5cCBMdR5Q/zlhGIBB9ZMnY3ECQBuxGSD/CkAo
-oi+iJ1BFEDljzXTXAf/bktPz3NEvotMz07/UzyJz71+gYvOb0kMyZghwm/Pd8v+T4ZpRBCDZMwdA
-mJGawZ9Q/55QDdAcUWngGjEsED/RC1C/EhDJs0QDnsIyUgDAcjBgf0IDQ3Qq4UPUHFGZQtkjJ/NE
-oQngZGIA0DBgEdAq8b8J4RzAmLDSUWqRymFjBaB/oIHVP9ZK1oFpISakRZ1C72rhQ8GY8AsgcyJG
-B8DfAbZGGHAYMHIiVbxARCJVAxVC8fAAAB8AQgABAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUA
-YQBsAAAAAAAfAGUAAQAAACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBt
-AAAAHwBkAAEAAAAKAAAAUwBNAFQAUAAAAAAAAgFBAAEAAABkAAAAAAAAAIErH6S+oxAZnW4A3QEP
-VAIAAACARgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAABTAE0AVABQAAAAbgBlAGEAbAAuAGYAcgBh
-AGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAB8AAl0BAAAAKAAAAG4AZQBhAGwALgBmAHIAYQBnAGUA
-cgBAAGEAbQBkAC4AYwBvAG0AAAAfAOVfAQAAADAAAABzAGkAcAA6AG4AZQBhAGwALgBmAHIAYQBn
-AGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfABoMAQAAABoAAABGAHIAYQBnAGUAcgAsACAATgBlAGEA
-bAAAAAAAHwAfDAEAAAAoAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQAA
-AB8AHgwBAAAACgAAAFMATQBUAFAAAAAAAAIBGQwBAAAAZAAAAAAAAACBKx+kvqMQGZ1uAN0BD1QC
-AAAAgEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAUwBNAFQAUAAAAG4AZQBhAGwALgBmAHIAYQBn
-AGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAAFdAQAAACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIA
-QABhAG0AZAAuAGMAbwBtAAAACwBAOgEAAAAfABoAAQAAABIAAABJAFAATQAuAE4AbwB0AGUAAAAA
-AAMA8T8JBAAACwBAOgEAAAADAP0/5AQAAAIBCzABAAAAEAAAAFORvkS/2YdGv7dYqg6ekk4DABcA
-AQAAAEAAOQAAPHwKN/7YAUAACDA6Ja8KN/7YAR8ANwABAAAAfAAAAFIARQA6ACAAWwBQAEEAVABD
-AEgAIAAxAC8AMQBdACAAYgBvAG8AdAAvAHUAYgBvAG8AdAAvAHUAYgBvAG8AdAAuAG0AawA6ACAA
-ZgBpAHgAIAB6AHkAbgBxAG0AcAAgAHcAaQB0AGgAbwB1AHQAIABwAG0AdQBmAHcAAAAfAD0AAQAA
-AAoAAABSAEUAOgAgAAAAAAADAN4/n04AAAsAAgABAAAACwAjAAAAAAADACYAAAAAAAsAKQAAAAAA
-CwArAAAAAAADAC4AAAAAAAMANgAAAAAAHwBwAAEAAAB0AAAAWwBQAEEAVABDAEgAIAAxAC8AMQBd
-ACAAYgBvAG8AdAAvAHUAYgBvAG8AdAAvAHUAYgBvAG8AdAAuAG0AawA6ACAAZgBpAHgAIAB6AHkA
-bgBxAG0AcAAgAHcAaQB0AGgAbwB1AHQAIABwAG0AdQBmAHcAAAACAXEAAQAAACAAAAABAdj95ju6
-Fx9vNfZOTqg32W3YxYEBrknxOgCAAH8tcAsABgwAAAAAHwA1EAEAAACiAAAAPABDAEgAMgBQAFIA
-MQAyAE0AQgA1ADAAMAA0ADMAMgBFADYARQBBADIANgBCADMANABGAEYAOABBAEMAOAA2AEUANABG
-ADAAMABEADkAQABDAEgAMgBQAFIAMQAyAE0AQgA1ADAAMAA0AC4AbgBhAG0AcAByAGQAMQAyAC4A
-cAByAG8AZAAuAG8AdQB0AGwAbwBvAGsALgBjAG8AbQA+AAAAAAAfADkQAQAAAKYAAAA8ADIAMAAy
-ADIAMQAxADIAMQAyADAAMQA2ADMAOAAuADMAMAA5ADUAMQAtADEALQBiAHIAYQBuAGQAbwBuAC4A
-bQBhAGkAZQByAEAAYwBvAGwAbABpAG4AcwAuAGMAbwBtAD4AIAA8ADIAMAAyADIAMQAxADIAMQAy
-ADMAMQAzADQAMgAuADUAMABiAGEAZgBjADQAYQBAAGIAbwBvAHQAeQA+AAAAAAAfAEIQAQAAAEAA
-AAA8ADIAMAAyADIAMQAxADIAMQAyADMAMQAzADQAMgAuADUAMABiAGEAZgBjADQAYQBAAGIAbwBv
-AHQAeQA+AAAAAwCAEP////8DABMSAAAAAEAABzBytXoKN/7YAQIBEDABAAAARgAAAAAAAADJ4BVB
-4r7ZT48VApT6YkmHBwAFFgQuaHpuToNMN4CwNOm0AAAAAAELAAAFFgQuaHpuToNMN4CwNOm0AACU
-09QQAAAAAAIBEzABAAAAEAAAALoXH2819k5OqDfZbdjFgQECARQwAQAAAAwAAAA6AQAA3yB+/kgA
-AAADAFszAQAAAAMAWjYAAAAAAwBoNg0AAAALAPo2AQAAAB8A2T8BAAAAAAIAAEgAaQAgAEIAcgBh
-AG4AZABvAG4ALAANAAoADQAKAD4AIABDAG8AbQBtAGkAdAAgAGQAMAA3AGUANgBiADcAMAAgACgA
-YgBvAG8AdAAvAHUAYgBvAG8AdAAvAHUAYgBvAG8AdAAuAG0AawA6ACAAYQBkAGQAIABwAG0AdQBm
-AHcALgBlAGwAZgAgAHMAdQBwAHAAbwByAHQAKQAgAGIAcgBvAGsAZQAgAA0ACgA+ACAAYwBvAG4A
-ZgBpAGcAdQByAGEAdABpAG8AbgBzACAAdwBoAGUAcgBlACAAdABoAGUAIABVAEIATwBPAFQAXwBa
-AFkATgBRAE0AUABfAFAATQBVAEYAVwAgAHcAYQBzACAAYgBsAGEAbgBrAC4AIABQAHIAZQB2AGkA
-bwB1AHMAbAB5ACAAaQB0ACAADQAKAD4AIAB3AG8AdQBsAGQAIABzAGUAdAAgAHQAaABlACAAVQAt
-AEIAbwBvAHQAIABDAE8ATgBGAEkARwBfAFAATQBVAEYAVwBfAEkATgBJAFQAXwBGAEkATABFACAA
-dABvACAAdABoAGUAIABiAGwAYQBuAGsAIABzAHQAcgBpAG4AZwAsACAAYgB1AHQAIAANAAoAPgAg
-AG4AbwB3ACAAaQB0ACAAdwBpAGwAbAAgAHMAZQB0ACAAaQB0ACAAdABvAAAAHwD4PwEAAAAaAAAA
-RgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8A+j8BAAAAGgAAAEYAcgBhAGcAZQByACwAIABO
-AGUAYQBsAAAAAAAfACJAAQAAAAYAAABFAFgAAAAAAB8AI0ABAAAAAgEAAC8ATwA9AEUAWABDAEgA
-QQBOAEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABBAE4ARwBFACAAQQBEAE0ASQBOAEkAUwBU
-AFIAQQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkARABJAEIATwBIAEYAMgAzAFMAUABEAEwA
-VAApAC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAvAEMATgA9AEQANAA0ADYAQQAwADQANgA0
-ADcANQAxADQAQwA2ADAAOAAzADIAMQBBADUANwA5ADkAQQAwADEAQgA4ADgARAAtAEYAUgBBAEcA
-RQBSACwAIABOAEUAQQAAAAAAHwAkQAEAAAAGAAAARQBYAAAAAAAfACVAAQAAAAIBAAAvAE8APQBF
-AFgAQwBIAEEATgBHAEUATABBAEIAUwAvAE8AVQA9AEUAWABDAEgAQQBOAEcARQAgAEEARABNAEkA
-TgBJAFMAVABSAEEAVABJAFYARQAgAEcAUgBPAFUAUAAgACgARgBZAEQASQBCAE8ASABGADIAMwBT
-AFAARABMAFQAKQAvAEMATgA9AFIARQBDAEkAUABJAEUATgBUAFMALwBDAE4APQBEADQANAA2AEEA
-MAA0ADYANAA3ADUAMQA0AEMANgAwADgAMwAyADEAQQA1ADcAOQA5AEEAMAAxAEIAOAA4AEQALQBG
-AFIAQQBHAEUAUgAsACAATgBFAEEAAAAAAB8AMEABAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUA
-YQBsAAAAAAAfADFAAQAAABoAAABGAHIAYQBnAGUAcgAsACAATgBlAGEAbAAAAAAAHwA4QAEAAAAa
-AAAARgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8AOUABAAAAGgAAAEYAcgBhAGcAZQByACwA
-IABOAGUAYQBsAAAAAAADAFlAAAAAAAMAWkAAAAAAAwA3UAEAAAADAAlZAQAAAB8ACl0BAAAAKAAA
-AG4AZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAAtdAQAAACgAAABuAGUA
-YQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAAgEVXQEAAAASAAAAAh+W2D2I5GBO
-jhGoLZlOGD0BAAACARZdAQAAABIAAAACH5bYPYjkYE6OEagtmU4YPQEAAAsAAIAIIAYAAAAAAMAA
-AAAAAABGAAAAABSFAAAAAAAAAwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAJAAAAEkAbgBkAGUAeABp
-AG4AZwBFAHIAcgBvAHIAQwBvAGQAZQAAABsAAAAfAACAUONjC8yc0BG82wCAX8zOBAEAAAAqAAAA
-SQBuAGQAZQB4AGkAbgBnAEUAcgByAG8AcgBNAGUAcwBzAGEAZwBlAAAAAAABAAAAcAAAAEkAbgBk
-AGUAeABpAG4AZwAgAFAAZQBuAGQAaQBuAGcAIAB3AGgAaQBsAGUAIABCAGkAZwBGAHUAbgBuAGUA
-bABQAE8ASQBJAHMAVQBwAFQAbwBEAGEAdABlACAAaQBzACAAZgBhAGwAcwBlAC4AAAALAACAUONj
-C8yc0BG82wCAX8zOBAEAAAAmAAAASQBzAFAAZQByAG0AYQBuAGUAbgB0AEYAYQBpAGwAdQByAGUA
-AAAAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgEAAAAyAAAARQB4AGMAaABhAG4AZwBlAEEAcABw
-AGwAaQBjAGEAdABpAG8AbgBGAGwAYQBnAHMAAAAAACAAAAAfAACAE4/yQfSDFEGlhO7bWmsL/wEA
-AAAWAAAAQwBsAGkAZQBuAHQASQBuAGYAbwAAAAAAAQAAACoAAABDAGwAaQBlAG4AdAA9AE0AUwBF
-AHgAYwBoAGEAbgBnAGUAUgBQAEMAAAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAaFAAAAAAAA
-CwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAA4UAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgAAAAAB
-hQAAAAAAAAIBAIATj/JB9IMUQaWE7ttaawv/AQAAAC4AAABIAGUAYQBkAGUAcgBCAG8AZAB5AEYA
-cgBhAGcAbQBlAG4AdABMAGkAcwB0AAAAAAABAAAAIgAAAAEACgAAAAQAAAAAAAAAFAAAAAAAAAAA
-AAAA/////wAAAAAAAAsAAIATj/JB9IMUQaWE7ttaawv/AQAAABwAAABIAGEAcwBRAHUAbwB0AGUA
-ZABUAGUAeAB0AAAAAAAAAAsAAIATj/JB9IMUQaWE7ttaawv/AQAAACgAAABJAHMAUQB1AG8AdABl
-AGQAVABlAHgAdABDAGgAYQBuAGcAZQBkAAAAAQAAAAIBAIATj/JB9IMUQaWE7ttaawv/AQAAAEAA
-AABDAG8AbgB2AGUAcgBzAGEAdABpAG8AbgBUAHIAZQBlAFAAYQByAGUAbgB0AFIAZQBjAG8AcgBk
-AEsAZQB5AAAAAQAAAC4AAAAAAAAAyeAVQeK+2U+PFQKU+mJJhwEABRYELmh6bk6DTDeAsDTptAAA
-3daHZAAAAAAfAACAH6TrM6h6LkK+e3nhqY5UswEAAAA4AAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBv
-AG4ASQBuAGQAZQB4AFQAcgBhAGMAawBpAG4AZwBFAHgAAAABAAAA0AEAAEkASQA9AFsAQwBJAEQA
-PQA2AGYAMQBmADEANwBiAGEALQBmADYAMwA1AC0ANABlADQAZQAtAGEAOAAzADcALQBkADkANgBk
-AGQAOABjADUAOAAxADAAMQA7AEkARABYAEgARQBBAEQAPQAwADEARAA4AEYARABFADYAMwBCADsA
-SQBEAFgAQwBPAFUATgBUAD0AMwBdADsAUwBCAE0ASQBEAD0AMQAwADsAUwAxAD0APAAyADAAMgAy
-ADEAMQAyADEAMgAzADEAMwA0ADIALgA1ADAAYgBhAGYAYwA0AGEAQABiAG8AbwB0AHkAPgA7AFIA
-VABQAD0ARABpAHIAZQBjAHQAQwBoAGkAbABkADsAVABEAE4APQBNAGkAcwBtAGEAdABjAGgAOwBU
-AFAAPQBTAGEAbQBlADsAVABGAFIAPQBOAG8AdABGAG8AcgBrAGkAbgBnADsAVgBlAHIAcwBpAG8A
-bgA9AFYAZQByAHMAaQBvAG4AIAAxADUALgAyADAAIAAoAEIAdQBpAGwAZAAgADUAOAAzADQALgAw
-ACkALAAgAFMAdABhAGcAZQA9AEgAMQA7AFUAUAA9AEQAMAA7AEQAUAA9ADEAMAAxAAAAAwAAgAgg
-BgAAAAAAwAAAAAAAAEYAAAAAEIUAAAAAAAALAACACCAGAAAAAADAAAAAAAAARgAAAAAOhQAAAAAA
-AAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAIKFAAAAAAAAHwAAgAggBgAAAAAAwAAAAAAAAEYAAAAA
-2IUAAAEAAAASAAAASQBQAE0ALgBOAG8AdABlAAAAAAACAQCACCAGAAAAAADAAAAAAAAARgEAAAA2
-AAAASQBuAFQAcgBhAG4AcwBpAHQATQBlAHMAcwBhAGcAZQBDAG8AcgByAGUAbABhAHQAbwByAAAA
-AAABAAAAEAAAAOqJppbZAatApZP2+lnDMocDAACACCAGAAAAAADAAAAAAAAARgAAAAAYhQAAAAAA
-AB8AAIApAwIAAAAAAMAAAAAAAABGAQAAAB4AAABJAG4AcwBwAGUAYwB0AG8AcgBBAGkAcABJAGQA
-AAAAAAEAAABKAAAAOAA4AGQAMwBhAGUAMgAwAC0AOAAyADYANwAtADQAYwBiAGQALQA4AGEAZQAw
-AC0AYwAwAGMANABiADYANAAzADAANQA0AGUAAAAAAAMADTT9PwAAHwAAgIYDAgAAAAAAwAAAAAAA
-AEYBAAAALgAAAGEAdQB0AGgAZQBuAHQAaQBjAGEAdABpAG8AbgAtAHIAZQBzAHUAbAB0AHMAAAAA
-AAEAAACyAAAAZABrAGkAbQA9AG4AbwBuAGUAIAAoAG0AZQBzAHMAYQBnAGUAIABuAG8AdAAgAHMA
-aQBnAG4AZQBkACkAIABoAGUAYQBkAGUAcgAuAGQAPQBuAG8AbgBlADsAZABtAGEAcgBjAD0AbgBv
-AG4AZQAgAGEAYwB0AGkAbwBuAD0AbgBvAG4AZQAgAGgAZQBhAGQAZQByAC4AZgByAG8AbQA9AGEA
-bQBkAC4AYwBvAG0AOwAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAHgAAAGEAYwBjAGUAcAB0
-AGwAYQBuAGcAdQBhAGcAZQAAAAAAAQAAAAwAAABlAG4ALQBVAFMAAAAfAACAhgMCAAAAAADAAAAA
-AAAARgEAAAAgAAAAeAAtAG0AcwAtAGgAYQBzAC0AYQB0AHQAYQBjAGgAAAABAAAAAgAAAAAAAABI
-AACACCAGAAAAAADAAAAAAAAARgEAAAAiAAAATgBlAHQAdwBvAHIAawBNAGUAcwBzAGEAZwBlAEkA
-ZAAAAAAAtcuXhj+HlEGvygjazE4tLx8AAICGAwIAAAAAAMAAAAAAAABGAQAAAC4AAAB4AC0AbQBz
-AC0AcAB1AGIAbABpAGMAdAByAGEAZgBmAGkAYwB0AHkAcABlAAAAAAABAAAADAAAAEUAbQBhAGkA
-bAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAADYAAAB4AC0AbQBzAC0AdAByAGEAZgBmAGkAYwB0
-AHkAcABlAGQAaQBhAGcAbgBvAHMAdABpAGMAAAAAAAEAAABIAAAAQwBIADIAUABSADEAMgBNAEIA
-NQAwADAANAA6AEUARQBfAHwAQgBZADUAUABSADEAMgBNAEIANAAxADkANAA6AEUARQBfAAAAHwAA
-gIYDAgAAAAAAwAAAAAAAAEYBAAAAUAAAAHgALQBtAHMALQBvAGYAZgBpAGMAZQAzADYANQAtAGYA
-aQBsAHQAZQByAGkAbgBnAC0AYwBvAHIAcgBlAGwAYQB0AGkAbwBuAC0AaQBkAAAAAQAAAEoAAAA4
-ADYAOQA3AGMAYgBiADUALQA4ADcAMwBmAC0ANAAxADkANAAtAGEAZgBjAGEALQAwADgAZABhAGMA
-YwA0AGUAMgBkADIAZgAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAOAAAAHgALQBtAHMALQBl
-AHgAYwBoAGEAbgBnAGUALQBzAGUAbgBkAGUAcgBhAGQAYwBoAGUAYwBrAAAAAQAAAAQAAAAxAAAA
-HwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAOgAAAHgALQBtAHMALQBlAHgAYwBoAGEAbgBnAGUALQBh
-AG4AdABpAHMAcABhAG0ALQByAGUAbABhAHkAAAAAAAEAAAAEAAAAMAAAAB8AAICGAwIAAAAAAMAA
-AAAAAABGAQAAACoAAAB4AC0AbQBpAGMAcgBvAHMAbwBmAHQALQBhAG4AdABpAHMAcABhAG0AAAAA
-AAEAAAAOAAAAQgBDAEwAOgAwADsAAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAEQAAAB4AC0A
-bQBpAGMAcgBvAHMAbwBmAHQALQBhAG4AdABpAHMAcABhAG0ALQBtAGUAcwBzAGEAZwBlAC0AaQBu
-AGYAbwAAAAEAAACyBQAANABRAHUAcQBoAHkAcABBAEMAeAAvAGQAQgBNAFkASwBqAGoAdABjAEIA
-WAB5AEwAagByAGkARQBRAGUAbABnAG0AOQBCAHUAWgA0ADMASABxAFIAaQBYAHYAQgA3AG0AZQBW
-AHAAeQArAGcAYgAzADcANABIAG8AUQBJAEMAdwBFADMAawBNAGYASgBRAGkATgBsAEcAUQBWADEA
-SABjACsANwBjAGMAZQBuADMAbABVAGcAZgA4ADYAMwByAEUAUABNAHkAMgBQADAAYQAvAEwARABS
-ADUAMwBqADgAbAA2AEEAUgAzADAAdwArAHoAdgBBAGUAMAA1ADUAWgBsAHkAeQBVAFQAdwBqAEIA
-UwBQAE4ATABUAGUAMgBEAGYASABWADMASQBrAEEANABHADMAMAA3AEIAUgBQACsAYgA5AFkAdQA5
-AHIAegAxAGcANQBTAHQARABoAHUAUgBHAG8ATQBMAGkAYwBrAHAARgAzAHAAQgBMAGsAVwBiAHYA
-agBEADYANwA0AGoAVQBjAEgAaQBhADcAVwBoAHUAOABRAEkAUwBDADMAWQBOAEYAegBXAFAARABC
-AHQAWAB0AEgAUQBzAHAAMgBtAEwAQwBmADQAVQBsAEgAaQBSAFMASQBEAEcAbQBJADAAYgBEAEgA
-cABRAGQAMwB0AGgAUwAxAEUAcgArAEUAYQBPAHAAMwBMACsAWABuAEYAVQBaAGEAWgBGAHcAZwA3
-AGMATQBSAFIATQAzAEkAdgBuAEEAWABSADUAZAA1AEoAagB3AFEAKwBjADQAcQBKAFkANwBmAG8A
-SQBBADMAUQBmAGQAMwBCAE0AQQBXAGMAdwAxADgAdQA0AFYANAAzAEoAMwAvAHAAaQByAGsASQBj
-AHIAQgBZAFAAbgBlAEMAUQA4AFIALwA0AGQAZgB6AHMAZAByAHAARwBZADgAVQBmAG4AawBmAEQA
-MQBUAFoAaQBHAHQAZABqAGgASgA1AHUAeAAvAGoAUABSAGcAZQB3ADYAYgBhAFEAZwBSAEgASgA2
-AG4AYwA0AEoAVgBnAEUAYgBrAFYAUgA2AEoAbwBUAFIAbwBNADgANwBDAFgAeABBAHIAegB0AEYA
-QgBYAHMAKwBMAEgATABtAEsAVwAxAGMAbwBZAHMASABwAGsAeQA2AGwAVwBaAHEASwBVAE4ANwBl
-AEcATQBTAE0AOQBtADIAegB6AFUARABwAG0AMQBFAEMATAArAFMAawB2AGsAKwB2AFQATwBkADUA
-cABxAHEAQQBJADEAagA1AG0AcgBYAGEAdgAzAEoAQgBmADIAdwBlADYAcgBYAGIAKwB5AG4AdABD
-AEwAWAArAHcAawB1ADUAZgBtAGkAQwAwADkAOQBkAFYASQBaAEoAZABBAEkAbwA4AGoAMgArAEMA
-aABkAG4AUQA4AG4AagBaAEUAOABvAFQAawBnAEYASwAzAEoAQQA2ADYAbwA5AGsAYQArAGIAWABH
-AE4AUgBCAHMATQBmAFYAVgBtAEkAUAA5AEYAVQBEADcARgBnAGsASgBMADgANwBZAFUAVgBxADQA
-cQBWAGoAZwBHADEANgAxAEQAYwBVAEgAUgAxAFUAZABqAEYAVwByAHAAZQBPAHkAMQBwAHAATABM
-AEQASgBPADQAMgBIADUAeAA4ADcASgB5ADMALwBIADIAcwBSAFMAbgBXAFgANwA5AGYATgBwAHMA
-ZgBsAGMAbAB4AFgAWgBuAEwAaABWAFYAbgBXADgAMQA5AGEARQBXAHUAawA2AG8AdQByADIAcgBp
-AHcANQBOAEUAMgBiAGoASwBEAEwAVgB4AEYAWABtAGsAWgAxAE0ANwBOAHgATgBQAEcAaABuAHQA
-RABmADEAMQBLACsAKwB3AGcAdABjAEsAUgBPAGsAYgBmAHkANgA3AGcAPQA9AAAAAAAfAACAhgMC
-AAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAGYAbwByAGUAZgByAG8AbgB0AC0AYQBuAHQAaQBzAHAA
-YQBtAC0AcgBlAHAAbwByAHQAAAABAAAAOAQAAEMASQBQADoAMgA1ADUALgAyADUANQAuADIANQA1
-AC4AMgA1ADUAOwBDAFQAUgBZADoAOwBMAEEATgBHADoAZQBuADsAUwBDAEwAOgAxADsAUwBSAFYA
-OgA7AEkAUABWADoATgBMAEkAOwBTAEYAVgA6AE4AUwBQAE0AOwBIADoAQwBIADIAUABSADEAMgBN
-AEIANQAwADAANAAuAG4AYQBtAHAAcgBkADEAMgAuAHAAcgBvAGQALgBvAHUAdABsAG8AbwBrAC4A
-YwBvAG0AOwBQAFQAUgA6ADsAQwBBAFQAOgBOAE8ATgBFADsAUwBGAFMAOgAoADEAMwAyADMAMAAw
-ADIAMgApACgANAA2ADMANgAwADAAOQApACgAMQAzADYAMAAwADMAKQAoADMANgA2ADAAMAA0ACkA
-KAAzADkAOAA2ADAANAAwADAAMAAwADIAKQAoADMANAA2ADAAMAAyACkAKAAzADcANgAwADAAMgAp
-ACgAMwA5ADYAMAAwADMAKQAoADQANQAxADEAOQA5ADAAMQA1ACkAKAAyADkAMAA2ADAAMAAyACkA
-KAA2ADYAOAA5ADkAMAAxADUAKQAoADYANgA0ADcANgAwADAANwApACgANgA0ADcANQA2ADAAMAA4
-ACkAKAA2ADYAOQA0ADYAMAAwADcAKQAoADcANgAxADEANgAwADAANgApACgANgA2ADUANQA2ADAA
-MAA4ACkAKAA0ADEAMwAwADAANwAwADAAMAAwADEAKQAoADYANgA0ADQANgAwADAAOAApACgAOAA2
-ADMANgAyADAAMAAxACkAKAAzADMANgA1ADYAMAAwADIAKQAoADUANQAwADEANgAwADAAMwApACgA
-MwA4ADAANwAwADcAMAAwADAAMAA1ACkAKAAxADEAMAAxADMANgAwADAANQApACgANQA0ADkAMAA2
-ADAAMAAzACkAKAA3ADYAOQA2ADAAMAA1ACkAKAAxADIAMgAwADAAMAAwADAAMQApACgANAAzADIA
-NgAwADAAOAApACgANgA1ADAANgAwADAANwApACgAMwA4ADEAMAAwADcAMAAwADAAMAAyACkAKAA1
-ADYANgAwADMAMAAwADAAMAAyACkAKAA3ADEAMgAwADAANAAwADAAMAAwADEAKQAoADgANgA3ADYA
-MAAwADIAKQAoADgAOQAzADYAMAAwADIAKQAoADUAMgA1ADMANgAwADEANAApACgAMgA2ADAAMAA1
-ACkAKAA0ADcAOAA2ADAAMAAwADAAMQApACgAMQA4ADYAMAAwADMAKQAoADMAMQA2ADAAMAAyACkA
-KAA5ADYAOAA2ADAAMAAzACkAKAA4ADMAMwA4ADAANAAwADAAMAAwADEAKQA7AEQASQBSADoATwBV
-AFQAOwBTAEYAUAA6ADEAMQAwADEAOwAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAFwAAAB4AC0A
-bQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBk
-AGEAdABhAC0AYwBoAHUAbgBrAGMAbwB1AG4AdAAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAA
-AAAAAABGAQAAAEoAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBt
-AC0AbQBlAHMAcwBhAGcAZQBkAGEAdABhAC0AMAAAAAAAAQAAAFoMAABZAFIAZAA4AEcAZgBaAGQA
-YgBEADUAbAB0AFIAYgB0AGMAWABZAFkAVABDAHUAQQBPADAAYgBsADIAOABFAEMAcgB4AGwAdQB2
-AEcAeAAwAEEAbABaAE8AKwB3AG4AdAA0AEcAZABSAFkAZQB3AFgAOQBoAEQAcABMAEIAMgBtAGgA
-eAB0AHEATgA2AEUAcwBJAHQAegBoAHgARgBiAGUAQwByADUAdgA5AEgASQBYAEMAWABGAEcAMgBK
-ADEASQBXAEEARwA0AFAAQwBtAGEAYwAvAE0ATQBnAG8ANwBwAGMAcQByACsANQBwAFgARgBQAHIA
-WQA0AGEAWABOAGcAMAB1AG8ATABuAG4AVQB0AHMAYQBYAGwANABEAFcAYgBJAEEAZgBmAFkAaQBS
-AHYAQQA0AEwAegBWAEgANwB1ADEAMgBiAFEARAA5AFcAVAByADAARQB5AHgAVgBjAEwAOQB2AEUA
-agBEAEcATgBjAEUAUABlAEcAdABWAGMAbgBlADcAawB3AEUANgBrAHIAQQBoAEIASgBFAEsATgBt
-AFMASABvAEEAVgAzAHAAYQBWAGkAZQBuAGoAQwBJAHoAUABvACsAYwBFADcAVQBEAHQAdABEAHMA
-dgB2AFAAMgAvAHQAbwBkAEMAYgBjADkAcwByAHcAYgBGAEgAVgA5AHoAZwBEAEIANABCAE4AUgBv
-AHcAMQBRAGEASwBJAG4AVQBoAC8AMgA3ADEAVgBwAEEAZQArAGQATgBHAGEAegBIAGkAawBoAFkA
-aQAxAFEAcAB3AFkASgAvAHMATgBYAE4AdwBkAEkAMQBHAFMAbQB1AE4AbwBmADAANQBrADMAOAB0
-AFkAWABKAEcAaAAvAG0AMgBWAEwAWgBxAHYAZgBUAEwAQwBPAFkAeQBnAHoAUQBGAE4ATQBkAE8A
-MwA0AFUALwBvAHYAcwBrAFkAKwBjAGIARAA0AFMASwBxAGEAUAB6AEgATwArAHoANABWACsAMwA4
-ADgAZQB2AHoAbwBVAFoAMQBKADgAagAvAGIAdgAzAFcAVgBsAFYASABDAHkARwB5AHIAegBzAHgA
-YwB5AHAAZABlAEwAdgB6AEEAUwBoAEUAdABqAGEAawBwAC8AYQB6ADQASABqAGoATgBVAEcAegBk
-AG8AMgBYAEcAcAA0AGYARABPAFEALwAwAFAAZAAyAFcAMgBSAEwASwB1AG4AawB4AEcAZABhAHIA
-cQAvAC8AZQBwAC8AVwBVAHkAYwBkAFEARwBUADAAQQB2AGQANQBlAEQAVwBjAFAANgBSAHIASABv
-AGMAWQAwAEIAegBKAGQARABoAC8AcwBQAFkAVwByAGgASwAwAHkAdwBjAHEAWAB3AHcATABCAGkA
-QwBVAGgAVgBPADIASAAxAGsAYgBGAFMAdAA5AE4AbgBEAE0AYwBnAFkAVgBrAFkAVQBuAFAAQQBQ
-AGoAeABZAHgAdgBxAHYAZABiAEEAVQA3AG4AdgAvAE4AZQB1AE0AMwBmAHoAMABUADgAUAB1AEIA
-bQBGAEcAawB4AG8ARgBYAFMAcQBPAHEAcwBhAEYAdgBtAHUAbwBQAE0AVQBNAGMAbwBQAHAAegBt
-AHUARwBPAEwASQAwAFEAWgA5AEwARwByAG8AUwA4ADMAMAAxADYAMgAwAFQARABaAHQAUQBqADcA
-aQBxAEIAUwBKADYAVwB2ADgAZgBLADkAWgBrAG0AbQBzAGQALwAxAHMAYQBYAEEAMABkAGkARwBT
-AEcAUABjADAATgBBAGYAaQBQAFoAMgBCAHcAUQB0AFgANAA2ADEAUQBTAFYAbgArAE8AWgBQAC8A
-MABkAHEAZQA1ADEAbgBYAHkAYwA2AGsAKwBDAGYAVABIAFAAaQBaAEsAeQB6AHQASwBCAG0AbABw
-AHQAYgBvAFcAKwB0AFUAcgBUADQAQgBkAGQANwBIAGUASwBzAEwAMwBRAGUALwBNAEQAZQA4AG0A
-RQBMAGwAWAArAEwANwBuADYATgBMAFAAWQBRACsAMQA0AGMASgBsAEUANABiAFgARwBLAHkAWgBu
-ADkASQBhAFcAdQBwAGEAOAAwAG8ASQBFAG4AaQBLAGQALwByACsAQgBYAFAAeQAyAEUANwBKAGgA
-SgBlAGUAawA0ACsANgBUAEsARABaAGsASAAwAFQAcQBYAGEAWQBmAFAAcAAyAG0ATwBCAEcAeQBB
-AEMAOABuAEUAbABCAHkASQBBAGIAdwBhADIALwB2AGwARwBDAEMAYQBHAHgARwBTAGcATQB5ADAA
-ZQBxAHYAegA4AFQAMABiAG8ATgB3AHgAQgB1AGEAVwBHAE4AeQBOAHcAUQBDADcATgB0ADEAcgBZ
-AFQAUwBCAEIAbQBTAHgAWABlAHgAZQBvAHQAVgBsAG0AWgBRAGsAWABSAGsANwBhADIAWAB4AHMA
-KwByAHIANgBzAFQAdABwAHYAcQB3AFUAVQBsAG0AeAB1ADcANgA2AE0AUwBhAEEAbAByAC8AZAAr
-AGgAcwArAE0AaQArAGwATQA3ADQAMAAwAFEARwAvAE0AdwB5ADgAUwBVAGkAZgBMAHIAbABXAG4A
-MQBVADYAQQBnAGQARAByAEcAdABvAHkARgA1AEYAcwBhAFcALwBGAHYAMgArADkATABqAEIAcQBo
-AHcAcQBnAFYAYgBXAEcAZgBjAHUAVwA2AG4AQwB1AE8AWgBXAGUASgB4AEcAawBkADUAUQBTAEwA
-WABaAE4AMQBnAEUAUABBAEQALwBRAGkANQBxAEkAVABpAHAAKwAvAG0AdABnAE4ASgByAEYANwBv
-AHYAcABsAFMAeQBzAHEAWABXADgAKwBRAGgASQBnAFMAKwA0AHUAQQBjAFcAQgB4AHgARwBSAEYA
-NgBIAGEAQQBjAGgAMQBGAHAARABlAEwAbQBoADgAeAA3AFAAdwBEAEIARABJAE0AMgByAEQAQQAz
-AHoAVQBOAFYAZwB2ADQAbQBPAGkAdQBsADMARwBFAGIAbQBOAE4AagA2AG4ANAAwAFkATgA3ADYA
-NgByACsAYgArADMAOABqAGMAdABlAG0AcQB2AGsAUwBSAGUATQBOAGIASgBkAHMANgAzAEMAcQBk
-AHkAcwBXAHUAUQB0AHgATQBXAFMALwBjAE0AVABhAEsAcwBFAFAAWgBRAEIAdwA0AFgAbAB0AG0A
-VABqAEoAMABMADMAdwBXADIAZQBiAGMASABuAGIASQBLACsANwBXAEMAOAA4AEkAMQBRAC8AWABv
-AFIASwBPAFcATQA0AE8ASwBLAFkANwBKAC8AOQBZAGQAOAByAHUAOABMAHQAMwBHAEkAagBIAEsA
-UAA5ADgAcgByAFoAawBqAFQAVgBJAHIAUAAvAFgASgBlAEcAcwBFAEUAMgBRAGwALwBRAGEAdABF
-AGsANQBLAEQAcwBNAHUATgBBAHIAegBjAFoAOQAyAG8AOQB6ADEAUwBKAE8AQQBmAFAAUABTAEgA
-agBJADgARwBPAHQAeABRAFkAMQBnAHQAYQBGAEMAQgBnAGgAMAB3AGIAVABnAG0AYgBzAGEAdQBS
-AHoAbAAvAGkAeQBQAGYATQBpADgAaABXAHgAbAB0AFAAZAAyAEQAbgBCAFUAagBPAHcAVABGAEQA
-WABxAFIATAAyADIAVQAxAEYAOABXAFoASgB3AGIAZAB3AC8AdAB4AEUATABaAFEAOABKADEAVgBX
-ADIANwBOAGQAMQBjAFEAMwAvAHYARgBBAGUAQgBBAHUARABHAGcARABLAGEAdABSADIAQQBRAEIA
-LwB5AHQAdwBBAEkAbABlADgAOABjAEgAZQBNADAAeABZAHkAYQBKAHoAUABqAEMAbgBMAEIASQAz
-AHgAQgBNAFkAagAwAGQAUQA5AHYARABTADQAbwBqAG0AaQB3AGcARAB1AEUAZABmAEoASgB5AHcA
-MAArADcANgBPADMAZQArAFcATABLADEAMQBWADkAUQBKAFkAUABzAGMAegA3AGcAWQA1ADMASgBu
-ADEAVwBhAG0AUAArAGUAKwAvADEAdwB5ADUAbQBlADAAbgBHADgAYwB5AFQATQB3AHUAagA0AGMA
-NgBWAFcAZQBXAGIATwBNAHkAZgBLAC8AdwA1AFoAbgB0AG4AQgBkAG0ANwA3AHMAMQBnAHIAdQBI
-AE8AdgBrAD0AAAAAABtu
-
---_000_CH2PR12MB500432E6EA26B34FF8AC86E4F00D9CH2PR12MB5004namp_
+--===============4706970446772166567==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -515,4 +255,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---_000_CH2PR12MB500432E6EA26B34FF8AC86E4F00D9CH2PR12MB5004namp_--
+--===============4706970446772166567==--
