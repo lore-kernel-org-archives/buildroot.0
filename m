@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87214C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 220D3C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 21:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 235C140354;
-	Tue, 22 Nov 2022 21:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 235C140354
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2FD761166;
+	Tue, 22 Nov 2022 21:27:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2FD761166
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yn_ePZ7ES_9p; Tue, 22 Nov 2022 21:27:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q5fZhPIHYHPl; Tue, 22 Nov 2022 21:27:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52C8340186;
-	Tue, 22 Nov 2022 21:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C8340186
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD5781BF38C
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:27:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 051AD61037;
+	Tue, 22 Nov 2022 21:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 051AD61037
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF8341BF38C
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BE3D81F3D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:27:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BE3D81F3D
+ by smtp3.osuosl.org (Postfix) with ESMTP id B840861037
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 21:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B840861037
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bmM82W97yXie for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 21:26:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 980E481379
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 980E481379
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:26:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4E74E60003;
- Tue, 22 Nov 2022 21:26:52 +0000 (UTC)
-Date: Tue, 22 Nov 2022 22:26:52 +0100
-To: Lang Daniel via buildroot <buildroot@buildroot.org>
-Message-ID: <20221122222652.6969e6ef@windsurf>
-In-Reply-To: <VI1P190MB04935B828AC5DEE6D76E6CFB9F0D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-References: <VI1P190MB04935B828AC5DEE6D76E6CFB9F0D9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669152413;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IQID2/M4W0obk093ez0qT/87fAv6Ebi/8PRD0iOuP2M=;
- b=SSjOPCRuN3XWCWlF4CXQ4GrbVcmLrX1qgLebTrWT3M3ATSsV/PWWMSTLUymc7x3uR+Bi/i
- U1ynz4zp/wvgicoKBcd3j79ajc7RIyiOcSWLMDRaIjC9jDxXZHqhj9OrbNiEpiFRFd6FuW
- Abdw3ebtW9RdGL1Gbp2YYfcJAGN4YDKeFHsZnXzfdJv7lLe/dGo4iwqrS42QyuGQcB4wRl
- yKZMG9VxaHwNVkBVkxBAu9jWmnie7FT3mp9uE0I5FoNMy1L95Tn19ozK4121XI4MMjSSJ1
- jhajYjlKsmdtlnC2fdsDkdxJ4+FFEL4RSL6ABtph+VIclIsPqJbYgZPeEle7fg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SSjOPCRu
-Subject: Re: [Buildroot] [PATCH] package/polkit: bump to version 122
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 92I8iPMRjjfw for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 21:27:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E599860D8E
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 21:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E599860D8E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D0E1484178; Tue, 22 Nov 2022 21:27:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Nov 2022 22:27:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 08a013d25a09d07a3e7a89b1afbb20da206a383d
+X-Git-Newrev: 79591b76674a8c0ed150021a27771a73a70d159b
+X-Patchwork-Hint: ignore
+Message-Id: <20221122212753.D0E1484178@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: fix the build for arm sgi575
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +57,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Lang Daniel <d.lang@abatec.at>,
- Marek Belisko <marek.belisko@open-nandra.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0607943331520866211=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Nov 2022 16:27:19 +0000
-Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
+--===============0607943331520866211==
+Content-Type: text/plain
 
-> As stated in [1] this and future release will only be hosted on
-> freedesktop's gitlab.
-> Archives hosted on gitlab are missing the gpg signature.
-> 
-> 1: https://gitlab.freedesktop.org/polkit/polkit/-/commit/49bb905131537dde062d477612456328a9655e30
-> 
-> Signed-off-by: Daniel Lang <d.lang@abatec.at>
-> ---
->  ...make-netgroup-support-optional-meson.patch | 260 ------------------
->  package/polkit/polkit.hash                    |   4 +-
->  package/polkit/polkit.mk                      |   4 +-
->  3 files changed, 3 insertions(+), 265 deletions(-)
->  delete mode 100644 package/polkit/0001-make-netgroup-support-optional-meson.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=79591b76674a8c0ed150021a27771a73a70d159b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to next, thanks.
+The edk2 package can be configured for platform Arm Sgi575 but this
+does not build correctly:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Usage: build.exe [options] [all|fds|genc|genmake|clean|cleanall|cleanlib|modules|libraries|run]
+
+build.exe: error: option -a: invalid choice: '-b' (choose from 'IA32', 'X64', 'EBC', 'ARM', 'AARCH64', 'RISCV64')
+make[1]: *** [package/pkg-generic.mk:293: /home/thomas/buildroot/buildroot/output/build/edk2-edk2-stable202102/.stamp_built] Error 2
+make: *** [Makefile:84: _all] Error 2
+
+Add the necessary definitions to fix the build.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/edk2/edk2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 5cbd9d152e..7d8765c310 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -75,6 +75,12 @@ EDK2_PACKAGE_NAME = ArmVirtPkg
+ EDK2_PLATFORM_NAME = ArmVirtQemuKernel
+ EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
+ 
++else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_SGI575),y)
++EDK2_ARCH = AARCH64
++EDK2_PACKAGE_NAME = Platform/ARM/SgiPkg/Sgi575
++EDK2_PLATFORM_NAME = Sgi575
++EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
++
+ else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64),y)
+ EDK2_ARCH = AARCH64
+ EDK2_PACKAGE_NAME = Platform/ARM/VExpressPkg
+
+--===============0607943331520866211==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0607943331520866211==--
