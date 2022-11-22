@@ -1,55 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771C9C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE482C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F06E40B83;
-	Tue, 22 Nov 2022 20:18:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F06E40B83
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CE8A812EE;
+	Tue, 22 Nov 2022 20:28:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CE8A812EE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bFsrlSsR0ASt; Tue, 22 Nov 2022 20:28:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA7D5812E2;
+	Tue, 22 Nov 2022 20:28:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA7D5812E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 038231BF285
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:28:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEC5E40B78
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:28:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEC5E40B78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CVjSFvnMWmhT; Tue, 22 Nov 2022 20:18:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0173E40B5A;
-	Tue, 22 Nov 2022 20:18:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0173E40B5A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7AAF51BF285
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:18:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63BC360B73
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:18:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63BC360B73
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a8BRsBQgHxWe for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 20:18:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EABBC60B2F
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EABBC60B2F
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:18:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 868151BF204;
- Tue, 22 Nov 2022 20:18:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1oxZjB-000Cy8-4W; Tue, 22 Nov 2022 21:18:45 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 21:18:25 +0100
-Message-Id: <20221122201826.49696-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aC231lebnc_m for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 20:28:33 +0000 (UTC)
+X-Greylist: delayed 00:06:14 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A29F440186
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A29F440186
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:28:33 +0000 (UTC)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
+ include these headers.
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python3: add upstream security fix for
- CVE-2022-45061
+Message-Id: <A6EE03B3-29A3-408B-B645-54C2C719C427@senzilla.io>
+Date: Tue, 22 Nov 2022 21:22:01 +0100
+To: =?utf-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=senzilla.io; s=key1; t=1669148534;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=W+vYrsayzlVjDnRF0d5hP2xxeACPuRstkAT6fXr6/tI=;
+ b=kDGJCe2j/icjHlrU6NsO+S8zWgyMkh8Yhqp2qZu+fB6Tb45+b/vENudElJB2vO2WsGN7K7
+ 1KS4+lUSRWeT4fGohcoGit3WWfrzVGCS6f8UfMgqvfIuv1coyUgZ0YJGSzRkPCTv7mY2Ls
+ 6cfba62vq7bdRoL9KYVUh1DS3rSd9fc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=senzilla.io header.i=@senzilla.io header.a=rsa-sha256
+ header.s=key1 header.b=kDGJCe2j
+Subject: Re: [Buildroot] [PATCH] boot/edk2: fix the build for arm sgi575
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,142 +67,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "D. Olsson via buildroot" <buildroot@buildroot.org>
+Reply-To: "D. Olsson" <hi@senzilla.io>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issue:
-
-CVE-2022-45061: An issue was discovered in Python before 3.11.1.  An
-unnecessary quadratic algorithm exists in one path when processing some
-inputs to the IDNA (RFC 3490) decoder, such that a crafted, unreasonably
-long name being presented to the decoder could lead to a CPU denial of
-service.  Hostnames are often supplied by remote servers that could be
-controlled by a malicious actor; in such a scenario, they could trigger
-excessive CPU consumption on the client attempting to make use of an
-attacker-supplied supposed hostname.  For example, the attack payload could
-be placed in the Location header of an HTTP response with status code 302.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-quadratic-time-idna-decoding.-GH-9.patch | 86 +++++++++++++++++++
- package/python3/python3.mk                    |  3 +
- 2 files changed, 89 insertions(+)
- create mode 100644 package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-
-diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-new file mode 100644
-index 0000000000..d281e7261d
---- /dev/null
-+++ b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-@@ -0,0 +1,86 @@
-+From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
-+From: "Miss Islington (bot)"
-+ <31488909+miss-islington@users.noreply.github.com>
-+Date: Mon, 7 Nov 2022 19:23:16 -0800
-+Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
-+ (GH-99222)
-+
-+There was an unnecessary quadratic loop in idna decoding. This restores
-+the behavior to linear.
-+
-+(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
-+
-+(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
-+
-+Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
-+Co-authored-by: Gregory P. Smith <greg@krypto.org>
-+[Peter: drop NEWS.d/*]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Lib/encodings/idna.py                         | 32 +++++++++----------
-+ Lib/test/test_codecs.py                       |  6 ++++
-+ 2 files changed, 23 insertions(+), 17 deletions(-)
-+
-+diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
-+index ea4058512f..bf98f51336 100644
-+--- a/Lib/encodings/idna.py
-++++ b/Lib/encodings/idna.py
-+@@ -39,23 +39,21 @@ def nameprep(label):
-+ 
-+     # Check bidi
-+     RandAL = [stringprep.in_table_d1(x) for x in label]
-+-    for c in RandAL:
-+-        if c:
-+-            # There is a RandAL char in the string. Must perform further
-+-            # tests:
-+-            # 1) The characters in section 5.8 MUST be prohibited.
-+-            # This is table C.8, which was already checked
-+-            # 2) If a string contains any RandALCat character, the string
-+-            # MUST NOT contain any LCat character.
-+-            if any(stringprep.in_table_d2(x) for x in label):
-+-                raise UnicodeError("Violation of BIDI requirement 2")
-+-
-+-            # 3) If a string contains any RandALCat character, a
-+-            # RandALCat character MUST be the first character of the
-+-            # string, and a RandALCat character MUST be the last
-+-            # character of the string.
-+-            if not RandAL[0] or not RandAL[-1]:
-+-                raise UnicodeError("Violation of BIDI requirement 3")
-++    if any(RandAL):
-++        # There is a RandAL char in the string. Must perform further
-++        # tests:
-++        # 1) The characters in section 5.8 MUST be prohibited.
-++        # This is table C.8, which was already checked
-++        # 2) If a string contains any RandALCat character, the string
-++        # MUST NOT contain any LCat character.
-++        if any(stringprep.in_table_d2(x) for x in label):
-++            raise UnicodeError("Violation of BIDI requirement 2")
-++        # 3) If a string contains any RandALCat character, a
-++        # RandALCat character MUST be the first character of the
-++        # string, and a RandALCat character MUST be the last
-++        # character of the string.
-++        if not RandAL[0] or not RandAL[-1]:
-++            raise UnicodeError("Violation of BIDI requirement 3")
-+ 
-+     return label
-+ 
-+diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
-+index 8edd5ac063..2407567261 100644
-+--- a/Lib/test/test_codecs.py
-++++ b/Lib/test/test_codecs.py
-+@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
-+         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
-+         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
-+ 
-++    def test_builtin_decode_length_limit(self):
-++        with self.assertRaisesRegex(UnicodeError, "too long"):
-++            (b"xn--016c"+b"a"*1100).decode("idna")
-++        with self.assertRaisesRegex(UnicodeError, "too long"):
-++            (b"xn--016c"+b"a"*70).decode("idna")
-++
-+     def test_stream(self):
-+         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
-+         r.read(3)
-+-- 
-+2.30.2
-+
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4131941e11..2e17104102 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
- PYTHON3_CPE_ID_VENDOR = python
- PYTHON3_CPE_ID_PRODUCT = python
- 
-+# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-+PYTHON3_IGNORE_CVES += CVE-2022-45061
-+
- # This host Python is installed in $(HOST_DIR), as it is needed when
- # cross-compiling third-party Python modules.
- 
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+77u/CkhpIFZpbmNlbnQsCgo+IE9uIDIyIE5vdiAyMDIyLCBhdCAxODoxNSwgVmluY2VudCBTdGVo
+bMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPiB3cm90ZToKPiAKPiDvu79UaGUgZWRrMiBwYWNr
+YWdlIGNhbiBiZSBjb25maWd1cmVkIGZvciBwbGF0Zm9ybSBBcm0gU2dpNTc1IGJ1dCB0aGlzIGRv
+ZXMKPiBub3QgYnVpbGQgY29ycmVjdGx5LiBBZGQgdGhlIG5lY2Vzc2FyeSBkZWZpbml0aW9ucyB0
+byBmaXggdGhlIGJ1aWxkLgoKVGhhbmtzIGZvciBjYXRjaGluZyB0aGlzIQoKSSB3YXMgdXNpbmcg
+dGhlIFNnaTU3NSB0YXJnZXQgYSBiaXQgZm9yIHRlc3Rpbmcgd2hlbiBidWlsZGluZyBvdXQgdGhp
+cyBwYWNrYWdlIGVhcmx5IG9uLiBJIG11c3QgaGF2ZSBtaXNzZWQgdGhlIGRlZmluaXRpb25zIHdo
+ZW4gYXNzZW1ibGluZyB0aGUgaW5pdGlhbCBwYXRjaHNldC4KCj4gQWx0ZXJuYXRpdmVseSB3ZSBj
+b3VsZCByZW1vdmUgdGhlIEJSMl9UQVJHRVRfRURLMl9QTEFURk9STV9BUk1fU0dJNTc1IGZyb20g
+dGhlCj4gQ29uZmlnLmluIGZpbGUgY29tcGxldGVseSBpZiB0aGlzIGlzIHByZWZlcnJlZC4gSnVz
+dCBsZXQgbWUga25vdyBhbmQgSSB3aWxsCj4gc2VuZCBhIHBhdGNoLgoKSSB0aGluayBpdCBzaG91
+bGQgYmUga2VwdC4gSXQncyBhIGdyZWF0IHRhcmdldCBmb3IgdGVzdGluZyBhbmQgZW11bGF0aW9u
+LgoKPiBCZXN0IHJlZ2FyZHMsCj4gVmluY2VudC4KPiAKPiAKPiBib290L2VkazIvZWRrMi5tayB8
+IDYgKysrKysrCj4gMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1n
+aXQgYS9ib290L2VkazIvZWRrMi5tayBiL2Jvb3QvZWRrMi9lZGsyLm1rCj4gaW5kZXggNWNiZDlk
+MTUyZTcuLjdkODc2NWMzMTA4IDEwMDY0NAo+IC0tLSBhL2Jvb3QvZWRrMi9lZGsyLm1rCj4gKysr
+IGIvYm9vdC9lZGsyL2VkazIubWsKPiBAQCAtNzUsNiArNzUsMTIgQEAgRURLMl9QQUNLQUdFX05B
+TUUgPSBBcm1WaXJ0UGtnCj4gRURLMl9QTEFURk9STV9OQU1FID0gQXJtVmlydFFlbXVLZXJuZWwK
+PiBFREsyX0JVSUxEX0RJUiA9ICQoRURLMl9QTEFURk9STV9OQU1FKS0kKEVESzJfQVJDSCkKPiAK
+PiArZWxzZSBpZmVxICgkKEJSMl9UQVJHRVRfRURLMl9QTEFURk9STV9BUk1fU0dJNTc1KSx5KQo+
+ICtFREsyX0FSQ0ggPSBBQVJDSDY0Cj4gK0VESzJfUEFDS0FHRV9OQU1FID0gUGxhdGZvcm0vQVJN
+L1NnaVBrZy9TZ2k1NzUKPiArRURLMl9QTEFURk9STV9OQU1FID0gU2dpNTc1Cj4gK0VESzJfQlVJ
+TERfRElSID0gJChFREsyX1BMQVRGT1JNX05BTUUpCj4gKwo+IGVsc2UgaWZlcSAoJChCUjJfVEFS
+R0VUX0VESzJfUExBVEZPUk1fQVJNX1ZFWFBSRVNTX0ZWUF9BQVJDSDY0KSx5KQo+IEVESzJfQVJD
+SCA9IEFBUkNINjQKPiBFREsyX1BBQ0tBR0VfTkFNRSA9IFBsYXRmb3JtL0FSTS9WRXhwcmVzc1Br
+Zwo+IC0tIAo+IDIuMzUuMQoKSSB3b24ndCBiZSBhYmxlIHRvIHRlc3QgdGhpcyBhbnl0aW1lIHNv
+b24uIEJ1dCBhdCBhIGdsYW5jZSB0aGUgcGF0Y2ggbG9va3Mgb2shCgoKQ2hlZXJzLAoKRC4gT2xz
+c29uCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
