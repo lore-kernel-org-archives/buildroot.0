@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB93FC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:29:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49AD3C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3986B409E3;
-	Tue, 22 Nov 2022 22:29:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3986B409E3
+	by smtp2.osuosl.org (Postfix) with ESMTP id E922740B9C;
+	Tue, 22 Nov 2022 22:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E922740B9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hl6cN0xHvgLj; Tue, 22 Nov 2022 22:29:13 +0000 (UTC)
+	with ESMTP id lxxm8imd16aB; Tue, 22 Nov 2022 22:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A21E40A07;
-	Tue, 22 Nov 2022 22:29:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A21E40A07
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5166B1BF46D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:29:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3366B40A01;
+	Tue, 22 Nov 2022 22:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3366B40A01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D77A1BF46D
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D2978132D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D2978132D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A17D41901
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A17D41901
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8I5GWkO6JA6r for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 22:29:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZY_34tPWMd1Z for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 22:30:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 101AB81EF1
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 101AB81EF1
- for <buildroot@busybox.net>; Tue, 22 Nov 2022 22:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E405418C5
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0E405418C5
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:30:17 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E6F791BF207;
- Tue, 22 Nov 2022 22:29:02 +0000 (UTC)
-Date: Tue, 22 Nov 2022 23:29:02 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20221122232902.5371d005@windsurf>
-In-Reply-To: <20221109083440.1254693-1-francois.perrad@gadz.org>
-References: <20221109083440.1254693-1-francois.perrad@gadz.org>
+ by mail.gandi.net (Postfix) with ESMTPSA id E4C04FF806;
+ Tue, 22 Nov 2022 22:30:14 +0000 (UTC)
+Date: Tue, 22 Nov 2022 23:30:14 +0100
+To: Tim Gover <tim.gover@raspberrypi.com>
+Message-ID: <20221122233014.5b274d03@windsurf>
+In-Reply-To: <20221101093007.28341-1-tim.gover@raspberrypi.com>
+References: <20221101093007.28341-1-tim.gover@raspberrypi.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669156143;
+ d=bootlin.com; s=gm1; t=1669156215;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tFJ/zN07uPwP8IZRySOLoG0CggiiIzgNg6h25icMaQM=;
- b=or3leVPGrVUZruQyAlvm0/Rgze1UPAuL2e/UbfHr78ouM2xD/tOV9PoR3+ud5mYDVf0Gpz
- Fj3iLF2smk3ScbcCIgD66kZJCEpohQb/WkD+V3gMvGHQvNKNVJ2rqHnNJYm6IbBb2yPuMm
- pMUXxocvOWyKPH5V2yJYIag0MNjgVgUKXbHgsgLZZ2/EJeIF/bI5eBimwZa8SCCk7zB3Ul
- J+/jMWkB6VVBwvherrxwEN5wYbsBHCosHULpNYAWnMJWT8dyBElbyhF7A80bfqF6OiF+Sz
- ezBzMVA8qZ+TMUuRuIsyVVMSwLHXU3tVJAV6rXyfADsblX9keACRNcb9js0X+w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=gnoPs6t1lfAiItg31HQIMfOzlt2/HowJuukxqmdKKCQ=;
+ b=NpMKAdCof/Qgw1Hp3pqpftgXYfSSZ80mULzMqk2uIoW/c9o8ommELry7l5Hdhwg7wafPXF
+ m3rsoClgOvoCtsfjpp3FkzM8qc5yc9iWXYMTClzhAFpnVfcBIbEOazuo95x4+DZhCybUiz
+ 4Nd65BcEeyXYkAjfSsXxgxjQCW5ZK2s1Q57RAZGDahzBIf3NZFp+vBCn7bNtoi+JC/F10m
+ NvxB7pcgkZEnUq0x1AG2Xg29+FgdumyI+nao9MX+XHGcLPc4ODjmxlXoTB1tNCVuESkhQV
+ OQMkiTfIp7JHZLJ3UcY3sdVj4i6hQupbashXYJU0T6QiJdfWKcqjEhtTJwD93w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=or3leVPG
-Subject: Re: [Buildroot] [PATCH] package/lua-mqtt: new package
+ header.s=gm1 header.b=NpMKAdCo
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-userland: add support for
+ aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,25 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  9 Nov 2022 09:34:40 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On Tue,  1 Nov 2022 09:30:07 +0000
+Tim Gover <tim.gover@raspberrypi.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Enable aarch64 support for rpi-userland to provide
+> vcmailbox and vcgencmd in 64bit builds. The are useful
+> for programming OTP and system debug.
+> 
+> The ARM64=ON parameter restricts the make targets
+> to only include those supported on 64-bit i.e. it
+> excludes the legacy Broadcom EGL drivers.
+> 
+> Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
 > ---
->  package/Config.in              |  1 +
->  package/lua-mqtt/Config.in     | 11 +++++++++++
->  package/lua-mqtt/lua-mqtt.hash |  3 +++
->  package/lua-mqtt/lua-mqtt.mk   | 11 +++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/lua-mqtt/Config.in
->  create mode 100644 package/lua-mqtt/lua-mqtt.hash
->  create mode 100644 package/lua-mqtt/lua-mqtt.mk
+>  package/rpi-userland/Config.in       | 14 +++++++-------
+>  package/rpi-userland/rpi-userland.mk |  6 ++++++
+>  2 files changed, 13 insertions(+), 7 deletions(-)
 
 Applied to next, thanks.
 
