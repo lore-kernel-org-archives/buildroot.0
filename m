@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AABEC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F06C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF9FB6115F;
-	Tue, 22 Nov 2022 20:32:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF9FB6115F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LjmL4QUtOvD8; Tue, 22 Nov 2022 20:32:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3D6861160;
-	Tue, 22 Nov 2022 20:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D6861160
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B10FB1BF285
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C011418F8
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C011418F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C11D41902;
+	Tue, 22 Nov 2022 20:32:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C11D41902
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FmQrYAbS_jpY for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 20:32:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12B43418FD
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 12B43418FD
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:32:00 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6_Ji2832iXT8; Tue, 22 Nov 2022 20:32:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A21641903;
+	Tue, 22 Nov 2022 20:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A21641903
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D56D31BF285
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE38F61163
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE38F61163
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DuWkirSzneBN for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 20:32:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38BD561035
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 38BD561035
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:32:07 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.169.84.171])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id DF84DB00533;
- Tue, 22 Nov 2022 21:31:52 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4CCE4B00572;
+ Tue, 22 Nov 2022 21:31:59 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 21:31:25 +0100
-Message-Id: <20221122203130.184496-2-ju.o@free.fr>
+Date: Tue, 22 Nov 2022 21:31:26 +0100
+Message-Id: <20221122203130.184496-3-ju.o@free.fr>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221122203130.184496-1-ju.o@free.fr>
 References: <20221122203130.184496-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1669149119;
- bh=uUI+4sjsGAPyRzGryH3uB0hTHk0X9WXNvt9vVssfCZc=;
+ d=free.fr; s=smtp-20201208; t=1669149125;
+ bh=PDG6L1uuOJpaph1mx044yV60q/3j55tveybHM8Tgl2s=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=qQndz1bM0t4005Aj6bLc+u149C7utQkxp6/rqz8qmCWJweTxTjDNkUJbIej+Ibs9l
- T9uKhDPKQE3hXHS1JeYAQT2C9+vw9BA9DmrmuW1ItHZklDQOkUjkx8gUZXmIE+P2VO
- tIAwsfv6P1rYRnG15pAqcLTr8gnxx1UvCZzZUdgmC58bI725rT9mjml3vMUABngUgs
- Xs9LOFOXe49MhZaNQcA63AMlLKAsBqb8Jn3971s+DV3zFkckAgl8VvQaPcTjlsl0cR
- S2MoW6y/O/mWWb1LvHkAn0gWhJ1IuwIsGH2AWChprF0zN2umxm5qsivIJFeKePTB6Q
- I+FktDJVrqTAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=sEf9suJ8bqAKEiYDp76yyTmTq6/my48DFK4ZnN/ron/C3K/08rHH5LDfucgVMt+ZF
+ BSEu02bVBQNWFeAeO9fnazKUIOUmH7tQhuOrDHef5W8YwzObf1KQxbA0LalXx3spMw
+ U9j1xZIBMWUzXWmWG/ugUwi0Zo1N7hul2Qt4LI+TJhzWPHa4vu1rHHMS6+9+edMI6q
+ 7415p62ASxHD8BoFezOfFJExMM/xe1Lh+BN6Ii6+qUyYPLOFbQy33RinMH3TqKyH2/
+ krLFYHhXCjEC+Yz21dh3PYy72puC3NO/Zt9KRsW0wQnae+vOdxENr75fHy+SI8Rj0T
+ g1OvGMKBGI0HA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qQndz1bM
-Subject: [Buildroot] [PATCH next v2 2/7] package/python-hkdf: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sEf9suJ8
+Subject: [Buildroot] [PATCH next v2 3/7] package/python-spake2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,151 +80,166 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-HMAC-based Extract-and-Expand Key Derivation Function (HKDF).
+SPAKE2 password-authenticated key exchange (in pure python).
 
-https://github.com/casebeer/python-hkdf
+This library implements the SPAKE2 password-authenticated key
+exchange ("PAKE") algorithm. This allows two parties, who share a
+weak password, to safely derive a strong shared secret (and
+therefore build an encrypted+authenticated channel).
+
+https://github.com/warner/python-spake2
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  DEVELOPERS                                    |  3 +++
  package/Config.in                             |  1 +
- package/python-hkdf/Config.in                 |  7 ++++++
- package/python-hkdf/python-hkdf.hash          |  3 +++
- package/python-hkdf/python-hkdf.mk            | 13 +++++++++++
- .../tests/package/sample_python_hkdf.py       | 22 +++++++++++++++++++
- .../testing/tests/package/test_python_hkdf.py | 11 ++++++++++
- 7 files changed, 60 insertions(+)
- create mode 100644 package/python-hkdf/Config.in
- create mode 100644 package/python-hkdf/python-hkdf.hash
- create mode 100644 package/python-hkdf/python-hkdf.mk
- create mode 100644 support/testing/tests/package/sample_python_hkdf.py
- create mode 100644 support/testing/tests/package/test_python_hkdf.py
+ package/python-spake2/Config.in               | 13 +++++++++++
+ package/python-spake2/python-spake2.hash      |  5 +++++
+ package/python-spake2/python-spake2.mk        | 14 ++++++++++++
+ .../tests/package/sample_python_spake2.py     | 22 +++++++++++++++++++
+ .../tests/package/test_python_spake2.py       | 11 ++++++++++
+ 7 files changed, 69 insertions(+)
+ create mode 100644 package/python-spake2/Config.in
+ create mode 100644 package/python-spake2/python-spake2.hash
+ create mode 100644 package/python-spake2/python-spake2.mk
+ create mode 100644 support/testing/tests/package/sample_python_spake2.py
+ create mode 100644 support/testing/tests/package/test_python_spake2.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fb6b329087..3c636a0d55 100644
+index 3c636a0d55..8807f13aae 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1694,12 +1694,14 @@ F:	package/ola/
- F:	package/ptm2human/
- F:	package/python-distro/
+@@ -1696,6 +1696,7 @@ F:	package/python-distro/
  F:	package/python-gnupg/
-+F:	package/python-hkdf/
+ F:	package/python-hkdf/
  F:	package/python-pyalsa/
++F:	package/python-spake2/
  F:	package/riscv-isa-sim/
  F:	package/tinycompress/
  F:	package/z3/
- F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
-+F:	support/testing/tests/package/sample_python_hkdf.py
+@@ -1704,6 +1705,7 @@ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_hkdf.py
  F:	support/testing/tests/package/sample_python_gnupg.py
  F:	support/testing/tests/package/sample_python_pyalsa.py
++F:	support/testing/tests/package/sample_python_spake2.py
  F:	support/testing/tests/package/test_hwloc.py
-@@ -1707,6 +1709,7 @@ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_octave.py
  F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_python_distro.py
-+F:	support/testing/tests/package/test_python_hkdf.py
+@@ -1712,6 +1714,7 @@ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_hkdf.py
  F:	support/testing/tests/package/test_python_gnupg.py
  F:	support/testing/tests/package/test_python_pyalsa.py
++F:	support/testing/tests/package/test_python_spake2.py
  F:	support/testing/tests/package/test_z3.py
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
 diff --git a/package/Config.in b/package/Config.in
-index 7b18859d02..afb42efe49 100644
+index afb42efe49..9c476d9407 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1061,6 +1061,7 @@ menu "External python modules"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h2/Config.in"
- 	source "package/python-hiredis/Config.in"
-+	source "package/python-hkdf/Config.in"
- 	source "package/python-hpack/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-hkdf/Config.in b/package/python-hkdf/Config.in
+@@ -1272,6 +1272,7 @@ menu "External python modules"
+ 	source "package/python-sockjs/Config.in"
+ 	source "package/python-sortedcontainers/Config.in"
+ 	source "package/python-soupsieve/Config.in"
++	source "package/python-spake2/Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-sqlalchemy/Config.in"
+ 	source "package/python-sqliteschema/Config.in"
+diff --git a/package/python-spake2/Config.in b/package/python-spake2/Config.in
 new file mode 100644
-index 0000000000..2add348ca2
+index 0000000000..1c2e3a49af
 --- /dev/null
-+++ b/package/python-hkdf/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_HKDF
-+	bool "python-hkdf"
-+	help
-+	  HMAC-based Extract-and-Expand Key Derivation Function
-+	  (HKDF).
-+
-+	  https://github.com/casebeer/python-hkdf
-diff --git a/package/python-hkdf/python-hkdf.hash b/package/python-hkdf/python-hkdf.hash
-new file mode 100644
-index 0000000000..87702b4582
---- /dev/null
-+++ b/package/python-hkdf/python-hkdf.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/hkdf/json
-+md5  d10471ad0ec891cdbe165d78282c943e  hkdf-0.0.3.tar.gz
-+sha256  622a31c634bc185581530a4b44ffb731ed208acf4614f9c795bdd70e77991dca  hkdf-0.0.3.tar.gz
-diff --git a/package/python-hkdf/python-hkdf.mk b/package/python-hkdf/python-hkdf.mk
-new file mode 100644
-index 0000000000..f495de7d0b
---- /dev/null
-+++ b/package/python-hkdf/python-hkdf.mk
++++ b/package/python-spake2/Config.in
 @@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_SPAKE2
++	bool "python-spake2"
++	select BR2_PACKAGE_PYTHON_HKDF # runtime
++	help
++	  SPAKE2 password-authenticated key exchange (in pure python).
++
++	  This library implements the SPAKE2 password-authenticated
++	  key exchange ("PAKE") algorithm. This allows two parties,
++	  who share a weak password, to safely derive a strong shared
++	  secret (and therefore build an encrypted+authenticated
++	  channel).
++
++	  https://github.com/warner/python-spake2
+diff --git a/package/python-spake2/python-spake2.hash b/package/python-spake2/python-spake2.hash
+new file mode 100644
+index 0000000000..30052b1b36
+--- /dev/null
++++ b/package/python-spake2/python-spake2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/spake2/json
++md5  0155bad518bb49c39994fe0b7d9fb32c  spake2-0.8.tar.gz
++sha256  c17a614b29ee4126206e22181f70a406c618d3c6c62ca6d6779bce95e9c926f4  spake2-0.8.tar.gz
++# Locally computed sha256 checksums
++sha256  2a8a1200c3a2769d1815727f3b4439bd800f3bc88163118a36ff30b007d30031  LICENSE
+diff --git a/package/python-spake2/python-spake2.mk b/package/python-spake2/python-spake2.mk
+new file mode 100644
+index 0000000000..99ce7dae13
+--- /dev/null
++++ b/package/python-spake2/python-spake2.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-hkdf
++# python-spake2
 +#
 +################################################################################
 +
-+PYTHON_HKDF_VERSION = 0.0.3
-+PYTHON_HKDF_SOURCE = hkdf-$(PYTHON_HKDF_VERSION).tar.gz
-+PYTHON_HKDF_SITE = https://files.pythonhosted.org/packages/c3/be/327e072850db181ce56afd51e26ec7aa5659b18466c709fa5ea2548c935f
-+PYTHON_HKDF_SETUP_TYPE = setuptools
-+PYTHON_HKDF_LICENSE = BSD-2-Clause
++PYTHON_SPAKE2_VERSION = 0.8
++PYTHON_SPAKE2_SOURCE = spake2-$(PYTHON_SPAKE2_VERSION).tar.gz
++PYTHON_SPAKE2_SITE = https://files.pythonhosted.org/packages/60/0b/bb5eca8e18c38a10b1c207bbe6103df091e5cf7b3e5fdc0efbcad7b85b60
++PYTHON_SPAKE2_SETUP_TYPE = setuptools
++PYTHON_SPAKE2_LICENSE = MIT
++PYTHON_SPAKE2_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_hkdf.py b/support/testing/tests/package/sample_python_hkdf.py
+diff --git a/support/testing/tests/package/sample_python_spake2.py b/support/testing/tests/package/sample_python_spake2.py
 new file mode 100644
-index 0000000000..a730c633e1
+index 0000000000..49dd914ca8
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_hkdf.py
++++ b/support/testing/tests/package/sample_python_spake2.py
 @@ -0,0 +1,22 @@
-+import hashlib
-+from binascii import hexlify, unhexlify
++from binascii import hexlify
 +
-+from hkdf import Hkdf, hkdf_expand, hkdf_extract
++from spake2 import SPAKE2_A, SPAKE2_B
 +
-+salt = b"ThisIsTheSalt."
-+key_in = b"ThisIsTheSecretKey"
-+key_info = b"KeyInfo1"
-+key_len = 16
-+expected_key = unhexlify(b"b49d6cc9065b72f3a0859377d8bb7299")
 +
-+prk = hkdf_extract(salt, input_key_material=key_in, hash=hashlib.sha512)
-+key1 = hkdf_expand(prk, info=key_info, length=key_len)
++shared_password = b"This Is The Password!"
 +
-+print("key1:", hexlify(key1))
-+assert key1 == expected_key
++alice = SPAKE2_A(shared_password)
++alice_msg = alice.start()
 +
-+kdf = Hkdf(salt, input_key_material=key_in, hash=hashlib.sha512)
-+key2 = kdf.expand(info=key_info, length=key_len)
++bob = SPAKE2_B(shared_password)
++bob_msg = bob.start()
 +
-+print("key2:", hexlify(key2))
-+assert key2 == expected_key
-diff --git a/support/testing/tests/package/test_python_hkdf.py b/support/testing/tests/package/test_python_hkdf.py
++# Alice and Bob exchange their messages...
++
++alice_key = alice.finish(bob_msg)
++bob_key = bob.finish(alice_msg)
++
++print("alice_key:", hexlify(alice_key))
++print("  bob_key:", hexlify(bob_key))
++
++assert alice_key == bob_key
+diff --git a/support/testing/tests/package/test_python_spake2.py b/support/testing/tests/package/test_python_spake2.py
 new file mode 100644
-index 0000000000..e93c24ff60
+index 0000000000..fb47a0802c
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_hkdf.py
++++ b/support/testing/tests/package/test_python_spake2.py
 @@ -0,0 +1,11 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy3Hkdf(TestPythonPackageBase):
++class TestPythonPy3Spake2(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_HKDF=y
++        BR2_PACKAGE_PYTHON_SPAKE2=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_hkdf.py"]
++    sample_scripts = ["tests/package/sample_python_spake2.py"]
 -- 
 2.38.1
 
