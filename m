@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D9DC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B7EDC433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E95FB40A01;
-	Tue, 22 Nov 2022 22:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E95FB40A01
+	by smtp4.osuosl.org (Postfix) with ESMTP id A993B4191B;
+	Tue, 22 Nov 2022 22:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A993B4191B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 11ZCJPDih72a; Tue, 22 Nov 2022 22:33:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CQEkjTPvLeMU; Tue, 22 Nov 2022 22:38:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12A8F40BBC;
-	Tue, 22 Nov 2022 22:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12A8F40BBC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71F4641924;
+	Tue, 22 Nov 2022 22:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71F4641924
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AEDA31BF46D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:33:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 188E51BF46D
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A1CA40BB5
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A1CA40BB5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 011D440528
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011D440528
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WuxnLaxgQROR for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 22:33:54 +0000 (UTC)
+ with ESMTP id UqvKcTDQv6rJ for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 22:38:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3751740A01
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3751740A01
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:33:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 851CE409F8
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 851CE409F8
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:38:41 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 49ED6FF802;
- Tue, 22 Nov 2022 22:33:50 +0000 (UTC)
-Date: Tue, 22 Nov 2022 23:33:50 +0100
-To: Tim Gover <tim.gover@raspberrypi.com>
-Message-ID: <20221122233350.6b00aa83@windsurf>
-In-Reply-To: <20221031150235.12074-1-tim.gover@raspberrypi.com>
-References: <20221031150235.12074-1-tim.gover@raspberrypi.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 77726240005;
+ Tue, 22 Nov 2022 22:38:39 +0000 (UTC)
+Date: Tue, 22 Nov 2022 23:38:38 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20221122233838.45a5a96b@windsurf>
+In-Reply-To: <20221031195205.429257-2-bernd.kuhls@t-online.de>
+References: <20221031195205.429257-1-bernd.kuhls@t-online.de>
+ <20221031195205.429257-2-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669156432;
+ d=bootlin.com; s=gm1; t=1669156719;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uMWTs+l8CHqxbiMVFvBPL3NKS57lhWNLZ2E7JSuyggw=;
- b=WZvaRwfgDQssWRN1cLoLJrxtyUE8/X7ucN6e76+GZRUJOywdlXDwSzYYRlkzqcFyQiZhcl
- tNDUrb39jlxPn+ZebvHFmeIEMjlhIj+OG7/B55TsRXYNlFngyv03xszZIWies4mZcBme75
- 8xLvBSc68Z7oifTCkP38LD2sG+Lcp0RVB8wN89/yUh15heHN2k+mQdgqrl880NvF4H9vbE
- a1/+DE4t4xYzE9VNF9wxlLqoVbTCcNJi0v4wDsJ/MNLFoedJvuGGK+jdIkDXanFytWEx9e
- qxdIriPvuEf+Lc2I3R/Kgm5EPFOTiV5dFhxii1uOSdCDXV+gAKer0g3QNlMH3g==
+ bh=6ZRemleEIpg7/eDCTAI+5F7SFnpYmySCDvw+kv4PLB8=;
+ b=QgZ/Zj1sTw4kDM6rcIjrXfVq5GDIjyERe6safXypZ8I92lqEuUiPFXXzLT/9HYBQRFGqJx
+ KoOBwjoIpsRxmgAUb/bYZbfrSGw2bxdYLqt8tKU3kSqcmXvT2F+LARbMaGB1Du9M5UW3GE
+ jCsvjAgui1obpzoRclUMPJPP9ejrrnvmi4AAHxnkgh35FQK3ffNSBdbhBJT3+VWsSztNsQ
+ SxAWURcSIxSX7lcgqDEpdul4I1iYor/8m3Yj86B9t5A6Cj8STYQbZPwL+7nz4DTK+W0AvJ
+ omBfQswPo6XUKCXrknwq0PejPJLjhakCJeMQ61oXGMZrgUXIY1aj89+UWej1jg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WZvaRwfg
-Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: add
- overlays/README
+ header.s=gm1 header.b=QgZ/Zj1s
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/monero: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,49 +78,115 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Cc: Stefan Ott <stefan@ott.net>, Samuel Martin <s.martin49@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Tim,
+Hello Bernd,
 
-On Mon, 31 Oct 2022 15:02:35 +0000
-Tim Gover <tim.gover@raspberrypi.com> wrote:
+Thanks for the contribution. See below some comments.
 
-> If a custom os_prefix directory is specified then the Raspberry Pi
-> firmware probes for the README file in overlays directory. If
-> this is not found then firmware will use the top-level overlays
-> directory which can be confusing if os_prefix is used in conjunction
-> with other filters to implement alternate boot behaviour.
-> 
-> In Raspberry Pi OS the README file is always included to ensure
-> that the relevant documenation is in sync with the overlays. Rather
-> that including the entire file let's just include an emtpy file so
-> that overlays directory is consistent with the Raspberry Pi OS
-> APT package.
-> 
-> From
-> https://www.raspberrypi.com/documentation/computers/config_txt.html#overlay_prefix
-> 
-> Unless ${os_prefix}${overlay_prefix}README exists, overlays are shared
-> with the main OS (i.e. os_prefix is ignored).
-> 
-> Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
+On Mon, 31 Oct 2022 20:52:04 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/rpi-firmware/rpi-firmware.mk | 1 +
->  1 file changed, 1 insertion(+)
+> v2: disabled support for BR2_aarch64_be, not supported upstream:
+>     https://github.com/tevador/RandomX/pull/257
 
-I am not entirely sure how useful ${os_prefix} is in the context of a
-Buildroot generated system, but I guess having this empty README file
-doesn't hurt much, so I've applied to next. Thanks!
+What this pull requests says is "The current implementation of JIT
+won't work on big endian processors.". So the problem seems to not be
+with just AArch64 BE, but all big endian architectures, no? If so,
+should this be depends on BR2_ENDIAN != "BIG" ? (With a comment above it).
+
+Curious: what is the use case of a cryptocurrency stuff in Buildroot?
+
+
+> diff --git a/package/monero/0001-disable-stack-protector.patch b/package/monero/0001-disable-stack-protector.patch
+> new file mode 100644
+> index 0000000000..0407b4e32d
+> --- /dev/null
+> +++ b/package/monero/0001-disable-stack-protector.patch
+> @@ -0,0 +1,22 @@
+> +Disable unconditional stack-protector support
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+They're using Git upstream, so please use Git-formatted patches.
+
+Has this been submitted upstream, for example by making SSP optional?
+
+> diff --git a/package/monero/0002-system-miniupnpc.patch b/package/monero/0002-system-miniupnpc.patch
+> new file mode 100644
+> index 0000000000..e12d9302bd
+> --- /dev/null
+> +++ b/package/monero/0002-system-miniupnpc.patch
+> @@ -0,0 +1,112 @@
+> +Add support for miniupnpc system library
+> +
+> +Downloaded from
+> +https://git.alpinelinux.org/aports/plain/community/monero/system-miniupnpc.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+It also needs to be Git formatted.
+
+Has this been submitted upstream?
+
+
+> diff --git a/package/monero/Config.in b/package/monero/Config.in
+> new file mode 100644
+> index 0000000000..59036286cd
+> --- /dev/null
+> +++ b/package/monero/Config.in
+> @@ -0,0 +1,35 @@
+> +config BR2_PACKAGE_MONERO
+> +	bool "monero"
+> +	depends on !BR2_aarch64_be && !BR2_i386
+
+Why is i386 excluded?
+
+
+> +MONERO_VERSION = 0.18.1.2
+> +MONERO_SOURCE = monero-source-v$(MONERO_VERSION).tar.bz2
+> +MONERO_SITE = https://downloads.getmonero.org/cli
+> +MONERO_LICENSE = MIT
+> +MONERO_LICENSE_FILES = LICENSE
+> +MONERO_CONF_OPTS = \
+> +	-DBUILD_DOCUMENTATION=OFF \
+> +	-DCMAKE_CXX_FLAGS="$(MONERO_CXXFLAGS)" \
+> +	-DCMAKE_BUILD_TYPE=None \
+
+Is that normal?
+
+> +	-DMANUAL_SUBMODULES=ON \
+> +	-DSTACK_TRACE=OFF \
+> +	-DUSE_CCACHE=OFF \
+> +	-DUSE_DEVICE_TREZOR=OFF
+> +MONERO_DEPENDENCIES = \
+> +	boost \
+> +	czmq \
+> +	libminiupnpc \
+> +	libsodium \
+> +	openssl \
+> +	unbound
+> +
+> +ifeq ($(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64el)$(BR2_sparc64),y)
+
+So you don't support AArch64 BE, but it's handled here ? :-)
+
+> +MONERO_CONF_OPTS += -DNO_AES=ON
+> +endif
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
