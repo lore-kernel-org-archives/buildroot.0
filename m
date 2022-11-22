@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9962CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:29:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC34C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 394C942CEB;
-	Mon, 20 Feb 2023 21:29:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 394C942CEB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9383F409E6;
+	Mon, 20 Feb 2023 21:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9383F409E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xqbq1jfYgI9R; Mon, 20 Feb 2023 21:29:17 +0000 (UTC)
+	with ESMTP id VVnU_eevODvc; Mon, 20 Feb 2023 21:29:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE62345AC9;
-	Mon, 20 Feb 2023 21:29:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE62345AC9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 27E921BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2823545BC3;
+	Mon, 20 Feb 2023 21:29:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2823545BC3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 112B81BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83BB14159E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83BB14159E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D9BC610E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D9BC610E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rdAXkIDVxPof for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id un9AhF11AgOK for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 200254159D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 200254159D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B6A1610D2
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B6A1610D2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C25B86495; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 91F748648F; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Dec 2022 22:22:15 +0100
+Date: Tue, 22 Nov 2022 22:49:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6866076d79ff2e022762b79421f511a8037fda73
-X-Git-Newrev: 0b71948c32bdc7f849190cb9501f72faa608dc17
+X-Git-Oldrev: 47659b4f342382c764076c0c0dfbee446b090661
+X-Git-Newrev: ef6c9da9d255f04847a89d22b99ab3605102d4cb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.1C25B86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmdbx: bump version
- to 0.11.13 "Swashplate"
+Message-Id: <20230220205152.91F748648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gitlab-runner: fix
+ inconsistency of systemd and sysv daemons
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,88 +56,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0256124020649705706=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0256124020649705706==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=0b71948c32bdc7f849190cb9501f72faa608dc17
+commit: https://git.buildroot.net/buildroot/commit/?id=ef6c9da9d255f04847a89d22b99ab3605102d4cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is stable bugfix release of libmdbx, in Family Glory and
-in memory of Boris Yuriev (the inventor of Helicopter and
-Swashplate in 1911) on his 133rd birthday.
+Copy default $DAEMON_ARGS from systemd service to sysv init script.
 
-It is reasonable to backport this patch to all applicable releases/branches of Buildroot.
+Make GITLAB_RUNNER_USER home directory the same as default
+--work-directory (-d) flag.
 
-Release notes for v0.11.13
---------------------------
+Run sysv daemon process using root user (remove -c option)
+This is needed to correctly access config files as specified.
+System access can still be limited with gitlab-runner `--user` flag.
 
-Fixes:
+Use same $DAEMON_ARGS variable name so it can be overwritten in
+/etc/default/gitlab-runner environment file in both cases.
 
- - Fixed builds with older libc versions after using `fcntl64()` (backport).
- - Fixed builds with  older `stdatomic.h` versions,
-   where the `ATOMIC_*_LOCK_FREE` macros mistakenly redefined using functions (backport).
- - Added workaround for `mremap()` defect to avoid assertion failure (backport).
- - Workaround for `encryptfs` bug(s) in the `copy_file_range` implementation  (backport).
- - Fixed unexpected `MDBX_BUSY` from `mdbx_env_set_option()`, `mdbx_env_set_syncbytes()`
-   and `mdbx_env_set_syncperiod()` (backport).
- - CMake requirements lowered to version 3.0.2 (backport).
- - Added admonition of insecure for RISC-V (backport).
-
-Minors:
-
- - Minor clarification output of `--help` for `mdbx_test` (backport).
- - Added admonition of insecure for RISC-V (backport).
- - Stochastic scripts and CMake files synchronized with the `devel` branch.
- - Use `--dont-check-ram-size` for small-tests make-targets (backport).
-
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
+Signed-off-by: Marek Metelski <marek.metelski@grinn-global.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gitlab-runner/S95gitlab-runner | 6 +++---
+ package/gitlab-runner/gitlab-runner.mk | 3 +--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 79af189633..e3fb309461 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  dde8f3626509bb764b17c93fe0629389625cb50362502eb1c27ca208342f3894  libmdbx-amalgamated-0.11.12.tar.xz
-+sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
+diff --git a/package/gitlab-runner/S95gitlab-runner b/package/gitlab-runner/S95gitlab-runner
+index 2a50e7151a..739adf1783 100644
+--- a/package/gitlab-runner/S95gitlab-runner
++++ b/package/gitlab-runner/S95gitlab-runner
+@@ -3,7 +3,7 @@
+ DAEMON="gitlab-runner"
+ PIDFILE="/var/run/$DAEMON.pid"
  
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index ac1a3a0d6f..a139e062f6 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-GITLAB_RUNNER_ARGS="run"
++DAEMON_ARGS="run --syslog --user gitlab-runner -d /var/lib/gitlab-runner -c /etc/gitlab-runner/config.toml"
  
--LIBMDBX_VERSION = 0.11.12
-+LIBMDBX_VERSION = 0.11.13
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============0256124020649705706==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # shellcheck source=/dev/null
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+@@ -11,8 +11,8 @@ GITLAB_RUNNER_ARGS="run"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -S -q -m -b -p "$PIDFILE" -c "$DAEMON:$DAEMON" -x "/usr/bin/$DAEMON" \
+-		-- $GITLAB_RUNNER_ARGS
++	start-stop-daemon -S -q -m -b -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
++		-- $DAEMON_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+diff --git a/package/gitlab-runner/gitlab-runner.mk b/package/gitlab-runner/gitlab-runner.mk
+index fde776e631..9542275135 100644
+--- a/package/gitlab-runner/gitlab-runner.mk
++++ b/package/gitlab-runner/gitlab-runner.mk
+@@ -12,9 +12,8 @@ GITLAB_RUNNER_LICENSE_FILES = LICENSE
+ GITLAB_RUNNER_LDFLAGS = \
+ 	-X gitlab.com/gitlab-org/gitlab-runner/common.VERSION=$(GITLAB_RUNNER_VERSION)
+ 
+-# Don't run gitlab runner as root.
+ define GITLAB_RUNNER_USERS
+-	gitlab-runner -1 gitlab-runner -1 * /var/run/dbus /bin/false - Gitlab Runner
++	gitlab-runner -1 gitlab-runner -1 * /var/lib/gitlab-runner /bin/false - Gitlab Runner
+ endef
+ 
+ define GITLAB_RUNNER_INSTALL_INIT_SYSV
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0256124020649705706==--
