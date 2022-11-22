@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 358C5C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF8F4C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 20:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EECC4191A;
-	Tue, 22 Nov 2022 20:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EECC4191A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8380E40541;
+	Tue, 22 Nov 2022 20:33:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8380E40541
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nzTL9kuvjUd0; Tue, 22 Nov 2022 20:33:03 +0000 (UTC)
+	with ESMTP id Mx-ExYBin1ji; Tue, 22 Nov 2022 20:33:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 154464191B;
-	Tue, 22 Nov 2022 20:33:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 154464191B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFE561BF285
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 499BE408B6;
+	Tue, 22 Nov 2022 20:33:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 499BE408B6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 438151BF285
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A801940B79
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A801940B79
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AD9E81FFC
+ for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 20:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AD9E81FFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SHw_ajKOigF8 for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 20:32:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F5340186
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 94F5340186
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:32:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YE8O51Iqb1Ww for <buildroot@lists.busybox.net>;
+ Tue, 22 Nov 2022 20:32:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFAFB82005
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CFAFB82005
+ for <buildroot@buildroot.org>; Tue, 22 Nov 2022 20:32:31 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.169.84.171])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E912EB0057C;
- Tue, 22 Nov 2022 21:32:17 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 08EFBB0057F;
+ Tue, 22 Nov 2022 21:32:23 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 21:31:29 +0100
-Message-Id: <20221122203130.184496-6-ju.o@free.fr>
+Date: Tue, 22 Nov 2022 21:31:30 +0100
+Message-Id: <20221122203130.184496-7-ju.o@free.fr>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221122203130.184496-1-ju.o@free.fr>
 References: <20221122203130.184496-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1669149143;
- bh=efdzead8mOCOniwOQALdLIi7k4dj/5EkNOaeyvVAzFI=;
+ d=free.fr; s=smtp-20201208; t=1669149150;
+ bh=49nwOO4hpwo4EujijR1lGGi4+CU7gx1ZAEGDO+qZ+y4=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=QxdtXldxRG7wve+1deuh7P0Tsa5fQ9ve77JtHoO5veVSj1PqlLJ87A99bWg/i/D+N
- C8u+4b2/lC+8a1qkTSpqoeiWxWMfAvCgeCcMEjr/0QRTxeIGCN2R+VuvFu6Z6IRibz
- winkweIU3KuvIpMLq9tE+Pw//B5AXVwht5VYYwrKYQx6nGAi3crCwgl95QpL1VkF4w
- +Y1qdgyxzSQm24EZ8zDqEDuj3cwUdgGVBX5PZybW4G+Y8hz/lto0D1kMNIwd4MMDuA
- XCCGVM/tirUiCRhKcjmkr68610+x7Z4nWh26zicxZ5TB98SMNq4mwG3zc81wGwnfwZ
- 9HzXaVvdgm/mg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=r6kJ/zPmy8+SKyx4SQS6u+iDbPRUxIv97ogoEGpgDQgfN+fLWqUi080z/LnAEk+pz
+ zT29j2Kl9ww5yEaaaKzd5DxnadhZOwfNpSGFeYHGwuClyMWmr3UUaeNR75h6JqtgdY
+ IsBjGR8OpheQTo2O9B8Sfn5tT6zh8UlW2rN6j8zPbnolguohNho19FpHRnekmlEA6D
+ TOoaxYNKW580k/j/oIvDTbmnxI6OdFB3jV9ry44IS4T3Ic1KUX6MVvEP+XEJE0A5n+
+ Ga4GbzIDYahX+vso9rzUxeKT2uUamsHdrpR6D24p8/GCTfwHwvDXgqXM6k44kOx2Vi
+ SSpymGGpO4DSQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QxdtXldx
-Subject: [Buildroot] [PATCH next v2 6/7]
- package/python-magic-wormhole-transit-relay: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=r6kJ/zPm
+Subject: [Buildroot] [PATCH next v2 7/7]
+ support/testing/tests/package/test_python_magic_wormhole.py: new runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,105 +82,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Transit Relay server for Magic-Wormhole.
-
-This repository implements the Magic-Wormhole "Transit Relay",
-a server that helps clients establish bulk-data transit connections
-even when both are behind NAT boxes. Each side makes a TCP connection
-to this server and presents a handshake. Two connections with
-identical handshakes are glued together, allowing them to pretend they
-have a direct connection.
-
-https://github.com/magic-wormhole/magic-wormhole-transit-relay
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                        |  1 +
- package/Config.in                                 |  1 +
- .../python-magic-wormhole-transit-relay/Config.in | 15 +++++++++++++++
- .../python-magic-wormhole-transit-relay.hash      |  5 +++++
- .../python-magic-wormhole-transit-relay.mk        | 14 ++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/python-magic-wormhole-transit-relay/Config.in
- create mode 100644 package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.hash
- create mode 100644 package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.mk
+ DEVELOPERS                                    |  1 +
+ .../package/test_python_magic_wormhole.py     | 62 +++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 support/testing/tests/package/test_python_magic_wormhole.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5497eb412c..3564d2749b 100644
+index 3564d2749b..76325dc7f9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1697,6 +1697,7 @@ F:	package/python-gnupg/
- F:	package/python-hkdf/
- F:	package/python-magic-wormhole/
- F:	package/python-magic-wormhole-mailbox-server/
-+F:	package/python-magic-wormhole-transit-relay/
- F:	package/python-pyalsa/
- F:	package/python-spake2/
- F:	package/riscv-isa-sim/
-diff --git a/package/Config.in b/package/Config.in
-index 0d95225080..35b62d4cb5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1111,6 +1111,7 @@ menu "External python modules"
- 	source "package/python-m2r/Config.in"
- 	source "package/python-magic-wormhole/Config.in"
- 	source "package/python-magic-wormhole-mailbox-server/Config.in"
-+	source "package/python-magic-wormhole-transit-relay/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markdown2/Config.in"
-diff --git a/package/python-magic-wormhole-transit-relay/Config.in b/package/python-magic-wormhole-transit-relay/Config.in
+@@ -1716,6 +1716,7 @@ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_hkdf.py
+ F:	support/testing/tests/package/test_python_gnupg.py
++F:	support/testing/tests/package/test_python_magic_wormhole.py
+ F:	support/testing/tests/package/test_python_pyalsa.py
+ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_z3.py
+diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
 new file mode 100644
-index 0000000000..1a743c10fe
+index 0000000000..d6541a2480
 --- /dev/null
-+++ b/package/python-magic-wormhole-transit-relay/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY
-+	bool "python-magic-wormhole-transit-relay"
-+	select BR2_PACKAGE_PYTHON_TWISTED # runtime
-+	help
-+	  Transit Relay server for Magic-Wormhole.
++++ b/support/testing/tests/package/test_python_magic_wormhole.py
+@@ -0,0 +1,62 @@
++import os
 +
-+	  This repository implements the Magic-Wormhole "Transit
-+	  Relay", a server that helps clients establish bulk-data
-+	  transit connections even when both are behind NAT
-+	  boxes. Each side makes a TCP connection to this server and
-+	  presents a handshake. Two connections with identical
-+	  handshakes are glued together, allowing them to pretend they
-+	  have a direct connection.
++from tests.package.test_python import TestPythonPackageBase
 +
-+	  https://github.com/magic-wormhole/magic-wormhole-transit-relay
-diff --git a/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.hash b/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.hash
-new file mode 100644
-index 0000000000..f131477a40
---- /dev/null
-+++ b/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/magic-wormhole-transit-relay/json
-+md5  aa575a4e22b3d5099674ba88b136a9a2  magic-wormhole-transit-relay-0.2.1.tar.gz
-+sha256  cb4801b46890eaff97286e0e3fec62d1d52ffe317d140083b6336a1fb4e8fa5e  magic-wormhole-transit-relay-0.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  d70f6469bb210c2aa4c0dfd74f498ef5f0467a137d8296479088e7243c5884eb  LICENSE
-diff --git a/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.mk b/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.mk
-new file mode 100644
-index 0000000000..e4ffe6e7a6
---- /dev/null
-+++ b/package/python-magic-wormhole-transit-relay/python-magic-wormhole-transit-relay.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-magic-wormhole-transit-relay
-+#
-+################################################################################
 +
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_VERSION = 0.2.1
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_SOURCE = magic-wormhole-transit-relay-$(PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_VERSION).tar.gz
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_SITE = https://files.pythonhosted.org/packages/21/c9/be25bb30e327037e009657960fc594d089b118c0d81cc6a200cad1bb3852
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_SETUP_TYPE = setuptools
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_LICENSE = MIT
-+PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY_LICENSE_FILES = LICENSE
++class TestPythonPy3MagicWormhole(TestPythonPackageBase):
++    __test__ = True
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE=y
++        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER=y
++        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    timeout = 60
 +
-+$(eval $(python-package))
++    def twistd_cmd(self, command):
++        s = "twistd"
++        s += " --pidfile=/tmp/{}.pid".format(command)
++        s += " --logfile=/tmp/{}.log".format(command)
++        s += " {}".format(command)
++
++        return s
++
++    def test_run(self):
++        code = "123-hello-buildroot"
++        text = "Hello Buildroot!"
++
++        relay_url = "ws://localhost:4000/v1"
++        transit_helper = "tcp:localhost:4001"
++
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5", kernel="builtin",
++                           options=["-initrd", img])
++
++        self.emulator.login()
++
++        cmd = self.twistd_cmd("wormhole-mailbox")
++        self.assertRunOk(cmd, timeout=30)
++
++        cmd = self.twistd_cmd("transitrelay")
++        self.assertRunOk(cmd, timeout=30)
++
++        wormhole_cmd = "wormhole --relay-url={} --transit-helper={}".format(
++            relay_url, transit_helper)
++
++        cmd = wormhole_cmd + " send --code={} --text=\"{}\" & ".format(code, text)
++        cmd += "sleep 25"
++        self.assertRunOk(cmd, timeout=30)
++
++        cmd = wormhole_cmd + " receive {}".format(code)
++        output, exit_code = self.emulator.run(cmd, timeout=35)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], text)
 -- 
 2.38.1
 
