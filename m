@@ -1,51 +1,138 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 130D7C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 22 Nov 2022 22:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91F5C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 00:04:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B250F81FCB;
-	Tue, 22 Nov 2022 22:57:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B250F81FCB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EB3B40BAD;
+	Wed, 23 Nov 2022 00:04:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EB3B40BAD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FVkTT5TPeVjY; Wed, 23 Nov 2022 00:03:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B9D840A15;
+	Wed, 23 Nov 2022 00:03:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B9D840A15
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5814C1BF95D
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 00:03:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03DCB8143B
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 00:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03DCB8143B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E9fNZ9SiENGJ; Tue, 22 Nov 2022 22:57:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B7EE8206D;
-	Tue, 22 Nov 2022 22:57:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B7EE8206D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0C3A71BF46D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:57:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E86B34191D
- for <buildroot@lists.busybox.net>; Tue, 22 Nov 2022 22:57:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E86B34191D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r5j1CAkhTmGi for <buildroot@lists.busybox.net>;
- Tue, 22 Nov 2022 22:57:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69CF04190D
- for <buildroot@buildroot.org>; Tue, 22 Nov 2022 22:57:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69CF04190D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58D6484253; Tue, 22 Nov 2022 22:57:16 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 22 Nov 2022 23:55:23 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: b41bb7ce25f57a25c24bc225904d624f68614ba3
-X-Git-Newrev: ad7f964ff953b3d8a76ccc239281879853a7748d
-X-Patchwork-Hint: ignore
-Message-Id: <20221122225716.58D6484253@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/nginx: add
- upstream security fix for CVE-2022-4174{1, 2}
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cE7jZVQRBlsy for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 00:03:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0C50808A6
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam04on20608.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e8d::608])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0C50808A6
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 00:03:54 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C+ys/ahxxLr7NZ76I8txx3EQW/nzDBKxIjClO3oygqgnyBsWpipcdnTFJRZggWGGcxahziU0i9Jnl8fsSLiuzwaiF5O70scb8Ufi6S3NZibaog7tyo+XncyGPUtrDER9blO7AyakFTAJVxdVEMmShiEhGuUNzAtqRRmJfh6FW5qflPSPWZ6LBHz+j+qzNucTapn5ZQgActnbPPuapWbymwn1Wmm8EcPxVZQa2kU12FzmuCMUN+Zd77KSMN+nyu2DIZ/VsVV2yGI1vcv5QW1on0W2+Zc+F9OD06m7mXnELnjVIGseHkS9rSDpBtBDVQ3KjEB0bTBpLHb2W4esdQH6ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pzr4cV2wSH2za2TiuYoU1GI6TwegQ6XaAeI0fEOSerE=;
+ b=fw3qseS8xvQjPakMXBrYmKpSZxLy8pJ7DL+KxSeAlMW8ellOrJB+xNaBDgKLTi3gkevdwE2rZFQwO6ESdlDJnjVysQpFyiZ/OP+R0sRwQsLx6UghEJyKwA3s/MaP+qwM94faCsGzaExq8qJDNpC7ME1+5m7yH+b/rewvVai4y62OHoTgMgOemvJhK9vMTT9KJEc3LfInPFA7u2146nYxWuO9b8QJ7sUOJynIziCLYgt/AvErDrYRVoQ/7ryjpgQZM4Rk4v/XsKr6DTjly+bnG6lD+Z22dOC8/qpPgOgdEL8I8WcBQRKFYWXm434A239eNVph0jRk7kjiHGs85XkbtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by DM6PR12MB4943.namprd12.prod.outlook.com (2603:10b6:5:1bc::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 00:03:51 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986%5]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 00:03:51 +0000
+Content-Type: multipart/mixed;
+ boundary="_000_CH2PR12MB500447A384CA04CD1901BA35F00C9CH2PR12MB5004namp_"
+To: Brandon Maier <brandon.maier@collins.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [PATCH v2 1/1] boot/uboot/uboot.mk: fix zynqmp without pmufw
+Thread-Index: AQHY/q9u67l1Z4BEKU2wMEcrAGq9Wq5LoF2w
+Date: Wed, 23 Nov 2022 00:03:51 +0000
+Message-ID: <CH2PR12MB500447A384CA04CD1901BA35F00C9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221122201701.65681-1-brandon.maier@collins.com>
+In-Reply-To: <20221122201701.65681-1-brandon.maier@collins.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: <CH2PR12MB500447A384CA04CD1901BA35F00C9@CH2PR12MB5004.namprd12.prod.outlook.com>
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DM6PR12MB4943:EE_
+x-ms-office365-filtering-correlation-id: 7b7ef618-3350-4be7-bb11-08dacce63413
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: R9FCjRSbsQkq1oKyc0K9+VhPSroZfNGiCEJNAI9LxuFsLkAEOFfjZ7MxbANR6KfdJzlJHZycC8RE9wfLVuQTyTtrw5mcpqE/VLVtEo7FyiztNDlatSLcPz3bCFrx19gFqTj+H4WguVGcvjQ8w4oRhK4HdymAU6Q/r79NTU5QUH6UZVdWw53v8Anq8RTMWZouGWS+t+1NdnWim1DmFivFvGXr2OXUD6LOdG/PoNdbV4Gv2HDCPNM6+UTFUQd5M8YLl+H3juSEp8mYOJkFzgFFYY1m4IiDveyujCEArW5e+9G7Tv1Juce1XzppgWsbMkdScYDgO5G7MxFwXSAUMkRh5wu2ZVmv/jlAG7wXaw6PubrpttgnQ32RQcLxxktkxJ5k39FVpEJ8bz2mg8/hjSrSJQv29jPvCgadAbncvYTliMOPZ/Dl6vHhYezd4qIJiMfpRmtJTD5Bv9MH54JbZsBsvLXNUuK4uKbPMde+Ka2DGNYt2+qA8EN6e8rXMC8HNDAROvQn+xeo3Z0HHommW+ty4HIjwcQv0OLZz1nOZqyS6F57+WVFSUT4BEdrJUJdd9BVFuay/FtctoJ0UKJC9kSfVt6HE6IXPOJagjHHQ0HeGGRNlRPkRbNzSeG/bcmTAs9mXztSI7lrKFf41TyaZh1ZeiW0Ksf0NCDpGCynOq3JKMAf2J2hx6H6XSnv4A925QfR5/cbKUMKhI0AMSeiiagIkw==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(346002)(396003)(39860400002)(376002)(136003)(366004)(451199015)(9686003)(83380400001)(122000001)(76116006)(55016003)(7696005)(64756008)(2906002)(186003)(26005)(38100700002)(5660300002)(71200400001)(6506007)(52536014)(66556008)(54906003)(41300700001)(8676002)(316002)(66946007)(478600001)(66446008)(8936002)(4326008)(66476007)(110136005)(33656002)(38070700005)(86362001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?h0AyJBd0tgGfWz1DGCEFfSTK6H47d9Krykz54KPNc+TJz/hU80MnQpW8glmo?=
+ =?us-ascii?Q?t98UOIGXSjJhPa950xbcWb0CL0okc8ZGzpN02gIzmWkZSkdcCgGlemqDqxnk?=
+ =?us-ascii?Q?VqyylX4aD544K6wJaY7VwrII6njQPQQO84zzKOHqfmB/heW2yI/mmDDxmbQX?=
+ =?us-ascii?Q?wF1TxA8PacWP7PGsa4/Eh5xVs/HhOJT7EazId8lQGORWUeMUbRVfLHPLyMYs?=
+ =?us-ascii?Q?qu658RyyRClYdM4pvBgnGFyglxH+8Vm2ywWYiHS6BW5qn1My9t0ioY3fVOFf?=
+ =?us-ascii?Q?vqTRSJCMop8NdQekRy5C36Nx8ksDlymEBxBQRDeksWwWoXBTPSHaS2KDeZaz?=
+ =?us-ascii?Q?Kvj01jTh12gRrOJGuEw8lnzj+ZDeWhK8LB/la+HjFApGB9SPUO7ioaoMpdCF?=
+ =?us-ascii?Q?GV1NARb3oj1kdX5xpV2lQdsB7wjMLTlafDKX3o5hxhMey2wuaGeBz3SLDPli?=
+ =?us-ascii?Q?tEBEwfMVH1ObC1VDLC0o46c/G2H8hJGB0LXTKpYzCde/W+Lime9+7W7msnbY?=
+ =?us-ascii?Q?h/4CoT8CwxEnK0WtwuFFqLQ/MJUGjOXy8a6g5gMjBKljCbjEzs0FjP6RRtOx?=
+ =?us-ascii?Q?xHWZlvmtAXL8yWg07C6DYcrbEM3Jj1DAW0HCh5S7j+mVcdWittbE2YeONIJh?=
+ =?us-ascii?Q?uJkA+Xu9XBiIno/1B8VwVSCjeORnLI5ztZMRZbG3L8gpzxwS1UT6DW6M0q1o?=
+ =?us-ascii?Q?HHXaLFKeQpMcJzjReOjC1UaaOgM7PB6aqxGOwBXL1+rjdkn7fnBQnmwZlCoG?=
+ =?us-ascii?Q?0XGOgZuaGm+8lIBfAvZNNjqAOBxeIqKm0M8e+b312Nxyv4PFN+v0dEqel6P6?=
+ =?us-ascii?Q?5WfTpo9B98ZoiueISjpUAsqNlTeAP7nuwIYQ3j21ghBi+6695uSLxl0nBOYI?=
+ =?us-ascii?Q?bJR3ceVDMsmWsnKvQAx/Lu+uSlNw85acpJ7DtKYMA/t9TcxT+DOcBspJJ3q7?=
+ =?us-ascii?Q?/X1N+jVJodMeg2f0wemdLlce8Kr3GAsnitOECi0HesO2S5gAkZ02NsqA16/4?=
+ =?us-ascii?Q?8zirwfjm+Ivd7YkyB3lT9bmrw9UE7Pjb8Tc1is/1Emszx0mCWCaCg5eVkyF8?=
+ =?us-ascii?Q?ReCRS8F9rh/3HZrkvGpfjSXrseY5WC7VrCnFpTGAE4HqyRCjI4NqoooFHzGt?=
+ =?us-ascii?Q?4Wy+zZOMZbeDFhZNu323IFOOVA+m0Uyt3Wm5IElkNs40Jum5yUPhCLgilb+5?=
+ =?us-ascii?Q?x22GjMFvet32qNQyOxDf5nUuGWDL2+Wxt3PWgIzfT/CiDX4IaSLXq5Dp3D1O?=
+ =?us-ascii?Q?LOoy73481kM8hITFEJxj52w36nMLzqm+pCKPH9v9TVEGCnqmAbPtu3cc0tLt?=
+ =?us-ascii?Q?6n5razAFyqONLG3RU5jBX4wkmAMNuJzGUiuulYgFA09V1Rr+viQD2c8OjA1S?=
+ =?us-ascii?Q?S2+rLg9FOmN0ohWjTvrVSel5izAImDM8EKsPnfGsiDESLooLncn7743YpNtE?=
+ =?us-ascii?Q?4c4Yn/9ydXsGyklp/yNpuiod1F/t0fO7w5Z2kNBsSsck/C6R91QKg1M/LCPN?=
+ =?us-ascii?Q?tEPwLgOi5tPqeYBJDKqx/xHrySGhaZJZpEWA5VSvtttDVSTdDtUaaeWwP3Uj?=
+ =?us-ascii?Q?BV00YZ4M+9pqpMGfKbY=3D?=
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7ef618-3350-4be7-bb11-08dacce63413
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 00:03:51.3974 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uuMkHscVrB6mpw3zSP1VaSb0JtL6bwwmkcimXOQWO7m/BD/G8+gcJPDIWuWndTJf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4943
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pzr4cV2wSH2za2TiuYoU1GI6TwegQ6XaAeI0fEOSerE=;
+ b=aqNMwV+xdBXVz2OhItnPJrqWakoV50mV7lXRIh4dGGfNCVPZUsdefgbxD1655uXA+wovGdO8T3zDmy1cJxT0glJ92oGUt/crvSSKJOKJq23CthUolwqbqjRPO0P144HpZgVruKZyFsGYWiFZSyXcfBgyS0kK9w9iE2suuTJDTXc=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=aqNMwV+x
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: fix zynqmp
+ without pmufw
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,367 +144,326 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad7f964ff953b3d8a76ccc239281879853a7748d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+--_000_CH2PR12MB500447A384CA04CD1901BA35F00C9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes the following security issues:
+Commit d07e6b70 (boot/uboot/uboot.mk: add pmufw.elf support) broke configur=
+ations where the UBOOT_ZYNQMP_PMUFW was blank. Previously it would set the =
+U-Boot CONFIG_PMUFW_INIT_FILE to the blank string, but now it will set it t=
+o ".bin" which causes U-Boot to fail to build.
 
-- CVE-2022-41741: Memory corruption in the ngx_http_mp4_module
-- CVE-2022-41742: Memory disclosure in the ngx_http_mp4_module
-
-https://mailman.nginx.org/archives/list/nginx-announce@nginx.org/message/RBRRON6PYBJJM2XIAPQBFBVLR4Q6IHRA/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8fa2ff28574cb5ba889cb4fc48240dd4291401a6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
- .../nginx/0011-Mp4-disabled-duplicate-atoms.patch  | 315 +++++++++++++++++++++
- package/nginx/nginx.mk                             |   3 +
- 2 files changed, 318 insertions(+)
+v2:
+  - support pmufw with any extension
+---
+ boot/uboot/uboot.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch b/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
-new file mode 100644
-index 0000000000..7baa810b56
---- /dev/null
-+++ b/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
-@@ -0,0 +1,315 @@
-+From 6b022a5556af22b6e18532e547a6ae46b0d8c6ea Mon Sep 17 00:00:00 2001
-+From: Roman Arutyunyan <arut@nginx.com>
-+Date: Wed, 19 Oct 2022 10:53:17 +0300
-+Subject: [PATCH] Mp4: disabled duplicate atoms.
-+
-+Most atoms should not appear more than once in a container.  Previously,
-+this was not enforced by the module, which could result in worker process
-+crash, memory corruption and disclosure.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/http/modules/ngx_http_mp4_module.c | 147 +++++++++++++++++++++++++
-+ 1 file changed, 147 insertions(+)
-+
-+diff --git a/src/http/modules/ngx_http_mp4_module.c b/src/http/modules/ngx_http_mp4_module.c
-+index 9c3f627f..4eff01e9 100644
-+--- a/src/http/modules/ngx_http_mp4_module.c
-++++ b/src/http/modules/ngx_http_mp4_module.c
-+@@ -1121,6 +1121,12 @@ ngx_http_mp4_read_ftyp_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+         return NGX_ERROR;
-+     }
-+ 
-++    if (mp4->ftyp_atom.buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 ftyp atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
-+ 
-+     ftyp_atom = ngx_palloc(mp4->request->pool, atom_size);
-+@@ -1179,6 +1185,12 @@ ngx_http_mp4_read_moov_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+         return NGX_DECLINED;
-+     }
-+ 
-++    if (mp4->moov_atom.buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 moov atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     conf = ngx_http_get_module_loc_conf(mp4->request, ngx_http_mp4_module);
-+ 
-+     if (atom_data_size > mp4->buffer_size) {
-+@@ -1246,6 +1258,12 @@ ngx_http_mp4_read_mdat_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mdat atom");
-+ 
-++    if (mp4->mdat_atom.buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 mdat atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     data = &mp4->mdat_data_buf;
-+     data->file = &mp4->file;
-+     data->in_file = 1;
-+@@ -1372,6 +1390,12 @@ ngx_http_mp4_read_mvhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mvhd atom");
-+ 
-++    if (mp4->mvhd_atom.buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 mvhd atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom_header = ngx_mp4_atom_header(mp4);
-+     mvhd_atom = (ngx_mp4_mvhd_atom_t *) atom_header;
-+     mvhd64_atom = (ngx_mp4_mvhd64_atom_t *) atom_header;
-+@@ -1637,6 +1661,13 @@ ngx_http_mp4_read_tkhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_TKHD_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 tkhd atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->tkhd_size = atom_size;
-+     trak->movie_duration = duration;
-+ 
-+@@ -1676,6 +1707,12 @@ ngx_http_mp4_read_mdia_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_MDIA_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 mdia atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->mdia_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -1799,6 +1836,13 @@ ngx_http_mp4_read_mdhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_MDHD_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 mdhd atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->mdhd_size = atom_size;
-+     trak->timescale = timescale;
-+     trak->duration = duration;
-+@@ -1862,6 +1906,12 @@ ngx_http_mp4_read_hdlr_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_HDLR_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 hdlr atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->hdlr_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -1890,6 +1940,12 @@ ngx_http_mp4_read_minf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_MINF_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 minf atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->minf_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -1933,6 +1989,15 @@ ngx_http_mp4_read_vmhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
-++        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
-++    {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
-++                      mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->vmhd_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -1964,6 +2029,15 @@ ngx_http_mp4_read_smhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
-++        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
-++    {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
-++                      mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->smhd_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -1995,6 +2069,12 @@ ngx_http_mp4_read_dinf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_DINF_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 dinf atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->dinf_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -2023,6 +2103,12 @@ ngx_http_mp4_read_stbl_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_STBL_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stbl atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->stbl_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -2144,6 +2230,12 @@ ngx_http_mp4_read_stsd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-+ 
-++    if (trak->out[NGX_HTTP_MP4_STSD_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stsd atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     atom = &trak->stsd_atom_buf;
-+     atom->temporary = 1;
-+     atom->pos = atom_header;
-+@@ -2212,6 +2304,13 @@ ngx_http_mp4_read_stts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_end = atom_table + entries * sizeof(ngx_mp4_stts_entry_t);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STTS_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stts atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->time_to_sample_entries = entries;
-+ 
-+     atom = &trak->stts_atom_buf;
-+@@ -2480,6 +2579,13 @@ ngx_http_mp4_read_stss_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+                    "sync sample entries:%uD", entries);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STSS_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stss atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->sync_samples_entries = entries;
-+ 
-+     atom_table = atom_header + sizeof(ngx_http_mp4_stss_atom_t);
-+@@ -2678,6 +2784,13 @@ ngx_http_mp4_read_ctts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+                    "composition offset entries:%uD", entries);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_CTTS_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 ctts atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->composition_offset_entries = entries;
-+ 
-+     atom_table = atom_header + sizeof(ngx_mp4_ctts_atom_t);
-+@@ -2881,6 +2994,13 @@ ngx_http_mp4_read_stsc_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_end = atom_table + entries * sizeof(ngx_mp4_stsc_entry_t);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STSC_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stsc atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->sample_to_chunk_entries = entries;
-+ 
-+     atom = &trak->stsc_atom_buf;
-+@@ -3213,6 +3333,13 @@ ngx_http_mp4_read_stsz_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+                    "sample uniform size:%uD, entries:%uD", size, entries);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STSZ_ATOM].buf) {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stsz atom in \"%s\"", mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->sample_sizes_entries = entries;
-+ 
-+     atom_table = atom_header + sizeof(ngx_mp4_stsz_atom_t);
-+@@ -3396,6 +3523,16 @@ ngx_http_mp4_read_stco_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_end = atom_table + entries * sizeof(uint32_t);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
-++        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
-++    {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stco/co64 atom in \"%s\"",
-++                      mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->chunks = entries;
-+ 
-+     atom = &trak->stco_atom_buf;
-+@@ -3602,6 +3739,16 @@ ngx_http_mp4_read_co64_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
-+     atom_end = atom_table + entries * sizeof(uint64_t);
-+ 
-+     trak = ngx_mp4_last_trak(mp4);
-++
-++    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
-++        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
-++    {
-++        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
-++                      "duplicate mp4 stco/co64 atom in \"%s\"",
-++                      mp4->file.name.data);
-++        return NGX_ERROR;
-++    }
-++
-+     trak->chunks = entries;
-+ 
-+     atom = &trak->co64_atom_buf;
-+-- 
-+2.30.2
-+
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index ba01c7e016..62ea379ffc 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -19,6 +19,9 @@ NGINX_CONF_OPTS = \
- 	--with-cpp="$(TARGET_CC)" \
- 	--with-ld-opt="$(TARGET_LDFLAGS)"
- 
-+# 0011-Mp4-disabled-duplicate-atoms.patch
-+NGINX_IGNORE_CVES += CVE-2022-41741 CVE-2022-41742
-+
- # www-data user and group are used for nginx. Because these user and group
- # are already set by buildroot, it is not necessary to redefine them.
- # See system/skeleton/etc/passwd
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk index 19e4183927..d0=
+37ae9c12 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -394,8 +394,9 @@ UBOOT_ZYNQMP_PMUFW_BASENAME =3D $(basename $(UBOOT_ZYNQ=
+MP_PMUFW_PATH))
+=20
+ define UBOOT_ZYNQMP_KCONFIG_PMUFW
+ 	$(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
+-		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(U=
+BOOT_ZYNQMP_PMUFW_BASENAME).bin)
+-	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASEN=
+AME).bin")
++		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(U=
+BOOT_ZYNQMP_PMUFW_BASENAME).bin
++		$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASE=
+NAME).bin"),
++		$(call=20
++KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)"))
+ endef
+=20
+ UBOOT_ZYNQMP_PM_CFG =3D $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
+--
+2.38.1
+
+Reviewed-by: Neal Frager <neal.frager@amd.com>
+
+Best regards,
+Neal Frager
+AMD
+
+
+--_000_CH2PR12MB500447A384CA04CD1901BA35F00C9CH2PR12MB5004namp_
+Content-Disposition: attachment; filename="winmail.dat"
+Content-Transfer-Encoding: base64
+Content-Type: application/ms-tnef; name="winmail.dat"
+
+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
+ACAATgBlAGEAbAAAAAAAHwAfDAEAAAAoAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQA
+LgBjAG8AbQAAAB8AHgwBAAAACgAAAFMATQBUAFAAAAAAAAIBGQwBAAAAZAAAAAAAAACBKx+kvqMQ
+GZ1uAN0BD1QCAAAAgEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAUwBNAFQAUAAAAG4AZQBhAGwA
+LgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAAFdAQAAACgAAABuAGUAYQBsAC4AZgBy
+AGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAACwBAOgEAAAAfABoAAQAAABIAAABJAFAATQAuAE4A
+bwB0AGUAAAAAAAMA8T8JBAAACwBAOgEAAAADAP0/5AQAAAIBCzABAAAAEAAAAJ8jJJyjnEVJkfrM
+x8HL8YYDABcAAQAAAEAAOQCAjVYRz/7YAUAACDD6z5ARz/7YAR8ANwABAAAAggAAAFIARQA6ACAA
+WwBQAEEAVABDAEgAIAB2ADIAIAAxAC8AMQBdACAAYgBvAG8AdAAvAHUAYgBvAG8AdAAvAHUAYgBv
+AG8AdAAuAG0AawA6ACAAZgBpAHgAIAB6AHkAbgBxAG0AcAAgAHcAaQB0AGgAbwB1AHQAIABwAG0A
+dQBmAHcAAAAAAB8APQABAAAACgAAAFIARQA6ACAAAAAAAAMA3j+fTgAACwACAAEAAAALACMAAAAA
+AAMAJgAAAAAACwApAAAAAAALACsAAAAAAAMALgAAAAAAAwA2AAAAAAAfAHAAAQAAAHoAAABbAFAA
+QQBUAEMASAAgAHYAMgAgADEALwAxAF0AIABiAG8AbwB0AC8AdQBiAG8AbwB0AC8AdQBiAG8AbwB0
+AC4AbQBrADoAIABmAGkAeAAgAHoAeQBuAHEAbQBwACAAdwBpAHQAaABvAHUAdAAgAHAAbQB1AGYA
+dwAAAAAAAgFxAAEAAAAbAAAAAQHY/q9u67l1Z4BEKU2wMEcrAGq9Wq5LoF2wAAsABgwAAAAAHwA1
+EAEAAACiAAAAPABDAEgAMgBQAFIAMQAyAE0AQgA1ADAAMAA0ADQANwBBADMAOAA0AEMAQQAwADQA
+QwBEADEAOQAwADEAQgBBADMANQBGADAAMABDADkAQABDAEgAMgBQAFIAMQAyAE0AQgA1ADAAMAA0
+AC4AbgBhAG0AcAByAGQAMQAyAC4AcAByAG8AZAAuAG8AdQB0AGwAbwBvAGsALgBjAG8AbQA+AAAA
+AAAfADkQAQAAAGYAAAA8ADIAMAAyADIAMQAxADIAMgAyADAAMQA3ADAAMQAuADYANQA2ADgAMQAt
+ADEALQBiAHIAYQBuAGQAbwBuAC4AbQBhAGkAZQByAEAAYwBvAGwAbABpAG4AcwAuAGMAbwBtAD4A
+AAAAAB8AQhABAAAAZgAAADwAMgAwADIAMgAxADEAMgAyADIAMAAxADcAMAAxAC4ANgA1ADYAOAAx
+AC0AMQAtAGIAcgBhAG4AZABvAG4ALgBtAGEAaQBlAHIAQABjAG8AbABsAGkAbgBzAC4AYwBvAG0A
+PgAAAAAAAwCAEP////8DABMSAAAAAEAABzAkUSoRz/7YAQIBEDABAAAARgAAAAAAAADJ4BVB4r7Z
+T48VApT6YkmHBwAFFgQuaHpuToNMN4CwNOm0AAAAAAELAAAFFgQuaHpuToNMN4CwNOm0AACU09QY
+AAAAAAIBEzABAAAAEAAAAOu5dWeARClNsDBHKwBqvVoCARQwAQAAAAwAAABxAAAAKF4vK0MAAAAD
+AFszAQAAAAMAWjYAAAAAAwBoNg0AAAALAPo2AQAAAB8A2T8BAAAAAAIAAEMAbwBtAG0AaQB0ACAA
+ZAAwADcAZQA2AGIANwAwACAAKABiAG8AbwB0AC8AdQBiAG8AbwB0AC8AdQBiAG8AbwB0AC4AbQBr
+ADoAIABhAGQAZAAgAHAAbQB1AGYAdwAuAGUAbABmACAAcwB1AHAAcABvAHIAdAApACAAYgByAG8A
+awBlACAAYwBvAG4AZgBpAGcAdQByAGEAdABpAG8AbgBzACAAdwBoAGUAcgBlACAAdABoAGUAIABV
+AEIATwBPAFQAXwBaAFkATgBRAE0AUABfAFAATQBVAEYAVwAgAHcAYQBzACAAYgBsAGEAbgBrAC4A
+IABQAHIAZQB2AGkAbwB1AHMAbAB5ACAAaQB0ACAAdwBvAHUAbABkACAAcwBlAHQAIAB0AGgAZQAg
+AFUALQBCAG8AbwB0ACAAQwBPAE4ARgBJAEcAXwBQAE0AVQBGAFcAXwBJAE4ASQBUAF8ARgBJAEwA
+RQAgAHQAbwAgAHQAaABlACAAYgBsAGEAbgBrACAAcwB0AHIAaQBuAGcALAAgAGIAdQB0ACAAbgBv
+AHcAIABpAHQAIAB3AGkAbABsACAAcwBlAHQAIABpAHQAIAB0AG8AIAAiAC4AYgBpAG4AIgAgAHcA
+aABpAGMAaAAgAGMAYQB1AHMAZQBzACAAVQAtAEIAbwBvAHQAIAB0AAAAHwD4PwEAAAAaAAAARgBy
+AGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8A+j8BAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUA
+YQBsAAAAAAAfACJAAQAAAAYAAABFAFgAAAAAAB8AI0ABAAAAAgEAAC8ATwA9AEUAWABDAEgAQQBO
+AEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABBAE4ARwBFACAAQQBEAE0ASQBOAEkAUwBUAFIA
+QQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkARABJAEIATwBIAEYAMgAzAFMAUABEAEwAVAAp
+AC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAvAEMATgA9AEQANAA0ADYAQQAwADQANgA0ADcA
+NQAxADQAQwA2ADAAOAAzADIAMQBBADUANwA5ADkAQQAwADEAQgA4ADgARAAtAEYAUgBBAEcARQBS
+ACwAIABOAEUAQQAAAAAAHwAkQAEAAAAGAAAARQBYAAAAAAAfACVAAQAAAAIBAAAvAE8APQBFAFgA
+QwBIAEEATgBHAEUATABBAEIAUwAvAE8AVQA9AEUAWABDAEgAQQBOAEcARQAgAEEARABNAEkATgBJ
+AFMAVABSAEEAVABJAFYARQAgAEcAUgBPAFUAUAAgACgARgBZAEQASQBCAE8ASABGADIAMwBTAFAA
+RABMAFQAKQAvAEMATgA9AFIARQBDAEkAUABJAEUATgBUAFMALwBDAE4APQBEADQANAA2AEEAMAA0
+ADYANAA3ADUAMQA0AEMANgAwADgAMwAyADEAQQA1ADcAOQA5AEEAMAAxAEIAOAA4AEQALQBGAFIA
+QQBHAEUAUgAsACAATgBFAEEAAAAAAB8AMEABAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBs
+AAAAAAAfADFAAQAAABoAAABGAHIAYQBnAGUAcgAsACAATgBlAGEAbAAAAAAAHwA4QAEAAAAaAAAA
+RgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8AOUABAAAAGgAAAEYAcgBhAGcAZQByACwAIABO
+AGUAYQBsAAAAAAADAFlAAAAAAAMAWkAAAAAAAwA3UAEAAAADAAlZAQAAAB8ACl0BAAAAKAAAAG4A
+ZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAAtdAQAAACgAAABuAGUAYQBs
+AC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAAgEVXQEAAAASAAAAAh+W2D2I5GBOjhGo
+LZlOGD0BAAACARZdAQAAABIAAAACH5bYPYjkYE6OEagtmU4YPQEAAAsAAIAIIAYAAAAAAMAAAAAA
+AABGAAAAABSFAAAAAAAAAwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAJAAAAEkAbgBkAGUAeABpAG4A
+ZwBFAHIAcgBvAHIAQwBvAGQAZQAAABsAAAAfAACAUONjC8yc0BG82wCAX8zOBAEAAAAqAAAASQBu
+AGQAZQB4AGkAbgBnAEUAcgByAG8AcgBNAGUAcwBzAGEAZwBlAAAAAAABAAAAcAAAAEkAbgBkAGUA
+eABpAG4AZwAgAFAAZQBuAGQAaQBuAGcAIAB3AGgAaQBsAGUAIABCAGkAZwBGAHUAbgBuAGUAbABQ
+AE8ASQBJAHMAVQBwAFQAbwBEAGEAdABlACAAaQBzACAAZgBhAGwAcwBlAC4AAAALAACAUONjC8yc
+0BG82wCAX8zOBAEAAAAmAAAASQBzAFAAZQByAG0AYQBuAGUAbgB0AEYAYQBpAGwAdQByAGUAAAAA
+AAAAAAADAACACCAGAAAAAADAAAAAAAAARgEAAAAyAAAARQB4AGMAaABhAG4AZwBlAEEAcABwAGwA
+aQBjAGEAdABpAG8AbgBGAGwAYQBnAHMAAAAAACAAAAAfAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAW
+AAAAQwBsAGkAZQBuAHQASQBuAGYAbwAAAAAAAQAAACoAAABDAGwAaQBlAG4AdAA9AE0AUwBFAHgA
+YwBoAGEAbgBnAGUAUgBQAEMAAAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAaFAAAAAAAACwAA
+gAggBgAAAAAAwAAAAAAAAEYAAAAAA4UAAAAAAAADAACACCAGAAAAAADAAAAAAAAARgAAAAABhQAA
+AAAAAAIBAIATj/JB9IMUQaWE7ttaawv/AQAAAC4AAABIAGUAYQBkAGUAcgBCAG8AZAB5AEYAcgBh
+AGcAbQBlAG4AdABMAGkAcwB0AAAAAAABAAAAIgAAAAEACgAAAAQAAAAAAAAAFAAAAAAAAAAAAAAA
+/////wAAAAAAAAsAAIATj/JB9IMUQaWE7ttaawv/AQAAABwAAABIAGEAcwBRAHUAbwB0AGUAZABU
+AGUAeAB0AAAAAAAAAAsAAIATj/JB9IMUQaWE7ttaawv/AQAAACgAAABJAHMAUQB1AG8AdABlAGQA
+VABlAHgAdABDAGgAYQBuAGcAZQBkAAAAAQAAAAIBAIATj/JB9IMUQaWE7ttaawv/AQAAAEAAAABD
+AG8AbgB2AGUAcgBzAGEAdABpAG8AbgBUAHIAZQBlAFAAYQByAGUAbgB0AFIAZQBjAG8AcgBkAEsA
+ZQB5AAAAAQAAAC4AAAAAAAAAyeAVQeK+2U+PFQKU+mJJhwEABRYELmh6bk6DTDeAsDTptAAA3dXq
+oQAAAAAfAACAH6TrM6h6LkK+e3nhqY5UswEAAAA4AAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBvAG4A
+SQBuAGQAZQB4AFQAcgBhAGMAawBpAG4AZwBFAHgAAAABAAAA9gEAAEkASQA9AFsAQwBJAEQAPQA2
+ADcANwA1AGIAOQBlAGIALQA0ADQAOAAwAC0ANABkADIAOQAtAGIAMAAzADAALQA0ADcAMgBiADAA
+MAA2AGEAYgBkADUAYQA7AEkARABYAEgARQBBAEQAPQAwADEARAA4AEYARQBBAEYANgBFADsASQBE
+AFgAQwBPAFUATgBUAD0AMgBdADsAUwBCAE0ASQBEAD0AMQA0ADsAUwAxAD0APAAyADAAMgAyADEA
+MQAyADIAMgAwADEANwAwADEALgA2ADUANgA4ADEALQAxAC0AYgByAGEAbgBkAG8AbgAuAG0AYQBp
+AGUAcgBAAGMAbwBsAGwAaQBuAHMALgBjAG8AbQA+ADsAUgBUAFAAPQBEAGkAcgBlAGMAdABDAGgA
+aQBsAGQAOwBUAEQATgA9AE0AaQBzAG0AYQB0AGMAaAA7AFQAUAA9AFMAYQBtAGUAOwBUAEYAUgA9
+AE4AbwB0AEYAbwByAGsAaQBuAGcAOwBWAGUAcgBzAGkAbwBuAD0AVgBlAHIAcwBpAG8AbgAgADEA
+NQAuADIAMAAgACgAQgB1AGkAbABkACAANQA4ADMANAAuADAAKQAsACAAUwB0AGEAZwBlAD0ASAAx
+ADsAVQBQAD0ARAAwADsARABQAD0AMQAwADEAAAAAAAMAAIAIIAYAAAAAAMAAAAAAAABGAAAAABCF
+AAAAAAAACwAAgAggBgAAAAAAwAAAAAAAAEYAAAAADoUAAAAAAAALAACACCAGAAAAAADAAAAAAAAA
+RgAAAACChQAAAAAAAB8AAIAIIAYAAAAAAMAAAAAAAABGAAAAANiFAAABAAAAEgAAAEkAUABNAC4A
+TgBvAHQAZQAAAAAAAgEAgAggBgAAAAAAwAAAAAAAAEYBAAAANgAAAEkAbgBUAHIAYQBuAHMAaQB0
+AE0AZQBzAHMAYQBnAGUAQwBvAHIAcgBlAGwAYQB0AG8AcgAAAAAAAQAAABAAAADItca8CNaSTrsq
+zNf066UGAwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAGIUAAAAAAAAfAACAKQMCAAAAAADAAAAAAAAA
+RgEAAAAeAAAASQBuAHMAcABlAGMAdABvAHIAQQBpAHAASQBkAAAAAAABAAAASgAAADQAOABjADIA
+ZgBlADEAMwAtAGQAYgBhAGYALQA0AGMAOQA1AC0AYgBjADUAZQAtAGUAYQBhADgAYgBlADgAMgAz
+ADMAYQA3AAAAAAADAA00/T8AAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAC4AAABhAHUAdABoAGUA
+bgB0AGkAYwBhAHQAaQBvAG4ALQByAGUAcwB1AGwAdABzAAAAAAABAAAAsgAAAGQAawBpAG0APQBu
+AG8AbgBlACAAKABtAGUAcwBzAGEAZwBlACAAbgBvAHQAIABzAGkAZwBuAGUAZAApACAAaABlAGEA
+ZABlAHIALgBkAD0AbgBvAG4AZQA7AGQAbQBhAHIAYwA9AG4AbwBuAGUAIABhAGMAdABpAG8AbgA9
+AG4AbwBuAGUAIABoAGUAYQBkAGUAcgAuAGYAcgBvAG0APQBhAG0AZAAuAGMAbwBtADsAAAAAAB8A
+AICGAwIAAAAAAMAAAAAAAABGAQAAAB4AAABhAGMAYwBlAHAAdABsAGEAbgBnAHUAYQBnAGUAAAAA
+AAEAAAAMAAAAZQBuAC0AVQBTAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAIAAAAHgALQBtAHMA
+LQBoAGEAcwAtAGEAdAB0AGEAYwBoAAAAAQAAAAIAAAAAAAAASAAAgAggBgAAAAAAwAAAAAAAAEYB
+AAAAIgAAAE4AZQB0AHcAbwByAGsATQBlAHMAcwBhAGcAZQBJAGQAAAAAABj2fntQM+dLuxEI2szm
+NBMfAACAhgMCAAAAAADAAAAAAAAARgEAAAAuAAAAeAAtAG0AcwAtAHAAdQBiAGwAaQBjAHQAcgBh
+AGYAZgBpAGMAdAB5AHAAZQAAAAAAAQAAAAwAAABFAG0AYQBpAGwAAAAfAACAhgMCAAAAAADAAAAA
+AAAARgEAAAA2AAAAeAAtAG0AcwAtAHQAcgBhAGYAZgBpAGMAdAB5AHAAZQBkAGkAYQBnAG4AbwBz
+AHQAaQBjAAAAAAABAAAASAAAAEMASAAyAFAAUgAxADIATQBCADUAMAAwADQAOgBFAEUAXwB8AEQA
+TQA2AFAAUgAxADIATQBCADQAOQA0ADMAOgBFAEUAXwAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAA
+AFAAAAB4AC0AbQBzAC0AbwBmAGYAaQBjAGUAMwA2ADUALQBmAGkAbAB0AGUAcgBpAG4AZwAtAGMA
+bwByAHIAZQBsAGEAdABpAG8AbgAtAGkAZAAAAAEAAABKAAAANwBiADcAZQBmADYAMQA4AC0AMwAz
+ADUAMAAtADQAYgBlADcALQBiAGIAMQAxAC0AMAA4AGQAYQBjAGMAZQA2ADMANAAxADMAAAAAAB8A
+AICGAwIAAAAAAMAAAAAAAABGAQAAADgAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AcwBl
+AG4AZABlAHIAYQBkAGMAaABlAGMAawAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAAAAAAAABG
+AQAAADoAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AcgBl
+AGwAYQB5AAAAAAABAAAABAAAADAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAqAAAAeAAtAG0A
+aQBjAHIAbwBzAG8AZgB0AC0AYQBuAHQAaQBzAHAAYQBtAAAAAAABAAAADgAAAEIAQwBMADoAMAA7
+AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABEAAAAeAAtAG0AaQBjAHIAbwBzAG8AZgB0AC0A
+YQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQAtAGkAbgBmAG8AAAABAAAAsgUAAFIAOQBG
+AEMAagBSAFMAYgBzAFEAawBxADEAbwBLAHkAYwAwAEsAOQArAFYAaABQAFMAcgBvAFoAZgBOAEcA
+aQBDAEUASgBOAEEASQA5AEwAeAB1AEYAcwBMAGsAQQBFAE8ARgBmAGoAWgA3AE0AeABiAEEATgBS
+ADYASwBmAGQASgB6AGwASgBIAFoAeQBjAEMAOABSAEUAOQB3AGYATABWAHUAUQBUAHkAVAB0AHIA
+dwA1AG0AYwBwAHEARQAvAFYATABWAHQARQBvADcARgB5AGkAegB0AE4ARABsAGEAdABTAEwAYwBQ
+AHoAMwBiAEMARgByAHgAMQA5AGcARgBxAFQAagArAEgANABXAGcAdQBWAEcAYwB2AGoAUQA4AHcA
+NABvAFIAaABLADQASABkAHkAbQBBAFUANgBRAC8AcgA3ADkATgBUAFUANQBRAFUASAA2AFUAWgBW
+AGQAVwB3ADUAMwB2ADgAQQBuAHEAOABSAFQATQBXAFoAbwB1AEcAVwBTACsAdAArADEATgBkAG4A
+VwBpAG0AMQBEAG0ARgBpAHYARgB2AEcAWAByADIATwBYAFUARAA2AEwATwBkAEcALwBQAG8ATgBk
+AGIAVgA0AEcAdgAyAEgARABDAFAATgBNADYAKwBVAFQARgBVAFEAZAA1AE0AOABZAEwAbAArAEgA
+MwBqAHUAUwBFAHAAOABtAFkATwBKAGsARgB6AGcARgBGAFkAWQAxAG0ANABJAGkARAB2AGUAeQB1
+AGoAQwBFAEEAcgBXADUAZQArADkARwA3AFQAdgAxAEoAdQBjAGUAMQBYAHoAcABwAGcAVwBzAGIA
+TQBrAGQAUwBjAFkARABnAE8ANQBHADcATQB4AEYAdwBYAFMAQQBVAE0AawBSAGgANQB3AHUAMgBa
+AFYAbQB2AC8AagBsAEEARwA3AHcAWABhAHcANgBQAHUAYgByAHAAdAB0AGcAbgBRADMAMgBSAFEA
+YwBMAHgAeABrAHQAawB4AEoANQBrADMAOQBGAFYAcABFAEoAOABiAHoAMgBtAGcAOAAvAGgAagBT
+AHIAUwBKAFEAdgAyADkAagBQAHYAQwBnAGEAZABBAGIAbgBjAHYAWQBUAGwAaQBNAE8AUABaAC8A
+RABsADYAdgBIAGgAWQBlAHoAZAA0AHEASQBKAGkATQBmAHAAUgBtAHQASgBUAEQANQBCAHYAOQBN
+AEgANQA0AEoAYgBaAHMAQgBzAHYATABYAE4AVQB1AEsANAB1AEsAYgBQAE0AZABlACsASwBhADIA
+RABHAE4AWQB0ADIAKwBxAEEAOABFAE4ANgBlADgAcgBYAE0AQwA4AEgATgBEAEEAUgBPAHYAUQBu
+ACsAeABlAG8AMwBaADAASABIAG8AbQBtAFcAKwB0AHkANABIAEkAagB3AGMAUQB2ADAATwBMAFoA
+egAxAG4ATwBaAHEAeQBTADYARgA1ADcAKwBXAFYARgBTAFUAVAA0AEIARQBkAHIASgBVAEoAZABk
+ADkAQgBWAEYAdQBhAHkALwBGAHQAYwB0AG8ASgAwAFUASwBKAEMAOQBrAFMAZgBWAHQANgBIAEUA
+NgBJAFgAUABPAEoAYQBnAGoASABIAFEAMABIAGUARwBHAFIATgBsAFIAUABrAFIAYgBOAHoAUwBl
+AEcALwBiAGMAbQBUAEEAcwA5AG0AWAB6AHQAUwBJADcAbAByAEsARgBmADQAMQBUAHkAYQBaAGgA
+MQBaAGUAaQBXADAASwBzAGYAMABOAEMARABwAEcAQwB5AG4ATwBxADMASgBLAE0AQQBmADIASgAy
+AGgAeAA2AEgANgBYAFMAbgB2ADQAQQA5ADIANQBRAGYAUgA1AC8AYwBiAEsAVQBNAEsAaABJADAA
+QQBNAFMAZQBpAGkAYQBnAEkAawB3AD0APQAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAOAAA
+AHgALQBmAG8AcgBlAGYAcgBvAG4AdAAtAGEAbgB0AGkAcwBwAGEAbQAtAHIAZQBwAG8AcgB0AAAA
+AQAAACQEAABDAEkAUAA6ADIANQA1AC4AMgA1ADUALgAyADUANQAuADIANQA1ADsAQwBUAFIAWQA6
+ADsATABBAE4ARwA6AGUAbgA7AFMAQwBMADoAMQA7AFMAUgBWADoAOwBJAFAAVgA6AE4ATABJADsA
+UwBGAFYAOgBOAFMAUABNADsASAA6AEMASAAyAFAAUgAxADIATQBCADUAMAAwADQALgBuAGEAbQBw
+AHIAZAAxADIALgBwAHIAbwBkAC4AbwB1AHQAbABvAG8AawAuAGMAbwBtADsAUABUAFIAOgA7AEMA
+QQBUADoATgBPAE4ARQA7AFMARgBTADoAKAAxADMAMgAzADAAMAAyADIAKQAoADQANgAzADYAMAAw
+ADkAKQAoADMANAA2ADAAMAAyACkAKAAzADkANgAwADAAMwApACgAMwA5ADgANgAwADQAMAAwADAA
+MAAyACkAKAAzADcANgAwADAAMgApACgAMQAzADYAMAAwADMAKQAoADMANgA2ADAAMAA0ACkAKAA0
+ADUAMQAxADkAOQAwADEANQApACgAOQA2ADgANgAwADAAMwApACgAOAAzADMAOAAwADQAMAAwADAA
+MAAxACkAKAAxADIAMgAwADAAMAAwADAAMQApACgANwA2ADEAMQA2ADAAMAA2ACkAKAA1ADUAMAAx
+ADYAMAAwADMAKQAoADcANgA5ADYAMAAwADUAKQAoADYANAA3ADUANgAwADAAOAApACgAMgA5ADAA
+NgAwADAAMgApACgAMQA4ADYAMAAwADMAKQAoADIANgAwADAANQApACgAMwA4ADEAMAAwADcAMAAw
+ADAAMAAyACkAKAA1ADYANgAwADMAMAAwADAAMAAyACkAKAA3ADEAMgAwADAANAAwADAAMAAwADEA
+KQAoADYANQAwADYAMAAwADcAKQAoADUAMgA1ADMANgAwADEANAApACgANgA2ADUANQA2ADAAMAA4
+ACkAKAA1ADQAOQAwADYAMAAwADMAKQAoADQAMQAzADAAMAA3ADAAMAAwADAAMQApACgAOAA2ADcA
+NgAwADAAMgApACgAMwAxADYAMAAwADIAKQAoADYANgA5ADQANgAwADAANwApACgANAA3ADgANgAw
+ADAAMAAwADEAKQAoADYANgA0ADQANgAwADAAOAApACgAOAA5ADMANgAwADAAMgApACgANAAzADIA
+NgAwADAAOAApACgANgA2ADQANwA2ADAAMAA3ACkAKAAxADEAMAAxADMANgAwADAANQApACgAMwAz
+ADYANQA2ADAAMAAyACkAKAAzADgAMAA3ADAANwAwADAAMAAwADUAKQAoADgANgAzADYAMgAwADAA
+MQApADsARABJAFIAOgBPAFUAVAA7AFMARgBQADoAMQAxADAAMQA7AAAAHwAAgIYDAgAAAAAAwAAA
+AAAAAEYBAAAAXAAAAHgALQBtAHMALQBlAHgAYwBoAGEAbgBnAGUALQBhAG4AdABpAHMAcABhAG0A
+LQBtAGUAcwBzAGEAZwBlAGQAYQB0AGEALQBjAGgAdQBuAGsAYwBvAHUAbgB0AAAAAQAAAAQAAAAx
+AAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAASgAAAHgALQBtAHMALQBlAHgAYwBoAGEAbgBnAGUA
+LQBhAG4AdABpAHMAcABhAG0ALQBtAGUAcwBzAGEAZwBlAGQAYQB0AGEALQAwAAAAAAABAAAAWgwA
+AGgAMABBAHkASgBCAGQAMAB0AGcARwBmAFcAegAxAEQARwBDAEUARgBmAFMAVABLADYASAA0ADcA
+ZAA5AEsAcgB5AGsAegA1ADQASwBQAE4AYwArAFQASgB6AC8AaABVADgAMABNAG4AUQBwAFcAOABn
+AGwAbQBvAHQAOQA4AFUATwBJAEcAWABTAGoASgBoAFAAYQA5ADUAMAB4AGIAYwBXAGIAMABDAEwA
+MABvAGsAYwA4AFoARwB6AHAATgAwADIAZwBJAHoAbQBXAGsAWgBTAGsAZABjAEMAZwBHAGwAZQBt
+AHEARABxAHgAbgBrAFYAcQB5AHkAbABYADQAYQBEADUANAA0AEsANgB3AEoAYQBZADcAVgB3AHIA
+SQBJADYAbgBqAFEAUABRAFEATwA4ADQAegB6AEsATwBIAHEAZgBtAEIALwBoAGUAVwAyAHkASQAv
+AG0AbQBEAEQAeABtAGIAUQBYAHcARgAxAFQAeABBADgAUABhAGMAVwBQADcAUABHAHMAYQA0AC8A
+RQBoADUAeABWAHMALwBIAGgATwBKAFQANwBFAGEAegBJAGQAOABsAFEARwBPAFIAVwBVAGUATQBV
+AGIAUgBWAGYATABIAFAATAB5AE0AWQBzAHEAdQA2ADUAOABSAHkAeQBSAEMAbABZAGQATQA0AHAA
+dgBCAGcAbgBHAEYAeQBnAGwAeABIACsAOABWAG0AMgB5AHcAVwBZAGkASABTADYAQgBXADUAcQBu
+ADEATQB5ADkAdAAwAGkAbwBZADMAZgBWAE8ARgBmAHYAcQBUAFIAUwBKAEMATQBvAHAAOABOAGQA
+UQBlAGsAUgB5ADUAQwAzADYATgB4ADgAawBzAEQAbAB5AG0ARQBCAHgAQgBRAFIARABlAGsAcwBX
+AHcAVwBvAFgAQgBUAFAAUwBIAGEAUwAyAEsARABlAFoAYQB6AEsAdgBqADAAMQBqAFQAaAAxADIA
+ZwBSAHIATwBKAEcAdQBFAHcAOABsAG4AegBqACsAWgBEAGUAVwBoAEsAOABMAEIALwBsAGEAKwBI
+AGoARgBBAHAARwBCADkAUwBQAFUATwA3AGkAbwBhAG8ATQBwAGQAQwBGAEcAVgAxAE4AQQBSAGIA
+MwBvAGoAMQBrAGQAWAA1AHgAcABWADIAbABRAGQAcwBCADcAdwBqAE0ATABUAGwAYQBmAEQASwBY
+ADMAbwA1AGgAeABoAE0AZQB5ADIAdwB1AGEARwBlAEIAegAzAFMATABEAFAAbABpAHQARQBCAEUA
+dwBmAE0AVgBIADEATwBiAEMAMQBWAEQATABDADAAbwA0ADYAYwAvAEcAMgBIADgAaABKAEcAQgAw
+AEwAWABUAEsAcABZAHoAQwBkAGUALwBXACsATABpAG0AZQA5ACsANwBXADcAbQBzAG4AYgBZAGgA
+LwA0AEMAbwBUADgAQwB3AHgARQBuAEsAMABXAHQAdwB1AEYARgBxAEwAUQAvAE0ASgBVAEcAagBP
+AFgAeQA4AGEANgBnADUAZwBNAGoAQgBLAGwAagBDAGIAagBFAHoAcwAwAEYAagBQADYAUgBSAHQA
+TwB4AHgASABXAFoAbAB2AG0AdABBAFgATAA4AHkAVwBnADAANwBDADYARABZAGMAcgBiAEUATQAz
+AEoAagAxAEQAQQBXADAASABDAGgANQBTADcAagArAG0AVgBjAGQAVwBpAHQAdABiAEUAMgBZAGUA
+TwBOAEkASgBoAHUASgBrAEEAKwBYAHUAOQBYAEIAaQBJAG4AbwAvADEAQgA4AFYAdwBWAFMAQwBq
+AGUATwBSAG4ATABJADUAegB0AFoATQBSAFoAYgBHADMATAA4AGcAcAB6AHgAdwBTADEAVQBUADYA
+RABXADYATQAwAHEAMQBvAEgASABYAGEATABGAEsAZQBRAHAATQBjAEoAegBqAFIAZQBPAGoAQwAx
+AFUAYQBhAE8AZwBNADcAUABCADYAYQBxAHgARwBPAHcAQgBYAEwAMQArAHIAagBkAGsAbgA3AGYA
+bgBCAFEAbgBtAHcAWgBsAEMAbwBHADAAWABHAE8AZwBaAHUAYQBHAG0AKwA4AGwASQBCAGYAQQB2
+AFoATgBOAGoAcQBBAE8AQgB4AGUASQBxAEsAbQAwAE0AOABlACsAYgAzADEAMgBOAHgAeQB2ADQA
+UABGAE4AKwB2ADAAZABFAHEAZQBsADYAUAA2ADUAVwBmAFQAcABvADkAQgA5ADgAWgBvAGkAdQBl
+AEkAUwBqAHAAVQBBAHMAcQBOAGwAVABlAEEAUAA3AG4AdQB3AEkAWQBRADMAagAyADEAZwBoAEIA
+aQArADYANgA5ADUAdQBTAEwAeABsADAAbgBCAE8AWQBJAGIASgBSADMAYwBlAFYARABNAHMAbQBX
+AHMAbgBLAHYAUQBBAHgALwBMAHUAKwB1AFMAbABOAHcAOAA1AGEAYwBwAEoANwBEAHQASwBZAE0A
+QQAvAHQAOQBUAGMAeABUACsARABPAGMAQgBzAHAASgBKADMAcQA3AC8AWAAxAE4AKwBqAFYASgBv
+AGQATQBlAGcAMgBmADAAdwBlAG0AZABMAGwAYwBlADgASwByADMARwBBAHMAbgBpAHQATwBFAEMA
+aQAwAEgAZQBzAE8AMgBTADUAZwBBAGsAWgAwADIATgBzAHEAQQAxADYALwA0ADgAegBpAHIAdwBm
+AGoAbQArAEkAdgBkADcAWQBrAHkAQgAzAGwAVAA5AGIAbQByAHcAOQBVAEUANwBQAGoAYgA4AFQA
+YwAxAGkAcwAvADEARQBtAHMAegB4ADAAbQBDAFcAQwBhAEMAZwA1AGUAVgBrAHkARgA4AFIAZQBD
+AFIAUwA4AEYAOQByAGgALwAzAEgAWgByAGsAdgBHAHAAZgBqAFMAWAByAHMAZQBZADUAVwBDADcA
+VgByAEMAbgBGAHAAVABHAEEARQA0AEgAcQB5AFIAQwBqAEkANABOAHEAbwBvAG8ARgBIAHoARwB0
+ADQAVwB5ACsAegBaAE8ATQBaAGIAZQBEAEYAaABaAE4AdQAzADIAMwBJAEYATwBPAFYAQQArAG0A
+MABVAHkAdAAzAFcAbQA1AEkARQBsAGsATgBzADQAMABKAHUAbQA1AHkAVQBQAGgAQwBMAGcAaQBs
+AGIAKwA1AHgAMgAyAEcAagBNAEYAdgBlAHQAMwAyAHEATgBRAHkATwB4AEQAZgA1AG4AVQB1AEcA
+VwBEAEwAMgArAFcAeAB0ADMAUABXAGcASQB6AGYAVAAvAEMAaQBEAFgANABJAGEAUwBMAFgAcQA1
+AEQAcAAzAEQAMQBPAEwATwBvAHkANwAzADQAOAAxAGsATQA4AGgASQBUAEYARQBKAHgAagA1ADIA
+dwAzADYAbgBNAEwAegBxAG0AKwBwAEMASwBQAEgAOQB2ADkAVABWAEUARwBDAG4AcQBtAEEAYgBQ
+AHQAdQAzAGMAYwAwAHQATAB0ADYAbgA1AHIAYQB6AEEARgB5AHEATwBOAEwARwAzAFIAVQA1AGoA
+QgBYADQAdwBrAG0AQQBNAE4AdQBKAHoARwBVAGkAdQB1AGwAWQBnAEYAQQAwADkAVgAxAFIAcgAr
+AHYAaQBRAEQAMgBjADgATwBqAEEAMQBTAFMAMgArAHIATABnADkARgBPAG0ATgAwAG8AaABXAGoA
+VAB2AHIAVgBTAGUAbAA1AGkAegBBAEkAbQBEAE0AOABFAEsAcwBQAG4AZgBHAHMAaQBEAEUAUwBM
+AG8AbwBMAG4AYwBuADcANwA0ADMAWQBwAE4AdABFADQAYwA0AFkAbgAvADkAeQBkAFgAcwBHAHkA
+awBsAHAALwB5AE4AcAB1AGkAbwBkADEARgAvAHQAMABmAE8ANwB3ADUAWgAyAGsATgBCAHMAUwBz
+AGMAawAvAEMANgBSADkAMQBRAEsAZwAxAE0ALwBMAEMAUABOAHQARQBQAHcATABnAE8AaQA1AHQA
+UABxAGUAWQBCAEoARABLAHEAeAAvAHgASAByAHkAUwBHAGgAYQBaAEoAWgBwAEUAVwBBADUAVgBT
+AHYAdAB0AHQARABWAFMAVABkAEQAdABVAGEAYQBlAFcAdwBQADMAVQBqAEIAVgAwADAAWQBaADQA
+TQArADkAcABxAHAATQBHAGYASwBiAFkAPQAAAAAANS8=
+
+--_000_CH2PR12MB500447A384CA04CD1901BA35F00C9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--_000_CH2PR12MB500447A384CA04CD1901BA35F00C9CH2PR12MB5004namp_--
