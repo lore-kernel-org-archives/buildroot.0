@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4603C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 08:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9F6C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 10:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55647820CC;
-	Wed, 23 Nov 2022 08:54:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55647820CC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 561EC40BB9;
+	Wed, 23 Nov 2022 10:09:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 561EC40BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GY0kIGcFdkTL; Wed, 23 Nov 2022 08:54:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 67DJx7OxVKxF; Wed, 23 Nov 2022 10:09:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F11982073;
-	Wed, 23 Nov 2022 08:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F11982073
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93E474018D;
+	Wed, 23 Nov 2022 10:09:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E474018D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 232B51BF3C3
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 08:54:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E9D961BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F12AC60B88
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 08:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12AC60B88
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4F176074C
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F176074C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gfoe2OtyNw42 for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 08:54:08 +0000 (UTC)
+ with ESMTP id oeurfWoOBpmS for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 10:09:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F6B260B89
- for <buildroot@uclibc.org>; Wed, 23 Nov 2022 08:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F6B260B89
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18766605EE
+ for <buildroot@uclibc.org>; Wed, 23 Nov 2022 10:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18766605EE
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 2A7D781E89; Wed, 23 Nov 2022 08:54:08 +0000 (UTC)
+ id 052C884359; Wed, 23 Nov 2022 10:09:42 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 23 Nov 2022 08:54:07 +0000
+Date: Wed, 23 Nov 2022 10:09:41 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ian_ormshaw@waters.com
+X-Bugzilla-Who: fido_max@inbox.ru
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15141-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15141-163-W1yXN9fE3T@https.bugs.busybox.net/>
+In-Reply-To: <bug-15141-163@https.bugs.busybox.net/>
+References: <bug-15141-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15141] New: kernel 5.16.2 (realtime patch 19)
- fails to build
+Subject: [Buildroot] [Bug 15141] kernel 5.16.2 (realtime patch 19) fails to
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,29 +81,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15141
 
-            Bug ID: 15141
-           Summary: kernel 5.16.2 (realtime patch 19)  fails to build
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: ian_ormshaw@waters.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Maxim Kochetkov <fido_max@inbox.ru> ---
+It was fixed by:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/tools/objtool/check.c?h=v6.1-rc6&id=82880283d7fcd0a1d20964a56d6d1a5cc0df0713
 
-Created attachment 9411
-  --> https://bugs.busybox.net/attachment.cgi?id=9411&action=edit
-Build log
-
-Using buildroot 20022-11 rc2 kernel 5.16.2 (with realtime patch 19) fails to
-build.
-
-This is the case for gcc 11 and 12
+You can apply patch or use newer kernel. 5.16.8 already has this fix.
 
 -- 
 You are receiving this mail because:
