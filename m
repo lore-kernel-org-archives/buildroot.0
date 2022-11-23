@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12ACBC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 410FFC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A20B240BB9;
-	Wed, 23 Nov 2022 09:54:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A20B240BB9
+	by smtp2.osuosl.org (Postfix) with ESMTP id E125240BBE;
+	Wed, 23 Nov 2022 09:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E125240BBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8GsJrz54SJ6N; Wed, 23 Nov 2022 09:54:48 +0000 (UTC)
+	with ESMTP id EG_D3qcjjL6L; Wed, 23 Nov 2022 09:55:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4FE740462;
-	Wed, 23 Nov 2022 09:54:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4FE740462
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97D3240BD3;
+	Wed, 23 Nov 2022 09:55:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97D3240BD3
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 812A21BF853
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:54:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C86E51BF853
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB97440158
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:53:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB97440158
+ by smtp2.osuosl.org (Postfix) with ESMTP id A326040158
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A326040158
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FkmK0-K7Mu1r for <buildroot@lists.busybox.net>;
+ with ESMTP id u88EXjdMS90S for <buildroot@lists.busybox.net>;
  Wed, 23 Nov 2022 09:53:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8F4840BCD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F61D40462
  for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8F4840BCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F61D40462
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A23BE842E4; Wed, 23 Nov 2022 09:53:58 +0000 (UTC)
+ id 8BF31842E1; Wed, 23 Nov 2022 09:53:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 10:52:34 +0100
+Date: Wed, 23 Nov 2022 10:50:33 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: d25bad9b3004a4da00e84a6eadbbd1d7f040becd
-X-Git-Newrev: 6b5773da49c6177809c0f2f13a6dbab7b1d4521e
+X-Git-Oldrev: e31574dca21609748189479921386bab2e10eaf3
+X-Git-Newrev: 6bd61d13c28c4f0973659f07b20cb7ecd3487d58
 X-Patchwork-Hint: ignore
-Message-Id: <20221123095358.A23BE842E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/asterisk:
- security bump to version 16.28.0
+Message-Id: <20221123095358.8BF31842E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/sysstat: security
+ bump to version 12.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,115 +58,88 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7614565661546702580=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7614565661546702580==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6b5773da49c6177809c0f2f13a6dbab7b1d4521e
+commit: https://git.buildroot.net/buildroot/commit/?id=6bd61d13c28c4f0973659f07b20cb7ecd3487d58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Asterisk 16.26.0 fixed the following security issues:
+Fix CVE-2022-39377: sysstat is a set of system performance tools for the
+Linux operating system. On 32 bit systems, in versions 9.1.16 and newer
+but prior to 12.7.1, allocate_structures contains a size_t overflow in
+sa_common.c. The allocate_structures function insufficiently checks
+bounds before arithmetic multiplication, allowing for an overflow in the
+size allocated for the buffer representing system activities. This issue
+may lead to Remote Code Execution (RCE).
 
-- [ASTERISK-29476] – res_stir_shaken: Blind SSRF vulnerabilities
-  https://issues.asterisk.org/jira/browse/ASTERISK-29476
+Despite what is written above in the CVE announcement, and as written in
+the Changelog, the fix is also included in version 12.6.1 (12.7.1 is a
+development version):
+    https://github.com/sysstat/sysstat/commit/c1e631eddc50c04e4dcea169ba396bee2bd6b0ab
 
-- [ASTERISK-29838] – ${SQL_ESC()} not correctly escaping a terminating \
-  https://issues.asterisk.org/jira/browse/ASTERISK-29838
+As a consequence, 12.6.1 is still reported as being affected. Until the
+NVD is updated appropriately, we mark the CVE as ignored with a comment
+that explains why.
 
-- [ASTERISK-29872] – res_stir_shaken: Resource exhaustion with large files
-  https://issues.asterisk.org/jira/browse/ASTERISK-29872
+Note: that commit is not reachable from any branch in the sysstat
+repository, and Github warns about that, but the commit does belong to
+the upstream repository and is reachable from the 12.6.1 tag (it looks
+like sysstat only pushes tags-with-history for fix releases).
 
-https://www.asterisk.org/asterisk-news/asterisk-16-26-0-now-available/
+https://github.com/sysstat/sysstat/security/advisories/GHSA-q8r6-g56f-9w7x
+https://github.com/sysstat/sysstat/blob/v12.6.1/CHANGES
 
-It unfortunately also introduced a change to chan_iax2, breaking builds
-without OpenSSL:
-https://github.com/asterisk/asterisk/commit/59a8cdaca2dbb5eeb7382dfbe78c0c1cbed8ce6d
-
-Which was again fixed in 16.28.0:
-https://github.com/asterisk/asterisk/commit/f812dfb68c6ed7ae55b4c163716fd1ddc063ff54
-
-So bump to 16.28.0:
-https://www.asterisk.org/asterisk-news/asterisk-16-28-0-now-available/
-
-The libxml2 support now uses pkg-config, so drop the libxml2-config handling:
-https://github.com/asterisk/asterisk/commit/bf9dafa7c22302b2f1a12b8216da63102116d9c9
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 [yann.morin.1998@free.fr:
-  - add host-pkgconf dep, don't rely on implicit dep from host-asterisk
+  - ignore the CVE, explain why
+  - explain why github warns about the fix commit
 ]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bd42aa1d0a3ed7a5845c7b5e7c8aeb82d899699c)
+(cherry picked from commit e4ef408e8f738575841c5ffc43504be4c3f6fa56)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 8 +++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/sysstat/sysstat.hash | 4 ++--
+ package/sysstat/sysstat.mk   | 5 ++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 880d67562d..9792d82ac5 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index b573f312c6..b47f000e57 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  0fb817943a276f5e540c2a9432e8841cd3393e7c1bd1250055c620902f6eafc8  asterisk-16.25.2.tar.gz
-+sha256  6e9c2f350db018df854b1301687ced8993facb2787698336e55cd19e0ae3ebfe  asterisk-16.28.0.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 9b59997b80..e0f28ae7ee 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1  1e38bc029979def730ae1fb1e39f631bd1a3bc73  sysstat-12.4.2.tar.xz
++sha1  a730982e0c2d4964a0022c1509f3ea0a345402bc  sysstat-12.6.1.tar.xz
+ # Locally calculated
+-sha256  3701b2c1883d50eb384d7b95ce5b6df0a71fdcb3c23f96cb58098d1bcffa018f  sysstat-12.4.2.tar.xz
++sha256  18ff5a4e149e2568e43385637f72437fe6bafcc1322a93d13d1981e9464a0342  sysstat-12.6.1.tar.xz
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  COPYING
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 6948f6b390..eaf505dc49 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.25.2
-+ASTERISK_VERSION = 16.28.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-@@ -31,6 +31,7 @@ ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ith
+-SYSSTAT_VERSION = 12.4.2
++SYSSTAT_VERSION = 12.6.1
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-file-attr
+@@ -14,6 +14,9 @@ SYSSTAT_LICENSE_FILES = COPYING
+ SYSSTAT_CPE_ID_VENDOR = sysstat_project
+ SYSSTAT_SELINUX_MODULES = sysstat
  
- ASTERISK_DEPENDENCIES = \
- 	host-asterisk \
-+	host-pkgconf \
- 	jansson \
- 	libcurl \
- 	libedit \
-@@ -115,8 +116,7 @@ ASTERISK_CONF_OPTS += --without-avcodec
- ASTERISK_CONF_OPTS += --without-spandsp
- 
- ASTERISK_CONF_ENV = \
--	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true \
--	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
-+	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-@@ -314,8 +314,6 @@ HOST_ASTERISK_LICENSE_FILES = COPYING
- # so do not inherit the target setup.
- HOST_ASTERISK_AUTORECONF = NO
- 
--HOST_ASTERISK_CONF_ENV = CONFIG_LIBXML2=$(HOST_DIR)/bin/xml2-config
--
- HOST_ASTERISK_CONF_OPTS = \
- 	--without-newt \
- 	--without-curses \
-
---===============7614565661546702580==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++# NVD is not up-to-date; 12.6.1 includes c1e631eddc50, which fixes the issue
++SYSSTAT_IGNORE_CVES += CVE-2022-39377
++
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ SYSSTAT_DEPENDENCIES += lm-sensors
+ SYSSTAT_CONF_OPTS += --enable-sensors
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7614565661546702580==--
