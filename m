@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25FBC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896F8C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 613CD42A4F;
-	Mon, 20 Feb 2023 21:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 613CD42A4F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 292314645A;
+	Mon, 20 Feb 2023 21:30:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 292314645A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rX3k-PNDI4hc; Mon, 20 Feb 2023 21:30:26 +0000 (UTC)
+	with ESMTP id fHmSq0JhvLGN; Mon, 20 Feb 2023 21:30:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDAC04634B;
-	Mon, 20 Feb 2023 21:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDAC04634B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 102741BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8B2A4695D;
+	Mon, 20 Feb 2023 21:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8B2A4695D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39AC41BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3E86415A7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3E86415A7
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEBD7610E5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEBD7610E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aUdqkt_anN4X for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kLmYjbiwTfNW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1EA040C42
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1EA040C42
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCDE761067
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCDE761067
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEB7386494; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id CD7C18648F; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 19:18:10 +0100
+Date: Wed, 23 Nov 2022 22:38:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e87d92966630a6c05857c3e29d1781fce3c16bad
-X-Git-Newrev: c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
+X-Git-Oldrev: 39a2ff16f92a61a3e8593c394d211c18d01de8d4
+X-Git-Newrev: 9bd126698397eb3105340f48e4f033e09b34aaf7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.CEB7386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/memcached: fix static
- with shared build
+Message-Id: <20230220205152.CD7C18648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/edk2-platforms: refine
+ license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4851308188961113748=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
+--===============4851308188961113748==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9bd126698397eb3105340f48e4f033e09b34aaf7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When BR2_SHARED_STATIC_LIBS is enabled, both --enable-static and
---enable-shared are passed to configure. memcached configure.ac only
-looks for --enable-static to make the build static. But when linking
-against openssl pkg-config only returns dynamic linking dependencies,
-resulting in the following build failure:
+The edk2-platforms project is licensed under the BSD-2-Clause license with
+a patent grant, as per commit ae604e4ffe8f ("edk2-platforms: Change
+License.txt from 2-Clause BSD to BSD+Patent").
 
-/home/thomas/autobuild/instance-1/output-1/host/bin/aarch64_be-buildroot-linux-gnu-gcc -std=gnu99  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2 -pthread  -Wall -pedantic -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls  -static  -o timedrun timedrun.o  -levent  -L/home/thomas/autobuild/instance-1/output-1/host/bin/../aarch64_be-buildroot-linux-gnu/sysroot/usr/lib -lssl -lcrypto  -ldl
-/home/thomas/autobuild/instance-1/output-1/host/lib/gcc/aarch64_be-buildroot-linux-gnu/11.3.0/../../../../aarch64_be-buildroot-linux-gnu/bin/ld: memcached-memcached.o: in function `conn_new':
-memcached.c:(.text+0x1668): undefined reference to `SSL_set_info_callback'
+There is a BSD-2-Clause-Patent SPDX license identifier[1] for this case,
+therefore refine the edk2-platforms package to use this more specific
+identifier.
 
-BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
-binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
-static only build.
+[1]: https://spdx.org/licenses/BSD-2-Clause-Patent.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/363c84eaa69350e02bec0b35b88d4bdf4dad804c
- - http://autobuild.buildroot.org/results/0bde41bb700100d8df5ebdb1b64dfdc76c7af475
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/memcached/memcached.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/edk2-platforms/edk2-platforms.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index c7d89054bd..7b4069e820 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -29,4 +29,8 @@ else
- MEMCACHED_CONF_OPTS += --disable-tls
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),)
-+MEMCACHED_CONF_OPTS += --disable-static
-+endif
-+
- $(eval $(autotools-package))
+diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
+index 7de59c1afc..6b155bf013 100644
+--- a/package/edk2-platforms/edk2-platforms.mk
++++ b/package/edk2-platforms/edk2-platforms.mk
+@@ -7,7 +7,7 @@
+ # Keep in sync with latest commit as of the release date for boot/edk2
+ EDK2_PLATFORMS_VERSION = db922e1253cb6f1fc456805bc42fb7d401eed5c2
+ EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
+-EDK2_PLATFORMS_LICENSE = BSD-2-Clause
++EDK2_PLATFORMS_LICENSE = BSD-2-Clause-Patent
+ EDK2_PLATFORMS_LICENSE_FILES = License.txt
+ EDK2_PLATFORMS_INSTALL_TARGET = NO
+ EDK2_PLATFORMS_INSTALL_STAGING = YES
+
+--===============4851308188961113748==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4851308188961113748==--
