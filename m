@@ -1,68 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA00C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3058C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DD2B81E15;
-	Wed, 23 Nov 2022 21:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DD2B81E15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EDFB610BA;
+	Wed, 23 Nov 2022 21:46:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EDFB610BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iz8nsyZ43YJa; Wed, 23 Nov 2022 21:43:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2HgMF6xJ70db; Wed, 23 Nov 2022 21:46:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A053B81DFE;
-	Wed, 23 Nov 2022 21:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A053B81DFE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C38D1BF2F7
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:42:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82C5A60A9E;
+	Wed, 23 Nov 2022 21:46:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82C5A60A9E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 767531BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 760AE41899
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:42:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 760AE41899
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44A234040D
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44A234040D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YYrRBDz3zKs0 for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 21:42:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3782541893
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3782541893
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 21:42:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZhZ9yYO5OCe1 for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 21:46:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 402F740116
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 402F740116
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 21:46:01 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1CCBA100006;
- Wed, 23 Nov 2022 21:42:51 +0000 (UTC)
-Date: Wed, 23 Nov 2022 22:42:51 +0100
-To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>
-Message-ID: <20221123224251.72a72de7@windsurf>
-In-Reply-To: <20221123150859.4003-1-vincent.stehle@arm.com>
-References: <20221123150859.4003-1-vincent.stehle@arm.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 024E240004;
+ Wed, 23 Nov 2022 21:45:59 +0000 (UTC)
+Date: Wed, 23 Nov 2022 22:45:59 +0100
+To: Chris Dimich <chris.dimich@boundarydevices.com>
+Message-ID: <20221123224559.3fcd83f5@windsurf>
+In-Reply-To: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
+References: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669239772;
+ d=bootlin.com; s=gm1; t=1669239960;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=jfYlBce9Dzu+/Ckr6KCA6d/KfnvqkzROeXDJh/CU/mo=;
- b=ZsPkhO2ulqu2uySWf4dYCqYRKx/GQFALyLqmfophSLvvJ0JVVbboOH/vjiheQJ/Sd7clEj
- hFVPUuxDn3FyhqTKvpLrOBZQoT/iqaPLeRSMSiwfCU1f4hohDsZMgzRvP3VMQLeCVTYA+o
- IHXCGCayMJwexM3mxfxZOMxVg/DCHWJs3nGV0XNU7GsKTcVxpCZjIhsMUSNaOlGnIyL4rm
- 9EQsK/tWPeKO+CZyMRYiMnzWGOgJ9NJBd2Il/rcMpKglBHOZ8RLE9/LdAvuHPltYgsmuSV
- VtJ8kVS2X9Rrkkln/E3z7kzSlsGT4pxf7fvIu8zRTqq3nvkvydis3yqPCRe6fQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=88vN72Bfsk50jFfX5wkRbdHfxfM4b2DSL9tQaPmhIrY=;
+ b=pk7dH0mQLa13+Z2JlresqS9e9Xm0hHEclUHYG4Vmv4JqbuWSgKgI9jozUtZVsiE550J/oB
+ uAEmL+f/O5CcwTpsCwmKJllOp/L5aveyPvd3+Pfc7zc+HH+4VzsBDmf1rxskTrOErIIJM7
+ k6kbns6ige8ZdO3q9x2krteISmGkmpcJA541J5rpzW7tZ5lWdyDSo1gKrc/XlqGsly5QYQ
+ kfFtZl8fIntSAM9BE2HnX2VywwyNxDj2xtjONdu5QjIrrtD/UU7PCo6Gp6ygWGsErk4N6X
+ BgoASGtiCj4mmoEXRjb0kICoQPC72C/BCapd4ICURJHmYW4j42RM3SR5fqe0Ow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZsPkhO2u
-Subject: Re: [Buildroot] [PATCH] configs/qemu_aarch64_ebbr: add host-qemu
+ header.s=gm1 header.b=pk7dH0mQ
+Subject: Re: [Buildroot] [PATCH 1/7] toolchain/toolchain-external: update
+ Arm AArch64 toolchain 11.3.Rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,20 +78,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAyMyBOb3YgMjAyMiAxNjowODo1OSArMDEwMApWaW5jZW50IFN0ZWhsw6kgPHZpbmNl
-bnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgoKPiBBZGQgdGhlIGhvc3QtcWVtdSBwYWNrYWdlIHRv
-IGVuYWJsZSB0ZXN0aW5nIG9uIGdpdGxhYi4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0
-ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+Cj4gQ2M6IFJvbWFpbiBOYW91ciA8cm9tYWlu
-Lm5hb3VyQGdtYWlsLmNvbT4KPiAtLS0KPiAgY29uZmlncy9xZW11X2FhcmNoNjRfZWJicl9kZWZj
-b25maWcgfCA0ICsrKysKPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQoKQXBwbGll
-ZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBC
-b290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290
-bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello Chris,
+
+Thanks for your patch. However, you have again sent your patches two
+times. Is there a setup issue on your side?
+
+Also see below for a comment specific to this patch.
+
+On Wed, 23 Nov 2022 11:52:51 -0800
+Chris Dimich <chris.dimich@boundarydevices.com> wrote:
+
+> Updated to gcc 11.3, gdb 12, binutils 2.38, glibc 2.35.
+> 
+> See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+> 
+> Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
+
+We cannot take this patch as this toolchain version is broken. See
+commit
+https://gitlab.com/buildroot.org/buildroot/-/commit/c80705452ef3c514f2c4026ee59b0ac5c02304fa
+for details. Please note in the commit message "It still not fixed with
+11.3.Rel1 release (2022.08)".
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
