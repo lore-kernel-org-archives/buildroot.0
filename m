@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A7ABC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E97C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E296E47661;
-	Mon, 20 Feb 2023 21:31:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E296E47661
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53F0D42D4F;
+	Mon, 20 Feb 2023 21:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53F0D42D4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vdgJfQfcuqr6; Mon, 20 Feb 2023 21:31:23 +0000 (UTC)
+	with ESMTP id GjJv4NFPTOYm; Mon, 20 Feb 2023 21:31:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D09C477BF;
-	Mon, 20 Feb 2023 21:31:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D09C477BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E0F71BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99C294766F;
+	Mon, 20 Feb 2023 21:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99C294766F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 21C731BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13B894010E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13B894010E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D001D610E9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D001D610E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id frxpvPq3IqdG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mQXoLpqFuBvA for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A79A0415A3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A79A0415A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4041610C4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4041610C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F1F086495; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+ id C24B2828C8; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 15:31:10 +0100
+Date: Wed, 23 Nov 2022 11:03:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d74137341d009e9a0dd79bca80015548f5af92ff
-X-Git-Newrev: 4bccc70e07a2a8c093249d6701161791e7ab7b58
+X-Git-Oldrev: 13dc57c94f9f394441b6faeb864aefd2b8ed08ab
+X-Git-Newrev: 39a2ff16f92a61a3e8593c394d211c18d01de8d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.8F1F086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/exim: add upstream
- security fixes for CVE-2022-3559
+Message-Id: <20230220205152.C24B2828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python3: add upstream
+ security fix for CVE-2022-45061
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,499 +57,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bccc70e07a2a8c093249d6701161791e7ab7b58
+commit: https://git.buildroot.net/buildroot/commit/?id=39a2ff16f92a61a3e8593c394d211c18d01de8d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2022-3559: A vulnerability was found in Exim and classified as
-problematic.  This issue affects some unknown processing of the component
-Regex Handler.  The manipulation leads to use after free.  The name of the
-patch is 4e9ed49f8f12eb331b29bd5b6dc3693c520fddc2.  It is recommended to
-apply a patch to fix this issue.  The identifier VDB-211073 was assigned to
-this vulnerability.
+Fixes the following security issue:
 
-The upstream patch does not apply to 4.96, so use the backported patches
-from Debian.  Amazingly, the patch needs 3 additional patches to unbreak
-builds without "WITH_CONTENT_SCAN" (default in Buildroot), so add those as
-well.
+CVE-2022-45061: An issue was discovered in Python before 3.11.1.  An
+unnecessary quadratic algorithm exists in one path when processing some
+inputs to the IDNA (RFC 3490) decoder, such that a crafted, unreasonably
+long name being presented to the decoder could lead to a CPU denial of
+service.  Hostnames are often supplied by remote servers that could be
+controlled by a malicious actor; in such a scenario, they could trigger
+excessive CPU consumption on the client attempting to make use of an
+attacker-supplied supposed hostname.  For example, the attack payload could
+be placed in the Location header of an HTTP response with status code 302.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0006-Fix-regex-n-use-after-free.-Bug-2915.patch | 173 +++++++++++++++++++++
- .../0007-Fix-non-WITH_CONTENT_SCAN-build.patch     |  61 ++++++++
- .../0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch   | 139 +++++++++++++++++
- .../0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch   |  49 ++++++
- package/exim/exim.mk                               |   3 +
- 5 files changed, 425 insertions(+)
+ ...33-Fix-quadratic-time-idna-decoding.-GH-9.patch | 86 ++++++++++++++++++++++
+ package/python3/python3.mk                         |  3 +
+ 2 files changed, 89 insertions(+)
 
-diff --git a/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch b/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch
+diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
 new file mode 100644
-index 0000000000..57fa189b04
+index 0000000000..d281e7261d
 --- /dev/null
-+++ b/package/exim/0006-Fix-regex-n-use-after-free.-Bug-2915.patch
-@@ -0,0 +1,173 @@
-+From 4e9ed49f8f12eb331b29bd5b6dc3693c520fddc2 Mon Sep 17 00:00:00 2001
-+From: Jeremy Harris <jgh146exb@wizmail.org>
-+Date: Wed, 31 Aug 2022 15:37:40 +0100
-+Subject: [PATCH] Fix $regex<n> use-after-free.  Bug 2915
++++ b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+@@ -0,0 +1,86 @@
++From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 7 Nov 2022 19:23:16 -0800
++Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
++ (GH-99222)
 +
-+[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_08-Fix-regex-n-use-after-free.-Bug-2915.patch]
-+[Peter: drop Changelog hunk]
-+Signed-off-by: Peter Korsgaard <peter@korsgard.com>
-+---
-+ src/exim.c                  |  4 +---
-+ src/expand.c                |  2 +-
-+ src/functions.h             |  1 +
-+ src/globals.c               |  2 +-
-+ src/regex.c                 | 29 ++++++++++++++++++-----------
-+ src/smtp_in.c               |  2 ++
-+ test/confs/4002                 | 10 ++++++++++
-+ test/mail/4002.userx            |  7 +++++++
-+ test/scripts/4000-scanning/4002 |  7 +++++++
-+ 9 files changed, 53 insertions(+), 17 deletions(-)
++There was an unnecessary quadratic loop in idna decoding. This restores
++the behavior to linear.
 +
-+--- a/src/exim.c
-++++ b/src/exim.c
-+@@ -1999,12 +1999,10 @@
-+ 
-+ regex_whitelisted_macro =
-+   regex_must_compile(US"^[A-Za-z0-9_/.-]*$", FALSE, TRUE);
-+ #endif
-+ 
-+-for (i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-+-
-+ /* If the program is called as "mailq" treat it as equivalent to "exim -bp";
-+ this seems to be a generally accepted convention, since one finds symbolic
-+ links called "mailq" in standard OS configurations. */
-+ 
-+ if ((namelen == 5 && Ustrcmp(argv[0], "mailq") == 0) ||
-+@@ -6082,11 +6080,11 @@
-+   callout_address = NULL;
-+   sending_ip_address = NULL;
-+   deliver_localpart_data = deliver_domain_data =
-+   recipient_data = sender_data = NULL;
-+   acl_var_m = NULL;
-+-  for(int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-++  regex_vars_clear();
-+ 
-+   store_reset(reset_point);
-+   }
-+ 
-+ exim_exit(EXIT_SUCCESS);   /* Never returns */
-+--- a/src/expand.c
-++++ b/src/expand.c
-+@@ -1871,11 +1871,11 @@
-+   {
-+   tree_node * node = tree_search(router_var, name + 2);
-+   return node ? node->data.ptr : strict_acl_vars ? NULL : US"";
-+   }
-+ 
-+-/* Handle $auth<n> variables. */
-++/* Handle $auth<n>, $regex<n> variables. */
-+ 
-+ if (Ustrncmp(name, "auth", 4) == 0)
-+   {
-+   uschar *endptr;
-+   int n = Ustrtoul(name + 4, &endptr, 10);
-+--- a/src/functions.h
-++++ b/src/functions.h
-+@@ -436,10 +436,11 @@
-+ extern int     regex(const uschar **);
-+ #endif
-+ extern BOOL    regex_match(const pcre2_code *, const uschar *, int, uschar **);
-+ extern BOOL    regex_match_and_setup(const pcre2_code *, const uschar *, int, int);
-+ extern const pcre2_code *regex_must_compile(const uschar *, BOOL, BOOL);
-++extern void    regex_vars_clear(void);
-+ extern void    retry_add_item(address_item *, uschar *, int);
-+ extern BOOL    retry_check_address(const uschar *, host_item *, uschar *, BOOL,
-+                  uschar **, uschar **);
-+ extern retry_config *retry_find_config(const uschar *, const uschar *, int, int);
-+ extern BOOL    retry_ultimate_address_timeout(uschar *, const uschar *,
-+--- a/src/globals.c
-++++ b/src/globals.c
-+@@ -1313,11 +1313,11 @@
-+ #ifndef DISABLE_PIPE_CONNECT
-+ const pcre2_code *regex_EARLY_PIPE   = NULL;
-+ #endif
-+ const pcre2_code *regex_ismsgid      = NULL;
-+ const pcre2_code *regex_smtp_code    = NULL;
-+-const uschar *regex_vars[REGEX_VARS];
-++const uschar *regex_vars[REGEX_VARS] = { 0 };;
-+ #ifdef WHITELIST_D_MACROS
-+ const pcre2_code *regex_whitelisted_macro = NULL;
-+ #endif
-+ #ifdef WITH_CONTENT_SCAN
-+ uschar *regex_match_string     = NULL;
-+--- a/src/regex.c
-++++ b/src/regex.c
-+@@ -94,22 +94,32 @@
-+   }
-+ pcre2_match_data_free(md);
-+ return FAIL;
-+ }
-+ 
-++
-++/* reset expansion variables */
-++void
-++regex_vars_clear(void)
-++{
-++regex_match_string = NULL;
-++for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-++}
-++
-++
-++
-+ int
-+-regex(const uschar **listptr)
-++regex(const uschar ** listptr)
-+ {
-+ unsigned long mbox_size;
-+-FILE *mbox_file;
-+-pcre_list *re_list_head;
-+-uschar *linebuffer;
-++FILE * mbox_file;
-++pcre_list * re_list_head;
-++uschar * linebuffer;
-+ long f_pos = 0;
-+ int ret = FAIL;
-+ 
-+-/* reset expansion variable */
-+-regex_match_string = NULL;
-++regex_vars_clear();
-+ 
-+ if (!mime_stream)				/* We are in the DATA ACL */
-+   {
-+   if (!(mbox_file = spool_mbox(&mbox_size, NULL, NULL)))
-+     {						/* error while spooling */
-+@@ -167,18 +177,17 @@
-+ 
-+ 
-+ int
-+ mime_regex(const uschar **listptr)
-+ {
-+-pcre_list *re_list_head = NULL;
-+-FILE *f;
-+-uschar *mime_subject = NULL;
-++pcre_list * re_list_head = NULL;
-++FILE * f;
-++uschar * mime_subject = NULL;
-+ int mime_subject_len = 0;
-+ int ret;
-+ 
-+-/* reset expansion variable */
-+-regex_match_string = NULL;
-++regex_vars_clear();
-+ 
-+ /* precompile our regexes */
-+ if (!(re_list_head = compile(*listptr)))
-+   return FAIL;			/* no regexes -> nothing to do */
-+ 
-+--- a/src/smtp_in.c
-++++ b/src/smtp_in.c
-+@@ -2155,12 +2155,14 @@
-+ prdr_requested = FALSE;
-+ #endif
-+ #ifdef SUPPORT_I18N
-+ message_smtputf8 = FALSE;
-+ #endif
-++regex_vars_clear();
-+ body_linecount = body_zerocount = 0;
-+ 
-++lookup_value = NULL;				/* Can be set by ACL */
-+ sender_rate = sender_rate_limit = sender_rate_period = NULL;
-+ ratelimiters_mail = NULL;           /* Updated by ratelimit ACL condition */
-+                    /* Note that ratelimiters_conn persists across resets. */
-+ 
-+ /* Reset message ACL variables */
-diff --git a/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch b/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch
-new file mode 100644
-index 0000000000..9f87f18e00
---- /dev/null
-+++ b/package/exim/0007-Fix-non-WITH_CONTENT_SCAN-build.patch
-@@ -0,0 +1,61 @@
-+From d8ecc7bf97934a1e2244788c610c958cacd740bd Mon Sep 17 00:00:00 2001
-+From: Jeremy Harris <jgh146exb@wizmail.org>
-+Date: Wed, 31 Aug 2022 17:03:37 +0100
-+Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build.
++(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
 +
-+Broken-by: 4e9ed49f8f
++(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
 +
-+[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_09-Fix-non-WITH_CONTENT_SCAN-build.patch]
++Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
++Co-authored-by: Gregory P. Smith <greg@krypto.org>
++[Peter: drop NEWS.d/*]
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ src/exim.c  | 11 +++++++++++
-+ src/regex.c | 10 ----------
-+ 2 files changed, 11 insertions(+), 10 deletions(-)
++ Lib/encodings/idna.py                         | 32 +++++++++----------
++ Lib/test/test_codecs.py                       |  6 ++++
++ 2 files changed, 23 insertions(+), 17 deletions(-)
 +
-+--- a/src/exim.c
-++++ b/src/exim.c
-+@@ -1677,10 +1677,21 @@
-+   if ((s = expand_string(big_buffer))) printf("%s\n", CS s);
-+   else printf("Failed: %s\n", expand_string_message);
-+ }
++diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
++index ea4058512f..bf98f51336 100644
++--- a/Lib/encodings/idna.py
+++++ b/Lib/encodings/idna.py
++@@ -39,23 +39,21 @@ def nameprep(label):
 + 
-+ 
-++/* reset regex expansion variables */
-++void
-++regex_vars_clear(void)
-++{
-++regex_match_string = NULL;
-++for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-++}
-++
-++
-++
-++
-+ 
-+ /*************************************************
-+ *          Entry point and high-level code       *
-+ *************************************************/
-+ 
-+--- a/src/regex.c
-++++ b/src/regex.c
-+@@ -95,20 +95,10 @@
-+ pcre2_match_data_free(md);
-+ return FAIL;
-+ }
-+ 
-+ 
-+-/* reset expansion variables */
-+-void
-+-regex_vars_clear(void)
-+-{
-+-regex_match_string = NULL;
-+-for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-+-}
++     # Check bidi
++     RandAL = [stringprep.in_table_d1(x) for x in label]
++-    for c in RandAL:
++-        if c:
++-            # There is a RandAL char in the string. Must perform further
++-            # tests:
++-            # 1) The characters in section 5.8 MUST be prohibited.
++-            # This is table C.8, which was already checked
++-            # 2) If a string contains any RandALCat character, the string
++-            # MUST NOT contain any LCat character.
++-            if any(stringprep.in_table_d2(x) for x in label):
++-                raise UnicodeError("Violation of BIDI requirement 2")
 +-
-+-
-+-
-+ int
-+ regex(const uschar ** listptr)
-+ {
-+ unsigned long mbox_size;
-+ FILE * mbox_file;
-diff --git a/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch b/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch
-new file mode 100644
-index 0000000000..43cc1d79a9
---- /dev/null
-+++ b/package/exim/0008-Fix-non-WITH_CONTENT_SCAN-build-2.patch
-@@ -0,0 +1,139 @@
-+From 158dff9936e36a2d31d037d3988b9353458d6471 Mon Sep 17 00:00:00 2001
-+From: Jeremy Harris <jgh146exb@wizmail.org>
-+Date: Wed, 31 Aug 2022 17:17:59 +0100
-+Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build (2)
-+
-+Broken-by: d8ecc7bf97
-+
-+[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_10-Fix-non-WITH_CONTENT_SCAN-build-2.patch]
-+[Peter: drop Changelog hunk]
-+Signed-off-by: Peter Korsgaard <peter@korsgard.com>
-+---
-+ src/exim.c      | 13 +------------
-+ src/functions.h |  2 +-
-+ src/globals.h   |  2 +-
-+ src/regex.c     | 10 ++++++++++
-+ src/smtp_in.c   |  2 ++
-+ 5 files changed, 15 insertions(+), 14 deletions(-)
-+
-+--- a/src/exim.c
-++++ b/src/exim.c
-+@@ -1677,21 +1677,10 @@
-+   if ((s = expand_string(big_buffer))) printf("%s\n", CS s);
-+   else printf("Failed: %s\n", expand_string_message);
-+ }
++-            # 3) If a string contains any RandALCat character, a
++-            # RandALCat character MUST be the first character of the
++-            # string, and a RandALCat character MUST be the last
++-            # character of the string.
++-            if not RandAL[0] or not RandAL[-1]:
++-                raise UnicodeError("Violation of BIDI requirement 3")
+++    if any(RandAL):
+++        # There is a RandAL char in the string. Must perform further
+++        # tests:
+++        # 1) The characters in section 5.8 MUST be prohibited.
+++        # This is table C.8, which was already checked
+++        # 2) If a string contains any RandALCat character, the string
+++        # MUST NOT contain any LCat character.
+++        if any(stringprep.in_table_d2(x) for x in label):
+++            raise UnicodeError("Violation of BIDI requirement 2")
+++        # 3) If a string contains any RandALCat character, a
+++        # RandALCat character MUST be the first character of the
+++        # string, and a RandALCat character MUST be the last
+++        # character of the string.
+++        if not RandAL[0] or not RandAL[-1]:
+++            raise UnicodeError("Violation of BIDI requirement 3")
 + 
++     return label
 + 
-+-/* reset regex expansion variables */
-+-void
-+-regex_vars_clear(void)
-+-{
-+-regex_match_string = NULL;
-+-for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-+-}
-+-
-+-
-+-
-+-
++diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
++index 8edd5ac063..2407567261 100644
++--- a/Lib/test/test_codecs.py
+++++ b/Lib/test/test_codecs.py
++@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
++         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
++         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
 + 
-+ /*************************************************
-+ *          Entry point and high-level code       *
-+ *************************************************/
-+ 
-+@@ -6085,17 +6074,17 @@
-+   deliver_domain_orig = NULL;
-+   deliver_host = deliver_host_address = NULL;
-+   dnslist_domain = dnslist_matched = NULL;
-+ #ifdef WITH_CONTENT_SCAN
-+   malware_name = NULL;
-++  regex_vars_clear();
-+ #endif
-+   callout_address = NULL;
-+   sending_ip_address = NULL;
-+   deliver_localpart_data = deliver_domain_data =
-+   recipient_data = sender_data = NULL;
-+   acl_var_m = NULL;
-+-  regex_vars_clear();
-+ 
-+   store_reset(reset_point);
-+   }
-+ 
-+ exim_exit(EXIT_SUCCESS);   /* Never returns */
-+--- a/src/functions.h
-++++ b/src/functions.h
-+@@ -432,15 +432,15 @@
-+ extern BOOL    receive_msg(BOOL);
-+ extern int_eximarith_t receive_statvfs(BOOL, int *);
-+ extern void    receive_swallow_smtp(void);
-+ #ifdef WITH_CONTENT_SCAN
-+ extern int     regex(const uschar **);
-++extern void    regex_vars_clear(void);
-+ #endif
-+ extern BOOL    regex_match(const pcre2_code *, const uschar *, int, uschar **);
-+ extern BOOL    regex_match_and_setup(const pcre2_code *, const uschar *, int, int);
-+ extern const pcre2_code *regex_must_compile(const uschar *, BOOL, BOOL);
-+-extern void    regex_vars_clear(void);
-+ extern void    retry_add_item(address_item *, uschar *, int);
-+ extern BOOL    retry_check_address(const uschar *, host_item *, uschar *, BOOL,
-+                  uschar **, uschar **);
-+ extern retry_config *retry_find_config(const uschar *, const uschar *, int, int);
-+ extern BOOL    retry_ultimate_address_timeout(uschar *, const uschar *,
-+--- a/src/globals.h
-++++ b/src/globals.h
-+@@ -895,16 +895,16 @@
-+ #ifndef DISABLE_PIPE_CONNECT
-+ extern const pcre2_code  *regex_EARLY_PIPE;  /* For recognizing PIPE_CONNCT */
-+ #endif
-+ extern const pcre2_code  *regex_ismsgid;     /* Compiled r.e. for message ID */
-+ extern const pcre2_code  *regex_smtp_code;   /* For recognizing SMTP codes */
-+-extern const uschar *regex_vars[];           /* $regexN variables */
-+ #ifdef WHITELIST_D_MACROS
-+ extern const pcre2_code  *regex_whitelisted_macro; /* For -D macro values */
-+ #endif
-+ #ifdef WITH_CONTENT_SCAN
-+ extern uschar *regex_match_string;     /* regex that matched a line (regex ACL condition) */
-++extern const uschar *regex_vars[];
-+ #endif
-+ extern int     remote_delivery_count;  /* Number of remote addresses */
-+ extern int     remote_max_parallel;    /* Maximum parallel delivery */
-+ extern uschar *remote_sort_domains;    /* Remote domain sorting order */
-+ extern retry_config *retries;          /* Chain of retry config information */
-+--- a/src/regex.c
-++++ b/src/regex.c
-+@@ -95,10 +95,20 @@
-+ pcre2_match_data_free(md);
-+ return FAIL;
-+ }
-+ 
-+ 
-++/* reset expansion variables */
-++void
-++regex_vars_clear(void)
-++{
-++regex_match_string = NULL;
-++for (int i = 0; i < REGEX_VARS; i++) regex_vars[i] = NULL;
-++}
+++    def test_builtin_decode_length_limit(self):
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*1100).decode("idna")
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*70).decode("idna")
 ++
-++
-++
-+ int
-+ regex(const uschar ** listptr)
-+ {
-+ unsigned long mbox_size;
-+ FILE * mbox_file;
-+--- a/src/smtp_in.c
-++++ b/src/smtp_in.c
-+@@ -2155,11 +2155,13 @@
-+ prdr_requested = FALSE;
-+ #endif
-+ #ifdef SUPPORT_I18N
-+ message_smtputf8 = FALSE;
-+ #endif
-++#ifdef WITH_CONTENT_SCAN
-+ regex_vars_clear();
-++#endif
-+ body_linecount = body_zerocount = 0;
-+ 
-+ lookup_value = NULL;				/* Can be set by ACL */
-+ sender_rate = sender_rate_limit = sender_rate_period = NULL;
-+ ratelimiters_mail = NULL;           /* Updated by ratelimit ACL condition */
-diff --git a/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch b/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch
-new file mode 100644
-index 0000000000..f9675c80d3
---- /dev/null
-+++ b/package/exim/0009-Fix-non-WITH_CONTENT_SCAN-build-3.patch
-@@ -0,0 +1,49 @@
-+From 32da6327e434e986a18b75a84f2d8c687ba14619 Mon Sep 17 00:00:00 2001
-+From: Jeremy Harris <jgh146exb@wizmail.org>
-+Date: Thu, 1 Sep 2022 15:54:35 +0100
-+Subject: [PATCH] Fix non-WITH_CONTENT_SCAN build (3)
-+
-+Broken-by: d8ecc7bf97
-+
-+[Upstream: https://sources.debian.org/data/main/e/exim4/4.96-9/debian/patches/75_11-Fix-non-WITH_CONTENT_SCAN-build-3.patch]
-+[Peter: drop Changelog hunk]
-+Signed-off-by: Peter Korsgaard <peter@korsgard.com>
-+---
-+ src/expand.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/expand.c b/src/expand.c
-+index 89de56255..831ca2b75 100644
-+--- a/src/expand.c
-++++ b/src/expand.c
-+@@ -1869,6 +1869,7 @@ if (Ustrncmp(name, "auth", 4) == 0)
-+   if (!*endptr && n != 0 && n <= AUTH_VARS)
-+     return auth_vars[n-1] ? auth_vars[n-1] : US"";
-+   }
-++#ifdef WITH_CONTENT_SCAN
-+ else if (Ustrncmp(name, "regex", 5) == 0)
-+   {
-+   uschar *endptr;
-+@@ -1876,6 +1877,7 @@ else if (Ustrncmp(name, "regex", 5) == 0)
-+   if (!*endptr && n != 0 && n <= REGEX_VARS)
-+     return regex_vars[n-1] ? regex_vars[n-1] : US"";
-+   }
-++#endif
-+ 
-+ /* For all other variables, search the table */
-+ 
-+@@ -8715,9 +8717,11 @@ assert_variable_notin() treats as const, so deconst is safe. */
-+ for (int i = 0; i < AUTH_VARS; i++) if (auth_vars[i])
-+   assert_variable_notin(US"auth<n>", US auth_vars[i], &e);
-+ 
-++#ifdef WITH_CONTENT_SCAN
-+ /* check regex<n> variables. assert_variable_notin() treats as const. */
-+ for (int i = 0; i < REGEX_VARS; i++) if (regex_vars[i])
-+   assert_variable_notin(US"regex<n>", US regex_vars[i], &e);
-++#endif
-+ 
-+ /* check known-name variables */
-+ for (var_entry * v = var_table; v < var_table + var_table_size; v++)
++     def test_stream(self):
++         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
++         r.read(3)
 +-- 
-+2.35.1
++2.30.2
 +
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 9c54eeec44..cd2fabeab1 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -13,6 +13,9 @@ EXIM_CPE_ID_VENDOR = exim
- EXIM_SELINUX_MODULES = exim mta
- EXIM_DEPENDENCIES = host-berkeleydb host-pcre2 pcre2 berkeleydb host-pkgconf
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 4131941e11..2e17104102 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
-+# 0006-Fix-regex-n-use-after-free.-Bug-2915.patch
-+EXIM_IGNORE_CVES += CVE-2022-3559
++# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
++PYTHON3_IGNORE_CVES += CVE-2022-45061
 +
- # Modify a variable value. It must already exist in the file, either
- # commented or not.
- define exim-config-change # variable-name, variable-value
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
