@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B7F4C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA641C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E17F28210A;
-	Wed, 23 Nov 2022 09:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E17F28210A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78DD68210C;
+	Wed, 23 Nov 2022 09:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78DD68210C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qSqdUPDnxjpv; Wed, 23 Nov 2022 09:47:49 +0000 (UTC)
+	with ESMTP id ddhBo21s8Ty4; Wed, 23 Nov 2022 09:48:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FFAC82109;
-	Wed, 23 Nov 2022 09:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FFAC82109
+	by smtp1.osuosl.org (Postfix) with ESMTP id A28EB8210A;
+	Wed, 23 Nov 2022 09:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A28EB8210A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F3401BF853
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6500E1BF853
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B20F40462
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B20F40462
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F7A8409E9
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F7A8409E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1VentNDk3hEk for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 09:47:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2109D40158
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2109D40158
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:47:37 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3F7ADC0008
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:47:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1oxmLu-001kxI-8b
- for buildroot@buildroot.org; Wed, 23 Nov 2022 10:47:34 +0100
+ with ESMTP id 9oVKiVhDS8sW for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86EED40158
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86EED40158
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 74E6B842A2; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20221119134510.826956-1-peter@korsgaard.com>
-Date: Wed, 23 Nov 2022 10:47:34 +0100
-In-Reply-To: <20221119134510.826956-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 19 Nov 2022 14:45:10 +0100")
-Message-ID: <87sfia2ea1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/xterm: security bump to patch 376
+Date: Wed, 23 Nov 2022 10:46:35 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 8c4ef52a79093a3d7ed841fd432c4b4f832646c6
+X-Git-Newrev: 9bea0ce784e6db9eff6a4ffefc1144be82971da8
+X-Patchwork-Hint: ignore
+Message-Id: <20221123094751.74E6B842A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/xen: security
+ bump to version 4.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9bea0ce784e6db9eff6a4ffefc1144be82971da8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > Fixes the following security issue:
- > CVE-2022-45063: xterm before 375 allows code execution via font ops, e.g.,
- > because an OSC 50 response may have Ctrl-g and therefore lead to command
- > execution within the vi line-editing mode of Zsh:
+Includes a number of bugfixes and the security fixes up to xsa-400:
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-5/
 
- > https://www.openwall.com/lists/oss-security/2022/11/10/1
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f901a90f57927bf09ccac2dc145c77688501cfe2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Additionally, patch 376 fixes a null pointer access issue:
-
- > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022942
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2022.08.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index a81d05e3f7..5637f0e8d9 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
++sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 03341d4275..169753e89f 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.14.4
++XEN_VERSION = 4.14.5
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
