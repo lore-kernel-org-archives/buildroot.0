@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B89BC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55269C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1BFC4043A;
-	Mon,  5 Dec 2022 12:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1BFC4043A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0543360BD9;
+	Mon,  5 Dec 2022 12:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0543360BD9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hOLfpwo9EhKD; Mon,  5 Dec 2022 12:03:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B1AF60A71;
+	Mon,  5 Dec 2022 12:03:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B1AF60A71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 102641BF8C7
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 052B9416A5
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052B9416A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h_Eirfa5kFN5; Mon,  5 Dec 2022 12:03:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A6E340241;
-	Mon,  5 Dec 2022 12:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A6E340241
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79EFD1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB65A40647
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB65A40647
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QFF-nsx_N2cI for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q1-hjkt7akmy for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAAC0405AB
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAAC0405AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FB99415D6
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FB99415D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DACA85B9B; Mon,  5 Dec 2022 11:26:07 +0000 (UTC)
+ id 0A9CF85BA3; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 23:08:27 +0100
+Date: Wed, 23 Nov 2022 22:51:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db1cf03ac5b6f8e165f953be28d1ce2723c7f3cf
-X-Git-Newrev: 3391056553d29c545f9d4a6b742f230da4400328
+X-Git-Oldrev: 6bab22ca418f4f1ecde53c178ee301c7dfaab44a
+X-Git-Newrev: 76e153273416a83574d78eb25b39ba2a47846a02
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112607.9DACA85B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-opcua-asyncio: bump to
- version 1.0.0
+Message-Id: <20221205112611.0A9CF85BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3391056553d29c545f9d4a6b742f230da4400328
+commit: https://git.buildroot.net/buildroot/commit/?id=76e153273416a83574d78eb25b39ba2a47846a02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to pypi source which should be the same:
-https://github.com/FreeOpcUa/opcua-asyncio#installation
+- To match NXP 5.15.52-2.1.0 release.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-opcua-asyncio/python-opcua-asyncio.hash | 6 ++++--
- package/python-opcua-asyncio/python-opcua-asyncio.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash          | 4 ++--
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk            | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.hash b/package/python-opcua-asyncio/python-opcua-asyncio.hash
-index d8aee272de..36b16a1596 100644
---- a/package/python-opcua-asyncio/python-opcua-asyncio.hash
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.hash
-@@ -1,3 +1,5 @@
--# Locally computed
--sha256  e5fab37a92162351fe40cab43df09db8a2e9f8b8a2a8f13ed680aa6f6d687ec3  opcua-asyncio-0.8.4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/asyncua/json
-+md5  a52df0dc0586abd1592c97a0274d1c9d  asyncua-1.0.0.tar.gz
-+sha256  25966e374b0c90da112a96e9dbc5cc36c123b2b60412eac6f26b04a4b0b4d91e  asyncua-1.0.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.mk b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-index 50b581037b..509beda151 100644
---- a/package/python-opcua-asyncio/python-opcua-asyncio.mk
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index ccb28bc4f6..5079de9840 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  b816ab94b1d248cfc5fe5f6381422346c273d01760bb324303e0298e10bd46e2  kernel-module-imx-gpu-viv-82c6cb6c607424403b8d76805bb17e7be74292f6.tar.gz
+-sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
++sha256  0754114b3088a46b9fee9a5bd1c7b9ec94b6ca656ed930c4cad9e04382e8e372  kernel-module-imx-gpu-viv-00fe5a0bedc07337c873f93998da9025083116ed.tar.gz
++sha256  0754114b3088a46b9fee9a5bd1c7b9ec94b6ca656ed930c4cad9e04382e8e372  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index d301494a0b..5c96ba0390 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_OPCUA_ASYNCIO_VERSION = 0.8.4
--PYTHON_OPCUA_ASYNCIO_SOURCE = opcua-asyncio-$(PYTHON_OPCUA_ASYNCIO_VERSION).tar.gz
--PYTHON_OPCUA_ASYNCIO_SITE = $(call github,FreeOpcUa,opcua-asyncio,$(PYTHON_OPCUA_ASYNCIO_VERSION))
-+PYTHON_OPCUA_ASYNCIO_VERSION = 1.0.0
-+PYTHON_OPCUA_ASYNCIO_SOURCE = asyncua-$(PYTHON_OPCUA_ASYNCIO_VERSION).tar.gz
-+PYTHON_OPCUA_ASYNCIO_SITE = https://files.pythonhosted.org/packages/e7/ea/6fe0799c740b0fc8ffda42fc97bf45204ffe06fe41d505c02654e0d4e379
- PYTHON_OPCUA_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_OPCUA_ASYNCIO_LICENSE = LGPL-3.0+
- PYTHON_OPCUA_ASYNCIO_LICENSE_FILES = COPYING
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 82c6cb6c607424403b8d76805bb17e7be74292f6
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 00fe5a0bedc07337c873f93998da9025083116ed
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
