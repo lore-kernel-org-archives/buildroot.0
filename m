@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78EDFC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 10:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD500C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 16:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA7E60B94;
-	Wed, 23 Nov 2022 10:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BA7E60B94
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F91960A71;
+	Wed, 23 Nov 2022 16:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F91960A71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wv1dO0ipOgmY; Wed, 23 Nov 2022 10:42:57 +0000 (UTC)
+	with ESMTP id iOos40IWx8CV; Wed, 23 Nov 2022 16:39:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CB37611A8;
-	Wed, 23 Nov 2022 10:42:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CB37611A8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 555C71BF85D
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:42:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB8F4607F2;
+	Wed, 23 Nov 2022 16:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB8F4607F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 095E41BF5AA
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 16:39:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36B30419D5
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:42:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36B30419D5
+ by smtp2.osuosl.org (Postfix) with ESMTP id D89D04032E
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 16:39:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D89D04032E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WA4On600chhL for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 10:42:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wRQXmFmZ-TQi for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 16:39:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D9EB419DD
- for <buildroot@uclibc.org>; Wed, 23 Nov 2022 10:42:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D9EB419DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 306264025D
+ for <buildroot@uclibc.org>; Wed, 23 Nov 2022 16:39:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 306264025D
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 175AE84364; Wed, 23 Nov 2022 10:42:53 +0000 (UTC)
+ id 1DBB284367; Wed, 23 Nov 2022 16:39:03 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 23 Nov 2022 10:42:52 +0000
+Date: Wed, 23 Nov 2022 16:39:02 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ian_ormshaw@waters.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: thomas.petazzoni@bootlin.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: WONTFIX
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15141-163-TAqZjyUxXa@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15141-163-oG3NxuqVtL@https.bugs.busybox.net/>
 In-Reply-To: <bug-15141-163@https.bugs.busybox.net/>
 References: <bug-15141-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,9 +81,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15141
 
---- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
-Thanks,  5.16.8 isn't an option as there's no PREEMPT_RT patch available yet. 
-I'll look at applying the patch below to 5.16.2
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
+
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Nothing to fix in Buildroot.
 
 -- 
 You are receiving this mail because:
