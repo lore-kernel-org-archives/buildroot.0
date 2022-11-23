@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23E78C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C50CC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 19:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D09E940C33;
-	Wed, 23 Nov 2022 19:55:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D09E940C33
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEDE14180D;
+	Wed, 23 Nov 2022 19:55:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEDE14180D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NtmSMgW6BKLh; Wed, 23 Nov 2022 19:55:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AGP_meUDfC5u; Wed, 23 Nov 2022 19:55:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BF9B40C28;
-	Wed, 23 Nov 2022 19:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BF9B40C28
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F041B1BF314
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F966417C2;
+	Wed, 23 Nov 2022 19:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F966417C2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C6AA1BF314
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB21A40647
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB21A40647
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51E0D60ADB
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51E0D60ADB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iMDQlTjS9JZX for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 19:53:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QxDkGTF8IB_l for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 19:53:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C97F40610
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com
- [IPv6:2607:f8b0:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C97F40610
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 19:53:28 +0000 (UTC)
-Received: by mail-pg1-x52a.google.com with SMTP id f3so17655351pgc.2
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 11:53:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B668961095
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B668961095
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 19:53:29 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id 4so17613783pli.0
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 11:53:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=P98x0K1vtPk6ZjxtiMjvBCVFVq9uZo+8d3xiQooucRM=;
- b=upE2XNgo1p2nZEnkhV3ZE5eSoiOuMzB6NwrH+sDnZ8SJdKahckapimIHrjpybpv7Bv
- 02sPSmCZ6tF2kV5IZFY2bcGiNDyErSDGAYOq/OPzBY3ozvFA3hxckp3mm53tYQX5Pn9s
- lYxeScy9KfLvOtM/N3j6Qh+50l/QXuHFxDGQvVyn36FQUiUYfxqqeVlP1QNG1M6noLFZ
- XfcjdCX0tr3pqWCc7PaA9kEpkLfUuWtkx91KpLvVcE0nOiJCCfc5x+2sFfgyhSPs9bsu
- XYkYAvtgAQTi/CnA2GVJCpwc54ysDI9IJSbLdbtj57X/jQdQkRyxJ/3uO+A6e48yeN9f
- 8/mw==
-X-Gm-Message-State: ANoB5pmkKHCuD2XB2wZtPa6Khi84TDXyLLr8p7PPEfxw0qbgKz38ZdxD
- SHTWgvCkxyY1OmyUhdAVnGfKjvrF9z/1DQ==
-X-Google-Smtp-Source: AA0mqf6SDAcJlP6Yeeykb6QEuTMCS+vvUJzRseXTiupL5PmZMXNFSMWKMVAmkirREd6vR6fOUwb71Q==
-X-Received: by 2002:a63:570e:0:b0:477:a381:84d with SMTP id
- l14-20020a63570e000000b00477a381084dmr7604192pgb.207.1669233207582; 
- Wed, 23 Nov 2022 11:53:27 -0800 (PST)
+ bh=Rb+x7NPDPVvrQt2O8bVIGHlIK4XjA8Px8EbsXYeUXdg=;
+ b=lUlhLFpNlWk4hrD18FD5VH/LV3Zo7N9VMqkNOydRtRMlKDwDbVEEEwTtXQgH3XUZ/B
+ snltjQzq8FuoClnoqCeq/5N3Bvtc8jbffyrB17lVbssWz7rG4WbWB3Jfs7i4/6IGrEyW
+ 6Jky6RO6wMPJRhT8N2wodoXZRpR8K9Z+yzj11nFH+pZR9tkmkZQRuiSaSi1827zksv1A
+ +s8QfDY4sbWcH7n80yPAxelJeKHIpyrR6DNBMoTSlZqHdCWejt6BAJFzAM/9SA6sZX8q
+ 7qWvpyqSqbcu05PZBmIop2Tl0AFRfYZxbEY9U92kp22jcsVzSxO2byBVFlivy4n6mf2c
+ eCpQ==
+X-Gm-Message-State: ANoB5plv+xCUD/ryMNPaiVPLXjxemyKy1ql2GEb0b7HWDrYnUeWySOW5
+ 8keSNe+uGnHle5GYIMp5hn8Q0SpGNcXnxQ==
+X-Google-Smtp-Source: AA0mqf69CTwxlt25+6pRvTJVI6R1ZrxTOFyHs+zCXVS6Oni4IxMEZXII/497P6Grky0dGyLxRDp/6Q==
+X-Received: by 2002:a17:90b:24f:b0:218:96da:b09a with SMTP id
+ fz15-20020a17090b024f00b0021896dab09amr16744477pjb.118.1669233208803; 
+ Wed, 23 Nov 2022 11:53:28 -0800 (PST)
 Received: from chris-jammy.lan ([136.52.75.52])
  by smtp.googlemail.com with ESMTPSA id
- y129-20020a626487000000b005745a586badsm1818282pfb.218.2022.11.23.11.53.26
+ y129-20020a626487000000b005745a586badsm1818282pfb.218.2022.11.23.11.53.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Nov 2022 11:53:27 -0800 (PST)
+ Wed, 23 Nov 2022 11:53:28 -0800 (PST)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 11:53:01 -0800
-Message-Id: <20221123195304.1582783-11-chris.dimich@boundarydevices.com>
+Date: Wed, 23 Nov 2022 11:53:02 -0800
+Message-Id: <20221123195304.1582783-12-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
 References: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
@@ -74,16 +74,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=P98x0K1vtPk6ZjxtiMjvBCVFVq9uZo+8d3xiQooucRM=;
- b=HXAt0NZ44gCd7zEfWdVbPehlWqW82zhE0iDUQxP0BBaTvHM6yLrekGz0MrBTIBCOgf
- xozwj7WJMf4li7TS3lqEktaezHyfMg29mWjtDg1tfqDJjTJWKDuV+vC/dFbK7Jx2CLek
- xADSZgvIK6r7TjI4+7DxJW8we6ANcmzawtWu8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Rb+x7NPDPVvrQt2O8bVIGHlIK4XjA8Px8EbsXYeUXdg=;
+ b=EhA91zBRngTUuXNET51HvuE8lD1bgPsi75H1K7xvtUBtp+m/g+IlWj2uf6gKzgILek
+ MWVgyxefiJyCPoO3+CcVPA5K9VlnGyXaL6ZqinHEee9owoNKXyDX+Sa94NXntDiocf6S
+ 6NLIQYx2jQB/FBc3/gp23jeR97vc71C2LxehI=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=boundarydevices.com
  header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=HXAt0NZ4
-Subject: [Buildroot] [PATCH 4/7] package/freescale-imx/imx-gpu-g2d: bump
- version to 6.4.3.p4.4
+ header.b=EhA91zBR
+Subject: [Buildroot] [PATCH 5/7] package/freescale-imx/imx-vpu-hantro-vc:
+ bump version to 1.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,40 +112,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash  | 6 +++---
+ .../freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk    | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 4d28b037d0..27f6a438d1 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  39fe307916e19a0892a514621121086e276a43858af90230372a1344852116a2  imx-gpu-g2d-6.4.3.p2.0-arm.bin
--sha256  2642a49e088daae4cf568a150d01e7c095995e8a6ff1883c02c3fa6d26d254b3  imx-gpu-g2d-6.4.3.p2.0-aarch64.bin
+diff --git a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
+index aadf5b121f..bd9bc37c1f 100644
+--- a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
++++ b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d5efae484c4271c098286d007590d6bf40c272d4f35702ff65625f2362715ab3  imx-vpu-hantro-vc-1.4.0.bin
 -sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
 -sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-+sha256  7737a3372bcde34e2d275397df67c307df5033d5b133ac770f75cac4e1ec2580  imx-gpu-g2d-6.4.3.p4.4-arm.bin
-+sha256  8341d6e2cde3f3ffa035dc95b0487dd04a50531cc80f4cddc5a689ebc4946e02  imx-gpu-g2d-6.4.3.p4.4-aarch64.bin
++sha256  62b5ba3c4aab21d0d4be3eee9b204a9bb50b83b6140ee1a3b27c648809bdfbaa  imx-vpu-hantro-vc-1.9.0.bin
 +sha256  5bd7aab9dc380a6f9577443b2e90bd5ca73d9528175fad04b6d17da43a05a48e  COPYING
 +sha256  654f0c4ce6d08f9a6d74e29c58206742cb7469a6a7c25413028a9bdbe647aa13  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index c5df87e618..d94da24d8f 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+index 5f4c6faee4..1f033c1434 100644
+--- a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
++++ b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.4-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-arm
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.4-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+-IMX_VPU_HANTRO_VC_VERSION = 1.4.0
++IMX_VPU_HANTRO_VC_VERSION = 1.9.0
+ IMX_VPU_HANTRO_VC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_HANTRO_VC_SOURCE = imx-vpu-hantro-vc-$(IMX_VPU_HANTRO_VC_VERSION).bin
+ IMX_VPU_HANTRO_VC_DEPENDENCIES = linux
 -- 
 2.34.1
 
