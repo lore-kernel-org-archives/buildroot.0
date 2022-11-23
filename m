@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA4BC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 22:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CE87C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 22:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DEE781250;
-	Wed, 23 Nov 2022 22:30:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DEE781250
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39E2040C61;
+	Wed, 23 Nov 2022 22:31:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39E2040C61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SKTie0dzqLTd; Wed, 23 Nov 2022 22:30:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2Jc2sB3yYZAc; Wed, 23 Nov 2022 22:31:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C354E81062;
-	Wed, 23 Nov 2022 22:30:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C354E81062
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0728C1BF316
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 22:30:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50A9940C44;
+	Wed, 23 Nov 2022 22:31:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50A9940C44
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A8F261BF316
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 22:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4F3081062
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 22:30:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4F3081062
+ by smtp2.osuosl.org (Postfix) with ESMTP id 846F240C44
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 22:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 846F240C44
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nNpaZiqYT3QV for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 22:30:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3438180FA4
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3438180FA4
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 22:30:23 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 63876240004;
- Wed, 23 Nov 2022 22:30:22 +0000 (UTC)
-Date: Wed, 23 Nov 2022 23:30:21 +0100
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20221123233021.09ce037b@windsurf>
-In-Reply-To: <20221123143126.17843-1-neal.frager@amd.com>
-References: <20221123143126.17843-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669242622;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zGFVI7qi0NCpKSDt3CCRX6wRjJ6m8rp5bFRuREAISDE=;
- b=HNcK67H8TNytIz4n0HJXMCHZgay9ssDwa33OkaRjZbBPZxHE/eHVZXxQCNUUY0OP6szZN5
- nwbmWssJxh1pp3b6Dv8ttJOm1Blavvrj2BQLSahPx5NIek4UbIK2N0XUlsQHMa4qllcTxo
- /6ALRiuLge+wAieE9SZbWrbmNMyNRXfqEIVjH//lq6kznOZEp7t0s0u/BZs+FkohQT6xqe
- DkNuBTyACOjRH7lJa1iEW9IvrGFQco8gjj9PMCeVN7JTo9k/CXrzm9nX6PbF1huOu5ow1U
- Ri1x3uMYyrCUpUlC1ArGUsD+toBSmq3I+3APaQ0ZxIyy+p9JhUs+Fy9kcD2Hcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HNcK67H8
-Subject: Re: [Buildroot] [PATCH v4 1/1] boot/uboot/uboot.mk: add binary
- u-boot.elf support
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X4iX1BiwhmGu for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 22:31:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92B7F40116
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 22:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92B7F40116
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7F589844A8; Wed, 23 Nov 2022 22:31:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 23 Nov 2022 23:30:45 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ecc33ec02a9c137387b9eb820e8e3b55b732d9b5
+X-Git-Newrev: e3959a039059d6b3bc95100409975e87e9c14d3b
+X-Patchwork-Hint: ignore
+Message-Id: <20221123223138.7F589844A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/heimdal: security bump to version
+ 7.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,64 +58,91 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: luca.ceresoli@bootlin.com, Neal Frager <neal.frager@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Neal,
+commit: https://git.buildroot.net/buildroot/commit/?id=e3959a039059d6b3bc95100409975e87e9c14d3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 23 Nov 2022 07:31:26 -0700
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+This release fixes the following Security Vulnerabilities:
 
-> If a user requests a u-boot binary in elf format,
-> they may actually want the stripped u-boot.elf version.
-> This patch provides the stripped u-boot.elf binary.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+- CVE-2022-42898 PAC parse integer overflows
+- CVE-2022-3437 Overflows and non-constant time leaks in DES{,3} and
+  arcfour
+- CVE-2022-41916 Fix Unicode normalization read of 1 bytes past end of
+  array
+- CVE-2021-44758 NULL dereference DoS in SPNEGO acceptors
+- CVE-2021-3671 A null pointer de-reference when handling missing sname
+  in TGS-REQ
+- CVE-2022-44640 Heimdal KDC: invalid free in ASN.1 codec
 
-I've applied to next, after doing some further fixes.
+  Note that CVE-2022-44640 is a severe vulnerability, possibly a 10.0
+  on the Common Vulnerability Scoring System (CVSS) v3, as we believe
+  it should be possible to get an RCE on a KDC, which means that
+  credentials can be compromised that can be used to impersonate
+  anyone in a realm or forest of realms.
 
->  config BR2_TARGET_UBOOT_FORMAT_ELF
-> +	bool "u-boot"
-> +	help
-> +	  Configures the u-boot ELF file with debug symbols.
+  Heimdal's ASN.1 compiler generates code that allows specially
+  crafted DER encodings of CHOICEs to invoke the wrong free function
+  on the decoded structure upon decode error. This is known to impact
+  the Heimdal KDC, leading to an invalid free() of an address partly
+  or wholly under the control of the attacker, in turn leading to a
+  potential remote code execution (RCE) vulnerability.
 
-This option does not "configure", it "installs". Also, I'm not sure
-having debugging symbols in u-boot is guaranteed, I suppose it depends
-on whether debugging is enabled or not. So I changed this to:
+  This error affects the DER codec for all extensible CHOICE types
+  used in Heimdal, though not all cases will be exploitable. We have
+  not completed a thorough analysis of all the Heimdal components
+  affected, thus the Kerberos client, the X.509 library, and other
+  parts, may be affected as well.
 
-+         Install the u-boot image, which is directly the ELF binary
-+         for the main U-Boot, potentially with debugging symbols.
+  This bug has been in Heimdal's ASN.1 compiler since 2005, but it may
+  only affect Heimdal 1.6 and up. It was first reported by Douglas
+  Bagnall, though it had been found independently by the Heimdal
+  maintainers via fuzzing a few weeks earlier.
 
-> +config BR2_TARGET_UBOOT_FORMAT_BIN_ELF
->  	bool "u-boot.elf"
-> +	help
-> +	  Configures the u-boot.elf binary version of ELF file.
-> +	  Debug symbols are not included in this ELF file.
+  While no zero-day exploit is known, such an exploit will likely be
+  available soon after public disclosure.
 
-So I researched a bit more, and this u-boot.elf is produced when
-CONFIG_REMAKE_ELF=y in U-Boot. So I changed this to:
+- CVE-2019-14870: Validate client attributes in protocol-transition
 
-+config BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF
-        bool "u-boot.elf"
-+       help
-+         Install the u-boot.elf image, which is produced when
-+         CONFIG_REMAKE_ELF=y. It is an ELF image (u-boot.elf)
-+         produced from the raw U-Boot binary (u-boot.bin), which may
-+         already have been statically relocated and may already have
-+         a device-tree appended to it.
+- CVE-2019-14870: Apply forwardable policy in protocol-transition
+- CVE-2019-14870: Always lookup impersonate client in DB
 
-The description was taken from the CONFIG_REMAKE_ELF help text in U-Boot.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/heimdal/heimdal.hash | 4 ++--
+ package/heimdal/heimdal.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
+index 005447a43b..cf822340da 100644
+--- a/package/heimdal/heimdal.hash
++++ b/package/heimdal/heimdal.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/heimdal/heimdal/releases
+-sha1  5dd16703be7255f66a4d65440f0c622aeeca60d9  heimdal-7.7.0.tar.gz
+-sha256  f02d3314d634cc55eb9cf04a1eae0d96b293e45a1f837de9d894e800161b7d1b  heimdal-7.7.0.tar.gz
++sha1  a33fdc957f84ab13f39f164b04fe1deeaab3179e  heimdal-7.7.1.tar.gz
++sha256  117cb1ede7848db24cf27311c46f7f735a99f9c836c22e80aec92b91efe56644  heimdal-7.7.1.tar.gz
+ # Locally computed
+ sha256  0c4b07bf5b98f7a1d01f8e60722d6c6747ef052c2aa6d2043daf690d4e1b0a7f  LICENSE
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index a8d87531ec..21b6c0ccb3 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HEIMDAL_VERSION = 7.7.0
++HEIMDAL_VERSION = 7.7.1
+ HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
+ HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
