@@ -1,68 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BD96C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9821EC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44FA26102F;
-	Wed, 23 Nov 2022 21:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44FA26102F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DC6D418D8;
+	Wed, 23 Nov 2022 21:51:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC6D418D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 98m1x0_bK40H; Wed, 23 Nov 2022 21:51:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E4cwFNdd0qlw; Wed, 23 Nov 2022 21:51:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D1D660BC2;
-	Wed, 23 Nov 2022 21:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D1D660BC2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E8974176B;
+	Wed, 23 Nov 2022 21:51:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E8974176B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5FBA81BF2F7
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:51:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BA271BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39BA841638
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39BA841638
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4208C4174E
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:51:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4208C4174E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vB1HrQfEvJrZ for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 21:51:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1D54415CD
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E1D54415CD
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 21:51:02 +0000 (UTC)
+ with ESMTP id HYHkOm9oqLcL for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 21:51:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E254174C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0E254174C
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 21:51:06 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8827240004;
- Wed, 23 Nov 2022 21:50:59 +0000 (UTC)
-Date: Wed, 23 Nov 2022 22:50:59 +0100
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20221123225059.65b6b796@windsurf>
-In-Reply-To: <20221123195045.2956125-1-troglobit@gmail.com>
-References: <20221123195045.2956125-1-troglobit@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id EF4FDC0003;
+ Wed, 23 Nov 2022 21:51:04 +0000 (UTC)
+Date: Wed, 23 Nov 2022 22:51:03 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20221123225103.16843388@windsurf>
+In-Reply-To: <20221123173421.3371884-1-dario.binacchi@amarulasolutions.com>
+References: <20221123173421.3371884-1-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669240260;
+ d=bootlin.com; s=gm1; t=1669240265;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Vk5tqseRO1WwHCs30wxaC+Z/P/xgxQgacxKH0NEu8A8=;
- b=lNK4pBEs+7hizAreDDTvKW/ioG2UUmV0t2RPBWBWEmoaleFzKPAmfZiMxFUQdA2CmgIc7K
- v4g8xtmjkG5Y6tXH1o1Wt7mpNmN93jC/dJh/6LA5DgOu+wf/AouTNMJzbLhpfWTvY1wYPk
- FIYKa98PMGyMnHeCwgccmRFSU5sKt/HIB2SQOnsJgyhzNdYivCiM+YiQyfC+MIIedumIH4
- IMLZ9UgzmpstI1OBihR5+rN5SV6J8yAYVmt0IiSJqlDywk9MJAMVJPzJA9OMjXkjlrAyW9
- ooGHijD38YCLgGNLCwonBUPl1w3QPv2vJYpdmz8yOzcStUtFRjvEILt285QW8w==
+ bh=aJFQSqAfYLTMNz1I+PX2p4+eoVQh9T0RrS1wPZ863FI=;
+ b=aEzDfCnnJMq14PT3K65ZOHpBGWnGKYA9i87wAjp7hUIrW5CjCK71HaLxOBGmrAfi2GQLAW
+ Az5y2lBtZ+Bu2N41EefK2e+d58sAwPOBfXKJGxJuDLBtBey2qZ7EVpoUo8o2pwL/gFdFG/
+ EaN1GIgHpSdvSZVxb6Q6gXMh0AV5PKpVmKjKd2T+GgjxLyYQA/KrZtqQnopPr/ZmCkHI9T
+ SxUJzlbZQPk6qbyyVIMClRcGWO9xccAnnukXBn4qFRnw7k5ZqXqzERR7/ZTfP6Q7aaRf9t
+ t6FjBtDiNO6dTKG+ypvEHCerzicO8PwPpuTGK+HuJJgPNdIFtmTKsM+iPYoi7Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lNK4pBEs
-Subject: Re: [Buildroot] [PATCH next 1/1] package/inadyn: bump to v2.10.0
+ header.s=gm1 header.b=aEzDfCnn
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,30 +83,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 23 Nov 2022 20:50:44 +0100
-Joachim Wiberg <troglobit@gmail.com> wrote:
+On Wed, 23 Nov 2022 18:34:21 +0100
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-> Highligts include support for MbedTLS and a serious memory leak fix to
-> the GnuTLS backend.
+> - Add nvme_all build-in command
+> - Add Write command to allow use mmc write to write image
+> - Fixed race conditions of g_last_error_str and g_last_err_id variables
+> - Add support for stm vendor fastboot
 > 
-> Changes:
->  - Add support for MbedTLS
->  - Add support for per-provider interface to bind to
->  - Use HTTP-only for api.ipify.org, default (fallback) checkip service
-> 
-> Fixes:
->  - serious memory leak in GnuTLS backend
->  - ca-trust-file has no effect for GnuTLS
->  - handle easyDNS "no update required" as OK status
->  - use configured server:port, don't force port 443 for HTTPS
-> 
-> (From https://github.com/troglobit/inadyn/releases/tag/v2.10.0)
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  package/inadyn/inadyn.hash | 2 +-
->  package/inadyn/inadyn.mk   | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/uuu/uuu.hash | 2 +-
+>  package/uuu/uuu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
