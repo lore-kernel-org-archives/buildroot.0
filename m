@@ -4,86 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D39C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 19:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709E6C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 19:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C5A7610AF;
-	Wed, 23 Nov 2022 19:56:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C5A7610AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1329360BD3;
+	Wed, 23 Nov 2022 19:58:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1329360BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DBVJ6XGStSb0; Wed, 23 Nov 2022 19:56:11 +0000 (UTC)
+	with ESMTP id IhHbXz6iCR07; Wed, 23 Nov 2022 19:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86162610D5;
-	Wed, 23 Nov 2022 19:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86162610D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C83D60A4F;
+	Wed, 23 Nov 2022 19:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C83D60A4F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C9CF1BF314
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0166B1BF314
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3213F60BBD
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3213F60BBD
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE00360A4F
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 19:58:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE00360A4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KwF-PQ1LGUb6 for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 19:53:32 +0000 (UTC)
+ with ESMTP id bCcWzQYP4ZL0 for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 19:58:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33A1261095
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
- [IPv6:2607:f8b0:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33A1261095
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 19:53:32 +0000 (UTC)
-Received: by mail-pl1-x62a.google.com with SMTP id d6so4071531pll.7
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 11:53:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0266960671
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0266960671
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 19:58:24 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id io19so17588503plb.8
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 11:58:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Wx5EczSbRaZDOETM3gnSPIYaqZ+/UC/Q9h1Xs1WZeQM=;
- b=hZ069XrILPzlCxgvso3vSXxNRCk1HDCr4unEJubkdVgyLz09qY0xvjgyNf3WcbpQeN
- 4meivWmVi3Bz5ZQl0foGt5ElwehzSDI+/tJN6CeBhcmLEj9+lUEyHacFRekK2pFyKZMd
- f9VOD7PYuackezG/8xUAj1aY5MF3NFxf8uUnWW4gtjzDtW8EFM9n23VnmMLmowlXcEqk
- YUaR5XZbRTIje9/aSRbE/jk+naOH2yWXJcSE+N0GzMQyZdch8dMkyQ6zClws1HGevdGM
- QOnrcZpKDucS0DpVcJk7uJRfuvz7QcS+w2lCgE8U33tDKjGRcNCXunXf0VBpcxs+G3v2
- BKKg==
-X-Gm-Message-State: ANoB5pm7clY0nF+kRrjNexbOggPek1xGadp3wt32+T86T/7XMMBjYM1s
- 9eLuMvuZ16PPyGPi92cH7A/ZoWZu6N4MFg==
-X-Google-Smtp-Source: AA0mqf5bVp+b+79u7yOVUtB1Ci3xkOzulHv2sT7ceAQYqk8cT69QksxOrRhuFvQ5TyvAzSmPHRtvqQ==
-X-Received: by 2002:a17:90b:48cf:b0:205:e1af:68d1 with SMTP id
- li15-20020a17090b48cf00b00205e1af68d1mr37688537pjb.121.1669233211239; 
- Wed, 23 Nov 2022 11:53:31 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OAia/miXQNDnqsQoLxmMX9mTQig9ivUuDvtCcNjj0v0=;
+ b=RSRJ+5JR2zyrun8ecJ8sdof5CGcosagdH7ZGCCdPIz2wMHfd2jazMNoszTa73KjTwg
+ RV/apYz11FJDbaz6tTfgvv1xQaOH68n4jYeVty2wnZjPmKbGdOMIEx/XXMqSAOdfOxIg
+ 8cm8kBYqU+RCgfqBj1cMrVkhUoNQV6U2pJrgcTz6vJkfY5x/oC+gup5JaWIamZC+89wM
+ 0Gcuw9MbFI47wC1LMz1J9akKnYtnTYvqEjFyhx7FJprLaJshl9O+VMBXyhn1qCrBnlNZ
+ ixysli4kC42blOLKvhhThq1ODxEgcp+psaHz9Fs9mEIvgdMZS7bTGjKvGP3NwpCl8uzR
+ 5o5g==
+X-Gm-Message-State: ANoB5pm3upT0oSp7dctPHODhmOr/9OI/B+BHI37vGCQaV/5PpOTu7otY
+ /JzvJpKCT5dNQ+mRSk2UOjZ1G7wfhdl5Aw==
+X-Google-Smtp-Source: AA0mqf5aGkID6SjkT0GeNxwDNAT32R2AtN5Mx5aYifZosStarLFonk0dd+uYPcNT+klZ8dq/+olfNw==
+X-Received: by 2002:a17:90a:70c5:b0:218:985d:25a0 with SMTP id
+ a5-20020a17090a70c500b00218985d25a0mr23015617pjm.168.1669233504016; 
+ Wed, 23 Nov 2022 11:58:24 -0800 (PST)
 Received: from chris-jammy.lan ([136.52.75.52])
  by smtp.googlemail.com with ESMTPSA id
- y129-20020a626487000000b005745a586badsm1818282pfb.218.2022.11.23.11.53.30
+ q15-20020aa7842f000000b0056b9df2a15esm13124508pfn.62.2022.11.23.11.58.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Nov 2022 11:53:30 -0800 (PST)
+ Wed, 23 Nov 2022 11:58:23 -0800 (PST)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 11:53:04 -0800
-Message-Id: <20221123195304.1582783-14-chris.dimich@boundarydevices.com>
+Date: Wed, 23 Nov 2022 11:58:10 -0800
+Message-Id: <20221123195815.1583545-1-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
-References: <20221123195304.1582783-1-chris.dimich@boundarydevices.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=boundarydevices.com; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Wx5EczSbRaZDOETM3gnSPIYaqZ+/UC/Q9h1Xs1WZeQM=;
- b=ePvmDfLyKofV88qlNSDBI+EfbAb0bvYUCZ8Lpem8ndy95JRisv+g8fepX5YTJ432sw
- S2gwe63CInQ5BPIh2L6xonEcb6QGWgfA9HVszyRPWt8gO8zOL5DEFY+iVUaMyYfAi1Kq
- r+DT2bl/D3IVp2+n8awyrUS2RpnntHKOL12Co=
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OAia/miXQNDnqsQoLxmMX9mTQig9ivUuDvtCcNjj0v0=;
+ b=i854C5GqKYXlYGFROzQuGnJgilFQGAZx9MHQS8QWySZc8lXnP5YXohKi9ddwGPHgCC
+ jIASY9fFtXFbQ7eXCi2g4MqZ+DpewArT/f801MsVWTPAQl0DGOQyW49bKPkmGAC8pzO0
+ bODEqeL6UbnSq5KtLjpf6ranphy9qfcHwplD8=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=boundarydevices.com
  header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=ePvmDfLy
-Subject: [Buildroot] [PATCH 7/7]
- package/freescale-imx/imx-vpu-hantro-daemon: new package
+ header.b=i854C5Gq
+Subject: [Buildroot] [PATCH 1/3] configs/nitrogen*: bump kernel revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,106 +103,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- i.MX Hantro V4L2 Daemon. Provides the vsidaemon, which is needed for
-V4L2 nodes to work.
-- To match NXP 5.15.52-2.1.0 release.
+- Based on NXP 5.15.52-2.1.0 release.
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- package/freescale-imx/Config.in               |  1 +
- .../imx-vpu-hantro-daemon/Config.in           | 17 +++++++++
- .../imx-vpu-hantro-daemon.hash                |  3 ++
- .../imx-vpu-hantro-daemon.mk                  | 35 +++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/Config.in
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ configs/nitrogen7_defconfig   | 2 +-
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ configs/nitrogen8mn_defconfig | 2 +-
+ configs/nitrogen8mp_defconfig | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 4a4237fb42..13d611b696 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -115,6 +115,7 @@ source "package/freescale-imx/imx-vpuwrap/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
- source "package/freescale-imx/imx-seco/Config.in"
-+source "package/freescale-imx/imx-vpu-hantro-daemon/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-vc/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
- source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/Config.in b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
-new file mode 100644
-index 0000000000..663ed4346b
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
-@@ -0,0 +1,17 @@
-+comment "imx-vpu-hantro-daemon needs an i.MX-specific Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "imx-vpu-hantro-daemon needs an i.MX platform with Hantro VPU"
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
-+
-+config BR2_PACKAGE_IMX_VPU_HANTRO_DAEMON
-+	bool "imx-vpu-hantro-daemon"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
-+	select BR2_PACKAGE_IMX_VPU_HANTRO
-+	select BR2_PACKAGE_IMX_VPU_HANTRO_VC if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-+	help
-+	  i.MX Hantro V4L2 Daemon specific for the NXP i.MX SoC
-+	  integrating a Hantro Video Processing Unit (VPU) such as the
-+	  i.MX8MQ/i.MX8MM/i.MX8MP.
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-new file mode 100644
-index 0000000000..e952491a60
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  83ba2798564702d74ab65f6238f95f59247d983b846de1de4c19bdfaf6dabeb8  imx-vpu-hantro-daemon-1.1.4.tar.gz
-+sha256  bb645f02b260955f333348100e40af76253e2cd8b116bac047230439dd53ec5a  LICENSE.txt
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-new file mode 100644
-index 0000000000..bf9088b065
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# imx-vpu-hantro-daemon
-+#
-+################################################################################
-+
-+IMX_VPU_HANTRO_DAEMON_VERSION = 1.1.4
-+IMX_VPU_HANTRO_DAEMON_SITE = $(FREESCALE_IMX_SITE)
-+IMX_VPU_HANTRO_DAEMON_SOURCE = imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION).tar.gz
-+IMX_VPU_HANTRO_DAEMON_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt
-+IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE = NO
-+IMX_VPU_HANTRO_DAEMON_DEPENDENCIES = imx-vpu-hantro linux
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
-+IMX_VPU_HANTRO_DAEMON_DEPENDENCIES += imx-vpu-hantro-vc
-+endif
-+
-+IMX_VPU_HANTRO_DAEMON_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	SDKTARGETSYSROOT=$(STAGING_DIR) \
-+	LINUX_KERNEL_ROOT=$(LINUX_DIR) \
-+	CTRLSW_HDRPATH="$(STAGING_DIR)/usr/include" \
-+	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
-+
-+define IMX_VPU_HANTRO_DAEMON_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(IMX_VPU_HANTRO_DAEMON_MAKE_ENV)
-+endef
-+
-+define IMX_VPU_HANTRO_DAEMON_INSTALL_TARGET_CMDS
-+	$(IMX_VPU_HANTRO_DAEMON_MAKE_ENV) $(MAKE) -C $(@D) \
-+		DEST_DIR=$(TARGET_DIR) libdir=/usr/lib install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index e302fcbba5..2e25a2011a 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 6f7c3bbe99..aa3b8b912b 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -35,7 +35,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 1efcdf6071..4df3f47b4b 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -35,7 +35,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index a6a9526dee..226ded6208 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -50,7 +50,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index 0130a6a62a..dd97f79f7e 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -50,7 +50,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 50976959c5..27a374e485 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -50,7 +50,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index a14a024353..48749e2a1a 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -50,7 +50,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_5.15.y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux/archive/97cc67c4.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.34.1
 
