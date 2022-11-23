@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94EC7C4321E
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AB46C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3AECC40BB5;
-	Wed, 23 Nov 2022 09:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AECC40BB5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FA33410B1;
+	Wed, 23 Nov 2022 09:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FA33410B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kB2xNrakPRif; Wed, 23 Nov 2022 09:48:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BeUYEmTidzlv; Wed, 23 Nov 2022 09:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 625EE40462;
-	Wed, 23 Nov 2022 09:48:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 625EE40462
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F2F71BF853
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79922409A8;
+	Wed, 23 Nov 2022 09:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79922409A8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB8131BF853
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58AFA40158
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58AFA40158
+ by smtp1.osuosl.org (Postfix) with ESMTP id A38E982087
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A38E982087
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VhsGwfnPA1Jp for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90BAE40462
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90BAE40462
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F39D842A5; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nhuZDRiS_bit for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 09:49:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9175182078
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9175182078
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:49:49 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5CE701C000D;
+ Wed, 23 Nov 2022 09:49:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oxmO1-001l5e-EH; Wed, 23 Nov 2022 10:49:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 10:47:13 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 9bea0ce784e6db9eff6a4ffefc1144be82971da8
-X-Git-Newrev: b0afdf16066c942ffd3e14208638ade5fc63a424
-X-Patchwork-Hint: ignore
-Message-Id: <20221123094751.7F39D842A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/xterm: security
- bump to patch 376
+To: Alexander Lukichev <alexander.lukichev@gmail.com>
+References: <20221120090654.312078-1-alexander.lukichev@gmail.com>
+Date: Wed, 23 Nov 2022 10:49:45 +0100
+In-Reply-To: <20221120090654.312078-1-alexander.lukichev@gmail.com> (Alexander
+ Lukichev's message of "Sun, 20 Nov 2022 11:06:54 +0200")
+Message-ID: <87o7sy2e6e.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/openpgm: fix build for non-x86
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +64,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0afdf16066c942ffd3e14208638ade5fc63a424
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
 
-Fixes the following security issue:
+ > openpgm-5-3-128 has assembly code for x86 that is not guarded by
+ > architecture defines. A patch to fix that has been merged upstream
+ > some time ago, and the next release will have it. This includes
+ > that patch for the time being.
 
-CVE-2022-45063: xterm before 375 allows code execution via font ops, e.g.,
-because an OSC 50 response may have Ctrl-g and therefore lead to command
-execution within the vi line-editing mode of Zsh:
+ > Fixes: http://autobuild.buildroot.net/results/338291e5bf0671cb7ed7a32cc10e546c7a521acc
+ > Fixes: http://autobuild.buildroot.net/results/3ab6d7f9ee841fa18c1c220d722b1c06ca1fff30
+ > Fixes: http://autobuild.buildroot.net/results/68e840b1fec8f14775cef0b6a14d9b847337324b
 
-https://www.openwall.com/lists/oss-security/2022/11/10/1
+ > Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
 
-Additionally, patch 376 fixes a null pointer access issue:
+Committed to 2022.08.x and 2022.02.x, thanks.
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022942
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0cc7c63f91ffadb0835bb57cdb7bfffdf7803add)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 3f6ec765ce..12cd2e639b 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  32f888277b19e28ebc0a3112bff000607c07bed0679caa0beebb36f9cad484f5  xterm-371.tgz
-+sha256  1e5bb7aad068fb31d6d3cbb77f80c7ad1526cd4c956a4ddcf2c5cf28af5334e1  xterm-376.tgz
- # Locally calculated
- sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 95984f1cf9..d01b608d99 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTERM_VERSION = 371
-+XTERM_VERSION = 376
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
