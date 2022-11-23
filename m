@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A57DC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 10:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6001C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 10:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A54048207C;
-	Wed, 23 Nov 2022 10:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A54048207C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B6D1403A7;
+	Wed, 23 Nov 2022 10:51:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B6D1403A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D0QB3v6jEw7I; Wed, 23 Nov 2022 10:30:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CK5jcA2X71tn; Wed, 23 Nov 2022 10:51:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D334382040;
-	Wed, 23 Nov 2022 10:30:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D334382040
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 192FD1BF85D
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:30:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64FA7402E8;
+	Wed, 23 Nov 2022 10:51:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64FA7402E8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D66FF1BF85D
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:51:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E87418205B
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E87418205B
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE8CD4017C
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 10:51:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8CD4017C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eak48t_U2amI for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 10:30:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G4hdw-2jiyVd for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 10:51:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D589581FBB
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D589581FBB
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 10:30:31 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id z18so24214266edb.9
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 02:30:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 831F3401A2
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
+ [IPv6:2001:4860:4864:20::32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 831F3401A2
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 10:51:21 +0000 (UTC)
+Received: by mail-oa1-x32.google.com with SMTP id
+ 586e51a60fabf-141ca09c2fbso20353541fac.6
+ for <buildroot@buildroot.org>; Wed, 23 Nov 2022 02:51:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=nmhlJns6BfBaAxfD/NuZZm1QmQyKYq4pVoc7CILu5q0=;
- b=GIaoNnbAg+eVR63eBE1BFQRc/Jnfk9J4s+NPf1akwZUu47CWfjqrgUhAOOFUTC/wT1
- 65HZE9vP7gTVk3eN4Gbkj5ffYhSj9xrstWMZlqh3vZuXSE4SNS88Q57E6UjShy9Le3rK
- aWj7S0lYkuQclPdAYSdmlIlukY7BVYNjPn6iBdsROh90W5/eBAkJOWtSsCHizG8Jisd0
- YcyCwhH0saskH0m+ApLxPXPwDAZFCMcYSFPrML+717iTTVa5QlpueKWpu/EUq/r66Q56
- sfhhsMZwrAhqe5fIuIJzrgAnHEtnhFx413j3olUrTNJbDiuHyNq8ZiSAjn4giafnFZ82
- HEKw==
-X-Gm-Message-State: ANoB5plLOEY2EA+D9jRSi0dzXBLqaBSNnlUC3k/7AKSMA1iYYllZhVDr
- 6QbxdXU371Yj4mZiXIen1lAeL9gTrPQ=
-X-Google-Smtp-Source: AA0mqf61iR6rXxwMj1pUuFmohrmPVgUfKD9ai8ppcshiS0mHzFfXcgbdsu2aFHVfNcLNgSjD5kJCUw==
-X-Received: by 2002:a05:6402:1caa:b0:467:78ce:5fe6 with SMTP id
- cz10-20020a0564021caa00b0046778ce5fe6mr9193649edb.325.1669199429777; 
- Wed, 23 Nov 2022 02:30:29 -0800 (PST)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- u8-20020aa7d548000000b00459cd13fd34sm7485949edr.85.2022.11.23.02.30.28
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 23 Nov 2022 02:30:29 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 11:30:22 +0100
-Message-Id: <20221123103022.17397-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JCE72XXJW/6wWa0vjBORgiInWHbsfYcrtod7mhE/TUI=;
+ b=huDxbM375ys9a5Zcn47l9yFXQY+cOm8RViN3ZT8/hFv5WqliM3UNDryNAFrlhlZZZ5
+ aDWWoJaH4eqdALoyDEE1xopMLy6Qxmdh2Gni73wKpLmbUTjqrBrEqUiixVbXU8coMDaY
+ 4XSaFQqP3XdL8gWrSSOTYtq7O0BvZLJ9Bv4zjabhLaykQ5Bchq2zp4Lim6CZ5tdzaUqG
+ RTZMMVlo9H4ni3PuUqj0LH0ofOoHFD/tHHbxY+wKzik8IjHkju21E/8PPwd+jKcN7lY6
+ xZL563G4wvlz6350xtN/KYAHtVYV7GPjj/PPjxXL6r3a4HjeHLNXpnWKzZK4tBV8J4ev
+ TfJg==
+X-Gm-Message-State: ANoB5pl3v/KODqgUIlKJpOcWMnNiQfXRcDJ1+LWAetwn9vP4+ijKRnTJ
+ zmQZhyoZ2MfanPE3IvE0INiaUGgK19a2ytcdHqQpxQ==
+X-Google-Smtp-Source: AA0mqf7zjYtM1fuw4XflANdT9nz14csu17jvRoeRajGVNv6XsiAIFwp7WKNAJrceIv9HoJfvi2DL/Myox8dCrlbipeo=
+X-Received: by 2002:a05:6870:3e03:b0:142:fd0e:4c61 with SMTP id
+ lk3-20020a0568703e0300b00142fd0e4c61mr5778922oab.289.1669200680305; Wed, 23
+ Nov 2022 02:51:20 -0800 (PST)
+MIME-Version: 1.0
+References: <20221031150235.12074-1-tim.gover@raspberrypi.com>
+ <20221122233350.6b00aa83@windsurf>
+In-Reply-To: <20221122233350.6b00aa83@windsurf>
+From: Tim Gover <tim.gover@raspberrypi.com>
+Date: Wed, 23 Nov 2022 10:51:08 +0000
+Message-ID: <CAAvKZ67w5UuracsKmawh5GW01K4S2pe5WvRn5-_jYWLLNjVBRQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nmhlJns6BfBaAxfD/NuZZm1QmQyKYq4pVoc7CILu5q0=;
- b=fNeYXl4nQZ7uz7e8eAOTgjfscO4u+cBxq+ElUOOLSsTgeI+eIVoJWwQmg715n+XGH6
- CgUmDrUMWbJzuR5r4gpQO1xABg2KiJKIWPyiKCLJhDLqr3OJTQsa+toHVR+RtJy+ZZd4
- FbXt3hgfC0fyr1NidJTFlYypuNMBg6PnbBLuGkRa84RQEczrVZYt75dOMK4lBna9NlNO
- MdAE7OjvyhT2SeIVd05dKr+00AwaYAUJYB28MeXKorrlwOtSCcQ5QRkoKJOYipgix2hj
- 9vjamTEIwqGU/rGnyNBk7x9T5AhDCccIfl3ARWC9yF/7JSrzghyd9T1khsll8TwPJGBJ
- ZVdg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fNeYXl4n
-Subject: [Buildroot] [PATCH branch/next] package/python-dicttoxml2: new
- package
+ d=raspberrypi.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=JCE72XXJW/6wWa0vjBORgiInWHbsfYcrtod7mhE/TUI=;
+ b=e568LjRGBcYN7KR7fCR12W3xPlm3n3enq0meglN7BrJmqKvmYEkToVUNqEd8EuWlZF
+ nXM3Sur11Ti5ATTypqVuX0B3GK3O8fXCzV4JH7S/1MF8bA9RTMmPYzHT0JWCHylo6ezW
+ z1+wB8Usx8UDs1W3Vz/RNz1Nt1anVtpBmI+GZ/ZLTCMqxohwghJFd+u2KFj/rMbIIBfs
+ 8T4Z80EGehzOJR1BbdrCh92odBAGZ02l4HROFYh/o+58n4FgL+S9YCUdnOEvNHPa0+Ty
+ f4v0Qtv5ZTD6d8XxaN/UF6X7ps8v3kjDyNnm9Fh2EyTC7pDBrvudtOw4ZJuvpNn7rV/J
+ bS4A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com
+ header.a=rsa-sha256 header.s=google header.b=e568LjRG
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: add
+ overlays/README
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,91 +92,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
-MIME-Version: 1.0
+Cc: Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, 22 Nov 2022 at 22:33, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Tim,
+>
+> On Mon, 31 Oct 2022 15:02:35 +0000
+> Tim Gover <tim.gover@raspberrypi.com> wrote:
+>
+> > If a custom os_prefix directory is specified then the Raspberry Pi
+> > firmware probes for the README file in overlays directory. If
+> > this is not found then firmware will use the top-level overlays
+> > directory which can be confusing if os_prefix is used in conjunction
+> > with other filters to implement alternate boot behaviour.
+> >
+> > In Raspberry Pi OS the README file is always included to ensure
+> > that the relevant documenation is in sync with the overlays. Rather
+> > that including the entire file let's just include an emtpy file so
+> > that overlays directory is consistent with the Raspberry Pi OS
+> > APT package.
+> >
+> > From
+> > https://www.raspberrypi.com/documentation/computers/config_txt.html#overlay_prefix
+> >
+> > Unless ${os_prefix}${overlay_prefix}README exists, overlays are shared
+> > with the main OS (i.e. os_prefix is ignored).
+> >
+> > Signed-off-by: Tim Gover <tim.gover@raspberrypi.com>
+> > ---
+> >  package/rpi-firmware/rpi-firmware.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> I am not entirely sure how useful ${os_prefix} is in the context of a
+> Buildroot generated system, but I guess having this empty README file
+> doesn't hurt much, so I've applied to next. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Add a maintained fork instead of the abandoned dicttoxml.
+Thanks Thomas!
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                                |  1 +
- package/python-dicttoxml2/Config.in              |  8 ++++++++
- package/python-dicttoxml2/python-dicttoxml2.hash |  5 +++++
- package/python-dicttoxml2/python-dicttoxml2.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-dicttoxml2/Config.in
- create mode 100644 package/python-dicttoxml2/python-dicttoxml2.hash
- create mode 100644 package/python-dicttoxml2/python-dicttoxml2.mk
+I appreciate that it's a bit of a corner case :) There's some work
+going into making things like A/B booting a bit simpler (either
+multiple boot partitions + swupdate/others or simple
+directory/os_prefix based) but it's early days. Hopefully, if there is
+common functionality that's useful for the wider audience that could
+be upstreamed.
 
-diff --git a/package/Config.in b/package/Config.in
-index cafd3b338c..7d227f8112 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1021,6 +1021,7 @@ menu "External python modules"
- 	source "package/python-defusedxml/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
-+	source "package/python-dicttoxml2/Config.in"
- 	source "package/python-distro/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-diff --git a/package/python-dicttoxml2/Config.in b/package/python-dicttoxml2/Config.in
-new file mode 100644
-index 0000000000..0bd8068dd6
---- /dev/null
-+++ b/package/python-dicttoxml2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_DICTTOXML2
-+	bool "python-dicttoxml2"
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	help
-+	  Converts a Python dictionary or other native data type into
-+	  a valid XML string.
-+
-+	  https://github.com/Ousret/dicttoxml
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.hash b/package/python-dicttoxml2/python-dicttoxml2.hash
-new file mode 100644
-index 0000000000..7f584cc000
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dicttoxml2/json
-+md5  787ea4b80cd6234a41c016e8efa7ff40  dicttoxml2-2.1.0.tar.gz
-+sha256  67cb729f337dd752808c021b70c8df8a34f84b9e111a5dbaa37e000eeaf4d462  dicttoxml2-2.1.0.tar.gz
-+# Locally computed
-+sha256 4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.mk b/package/python-dicttoxml2/python-dicttoxml2.mk
-new file mode 100644
-index 0000000000..d2abe63860
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-dicttoxml2
-+#
-+################################################################################
-+
-+PYTHON_DICTTOXML2_VERSION = 2.1.0
-+PYTHON_DICTTOXML2_SOURCE = dicttoxml2-$(PYTHON_DICTTOXML2_VERSION).tar.gz
-+PYTHON_DICTTOXML2_SITE = https://files.pythonhosted.org/packages/0b/24/7a6d37b2770843e34685e470fd711955cb0f77c354c73d8ca64b02420bce
-+PYTHON_DICTTOXML2_SETUP_TYPE = setuptools
-+PYTHON_DICTTOXML2_LICENSE = GPL-2.0
-+PYTHON_DICTTOXML2_LICENSE_FILES = LICENCE.txt
-+
-+$(eval $(python-package))
--- 
-2.17.0
+Tim
 
+
+
+
+
+Tim
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
