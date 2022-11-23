@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA641C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 679B4C4321E
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78DD68210C;
-	Wed, 23 Nov 2022 09:48:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78DD68210C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1ECA960E3B;
+	Wed, 23 Nov 2022 09:48:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ECA960E3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ddhBo21s8Ty4; Wed, 23 Nov 2022 09:48:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xiyWVtPT44Jv; Wed, 23 Nov 2022 09:48:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A28EB8210A;
-	Wed, 23 Nov 2022 09:48:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A28EB8210A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6500E1BF853
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45DA760B8B;
+	Wed, 23 Nov 2022 09:48:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45DA760B8B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 839801BF95D
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F7A8409E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F38360B46
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F7A8409E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F38360B46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9oVKiVhDS8sW for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z85KHcZ0Vr9U for <buildroot@lists.busybox.net>;
  Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86EED40158
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BF6560B8B
  for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86EED40158
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BF6560B8B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74E6B842A2; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
+ id 69FFD842A1; Wed, 23 Nov 2022 09:47:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 10:46:35 +0100
+Date: Wed, 23 Nov 2022 10:45:03 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 8c4ef52a79093a3d7ed841fd432c4b4f832646c6
-X-Git-Newrev: 9bea0ce784e6db9eff6a4ffefc1144be82971da8
+X-Git-Oldrev: e4c93320bbfed2f616173fb40fe26ad7aadfe55c
+X-Git-Newrev: 8c4ef52a79093a3d7ed841fd432c4b4f832646c6
 X-Patchwork-Hint: ignore
-Message-Id: <20221123094751.74E6B842A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/xen: security
- bump to version 4.14.5
+Message-Id: <20221123094751.69FFD842A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/nodejs: security
+ bump to version 16.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bea0ce784e6db9eff6a4ffefc1144be82971da8
+commit: https://git.buildroot.net/buildroot/commit/?id=8c4ef52a79093a3d7ed841fd432c4b4f832646c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Includes a number of bugfixes and the security fixes up to xsa-400:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-5/
+Fixes the following security issue:
+
+DNS rebinding in --inspect via invalid octal IP address (Medium) (CVE-2022-43548)
+
+The Node.js rebinding protector for --inspect still allows invalid IP
+address, specifically, the octal format.  An example of an octal IP address
+is 1.09.0.0, the 09 octet is invalid because 9 is not a number in the base 8
+number system.  Browsers such as Firefox (tested on latest version m105)
+will still attempt to resolve this invalid octal address via DNS.  When
+combined with an active --inspect session, such as when using VSCode, an
+attacker can perform DNS rebinding and execute arbitrary code
+
+Update license hash for an update of base64 (MIT license) and a change in
+copyright year:
+
+https://github.com/nodejs/node/commit/8ea9a71b15a953cd0936f7e6aae84c62873a77b5
+https://github.com/nodejs/node/commit/9f14dc1a8f43a9f3755c673009378b798cbdd73b
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f901a90f57927bf09ccac2dc145c77688501cfe2)
+(cherry picked from commit 58ba17c7849056fbeb3b4d652749af32f81e7360)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.hash | 6 +++---
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index a81d05e3f7..5637f0e8d9 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e76d56dfcdabf5d80aa06819f44472de49526a518dbb483eb08e7ff9aec2c669  xen-4.14.4.tar.gz
-+sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 03341d4275..169753e89f 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 83e4c271ce..4408782248 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v16.17.1/SHASUMS256.txt
+-sha256  6721feb4152d56d2c6b358ce397abd5a7f1daf09ee2e25c5021b9b4d3f86a330  node-v16.17.1.tar.xz
++# From https://nodejs.org/dist/v16.18.1/SHASUMS256.txt
++sha256  1f8051a88f86f42064f4415fe7a980e59b0a502ecc8def583f6303bc4d445238  node-v16.18.1.tar.xz
+ 
+ # Hash for license file
+-sha256  69090e865afa7c62715b97f0712632d2923bd7a5faba91f94e4e75a2f9219d5e  LICENSE
++sha256  0bec08634ba79b5404f6b7f92ea850f3c2a06e27e6f83f2267e4f5e55ae33334  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 29a10b900f..367d5d2058 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XEN_VERSION = 4.14.4
-+XEN_VERSION = 4.14.5
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+-NODEJS_VERSION = 16.17.1
++NODEJS_VERSION = 16.18.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
