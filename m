@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB698C43219
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 268BFC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DF00418EB;
-	Wed, 23 Nov 2022 09:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DF00418EB
+	by smtp1.osuosl.org (Postfix) with ESMTP id B792582112;
+	Wed, 23 Nov 2022 09:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B792582112
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 62QLvvPla0Jv; Wed, 23 Nov 2022 09:56:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cphPdGDYbmyL; Wed, 23 Nov 2022 09:57:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29D5B41894;
-	Wed, 23 Nov 2022 09:56:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D5B41894
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D6411BF853
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECC6C820DC;
+	Wed, 23 Nov 2022 09:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECC6C820DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B51D11BF95D
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5911A40BBE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9082A8210E
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5911A40BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9082A8210E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TrD9_WQO3fLo for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GyOkRZxJcuMa for <buildroot@lists.busybox.net>;
  Wed, 23 Nov 2022 09:56:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A74440158
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5314820DC
  for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A74440158
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5314820DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7503384315; Wed, 23 Nov 2022 09:56:43 +0000 (UTC)
+ id A3BCC84315; Wed, 23 Nov 2022 09:56:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 10:48:32 +0100
+Date: Wed, 23 Nov 2022 10:53:34 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6b2ca5aa254107bf25e3bd283e3b07274a6cf5f0
-X-Git-Newrev: 2ba9a3acdb19140d436999d888582224726877c7
+X-Git-Oldrev: 03798ced12d8c8e7c561caa956897ce2d277ad2b
+X-Git-Newrev: fcef81a3bb2a87e30be792ef0c891ba4c087eead
 X-Patchwork-Hint: ignore
-Message-Id: <20221123095643.7503384315@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/openpgm: fix
- build for non-x86 targets
+Message-Id: <20221123095643.A3BCC84315@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/samba4: security
+ bump to version 4.15.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ba9a3acdb19140d436999d888582224726877c7
+commit: https://git.buildroot.net/buildroot/commit/?id=fcef81a3bb2a87e30be792ef0c891ba4c087eead
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-openpgm-5-3-128 has assembly code for x86 that is not guarded by
-architecture defines. A patch to fix that has been merged upstream
-some time ago, and the next release will have it. This includes
-that patch for the time being.
+Fixes the following security issue:
 
-Fixes: http://autobuild.buildroot.net/results/338291e5bf0671cb7ed7a32cc10e546c7a521acc
-Fixes: http://autobuild.buildroot.net/results/3ab6d7f9ee841fa18c1c220d722b1c06ca1fff30
-Fixes: http://autobuild.buildroot.net/results/68e840b1fec8f14775cef0b6a14d9b847337324b
+- CVE-2022-42898: Samba buffer overflow vulnerabilities on 32-bit systems
+  https://www.samba.org/samba/security/CVE-2022-42898.html
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8f706ebb2cf325565f12b532c84a9d5ebe14d0d2)
+(cherry picked from commit 81a02457b0f161d6a0b7c9f2f916d55983e5cb44)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openpgm/0003-fix-build-on-macOS-ARM.patch | 34 +++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openpgm/0003-fix-build-on-macOS-ARM.patch b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-new file mode 100644
-index 0000000000..5769c5d7f1
---- /dev/null
-+++ b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-@@ -0,0 +1,34 @@
-+From 43dfc3e3a66b8e4584eb46219b129197a2428181 Mon Sep 17 00:00:00 2001
-+From: Michael Cho <cho-m@tuta.io>
-+Date: Thu, 10 Mar 2022 22:46:29 -0800
-+Subject: [PATCH] fix build on macOS ARM
-+
-+[alexander.lukichev@gmail.com: backport from upstream]
-+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-+---
-+ openpgm/pgm/cpu.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/openpgm/pgm/cpu.c b/openpgm/pgm/cpu.c
-+index cbcc988..f5da471 100644
-+--- a/openpgm/pgm/cpu.c
-++++ b/openpgm/pgm/cpu.c
-+@@ -33,6 +33,7 @@
-+ //#define CPU_DEBUG
-+ 
-+ 
-++#if defined(__i386__) || defined(__x86_64__)
-+ #ifndef _MSC_VER
-+ static
-+ void
-+@@ -59,7 +60,6 @@ _xgetbv(uint32_t xcr) {
-+ #endif
-+ 
-+ 
-+-#if defined(__i386__) || defined(__x86_64__)
-+ PGM_GNUC_INTERNAL
-+ void
-+ pgm_cpuid (pgm_cpu_t* cpu)
-+-- 
-+2.37.2
-+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f845a31290..81cbab4552 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.15.11.tar.asc
+-sha256  2f305980d49c7723cbef281fff2b81a2eeafae51e58b5172bb43d9693ef8953b  samba-4.15.11.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.15.12.tar.asc
++sha256  5889493d69dc7723be6c3154387fbed38c1cddf93a16da8670d99b7cca33b15e  samba-4.15.12.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 814bf0bbaa..31f692e03d 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.15.11
++SAMBA4_VERSION = 4.15.12
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
