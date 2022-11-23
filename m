@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56988C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDB9C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 09:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA9C040BB5;
-	Wed, 23 Nov 2022 09:45:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9C040BB5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CAFA61196;
+	Wed, 23 Nov 2022 09:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CAFA61196
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kA95n-S5UuJg; Wed, 23 Nov 2022 09:45:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ivLC0a5174BW; Wed, 23 Nov 2022 09:46:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BAE340462;
-	Wed, 23 Nov 2022 09:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BAE340462
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 070ED1BF853
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:45:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8FBF60E3B;
+	Wed, 23 Nov 2022 09:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8FBF60E3B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 51D431BF853
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D66E740462
- for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D66E740462
+ by smtp1.osuosl.org (Postfix) with ESMTP id 39CE3820C7
+ for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 09:46:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39CE3820C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L1Hbphsn2XTB for <buildroot@lists.busybox.net>;
- Wed, 23 Nov 2022 09:45:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y8hcBUMww2Pp for <buildroot@lists.busybox.net>;
+ Wed, 23 Nov 2022 09:46:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71E8540158
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71E8540158
- for <buildroot@buildroot.org>; Wed, 23 Nov 2022 09:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55A9282087
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 55A9282087
+ for <buildroot@busybox.net>; Wed, 23 Nov 2022 09:46:18 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2B60940008;
- Wed, 23 Nov 2022 09:45:15 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 423A8FF805;
+ Wed, 23 Nov 2022 09:46:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oxmJf-001kki-Ak; Wed, 23 Nov 2022 10:45:15 +0100
+ id 1oxmKc-001kme-Bm; Wed, 23 Nov 2022 10:46:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20221119101904.230827-1-peter@korsgaard.com>
-Date: Wed, 23 Nov 2022 10:45:15 +0100
-In-Reply-To: <20221119101904.230827-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 19 Nov 2022 11:19:03 +0100")
-Message-ID: <878rk23syc.fsf@dell.be.48ers.dk>
+To: Michael Fischer <mf@go-sys.de>
+References: <20221115162705.27235-1-mf@go-sys.de>
+Date: Wed, 23 Nov 2022 10:46:14 +0100
+In-Reply-To: <20221115162705.27235-1-mf@go-sys.de> (Michael Fischer's message
+ of "Tue, 15 Nov 2022 17:27:05 +0100")
+Message-ID: <874juq3swp.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/nodejs: security bump to version
- 16.18.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/libksba: security bump to
+ version 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,34 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>, Daniel Price <daniel.price@gmail.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
 
- > Fixes the following security issue:
- > DNS rebinding in --inspect via invalid octal IP address (Medium) (CVE-2022-43548)
+ > A severe bug has been found in Libksba , the library used by GnuPG for parsing
+ > the ASN.1 structures as used by S/MIME. The bug affects all versions of Libksba
+ > before 1.6.2 and may be used for remote code execution.
 
- > The Node.js rebinding protector for --inspect still allows invalid IP
- > address, specifically, the octal format.  An example of an octal IP address
- > is 1.09.0.0, the 09 octet is invalid because 9 is not a number in the base 8
- > number system.  Browsers such as Firefox (tested on latest version m105)
- > will still attempt to resolve this invalid octal address via DNS.  When
- > combined with an active --inspect session, such as when using VSCode, an
- > attacker can perform DNS rebinding and execute arbitrary code
+ > Fix CVE-2022-3515
 
- > Update license hash for an update of base64 (MIT license) and a change in
- > copyright year:
+ > Signed-off-by: Michael Fischer <mf@go-sys.de>
 
- > https://github.com/nodejs/node/commit/8ea9a71b15a953cd0936f7e6aae84c62873a77b5
- > https://github.com/nodejs/node/commit/9f14dc1a8f43a9f3755c673009378b798cbdd73b
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2022.08.x, thanks.
+Committed to 2022.08.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
