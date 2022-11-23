@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC77C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3E3C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 23 Nov 2022 21:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 081AD418DF;
-	Wed, 23 Nov 2022 21:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 081AD418DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 105E340255;
+	Wed, 23 Nov 2022 21:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 105E340255
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bBSsqMMqcBRL; Wed, 23 Nov 2022 21:58:08 +0000 (UTC)
+	with ESMTP id UV1foJt_u3pT; Wed, 23 Nov 2022 21:58:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02D8D418D8;
-	Wed, 23 Nov 2022 21:58:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02D8D418D8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9A0391BF95E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9685402BD;
+	Wed, 23 Nov 2022 21:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9685402BD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C9951BF95F
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74147404DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85C6B60BC2
  for <buildroot@lists.busybox.net>; Wed, 23 Nov 2022 21:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74147404DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C6B60BC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ggG3bJ10E1Tk for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DsSZCx9aNahX for <buildroot@lists.busybox.net>;
  Wed, 23 Nov 2022 21:57:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADD3940116
+ by smtp3.osuosl.org (Postfix) with ESMTP id C786E60A9E
  for <buildroot@buildroot.org>; Wed, 23 Nov 2022 21:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADD3940116
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C786E60A9E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 985A48444D; Wed, 23 Nov 2022 21:57:51 +0000 (UTC)
+ id B5C2B84447; Wed, 23 Nov 2022 21:57:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 22:51:55 +0100
+Date: Wed, 23 Nov 2022 22:54:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e8df0f7392990299863229e54aa101df5fb9c200
-X-Git-Newrev: b84557b588b3519b8cbe4856669d33fca1c56f7c
+X-Git-Oldrev: 43f6ae0de3220118ec6520b421b39c580396720d
+X-Git-Newrev: 4ef729d1cf86a9793c34a794f89905ca502e86d3
 X-Patchwork-Hint: ignore
-Message-Id: <20221123215751.985A48444D@busybox.osuosl.org>
+Message-Id: <20221123215751.B5C2B84447@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/imx-gpu-g2d: bump version to 6.4.3.p4.4
+ package/freescale-imx/imx-vpu-hantro-vc: add INSTALL_STAGING_CMDS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b84557b588b3519b8cbe4856669d33fca1c56f7c
+commit: https://git.buildroot.net/buildroot/commit/?id=4ef729d1cf86a9793c34a794f89905ca502e86d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- To match NXP 5.15.52-2.1.0 release.
-- EULA/COPYING: update to LA_OPT_NXP_Software_License v39.
+Add an INSTALL_STAGING_CMDS define as libraries needed by
+imx-vpu-hantro-daemon.
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 4d28b037d0..27f6a438d1 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  39fe307916e19a0892a514621121086e276a43858af90230372a1344852116a2  imx-gpu-g2d-6.4.3.p2.0-arm.bin
--sha256  2642a49e088daae4cf568a150d01e7c095995e8a6ff1883c02c3fa6d26d254b3  imx-gpu-g2d-6.4.3.p2.0-aarch64.bin
--sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
--sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-+sha256  7737a3372bcde34e2d275397df67c307df5033d5b133ac770f75cac4e1ec2580  imx-gpu-g2d-6.4.3.p4.4-arm.bin
-+sha256  8341d6e2cde3f3ffa035dc95b0487dd04a50531cc80f4cddc5a689ebc4946e02  imx-gpu-g2d-6.4.3.p4.4-aarch64.bin
-+sha256  5bd7aab9dc380a6f9577443b2e90bd5ca73d9528175fad04b6d17da43a05a48e  COPYING
-+sha256  654f0c4ce6d08f9a6d74e29c58206742cb7469a6a7c25413028a9bdbe647aa13  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index c5df87e618..d94da24d8f 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+diff --git a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+index 1f033c1434..3d266fb5bd 100644
+--- a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
++++ b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+@@ -8,6 +8,7 @@ IMX_VPU_HANTRO_VC_VERSION = 1.9.0
+ IMX_VPU_HANTRO_VC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_HANTRO_VC_SOURCE = imx-vpu-hantro-vc-$(IMX_VPU_HANTRO_VC_VERSION).bin
+ IMX_VPU_HANTRO_VC_DEPENDENCIES = linux
++IMX_VPU_HANTRO_VC_INSTALL_STAGING = YES
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.4-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-arm
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.4-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+ IMX_VPU_HANTRO_VC_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_VPU_HANTRO_VC_LICENSE_FILES = EULA COPYING
+@@ -17,6 +18,13 @@ define IMX_VPU_HANTRO_VC_EXTRACT_CMDS
+ 	$(call NXP_EXTRACT_HELPER,$(IMX_VPU_HANTRO_VC_DL_DIR)/$(IMX_VPU_HANTRO_VC_SOURCE))
+ endef
+ 
++define IMX_VPU_HANTRO_VC_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/
++	cp -dpfr $(@D)/usr/include/hantro_VC8000E_enc/*.h $(STAGING_DIR)/usr/include/
++	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so $(STAGING_DIR)/usr/lib/libhantro_vc8000e.so
++	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so.1 $(STAGING_DIR)/usr/lib/libhantro_vc8000e.so.1
++endef
++
+ define IMX_VPU_HANTRO_VC_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so $(TARGET_DIR)/usr/lib/libhantro_vc8000e.so
+ 	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so.1 $(TARGET_DIR)/usr/lib/libhantro_vc8000e.so.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
