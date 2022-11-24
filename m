@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B2FDC43217
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 14:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88FAC43217
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 14:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0A68821EA;
-	Thu, 24 Nov 2022 14:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A68821EA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Q9jER1m-n1x; Thu, 24 Nov 2022 14:13:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC0DC82101;
-	Thu, 24 Nov 2022 14:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC0DC82101
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2B131BF2B1
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 14:13:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADBB8404CF
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 14:13:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADBB8404CF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67EF4405BE;
+	Thu, 24 Nov 2022 14:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67EF4405BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ULwAbhtH5A_8 for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 14:13:02 +0000 (UTC)
-X-Greylist: delayed 00:05:49 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21272402F3
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5whD03jRpBH0; Thu, 24 Nov 2022 14:13:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D403404CF;
+	Thu, 24 Nov 2022 14:13:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D403404CF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4AA01BF2B1
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 14:13:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F74F60BC0
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 14:13:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F74F60BC0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aDuHew0tKZMY for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 14:13:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EC8E60A9D
 Received: from mx-ginzinger.sigmacloud.services
  (mx-ginzinger.sigmacloud.services [185.154.235.147])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 21272402F3
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 14:13:02 +0000 (UTC)
-Received: from mail-am6eur05lp2105.outbound.protection.outlook.com
- ([104.47.18.105]:41216 helo=EUR05-AM6-obe.outbound.protection.outlook.com)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5EC8E60A9D
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 14:13:04 +0000 (UTC)
+Received: from mail-db8eur05lp2109.outbound.protection.outlook.com
+ ([104.47.17.109]:29152 helo=EUR05-DB8-obe.outbound.protection.outlook.com)
  by mx-ginzinger.sigmacloud.services with esmtps (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.95)
- (envelope-from <Stefan.Hager@ginzinger.com>) id 1oyCsd-0002lI-31;
- Thu, 24 Nov 2022 15:07:08 +0100
-Received: from AM6P194CA0024.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:90::37)
- by AS8PR06MB8260.eurprd06.prod.outlook.com (2603:10a6:20b:343::20) with
+ (envelope-from <Stefan.Hager@ginzinger.com>) id 1oyCsc-0002lC-0h;
+ Thu, 24 Nov 2022 15:07:06 +0100
+Received: from AS9PR06CA0321.eurprd06.prod.outlook.com (2603:10a6:20b:45b::23)
+ by PR1PR06MB5676.eurprd06.prod.outlook.com (2603:10a6:102:6::25) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 14:07:06 +0000
-Received: from VI1EUR05FT016.eop-eur05.prod.protection.outlook.com
- (2603:10a6:209:90:cafe::24) by AM6P194CA0024.outlook.office365.com
- (2603:10a6:209:90::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Thu, 24 Nov
+ 2022 14:07:04 +0000
+Received: from AM6EUR05FT051.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:20b:45b:cafe::a2) by AS9PR06CA0321.outlook.office365.com
+ (2603:10a6:20b:45b::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
- Transport; Thu, 24 Nov 2022 14:07:06 +0000
+ Transport; Thu, 24 Nov 2022 14:07:04 +0000
 X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_2000_2999 0.000000, 
  BODY_SIZE_5000_LESS 0.000000, BODY_SIZE_7000_LESS 0.000000,
  CTE_QUOTED_PRINTABLE 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
  IN_REP_TO 0.000000, IN_TLD 0.100000, LEGITIMATE_SIGNS 0.000000,
- LINES_OF_YELLING_3 0.050000, MULTIPLE_RCPTS 0.100000,
- MULTIPLE_REAL_RCPTS 0.000000, NO_FUR_HEADER 0.000000, OUTBOUND 0.000000,
- OUTBOUND_SOPHOS 0.000000, REFERENCES 0.000000, SINGLE_URI_IN_BODY 0.000000,
- SUSP_DH_NEG 0.000000, URI_WITH_PATH_ONLY 0.000000, __ANY_URI 0.000000,
+ MULTIPLE_RCPTS 0.100000, MULTIPLE_REAL_RCPTS 0.000000,
+ NO_FUR_HEADER 0.000000, OUTBOUND 0.000000, OUTBOUND_SOPHOS 0.000000,
+ REFERENCES 0.000000, SINGLE_URI_IN_BODY 0.000000, SUSP_DH_NEG 0.000000,
+ URI_WITH_PATH_ONLY 0.000000, __ANY_URI 0.000000,
  __ARCAUTH_DKIM_PASSED 0.000000, __ARCAUTH_DMARC_PASSED 0.000000,
  __ARCAUTH_PASSED 0.000000, __ARC_SEAL_MICROSOFT 0.000000,
  __ARC_SIGNATURE_MICROSOFT 0.000000, __AUTH_RES_ORIG_DKIM_NONE 0.000000,
@@ -98,19 +98,19 @@ Received-SPF: Pass (protection.outlook.com: domain of ginzinger.com designates
  client-ip=20.93.157.195; helo=westeu11-emailsignatures-cloud.codetwo.com;
  pr=C
 Received: from westeu11-emailsignatures-cloud.codetwo.com (20.93.157.195) by
- VI1EUR05FT016.mail.protection.outlook.com (10.233.242.73) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.17 via Frontend Transport; Thu, 24 Nov 2022 14:07:05 +0000
+ AM6EUR05FT051.mail.protection.outlook.com (10.233.241.183) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.17 via Frontend Transport; Thu, 24 Nov 2022 14:07:03 +0000
 Received: from EUR04-HE1-obe.outbound.protection.outlook.com (104.47.13.55) by
  westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12)
- via SMTP; Thu, 24 Nov 2022 14:07:03 +0000
+ via SMTP; Thu, 24 Nov 2022 14:07:02 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B1VpzFeE3FxoNeJYeTYBCHCgrbKs8XUNOdSzkwMM1P405zywV9PpcLt3EcnAaijSPOdxBp/xR85edoPZuj99fP042KI/O9sIe1Dup4h2Oc9VpWOVNAhVvxjNhmI0evuA7SMhrtrEpwPoK3V+SzXYAiQ5f81DIHmU8U4nvAsq/HrMZFNVTg2FdcADxfTpA1HIJ8NMP4AFQpgsEFuB+ueIobIXmzwJrLTcUJzZxbahVGLFtwxahKMortsmXR9eM1Lul0drAu+qbnrYkwb8LTQN3/KjdiH2NpnzfWjLZi4fPTugL1qujl+16tG7dtALJDI5Qs/+eSTNhLwjgr/1Bwv7Pw==
+ b=k+ZS4C3JxkR6qgXlxmUjTRk1WDA9xtJUl1Zu/Wa0yyJUO0y3zzNJUjvGiAGwFjxs9eySXeH20vT95M21V/tg7Ru7OoSUsI5wTD4uas+lIVDZiDsYXf0Dgd9JKmhlFDisLCOR9RWay6aGbvmPScNCtnoqZFnFCfdPQerZGQJT669l+GbrjsRH5O6yHPSm1cK2YySPuBwAwEKE7E/mGB2nR8ATTqWeFQb1Gco0E9PURS5UQ3hI6IBbchuYVvu3cD82GjUmOdP7WSplvGWf5H89wU93KY9mxaWWVHvMwt2vGF+/w9FqUPscL+7xXHXarvLUiTWpWgSqv32SlghYf58ijQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/sckGLidoE7p9vmdwnfDt0rET6LHNO46z7q4P4747Fc=;
- b=HDMXnM0EVdSWpuaJrjVhiTlf4luQ5gDCndKCBo/zXiAQTmcgZ8TEwBXq+kuhLrlF08dPPBY7HyuM4+iHkl2WJtGxarPqlbg0cF+7USnU6MH6x4s46hcNa3nVOf+MJz/r6qpoe+au/xrhM7buDKenKbc3s+WMXS8xgmHJpQKDNmZDzULRdc4ucVdZV4c5SvXJwCdB4qGdU/TtFZ7pilF5LxSgBxj+Ub/wp/rPIXlvF9IEnAf+YGFu4UVr1zQfWYpYqm3OYNBFLSVhn38W5F63BAv+U7UtsxNpjkfvSeKBBEA6g2BdY54zeTk6T3gbvgJj5tEgaYi4wDLmR0xowH/e6g==
+ bh=eHd5ejiIWc4ayxrs3byryteCBN+0FSeDwjXWE5ZVzVE=;
+ b=C7QzOnEV3v3amiLyL2pfhY1buk0p5QIxlW3i7uYAwYu5BwMPQRq1zMoBV+a+eSmBoUzIsSbOLqBvhLbC2Eg3WmCY87FXtPyHCvlAt7NJS3zU50n7ljQD7PuNMaGIZD4VvtrNp+eYrWJsAoebUw7b7s8tAv/rXNaiFpB7t5Ll6H/ON+uXRdYxqazjA3H7PpL11dF4iY1nyMYAheJujCNkzyK2iuD+FKklAZ5DK6RboXd7jc62q+EY0SKIVYp+jsL5ByOaVvsG23x5XXIDv6GkJqwVVcZaHr1jzw/9XkGJ+NG/ckA/XrA9jcq2SeQXG/vZVMg5dgUaCPVV4v7qM+eEXA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=ginzinger.com; dmarc=pass action=none
  header.from=ginzinger.com; dkim=pass header.d=ginzinger.com; arc=none
@@ -120,58 +120,59 @@ Received: from AM5PR06MB3153.eurprd06.prod.outlook.com (2603:10a6:206:6::18)
  by AM8PR06MB7715.eurprd06.prod.outlook.com (2603:10a6:20b:316::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 14:07:01 +0000
+ 2022 14:07:00 +0000
 Received: from AM5PR06MB3153.eurprd06.prod.outlook.com
  ([fe80::ccff:c03f:1f56:8172]) by AM5PR06MB3153.eurprd06.prod.outlook.com
  ([fe80::ccff:c03f:1f56:8172%7]) with mapi id 15.20.5857.019; Thu, 24 Nov 2022
- 14:07:01 +0000
+ 14:07:00 +0000
 From: Stefan Hager <stefan.hager@ginzinger.com>
 To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 15:06:22 +0100
-Message-ID: <20221124140627.3269192-6-stefan.hager@ginzinger.com>
+Date: Thu, 24 Nov 2022 15:06:20 +0100
+Message-ID: <20221124140627.3269192-4-stefan.hager@ginzinger.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221124140627.3269192-1-stefan.hager@ginzinger.com>
 References: <20221124140627.3269192-1-stefan.hager@ginzinger.com>
 X-ClientProxiedBy: FR3P281CA0064.DEUP281.PROD.OUTLOOK.COM
  (2603:10a6:d10:4b::12) To AM5PR06MB3153.eurprd06.prod.outlook.com
  (2603:10a6:206:6::18)
-X-MS-TrafficTypeDiagnostic: AM5PR06MB3153:EE_|AM8PR06MB7715:EE_|VI1EUR05FT016:EE_|AS8PR06MB8260:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc85e93b-411e-42f2-f0ed-08dace252b0b
+X-MS-TrafficTypeDiagnostic: AM5PR06MB3153:EE_|AM8PR06MB7715:EE_|AM6EUR05FT051:EE_|PR1PR06MB5676:EE_
+X-MS-Office365-Filtering-Correlation-Id: f388ae9e-4423-4cd8-9574-08dace2529dd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 6S7dGeKmnNvGmdVtAovia6nBQ6cZRmgf/S7v7tsGGsPzxTmuEj6znO3Vmdhb9QXttLlisau3goAPXTwPx9kJEIFC/UH56KjhY1mSe/pYbh6phEpOSsN5HalG/4OjhWgXMgkUFT79zYKl8BC19HMu2ac6R42q0KwGNYg+aCRZb6HDS1EGbzFbK1WAIepfWVlRREp26H9iYUqdH5qaotzKumRAEjbE/zN92hoj+f94MQwOYIC8+IYDpu5r9FGA8QXFZoKILZJgF8iH+uD2xsEknxD1UFzqm1SAKBgnMELJA2EH7UZz6lsEbmviAVkcle9dWd6jwN0F/b/2Ilba44WgaDhQOWNKo4yfUipYKkqG/GZxsn0OdIRqupfCqaMsj+p6PjkVnl3NOx0rA/DECmXvHZNDDmGOOuAQn7DNJTTkfst4cCiyuN0bxXCLRMP6/WFSfQ8WCQyJXUYAvEA6FpZYW3bq5Hny42wRW73ZkQc22AkdIFmwJqB+fmMxJMd+GG2XEEeuaeeh5f4L4n9u4d3gmF9RauIICHXn6cdKdth84hEi7pbHlNWFHNdQNAm9ysUidTCfq+ZeMSW4MTSReLbLcR3qEIrlkLEshtIdRcbTVRhivRyM4RGautYbjURxyUJh3itZHT4OH2x1S895dmtwp3UOb8TG7oiRh6L6UMfmZgbJ/xpUWOccFfrm9G6c3wfDMhYrfBFo3K7U00pz1/fHF6mjMhDxMQ4F+6/XsMjDbT4=
+X-Microsoft-Antispam-Message-Info-Original: okTW/a/Z4TUXbwV2yQFWYIH9CS7DWLh9Yqztv2aKHNfe+yDuQ96evyxp682JrCW//0v3IESUjWKqO/MdVx5K7RkEdSlvEsQxCXtZNzcSValrJGetmvYhexYvTZP/OMODG+VfW46h+AfmKzfDFUQZjXEIJhjuxsMlJ/x9EktYiQ4uVROS9+yjFB2JuyYNdQDgrlJyEX6MS0umvkbfsF5IHY20GKdLTSAswNUkw1tPvkPazEm5gJOdcetb/jNHZaA865RMmxohHSUpXpB3FGZxwcRmzeteKt6bvYM9/RlEqHPMd3ebUhbBzlYE/4NZ2delQkZ90hC4dyW07nSyWIGDWkoMQZwcnECz00GW01Ohg6XQCMzmWfDaANeQnh60TNIt8ct+q37FyGSivJ76K4XtuyUnOcEzTTvyyUN2OILnCC9SD38j+ACAh9PFzK3+1fq3e/3gTeTkLrt1tRTiIzS4L6OmBfeRx/jFipPLFc27n1RAA+6qTrfXOEutE2t+7aSSECe70hl2zq7B4Xay6Y4IfIzcb+uo6Z+5SqfLxhRhsA2MNWx1BnAGUXvl5UYXwenbe/xcmKCLRNoL6mPmTPoV4zmpbptx1CAKsCW6h5fSaB6BNp9mMYP6FmiqOHdDQ/mzQ90OAHHPUU708LyTDCUicz/VdxOK6fFJf2/gn3A/uHwHhNA/2ZuLjAsEMi4S4ZV0llhRaTfjeDEhs+dGKEy0TIXgwa+YD95GwtvFpbE/R3o=
 X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
  SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:AM5PR06MB3153.eurprd06.prod.outlook.com;
  PTR:; CAT:NONE;
  SFS:(13230022)(4636009)(136003)(376002)(366004)(396003)(346002)(39840400004)(451199015)(966005)(6506007)(6486002)(36756003)(107886003)(6666004)(41300700001)(1076003)(44832011)(2906002)(186003)(2616005)(8936002)(5660300002)(6916009)(26005)(316002)(6512007)(86362001)(54906003)(52116002)(66476007)(8676002)(66946007)(66556008)(4326008)(38100700002)(38350700002)(478600001);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR06MB7715
-X-CodeTwo-MessageID: e9f513c5-0ec2-45f1-b881-0176d008ca38.20221124140703@westeu11-emailsignatures-cloud.codetwo.com
+X-CodeTwo-MessageID: 492028b4-ac4f-4f85-b1cc-e2597f906c80.20221124140702@westeu11-emailsignatures-cloud.codetwo.com
 X-CodeTwoProcessed: true
 X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT016.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM6EUR05FT051.eop-eur05.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d0b483bd-32e3-4415-b78c-08dace252840
+X-MS-Office365-Filtering-Correlation-Id-Prvs: a944d33f-c0e7-4256-bf56-08dace2527c4
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f27YD2mMMdqF5773qeSs8kEqqZpt9OxnfywqAdERHT832mjko9sKffuR2y9Ai12NPXUKS6Z8EuHZkqzv0mX/+6NAsWqiorbmXvj5VnPyUNeTqhr62Grg0R2nYTaSa5SzpHKr2xVfflqHm9IQph7vhLWaJQXnDBYfP6Z2wDYpK9JjaECp1E4EDpEYM+urhY+RoTCyETl/iBuDFqS8bYy+m4maKcmi9xyzJVj3VRRBb0wcyE15hbSpfUXTeh1/3Rdl6vlOXrVFZwy9RDxZ5/wFGaexIIV03JuO3u4S3R01LAClWq8b4aao/Isbc3F3L8tnTyF0FFz7drdvbJCK3Mug+0up/Yhgnud3B11/qGvPSsug4X9ZX637JqwQM4c2ZRW7C+S9+dMU8kzffaLIXKBKhj/p0JYXZBKZaCda07eplsQeiYGg3jboK935o36YI3Uj8GzDzAGDyjari7Z62VltI6GXPY5vcKUu4DiguPuX4ZnqjYSCXz7s8sX7CQaFIm1ykmgMsXp70s8uNBq5W1lqlopIxQ8UpkzYFhlU8pVfh16Y/JhcCZ4dv3YxdmcD+nUvBGTRw2erKHfoO4ngaSPrUtWd5oM1hZNHydIzfh3rvJ9venOrProdjDRosdXyaDYLCnU3Y/04J1S22KK/nBNWbFEKajekxOHhoX3Elsed1h9LVLD2u8ImqoO8J1VSh7pGUPzPpzcFQQSkYuGaxalzgA==
+X-Microsoft-Antispam-Message-Info: 2nDq8tvMO03uunxfOA4m+ojridGTdGceGTvbA4zFClmwnafl01zHqH5zv7tGliBuhUTNlG48h0JNiXlcIcIK8OWy2+42CIbI3qVcW+4Ijc0lxc9QgvQvzes2ox0wBzlD0bVCaq5KkisdRz/NHoqzbr0Wl/iFLPkp1pAgK++k5c+MB9HL3KKG+0oxFbbVCJ75NTLTLx1m8s22R1ZUaFOG35ZAwhjA++Dxogszpcfi5mPXhtFz8grekdY0Zw+FKYlRSUjT/VBG6ufLF5aOadxaV+hS908S919n1U+z4xB/bwOYt6ivKrQ9wOzzZKaEDKGTSUYCXAi+Rt0YfqSpQEFfxrtCBrhPqqUSi6fNkVCnvD3s3lg/89x8Av5EuZjkC/euGQE50bEz6dbE8yGlvsKGhQJoOuvAqRZU96x+TR3CQ6ZMNnOyoRfQhvAd7wdqZUgW3z1PDMH/T8UeKgBxCjWeFDxiO113gHyVz5u/sDa0TZDwB7ylVDoz/OkJ3zqVDyB1hnUO9WdAJWXKRwJrZypFDB89RpMiQDGUt8Cil4XkZdTpE/c2R+x92m86EQmLe5ezs4mJEiJLSyLkR0pkPVjkck6X8eZJQCFUguIkd/hD2YhYhainormPeggKGH7E6JoNDMsJg6kn9gd1uELPSoG0DL7Vr7kQjYWzINDfbPzixNiblTCgpcvqcaIUMrpUzPu+wOPnhznBnumnqPNl5DZuAQ==
 X-Forefront-Antispam-Report: CIP:20.93.157.195; CTRY:NL; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:westeu11-emailsignatures-cloud.codetwo.com;
  PTR:westeu11-emailsignatures-cloud.codetwo.com; CAT:NONE;
- SFS:(13230022)(4636009)(136003)(396003)(376002)(39840400004)(346002)(451199015)(36840700001)(46966006)(2906002)(40480700001)(7636003)(7596003)(356005)(336012)(44832011)(2616005)(186003)(1076003)(8936002)(6506007)(82310400005)(6666004)(6512007)(26005)(107886003)(54906003)(6916009)(5660300002)(47076005)(316002)(36860700001)(4326008)(70206006)(70586007)(8676002)(966005)(478600001)(6486002)(86362001)(41300700001)(36756003);
+ SFS:(13230022)(4636009)(376002)(39840400004)(136003)(396003)(346002)(451199015)(46966006)(36840700001)(6916009)(5660300002)(44832011)(336012)(6506007)(2616005)(70206006)(8936002)(26005)(82310400005)(1076003)(36756003)(6512007)(8676002)(36860700001)(7636003)(356005)(7596003)(47076005)(186003)(54906003)(70586007)(4326008)(2906002)(316002)(107886003)(41300700001)(6666004)(86362001)(40480700001)(966005)(478600001)(6486002);
  DIR:OUT; SFP:1102; 
 X-OriginatorOrg: ginzinger.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 14:07:05.6567 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc85e93b-411e-42f2-f0ed-08dace252b0b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 14:07:03.6439 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f388ae9e-4423-4cd8-9574-08dace2529dd
 X-MS-Exchange-CrossTenant-Id: 198354b3-f56d-4ad5-b1e4-7eb8b115ed44
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=198354b3-f56d-4ad5-b1e4-7eb8b115ed44; Ip=[20.93.157.195];
  Helo=[westeu11-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT016.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT051.eop-eur05.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB8260
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1PR06MB5676
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC PATCH 05/10] tensorflow-lite-farmhash: new package
+Subject: [Buildroot] [RFC PATCH 03/10] tensorflow-lite-abseil-cpuinfo: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -185,18 +186,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Stefan Hager <stefan.hager@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: multipart/mixed; boundary="===============0530087817359030163=="
+Content-Type: multipart/mixed; boundary="===============3306197071338868302=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 This is an S/MIME signed message
 
---===============0530087817359030163==
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="----CD441AD9750942A95AD32FDF72DDF28E"
+--===============3306197071338868302==
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="----2C1AAAF433536F3B65B8AA8904FAD5B4"
 
 This is an S/MIME signed message
 
-------CD441AD9750942A95AD32FDF72DDF28E
+------2C1AAAF433536F3B65B8AA8904FAD5B4
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 MIME-Version: 1.0
@@ -209,68 +210,68 @@ em for building or to provide headers for the staging folder.
 
 Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 ---
- package/tensorflow-lite-farmhash/Config.in         |  5 +++++
- .../tensorflow-lite-farmhash.hash                  |  3 +++
- .../tensorflow-lite-farmhash.mk                    | 14 ++++++++++++++
+ package/tensorflow-lite-cpuinfo/Config.in          |  5 +++++
+ .../tensorflow-lite-cpuinfo.hash                   |  3 +++
+ .../tensorflow-lite-cpuinfo.mk                     | 14 ++++++++++++++
  3 files changed, 22 insertions(+)
- create mode 100644 package/tensorflow-lite-farmhash/Config.in
- create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmha=
-sh.hash
- create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmha=
-sh.mk
+ create mode 100644 package/tensorflow-lite-cpuinfo/Config.in
+ create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo=
+.hash
+ create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo=
+.mk
 
-diff --git a/package/tensorflow-lite-farmhash/Config.in b/package/tensorflo=
-w-lite-farmhash/Config.in
+diff --git a/package/tensorflow-lite-cpuinfo/Config.in b/package/tensorflow=
+-lite-cpuinfo/Config.in
 new file mode 100644
-index 0000000000..1a5b24b4b7
+index 0000000000..59b32a7d63
 --- /dev/null
-+++ b/package/tensorflow-lite-farmhash/Config.in
++++ b/package/tensorflow-lite-cpuinfo/Config.in
 @@ -0,0 +1,5 @@
 +# Not user-selectable, it is only needed to be copied
 +# into the tensorflow-lite source tree.
 +
-+config BR2_PACKAGE_TENSORFLOW_LITE_FARMHASH
++config BR2_PACKAGE_TENSORFLOW_LITE_CPUINFO
 +	bool
-diff --git a/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.hash=
- b/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.hash
+diff --git a/package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.hash b=
+/package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.hash
 new file mode 100644
-index 0000000000..2082fca269
+index 0000000000..d1d29ae788
 --- /dev/null
-+++ b/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.hash
++++ b/package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256  c7dfabd151ee94fe121dbc7bb2f31c6749a9ffab5e36a3d3765c34a4c75a981e  =
-tensorflow-lite-farmhash-0d859a811870-br1.tar.gz
-+sha256  4162dd091caae234f72d3b57e138174f733e736b2430a4c51b098b17d866fcb6  =
-COPYING
-diff --git a/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.mk b=
-/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.mk
++sha256  62398e57c4d71aacd80447f376a0c387278e74f9bf767d24be8860110ac9bee8  =
+tensorflow-lite-cpuinfo-5916273f79a2-br1.tar.gz
++sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  =
+LICENSE
+diff --git a/package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.mk b/p=
+ackage/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.mk
 new file mode 100644
-index 0000000000..90892dcfc1
+index 0000000000..a308f13125
 --- /dev/null
-+++ b/package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.mk
++++ b/package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.mk
 @@ -0,0 +1,14 @@
 +##########################################################################=
 ######
 +#
-+# tensorflow-lite-farmhash
++# tensorflow-lite-cpuinfo
 +#
 +##########################################################################=
 ######
 +
-+TENSORFLOW_LITE_FARMHASH_SITE_METHOD =3D git
-+TENSORFLOW_LITE_FARMHASH_SITE =3D https://github.com/google/farmhash
-+TENSORFLOW_LITE_FARMHASH_VERSION =3D 0d859a811870
-+TENSORFLOW_LITE_FARMHASH_LICENSE =3D MIT
-+TENSORFLOW_LITE_FARMHASH_LICENSE_FILES =3D COPYING
-+TENSORFLOW_LITE_FARMHASH_INSTALL_TARGET =3D NO
++TENSORFLOW_LITE_CPUINFO_SITE_METHOD =3D git
++TENSORFLOW_LITE_CPUINFO_SITE =3D https://github.com/pytorch/cpuinfo.git
++TENSORFLOW_LITE_CPUINFO_VERSION =3D 5916273f79a2
++TENSORFLOW_LITE_CPUINFO_LICENSE =3D BSD-2-Clause
++TENSORFLOW_LITE_CPUINFO_LICENSE_FILES =3D LICENSE
++TENSORFLOW_LITE_CPUINFO_INSTALL_TARGET =3D NO
 +
 +$(eval $(generic-package))
 --=20
 2.36.1
 
 
-------CD441AD9750942A95AD32FDF72DDF28E
+------2C1AAAF433536F3B65B8AA8904FAD5B4
 Content-Type: application/x-pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -359,24 +360,24 @@ EDCCAwwCAQEwfjBqMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5j
 MRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSkwJwYDVQQDEyBEaWdpQ2VydCBB
 c3N1cmVkIElEIENsaWVudCBDQSBHMgIQDGW+hPuss5Tc1j96Q5g6rTANBglghkgB
 ZQMEAgEFAKCB5DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjExMjQxNDA3MTJaMC8GCSqGSIb3DQEJBDEiBCDmhwidUa91TIGRCAMT
-6ymgw30CKo2MYml0gNfnbUCmBjB5BgkqhkiG9w0BCQ8xbDBqMAsGCWCGSAFlAwQB
+BTEPFw0yMjExMjQxNDA3MTBaMC8GCSqGSIb3DQEJBDEiBCDJSwFfTLGzi8kqMXTH
+bd3AxVSy1Yaiu2pZi1BZ6RdEezB5BgkqhkiG9w0BCQ8xbDBqMAsGCWCGSAFlAwQB
 KjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqGSIb3
 DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDAN
-BgkqhkiG9w0BAQEFAASCAYCdSEAEH8YHD3Ux438zKRTUef/3QirpT04bsxJdYO6d
-RJbOP79xYk/BQMo9H6NxmIkLwIPuYqnfc+ZJgThpG7pO9uEIR4uCFvonUgmsdHbP
-22b96MpgHnm1lQqN+yWDaps6KdPhVpJlJ/KiIJBzJCs4W+qbMifunkforwiqqKdj
-f4kbqRQDcWkW59fjVQYViw6anK1I4xWycdT1j2C7JpZUNyqw8iBYxlxL1auP9qLu
-ckrJBJou264gb3/GjZ1q6w2VNu7DW2PGQrzakpMfbldhSA9+EdJ6bXsRwxlCi4kn
-0H9bxWxHlPvZNmAfDzXwP8sVWPuhFmvdQWkDWwrVA/Lao5T9/ZuUkWOzS9NiT8N7
-mq8rzXG3IpkJxt52fp8h5iDPwahMsnkMJtID5klO2G1mGLbLGHYciVP9CtOAEhqC
-gfClLw3Kw2gU2vjuBHXkjksDaREl34hT7+mdWUOK4buvWbvnrJDIqkxXTEd6HUxp
-Kim/VX52yZym++qCoUmpI/0=
+BgkqhkiG9w0BAQEFAASCAYAI56OrBWwzctMmjhoa5VIiUSOcfzdsKMZhSlf+B6NF
+/jUuJwxKoSccSkEecdWmN7Aa4DtaeCqMzFobSi+zC3iwQfF9ku6ttU6Orw9UHT7B
+Qj8H9VHE1WBZbZ/iuDnglwt2sPmWLhHloIl6opJVQCBZUP3GWjoJ0FDaKVZgFWIO
+2GVsghkUUMMb5kjXwQRTNLV9H1c2iuB6YYekEcS/jYcjVb0BY9rRoj89iD0hAFT9
+vtOfGyd+D3l7uNHIWL7PWpZ9nl23JP4MWy2HKA+aHMMqDavnC3ephVbMDRjq7LI7
+Gnl3hpFvWPNkh3tf5ZhD+1NHyQqJgjlnYOkJxOXee77sZUte8WpQHLRN/r35+QqZ
+6F00EUlTr68OjYYz6+Y17g2iMNUap3x+hUIcPICDkqvmn+QOPTYclFHB1JtHjACp
+9cNjZ7oJ8jwidrQ4GYmu9zs/iolSmTTEAeBcFkT4ItO4nWtiWY/YYlLRFzmMMxE8
+3NNaI15sL1igia2K+D3Usd0=
 
-------CD441AD9750942A95AD32FDF72DDF28E--
+------2C1AAAF433536F3B65B8AA8904FAD5B4--
 
 
---===============0530087817359030163==
+--===============3306197071338868302==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -387,5 +388,5 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0530087817359030163==--
+--===============3306197071338868302==--
 
