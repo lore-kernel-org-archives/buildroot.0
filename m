@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A392C43219
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1577C43219
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC31941167;
-	Thu, 24 Nov 2022 21:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC31941167
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75E6041186;
+	Thu, 24 Nov 2022 21:48:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E6041186
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hvgWGJKVwqpF; Thu, 24 Nov 2022 21:48:22 +0000 (UTC)
+	with ESMTP id GGkINaaCe1Rh; Thu, 24 Nov 2022 21:48:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E10F040C36;
-	Thu, 24 Nov 2022 21:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E10F040C36
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2C3B41168;
+	Thu, 24 Nov 2022 21:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2C3B41168
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 430F61BF311
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:48:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8940B1BF311
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:48:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29C5860DFD
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:48:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29C5860DFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60E3060595
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:48:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60E3060595
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EMsBWoSDbUdH for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 21:48:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3827C60DFC
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3827C60DFC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2525E845D1; Thu, 24 Nov 2022 21:48:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 22:47:46 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f3aaa6fd2aa5ba132ba6f95a12fc463ed6f4d850
-X-Git-Newrev: e52eb61842acb4a3b8a2d4b716ba673bc972cf89
-X-Patchwork-Hint: ignore
-Message-Id: <20221124214819.2525E845D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-dicttoxml2: new
+ with ESMTP id 1cwJi9nCgzJA for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 21:48:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3029B60D6E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3029B60D6E
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:48:35 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 12DF540007;
+ Thu, 24 Nov 2022 21:48:32 +0000 (UTC)
+Date: Thu, 24 Nov 2022 22:48:31 +0100
+To: yegorslists--- via buildroot <buildroot@buildroot.org>
+Message-ID: <20221124224831.17cae90e@windsurf>
+In-Reply-To: <20221123103022.17397-1-yegorslists@googlemail.com>
+References: <20221123103022.17397-1-yegorslists@googlemail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669326513;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=D3cL4dENOprhFeXWWzjfDewYpzYDdeenId01bCZohUM=;
+ b=UmvhMheAgaef4LXkpgQlxAtfdykHyPVL2Cv3p3sp9YSpZO3rgG8H0dPRZDJLs7lwM2s4qs
+ MiWxSWz7+hrapVub0PSmDj5edii0vMa8/BL4IMFGCC6X8/tEr/KSR5S2gt4vSBFz5htrti
+ 1FjKyMSUD+eskSGyLOEDay4DdToKa0wvMjAH2fFsGpS2DBShRNQP64+O9uriD+6xUQAl+v
+ NFnxp+VZG3HDrC7gUUFE+hp89t0kH7ERHXzDasUdCNkiOaYVXl4i7Gpc4BAi98eRbbcRdM
+ xXOuYUgLZOvuLu2Wph8kNifu7sARwlejH+lHUSW67RawKoiI44aK6LTHXDjiZw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UmvhMheA
+Subject: Re: [Buildroot] [PATCH branch/next] package/python-dicttoxml2: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,83 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e52eb61842acb4a3b8a2d4b716ba673bc972cf89
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed, 23 Nov 2022 11:30:22 +0100
+yegorslists--- via buildroot <buildroot@buildroot.org> wrote:
 
-Add a maintained fork instead of the abandoned dicttoxml.
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Add a maintained fork instead of the abandoned dicttoxml.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                                |  1 +
+>  package/python-dicttoxml2/Config.in              |  8 ++++++++
+>  package/python-dicttoxml2/python-dicttoxml2.hash |  5 +++++
+>  package/python-dicttoxml2/python-dicttoxml2.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-dicttoxml2/Config.in
+>  create mode 100644 package/python-dicttoxml2/python-dicttoxml2.hash
+>  create mode 100644 package/python-dicttoxml2/python-dicttoxml2.mk
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                                |  1 +
- package/python-dicttoxml2/Config.in              |  8 ++++++++
- package/python-dicttoxml2/python-dicttoxml2.hash |  5 +++++
- package/python-dicttoxml2/python-dicttoxml2.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
+Applied to next, thanks.
 
-diff --git a/package/Config.in b/package/Config.in
-index cafd3b338c..7d227f8112 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1021,6 +1021,7 @@ menu "External python modules"
- 	source "package/python-defusedxml/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
-+	source "package/python-dicttoxml2/Config.in"
- 	source "package/python-distro/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-diff --git a/package/python-dicttoxml2/Config.in b/package/python-dicttoxml2/Config.in
-new file mode 100644
-index 0000000000..0bd8068dd6
---- /dev/null
-+++ b/package/python-dicttoxml2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_DICTTOXML2
-+	bool "python-dicttoxml2"
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	help
-+	  Converts a Python dictionary or other native data type into
-+	  a valid XML string.
-+
-+	  https://github.com/Ousret/dicttoxml
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.hash b/package/python-dicttoxml2/python-dicttoxml2.hash
-new file mode 100644
-index 0000000000..7f584cc000
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dicttoxml2/json
-+md5  787ea4b80cd6234a41c016e8efa7ff40  dicttoxml2-2.1.0.tar.gz
-+sha256  67cb729f337dd752808c021b70c8df8a34f84b9e111a5dbaa37e000eeaf4d462  dicttoxml2-2.1.0.tar.gz
-+# Locally computed
-+sha256 4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.mk b/package/python-dicttoxml2/python-dicttoxml2.mk
-new file mode 100644
-index 0000000000..d2abe63860
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-dicttoxml2
-+#
-+################################################################################
-+
-+PYTHON_DICTTOXML2_VERSION = 2.1.0
-+PYTHON_DICTTOXML2_SOURCE = dicttoxml2-$(PYTHON_DICTTOXML2_VERSION).tar.gz
-+PYTHON_DICTTOXML2_SITE = https://files.pythonhosted.org/packages/0b/24/7a6d37b2770843e34685e470fd711955cb0f77c354c73d8ca64b02420bce
-+PYTHON_DICTTOXML2_SETUP_TYPE = setuptools
-+PYTHON_DICTTOXML2_LICENSE = GPL-2.0
-+PYTHON_DICTTOXML2_LICENSE_FILES = LICENCE.txt
-+
-+$(eval $(python-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
