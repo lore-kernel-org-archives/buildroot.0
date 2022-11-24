@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC7FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA53C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC31342D60;
-	Mon, 20 Feb 2023 21:22:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC31342D60
+	by smtp4.osuosl.org (Postfix) with ESMTP id 632EA42B00;
+	Mon, 20 Feb 2023 21:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 632EA42B00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x-NMMVHVe24R; Mon, 20 Feb 2023 21:22:49 +0000 (UTC)
+	with ESMTP id V_l9qR_bwFw0; Mon, 20 Feb 2023 21:23:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B26E42D5E;
-	Mon, 20 Feb 2023 21:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B26E42D5E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 160EC1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29F4D42D70;
+	Mon, 20 Feb 2023 21:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F4D42D70
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C9251BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18EC2610CB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18EC2610CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0553E4159B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0553E4159B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S69W9PO5s5hs for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u61BabFuti5G for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A85C6106F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A85C6106F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AFB14156D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AFB14156D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3920686494; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 1468A8648F; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 17 Nov 2022 15:15:54 +0100
+Date: Thu, 24 Nov 2022 13:15:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bc9b716296f37e0e3e47fd34c8991e92b6baeebd
-X-Git-Newrev: 4d46f51064e4611142c723ad080d01ed6095af2a
+X-Git-Oldrev: e3959a039059d6b3bc95100409975e87e9c14d3b
+X-Git-Newrev: a11b36089b34dcf0c1b90835a436f50efec3d8fb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205151.3920686494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Update for 2022.02.7
+Message-Id: <20230220205153.1468A8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swupdate: add
+ libubootenv as optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,63 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d46f51064e4611142c723ad080d01ed6095af2a
+commit: https://git.buildroot.net/buildroot/commit/?id=a11b36089b34dcf0c1b90835a436f50efec3d8fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d036dc6ec873f50a24e73d8dbdafecb3b4098909)
-[Peter: drop Makefile/Vagrantfile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+If the swupdate configuration contains CONFIG_UBOOT=y it uses
+libubootenv to access the U-Boot environment.
 
-diff --git a/CHANGES b/CHANGES
-index b856f16179..d08b2500ab 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -479,6 +479,41 @@
- 	#14731: BR2_PACKAGE_IOSTAT
- 	#14751: LVM2 Outdated Link
+We don't have Buildroot config options for all the different optional
+dependencies of swupdate, instead we rely on the user to select the
+appropriate packages and simply add the dependency in the .mk file. Do
+this for libubootenv as well. swupdate doesn't have anything like
+HAVE_LIBUBOOTENV, it just assumes libubootenv is available.
+
+Fixes:
+bootloader/uboot.c:23:10: fatal error: libuboot.h: No such file or directory
+   23 | #include <libuboot.h>
+
+Note that libubootenv is normally built before swupdate (alphabetical
+ordering), so the error only occrus with BR2_PER_PACKAGE_DIRECTORIES or
+when building swupdate directly.
+
+Note that the autobuilders don't have this error, because they only
+build swupdate with a default configuration that doesn't have U-Boot
+support.
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/swupdate/swupdate.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index bfc161d490..ed0c1e56a8 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -81,6 +81,10 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
+ endif
  
-+2022.02.7, released November 17th, 2022
++ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
++SWUPDATE_DEPENDENCIES += libubootenv
++endif
 +
-+	Important / security related fixes.
-+
-+	Defconfig: Pine64: Change to mainline ATF to fix build
-+	issue, Zynqmp zcu102 / zcu106: Fix pmufw reset issue
-+
-+	Updated/fixed packages: arm-trusted-firmware, bind, botan,
-+	collectd, darkhttpd, dbus, dhcp, dnsmasq, docker-cli,
-+	docker-engine, exfatprogs, expat, f2fs-tools, faad2, ffmpeg,
-+	freerdp, gnutls, go, gpsd, grub2, gsl, gst-omx, gst1-devtools,
-+	gst1-libav, gst1-plugins-bad, gst1-plugins-base,
-+	gst1-plugins-good, gst1-plugins-ugly, gst1-python,
-+	gst1-rtsp-server, gst1-vaapi, gstreamer1,
-+	gstreamer1-editing-services, hdparm, hostapd, imagemagick,
-+	iwd, jack2, libbpf, libcurl, libfribi, libidn2, libinput,
-+	libmdbx, libopenssl, libosip2, libpng, libtasn1,
-+	libtorrent-rasterbar, libuhttpd, libvncserver, libxml2, linux,
-+	linux-tools, lldpd, lrzip, lz4, matchbox-startup-monitor,
-+	msmtp, multipath-tools, mupdf, musl, mv-ddr-marvell, mxml,
-+	nodejs, ntfs-3g, numactl, openvmtools, oracle-mysql,
-+	paho-mqtt-c, perl-net-ssleay, php, pixman, poppler, procps-ng,
-+	python-django, python3, qdecoder, rpi-userland, rsync,
-+	rtl8189es, rtl8189fs, rtl8723bu, rtl8812au-aircrack-ng,
-+	rtl8821au, rtl_433, samba4, shapelib, socat, squid, sqlite,
-+	squashfs, strongswan, sudo, swupdate, timescaledb, u-boot,
-+	uclibc-ng-test, udisks, uftp, uhd, umtprd, vim, wavemon,
-+	wireguard-linux-compat, wolfssl, wpa_supplicant, wpewebkit,
-+	zlib-ng, zsh
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15026: package/udisks: install to staging
-+	#15061: Node.js Package fails to build against musl i386
-+
- 2022.02.6, released October 2nd, 2022
- 
- 	Important / security related fixes.
+ ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
+ SWUPDATE_DEPENDENCIES += liburiparser
+ SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
