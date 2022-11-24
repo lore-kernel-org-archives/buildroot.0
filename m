@@ -4,47 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37FD1C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 16:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE28C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 16:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B0C741BE5;
-	Thu, 24 Nov 2022 16:47:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B0C741BE5
+	by smtp4.osuosl.org (Postfix) with ESMTP id A46A341C14;
+	Thu, 24 Nov 2022 16:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A46A341C14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cy6FnKvehYUB; Thu, 24 Nov 2022 16:47:34 +0000 (UTC)
+	with ESMTP id Vuo_clgQB4am; Thu, 24 Nov 2022 16:52:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35F4341BF7;
-	Thu, 24 Nov 2022 16:47:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35F4341BF7
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0CD841BFB;
+	Thu, 24 Nov 2022 16:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0CD841BFB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 85FD91BF2AB
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 16:47:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F7091BF2AB
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 16:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6131A4012D
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 16:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6131A4012D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AA684012D
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 16:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AA684012D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0CLSPEET3jjk for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 16:47:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55445400D8
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 16:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55445400D8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4154684557; Thu, 24 Nov 2022 16:47:30 +0000 (UTC)
+ with ESMTP id AeRfVCZxPYOk for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 16:52:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 159DE400D8
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 159DE400D8
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 16:52:29 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 71B8EC0007
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 16:52:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1oyFSb-000ldQ-F9
+ for buildroot@buildroot.org; Thu, 24 Nov 2022 17:52:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 17:47:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f93c47fad847219e2d748570484ca800faa9d4eb
-X-Git-Newrev: 269c1e9368e5473fa0dc117ff6b020143c014c8b
-X-Patchwork-Hint: ignore
-Message-Id: <20221124164730.4154684557@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.11-rc3
+Date: Thu, 24 Nov 2022 17:52:25 +0100
+Message-ID: <87zgcgfg6u.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: [Buildroot] Buildroot 2022.11-rc3 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,146 +60,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=269c1e9368e5473fa0dc117ff6b020143c014c8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 15 +++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 47 insertions(+), 11 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index d08b2500ab..79b010a9b8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,18 @@
-+2022.11-rc3, released November 24th, 2022
-+
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: asterisk, edk2, edk2-platforms,
-+	freerdp, gitlab-runner, gnupg2, gptfdisk, heimdal,
-+	igh-ethercat, iwd, libkrb5, libksba, libnss, libopenssl,
-+	mesa3d, nginx, nodejs, openpgm, python3, rsync, rtl8189es,
-+	rtl8723ds, samba4, sdl, sdl2, swupdate, sysstat, systemd,
-+	uboot, xen, xterm
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15141: kernel 5.16.2 (realtime patch 19) fails to build
-+
- 2022.11-rc2, released November 16th, 2022
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index b2f342f4a8..827ab230ef 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.11-rc2
-+export BR2_VERSION := 2022.11-rc3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1668603000
-+BR2_VERSION_EPOCH = 1669308000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 538f2f6042..a92f630611 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -76,37 +76,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc2</b></h3>
-+      <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.11-rc2.tar.gz">buildroot-2022.11-rc2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.11-rc2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.11-rc3.tar.gz">buildroot-2022.11-rc3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.11-rc3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.11-rc2.tar.xz">buildroot-2022.11-rc2.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.11-rc2.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.11-rc3.tar.xz">buildroot-2022.11-rc3.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.11-rc3.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ee7ce344c9..1d76cc3cf5 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.11-rc3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 November 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>2022.11-rc3 has been released with more cleanups and build fixes. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11-rc3">CHANGES</a>
-+	  file for details.</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.11-rc3.tar.xz">2022.11-rc3
-+	  release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyMi4xMS1yYzMgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHA6Ly9idWlsZHJvb3QubmV0L2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyMi4xMS1yYzMu
+dGFyLmd6CgpvcgoKaHR0cDovL2J1aWxkcm9vdC5uZXQvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIy
+LjExLXJjMy50YXIueHoKCk9yIGdldCBpdCBmcm9tIEdpdDoKCmdpdDovL2dpdC5idWlsZHJvb3Qu
+bmV0L2J1aWxkcm9vdAoKQW5vdGhlciB3ZWVrLCBhbm90aGVyIHJlbGVhc2UgY2FuZGlkYXRlLgoK
+UGxlYXNlIGdpdmUgaXQgYSBzcGluIGFuZCByZXBvcnQgYW55IHByb2JsZW1zIHRvIHRoZSBtYWls
+aW5nIGxpc3Qgb3IKYnVnIHRyYWNrZXIuIE1hbnkgdGhhbmtzIHRvIHRoZSBwZW9wbGUgY29udHJp
+YnV0aW5nIHRvIHRoaXMgcmVsZWFzZToKCmdpdCBzaG9ydGxvZyAtc24gMjAyMi4xMS1yYzIuLgoK
+ICAgIDE2ICBQZXRlciBLb3JzZ2FhcmQKICAgICA1ICBGYWJyaWNlIEZvbnRhaW5lCiAgICAgNCAg
+VmluY2VudCBTdGVobMOpCiAgICAgMyAgR2l1bGlvIEJlbmV0dGkKICAgICAzICBNaWNoYWVsIEZp
+c2NoZXIKICAgICAyICBUaG9tYXMgUGV0YXp6b25pCiAgICAgMiAgWWFubiBFLiBNT1JJTgogICAg
+IDEgIEFsZXhhbmRlciBMdWtpY2hldgogICAgIDEgIEJlcm5kIEt1aGxzCiAgICAgMSAgQnJhbmRv
+biBNYWllcgogICAgIDEgIEphbWVzIEhpbGxpYXJkCiAgICAgMSAgTWFyZWsgTWV0ZWxza2kKICAg
+ICAxICBNaWNoYWVsIE5vc3Rob2ZmCiAgICAgMSAgTWlxdWVsIFJheW5hbAogICAgIDEgIFllZ29y
+IFllZnJlbW92CgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENIQU5HRVMgZmlsZToKCmh0dHA6
+Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvcGxhaW4vQ0hBTkdFUz9pZD0yMDIyLjExLXJj
+MwoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
