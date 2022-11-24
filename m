@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 902ABC43219
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD8DC43219
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14B01607F0;
-	Thu, 24 Nov 2022 21:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14B01607F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BC2940017;
+	Thu, 24 Nov 2022 21:16:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BC2940017
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FUYtTH-Oi7hO; Thu, 24 Nov 2022 21:03:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yxinSaMBAZR2; Thu, 24 Nov 2022 21:16:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC9560B3B;
-	Thu, 24 Nov 2022 21:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EC9560B3B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8249840610;
+	Thu, 24 Nov 2022 21:16:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8249840610
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD0211BF29D
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:03:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3DEF81BF311
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:16:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9438381250
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:03:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9438381250
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0309882235
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:16:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0309882235
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eyaKXaxbteDZ for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 21:03:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8321381025
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8321381025
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:03:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.243.59])
- by smtp6-g21.free.fr (Postfix) with ESMTP id 95D0F7802FE;
- Thu, 24 Nov 2022 22:03:28 +0100 (CET)
-Received: from [37.171.166.93]
-	by webmail.free.fr
+ with ESMTP id hDh7snyqo8lq for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 21:16:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36A408222F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 36A408222F
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:16:00 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1063E1C0006;
+ Thu, 24 Nov 2022 21:15:57 +0000 (UTC)
+Date: Thu, 24 Nov 2022 22:15:57 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221124221557.4a18a2a9@windsurf>
+In-Reply-To: <20221124102144.16833-1-neal.frager@amd.com>
+References: <20221124102144.16833-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Thu, 24 Nov 2022 22:03:28 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20221123153710.71a2056b@windsurf>
-References: <20221122215557.789750-1-ju.o@free.fr>
- <20221122215912.824599-1-ju.o@free.fr> <20221123153710.71a2056b@windsurf>
-Message-ID: <b400af36b443666a96c66df555135675@free.fr>
-X-Sender: ju.o@free.fr
-User-Agent: Webmail Free/1.3.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1669323808;
- bh=keaQRe8Fp7qtM91WEmL1kJwze5anFL+8j640QwyFCA4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SyfyF7zPCnDtbCBiVq1k/XcO/9eQNF+UfreeENawBlFc6+oIzewnSehy3G3xKX7fR
- b4EvcxK7h4TFJ8HYoNDbrPniPStLITRoCH6CiRTGxRjL6lFqkFFM40qafPkpnS5gci
- LMtPKM+suV81EjDaR040IhkB9r6EmkTiEYpNqja+NRAU46/j4qZYONFGymW5mZYREE
- u0VzsHoSFs51S7GQ85zrJM3GBlyOE+EvvM1ihF/jCVO23Q2mnW+ZPeDPdDX2tDOG6n
- E1oOKMITBA/HLn7eYSWVjQ0CLJMry2NdILxeEZK1moGxVUjtDX0fghx738O5E3vPDf
- ktRshSuc59nXg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669324558;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=k/g30/k5JMSX1yP6stXqbkqyBA+yrDImcgDm2+GdHXM=;
+ b=ME86V0oPvXzwGLHg0TVdkI2tWVBYYsK/FRHAFaU4+udScLOayfRRVsh17rLa0mqs0qbpf6
+ VuER0by5Ydj3TfMDQw2P7NevIQueRI/UQNDhGX+s3ZBfrgaEdngGl1+Mj6uie+tyCzizsM
+ cSdRIeLvFsFSK1rmeNut3s+lsdxIHiP2GmzNQ9HEeq4g0S+YGF2/WpVwbn0DkKWJ44dgZo
+ 2DN1N9gQqnvnZOjUScwfkwA32otpy38oOyiHlIlPkGHS/77dr3cxJjm1+1ZMZT1lkL7MsD
+ g+jiVOe2YsWPMjOKLQCT4AREGGQWN3X4y3W6ag5JnU2BXB8YpFx9NTkUHNLY3g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SyfyF7zP
-Subject: Re: [Buildroot] [PATCH next 2/2] package/libjxl: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ME86V0oP
+Subject: Re: [Buildroot] [PATCH v6 1/2] package/versal-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,71 +75,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: michal.simek@amd.com, kris.chaplin@amd.com, terry.oneal@amd.com,
+ luca.ceresoli@bootlin.com, Neal Frager via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+On Thu, 24 Nov 2022 03:21:43 -0700
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-On 23/11/2022 15:37, Thomas Petazzoni wrote:
-> Hello Julien,
+> This patch adds support for downloading versal microblaze firmware binaries.
+> These are necessary for booting Xilinx versal devices.
 > 
-> On Tue, 22 Nov 2022 22:59:12 +0100
-> Julien Olivain <ju.o@free.fr> wrote:
+> The location of these binaries is temporary, and will soon be added to the
+> Xilinx firmware repository.  The temporary location is using the same free
+> distribution license as the Xilinx firmware repository.
 > 
->> diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
->> new file mode 100644
->> index 0000000000..456305083c
->> --- /dev/null
->> +++ b/package/libjxl/Config.in
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_LIBJXL
->> +	bool "libjxl"
->> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # highway
->> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC # highway
->> +	depends on BR2_INSTALL_LIBSTDCPP # highway
->> +	depends on BR2_PACKAGE_HIGHWAY_ARCH_SUPPORTS
->> +	select BR2_PACKAGE_BROTLI
->> +	select BR2_PACKAGE_HIGHWAY
->> +	select BR2_PACKAGE_LCMS2
->> +	help
->> +	  libjxl is the reference implementation of JPEG XL (encoder
->> +	  and decoder).
->> +
->> +	  https://github.com/libjxl/libjxl
+> Once these files are available on the Xilinx repository, this package will
+> be updated to the new location.
 > 
-> Missing:
-> 
-> comment "libjxl needs a toolchain with C++, gcc >= 7"
-> 	depends on ...
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Thanks!  I'll add it and send an updated version of the patch.
+I wanted to apply this... but there is a serious licensing issue I
+believe, see below.
 
->> +LIBJXL_DEPENDENCIES = \
->> +	brotli \
->> +	lcms2 \
->> +	highway
->> +
->> +LIBJXL_CONF_OPTS = \
->> +	-DJPEGXL_BUNDLE_LIBPNG=OFF \
-> 
-> So which libpng gets used? None?
 
-libpng is in fact an optional dependency. This means if libpng is
-enabled in Buildroot, it will be used. Otherwise, if not present,
-no version will be used. It is indeed missing here and need to be
-added only if BR2_PACKAGE_LIBPNG=y. I'll add it in the
-updated version of the patch.
+> diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
+> new file mode 100644
+> index 0000000000..122ef02175
+> --- /dev/null
+> +++ b/package/versal-firmware/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_VERSAL_FIRMWARE
+> +	bool "versal-firmware"
+> +	depends on BR2_aarch64
+> +	help
+> +	  Pre-built firmware files for Xilinx Versal boards.
+> +
+> +	  https://github.com/nealfrager/buildroot-firmware
+> +
+> +if BR2_PACKAGE_VERSAL_FIRMWARE
+> +
+> +config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
+> +	string "versal firmware version"
 
-> Thanks!
-> 
-> Thomas
+Drop "versal" here: this option appears indented under
+"versal-firmware", so repeating "versal" is not needed.
+
+> +	default v2022.2
+
+Quotes around v2022.2
+
+> +config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
+> +	string "versal board name"
+> +	default vck190
+
+Same comments here.
+
+> +	help
+> +	  Name of Versal target board.
+> +	  Used for installing the appropriate firmware boot.bin.
+> +
+> +endif # BR2_PACKAGE_VERSAL_FIRMWARE
+> diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
+> new file mode 100644
+> index 0000000000..cb36d1e045
+> --- /dev/null
+> +++ b/package/versal-firmware/versal-firmware.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# versal-firmware
+> +#
+> +################################################################################
+> +
+> +VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
+> +VERSAL_FIRMWARE_SITE = $(call github,nealfrager,buildroot-firmware,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
+
+Use $(VERSAL_FIRMWARE_VERSION) here
+
+> +VERSAL_FIRMWARE_LICENSE = "Xilinx-Binary-Only or GPL-2.0-or-later"
+> +
+> +VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
+
+I really don't understand how this repository code can be under
+GPL-2.0-or-later. The GPL implies that source code is available as the
+GPL explicitly states that the software should be provided under its
+"preferred form of modification", which a closed source binary
+definitely is not.
+
+So when the LICENSE file says:
+
+COPYRIGHT TEXT:
+---------------
+
+The files distributed with this project are provided in binary form under the following free and
+permissive binary-only license; source files are not provided.  While the following free and 
+permissive license is similar to the MIT open source license, this it is NOT the MIT open source 
+license or any other OSI-approved open-source license.
+
+Copyright (c) 2022 Xilinx, Inc
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject 
+to the following conditions: 
+
+The above copyright notice and this permission notice shall be included in all copies or substantial 
+portions of the Software. 
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT 
+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Files:
+kv260/kv260_pmufw.elf
+zcu102/zcu102_pmufw.elf
+zcu106/zcu106_pmufw.elf
+vck190/vck190_plm.elf
+vck190/vck190_psmfw.elf
+vck190/vck190_vpl_gen_fixed.pdi
+
+---------------------------------------------------------------------------------------------------
+
+COPYRIGHT TEXT:
+---------------
+Copyright (C) 2010 - 2022 <Xilinx, Inc> This program is free software; you can
+redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version. This program is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details. You should have received a copy of
+the GNU General Public License along with this program; if not, see
+<http://www.gnu.org/licenses/>
+
+SPDX-License-Identifier: GPL-2.0 /
+
+Files: 
+kv260/kv260_pmufw.elf
+zcu102/zcu102_pmufw.elf
+zcu106/zcu106_pmufw.elf
+vck190/vck190_plm.elf
+vck190/vck190_psmfw.elf
+vck190/vck190_vpl_gen_fixed.pdi
+
+The first part somewhat makes sense, but the second part certainly does
+not make sense. If those binary files contain GPLv2 code, providing
+only the binaries is a violation of the GPL.
+
+So I'm sorry, but this needs to be fixed up before we can consider
+applying this package.
 
 Best regards,
 
-Julien.
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
