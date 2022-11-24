@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 068CCC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 766A2C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:23:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A214642A77;
-	Mon, 20 Feb 2023 21:23:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A214642A77
+	by smtp4.osuosl.org (Postfix) with ESMTP id 289E242A80;
+	Mon, 20 Feb 2023 21:23:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 289E242A80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LHEKdlLXPCoM; Mon, 20 Feb 2023 21:23:44 +0000 (UTC)
+	with ESMTP id GzEIu6u_6ZgZ; Mon, 20 Feb 2023 21:23:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7C242D9A;
-	Mon, 20 Feb 2023 21:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7C242D9A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64B891BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BE8D42AE5;
+	Mon, 20 Feb 2023 21:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BE8D42AE5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 118061BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FAAC41947
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FAAC41947
+ by smtp2.osuosl.org (Postfix) with ESMTP id 218BA40C13
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 218BA40C13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YP9QqCPr6bvM for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2QTW51pi2E-E for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5096E4192D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5096E4192D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4754540C14
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4754540C14
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D4CF86497; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+ id 382D48648F; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 22:03:14 +0100
+Date: Thu, 24 Nov 2022 15:36:04 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 33c89f98377cb968b03eb1428af8a74eba9d13ce
-X-Git-Newrev: c93db6789b1afaba27703baf9d323bcb06e6430e
+X-Git-Oldrev: 45bb69c2bdee44346d6be5b58e46b2278e40a04a
+X-Git-Newrev: f93c47fad847219e2d748570484ca800faa9d4eb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.3D4CF86497@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/luaposix: bump to
- version 36.0
+Message-Id: <20230220205153.382D48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libkrb5: security bump
+ to version 1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,51 +57,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c93db6789b1afaba27703baf9d323bcb06e6430e
+commit: https://git.buildroot.net/buildroot/commit/?id=f93c47fad847219e2d748570484ca800faa9d4eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff LICENSE:
--Copyright (C) 2006-2021 luaposix authors
-+Copyright (C) 2006-2023 luaposix authors
+Fixes the following security issue:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CVE-2022-42898: In MIT krb5 releases 1.8 and later, an authenticated
+attacker may be able to cause a KDC or kadmind process to crash by reading
+beyond the bounds of allocated memory, creating a denial of service.  A
+privileged attacker may similarly be able to cause a Kerberos or GSS
+application service to crash.  On 32-bit platforms, an attacker can also
+cause insufficient memory to be allocated for the result, potentially
+leading to remote code execution in a KDC, kadmind, or GSS or Kerberos
+application server process.  An attacker with the privileges of a
+cross-realm KDC may be able to extract secrets from a KDC process's memory
+by having them copied into the PAC of a new ticket.
+
+Bugfix tarballs are located in the same directory as the base version, so
+introduce LIBKRB5_VERSION_MAJOR.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/luaposix/luaposix.hash | 4 ++--
- package/luaposix/luaposix.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libkrb5/libkrb5.hash | 2 +-
+ package/libkrb5/libkrb5.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index ee76ea103d..fc0b5fa747 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1b5c48d2abd59de0738d1fc1e6204e44979ad2a1a26e8e22a2d6215dd502c797  luaposix-35.1.tar.gz
--sha256  f50bc0f3197523b1709f31707425f2de95f8a45534b081a6b564179ab059e850  LICENSE
-+sha256  e0fcb4996f76aa49ae3e5edf69978171091e3d69d5de5589d591d227f8a427c1  luaposix-36.0.tar.gz
-+sha256  ea0fdaae50b0d31a81c2c99f4354264783c71043fd40522feaa40eecc069599b  LICENSE
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index fa26709154..1a537defc4 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 2fce24b45b..94dfa2ed6e 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  7e022bdd3c851830173f9faaa006a230a0e0fdad4c953e85bff4bf0da036e12f  krb5-1.20.tar.gz
++sha256  704aed49b19eb5a7178b34b2873620ec299db08752d6a8574f95d41879ab8851  krb5-1.20.1.tar.gz
+ 
+ # Hash for license file:
+ sha256  cfadcf7b2ead2f3af793c25c00638c9908ac0023b101695f40cb9a03b16811dc  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 5e547470ed..9bacfaee58 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--LUAPOSIX_VERSION = 35.1
-+LUAPOSIX_VERSION = 36.0
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
+-LIBKRB5_VERSION = 1.20
+-LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION)
++LIBKRB5_VERSION_MAJOR = 1.20
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
++LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
+ LIBKRB5_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
