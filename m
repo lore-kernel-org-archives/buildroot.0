@@ -1,85 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C29E1C43219
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 19:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1025AC43219
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 20:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1690C60C24;
-	Thu, 24 Nov 2022 19:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1690C60C24
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5000281455;
+	Thu, 24 Nov 2022 20:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5000281455
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jbEm3avnY8TE; Thu, 24 Nov 2022 19:00:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u10rnZndxFjK; Thu, 24 Nov 2022 20:29:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 392DF60BE7;
-	Thu, 24 Nov 2022 19:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 392DF60BE7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77A1981442;
+	Thu, 24 Nov 2022 20:29:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A1981442
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE5F81BF375
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 19:00:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A53811BF29D
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 20:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9CD660BE7
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 19:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9CD660BE7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A31660D89
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 20:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A31660D89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zInEVWs3XYiA for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 19:00:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09D2160B8A
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
- [IPv6:2607:f8b0:4864:20::102e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 09D2160B8A
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 19:00:14 +0000 (UTC)
-Received: by mail-pj1-x102e.google.com with SMTP id
- k2-20020a17090a4c8200b002187cce2f92so5815021pjh.2
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 11:00:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=A16uyzyu+5mvwW5kHMCd03YOtnljOTTt9VfCrnY9JnA=;
- b=N7K7/AQTmxEgAQmzw+ekURfnN2v8Os77uDDTNzKmVhw1ErfgcaFdgw7uv7C+Ko3L1l
- MIpKTRL8NTVUuwy+u+RbkaOU96N4V8l3ToixtBkId8pbu60MV/YCLf7HzVJ4VR1xBxrO
- y7fRq3fb4ruJwzm1GHznBOthAIjGFyMEB38AvZ5Cxb7EXPaKOM3UIZV+MAb8Au6PjfT7
- uDXQWpPM2iLqSEtMgCLzihZPEXKziHoVHGZl4yJ3BOJYVS0Q2MDIhoA7kIl31pSbsqFt
- scyWwaN6Rvl4PRS4X019ClMDRkux6dvbRm5E0BlU0GIWiI8SY2LqkACPmJIv/f8eX5r4
- wFqA==
-X-Gm-Message-State: ANoB5pkWCfNVOCahnHDcNioMKrmtpA3FjCqaNsfEHw+Yv50S4T1Tq3OY
- kmau+zT95gzhdwPVvMwYLavGNw2sB6s0dFnth3eoO56J
-X-Google-Smtp-Source: AA0mqf7lIB69HWo7MnmE2jAM3aCpHqqQu1+DEboRkv27H+Fmbp3OilLVUCDjBTwvlkTz5hy2mGXbWJ+6ZGY7C8n5gHQ=
-X-Received: by 2002:a17:902:ab46:b0:186:8502:cde5 with SMTP id
- ij6-20020a170902ab4600b001868502cde5mr16709202plb.121.1669316414320; Thu, 24
- Nov 2022 11:00:14 -0800 (PST)
-MIME-Version: 1.0
-References: <mailman.9442.1669275362.179200.buildroot@buildroot.org>
- <cd5a955627dfcf09eefb5e58c355bd4b@umbiko.net>
-In-Reply-To: <cd5a955627dfcf09eefb5e58c355bd4b@umbiko.net>
-From: Charles Lohr <lohr85@gmail.com>
-Date: Thu, 24 Nov 2022 11:00:03 -0800
-Message-ID: <CAGu26P-uy3k2p4zsSPJawoqii3gRVW2ZVppdj7HbfET8cPftGg@mail.gmail.com>
-To: Andreas Ziegler <br015@umbiko.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=A16uyzyu+5mvwW5kHMCd03YOtnljOTTt9VfCrnY9JnA=;
- b=pAU9vmODj0lXT/7WYXBnQjoERvoaaMI+K5z0/l7Fh0BhEAqGfjjkEwi5ME11Mio59D
- hkiaBFAg/DymfHyrH7EnFb4IMVqNHIOsvKC2DAUrz/AJzr1EPP1rg2B99x7flzZOAvs+
- ZfoDEAIsNSuVHnLToSFxOpgtpUZqpZXYsUBWKEesWKSKSlsOxkpBCFQy37gUXjMbnMjQ
- VhqtEBXpqFsAYbOi7IJC5ax30wQX85qtMfaqG3RPXk01uVWccLqhRLyEa8mm7sFErB9n
- 2f0zIK8CsPxqOY3wFVVYHbZf3sbUWaL+P/3qmq78o9eYOyNI601m4Hfg46hFlCoXR9yj
- /r9Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pAU9vmOD
-Subject: Re: [Buildroot] CPIO Kernel Image Build Order for initramfs
+ with ESMTP id hxl0fq-MewHe for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 20:28:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D27260BDB
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 20:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D27260BDB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 899E184568; Thu, 24 Nov 2022 20:28:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Nov 2022 21:28:45 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: fb449c72cd6a2983e1d9ebffcd6b0f87fbe7df96
+X-Git-Newrev: 338375d88de1baae5e3a178813f53334a891656b
+X-Patchwork-Hint: ignore
+Message-Id: <20221124202857.899E184568@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dropbear: bump to
+ version 2022.83
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,120 +56,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============3630977643300342341=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3630977643300342341==
-Content-Type: multipart/alternative; boundary="000000000000e4b72205ee3c03bd"
+commit: https://git.buildroot.net/buildroot/commit/?id=338375d88de1baae5e3a178813f53334a891656b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
---000000000000e4b72205ee3c03bd
-Content-Type: text/plain; charset="UTF-8"
+DROPBEAR_DSS is now disabled by default. Enable only when
+BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO is enabled.
 
-Thank you!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-On Thu, Nov 24, 2022, 04:00 Andreas Ziegler <br015@umbiko.net> wrote:
-
-> Hi Charles,
->
-> On 2022-11-21 06:26, Charles Lohr <lohr85@gmail.com> wrote:
-> > (Forgive me if this list isn't for questions, please direct me to the
-> > right
-> > place. This is my first message to the list)
-> >
-> > I want to build full executable images, with the rootfs built into the
-> > kernel without compression, so I'm using CPIO.  But, buildroot doesn't
-> > seem
-> > to like this when starting from a clean slate.
->
-> You can enable this under 'Filesystem images' -> 'Initial RAM filesystem
-> linked into Linux kernel' (BR2_TARGET_ROOTFS_INITRAMFS). This will
-> execute the steps you now perform manually.
->
-> > It wants to build the kernel before the image, but if I do that, I get
-> > this
-> > error.
-> >
-> > make[4]: *** No rule to make target '../../images/rootfs.cpio', needed
-> > by
-> > 'usr/initramfs_inc_data'.  Stop.
-> >
-> > Right now, my process is: touch an empty images/rootfs.cpio file,
-> > compile,
-> > touch the kernel config, recompile and this works but it's yucky.
-> >
-> > What is the "right" answer?
-> >
-> > Charles
->
-> Kind regards,
-> Andreas
->
-
---000000000000e4b72205ee3c03bd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Thank you!</div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">On Thu, Nov 24, 2022, 04:00 Andreas Ziegler &=
-lt;<a href=3D"mailto:br015@umbiko.net">br015@umbiko.net</a>&gt; wrote:<br><=
-/div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-le=
-ft:1px #ccc solid;padding-left:1ex">Hi Charles,<br>
-<br>
-On 2022-11-21 06:26, Charles Lohr &lt;<a href=3D"mailto:lohr85@gmail.com" t=
-arget=3D"_blank" rel=3D"noreferrer">lohr85@gmail.com</a>&gt; wrote:<br>
-&gt; (Forgive me if this list isn&#39;t for questions, please direct me to =
-the <br>
-&gt; right<br>
-&gt; place. This is my first message to the list)<br>
-&gt; <br>
-&gt; I want to build full executable images, with the rootfs built into the=
-<br>
-&gt; kernel without compression, so I&#39;m using CPIO.=C2=A0 But, buildroo=
-t doesn&#39;t <br>
-&gt; seem<br>
-&gt; to like this when starting from a clean slate.<br>
-<br>
-You can enable this under &#39;Filesystem images&#39; -&gt; &#39;Initial RA=
-M filesystem <br>
-linked into Linux kernel&#39; (BR2_TARGET_ROOTFS_INITRAMFS). This will <br>
-execute the steps you now perform manually.<br>
-<br>
-&gt; It wants to build the kernel before the image, but if I do that, I get=
- <br>
-&gt; this<br>
-&gt; error.<br>
-&gt; <br>
-&gt; make[4]: *** No rule to make target &#39;../../images/rootfs.cpio&#39;=
-, needed <br>
-&gt; by<br>
-&gt; &#39;usr/initramfs_inc_data&#39;.=C2=A0 Stop.<br>
-&gt; <br>
-&gt; Right now, my process is: touch an empty images/rootfs.cpio file, <br>
-&gt; compile,<br>
-&gt; touch the kernel config, recompile and this works but it&#39;s yucky.<=
-br>
-&gt; <br>
-&gt; What is the &quot;right&quot; answer?<br>
-&gt; <br>
-&gt; Charles<br>
-<br>
-Kind regards,<br>
-Andreas<br>
-</blockquote></div>
-
---000000000000e4b72205ee3c03bd--
-
---===============3630977643300342341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index ff6e312fde..8f6c49c62b 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,5 +1,5 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256  3a038d2bbc02bf28bbdd20c012091f741a3ec5cbe460691811d714876aad75d1  dropbear-2022.82.tar.bz2
++sha256  bc5a121ffbc94b5171ad5ebe01be42746d50aa797c9549a4639894a16749443b  dropbear-2022.83.tar.bz2
+ 
+ # License file, locally computed
+ sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bfb80345ec..36eb7898ba 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2022.82
++DROPBEAR_VERSION = 2022.83
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+@@ -64,13 +64,9 @@ define DROPBEAR_ENABLE_LEGACY_CRYPTO
+ 	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_DH_GROUP1 1'             >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_DSS 1'                   >> $(@D)/localoptions.h
+ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
+-else
+-define DROPBEAR_DISABLE_LEGACY_CRYPTO
+-	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
+-endef
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3630977643300342341==--
