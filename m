@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E347C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0A0CC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DDCF240569;
-	Mon,  5 Dec 2022 12:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDCF240569
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51FAB81DFD;
+	Mon,  5 Dec 2022 12:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51FAB81DFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BnCod3tL1vAe; Mon,  5 Dec 2022 12:18:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oY1LwnB_xSxq; Mon,  5 Dec 2022 12:18:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E616404F5;
-	Mon,  5 Dec 2022 12:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E616404F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9150D80CE6;
+	Mon,  5 Dec 2022 12:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9150D80CE6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B3A41BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 14BA41BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26CB44052E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3CC24403D6
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26CB44052E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC24403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lnIh_4ENq2s1 for <buildroot@lists.busybox.net>;
+ with ESMTP id 8QYCxrsqNiG9 for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96D2E408A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D531F4074E
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96D2E408A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D531F4074E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FB2785B9E; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+ id BC94A85B9E; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 21:28:45 +0100
+Date: Thu, 24 Nov 2022 22:51:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb449c72cd6a2983e1d9ebffcd6b0f87fbe7df96
-X-Git-Newrev: 338375d88de1baae5e3a178813f53334a891656b
+X-Git-Oldrev: e52eb61842acb4a3b8a2d4b716ba673bc972cf89
+X-Git-Newrev: e25d03979c5323bcad5b8f6be58d0e054950c6ca
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112611.8FB2785B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dropbear: bump to version 2022.83
+Message-Id: <20221205112611.BC94A85B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
+ 22.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338375d88de1baae5e3a178813f53334a891656b
+commit: https://git.buildroot.net/buildroot/commit/?id=e25d03979c5323bcad5b8f6be58d0e054950c6ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-DROPBEAR_DSS is now disabled by default. Enable only when
-BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO is enabled.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 8 ++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index ff6e312fde..8f6c49c62b 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  3a038d2bbc02bf28bbdd20c012091f741a3ec5cbe460691811d714876aad75d1  dropbear-2022.82.tar.bz2
-+sha256  bc5a121ffbc94b5171ad5ebe01be42746d50aa797c9549a4639894a16749443b  dropbear-2022.83.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bfb80345ec..36eb7898ba 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 0807d6de7e..e4fd569830 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8b9bbe1631c9df8cb670d9e1cc66ae79b21520d26519d929e0a264da9f4c0924  intel-mediasdk-22.6.2.tar.gz
++sha256  a47a554cb3055614a8041cf478c4c89e249c2157c7e98389fbaba6144dc18783  intel-mediasdk-22.6.3.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 67c6683ec0..f5e39905a1 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2022.82
-+DROPBEAR_VERSION = 2022.83
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-@@ -64,13 +64,9 @@ define DROPBEAR_ENABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_DH_GROUP1 1'             >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_DSS 1'                   >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
--else
--define DROPBEAR_DISABLE_LEGACY_CRYPTO
--	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
--endef
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
- endif
- 
- ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+-INTEL_MEDIASDK_VERSION = 22.6.2
++INTEL_MEDIASDK_VERSION = 22.6.3
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
