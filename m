@@ -1,123 +1,141 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A66DC43219
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 10:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A592CC4321E
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 10:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2CA3400C4;
-	Thu, 24 Nov 2022 10:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2CA3400C4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gkWDlb6L10lC; Thu, 24 Nov 2022 10:22:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8734A410C6;
-	Thu, 24 Nov 2022 10:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8734A410C6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEF551BF3D6
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 10:22:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B836441BBE
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 10:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B836441BBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E74341BD5;
+	Thu, 24 Nov 2022 10:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E74341BD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GOrWY1awoLpa for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 10:22:07 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gvctuok33TUe; Thu, 24 Nov 2022 10:24:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09EE741BD4;
+	Thu, 24 Nov 2022 10:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09EE741BD4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 16F491BF964
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 10:24:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 135D5410BD
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 10:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 135D5410BD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uInU7EvWru2C for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 10:24:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F38DC41BDC
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on2061f.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5b::61f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F38DC41BDC
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 10:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CB10402C3
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam12on20623.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe5a::623])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CB10402C3
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 10:24:04 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sa9PhQP0nfyLpaoRUr4nSka5UqXIYstZPlxPpwaSBOYQSQLc6Hu97WTOR25JqbpGZP5AF0wvegXoxbvh5UQO5qv3cIXbFgApkUEXpI1nH+oQxngVeErmtTbJi8z3bvGddunzJk6jXY/ahZWQePNfTXvN3cLKRkbXiLIbkr8EGAGgVehheIOZLZpW9B0Ck+wkVOu/wbvX+tNIITtRDlTnxGqA2HQcRrd4Qm94lxVDDZxCRBs0vRZ3Ovyqf6V992OFcg6SaSbnvfCX7E7WLIg7rcKfdZPf1FKU9CU7v79zq8u0LbfvBTVadxB6uVQEiK9rJT980TLzrgieBv029slPRg==
+ b=Bw7Zvv0/trRH2RM6LyXgq6iB61/gByEQYuHT4wnoz/YraD38cT0w/7KhyIoVj+6y0ndMfoqxGKkRwIpmgFv3LTBwlRFQZaEl47geW9fx5cnRh6DrSHwD+lymlCrIXjnL/kawpXDNQcUKKx4wzhF4yuLD0RDAH6rgIRDj2OSWIe4SIriY4znhk5w4QR3zYQVLXs+C0h/2a7VODiTpXF7YMVvsm5TzY2UX5j2+D7ILRTVmj8eKjPp++LZn7/ORqF1ciV+lkjOYUc1RklKRlRTT3UkkJZ0d1N5tGOPxLE+NrsUzROnPU3dTpxxBr9fKPxQVjb7gvAj8WLpJ7dBcr2805w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M1UBhz8avI6FdmF9ThUHmKRzDrGA7n89v3JVGLfJhM8=;
- b=F1A0RVstNc8DyoY2t3WM4sctuqTx9CcJUSO8oTRuE4Y3J+88qjJ9VSeQZ6rDFk5ycdAMFPCExAUnSpQavpncsSXZQrMt6NkxcZpkOvVkTmvdEFFTlAgpsbbLHGPRGEtthIthZVmdVpRzUgQ267vHCu0g5T11jsYteRZSkH8azG2ByVc7pF9+ng+WEUXKUKG34BzFnGqbxu8wZNw5+yiGgSJ+rOm5394OkoNAJmKOwUFHn7v439huqhJ5bG+fd8+FqoixjqsED9rbnBlsiwIkAnSN2gjcyhAvI9YutoN7lQfqxl0opBlJf2etCR8JkQG8dSWldWoWGb+7AQ/35gd5dA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from DM6PR06CA0080.namprd06.prod.outlook.com (2603:10b6:5:336::13)
- by CH2PR12MB4151.namprd12.prod.outlook.com (2603:10b6:610:78::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 10:22:03 +0000
-Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:336:cafe::a0) by DM6PR06CA0080.outlook.office365.com
- (2603:10b6:5:336::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
- Transport; Thu, 24 Nov 2022 10:22:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.19 via Frontend Transport; Thu, 24 Nov 2022 10:22:01 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
- 2022 04:21:59 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
- 2022 04:21:55 -0600
-Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 24 Nov 2022 04:21:54 -0600
-To: <buildroot@buildroot.org>
-Date: Thu, 24 Nov 2022 03:21:44 -0700
-Message-ID: <20221124102144.16833-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221124102144.16833-1-neal.frager@amd.com>
-References: <20221124102144.16833-1-neal.frager@amd.com>
-MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT003:EE_|CH2PR12MB4151:EE_
-X-MS-Office365-Filtering-Correlation-Id: 198b6c9e-3e68-4172-5477-08dace05b9cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7OlNejuidn/XhPbLBN2qGDZ4wVXPiq67wBckINRsKLbQTc8i6zZizKG2+LHWBW/V6g/rOB9SJg4p3jawoyo+LN0EPpg0F4TIvlxirLjsA3IThJrOr5MkzH8OVhFY62/gfG7yO/4+IyOaSq5oFbp6+N8kXO6odxlX71bw00MDXTwbZhFJFQO3wzRExP4iMTevKhvYxMuUihW4+vDFFt0LxyQU1NdgnuTOvO7T9T02Z3j/Sf6tJai7Qfm+TEqSLPPBGxuBfCoNuioIwTr6aXcISXZovH8AjRwoOYEa1PG95u9fQbgvvx/BDuvJQP2Mkyjwg/zT+rXIymmMb05sX+TRo9Hnw2+3pqQeCqRJ4dPfnzU8eDmcVjiTwePAfIRk0XHuCbp2C1t/JGGmjHuWzvO3+U4aKn38yvjos8jk/HNdeCUVxRH8fiCWAxDHk9jwo7aj5kxZBaTleq2KzwLb6Au4M6BCRoFR+l/0roXlsUVZFHuKXdpKt69R/nvoaSBc2caO5s3A10JdiS7nV4rbat8MxllTK12lwjQ20TsAGC7yTpLLS5czKpPRKQKn2mN1ouE4uy9g2NcQduKdHJAY+MkpA2sllW/68NfUKqutRMYv9xJxFUCWkVA+39jQl/afbbziYSG6+hbajG4PFZk6FD4mSp5qI69xvX4IS9mI6zrTYAtxHalKV6WvHUidPyeivB1W3KAfI6aD1Md3To84d6KTcfVy4A7yPIoWJeyfT5Z4rGT/1WA/uK1eR7fLuFMmkxELz3Y4WJ9cdl5wOD4ZREEehBwAc5XGgmOvRR3oIDhy8tAlB2+n/9Ob1REONL9nH6ml
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(36756003)(83380400001)(1076003)(2906002)(2616005)(41300700001)(336012)(5660300002)(44832011)(426003)(47076005)(8936002)(186003)(36860700001)(86362001)(40480700001)(40460700003)(82310400005)(82740400003)(356005)(26005)(54906003)(6916009)(966005)(316002)(6666004)(81166007)(4326008)(478600001)(70586007)(70206006)(8676002)(36900700001);
+ bh=ojMiu7E1QZ0SeaZ3Ace9Xj9DapKT3dCv5BgVPE5lLAg=;
+ b=DDPD4ULqeKa4xkAOZZXHkwpITiGyv+6qQbh5mlnC4jRWJjL7mDuaSYJR0WJDtvuq2eIld19Y6qcvbyKoFKadO68kphCYzm05pRLocrFko4S8Rr8Xgen6bJViHrrG18lqkjlsc3PoEQCA+kOk4ZRPNHpxSSzqGAFPWPOM/4dxY7Po/Dxh+jrJHNSWFEqQzSssYUqtXx8kfMmSMhMIBO67KIox+w+Q4Kov8BrKI4RA5FR8KZj22JUw27kTfhJguTD2p2+e/rd01LT1I8mfR1QaSnGrMjgDKXVsPPtlR4MoV2+/TF8978NRk4yY9K/4FqGhA3GJ3u/XuFHGPZxmeUpAiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by PH7PR12MB6936.namprd12.prod.outlook.com (2603:10b6:510:1ba::7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Thu, 24 Nov
+ 2022 10:24:01 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986%4]) with mapi id 15.20.5857.019; Thu, 24 Nov 2022
+ 10:24:01 +0000
+Content-Type: multipart/mixed;
+ boundary="_000_CH2PR12MB5004970812B1666D57B26FD7F00F9CH2PR12MB5004namp_"
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH v4 1/1] boot/uboot/uboot.mk: add binary
+ u-boot.elf support
+Thread-Index: AQHY/0hI60tlte5Wfk6gnY2qsyB4k65NF8eAgADG6EA=
+Date: Thu, 24 Nov 2022 10:24:01 +0000
+Message-ID: <CH2PR12MB5004970812B1666D57B26FD7F00F9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221123143126.17843-1-neal.frager@amd.com>
+ <20221123233021.09ce037b@windsurf>
+In-Reply-To: <20221123233021.09ce037b@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: <CH2PR12MB5004970812B1666D57B26FD7F00F9@CH2PR12MB5004.namprd12.prod.outlook.com>
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|PH7PR12MB6936:EE_
+x-ms-office365-filtering-correlation-id: 31daab33-7b65-4561-f6db-08dace060187
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0h82WPKF1lkEo6/HFuX3ZrqjlIakDPWkZKRiDlT2WRLcc6jb2JARUIrq3aGtbeVsCjMZbfgpkd7oBuABitIwjDV4nLJJ9J7u/YUgJB9ffqc7ulHumsy83GbXXkDty/QmzDtkE9YjWzDFSzA2EJM1qm4zPsGMu1Jp6dKCnKIjiMaecYe1IBfuxkjlvpAs55g2JUMV0ri7IsEN7ESdGRkAp+H6/+IsWqgxA1pEMrnexNs9i4U/SY+m6gh2G7M5Mr7fd7/l1mJShv0nnHFEOmlNl65/AeIkZhFvSMKViJ0vsaR5S2vwjxDtLREW+cwMy9zWJL/39FeQgyb4/dHI0arm2WbXAUXPNsceXlycYbBenIMezvZjhwKN7VcZWRA0PTko9Iv9byFnhuoScENdH4mJQHYmFw9ViXKwE9HL3YANI6QH5tix+IsreJRMteoghrv3qzQXFHlmYswnuQ27oLVziuB2sjhaxpnq0UoJA2fCkushQSrLmmYs3vUcPdCqTq9cCBUW8Cbd6LuRynbFoh9RCX+B2bgjzffj1ll99gkVj1DixrcSzMs4u/Do5ABiUJAm/RxLdWt0xlDGmqmS8TWlkM6wKA1I9mdhHQDze2xAboR9sqMFW83TYTddzQll6B1IcJ/gLg/3WRP6HxGO/XLdJdr3CO+APqcMHfojtMEME/JDYn0crmpROvya21FILn0+L+OmgfR7iZksMeyS8M8iNQ==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199015)(33656002)(86362001)(122000001)(2906002)(38070700005)(38100700002)(5660300002)(55016003)(66556008)(8936002)(41300700001)(66476007)(4326008)(9686003)(316002)(66446008)(8676002)(64756008)(52536014)(66946007)(6506007)(7696005)(186003)(76116006)(478600001)(83380400001)(71200400001)(110136005);
  DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VCWjQU0u+kx5cJkNKbQYF5ujxltAU2X6Lv8UUR5ccsrjhded1rTDu0VWPCdW?=
+ =?us-ascii?Q?kW6PLptQ0XQ30yy/SjSLiwAZfWLGcNqM/MZ95YjJtCn2j7f2Y+u/L+rAakhD?=
+ =?us-ascii?Q?7xzriexoreWwzs0w9pyGAFuOFR0GtByfCIxW07jYfLSp2znrhcvzWUqot0NX?=
+ =?us-ascii?Q?cj8qd5GYfUgQTSHCRLszW+O5C1RAEfKQh2pKxCkFyalj2nIIH8dAl78Tmb57?=
+ =?us-ascii?Q?UEw82pC3C+++NqiZpN/FIFOMoHZQoYq1UehNgBgU98at5SY1LU+liVZFF99m?=
+ =?us-ascii?Q?EwWIWAYoJqnMkJ9nQRKsd4EcaKl4FS4v0APHUuT3fTGFfxA6CTPzlTQOXh0I?=
+ =?us-ascii?Q?MaVBvmZtLEwjHxEgV+LVJG30soWYvZepJvqXqDIcwdXJT3Mo8ctTvooZCi5s?=
+ =?us-ascii?Q?aqg5lwGqulJtzS/DWYKM4600zeljSIYQiRbJEYH7gOqQALtIJDsL36wzfubc?=
+ =?us-ascii?Q?HQCbZvDXCcnCu9SDKAYAL4ZwOPyTTOGurSQshSIOfyaPLLSUP4c2TxsCVIB8?=
+ =?us-ascii?Q?A/OSEgqPQsU96Y4RSAm+wjtsOQny9hCKsggHnDBs4WWpN9YxgJI3BKk5jxv4?=
+ =?us-ascii?Q?qeo/7n2bH3wJ/fcxFYKmuexnWCj2HPodW9gA2+RT0LRR3Er+UiAdMHUfwibf?=
+ =?us-ascii?Q?UaRVHcK+vJZ1sYTi0EEeIRNvdcJi9X/kZu5cddGS4kgsridhSx3NRrpBbci3?=
+ =?us-ascii?Q?oiw0l/EEDQMc1Tb6vWW10gtg2PopbfCYTB00qrlBJYJ1WuLu9WpdaXPZJD+e?=
+ =?us-ascii?Q?t5gDh42Igy9wkWd0Jfh085UtWh71rDM9J4hEbrgYtEje3F0Z+gqL76aRg2c3?=
+ =?us-ascii?Q?NubXIfxKqhGF9/MpdAes67L/ljgbtVsZhqDAteLpAE5xeVCYVUgFJt5e5V6i?=
+ =?us-ascii?Q?XWl73PfoqBwTvSNpRuKn0hD8BxvyXxJbjNgt66RPzfuQ7sNLTE00+7VCWI+u?=
+ =?us-ascii?Q?phzf7+aVmqNKcydxi1ZdLGEzmqvYeTR5NuFwGy8y8V4pQh567ShL7EFhJuXQ?=
+ =?us-ascii?Q?uD9dBperYSblw3XC/cVIskFRbNrFhMVF6uLsuSWP8zDoBXzgsx90DQ7SdSoz?=
+ =?us-ascii?Q?lAe1TsSJQVK0JyC8JLvxqRpQSL2vy/q18+DQoAHEqEQjIeTmt9uZAiwV7hxJ?=
+ =?us-ascii?Q?3Jmo4OVjCoRDh8KH83J7xeyydtnvs0cRezT9pJkR3EjVMxYvcj6l+gWqFfrL?=
+ =?us-ascii?Q?AdkaWDAafajzjfZnMWmBZ2udwhXQam+M36mTZyHiixHCve7JMDPlDAA/SirF?=
+ =?us-ascii?Q?NdwI9VW8CT2zEIjbDzJbUvupKqii9UzDuZt3TthX98K0Iv2xhdkODSXmoPzm?=
+ =?us-ascii?Q?QgVKvxiQSFlA7WY3i30tZXCIzW5G2znSttZiippQW6u+mQBTwg52xlBX6jCV?=
+ =?us-ascii?Q?GuKeihhe6bMcXSWKVnGWET9RLlQOFAxwDgQU76Hb/uN6FU8uwn+WlkTt74TI?=
+ =?us-ascii?Q?AoHAwrDRIsq0vM1OLU1Kd0Ea0yrd3aj7qYhV8922nsOmTul3fUP4s7b1dZO0?=
+ =?us-ascii?Q?kJz5ydayOOeppdPQKeKGJwyff7utERPpXRNnHLjUzXhNE4Gd9jKQtQ5/+GwJ?=
+ =?us-ascii?Q?0O39/bGGXCMJfudprVymritM+4l4Pd+/fx4BIp7A/MIYKGmbMlrewZ4cjaq8?=
+ =?us-ascii?Q?08yHyhahln93nJMAUZT2I5U=3D?=
+MIME-Version: 1.0
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 10:22:01.2965 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 198b6c9e-3e68-4172-5477-08dace05b9cd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4151
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31daab33-7b65-4561-f6db-08dace060187
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2022 10:24:01.6847 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fdZ0227K8d2uaCUBTA43qNmF/AKujWpFP34A/kjdMuiNASuMvqiJSBGGDtPgnXQf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6936
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1UBhz8avI6FdmF9ThUHmKRzDrGA7n89v3JVGLfJhM8=;
- b=tPNBofSW8kJ227BlbmqfAlop59uP5tDEW37v8CugJl3/3xET/4iINA/NxKMNnmnloQaVyXQ8Lg7Klk2XzVmlEQJ2JDqCtLXzu60N8ZMbyxNcSpUa+g1dnjlKaKbH6qFWaE+hWnVY+/bOE/xbe0Umy+tgrimRWhV9tZwPSeHpxlg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ojMiu7E1QZ0SeaZ3Ace9Xj9DapKT3dCv5BgVPE5lLAg=;
+ b=BLJM7SlEQpmhIvX/bs8/oyX1btTzyMptKNnZkpUPNZeuymmYFvreq7AL7fUX0L14iuogC7BXiVcut/QeZXpQWJ6uy9jnh8qpzQIsuRkbqgc7Z4G52pPvZlZj377VdzFUbOGIKlO4x1bEuEhxfPh4B6v0hEFXgp13bCr4qcWawNA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=tPNBofSW
-Subject: [Buildroot] [PATCH v6 2/2] configs/versal_vck190: new defconfig
+ header.s=selector1 header.b=BLJM7SlE
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v4 1/1] boot/uboot/uboot.mk: add binary
+ u-boot.elf support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -129,289 +147,340 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: terry.oneal@amd.com, luca.ceresoli@bootlin.com, kris.chaplin@amd.com,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- michal.simek@amd.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support for Xilinx Versal VCK190 evaluation board.
+--_000_CH2PR12MB5004970812B1666D57B26FD7F00F9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-VCK190 features can be found here:
-https://www.xilinx.com/products/boards-and-kits/vck190.html
+Hi Thomas,
 
-The VCK190 is based on the Xilinx Versal family:
-https://www.xilinx.com/products/silicon-devices/acap/versal.html
+> If a user requests a u-boot binary in elf format, they may actually=20
+> want the stripped u-boot.elf version.
+> This patch provides the stripped u-boot.elf binary.
+>=20
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-The VC1902 included with the VCK190 evaluation board has Xilinx
-AI Engine acclerators designed for accelerating machine learning
-applications.  Also included is an upgrade from prior Zynq and
-ZynqMP families to ARM Cortex-A72 cores.
+> I've applied to next, after doing some further fixes.
 
-While the Linux kernel for Versal is quite similar to ZynqMP,
-the boot process has significantly changed.
+Great, thanks!
 
-Triple-redundant MicroBlaze cores are used to boot and setup
-Versal devices.  For this reason, current buildroot support
-will download pre-built firmware images and use Xilinx bootgen
-to generate the boot.bin for the vck190.
+>  config BR2_TARGET_UBOOT_FORMAT_ELF
+> +	bool "u-boot"
+> +	help
+> +	  Configures the u-boot ELF file with debug symbols.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-V1->V2:
-  - removed uboot.fragment and using BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS instead
-  - squashed versal_vck190_defconfig and board files into single patch
-V2->V3:
-  - correct console name to ttyAMA0
-  - added necessary extlinux.conf append flags
-V3->V4:
-  - switch to stripped u-boot.elf binary
-  - clean up bootgen.bif file format
-V4->V5:
-  - using new BR2_TARGET_UBOOT_FORMAT_BIN_ELF config
-V5->V6:
-  - using new BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF config
----
- DEVELOPERS                      |  2 ++
- board/versal/genimage.cfg       | 30 ++++++++++++++++++
- board/versal/post-build.sh      | 16 ++++++++++
- board/versal/post-image.sh      | 35 +++++++++++++++++++++
- board/versal/readme.txt         | 54 +++++++++++++++++++++++++++++++++
- configs/versal_vck190_defconfig | 38 +++++++++++++++++++++++
- 6 files changed, 175 insertions(+)
- create mode 100644 board/versal/genimage.cfg
- create mode 100755 board/versal/post-build.sh
- create mode 100755 board/versal/post-image.sh
- create mode 100644 board/versal/readme.txt
- create mode 100644 configs/versal_vck190_defconfig
+> This option does not "configure", it "installs". Also, I'm not sure havin=
+g debugging symbols in u-boot is guaranteed, I suppose it depends on whethe=
+r debugging is enabled or not. So I changed this to:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4689453d54..63d0758858 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2146,9 +2146,11 @@ F:	package/pkg-qmake.mk
- F:	package/qt5/qt5opcua/
- 
- N:	Neal Frager <neal.frager@amd.com>
-+F:	board/versal/
- F:	board/zynq/
- F:	board/zynqmp/
- F:	board/zynqmp/kria/
-+F:	configs/versal_vck190_defconfig
- F:	configs/zynq_zc706_defconfig
- F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
-diff --git a/board/versal/genimage.cfg b/board/versal/genimage.cfg
-new file mode 100644
-index 0000000000..d994d3a2bf
---- /dev/null
-+++ b/board/versal/genimage.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.bin",
-+			"system.dtb",
-+			"Image"
-+		}
-+		file extlinux/extlinux.conf {
-+			image = extlinux.conf
-+		}
-+	}
-+
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-new file mode 100755
-index 0000000000..ff8f8a6071
---- /dev/null
-+++ b/board/versal/post-build.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+
-+# genimage will need to find the extlinux.conf
-+# in the binaries directory
-+
-+BOARD_DIR="$(dirname $0)"
-+CONSOLE=$2
-+ROOT=$3
-+
-+mkdir -p "${BINARIES_DIR}"
-+cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-+	label linux
-+	  kernel /Image
-+	  devicetree /system.dtb
-+	  append console=${CONSOLE} clk_ignore_unused root=/dev/${ROOT} rw rootwait
-+	__HEADER_EOF
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-new file mode 100755
-index 0000000000..890522c31d
---- /dev/null
-+++ b/board/versal/post-image.sh
-@@ -0,0 +1,35 @@
-+#!/bin/sh
-+
-+# By default U-Boot loads DTB from a file named "system.dtb", so
-+# let's use a symlink with that name that points to the *first*
-+# devicetree listed in the config.
-+
-+FIRST_DT=$(sed -nr \
-+               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-+               ${BR2_CONFIG})
-+
-+[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+
-+BOARD_DIR="$(dirname $0)"
-+BOARD_NAME=$4
-+
-+mkdir -p "${BINARIES_DIR}"
-+cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
-+	the_ROM_image:
-+	{
-+	  image {
-+	    { type=bootimage, file=${BINARIES_DIR}/${BOARD_NAME}_vpl_gen_fixed.pdi }
-+	    { type=bootloader, file=${BINARIES_DIR}/${BOARD_NAME}_plm.elf }
-+	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
-+	  }
-+	  image {
-+	    id = 0x1c000000, name=apu_subsystem 
-+	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/system.dtb }
-+	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
-+	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
-+	  }
-+	}
-+	__HEADER_EOF
-+
-+${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
-+support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
-diff --git a/board/versal/readme.txt b/board/versal/readme.txt
-new file mode 100644
-index 0000000000..9f234be620
---- /dev/null
-+++ b/board/versal/readme.txt
-@@ -0,0 +1,54 @@
-+******************************************
-+Xilinx VCK190 board - Versal
-+******************************************
-+
-+This document describes the Buildroot support for the VCK190
-+board by Xilinx, based on Versal.  It has been tested with the 
-+VCK190 production board.
-+
-+Evaluation board features can be found here with the link below.
-+
-+VCK190:
-+https://www.xilinx.com/products/boards-and-kits/vck190.html
-+
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make versal_vck190_defconfig
-+
-+Compile everything and build the rootfs image:
-+
-+    $ make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should get a tree like this:
-+
-+    output/images/
-+    +-- boot.bin
-+    +-- boot.vfat
-+    +-- Image
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4 -> rootfs.ext2
-+    +-- sdcard.img
-+    +-- system.dtb -> versal-vck190-rev1.1.dtb
-+    `-- versal-vck190-rev1.1.dtb
-+
-+How to write the SD card
-+========================
-+
-+WARNING! This will destroy all the card content. Use with care!
-+
-+The sdcard.img file is a complete bootable image ready to be written
-+on the boot medium. To install it, simply copy the image to an SD
-+card:
-+
-+    # dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Where 'sdX' is the device node of the SD.
-+
-+Eject the SD card, insert it in the board, and power it up.
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-new file mode 100644
-index 0000000000..d87df221c6
---- /dev/null
-+++ b/configs/versal_vck190_defconfig
-@@ -0,0 +1,38 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2 vck190"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx_versal"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
-+BR2_PACKAGE_VERSAL_FIRMWARE=y
-+BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="v2022.2"
-+BR2_PACKAGE_VERSAL_FIRMWARE_BOARD="vck190"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_BOOTGEN=y
--- 
-2.17.1
+> +         Install the u-boot image, which is directly the ELF binary
+> +         for the main U-Boot, potentially with debugging symbols.
+
+Good point.  Thanks for correcting this.
+
+> +config BR2_TARGET_UBOOT_FORMAT_BIN_ELF
+>  	bool "u-boot.elf"
+> +	help
+> +	  Configures the u-boot.elf binary version of ELF file.
+> +	  Debug symbols are not included in this ELF file.
+
+> So I researched a bit more, and this u-boot.elf is produced when CONFIG_R=
+EMAKE_ELF=3Dy in U-Boot. So I changed this to:
+
+> +config BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF
+>        bool "u-boot.elf"
+> +       help
+> +         Install the u-boot.elf image, which is produced when
+> +         CONFIG_REMAKE_ELF=3Dy. It is an ELF image (u-boot.elf)
+> +         produced from the raw U-Boot binary (u-boot.bin), which may
+> +         already have been statically relocated and may already have
+> +         a device-tree appended to it.
+
+> The description was taken from the CONFIG_REMAKE_ELF help text in U-Boot.
+
+I agree that using a name that matches the u-boot config option is the righ=
+t thing to do.  Thanks for verifying this!
+
+Best regards,
+Neal Frager
+AMD
+
+--_000_CH2PR12MB5004970812B1666D57B26FD7F00F9CH2PR12MB5004namp_
+Content-Disposition: attachment; filename="winmail.dat"
+Content-Transfer-Encoding: base64
+Content-Type: application/ms-tnef; name="winmail.dat"
+
+eJ8+IiIyAQaQCAAEAAAAAAABAAEAAQeQBgAIAAAA5AQAAAAAAADoAAEJgAEAIQAAAEI3OURFREU4
+NjUyQTY2NEM5RTY0MTgyMTNEM0NDMTI5AD0HAQ2ABAACAAAAAgACAAEFgAMADgAAAOYHCwAYAAoA
+GAABAAQANwEBIIADAA4AAADmBwsAGAAKABgAAQAEADcBAQiABwAYAAAASVBNLk1pY3Jvc29mdCBN
+YWlsLk5vdGUAMQgBBIABAFIAAABSRTogW0J1aWxkcm9vdF0gW1BBVENIIHY0IDEvMV0gYm9vdC91
+Ym9vdC91Ym9vdC5tazogYWRkIGJpbmFyeSB1LWJvb3QuZWxmIHN1cHBvcnQA6hsBA5AGANw3AABo
+AAAAAgF/AAEAAABRAAAAPENIMlBSMTJNQjUwMDQ5NzA4MTJCMTY2NkQ1N0IyNkZEN0YwMEY5QENI
+MlBSMTJNQjUwMDQubmFtcHJkMTIucHJvZC5vdXRsb29rLmNvbT4AAAAACwAfDgAAAAACAQkQAQAA
+AO8EAADrBAAAZgkAAExaRnXeI9xdYQAKZmJpZAQAAGNjwHBnMTI1MgD+A0PwdGV4dAH3AqQD4wIA
+BGNoCsBzZXQwIO8HbQKDAFARTTIKgAa0AoCWfQqACMg7CWIxOQ7AvwnDFnIKMhZxAoAVYioJsHMJ
+8ASQYXQFsg5QA2Bzom8BgCBFeBHBbhgwXQZSdgSQF7YCEHIAwHR9CFBuGjEQIAXABaAbZGSaIANS
+IBAiF7JcdgiQ5HdrC4BkNR1TBPAHQA0XcDAKcRfyYmttawZzAZAAICBCTV9C4EVHSU59CvwB8Qvw
+UDIgSGkSQGgDcXNoLFxsC4BlCoEiVD6AIElmIGEgdRIAewXACXBxClAfYAQgI3EtLQbgbwVADcBu
+CsB5ILELgCBlbCNQGuQsHMA8aGUlUADAJVAA0HR17QdAbCVQIrd3AHAFQCZhtiAfYAURcBxRJJQu
+JaJ3GjEAkAIgLiK3IdAEACD9CrB0EcArMANgHWABAAQgHyhvKXUlBCpYIrdTaWcpGFBkLRkwZiSg
+eTpzB7EHQCBGGHAYMAXAPBsYUAdALgNQMKJAYW2kZC4FoG0+Ik8nGjDfI2Ao4CJQHFEYkCAYUBBA
+TSZAYQGAG7FkbwuAZ3csYANwGeBmCHAmYQXAZtxpeAeQKlYyRUcJcCYkewBwH1AhMk4b0jYwNUBC
+AFIyX1RBUkdFQFRfVUJPTzpgRhBPUk1BOmBFTEa9IrcrDIIk8CTAAyAiJJTmIjuNJnBscDuNOUAb
+Qf85kQhwLAUklTtRNiEecCgAxmkmYDTwZWJ1NUEGw3s2firVbwUwKiE08QeRbu0k0SI5ZD/hIiZA
+QYA8sAcLgB9hJ0BzIi4gQb1CcG8mQDNAHLBEsnM/4d0+IGEdYDUxQcNnNSNCNH8lYiSVKxE/0ArA
+KCEJ4GT/RvFHgSjgGRAZ4EXBAQAo8PcdwEPRA6B3JnA140hYKxF/CfABoB5wHGAFsUSxRpBTvzQg
+SwAZlDPxKwIYkDoyTvYrP1FRNElGFEAqB3Awof8mQEyADlArgCsRDeAJcCcA/ydRLDJA4iUEUJ85
+QBrhLCPjAMAlcVUtQiTBJkBLUP8QIAIwBzEnUUF4SKo2jiTA/xxgS1ALgE6hIcE4AlaDBaFvVBI1
+Ik+iQp8rOW86fEL/ICA7SwMwPD4pkj0/Pk8/X/8s/yVQKeVD4CNQQOYqWGSmvkRB2iNgR7FEsguA
+YwpA/wEAHGAlcU+jZ+4uuE7iP/H9MEByEcAcUSNwDcAFQARgfwlwNIEdwE+UKTkrEgNgZBx1YxxR
+TIEDoENPTkBGSUdfUkU7EEv6RTtCPSVTV2ROv0/PXi//Xz87IXIIOMhRNGHfVW9j3P9RP2XdUv5w
+u3vfZQFxry4AnyMwSfMDkUDiUvMgKCk4/imATzlAcLcchCxBGHAH4O9XZCT2g/YlASlTRiaxhL93
+OUAHQDeBZCVQR+EZ4GL/CeEsYRiADlAnMwlwCQAeUP8cQm9CJrOK2YmfiqFBsR1g/XEALSyACeAz
+gkwBM+RBgP9sfyHQGeAr8QUDRCIoECwR/GFrcWGGd4F/Y8Mcw3LJ/zJMSwAwoJBCN+EFQCOQNSL/
+I3AlIDWBmGMbEW4xQBt15e9D9XRyhtIvUGgoQlzjNCBvNQBbnBoxBpB5XOY4TUJ7JCEj0WcLESIn
+MDkyRUEcTUQyRRVCo1AAHwBCAAEAAAAaAAAARgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8A
+ZQABAAAAKAAAAG4AZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAGQAAQAA
+AAoAAABTAE0AVABQAAAAAAACAUEAAQAAAGQAAAAAAAAAgSsfpL6jEBmdbgDdAQ9UAgAAAIBGAHIA
+YQBnAGUAcgAsACAATgBlAGEAbAAAAFMATQBUAFAAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABh
+AG0AZAAuAGMAbwBtAAAAHwACXQEAAAAoAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQA
+LgBjAG8AbQAAAB8A5V8BAAAAMAAAAHMAaQBwADoAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBt
+AGQALgBjAG8AbQAAAB8AGgwBAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAAAAfAB8M
+AQAAACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAHwAeDAEAAAAK
+AAAAUwBNAFQAUAAAAAAAAgEZDAEAAABkAAAAAAAAAIErH6S+oxAZnW4A3QEPVAIAAACARgByAGEA
+ZwBlAHIALAAgAE4AZQBhAGwAAABTAE0AVABQAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBt
+AGQALgBjAG8AbQAAAB8AAV0BAAAAKAAAAG4AZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4A
+YwBvAG0AAAALAEA6AQAAAB8AGgABAAAAEgAAAEkAUABNAC4ATgBvAHQAZQAAAAAAAwDxPwkEAAAL
+AEA6AQAAAAMA/T/kBAAAAgELMAEAAAAQAAAAt53t6GUqZkyeZBghPTzBKQMAFwABAAAAQAA5AIC2
+o97u/9gBQAAIMAPSCd/u/9gBHwA3AAEAAACkAAAAUgBFADoAIABbAEIAdQBpAGwAZAByAG8AbwB0
+AF0AIABbAFAAQQBUAEMASAAgAHYANAAgADEALwAxAF0AIABiAG8AbwB0AC8AdQBiAG8AbwB0AC8A
+dQBiAG8AbwB0AC4AbQBrADoAIABhAGQAZAAgAGIAaQBuAGEAcgB5ACAAdQAtAGIAbwBvAHQALgBl
+AGwAZgAgAHMAdQBwAHAAbwByAHQAAAAfAD0AAQAAAAoAAABSAEUAOgAgAAAAAAADAN4/n04AAAsA
+AgABAAAACwAjAAAAAAADACYAAAAAAAsAKQAAAAAACwArAAAAAAADAC4AAAAAAAMANgAAAAAAHwBw
+AAEAAACcAAAAWwBCAHUAaQBsAGQAcgBvAG8AdABdACAAWwBQAEEAVABDAEgAIAB2ADQAIAAxAC8A
+MQBdACAAYgBvAG8AdAAvAHUAYgBvAG8AdAAvAHUAYgBvAG8AdAAuAG0AawA6ACAAYQBkAGQAIABi
+AGkAbgBhAHIAeQAgAHUALQBiAG8AbwB0AC4AZQBsAGYAIABzAHUAcABwAG8AcgB0AAAAAgFxAAEA
+AAAgAAAAAQHY/0hI60tlte5Wfk6gnY2qsyB4k65NF8eAgADG6EALAAYMAAAAAB8ANRABAAAAogAA
+ADwAQwBIADIAUABSADEAMgBNAEIANQAwADAANAA5ADcAMAA4ADEAMgBCADEANgA2ADYARAA1ADcA
+QgAyADYARgBEADcARgAwADAARgA5AEAAQwBIADIAUABSADEAMgBNAEIANQAwADAANAAuAG4AYQBt
+AHAAcgBkADEAMgAuAHAAcgBvAGQALgBvAHUAdABsAG8AbwBrAC4AYwBvAG0APgAAAAAAHwA5EAEA
+AACgAAAAPAAyADAAMgAyADEAMQAyADMAMQA0ADMAMQAyADYALgAxADcAOAA0ADMALQAxAC0AbgBl
+AGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQA+ACAAPAAyADAAMgAyADEAMQAyADMA
+MgAzADMAMAAyADEALgAwADkAYwBlADAAMwA3AGIAQAB3AGkAbgBkAHMAdQByAGYAPgAAAB8AQhAB
+AAAARgAAADwAMgAwADIAMgAxADEAMgAzADIAMwAzADAAMgAxAC4AMAA5AGMAZQAwADMANwBiAEAA
+dwBpAG4AZABzAHUAcgBmAD4AAAAAAAMAgBD/////AwATEgAAAABAAAcwpA7m3u7/2AECARAwAQAA
+AEYAAAAAAAAAyeAVQeK+2U+PFQKU+mJJhwcABRYELmh6bk6DTDeAsDTptAAAAAABCwAABRYELmh6
+bk6DTDeAsDTptAAAlNPULwAAAAACARMwAQAAABAAAADrS2W17lZ+TqCdjaqzIHiTAgEUMAEAAAAM
+AAAA7AAAAHck4tdIAAAAAwBbMwEAAAADAFo2AAAAAAMAaDYNAAAACwD6NgEAAAAfANk/AQAAAAAC
+AABIAGkAIABUAGgAbwBtAGEAcwAsAA0ACgANAAoAPgAgAEkAZgAgAGEAIAB1AHMAZQByACAAcgBl
+AHEAdQBlAHMAdABzACAAYQAgAHUALQBiAG8AbwB0ACAAYgBpAG4AYQByAHkAIABpAG4AIABlAGwA
+ZgAgAGYAbwByAG0AYQB0ACwAIAB0AGgAZQB5ACAAbQBhAHkAIABhAGMAdAB1AGEAbABsAHkAIAAN
+AAoAPgAgAHcAYQBuAHQAIAB0AGgAZQAgAHMAdAByAGkAcABwAGUAZAAgAHUALQBiAG8AbwB0AC4A
+ZQBsAGYAIAB2AGUAcgBzAGkAbwBuAC4ADQAKAD4AIABUAGgAaQBzACAAcABhAHQAYwBoACAAcABy
+AG8AdgBpAGQAZQBzACAAdABoAGUAIABzAHQAcgBpAHAAcABlAGQAIAB1AC0AYgBvAG8AdAAuAGUA
+bABmACAAYgBpAG4AYQByAHkALgANAAoAPgAgAA0ACgA+ACAAUwBpAGcAbgBlAGQALQBvAGYAZgAt
+AGIAeQA6ACAATgBlAGEAbAAgAEYAcgBhAGcAZQByACAAPABuAGUAYQBsAC4AZgByAGEAZwBlAHIA
+QABhAG0AZAAuAGMAbwBtAD4ADQAKAA0ACgA+ACAASQAnAHYAZQAgAGEAcABwAGwAaQBlAGQAIAAA
+AB8A+D8BAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAAAAfAPo/AQAAABoAAABGAHIA
+YQBnAGUAcgAsACAATgBlAGEAbAAAAAAAHwAiQAEAAAAGAAAARQBYAAAAAAAfACNAAQAAAAIBAAAv
+AE8APQBFAFgAQwBIAEEATgBHAEUATABBAEIAUwAvAE8AVQA9AEUAWABDAEgAQQBOAEcARQAgAEEA
+RABNAEkATgBJAFMAVABSAEEAVABJAFYARQAgAEcAUgBPAFUAUAAgACgARgBZAEQASQBCAE8ASABG
+ADIAMwBTAFAARABMAFQAKQAvAEMATgA9AFIARQBDAEkAUABJAEUATgBUAFMALwBDAE4APQBEADQA
+NAA2AEEAMAA0ADYANAA3ADUAMQA0AEMANgAwADgAMwAyADEAQQA1ADcAOQA5AEEAMAAxAEIAOAA4
+AEQALQBGAFIAQQBHAEUAUgAsACAATgBFAEEAAAAAAB8AJEABAAAABgAAAEUAWAAAAAAAHwAlQAEA
+AAACAQAALwBPAD0ARQBYAEMASABBAE4ARwBFAEwAQQBCAFMALwBPAFUAPQBFAFgAQwBIAEEATgBH
+AEUAIABBAEQATQBJAE4ASQBTAFQAUgBBAFQASQBWAEUAIABHAFIATwBVAFAAIAAoAEYAWQBEAEkA
+QgBPAEgARgAyADMAUwBQAEQATABUACkALwBDAE4APQBSAEUAQwBJAFAASQBFAE4AVABTAC8AQwBO
+AD0ARAA0ADQANgBBADAANAA2ADQANwA1ADEANABDADYAMAA4ADMAMgAxAEEANQA3ADkAOQBBADAA
+MQBCADgAOABEAC0ARgBSAEEARwBFAFIALAAgAE4ARQBBAAAAAAAfADBAAQAAABoAAABGAHIAYQBn
+AGUAcgAsACAATgBlAGEAbAAAAAAAHwAxQAEAAAAaAAAARgByAGEAZwBlAHIALAAgAE4AZQBhAGwA
+AAAAAB8AOEABAAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAAAAfADlAAQAAABoAAABG
+AHIAYQBnAGUAcgAsACAATgBlAGEAbAAAAAAAAwBZQAAAAAADAFpAAAAAAAMAN1ABAAAAAwAJWQEA
+AAAfAApdAQAAACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAHwAL
+XQEAAAAoAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAAIBFV0BAAAA
+EgAAAAIfltg9iORgTo4RqC2ZThg9AQAAAgEWXQEAAAASAAAAAh+W2D2I5GBOjhGoLZlOGD0BAAAL
+AACACCAGAAAAAADAAAAAAAAARgAAAAAUhQAAAAAAAAMAAIBQ42MLzJzQEbzbAIBfzM4EAQAAACQA
+AABJAG4AZABlAHgAaQBuAGcARQByAHIAbwByAEMAbwBkAGUAAAAbAAAAHwAAgFDjYwvMnNARvNsA
+gF/MzgQBAAAAKgAAAEkAbgBkAGUAeABpAG4AZwBFAHIAcgBvAHIATQBlAHMAcwBhAGcAZQAAAAAA
+AQAAAHAAAABJAG4AZABlAHgAaQBuAGcAIABQAGUAbgBkAGkAbgBnACAAdwBoAGkAbABlACAAQgBp
+AGcARgB1AG4AbgBlAGwAUABPAEkASQBzAFUAcABUAG8ARABhAHQAZQAgAGkAcwAgAGYAYQBsAHMA
+ZQAuAAAACwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAJgAAAEkAcwBQAGUAcgBtAGEAbgBlAG4AdABG
+AGEAaQBsAHUAcgBlAAAAAAAAAAAAAwAAgAggBgAAAAAAwAAAAAAAAEYBAAAAMgAAAEUAeABjAGgA
+YQBuAGcAZQBBAHAAcABsAGkAYwBhAHQAaQBvAG4ARgBsAGEAZwBzAAAAAAAgAAAAHwAAgBOP8kH0
+gxRBpYTu21prC/8BAAAAFgAAAEMAbABpAGUAbgB0AEkAbgBmAG8AAAAAAAEAAAAqAAAAQwBsAGkA
+ZQBuAHQAPQBNAFMARQB4AGMAaABhAG4AZwBlAFIAUABDAAAAAAALAACACCAGAAAAAADAAAAAAAAA
+RgAAAAAGhQAAAAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAOFAAAAAAAAAwAAgAggBgAAAAAA
+wAAAAAAAAEYAAAAAAYUAAAAAAAACAQCAE4/yQfSDFEGlhO7bWmsL/wEAAAAuAAAASABlAGEAZABl
+AHIAQgBvAGQAeQBGAHIAYQBnAG0AZQBuAHQATABpAHMAdAAAAAAAAQAAACIAAAABAAoAAAAEAAAA
+AAAAABQAAAAAAAAAAAAAAP////8AAAAAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAcAAAASABh
+AHMAUQB1AG8AdABlAGQAVABlAHgAdAAAAAAAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAoAAAA
+SQBzAFEAdQBvAHQAZQBkAFQAZQB4AHQAQwBoAGEAbgBnAGUAZAAAAAEAAAACAQCAE4/yQfSDFEGl
+hO7bWmsL/wEAAABAAAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBvAG4AVAByAGUAZQBQAGEAcgBlAG4A
+dABSAGUAYwBvAHIAZABLAGUAeQAAAAEAAAAuAAAAAAAAAMngFUHivtlPjxUClPpiSYcBAAUWBC5o
+em5Og0w3gLA06bQAAN3V6vQAAAAAHwAAgB+k6zOoei5Cvnt54amOVLMBAAAAOAAAAEMAbwBuAHYA
+ZQByAHMAYQB0AGkAbwBuAEkAbgBkAGUAeABUAHIAYQBjAGsAaQBuAGcARQB4AAAAAQAAANQBAABJ
+AEkAPQBbAEMASQBEAD0AYgA1ADYANQA0AGIAZQBiAC0ANQA2AGUAZQAtADQAZQA3AGUALQBhADAA
+OQBkAC0AOABkAGEAYQBiADMAMgAwADcAOAA5ADMAOwBJAEQAWABIAEUAQQBEAD0AMAAxAEQAOABG
+AEYANAA4ADQAOAA7AEkARABYAEMATwBVAE4AVAA9ADMAXQA7AFMAQgBNAEkARAA9ADUAOwBTADEA
+PQA8ADIAMAAyADIAMQAxADIAMwAyADMAMwAwADIAMQAuADAAOQBjAGUAMAAzADcAYgBAAHcAaQBu
+AGQAcwB1AHIAZgA+ADsAUgBUAFAAPQBEAGkAcgBlAGMAdABDAGgAaQBsAGQAOwBUAEQATgA9AE0A
+aQBzAG0AYQB0AGMAaAA7AFQAUAA9AFMAYQBtAGUAOwBUAEYAUgA9AE4AbwB0AEYAbwByAGsAaQBu
+AGcAOwBWAGUAcgBzAGkAbwBuAD0AVgBlAHIAcwBpAG8AbgAgADEANQAuADIAMAAgACgAQgB1AGkA
+bABkACAANQA4ADUANwAuADAAKQAsACAAUwB0AGEAZwBlAD0ASAAxADsAVQBQAD0ARAAwADsARABQ
+AD0AMQAwADEAAAADAACACCAGAAAAAADAAAAAAAAARgAAAAAQhQAAAAAAAAsAAIAIIAYAAAAAAMAA
+AAAAAABGAAAAAA6FAAAAAAAACwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAgoUAAAAAAAAfAACACCAG
+AAAAAADAAAAAAAAARgAAAADYhQAAAQAAABIAAABJAFAATQAuAE4AbwB0AGUAAAAAAAIBAIAIIAYA
+AAAAAMAAAAAAAABGAQAAADYAAABJAG4AVAByAGEAbgBzAGkAdABNAGUAcwBzAGEAZwBlAEMAbwBy
+AHIAZQBsAGEAdABvAHIAAAAAAAEAAAAQAAAA5btAIBofDkyL6qVOAboJCQMAAIAIIAYAAAAAAMAA
+AAAAAABGAAAAABiFAAAAAAAAHwAAgCkDAgAAAAAAwAAAAAAAAEYBAAAAHgAAAEkAbgBzAHAAZQBj
+AHQAbwByAEEAaQBwAEkAZAAAAAAAAQAAAEoAAABmADEAZgA0ADUAOABiAGUALQBiADgAOQA2AC0A
+NAA4AGIAYQAtADgAMwA1AGMALQA1AGUAZQBiAGMAMwBmADcAMQBjAGUAMQAAAAAAAwANNP0/AAAf
+AACAhgMCAAAAAADAAAAAAAAARgEAAAAuAAAAYQB1AHQAaABlAG4AdABpAGMAYQB0AGkAbwBuAC0A
+cgBlAHMAdQBsAHQAcwAAAAAAAQAAALIAAABkAGsAaQBtAD0AbgBvAG4AZQAgACgAbQBlAHMAcwBh
+AGcAZQAgAG4AbwB0ACAAcwBpAGcAbgBlAGQAKQAgAGgAZQBhAGQAZQByAC4AZAA9AG4AbwBuAGUA
+OwBkAG0AYQByAGMAPQBuAG8AbgBlACAAYQBjAHQAaQBvAG4APQBuAG8AbgBlACAAaABlAGEAZABl
+AHIALgBmAHIAbwBtAD0AYQBtAGQALgBjAG8AbQA7AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEA
+AAAeAAAAYQBjAGMAZQBwAHQAbABhAG4AZwB1AGEAZwBlAAAAAAABAAAADAAAAGUAbgAtAFUAUwAA
+AB8AAICGAwIAAAAAAMAAAAAAAABGAQAAACAAAAB4AC0AbQBzAC0AaABhAHMALQBhAHQAdABhAGMA
+aAAAAAEAAAACAAAAAAAAAEgAAIAIIAYAAAAAAMAAAAAAAABGAQAAACIAAABOAGUAdAB3AG8AcgBr
+AE0AZQBzAHMAYQBnAGUASQBkAAAAAAAzq9oxZXthRfbbCNrOBgGHHwAAgIYDAgAAAAAAwAAAAAAA
+AEYBAAAALgAAAHgALQBtAHMALQBwAHUAYgBsAGkAYwB0AHIAYQBmAGYAaQBjAHQAeQBwAGUAAAAA
+AAEAAAAMAAAARQBtAGEAaQBsAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAANgAAAHgALQBtAHMA
+LQB0AHIAYQBmAGYAaQBjAHQAeQBwAGUAZABpAGEAZwBuAG8AcwB0AGkAYwAAAAAAAQAAAEgAAABD
+AEgAMgBQAFIAMQAyAE0AQgA1ADAAMAA0ADoARQBFAF8AfABQAEgANwBQAFIAMQAyAE0AQgA2ADkA
+MwA2ADoARQBFAF8AAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABQAAAAeAAtAG0AcwAtAG8AZgBm
+AGkAYwBlADMANgA1AC0AZgBpAGwAdABlAHIAaQBuAGcALQBjAG8AcgByAGUAbABhAHQAaQBvAG4A
+LQBpAGQAAAABAAAASgAAADMAMQBkAGEAYQBiADMAMwAtADcAYgA2ADUALQA0ADUANgAxAC0AZgA2
+AGQAYgAtADAAOABkAGEAYwBlADAANgAwADEAOAA3AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEA
+AAA4AAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAHMAZQBuAGQAZQByAGEAZABjAGgAZQBj
+AGsAAAABAAAABAAAADEAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAA6AAAAeAAtAG0AcwAtAGUA
+eABjAGgAYQBuAGcAZQAtAGEAbgB0AGkAcwBwAGEAbQAtAHIAZQBsAGEAeQAAAAAAAQAAAAQAAAAw
+AAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAKgAAAHgALQBtAGkAYwByAG8AcwBvAGYAdAAtAGEA
+bgB0AGkAcwBwAGEAbQAAAAAAAQAAAA4AAABCAEMATAA6ADAAOwAAAAAAHwAAgIYDAgAAAAAAwAAA
+AAAAAEYBAAAARAAAAHgALQBtAGkAYwByAG8AcwBvAGYAdAAtAGEAbgB0AGkAcwBwAGEAbQAtAG0A
+ZQBzAHMAYQBnAGUALQBpAG4AZgBvAAAAAQAAALIFAAAwAGgAOAAyAFcAUABLAEYAMQBsAGsARQBv
+ADYALwBIAEYAdQBYADMAWgByAHEAagBsAEkAYQBrAEQAUABXAGsAWgBLAFIAaQBEAGwAVAAyAFcA
+UgBMAGMAYwA2AGoAYgAyAEoAQQBSAFUASQByAHEAMwBhAEcAdABiAGUAVgBzAEMAagBNAFoAYgBm
+AGcAcABrAGQANwBvAEIAdQBBAEIAaQB0AEkAdwBqAEQAVgA0AG4ATABKAEoAOQBKADcAdQAvAFkA
+VQBnAEoAQgA5AGYAZgBxAGMANwB1AGwASAB1AG0AcwB5ADgAMwBHAGIAWABYAGsARAB0AHkALwBR
+AG0AegBEAHQAawBFADkAWQBqAFcAegBEAEYAUwB6AEEAMgBFAEoATQAxAHEAbQA0AHoAUABzAEcA
+TQB1ADEASgBwADYAZABLAEMAbgBLAEkAagBpAE0AYQBlAGMAWQBlADEASQBCAGYAdQB4AGsAagBs
+AHYAcABBAHMANQA1AGcAMgBKAFUATQBWADAAcgBpADcASQBzAEUATgA3AEUAUwBkAEcAUgBrAEEA
+cAArAEgANgAvACsASQBzAFcAcQBnAHgAQQAxAHAARQBNAHIAbgBlAHgATgBzADkAaQA0AFUALwBT
+AFkAKwBtADYAZwBoADIARwA3AE0ANQBNAHIANwBmAGQANwAvAGwAMQBtAEoAUwBoAHYAMABuAG4A
+SABGAEUATwBtAGwATgBsADYANQAvAEEAZQBJAGsAWgBoAEYAdgBTAE0ASwBWAGkASgAwAHYAcwBh
+AFIANQBTADIAdgB3AGoAeABEAHQATABSAEUAVwArAGMAdwBNAHkAOQB6AFcASgBMAC8AMwA5AEYA
+ZQBRAGcAeQBiADQALwBkAEgASQAwAGEAcgBtADIAVwBiAFgAQQBVAFgAUABOAHMAYwBlAFgAbAB5
+AGMAWQBiAEIAZQBuAEkATQBlAHoAdgBaAGoAaAB3AEsATgA3AFYAYwBaAFcAUgBBADAAUABUAGsA
+bwA5AEkAdgA5AGIAeQBGAG4AaAB1AG8AUwBjAEUATgBkAEgANABtAEoAUQBIAFkAbQBGAHcAOQBW
+AGkAWABLAHcARQA5AEgATAAzAFkAQQBOAEkANgBRAEgANQB0AGkAeAArAEkAcwByAGUASgBSAE0A
+dABlAG8AZwBoAHIAdgAzAHEAegBRAFgARgBIAGwAbQBZAHMAdwBuAHUAUQAyADcAbwBMAFYAegBp
+AHUAQgAyAHMAagBoAGEAeABwAG4AcQAwAFUAbwBKAEEAMgBmAEMAawB1AHMAaABRAFMAcgBMAG0A
+bQBZAHMAMwB2AFUAYwBQAGQAQwBxAFQAcQA5AGMAQwBCAFUAVwA4AEMAYgBkADYATAB1AFIAeQBu
+AGIARgBvAGgAOQBSAEMAWAArAEIAMgBiAGcAagB6AGYAZgBqADEAbABsADkAOQBnAGsAVgBqADEA
+RABpAHgAcgBjAFMAegBNAHMANAB1AC8ARABvADUAQQBCAGkAVQBKAEEAbQAvAFIAeABMAGQAVwB0
+ADAAeABsAEQARwBtAHEAbQBTADgAVABXAGwAawBNADYAdwBLAEEAMQBJADkAbQBkAGgASABRAEQA
+egBlADIAeABBAGIAbwBSADkAcwBxAE0ARgBXADgAMwBUAFkAVABkAGQAegBRAGwAbAA2AEIAMQBJ
+AGMASgAvAGcATABnAC8AMwBXAFIAUAA2AEgAeABHAE8ALwBYAEwAZABKAGQAcgAzAEMATwArAEEA
+UABxAGMATQBIAGYAbwBqAHQATQBFAE0ARQAvAEoARABZAG4AMABjAHIAbQBwAFIATwB2AHkAYQAy
+ADEARgBJAEwAbgAwACsATAArAE8AbQBnAGYAUgA3AGkAWgBrAHMATQBlAHkAUwA4AE0AOABpAE4A
+UQA9AD0AAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAADgAAAB4AC0AZgBvAHIAZQBmAHIAbwBu
+AHQALQBhAG4AdABpAHMAcABhAG0ALQByAGUAcABvAHIAdAAAAAEAAAACBAAAQwBJAFAAOgAyADUA
+NQAuADIANQA1AC4AMgA1ADUALgAyADUANQA7AEMAVABSAFkAOgA7AEwAQQBOAEcAOgBlAG4AOwBT
+AEMATAA6ADEAOwBTAFIAVgA6ADsASQBQAFYAOgBOAEwASQA7AFMARgBWADoATgBTAFAATQA7AEgA
+OgBDAEgAMgBQAFIAMQAyAE0AQgA1ADAAMAA0AC4AbgBhAG0AcAByAGQAMQAyAC4AcAByAG8AZAAu
+AG8AdQB0AGwAbwBvAGsALgBjAG8AbQA7AFAAVABSADoAOwBDAEEAVAA6AE4ATwBOAEUAOwBTAEYA
+UwA6ACgAMQAzADIAMwAwADAAMgAyACkAKAA0ADYAMwA2ADAAMAA5ACkAKAAzADkAOAA2ADAANAAw
+ADAAMAAwADIAKQAoADMAOQA2ADAAMAAzACkAKAAzADcANgAwADAAMgApACgAMQAzADYAMAAwADMA
+KQAoADMANAA2ADAAMAAyACkAKAAzADYANgAwADAANAApACgANAA1ADEAMQA5ADkAMAAxADUAKQAo
+ADMAMwA2ADUANgAwADAAMgApACgAOAA2ADMANgAyADAAMAAxACkAKAAxADIAMgAwADAAMAAwADAA
+MQApACgAMgA5ADAANgAwADAAMgApACgAMwA4ADAANwAwADcAMAAwADAAMAA1ACkAKAAzADgAMQAw
+ADAANwAwADAAMAAwADIAKQAoADUANgA2ADAAMwAwADAAMAAwADIAKQAoADUANQAwADEANgAwADAA
+MwApACgANgA2ADUANQA2ADAAMAA4ACkAKAA4ADkAMwA2ADAAMAAyACkAKAA0ADEAMwAwADAANwAw
+ADAAMAAwADEAKQAoADYANgA0ADcANgAwADAANwApACgANAAzADIANgAwADAAOAApACgAOQA2ADgA
+NgAwADAAMwApACgAMwAxADYAMAAwADIAKQAoADYANgA0ADQANgAwADAAOAApACgAOAA2ADcANgAw
+ADAAMgApACgANgA0ADcANQA2ADAAMAA4ACkAKAA1ADIANQAzADYAMAAxADQAKQAoADYANgA5ADQA
+NgAwADAANwApACgANgA1ADAANgAwADAANwApACgANwA2ADkANgAwADAANQApACgAMQA4ADYAMAAw
+ADMAKQAoADcANgAxADEANgAwADAANgApACgANAA3ADgANgAwADAAMAAwADEAKQAoADgAMwAzADgA
+MAA0ADAAMAAwADAAMQApACgANwAxADIAMAAwADQAMAAwADAAMAAxACkAKAAxADEAMAAxADMANgAw
+ADAANQApADsARABJAFIAOgBPAFUAVAA7AFMARgBQADoAMQAxADAAMQA7AAAAAAAfAACAhgMCAAAA
+AADAAAAAAAAARgEAAABcAAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAGEAbgB0AGkAcwBw
+AGEAbQAtAG0AZQBzAHMAYQBnAGUAZABhAHQAYQAtAGMAaAB1AG4AawBjAG8AdQBuAHQAAAABAAAA
+BAAAADEAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABKAAAAeAAtAG0AcwAtAGUAeABjAGgAYQBu
+AGcAZQAtAGEAbgB0AGkAcwBwAGEAbQAtAG0AZQBzAHMAYQBnAGUAZABhAHQAYQAtADAAAAAAAAEA
+AADaDAAAVgBDAFcAagBRAFUAMAB1ACsAawB4ADUAYwBKAGsATgBLAGIAUQBZAEYANQB1AGoAeABs
+AHQAQQBVADIAWAA2AEwAdgA4AFUAVQBSADUAYwBjAHMAcgBqAGgAZABlAGQAMQByAFQARAB1ADAA
+VgBXAFAAQwBkAFcAawBXADYAUABMAHAAdABRADAAWABRADMAMAB5AHkALwBTAGoAUwBMAGkAdwBB
+AFoAZgBXAEwARwBjAE4AcQBNAC8ATQBaADkANQBZAGoASgB0AEMAbgAyAGoANwBmADIAWQArAHUA
+LwBMACsAcgBBAGEAawBoAEQANwB4AHoAcgBpAGUAeABvAHIAZQBXAHcAegBzADAAdwA5AHAAeQBH
+AEEARgB1AE8ARgBSADAARwB0AEIAeQBmAEMASQB4AFcAMAA3AGoAWQBmAEwAUwBwADIAegBuAHIA
+aABjAHYAegBXAFUAcQBvAHQAMABOAFgAYwBqADgAcQBkADUARwBZAGYAVQBnAFEAVABTAEgAQwBS
+AEwAcwB6AFcAKwBPADUAQwAxAFIAQQBFAGYASwBRAGgAMgBwAEsAeABDAGsARgB5AGEAbABqADIA
+bgBJAEkASAA4AGQAQQBsADcAOABUAG0AYgA1ADcAVQBFAHcAOAAyAHAAQwAzAEMAKwArACsATgBx
+AGkAWgBwAE4ALwBGAEkARgBPAE0AbwBIAFoAUQBvAFkAcQAxAFUAZQBoAE4AZwBCAGcAVQA5ADgA
+YQB0ADUAUwBZADEATABVACsAbABpAFYAWgBGAEYAOQA5AG0ARQB3AFcASQBXAEEAWQBvAEoAcQBu
+AE0AawBKADkAbgBRAFIASwBzAGQANABFAGMAYQBLAGwANABGAFMANAB2ADAAQQBQAEgAVQB1AFQA
+MwBmAFQARwBGAGYAeABBADYAQwBUAFAAegBsAFQAUQBPAFgAaAAwAEkATQBhAFYAQgB2AG0AWgB0
+AEwARQB3AGoASAB4AEUAZwBWACsATABWAEoARwAzADAAcwBvAFcAWQB2AFoAZQBwAEoAdgBxAFgA
+cQBEAEkAYwB3AGQAWABKAFQAMwBNAG8AOABjAHQAVAB2AG8AbwBaAEMAaQA1AHMAYQBxAGcANQBs
+AHcARwBxAHUAbABKAHQAegBTAC8ARABXAFkASwBNADQANgAwADAAegBlAGwAagBTAEkAWQBRAGkA
+UgBiAEoARQBZAEgANwBnAE8AcQBRAEEATAB0AEkASgBEAHMATAAzADYAdwB6AGYAdQBiAGMASABR
+AEMAYgBaAHYARABYAEMAYwBuAEMAdQA5AFMARABLAEEAWQBBAEwANABaAHcATwBQAHkAVABUAE8A
+RwB1AHIAUwBRAHMAaABTAEkATwBmAHkAYQBQAEwATABTAFUAUAA0AGMAMgBUAHgAcwBDAFYASQBC
+ADgAQQAvAE8AUwBFAGcAcQBQAFEAcwBVADkANgBZADQAUgBTAEEAbQArAHcAagB0AHMATwBRAG4A
+eQA5AGgAQwBLAHMAZwBnAEgAbgBEAEIAcwA0AFcAVwBwAE4AOQBZAHgAZwBKAEkAMwBCAEsAawA1
+AGoAeAB2ADQAcQBlAG8ALwA3AG4AMgBiAEgAMwB3AEoALwBmAGMAeABGAFkASwBtAHUAZQB4AG4A
+VwBDAGoAMgBIAFAAbwBkAFcAOQBnAEEAMgArAFIAVAAwAEwAUgBSADMARQByACsAVQBpAEEAZABN
+AEgAVQBmAHcAaQBiAGYAVQBhAFIAVgBIAGMASwArAHYASgBaADEAcwBZAFQAaQAwAEUARQBlAEkA
+UgBOAHYAZABjAEoAaQA5AFgALwBrAFoAdQA1AGMAZABkAEcAUwA0AGsAZwBzAHIAaQBkAGgAUwB4
+ADMATgBSAHIAcABCAGIAYwBpADMAbwBpAHcAMABsAC8ARQBFAEQAUQBNAGMAMQBUAGIANgB2AFcA
+VwAxADAAZwB0AGcAMgBQAG8AcABiAGYAQwBZAFQAQgAwADAAcQByAGwAQgBKAFkASgAxAFcAdQBM
+AHUAOQBXAHAAZABhAFgAUABaAEoARAArAGUAdAA1AGcARABoADQAMgBJAGcAeQA5AHcAawBXAGQA
+MABKAGYAaAAwADgANQBVAHQAVwBoADcAMQByAEQATQA5AEoANABoAEUAYgByAGcAWQB0AEUAagBl
+ADMARgAwAFoAKwBnAHEATAA3ADYAYQBSAGcAMgBjADMATgB1AGIAWABJAGYAeABLAHEAaABHAEYA
+OQAvAE0AcABkAEEAZQBzADYANwBMAC8AbABqAGcAYgB0AFYAcwBaAGgAcQBEAEEAdABlAEwAcABB
+AEUANQB4AGUAVgBDAFkAVgBVAGcARgBKAHQANQBlADUAVgA2AGkAWABXAGwANwAzAFAAZgBvAHEA
+QgB3AFQAdgBTAE4AcABSAHUASwBuADAAaABEADgAQgB4AHYAeQBYAHgASgBiAGoATgBnAHQANgA2
+AFIAUAB6AGYAdQBRADcAcwBOAEwAVABFADAAMAArADcAVgBDAFcASQArAHUAcABoAHoAZgA3ACsA
+YQBWAG0AcQBOAEsAYwB5AGQAeABpADEAWgBkAEwARwBFAHoAbQBxAHYAWQBlAFQAUgA1AE4AdQBG
+AHcARwB5ADgAeQA4AFYANABwAFEAaAA1ADYANwBTAGgATAA3AEUARgBoAEoAdQBYAFEAdQBEADkA
+ZABCAHAAZQByAFkAUwBiAGwAdwAzAFgAQwAvAGMAVgBJAHMAawBGAFIAYgBOAHIARgBoAE0AVgBG
+ADYAdQBMAHMAdQBTAFcAUAA4AHoARABvAEIAWAB6AGcAcwB4ADkAMABEAFEANwBTAGQAUwBvAHoA
+bABBAGUAMQBUAHMAUwBKAFEAVgBLADAASgB5AEMAOABKAEwAdgB4AHEAUgBwAFEAUwBMADIAdgB5
+AC8AcQAxADgAKwBEAFEAbwBBAEgARQBxAEUAUQBqAEkAZQBUAG0AdAA5AHUAWgBBAGkAdwBWADcA
+aAB4AEoAMwBKAG0AbwA0AE8AVgBqAEMAbwBSAEQAaAA4AEsASAA4ADMASgA3AHgAZQB5AHkAZAB0
+AG4AdgBzADAAYwBSAGUAegBUADkAcABKAGsAUgAzAEUAagBWAE0AeABZAHYAYwBqADYAbAArAGcA
+VwBxAEYAZgByAEwAQQBkAGsAYQBXAEQAQQBhAGYAYQBqAHoAagBmAFoAbgBNAFcAbQBCAFoAMgB1
+AGQAdwBoAFgAUQBhAG0AKwBNADMANgBtAFQAWgB5AEgAaQBpAHgASABDAHYAZQA3AEoATQBEAFAA
+bABEAEEAQQAvAFMAaQByAEYATgBkAHcASQA5AFYAVwA4AEMAVAAyAHoARQBJAGoAYgBEAHoASgBi
+AFUAdgB1AHAASwBxAGkAaQA5AFUAegBEAHUAWgB0ADMAVAB0AGgAWAA5ADgASwAwAEkAdgAyAHgA
+aABkAGsATwBEAFMAWABtAG8AUAB6AG0AUQBnAFYASwB2AHgAaQBRAFMARgBsAEEANwBXAFkAMwBp
+ADMAMAB0AFoAWABDAEkAegBXADUARwAyAHoAbgBTAHQAdABaAGkAaQBwAHAAUQBXADYAdQArAG0A
+UQBCAFQAdwBnADUAMgB4AGwAQgBYADYAagBDAFYARwB1AEsAZQBpAGgAaABlADYAYgBNAGMAWABT
+AFcASwBWAG4ARwBXAEUAVAA5AFIATABsAFEATwBGAEEAeAB3AEQAZwBRAFUANwA2AEgAYgAvAHUA
+TgA2AEYAVQA4AHUAdwBuACsAVwBsAGsAVAB0ADcANABUAEkAQQBvAEgAQQB3AHIARABSAEkAcwBx
+ADAAdgBNADEATwBMAFUAMQBLAGQAMABFAGEAMAB5AHIAZAAzAGEAagA3AHEAWQBoAFYAOAA5ADIA
+MgBuAHMATwBtAFQAdQBsADMAZgBVAFAANABzADcAYgAxAGQAWgBPADAAawBKAHoANQB5AGQAYQB5
+AE8ATwBlAHAAcABkAFAAUQBLAGUASwBHAEoAdwB5AGYAZgA3AHUAdABFAFIAUABwAFgAUgBOAG4A
+SABMAGoAVQB6AFgAaABOAEUANABHAGQAOQBqAEsAUQB0AFEANQAvACsARwB3AEoAMABPADMAOQAv
+AGIARwBHAFgAQwBNAEoAZgB1AGQAcAByAFYAeQBtAHIAaQB0AE0AKwA0AGwANABQAGQAKwAvAGYA
+eAA0AEIASQBwADcAQQAvAE0ASQBZAEsARwBtAGIATQBsAHIAZQB3AFoANABjAGoAYQBxADgAMAA4
+AHkASAB5AGgAYQBoAGwAbgA5ADMAbgBKAE0AQQBVAFoAVAAyAEkANQBVAD0AAAAAANWf
+
+--_000_CH2PR12MB5004970812B1666D57B26FD7F00F9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--_000_CH2PR12MB5004970812B1666D57B26FD7F00F9CH2PR12MB5004namp_--
