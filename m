@@ -4,90 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91817C43217
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 13:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D179C43217
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 13:53:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E266A4056A;
-	Thu, 24 Nov 2022 13:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E266A4056A
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEF49410BB;
+	Thu, 24 Nov 2022 13:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEF49410BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tjkid6sqB4Hh; Thu, 24 Nov 2022 13:47:44 +0000 (UTC)
+	with ESMTP id J3RUMtxKN8Ur; Thu, 24 Nov 2022 13:53:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F00A040C89;
-	Thu, 24 Nov 2022 13:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F00A040C89
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D1E9410BD;
+	Thu, 24 Nov 2022 13:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D1E9410BD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AE01B1BF419
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 13:47:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9E2461BF419
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 13:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 873E841BDB
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 13:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 873E841BDB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78E9341976
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 13:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78E9341976
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X9dqG3QBNceD for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 13:47:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32D8541BD4
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32D8541BD4
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 13:47:39 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id s5so2583665edc.12
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 05:47:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=sOgD17j8xwbFqjihLIfu1nNyJWA+Qg5aA3k1IbAYTAA=;
- b=TXXMt30IfIFezQQIHSchZkAQLANIASFmTdg3/E8Ym+sScGOvrcjvfwvj1OE+ty4ja/
- 1SQwiEBrV9SG6yl41kfPRrEflODoiYHKbNAVU92Zf021yyYHM2oXFaOGMHZP5GC5ylsv
- X8uOZGzwXYrqce865xGCfrA+BXK4xCK0nPFiK2QEwGH0N4UogQP1kQyY9S1yuKhqNgmc
- s5N2wJDN++Lug1xhCX1q3w378zxF2n6VxDJ5Va4jjeG8D6X8mkjq4BQK18VVtYW1xaZl
- R3368yiBmZXldpMuVSarHvovxGc4frthM6QSOhZA/YAFyhoChHD9Slz8JWUbsCs5+9Dh
- 8Igg==
-X-Gm-Message-State: ANoB5pk45NX3Hn4FlH28FN5yzgmlHMMzu/0JCBHZA4D4imSOn42Q5Zpf
- mviIUW9FAZ6gtmnPT8vcKhGfIg==
-X-Google-Smtp-Source: AA0mqf7mXRwcE+FtzJDZNmNssMFGAvMRLLVEby4TpXSHpI9lQnx6WqsSwj2oU/JYZyEViFbFiMZlPA==
-X-Received: by 2002:a05:6402:2929:b0:469:b603:ca21 with SMTP id
- ee41-20020a056402292900b00469b603ca21mr14482339edb.350.1669297658011; 
- Thu, 24 Nov 2022 05:47:38 -0800 (PST)
-Received: from [10.1.0.116] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- p24-20020a056402075800b0046191f5e946sm532237edy.21.2022.11.24.05.47.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 24 Nov 2022 05:47:37 -0800 (PST)
-Message-ID: <2c5c61d4-dc85-3848-ffbe-a7a1b55dca5b@mind.be>
-Date: Thu, 24 Nov 2022 14:47:35 +0100
+ with ESMTP id xlT2cCMBqcLO for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 13:53:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 003C74091D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 003C74091D
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 13:53:42 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D2E6C60009;
+ Thu, 24 Nov 2022 13:53:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1oyCfX-000f8W-AS; Thu, 24 Nov 2022 14:53:35 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu, 24 Nov 2022 14:53:34 +0100
+Message-Id: <20221124135334.158081-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-GB
-To: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
-References: <20221101003419.754757-1-christian@paral.in>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20221101003419.754757-1-christian@paral.in>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=sOgD17j8xwbFqjihLIfu1nNyJWA+Qg5aA3k1IbAYTAA=;
- b=WPkfXxwLLgbeTtmtOVIpltim6FWvTddFy5qe1ErkrWTbQkpjCO3zu3uZABrxJnk2aC
- TxgrFhR2udvo8mbqYlvg4VjiiIZpP9B+RmxTDQ/6ri7TAkVjpfA4DbEAK7ls1Hu++876
- PpSdX6LvLtUUBxvu146jd7eJkuf2qRq9BonM+coyX8/fRbv75k6+RwzvNII7KBY/RyXf
- H8xaMZRPktk3P92kqjJA+Gfq3xUIc6c5MM4jlQU8g6507Ag0R5L4SHkR7blc/HOLNG53
- +NntH7eiEzooLH+vbKJKrG3pLHIe3+KBxHhKx9JhGTws7b2scIExz5gAYvL5E7RYeV80
- 6YmA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WPkfXxwL
-Subject: Re: [Buildroot] [PATCH 1/1] package/go: disable stack protector for
- cgo
+Subject: [Buildroot] [PATCH] package/libkrb5: security bump to version 1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,99 +60,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fixes the following security issue:
 
+CVE-2022-42898: In MIT krb5 releases 1.8 and later, an authenticated
+attacker may be able to cause a KDC or kadmind process to crash by reading
+beyond the bounds of allocated memory, creating a denial of service.  A
+privileged attacker may similarly be able to cause a Kerberos or GSS
+application service to crash.  On 32-bit platforms, an attacker can also
+cause insufficient memory to be allocated for the result, potentially
+leading to remote code execution in a KDC, kadmind, or GSS or Kerberos
+application server process.  An attacker with the privileges of a
+cross-realm KDC may be able to extract secrets from a KDC process's memory
+by having them copied into the PAC of a new ticket.
 
-On 01/11/2022 01:34, Christian Stewart via buildroot wrote:
-> Enabling the C stack protector for Cgo causes a build failure on i386:
-> 
-> runtime/cgo(.text): unknown symbol __stack_chk_fail_local in pcrel
-> runtime/cgo(.text): unknown symbol __stack_chk_fail_local in pcrel
-> runtime/cgo(.text): unknown symbol __stack_chk_fail_local in pcrel
-> runtime/cgo(.text): unknown symbol __stack_chk_fail_local in pcrel
-> runtime/cgo(.text): unknown symbol __stack_chk_fail_local in pcrel
-> runtime/cgo(.text): relocation target __stack_chk_fail_local not defined
-> runtime/cgo(.text): relocation target __stack_chk_fail_local not defined
-> 
-> Add: CGO_CFLAGS=-fno-stack-protector
-> 
-> https://github.com/golang/go/issues/52919
+Bugfix tarballs are located in the same directory as the base version, so
+introduce LIBKRB5_VERSION_MAJOR.
 
-  Based on the comments in this issue, I could determine that this was in fact 
-already fixed in 1.19.1, which we applied in Buildroot on September 7. I could 
-reproduce the issue after reverting to 1.19, but not with 1.19.1.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libkrb5/libkrb5.hash | 2 +-
+ package/libkrb5/libkrb5.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-  Therefore, I marked the patch as Rejected in patchwork.
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 2fce24b45b..94dfa2ed6e 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  7e022bdd3c851830173f9faaa006a230a0e0fdad4c953e85bff4bf0da036e12f  krb5-1.20.tar.gz
++sha256  704aed49b19eb5a7178b34b2873620ec299db08752d6a8574f95d41879ab8851  krb5-1.20.1.tar.gz
+ 
+ # Hash for license file:
+ sha256  cfadcf7b2ead2f3af793c25c00638c9908ac0023b101695f40cb9a03b16811dc  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 5e547470ed..9bacfaee58 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBKRB5_VERSION = 1.20
+-LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION)
++LIBKRB5_VERSION_MAJOR = 1.20
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
++LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
+ LIBKRB5_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, others
+-- 
+2.30.2
 
-  BTW, in the future, please make sure that a patch that fixes something 
-includes the Fixes: tag - this marks it in patchwork and makes it easier to pick up.
-
-  Regards,
-  Arnout
-
-> 
-> Set CGO_CFLAGS and other flags while building Go with make.bash as well.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->   package/go/go.mk | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index fe4d3a29a9..d6c15c4ac9 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -49,6 +49,8 @@ else ifeq ($(BR2_aarch64),y)
->   GO_GOARCH = arm64
->   else ifeq ($(BR2_i386),y)
->   GO_GOARCH = 386
-> +# stack-protector causes a build failure on i386.
-> +HOST_GO_CGO_CFLAGS += -fno-stack-protector
->   # i386: use softfloat if no SSE2: https://golang.org/doc/go1.16#386
->   ifneq ($(BR2_X86_CPU_HAS_SSE2),y)
->   GO_GO386 = softfloat
-> @@ -78,7 +80,7 @@ HOST_GO_TARGET_ENV = \
->   	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
->   	CC="$(TARGET_CC)" \
->   	CXX="$(TARGET_CXX)" \
-> -	CGO_CFLAGS="$(TARGET_CFLAGS)" \
-> +	CGO_CFLAGS="$(TARGET_CFLAGS) $(HOST_GO_CGO_CFLAGS)" \
->   	CGO_CXXFLAGS="$(TARGET_CXXFLAGS)" \
->   	CGO_LDFLAGS="$(TARGET_LDFLAGS)" \
->   	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
-> @@ -109,6 +111,7 @@ HOST_GO_CGO_ENABLED = 1
->   endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->   
->   # For the convenience of host golang packages
-> +# stack-protector causes a build failure on some architectures.
->   HOST_GO_HOST_ENV = \
->   	$(HOST_GO_COMMON_ENV) \
->   	GOOS="" \
-> @@ -116,7 +119,7 @@ HOST_GO_HOST_ENV = \
->   	GOCACHE="$(HOST_GO_HOST_CACHE)" \
->   	CC="$(HOSTCC_NOCCACHE)" \
->   	CXX="$(HOSTCXX_NOCCACHE)" \
-> -	CGO_CFLAGS="$(HOST_CFLAGS)" \
-> +	CGO_CFLAGS="$(HOST_CFLAGS) $(HOST_GO_CGO_CFLAGS)" \
->   	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
->   	CGO_LDFLAGS="$(HOST_LDFLAGS)"
->   
-> @@ -133,6 +136,9 @@ HOST_GO_MAKE_ENV = \
->   	CC=$(HOSTCC_NOCCACHE) \
->   	CXX=$(HOSTCXX_NOCCACHE) \
->   	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
-> +	CGO_CFLAGS="$(HOST_CFLAGS) $(HOST_GO_CGO_CFLAGS)" \
-> +	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
-> +	CGO_LDFLAGS="$(HOST_LDFLAGS)" \
->   	$(HOST_GO_CROSS_ENV)
->   
->   define HOST_GO_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
