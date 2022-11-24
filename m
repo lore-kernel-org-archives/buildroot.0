@@ -1,93 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96259C43219
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 11:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49152C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 11:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 228B94189F;
-	Thu, 24 Nov 2022 11:26:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 228B94189F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C82C813CA;
+	Thu, 24 Nov 2022 11:49:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C82C813CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JMG5q4C4WXaA; Thu, 24 Nov 2022 11:26:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rleJwv5yJqXe; Thu, 24 Nov 2022 11:49:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3FC2418AE;
-	Thu, 24 Nov 2022 11:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3FC2418AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC86081D18;
+	Thu, 24 Nov 2022 11:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC86081D18
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFA291BF48C
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 11:26:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8C1961BF48C
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 11:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C84A782116
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 11:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C84A782116
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6680581D18
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 11:49:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6680581D18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nhZwOY694aOL for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 11:26:17 +0000 (UTC)
+ with ESMTP id qDR5JJykoVQ6 for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 11:49:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1F248211C
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A1F248211C
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 11:26:16 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id n21so3463360ejb.9
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 03:26:16 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A3E7813CA
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3A3E7813CA
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 11:49:19 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id i10so3614042ejg.6
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 03:49:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=3P+V/h3MWubRsr7XuaelymLCbFrDr8SOFsDwFDyTifo=;
- b=q+r+meChb2eRcPxs7MFrOCu66wtUMXrd02MrTwKh2J1ulEk9sRNKMpP0ByJE7XMk3Q
- WH837Tgs+MhT/BLmtKIYibTjoYxpBqrgQmP6MmJTz0zpoCJGRFET183BdJHsW80iDKyD
- jcRMnE6jB3nNGMmfjBbtgtc7C4u21fNSq4RX32yhGbG3D+kJqQEUJSLn0K7VsZAY0kDJ
- ygJALvCiqROzCgWw0aQia35LCOw9GhU+LpLhbBS1pYxEGxoeJfj6AzHlbr0BzaBazWUZ
- rWer73+JUIeUXKbBeQ7ZNus5Y97iMU76JZHhF4jX/EHPiJR0MMAyr7ZX5OoVmA93Xm1j
- XIBA==
-X-Gm-Message-State: ANoB5plNDtCzP6C1XCuy95Jc0nx8CSjp69qfkmODNnAB/C4T+4fY9Ats
- gnzZ5RgyGu394rS6X1jemZozIxa+oBEtew==
-X-Google-Smtp-Source: AA0mqf5vNePf6IGQEwlYcGzFESFPiNejymBQ8bUGqRRNjDMCNGYiP04l7XL7JO2JasjF0Pp2wfgqhA==
-X-Received: by 2002:a17:906:c18c:b0:7b2:8a6e:c569 with SMTP id
- g12-20020a170906c18c00b007b28a6ec569mr27546926ejz.582.1669289174861; 
- Thu, 24 Nov 2022 03:26:14 -0800 (PST)
+ bh=b8x3WjDdgVqWPrOnvxxNi4LhoVPlpNepO4p4dfeYMbs=;
+ b=bwIPV5nL2HvsXhVGE5UWe4kTBtklIy8xsUmDw4+a80Q1yDKdPxMtFPVwNTTboEbDAI
+ OwS1X6mbIuM1O331sCzANgh9TfAajwI4s/Y4DJPzPuzU2Q0E2pKy2ctud8nhI24eyf9g
+ 3y6MLtr8Ic9AbwdlASzmlAtD6G30hy4nctSRv/OHBx0ybf6aVh64YPYSHanuC9lk6zTX
+ Com0M/iRvalYrotCMYLQL0oGnLfu0PNOhT+WaowcXNutf3utF8WGz2ieP3eMv8KrG38v
+ 5Eb+zYqym2vofAKeys/wzhc05gaj8WnVXUvfM86J9OWRGwyeHUVM2xzit3HckjZoinz9
+ y+Zw==
+X-Gm-Message-State: ANoB5pkX7bLX6wMzdBaBhreZrliOzo7vMQ+IiuISWiOTGSaP8HYKK6Et
+ svQMzYWHVTsON/P+X5fiN5rkEA==
+X-Google-Smtp-Source: AA0mqf4e185z7Mue1B+TNF5YVV7CloBqhND5WQvE5LQ1DfAYNZgr/PqXA4cJt+QRX20E/uJkc0d9Qg==
+X-Received: by 2002:a17:906:9f11:b0:7b4:7758:f1e1 with SMTP id
+ fy17-20020a1709069f1100b007b47758f1e1mr19390204ejc.145.1669290557153; 
+ Thu, 24 Nov 2022 03:49:17 -0800 (PST)
 Received: from [10.1.0.116] (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- kz6-20020a17090777c600b007ad2da5668csm318663ejc.112.2022.11.24.03.26.13
+ s5-20020aa7c545000000b00458dc7e8ecasm419686edr.72.2022.11.24.03.49.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 24 Nov 2022 03:26:14 -0800 (PST)
-Message-ID: <c91a89d0-094a-bbb7-c406-7c1d72cb5469@mind.be>
-Date: Thu, 24 Nov 2022 12:26:11 +0100
+ Thu, 24 Nov 2022 03:49:16 -0800 (PST)
+Message-ID: <38660b17-3747-336e-87d6-3603aa55e379@mind.be>
+Date: Thu, 24 Nov 2022 12:49:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
 Content-Language: en-GB
-To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
-References: <20221123173149.17188-1-brandon.maier@collins.com>
+To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20221115235235.74897-1-abrodkin@synopsys.com>
+ <20221115235235.74897-2-abrodkin@synopsys.com>
+ <20221116085427.3525bbcc@windsurf>
+ <IA1PR12MB6210F02877F05C126179D5C1A1079@IA1PR12MB6210.namprd12.prod.outlook.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20221123173149.17188-1-brandon.maier@collins.com>
+In-Reply-To: <IA1PR12MB6210F02877F05C126179D5C1A1079@IA1PR12MB6210.namprd12.prod.outlook.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=3P+V/h3MWubRsr7XuaelymLCbFrDr8SOFsDwFDyTifo=;
- b=Wj8SL/pNg8sZHDRI47swHQbjkZ96W+hR6L+9WuoDyTo8CcDR/pGbX86YjkxKQliS3C
- fw0w3Ht1ZIAgUuFZ5WyIRL1/RN+fNDqnw/7ajpxtKuSePTAwa1iqDq9OH+/dY8ELmAIh
- Y5YM5UwLPBD1k4MZbGvCzyuDxEy68VFU5sW6geAAdCdqSzAnUEzU8dGoDhNnbXXNOzYX
- AeAsFnNYJTAH9FdRs5txC/lSzZTogJMTlLMWQDwhXiP1r/dDqwg+ipH6yq0yRLpqCTRo
- 1gxTo1gu0snJSVeibgDDBZnC9+vQzRIPCkz82fttzPb3NcyNhuXXBjn6Eo4Ygq9qxZYG
- PXaA==
+ bh=b8x3WjDdgVqWPrOnvxxNi4LhoVPlpNepO4p4dfeYMbs=;
+ b=MxSiqR8xaGzXfDd4DzRbgpUNueCw8R6y2DRCuMzFNOao7ZB3XvvQpp7ffzFK2jAGyA
+ awkRCq/3cX3d4gObkCrBQezLQEjUtSALnqRNEFYOQdwvwyQVL5qVLThI+eDZ7i06MeTY
+ CqGdI1WX2gCx7zbhQ2ub2zfuExtGNFSEtFlAjG7zACwPOKePrHbROaj2NMrUhmvPxTec
+ W5gPp/fADNAk+22tnoWadO5HexWxfl/QqCDclxFnhHroBfyFMYlZ3tfLqKTyEQomIk0a
+ 4qpL/KkOk0I1CPhHUuNyYmiQZ8qNzoWQEu5+X3GvF/BGWxIyK2YBbwwxuU9Ms2AwnjWe
+ UHKA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Wj8SL/pN
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-kconfig: fix bad config
- with per-package-dirs
+ header.a=rsa-sha256 header.s=google header.b=MxSiqR8x
+Subject: Re: [Buildroot] [PATCH 1/2] package/glibc: add support for ARC700
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,7 +102,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sergey Matyukevich <Sergey.Matyukevich@synopsys.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -107,83 +112,86 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 23/11/2022 18:31, Brandon Maier via buildroot wrote:
-> If BR2_PER_PACKAGE_DIRECTORIES is enabled and Buildroot is using
-> HOST_MAKE for a Kconfig package. The $(1)_KCONFIG_RULES does not work
-> correctly, and kconfig-package-regen-dot-config will always run the
-> 'oldconfig' target.
+On 16/11/2022 16:33, Alexey Brodkin via buildroot wrote:
+> Hi Thomas,
 > 
-> This is because $(1)_KCONFIG_RULES expands before the first recipe line
-> of .stamp_dotconfig. $(1)_KCONFIG_RULES attempts to call $(HOST_MAKE),
-> which requires that the per-package/<pkg>/host directory has been setup.
-> But that directory is not setup until a later recipe line. This results
-> in $(1)_KCONFIG_RULES silently failing, and so always configuring with
-> 'oldconfig'.
-> 
-> Fix the issue by calling the command as part of the recipe, so
-> $(HOST_MAKE) will be ready in time. As the comment on $(1)_KCONFIG_RULES
-> describes, we should not use backticks. Use an intermediary file to
-> store the output of the command, so that backticks are not needed.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+>>> Even though ARC700 glibc port is very close to ARCv2 port, it is formally
+>>> another ABI that requires appropriate maintenance. That includes running
+>>> extensive glibc test-suite and fixing discovered issues and regressions.
+>>> That effort was considered impractical due to ARCompact ISA reaching EOL.
+>>> Besides ARC700 processors are usually found on very resource constrained
+>>> devices that tend to use uClibc if they run Linux.
 
-  Although this is a fix (normally for master), it's not a regression and the 
-issue has been there for years already. In addition, it's not something that is 
-very well tested, so it's a risky change. Therefore, I applied to next, thanks.
+  This sounds very much like we should use uClibc in snps_arc700_axs101_defconfig.
+
+>>>
+>>> On the other hand adding ARC700 glibc support still can be useful for
+>>> development and testing purposes. This commit adds two glibc patches
+
+  "Development and testing purposes" is really not making a strong case... It 
+sounds like the only reason to keep those glibc patches is to be able to test 
+glibc, but you don't want to commit to really fully support glibc, so what is 
+the point then?
+
+>>> that enable ARC700 support.
+
+  The cover letter says that it fixes something, then the commit message should 
+contain a Fixes: line so it's clear that this patch is for master, not next.
+
+>>
+>> Hmm, this commit only adds one patch.
+> 
+> Correct, because that's all what's needed for ARC700 to be supported by glibc
+> as good as ARC HS processors are. Seriously, there're just a couple of
+> instructions which need to be changed (like use "trap0" instead of "trap_s 0")
+> and dynamic loader name is different ("/lib/ld-linux-arc700.so.2"). All the
+> rest is some configuration/infrastructural nonsense.
+> 
+>> Also, what is the upstream status of this patch?
+> 
+> As it is said in the patch itself, we decided to not officially maintain ARC700
+> in glibc due to very strict rules in the upstream glibc community for supported
+> architectures and ABI's. But given minimal differences compared to ARCv2
+> (read "ARC HS") port, IMHO it's practical to have ARC700 support "downstream"
+> with a bit more relaxed requirements on maintenance activities... which doesn't
+> mean I'd like to throw stuff over the wall and never do anything about it.
+
+  Yeah, what you're saying is: fully supporting it is a lot of effort because 
+you have to run all the tests every time glibc is updated (and there are 
+probably tests that will fail because they're somewhat fragile). While just 
+carrying those patches is probably going to work for most people.
+
+> 
+>> In order to make sure we can easily update glibc, I'm not too fan to have
+>> patches that are not upstream.
+> 
+> That's understood, but for many releases that change was equally applicable to
+> newer glibc versions (as we touch code which is rarely being modified) and even
+> now I re-based or refreshed this patch from 2.34 to 2.36 automatically with
+> only changes of hunk offsets (for the record, even before refresh, the patch
+> got applied to the current glibc in Buildroot only showing patch warnings
+> related to offsets).
+> 
+> That said, if you're not comfortable with the current maintenance status of
+> glibc for ARC700, we may drop it and limit ARC700 to only uClibc, otherwise
+> let's keep that patch until it seriously get in the way on glibc upgrade etc.
+
+  I don't see much advantage for Synopsys to spend any effort at all in 
+maintaining glibc for ARC700. So I'd simply limit ARC700 to uClibc. If in the 
+future you encounter a real use case for supporting glibc, then I think we can 
+carry those glibc patches - as you said, they should still apply. But until 
+then, I wouldn't bother.
 
   Regards,
   Arnout
 
-> ---
->   package/pkg-kconfig.mk | 28 ++++++++++------------------
->   1 file changed, 10 insertions(+), 18 deletions(-)
+
 > 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 32dcfea0bc..f4f35bf96a 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -45,11 +45,16 @@ endef
->   # only, as this can fail in complex cases.
->   # $(1): the name of the package in upper-case letters
->   define kconfig-package-regen-dot-config
-> -	$(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
-> -		$(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
-> -		$(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
-> -			$(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
-> -			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
-> +	$(Q)[ -e $($(1)_DIR)/.br_regen_dot_config ] || \
-> +		$($(1)_KCONFIG_MAKE) -pn config 2>/dev/null \
-> +		| sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d' >$($(1)_DIR)/.br_regen_dot_config
-> +	$(Q)if grep -q '\bolddefconfig\b' $($(1)_DIR)/.br_regen_dot_config; then \
-> +		$($(1)_KCONFIG_MAKE) olddefconfig; \
-> +	elif grep -q '\boldnoconfig\b' $($(1)_DIR)/.br_regen_dot_config; then \
-> +		$($(1)_KCONFIG_MAKE) oldnoconfig; \
-> +	else \
-> +		yes "" | $($(1)_KCONFIG_MAKE) oldconfig; \
-> +	fi
->   endef
->   
->   # Macro to create a .config file where all given fragments are merged into.
-> @@ -147,19 +152,6 @@ $(2)_KCONFIG_MAKE = \
->   	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
->   		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
->   
-> -# $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
-> -# of the shell conflicts with Make's own syntax, this means that backticks
-> -# are used with those shell constructs. Unfortunately, the backtick syntax
-> -# does not nest, and we need to use Make instead of the shell to handle
-> -# conditions.
-> -
-> -# A recursively expanded variable is necessary, to be sure that the shell
-> -# command is called when the rule is processed during the build and not
-> -# when the rule is created when parsing all packages.
-> -$(2)_KCONFIG_RULES = \
-> -	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
-> -		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
-> -
->   # The specified source configuration file and any additional configuration file
->   # fragments are merged together to .config, after the package has been patched.
->   # Since the file could be a defconfig file it needs to be expanded to a
+> -Alexey
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
