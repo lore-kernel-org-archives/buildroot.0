@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8D31C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BF2C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 24 Nov 2022 21:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 597DD8214C;
-	Thu, 24 Nov 2022 21:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 597DD8214C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36C8F4035D;
+	Thu, 24 Nov 2022 21:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C8F4035D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X2nO1YgfE2c4; Thu, 24 Nov 2022 21:57:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3yEVcOO1JAMv; Thu, 24 Nov 2022 21:58:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C9A98209A;
-	Thu, 24 Nov 2022 21:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C9A98209A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B8F2402E5;
+	Thu, 24 Nov 2022 21:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B8F2402E5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 768731BF311
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:57:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67F421BF311
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 522D58209A
- for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:57:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 522D58209A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 354F982257
+ for <buildroot@lists.busybox.net>; Thu, 24 Nov 2022 21:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 354F982257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kj82fXsth4ER for <buildroot@lists.busybox.net>;
- Thu, 24 Nov 2022 21:57:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E04C78206A
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E04C78206A
- for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:57:18 +0000 (UTC)
+ with ESMTP id rMj0yoqNQ8Ia for <buildroot@lists.busybox.net>;
+ Thu, 24 Nov 2022 21:58:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12BC78214C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12BC78214C
+ for <buildroot@buildroot.org>; Thu, 24 Nov 2022 21:58:19 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EF99A1BF204;
- Thu, 24 Nov 2022 21:57:15 +0000 (UTC)
-Date: Thu, 24 Nov 2022 22:57:14 +0100
-To: Yu Chien Peter Lin <peterlin@andestech.com>
-Message-ID: <20221124225714.7cc1dcf4@windsurf>
-In-Reply-To: <20221116025529.26935-1-peterlin@andestech.com>
-References: <20221116025529.26935-1-peterlin@andestech.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 92D8FC0008;
+ Thu, 24 Nov 2022 21:58:17 +0000 (UTC)
+Date: Thu, 24 Nov 2022 22:58:16 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20221124225816.3d2c6a95@windsurf>
+In-Reply-To: <20220920133224.3290270-1-giulio.benetti@benettiengineering.com>
+References: <20220920133224.3290270-1-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669327036;
+ d=bootlin.com; s=gm1; t=1669327098;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=y+Sp268ZgY67VAfhTEBqaN+frv8qtXtzgI6UJfqjuOI=;
- b=MrxyhyKWxFhVX5vgcxfxLVZp/PuAJmr7fgwC5gKVL+YlsirOWzdiRutvkoQ8d9fYQWhfxO
- bnOjKF1fJ0MwLkNy79jN7dJNmTo24qQeNlV8nnwHjd8J8QE+zu1VmXleU240q7gtN9XRr1
- 1zUM06ePa16y8AKITs7UYQnwKQ09SGllWJhObJ4BO9LFnXgc2J0xeapS8J3+WRzLlIX/7j
- usBdA3pMeVRwMaRh/uYUIhLn4PZbT6a+hXKbJTac8is8JSVgX/TBLvTprzLz4XFGHuZk1T
- BgUsjasA4NBBEsKBCCvW/6sD3UQXchPj5jzJ0HP/4Zn4xSuV2zGRluwSJO6aeg==
+ bh=HDNlxRwkEac06EiMs3ITRTts2fEYGNtjkHXwN+DCkIQ=;
+ b=PbbL70BMFvrzV4hx//loAQGmGUuhpPe31pyKJnzseOU+tbmp3M0+QB9t+wOoXji9ekkeES
+ SVSLcvDlWOJllxWgF+FYLR7YvZlmtDjVYzkEi8s0Cq8RkcymWN4tT0guXozQQN81HFAU8F
+ Yu3kVgBgLAa6tKN3R9itnWmtZd0EJaaDDeTBCBA0y5RmSYphS1a/gULPuOMM6LE//nNIK1
+ +Lgp29EOKBbIsOU8rU0NMX69nyQBq5a5GCsrkbeLVhsgRpYicZombLutowN9ggLKQo8l6Q
+ y8Xtj5C2aF+n+8TGeEaxvCbU+g04K2C+MYtpHvEMX8O1apJ7W6kGfwXAdFdL7Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MrxyhyKW
-Subject: Re: [Buildroot] [PATCH v3] andes_ae350_45_defconfig: bump opensbi,
- u-boot and linux
+ header.s=gm1 header.b=PbbL70BM
+Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure due
+ to missing Linux options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,60 +78,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Kris Bahnsen <kris@embeddedTS.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 16 Nov 2022 10:55:29 +0800
-Yu Chien Peter Lin <peterlin@andestech.com> wrote:
+On Tue, 20 Sep 2022 15:32:24 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> This patch bumps following packages to the newer version:
-> - OpenSBI v1.1
-> - U-boot v2022.10
-> - Linux 6.0
+> Enable Linux options depending on the bus has been chosen, so:
+> 1) enable by default common Linux options:
+> CONFIG_NET
+> CONFIG_WIRELESS
+> CONFIG_CFG80211
+> CONFIG_CRC_ITU_T
+> CONFIG_CRC7
+> 2) enable for SDIO bus:
+> CONFIG_MMC
+> 3) enable for SPI bus:
+> CONFIG_SPI
 > 
-> Linux kernel is hosted on AndesTech Github which includes ethernet,
-> SD card, DMAC, RTC, WDT drivers support. OpenSBI is based on v1.1
-> with andes platfrom fdt driver.
+> Fixes:
+> http://autobuild.buildroot.net/results/d8c4f0f959dd2ec110db8a75980f13172c3c116c/
 > 
-> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
-> Changelog v1 -> v2
-> - Add Signed-off and upstream status to U-boot patches
-> - Bump U-boot to a revision that includes U-boot patch 0003 & 0004
-> - Specify BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-> Changelog v2 -> v3
-> - Drop unused packages
-> ---
->  board/andes/ae350/ae350.dts                   | 274 ------------------
->  board/andes/ae350/genimage_sdcard.cfg         |   2 +-
->  ...isable-PIC-explicitly-for-assembling.patch |  29 --
->  ...2-Enable-cache-for-opensbi-jump-mode.patch |  25 --
->  ...001-Fix-mmc-no-partition-table-error.patch |  27 --
->  ...-Support-DTS-of-ftsdc010-driver-for-.patch |  38 +++
->  ...2-Prevent-fw_dynamic-from-relocation.patch |  27 --
->  ...-tree-blob-address-at-8-byte-boundar.patch |  42 +++
->  ...0003-Fix-u-boot-proper-booting-issue.patch |  26 --
->  ...04-Enable-printing-OpenSBI-boot-logo.patch |  25 --
->  board/andes/ae350/post-build.sh               |   2 +-
->  board/andes/ae350/readme.txt                  |   4 +-
->  .../boot/extlinux/extlinux.conf               |   2 +-
->  board/andes/ae350/uboot.config.fragment       |   6 +-
->  configs/andes_ae350_45_defconfig              |  19 +-
->  15 files changed, 98 insertions(+), 450 deletions(-)
->  delete mode 100755 board/andes/ae350/ae350.dts
->  delete mode 100644 board/andes/ae350/patches/opensbi/0001-Disable-PIC-explicitly-for-assembling.patch
->  delete mode 100644 board/andes/ae350/patches/opensbi/0002-Enable-cache-for-opensbi-jump-mode.patch
->  delete mode 100644 board/andes/ae350/patches/uboot/0001-Fix-mmc-no-partition-table-error.patch
->  create mode 100644 board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch
->  delete mode 100644 board/andes/ae350/patches/uboot/0002-Prevent-fw_dynamic-from-relocation.patch
->  create mode 100644 board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch
->  delete mode 100644 board/andes/ae350/patches/uboot/0003-Fix-u-boot-proper-booting-issue.patch
->  delete mode 100644 board/andes/ae350/patches/uboot/0004-Enable-printing-OpenSBI-boot-logo.patch
+>  package/wilc-driver/wilc-driver.mk | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
