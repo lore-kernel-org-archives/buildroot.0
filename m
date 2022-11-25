@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6092FC4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E97C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13ADB81E43;
-	Mon,  5 Dec 2022 12:19:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13ADB81E43
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A5E64059E;
+	Mon,  5 Dec 2022 12:19:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A5E64059E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3yvjx84uMNp1; Mon,  5 Dec 2022 12:19:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GhfCyjOBejS9; Mon,  5 Dec 2022 12:19:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B39A81E1B;
-	Mon,  5 Dec 2022 12:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B39A81E1B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B3744057A;
+	Mon,  5 Dec 2022 12:19:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B3744057A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BB7A1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D1C41BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6B2A4074E
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACB5C408BF
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6B2A4074E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACB5C408BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O_LQ8vRS-v57 for <buildroot@lists.busybox.net>;
+ with ESMTP id OWRl5d8KPmGU for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B93EA408D4
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B93EA408D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A7504052F
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A7504052F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B18EA85B9B; Mon,  5 Dec 2022 11:26:11 +0000 (UTC)
+ id 1779F85BA2; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Nov 2022 22:47:46 +0100
+Date: Fri, 25 Nov 2022 23:16:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3aaa6fd2aa5ba132ba6f95a12fc463ed6f4d850
-X-Git-Newrev: e52eb61842acb4a3b8a2d4b716ba673bc972cf89
+X-Git-Oldrev: 4060a6d5307d81475f8cc3b572cd6eca9a94ffbf
+X-Git-Newrev: b49d8c03da2dc25aa28f14a3db1d38298221c7c3
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112611.B18EA85B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dicttoxml2: new package
+Message-Id: <20221205112612.1779F85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-cadence-dp-firmware: also
+ install to target if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e52eb61842acb4a3b8a2d4b716ba673bc972cf89
+commit: https://git.buildroot.net/buildroot/commit/?id=b49d8c03da2dc25aa28f14a3db1d38298221c7c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a maintained fork instead of the abandoned dicttoxml.
+This firmware is loaded by U-Boot, so when U-Boot is loading the Linux
+kernel from the root filesystem, it is very likely that it will also
+want to load this firmware from the root filesystem.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Therefore, this patch makes sure that that Cadence DP firmware is
+installed alongside the kernel image in /boot in the root filesystem
+when the kernel is installed
+there (BR2_LINUX_KERNEL_INSTALL_TARGET=y).
+
+We keep installing the firmware in $(BINARIES_DIR) in any case.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                |  1 +
- package/python-dicttoxml2/Config.in              |  8 ++++++++
- package/python-dicttoxml2/python-dicttoxml2.hash |  5 +++++
- package/python-dicttoxml2/python-dicttoxml2.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index cafd3b338c..7d227f8112 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1021,6 +1021,7 @@ menu "External python modules"
- 	source "package/python-defusedxml/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
-+	source "package/python-dicttoxml2/Config.in"
- 	source "package/python-distro/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-diff --git a/package/python-dicttoxml2/Config.in b/package/python-dicttoxml2/Config.in
-new file mode 100644
-index 0000000000..0bd8068dd6
---- /dev/null
-+++ b/package/python-dicttoxml2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_DICTTOXML2
-+	bool "python-dicttoxml2"
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	help
-+	  Converts a Python dictionary or other native data type into
-+	  a valid XML string.
+diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+index 2ccdd8b903..4f75287269 100644
+--- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
++++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+@@ -11,12 +11,18 @@ QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
+ QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA EULA.txt
+ QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
++ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),)
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
++endif
+ 
+ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
+ 	$(call NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
+ endef
+ 
++define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
++endef
 +
-+	  https://github.com/Ousret/dicttoxml
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.hash b/package/python-dicttoxml2/python-dicttoxml2.hash
-new file mode 100644
-index 0000000000..7f584cc000
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dicttoxml2/json
-+md5  787ea4b80cd6234a41c016e8efa7ff40  dicttoxml2-2.1.0.tar.gz
-+sha256  67cb729f337dd752808c021b70c8df8a34f84b9e111a5dbaa37e000eeaf4d462  dicttoxml2-2.1.0.tar.gz
-+# Locally computed
-+sha256 4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
-diff --git a/package/python-dicttoxml2/python-dicttoxml2.mk b/package/python-dicttoxml2/python-dicttoxml2.mk
-new file mode 100644
-index 0000000000..d2abe63860
---- /dev/null
-+++ b/package/python-dicttoxml2/python-dicttoxml2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-dicttoxml2
-+#
-+################################################################################
-+
-+PYTHON_DICTTOXML2_VERSION = 2.1.0
-+PYTHON_DICTTOXML2_SOURCE = dicttoxml2-$(PYTHON_DICTTOXML2_VERSION).tar.gz
-+PYTHON_DICTTOXML2_SITE = https://files.pythonhosted.org/packages/0b/24/7a6d37b2770843e34685e470fd711955cb0f77c354c73d8ca64b02420bce
-+PYTHON_DICTTOXML2_SETUP_TYPE = setuptools
-+PYTHON_DICTTOXML2_LICENSE = GPL-2.0
-+PYTHON_DICTTOXML2_LICENSE_FILES = LICENCE.txt
-+
-+$(eval $(python-package))
+ define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
