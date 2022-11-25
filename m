@@ -4,58 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC881C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 10:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B628C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 11:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 356AA41D09;
-	Fri, 25 Nov 2022 10:35:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 356AA41D09
+	by smtp4.osuosl.org (Postfix) with ESMTP id D34F941D2A;
+	Fri, 25 Nov 2022 11:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D34F941D2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c1ydItK5Sqwz; Fri, 25 Nov 2022 10:35:00 +0000 (UTC)
+	with ESMTP id usIEMKARx3SI; Fri, 25 Nov 2022 11:02:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 215D04174E;
-	Fri, 25 Nov 2022 10:34:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 215D04174E
+	by smtp4.osuosl.org (Postfix) with ESMTP id A21B341D28;
+	Fri, 25 Nov 2022 11:02:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A21B341D28
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 27C9E1BF386
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 10:34:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B2AB11BF386
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 11:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CDD78214B
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 10:34:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CDD78214B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E20082160
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 11:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E20082160
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mM-BX67YiuXl for <buildroot@lists.busybox.net>;
- Fri, 25 Nov 2022 10:34:55 +0000 (UTC)
-X-Greylist: delayed 00:07:52 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D5B2820AC
-Received: from mx.msync.work (mx.msync.work [185.250.0.168])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D5B2820AC
- for <buildroot@buildroot.org>; Fri, 25 Nov 2022 10:34:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5DC8A31A2D; Fri, 25 Nov 2022 10:27:00 +0000 (UTC)
-To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 25 Nov 2022 13:26:50 +0300
-Message-Id: <20221125102650.2804226-1-adeep@lexina.in>
+ with ESMTP id P5Zg1jVyCfHc for <buildroot@lists.busybox.net>;
+ Fri, 25 Nov 2022 11:02:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A0EF820B6
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A0EF820B6
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 11:02:51 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B6C64100006;
+ Fri, 25 Nov 2022 11:02:47 +0000 (UTC)
+Date: Fri, 25 Nov 2022 12:02:46 +0100
+To: "Frager, Neal" <neal.frager@amd.com>
+Message-ID: <20221125120246.1fed3208@windsurf>
+In-Reply-To: <CH2PR12MB5004D69C65B84BEB0241DB7CF00E9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221124102144.16833-1-neal.frager@amd.com>
+ <20221124221557.4a18a2a9@windsurf>
+ <CH2PR12MB5004D69C65B84BEB0241DB7CF00E9@CH2PR12MB5004.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lexina.in; s=dkim; 
- t=1669372020; h=from:subject:date:message-id:to:mime-version:
- content-transfer-encoding; bh=Du5e2mfhJ0drDUZj1Dgll9VsosmOJaEBphQSTre1Tno=;
- b=Wf3J/5fmCgMKoYURpxTOHaq0Phneqr+4H8v+6I9pTFmHpYMz1JzarerQlKJuvS53E2/Puo
- OH7M6ot65MOUMRkGwvof2stUb+I2PNPh+/VcBHffSSeQP93tSv7t0gDX9Uc8k1LHZGiOLD
- rJPTus43gzgdap30xujPF0g6aTLyzQxNGlvTSw9rPXFE9Dl/92wLwLkas6kBzk3C4Dqwi5
- JjWb/eLY4cdeeHzEgn/CUb2y78kcXs6lFrze3H8cgL6T7KAlRayKcKTEJsOHLK4RC5jhV2
- KAsWhyqGzkkXkUNaBM6uOClLOMKV9pxt18qr1FUtszZFN5C023ype4TcVPH32Q==
+ d=bootlin.com; s=gm1; t=1669374169;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qLbnUoWja/QNqgTsBtk84x6DEtpYAE8y0W3mJwHXTKM=;
+ b=cw2Q/teI0gCI7gc2mXBexuiYpvPDmuDNX+U7gMkjDCOwzNH0VHIM2bg3a98e4G7IJjq1dh
+ knh+UVozOC1jTSm5Pq8lhmaDfJebmIQUErbPsWpwcUgEWVg1hWKmFJJuXf4POtozfe+fhh
+ y1Pin42pH996Q1iVWdgxtk+4+0RkC3dcPbFDtIwnAnM+UT7wJyVnuoIiuQE4FjHMho6uql
+ 1dru1h1Lz2SWkYzewDA+0izb2uLUcjDVlmLZE9zH542WjW/Sdd/wugnRuywKllsUI1EkAi
+ hwvfl0F9KrG9Oyp4oY55A1iesq9UZ9Zf+jzLokboFTs+ZAMzOyZHHbqJ4luzcA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=lexina.in header.i=@lexina.in
- header.a=rsa-sha256 header.s=dkim header.b=Wf3J/5fm
-Subject: [Buildroot] [PATCH] rtl8822cs: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cw2Q/teI
+Subject: Re: [Buildroot] [PATCH v6 1/2] package/versal-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,117 +76,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Viacheslav Bocharov via buildroot <buildroot@buildroot.org>
-Reply-To: Viacheslav Bocharov <adeep@lexina.in>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>, "Chaplin,
+ Kris" <Kris.Chaplin@amd.com>, "O'Neal, Terry" <terry.oneal@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package adds the rtl88822cs WiFi driver.
-   repo: https://github.com/jethome-ru/rtl88x2cs.git
-   branch: tune_for_jethub
+Hello,
 
-Driver is known to support Realtek RTL8822CS SDIO WiFi/BT chip.
+On Fri, 25 Nov 2022 09:29:05 +0000
+"Frager, Neal" <neal.frager@amd.com> wrote:
 
-Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
----
- DEVELOPERS                       |  3 +++
- package/Config.in                |  1 +
- package/rtl8822cs/Config.in      | 12 ++++++++++++
- package/rtl8822cs/rtl8822cs.hash |  1 +
- package/rtl8822cs/rtl8822cs.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 43 insertions(+)
- create mode 100644 package/rtl8822cs/Config.in
- create mode 100644 package/rtl8822cs/rtl8822cs.hash
- create mode 100644 package/rtl8822cs/rtl8822cs.mk
+> I copied the LICENSE file from the Xilinx/ubuntu-firmware repo below.
+>  Looking more closely at it, I believe you are right that the license
+> should just be Xilinx-Binary-Only.
+> 
+> I will update the LICENSE file to only include the binary portion as
+> described in the below license:
+> https://github.com/Xilinx/ubuntu-firmware/blob/main/LICENSE
+> 
+> The source code for the versal_plm and versal_psmfw applications
+> comes from the same Xilinx/embeddedsw repository as the zynqmp_pmufw,
+> so the source and binary licenses for all of these files should be
+> the same. https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 569d58407a..dda837bc5d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2937,6 +2937,9 @@ F:	package/llvm/
- N:	Vanya Sergeev <vsergeev@gmail.com>
- F:	package/lua-periphery/
- 
-+N:	Viacheslav Bocharov <adeep@lexina.in>
-+F:	package/rtl8822cs/
-+
- N:	Victor Huesca <victor.huesca@bootlin.com>
- F:	support/testing/tests/core/test_root_password.py
- 
-diff --git a/package/Config.in b/package/Config.in
-index aef80f9ab0..fc92dc8825 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -584,6 +584,7 @@ endmenu
- 	source "package/rtl8723ds/Config.in"
- 	source "package/rtl8812au-aircrack-ng/Config.in"
- 	source "package/rtl8821au/Config.in"
-+	source "package/rtl8822cs/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/sedutil/Config.in"
-diff --git a/package/rtl8822cs/Config.in b/package/rtl8822cs/Config.in
-new file mode 100644
-index 0000000000..c887ae7e02
---- /dev/null
-+++ b/package/rtl8822cs/Config.in
-@@ -0,0 +1,12 @@
-+comment "RTL8822CS needs a Linux kernel to be built"
-+	depends on !BR2_s390x
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_RTL8822CS
-+	bool "Realtek RTL8822CS SDIO Wi-Fi driver"
-+	depends on !BR2_s390x
-+	depends on BR2_LINUX_KERNEL
-+	help
-+          Realtek RTL8822CS Wi-Fi driver as a kernel module (JetHome repository)
-+
-+          https://github.com/jethome-ru/rtl88x2cs/
-diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
-new file mode 100644
-index 0000000000..11633e1633
---- /dev/null
-+++ b/package/rtl8822cs/rtl8822cs.hash
-@@ -0,0 +1 @@
-+sha256 4cd97adcf44dc4196fce6f87e68370ad588b19bbc38b246615f9c05739f7bd00  rtl8822cs-db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e.tar.gz
-diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
-new file mode 100644
-index 0000000000..799a07823d
---- /dev/null
-+++ b/package/rtl8822cs/rtl8822cs.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# Realtek RTL8822CS driver
-+#
-+################################################################################
-+
-+RTL8822CS_VERSION = db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e
-+RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
-+RTL8822CS_LICENSE = GPL-2.0
-+
-+RTL8822CS_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8822CS=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	KSRC=$(LINUX_DIR)
-+
-+define RTL8822CS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MAC80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
-+endef
-+
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+Is this the full source code needed to build the versal-firmware? If
+so, why do we use a precompiled binary? We should instead build it from
+source from this repository.
+
+> If I modify the LICENSE file and remove the commentary about GPL, do
+> you think this could be acceptable for inclusion in buildroot?  If
+> there is anything else I need to add, please let me know.
+
+Yes, if the pre-compiled binaries are distributed under the
+Xilinx-Binary-Only license, then that's OK.
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
