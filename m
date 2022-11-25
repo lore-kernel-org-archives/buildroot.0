@@ -1,64 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB5EFC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 09:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC881C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 10:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EE88610F5;
-	Fri, 25 Nov 2022 09:36:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE88610F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 356AA41D09;
+	Fri, 25 Nov 2022 10:35:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 356AA41D09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mG2k6Rv9ZIz0; Fri, 25 Nov 2022 09:36:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c1ydItK5Sqwz; Fri, 25 Nov 2022 10:35:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C01061108;
-	Fri, 25 Nov 2022 09:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C01061108
+	by smtp4.osuosl.org (Postfix) with ESMTP id 215D04174E;
+	Fri, 25 Nov 2022 10:34:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 215D04174E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E1FAC1BF2B4
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 09:35:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 27C9E1BF386
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 10:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD63F82179
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 09:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD63F82179
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CDD78214B
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 10:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CDD78214B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cdlIXqTdB9L6 for <buildroot@lists.busybox.net>;
- Fri, 25 Nov 2022 09:35:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5775B81FA5
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5775B81FA5
- for <buildroot@busybox.net>; Fri, 25 Nov 2022 09:35:55 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 05394440A8D;
- Fri, 25 Nov 2022 11:33:06 +0200 (IST)
-To: buildroot@busybox.net
-Date: Fri, 25 Nov 2022 11:35:33 +0200
-Message-Id: <58294107fad727dfc01e76ca23a47ab08a1ef9ea.1669368933.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id mM-BX67YiuXl for <buildroot@lists.busybox.net>;
+ Fri, 25 Nov 2022 10:34:55 +0000 (UTC)
+X-Greylist: delayed 00:07:52 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D5B2820AC
+Received: from mx.msync.work (mx.msync.work [185.250.0.168])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D5B2820AC
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 10:34:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 5DC8A31A2D; Fri, 25 Nov 2022 10:27:00 +0000 (UTC)
+To: buildroot@buildroot.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Nov 2022 13:26:50 +0300
+Message-Id: <20221125102650.2804226-1-adeep@lexina.in>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1669368786;
- bh=rfFr7Z8KOwIT1ms0d0RAgdpH+mSH/l6yIeInxbVAzgQ=;
- h=From:To:Cc:Subject:Date:From;
- b=vaB5v/dNLrxmnPwK49+DMmOg6SnGp9QEG71L5yDQ33nPrsdcHcF3RkttMYtX2jYs+
- CP86iSrUw0ajD0fCYa8Q1VVjhbSbai7c88pxGBn6Qz/I/PIE3ejPsB9tGi/2hHOcif
- j2bkscYqtZlRsw9ey0DHL8c5dEvug07iAIIzrRW7zKm6ho/NFWptfk7HibQKJ9Sc8D
- Nr/4ZkOeWIHIOzROrTnCQTQSWpYi2u5LhGKBD4WQTnEaoiTCUdW7L868HHHAkXucuf
- V0KcEyFjCHVj3on80DRXr0kynnKvjoWjbixjnfcJ3oyQAxQUku1VEBCBE4fmS7c9AW
- qO48sObzm43qA==
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=lexina.in; s=dkim; 
+ t=1669372020; h=from:subject:date:message-id:to:mime-version:
+ content-transfer-encoding; bh=Du5e2mfhJ0drDUZj1Dgll9VsosmOJaEBphQSTre1Tno=;
+ b=Wf3J/5fmCgMKoYURpxTOHaq0Phneqr+4H8v+6I9pTFmHpYMz1JzarerQlKJuvS53E2/Puo
+ OH7M6ot65MOUMRkGwvof2stUb+I2PNPh+/VcBHffSSeQP93tSv7t0gDX9Uc8k1LHZGiOLD
+ rJPTus43gzgdap30xujPF0g6aTLyzQxNGlvTSw9rPXFE9Dl/92wLwLkas6kBzk3C4Dqwi5
+ JjWb/eLY4cdeeHzEgn/CUb2y78kcXs6lFrze3H8cgL6T7KAlRayKcKTEJsOHLK4RC5jhV2
+ KAsWhyqGzkkXkUNaBM6uOClLOMKV9pxt18qr1FUtszZFN5C023ype4TcVPH32Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=vaB5v/dN
-Subject: [Buildroot] [PATCH] package/dash: fix static with shared build
+ dkim=pass (2048-bit key) header.d=lexina.in header.i=@lexina.in
+ header.a=rsa-sha256 header.s=dkim header.b=Wf3J/5fm
+Subject: [Buildroot] [PATCH] rtl8822cs: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +67,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+From: Viacheslav Bocharov via buildroot <buildroot@buildroot.org>
+Reply-To: Viacheslav Bocharov <adeep@lexina.in>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When BR2_SHARED_STATIC_LIBS is enabled we pass both --enable-static and
---enable-shared to configure. dash configure.ac only looks for
---enable-static to make the build static. But when linking against
-libedit pkg-config only returns dynamic linking dependencies, so the
-indirect ncurses dependency in not mentioned. The end result is that
-libedit can't find ncurses symbols on link.
+This package adds the rtl88822cs WiFi driver.
+   repo: https://github.com/jethome-ru/rtl88x2cs.git
+   branch: tune_for_jethub
 
-BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
-binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
-static only build.
+Driver is known to support Realtek RTL8822CS SDIO WiFi/BT chip.
 
-Fixes:
-http://autobuild.buildroot.net/results/137d39cc5ec436759a2fde3f26ce5633e0ad6c2e/
-http://autobuild.buildroot.net/results/55a38e0e45212bf7403d9ccb626c9422e3affe72/
-http://autobuild.buildroot.net/results/8f109f1a04a6a2ff6d8c4c920e499fbaec3f72b9/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
 ---
- package/dash/dash.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/rtl8822cs/Config.in      | 12 ++++++++++++
+ package/rtl8822cs/rtl8822cs.hash |  1 +
+ package/rtl8822cs/rtl8822cs.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
+ create mode 100644 package/rtl8822cs/Config.in
+ create mode 100644 package/rtl8822cs/rtl8822cs.hash
+ create mode 100644 package/rtl8822cs/rtl8822cs.mk
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index fed3a995511c..6efc71e5684e 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -27,6 +27,10 @@ else
- DASH_CONF_OPTS += --without-libedit
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 569d58407a..dda837bc5d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2937,6 +2937,9 @@ F:	package/llvm/
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
  
-+ifeq ($(BR2_STATIC_LIBS),)
-+DASH_CONF_OPTS += --disable-static
-+endif
++N:	Viacheslav Bocharov <adeep@lexina.in>
++F:	package/rtl8822cs/
 +
- define DASH_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/dash $(TARGET_DIR)/bin/dash
- endef
+ N:	Victor Huesca <victor.huesca@bootlin.com>
+ F:	support/testing/tests/core/test_root_password.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index aef80f9ab0..fc92dc8825 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -584,6 +584,7 @@ endmenu
+ 	source "package/rtl8723ds/Config.in"
+ 	source "package/rtl8812au-aircrack-ng/Config.in"
+ 	source "package/rtl8821au/Config.in"
++	source "package/rtl8822cs/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/sedutil/Config.in"
+diff --git a/package/rtl8822cs/Config.in b/package/rtl8822cs/Config.in
+new file mode 100644
+index 0000000000..c887ae7e02
+--- /dev/null
++++ b/package/rtl8822cs/Config.in
+@@ -0,0 +1,12 @@
++comment "RTL8822CS needs a Linux kernel to be built"
++	depends on !BR2_s390x
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_RTL8822CS
++	bool "Realtek RTL8822CS SDIO Wi-Fi driver"
++	depends on !BR2_s390x
++	depends on BR2_LINUX_KERNEL
++	help
++          Realtek RTL8822CS Wi-Fi driver as a kernel module (JetHome repository)
++
++          https://github.com/jethome-ru/rtl88x2cs/
+diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
+new file mode 100644
+index 0000000000..11633e1633
+--- /dev/null
++++ b/package/rtl8822cs/rtl8822cs.hash
+@@ -0,0 +1 @@
++sha256 4cd97adcf44dc4196fce6f87e68370ad588b19bbc38b246615f9c05739f7bd00  rtl8822cs-db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e.tar.gz
+diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
+new file mode 100644
+index 0000000000..799a07823d
+--- /dev/null
++++ b/package/rtl8822cs/rtl8822cs.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# Realtek RTL8822CS driver
++#
++################################################################################
++
++RTL8822CS_VERSION = db8dc6c7ae1a75af3f6d7fa4f05456c76f5cab3e
++RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
++RTL8822CS_LICENSE = GPL-2.0
++
++RTL8822CS_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8822CS=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	KSRC=$(LINUX_DIR)
++
++define RTL8822CS_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MAC80211)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
++endef
++
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-2.35.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
