@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA320C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:08:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999BEC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 528C54022A;
-	Mon,  5 Dec 2022 12:08:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 528C54022A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E0B7605A2;
+	Mon,  5 Dec 2022 12:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E0B7605A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oePWJbz725ZL; Mon,  5 Dec 2022 12:08:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BWClAOo3MCTQ; Mon,  5 Dec 2022 12:08:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 360F240231;
-	Mon,  5 Dec 2022 12:08:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 360F240231
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5269A1BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C78F60A47;
+	Mon,  5 Dec 2022 12:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C78F60A47
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B87FC1BF352
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27BA5408B0
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27BA5408B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FCC8416BC
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FCC8416BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id USjti-3dG1eJ for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P1ompJS6atnx for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EF094063F
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF094063F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E24B416BA
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E24B416BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 442C385B9E; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+ id 2B38585BBE; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:16:34 +0100
+Date: Fri, 25 Nov 2022 23:18:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9894ed686a1ee749a1a7ef9e990dd6b161f8816c
-X-Git-Newrev: cbf420706397408b493282b3827397191d7a733e
+X-Git-Oldrev: d76a277a0e0a0f9703f0e0c2b0e313db9a834d7d
+X-Git-Newrev: c45b2f2b9da5109e40a18ffdef379f5112aa7224
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112608.442C385B9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jsonschema: bump to version
- 4.17.0
+Message-Id: <20221205112612.2B38585BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/freescale/ls1028ardb: add more
+ documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbf420706397408b493282b3827397191d7a733e
+commit: https://git.buildroot.net/buildroot/commit/?id=c45b2f2b9da5109e40a18ffdef379f5112aa7224
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jsonschema/python-jsonschema.hash | 4 ++--
- package/python-jsonschema/python-jsonschema.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/freescale/ls1028ardb/readme.txt | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
-index d4c2759811..19b9659d08 100644
---- a/package/python-jsonschema/python-jsonschema.hash
-+++ b/package/python-jsonschema/python-jsonschema.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jsonschema/json
--md5  3bc1f63a74fc61bf2847f22cadb0dfff  jsonschema-4.16.0.tar.gz
--sha256  165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23  jsonschema-4.16.0.tar.gz
-+md5  e569b6114d575bdb05cb8ce4676fe458  jsonschema-4.17.0.tar.gz
-+sha256  5bfcf2bca16a087ade17e02b282d34af7ccd749ef76241e7f9bd7c0cb8a9424d  jsonschema-4.17.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
- sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
-diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
-index 68a25aed58..8cc624886c 100644
---- a/package/python-jsonschema/python-jsonschema.mk
-+++ b/package/python-jsonschema/python-jsonschema.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+index 2dd2e2d84b..cfd1c8c490 100644
+--- a/board/freescale/ls1028ardb/readme.txt
++++ b/board/freescale/ls1028ardb/readme.txt
+@@ -8,6 +8,16 @@ for more details about the board and the QorIQ Layerscape SoC, see the following
+   - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
+   - https://www.nxp.com/LS1028A
  
--PYTHON_JSONSCHEMA_VERSION = 4.16.0
-+PYTHON_JSONSCHEMA_VERSION = 4.17.0
- PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
--PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/cf/54/8923ba38b5145f2359d57e5516715392491d674c83f446cd4cd133eeb4d6
-+PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/3a/3d/0653047b9b2ed03d3e96012bc90cfc96227221193fbedd4dc0cbf5a0e342
- PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
- PYTHON_JSONSCHEMA_LICENSE = MIT
- PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
++for the software NXP LSDK (Layerscape Software Development Kit), see
++  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
++
++the components from NXP are:
++  - rcw, LSDK 21.08
++  - atf (fork), LSDK 21.08
++  - uboot (fork), LSDK 21.08
++  - cadence-dp-firmware (blob), LSDK 20.12
++  - linux (fork), LSDK 21.08
++
+ Build
+ =====
+ 
+@@ -67,3 +77,11 @@ The Cadence DP (Display Port) firmware must loaded from uboot with the following
+   Loading hdp firmware from 0x0000000080000000 offset 0x0000000000002000
+   Loading hdp firmware Complete
+   => boot
++
++The interfaces of Ethernet switch (Felix DSA) are bring up with the following commands:
++
++  ip link set eno2 up
++  ip link set swp0 up
++  ip link set swp1 up
++  ip link set swp2 up
++  ip link set swp3 up
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
