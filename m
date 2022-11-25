@@ -1,50 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EDE1C4167B
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 13:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE5AC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 14:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B15BF60A69;
-	Fri, 25 Nov 2022 13:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B15BF60A69
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0319F81E12;
+	Fri, 25 Nov 2022 14:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0319F81E12
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ab2lZXpES-AW; Fri, 25 Nov 2022 13:55:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ltCnu29gfwOq; Fri, 25 Nov 2022 14:06:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB9B760AE5;
-	Fri, 25 Nov 2022 13:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB9B760AE5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 74B021BF35E
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 13:55:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3675F81DEA;
+	Fri, 25 Nov 2022 14:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3675F81DEA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6140C1BF30A
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 14:06:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50571608B7
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 13:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50571608B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4608040017
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 14:06:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4608040017
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PQ3PBjVOf1uT for <buildroot@lists.busybox.net>;
- Fri, 25 Nov 2022 13:55:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21B68607FE
- for <buildroot@buildroot.org>; Fri, 25 Nov 2022 13:55:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21B68607FE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DEC184656; Fri, 25 Nov 2022 13:55:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qZeXwmzL6lJb for <buildroot@lists.busybox.net>;
+ Fri, 25 Nov 2022 14:06:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDFCF4000B
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DDFCF4000B
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 14:06:25 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id r26so4441963edc.10
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 06:06:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=C6D36R+FvMToInqvukRj9VtEMQ0EKHL4/yEfOJnQbN8=;
+ b=VFrPFq2VaCeZ1w/WnxJI3RnRpbOUt0vHc6z3PNd7Ong0gy65be3pV2ndrM9FzTjz3f
+ CChVhbQ18GjMyUxpFlA9r/7JNMlOSQ293Gxr3x46npofNhuLBiGZm/oN2HjKkj9bA7oT
+ zz6cEnoaICGYX8E2A7+6GcFdCfeJcTktdzTd6T5jjbkmB6GGDranVtZI3zQzYc0VAdJZ
+ 5enflpsXZBis/+THEEJqCOZIPqpyIwkolRjAulNHv1NxCRQidqvx9K467vfFCcLkw+aV
+ eqN9b1LO2dAi/axNprZG3Anq7+E/mFqBVNgdHNB2bkvuvHydMSowF97wDo97LgWWuOCg
+ c+EA==
+X-Gm-Message-State: ANoB5plGabQdOzsxflZTGkNwkDpuSMTQkk2xhCm+V765dtCcPeR/5DXF
+ YDV8oV2/fG3k1bKZpCExQwv8Tw==
+X-Google-Smtp-Source: AA0mqf6lWtuJ9m/QDfhVXOFFy+fVEfFnfEuiEO1VGOF+OMUi3unVBLRV9ApXNl9OKkeUfVQtwMAf2A==
+X-Received: by 2002:a05:6402:548a:b0:468:e8e2:31c9 with SMTP id
+ fg10-20020a056402548a00b00468e8e231c9mr9833838edb.310.1669385183998; 
+ Fri, 25 Nov 2022 06:06:23 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ y4-20020a1709064b0400b0073c10031dc9sm1582313eju.80.2022.11.25.06.06.22
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 25 Nov 2022 06:06:23 -0800 (PST)
+Message-ID: <620448da-4dda-3d9d-cb39-5c8a278767d6@mind.be>
+Date: Fri, 25 Nov 2022 15:06:21 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20221028223844.1180418-1-james.hilliard1@gmail.com>
+ <20221030083033.GC1058960@scaer> <20221117085339.4a4d5d8f@windsurf>
+Content-Language: en-GB
 From: Arnout Vandecappelle <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 14:53:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f324758f670af788df4cfaf235fd2fc5b4f15450
-X-Git-Newrev: 0fc5c1ccdb11af5185471272ef5eeece81b5e866
-X-Patchwork-Hint: ignore
-Message-Id: <20221125135508.0DEC184656@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: ensure __register_frame is
+In-Reply-To: <20221117085339.4a4d5d8f@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=C6D36R+FvMToInqvukRj9VtEMQ0EKHL4/yEfOJnQbN8=;
+ b=fK+EvExI0XyfFG+JuiPTdx7XnqOVZyRMLx6kw4g6fkUG1yjH8KrsHeFr7miNA0KkNB
+ X7feFAdV7TmxVn1MkuoVez2Q9fi0pLccbRtPrTsrfdhny++Vx5y1XeKDcNNEYqoGc4t1
+ 0DTQiDzvIqndRxosPrQ9+ayl298dTSNYmKiByS2F0TJbokO1AQeGRL3TaMV6fncPeWWU
+ zLoq9bWGs26FS6DxIHRtBizEjf9IC5ZiVkoGH6rC4AIFtrkisDQcuKfC+vGlMxrPNixO
+ tqiwlbABfcCB2/+zP+OQnyOXGOo4umj9MZrDbB58f/7nrsaCFNQanVQqqTrJjX+qVOb3
+ e9EA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fK+EvExI
+Subject: Re: [Buildroot] [PATCH 1/1] package/gcc: ensure __register_frame is
  optimized out for glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,90 +103,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fc5c1ccdb11af5185471272ef5eeece81b5e866
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some architectures when building with -O0 the __register_frame
-symbol fails to get optimized out which can cause linking failures
-when building glibc.
 
-To fix this set -O1 for GCC target libs when building with glibc
-and BR2_OPTIMIZE_0 on the problematic target architectures.
+On 17/11/2022 08:53, Thomas Petazzoni via buildroot wrote:
+> On Sun, 30 Oct 2022 09:30:33 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+>> Should this not be limitied to the intial compiler only? Otherwise, why
+>> would we need it for the final compiler?
+> 
+> I confirm limiting the work-around to gcc-initial works.
+> 
+> However, I have reported the bug to gcc upstream, and they say the
+> issue is in glibc:
+> 
+>    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
 
-This was reported both to GCC [1] and glibc [2] upstream. It is not
-entirely clear yet where the bug lies exactly. At the moment the
-assumption is that it's GCC, so create a symbol
+  James previously already reported the problem to glibc:
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=29621
+
+  I picked up the thread in both issues, I was able to narrow the problem down a 
+little more, but in the end the conclusion seems to be "We can't support that on 
+the glibc side at present."
+
+  So I applied this patch to master, after making two major changes:
+
+- move it to host-gcc-initial only;
+- instead of putting the full condition in the .mk file, make a Config.in symbol 
 BR2_TOOLCHAIN_HAS_GCC_BUG_107728.
 
-This issue only seems to occur when linking glibc, not with anything
-else, so only compile libgcc from host-gcc-initial with -O1.
+  ... And now I notice I forgot to put the changes I made in the commit message. 
+But it's pushed already.
 
-Fixes:
- - http://autobuild.buildroot.net/results/89b/89b6c6924240b7cf82035a844f3573673e91b364
- - http://autobuild.buildroot.net/results/46f/46f4ec99d2b23d354a4bb5e92123d64f0da6ed27
- - http://autobuild.buildroot.net/results/839/839f929f700cf181ebdf34389c7806a96f55813e
- - http://autobuild.buildroot.net/results/0e2/0e202bf53a683930f3cad6edef2a4dea629eaecb
- - http://autobuild.buildroot.net/results/8a8/8a8c917f597fdcca744e696e19e9300b64004335
- - http://autobuild.buildroot.net/results/c05/c058b27ed2834dfa633b63ec6c3639ab1e8bf412
- - http://autobuild.buildroot.net/results/8ba/8ba8882a861cf7df359c23969c09b2be0725b2e5
+  Anyway, applied to master, thanks!
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
-[2] https://sourceware.org/bugzilla/show_bug.cgi?id=29621
+  Regards,
+  Arnout
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/gcc/gcc-initial/gcc-initial.mk |  7 +++++++
- toolchain/Config.in                    | 12 ++++++++++++
- 2 files changed, 19 insertions(+)
-
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index f5bc6c5b77..ebd8e8f017 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -43,6 +43,13 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- HOST_GCC_INITIAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
- 
-+# Enable GCC target libs optimizations to optimize out __register_frame
-+# when needed for some architectures when building with glibc.
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_107728),y)
-+HOST_GCC_INITIAL_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS) -O1"
-+HOST_GCC_INITIAL_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS) -O1"
-+endif
-+
- HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc all-target-libgcc
- HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc install-target-libgcc
- 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 23596d6c85..e7329c1a1c 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -227,6 +227,18 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_104028
- 	bool
- 	default y if BR2_m68k
- 
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=29621
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
-+	bool
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_OPTIMIZE_0
-+	default y if BR2_microblazebe || BR2_microblazeel \
-+		|| BR2_mips || BR2_mipsel \
-+		|| BR2_nios2 \
-+		|| BR2_or1k \
-+		|| BR2_sh
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
+> 
+> To be honest, even after reading multiple times the feedback from the
+> gcc folks, I'm not entirely sure that I really understand their
+> explanation nor how to move forward with investigating the issue.
+> 
+> Best regards,
+> 
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
