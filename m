@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33511C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 22:15:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6226C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 22:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADBE3611F0;
-	Fri, 25 Nov 2022 22:15:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADBE3611F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B2A541DFE;
+	Fri, 25 Nov 2022 22:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B2A541DFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rntNo5WtKXjJ; Fri, 25 Nov 2022 22:15:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TycQzSKLKM82; Fri, 25 Nov 2022 22:16:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1898611D7;
-	Fri, 25 Nov 2022 22:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1898611D7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52C331BF3D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E90441DF9;
+	Fri, 25 Nov 2022 22:15:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E90441DF9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 927041BF3D0
  for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AF54401AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BCC5822CF
  for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:15:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF54401AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BCC5822CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C8O8YsSALgDy for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vlwo_U87GMV4 for <buildroot@lists.busybox.net>;
  Fri, 25 Nov 2022 22:15:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 617E540143
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69FBF822CE
  for <buildroot@buildroot.org>; Fri, 25 Nov 2022 22:15:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 617E540143
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69FBF822CE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DDBB846D5; Fri, 25 Nov 2022 22:15:44 +0000 (UTC)
+ id 588C4846D8; Fri, 25 Nov 2022 22:15:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 23:09:14 +0100
+Date: Fri, 25 Nov 2022 23:11:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4d47982fa2d1b0ab04a253906944ff3f8ce99340
-X-Git-Newrev: 288207cd5bcbd88d0c11bcb5089b7411d1fd921b
+X-Git-Oldrev: 288207cd5bcbd88d0c11bcb5089b7411d1fd921b
+X-Git-Newrev: 4060a6d5307d81475f8cc3b572cd6eca9a94ffbf
 X-Patchwork-Hint: ignore
-Message-Id: <20221125221544.4DDBB846D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/versal-firmware: new
- package
+Message-Id: <20221125221544.588C4846D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/versal_vck190: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,109 +64,260 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=288207cd5bcbd88d0c11bcb5089b7411d1fd921b
+commit: https://git.buildroot.net/buildroot/commit/?id=4060a6d5307d81475f8cc3b572cd6eca9a94ffbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds support for downloading versal microblaze firmware binaries.
-These are necessary for booting Xilinx versal devices.
+This patch adds support for Xilinx Versal VCK190 evaluation board.
 
-The location of these binaries is temporary, and will soon be added to the
-Xilinx firmware repository.  The temporary location is using the same free
-distribution license as the Xilinx firmware repository.
+VCK190 features can be found here:
+https://www.xilinx.com/products/boards-and-kits/vck190.html
 
-Once these files are available on the Xilinx repository, this package will
-be updated to the new location.
+The VCK190 is based on the Xilinx Versal family:
+https://www.xilinx.com/products/silicon-devices/acap/versal.html
+
+The VC1902 included with the VCK190 evaluation board has Xilinx
+AI Engine acclerators designed for accelerating machine learning
+applications.  Also included is an upgrade from prior Zynq and
+ZynqMP families to ARM Cortex-A72 cores.
+
+While the Linux kernel for Versal is quite similar to ZynqMP,
+the boot process has significantly changed.
+
+Triple-redundant MicroBlaze cores are used to boot and setup
+Versal devices.  For this reason, current buildroot support
+will download pre-built firmware images and use Xilinx bootgen
+to generate the boot.bin for the vck190.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/versal-firmware/Config.in          | 24 ++++++++++++++++++++++++
- package/versal-firmware/versal-firmware.mk | 21 +++++++++++++++++++++
- 4 files changed, 47 insertions(+)
+ DEVELOPERS                      |  2 ++
+ board/versal/genimage.cfg       | 30 +++++++++++++++++++++++
+ board/versal/post-build.sh      | 16 ++++++++++++
+ board/versal/post-image.sh      | 35 ++++++++++++++++++++++++++
+ board/versal/readme.txt         | 54 +++++++++++++++++++++++++++++++++++++++++
+ configs/versal_vck190_defconfig | 38 +++++++++++++++++++++++++++++
+ 6 files changed, 175 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a2c60f38fd..61a50b5863 100644
+index 61a50b5863..ab9cfe5ee9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2195,6 +2195,7 @@ F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
- F:	configs/zynqmp_kria_kv260_defconfig
- F:	package/bootgen/
-+F:	package/versal-firmware/
+@@ -2187,9 +2187,11 @@ F:	package/pkg-qmake.mk
+ F:	package/qt5/qt5opcua/
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/package/Config.in b/package/Config.in
-index 7d227f8112..1a2bda4639 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -443,6 +443,7 @@ menu "Firmware"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-+	source "package/versal-firmware/Config.in"
- 	source "package/wilc-firmware/Config.in"
- 	source "package/wilink-bt-firmware/Config.in"
- 	source "package/zd1211-firmware/Config.in"
-diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
+ N:	Neal Frager <neal.frager@amd.com>
++F:	board/versal/
+ F:	board/zynq/
+ F:	board/zynqmp/
+ F:	board/zynqmp/kria/
++F:	configs/versal_vck190_defconfig
+ F:	configs/zynq_zc706_defconfig
+ F:	configs/zynqmp_zcu102_defconfig
+ F:	configs/zynqmp_zcu106_defconfig
+diff --git a/board/versal/genimage.cfg b/board/versal/genimage.cfg
 new file mode 100644
-index 0000000000..8d13816149
+index 0000000000..d994d3a2bf
 --- /dev/null
-+++ b/package/versal-firmware/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_VERSAL_FIRMWARE
-+	bool "versal-firmware"
-+	depends on BR2_aarch64
-+	help
-+	  Pre-built firmware files for Xilinx Versal boards.
++++ b/board/versal/genimage.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"boot.bin",
++			"system.dtb",
++			"Image"
++		}
++		file extlinux/extlinux.conf {
++			image = extlinux.conf
++		}
++	}
 +
-+	  https://github.com/nealfrager/buildroot-firmware
++	size = 32M
++}
 +
-+if BR2_PACKAGE_VERSAL_FIRMWARE
++image sdcard.img {
++	hdimage {
++	}
 +
-+config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
-+	string "firmware version"
-+	default "v2022.2"
-+	help
-+	  Release version of Versal firmware.
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
-+config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
-+	string "board name"
-+	default "vck190"
-+	help
-+	  Name of Versal target board.
-+	  Used for installing the appropriate firmware.
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
+new file mode 100755
+index 0000000000..ff8f8a6071
+--- /dev/null
++++ b/board/versal/post-build.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
 +
-+endif # BR2_PACKAGE_VERSAL_FIRMWARE
-diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
++# genimage will need to find the extlinux.conf
++# in the binaries directory
++
++BOARD_DIR="$(dirname $0)"
++CONSOLE=$2
++ROOT=$3
++
++mkdir -p "${BINARIES_DIR}"
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
++	label linux
++	  kernel /Image
++	  devicetree /system.dtb
++	  append console=${CONSOLE} clk_ignore_unused root=/dev/${ROOT} rw rootwait
++	__HEADER_EOF
+diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
+new file mode 100755
+index 0000000000..890522c31d
+--- /dev/null
++++ b/board/versal/post-image.sh
+@@ -0,0 +1,35 @@
++#!/bin/sh
++
++# By default U-Boot loads DTB from a file named "system.dtb", so
++# let's use a symlink with that name that points to the *first*
++# devicetree listed in the config.
++
++FIRST_DT=$(sed -nr \
++               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
++               ${BR2_CONFIG})
++
++[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME=$4
++
++mkdir -p "${BINARIES_DIR}"
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
++	the_ROM_image:
++	{
++	  image {
++	    { type=bootimage, file=${BINARIES_DIR}/${BOARD_NAME}_vpl_gen_fixed.pdi }
++	    { type=bootloader, file=${BINARIES_DIR}/${BOARD_NAME}_plm.elf }
++	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
++	  }
++	  image {
++	    id = 0x1c000000, name=apu_subsystem 
++	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/system.dtb }
++	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
++	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
++	  }
++	}
++	__HEADER_EOF
++
++${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
++support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
+diff --git a/board/versal/readme.txt b/board/versal/readme.txt
 new file mode 100644
-index 0000000000..3e4b9e558d
+index 0000000000..9f234be620
 --- /dev/null
-+++ b/package/versal-firmware/versal-firmware.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# versal-firmware
-+#
-+################################################################################
++++ b/board/versal/readme.txt
+@@ -0,0 +1,54 @@
++******************************************
++Xilinx VCK190 board - Versal
++******************************************
 +
-+VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_SITE = $(call github,nealfrager,buildroot-firmware,$(VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_LICENSE = Xilinx-Binary-Only
-+VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
-+VERSAL_FIRMWARE_INSTALL_TARGET = NO
-+VERSAL_FIRMWARE_INSTALL_IMAGES = YES
++This document describes the Buildroot support for the VCK190
++board by Xilinx, based on Versal.  It has been tested with the 
++VCK190 production board.
 +
-+define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(foreach f,plm.elf psmfw.elf vpl_gen_fixed.pdi,\
-+		$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f) \
-+			$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f)
-+	)
-+endef
++Evaluation board features can be found here with the link below.
 +
-+$(eval $(generic-package))
++VCK190:
++https://www.xilinx.com/products/boards-and-kits/vck190.html
++
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make versal_vck190_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- boot.bin
++    +-- boot.vfat
++    +-- Image
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- system.dtb -> versal-vck190-rev1.1.dtb
++    `-- versal-vck190-rev1.1.dtb
++
++How to write the SD card
++========================
++
++WARNING! This will destroy all the card content. Use with care!
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to an SD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the SD.
++
++Eject the SD card, insert it in the board, and power it up.
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+new file mode 100644
+index 0000000000..d87df221c6
+--- /dev/null
++++ b/configs/versal_vck190_defconfig
+@@ -0,0 +1,38 @@
++BR2_aarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2 vck190"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_versal"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
++BR2_PACKAGE_VERSAL_FIRMWARE=y
++BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="v2022.2"
++BR2_PACKAGE_VERSAL_FIRMWARE_BOARD="vck190"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_BOOTGEN=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
