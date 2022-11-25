@@ -1,64 +1,138 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3288C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 07:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414B8C4321E
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 09:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D01D82153;
-	Fri, 25 Nov 2022 07:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D01D82153
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FEAB6105A;
+	Fri, 25 Nov 2022 09:29:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FEAB6105A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L5dhkprd1adB; Fri, 25 Nov 2022 07:37:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RvjyNGuZKVIR; Fri, 25 Nov 2022 09:29:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FF4E82156;
-	Fri, 25 Nov 2022 07:37:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FF4E82156
+	by smtp3.osuosl.org (Postfix) with ESMTP id 976F660E86;
+	Fri, 25 Nov 2022 09:29:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 976F660E86
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F21E31BF5A6
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 07:37:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 985431BF2B4
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 09:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3C7382156
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 07:37:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3C7382156
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E67581D18
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 09:29:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E67581D18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S6Ux0SVFZ1Os for <buildroot@lists.busybox.net>;
- Fri, 25 Nov 2022 07:37:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D4AA82153
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D4AA82153
- for <buildroot@buildroot.org>; Fri, 25 Nov 2022 07:37:51 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6306C24000C
- for <buildroot@buildroot.org>; Fri, 25 Nov 2022 07:37:48 +0000 (UTC)
+ with ESMTP id XP1MySXVe3t2 for <buildroot@lists.busybox.net>;
+ Fri, 25 Nov 2022 09:29:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C60B819F8
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on2062f.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eaa::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C60B819F8
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 09:29:09 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hY109ExvmSMz0bUH+Q0FC/ckxu//af66hpHwtk4/lyzfKPXMB1HYISk2QLyaPT6ebrDKolVr3JGzW1JhmYunqjaAw0Bb4umj0EW5b0AkNRDjt40OdjDPS44hLLq6zwvxkMNjVcDJafIlY0lYpxn61i1WJ0pCePGRYfw7HDka4Qwo2nKAEW7OQwe5MLI1TPuG5CdxQTMvj/JIIRm09ou5sbKujQ3/LYdiojdH5c7wdfJdmXmFYb5kDSeW94NMt/1bX2HhOpncjaE9lzDxHj6VqZdRXBZTyOnAyIC1qWQFlYPMV3jl+bvomWpMlVidMQmn9+ptwvO1Iypr4qJ3S18Ltw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KsLBI8x1JTe1GwrsxfeIrYZ5oWEaFPSch6/qXBs5pYQ=;
+ b=KjunBFOuNgMjXUZq4iQO9eLPGYfEaGjQ/C49tBABAMN6p1dXn1LMI3Ymzoff3+OD6w9dXNwMxc5PEOKA+i66/TXp2bXMtgqOkVK65OAj23hPnmhzHSS2Rcy40nOuYavp4bWkGSJgBZkKFfWxyG/bSKMK/KV6hp1wGfcAJcFBkbz84Lbncz187dxpzTb84vSL7KFKcmVFkFMbo6saykEws7coYHyQLirOPjaO4W7h5goWEvOixDXPU1YkJhth/B9m2F880kIlNWqRjp3si1l0Vhzvy20VblVLxhGTIzD67huha8YV7ya8jMDXBKE786lSryTO59YCR8iLZjvhhkqhPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by PH7PR12MB5782.namprd12.prod.outlook.com (2603:10b6:510:1d1::22)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Fri, 25 Nov
+ 2022 09:29:06 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::1a65:97e7:c0ee:f986%4]) with mapi id 15.20.5857.020; Fri, 25 Nov 2022
+ 09:29:05 +0000
+Content-Type: multipart/mixed;
+ boundary="_000_CH2PR12MB5004D69C65B84BEB0241DB7CF00E9CH2PR12MB5004namp_"
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [PATCH v6 1/2] package/versal-firmware: new package
+Thread-Index: AQHY/+6THTFhMWceYUykDOlWPwefpq5OlAaAgADJcwA=
+Date: Fri, 25 Nov 2022 09:29:05 +0000
+Message-ID: <CH2PR12MB5004D69C65B84BEB0241DB7CF00E9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221124102144.16833-1-neal.frager@amd.com>
+ <20221124221557.4a18a2a9@windsurf>
+In-Reply-To: <20221124221557.4a18a2a9@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: <CH2PR12MB5004D69C65B84BEB0241DB7CF00E9@CH2PR12MB5004.namprd12.prod.outlook.com>
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|PH7PR12MB5782:EE_
+x-ms-office365-filtering-correlation-id: 8850f97f-d3f7-4c7e-a018-08dacec77f7e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0d3oSroRwkCv/ebGYPefO8D1zWrwFK9Nf/49R4GStX1qssaPgwfs7ytg+9cgyS15EvgiqaMGBHSXUH22NI+umwFirDkiBNfz6p6cQh6lp7NiwqRy63zuopBx+iLAIhymwQ51sKpFPNoJHGPVHFqXstcQkR8rdUsIKmJh8e+f+Sl6TC3bdzRqsfkbzF0yQOzr7lfJO12b8GPCx0r/WPR1laiC1y8JNbDjhRTp2xucbIXThilPyLwZ2MGoJt5qeCKuuFQxTdtkFarNShYLUj8elmjEk7mDk0ssY86YWGHZQ0iLzyOx4Y4o2a6a+tR+X8U7MsGSJlKZB/cBlreWA6dBhac9wKnJ4F+F+ke5bBQd21tiTOh1HRSl3niQyQwTdpB+lx7ajJ2nTMHGT9jQIdbxY6WwKx/ns+NL+pPx45J4h/RoeryGHyIVeLw/Vd7jXzhJV2aPliXumkFPxrB9fDEoSio0V9iBBmTG5+Z6gFPgqQcAyjzLONbWXKJsWUpMziDUktEzd6sx9qsKB1sAEagrBKJUnH8KkChOGqYz2aXfXxOOo0kDufKyrAfbVM8pGhQoIVZp4sTotr8hALtqCzCb7ufbEHgPbvxC/yku6fGRT4AjesgcJjy4G0Z8NcpVq8f8/ukHr9pJyNhcz2pIfE6nyHFoVy7SiuXdmOGXp6azLkgtCMYA4Qd+0l8iftDY3laDtoalC29CC2ePl7RObtHLvQSTXY1C4EmOxn8QpSq+athNw2V6KT8J4j5C9eJc7az92AQpSVpQrIYKg3qwcQSvQQ==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(9686003)(66446008)(8676002)(8936002)(64756008)(6916009)(4326008)(66556008)(6506007)(66476007)(316002)(76116006)(5660300002)(38100700002)(33656002)(66946007)(71200400001)(86362001)(54906003)(966005)(122000001)(41300700001)(7696005)(52536014)(83380400001)(55016003)(478600001)(2906002)(186003)(38070700005);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fH8lCrYVuxcBv5inrkkykM9Db2KhZ39xmtgv6jbOcnNMkhcdpK+sTvOfZ73d?=
+ =?us-ascii?Q?5Z0K+meZeVs00pRAgKQw8vIi6mRkhZTCSmrl381K9XWALkZb0sV1P5GmNADP?=
+ =?us-ascii?Q?/W6YBrWW9CumoOXvWFcAD3gGMRJYwopQvLDg/hAYx0y6ZoipkRUUgiOUPpQ7?=
+ =?us-ascii?Q?z2WRCRCXbbAhoZPf1Z9uio0FXP6a7dNWRSFscrG2Kk5Zo3VwwOhj+iP2WwpZ?=
+ =?us-ascii?Q?n5CifSK3tig/Qryl7pw1GJs6ilGhwRPJBqAZ2ToV+SB94ALdIfqPKl6QKza7?=
+ =?us-ascii?Q?K9TPfDLtzALQuoooCeET17R6RqpvbZAlpCSxMvLHaGsr+1UbeeLgfiY/xe8V?=
+ =?us-ascii?Q?pAqzigD1l0uU1j6v1B8G+0m51HZADtraVLvZhUExKfMMywjlpJvRHkFiClzH?=
+ =?us-ascii?Q?rclNMs/rVJoqUzQwtQGs4wFKLOdjwa8lgVqdM0/NbgqDAHJh1Qu+xw3Ck3oo?=
+ =?us-ascii?Q?15xf5h062aliH6xqWoTASIgXbBS/HNHlviR751NgsBNnG/ztM8PMTdf77sVu?=
+ =?us-ascii?Q?+XzhqqoTlg/I3CAjxAWtFE5yAXgdPQM8udP2c+egMffPshr6tNviC2jZyK7C?=
+ =?us-ascii?Q?TnKuTsr92hcq9AUfhLvoLMe86+ONDciQehPk9Lx2rzKkeJpxBMttK6qUGMaD?=
+ =?us-ascii?Q?cy0+alUgxsU8pEh81FdfRbkg+r2dhOBINlid6oLX7nffic9XzxBEhg8o/k8c?=
+ =?us-ascii?Q?HxcwQ5dfC/hPz4KP9CtjypvEMkuDEjkCfeWkA/y2/RB090w4pmz6lhdu+qAv?=
+ =?us-ascii?Q?vvSd08uuGTvl3nvYxwS0lsar3u8YRC2qqhtsYTtiqcYMtE/Ey0wRa1itNyLx?=
+ =?us-ascii?Q?YQu4+mzHMwDXnLp7hzSBs0vj2CYNefEUOwwV2ExZk7nBZLjZhWAupvE6r7u/?=
+ =?us-ascii?Q?e1KngOZofGFHPd4zxXEf3lNn4imIHf3F6XXiQaLQLLq9mc0wt4ueoXBg5LTX?=
+ =?us-ascii?Q?VQv//nnIeDUXlg7A2UY66Kf/ZlxcokQG3kScGtZYF0bVzOsh1yxpYG6VaMho?=
+ =?us-ascii?Q?KnN0iAVNzWTeJM0hFwB03TDNC6qt4zKZ1wGVSOBUHUal/iSetmA6TFqhZcTl?=
+ =?us-ascii?Q?kihm2idXCv/9NE2v0R0F6wwaNrJNzIkDiE2bYrZeVfNgD0+aXxXBAsTt8Gi2?=
+ =?us-ascii?Q?QuJ7C7i2cp3QfSRvceonHpjKI8AyAVCLngv6S1Ydz9YsKPRQOnOCDHkrmB2N?=
+ =?us-ascii?Q?ZjFv2wA6s2kM6Gm8rOHbkN8HL/uBcuziOojlgqmmJgFTREWuLD17hLj/YB0u?=
+ =?us-ascii?Q?xtyHxfnUtemCdb7FoEz3HT7CGYfYts3Esb4UXezUYGFrswyYLztLrLqkRzsF?=
+ =?us-ascii?Q?kej4WPJ1W/gj0J1QPxVqUI2HyVsgIxrkXtYA/NY7tXc+rTvHHuOX6XftxSpM?=
+ =?us-ascii?Q?+IMoLFHkctbVOJJrZ5xiUhmf7lD5mSpN8ur3hDBs9+K3fxkQRL/XOGtuDYBd?=
+ =?us-ascii?Q?V1pZaFuoY22feMbp6C0tMCfi0lQjLT5NyQ3+fgh1EkBeSEcwrbLsEBWYRATn?=
+ =?us-ascii?Q?8+CSn7YgOoM4k/A84f+AJmz0q5nXeSpaDRQumuoiK2jPD/ALDx+md/fFWgEv?=
+ =?us-ascii?Q?no+cONvm1EKzDUw6fxDHRKgc7OYxcmQKJuxe+8m/OLM8KeN7WcpPs21FjYYc?=
+ =?us-ascii?Q?Yq+3BJinP1aYAbuYLx7vgCk=3D?=
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 07:37:48 -0000
-Message-Id: <20221125073754.C3C7382156@smtp1.osuosl.org>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8850f97f-d3f7-4c7e-a018-08dacec77f7e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2022 09:29:05.8853 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l3NTG43bI6bYvCEnUZWLBUuJ+jXSk5oOLYnp+XKC3Vc0ger+1LqlHWEMQKiVxGZV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5782
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1669361869; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=yAFxd8EOVJz0CGFJ8SuEMo3Kg6DsaeVXVuzo/O5ZygY=;
- b=joV/NXUKncBltC1G8N7hxAIVHlMmDWgEl6nXyFliOVczNg7INhiwWalcQ3jcUt+1c0Ei73
- BWIf0IUL5mrCwgTvaeYD3uuDRTSQVJXOhgzN75lT1j3/GHnDe/1o0rtMXi6u3EXoT+UGRE
- KkW1H9nzemO+l0VWHEWnfSjiBd4SSROyBC8uIHKCq2DrjPCyfLK5qEB6SWI5DWaJthwTmO
- n1iMzdj7uWBD6v1Y2NtEYwBeBxPwf3RiYnRl59aFb5EuK3C9lrAWPOduVS3oryiLKHyAuU
- XAu1Nyav0C/cmDRpqlyzl481CW+NtQ9WwLy+AAuM5ADp9pdcpdm2NyloPAgCHg==
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KsLBI8x1JTe1GwrsxfeIrYZ5oWEaFPSch6/qXBs5pYQ=;
+ b=rmZrq0juhtFr9ZviJrnlp9TY87jdnMzIIrRPwY4QoFpaIIIP4F2DGLMXjxmMl81A1k6LYc7Q0/dCs/T54TfzGjZLT5pNL8VBm2sGzCvU/pBG/vrP397wtJfd2gpu7eFAEdktJkm5RP5Cds2dkcJ0k4MojqY6800eKb6Pa92yrB4=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=joV/NXUK
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-11-24
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=rmZrq0ju
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v6 1/2] package/versal-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,435 +144,443 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Simek,
+ Michal" <michal.simek@amd.com>, "Chaplin, Kris" <Kris.Chaplin@amd.com>, "O'Neal,
+ Terry" <terry.oneal@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--_000_CH2PR12MB5004D69C65B84BEB0241DB7CF00E9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Autobuild statistics for 2022-11-24
-===================================
+Hi Thomas,
 
-      branch |  OK | NOK | TIM | TOT |
-  2022.02.x  |  3  |  1  |  0  |  4  |
-  2022.08.x  |  9  |  8  |  0  | 17  |
-    master   | 181 | 205 |  1  | 387 |
-     next    |  5  | 15  |  0  | 20  |
+> This patch adds support for downloading versal microblaze firmware binari=
+es.
+> These are necessary for booting Xilinx versal devices.
+>=20
+> The location of these binaries is temporary, and will soon be added to=20
+> the Xilinx firmware repository.  The temporary location is using the=20
+> same free distribution license as the Xilinx firmware repository.
+>=20
+> Once these files are available on the Xilinx repository, this package=20
+> will be updated to the new location.
+>=20
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Classification of failures by reason for master
------------------------------------------------
+> I wanted to apply this... but there is a serious licensing issue I believ=
+e, see below.
 
-                   linux-6.0.9 | 10
-            host-binutils-2.38 | 9 
-glibc-2.36-66-ga1dc0be03c9d... | 8 
-                       unknown | 8 
-                host-go-1.19.3 | 7 
-               libglib2-2.72.3 | 6 
-  gobject-introspection-1.72.0 | 5 
-              host-pahole-1.24 | 5 
-              host-rust-1.64.0 | 5 
-                linuxptp-3.1.1 | 5 
-                      xz-5.2.7 | 5 
-                 dash-0.5.11.5 | 4 
-                gerbera-1.10.0 | 4 
-                     frr-8.3.1 | 3 
-             libgpg-error-1.45 | 3 
-            ocf-linux-20171122 | 3 
-           python-numpy-1.23.4 | 3 
-                tealdeer-1.6.1 | 3 
-                wtfutil-0.41.0 | 3 
-                 dmalloc-5.6.5 | 2 
-                elfutils-0.186 | 2 
-                   flann-1.9.2 | 2 
-fs/ubifs/ubifs.mk:49: /home... | 2 
-            host-binutils-2.39 | 2 
-             host-cmake-3.22.3 | 2 
-       host-gcc-initial-11.3.0 | 2 
-host-spirv-llvm-translator-... | 2 
-                  lcms2-2.13.1 | 2 
-              libgcrypt-1.10.1 | 2 
-             lirc-tools-0.10.2 | 2 
-                    musl-1.2.3 | 2 
-              open62541-v1.3.3 | 2 
-   openvmtools-11.3.5-18557794 | 2 
-                    php-8.1.12 | 2 
-          python-orjson-3.7.11 | 2 
-                  reaver-1.6.6 | 2 
-                    sdl-1.2.15 | 2 
-                 uclibc-1.0.42 | 2 
-                 wolfssl-5.5.3 | 2 
-                  xvisor-0.3.1 | 2 
-                    zeek-4.1.1 | 2 
-/home/buildroot/autobuild/i... | 1 
-                  acpid-2.0.34 | 1 
-        at91dataflashboot-1.05 | 1 
-azure-iot-sdk-c-LTS_07_2022... | 1 
-                    bat-0.19.0 | 1 
-             batman-adv-2022.2 | 1 
-                  botan-2.19.2 | 1 
-                  cairo-1.16.0 | 1 
-                 cdrkit-1.1.11 | 1 
-                     efivar-38 | 1 
-              erlang-22.3.4.22 | 1 
-               fftw-quad-3.3.8 | 1 
-             fontconfig-2.13.1 | 1 
-fs/cramfs/cramfs.mk:46: /ho... | 1 
-fs/cramfs/cramfs.mk:46: /ho... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /home... | 1 
-fs/ubifs/ubifs.mk:49: /tmp/... | 1 
-fs/ubifs/ubifs.mk:49: /tmp/... | 1 
-fs/ubifs/ubifs.mk:49: /tmp/... | 1 
-                gnu-efi-3.0.15 | 1 
-         gobject-introspection | 1 
-google-breakpad-c85eb4a59b6... | 1 
-                 gtkmm3-3.22.0 | 1 
-              host-delve-1.8.0 | 1 
-           host-libiberty-2.32 | 1 
-      host-riscv-isa-sim-1.1.0 | 1 
-                    lame-3.100 | 1 
-libdill-32d0e8b733416208e04... | 1 
-                libglvnd-1.4.0 | 1 
-                libkcapi-1.4.0 | 1 
-               libmdbx-0.11.12 | 1 
-                   libnl-3.7.0 | 1 
-               libsigsegv-2.14 | 1 
-               lightning-2.1.3 | 1 
-                         linux | 1 
-      linux-5.10.145-cip17-rt7 | 1 
-              liquid-dsp-1.4.0 | 1 
-        ltp-testsuite-20220930 | 1 
-          lttng-modules-2.13.1 | 1 
-            lttng-tools-2.13.2 | 1 
-                     lxc-5.0.1 | 1 
-                  matio-1.5.23 | 1 
-                       ncurses | 1 
-             netsniff-ng-0.6.8 | 1 
-                        ngircd | 1 
-                  ntpsec-1_2_1 | 1 
-                 openssh-9.1p1 | 1 
-                    opus-1.3.1 | 1 
-rtl8189es-e58bd86c9d9408c64... | 1 
-rtl8821au-4235b0ec7d7220a63... | 1 
-                 sqlite-3.39.4 | 1 
-toolchain-external-codescap... | 1 
-              traceroute-2.1.0 | 1 
-           uboot-tools-2021.07 | 1 
-             uccp420wlan-6.9.1 | 1 
-uqmi-0a19b5b77140465c29e2af... | 1 
-xr819-xradio-4f0cfd5e869ca1... | 1 
-                  zabbix-5.4.9 | 1 
-                 zlib-ng-2.0.6 | 1 
+Thank you for your review and feedback.  Licensing is still something that =
+I do not understand as well as I probably should.
 
+> diff --git a/package/versal-firmware/Config.in=20
+> b/package/versal-firmware/Config.in
+> new file mode 100644
+> index 0000000000..122ef02175
+> --- /dev/null
+> +++ b/package/versal-firmware/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_VERSAL_FIRMWARE
+> +	bool "versal-firmware"
+> +	depends on BR2_aarch64
+> +	help
+> +	  Pre-built firmware files for Xilinx Versal boards.
+> +
+> +	  https://github.com/nealfrager/buildroot-firmware
+> +
+> +if BR2_PACKAGE_VERSAL_FIRMWARE
+> +
+> +config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
+> +	string "versal firmware version"
 
-Detail of failures for master
------------------------------
+> Drop "versal" here: this option appears indented under "versal-firmware",=
+ so repeating "versal" is not needed.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    | /home/buildroot/autobuild/i... | NOK | http://autobuild.buildroot.net/results/602519eb6b9632c09d8d33711864f5b84ce7b492 |     
-   mips64    |          acpid-2.0.34          | NOK | http://autobuild.buildroot.net/results/85437e6dfbe2081f255379fd0658c5a8618a8f38 | ORPH
-    arm      |     at91dataflashboot-1.05     | NOK | http://autobuild.buildroot.net/results/586ff481687e3555c3eda2017b82eeae9d09dc8f | ORPH
-    arm      | azure-iot-sdk-c-LTS_07_2022... | NOK | http://autobuild.buildroot.net/results/b495d48a0a747b81f269f2bebd484a06d1f2cf64 |     
-    i686     |           bat-0.19.0           | NOK | http://autobuild.buildroot.net/results/dd2f34835fd3b81c100472a7a904671fd1258d79 |     
-  mips64el   |       batman-adv-2022.2        | NOK | http://autobuild.buildroot.net/results/3df9008dc3e63ad153b0e0bb0361d5c8e88f58f9 |     
-   armeb     |          botan-2.19.2          | NOK | http://autobuild.buildroot.net/results/7940dfeb7c248d8eef9a1ef1cc1a886373d86bf5 | ORPH
-   xtensa    |          cairo-1.16.0          | NOK | http://autobuild.buildroot.net/results/013e3c130edc44d213bb10d43aa552104c3f9f9c |     
-   armeb     |         cdrkit-1.1.11          | NOK | http://autobuild.buildroot.net/results/c94d143b112997e6f4d1337ac141a615fd10bcf8 |     
-    sh4      |         dash-0.5.11.5          | NOK | http://autobuild.buildroot.net/results/06119297aab59ab15f694fc023314d9a5385746c | ORPH
-    sh4      |         dash-0.5.11.5          | NOK | http://autobuild.buildroot.net/results/d697b074e4987adab143ede886862cb3fff9a20f | ORPH
-    i686     |         dash-0.5.11.5          | NOK | http://autobuild.buildroot.net/results/566c0f8a4c9bb6dfd98c3ccb51f6cc74ac0b7b63 | ORPH
-   sparc     |         dash-0.5.11.5          | NOK | http://autobuild.buildroot.net/results/8f109f1a04a6a2ff6d8c4c920e499fbaec3f72b9 | ORPH
-    i686     |         dmalloc-5.6.5          | NOK | http://autobuild.buildroot.net/results/bf87345c93ce2536a6ed5ccf3bd29c1d31d131c9 | ORPH
-  powerpc    |         dmalloc-5.6.5          | NOK | http://autobuild.buildroot.net/results/67e5f7265a069f0f5171d7461175762305d9afb7 | ORPH
-    i586     |           efivar-38            | NOK | http://autobuild.buildroot.net/results/036229635c9aca50b879388066fe6d192f97a6d6 |     
-    arc      |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/74198c6926370671b61e141376c70937dccce139 | ORPH
-microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/6f5d7a3bbf77af3efb325d775ca7daf9784091f9 | ORPH
-  aarch64    |        erlang-22.3.4.22        | NOK | http://autobuild.buildroot.net/results/69f6741b181cb105bee162a77cee5877849275f9 |     
-powerpc64le  |        fftw-quad-3.3.8         | NOK | http://autobuild.buildroot.net/results/4178560c6b387028ed434d691dc49e83e1c9a992 | ORPH
-    mips     |          flann-1.9.2           | NOK | http://autobuild.buildroot.net/results/f62cc9c56fb9f3146cbf979065b70ade18f93b63 |     
-    mips     |          flann-1.9.2           | NOK | http://autobuild.buildroot.net/results/6b6ebb4652173ee86688d5a7f106a6e786ac398c |     
-  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/2a4f761924c60e35cea4af0bee187c3758e378de | ORPH
-    arc      |           frr-8.3.1            | NOK | http://autobuild.buildroot.net/results/7d2ba034ea4334d3907c564fa2484ccf4ff4d902 |     
-  mips64el   |           frr-8.3.1            | NOK | http://autobuild.buildroot.net/results/b8c225dafc385f606e1075ca00eecee5dad619e3 |     
-  mips64el   |           frr-8.3.1            | NOK | http://autobuild.buildroot.net/results/259fd2e110f02a1b35f860c3073edb3c4ec553b0 |     
-   mipsel    | fs/cramfs/cramfs.mk:46: /ho... | NOK | http://autobuild.buildroot.net/results/80bf061a5be261248f57f0d94eedad27b3a32b21 |     
-  sparc64    | fs/cramfs/cramfs.mk:46: /ho... | NOK | http://autobuild.buildroot.net/results/27407776b8d5e8cc48a0bd2e20581e95edda67f0 |     
-   x86_64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/6833860e23518ed5f6a151d8992bf8b72f452624 |     
-  sparc64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/2c5e76a09158d48d3c6c3f9a8a5ddfb45d39b8f1 |     
-  powerpc    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/f67d07015ecd8ae35dc7b25e866714691a8fc5b8 |     
-   x86_64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/aac5243f77ebe495ae8bc1c5d44cd156752b85a7 |     
-   nios2     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/f14f05d2db171d026f0297999ba8be7173ba5874 |     
- powerpc64   | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/69450088dcb6d8d7f66a9aa00b9e82bd70de63aa |     
-   x86_64    | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/33ab4d6ca0e61c70be201d2a38339a2e92a9a7bf |     
- aarch64_be  | fs/ubifs/ubifs.mk:49: /tmp/... | NOK | http://autobuild.buildroot.net/results/3393c6ab03a9d955db8a16266ddde16fc11ecd20 |     
-   armeb     | fs/ubifs/ubifs.mk:49: /tmp/... | NOK | http://autobuild.buildroot.net/results/9bb97299236e676755bf745db74fd73f7aca1590 |     
-    or1k     | fs/ubifs/ubifs.mk:49: /tmp/... | NOK | http://autobuild.buildroot.net/results/4e0045d3477f2a202523f2260b236f487749061f |     
-    i686     |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/9390cdf2708e67f17e66563305c2e66d770c92af |     
-    arc      |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/2bc3260d27703ca6b6b3afd88653ef5cd11b3bb1 |     
-powerpc64le  |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/58988a507b658122e0bd83ec6023dda95d64bf83 |     
-  mips64el   |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/984f28e3a8df8f433a427bc2b97c0f8022373f5a |     
-    sh4a     | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/61b60dc136a64575bee6143c4c06bdbd48c511ff |     
-   sh4aeb    | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/b99d869202c6007bac62dc0fb72a4841a27de3ff |     
-   nios2     | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/33fa2b93232688c4dbbb88e869ee8549293019ef |     
- aarch64_be  | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/434380dc5e51e55a962b61ec3aba60b00d2b6855 |     
-  powerpc    | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/3028fd2a5f909c233f6afb29bc2d8c495430380e |     
-microblazeel | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/e25419c1a7a0420bc9960db5dab664cb71504915 |     
-   nios2     | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/280052ee240bc5325ca94ea156315ac71e336067 |     
-    sh4a     | glibc-2.36-66-ga1dc0be03c9d... | NOK | http://autobuild.buildroot.net/results/44180088af0264737adff622a1b128efc874dcf2 |     
-  mips64el   |         gnu-efi-3.0.15         | NOK | http://autobuild.buildroot.net/results/bdd367e3e135175fb05b5ab081b2309c6f27c440 |     
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/79972ede39507a1f7423854f460073140520971c |     
-   s390x     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/6e9d9e6f7021350ec6a29aa69bf5fb38b044d8b3 | ORPH
-  sparc64    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/f2b25786b508348c26108f8987414572d868ca43 | ORPH
-   x86_64    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/e393874d31704c1ff61afc36f9686286d2ccda32 | ORPH
-    mips     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/161a1f331f126f69deb1d4df31cb1844764ac972 | ORPH
-  sparc64    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/d43311ee9db019afd64bf3071bc4f7514377bd2b | ORPH
-    mips     | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/88be60b961a0d031c7ec0356c449ba1ef817aa3f |     
-powerpc64le  |         gtkmm3-3.22.0          | NOK | http://autobuild.buildroot.net/results/17263ac51f197031106eb7fd595126a2720f0397 |     
-powerpc64le  |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/e28ae9a281d9146ea12105c2ca9bb6a901636a0f |     
-    mips     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/57d168a75368314e31a596ad95245b2736536703 |     
-   mipsel    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/668de87bb713a97251f1fb75c1e46596b933a453 |     
- aarch64_be  |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/a8f5d218c0d7911181d61b43298c79a8933065ca |     
-  mips64el   |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/812b3588d2dc35e12f4a1df78d5d0ffac4b81434 |     
-   armeb     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/99a7b74bbe45f0d75c5737fee3e9f11726053e18 |     
- powerpc64   |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/4a4459c4365022133d35660625e093dd6597ed1b |     
-microblazeel |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/6c1b78f8c103a4de190a66859f78d6a066be1c65 |     
-   mips64    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/98d2376f0f9351ce35ac363318af447357edd670 |     
-  mips64el   |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/8c2ba20ff462bc6c263af5ff6571c50fc6fa5d5f |     
-   mipsel    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/76e9bf1677d718262ba5fb3fdfe446a4593264b7 |     
-   sparc     |       host-cmake-3.22.3        | NOK | http://autobuild.buildroot.net/results/2afd285bf363019056f24555eedee9c08e7b8d2e |     
-   x86_64    |       host-cmake-3.22.3        | NOK | http://autobuild.buildroot.net/results/4536950f5df6a70168d6faa5a292f676ffc61c39 |     
-   x86_64    |        host-delve-1.8.0        | NOK | http://autobuild.buildroot.net/results/2040665851c1ff5aafc8e81dde7985608aa18f99 |     
-microblazeel |    host-gcc-initial-11.3.0     | NOK | http://autobuild.buildroot.net/results/2252b4768b850c7b45e1c2a046e95fcd4769170e |     
- aarch64_be  |    host-gcc-initial-11.3.0     | NOK | http://autobuild.buildroot.net/results/9b527e65025dc2b1cfc17fbd95bbd82ab1ec8a4f |     
-    i686     |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/42f61c4fc637b75676ded4c6197e12b4da224824 |     
-   mips64    |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/9a7b3762b3987858bbe7a78cbb0413a30f2b5aa4 |     
-    i686     |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/d73d32fc715e71913315a032e4b3c20a39ff1c60 |     
-   mips64    |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/ea61dd6ce19b74cdeba1c4fba87a5a677940912c |     
-  mips64el   |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/bb7b14de750d8b3e387147afef1fb786dfbf526c |     
-    i686     |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/fa18b8626602cb8be4d5a60f60ec8fdb795669f4 |     
-   mips64    |         host-go-1.19.3         | NOK | http://autobuild.buildroot.net/results/7790a8beaf767e50684f060d8c02d56f1b560800 |     
-  powerpc    |      host-libiberty-2.32       | NOK | http://autobuild.buildroot.net/results/1ac08fdca9a38b3ced0cf8fec127dae81b33af2c |     
-   s390x     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/c94834711d208b0480c2bf45aedc5e785715d57f |     
-   xtensa    |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/7842abf97cf4a76a36f13b419fb8cb87419ce0a2 |     
-   mips64    |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/83fe96310f4aa12f406c7f1b2b58cc06fb7e2239 |     
-   sparc     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/5df782a74bdd477c9d2c5b566c7946ece595421d |     
-   x86_64    |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/23bb78f6c093e1b2e75b452ab03a9cc105702557 |     
- powerpc64   |    host-riscv-isa-sim-1.1.0    | NOK | http://autobuild.buildroot.net/results/9e8e30f40f67c6cf80a857ae2b84b2d43e27041c |     
-   x86_64    |        host-rust-1.64.0        | NOK | http://autobuild.buildroot.net/results/f40350a440b7333c758a31725aaca1ada3f8b6ba |     
-   s390x     |        host-rust-1.64.0        | NOK | http://autobuild.buildroot.net/results/8de14a2292d28a0b0da37fde5a44306176223990 |     
-  sparc64    |        host-rust-1.64.0        | NOK | http://autobuild.buildroot.net/results/6b64dd323c69bdd0877d0113ef260e0821c1ebe8 |     
-powerpc64le  |        host-rust-1.64.0        | NOK | http://autobuild.buildroot.net/results/392ed65083ef7f45513d7a3ed8637b3fc4f4c5c2 |     
-powerpc64le  |        host-rust-1.64.0        | NOK | http://autobuild.buildroot.net/results/ed39c149afd55f18271a04eb5a6a289e5f005c11 |     
-    i686     | host-spirv-llvm-translator-... | NOK | http://autobuild.buildroot.net/results/aec4e19ad6bef2040360045ab681f65f09c19afa | ORPH
-  aarch64    | host-spirv-llvm-translator-... | NOK | http://autobuild.buildroot.net/results/dc20dc2ce458c6fb1178b4d9799181cdbc365b0b | ORPH
-  powerpc    |           lame-3.100           | NOK | http://autobuild.buildroot.net/results/23e8e00d11376f0558c7888f649c91bdc2831457 |     
-    or1k     |          lcms2-2.13.1          | NOK | http://autobuild.buildroot.net/results/4028ccd5bd570268a0144a0c79dfacc3b50a826a |     
-  powerpc    |          lcms2-2.13.1          | NOK | http://autobuild.buildroot.net/results/28d3617d565e5a3f5ce839655038e85ceee0ecd5 |     
-   sh4aeb    | libdill-32d0e8b733416208e04... | NOK | http://autobuild.buildroot.net/results/51f1711e9723d4757773dde372c6bb87ef1af1ab |     
-    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/c5f9d7f0ebcc199ab177db7191344838c9b81f34 | ORPH
-    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/1cb760d61fecffe6e73493a1d525fc02d13f066f | ORPH
-    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/4cdb315f3d8f35d54d437585cf243d848a1deec9 |     
-    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/2b9a21dbc6d513e8b35deded72cb9f729e45e301 |     
-   arceb     |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/c88f3bea789182043d7b42c384736d0cbc3bd2e3 |     
-   arceb     |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/eac188f832753eda718c9cb983e755274cf143d0 |     
-    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/9efd9625b1470cc3501f5646d339041f982c6243 |     
-   arceb     |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/c4efbc0801d4cac4a9635d79dbd87849e12fa372 |     
-    m68k     |         libglvnd-1.4.0         | NOK | http://autobuild.buildroot.net/results/17ee29aec0ff64b5d70f4ac6017e56eaffa8a07f | ORPH
-  aarch64    |       libgpg-error-1.45        | NOK | http://autobuild.buildroot.net/results/3069bda7ac7fd3a727f849c0485749edf2ce6853 | ORPH
-  aarch64    |       libgpg-error-1.45        | NOK | http://autobuild.buildroot.net/results/60bdcade47a2b951c0a3d797d55d12c94a39d04d | ORPH
- aarch64_be  |       libgpg-error-1.45        | NOK | http://autobuild.buildroot.net/results/52677422f39f2e9ecd37da93d53b3e1864f17992 | ORPH
-microblazeel |         libkcapi-1.4.0         | NOK | http://autobuild.buildroot.net/results/73a6b7e74daef4e6ac1ba677507a7cf28d27f9f6 |     
-   x86_64    |        libmdbx-0.11.12         | NOK | http://autobuild.buildroot.net/results/962e8507340155137ba104d385b100c000293179 |     
-   mips64    |          libnl-3.7.0           | NOK | http://autobuild.buildroot.net/results/e57e3560aad67a214f08422002c16ecae49140e8 | ORPH
-  powerpc    |        libsigsegv-2.14         | NOK | http://autobuild.buildroot.net/results/3ec4d667da09c04094b0bc7d8fd3cf43a960e360 |     
-    i686     |        lightning-2.1.3         | NOK | http://autobuild.buildroot.net/results/4d302cf177d7e8b87f845437f6af390be84f3fab |     
- powerpc64   |             linux              | NOK | http://autobuild.buildroot.net/results/a56e911793f51dacc9a97e7c7dd39a3e2a85263b |     
-   arceb     |    linux-5.10.145-cip17-rt7    | NOK | http://autobuild.buildroot.net/results/10c86e21b796d1bce84e1aeabb182518b8e29cd7 | ORPH
-   sh4aeb    |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/8eceacc99a56fd25629db5a0db1585bfc1f9fc35 | ORPH
-   nios2     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/de97631d18c7ef8bdac42fbdf9cccacafbb674d6 | ORPH
-   s390x     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/5299d4075f2386fee348b1ed0602a256e323798b | ORPH
-    m68k     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/cd55f6dc9dfff91d62f0cb9b36650ebce225619b | ORPH
-   s390x     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/6d6d1298c46e87d923fe47e495fcd786c82c08ad | ORPH
-   x86_64    |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/007bae7f357c5340355e8928ac5fc603bbec018a | ORPH
-   s390x     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/65b7efcd6e56dbd11099adfbc816955bc5e036bf | ORPH
-   mips64    |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/a0d090aaea332263cb03049a4f8269b6550696b2 | ORPH
-  powerpc    |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/a450cb8d8d765d077d9d7142ac56afad45d1b752 | ORPH
-    sh4a     |          linux-6.0.9           | NOK | http://autobuild.buildroot.net/results/2b727d04e65421115440b5d7eefb5a173f0a9655 | ORPH
-   nios2     |         linuxptp-3.1.1         | NOK | http://autobuild.buildroot.net/results/c29a6fea94d09f92f5ab3ae9b770bc996c245622 |     
-   armeb     |         linuxptp-3.1.1         | NOK | http://autobuild.buildroot.net/results/2926b13b7bf4493664fac6169214d94347ab8810 |     
-    mips     |         linuxptp-3.1.1         | NOK | http://autobuild.buildroot.net/results/bcd2db39b44597a1a713cade0a4b81e5b1e74eff |     
-microblazeel |         linuxptp-3.1.1         | NOK | http://autobuild.buildroot.net/results/bbfb782456e6c311a42be7a6f697112a830e81cd |     
-   mips64    |         linuxptp-3.1.1         | NOK | http://autobuild.buildroot.net/results/4fa1edeb849f6aecaac3163a3003d942215b763a |     
-    arm      |        liquid-dsp-1.4.0        | NOK | http://autobuild.buildroot.net/results/1fea01b3fbfa9d479264c77a59e61cded8133acc |     
-   nios2     |       lirc-tools-0.10.2        | NOK | http://autobuild.buildroot.net/results/c2438e2d7e42abc48e970251d9b0f6a301961ba7 | ORPH
-   nios2     |       lirc-tools-0.10.2        | NOK | http://autobuild.buildroot.net/results/5157df48d6c733df2b056c66e3a3b0553efbb27c | ORPH
-    or1k     |     ltp-testsuite-20220930     | NOK | http://autobuild.buildroot.net/results/c1acf2206edb5127055baa30ce7ed1e52957abe8 |     
-   arceb     |      lttng-modules-2.13.1      | NOK | http://autobuild.buildroot.net/results/efff8a069b5a7c23577229d8d6f3c16788c3e3fb |     
-   armeb     |       lttng-tools-2.13.2       | NOK | http://autobuild.buildroot.net/results/3c0831f2e95e2ac6a4efe273ff1db41b1eae45e7 |     
- aarch64_be  |           lxc-5.0.1            | NOK | http://autobuild.buildroot.net/results/fce4d9baf4a536757d93a4c737dc1640b8c943b1 |     
-   nios2     |          matio-1.5.23          | NOK | http://autobuild.buildroot.net/results/0de97cf24d6e564e6cb2ebc9e544ea558a28b9d0 |     
-  powerpc    |           musl-1.2.3           | NOK | http://autobuild.buildroot.net/results/f7348b2028157fd430993177cfb65018d5297ab0 |     
-  powerpc    |           musl-1.2.3           | NOK | http://autobuild.buildroot.net/results/4a66287354e6ca43010be2065d1953a336a7f3e8 |     
-    arc      |            ncurses             | NOK | http://autobuild.buildroot.net/results/052500bd2c0da9c767244eb2b5cf9ec3c6759395 |     
-   s390x     |       netsniff-ng-0.6.8        | NOK | http://autobuild.buildroot.net/results/7dc03ae5ea37c1c7df856cb856ed857ccee32ca4 |     
-   nios2     |             ngircd             | NOK | http://autobuild.buildroot.net/results/07f981813b15ca730d4f797999a9f906e3ddc804 |     
-microblazeel |          ntpsec-1_2_1          | NOK | http://autobuild.buildroot.net/results/1a4c48292ae77eddcdfb2910b7994aae4ec08044 | ORPH
-   arceb     |       ocf-linux-20171122       | NOK | http://autobuild.buildroot.net/results/cf46f6f2dc7990b2cfad95076c1ba200c379c454 | ORPH
- powerpc64   |       ocf-linux-20171122       | NOK | http://autobuild.buildroot.net/results/b50322263f077d1d9fa23c6647fe18916c2a0f21 | ORPH
-    arc      |       ocf-linux-20171122       | NOK | http://autobuild.buildroot.net/results/0566ac1526cce6b44768c852c59862ba68d9999a | ORPH
-  aarch64    |        open62541-v1.3.3        | NOK | http://autobuild.buildroot.net/results/660ae09d4a15ace9a95fff31f159216e169adaf8 | ORPH
-    arm      |        open62541-v1.3.3        | NOK | http://autobuild.buildroot.net/results/b81efb19c3c7d1a9f79ca980d89cf06c0af068fb | ORPH
-    m68k     |         openssh-9.1p1          | NOK | http://autobuild.buildroot.net/results/7738267ee2d397e47912646d1ec0f98f2c7828a5 | ORPH
-    i686     |  openvmtools-11.3.5-18557794   | NOK | http://autobuild.buildroot.net/results/056f97401b1112cb30e73a0d361f870f5457631b |     
-   x86_64    |  openvmtools-11.3.5-18557794   | NOK | http://autobuild.buildroot.net/results/362c197d01426ec4d4d9ba1351776652cc440b3c |     
-   armeb     |           opus-1.3.1           | NOK | http://autobuild.buildroot.net/results/7733a4114a63d5fc1d32d3002246bbc47e4dca2a | ORPH
-    or1k     |           php-8.1.12           | NOK | http://autobuild.buildroot.net/results/8aa534062a1a56fcda41ca35c76c599998011fd0 |     
-  sparc64    |           php-8.1.12           | NOK | http://autobuild.buildroot.net/results/c383b6b9dc6e3f9fa35bd5ea0e96419658dbfe63 |     
- powerpc64   |      python-numpy-1.23.4       | NOK | http://autobuild.buildroot.net/results/846d2dac85f248c6ccdd0700c839405fbd18819b |     
-  aarch64    |      python-numpy-1.23.4       | NOK | http://autobuild.buildroot.net/results/89a12dd6c60d60a08f4f5360ab5022a9ee98b893 |     
-   sh4eb     |      python-numpy-1.23.4       | NOK | http://autobuild.buildroot.net/results/afa344334cda68ecae15a7e980f002aa7c7e0e86 |     
-    mips     |      python-orjson-3.7.11      | NOK | http://autobuild.buildroot.net/results/e52fbf7cb921496ee6b7471f72844d202c8e38c3 |     
-   armeb     |      python-orjson-3.7.11      | NOK | http://autobuild.buildroot.net/results/091296e6be6a3ecc1ab074aa27c129fb30122834 |     
-    arc      |          reaver-1.6.6          | NOK | http://autobuild.buildroot.net/results/def437f44b200054bb8964fff1478b0d2ca994a9 |     
-    arc      |          reaver-1.6.6          | NOK | http://autobuild.buildroot.net/results/bfd1ecbd76a7bf38c51a1d65f972c46b0fc762da |     
- powerpc64   | rtl8189es-e58bd86c9d9408c64... | NOK | http://autobuild.buildroot.net/results/a49773cc73741685e55e785434dfc859e8f246ef |     
-  sparc64    | rtl8821au-4235b0ec7d7220a63... | NOK | http://autobuild.buildroot.net/results/e0899f0ce387ed4c06888b317f74430faaf04a9a |     
-    sh4      |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/0f20a61b6de790cf50762804e5913e071e5fe4c9 | ORPH
-    sh4      |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/f70aae364316ea1df43e164b4c046bbb743044da | ORPH
-powerpc64le  |         sqlite-3.39.4          | NOK | http://autobuild.buildroot.net/results/16395c07e69c6b8ab3ddd47c7220763a2ce291cb |     
-   s390x     |         tealdeer-1.6.1         | NOK | http://autobuild.buildroot.net/results/b468fc9701ff872b08f4829a40659cc7b8778f68 |     
-  sparc64    |         tealdeer-1.6.1         | NOK | http://autobuild.buildroot.net/results/8de297b540a1829dc3e2e678cf1f24fc6b95b7b1 |     
-  sparc64    |         tealdeer-1.6.1         | NOK | http://autobuild.buildroot.net/results/0d45344064581f8c6f44cc6db4da281466c2c27c |     
-  mips64el   | toolchain-external-codescap... | NOK | http://autobuild.buildroot.net/results/abc34f52bdd1c74d6f420ad1677594940e93bc65 | ORPH
-  mips64el   |        traceroute-2.1.0        | NOK | http://autobuild.buildroot.net/results/dbb9e1e4300f2f65c5a5069e371e7f859a041498 |     
-  aarch64    |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/c8465bac67d81704c69662c0f281ed1d5c1cd132 |     
-   s390x     |       uccp420wlan-6.9.1        | NOK | http://autobuild.buildroot.net/results/16f63d44001dbb28ac56b1b0bf27503e6f4f630f | ORPH
-  powerpc    |         uclibc-1.0.42          | NOK | http://autobuild.buildroot.net/results/f4ca151fb5f8f86bfae80130ca94de400d70c564 |     
-  powerpc    |         uclibc-1.0.42          | NOK | http://autobuild.buildroot.net/results/6aeb8c957ce11292103b7f7980b2dd392a434963 |     
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/872cb74d6ff96b588260f5f5b5eadfec6d1d6fc3 |     
-   s390x     |            unknown             | NOK | http://autobuild.buildroot.net/results/dda2094a10f15a1ce74aa19c6403ecfa72938a9f |     
-  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/53c4b3cb3ab6558f2aea4df0f6a927fe2a38f8a3 |     
-   armeb     |            unknown             | NOK | http://autobuild.buildroot.net/results/cae8844a612eec9fc1b653dd23d1cd6186728680 |     
-powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/634a8b03f8383e9ef89f29bf16eb208b794fb6d7 |     
-  sparc64    |            unknown             | NOK | http://autobuild.buildroot.net/results/f796971154c42c0e99d8cbb6e66fe5a478777dd8 |     
- aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/60b292a18222c1fe211f5dd0478cafb7229e5f53 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/2bfa8a42c78df2f7fec62cb5a73773783f9fc593 |     
-    i686     | uqmi-0a19b5b77140465c29e2af... | NOK | http://autobuild.buildroot.net/results/4736dd637949628c188240dd9ebcfb4747020f20 | ORPH
-   armeb     |         wolfssl-5.5.3          | NOK | http://autobuild.buildroot.net/results/1b955c5f109961877428601e34899ba178c9b29d |     
-   armeb     |         wolfssl-5.5.3          | NOK | http://autobuild.buildroot.net/results/126cab893b0d0b76f9be5062339910229d83cfb3 |     
-  aarch64    |         wtfutil-0.41.0         | NOK | http://autobuild.buildroot.net/results/322750657d62bae50875e47eb08c6ec1c3587802 |     
-    arm      |         wtfutil-0.41.0         | NOK | http://autobuild.buildroot.net/results/b50892b322881b9c6a36e9143126c855113da821 |     
-powerpc64le  |         wtfutil-0.41.0         | NOK | http://autobuild.buildroot.net/results/cde5127a6f606972fdc2a3b8f3bcbbd729725260 |     
-   armeb     | xr819-xradio-4f0cfd5e869ca1... | NOK | http://autobuild.buildroot.net/results/434c1d2a5104090366519278314bf750324d3710 |     
-   x86_64    |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/447ce1f1cfbe29c8e372b9a3d2008286503ee799 |     
-  aarch64    |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/5c35fb48e2249ff625d79290f400cd869a8a4f44 |     
- microblaze  |            xz-5.2.7            | NOK | http://autobuild.buildroot.net/results/b636cb5ba5a8eb42a735742e34ad38b3aa198d41 | ORPH
-microblazeel |            xz-5.2.7            | NOK | http://autobuild.buildroot.net/results/2881e94887a2564caddf91afa0d45efde300a306 | ORPH
-microblazeel |            xz-5.2.7            | NOK | http://autobuild.buildroot.net/results/b8e8f01ea810614747f5daa96707315064e2dcb3 | ORPH
- microblaze  |            xz-5.2.7            | NOK | http://autobuild.buildroot.net/results/81c607791ea251dbbaefdeea8627f3f8fbe450a0 | ORPH
-microblazeel |            xz-5.2.7            | NOK | http://autobuild.buildroot.net/results/26279e3a88a830cc9fc17b171dc399cc17a367ab | ORPH
-   x86_64    |          zabbix-5.4.9          | NOK | http://autobuild.buildroot.net/results/627db30b51efc3a09d4425f9c58bf1de0c9eb815 |     
-microblazeel |           zeek-4.1.1           | NOK | http://autobuild.buildroot.net/results/3baff7b60feda3123eae2d19861eab432fe091d0 |     
-  powerpc    |           zeek-4.1.1           | NOK | http://autobuild.buildroot.net/results/95bf0f84e6a7ac7102a29bd31d2d823264184631 |     
-    arm      |         zlib-ng-2.0.6          | NOK | http://autobuild.buildroot.net/results/fbbf3dd8188adab87846aefa25b8b8e422d256a0 | ORPH
+Ok, no problem.
 
+> +	default v2022.2
 
-Classification of failures by reason for next
----------------------------------------------
+> Quotes around v2022.2
 
-              alsa-utils-1.2.8 | 1 
-                   aubio-0.4.9 | 1 
-             cni-plugins-1.1.1 | 1 
-                 dhcp-4.4.3-P1 | 1 
-                       gsl-2.6 | 1 
-              host-pahole-1.24 | 1 
-host-spirv-llvm-translator-... | 1 
-          imagemagick-7.1.0-51 | 1 
-                  jack2-1.9.21 | 1 
-                    lxc-4.0.12 | 1 
-                    norm-1.5.8 | 1 
-                    opus-1.3.1 | 1 
-    python-cryptography-38.0.3 | 1 
-                 wavemon-0.9.4 | 1 
-                 wolfssl-5.5.2 | 1 
+Ok.  I will fix this.
 
+> +config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
+> +	string "versal board name"
+> +	default vck190
 
-Detail of failures for next
----------------------------
+> Same comments here.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        alsa-utils-1.2.8        | NOK | http://autobuild.buildroot.net/results/b7bea7e0641b982d4cf472c09c130776bc0d9948 |     
-   x86_64    |          aubio-0.4.9           | NOK | http://autobuild.buildroot.net/results/31e5f6fc44689c4d725df9c7f1982de54923f39f |     
-powerpc64le  |       cni-plugins-1.1.1        | NOK | http://autobuild.buildroot.net/results/a6174b769edcd27b32ae5e74356644504e9ed303 |     
-    arm      |         dhcp-4.4.3-P1          | NOK | http://autobuild.buildroot.net/results/618c7ad654274ae1cadcd9c34f4dab58a18d754b | ORPH
-  powerpc    |            gsl-2.6             | NOK | http://autobuild.buildroot.net/results/b3aa35efbac5b7739fe706f2ecd7271b1df2caa0 | ORPH
-  mips64el   |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/888fd62711bc80ce53e7aa4dc1f10aede487857a |     
-   x86_64    | host-spirv-llvm-translator-... | NOK | http://autobuild.buildroot.net/results/511396271ee23ac2ae029e001f857ebb773edeab | ORPH
- microblaze  |      imagemagick-7.1.0-51      | NOK | http://autobuild.buildroot.net/results/b46665a9fd38822f1a670818a8d8a3c56bf81629 | ORPH
-    arc      |          jack2-1.9.21          | NOK | http://autobuild.buildroot.net/results/e09fcf3ce14891b430eb61953a119926b4c502e6 |     
-powerpc64le  |           lxc-4.0.12           | NOK | http://autobuild.buildroot.net/results/33a3ecb696b244f605c3f0a26710d307ee72f7c6 |     
-    i686     |           norm-1.5.8           | NOK | http://autobuild.buildroot.net/results/94c3af3195bafea2595cb24f5b6a875b57dedd63 | ORPH
-    arm      |           opus-1.3.1           | NOK | http://autobuild.buildroot.net/results/224ada4c6461f8ee9a535c65cda3f8eb98c3bc41 | ORPH
-   x86_64    |   python-cryptography-38.0.3   | NOK | http://autobuild.buildroot.net/results/340c4389b369b091a7a648a98a926c5d09afd65e |     
-  mips64el   |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/5542f5699a6e6665e68776e51b332ad12e8cbe2b | ORPH
-    arm      |         wolfssl-5.5.2          | NOK | http://autobuild.buildroot.net/results/5a8505046d0b621d882566845ba69c14169d4cb7 |     
+Understood.  I will fix this too.
 
+> +	help
+> +	  Name of Versal target board.
+> +	  Used for installing the appropriate firmware boot.bin.
+> +
+> +endif # BR2_PACKAGE_VERSAL_FIRMWARE
+> diff --git a/package/versal-firmware/versal-firmware.mk=20
+> b/package/versal-firmware/versal-firmware.mk
+> new file mode 100644
+> index 0000000000..cb36d1e045
+> --- /dev/null
+> +++ b/package/versal-firmware/versal-firmware.mk
+> @@ -0,0 +1,23 @@
+> +#####################################################################
+> +###########
+> +#
+> +# versal-firmware
+> +#
+> +#####################################################################
+> +###########
+> +
+> +VERSAL_FIRMWARE_VERSION =3D $(call=20
+> +qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
+> +VERSAL_FIRMWARE_SITE =3D $(call=20
+> +github,nealfrager,buildroot-firmware,$(BR2_PACKAGE_VERSAL_FIRMWARE_VE
+> +RSION))
 
-Classification of failures by reason for 2022.02.x
---------------------------------------------------
+> Use $(VERSAL_FIRMWARE_VERSION) here
 
-                  exempi-2.6.1 | 1 
+No problem.  Thanks for catching this.
 
+> +VERSAL_FIRMWARE_LICENSE =3D "Xilinx-Binary-Only or GPL-2.0-or-later"
+> +
+> +VERSAL_FIRMWARE_LICENSE_FILES =3D LICENSE
 
-Detail of failures for 2022.02.x
---------------------------------
+> I really don't understand how this repository code can be under GPL-2.0-o=
+r-later. The GPL implies that source code is available as the GPL explicitl=
+y states that the software should be provided under its "preferred form of =
+modification", which a closed source binary definitely is not.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          exempi-2.6.1          | NOK | http://autobuild.buildroot.net/results/6f1086271e3a8f744b269aad4dd2744e1ecbb713 |     
+> The first part somewhat makes sense, but the second part certainly does n=
+ot make sense. If those binary files contain GPLv2 code, providing only the=
+ binaries is a violation of the GPL.
 
+> So I'm sorry, but this needs to be fixed up before we can consider applyi=
+ng this package.
 
-Classification of failures by reason for 2022.08.x
---------------------------------------------------
+I copied the LICENSE file from the Xilinx/ubuntu-firmware repo below.  Look=
+ing more closely at it, I believe you are right that the license should jus=
+t be Xilinx-Binary-Only.
 
-                       unknown | 2 
-               collectd-5.12.0 | 1 
-                host-go-1.18.8 | 1 
-                    ruby-3.1.2 | 1 
-ulog-0389d243352255f6182326... | 1 
-                 wolfssl-5.5.3 | 1 
-                    zeek-4.1.1 | 1 
+I will update the LICENSE file to only include the binary portion as descri=
+bed in the below license:
+https://github.com/Xilinx/ubuntu-firmware/blob/main/LICENSE
 
+The source code for the versal_plm and versal_psmfw applications comes from=
+ the same Xilinx/embeddedsw repository as the zynqmp_pmufw, so the source a=
+nd binary licenses for all of these files should be the same.
+https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps
 
-Detail of failures for 2022.08.x
---------------------------------
+If I modify the LICENSE file and remove the commentary about GPL, do you th=
+ink this could be acceptable for inclusion in buildroot?  If there is anyth=
+ing else I need to add, please let me know.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |        collectd-5.12.0         | NOK | http://autobuild.buildroot.net/results/6ff6d10e64d4c74b9f4dbfb5090aed1a9c0084ce |     
-  mips64el   |         host-go-1.18.8         | NOK | http://autobuild.buildroot.net/results/aa7677123b76fe5187284d3af6e55f4d5a1018ef |     
-  riscv64    |           ruby-3.1.2           | NOK | http://autobuild.buildroot.net/results/9bd7c8431e4857d1a1d71dc1db1e3314718a6c09 |     
-    sh4      | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/e21e82806f3c0ddc0cfc2d273155555ebde5cb72 |     
- microblaze  |            unknown             | NOK | http://autobuild.buildroot.net/results/288ff0e7a9ad571230a4eaba4e1687082a22731c |     
- aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/861cd5ec3da01dc75de79d81ea1e5a3a2c745ccf |     
-  mips64el   |         wolfssl-5.5.3          | NOK | http://autobuild.buildroot.net/results/f029bfb45c045e1742b4d0c171829ec13fa411b6 |     
-  mips64el   |           zeek-4.1.1           | NOK | http://autobuild.buildroot.net/results/5c4eb02ad4b12e1856dd3bf3b1349024af6d8fe1 |     
+Thanks again for your help.
 
+Best regards,
+Neal Frager
+AMD
 
+--_000_CH2PR12MB5004D69C65B84BEB0241DB7CF00E9CH2PR12MB5004namp_
+Content-Disposition: attachment; filename="winmail.dat"
+Content-Transfer-Encoding: base64
+Content-Type: application/ms-tnef; name="winmail.dat"
 
--- 
-http://autobuild.buildroot.net
+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
+9xuBpAEvgWtTsE2/4kQSQO8Hkk9XoYIL7UKP0FNA+oCbShBzsSzg9thxIEbYs8nFZUFNlpZ9fcWw
+T2AAAAAfAEIAAQAAABoAAABGAHIAYQBnAGUAcgAsACAATgBlAGEAbAAAAAAAHwBlAAEAAAAoAAAA
+bgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAB8AZAABAAAACgAAAFMATQBU
+AFAAAAAAAAIBQQABAAAAZAAAAAAAAACBKx+kvqMQGZ1uAN0BD1QCAAAAgEYAcgBhAGcAZQByACwA
+IABOAGUAYQBsAAAAUwBNAFQAUAAAAG4AZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBv
+AG0AAAAfAAJdAQAAACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAA
+HwDlXwEAAAAwAAAAcwBpAHAAOgBuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBt
+AAAAHwAaDAEAAAAaAAAARgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8AHwwBAAAAKAAAAG4A
+ZQBhAGwALgBmAHIAYQBnAGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAfAB4MAQAAAAoAAABTAE0AVABQ
+AAAAAAACARkMAQAAAGQAAAAAAAAAgSsfpL6jEBmdbgDdAQ9UAgAAAIBGAHIAYQBnAGUAcgAsACAA
+TgBlAGEAbAAAAFMATQBUAFAAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBt
+AAAAHwABXQEAAAAoAAAAbgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAAsA
+QDoBAAAAHwAaAAEAAAASAAAASQBQAE0ALgBOAG8AdABlAAAAAAADAPE/CQQAAAsAQDoBAAAAAwD9
+P+QEAAACAQswAQAAABAAAAB+bWjjSddeR4bX9ghq/Hq5AwAXAAEAAABAADkAgMZ7XLAA2QFAAAgw
+cXkAXbAA2QEfADcAAQAAAIgAAABSAEUAOgAgAFsAQgB1AGkAbABkAHIAbwBvAHQAXQAgAFsAUABB
+AFQAQwBIACAAdgA2ACAAMQAvADIAXQAgAHAAYQBjAGsAYQBnAGUALwB2AGUAcgBzAGEAbAAtAGYA
+aQByAG0AdwBhAHIAZQA6ACAAbgBlAHcAIABwAGEAYwBrAGEAZwBlAAAAHwA9AAEAAAAKAAAAUgBF
+ADoAIAAAAAAAAwDeP59OAAALAAIAAQAAAAsAIwAAAAAAAwAmAAAAAAALACkAAAAAAAsAKwAAAAAA
+AwAuAAAAAAADADYAAAAAAB8AcAABAAAAgAAAAFsAQgB1AGkAbABkAHIAbwBvAHQAXQAgAFsAUABB
+AFQAQwBIACAAdgA2ACAAMQAvADIAXQAgAHAAYQBjAGsAYQBnAGUALwB2AGUAcgBzAGEAbAAtAGYA
+aQByAG0AdwBhAHIAZQA6ACAAbgBlAHcAIABwAGEAYwBrAGEAZwBlAAAAAgFxAAEAAAAgAAAAAQHY
+/+6THTFhMWceYUykDOlWPwefpq5OlAaAgADJcwALAAYMAAAAAB8ANRABAAAAogAAADwAQwBIADIA
+UABSADEAMgBNAEIANQAwADAANABEADYAOQBDADYANQBCADgANABCAEUAQgAwADIANAAxAEQAQgA3
+AEMARgAwADAARQA5AEAAQwBIADIAUABSADEAMgBNAEIANQAwADAANAAuAG4AYQBtAHAAcgBkADEA
+MgAuAHAAcgBvAGQALgBvAHUAdABsAG8AbwBrAC4AYwBvAG0APgAAAAAAHwA5EAEAAACgAAAAPAAy
+ADAAMgAyADEAMQAyADQAMQAwADIAMQA0ADQALgAxADYAOAAzADMALQAxAC0AbgBlAGEAbAAuAGYA
+cgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQA+ACAAPAAyADAAMgAyADEAMQAyADQAMgAyADEANQA1
+ADcALgA0AGEAMQA4AGEAMgBhADkAQAB3AGkAbgBkAHMAdQByAGYAPgAAAB8AQhABAAAARgAAADwA
+MgAwADIAMgAxADEAMgA0ADIAMgAxADUANQA3AC4ANABhADEAOABhADIAYQA5AEAAdwBpAG4AZABz
+AHUAcgBmAD4AAAAAAAMAgBD/////AwATEgAAAABAAAcw5bfcXLAA2QECARAwAQAAAEYAAAAAAAAA
+yeAVQeK+2U+PFQKU+mJJhwcABRYELmh6bk6DTDeAsDTptAAAAAABCwAABRYELmh6bk6DTDeAsDTp
+tAAAlNPUNAAAAAACARMwAQAAABAAAAAdMWExZx5hTKQM6VY/B5+mAgEUMAEAAAAMAAAA3wEAAAtk
+OxpIAAAAAwBbMwEAAAADAFo2AAAAAAMAaDYNAAAACwD6NgEAAAAfANk/AQAAAAACAABIAGkAIABU
+AGgAbwBtAGEAcwAsAA0ACgANAAoAPgAgAFQAaABpAHMAIABwAGEAdABjAGgAIABhAGQAZABzACAA
+cwB1AHAAcABvAHIAdAAgAGYAbwByACAAZABvAHcAbgBsAG8AYQBkAGkAbgBnACAAdgBlAHIAcwBh
+AGwAIABtAGkAYwByAG8AYgBsAGEAegBlACAAZgBpAHIAbQB3AGEAcgBlACAAYgBpAG4AYQByAGkA
+ZQBzAC4ADQAKAD4AIABUAGgAZQBzAGUAIABhAHIAZQAgAG4AZQBjAGUAcwBzAGEAcgB5ACAAZgBv
+AHIAIABiAG8AbwB0AGkAbgBnACAAWABpAGwAaQBuAHgAIAB2AGUAcgBzAGEAbAAgAGQAZQB2AGkA
+YwBlAHMALgANAAoAPgAgAA0ACgA+ACAAVABoAGUAIABsAG8AYwBhAHQAaQBvAG4AIABvAGYAIAB0
+AGgAZQBzAGUAIABiAGkAbgBhAHIAaQBlAHMAIABpAHMAIAB0AGUAbQBwAG8AcgBhAHIAeQAsACAA
+YQBuAGQAIAB3AGkAbABsACAAcwBvAG8AbgAgAGIAZQAgAGEAZABkAGUAZAAgAHQAbwAgAA0ACgA+
+ACAAdABoAGUAIABYAGkAbABpAG4AeAAgAGYAaQByAG0AdwBhAHIAZQAgAHIAZQAAAB8A+D8BAAAA
+GgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAAAAfAPo/AQAAABoAAABGAHIAYQBnAGUAcgAs
+ACAATgBlAGEAbAAAAAAAHwAiQAEAAAAGAAAARQBYAAAAAAAfACNAAQAAAAIBAAAvAE8APQBFAFgA
+QwBIAEEATgBHAEUATABBAEIAUwAvAE8AVQA9AEUAWABDAEgAQQBOAEcARQAgAEEARABNAEkATgBJ
+AFMAVABSAEEAVABJAFYARQAgAEcAUgBPAFUAUAAgACgARgBZAEQASQBCAE8ASABGADIAMwBTAFAA
+RABMAFQAKQAvAEMATgA9AFIARQBDAEkAUABJAEUATgBUAFMALwBDAE4APQBEADQANAA2AEEAMAA0
+ADYANAA3ADUAMQA0AEMANgAwADgAMwAyADEAQQA1ADcAOQA5AEEAMAAxAEIAOAA4AEQALQBGAFIA
+QQBHAEUAUgAsACAATgBFAEEAAAAAAB8AJEABAAAABgAAAEUAWAAAAAAAHwAlQAEAAAACAQAALwBP
+AD0ARQBYAEMASABBAE4ARwBFAEwAQQBCAFMALwBPAFUAPQBFAFgAQwBIAEEATgBHAEUAIABBAEQA
+TQBJAE4ASQBTAFQAUgBBAFQASQBWAEUAIABHAFIATwBVAFAAIAAoAEYAWQBEAEkAQgBPAEgARgAy
+ADMAUwBQAEQATABUACkALwBDAE4APQBSAEUAQwBJAFAASQBFAE4AVABTAC8AQwBOAD0ARAA0ADQA
+NgBBADAANAA2ADQANwA1ADEANABDADYAMAA4ADMAMgAxAEEANQA3ADkAOQBBADAAMQBCADgAOABE
+AC0ARgBSAEEARwBFAFIALAAgAE4ARQBBAAAAAAAfADBAAQAAABoAAABGAHIAYQBnAGUAcgAsACAA
+TgBlAGEAbAAAAAAAHwAxQAEAAAAaAAAARgByAGEAZwBlAHIALAAgAE4AZQBhAGwAAAAAAB8AOEAB
+AAAAGgAAAEYAcgBhAGcAZQByACwAIABOAGUAYQBsAAAAAAAfADlAAQAAABoAAABGAHIAYQBnAGUA
+cgAsACAATgBlAGEAbAAAAAAAAwBZQAAAAAADAFpAAAAAAAMAN1ABAAAAAwAJWQEAAAAfAApdAQAA
+ACgAAABuAGUAYQBsAC4AZgByAGEAZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAHwALXQEAAAAoAAAA
+bgBlAGEAbAAuAGYAcgBhAGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAAIBFV0BAAAAEgAAAAIfltg9
+iORgTo4RqC2ZThg9AQAAAgEWXQEAAAASAAAAAh+W2D2I5GBOjhGoLZlOGD0BAAALAACACCAGAAAA
+AADAAAAAAAAARgAAAAAUhQAAAAAAAAMAAIBQ42MLzJzQEbzbAIBfzM4EAQAAACQAAABJAG4AZABl
+AHgAaQBuAGcARQByAHIAbwByAEMAbwBkAGUAAAAbAAAAHwAAgFDjYwvMnNARvNsAgF/MzgQBAAAA
+KgAAAEkAbgBkAGUAeABpAG4AZwBFAHIAcgBvAHIATQBlAHMAcwBhAGcAZQAAAAAAAQAAAHAAAABJ
+AG4AZABlAHgAaQBuAGcAIABQAGUAbgBkAGkAbgBnACAAdwBoAGkAbABlACAAQgBpAGcARgB1AG4A
+bgBlAGwAUABPAEkASQBzAFUAcABUAG8ARABhAHQAZQAgAGkAcwAgAGYAYQBsAHMAZQAuAAAACwAA
+gFDjYwvMnNARvNsAgF/MzgQBAAAAJgAAAEkAcwBQAGUAcgBtAGEAbgBlAG4AdABGAGEAaQBsAHUA
+cgBlAAAAAAAAAAAAAwAAgAggBgAAAAAAwAAAAAAAAEYBAAAAMgAAAEUAeABjAGgAYQBuAGcAZQBB
+AHAAcABsAGkAYwBhAHQAaQBvAG4ARgBsAGEAZwBzAAAAAAAgAAAAHwAAgBOP8kH0gxRBpYTu21pr
+C/8BAAAAFgAAAEMAbABpAGUAbgB0AEkAbgBmAG8AAAAAAAEAAAAqAAAAQwBsAGkAZQBuAHQAPQBN
+AFMARQB4AGMAaABhAG4AZwBlAFIAUABDAAAAAAALAACACCAGAAAAAADAAAAAAAAARgAAAAAGhQAA
+AAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAOFAAAAAAAAAwAAgAggBgAAAAAAwAAAAAAAAEYA
+AAAAAYUAAAAAAAACAQCAE4/yQfSDFEGlhO7bWmsL/wEAAAAuAAAASABlAGEAZABlAHIAQgBvAGQA
+eQBGAHIAYQBnAG0AZQBuAHQATABpAHMAdAAAAAAAAQAAACIAAAABAAoAAAAEAAAAAAAAABQAAAAA
+AAAAAAAAAP////8AAAAAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAcAAAASABhAHMAUQB1AG8A
+dABlAGQAVABlAHgAdAAAAAAAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAoAAAASQBzAFEAdQBv
+AHQAZQBkAFQAZQB4AHQAQwBoAGEAbgBnAGUAZAAAAAEAAAACAQCAE4/yQfSDFEGlhO7bWmsL/wEA
+AABAAAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBvAG4AVAByAGUAZQBQAGEAcgBlAG4AdABSAGUAYwBv
+AHIAZABLAGUAeQAAAAEAAAAuAAAAAAAAAMngFUHivtlPjxUClPpiSYcBAAUWBC5oem5Og0w3gLA0
+6bQAAN/2daQAAAAAHwAAgB+k6zOoei5Cvnt54amOVLMBAAAAOAAAAEMAbwBuAHYAZQByAHMAYQB0
+AGkAbwBuAEkAbgBkAGUAeABUAHIAYQBjAGsAaQBuAGcARQB4AAAAAQAAANYBAABJAEkAPQBbAEMA
+SQBEAD0AMwAxADYAMQAzADEAMQBkAC0AMQBlADYANwAtADQAYwA2ADEALQBhADQAMABjAC0AZQA5
+ADUANgAzAGYAMAA3ADkAZgBhADYAOwBJAEQAWABIAEUAQQBEAD0AMAAxAEQAOABGAEYARQBFADkA
+MwA7AEkARABYAEMATwBVAE4AVAA9ADMAXQA7AFMAQgBNAEkARAA9ADQAMAA7AFMAMQA9ADwAMgAw
+ADIAMgAxADEAMgA0ADIAMgAxADUANQA3AC4ANABhADEAOABhADIAYQA5AEAAdwBpAG4AZABzAHUA
+cgBmAD4AOwBSAFQAUAA9AEQAaQByAGUAYwB0AEMAaABpAGwAZAA7AFQARABOAD0ATQBpAHMAbQBh
+AHQAYwBoADsAVABQAD0AUwBhAG0AZQA7AFQARgBSAD0ATgBvAHQARgBvAHIAawBpAG4AZwA7AFYA
+ZQByAHMAaQBvAG4APQBWAGUAcgBzAGkAbwBuACAAMQA1AC4AMgAwACAAKABCAHUAaQBsAGQAIAA1
+ADgANQA3AC4AMAApACwAIABTAHQAYQBnAGUAPQBIADEAOwBVAFAAPQBEADAAOwBEAFAAPQAxADAA
+MQAAAAAAAwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAEIUAAAAAAAALAACACCAGAAAAAADAAAAAAAAA
+RgAAAAAOhQAAAAAAAAsAAIAIIAYAAAAAAMAAAAAAAABGAAAAAIKFAAAAAAAAHwAAgAggBgAAAAAA
+wAAAAAAAAEYAAAAA2IUAAAEAAAASAAAASQBQAE0ALgBOAG8AdABlAAAAAAACAQCACCAGAAAAAADA
+AAAAAAAARgEAAAA2AAAASQBuAFQAcgBhAG4AcwBpAHQATQBlAHMAcwBhAGcAZQBDAG8AcgByAGUA
+bABhAHQAbwByAAAAAAABAAAAEAAAAJK3XYWyE9JCkeXBj7CcnHQDAACACCAGAAAAAADAAAAAAAAA
+RgAAAAAYhQAAAAAAAEAAAIAIIAYAAAAAAMAAAAAAAABGAAAAAL+FAADwwuHurwDZAR8AAIApAwIA
+AAAAAMAAAAAAAABGAQAAAB4AAABJAG4AcwBwAGUAYwB0AG8AcgBBAGkAcABJAGQAAAAAAAEAAABK
+AAAAYQBmADcANQA1ADQAZgA2AC0AMAAzADUAZQAtADQAYgBjAGQALQA4AGMAZQBmAC0AMAAwAGQA
+NQA3AGUANAA2ADkAMQA0ADkAAAAAAAMADTT9PwAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAALgAA
+AGEAdQB0AGgAZQBuAHQAaQBjAGEAdABpAG8AbgAtAHIAZQBzAHUAbAB0AHMAAAAAAAEAAACyAAAA
+ZABrAGkAbQA9AG4AbwBuAGUAIAAoAG0AZQBzAHMAYQBnAGUAIABuAG8AdAAgAHMAaQBnAG4AZQBk
+ACkAIABoAGUAYQBkAGUAcgAuAGQAPQBuAG8AbgBlADsAZABtAGEAcgBjAD0AbgBvAG4AZQAgAGEA
+YwB0AGkAbwBuAD0AbgBvAG4AZQAgAGgAZQBhAGQAZQByAC4AZgByAG8AbQA9AGEAbQBkAC4AYwBv
+AG0AOwAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAHgAAAGEAYwBjAGUAcAB0AGwAYQBuAGcA
+dQBhAGcAZQAAAAAAAQAAAAwAAABlAG4ALQBVAFMAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAg
+AAAAeAAtAG0AcwAtAGgAYQBzAC0AYQB0AHQAYQBjAGgAAAABAAAAAgAAAAAAAABIAACACCAGAAAA
+AADAAAAAAAAARgEAAAAiAAAATgBlAHQAdwBvAHIAawBNAGUAcwBzAGEAZwBlAEkAZAAAAAAAf/lQ
+iPfTfkygGAjazsd/fh8AAICGAwIAAAAAAMAAAAAAAABGAQAAAC4AAAB4AC0AbQBzAC0AcAB1AGIA
+bABpAGMAdAByAGEAZgBmAGkAYwB0AHkAcABlAAAAAAABAAAADAAAAEUAbQBhAGkAbAAAAB8AAICG
+AwIAAAAAAMAAAAAAAABGAQAAADYAAAB4AC0AbQBzAC0AdAByAGEAZgBmAGkAYwB0AHkAcABlAGQA
+aQBhAGcAbgBvAHMAdABpAGMAAAAAAAEAAABIAAAAQwBIADIAUABSADEAMgBNAEIANQAwADAANAA6
+AEUARQBfAHwAUABIADcAUABSADEAMgBNAEIANQA3ADgAMgA6AEUARQBfAAAAHwAAgIYDAgAAAAAA
+wAAAAAAAAEYBAAAAUAAAAHgALQBtAHMALQBvAGYAZgBpAGMAZQAzADYANQAtAGYAaQBsAHQAZQBy
+AGkAbgBnAC0AYwBvAHIAcgBlAGwAYQB0AGkAbwBuAC0AaQBkAAAAAQAAAEoAAAA4ADgANQAwAGYA
+OQA3AGYALQBkADMAZgA3AC0ANABjADcAZQAtAGEAMAAxADgALQAwADgAZABhAGMAZQBjADcANwBm
+ADcAZQAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAOAAAAHgALQBtAHMALQBlAHgAYwBoAGEA
+bgBnAGUALQBzAGUAbgBkAGUAcgBhAGQAYwBoAGUAYwBrAAAAAQAAAAQAAAAxAAAAHwAAgIYDAgAA
+AAAAwAAAAAAAAEYBAAAAOgAAAHgALQBtAHMALQBlAHgAYwBoAGEAbgBnAGUALQBhAG4AdABpAHMA
+cABhAG0ALQByAGUAbABhAHkAAAAAAAEAAAAEAAAAMAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAA
+ACoAAAB4AC0AbQBpAGMAcgBvAHMAbwBmAHQALQBhAG4AdABpAHMAcABhAG0AAAAAAAEAAAAOAAAA
+QgBDAEwAOgAwADsAAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAEQAAAB4AC0AbQBpAGMAcgBv
+AHMAbwBmAHQALQBhAG4AdABpAHMAcABhAG0ALQBtAGUAcwBzAGEAZwBlAC0AaQBuAGYAbwAAAAEA
+AAAyBgAAMABkADMAbwBTAHIAbwBSAHcAawBDAHYALwBlAGIARwBZAFAAZQBmAE8AOABEADEAegBX
+AHIAdwBGAEsAOQBOAGYALwA0ADkAUgA0AEcAUwB0AFgAMQBxAHMAcwBhAFAAZwB3AGYAcwA3AHkA
+dABnACsAOQBjAGcAeQBTADEANQBFAHYAZwBpAHEAYQBNAEcAQgBIAFMAWABVAEgAMgAyAE4ASQAr
+AHUAbQB3AEYAaQByAEQAawBpAEIATgBmAHoANgBwADYAYwBRAGgANgBsAHAANwBOAGkAdwBxAFIA
+eQA2ADMAegB1AG8AcABCAHgAKwBpAEwAQQBJAGgAeQBtAHcAUQA1ADEAcwBLAHAARgBQAE4AbwBK
+AEgARwBQAFYASABGAHEAWABzAHQAYwBRAGsAUgA4AHIAZABVAHMASQBLAG0ASgBoADgAZQArAGYA
+KwBTAGwANgBUAEMAMwBiAGQAegBSAHEAcwBmAGsAYgB6AEYAMAB5AFEATwB6AHIANwBsAGYASgBP
+ADEAMgBiADgARwBQAEMAeAAwAHIALwBXAFAAUgAxAGwAYQBpAEMAMQB5ADgASgBOAGIARABqAGgA
+UgBUAHAAMgB4AHUAYwBiAEkAWABUAGgAaQBsAFAAeQBMAHcAWgAyAE0ARwBvAEoAdAA1AHEAZQBD
+AEsAdQB1AEYAUQB4AFQAZAB0AGsARgBhAHIATgBTAGgAWQBMAFUAagA4AGUAbABtAGoARQBrADcA
+bQBEAGsAMABzAHMAWQA4ADYAWQBXAEcASABaAFEAMABpAEwAegB5AE8AeAA0AFkANABvADIAYQA2
+AGEAKwB0AFIAKwBYADgAVQA3AE0AcwBHAFMASgBsAEsAWgBCAC8AYwBCAGwAcgBlAFcAQQA2AGQA
+QgBoAGEAYwA5AHcASwBuAEoANABGACsARgArAGsAZQA1AGIAQgBRAGQAMgAxAHQAaQBUAE8AaAAx
+AEgAUgBTAGwAMwBuAGkAUQB5AFEAdwBUAGQAcABCACsAbAB4ADcAYQBqAEoAMgBuAFQATQBIAEcA
+VAA5AGoAUQBJAGQAYgB4AFkANgBXAHcASwB4AC8AbgBzACsATgBMACsAcABQAHgANAA1AEoANABo
+AC8AUgBvAGUAcgB5AEcASAB5AEkAVgBlAEwAdwAvAFYAZAA3AGoAWAB6AGgASgBWADIAYQBQAGwA
+aQBYAHUAbQBrAEYAUAB4AHIAQgA5AGYARABFAG8AUwBpAG8AMABWADkAaQBCAEIAbQBUAEcANQAr
+AFoANgBnAEYAUABnAHEAUQBjAEEAeQBqAHoATABPAE4AYgBXAFgASwBKAHMAVwBVAHAATQB6AGkA
+RABVAGsAdABFAHoAZAA2AHMAeAA5AHEAcwBLAEIAMQBzAEEARQBhAGcAcgBCAEsASgBVAG4ASAA4
+AEsAawBDAGgATwBHAHEAWQB6ADIAYQBYAGYAWAB4AE8ATwBvADAAawBEAHUAZgBLAHkAcgBBAGYA
+YgBWAE0AOABwAEcAaABRAG8ASQBWAFoAcAA0AHMAVABvAHQAcgA4AGgAQQBMAHQAcQBDAHoAQwBi
+ADcAdQBmAGIARQBIAGcAUABiAHYAeABDAC8AeQBrAHUANgBmAEcAUgBUADQAQQBqAGUAcwBnAGMA
+SgBqAHkANABHADAAWgA4AE4AYwBwAFYAcQA4AGYAOAAvAHUAawBIAHIAOQBwAEoAeQBOAGgAYwB6
+ADIAcABJAGYARQA2AG4AeQBIAEYAbwBWAHkANwBTAGkAdQBYAGQAbQBPAEcAWABwADYAYQB6AEwA
+awBnAHQAQwBNAFkAQQA0AFEAZAArADAAbAA4AGkAZgB0AEQAWQAzAGwAYQBEAHQAbwBhAGwAQwAy
+ADkAQwBDADIAZQBQAGwANwBSAE8AYgB0AEgATAB2AFEAUwBUAFgAWQAxAEMANABFAG0ATwB4AG4A
+OABRAHAAUwBxACsAYQB0AGgATgB3ADIAVgA2AEsAVAA4AEoANABqADUAQwA5AGUASgBjADcAYQB6
+ADkAMgBBAFEAcABTAFYAcABRAHIASQBZAEsAZwAzAHEAdwBjAFEAUwB2AFEAUQA9AD0AAAAAAB8A
+AICGAwIAAAAAAMAAAAAAAABGAQAAADgAAAB4AC0AZgBvAHIAZQBmAHIAbwBuAHQALQBhAG4AdABp
+AHMAcABhAG0ALQByAGUAcABvAHIAdAAAAAEAAAAiBAAAQwBJAFAAOgAyADUANQAuADIANQA1AC4A
+MgA1ADUALgAyADUANQA7AEMAVABSAFkAOgA7AEwAQQBOAEcAOgBlAG4AOwBTAEMATAA6ADEAOwBT
+AFIAVgA6ADsASQBQAFYAOgBOAEwASQA7AFMARgBWADoATgBTAFAATQA7AEgAOgBDAEgAMgBQAFIA
+MQAyAE0AQgA1ADAAMAA0AC4AbgBhAG0AcAByAGQAMQAyAC4AcAByAG8AZAAuAG8AdQB0AGwAbwBv
+AGsALgBjAG8AbQA7AFAAVABSADoAOwBDAEEAVAA6AE4ATwBOAEUAOwBTAEYAUwA6ACgAMQAzADIA
+MwAwADAAMgAyACkAKAA0ADYAMwA2ADAAMAA5ACkAKAAxADMANgAwADAAMwApACgAMwA5ADgANgAw
+ADQAMAAwADAAMAAyACkAKAAzADkANgAwADAAMwApACgAMwA0ADYAMAAwADIAKQAoADMANgA2ADAA
+MAA0ACkAKAAzADcANgAwADAAMgApACgANAA1ADEAMQA5ADkAMAAxADUAKQAoADkANgA4ADYAMAAw
+ADMAKQAoADYANgA0ADQANgAwADAAOAApACgAOAA2ADcANgAwADAAMgApACgAOAA5ADMANgAwADAA
+MgApACgANgA0ADcANQA2ADAAMAA4ACkAKAA2ADkAMQA2ADAAMAA5ACkAKAA0ADMAMgA2ADAAMAA4
+ACkAKAA2ADYANQA1ADYAMAAwADgAKQAoADYANQAwADYAMAAwADcAKQAoADYANgA0ADcANgAwADAA
+NwApACgAMwAxADYAMAAwADIAKQAoADcANgAxADEANgAwADAANgApACgANQA2ADYAMAAzADAAMAAw
+ADAAMgApACgAMwA4ADEAMAAwADcAMAAwADAAMAAyACkAKAAzADMANgA1ADYAMAAwADIAKQAoADYA
+NgA5ADQANgAwADAANwApACgANwAxADIAMAAwADQAMAAwADAAMAAxACkAKAA4ADYAMwA2ADIAMAAw
+ADEAKQAoADUANAA5ADAANgAwADAAMwApACgAOQA2ADYAMAAwADUAKQAoADEAMgAyADAAMAAwADAA
+MAAxACkAKAA0ADEAMwAwADAANwAwADAAMAAwADEAKQAoADcANgA5ADYAMAAwADUAKQAoADUAMgA1
+ADMANgAwADEANAApACgAOAAzADMAOAAwADQAMAAwADAAMAAxACkAKAA1ADUAMAAxADYAMAAwADMA
+KQAoADQANwA4ADYAMAAwADAAMAAxACkAKAAyADkAMAA2ADAAMAAyACkAKAAxADgANgAwADAAMwAp
+ACgAMwA4ADAANwAwADcAMAAwADAAMAA1ACkAOwBEAEkAUgA6AE8AVQBUADsAUwBGAFAAOgAxADEA
+MAAxADsAAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAFwAAAB4AC0AbQBzAC0AZQB4AGMAaABh
+AG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBkAGEAdABhAC0AYwBoAHUA
+bgBrAGMAbwB1AG4AdAAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAEoAAAB4
+AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcA
+ZQBkAGEAdABhAC0AMAAAAAAAAQAAANoMAABmAEgAOABsAEMAcgBZAFYAdQB4AGMAQgB2ADUAaQBu
+AHIAawBrAHkAawBNADkARABiADIASwBoAFoAMwA5AHgAbQB0AGcAdgA2AGoAYgBPAGMAbgBOAE0A
+awBoAGMAZABwAEsAKwBzAFQAdgBPAGYAWgA3ADMAZAA1AFoAMABLACsAbQBlAFoAZQBWAHMAMAAw
+AHAAUgBBAGcASwBRAHcAOAB2AEkAaQA2AG0AUgBrAGgAWgBUAEMAUwBtAHIAbAAzADgAMQBLADkA
+WABXAEEATABrAFoAYgAwAHMAVgAxAFAANQBHAG0ATgBBAEQAUAAvAFcANgBZAEIAcgBXAFcAOQBD
+AHUAbQBvAE8AWAB2AFcARgBjAEEARAAzAGcARwBNAFIASgBZAHcAbwBwAFEAdgBMAEQAZwAvAGgA
+QQBZAHgAMAB5ADYAWgBvAGkAcABrAFIAVQBVAGcAaQBPAFUAUABwAFEANwB6ADIAVwBSAEMAUgBD
+AFgAYgBiAEEAaABvAFoAUABmADEAWgA5AHUAaQBvADAARgBYAFAANgBhADcAZABOAFcAUgBTAEYA
+cwBjAHIARwAyAEsAawA1AFoAbwAzAFYAdwB3AE8AaABqACsAaQBQADIAVwB3AHAAWgBuADUAQwBp
+AGYAUwBLADMAdABpAGcALwBRAHIAeQBsADcAcAB3ADEARwBKAHMANgBpAGwARwBoAHcAUgBQAEoA
+QgBxAEEAWgAyAFQAbwBWACsAUwBCADkANABBAEwAZABJAGYAcQBQAEsAbAA2AFEASwB6AGEANwBL
+ADkAVABQAGYARABMAHQAegBBAEwAUQB1AG8AbwBvAEMAZQBFAFQAMQA3AFIANgBSAHEAcAB2AGIA
+WgBBAGwAcABDAFMAeABNAHYATABIAGEARwBzAHIAKwAxAFUAYgBlAGUATABnAGYAaQBZAC8AeABl
+ADgAVgBwAEEAcQB6AGkAZwBEADEAbAAwAHUAVQAxAGoANgB2ADEAQgA4AEcAKwAwAG0ANQAxAEgA
+WgBBAEQAdAByAGEAVgBMAHYAWgBoAFUARQB4AEsAZgBNAE0AeQB3AGoAbABwAEoAdgBSAEgAawBG
+AGkAQwBsAHoASAByAGMAbABOAE0AcwAvAHIAVgBKAG8AcQBVAHoAUQB3AHQAUQBHAHMANAB3AEYA
+SwBMAE8AZABqAHcAYQA4AGwAZwBWAHEAZABNADAALwBOAGIAZwBxAEQAQQBIAEoAaAAxAFEAdQAr
+AHgAdwAzAEMAawAzAG8AbwAxADUAeABmADUAaAAwADYAMgBhAGwAaQBIADYAeABxAFcAbwBUAEEA
+UwBJAGcAWABiAEIAUwAvAEgATgBIAGwAdgBpAFIANwA1ADEATgBnAHMAQgBOAG4ARwAvAHoAdABN
+ADgAUABNAFQAZABmADcANwBzAFYAdQArAFgAegBoAHEAcQBvAFQAbABnAC8ASQAzAEMAQQBqAHgA
+QQBXAHQARgBFADUAeQBBAFgAZwBkAFAAUQBNADgAdQBkAFAAMgBjACsAZQBnAE0AZgBmAFAAcwBo
+AHIANgB0AE4AdgBpAEMAMgBqAFoAeQBLADcAQwBUAG4ASwB1AFQAcwByADkAMgBoAGMAcQA5AEEA
+VQBmAGgATAB2AG8ATABNAGUAOAA2ACsATwBOAEQAYwBpAFEAZQBoAFAAawA5AEwAeAAyAHIAegBL
+AGsAZQBKAHAAeABCAE0AdAB0AEsANgBxAFUARwBNAGEARABjAHkAMAArAGEAbABVAGcAeABzAFUA
+OABwAEUAaAA4ADEARgBkAGYAUgBiAGsAZwArAHIAMgBkAGgATwBCAEkATgBsAGkAZAA2AG8ATABY
+ADcAbgBmAGYAaQBjADkAWAB6AHgAQgBFAGgAZwA4AG8ALwBrADgAYwBIAHgAYwB3AFEANQBkAGYA
+QwAvAGgAUAB6ADQASwBQADkAQwB0AGoAeQBwAHYARQBNAGsAdQBEAEUAagBrAEMAZgBlAFcAawBB
+AC8AeQAyAC8AUgBCADAAOQAwAHcANABwAG0AegA2AGwAaABkAHUAKwBxAEEAdgB2AHYAUwBkADAA
+OAB1AHUARwBUAHYAbAAzAG4AdgBZAHgAdwBTADAAbABzAGEAcgAzAHUAOABZAFIAQwAyAHEAcQBo
+AHQAcwBZAFQAdABpAHEAYwBZAE0AdABFAC8ARQB5ADAAdwBSAGEAMQBpAHQATgB5AEwAeABZAFEA
+dQA0ACsAbQB6AEgATQB3AEQAWABuAEwAcAA3AGgAegBTAEIAcwAwAHYAagAyAEMAWQBOAGUAZgBF
+AFUATwB3AHcAVgAyAEUAeABaAGsANwBuAEIAWgBMAGoAWgBoAFcAQQB1AHAAdgBFADYAcgA3AHUA
+LwBlADEASwBuAGcATwBaAG8AZgBHAEYASABQAGQANAB6AHgAWABFAGYAMwBsAE4AbgA0AGkAbQBJ
+AEgAZgAzAEYANgBYAFgAaQBRAGEATABRAEwATABxADkAbQBjADAAdwB0ADQAdQBlAG8AWABCAGcA
+NQBMAFQAWABWAFEAdgAvAC8AbgBuAEkAZQBEAFUAWABsAGcANwBBADIAVQBZADYANgBLAGYALwBa
+AGwAeABjAG8AawBRAEcAMwBrAFMAYwBHAHQAWgBZAEYAMABiAFYAegBPAHMAaAAxAHkAeABwAFkA
+RwA2AFYAYQBNAGgAbwBLAG4ATgAwAGkAQQBWAE4AegBXAFQAZQBKAE0AMABoAEYAdwBCADAAMwBU
+AEQATgBDADYAcQB0ADQAegBLAFoAMQB3AEcAVgBTAE8AQgBVAEgAVQBhAGwALwBpAFMAZQB0AG0A
+QQA2AFQARgBxAGgAWgBjAFQAbABrAGkAaABtADIAaQBkAFgAQwB2AC8AOQBOAEUAMgB2ADAAUgAw
+AEYANgB3AHcAYQBOAHIASgBOAHoASQBrAEQAaQBFADIAYgBZAHIAWgBlAFYAZgBOAGcARAAwACsA
+YQBYAHgAWABCAEEAcwBUAHQAOABHAGkAMgBRAHUASgA3AEMANwBpADIAYwBwADMAUQBmAFMAUgB2
+AGMAZQBvAG4ASABwAGoASwBJADgAQQB5AEEAVgBDAEwAbgBnAHYANgBTADEAWQBkAHoAOQBZAHMA
+SwBQAFIAUQBPAG4ATwBDAEQASABrAHIAbQBCADIATgBaAGoARgB2ADIAdwBBADYAcwAyAGsATQA2
+AEcAbQA4AHIATwBIAGIAawBOADgASABMAC8AdQBCAGMAdQB6AGkATwBvAGoAbABnAHEAbQBtAEoA
+ZwBGAFQAUgBFAFcAdQBMAEQAMQA3AGgATABqAC8AWQBCADAAdQB4AHQAeQBIAHgAZgBuAFUAdABl
+AG0AQwBkAGIANwBGAG8ARQB6ADMASABUADcAQwBHAFkAZgBZAHQAcwAzAEUAcwBiADQAVQBYAGUA
+egBVAFkARwBGAHIAcwB3AHkAWQBMAHoAdABMAHIATABxAGsAUgB6AHMARgBrAGUAagA0AFcAUABK
+ADEAVwAvAGcAagAwAEoAMQBRAFAAeABWAHEAVQBJADIASAB5AFYAcwBnAEkAeAByAGsAWAB0AFkA
+QQAvAE4AWQA3AHQAWABjACsAcgBUAHYASABIAHUATwBYADYAWABmAHQAeABTAHAATQArAEkATQBv
+AEwARgBIAGsAYwB0AGIAVgBPAEoASgByAFoANQB4AGkAVQBoAG0AZgA3AGwARAA1AG0AUwBwAE4A
+OAB1AHIAMwBoAEQAQgBzADkAKwBLADMAZgB4AGsAUQBSAEwALwBYAE8ARwB0AHUARABZAEIAZABW
+ADEAcABaAGEARgB1AG8AWQAyADIAZgBlAE0AYgBwADYAQwAwAHQATQBDAGYAaQAwAGwAUQBqAEwA
+VAA1AE4AeQBRADMAKwBmAGcAaAAxAEUAawBCAGUAUwBFAGMAdwByAGIATABzAEUAQgBXAFkAUgBB
+AFQAbgA4ACsAQwBTAG4ANwBZAGcATwBvAE0ANABrAC8AQQA4ADQAZgArAEEASgBtAHoAMABxADUA
+bgBYAGUAUwBwAGEARABSAFEAdQBtAHUAbwBpAEsAMgBqAFAARAAvAEEATABEAHgAKwBtAGQALwBm
+AEYAVwBnAEUAdgBuAG8AKwBjAE8ATgB2AG0AMQBFAEsAegBEAFUAdwA2AGYAeABEAEgAUgBLAGcA
+YwA3AE8AWQB4AGMAbQBRAEsASgB1AHgAZQArADgAbQAvAE8ATABNADgASwBlAE4ANwBXAGMAcABQ
+AHMAMgAxAEYAagBZAFkAYwBZAHEAKwAzAEIASgBpAG4AUAAxAGEAWQBBAGIAdQBZAEwAeAA3AHYA
+ZwBDAGsAPQAAAAAAzLk=
+
+--_000_CH2PR12MB5004D69C65B84BEB0241DB7CF00E9CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
+--_000_CH2PR12MB5004D69C65B84BEB0241DB7CF00E9CH2PR12MB5004namp_--
