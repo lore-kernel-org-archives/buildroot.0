@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9B6C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 22:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F05C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Nov 2022 22:19:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 640D4405C1;
-	Fri, 25 Nov 2022 22:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 640D4405C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44EE2611FE;
+	Fri, 25 Nov 2022 22:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44EE2611FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HaJcyL1mpfJ4; Fri, 25 Nov 2022 22:16:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0ft22bjs3o1M; Fri, 25 Nov 2022 22:19:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 970B3401AE;
-	Fri, 25 Nov 2022 22:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 970B3401AE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 884571BF3D0
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:16:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CCBE611D7;
+	Fri, 25 Nov 2022 22:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CCBE611D7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 302951BF3D0
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 564FB401ED
- for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:16:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 564FB401ED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 156068142F
+ for <buildroot@lists.busybox.net>; Fri, 25 Nov 2022 22:18:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 156068142F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gyxxjcpp-YUi for <buildroot@lists.busybox.net>;
- Fri, 25 Nov 2022 22:16:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 370E9401AE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 370E9401AE
- for <buildroot@buildroot.org>; Fri, 25 Nov 2022 22:16:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B418A40003;
- Fri, 25 Nov 2022 22:16:30 +0000 (UTC)
-Date: Fri, 25 Nov 2022 23:16:29 +0100
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20221125231629.42706ce0@windsurf>
-In-Reply-To: <20221125140800.38511-1-neal.frager@amd.com>
-References: <20221125140800.38511-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669414591;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JqZjjtfZE8qHA8KIjsxfzQCkvjDQmJLssrpJH634bds=;
- b=jw3ebSmxayp+bctRl++zs2cmifrkEL7CGUpL9y5mTrjOV9hQDLyuttsB4HZDAXQyXp85Dw
- J0a252IZ3SUCoYtMVewEFfm22x+wj/cl2aynr77lsS4Q0jp7B1QY2qtcD1imCdKgZsbEIV
- iM5zOI706daeeP6DxzIApyFZTPUQnKSQ55qZzdtFWLrmT8p1SfSVrp1fUD763GsyjLPGTR
- BTlZelBNqVW5QLk8GSkTa8FEv7suYdvqCvHNWoyqReY1xyCb4wtWayOy/cnYWCvokO4SV9
- Uhj/p20t9uzP9GL+wd21T9tLBgef75UbUxeHUlY0l6+Su2b9r2b7A6d/+8NumQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jw3ebSmx
-Subject: Re: [Buildroot] [PATCH v7 1/2] package/versal-firmware: new package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cd2YEOKEAZKV for <buildroot@lists.busybox.net>;
+ Fri, 25 Nov 2022 22:18:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3ABD681414
+ for <buildroot@buildroot.org>; Fri, 25 Nov 2022 22:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ABD681414
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 28052846F3; Fri, 25 Nov 2022 22:18:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 25 Nov 2022 23:16:46 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4060a6d5307d81475f8cc3b572cd6eca9a94ffbf
+X-Git-Newrev: b49d8c03da2dc25aa28f14a3db1d38298221c7c3
+X-Patchwork-Hint: ignore
+Message-Id: <20221125221857.28052846F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/qoriq-cadence-dp-firmware: also install to target if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,35 +58,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: michal.simek@amd.com, kris.chaplin@amd.com, terry.oneal@amd.com,
- luca.ceresoli@bootlin.com, Neal Frager <neal.frager@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 25 Nov 2022 07:07:59 -0700
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b49d8c03da2dc25aa28f14a3db1d38298221c7c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This patch adds support for downloading versal microblaze firmware binaries.
-> These are necessary for booting Xilinx versal devices.
-> 
-> The location of these binaries is temporary, and will soon be added to the
-> Xilinx firmware repository.  The temporary location is using the same free
-> distribution license as the Xilinx firmware repository.
-> 
-> Once these files are available on the Xilinx repository, this package will
-> be updated to the new location.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+This firmware is loaded by U-Boot, so when U-Boot is loading the Linux
+kernel from the root filesystem, it is very likely that it will also
+want to load this firmware from the root filesystem.
 
-Both applied to next. Thanks!
+Therefore, this patch makes sure that that Cadence DP firmware is
+installed alongside the kernel image in /boot in the root filesystem
+when the kernel is installed
+there (BR2_LINUX_KERNEL_INSTALL_TARGET=y).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+We keep installing the firmware in $(BINARIES_DIR) in any case.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+index 2ccdd8b903..4f75287269 100644
+--- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
++++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+@@ -11,12 +11,18 @@ QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
+ QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA EULA.txt
+ QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
++ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),)
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
++endif
+ 
+ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
+ 	$(call NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
+ endef
+ 
++define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
++endef
++
+ define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
