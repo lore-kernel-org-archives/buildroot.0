@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F85DC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3279FC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5DB341715;
-	Sat, 26 Nov 2022 18:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5DB341715
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE3934087C;
+	Sat, 26 Nov 2022 18:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE3934087C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V2c5wIDd4qJ8; Sat, 26 Nov 2022 18:29:06 +0000 (UTC)
+	with ESMTP id sXbx8fJawHcU; Sat, 26 Nov 2022 18:29:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8295B40541;
-	Sat, 26 Nov 2022 18:29:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8295B40541
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B61621BF372
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75E1841706;
+	Sat, 26 Nov 2022 18:29:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75E1841706
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C59A31BF85D
  for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F4DC60E39
+ by smtp1.osuosl.org (Postfix) with ESMTP id ADF7781BBD
  for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F4DC60E39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADF7781BBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ULHa5jBR-YLJ for <buildroot@lists.busybox.net>;
- Sat, 26 Nov 2022 18:29:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1rfeWPph9PpM for <buildroot@lists.busybox.net>;
+ Sat, 26 Nov 2022 18:29:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF5B260E38
+ by smtp1.osuosl.org (Postfix) with ESMTP id D95AB81B60
  for <buildroot@buildroot.org>; Sat, 26 Nov 2022 18:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF5B260E38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D95AB81B60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDB40844CC; Sat, 26 Nov 2022 18:29:02 +0000 (UTC)
+ id C653A844C9; Sat, 26 Nov 2022 18:29:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Nov 2022 19:22:27 +0100
-Subject: [git commit branch/2022.08.x] package/mali-driver: remove Miquèl from the DEVELOPERS list
+Date: Sat, 26 Nov 2022 17:55:22 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 2cec73e98bee01cc3051fd231261731179a34c45
-X-Git-Newrev: af4bfa3fd2c97f93888f1f7313d94467cdc14591
+X-Git-Oldrev: 75fbc14769b6097e75572008a3dce0dc446c2a7a
+X-Git-Newrev: 695c51db81dacc0f06457f011de30bb9a0b7dfc6
 X-Patchwork-Hint: ignore
-Message-Id: <20221126182902.DDB40844CC@busybox.osuosl.org>
+Message-Id: <20221126182902.C653A844C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/sdl2: fix
+ sdl_init() error with kernel 5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +58,109 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3518966715741338083=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3518966715741338083==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=af4bfa3fd2c97f93888f1f7313d94467cdc14591
+commit: https://git.buildroot.net/buildroot/commit/?id=695c51db81dacc0f06457f011de30bb9a0b7dfc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-I am not really maintaining these packages, I don't follow closely
-enough nor use them to take the time to make the necessary changes.
-Giulio has been much more reactive than me to fix issues and he is
-already listed for them anyway.
+Fixes #6421
+Backport from: da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+[yann.morin.1998@free.fr: make it an actual backport]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 124fc473dd9298facc6f9fd58dd59a706550e29b)
+(cherry picked from commit 7928c51bf625333102358ed1c9d84efe3e6bdc01)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+ ...oesn-t-have-a-mode-configured-use-the-pre.patch | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d565cc8add..d563c20aaa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2135,10 +2135,6 @@ F:	configs/bananapi_m2_plus_defconfig
- N:	Mikhail Boiko <mikhailboiko85@gmail.com>
- F:	package/libfribidi/
- 
--N:	Miquèl Raynal <miquel.raynal@bootlin.com>
--F:	package/mali-driver/
--F:	package/rockchip-mali/
--
- N:	Mircea Gliga <gliga.mircea@gmail.com>
- F:	package/mbuffer/
- 
-
---===============3518966715741338083==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+new file mode 100644
+index 0000000000..c8be280c56
+--- /dev/null
++++ b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+@@ -0,0 +1,76 @@
++From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
++From: Sam Lantinga <slouken@libsdl.org>
++Date: Fri, 18 Nov 2022 12:17:27 -0800
++Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
++ or largest mode as the default mode
++
++Fixes https://github.com/libsdl-org/SDL/issues/6421
++
++[mf@go-sys.de: backport from upstream]
++Signed-off-by: Michael Fischer <mf@go-sys.de>
++[yann.morin.1998@free.fr: do an actual backport]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
++ 1 file changed, 29 insertions(+), 6 deletions(-)
++
++diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
++index eae721455..eeeefef2b 100644
++--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
+++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
++@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
++ /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
++    list of SDL Displays in _this->displays[]  */
++ static void
++-KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
++-
+++KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
+++{
++     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
++     SDL_DisplayData *dispdata = NULL;
++     SDL_VideoDisplay display = {0};
++@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
++         drmModeModeInfo *mode = &connector->modes[i];
++ 
++         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
++-          mode_index = i;
++-          break;
+++            mode_index = i;
+++            break;
++         }
++     }
++ 
++     if (mode_index == -1) {
++-      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
++-      goto cleanup;
+++        int current_area, largest_area = 0;
+++
+++        /* Find the preferred mode or the highest resolution mode */
+++        for (i = 0; i < connector->count_modes; i++) {
+++            drmModeModeInfo *mode = &connector->modes[i];
+++
+++            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
+++                mode_index = i;
+++                break;
+++            }
+++
+++            current_area = mode->hdisplay * mode->vdisplay;
+++            if (current_area > largest_area) {
+++                mode_index = i;
+++                largest_area = current_area;
+++            }
+++        }
+++        if (mode_index != -1) {
+++            crtc->mode = connector->modes[mode_index];
+++        }
+++    }
+++
+++    if (mode_index == -1) {
+++        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
+++        goto cleanup;
++     }
++ 
++     /*********************************************/
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3518966715741338083==--
