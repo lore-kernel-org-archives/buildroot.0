@@ -4,89 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF48C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:00:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D09C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:19:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 039BC81E12;
-	Sat, 26 Nov 2022 18:00:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 039BC81E12
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37F2781422;
+	Sat, 26 Nov 2022 18:19:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37F2781422
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zNAS_J5u3C81; Sat, 26 Nov 2022 18:00:49 +0000 (UTC)
+	with ESMTP id HJ0sCQpEcTcH; Sat, 26 Nov 2022 18:19:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49AEC81E0D;
-	Sat, 26 Nov 2022 18:00:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49AEC81E0D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 902931BF356
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:00:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B2EB8141B;
+	Sat, 26 Nov 2022 18:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B2EB8141B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D5E4C1BF372
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69C8B81E06
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69C8B81E06
+ by smtp4.osuosl.org (Postfix) with ESMTP id A864140919
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A864140919
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b7G9wwwi-RWx for <buildroot@lists.busybox.net>;
- Sat, 26 Nov 2022 18:00:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B3B81E0D
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 86B3B81E0D
- for <buildroot@busybox.net>; Sat, 26 Nov 2022 18:00:33 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id o30so5671185wms.2
- for <buildroot@busybox.net>; Sat, 26 Nov 2022 10:00:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=erztBVPvo0VbU7EdDkM385LIGkhDvJQdhxdu/bHfVGY=;
- b=twrLIWk+a68UcAPhDDGcM957zrjVEN8K8NDIRq3bUZZLV7boDc8P4kiYyuqSIHLiRh
- Mid99HCvVOVIfr9Z7Udxbn72hj5U3JJBuagq1kNlcOI2vjumAhCj/3UZ9ro7XTYMTmm6
- yl702wCeciJiPFfmoDySCDfjpo3Dhv8/aECi7pEFQ4H6OZ7xaZjsyb8YBrPkRVyUP/LX
- 3/erxwdsYkLH4l6Q7b0hzhsEP/yWy35ShNiXelqk3Gs0iPti+4OobZ9R/0L9QzUmTNW1
- uA9e8Plv3MmPuhaFMfe1RW02AcMAG2mYDtt84tqCVOz3A0MNKgVVMCwiSe6zDL391fkW
- PVPQ==
-X-Gm-Message-State: ANoB5pmma/cpvFIOrMPUNIzmEdVfShU6mb85+6Z2QOZmBOlF+TI21Ttp
- 0eenadjya3oeb3KuphakliNXDjrZqT0=
-X-Google-Smtp-Source: AA0mqf65RcK9C9GM4LvBqKUP7HGDuS5zLYcguJcmynROLg+Qp9qWSZQ4i4y6o/fKyCCkrSNiKgmVSA==
-X-Received: by 2002:a05:600c:3d98:b0:3cf:e9a4:325f with SMTP id
- bi24-20020a05600c3d9800b003cfe9a4325fmr31919143wmb.98.1669485631719; 
- Sat, 26 Nov 2022 10:00:31 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- r12-20020a5d494c000000b00241b6d27ef1sm6360340wrs.104.2022.11.26.10.00.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Nov 2022 10:00:31 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 26 Nov 2022 19:00:16 +0100
-Message-Id: <20221126180016.280061-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221126180016.280061-1-francois.perrad@gadz.org>
-References: <20221126180016.280061-1-francois.perrad@gadz.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1l38BIECDMHY for <buildroot@lists.busybox.net>;
+ Sat, 26 Nov 2022 18:19:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA3D408ED
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FA3D408ED
+ for <buildroot@buildroot.org>; Sat, 26 Nov 2022 18:19:16 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 11BBBE0003;
+ Sat, 26 Nov 2022 18:19:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oyzlh-0001pY-11; Sat, 26 Nov 2022 19:19:13 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20221116212105.702408-1-thomas.petazzoni@bootlin.com>
+ <20221116212105.702408-2-thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Nov 2022 19:19:13 +0100
+In-Reply-To: <20221116212105.702408-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Wed, 16 Nov 2022 22:21:05
+ +0100")
+Message-ID: <87lenxfuji.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=erztBVPvo0VbU7EdDkM385LIGkhDvJQdhxdu/bHfVGY=;
- b=EvKviLrG/xsmKUJ2LkP711PW5hIRuqR4f5r7xqOPlgKBj3+xie5uiA4J6cK0rZbsQw
- 6PDBHitUoQmuq4cqMg1Q3rPRW/CRIpz7SgmbBhHOmxMCaicE322r6trfKrufP9bv3JcK
- vbmmn6FBYWz/MMrqmZcMinYAyRHGw0ACPbDwSzH8Lmg48eR5+xRvn9PFL7TEoRdDf1rF
- pojyoncfNSQd0Eg1rr8+zwRkgPf9vad92wvZ84hqw3YjmjV8KsshPee2+LOfgCAL+R+H
- imCkwGfF7gxkEnKtV/tGtGcYbu3YWGJrGot6v/sgnsY7pxwbiJ7UCT+D5qSMGpeWLvEP
- 8lDg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EvKviLrG
-Subject: [Buildroot] [PATCH 2/2] configs/olimex_stmp157: configure eth0 with
- DHCP
+Subject: Re: [Buildroot] [PATCH 2/2] utils/genrandconfig: don't build
+ igh-ethercat drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,31 +66,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_stmp157_olinuxino_lime_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
-index 49670dbe4..60c34d7fa 100644
---- a/configs/olimex_stmp157_olinuxino_lime_defconfig
-+++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
-@@ -8,6 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/olimex/stmp1_olinuxino/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
+ > igh-ethercat comes with a small number of patched Linux kernel network
+ > drivers, which aim at replacing the ones available in upstream Linux
+ > kernel. All those drivers are provided only for specific kernel
+ > releases. For example:
+
+ > r8169-2.6.24-ethercat.c
+ > r8169-2.6.24-orig.c
+ > r8169-2.6.27-ethercat.c
+ > r8169-2.6.27-orig.c
+ > r8169-2.6.28-ethercat.c
+ > r8169-2.6.28-orig.c
+ > r8169-2.6.29-ethercat.c
+ > r8169-2.6.29-orig.c
+ > r8169-2.6.31-ethercat.c
+ > r8169-2.6.31-orig.c
+ > r8169-2.6.32-ethercat.c
+ > r8169-2.6.32-orig.c
+ > r8169-2.6.33-ethercat.c
+ > r8169-2.6.33-orig.c
+ > r8169-2.6.35-ethercat.c
+ > r8169-2.6.35-orig.c
+ > r8169-2.6.36-ethercat.c
+ > r8169-2.6.36-orig.c
+ > r8169-2.6.37-ethercat.c
+ > r8169-2.6.37-orig.c
+ > r8169-3.10-ethercat.c
+ > r8169-3.10-orig.c
+ > r8169-3.12-ethercat.c
+ > r8169-3.12-orig.c
+ > r8169-3.14-ethercat.c
+ > r8169-3.14-orig.c
+ > r8169-3.16-ethercat.c
+ > r8169-3.16-orig.c
+ > r8169-3.2-ethercat.c
+ > r8169-3.2-orig.c
+ > r8169-3.4-ethercat.c
+ > r8169-3.4-orig.c
+ > r8169-3.6-ethercat.c
+ > r8169-3.6-orig.c
+ > r8169-3.8-ethercat.c
+ > r8169-3.8-orig.c
+ > r8169-4.4-ethercat.c
+ > r8169-4.4-orig.c
+
+ > Obviously, this doesn't play well with the random configuration
+ > testing done by utils/genrandconfig. This commit avoids this issue by
+ > making sure we never build any of those drivers as part of the
+ > genrandconfig generated configurations.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/07b7475d780c067d99ee5618a5fd2bb024a5b4e7/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2022.08.x, thanks.
+
 -- 
-2.37.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
