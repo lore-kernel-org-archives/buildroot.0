@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FACC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:43:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A351C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B40F60E3D;
-	Sat, 26 Nov 2022 18:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B40F60E3D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wmPA73A35Hm9; Sat, 26 Nov 2022 18:43:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB9EF60E39;
-	Sat, 26 Nov 2022 18:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB9EF60E39
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFEC81BF85D
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:42:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C79524098E
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:42:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C79524098E
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE071408A2;
+	Sat, 26 Nov 2022 18:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE071408A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4m3uFMJCeRkM for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lZkv4eBXWgWW; Sat, 26 Nov 2022 18:43:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5551C406E0;
+	Sat, 26 Nov 2022 18:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5551C406E0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F1ADD1BF860
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:42:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD35781DE3
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD35781DE3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QZS5neXU4Ixq for <buildroot@lists.busybox.net>;
  Sat, 26 Nov 2022 18:42:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C73074097F
+ by smtp1.osuosl.org (Postfix) with ESMTP id D12FF81E1F
  for <buildroot@buildroot.org>; Sat, 26 Nov 2022 18:42:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73074097F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12FF81E1F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B430284756; Sat, 26 Nov 2022 18:42:55 +0000 (UTC)
+ id BF16584758; Sat, 26 Nov 2022 18:42:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Nov 2022 19:40:29 +0100
+Date: Sat, 26 Nov 2022 19:41:10 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2f57c2695800090a9abbf68442e344dfda91df38
-X-Git-Newrev: aa4b60f809d02e29bdd9d33667d994857ee91222
+X-Git-Oldrev: aa4b60f809d02e29bdd9d33667d994857ee91222
+X-Git-Newrev: 3cac6907be79a9db658b61e0022e52747375981b
 X-Patchwork-Hint: ignore
-Message-Id: <20221126184255.B430284756@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/uboot/uboot.mk: fix
- zynqmp without pmufw
+Message-Id: <20221126184255.BF16584758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python3: add
+ upstream security fix for CVE-2022-45061
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa4b60f809d02e29bdd9d33667d994857ee91222
+commit: https://git.buildroot.net/buildroot/commit/?id=3cac6907be79a9db658b61e0022e52747375981b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit d07e6b70 (boot/uboot/uboot.mk: add pmufw.elf support) broke
-configurations where the UBOOT_ZYNQMP_PMUFW was blank. Previously it
-would set the U-Boot CONFIG_PMUFW_INIT_FILE to the blank string, but now
-it will set it to ".bin" which causes U-Boot to fail to build.
+Fixes the following security issue:
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Reviewed-by: Neal Frager <neal.frager@amd.com>
+CVE-2022-45061: An issue was discovered in Python before 3.11.1.  An
+unnecessary quadratic algorithm exists in one path when processing some
+inputs to the IDNA (RFC 3490) decoder, such that a crafted, unreasonably
+long name being presented to the decoder could lead to a CPU denial of
+service.  Hostnames are often supplied by remote servers that could be
+controlled by a malicious actor; in such a scenario, they could trigger
+excessive CPU consumption on the client attempting to make use of an
+attacker-supplied supposed hostname.  For example, the attack payload could
+be placed in the Location header of an HTTP response with status code 302.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 13dc57c94f9f394441b6faeb864aefd2b8ed08ab)
+(cherry picked from commit 39a2ff16f92a61a3e8593c394d211c18d01de8d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...33-Fix-quadratic-time-idna-decoding.-GH-9.patch | 86 ++++++++++++++++++++++
+ package/python3/python3.mk                         |  3 +
+ 2 files changed, 89 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index c82c67e310..d5a3e607a2 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -387,8 +387,9 @@ UBOOT_ZYNQMP_PMUFW_BASENAME = $(basename $(UBOOT_ZYNQMP_PMUFW_PATH))
+diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+new file mode 100644
+index 0000000000..d281e7261d
+--- /dev/null
++++ b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+@@ -0,0 +1,86 @@
++From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 7 Nov 2022 19:23:16 -0800
++Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
++ (GH-99222)
++
++There was an unnecessary quadratic loop in idna decoding. This restores
++the behavior to linear.
++
++(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
++
++(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
++
++Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
++Co-authored-by: Gregory P. Smith <greg@krypto.org>
++[Peter: drop NEWS.d/*]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/encodings/idna.py                         | 32 +++++++++----------
++ Lib/test/test_codecs.py                       |  6 ++++
++ 2 files changed, 23 insertions(+), 17 deletions(-)
++
++diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
++index ea4058512f..bf98f51336 100644
++--- a/Lib/encodings/idna.py
+++++ b/Lib/encodings/idna.py
++@@ -39,23 +39,21 @@ def nameprep(label):
++ 
++     # Check bidi
++     RandAL = [stringprep.in_table_d1(x) for x in label]
++-    for c in RandAL:
++-        if c:
++-            # There is a RandAL char in the string. Must perform further
++-            # tests:
++-            # 1) The characters in section 5.8 MUST be prohibited.
++-            # This is table C.8, which was already checked
++-            # 2) If a string contains any RandALCat character, the string
++-            # MUST NOT contain any LCat character.
++-            if any(stringprep.in_table_d2(x) for x in label):
++-                raise UnicodeError("Violation of BIDI requirement 2")
++-
++-            # 3) If a string contains any RandALCat character, a
++-            # RandALCat character MUST be the first character of the
++-            # string, and a RandALCat character MUST be the last
++-            # character of the string.
++-            if not RandAL[0] or not RandAL[-1]:
++-                raise UnicodeError("Violation of BIDI requirement 3")
+++    if any(RandAL):
+++        # There is a RandAL char in the string. Must perform further
+++        # tests:
+++        # 1) The characters in section 5.8 MUST be prohibited.
+++        # This is table C.8, which was already checked
+++        # 2) If a string contains any RandALCat character, the string
+++        # MUST NOT contain any LCat character.
+++        if any(stringprep.in_table_d2(x) for x in label):
+++            raise UnicodeError("Violation of BIDI requirement 2")
+++        # 3) If a string contains any RandALCat character, a
+++        # RandALCat character MUST be the first character of the
+++        # string, and a RandALCat character MUST be the last
+++        # character of the string.
+++        if not RandAL[0] or not RandAL[-1]:
+++            raise UnicodeError("Violation of BIDI requirement 3")
++ 
++     return label
++ 
++diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
++index 8edd5ac063..2407567261 100644
++--- a/Lib/test/test_codecs.py
+++++ b/Lib/test/test_codecs.py
++@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
++         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
++         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
++ 
+++    def test_builtin_decode_length_limit(self):
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*1100).decode("idna")
+++        with self.assertRaisesRegex(UnicodeError, "too long"):
+++            (b"xn--016c"+b"a"*70).decode("idna")
+++
++     def test_stream(self):
++         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
++         r.read(3)
++-- 
++2.30.2
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7cea4329e7..a10f04cb97 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
- define UBOOT_ZYNQMP_KCONFIG_PMUFW
- 	$(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
--		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
--	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin")
-+		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin
-+		$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin"),
-+		$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)"))
- endef
++# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
++PYTHON3_IGNORE_CVES += CVE-2022-45061
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
  
- UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
