@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9230DC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B0AAC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 26 Nov 2022 18:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 304078130D;
-	Sat, 26 Nov 2022 18:53:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 304078130D
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6070403C2;
+	Sat, 26 Nov 2022 18:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6070403C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JfOjbqE5dghm; Sat, 26 Nov 2022 18:53:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uV9k3RJRpfmF; Sat, 26 Nov 2022 18:54:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69EAA81378;
-	Sat, 26 Nov 2022 18:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69EAA81378
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3437404B7;
+	Sat, 26 Nov 2022 18:54:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3437404B7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B5421BF372
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:53:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AFEAE1BF372
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0719E80FAC
- for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0719E80FAC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9925D81E2F
+ for <buildroot@lists.busybox.net>; Sat, 26 Nov 2022 18:54:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9925D81E2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dzgAYx8UfuK1 for <buildroot@lists.busybox.net>;
- Sat, 26 Nov 2022 18:53:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD86812CA
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9BD86812CA
- for <buildroot@buildroot.org>; Sat, 26 Nov 2022 18:53:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B2DC61C000A;
- Sat, 26 Nov 2022 18:53:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oz0Ix-0003zO-OM; Sat, 26 Nov 2022 19:53:35 +0100
+ with ESMTP id aaN5FiMUUJ2k for <buildroot@lists.busybox.net>;
+ Sat, 26 Nov 2022 18:54:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A49EC81346
+ for <buildroot@buildroot.org>; Sat, 26 Nov 2022 18:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A49EC81346
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8FC3F847A3; Sat, 26 Nov 2022 18:54:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>
-References: <20221123102035.2221-1-vincent.stehle@arm.com>
- <20221123102035.2221-3-vincent.stehle@arm.com>
-Date: Sat, 26 Nov 2022 19:53:35 +0100
-In-Reply-To: <20221123102035.2221-3-vincent.stehle@arm.com> ("Vincent
- =?utf-8?Q?Stehl=C3=A9=22's?= message of "Wed, 23 Nov 2022 11:20:35 +0100")
-Message-ID: <87mt8deeds.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] boot/edk2: refine license
+To: buildroot@buildroot.org
+Date: Sat, 26 Nov 2022 19:53:01 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3cac6907be79a9db658b61e0022e52747375981b
+X-Git-Newrev: 8ee618bdc793216ec1d1cc106df104630953b0e1
+X-Patchwork-Hint: ignore
+Message-Id: <20221126185401.8FC3F847A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/edk2-platforms:
+ refine license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,23 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4564063148625341660=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlZpbmNlbnQiID09IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNv
-bT4gd3JpdGVzOgoKID4gVGhlIGVkazIgcHJvamVjdCBpcyBsaWNlbnNlZCB1bmRlciB0aGUgQlNE
-LTItQ2xhdXNlIGxpY2Vuc2Ugd2l0aCBhIHBhdGVudAogPiBncmFudCwgYXMgcGVyIGNvbW1pdCAz
-MDRiZmY3MjIzYTggKCJlZGsyOiBDaGFuZ2UgTGljZW5zZS50eHQgZnJvbSAyLUNsYXVzZQogPiBC
-U0QgdG8gQlNEK1BhdGVudCIpLgoKID4gVGhlcmUgaXMgYSBCU0QtMi1DbGF1c2UtUGF0ZW50IFNQ
-RFggbGljZW5zZSBpZGVudGlmaWVyWzFdIGZvciB0aGlzIGNhc2UsCiA+IHRoZXJlZm9yZSByZWZp
-bmUgdGhlIGVkazIgcGFja2FnZSB0byB1c2UgdGhpcyBtb3JlIHNwZWNpZmljIGlkZW50aWZpZXIu
-CgogPiBbMV06IGh0dHBzOi8vc3BkeC5vcmcvbGljZW5zZXMvQlNELTItQ2xhdXNlLVBhdGVudC5o
-dG1sCgogPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFy
-bS5jb20+CiA+IENjOiBEaWNrIE9sc3NvbiA8aGlAc2VuemlsbGEuaW8+CgpDb21taXR0ZWQgdG8g
-MjAyMi4wOC54IGFuZCAyMDIyLjAyLngsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFy
-ZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============4564063148625341660==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8ee618bdc793216ec1d1cc106df104630953b0e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+
+The edk2-platforms project is licensed under the BSD-2-Clause license with
+a patent grant, as per commit ae604e4ffe8f ("edk2-platforms: Change
+License.txt from 2-Clause BSD to BSD+Patent").
+
+There is a BSD-2-Clause-Patent SPDX license identifier[1] for this case,
+therefore refine the edk2-platforms package to use this more specific
+identifier.
+
+[1]: https://spdx.org/licenses/BSD-2-Clause-Patent.html
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9bd126698397eb3105340f48e4f033e09b34aaf7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/edk2-platforms/edk2-platforms.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
+index 7de59c1afc..6b155bf013 100644
+--- a/package/edk2-platforms/edk2-platforms.mk
++++ b/package/edk2-platforms/edk2-platforms.mk
+@@ -7,7 +7,7 @@
+ # Keep in sync with latest commit as of the release date for boot/edk2
+ EDK2_PLATFORMS_VERSION = db922e1253cb6f1fc456805bc42fb7d401eed5c2
+ EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
+-EDK2_PLATFORMS_LICENSE = BSD-2-Clause
++EDK2_PLATFORMS_LICENSE = BSD-2-Clause-Patent
+ EDK2_PLATFORMS_LICENSE_FILES = License.txt
+ EDK2_PLATFORMS_INSTALL_TARGET = NO
+ EDK2_PLATFORMS_INSTALL_STAGING = YES
+
+--===============4564063148625341660==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4564063148625341660==--
