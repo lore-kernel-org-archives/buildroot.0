@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4054EC4321E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CB38C4321E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBB42410BD;
-	Sun, 27 Nov 2022 13:08:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBB42410BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6B9E60B10;
+	Sun, 27 Nov 2022 13:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6B9E60B10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ly7qHT5cvBv; Sun, 27 Nov 2022 13:08:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wq2hLU8ixRwU; Sun, 27 Nov 2022 13:09:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86FAB410BE;
-	Sun, 27 Nov 2022 13:08:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86FAB410BE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 269431BF42C
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E22F6605A1;
+	Sun, 27 Nov 2022 13:09:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E22F6605A1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A6BA31BF42C
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E8544099F
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E8544099F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9022260AD2
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9022260AD2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2zw6UxtoO7tp for <buildroot@lists.busybox.net>;
- Sun, 27 Nov 2022 13:08:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TRD1BLh055ko for <buildroot@lists.busybox.net>;
+ Sun, 27 Nov 2022 13:08:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7BFC4098A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C00605A1
 Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
  [IPv6:2607:f8b0:4864:20::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D7BFC4098A
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:08:07 +0000 (UTC)
-Received: by mail-oi1-x229.google.com with SMTP id c129so9058631oia.0
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:08:07 -0800 (PST)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3C00605A1
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:08:10 +0000 (UTC)
+Received: by mail-oi1-x229.google.com with SMTP id e205so8997937oif.11
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:08:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=rBRMadNFAJQZBi6uC9EFFKI9wHDhRLKABQ7RU8KdhxU=;
- b=VXGih6I0R2eGs7jwxomqmqgX5oLQdzcZGjSsysujsNyd+hz0U275MmnJuzUwQDq+VW
- Wu+ZrlUCEjn2XwElh+mishSVttFsDRBfzXH0vV30I1pz8VYIFrI3xVwZZ6SI/Qe4JC8O
- uh/sC64YnLmwCM8I+st+R/Phl2HlEz7B0I/I87eylm9d2C+wp/PC/Aqjb5AhKjXktLf+
- WFq+xnjjeuemhL1DTAVLiu8IGYrdTJ+1H/TW9k7k9MFw/PjeZYXUtogFqJE7xuPc/m2L
- BPyzVZB8Z94ZrUhoplOkgB2giWGbGI2B2Caxl5qQ3GRB/DZt493x1rSb/pV7Xz7YUpvB
- gAKg==
-X-Gm-Message-State: ANoB5pkWNE66IkdLYpy6DDYih2x0aooiWTNFZnC5m4CoNSz124JUiJ3B
- UBa9SGVHgNhS5W6dCxMgGmeGYf6Y0So=
-X-Google-Smtp-Source: AA0mqf6ph562pb/cDstWFD8h/EtGeWSTtUWI57Nm52sMlmr7BfLlpYSIGbi9mZlUvYcd36cx+I2jWA==
-X-Received: by 2002:a54:401a:0:b0:35a:f075:6791 with SMTP id
- x26-20020a54401a000000b0035af0756791mr13134379oie.20.1669554486877; 
- Sun, 27 Nov 2022 05:08:06 -0800 (PST)
+ bh=cikp0EEulpzCFR0AlDmg2kXgITR4MKVNwwpswSFcFm0=;
+ b=eYQgpZPwsWsyG97ILuv2/goJtDNRzHsyW8k+98My0PgSzrHVWtJ/XBO+XGU8RqdKPc
+ NG1n8ma0n8j6ICOQ6a45skgWYe8+Uemyzo7kQ6tdt3k6UDgpR0iISLmAjxqf3O6kgazc
+ N53wti390OxRNAQoTj1P4D5ZRI8bF7hj6pj0tKNR5VaSiJtL1mmr2N7dEJ1aqAmKBBss
+ NHINiooC9nDVNa0wA2kijPjclioRhnCwMpKG9C2GbpKf79Lza8K517LBTIGyLvgX1UBG
+ j/gmqn3mhAF8JSq8R3NkK+wN4fe4E5fmIuHXOxuWqXpuDzRg8acD2k89phwmBeWCEtOB
+ fc+w==
+X-Gm-Message-State: ANoB5pl/xqt+UT84LYO+ddLBcSk2AokdZgBuoXlBteFawtNHaTfDsD0t
+ Io0IsmixymjyML/RGJj4mkwtmp+AL5o=
+X-Google-Smtp-Source: AA0mqf7l/K+6wEoC5TWoceLB+s4J3UoRg/KyTU88tWpjLQV24N76umo0bkJE+RzO63xlGXNfF3U3GQ==
+X-Received: by 2002:aca:1306:0:b0:35b:88aa:be80 with SMTP id
+ e6-20020aca1306000000b0035b88aabe80mr6913936oii.41.1669554489543; 
+ Sun, 27 Nov 2022 05:08:09 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:9b54:d73e:4d8c:458c])
  by smtp.gmail.com with ESMTPSA id
- i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.08.04
+ i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.08.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Nov 2022 05:08:05 -0800 (PST)
+ Sun, 27 Nov 2022 05:08:08 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Nov 2022 10:07:18 -0300
-Message-Id: <20221127130739.1862398-5-ricardo.martincoski@gmail.com>
+Date: Sun, 27 Nov 2022 10:07:19 -0300
+Message-Id: <20221127130739.1862398-6-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=rBRMadNFAJQZBi6uC9EFFKI9wHDhRLKABQ7RU8KdhxU=;
- b=YlAzORdnGg9ezS0yuKlZmkgAZRbPBpLt2QtPhd8DbfOeVStk3tOwp22Woe2yLpdsho
- zWtTeWjBPeNhnp4huW6BSmZ8e5dvEKVRC8yZFcITxlveePHh/ERt9mVJAsrarp63f1Gw
- oCxYfidpYNu3ua4zReIoC73VIh+mx6u1QSY9HR3za5uaGanCQquJOe7vG3Q8eNKGe/z0
- JmM3tTQTxwbOTdsDzuEW//U9sjyq0i49QPHZi5oO3GpxJMPQBSzUX4sV9J1262qAquGU
- IwmyV7TYyMd+DCFrMKeXujiYZNkwq4W1OTg0wo9HJpZ/aUwiMJIqug2x5UehWBq+w6cC
- 0pVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=cikp0EEulpzCFR0AlDmg2kXgITR4MKVNwwpswSFcFm0=;
+ b=iho3/hYYeN9BR5B+g/GIFiGDnWDL+y8SjMFq+J7lOSwfGswpkxWl/65nX/X64EcywU
+ foTfYmHzTGNftGlrbwpI+YUBY0Z2I0Q9dwElQ8YlXyRv805WR6p/nbUmc7BOkCa6oWzu
+ iKeVzoQJrRYnJUVYCg/KBBLgoyuMCa2pIsaeiwp1GGoKvoMSMmBrbz82ytVP3g0koPdn
+ Oazku4Th5fHeHb7M48dLD+coLSR6xfB/MZcH9pNOG+T0EixhbnvqfcBDGMwW+6nBWvWo
+ iqAGZECtchJjUnwprQtyAvqCYMOHvManPKs4p9Trenib77cdgmBTd1dk/uia5fDXpkBi
+ rR0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YlAzORdn
-Subject: [Buildroot] [next 04/25] utils/checkpackagelib: warn about
- redefined config
+ header.a=rsa-sha256 header.s=20210112 header.b=iho3/hYY
+Subject: [Buildroot] [next 05/25] support/scripts/generate-gitlab-ci-yml:
+ improve test-pkg support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,161 +103,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Warn the developer in the case the same config is declared more than
-once in the same Config.in file.
-But take into account the conditional code that lets the config be
-visible and warn only when it is declared more than once in the same
-conditions.
-For instance, do not warn for:
- if BR2_PACKAGE_BUSYBOX
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
+Following the example of test-pkg config described in commit
+"12c7a05da1 utils/test-pkg: add gitlab-ci support" to test a defconfig
+fragment that contains a disabled option is currently possible, but
+it do requires one to change the git config core.commentChart so the
+lines starting with "#" are not discarded by git when creating/editing
+the commit message.
+
+For instance, without the indentation the 3rd line below would be
+excluded from the commit message when the editor is closed:
+    test-pkg config:
+    SOME_OPTION=y
+    # OTHER_OPTION is not set
+    SOME_VARIABLE="some value"
+
+Requiring to change git configs is not very nice.
+So make the developer's life easier by changing the sed expression to
+remove indentation with spaces from a defconfig fragment found on a
+commit message.
+For instance these lines become valid and generate a defconfig fragment
+without the indentation of one space to be tested in GitLab CI:
+test-pkg config:
+ SOME_OPTION=y
+ # OTHER_OPTION is not set
+ SOME_VARIABLE="some value"
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-Applying only this patch on current master, check-package returns:
-
-Config.in.legacy:2597: config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF redeclared (previous line: 2589)
+Example usage:
+https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/704846763
 ---
- utils/checkpackagelib/lib_config.py      | 38 ++++++++++++
- utils/checkpackagelib/test_lib_config.py | 78 ++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index b05831f2c3..f26ca0d898 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -233,3 +233,41 @@ class Indent(_CheckFunction):
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
-+
-+
-+class RedefinedConfig(_CheckFunction):
-+    CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
-+    IF = re.compile(r"^\s*if\s+([^#]*)\b")
-+    ENDIF = re.compile(r"^\s*endif\b")
-+
-+    def before(self):
-+        self.configs = {}
-+        self.conditional = []
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
-+            return
-+
-+        m = self.IF.search(text)
-+        if m is not None:
-+            condition = m.group(1)
-+            self.conditional.append(condition)
-+            return
-+
-+        m = self.ENDIF.search(text)
-+        if m is not None:
-+            self.conditional.pop()
-+            return
-+
-+        m = self.CONFIG.search(text)
-+        if m is None:
-+            return
-+        config = m.group(2)
-+
-+        key = (config, ' AND '.join(self.conditional))
-+        if key in self.configs.keys():
-+            previous_line = self.configs[key]
-+            return ["{}:{}: config {} redeclared (previous line: {})"
-+                    .format(self.filename, lineno, config, previous_line),
-+                    text]
-+        self.configs[key] = lineno
-diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
-index 91a549adf2..474d17105e 100644
---- a/utils/checkpackagelib/test_lib_config.py
-+++ b/utils/checkpackagelib/test_lib_config.py
-@@ -385,3 +385,81 @@ Indent = [
- def test_Indent(testname, filename, string, expected):
-     warnings = util.check_file(m.Indent, filename, string)
-     assert warnings == expected
-+
-+
-+RedefinedConfig = [
-+    ('no redefinition',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO_BAR\n'
-+     'bool "foo"\n',
-+     []),
-+    ('no conditional',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('three times',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:3: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n'],
-+      ['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('same conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:6: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:8: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('not equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if !BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     []),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', RedefinedConfig)
-+def test_RedefinedConfig(testname, filename, string, expected):
-+    warnings = util.check_file(m.RedefinedConfig, filename, string)
-+    assert warnings == expected
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..27f586f1b6 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -91,7 +91,7 @@ gen_tests() {
+ 
+     # Retrieve defconfig for test-pkg from the git commit message (if any)
+     if grep -q -E '^test-pkg config:$' <<<"${CI_COMMIT_DESCRIPTION}"; then
+-        sed -r -n -e '/^test-pkg config:$/{:a;n;p;ba;}' \
++        sed -r -n -e '/^test-pkg config:$/{:a;n;s/^ +//;p;ba;}' \
+             <<<"${CI_COMMIT_DESCRIPTION}" \
+             >defconfig.frag
+         if [ ! -s defconfig.frag ]; then
 -- 
 2.34.1
 
