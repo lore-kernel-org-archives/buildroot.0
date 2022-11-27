@@ -4,89 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D84CC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 14:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE34C43217
+	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 16:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 150E740278;
-	Sun, 27 Nov 2022 14:48:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150E740278
+	by smtp2.osuosl.org (Postfix) with ESMTP id 595B040414;
+	Sun, 27 Nov 2022 16:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 595B040414
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RX3juiINCgLP; Sun, 27 Nov 2022 14:48:52 +0000 (UTC)
+	with ESMTP id I3IcXn_EUmeY; Sun, 27 Nov 2022 16:45:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14D42401DD;
-	Sun, 27 Nov 2022 14:48:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14D42401DD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DE1311BF3C5
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 14:48:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6557F400D6;
+	Sun, 27 Nov 2022 16:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6557F400D6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A186E1BF425
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 16:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6356401DD
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 14:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6356401DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CED360B2E
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 16:45:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CED360B2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gmixBG9m2gOR for <buildroot@lists.busybox.net>;
- Sun, 27 Nov 2022 14:48:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PbaKXxqW0Md4 for <buildroot@lists.busybox.net>;
+ Sun, 27 Nov 2022 16:45:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A465400B8
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
- [IPv6:2001:4860:4864:20::33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A465400B8
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 14:48:39 +0000 (UTC)
-Received: by mail-oa1-x33.google.com with SMTP id
- 586e51a60fabf-13bd19c3b68so10333334fac.7
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 06:48:39 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19995605A1
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 19995605A1
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 16:45:38 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id q7so12525847wrr.8
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 08:45:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=E619c6XN2L6YyZuGlR/lWBaUdGyK8Z1TuZ9C93V6F6k=;
- b=ebgJ4r3IzeYV3K56BkFLt2By6BxCjyM8sHVAVBxoE2S9t5QECGDcWcbz39uxV5bNmo
- 4QvfRe1xi5DurvNjrm6YQqaoPeVpmlIEqdxpNT10zx0oAdBRNfldTXS8sgDnbM4bYT4C
- G8xuFaYGEVs1qutqi18rnFD7Pj4HIVXGh6bwzyesuf1o4aGG8/kcY54SG8EyfxDmXQ7V
- mIWQ6jiMl1X0wEsNcc7inAQd92D8Um0euiq3E6JkL5Z2Db3ZBs70pq0Pfg8yw5gKrdyB
- MGu1euKhXQxrKMfRe2mvoPuk8yUo00hrJLcxsp7R5262QovhwCIQFvOP/d3YPUrtZp2N
- WBbg==
-X-Gm-Message-State: ANoB5pkXdML5J/zmWtrETGKnCwnTS7sLD75BZoj/eLMlP/I92ALSVUrN
- QX5tzYpCb+QbBK3FcEnMwrcArAc4+Vs=
-X-Google-Smtp-Source: AA0mqf7ehVuTOqzP4YmJwzYayJo517REsDv/08GMmGEbPntPSkEU2YUfgJhnYjgLB1RrZB7tZDvjjw==
-X-Received: by 2002:a05:6870:788d:b0:137:3d65:f5ec with SMTP id
- hc13-20020a056870788d00b001373d65f5ecmr14752178oab.257.1669560518640; 
- Sun, 27 Nov 2022 06:48:38 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:7980:988a:9b54:d73e:4d8c:458c])
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Xx357/iOyae+Njcvve5qLeCgLNEzP1a7LWSmS0ufvCI=;
+ b=gE+fFIAV7sfCxPRLbbFrNXGJV6vQLPRiGOt8U2KlDCv9N+9JONJ1j0vC1/l1plBvtK
+ mndbnm7lDjCn3gs1yGZp5nHeceGi0pIs8rzxu3gqhkvRkK6JvS0VMBQQ22RMos+WdaJD
+ NE7TiU24DanoDWvzovG/d/j8LrAcY8X2iiU98WlBOW8FKeiCIilUMYjbZD37MdirjJve
+ szHT3NpPPjYrgUK6B46/b8BxlxSQGJe8jNq5EwmNdnHMTIvYu9lYC8APRM83dcVk4oFs
+ Ah6GiHK7rwVd5vnsusUwKKf+RS61WfjoOA8kRzw7lpkisJOBMU+jDCWT+jqF9H4/xyrI
+ S9kQ==
+X-Gm-Message-State: ANoB5pmOHBzMcMahdrBtO0OimpYgls3+jGxBwU9P1odxnm342QrFcoDu
+ dFEvVtYWWP8Dv9FfuVMvW7qzwA/AlU1IlA==
+X-Google-Smtp-Source: AA0mqf65F/pjD0Iq7vPA06Slc28bAhNTIyP3dYAbtheSLEyWecD2mQDGSJj5n1trIjNGCFKteayWrg==
+X-Received: by 2002:adf:ab1d:0:b0:242:e73:f642 with SMTP id
+ q29-20020adfab1d000000b002420e73f642mr3531660wrc.184.1669567536837; 
+ Sun, 27 Nov 2022 08:45:36 -0800 (PST)
+Received: from gpdmax.. ([2a01:e0a:28f:75b0:2488:d453:b017:99a])
  by smtp.gmail.com with ESMTPSA id
- e64-20020aca3743000000b00342e8bd2299sm3471711oia.6.2022.11.27.06.48.35
+ p16-20020a05600c1d9000b003b3307fb98fsm12075180wms.24.2022.11.27.08.45.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Nov 2022 06:48:37 -0800 (PST)
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ Sun, 27 Nov 2022 08:45:35 -0800 (PST)
+From: Anisse Astier <anisse@astier.eu>
 To: buildroot@buildroot.org
-Date: Sun, 27 Nov 2022 11:48:19 -0300
-Message-Id: <20221127144819.2022348-2-ricardo.martincoski@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221127144819.2022348-1-ricardo.martincoski@gmail.com>
-References: <20221127144819.2022348-1-ricardo.martincoski@gmail.com>
+Date: Sun, 27 Nov 2022 17:45:33 +0100
+Message-Id: <20221127164533.1075407-1-anisse@astier.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=E619c6XN2L6YyZuGlR/lWBaUdGyK8Z1TuZ9C93V6F6k=;
- b=dF+icwmBwmY5VufTE8MuQqlcDR1GXekenlWDOVs2vWUqni1rMoGAXpU+T6PSvHncTF
- gbyE2mfN+/LMOEkjcDnOxloKP4vwv3phxADn9BFyHowmZGjrfod2uWaFeRHYDOvicWW9
- XDifvnrEwsEtfxKmgrqLxIA1SL3y7k4SRfZAGBIMa/jKriqXyJ4uJ8fSZ5zpFcOV8Dkd
- oognOtKV4oReKi4TG+EHt499c49WcM1cqonO613XhYPgja2vj2Iatu3Yg5g3t3aGQY0M
- +/+0zZKhTyL+CkoNuFJSB+7Omhtz+6jxFyB0N7ZU1UqgsOx4gKkm0KecNk4QDbIJgUIG
- BWIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dF+icwmB
-Subject: [Buildroot] [next,
- v2 2/2] utils/get-developers: print error for correct line
+ d=astier-eu.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Xx357/iOyae+Njcvve5qLeCgLNEzP1a7LWSmS0ufvCI=;
+ b=7pFaYKx5noeRNUohqFnMUlFdGrEV5wXevM2QM/0UPEDyeLaHaW5Ntbwzz83Ee8JyYz
+ lQdsvud5mFh55Bw4Hgt8czHthyJyB10YxPkrZvDfopKXHt1omQ07bxsVfhFgbCZR70aA
+ OVpez6xsbybv/95AjIqYfQbexNzOvA8wBzbQBG3+eg1H1UKJa7x98Q+V+nEnKObfOfJv
+ Poo7MU+369dhlQQDMoJGADIAdR/3W6Owx8DxCaJRl8meH5xJh3ImRTzQbF7cQVGcWGbx
+ QVLklNDBjb7x6Kd9d4HCCbVg1G5WHK/6snIK70B97KLtGn023/aSzM4u+fUcGhI9MLEh
+ MfMA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=astier-eu.20210112.gappssmtp.com
+ header.i=@astier-eu.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=7pFaYKx5
+Subject: [Buildroot] [PATCH v3] package/go: disable cgo support with static
+ libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,149 +95,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Anisse Astier <anisse@astier.eu>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Start counting the line numbers in 1 instead of 0, in case an error
-must be printed.
-
-Both the error about a developer entry with no file entry and the error
-about a file entry with no developer entry actually belong to the
-non-empty line previous the one being analysed, so in these cases print
-the line number from the line before.
-
-Also count empty and comment lines, so a developer fixing the file can
-jump to the correct line (or the nearest one).
-
-At same time standardize the messages, printing the line number
-also in the case of a warning for a file that is not in the tree
-anymore.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-Changes v1 -> v2:
-  - avoid changing the message to a weird one, just print the line
-    number for the line before (Thomas)
-  - add the lineno on the warning messages in the this patch instead of
-    the previous one
-
-check-*:
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/706255042
-
-tests.utils.test_get_developers.TestGetDevelopers:
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/706255012
----
- .../testing/tests/utils/test_get_developers.py   | 16 ++++++++--------
- utils/getdeveloperlib.py                         |  6 +++---
- 2 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
-index 0b313c7c59..ffc01f6ce7 100644
---- a/support/testing/tests/utils/test_get_developers.py
-+++ b/support/testing/tests/utils/test_get_developers.py
-@@ -48,7 +48,7 @@ class TestGetDevelopers(unittest.TestCase):
-         # -v generating error, called from the main dir
-         developers = b'text1\n'
-         out, err, rc = call_get_developers("./utils/get-developers", ["-v"], self.WITH_EMPTY_PATH, topdir, developers)
--        self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text1'", err)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 1: 'text1'", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-         self.assertEqual(len(err), 1)
-@@ -56,7 +56,7 @@ class TestGetDevelopers(unittest.TestCase):
-         # -v generating error, called from path
-         developers = b'text2\n'
-         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
--        self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text2'", err)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 1: 'text2'", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-         self.assertEqual(len(err), 1)
-@@ -69,7 +69,7 @@ class TestGetDevelopers(unittest.TestCase):
-                      b'N:\tAuthor2 <email>\n' \
-                      b'F:\tutils/get-developers\n'
-         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
--        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 4", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-         self.assertEqual(len(err), 1)
-@@ -83,7 +83,7 @@ class TestGetDevelopers(unittest.TestCase):
-                      b'N:\tAuthor3 <email>\n' \
-                      b'F:\tutils/get-developers\n'
-         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
--        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 4", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-         self.assertEqual(len(err), 1)
-@@ -108,8 +108,8 @@ class TestGetDevelopers(unittest.TestCase):
-                      b'F:\tpath/that/does/not/exists/1\n' \
-                      b'F:\tpath/that/does/not/exists/2\n'
-         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
--        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
--        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file, line 2", err)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file, line 3", err)
-         self.assertEqual(rc, 0)
-         self.assertEqual(len(out), 0)
-         self.assertEqual(len(err), 2)
-@@ -119,8 +119,8 @@ class TestGetDevelopers(unittest.TestCase):
-                      b'F:\tpath/that/does/not/exists/1\n' \
-                      b'F:\tpath/that/does/not/exists/2\n'
-         out, err, rc = call_get_developers("./utils/get-developers", ["-c"], self.WITH_EMPTY_PATH, topdir, developers)
--        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
--        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file, line 2", err)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file, line 3", err)
-         self.assertEqual(rc, 0)
-         self.assertGreater(len(out), 1000)
-         self.assertEqual(len(err), 2)
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index dbd21af443..e7d0d23e49 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -236,12 +236,13 @@ def parse_developers(filename=None):
-         files = []
-         name = None
-         for line in f:
-+            linen += 1
-             line = line.strip()
-             if line.startswith("#"):
-                 continue
-             elif line.startswith("N:"):
-                 if name is not None or len(files) != 0:
--                    print("Syntax error in DEVELOPERS file, line %d" % linen,
-+                    print("Syntax error in DEVELOPERS file, line %d" % (linen - 1),
-                           file=sys.stderr)
-                     return None
-                 name = line[2:].strip()
-@@ -249,7 +250,7 @@ def parse_developers(filename=None):
-                 fname = line[2:].strip()
-                 dev_files = glob.glob(os.path.join(brpath, fname))
-                 if len(dev_files) == 0:
--                    print("WARNING: '%s' doesn't match any file" % fname,
-+                    print("WARNING: '%s' doesn't match any file, line %d" % (fname, linen),
-                           file=sys.stderr)
-                 for f in dev_files:
-                     dev_file = os.path.relpath(f, brpath)
-@@ -267,7 +268,6 @@ def parse_developers(filename=None):
-                 print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
-                       file=sys.stderr)
-                 return None
--            linen += 1
-     # handle last developer
-     if name is not None:
-         developers.append(Developer(name, files))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGdvIHN0ZGxpYiAicGx1Z2luIuKAr3BhY2thZ2UgcmVsaWVzIG9uIGRsZmNuLmggd2hpY2gg
+aXNuJ3QgYXZhaWxhYmxlCndoZW4gd2UgaGF2ZSBCUjJfU1RBVElDX0xJQlM9eS4KCkNvbmNlbnRy
+YXRlIGFsbCBjZ28gZGVjaXNpb24gdW5kZXIgdGhlIGNvbmZpZyBvcHRpb24KQlIyX1BBQ0tBR0Vf
+SE9TVF9HT19UQVJHRVRfQ0dPX0xJTktJTkdfU1VQUE9SVFMgdGhhdCBoYXMgdGhlIHByb3Blcgpk
+ZXBlbmRzLgoKVGhpcyBzaG91bGQgZml4IHRoaXMgYnVpbGQgZXJyb3IgZnJvbSBhdXRvYnVpbGRl
+cnM6CgovYnVpbGRyb290L2J1aWxkL2hvc3QtZ28tMS4xOS4zL3NyYy9wbHVnaW4vcGx1Z2luX2Rs
+b3Blbi5nbzoxMToxMDogZmF0YWwgZXJyb3I6IGRsZmNuLmg6IE5vIHN1Y2ggZmlsZSBvciBkaXJl
+Y3RvcnkKICAgMTEgfCAjaW5jbHVkZSA8ZGxmY24uaD4KClNpZ25lZC1vZmYtYnk6IEFuaXNzZSBB
+c3RpZXIgPGFuaXNzZUBhc3RpZXIuZXU+Ci0tLQpDaGFuZ2VzIHNpbmNlIHYyOgogLSBhZGQgbW9y
+ZSBjb21tZW50cwogLSBjb25zb2xpZGF0ZSBhbGwgZGVjaXNpb24gdW5kZXIgYSBzaW5nbGUgY29u
+ZmlnIG9wdGlvbiBhcyBzdWdnZXN0ZWQgYnkKICAgWWFubgoKLS0tCiBwYWNrYWdlL2dvL0NvbmZp
+Zy5pbi5ob3N0IHwgIDQgKysrKwogcGFja2FnZS9nby9nby5tayAgICAgICAgICB8IDMxICsrKysr
+KysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjEgaW5zZXJ0aW9u
+cygrKSwgMTQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9nby9Db25maWcuaW4u
+aG9zdCBiL3BhY2thZ2UvZ28vQ29uZmlnLmluLmhvc3QKaW5kZXggZGVkMDJkM2IzYS4uYWNjMWFk
+ZTE3MSAxMDA2NDQKLS0tIGEvcGFja2FnZS9nby9Db25maWcuaW4uaG9zdAorKysgYi9wYWNrYWdl
+L2dvL0NvbmZpZy5pbi5ob3N0CkBAIC0yMyw2ICsyMywxMCBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
+SE9TVF9HT19UQVJHRVRfQ0dPX0xJTktJTkdfU1VQUE9SVFMKIAkjIEdvIGRvZXNuJ3Qgc3VwcG9y
+dCBDR08gbGlua2luZyBvbiBNSVBTNjR4IHBsYXRmb3JtcwogCSMgU2VlOiBodHRwczovL2dpdGh1
+Yi5jb20va2FyYWxhYmUveGdvL2lzc3Vlcy80NgogCWRlcGVuZHMgb24gIUJSMl9taXBzNjQgJiYg
+IUJSMl9taXBzNjRlbAorCSMgZ28gdXNlcyBkbGZjbi5oICsgY2dvIGZvciBpdHMgcGx1Z2luIG1v
+ZHVsZQorCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUworCSMgY2dvIHN1cHBvcnRzIHVzZXMg
+dGhyZWFkcworCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwogCiAjIEhvc3Qg
+Z28gcGFja2FnZXMgc2hvdWxkIGRlcGVuZCBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPX0hPU1RfQVJD
+SF9TVVBQT1JUUwogY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfR09fSE9TVF9BUkNIX1NVUFBPUlRT
+CmRpZmYgLS1naXQgYS9wYWNrYWdlL2dvL2dvLm1rIGIvcGFja2FnZS9nby9nby5tawppbmRleCBm
+ZDRjYWEyZTVhLi5lODAyM2RhMjYwIDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvL2dvLm1rCisrKyBi
+L3BhY2thZ2UvZ28vZ28ubWsKQEAgLTgzLDE2ICs4Myw2IEBAIEhPU1RfR09fVEFSR0VUX0VOViA9
+IFwKIAlDR09fTERGTEFHUz0iJChUQVJHRVRfTERGTEFHUykiIFwKIAlHT1RPT0xESVI9IiQoSE9T
+VF9HT19UT09MRElSKSIKIAotIyBUaGUgZ28gY29tcGlsZXIncyBjZ28gc3VwcG9ydCB1c2VzIHRo
+cmVhZHMuICBJZiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTIGlzCi0jIHNldCwgYnVpbGQgaW4g
+Y2dvIHN1cHBvcnQgZm9yIGFueSBnbyBwcm9ncmFtcyB0aGF0IG1heSBuZWVkIGl0LiAgTm90ZSB0
+aGF0Ci0jIGFueSB0YXJnZXQgcGFja2FnZSBuZWVkaW5nIGNnbyBzdXBwb3J0IG11c3QgaW5jbHVk
+ZQotIyAnZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTJyBpbiBpdHMgY29uZmln
+IGZpbGUuCi1pZmVxICgkKEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMpLHkpCi1IT1NUX0dPX0NH
+T19FTkFCTEVEID0gMQotZWxzZQotSE9TVF9HT19DR09fRU5BQkxFRCA9IDAKLWVuZGlmCi0KIEhP
+U1RfR09fQ1JPU1NfRU5WID0gXAogCUNDX0ZPUl9UQVJHRVQ9IiQoVEFSR0VUX0NDKSIgXAogCUNY
+WF9GT1JfVEFSR0VUPSIkKFRBUkdFVF9DWFgpIiBcCkBAIC0xMDEsMTIgKzkxLDI1IEBAIEhPU1Rf
+R09fQ1JPU1NfRU5WID0gXAogCSQoaWYgJChHT19HTzM4NiksR08zODY9JChHT19HTzM4NikpIFwK
+IAkkKGlmICQoR09fR09BUk0pLEdPQVJNPSQoR09fR09BUk0pKSBcCiAJR09fQVNTVU1FX0NST1NT
+Q09NUElMSU5HPTEKK2VuZGlmICMgQlIyX1BBQ0tBR0VfSE9TVF9HT19UQVJHRVRfQVJDSF9TVVBQ
+T1JUUwogCi1lbHNlICMgIUJSMl9QQUNLQUdFX0hPU1RfR09fVEFSR0VUX0FSQ0hfU1VQUE9SVFMK
+LSMgaG9zdC1nbyBjYW4gc3RpbGwgYmUgdXNlZCB0byBidWlsZCBwYWNrYWdlcyBmb3IgdGhlIGhv
+c3QuIE5vIG5lZWQgdG8gc2V0IGFsbAotIyB0aGUgYXJjaCBzdHVmZiBzaW5jZSB3ZSB3aWxsIG5v
+dCBiZSBjcm9zcy1jb21waWxpbmcuCisjIFRoZSBnbyBjb21waWxlcidzIGNnbyBzdXBwb3J0IHVz
+ZXMgdGhyZWFkcy4gSWYgQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyBpcworIyBzZXQsIGJ1aWxk
+IGluIGNnbyBzdXBwb3J0IGZvciBhbnkgZ28gcHJvZ3JhbXMgdGhhdCBtYXkgbmVlZCBpdC4KKyMK
+KyMgSWYgdGhlIHdlIGFyZSB1c2luZyBzdGF0aWMgbGlicywgZHluYW1pYyBsb2FkaW5nIG9mIGxp
+YnJhcmllcyB3b24ndCBiZQorIyBhdmFpbGFibGUsIGFuZCBnbyB3b24ndCBiZSBhYmxlIHRvIHVz
+ZSBkbGZjbi5oIGZvciBpdHMgcGx1Z2luIHBhY2thZ2UuCisjIERpc2FibGUgY2dvIGFzIHdlbGwu
+CisjCisjIElmIHRoZSB0YXJnZXQgYXJjaCBkb2VzIG5vdCBzdXBwb3J0IGdvLCBob3N0LWdvIGNh
+biBzdGlsbCBiZSB1c2VkIHRvIGJ1aWxkCisjIHBhY2thZ2VzIGZvciB0aGUgaG9zdCwgYW5kIGVu
+YWJsZSBjZ28uCisjCisjIE5vdGUgdGhhdCBhbnkgdGFyZ2V0IHBhY2thZ2UgbmVlZGluZyBjZ28g
+c3VwcG9ydCBtdXN0IGluY2x1ZGUgJ2RlcGVuZHMgb24KKyMgQlIyX1BBQ0tBR0VfSE9TVF9HT19U
+QVJHRVRfQ0dPX0xJTktJTkdfU1VQUE9SVFMnIGluIGl0cyBjb25maWcgZmlsZS4KK2lmZXEgKCQo
+QlIyX1BBQ0tBR0VfSE9TVF9HT19UQVJHRVRfQ0dPX0xJTktJTkdfU1VQUE9SVFMpLHkpCiBIT1NU
+X0dPX0NHT19FTkFCTEVEID0gMQotZW5kaWYgIyBCUjJfUEFDS0FHRV9IT1NUX0dPX1RBUkdFVF9B
+UkNIX1NVUFBPUlRTCitlbHNlCitIT1NUX0dPX0NHT19FTkFCTEVEID0gMAorZW5kaWYKIAogIyBG
+b3IgdGhlIGNvbnZlbmllbmNlIG9mIGhvc3QgZ29sYW5nIHBhY2thZ2VzCiBIT1NUX0dPX0hPU1Rf
+RU5WID0gXAotLSAKMi4zOC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
