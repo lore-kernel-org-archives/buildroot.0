@@ -1,87 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85B8BC4321E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4133C4321E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAF7881A9C;
-	Sun, 27 Nov 2022 13:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAF7881A9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9097A60B10;
+	Sun, 27 Nov 2022 13:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9097A60B10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Blfxux70ex1b; Sun, 27 Nov 2022 13:08:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tadZzwEcYQ4r; Sun, 27 Nov 2022 13:08:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE98A81AAB;
-	Sun, 27 Nov 2022 13:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE98A81AAB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4AB2C1BF42C
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:07:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB98B60AD2;
+	Sun, 27 Nov 2022 13:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB98B60AD2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B89A61BF42C
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2611381AAB
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2611381AAB
+ by smtp3.osuosl.org (Postfix) with ESMTP id A184060AD2
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A184060AD2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IIkt2dcC99ad for <buildroot@lists.busybox.net>;
- Sun, 27 Nov 2022 13:07:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZXJIyiqVPndP for <buildroot@lists.busybox.net>;
+ Sun, 27 Nov 2022 13:07:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB5B81A9C
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFB5B81A9C
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:07:56 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id v82so9037518oib.4
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:07:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A45C605A1
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
+ [IPv6:2001:4860:4864:20::29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A45C605A1
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:07:59 +0000 (UTC)
+Received: by mail-oa1-x29.google.com with SMTP id
+ 586e51a60fabf-14286d5ebc3so10202178fac.3
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:07:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7Hpgd+3sZpaVm+IRt4OFTLJy7FYrjmLgcZdpLJ0QzqE=;
- b=P1HkvJ1P7CtOQ7S8khJSMSzF38+lUUH0qzquLI7yofFKGo7OH20VtzKAgUqEg54D5D
- FCSuK47wf1lr5+jYiWq1TmKZGtnYjknS8r7caUHiaKgTrZiX4cHYLbTNqDrxR8MXuQtj
- FSLST9iYwmUzzKt/e/yLQyrlCV/tH5fqjOCBG6CajYQ8obMjwt1CmvqE4AU3gHa7uryh
- I36axxMtsvP0sFql5rvS6uRjN9jHE/cx/BEGFiQMBCAKGEuu9DU7IK2GSW7b6G2Y/MUy
- KbJxqgUDVnhbWrcYwjUnDbVUDsE26AMxxtkPntD6atGBmFfHXVUAn7tJg3XlDZ7tJCgm
- C/sA==
-X-Gm-Message-State: ANoB5plzWnRHUcByaM5PaKMB8eYZKp+b9+Y8DR537JoXEMUV/JNQK3aZ
- xTUiHR+clymHDytELbjUbT9YUt+tqv8=
-X-Google-Smtp-Source: AA0mqf7iLTU4qi9LCLR9QmQcvhQ8rpaIrTjjpORfjiwA448v4TRr1AB+lB+XcYeTAv/tbil6RrJ0hQ==
-X-Received: by 2002:aca:d0a:0:b0:35a:429f:3460 with SMTP id
- 10-20020aca0d0a000000b0035a429f3460mr13288041oin.202.1669554475593; 
- Sun, 27 Nov 2022 05:07:55 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=3cqdnmzB1uck8A5PFV23hRp+qyirNspWzYVEiHTntrY=;
+ b=lotHCEY1qPPNnVGBo/Qg6wVyKlovGtMstEEIScfwZ6yxaGBrfj9QdzM4aqoNjt63M3
+ Pv0N+FmXIr9GAHWQY4BhfmCK+qcx+uz/o1vOPQ8KCzo4J62HluDqxMOaUPQ41iGCnkSA
+ DY7XKui1OZweE5B1rccUC1KaCQHqmyNYBTWB2aa3aigBua1UD5jdprAhkHB2vB77wQmx
+ rvXw6FiTutChM7U94v3bt6ZOpHccgoVJfW/CbkllHaQczsAnpkSMCwkRJXwuxyULxIm1
+ zSCV9yaO9Vro5aFCPE+aYeOJYm2V18pPCIRPbYkt9ZZbBYDnjmMWb0hoedYFou5NqCXJ
+ TZKw==
+X-Gm-Message-State: ANoB5plOo0JbEWnQbJiw0SmE3wCGSj+C4hA7fASxuxEHjWkHWOEFjlNu
+ oXgaeFnCrxkMsASJoRB5EYlPonSNZUE=
+X-Google-Smtp-Source: AA0mqf7gwfTxwbEPyrVxgJ0Pdjng6MapG3L734Lr2S9YyZD2lUB096dLrQDUHWik0IjilTYDrKDHCw==
+X-Received: by 2002:a05:6870:9d09:b0:143:2972:e928 with SMTP id
+ pp9-20020a0568709d0900b001432972e928mr12539702oab.69.1669554478396; 
+ Sun, 27 Nov 2022 05:07:58 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:9b54:d73e:4d8c:458c])
  by smtp.gmail.com with ESMTPSA id
- i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.07.52
+ i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.07.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Nov 2022 05:07:54 -0800 (PST)
+ Sun, 27 Nov 2022 05:07:57 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Nov 2022 10:07:14 -0300
-Message-Id: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
+Date: Sun, 27 Nov 2022 10:07:15 -0300
+Message-Id: <20221127130739.1862398-2-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
+References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7Hpgd+3sZpaVm+IRt4OFTLJy7FYrjmLgcZdpLJ0QzqE=;
- b=CrsPwDU4be1ruQcPRIieROvBhRBp7QR0HDmA/lDgt0zsIJyKs7Pi9tl+RjLtyeIFgK
- 8Nxfj80gu/y/tApRZMhajDybW4SZFvnpkWkotOyqdxrO/POUUxVOuEcQ/YUay8SUNYj8
- 1LDug4yGjmdJ/0Hvsrc3cYBDJC0Xo55wKK0vzml6xxiyZpwqWpDaFeFqU89pCVqgteQ2
- hB+7Lk9kO2+GYQeQuK+7NZQc45azQ3yU95SNKTDSnExny2PEd7sIW2shnGJI0PrH7/X5
- Sl9hYDUBNynqW0arcF4gHFiWlRgkvqNk0N7eoHWEwFS9vM3t6i3GpnccyOxtT0zqPTvz
- m7BQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=3cqdnmzB1uck8A5PFV23hRp+qyirNspWzYVEiHTntrY=;
+ b=ON7EHo+Sv4BCTKHHd4gXJ3xPfivbUlv4MjIfRpWEA9est7g1Zyob5vJ9amXARGSeED
+ 3b1Jns8dYUnCGmm6nlO5ZKfFWZgYOalkJ7rqWZPE/Cmtd6JPdaSfoF+5UrZq+wRyRjor
+ WEnN6o8H78OxmseyG4BEUMRwbMM4ZJCg72fO2tKbbN/TxGoP1b9R+zbMVeAZUjZ0OILK
+ 7iMJ+3dztaHJfStPRRufHlp60wy1Kj7dfEOcnt/fOLXQYppGwjLP1A7Ia651IDJ/3Hrn
+ uqWHNDBd95fd4UyX3RBBkFjFd2ZSaZxPdNt38RTp9iygs2r2VYARlFsDVWnxhgi0SnDX
+ OdrQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=CrsPwDU4
-Subject: [Buildroot] [next 00/25] check-symbols v2
+ header.a=rsa-sha256 header.s=20210112 header.b=ON7EHo+S
+Subject: [Buildroot] [next 01/25] *: fix typo for separate(d|) in text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,170 +97,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The script check-symbols checks for inconsistencies on symbols declared
-in Config.in and used in .mk files.
+seperate is a common misspelling of separate
 
-Patch 25 is actually v2 for
-http://patchwork.ozlabs.org/project/buildroot/patch/20220814233845.2247022-34-ricardo.martincoski@gmail.com/
-But v1 was only a prototype/WIP.
-There was so many changes from v1 that I honestly gave up keeping track
-of them. Because of that, no changelog on this patch.
+Fix all the typos in the tree that are not related to patch files.
 
-All other patches in the series are new, found while developing this
-script. Because of that, no changelog for patches 1 to 24.
+CHANGES
+  seperate -> separate, in the list of changes
+Config.in.legacy
+  seperate -> separate, in option name and help texts
+package/leafnode2/leafnode2.mk
+  seperate -> separate, in a comment
+system/Config.in
+  seperated -> separated, in a help text
 
-Patches 1 and 2 fix typos on text (help text, CHANGES, ...).
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ CHANGES                        | 4 ++--
+ Config.in.legacy               | 6 +++---
+ package/leafnode2/leafnode2.mk | 2 +-
+ system/Config.in               | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Patch 3 fixes a duplicate symbol on Config.in.legacy, result of a
-copy&paste error.
-Patch 4 makes check-package to warn about occurrences of duplicated
-symbols.
-
-Patch 5 makes the test using test-pkg on GitLab CI easier for defconfigs
-that contain disabled options. It was used to test patches 9 and 10
-without changing the default git configuration.
-
-Patches 6, 7 and 8 fix the use of ifdef on .mk files.
-While testing patch 8, an issue passing config options and an
-improvement raised for package pugixml.
-Patch 9 fixes the issue.
-Patch 10 implements the improvement when passing build options.
-Patch 11 adds a comment to busybox.mk, copied from uclibc.mk about
-overriding a variable.
-Patch 12 makes check-package to warn about the use of ifdef in .mk
-files.
-
-While developing patch 25, I noticed that toolchain and
-toolchain-buildroot are not really virtual packages but both use the
-virtual package infra. Patch 13 add comments to explain why.
-Patches 14 and 15 remove usage of legacy symbols from packages.
-Patch 16 removes an unused symbol.
-Patch 17 fixes a select of a config that belongs to a choice.
-Patches 18, 19, 20, 21, 22 and 23 fix legacy handling.
-Patch 24 fixes a typo just merged only on next branch.
-Patch 25 is the actual goal of this series, adding check-symbols script.
-
-Example usage of the script applying only patch 25 to next:
-$ time utils/docker-run utils/check-symbols
-Config.in.legacy:634: BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 is part of a "choice" and should not be "select"ed
-Config.in.legacy:643: BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1 is part of a "choice" and should not be "select"ed
-Config.in.legacy:705: BR2_PACKAGE_OPENJDK_VERSION_11 is part of a "choice" and should not be "select"ed
-Config.in.legacy:713: BR2_PACKAGE_OPENJDK_VERSION_17 is part of a "choice" and should not be "select"ed
-Config.in.legacy:2097: BR2_PACKAGE_LUA_5_3 is part of a "choice" and should not be "select"ed
-Config.in.legacy:2605: BR2_PACKAGE_TI_SGX_AM335X not referenced but has a comment stating it is
-Config.in.legacy:2615: BR2_PACKAGE_TI_SGX_AM437X not referenced but has a comment stating it is
-Config.in.legacy:2625: BR2_PACKAGE_TI_SGX_AM4430 not referenced but has a comment stating it is
-Config.in.legacy:2635: BR2_PACKAGE_TI_SGX_AM5430 not referenced but has a comment stating it is
-Config.in.legacy:3973: BR2_GCC_VERSION_ARC is part of a "choice" and should not be "select"ed
-Config.in.legacy:4316: BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB is part of a "choice" and should not be "select"ed
-Config.in.legacy:4324: BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB is part of a "choice" and should not be "select"ed
-boot/uboot/Config.in:445: BR2_TARGET_XLOADER is a legacy symbol and should not be referenced
-package/fwts/Config.in:31: BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE defined but not referenced
-package/gitlab-runner/Config.in:14: BR2_PACKAGE_LIBCURL_OPENSSL is part of a "choice" and should not be "select"ed
-package/rpi-userland/Config.in:43: BR2_arch64 referenced but not defined
-system/Config.in:81: BR2_TARGET_GENERIC_PASSWD_MD5 is a legacy symbol and should not be referenced
-real    0m4,703s
-user    0m0,057s
-sys     0m0,020s
-
-The new GitLab CI jobs can be seen here, with the whole series applied
-to next:
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/706073924
-
-Regards,
-Ricardo
-
-Ricardo Martincoski (25):
-  *: fix typo for separate(d|) in text
-  package,legacy: fix typo for "daemon" on help text
-  Config.in.legacy: fix typo on BR2_PACKAGE_MEDIAART_BACKEND_QT
-  utils/checkpackagelib: warn about redefined config
-  support/scripts/generate-gitlab-ci-yml: improve test-pkg support
-  package/fwts: use ifeq instead of ifdef
-  package/live555: fix build config with locale
-  package/pugixml: unconditionally set BUILD_DEFINES
-  package/pugixml: fix configuration options
-  package/pugixml: use explicit build options
-  package/busybox: add comment about variable override
-  utils/checkpackagelib: warn about ifdef on .mk
-  toolchain/toolchain-buildroot: add comment about using virtual package
-    infra
-  boot/uboot: remove use of legacy xloader symbol
-  system: remove use of legacy md5 option
-  package/linux-headers: remove bogus symbol
-    BR2_PACKAGE_HOST_LINUX_HEADERS
-  package/gitlab-runner: ensure use of LIBCURL_OPENSSL
-  package/openpowerlink: properly handle legacy options
-  package/gcc: properly handle legacy for renamed ARC option
-  package/lua: properly handle legacy for removed version
-  package/ti-sgx-km: properly handle legacy for removed options
-  package/openjdk: properly handle legacy for renamed options
-  package/sunxi-mali-utgard: properly handle legacy for renamed options
-  package/rpi-userland: fix typo for BR2_aarch64
-  utils/check-symbols: new script
-
- CHANGES                                       |   4 +-
- Config.in.legacy                              | 101 ++--
- DEVELOPERS                                    |   2 +
- boot/uboot/Config.in                          |   1 -
- package/busybox/busybox.mk                    |   3 +
- package/fwts/fwts.mk                          |   2 +-
- package/gcc/Config.in.host                    |   1 +
- package/gitlab-runner/Config.in               |   1 -
- package/gitlab-runner/gitlab-runner.mk        |   4 +
- package/leafnode2/leafnode2.mk                |   2 +-
- package/linux-headers/Config.in.host          |   3 -
- package/live555/live555.mk                    |   2 +-
- package/lua/Config.in                         |   1 +
- package/ngircd/Config.in                      |   2 +-
- package/openjdk/Config.in                     |   2 +
- package/openpowerlink/Config.in               |   2 +
- package/pugixml/pugixml.mk                    |  24 +-
- package/rp-pppoe/Config.in                    |   2 +-
- package/rpi-userland/Config.in                |   2 +-
- package/sunxi-mali-utgard/Config.in           |   2 +
- package/uclibc/uclibc.mk                      |   1 +
- support/misc/gitlab-ci.yml.in                 |   8 +
- support/scripts/generate-gitlab-ci-yml        |   4 +-
- system/Config.in                              |   3 +-
- .../toolchain-buildroot.mk                    |   3 +
- toolchain/toolchain/toolchain.mk              |   3 +
- utils/check-symbols                           |  78 ++++
- utils/checkpackagelib/lib_config.py           |  38 ++
- utils/checkpackagelib/lib_mk.py               |  18 +
- utils/checkpackagelib/test_lib_config.py      |  78 ++++
- utils/checkpackagelib/test_lib_mk.py          |  48 ++
- utils/checksymbolslib/__init__.py             |   0
- utils/checksymbolslib/br.py                   | 140 ++++++
- utils/checksymbolslib/db.py                   | 205 ++++++++
- utils/checksymbolslib/file.py                 |  83 ++++
- utils/checksymbolslib/kconfig.py              | 139 ++++++
- utils/checksymbolslib/makefile.py             | 100 ++++
- utils/checksymbolslib/test_db.py              | 286 ++++++++++++
- utils/checksymbolslib/test_file.py            | 152 ++++++
- utils/checksymbolslib/test_kconfig.py         | 438 ++++++++++++++++++
- utils/checksymbolslib/test_makefile.py        | 304 ++++++++++++
- utils/checksymbolslib/test_util.py            |  15 +
- 42 files changed, 2242 insertions(+), 65 deletions(-)
- create mode 100755 utils/check-symbols
- create mode 100644 utils/checksymbolslib/__init__.py
- create mode 100644 utils/checksymbolslib/br.py
- create mode 100644 utils/checksymbolslib/db.py
- create mode 100644 utils/checksymbolslib/file.py
- create mode 100644 utils/checksymbolslib/kconfig.py
- create mode 100644 utils/checksymbolslib/makefile.py
- create mode 100644 utils/checksymbolslib/test_db.py
- create mode 100644 utils/checksymbolslib/test_file.py
- create mode 100644 utils/checksymbolslib/test_kconfig.py
- create mode 100644 utils/checksymbolslib/test_makefile.py
- create mode 100644 utils/checksymbolslib/test_util.py
-
+diff --git a/CHANGES b/CHANGES
+index 3090466d2e..192546993f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7475,7 +7475,7 @@
+ 
+ 	Architecture: Default to bf532 CPU variant for blackfin,
+ 	Fix flat one memory region support for m68k and disable flat
+-	seperate data support because of compatibility issues.
++	separate data support because of compatibility issues.
+ 
+ 	Defconfigs: Minnowboard and Raspberrypi: Fix errors with
+ 	post-build scripts when systemd is used.
+@@ -8011,7 +8011,7 @@
+ 
+ 	Minor fixes.
+ 
+-	Merged/seperate /usr handling is now also performed for
++	Merged/separate /usr handling is now also performed for
+ 	staging so cross-gdb / gdbserver can find the libraries.
+ 
+ 	Updated/fixed packages: autossh, conntrack-tools, dcron,
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 17f0858e70..284e7bf887 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -3240,7 +3240,7 @@ config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
+ 	select BR2_PACKAGE_RESTORECOND
+ 	help
+ 	  The policycoreutils package no longer offers restorecond
+-	  as a option.  This package has been moved into a seperate
++	  as a option.  This package has been moved into a separate
+ 	  package maintained by the SELinux maintainers.
+ 
+ config BR2_PACKAGE_SEPOLGEN
+@@ -3834,7 +3834,7 @@ config BR2_GDB_VERSION_7_9
+ comment "Legacy options removed in 2016.11"
+ 
+ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
+-	bool "PHP CGI and CLI options are now seperate"
++	bool "PHP CGI and CLI options are now separate"
+ 	select BR2_PACKAGE_PHP_SAPI_CLI
+ 	select BR2_PACKAGE_PHP_SAPI_CGI
+ 	select BR2_LEGACY
+@@ -4864,7 +4864,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	select BR2_PACKAGE_KODI_PVR_WMC
+ 	help
+-	  Kodi PVR addon was split into seperate modules
++	  Kodi PVR addon was split into separate modules
+ 
+ config BR2_BINUTILS_VERSION_2_23_2
+ 	bool "binutils 2.23 option renamed"
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index a02aad4302..e82ca2e1ee 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -23,7 +23,7 @@ LEAFNODE2_CONF_OPTS = \
+ 	--enable-runas-user=root
+ 
+ # Leafnode2 needs the host version of b_sortnl during
+-# compilation. Instead of creating a seperate host package and
++# compilation. Instead of creating a separate host package and
+ # installing b_sortnl to $(HOST_DIR) this binary is compiled
+ # on-the-fly, host-pcre is needed for this
+ define LEAFNODE2_BUILD_SORTNL_TOOL
+diff --git a/system/Config.in b/system/Config.in
+index 888c24ce81..e6dcd25455 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -443,7 +443,7 @@ config BR2_ENABLE_LOCALE_WHITELIST
+ 	default "C en_US"
+ 	depends on BR2_ENABLE_LOCALE_PURGE
+ 	help
+-	  Whitespace seperated list of locales to allow on target.
++	  Whitespace separated list of locales to allow on target.
+ 	  Locales not listed here will be removed from the target.
+ 	  See 'locale -a' on your host for a list of locales available
+ 	  on your build host, or have a look in /usr/share/locale in
 -- 
 2.34.1
 
