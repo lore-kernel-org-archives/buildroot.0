@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4133C4321E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B65F8C4321E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9097A60B10;
-	Sun, 27 Nov 2022 13:08:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9097A60B10
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41FAF81AEF;
+	Sun, 27 Nov 2022 13:08:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41FAF81AEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tadZzwEcYQ4r; Sun, 27 Nov 2022 13:08:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GGROHdeo6w0m; Sun, 27 Nov 2022 13:08:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB98B60AD2;
-	Sun, 27 Nov 2022 13:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB98B60AD2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B89A61BF42C
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A15181AAB;
+	Sun, 27 Nov 2022 13:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A15181AAB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 161FF1BF42C
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A184060AD2
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A184060AD2
+ by smtp4.osuosl.org (Postfix) with ESMTP id E43C94099F
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E43C94099F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZXJIyiqVPndP for <buildroot@lists.busybox.net>;
- Sun, 27 Nov 2022 13:07:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aZmOkID16_Wh for <buildroot@lists.busybox.net>;
+ Sun, 27 Nov 2022 13:08:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A45C605A1
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
- [IPv6:2001:4860:4864:20::29])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A45C605A1
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:07:59 +0000 (UTC)
-Received: by mail-oa1-x29.google.com with SMTP id
- 586e51a60fabf-14286d5ebc3so10202178fac.3
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:07:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFA134098A
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CFA134098A
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:08:01 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id q83so9007810oib.10
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:08:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=3cqdnmzB1uck8A5PFV23hRp+qyirNspWzYVEiHTntrY=;
- b=lotHCEY1qPPNnVGBo/Qg6wVyKlovGtMstEEIScfwZ6yxaGBrfj9QdzM4aqoNjt63M3
- Pv0N+FmXIr9GAHWQY4BhfmCK+qcx+uz/o1vOPQ8KCzo4J62HluDqxMOaUPQ41iGCnkSA
- DY7XKui1OZweE5B1rccUC1KaCQHqmyNYBTWB2aa3aigBua1UD5jdprAhkHB2vB77wQmx
- rvXw6FiTutChM7U94v3bt6ZOpHccgoVJfW/CbkllHaQczsAnpkSMCwkRJXwuxyULxIm1
- zSCV9yaO9Vro5aFCPE+aYeOJYm2V18pPCIRPbYkt9ZZbBYDnjmMWb0hoedYFou5NqCXJ
- TZKw==
-X-Gm-Message-State: ANoB5plOo0JbEWnQbJiw0SmE3wCGSj+C4hA7fASxuxEHjWkHWOEFjlNu
- oXgaeFnCrxkMsASJoRB5EYlPonSNZUE=
-X-Google-Smtp-Source: AA0mqf7gwfTxwbEPyrVxgJ0Pdjng6MapG3L734Lr2S9YyZD2lUB096dLrQDUHWik0IjilTYDrKDHCw==
-X-Received: by 2002:a05:6870:9d09:b0:143:2972:e928 with SMTP id
- pp9-20020a0568709d0900b001432972e928mr12539702oab.69.1669554478396; 
- Sun, 27 Nov 2022 05:07:58 -0800 (PST)
+ bh=xif48wvjxmSFCzPkEj+GZMOC7ubIcSZuLpdw5rzTfGA=;
+ b=t6me8EKjqxoe+kIlcZV3sowUzqzChCCt77umzTdUUwjF2lEDe1j7xNpG3rFuqfC4jr
+ nFBImsVU0B5rrUK9a+IL8N1DOp2UF3/9r8DOrzPBuoEhv3M+GIKEnAzZ1dAXlpwx/nEa
+ xqHtFmghVENw5gV7bcw74WMqPLeSlZj2ZXROv9CcXhbeDbs+PiBdl6R7EAW1k1rNg0Vm
+ 5kNUbSUkiFOD84X9V7Nk4cfJi4zDwZHvkhVbInJTYNHU4xIkpBMs6VbwNMNJgHCzyyX3
+ n0bMwHMuYzMAcM0VfesPtHWL9ST4w6FuLcHIdYZDE8IyIGU/cu2Q+1LnJyCd6xFxR+A5
+ LNJg==
+X-Gm-Message-State: ANoB5pn6e48UcIfwoQBrVbI11kOth18hnoCEZpssgU+HRbjyRNvh7Bmf
+ 2kOMUPf7lF9NsCuzBg2Ajg2meq8leCg=
+X-Google-Smtp-Source: AA0mqf6wY6+0ob15J3U2bfqQyb63NMClcN+svmFpeXWf/Cw4EPW4ZwVOHyKxp4goDGy5nkW4AioatA==
+X-Received: by 2002:aca:d10:0:b0:359:ad61:e574 with SMTP id
+ 16-20020aca0d10000000b00359ad61e574mr12574623oin.221.1669554480934; 
+ Sun, 27 Nov 2022 05:08:00 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:9b54:d73e:4d8c:458c])
  by smtp.gmail.com with ESMTPSA id
- i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.07.55
+ i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.07.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Nov 2022 05:07:57 -0800 (PST)
+ Sun, 27 Nov 2022 05:07:59 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Nov 2022 10:07:15 -0300
-Message-Id: <20221127130739.1862398-2-ricardo.martincoski@gmail.com>
+Date: Sun, 27 Nov 2022 10:07:16 -0300
+Message-Id: <20221127130739.1862398-3-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
@@ -75,17 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3cqdnmzB1uck8A5PFV23hRp+qyirNspWzYVEiHTntrY=;
- b=ON7EHo+Sv4BCTKHHd4gXJ3xPfivbUlv4MjIfRpWEA9est7g1Zyob5vJ9amXARGSeED
- 3b1Jns8dYUnCGmm6nlO5ZKfFWZgYOalkJ7rqWZPE/Cmtd6JPdaSfoF+5UrZq+wRyRjor
- WEnN6o8H78OxmseyG4BEUMRwbMM4ZJCg72fO2tKbbN/TxGoP1b9R+zbMVeAZUjZ0OILK
- 7iMJ+3dztaHJfStPRRufHlp60wy1Kj7dfEOcnt/fOLXQYppGwjLP1A7Ia651IDJ/3Hrn
- uqWHNDBd95fd4UyX3RBBkFjFd2ZSaZxPdNt38RTp9iygs2r2VYARlFsDVWnxhgi0SnDX
- OdrQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=xif48wvjxmSFCzPkEj+GZMOC7ubIcSZuLpdw5rzTfGA=;
+ b=TvamxyC+3AFCna+neHgU4qODqU1k4TqDN+m8m+QcF3zQc40q1hP/Xh07VBq+okgiq8
+ quuuu1XUjZzRawKa23LubdBz5F0aTIaRZbRq/He2gO7eyuq/ln+LyDaNsu5UBDeB2yBT
+ yZZuw/8BKOwR2I+UJ6Mb4HZmd/oK3aZTxTYmb9yq+PcnqkdOngituddc7dS1eQ91KEFH
+ f7UVHglzxbFvcROGgNZeRTdg/2PTJwyniblB4A/1SfWYUnouX+YB65VcsPC5WJ3FcmfM
+ G72Dv9YgEPCtxcbv5vyqOvpaaa2HJM6SrBQtcj5yZDIeGRsvAVISm1NsdQt/DxDOyTh6
+ p4pw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ON7EHo+S
-Subject: [Buildroot] [next 01/25] *: fix typo for separate(d|) in text
+ header.a=rsa-sha256 header.s=20210112 header.b=TvamxyC+
+Subject: [Buildroot] [next 02/25] package,
+ legacy: fix typo for "daemon" on help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,114 +97,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-seperate is a common misspelling of separate
+deamon -> daemon
 
-Fix all the typos in the tree that are not related to patch files.
+At same time, in Config.in.legacy fix other typos in the same help text:
+spae -> space
+monolitic -> monolithic
 
-CHANGES
-  seperate -> separate, in the list of changes
-Config.in.legacy
-  seperate -> separate, in option name and help texts
-package/leafnode2/leafnode2.mk
-  seperate -> separate, in a comment
-system/Config.in
-  seperated -> separated, in a help text
-
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- CHANGES                        | 4 ++--
- Config.in.legacy               | 6 +++---
- package/leafnode2/leafnode2.mk | 2 +-
- system/Config.in               | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ Config.in.legacy           | 4 ++--
+ package/ngircd/Config.in   | 2 +-
+ package/rp-pppoe/Config.in | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3090466d2e..192546993f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -7475,7 +7475,7 @@
- 
- 	Architecture: Default to bf532 CPU variant for blackfin,
- 	Fix flat one memory region support for m68k and disable flat
--	seperate data support because of compatibility issues.
-+	separate data support because of compatibility issues.
- 
- 	Defconfigs: Minnowboard and Raspberrypi: Fix errors with
- 	post-build scripts when systemd is used.
-@@ -8011,7 +8011,7 @@
- 
- 	Minor fixes.
- 
--	Merged/seperate /usr handling is now also performed for
-+	Merged/separate /usr handling is now also performed for
- 	staging so cross-gdb / gdbserver can find the libraries.
- 
- 	Updated/fixed packages: autossh, conntrack-tools, dcron,
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 17f0858e70..284e7bf887 100644
+index 284e7bf887..4eff5b55d6 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -3240,7 +3240,7 @@ config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
- 	select BR2_PACKAGE_RESTORECOND
+@@ -4324,8 +4324,8 @@ config BR2_PACKAGE_OPENPOWERLINK_LIBPCAP
+ 	select BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
  	help
- 	  The policycoreutils package no longer offers restorecond
--	  as a option.  This package has been moved into a seperate
-+	  as a option.  This package has been moved into a separate
- 	  package maintained by the SELinux maintainers.
+ 	  The user space support has been split in two part:
+-	  - a monolitic user space library
+-	  - a user spae deamon driver
++	  - a monolithic user space library
++	  - a user space daemon driver
  
- config BR2_PACKAGE_SEPOLGEN
-@@ -3834,7 +3834,7 @@ config BR2_GDB_VERSION_7_9
- comment "Legacy options removed in 2016.11"
- 
- config BR2_PACKAGE_PHP_SAPI_CLI_CGI
--	bool "PHP CGI and CLI options are now seperate"
-+	bool "PHP CGI and CLI options are now separate"
- 	select BR2_PACKAGE_PHP_SAPI_CLI
- 	select BR2_PACKAGE_PHP_SAPI_CGI
- 	select BR2_LEGACY
-@@ -4864,7 +4864,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_VUPLUS
- 	select BR2_PACKAGE_KODI_PVR_WMC
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "using the linux headers version for the kernel has been removed"
+diff --git a/package/ngircd/Config.in b/package/ngircd/Config.in
+index 9b3d430922..1e93a5702c 100644
+--- a/package/ngircd/Config.in
++++ b/package/ngircd/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_NGIRCD
+ 	bool "ngircd"
+ 	depends on BR2_USE_MMU # fork()
  	help
--	  Kodi PVR addon was split into seperate modules
-+	  Kodi PVR addon was split into separate modules
+-	  Next Generation IRC server deamon.
++	  Next Generation IRC server daemon.
  
- config BR2_BINUTILS_VERSION_2_23_2
- 	bool "binutils 2.23 option renamed"
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index a02aad4302..e82ca2e1ee 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -23,7 +23,7 @@ LEAFNODE2_CONF_OPTS = \
- 	--enable-runas-user=root
- 
- # Leafnode2 needs the host version of b_sortnl during
--# compilation. Instead of creating a seperate host package and
-+# compilation. Instead of creating a separate host package and
- # installing b_sortnl to $(HOST_DIR) this binary is compiled
- # on-the-fly, host-pcre is needed for this
- define LEAFNODE2_BUILD_SORTNL_TOOL
-diff --git a/system/Config.in b/system/Config.in
-index 888c24ce81..e6dcd25455 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -443,7 +443,7 @@ config BR2_ENABLE_LOCALE_WHITELIST
- 	default "C en_US"
- 	depends on BR2_ENABLE_LOCALE_PURGE
+ 	  http://ngircd.barton.de
+diff --git a/package/rp-pppoe/Config.in b/package/rp-pppoe/Config.in
+index 2ac81cbb2d..6ff005a1e1 100644
+--- a/package/rp-pppoe/Config.in
++++ b/package/rp-pppoe/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_RP_PPPOE
+ 	select BR2_PACKAGE_PPPD
  	help
--	  Whitespace seperated list of locales to allow on target.
-+	  Whitespace separated list of locales to allow on target.
- 	  Locales not listed here will be removed from the target.
- 	  See 'locale -a' on your host for a list of locales available
- 	  on your build host, or have a look in /usr/share/locale in
+ 	  An implementation of the Point-to-point protocol over
+-	  Ethernet.  Has userspace client and server deamons. You
++	  Ethernet.  Has userspace client and server daemons. You
+ 	  likely only need this package if you are implementing the
+ 	  pppoe server that will service other pppoe client
+ 	  devices. Otherwise the normal client functionality already
 -- 
 2.34.1
 
