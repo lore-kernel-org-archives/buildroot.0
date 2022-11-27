@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D22C4321E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4054EC4321E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Nov 2022 13:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C40608144F;
-	Sun, 27 Nov 2022 13:08:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C40608144F
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBB42410BD;
+	Sun, 27 Nov 2022 13:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBB42410BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lTSK2WeXRotW; Sun, 27 Nov 2022 13:08:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7ly7qHT5cvBv; Sun, 27 Nov 2022 13:08:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1557E81419;
-	Sun, 27 Nov 2022 13:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1557E81419
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE8251BF42C
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86FAB410BE;
+	Sun, 27 Nov 2022 13:08:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86FAB410BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 269431BF42C
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA5AE81AC1
- for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA5AE81AC1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E8544099F
+ for <buildroot@lists.busybox.net>; Sun, 27 Nov 2022 13:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E8544099F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xq9nPi7MpgHG for <buildroot@lists.busybox.net>;
- Sun, 27 Nov 2022 13:08:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2zw6UxtoO7tp for <buildroot@lists.busybox.net>;
+ Sun, 27 Nov 2022 13:08:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F41A81AAB
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F41A81AAB
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:08:04 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id v82so9037730oib.4
- for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:08:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7BFC4098A
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
+ [IPv6:2607:f8b0:4864:20::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7BFC4098A
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 13:08:07 +0000 (UTC)
+Received: by mail-oi1-x229.google.com with SMTP id c129so9058631oia.0
+ for <buildroot@buildroot.org>; Sun, 27 Nov 2022 05:08:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=fuTtuQDZkYQSTRkD9VcL6aJwMXipj85xN8sWamDOY6g=;
- b=f5gU9eELEoIsuen1RU5Vw/gl1U0KcQBwlHMQAMr4C69+ABlK9ewoG8b+bw4FCp62Os
- NhRsiSSxvtNqHDcD5oG8NxOzxDlLSDe8GB/f/E/YnXnbEncXYXEbS6PhXW+acHBo+Wuf
- mK3Jea72SekNMV9WiI4NxAHPxhvxi6NI3ztioyd/6Rmhu0N+W9+Byd1WaEhGnP5oyYS/
- ZchTojylWJ4odDycqoaqBPqvkONTQxT8dQV31++9YZ3ffGB9nL1rJGq4foIRKJ54y909
- BkUa7cqzsnM5f+rIIcDYkOvJ9D63z7nEEg2CLqmZV3QqBSck5eVIduMe3qKNdQNQRXLi
- EfoA==
-X-Gm-Message-State: ANoB5pnplyIPhMI0rPXwvaf3vdVRcaBpu+RPyyCh81aykt4iBVOwTK+U
- q3Z01JgjoSsk/nblP+9/Bt/nkvmJJQo=
-X-Google-Smtp-Source: AA0mqf6IJJYvF0I67/BBA/Na4NyfXxOkX8tpZdWbI/nC12hqexMISj2T/BeMvjSny29X9d/UJ8s8fg==
-X-Received: by 2002:aca:3d07:0:b0:35b:4cbf:b9e9 with SMTP id
- k7-20020aca3d07000000b0035b4cbfb9e9mr12385426oia.127.1669554483879; 
- Sun, 27 Nov 2022 05:08:03 -0800 (PST)
+ bh=rBRMadNFAJQZBi6uC9EFFKI9wHDhRLKABQ7RU8KdhxU=;
+ b=VXGih6I0R2eGs7jwxomqmqgX5oLQdzcZGjSsysujsNyd+hz0U275MmnJuzUwQDq+VW
+ Wu+ZrlUCEjn2XwElh+mishSVttFsDRBfzXH0vV30I1pz8VYIFrI3xVwZZ6SI/Qe4JC8O
+ uh/sC64YnLmwCM8I+st+R/Phl2HlEz7B0I/I87eylm9d2C+wp/PC/Aqjb5AhKjXktLf+
+ WFq+xnjjeuemhL1DTAVLiu8IGYrdTJ+1H/TW9k7k9MFw/PjeZYXUtogFqJE7xuPc/m2L
+ BPyzVZB8Z94ZrUhoplOkgB2giWGbGI2B2Caxl5qQ3GRB/DZt493x1rSb/pV7Xz7YUpvB
+ gAKg==
+X-Gm-Message-State: ANoB5pkWNE66IkdLYpy6DDYih2x0aooiWTNFZnC5m4CoNSz124JUiJ3B
+ UBa9SGVHgNhS5W6dCxMgGmeGYf6Y0So=
+X-Google-Smtp-Source: AA0mqf6ph562pb/cDstWFD8h/EtGeWSTtUWI57Nm52sMlmr7BfLlpYSIGbi9mZlUvYcd36cx+I2jWA==
+X-Received: by 2002:a54:401a:0:b0:35a:f075:6791 with SMTP id
+ x26-20020a54401a000000b0035af0756791mr13134379oie.20.1669554486877; 
+ Sun, 27 Nov 2022 05:08:06 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:9b54:d73e:4d8c:458c])
  by smtp.gmail.com with ESMTPSA id
- i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.08.01
+ i25-20020a9d6519000000b0066a9ba5094fsm3655102otl.1.2022.11.27.05.08.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Nov 2022 05:08:02 -0800 (PST)
+ Sun, 27 Nov 2022 05:08:05 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Nov 2022 10:07:17 -0300
-Message-Id: <20221127130739.1862398-4-ricardo.martincoski@gmail.com>
+Date: Sun, 27 Nov 2022 10:07:18 -0300
+Message-Id: <20221127130739.1862398-5-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fuTtuQDZkYQSTRkD9VcL6aJwMXipj85xN8sWamDOY6g=;
- b=TYOGwYo8w+dnDluw5acpEloDp/n/nTwJJCcVAqsAx12ePYn24SjYjvuSyiuNhCBFWf
- oiqjdVy5PgRhKwW2Y0Vtxpnx1XR06ZyTkvuhAATHQAFNK1HGr9xNbLTLFD9bKGUBgnCA
- qd/4OghLQBaDj7B0GbkdTfdIKUc8Q7S3MvhZZnvsc6dmmQk4QWk8tsKIXVs//ujFJhiX
- 4isb47NKJv2mGCK4lFYvqxKDB+mOkFttvLB4ankQ4OKhWPsL3oSRvdLoIlFOMQTVFFK0
- SMvI8AB62Uf2LK/jnHnXwdK/shhBmqWsIQVX+hI73gzExFwaJ8NR0+jmKFMQHS9siRu8
- hkUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=rBRMadNFAJQZBi6uC9EFFKI9wHDhRLKABQ7RU8KdhxU=;
+ b=YlAzORdnGg9ezS0yuKlZmkgAZRbPBpLt2QtPhd8DbfOeVStk3tOwp22Woe2yLpdsho
+ zWtTeWjBPeNhnp4huW6BSmZ8e5dvEKVRC8yZFcITxlveePHh/ERt9mVJAsrarp63f1Gw
+ oCxYfidpYNu3ua4zReIoC73VIh+mx6u1QSY9HR3za5uaGanCQquJOe7vG3Q8eNKGe/z0
+ JmM3tTQTxwbOTdsDzuEW//U9sjyq0i49QPHZi5oO3GpxJMPQBSzUX4sV9J1262qAquGU
+ IwmyV7TYyMd+DCFrMKeXujiYZNkwq4W1OTg0wo9HJpZ/aUwiMJIqug2x5UehWBq+w6cC
+ 0pVw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TYOGwYo8
-Subject: [Buildroot] [next 03/25] Config.in.legacy: fix typo on
- BR2_PACKAGE_MEDIAART_BACKEND_QT
+ header.a=rsa-sha256 header.s=20210112 header.b=YlAzORdn
+Subject: [Buildroot] [next 04/25] utils/checkpackagelib: warn about
+ redefined config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,50 +97,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently using this minimal .config:
- BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF=y
-triggers:
-     *** Legacy options removed in 2018.05 ***
- [ ] libmediaart none backend option renamed (NEW)
- [*] libmediaart gdk-pixbuf backend option renamed
- [*] libmediaart qt backend option renamed
+Warn the developer in the case the same config is declared more than
+once in the same Config.in file.
+But take into account the conditional code that lets the config be
+visible and warn only when it is declared more than once in the same
+conditions.
+For instance, do not warn for:
+ if BR2_PACKAGE_BUSYBOX
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ endif
+ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ endif
 
-Commit "8553b39887 libmediaart: rename options to have proper prefix",
-part of the 2018.05 release had a copy&paste error.
-
-As stated in the beginning of the file:
- The oldest symbols will be removed again after about two years.
-But while we carry these legacy symbols, let's fix the typo.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-NOTE: Maybe it is time to drop old legacy symbols again?
-If so, some patches in this series can be dropped.
----
- Config.in.legacy | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applying only this patch on current master, check-package returns:
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4eff5b55d6..9ce1004b0c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -2594,7 +2594,7 @@ config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
- 	  BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF has been renamed to
- 	  BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 
--config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
-+config BR2_PACKAGE_MEDIAART_BACKEND_QT
- 	bool "libmediaart qt backend option renamed"
- 	select BR2_LEGACY
- 	help
+Config.in.legacy:2597: config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF redeclared (previous line: 2589)
+---
+ utils/checkpackagelib/lib_config.py      | 38 ++++++++++++
+ utils/checkpackagelib/test_lib_config.py | 78 ++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
+
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index b05831f2c3..f26ca0d898 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -233,3 +233,41 @@ class Indent(_CheckFunction):
+                 return ["{}:{}: should not be indented"
+                         .format(self.filename, lineno),
+                         text]
++
++
++class RedefinedConfig(_CheckFunction):
++    CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
++    IF = re.compile(r"^\s*if\s+([^#]*)\b")
++    ENDIF = re.compile(r"^\s*endif\b")
++
++    def before(self):
++        self.configs = {}
++        self.conditional = []
++
++    def check_line(self, lineno, text):
++        if _empty_or_comment(text) or _part_of_help_text(text):
++            return
++
++        m = self.IF.search(text)
++        if m is not None:
++            condition = m.group(1)
++            self.conditional.append(condition)
++            return
++
++        m = self.ENDIF.search(text)
++        if m is not None:
++            self.conditional.pop()
++            return
++
++        m = self.CONFIG.search(text)
++        if m is None:
++            return
++        config = m.group(2)
++
++        key = (config, ' AND '.join(self.conditional))
++        if key in self.configs.keys():
++            previous_line = self.configs[key]
++            return ["{}:{}: config {} redeclared (previous line: {})"
++                    .format(self.filename, lineno, config, previous_line),
++                    text]
++        self.configs[key] = lineno
+diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
+index 91a549adf2..474d17105e 100644
+--- a/utils/checkpackagelib/test_lib_config.py
++++ b/utils/checkpackagelib/test_lib_config.py
+@@ -385,3 +385,81 @@ Indent = [
+ def test_Indent(testname, filename, string, expected):
+     warnings = util.check_file(m.Indent, filename, string)
+     assert warnings == expected
++
++
++RedefinedConfig = [
++    ('no redefinition',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'config BR2_PACKAGE_FOO_BAR\n'
++     'bool "foo"\n',
++     []),
++    ('no conditional',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'config BR2_PACKAGE_BAR\n'
++     'bool "bar"\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n',
++     [['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
++       'config BR2_PACKAGE_FOO\n']]),
++    ('three times',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n',
++     [['any:3: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
++       'config BR2_PACKAGE_FOO\n'],
++      ['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
++       'config BR2_PACKAGE_FOO\n']]),
++    ('same conditional',
++     'any',
++     'if BR2_PACKAGE_BAZ\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'config BR2_PACKAGE_BAR\n'
++     'bool "bar"\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'endif\n',
++     [['any:6: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
++       'config BR2_PACKAGE_FOO\n']]),
++    ('equivalent conditional',
++     'any',
++     'if BR2_PACKAGE_BAZ\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'endif\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'if BR2_PACKAGE_BAZ\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'endif\n',
++     [['any:8: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
++       'config BR2_PACKAGE_FOO\n']]),
++    ('not equivalent conditional',
++     'any',
++     'if BR2_PACKAGE_BAZ\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'endif\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'if !BR2_PACKAGE_BAZ\n'
++     'config BR2_PACKAGE_FOO\n'
++     'bool "foo"\n'
++     'endif\n',
++     []),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', RedefinedConfig)
++def test_RedefinedConfig(testname, filename, string, expected):
++    warnings = util.check_file(m.RedefinedConfig, filename, string)
++    assert warnings == expected
 -- 
 2.34.1
 
