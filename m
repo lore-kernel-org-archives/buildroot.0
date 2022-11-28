@@ -1,93 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F57C43217
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 10:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27D28C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 10:41:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 032AD4094D;
-	Mon, 28 Nov 2022 10:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 032AD4094D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id stkmZ8m_UpRH; Mon, 28 Nov 2022 10:33:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDCFB4095F;
-	Mon, 28 Nov 2022 10:33:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCFB4095F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E22E1BF3BE
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:33:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA5834018E
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA5834018E
+	by smtp2.osuosl.org (Postfix) with ESMTP id B65B540966;
+	Mon, 28 Nov 2022 10:41:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B65B540966
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BBvmOzfer5Cp for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 10:33:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91DA9400D9
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 91DA9400D9
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 10:33:03 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id b2so8314306eja.7
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 02:33:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=DYOtsHMA6yeRh8MEAKs7BkyeWrPtnvsIGigs1n3mKZQ=;
- b=kY1Uy24hyfPX/7e7mneAA4Qzy59JpMyKJizmZCs5OCBjNJsbq/e4WxvaRRjBqWle22
- FO49Va2f8SBfJnevSjukDi514WZtWkJs28icHglXfsKmFw0KrHn2kxmikuLZH6Jmd/Ud
- QwjqHOv59CKNgqc3lieoS2i915UQH173euh4+5zkdG8+3acDfaLeX93zn0M7qoD4iJmH
- qwLt5dUmuzkceDpfM0zhp/f4za1LoBAuIgDE1R09a3lni4AHB1QI0uVFEr5ZZN9p732Z
- 0BYvl0acSZ4GFSUzlMQelIe8Ftdpum4cnjWe5HMqHEFtwCLoBHF1tNJvgbuTkeT596wb
- Al4Q==
-X-Gm-Message-State: ANoB5pmp8BTDsMLxysOrgcl2OV/0nEt4nfrXjCsS7NEkfa3RGpXE7kYD
- Qb7c5Y37XPp+5gYjVezTDhU9+A==
-X-Google-Smtp-Source: AA0mqf6h5q9nYp/6XxwuFi7lkB44tuMgzbI5Ln4+VP9AiS4COosPtjaM2dCBlKaLs4k2nN+0kzB4mA==
-X-Received: by 2002:a17:907:d006:b0:7bc:ad2d:879d with SMTP id
- va6-20020a170907d00600b007bcad2d879dmr12391199ejc.603.1669631581589; 
- Mon, 28 Nov 2022 02:33:01 -0800 (PST)
-Received: from [10.1.0.161] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- kx20-20020a170907775400b00788c622fa2csm4753118ejc.135.2022.11.28.02.33.00
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 28 Nov 2022 02:33:01 -0800 (PST)
-Message-ID: <ffa0513e-e898-2b20-13c1-c221fdd9c333@mind.be>
-Date: Mon, 28 Nov 2022 11:32:58 +0100
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tYZ6zATW3EBf; Mon, 28 Nov 2022 10:41:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B98D640912;
+	Mon, 28 Nov 2022 10:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B98D640912
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E34271BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:41:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB50B81768
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB50B81768
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9k1M2M-eE7MR for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 10:41:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63E8681765
+Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de
+ [80.67.18.16])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63E8681765
+ for <buildroot@busybox.net>; Mon, 28 Nov 2022 10:41:43 +0000 (UTC)
+Received: from [91.21.124.120] (helo=exchange.go-sys.de)
+ by smtprelay04.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
+ (envelope-from <mf@go-sys.de>)
+ id 1ozbZX-0004yx-4c; Mon, 28 Nov 2022 11:41:11 +0100
+Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
+ (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.16; Mon, 28
+ Nov 2022 11:41:03 +0100
+Received: from go-sys.de (192.168.1.127) by exchange.go-sys.de (192.168.1.17)
+ with Microsoft SMTP Server id 15.1.2507.16 via Frontend Transport;
+ Mon, 28 Nov 2022 11:41:03 +0100
+From: Michael Fischer <mf@go-sys.de>
+To: <buildroot@busybox.net>
+Date: Mon, 28 Nov 2022 11:40:57 +0100
+Message-ID: <20221128104057.19164-1-mf@go-sys.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-GB
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org,
- Frank Vanbever <frank.vanbever@mind.be>
-References: <87ilj97chz.fsf@dell.be.48ers.dk>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <87ilj97chz.fsf@dell.be.48ers.dk>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=DYOtsHMA6yeRh8MEAKs7BkyeWrPtnvsIGigs1n3mKZQ=;
- b=fZ3g4UWYc3wUNSez7u6bsZ/TiNO2e4a1+rvEHZlTTg/bHfq/iLOC7Q7rvGeYOMrvbN
- jI48XYfsxkj+fWrx01/0zCvPvlpSwjLX0FuiwJLrE7Nt3QExwU3Z/Jmpz1X9tYZnQg4s
- 71E8m0jEUcqWSN83rq1Sv04RIYBxN1RDIxlFI2ZRo6uy09xWMYG9hP5cnJEjsCuhm+b3
- L2vpTQ8IygH1OOVxJPULsNwXgaKy1BztrD8w4k2g/uSlIerTLaQ9iRExDkIVPUBDciTQ
- P0CSPKdHhFpY9bSLGH7lVrqnn3vW43JDs6oLgrvuQxTcddW1PqTsZppx/8gXFtiEvIzJ
- cVGg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fZ3g4UWY
-Subject: Re: [Buildroot] rabbitmq-server support in Buildroot
+X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
+X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
+X-OrganizationHeadersPreserved: exchange.go-sys.local
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,49 +70,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Michael Fischer <mf@go-sys.de>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+patch 0001: already applied upstream
 
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ ...t-have-a-mode-configured-use-the-pre.patch | 76 -------------------
+ package/sdl2/sdl2.hash                        |  4 +-
+ package/sdl2/sdl2.mk                          |  2 +-
+ 3 files changed, 3 insertions(+), 79 deletions(-)
+ delete mode 100644 package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
 
-On 20/11/2022 18:38, Peter Korsgaard wrote:
-> Hi Frank,
+diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+deleted file mode 100644
+index c8be280c56..0000000000
+--- a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
+-From: Sam Lantinga <slouken@libsdl.org>
+-Date: Fri, 18 Nov 2022 12:17:27 -0800
+-Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
+- or largest mode as the default mode
+-
+-Fixes https://github.com/libsdl-org/SDL/issues/6421
+-
+-[mf@go-sys.de: backport from upstream]
+-Signed-off-by: Michael Fischer <mf@go-sys.de>
+-[yann.morin.1998@free.fr: do an actual backport]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
+- 1 file changed, 29 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-index eae721455..eeeefef2b 100644
+---- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
+- /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
+-    list of SDL Displays in _this->displays[]  */
+- static void
+--KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
+--
+-+KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
+-+{
+-     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
+-     SDL_DisplayData *dispdata = NULL;
+-     SDL_VideoDisplay display = {0};
+-@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
+-         drmModeModeInfo *mode = &connector->modes[i];
+- 
+-         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
+--          mode_index = i;
+--          break;
+-+            mode_index = i;
+-+            break;
+-         }
+-     }
+- 
+-     if (mode_index == -1) {
+--      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
+--      goto cleanup;
+-+        int current_area, largest_area = 0;
+-+
+-+        /* Find the preferred mode or the highest resolution mode */
+-+        for (i = 0; i < connector->count_modes; i++) {
+-+            drmModeModeInfo *mode = &connector->modes[i];
+-+
+-+            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
+-+                mode_index = i;
+-+                break;
+-+            }
+-+
+-+            current_area = mode->hdisplay * mode->vdisplay;
+-+            if (current_area > largest_area) {
+-+                mode_index = i;
+-+                largest_area = current_area;
+-+            }
+-+        }
+-+        if (mode_index != -1) {
+-+            crtc->mode = connector->modes[mode_index];
+-+        }
+-+    }
+-+
+-+    if (mode_index == -1) {
+-+        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
+-+        goto cleanup;
+-     }
+- 
+-     /*********************************************/
+--- 
+-2.25.1
+-
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 782c552c52..78122359a2 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.1.tar.gz.sig
+-sha256  bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b  SDL2-2.24.1.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.0.tar.gz.sig
++sha256  8000d7169febce93c84b6bdf376631f8179132fd69f7015d4dadb8b9c2bdb295  SDL2-2.26.0.tar.gz
+ # Locally calculated
+ sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 28e2c5cb36..3b897f2380 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.24.1
++SDL2_VERSION = 2.26.0
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
+-- 
+2.20.1
 
-  Sending to the right Frank now...
-
-  Regards,
-  Arnout
-
-> 
-> You are listed in the Buildroot DEVELOPERS file for rabbitmq-server, but
-> it has not seen any updates since:
-> 
-> commit 27df8b7b0d7c6c331d2e4fe7b6ea2bd1596acd75
-> Author: Frank Vanbever <frank.vanbever@essensium.com>
-> Date:   Thu Feb 13 16:14:14 2020 +0100
-> 
->      package/rabbitmq-server: bump version to 3.8.2
-> 
-> Are you still interested in maintaining it? If not, are anybody else?
-> Otherwise I suggest we remove it before the 2022.11 release.
-> 
-> The 3.8.x series looks to still be maintained upstream, and 3.8.2 is
-> vulnerable to a number of security issues, E.G.:
-> 
-> https://nvd.nist.gov/vuln/detail/CVE-2020-5419 (Windows only)
-> https://tanzu.vmware.com/security/cve-2021-22116
-> https://tanzu.vmware.com/security/cve-2021-22117 (Windows only)
-> https://github.com/rabbitmq/rabbitmq-server/security/advisories
-> 
-> rabbitmq-server >= 3.8.16 unfortunately requires erlang 23, so udating
-> is not trivial:
-> 
-> https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.8.16
-> 
-> What do you say?
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
