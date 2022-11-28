@@ -1,64 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27D28C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 10:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB040C43217
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 11:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B65B540966;
-	Mon, 28 Nov 2022 10:41:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B65B540966
+	by smtp3.osuosl.org (Postfix) with ESMTP id 732E160808;
+	Mon, 28 Nov 2022 11:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 732E160808
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FnOLWn4RuDhd; Mon, 28 Nov 2022 11:54:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A83D0605E9;
+	Mon, 28 Nov 2022 11:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A83D0605E9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 85C081BF589
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 11:54:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E7D740179
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 11:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E7D740179
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tYZ6zATW3EBf; Mon, 28 Nov 2022 10:41:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B98D640912;
-	Mon, 28 Nov 2022 10:41:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B98D640912
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E34271BF3BE
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:41:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB50B81768
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 10:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB50B81768
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9k1M2M-eE7MR for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 10:41:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63E8681765
-Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de
- [80.67.18.16])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 63E8681765
- for <buildroot@busybox.net>; Mon, 28 Nov 2022 10:41:43 +0000 (UTC)
-Received: from [91.21.124.120] (helo=exchange.go-sys.de)
- by smtprelay04.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>)
- id 1ozbZX-0004yx-4c; Mon, 28 Nov 2022 11:41:11 +0100
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.16; Mon, 28
- Nov 2022 11:41:03 +0100
-Received: from go-sys.de (192.168.1.127) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2507.16 via Frontend Transport;
- Mon, 28 Nov 2022 11:41:03 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 28 Nov 2022 11:40:57 +0100
-Message-ID: <20221128104057.19164-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XI42RGz6c_j2 for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 11:54:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1E57400FE
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com
+ [IPv6:2607:f8b0:4864:20::b2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A1E57400FE
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 11:54:31 +0000 (UTC)
+Received: by mail-yb1-xb2f.google.com with SMTP id z192so12985950yba.0
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 03:54:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=zK6or7+ll90yJygvPp0fVBYjPQsowcmxounnyzDjttw=;
+ b=fAvzbjYSkK3U17u0NHGE9jaZvfPKPe7dX42II2HCqGBhML8yB3IEgs6PeINjq/6xz8
+ jL0WP/uLTaMHLkCH/MCfG55ZHtkK1olmwFakdFWUmCmOBZfzYe2fvCVuXQPfrTtuQdVh
+ H/NxuTZ5UcofuwbB4Hy6V4XGqKaAxXijUt75T2sBCvszb2++HhTCd28ynPP/9HNzezWr
+ 6yYOAOarLRfsegJxaYsfoV8jL8mcsEzC5zndnB/AvXrlktVqje6LlW43YVTyN08+Za7/
+ PUp3iKjVO3o0ZyG0VzlMSvHHTDLW62Vtu6t5BnS/JfgKnA914DFt5AjthORs0AMEwLy7
+ TcyA==
+X-Gm-Message-State: ANoB5pnBXBk3z31EaUnvJ0cgyv8PJNtnKCus1XOEqHloTHDn/GvIPo+7
+ m4z3ux3tnVgOWTXKdtrAdv9DFXbcV6B409s6YQM=
+X-Google-Smtp-Source: AA0mqf5Y0O0sYXP5binNhqWS3FVGQPcGoPBAA799GXKqUvrY5YXd7OWPAPORG+IX8EVR9UWvwoFuatAX8fIMyaoHC0I=
+X-Received: by 2002:a25:2303:0:b0:6f1:b62b:5081 with SMTP id
+ j3-20020a252303000000b006f1b62b5081mr19247123ybj.497.1669636470583; Mon, 28
+ Nov 2022 03:54:30 -0800 (PST)
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.26.0
+References: <20221125191155.111c4ddc@windsurf>
+In-Reply-To: <20221125191155.111c4ddc@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 28 Nov 2022 03:54:19 -0800
+Message-ID: <CAMo8BfKE9KqDYyFhsKK9M8XjjuR=TtONT8JdKniFKwAgfr4HVg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=zK6or7+ll90yJygvPp0fVBYjPQsowcmxounnyzDjttw=;
+ b=d0OYPmeeSadeLSTuZs2WcHaqG1wJpFJow11eo16DkG+Y9ooFr3586JfZ4upW7ffJwx
+ 3PpRKCEf/lvA3sywYXHDOatM57QBYvXvQwHaRkZPue78+M76e9G/S43qJi80ZL0dZgRY
+ KGxsNIO5O4fcPSlEvdzU79iFYzYePX3lL7rGnKjOVPGXxAAPr8VxV4NkzsNqyAQuPqGG
+ ObDP9m7cY0aIugSPuvvJFTToPkUTzKaLTXmBd0ytYfv0Ll5NX5NrfdzGxaHpks5rVHix
+ LInd9tM70s7VPNgyLCCE7oVzFyd0sretT1PeU0MU0YRo92KCMlPXE6H+BtWpOvUZj1em
+ 5Dxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=d0OYPmee
+Subject: Re: [Buildroot] Xtensa qemu nommu defconfig not working
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,131 +89,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, Romain Naour <romain.naour@smile.fr>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-patch 0001: already applied upstream
+Hi Thomas,
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- ...t-have-a-mode-configured-use-the-pre.patch | 76 -------------------
- package/sdl2/sdl2.hash                        |  4 +-
- package/sdl2/sdl2.mk                          |  2 +-
- 3 files changed, 3 insertions(+), 79 deletions(-)
- delete mode 100644 package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+On Fri, Nov 25, 2022 at 10:11 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> The configs/qemu_xtensa_lx60_nommu_defconfig builds correctly, but
+> fails to boot under Qemu:
+>
+> [    1.158675] Freeing unused kernel image (initmem) memory: 460K
+> [    1.159475] This architecture does not have kernel memory protection.
+> [    1.160806] Run /init as init process
+> [    1.186746] binfmt_flat: reloc outside program 0x24c80100 (0 - 0x6e430/0x56a20), killing init!
 
-diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
-deleted file mode 100644
-index c8be280c56..0000000000
---- a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
--From: Sam Lantinga <slouken@libsdl.org>
--Date: Fri, 18 Nov 2022 12:17:27 -0800
--Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
-- or largest mode as the default mode
--
--Fixes https://github.com/libsdl-org/SDL/issues/6421
--
--[mf@go-sys.de: backport from upstream]
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--[yann.morin.1998@free.fr: do an actual backport]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
-- 1 file changed, 29 insertions(+), 6 deletions(-)
--
--diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--index eae721455..eeeefef2b 100644
----- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
--+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
-- /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
--    list of SDL Displays in _this->displays[]  */
-- static void
---KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
---
--+KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
--+{
--     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
--     SDL_DisplayData *dispdata = NULL;
--     SDL_VideoDisplay display = {0};
--@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
--         drmModeModeInfo *mode = &connector->modes[i];
-- 
--         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
---          mode_index = i;
---          break;
--+            mode_index = i;
--+            break;
--         }
--     }
-- 
--     if (mode_index == -1) {
---      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
---      goto cleanup;
--+        int current_area, largest_area = 0;
--+
--+        /* Find the preferred mode or the highest resolution mode */
--+        for (i = 0; i < connector->count_modes; i++) {
--+            drmModeModeInfo *mode = &connector->modes[i];
--+
--+            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
--+                mode_index = i;
--+                break;
--+            }
--+
--+            current_area = mode->hdisplay * mode->vdisplay;
--+            if (current_area > largest_area) {
--+                mode_index = i;
--+                largest_area = current_area;
--+            }
--+        }
--+        if (mode_index != -1) {
--+            crtc->mode = connector->modes[mode_index];
--+        }
--+    }
--+
--+    if (mode_index == -1) {
--+        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
--+        goto cleanup;
--     }
-- 
--     /*********************************************/
---- 
--2.25.1
--
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 782c552c52..78122359a2 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.1.tar.gz.sig
--sha256  bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b  SDL2-2.24.1.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.0.tar.gz.sig
-+sha256  8000d7169febce93c84b6bdf376631f8179132fd69f7015d4dadb8b9c2bdb295  SDL2-2.26.0.tar.gz
- # Locally calculated
- sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 28e2c5cb36..3b897f2380 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.24.1
-+SDL2_VERSION = 2.26.0
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+> Max, do you think you could have a look at what is happening?
+
+AFAICS the following commit in the elf2flt
+https://github.com/uclinux-dev/elf2flt/commit/5e08f19683163584f23b953e570749964758c439
+
+disabled address endianness fixup for addresses in the text segment for
+xtensa which results in the observed failure. I haven't checked, but from
+the code it looks like not only the xtensa may be affected.
+I can confirm that reverting that change fixes xtensa nommu boot.
+
 -- 
-2.20.1
-
+Thanks.
+-- Max
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
