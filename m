@@ -1,85 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4853C43217
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 13:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D40C43217
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 13:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5260E60B2C;
-	Mon, 28 Nov 2022 13:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5260E60B2C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9052D408EB;
+	Mon, 28 Nov 2022 13:57:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9052D408EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PlPC1HJKYQpC; Mon, 28 Nov 2022 13:37:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q4w2CHbC6g74; Mon, 28 Nov 2022 13:57:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 989E160B05;
-	Mon, 28 Nov 2022 13:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 989E160B05
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 588E81BF38D
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 13:37:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64838408E0;
+	Mon, 28 Nov 2022 13:57:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64838408E0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 347D71BF38D
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 13:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33FD340391
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 13:37:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33FD340391
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19C54408E0
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 13:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19C54408E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SAgKD8Rv47MG for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 13:37:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95EBB40151
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com
- [IPv6:2607:f8b0:4864:20::b2d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 95EBB40151
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 13:37:37 +0000 (UTC)
-Received: by mail-yb1-xb2d.google.com with SMTP id l67so13322890ybl.1
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 05:37:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=fb0xDvamvfwTcSZXQ1lGqBwLt4ibEd85vd5FakW/PdU=;
- b=EfQthugn7efpZdGi1w48PfI+xxEvHqhCwLnDRib9SFbVQ+b0BNhjNQyL2CUHgCcWcn
- zqUEgYuZ1uG08ZO11/ZNWej+k3xjp5BGQ8J6pXu9GXNDkrZuOFoi4nt4YEX9cO/8OiyD
- ozBducCgFW9HAX/x0A72EeeuG31/tmvStS3SQ9Gd/1zs6QCp43GSrdg7QhBUryiB+nqZ
- NLkEeSHPZ0A8QS4xbErkGv8bImIcn7tPZQiKOV1gop9VXgjxHJBR5iK2W0CbCb6//bVo
- qA0um1NzoND9gONjWatD5RLgMS5ih9kXWox0QWjgICRfeaS76S57U9XSwuheBE5rucPY
- Ai0w==
-X-Gm-Message-State: ANoB5pnvjRVVDsv/seR4xyupbWYarQI9XqLjJRZmvaoYXqvrZf1607Cb
- I7Bgw4Wyy9ca2kko5QhKanzfKXkZF3+zWW2zaE4=
-X-Google-Smtp-Source: AA0mqf4BilQPIyuWGM27qWtIDlNtjeeURxorgi0fiGgW7CBr+47F9BRcpXrBUY5DkqQQ2RvKouN5qNOKsd9YZJbPt3k=
-X-Received: by 2002:a25:d449:0:b0:6f4:3ced:f472 with SMTP id
- m70-20020a25d449000000b006f43cedf472mr11843277ybf.539.1669642656577; Mon, 28
- Nov 2022 05:37:36 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PCWj8MkRcL6l for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 13:57:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07796408DE
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07796408DE
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 13:57:20 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.87.80])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id zedJoVPqlb7IjzedJo4SKb; Mon, 28 Nov 2022 14:57:18 +0100
+Message-ID: <f1c8711c-7dbb-e41a-e3cb-ac0208f34d00@benettiengineering.com>
+Date: Mon, 28 Nov 2022 14:57:17 +0100
 MIME-Version: 1.0
-References: <20221125191155.111c4ddc@windsurf>
- <CAMo8BfKE9KqDYyFhsKK9M8XjjuR=TtONT8JdKniFKwAgfr4HVg@mail.gmail.com>
- <20221128141221.0b2f5a56@windsurf>
-In-Reply-To: <20221128141221.0b2f5a56@windsurf>
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 28 Nov 2022 05:37:25 -0800
-Message-ID: <CAMo8BfL61tm-ojZvSqPB7C4bzqOaugTCOo8fQ+ap-wn1k36GQQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=fb0xDvamvfwTcSZXQ1lGqBwLt4ibEd85vd5FakW/PdU=;
- b=n/NoUnYhvNpfBv5CLMlkOY79kboGIPu2zYuLe8wp3I0iZkNb58HX9KTzraLjOzXQCw
- lU5DthaFualyK6226LZkHc7Tumz7hfwrVegfFdZBlgnAxmiLbi4nuEDfzV+lr5JzILh7
- r4HgEmAp9zjnOX4LbccX3hWZNk/ROGiz7Gf94s9ENoo6wwF35++6UfdRkV4fRvDP7iUC
- d1lEhBMickF42XOB5bNMIa9uSmD8HrNY8G5ykKToj2GTV1Q/mfTmUhQcIKeFEqEti3Fn
- MzpihysZ8yQEPUatZtoGp/76buiMr+UUTgBsUUsgQctuCRgke/kCYcRUd/Xcdhho39TB
- 4LvQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n/NoUnYh
-Subject: Re: [Buildroot] Xtensa qemu nommu defconfig not working
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+References: <20221127132855.510943-1-giulio.benetti@benettiengineering.com>
+ <20221128105535.5a2c0798@booty>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221128105535.5a2c0798@booty>
+X-CMAE-Envelope: MS4xfMd++e2UZtw/wZ69NuJ617d01NPkoDaf+o76vIWq+CEvJwvMXdv63VIIltUH/h5fVAooPSkMWxQDlWpYNG76IWofxRLDhuboV2WcTF5r/JY2HhSqOagS
+ lzo/Rub2rsT2wy/xC4YaDmTODmGr4DtPjb3YYTWYvwEoqSL9wLzy0aLwRyYBz/615rsHnBKwaSunfrTI9PjWyTOJa/JS70MRZ1dFBVxAPnjfQLnyyEDM4kBs
+ uI4K07Ir56mBBykvAtgTpgJHeyRthjmx/niO2ha1vEk=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1669643838; bh=5aK3tyQ148Y3JLMFnlhypHVj1mG0/5E5oAGK2f5oMGM=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=Nrf/qbUiywB6339r6VkA5HxYvXLmU/BZTqmXLhiDYXXqGjwjDNJvEOwRcW8KbUcB0
+ kLUI2uXMYMZeB7ZohF5aWsHiXccanUKr+9blcs//Pxr7ASO4HWN7hYRFuwt4F4pg4L
+ qAInCH57eRrsSH2lvWCyBzJpSRsWtm7Wc94hPit174fquvqCOg7ouKHgGkbmVR9X55
+ yAHY0jFYcv8L1xzc5AupUybxZMFpyJNTLLC8bXf1Gv3wJOHHO8JaHJlHkjd96ZH97H
+ HD2jbegbeQqAvH+b2FZdyGo+6w6D1vu4ThTiqahEBKTIOVkiwAZTzRl8f7Y3iKMkvy
+ +lXUZ1euABSNg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Nrf/qbUi
+Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: fix build failure on
+ PowerPC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,28 +78,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>, Romain Naour <romain.naour@smile.fr>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Nov 28, 2022 at 5:12 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Should we report a bug to upstream elf2flt (which are generally never
-> looked at), or is someone volunteering to provide a fix for this?
+Hi Luca,
 
-I'll check what other architectures are affected and will make a fix.
+On 28/11/22 10:55, Luca Ceresoli wrote:
+> Hi Giulio,
+> 
+> On Sun, 27 Nov 2022 14:28:55 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> Add local patch(pending upstream[0]) to fix build failure with PowerPC due
+>> to a package re-defition of get_ra() that is only defined in Linux PowerPC
+>> implementation.
+>>
+>> [0]: https://github.com/lwfinger/rtl8188eu/pull/432
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/8bcb4d0adabc141ff8144f9e22bd549e3cd8858a/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   ...uild-failure-on-PowerPc-architecture.patch | 106 ++++++++++++++++++
+>>   1 file changed, 106 insertions(+)
+>>   create mode 100644 package/rtl8188eu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+>>
+>> diff --git a/package/rtl8188eu/0001-Fix-build-failure-on-PowerPc-architecture.patch b/package/rtl8188eu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+>> new file mode 100644
+>> index 0000000000..b16a312c7e
+>> --- /dev/null
+>> +++ b/package/rtl8188eu/0001-Fix-build-failure-on-PowerPc-architecture.patch
+>> @@ -0,0 +1,106 @@
+>> +From 2a91a721d634a2eca131628b5c9c028af20037af Mon Sep 17 00:00:00 2001
+>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> +Date: Sun, 27 Nov 2022 14:20:43 +0100
+>> +Subject: [PATCH] Fix build failure on PowerPc architecture
+>> +
+>> +In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
+>> +that has a completely different purpose. So let's rename local get_ra()
+>> +to wifi_get_ra() to make it different from Linux's get_ra().
+>> +
+>> +[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm
+>> +
+>> +Upstream: https://github.com/lwfinger/rtl8188eu/pull/432
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Thank you!
+> 
+> I have posted some change request to the commit message on your patch
+> for upstream, but the patch content itself looks good, so I guess for
+> the Buildroot needs this is enough:
 
-Also starting with linux-6.1 nommu xtensa will support static PIE ELF,
-which is in every way better than bFLT. Will it be acceptable to add
-static PIE ELF as an executable file format for nommu configurations
-in the buildroot?
+Unfortunately I've forgotten some code replacement on get_ra() that has
+been pointed upstream. The maintainer answered quickly so at this point
+I'd wait some day, if the patch is then merged I'll send a patch to
+bump the version, otherwise a send a V2 of this patch with the local
+patch.
 
+Thank you!
+Kind regards
 -- 
-Thanks.
--- Max
+Giulio Benetti
+Benetti Engineering sas
+
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
