@@ -1,67 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E03C9C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 12:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B14ADC43217
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 12:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A62660A92;
-	Mon, 28 Nov 2022 12:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A62660A92
+	by smtp2.osuosl.org (Postfix) with ESMTP id 459324018A;
+	Mon, 28 Nov 2022 12:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 459324018A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AIUftJIdpxjv; Mon, 28 Nov 2022 12:50:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MI2j8T8rvYNr; Mon, 28 Nov 2022 12:50:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD55C60B00;
-	Mon, 28 Nov 2022 12:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD55C60B00
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 285E11BF39C
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 12:50:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74BAA40164;
+	Mon, 28 Nov 2022 12:50:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74BAA40164
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 071911BF334
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 12:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02EC94094B
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 12:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02EC94094B
+ by smtp2.osuosl.org (Postfix) with ESMTP id E26F6401B7
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 12:50:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E26F6401B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Exb1Zwvrb4Pf for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 12:50:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xm8ZcGqx11q3 for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 12:50:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D1814092A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD1CE4017A
 Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D1814092A
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 12:50:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD1CE4017A
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 12:50:14 +0000 (UTC)
 Received: from ubuntu-jammy.com (unknown [223.102.84.39])
- by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wDHXHroqoRjRIDfAA--.18116S2;
- Mon, 28 Nov 2022 20:34:49 +0800 (CST)
+ by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wDHXHroqoRjRIDfAA--.18116S6;
+ Mon, 28 Nov 2022 20:35:04 +0800 (CST)
 From: TIAN Yuanhao <tianyuanhao3@163.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Nov 2022 12:34:13 +0000
-Message-Id: <20221128123418.2197-1-tianyuanhao3@163.com>
+Date: Mon, 28 Nov 2022 12:34:17 +0000
+Message-Id: <20221128123418.2197-5-tianyuanhao3@163.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221128123418.2197-1-tianyuanhao3@163.com>
+References: <20221128123418.2197-1-tianyuanhao3@163.com>
 MIME-Version: 1.0
-X-CM-TRANSID: _____wDHXHroqoRjRIDfAA--.18116S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWryUtFWxKw15Gr47JF4xZwb_yoW5AF1xpr
- 43Jr1rG3yIg3WSyrZrG3W7Zr4avr4DuF1UGwnrt34Utry5G3W8K340qa17Gr1xJry7Gw4f
- Xw18Ar4UWrWDKaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRctxkUUUUU=
+X-CM-TRANSID: _____wDHXHroqoRjRIDfAA--.18116S6
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCrW3Ww15Gr1ktFy7Zw1DZFb_yoW5Cw17pF
+ 43JF45Gw4xK3Z5GrZrGF17Zw1akr4q9r13Gwn3Jr1Uta48XFWUA34rJay8Ar17Jry7Aa1U
+ Zw18Wr4UWry7taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRE1v3UUUUU=
 X-Originating-IP: [223.102.84.39]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBzgrHjWI0WpO6qgAAsB
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiGhvHjVaEDkzF6AAAs2
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=163.com; 
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=px2Tn
- avVWMPYHpuobYUmHMi1vFIL98rUNUZXHA+MOac=; b=ic7jAcanFyDcv2X+QU1Kt
- QwhhEb3bgsBmDtBk36GtvtAHkN0t44hzkdc8JHn7S9FSiCjCvI5EfToGHP2S7gI5
- vv9VpbnLZPmVoclSG0N1uGfltbirLVRurCgUwJutMlsaJq6AkOF9eZgddLkwsWBl
- yY0NMsH8nB8WQCB7HAW+m0=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=quc1A
+ rvWKkonQMLU4n1VV+/YRkj8Ha+PaTfNL7NgHZ0=; b=SeS3aKGu/1cA4fP0sualh
+ srwvvdRiFSvKH0BplFtLj5dqQWvTNe1xR5aL8jDVadFtvqNi/0VHwwuXfO2w2mwi
+ 3QIp3lAwVK3OM9nEUKVnV5ZFoZ3njy/bS41VeVUrDiocYPvWkF9RyKmUXcVCkqVW
+ mT0Wjsfn+caSsLUMhkRCT8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
- header.a=rsa-sha256 header.s=s110527 header.b=ic7jAcan
-Subject: [Buildroot] [PATCH/next 1/6] package/cli11: new package
+ header.a=rsa-sha256 header.s=s110527 header.b=SeS3aKGu
+Subject: [Buildroot] [PATCH/next 5/6] package/reproc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,87 +84,90 @@ Required by micromamba.
 
 Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/cli11/Config.in  | 13 +++++++++++++
- package/cli11/cli11.hash |  3 +++
- package/cli11/cli11.mk   | 15 +++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/cli11/Config.in
- create mode 100644 package/cli11/cli11.hash
- create mode 100644 package/cli11/cli11.mk
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/reproc/Config.in   | 14 ++++++++++++++
+ package/reproc/reproc.hash |  3 +++
+ package/reproc/reproc.mk   | 17 +++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/reproc/Config.in
+ create mode 100644 package/reproc/reproc.hash
+ create mode 100644 package/reproc/reproc.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2aecdb1c8f..180793a91b 100644
+index 572086d129..462a9511aa 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2738,6 +2738,7 @@ N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
- 
- N:	TIAN Yuanhao <tianyuanhao3@163.com>
-+F:	package/cli11/
+@@ -2741,6 +2741,7 @@ N:	TIAN Yuanhao <tianyuanhao3@163.com>
+ F:	package/cli11/
+ F:	package/libsolv/
  F:	package/open-isns/
++F:	package/reproc/
+ F:	package/termcolor/
+ F:	package/tl-expected/
  
- N:	Tan En De <ende.tan@starfivetech.com>
 diff --git a/package/Config.in b/package/Config.in
-index aef80f9ab0..a378146ac7 100644
+index b682fbe0ab..29153048cf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2118,6 +2118,7 @@ endmenu
- 
- menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
-+	source "package/cli11/Config.in"
- 	source "package/docopt-cpp/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/fmt/Config.in"
-diff --git a/package/cli11/Config.in b/package/cli11/Config.in
+@@ -2094,6 +2094,7 @@ endif
+ 	source "package/protozero/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
++	source "package/reproc/Config.in"
+ 	source "package/riemann-c-client/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
+diff --git a/package/reproc/Config.in b/package/reproc/Config.in
 new file mode 100644
-index 0000000000..87db9ac8f7
+index 0000000000..a4e9c893b1
 --- /dev/null
-+++ b/package/cli11/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_CLI11
-+	bool "cli11"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++++ b/package/reproc/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_REPROC
++	bool "reproc"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # uses wchar_t
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
 +	help
-+	  CLI11 is a command line parser for C++11 and beyond that
-+	  provides a rich feature set with a simple and intuitive
-+	  interface.
++	  reproc is a cross-platform C/C++ library that simplifies
++	  starting, stopping and communicating with external programs.
 +
-+	  https://github.com/CLIUtils/CLI11
++	  https://github.com/DaanDeMeyer/reproc
 +
-+comment "cli11 needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/cli11/cli11.hash b/package/cli11/cli11.hash
++comment "reproc needs a toolchain w/ threads, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/reproc/reproc.hash b/package/reproc/reproc.hash
 new file mode 100644
-index 0000000000..12e5b4fb55
+index 0000000000..6da6d0a0bb
 --- /dev/null
-+++ b/package/cli11/cli11.hash
++++ b/package/reproc/reproc.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  378da73d2d1d9a7b82ad6ed2b5bda3e7bc7093c4034a1d680a2e009eb067e7b2  cli11-2.3.1.tar.gz
-+sha256  89022151dbf5827a22430557ef2f8a75808dd25fa1e9a12709ef5421d363e66d  LICENSE
-diff --git a/package/cli11/cli11.mk b/package/cli11/cli11.mk
++sha256  55c780f7faa5c8cabd83ebbb84b68e5e0e09732de70a129f6b3c801e905415dd  reproc-14.2.4.tar.gz
++sha256  8f91afbe266bebac2cf1b220e0e67ace4cb9a97d2b21940abef20eb6691cfa91  LICENSE
+diff --git a/package/reproc/reproc.mk b/package/reproc/reproc.mk
 new file mode 100644
-index 0000000000..b02bd4478f
+index 0000000000..3167911c4d
 --- /dev/null
-+++ b/package/cli11/cli11.mk
-@@ -0,0 +1,15 @@
++++ b/package/reproc/reproc.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# cli11
++# reproc
 +#
 +################################################################################
 +
-+CLI11_VERSION = 2.3.1
-+CLI11_SITE = $(call github,CLIUtils,CLI11,v$(CLI11_VERSION))
-+CLI11_LICENSE = BSD-3-Clause
-+CLI11_LICENSE_FILES = LICENSE
-+CLI11_INSTALL_STAGING = YES
-+CLI11_INSTALL_TARGET = NO
-+CLI11_CONF_OPTS = -DCLI11_BUILD_DOCS=OFF -DCLI11_BUILD_EXAMPLES=OFF
++REPROC_VERSION = 14.2.4
++REPROC_SITE = $(call github,DaanDeMeyer,reproc,v$(REPROC_VERSION))
++REPROC_LICENSE = MIT
++REPROC_LICENSE_FILES = LICENSE
++REPROC_INSTALL_STAGING = YES
++
++ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy) # C++11
++REPROC_CONF_OPTS += -DREPROC++=ON
++endif
 +
 +$(eval $(cmake-package))
 -- 
