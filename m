@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 895D9C47089
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 15:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3062CC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 15:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0E98402F5;
-	Mon, 28 Nov 2022 15:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E98402F5
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3E2C402A7;
+	Mon, 28 Nov 2022 15:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3E2C402A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dUwUfUxjsr84; Mon, 28 Nov 2022 15:25:31 +0000 (UTC)
+	with ESMTP id 4FKcG9fFqbSL; Mon, 28 Nov 2022 15:26:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 421B64025F;
-	Mon, 28 Nov 2022 15:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 421B64025F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CF5E21BF329
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 15:25:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C66534025F;
+	Mon, 28 Nov 2022 15:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C66534025F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 34BCB1BF329
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 15:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7DED4025F
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 15:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7DED4025F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E64E60AF4
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 15:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E64E60AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hxbR0uISNfKi for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 15:25:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YL68NvmWxZK4 for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 15:26:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C79C400DB
- for <buildroot@uclibc.org>; Mon, 28 Nov 2022 15:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C79C400DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B14A60B1E
+ for <buildroot@uclibc.org>; Mon, 28 Nov 2022 15:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B14A60B1E
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 071A884987; Mon, 28 Nov 2022 15:25:27 +0000 (UTC)
+ id 27A5E82AA8; Mon, 28 Nov 2022 15:26:04 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 28 Nov 2022 15:25:26 +0000
+Date: Mon, 28 Nov 2022 15:26:03 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -48,14 +48,14 @@ X-Bugzilla-Version: 2022.02.7
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: mek101-dev.inv@slmail.me
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15151-163-8hkx9n0qF1@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15151-163-ug5da0zMYu@https.bugs.busybox.net/>
 In-Reply-To: <bug-15151-163@https.bugs.busybox.net/>
 References: <bug-15151-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,11 +81,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15151
 
---- Comment #3 from Mek101 <mek101-dev.inv@slmail.me> ---
-I did some ulterior tests and it seems that the issue was caused by the FS
-image not being rebuild after I removed a problematic overlay.
+Mek101 <mek101-dev.inv@slmail.me> changed:
 
-Closing.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|ASSIGNED                    |RESOLVED
 
 -- 
 You are receiving this mail because:
