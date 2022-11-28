@@ -4,63 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31FAC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 19:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97735C4321E
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 20:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE04481882;
-	Mon, 28 Nov 2022 19:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE04481882
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ABF2813CB;
+	Mon, 28 Nov 2022 20:17:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ABF2813CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eHXRavmxqg1Q; Mon, 28 Nov 2022 19:41:39 +0000 (UTC)
+	with ESMTP id CFG0MIcTpr-D; Mon, 28 Nov 2022 20:16:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26CAA8175F;
-	Mon, 28 Nov 2022 19:41:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26CAA8175F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A8C3E1BF86C
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 19:41:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5541A814B6;
+	Mon, 28 Nov 2022 20:16:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5541A814B6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B444B1BF2B8
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 20:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 840C160A64
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 19:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 840C160A64
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F50D409F3
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 20:16:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F50D409F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xb4eLXdlblNj for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 19:41:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4CEF60595
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4CEF60595
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 19:41:34 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.87.80])
- by Aruba Outgoing Smtp  with ESMTPSA
- id zk0SoHvlV40Ljzk0SoRpXb; Mon, 28 Nov 2022 20:41:32 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Mon, 28 Nov 2022 20:41:31 +0100
-Message-Id: <20221128194131.3102770-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4w9Zau6o-rIc for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 20:16:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BB4F409EC
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com
+ [IPv6:2607:f8b0:4864:20::112b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3BB4F409EC
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 20:16:55 +0000 (UTC)
+Received: by mail-yw1-x112b.google.com with SMTP id
+ 00721157ae682-3b48b139b46so117609847b3.12
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 12:16:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9kimlsYKScIzeG+C+FidGFy5hHbpK5GmE5MeRr3adSk=;
+ b=hlysN2onZe2nyKS8Gc1TjooSyNshRDEIu+359l/2iVghL2KP2Nj3//w62jtVptVHRJ
+ VswOLY3WyOwGTTYqRa//oESWIFC8OwQgXha+r1mNYQQ+i9+l4kp7DpggMXr4BmciVmL0
+ Frqqj1s8DKhNkRVnxyzLWtCfWiKRS3N7lZo/bBALZ5giIhojIi6seaum+a6pJtJb4JNB
+ 9o1P3YFKW75jaLzLtUldcpiY+ODxfVOLbtcWKNEaUQ24qw5+WRhSu0X2zO+OfemDk+aa
+ VBQrlM/BO7/q9ml6mwPDi0dIxjW2QvquslXueD4DCBH1AZdgKFdOKqWknonaHeYrt2eW
+ Co9Q==
+X-Gm-Message-State: ANoB5pm9mnq89sanzRP1drir0/0o3iK9PQkM1RhMDOQPU4PmEKDZfqur
+ /hm7JlnZmtbr3rlCSLXVIx4+s+8xOyn4ucdhXs/9cO/RwJY=
+X-Google-Smtp-Source: AA0mqf7rqi7uD8LniyHeUdjjds0Vk/nS2eQiWMDEBDLCcPic7QIjQ751r5ZsM2dPwf7UYpo9izY0cNISna7gmfkk3vo=
+X-Received: by 2002:a81:8a05:0:b0:381:49e8:aad4 with SMTP id
+ a5-20020a818a05000000b0038149e8aad4mr50229797ywg.495.1669666613953; Mon, 28
+ Nov 2022 12:16:53 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfA75+lx1U/eQ/eLd30Rn+WcRFoYQCpON9fJW04MS9i7oHvF7dmnVWXoxkOgoyTaCGSVJqrQdEF39vA8hMgulqCoapbMXUj0mzmgFYYLIkiSdGD5RiSky
- k2/zdB1VqjlAKrwMw2tjdNSomD7hKCmwACfMYnZ/MRbL1ejta239FDwXyO5P+uKizcGUrJN3uiEoC0Dm1aPb1Z+IvwqVtecWazK0X1vv2yzeIgcLSoJGruRK
- 9ifuktxAgDKusbjNUT5U/ejAZSOJPaRa5xUG8sDLEpFMledJW5lRgo60A1i+lIJ+lip8o2I77ieCxK6nkq7+TZUpP/USNZ048RG2a3hIQBI=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1669664492; bh=lSeBD/rloUE+MnDsEfyUg6PIv2/u2svaKQhf04GkdoM=;
- h=From:To:Subject:Date:MIME-Version;
- b=H85CKBrR5qUb0N4Se62y5XOrtqkCskQZp2SPEFjEQiMtxljJjBaGkX4jhEqJo6yl/
- 9PXTxr+Gqz8l7oHw9IREn/oCQSPlEMccqgGvIwuQaHjBodQYP9xO0TCUGBy0UnZLz1
- t/jAHDRX19RDBb699Tuf7BvdE8hORp86HY7tANcsaorwLKu6c6FeslUEb+1hPUwgJJ
- Z+n68k6Fn8BmwCI95eNpkffW0IysCT+V6QJahfMbZizdt7Mf3tbCZhlGrto5cZ+nJg
- BBYOpT5M0UShInjGCMZTUBMm8ixS2xcTX2jeeFbD3DqpJq1UNCFGxmDZMdwZS8bU6c
- hxN6WAo/HxkcA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=H85CKBrR
-Subject: [Buildroot] [for-next] package/rtl8723ds: bump to latest version
+References: <20221128182304.1915237-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221128182304.1915237-1-james.hilliard1@gmail.com>
+Date: Mon, 28 Nov 2022 21:16:42 +0100
+Message-ID: <CAGm1_ksVj-sXAEH5ZUC88vEa-BrBOnVx6STcQOJT5EzzcsbUFQ@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=9kimlsYKScIzeG+C+FidGFy5hHbpK5GmE5MeRr3adSk=;
+ b=Z+2RmibGrfO4yH9lzHXipA2iFPbwvZv3zkP7CUu6giqIynz7QjuhnrCfYww07mL3yJ
+ WD9Vlafsu4fSvqMv0vc2JIq4tTFIo0mymNNsgrNFAH5uzpuXqDxw4m9+K92vITrqcZ9A
+ d78RNLa2KjMhsTSIoSfRu08H1MMhgKLoEvL4b1/+cdBv2aEl9w4a45urdDRRxoFUvDVH
+ jvnhtgx95OcABQ2v3gX2yhlG8JnUm384SLPAZdKo8F8uXghHlFrTzyqPUuGx9u425knD
+ Rhc8muk8xVP5OuE01MiIH2SG+OVpvh5vTd2StOY4kvMGqJ0tKDQhJjeok0JNqbJyPekT
+ GJNg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Z+2RmibG
+Subject: Re: [Buildroot] [PATCH v4 1/1] utils/scanpypi: add flit package
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,92 +90,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop local patch since it's been upstreamed.
+On Mon, Nov 28, 2022 at 7:23 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> These packages don't have a setup.py so we instead need to parse their
+> pyproject.toml file.
+>
+> Note that this currently doesn't handle flit package dependency
+> resolution.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 39 -------------------
- package/rtl8723ds/rtl8723ds.hash              |  2 +-
- package/rtl8723ds/rtl8723ds.mk                |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
- delete mode 100644 package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index 4495817358..0000000000
---- a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 769a1943cb409f89f3c91208294a89b09bf47b86 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 16 Nov 2022 16:08:21 +0100
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index aa57f85..3d91574 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -1738,6 +1737,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- rtk_core :=	core/rtw_cmd.o \
---- 
--2.34.1
--
-diff --git a/package/rtl8723ds/rtl8723ds.hash b/package/rtl8723ds/rtl8723ds.hash
-index cbc77e14c1..53ccbacab2 100644
---- a/package/rtl8723ds/rtl8723ds.hash
-+++ b/package/rtl8723ds/rtl8723ds.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  691040a85d838f8d8d7da0f2ed460f1ea5f6734c40dc73770ba7e260b6cda9cc  rtl8723ds-5ab2d3f3858dc4c833013c47a79faa05b10198f6.tar.gz
-+sha256  837fcd4cd2c7353b54c5356f4a4ef2e4ad556910386d79d1e2e03f35e9f94af9  rtl8723ds-fa06cb893c18755965f29f6bd4954b18628887da.tar.gz
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-index 0d96e6b03a..41ef687c77 100644
---- a/package/rtl8723ds/rtl8723ds.mk
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8723DS_VERSION = 5ab2d3f3858dc4c833013c47a79faa05b10198f6
-+RTL8723DS_VERSION = fa06cb893c18755965f29f6bd4954b18628887da
- RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
- RTL8723DS_LICENSE = GPL-2.0
- 
--- 
-2.34.1
-
+> ---
+> Changes v3 -> v4:
+>   - prefer/support python3.11 tomllib
+>   - use bool interpretation for None
+> Changes v2 -> v3:
+>   - minor cleanup
+>   - rebase
+>   - more detailed  commit log
+> Changes v1 -> v2:
+>   - remove homepage format fixes(sent as separate patch)
+>   - remove load_setup fixes
+> ---
+>  utils/scanpypi | 85 ++++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 83 insertions(+), 2 deletions(-)
+>
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 3c98bb4bcc..38f0cb91e9 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -42,6 +42,55 @@ except ImportError:
+>            'pip install spdx_lookup')
+>      liclookup = None
+>
+> +def toml_load(f):
+> +    with open(f, 'rb') as fh:
+> +        ex = None
+> +
+> +        # Try standard library tomllib first
+> +        try:
+> +            from tomllib import load
+> +            return load(fh)
+> +        except ImportError as e:
+> +            pass
+> +
+> +        # Try regular tomli next
+> +        try:
+> +            from tomli import load
+> +            return load(fh)
+> +        except ImportError as e:
+> +            ex = e
+> +
+> +        # Try pip's vendored tomli
+> +        try:
+> +            from pip._vendor.tomli import load
+> +            try:
+> +                return load(fh)
+> +            except TypeError:
+> +                # Fallback to handle older version
+> +                try:
+> +                    fh.seek(0)
+> +                    w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> +                    return load(w)
+> +                finally:
+> +                    w.detach()
+> +        except ImportError as e:
+> +            pass
+> +
+> +        # Try regular toml last
+> +        try:
+> +            from toml import load
+> +            fh.seek(0)
+> +            w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> +            try:
+> +                return load(w)
+> +            finally:
+> +                w.detach()
+> +        except ImportError:
+> +            pass
+> +
+> +        print('This package needs tomli')
+> +        raise ex
+> +
+>
+>  def setup_decorator(func, method):
+>      """
+> @@ -316,6 +365,35 @@ class BuildrootPackage():
+>              os.chdir(current_dir)
+>              sys.path.remove(self.tmp_extract)
+>
+> +    def load_pyproject(self):
+> +        """
+> +        Loads the corresponding pyproject.toml and store its metadata
+> +        """
+> +        current_dir = os.getcwd()
+> +        os.chdir(self.tmp_extract)
+> +        sys.path.insert(0, self.tmp_extract)
+> +        try:
+> +            pyproject_data = toml_load('pyproject.toml')
+> +            try:
+> +                self.setup_metadata = pyproject_data.get('project', {})
+> +                self.metadata_name = self.setup_metadata.get('name', self.real_name)
+> +                build_system = pyproject_data.get('build-system', {})
+> +                build_backend = build_system.get('build-backend', None)
+> +                if build_backend and build_backend == 'flit_core.buildapi':
+> +                    self.setup_metadata['method'] = 'flit'
+> +                elif build_system.get('backend-path', None):
+> +                    self.setup_metadata['method'] = 'pep517'
+> +                else:
+> +                    self.setup_metadata['method'] = 'unknown'
+> +            except KeyError:
+> +                print('ERROR: Could not determine package metadata for {pkg}.\n'
+> +                      .format(pkg=self.real_name))
+> +                raise
+> +        except FileNotFoundError:
+> +            raise
+> +        os.chdir(current_dir)
+> +        sys.path.remove(self.tmp_extract)
+> +
+>      def get_requirements(self, pkg_folder):
+>          """
+>          Retrieve dependencies from the metadata found in the setup.py script of
+> @@ -699,9 +777,12 @@ def main():
+>              except ImportError as err:
+>                  if 'buildutils' in str(err):
+>                      print('This package needs buildutils')
+> +                    continue
+>                  else:
+> -                    raise
+> -                continue
+> +                    try:
+> +                        package.load_pyproject()
+> +                    except Exception as e:
+> +                        raise
+>              except (AttributeError, KeyError) as error:
+>                  print('Error: Could not install package {pkg}: {error}'.format(
+>                      pkg=package.real_name, error=error))
+> --
+> 2.34.1
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
