@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2334C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 18:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B41A2C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 18:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AE3B400E7;
-	Mon, 28 Nov 2022 18:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE3B400E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B3914042B;
+	Mon, 28 Nov 2022 18:02:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B3914042B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wvqc6fhR9hct; Mon, 28 Nov 2022 18:01:10 +0000 (UTC)
+	with ESMTP id 5UPWF0cXbRGr; Mon, 28 Nov 2022 18:02:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 850164025D;
-	Mon, 28 Nov 2022 18:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 850164025D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D7371BF335
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 18:01:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73A3F4063F;
+	Mon, 28 Nov 2022 18:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73A3F4063F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B94A1BF335
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 18:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0460E40921
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 18:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0460E40921
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33BC74063F
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 18:02:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33BC74063F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EDDAhIZw55oW for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 18:01:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D11BE408EC
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D11BE408EC
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 18:01:02 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.77]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKhs-1pONt33eFm-00OnDL; Mon, 28
- Nov 2022 19:00:59 +0100
-Date: Mon, 28 Nov 2022 19:00:49 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Message-ID: <20221128190024.5380be46@gmx.net>
-In-Reply-To: <166962622413.3066484.1675129521759030444@Monstersaurus>
-References: <notmuch-sha1-bd80a5e4a125bbe0e62e6253fdfa7610e4834e90>
- <166962622413.3066484.1675129521759030444@Monstersaurus>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Zt8Ckxagyen for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 18:02:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F9374064D
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
+ [IPv6:2607:f8b0:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F9374064D
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 18:02:22 +0000 (UTC)
+Received: by mail-pl1-x635.google.com with SMTP id b21so10921013plc.9
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 10:02:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=uepwwndspNvTbH9IpKOPO27SEHlEka/m6dTXd5U7mc0=;
+ b=q1m1SqaMMLG49mcmbboyVJZZFJcBDAGBxYH4y7Xc/NjnaivxYesp9jRgRBINPFIOt3
+ bZrmK/3XT/ak7WGSCS3BWmQVoa0VLPF3BqeLDavRUf+K4dJx3Z/an28yZvm2InUsQgIH
+ pMdcZ+WE9FVWj9WBcmGbklyT3puLb1cw/oen2uxr8F90qqG9lgCOoyhRWpvPNb0ulul0
+ kuukuqVrFrpMx+QB5ibTCqASgdsFQ2PsOqigIym2EnvyBBCc8XnewcSB+VfXRTxXB4u+
+ 5p+GKLPoFP27M7rtuxyx4lyrCApnMyxK8S3geQJI/JCzgKwz+/gH2IlNaLKXm1AbKsDR
+ 0oZQ==
+X-Gm-Message-State: ANoB5plM+d8KGCQT9EYlfeGGpwFH991LfrDLEkStOJXJjaKs8AmzqErC
+ g2baQk7V7FMEx88FtQ9mok7pmrXHobsOBJki+p5eeFfOsXS9OQ==
+X-Google-Smtp-Source: AA0mqf5QWpct2KBKFHWXTSvERGV8O4E4AcPZidhI6Qis7HR7MEJkMDtLGdpJVdC0Xni+Psyy01EQJEk+Efqn0ZPTr6s=
+X-Received: by 2002:a17:902:a989:b0:188:d6c7:e7b7 with SMTP id
+ bh9-20020a170902a98900b00188d6c7e7b7mr33205341plb.16.1669658542070; Mon, 28
+ Nov 2022 10:02:22 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Y0d+hzR1I1+qAwTKUPaY87WxOgA003OhD8IvLHzCx+GRNR7iPH6
- pxL8jRWhhJprcZVzJmEhr8tYD6uRA7Ldv2xg/PxpBMg4lQBzcaPQBHnPfEJaUqQflIabZZ9
- TNr73C/q0ALQyvTbZdXaLj/2pGiYCo0BXQIXOh7/NGq7tT/IfRrt6/9dqyJroCNFD9x1fNz
- JQ0C6Hb1FllyEKyyuKk0A==
-UI-OutboundReport: notjunk:1;M01:P0:/g44O17sbBU=;FucZx8jGYzuwVtxB4HQNfccZMvz
- JCJNWDvFhHcP+G7JUG9UTKsxY0JaKgKV2/oriOktc2dLzpAtlxX2MomUfAhU4RnQnPCt1CtZ0
- ZFWiX4LtEcQ4mJSXoEFw6hBFiGrXyr8QxmK1hyXMyKzi8Lzw+62xA1G7h0jQaor0CHEgoUms7
- GLywJ0TtkVPhz7mJruaBV5GdTfV/GgqT5kyrxvUq7hS6KMb3CY1ZOjwHu+95BzEpgeH2/2On/
- s3F1+I0QmE78Ub1FxRKyh9t6yrKuLUj0dkti68hEt1neQ1wJ6H8XPKb3lxyxWfhgaByMw9458
- IRe2Oh4EzFfewxy+bKC96e08hRSTftBZ5looyGEOH/GMsQCn8tA+V8ug0C6qHAdwpQjPuARYr
- G9fpnY5gP2W01C/5DhaQm1ziYM5TfJS0SIimqiuYu0pQkx821cNdFLjuA6Z8cxnE1phWuZ86s
- KxA0B81YZkJ2iZxovbemoDCcrsY757GBZyfPpxkZMIvaABMtzIlUjFzK/l3JonrRaFNGSIHQT
- EOz1nqz2GvM/JmsEdrfl4zs676Rh7yZI8p4mbDgRbvumh7bWSGEHIN/eCmNBXH5YBJEmco18h
- fyFkBq6pDPYlVA5xdAcuSPuCQYyjFRrvzfoiIYhjgT7JvpoCPBogqyMNWWgQzCBpjoW8ervMV
- mXLy1LbQ+w8zzLI7TJiqCdVj67iCx6AT8HWSdt2LZtDHzQ2/gew+f2Fw3PLOmlyZ5mVEsSCQC
- qZLhl5uLPINGK2FpAuLfLr7VOKQHCZmOKX3yXitIeSjRYdXQ+HKJ7gXwVenJy+eyX1bkqRmdP
- iFbdWwWe0MEQWdRc18uDvJUF0aXYxnwiw9G/X84MWgKJg0kxOzKGkeUcQYtUCj6SrDUvGPEnT
- 9ctKm0qx+kgoZP6TYlyqTzy8dMsuBOeWPaOpAeO/RTUHAPN/S0Ja/JMXoFUtR9SZrjNHW9s/c
- eK3pNFAt1lJP4iuRdbtIwzYczrc=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1669658460; bh=BRCffT4c//pbhve2SWjYGem+mCqw1dkhHJxB+jLa7oA=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=RTxewIOXQU19bhI9Cp+J6YL7TFaaWdphQcbOox0q1ZalSRQn9EZyxiZpm/cHx3fwU
- tJ1AjvEVVPb+B/xkmKzDNFg/xgX4eZdi7IrfZFb9ZNG7ntA1OaEPMsSBz8Vgb27SV/
- 2yrJ8hzfQARhu8BITz3masReZaWkxYSJzP/mHSX/kXmQxXaXmO2Fu7bbZT55ewX4ru
- UDLAO42HCNc9YjTcd51LwnDMC/uY2SAGkU6PE2Oxg5rMhW8L3JjbNbz4IxfRyxSv5Y
- njDqGdbRMtM3cpNAmUsjap2ptguFR1rrdqEytwJZedzE30g/ynN9fDjjVcwuvSlh85
- wf6u3fZZ7jYVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=RTxewIOX
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-11-26
+References: <20221124140627.3269192-1-stefan.hager@ginzinger.com>
+ <CADvTj4rmM5-9_qvHqKCRA3FHebK5O3po2dtUg7bXkPW+Oii8pw@mail.gmail.com>
+ <AM5PR06MB315361D4448EE9C17B1C3F65840E9@AM5PR06MB3153.eurprd06.prod.outlook.com>
+ <CADvTj4p-u4aELr0Km=cGzh092dMXq0rq=gVOHV5jC=eQagrYXA@mail.gmail.com>
+ <AM5PR06MB31539DCE3243B81D0E0B9D6584139@AM5PR06MB3153.eurprd06.prod.outlook.com>
+In-Reply-To: <AM5PR06MB31539DCE3243B81D0E0B9D6584139@AM5PR06MB3153.eurprd06.prod.outlook.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 28 Nov 2022 14:02:10 -0400
+Message-ID: <CADvTj4pqJYfn7yXPhxE8ofYqHNeZNjqUxgwf4qHr7Uhx7-todQ@mail.gmail.com>
+To: Hager Stefan <Stefan.Hager@ginzinger.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=uepwwndspNvTbH9IpKOPO27SEHlEka/m6dTXd5U7mc0=;
+ b=iIQOF9GkezYzORIK6UAMbfw61KAlJb1+cOwi0/nCKDhig7/MsjjGKEfrMhvb63ivEs
+ a8+vZ1eFwdlgmQ3j2Hk7IeDTPFw2w1XsGvqkVLfnrUmSsSADhR14hhWDgCF2KQoJ/aJB
+ KPJ2QO2NqHvAM67H+q9UVlVEW8eruAucnWWVU4K+iXnDdtYPO48HAmKeSe/bsvEMXseE
+ L6uezW32wX84WCAgWPaMWeA8HtxpR6JT0ZkJ2hTlqI3xHgXCeTEazanM169HUWGChUa4
+ L9+FWSsrcdnn50a9T+tz8/hAoyqjPDP761FRKOoYhr7S0d5ZRzjrJt3wsk4Sj/zmuWs1
+ 541w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iIQOF9Gk
+Subject: Re: [Buildroot] [RFC PATCH 00/10] tensorflow-lite: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,106 +93,467 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Kieran,
-
-On Mon, 28 Nov 2022 09:03:44 +0000, Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
-
-> Hi Thomas,
+On Mon, Nov 28, 2022 at 11:17 AM Hager Stefan
+<Stefan.Hager@ginzinger.com> wrote:
 >
-> + Buildroot list
+> Hi James!
 >
-> Quoting Thomas Petazzoni (2022-11-27 07:39:11)
-> > Hello,
-> >
-> > Autobuilder failures
-> > ====================
-> >
-> > Below is a list of build failures reported by the Buildroot autobuilders
-> > in relation to packages or CPU architectures you are in charge of.
-> > Please help us improving the quality of Buildroot by investigating those
-> > build failures and sending patches to fix them.
-> >
-> > Results for the '2022.02.x' branch
-> > ----------------------------------
-> >
-> > Build failures related to your packages:
-> >
-> >     arch     |             reason             |                                       url
-> > -------------+--------------------------------+---------------------------------------------------------------------------------
-> >   aarch64    | libcamera-1966b9a58436fab51... | http://autobuild.buildroot.net/results/5ea8f180e4909f8157565238b25f567fcf1f3beb
+> Thanks four your great work!
+> I was able to successfully build it.
 >
-> Upon a quick examination I can see the following highlights in
-> build-end.log here:
+> Unfortunately i could not build (linking error) the example program label_image.
+> I use this to verify if the inference results are the same across different Versions
+> on the target hardware.
 >
-> ...
-> Run-time dependency GTest found: YES 1.11.0
-> ...
->     lc-compliance application: YES
-> ...
->     lc-compliance            : enabled
-> ...
-> [117/121] Linking target src/lc-compliance/lc-compliance
-> FAILED: src/lc-compliance/lc-compliance
-> /home/buildroot/autobuild/run/instance-3/output-1/host/bin/aarch64-linux-gnu-g++  -o src/lc-compliance/lc-compliance src/lc-compliance/lc-compliance.p/.._cam_event_loop.cpp.o src/lc-compliance/lc-compliance.p/.._cam_options.cpp.o src/lc-compliance/lc-compliance.p/environment.cpp.o src/lc-compliance/lc-compliance.p/main.cpp.o src/lc-compliance/lc-compliance.p/simple_capture.cpp.o src/lc-compliance/lc-compliance.p/capture_test.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,--start-group -lstdc++fs -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera:$ORIGIN/../libcamera/base:/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64' -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-3/output-1/build/libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4/build/src/libcamera -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-3/output-1/build/libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4/build/src/libcamera/base -Wl,-rpath-
- li
->  nk,/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64 src/libcamera/libcamera.so.0.0.0 src/libcamera/base/libcamera-base.so.0.0.0 -latomic /home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libevent_pthreads.so /home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libevent.so -lpthread -L/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lgtestd -Wl,--end-group
-> /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/7.3.1/../../../../aarch64-linux-gnu/bin/ld: cannot find -lgtestd
+> This is what i did:
+> $ make freescale_imx8mpevk_defconfig menuconfig
+> => in Menuconfig: activated C++ Support in the Toolchain Section; activated tensorflow-lite; activated host environment-setup;
+> $ make
+> # everything built fine
+>
+> $ source output/host/environment-setup
+> $ cd output/build/tensorflow-lite-2.11.0/tensorflow/lite/buildroot-build/examples/label_image/
+> $ make label_image
+> # linking error, full log:
+>
+> Consolidate compiler generated dependencies of target fft2d_fftsg
+> [  1%] Built target fft2d_fftsg
+> Consolidate compiler generated dependencies of target farmhash
+> [  1%] Built target farmhash
+> Consolidate compiler generated dependencies of target fft2d_fftsg2d
+> [  1%] Built target fft2d_fftsg2d
+> Consolidate compiler generated dependencies of target tensorflow-lite
+> [ 94%] Built target tensorflow-lite
+> [ 94%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/bitmap_helpers.cc.o
+> [ 95%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/label_image.cc.o
+> [ 95%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/xxx/buildroot/output/build/tensorflow-lite-2.11.0/tensorflow/core/util/stats_calculator.cc.o
+> [ 96%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/profiling/memory_info.cc.o
+> [ 96%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/profiling/profile_summarizer.cc.o
+> [ 96%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/profiling/profile_summary_formatter.cc.o
+> [ 97%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/profiling/time.cc.o
+> [ 97%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/tools/command_line_flags.cc.o
+> [ 98%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/tools/delegates/default_execution_provider.cc.o
+> [ 98%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/tools/delegates/delegate_provider.cc.o
+> [ 98%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/tools/evaluation/utils.cc.o
+> [100%] Building CXX object examples/label_image/CMakeFiles/label_image.dir/__/__/tools/tool_params.cc.o
+> [100%] Linking CXX executable label_image
+> xxx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../../libtensorflow-lite.so: undefined reference to `tsl::profiler::TraceMeRecorder::Record(tsl::profiler::TraceMeRecorder::Event&&)'
+> xxx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../../libtensorflow-lite.so: undefined reference to `tsl::profiler::internal::g_trace_level'
+> xxx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../../libtensorflow-lite.so: undefined reference to `tensorflow::profiler::ScopedMemoryDebugAnnotation::ThreadMemoryDebugAnnotation()'
+> xxx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: ../../libtensorflow-lite.so: undefined reference to `tsl::profiler::GetCurrentTimeNanos()'
 > collect2: error: ld returned 1 exit status
+> make[3]: *** [examples/label_image/CMakeFiles/label_image.dir/build.make:351: examples/label_image/label_image] Error 1
+> make[2]: *** [CMakeFiles/Makefile2:436: examples/label_image/CMakeFiles/label_image.dir/all] Error 2
+> make[1]: *** [CMakeFiles/Makefile2:443: examples/label_image/CMakeFiles/label_image.dir/rule] Error 2
+> make: *** [Makefile:166: examples/label_image/CMakeFiles/label_image.dir/rule] Error 2
 >
-> I don't think we've changed anything (on the libcamera side) regarding
-> gtest/lc-compliance in quite some time ... so I'm surprised to see this
-> error pop up?
-
-The following patch/hack fixes the problem here:
-
-	$ diff -u ./host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/gtest.pc_orig ./host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/gtest.pc
---- ./host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/gtest.pc_orig	2022-11-28 18:44:57.547871537 +0100
-+++ ./host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/gtest.pc	2022-11-28 18:45:06.676052468 +0100
-@@ -5,5 +5,5 @@
- Description: GoogleTest (without main() function)
- Version: 1.11.0
- URL: https://github.com/google/googletest
--Libs: -L${libdir} -lgtestd -lpthread
-+Libs: -L${libdir} -lgtest -lpthread
- Cflags: -I${includedir} -DGTEST_HAS_PTHREAD=1
-
-
-More of an gtest package problem than a libcamera one, mind the
-libgtestd vs. libgtest, the other way round was fixed by 'package/gtest:
-fix gtest.pc/gmock.pc library names for the debug build' ([1]), seems
-something changed since the introduction of the patch (or the conditional
-introduced by the patch is wrong)....
-
-The given .config sets:
-
-# BR2_ENABLE_DEBUG is not set
-BR2_ENABLE_RUNTIME_DEBUG=y
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/commit/?id=1afea0b11b140a6d50aff726f2570702cc984a6e
-
+> This did peviously work with tensorflow-lite v2.8.
+> Maybe i am missing something?
 >
-> --
-> Kieran
+> I guess this is broken in v2.11.0.
+> A fix may be in their master: https://github.com/tensorflow/tensorflow/commit/8562f9764937db51a4742fd10057463880579329
+
+Fix is in master but it's not that specific commit, should be this one:
+https://github.com/tensorflow/tensorflow/commit/081c2e4e3cf021efb2853a485a18b563e88f6117
+
+Pushed the fix to my github branch and v2 series:
+https://patchwork.ozlabs.org/project/buildroot/patch/20221128175851.1913859-8-james.hilliard1@gmail.com/
+
+> I can try to use their master branch to see if that issue was addressed in the next days. Alternatively i can Test v2.10.1.
 >
+> Maybe we need to wait for the next release v2.12?
 >
-> > Thanks for your contribution to Buildroot!
+> Best Regards
+> Stefan
+>
+> From: James Hilliard <james.hilliard1@gmail.com>
+> Sent: Friday, November 25, 2022 17:16
+> To: Hager Stefan <Stefan.Hager@ginzinger.com>
+> Cc: buildroot <buildroot@buildroot.org>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Subject: Re: [Buildroot] [RFC PATCH 00/10] tensorflow-lite: new package
+>
+> On Fri, Nov 25, 2022 at 5:07 AM Hager Stefan <Stefan.Hager@ginzinger.com> wrote:
 > >
-> > --
-> > http://autobuild.buildroot.net
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+> > Hi James!
+> >
+> > Tanks for your Feedback!
+> >
+> > Yes TFlite 2.8.0 is not the "latest" Release.
+> >
+> > I'm absolutly with you that using special Versions is a bad idea in general.
+> > On the other hand, it was my fear that it may be difficult to prove that everything works properly with newer Libs even if the build succeeds.
+> > It was hard work for me get it running and I was happy that everything works even with the known limitations. But i learned a lot ; )
+>
+> It seems to build fine with normal libraries and without all the
+> manual copy hacks:
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=330091&submitter=&state=*&q=&archive=both&delegate=
+>
+> See if that works for you, I refactored your patchset and it seems to
+> build without
+> issues now using system libraries.
+>
+> I also uploaded that series to my personal github if that's easier for
+> you to test:
+> https://github.com/jameshilliard/buildroot/tree/tensorflow-lite
+>
+> >
+> > Maybe it is the best to bump to Version 2.11.0 and they try it again with buildroot's own packages where they exist.
+> > But this will take some time, maybe next year for the 23.04 Release.
+>
+> I bumped it to 2.11.0 and fixed the build issues I ran into:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20221125160724.1725476-8-james.hilliard1@gmail.com/
+>
+> >
+> > And next time i need to add the [Buildroot] tag to the subject so my mail sorting rule will work for my own mails...
+>
+> I think you also accidentally dropped the mailing list from your reply as well.
+>
+> >
+> > Best Regards
+> > Stefan
+> >
+> >
+> >
+> >
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> > Sent: Thursday, November 24, 2022 15:54
+> > To: Hager Stefan <Stefan.Hager@ginzinger.com>
+> > Cc: buildroot@buildroot.org <buildroot@buildroot.org>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Subject: Re: [Buildroot] [RFC PATCH 00/10] tensorflow-lite: new package
+> >
+> > On Thu, Nov 24, 2022 at 10:14 AM Stefan Hager
+> > <stefan.hager@ginzinger.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > this RFC patch series proposes a way to integrate the Tensorflow-lite runtime (TFLite) into Buildroot.
+> > >
+> > > This first RFC just integrates the TFLite C++ sahred library.
+> > > After a sucessful first integration the next step wuld be to activate the python library for TFlite.
+> > > As a third step i plan to integrate the NPU Backend Driver for TFLite to use accelerated inference on the i.MX8MP NPU (neural processing unit) for C++ an Python.
+> > > All of this currently works locally as a proof of concept for a few users.
+> > >
+> > > The currently used Version of TFLite is 2.8.0 (official) which is proven to work.
+> >
+> > This is an outdated release right? Are there issues with 2.11.0?
+> >
+> > >
+> > > TFlite comes with a bunch of external source dependencies which are downloaded by separate hidden packages and then built by the main TFLite package.
+> > > TFLite needs its own versions of libabseil, eigen and flatbuffers wich may conflict with the Versions provided by Buildroot.
+> >
+> > I'm unable to find any documentation indicating this is actually the case.
+> >
+> > I skimmed the cmakelists and it doesn't seem to have strict version
+> > requirements:
+> > https://github.com/tensorflow/tensorflow/blob/v2.11.0/tensorflow/lite/CMakeLists.txt
+> >
+> > Have you tried building against the normal buildroot versions of these packages?
+> >
+> > > Since i can not gurantee that TFlite will work with other Versions of this packages i decided to only let TFlite be activated if this packages are not activated in Buildroot.
+> >
+> > This is probably not the right approach, other packages may depend on
+> > or select the normal versions(flatbuffers seems especially problematic).
+> >
+> > >
+> > > Currently TFlite only supports a limited set of processor architectures (ARMV8A: only 64-bit Support no 32-bit (doesn't build); ARMV7A: only 32-bit Support).
+> > > Anyone else may activate further platforms if needed, but testing needs to then be done by them.
+> > >
+> > > How to build a minimal config with TFLite:
+> > > ===============================================
+> > > $ make raspberrypi4_64_defconfig menuconfig
+> > > Activate TFLite in menuconfig: Target packages -> Libraries -> [*] tensorflow-lite
+> > > $ make tensorflow-lite
+> > >
+> > > I'm hoping for Comments to prepare a first patchset.
+> > >
+> > > Stefan Hager (10):
+> > >   tensorflow-lite-abseil-cpp: new package
+> > >   tensorflow-lite-clog: new package
+> > >   tensorflow-lite-abseil-cpuinfo: new package
+> > >   tensorflow-lite-eigen: new package
+> > >   tensorflow-lite-farmhash: new package
+> > >   tensorflow-lite-fft2d: new package
+> > >   tensorflow-lite-flatbuffers: new package
+> > >   tensorflow-lite-gemmlowp: new package
+> > >   tensorflow-lite-ruy: new package
+> > >   tensorflow-lite: new package
+> > >
+> > >  package/Config.in                             |   1 +
+> > >  package/tensorflow-lite-abseil-cpp/Config.in  |   5 +
+> > >  .../tensorflow-lite-abseil-cpp.hash           |   3 +
+> > >  .../tensorflow-lite-abseil-cpp.mk             |  14 ++
+> > >  package/tensorflow-lite-clog/Config.in        |   5 +
+> > >  .../tensorflow-lite-clog.hash                 |   3 +
+> > >  .../tensorflow-lite-clog.mk                   |  14 ++
+> > >  package/tensorflow-lite-cpuinfo/Config.in     |   5 +
+> > >  .../tensorflow-lite-cpuinfo.hash              |   3 +
+> > >  .../tensorflow-lite-cpuinfo.mk                |  14 ++
+> > >  package/tensorflow-lite-eigen/Config.in       |   5 +
+> > >  .../tensorflow-lite-eigen.hash                |   9 +
+> > >  .../tensorflow-lite-eigen.mk                  |  14 ++
+> > >  package/tensorflow-lite-farmhash/Config.in    |   5 +
+> > >  .../tensorflow-lite-farmhash.hash             |   3 +
+> > >  .../tensorflow-lite-farmhash.mk               |  14 ++
+> > >  package/tensorflow-lite-fft2d/Config.in       |   5 +
+> > >  .../tensorflow-lite-fft2d.hash                |   3 +
+> > >  .../tensorflow-lite-fft2d.mk                  |  15 ++
+> > >  package/tensorflow-lite-flatbuffers/Config.in |   5 +
+> > >  .../tensorflow-lite-flatbuffers.hash          |   3 +
+> > >  .../tensorflow-lite-flatbuffers.mk            |  14 ++
+> > >  package/tensorflow-lite-gemmlowp/Config.in    |   5 +
+> > >  .../tensorflow-lite-gemmlowp.hash             |   3 +
+> > >  .../tensorflow-lite-gemmlowp.mk               |  14 ++
+> > >  package/tensorflow-lite-ruy/Config.in         |   5 +
+> > >  .../tensorflow-lite-ruy.hash                  |   3 +
+> > >  .../tensorflow-lite-ruy.mk                    |  14 ++
+> > >  ...2sse-since-this-is-only-useful-on-x8.patch |  34 +++
+> > >  ...build-a-shared-library-instead-of-st.patch |  55 +++++
+> > >  ...build-tflite-with-external-delegates.patch |  59 +++++
+> > >  ...epositories-and-git-pull-configurati.patch | 203 +++++++++++++++
+> > >  package/tensorflow-lite/Config.in             |  56 +++++
+> > >  package/tensorflow-lite/tensorflow-lite.hash  |   3 +
+> > >  package/tensorflow-lite/tensorflow-lite.mk    | 232 ++++++++++++++++++
+> > >  35 files changed, 848 insertions(+)
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/Config.in
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/tensorflow-lite-abseil-cpp.hash
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/tensorflow-lite-abseil-cpp.mk
+> > >  create mode 100644 package/tensorflow-lite-clog/Config.in
+> > >  create mode 100644 package/tensorflow-lite-clog/tensorflow-lite-clog.hash
+> > >  create mode 100644 package/tensorflow-lite-clog/tensorflow-lite-clog.mk
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/Config.in
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.hash
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.mk
+> > >  create mode 100644 package/tensorflow-lite-eigen/Config.in
+> > >  create mode 100644 package/tensorflow-lite-eigen/tensorflow-lite-eigen.hash
+> > >  create mode 100644 package/tensorflow-lite-eigen/tensorflow-lite-eigen.mk
+> > >  create mode 100644 package/tensorflow-lite-farmhash/Config.in
+> > >  create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.hash
+> > >  create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.mk
+> > >  create mode 100644 package/tensorflow-lite-fft2d/Config.in
+> > >  create mode 100644 package/tensorflow-lite-fft2d/tensorflow-lite-fft2d.hash
+> > >  create mode 100644 package/tensorflow-lite-fft2d/tensorflow-lite-fft2d.mk
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/Config.in
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/tensorflow-lite-flatbuffers.hash
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/tensorflow-lite-flatbuffers.mk
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/Config.in
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/tensorflow-lite-gemmlowp.hash
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/tensorflow-lite-gemmlowp.mk
+> > >  create mode 100644 package/tensorflow-lite-ruy/Config.in
+> > >  create mode 100644 package/tensorflow-lite-ruy/tensorflow-lite-ruy.hash
+> > >  create mode 100644 package/tensorflow-lite-ruy/tensorflow-lite-ruy.mk
+> > >  create mode 100644 package/tensorflow-lite/0001-Deactivated-neon2sse-since-this-is-only-useful-on-x8.patch
+> > >  create mode 100644 package/tensorflow-lite/0002-Added-option-to-build-a-shared-library-instead-of-st.patch
+> > >  create mode 100644 package/tensorflow-lite/0003-Added-option-to-build-tflite-with-external-delegates.patch
+> > >  create mode 100644 package/tensorflow-lite/0004-Removed-source-repositories-and-git-pull-configurati.patch
+> > >  create mode 100644 package/tensorflow-lite/Config.in
+> > >  create mode 100644 package/tensorflow-lite/tensorflow-lite.hash
+> > >  create mode 100644 package/tensorflow-lite/tensorflow-lite.mk
+> > >
+> > > --
+> > > 2.36.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+>
+> From: James Hilliard <james.hilliard1@gmail.com>
+> Sent: Friday, November 25, 2022 17:16
+> To: Hager Stefan <Stefan.Hager@ginzinger.com>
+> Cc: buildroot <buildroot@buildroot.org>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Subject: Re: [Buildroot] [RFC PATCH 00/10] tensorflow-lite: new package
+>
+> On Fri, Nov 25, 2022 at 5:07 AM Hager Stefan <Stefan.Hager@ginzinger.com> wrote:
+> >
+> > Hi James!
+> >
+> > Tanks for your Feedback!
+> >
+> > Yes TFlite 2.8.0 is not the "latest" Release.
+> >
+> > I'm absolutly with you that using special Versions is a bad idea in general.
+> > On the other hand, it was my fear that it may be difficult to prove that everything works properly with newer Libs even if the build succeeds.
+> > It was hard work for me get it running and I was happy that everything works even with the known limitations. But i learned a lot ; )
+>
+> It seems to build fine with normal libraries and without all the
+> manual copy hacks:
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=330091&submitter=&state=*&q=&archive=both&delegate=
+>
+> See if that works for you, I refactored your patchset and it seems to
+> build without
+> issues now using system libraries.
+>
+> I also uploaded that series to my personal github if that's easier for
+> you to test:
+> https://github.com/jameshilliard/buildroot/tree/tensorflow-lite
+>
+> >
+> > Maybe it is the best to bump to Version 2.11.0 and they try it again with buildroot's own packages where they exist.
+> > But this will take some time, maybe next year for the 23.04 Release.
+>
+> I bumped it to 2.11.0 and fixed the build issues I ran into:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20221125160724.1725476-8-james.hilliard1@gmail.com/
+>
+> >
+> > And next time i need to add the [Buildroot] tag to the subject so my mail sorting rule will work for my own mails...
+>
+> I think you also accidentally dropped the mailing list from your reply as well.
+>
+> >
+> > Best Regards
+> > Stefan
+> >
+> >
+> >
+> >
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> > Sent: Thursday, November 24, 2022 15:54
+> > To: Hager Stefan <Stefan.Hager@ginzinger.com>
+> > Cc: buildroot@buildroot.org <buildroot@buildroot.org>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Subject: Re: [Buildroot] [RFC PATCH 00/10] tensorflow-lite: new package
+> >
+> > On Thu, Nov 24, 2022 at 10:14 AM Stefan Hager
+> > <stefan.hager@ginzinger.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > this RFC patch series proposes a way to integrate the Tensorflow-lite runtime (TFLite) into Buildroot.
+> > >
+> > > This first RFC just integrates the TFLite C++ sahred library.
+> > > After a sucessful first integration the next step wuld be to activate the python library for TFlite.
+> > > As a third step i plan to integrate the NPU Backend Driver for TFLite to use accelerated inference on the i.MX8MP NPU (neural processing unit) for C++ an Python.
+> > > All of this currently works locally as a proof of concept for a few users.
+> > >
+> > > The currently used Version of TFLite is 2.8.0 (official) which is proven to work.
+> >
+> > This is an outdated release right? Are there issues with 2.11.0?
+> >
+> > >
+> > > TFlite comes with a bunch of external source dependencies which are downloaded by separate hidden packages and then built by the main TFLite package.
+> > > TFLite needs its own versions of libabseil, eigen and flatbuffers wich may conflict with the Versions provided by Buildroot.
+> >
+> > I'm unable to find any documentation indicating this is actually the case.
+> >
+> > I skimmed the cmakelists and it doesn't seem to have strict version
+> > requirements:
+> > https://github.com/tensorflow/tensorflow/blob/v2.11.0/tensorflow/lite/CMakeLists.txt
+> >
+> > Have you tried building against the normal buildroot versions of these packages?
+> >
+> > > Since i can not gurantee that TFlite will work with other Versions of this packages i decided to only let TFlite be activated if this packages are not activated in Buildroot.
+> >
+> > This is probably not the right approach, other packages may depend on
+> > or select the normal versions(flatbuffers seems especially problematic).
+> >
+> > >
+> > > Currently TFlite only supports a limited set of processor architectures (ARMV8A: only 64-bit Support no 32-bit (doesn't build); ARMV7A: only 32-bit Support).
+> > > Anyone else may activate further platforms if needed, but testing needs to then be done by them.
+> > >
+> > > How to build a minimal config with TFLite:
+> > > ===============================================
+> > > $ make raspberrypi4_64_defconfig menuconfig
+> > > Activate TFLite in menuconfig: Target packages -> Libraries -> [*] tensorflow-lite
+> > > $ make tensorflow-lite
+> > >
+> > > I'm hoping for Comments to prepare a first patchset.
+> > >
+> > > Stefan Hager (10):
+> > >   tensorflow-lite-abseil-cpp: new package
+> > >   tensorflow-lite-clog: new package
+> > >   tensorflow-lite-abseil-cpuinfo: new package
+> > >   tensorflow-lite-eigen: new package
+> > >   tensorflow-lite-farmhash: new package
+> > >   tensorflow-lite-fft2d: new package
+> > >   tensorflow-lite-flatbuffers: new package
+> > >   tensorflow-lite-gemmlowp: new package
+> > >   tensorflow-lite-ruy: new package
+> > >   tensorflow-lite: new package
+> > >
+> > >  package/Config.in                             |   1 +
+> > >  package/tensorflow-lite-abseil-cpp/Config.in  |   5 +
+> > >  .../tensorflow-lite-abseil-cpp.hash           |   3 +
+> > >  .../tensorflow-lite-abseil-cpp.mk             |  14 ++
+> > >  package/tensorflow-lite-clog/Config.in        |   5 +
+> > >  .../tensorflow-lite-clog.hash                 |   3 +
+> > >  .../tensorflow-lite-clog.mk                   |  14 ++
+> > >  package/tensorflow-lite-cpuinfo/Config.in     |   5 +
+> > >  .../tensorflow-lite-cpuinfo.hash              |   3 +
+> > >  .../tensorflow-lite-cpuinfo.mk                |  14 ++
+> > >  package/tensorflow-lite-eigen/Config.in       |   5 +
+> > >  .../tensorflow-lite-eigen.hash                |   9 +
+> > >  .../tensorflow-lite-eigen.mk                  |  14 ++
+> > >  package/tensorflow-lite-farmhash/Config.in    |   5 +
+> > >  .../tensorflow-lite-farmhash.hash             |   3 +
+> > >  .../tensorflow-lite-farmhash.mk               |  14 ++
+> > >  package/tensorflow-lite-fft2d/Config.in       |   5 +
+> > >  .../tensorflow-lite-fft2d.hash                |   3 +
+> > >  .../tensorflow-lite-fft2d.mk                  |  15 ++
+> > >  package/tensorflow-lite-flatbuffers/Config.in |   5 +
+> > >  .../tensorflow-lite-flatbuffers.hash          |   3 +
+> > >  .../tensorflow-lite-flatbuffers.mk            |  14 ++
+> > >  package/tensorflow-lite-gemmlowp/Config.in    |   5 +
+> > >  .../tensorflow-lite-gemmlowp.hash             |   3 +
+> > >  .../tensorflow-lite-gemmlowp.mk               |  14 ++
+> > >  package/tensorflow-lite-ruy/Config.in         |   5 +
+> > >  .../tensorflow-lite-ruy.hash                  |   3 +
+> > >  .../tensorflow-lite-ruy.mk                    |  14 ++
+> > >  ...2sse-since-this-is-only-useful-on-x8.patch |  34 +++
+> > >  ...build-a-shared-library-instead-of-st.patch |  55 +++++
+> > >  ...build-tflite-with-external-delegates.patch |  59 +++++
+> > >  ...epositories-and-git-pull-configurati.patch | 203 +++++++++++++++
+> > >  package/tensorflow-lite/Config.in             |  56 +++++
+> > >  package/tensorflow-lite/tensorflow-lite.hash  |   3 +
+> > >  package/tensorflow-lite/tensorflow-lite.mk    | 232 ++++++++++++++++++
+> > >  35 files changed, 848 insertions(+)
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/Config.in
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/tensorflow-lite-abseil-cpp.hash
+> > >  create mode 100644 package/tensorflow-lite-abseil-cpp/tensorflow-lite-abseil-cpp.mk
+> > >  create mode 100644 package/tensorflow-lite-clog/Config.in
+> > >  create mode 100644 package/tensorflow-lite-clog/tensorflow-lite-clog.hash
+> > >  create mode 100644 package/tensorflow-lite-clog/tensorflow-lite-clog.mk
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/Config.in
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.hash
+> > >  create mode 100644 package/tensorflow-lite-cpuinfo/tensorflow-lite-cpuinfo.mk
+> > >  create mode 100644 package/tensorflow-lite-eigen/Config.in
+> > >  create mode 100644 package/tensorflow-lite-eigen/tensorflow-lite-eigen.hash
+> > >  create mode 100644 package/tensorflow-lite-eigen/tensorflow-lite-eigen.mk
+> > >  create mode 100644 package/tensorflow-lite-farmhash/Config.in
+> > >  create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.hash
+> > >  create mode 100644 package/tensorflow-lite-farmhash/tensorflow-lite-farmhash.mk
+> > >  create mode 100644 package/tensorflow-lite-fft2d/Config.in
+> > >  create mode 100644 package/tensorflow-lite-fft2d/tensorflow-lite-fft2d.hash
+> > >  create mode 100644 package/tensorflow-lite-fft2d/tensorflow-lite-fft2d.mk
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/Config.in
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/tensorflow-lite-flatbuffers.hash
+> > >  create mode 100644 package/tensorflow-lite-flatbuffers/tensorflow-lite-flatbuffers.mk
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/Config.in
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/tensorflow-lite-gemmlowp.hash
+> > >  create mode 100644 package/tensorflow-lite-gemmlowp/tensorflow-lite-gemmlowp.mk
+> > >  create mode 100644 package/tensorflow-lite-ruy/Config.in
+> > >  create mode 100644 package/tensorflow-lite-ruy/tensorflow-lite-ruy.hash
+> > >  create mode 100644 package/tensorflow-lite-ruy/tensorflow-lite-ruy.mk
+> > >  create mode 100644 package/tensorflow-lite/0001-Deactivated-neon2sse-since-this-is-only-useful-on-x8.patch
+> > >  create mode 100644 package/tensorflow-lite/0002-Added-option-to-build-a-shared-library-instead-of-st.patch
+> > >  create mode 100644 package/tensorflow-lite/0003-Added-option-to-build-tflite-with-external-delegates.patch
+> > >  create mode 100644 package/tensorflow-lite/0004-Removed-source-repositories-and-git-pull-configurati.patch
+> > >  create mode 100644 package/tensorflow-lite/Config.in
+> > >  create mode 100644 package/tensorflow-lite/tensorflow-lite.hash
+> > >  create mode 100644 package/tensorflow-lite/tensorflow-lite.mk
+> > >
+> > > --
+> > > 2.36.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
