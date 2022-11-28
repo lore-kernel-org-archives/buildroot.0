@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AFA4C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 17:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E96C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 17:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6E3340580;
-	Mon, 28 Nov 2022 17:59:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6E3340580
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EqmGgaHW2fkr; Mon, 28 Nov 2022 17:59:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0162740643;
-	Mon, 28 Nov 2022 17:59:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0162740643
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 956A81BF335
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F4F6408AC
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F4F6408AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id E161D409A5;
+	Mon, 28 Nov 2022 17:59:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E161D409A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mTcG0LuIcI-I for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 17:58:58 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 66_t2i31HVnT; Mon, 28 Nov 2022 17:59:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B95CC40921;
+	Mon, 28 Nov 2022 17:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B95CC40921
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BBF3A1BF20B
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97DE94045C
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97DE94045C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fqDFtr9hn92J for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 17:59:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90468408A1
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90468408A1
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 17:58:58 +0000 (UTC)
-Received: by mail-il1-x129.google.com with SMTP id z9so5396666ilu.10
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:58:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6ED71400DB
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6ED71400DB
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 17:59:00 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id q21so8186680iod.4
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:59:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jV91SKhb/jzmsnlD/kJwcSI5+/8b4CpmUHUfX+vNsbw=;
- b=Zy/Pytx2EZNIH0fynmm7majB7y5it7Memdso5WvxRSvmO1dsUoDI+cWsmb5yLS+ZTT
- zE1yTyHZkf8bl57p1Xb1GtCRpNQxry7FKmrwGYAUjzlGlZvAYXiFa8dr/oxTEYvpfj8Q
- rcMxBAST4RVpv7K5hM7vOoP2FyVDKsmQEQP3IE1t0anfmrN8pzP0tCrf1/7AYS88qS6u
- 1wBEhOk1RYExS13XWjaOvs+km7izLa0D4KzRgIXE5mJr5Ldoz57VXqkp8D/tMj0njcky
- 69qngWyQKT6RYG6zvtOrWaOhOeA3ieFG/UXq7Nr4SGmWzru2UnQLO5VgNfjUSRVmXn53
- MHcw==
-X-Gm-Message-State: ANoB5plEKodsIGwEe0zdV/7v+tXovoCNVmhXkaZSWi14bBj4D7CO8+Lr
- rqKOsswylxK54bP3328mKbjX3Zr1HdXU4pgQ
-X-Google-Smtp-Source: AA0mqf7oqg2d5aC6Gq2b2XTFXS5iplvazcfK1UgmyM9xg9k1bS0UWV8NawPeNkaHtp4LKEzIlevU8A==
-X-Received: by 2002:a05:6e02:c82:b0:302:a9a5:d60f with SMTP id
- b2-20020a056e020c8200b00302a9a5d60fmr15401605ile.238.1669658337222; 
- Mon, 28 Nov 2022 09:58:57 -0800 (PST)
+ bh=jCZBKMIgDth8J8gJoVCZRSm7/FtXcNO1yJ4KGQqD+5E=;
+ b=sihT2wykg0Ujx6SGi7RNpG+F/N8DZ+Sqw1oE1xcORVxQ+RqIN0EdT44vycACNJ7G6q
+ cisAgydwLbcoxalN2sI1pls1ggKEaJqteSc4qIMQ7ZJCfHEBtYCH/juunDNRqYLVY/Cx
+ 9ql3/4pOi0nGm6MAN60yz1RwItHCYedRyOY1j+tz6ApU5C/4BlSt/3dJ6YThDSgc1RJq
+ CNvI6A7HjhrCWxMcyGIAx+cSnf+rab/8G3lstT8CEJAJPkw0ew82l7IyUT/fuoKv1Q1O
+ 2tEVjEDtIjz26dDvaAsob78rQS/O+4SukjsZQTrclKWaPxraG+Rp6Ytt7i7bC+7JB2wV
+ RK4Q==
+X-Gm-Message-State: ANoB5pkZZH/EOIquqa7V569O0ty0mclThEnbtkXv/c+cgOwaxj3ybpH9
+ 5TOVJMRfZSfIhAL71oS1C/gZKtfXU2AsAIVU
+X-Google-Smtp-Source: AA0mqf6j9bepo+HQfkkLZV03Qj87s58SADZP+AxusjZt9BfGgzDvZb8Cpknfe7LSbAh/NjAcyAQbdg==
+X-Received: by 2002:a02:9712:0:b0:363:a1bb:343e with SMTP id
+ x18-20020a029712000000b00363a1bb343emr25117607jai.175.1669658339085; 
+ Mon, 28 Nov 2022 09:58:59 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- y16-20020a056638229000b00363781b6bccsm4564802jas.49.2022.11.28.09.58.56
+ y16-20020a056638229000b00363781b6bccsm4564802jas.49.2022.11.28.09.58.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Nov 2022 09:58:56 -0800 (PST)
+ Mon, 28 Nov 2022 09:58:58 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Nov 2022 10:58:46 -0700
-Message-Id: <20221128175851.1913859-3-james.hilliard1@gmail.com>
+Date: Mon, 28 Nov 2022 10:58:48 -0700
+Message-Id: <20221128175851.1913859-5-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128175851.1913859-1-james.hilliard1@gmail.com>
 References: <20221128175851.1913859-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jV91SKhb/jzmsnlD/kJwcSI5+/8b4CpmUHUfX+vNsbw=;
- b=Eg9pyuFZEhYsorJF2j9RGQSabmnX1++BxCkQPkaZh5BnqbCsKslMfKJHQzTMt7mT9d
- WIMt102/Y353rihqWDnoxOA6brbGppzH2vyQqsyYPyUTBpUWhKWRh5ISD/RhcGlEyod3
- oXIHlAj9dqsyaUh9nE0rHFnhsGG+AWtVHFRwg0OjCB5w98UXNWFi7+WCreRIC7L96R1z
- OtSOUxLWXljm3us8BV7YCv/HmDjqVEfpteHE6yiMWZAYAjr76wFeM6aOxGzYTVdWuiQg
- v6sCSGf4LDhqmUJ7ECcWGb5G0ltw4joz7lgYWouNxJ3HKABqmJMrMNnUb7Z12bjn+E6Y
- Sr9A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=jCZBKMIgDth8J8gJoVCZRSm7/FtXcNO1yJ4KGQqD+5E=;
+ b=IcItxfhTcAWWZTCcrtyy6QTf18YzQDpCl3MOzgidBome/z5ZhdfJBvkepLEWq60XM6
+ zlNk5ftxvK4pBRnjvtioKhnWgd8iWHrR5ubgjAm9rzWZkXdl8XCP/Cfb64BaR/xUcH1q
+ eXWNEiSmD2iLv3Ez/UCjo2Fik6FgAK2F/1huV4XZnNVXH/PHINCxElbmCqFB4+qwipjn
+ j6ResOA4JIRkk1PoMbo6fsChJQq6PONl89Tc+ckPA3FeQoDoLoppZvl5RJO70QqtDXYp
+ 4eU4E9fW+upVj9moXmDeZo+kaILQrdApSNY+prKG4DiVkvE19zQH1GNGUboiwRICgGO5
+ ESmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Eg9pyuFZ
-Subject: [Buildroot] [PATCH v2 3/8] package/ruy: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=IcItxfhT
+Subject: [Buildroot] [PATCH v2 5/8] package/neon-2-sse: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,83 +106,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Hager <stefan.hager@ginzinger.com>
-
 This package is required by tensorflow-lite.
 
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in     |  1 +
- package/ruy/Config.in | 11 +++++++++++
- package/ruy/ruy.hash  |  4 ++++
- package/ruy/ruy.mk    | 18 ++++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 package/ruy/Config.in
- create mode 100644 package/ruy/ruy.hash
- create mode 100644 package/ruy/ruy.mk
+ package/Config.in                  |  1 +
+ package/neon-2-sse/Config.in       |  9 +++++++++
+ package/neon-2-sse/neon-2-sse.hash |  4 ++++
+ package/neon-2-sse/neon-2-sse.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/neon-2-sse/Config.in
+ create mode 100644 package/neon-2-sse/neon-2-sse.hash
+ create mode 100644 package/neon-2-sse/neon-2-sse.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e09fa0b3bd..45e66caa8c 100644
+index d0d9d2905c..2ec623ed8f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2095,6 +2095,7 @@ endif
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
- 	source "package/riemann-c-client/Config.in"
-+	source "package/ruy/Config.in"
- 	source "package/shapelib/Config.in"
- 	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
-diff --git a/package/ruy/Config.in b/package/ruy/Config.in
+@@ -2086,6 +2086,7 @@ endif
+ 	source "package/msgpack/Config.in"
+ 	source "package/musl-compat-headers/Config.in"
+ 	source "package/musl-fts/Config.in"
++	source "package/neon-2-sse/Config.in"
+ 	source "package/openblas/Config.in"
+ 	source "package/orc/Config.in"
+ 	source "package/p11-kit/Config.in"
+diff --git a/package/neon-2-sse/Config.in b/package/neon-2-sse/Config.in
 new file mode 100644
-index 0000000000..ce7ab5d585
+index 0000000000..25613c5ec4
 --- /dev/null
-+++ b/package/ruy/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_RUY
-+	bool "ruy"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_CPUINFO
++++ b/package/neon-2-sse/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_NEON_2_SSE
++	bool "neon-2-sse"
 +	help
-+	  Ruy is a matrix multiplication library. Its focus is to cover
-+	  the matrix multiplication needs of neural network inference
-+	  engines. Its initial user has been TensorFlow Lite, where it
-+	  is used by default on the ARM CPU architecture.
++	  The platform independent header allowing to compile any
++	  C/C++ code containing ARM NEON intrinsic functions for
++	  x86 target systems using SIMD up to SSE4 intrinsic
++	  functions.
 +
-+	  https://github.com/google/ruy
-diff --git a/package/ruy/ruy.hash b/package/ruy/ruy.hash
++	  https://github.com/intel/ARM_NEON_2_x86_SSE
+diff --git a/package/neon-2-sse/neon-2-sse.hash b/package/neon-2-sse/neon-2-sse.hash
 new file mode 100644
-index 0000000000..98266b5881
+index 0000000000..ded20d58f5
 --- /dev/null
-+++ b/package/ruy/ruy.hash
++++ b/package/neon-2-sse/neon-2-sse.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  4da8572946007603378c5d0280f48c5b77f4d38763209f5306b57c7513d9a82e  ruy-3168a5c8f4c447fd8cea94078121ee2e2cd87df0.tar.gz
++sha256  019fbc7ec25860070a1d90e12686fc160cfb33e22aa063c80f52b363f1361e9d  neon-2-sse-a15b489e1222b2087007546b4912e21293ea86ff.tar.gz
 +# License files, locally calculated
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/ruy/ruy.mk b/package/ruy/ruy.mk
++sha256  7022f51b439a5915e933ecc270c83e24ca0cb2cceeb08b0132dcd4dbb03ed2dc  LICENSE
+diff --git a/package/neon-2-sse/neon-2-sse.mk b/package/neon-2-sse/neon-2-sse.mk
 new file mode 100644
-index 0000000000..ceeea8cd58
+index 0000000000..0e9d066abd
 --- /dev/null
-+++ b/package/ruy/ruy.mk
-@@ -0,0 +1,18 @@
++++ b/package/neon-2-sse/neon-2-sse.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# ruy
++# neon-2-sse
 +#
 +################################################################################
 +
-+RUY_VERSION = 3168a5c8f4c447fd8cea94078121ee2e2cd87df0
-+RUY_SITE = $(call github,google,ruy,$(RUY_VERSION))
-+RUY_LICENSE = Apache-2.0
-+RUY_LICENSE_FILES = LICENSE
-+RUY_INSTALL_STAGING = YES
-+RUY_DEPENDENCIES = cpuinfo
-+RUY_CONF_OPTS = \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-+	-DRUY_FIND_CPUINFO=ON \
-+	-DRUY_MINIMAL_BUILD=ON
++NEON_2_SSE_VERSION = a15b489e1222b2087007546b4912e21293ea86ff
++NEON_2_SSE_SITE = $(call github,intel,ARM_NEON_2_x86_SSE,$(NEON_2_SSE_VERSION))
++NEON_2_SSE_LICENSE = BSD-2-Clause
++NEON_2_SSE_LICENSE_FILES = LICENSE
++NEON_2_SSE_INSTALL_STAGING = YES
++NEON_2_SSE_INSTALL_TARGET = NO
 +
 +$(eval $(cmake-package))
 -- 
