@@ -1,65 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55586C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 09:09:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90D85C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 09:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D99A8408BF;
-	Mon, 28 Nov 2022 09:09:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D99A8408BF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 169D581DE5;
+	Mon, 28 Nov 2022 09:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 169D581DE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hAV0IxhglZ2g; Mon, 28 Nov 2022 09:09:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dw3UvLIPlW85; Mon, 28 Nov 2022 09:12:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01162408FF;
-	Mon, 28 Nov 2022 09:09:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01162408FF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 849771BF3C8
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 09:09:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40DD981DE6;
+	Mon, 28 Nov 2022 09:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40DD981DE6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FF8A1BF3C8
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 09:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D08D408BF
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 09:09:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D08D408BF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73DD34161A
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 09:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73DD34161A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qPIbMBkOGP6J for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 09:09:40 +0000 (UTC)
-X-Greylist: delayed 00:05:49 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52FE4408BA
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
- [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 52FE4408BA
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:09:40 +0000 (UTC)
-Received: from pendragon.ideasonboard.com
- (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
- by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3F404501;
- Mon, 28 Nov 2022 10:03:46 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a9deTsm4GJlP for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 09:12:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8547415C9
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E8547415C9
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:12:12 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id f13so16327982lfa.6
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 01:12:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Wd24cU493J8S8mudTmbmEQP2eTc1LwAljjMFUAg5f+0=;
+ b=RRzpzQNH9E5J1wmZpz03twmtvOtg4DomvZMuQRfiahkZsWJxh2j/x1d+0iwkQG2NxB
+ pYG7RRDq1XGnC8XqURgDNwXToxVcdkP5H4pyP2s5FjxLGeQPwsBP2WwMN6QvpgbBTdOc
+ BCh75d6NJa9biwlwB2AM76RdEKUsglek3bpQwSB1GvFvCq5iJ1t7wI1qNhIWxb6Cg2SO
+ m8ePVyaLOS4ShE3TGrqT8AHpfCZZE1I1f9rQt8Z/RAYs9JHWhaHHu7p8AexmNp6xpe5h
+ GXX4sdjcsyHZFa2rKfUIbgcdW2BEzfewEId+Q3bmwzioIE7tUtu5DE3GKivDdmKl4aw+
+ Y/NQ==
+X-Gm-Message-State: ANoB5pldph+kSPmOlHo9oO15orPCRFVJYjiTuZXGXujZc7Hat5nlxnD9
+ ER7SA5WjTm5pr8po6x7WxhZN276YPlA=
+X-Google-Smtp-Source: AA0mqf7yhwJ2GgLjyC8+vMBo1x9wOsnE8YtMMTb8EIJ0AE/IKk5EPZhl6+JbVd04tU78YxZhMn8xrQ==
+X-Received: by 2002:a05:6512:36d3:b0:4a6:4e24:b2dc with SMTP id
+ e19-20020a05651236d300b004a64e24b2dcmr19256750lfs.456.1669626730224; 
+ Mon, 28 Nov 2022 01:12:10 -0800 (PST)
+Received: from localhost.localdomain (83-233-52-190.cust.bredband2.com.
+ [83.233.52.190]) by smtp.gmail.com with ESMTPSA id
+ m30-20020ac24ade000000b004947f8b6266sm1649709lfp.203.2022.11.28.01.12.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 28 Nov 2022 01:12:08 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 28 Nov 2022 10:11:58 +0100
+Message-Id: <20221128091158.5049-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-In-Reply-To: <notmuch-sha1-bd80a5e4a125bbe0e62e6253fdfa7610e4834e90>
-References: <notmuch-sha1-bd80a5e4a125bbe0e62e6253fdfa7610e4834e90>
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Nov 2022 09:03:44 +0000
-Message-ID: <166962622413.3066484.1675129521759030444@Monstersaurus>
-User-Agent: alot/0.10
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=ideasonboard.com; s=mail; t=1669626226;
- bh=SYi5HBQTqwLN8mVa4NMBhTxgo++v42E+1MwdiLsaAlk=;
- h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
- b=jT0+ZS1aiu+W9lHPUB26zbav+i5KT5h3n6vHwgFaMeUXqJFcrWQoobwVJ3nD9f9Cs
- m3DU2kNyDZwXjlVIWQFW2hLu+7ezkJWQWYnJgkqrZY/6VKX+/MNtrq1774IFK7+DII
- N0959/4fYpaeVw4sqU3yO/6/omTHeBIMuhC6IwBw=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com
- header.a=rsa-sha256 header.s=mail header.b=jT0+ZS1a
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-11-26
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Wd24cU493J8S8mudTmbmEQP2eTc1LwAljjMFUAg5f+0=;
+ b=YWscz3Ap4Uz0quQmaL8z8P7QovlmFZyNzLYQJPSqUQOF+veEdHG/HYtXfJ5xctmIT4
+ lCugWaN1ICweAY+IE0zLjz18dqt9spgQYtm4rvjdvO1mfOCkE/pVxfpZtK+5NVzakh8s
+ I/LSJJeCJJAPzvtAGG32rymc/yZ44ekV06aFXliF3Iqw44mHe8VZdnkhgRFG49o3C9rj
+ CrG9EpxzyXulPEPZToTxxLYpildzLPNT+vSOB6hnXurg4DVliZrxofRr5sAoUGpZkeIP
+ v7dzMlvyOfqWu9rGsA5/azPb1e1n9kibezX8wAY8ZpzuewVSWzNjV5BLcJvRjH8Yvd/c
+ 2+eA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YWscz3Ap
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2022.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,65 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-+ Buildroot list
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 582af4b7b9..ed31109fdb 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  835ef47d9a0b35a10c77ffd7f0fbd2e2b87f7cccb588da27442a05ff71ffad8c  libostree-2022.6.tar.xz
++sha256  8be2a9261c94e8b9ec4113380ffc480f8598245fb321a009bad4fae4b822411f  libostree-2022.7.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index e99da9d2cb..8e8ec63213 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2022.6
++LIBOSTREE_VERSION = 2022.7
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
+-- 
+2.38.1
 
-Quoting Thomas Petazzoni (2022-11-27 07:39:11)
-> Hello,
-> 
-> Autobuilder failures
-> ====================
-> 
-> Below is a list of build failures reported by the Buildroot autobuilders
-> in relation to packages or CPU architectures you are in charge of.
-> Please help us improving the quality of Buildroot by investigating those
-> build failures and sending patches to fix them.
-> 
-> Results for the '2022.02.x' branch
-> ----------------------------------
-> 
-> Build failures related to your packages:
-> 
->     arch     |             reason             |                                       url                                      
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->   aarch64    | libcamera-1966b9a58436fab51... | http://autobuild.buildroot.net/results/5ea8f180e4909f8157565238b25f567fcf1f3beb
-
-Upon a quick examination I can see the following highlights in
-build-end.log here:
-
-...
-Run-time dependency GTest found: YES 1.11.0
-...
-    lc-compliance application: YES
-...
-    lc-compliance            : enabled
-...
-[117/121] Linking target src/lc-compliance/lc-compliance
-FAILED: src/lc-compliance/lc-compliance
-/home/buildroot/autobuild/run/instance-3/output-1/host/bin/aarch64-linux-gnu-g++  -o src/lc-compliance/lc-compliance src/lc-compliance/lc-compliance.p/.._cam_event_loop.cpp.o src/lc-compliance/lc-compliance.p/.._cam_options.cpp.o src/lc-compliance/lc-compliance.p/environment.cpp.o src/lc-compliance/lc-compliance.p/main.cpp.o src/lc-compliance/lc-compliance.p/simple_capture.cpp.o src/lc-compliance/lc-compliance.p/capture_test.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,--start-group -lstdc++fs -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera:$ORIGIN/../libcamera/base:/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64' -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-3/output-1/build/libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4/build/src/libcamera -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-3/output-1/build/libcamera-1966b9a58436fab51f8270aad6a228b935e4fac4/build/src/libcamera/base -Wl,-rpath-li
- nk,/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64 src/libcamera/libcamera.so.0.0.0 src/libcamera/base/libcamera-base.so.0.0.0 -latomic /home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libevent_pthreads.so /home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libevent.so -lpthread -L/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lgtestd -Wl,--end-group
-/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/7.3.1/../../../../aarch64-linux-gnu/bin/ld: cannot find -lgtestd
-collect2: error: ld returned 1 exit status
-
-I don't think we've changed anything (on the libcamera side) regarding
-gtest/lc-compliance in quite some time ... so I'm surprised to see this
-error pop up?
-
---
-Kieran
-
-
-> Thanks for your contribution to Buildroot!
-> 
-> -- 
-> http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
