@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0129CC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 17:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D37AC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 28 Nov 2022 17:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8295D60BD6;
-	Mon, 28 Nov 2022 17:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8295D60BD6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4996E8137A;
+	Mon, 28 Nov 2022 17:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4996E8137A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWKTBdUdd7gw; Mon, 28 Nov 2022 17:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9qLwxdgPnr9q; Mon, 28 Nov 2022 17:59:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C28F660C2E;
-	Mon, 28 Nov 2022 17:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C28F660C2E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 941501BF20B
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70DB88135A;
+	Mon, 28 Nov 2022 17:59:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70DB88135A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AAA61BF20B
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EAB360B92
- for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EAB360B92
+ by smtp1.osuosl.org (Postfix) with ESMTP id 657658135A
+ for <buildroot@lists.busybox.net>; Mon, 28 Nov 2022 17:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 657658135A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MAhALIongw3e for <buildroot@lists.busybox.net>;
- Mon, 28 Nov 2022 17:58:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A9ILMEHTlgU6 for <buildroot@lists.busybox.net>;
+ Mon, 28 Nov 2022 17:58:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC4860B2C
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DC4860B2C
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 17:58:57 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id g26so7534812iob.11
- for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:58:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61A4D81252
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 61A4D81252
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 17:58:59 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id x12so2479358ilg.1
+ for <buildroot@buildroot.org>; Mon, 28 Nov 2022 09:58:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2z/VoGPWnYvwHtDlK5X9LfcCaGfQbHxKgTA2z7jz+8w=;
- b=3Xhg8MQLGhbJF8Nh7o5LEH5crrybqV00QbTBAocv7+JDVi6PL5qDk/9j/aybpM6fZe
- 1X0JeElghsFQqOUsBSOJ25Ud7AqCdwWwTnHoCl3NjQd0HemZwZ2E0yEWJUF5C005uhgz
- MKUzUGZeGfr6kjyU/77DTl1sVFML2RAeVEItSxfI+4ZW1j4JxuTCy/gFFg8GUiDkwhf3
- HnvBIoIQbmNwkIlEn31ntFE53NkREkZB0t8UU7p8ixc2Tn8R7StH4unC4RHjQqRTmYGS
- 3qzt1vtGmNCy60A/fJXEtcN4Gp7U9ZNZ3xKm7/nnM+B0dYDLYmnnscakC4h9I8hA0CDR
- 26GA==
-X-Gm-Message-State: ANoB5pkiQ2Y5DG8Wly72sr1x4z+wPsHFjeEEv4aokxVHvTvbi8Y0SxZM
- 2zVe7KWmoj94D7HQ00ciu5jvJq9wH01G+g==
-X-Google-Smtp-Source: AA0mqf6WgiJeySk+2Jkujr/rHojMFQCWd+nenKRaKrJvcyoTxRq9jYCWYNoVfl8Mh29oJ1l/AQ0ALA==
-X-Received: by 2002:a05:6638:4394:b0:34a:35a:5463 with SMTP id
- bo20-20020a056638439400b0034a035a5463mr18940669jab.148.1669658336323; 
- Mon, 28 Nov 2022 09:58:56 -0800 (PST)
+ bh=NkxPNA5F3tLQheb8jim0Blgupw3YYdZGZC25ymbd0qc=;
+ b=2Bdd6bJf5RkrFw3oZJGAFlXC34HNVhfX9apE4Artav8a3e4cX0XCiDnmMtsQf+LIIH
+ URGiYO8VhzWNk5JH3AvchjuHWu4qlbl/gVyQXIAj+KjXsTY8pHOK24TR/wiwqND2W6nr
+ SeVphR4FC7rO8VY2O5apf1I3RKPwCnv6bNplOKT50MzvF/MuvjSltG817dUcehlTdA5O
+ ckyuJ/13Qui0V+BN+OAszLuVT0QGt9IQE/TFOAb5OM3+yT6rMNC05QuHNT49PVssRzz8
+ cMHPlJfIM23i0q1S03zZO3s3QHp/T0pavOfYsPAayyp/kZx+agGXEIoUfjssp7vdI2hQ
+ 2Nxw==
+X-Gm-Message-State: ANoB5pndX9hjudQ6CxNAgin+GN84U6Isbo+4V1x8VczXrMGWxAeVkM7U
+ I6uMofWgeWAKIDK9snnzTr6eCdLxU2/QTsp3
+X-Google-Smtp-Source: AA0mqf507yPNrtCua23vb5GA8td7beTImT1KWlUv+frH96aNWdWFWl//G+yV8kycXsUE4OfMvqujJQ==
+X-Received: by 2002:a92:cc4a:0:b0:302:b6c0:70f7 with SMTP id
+ t10-20020a92cc4a000000b00302b6c070f7mr15144541ilq.151.1669658338149; 
+ Mon, 28 Nov 2022 09:58:58 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- y16-20020a056638229000b00363781b6bccsm4564802jas.49.2022.11.28.09.58.55
+ y16-20020a056638229000b00363781b6bccsm4564802jas.49.2022.11.28.09.58.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Nov 2022 09:58:55 -0800 (PST)
+ Mon, 28 Nov 2022 09:58:57 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 28 Nov 2022 10:58:45 -0700
-Message-Id: <20221128175851.1913859-2-james.hilliard1@gmail.com>
+Date: Mon, 28 Nov 2022 10:58:47 -0700
+Message-Id: <20221128175851.1913859-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128175851.1913859-1-james.hilliard1@gmail.com>
 References: <20221128175851.1913859-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2z/VoGPWnYvwHtDlK5X9LfcCaGfQbHxKgTA2z7jz+8w=;
- b=DywXIOLARglJTrnC7CD4mrvGsQ1Yw8lJhqTqO6Ytc7cD7NGFo7hWViCQ78pTgBdL1i
- lPWwl2E7GrgWrF/eL3YkokQnQu9pICy3wA9UA7TuQMnKMnRvXODmFayxjT/F4TJdZjod
- sFYwVIGOAv7jLidY4WB0IiMslgqzyT4yCFq4D1IhovAjEUV8AJLlHI1fhftXxlwc0UYy
- /8O54vEnrWpxe5Z1Jr/somAbe1U2fu5pDNESbY9J+yL86TTNjECzuHbwnKFbMVJA6GAe
- i02VxJIPllvYLxU32QCrEiJmMzTs28wlp9ozgXFet/S/KJA7N4I+uHWuh7nyeS6E2KJC
- fhQA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=NkxPNA5F3tLQheb8jim0Blgupw3YYdZGZC25ymbd0qc=;
+ b=D6DbcVxve9zONM6celP9yK0MIeQSjPorjFnAwBjlLOLYWdNXC2oX/uyjSmNYB1JFcS
+ kC4ErmMp5P2K7bJHmS4to16CI7qGJg2Dx+PsSIl5OM6nnh44Z4oKT7rcokF61AmpNQjp
+ gj6pt+NF8IWi5DPRbWIe3BETqTWIDXYeidP5c7Ve5vz5k05LKdXCl0o6b8c3bKnSKZFQ
+ rwlbnAd05AbJbnnJwWKMqWtPoYBKQm8yOFbZH53mM+OXF4apyaHlxl4FB+bf5KPR6ma5
+ QeBy+GiMXIVXmrU4h5KAXk+RuGdhmO65JKXdDlTf2y8t5LPU8oGnJr6VYWWFSNEm+q3C
+ qAgg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=DywXIOLA
-Subject: [Buildroot] [PATCH v2 2/8] package/cpuinfo: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=D6DbcVxv
+Subject: [Buildroot] [PATCH v2 4/8] package/gemmlowp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,73 +113,69 @@ This package is required by tensorflow-lite.
 Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in            |  1 +
- package/cpuinfo/Config.in    |  9 +++++++++
- package/cpuinfo/cpuinfo.hash |  4 ++++
- package/cpuinfo/cpuinfo.mk   | 17 +++++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/cpuinfo/Config.in
- create mode 100644 package/cpuinfo/cpuinfo.hash
- create mode 100644 package/cpuinfo/cpuinfo.mk
+ package/Config.in              |  1 +
+ package/gemmlowp/Config.in     |  7 +++++++
+ package/gemmlowp/gemmlowp.hash |  4 ++++
+ package/gemmlowp/gemmlowp.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/gemmlowp/Config.in
+ create mode 100644 package/gemmlowp/gemmlowp.hash
+ create mode 100644 package/gemmlowp/gemmlowp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index aef80f9ab0..e09fa0b3bd 100644
+index 45e66caa8c..d0d9d2905c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -465,6 +465,7 @@ endmenu
- 	source "package/cc-tool/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cpuburn-arm/Config.in"
-+	source "package/cpuinfo/Config.in"
- 	source "package/crucible/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+@@ -1994,6 +1994,7 @@ menu "Other"
+ 	source "package/flatcc/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
++	source "package/gemmlowp/Config.in"
+ 	source "package/gflags/Config.in"
+ 	source "package/gli/Config.in"
+ 	source "package/glibmm/Config.in"
+diff --git a/package/gemmlowp/Config.in b/package/gemmlowp/Config.in
 new file mode 100644
-index 0000000000..137f657d69
+index 0000000000..24ba6e9768
 --- /dev/null
-+++ b/package/cpuinfo/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_CPUINFO
-+	bool "cpuinfo"
++++ b/package/gemmlowp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_GEMMLOWP
++	bool "gemmlowp"
 +	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  CPU INFOrmation library, cpuinfo is a library to detect
-+	  essential for performance optimization information about
-+	  host CPU.
++	  Low-precision matrix multiplication.
 +
-+	  https://github.com/pytorch/cpuinfo
-diff --git a/package/cpuinfo/cpuinfo.hash b/package/cpuinfo/cpuinfo.hash
++	  https://github.com/google/gemmlowp
+diff --git a/package/gemmlowp/gemmlowp.hash b/package/gemmlowp/gemmlowp.hash
 new file mode 100644
-index 0000000000..c3f70fa90f
+index 0000000000..7c56a18bb6
 --- /dev/null
-+++ b/package/cpuinfo/cpuinfo.hash
++++ b/package/gemmlowp/gemmlowp.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  0936848904943381b2c01321101614776e43d583840ee0f3ceeea1e3fb7405f7  cpuinfo-de2fa78ebb431db98489e78603e4f77c1f6c5c57.tar.gz
++sha256  cc8a22b6f071c3781e6b4b72654c89b1cdc198e72ebadebb17638eac205344c1  gemmlowp-08e4bb339e34017a0835269d4a37c4ea04d15a69.tar.gz
 +# License files, locally calculated
-+sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  LICENSE
-diff --git a/package/cpuinfo/cpuinfo.mk b/package/cpuinfo/cpuinfo.mk
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
 new file mode 100644
-index 0000000000..ab6a0269ec
+index 0000000000..1a36fc48f7
 --- /dev/null
-+++ b/package/cpuinfo/cpuinfo.mk
-@@ -0,0 +1,17 @@
++++ b/package/gemmlowp/gemmlowp.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# cpuinfo
++# gemmlowp
 +#
 +################################################################################
 +
-+CPUINFO_VERSION = de2fa78ebb431db98489e78603e4f77c1f6c5c57
-+CPUINFO_SITE = $(call github,pytorch,cpuinfo,$(CPUINFO_VERSION))
-+CPUINFO_LICENSE = BSD-2-Clause
-+CPUINFO_LICENSE_FILES = LICENSE
-+CPUINFO_INSTALL_STAGING = YES
-+CPUINFO_CONF_OPTS = \
-+	-DCPUINFO_BUILD_UNIT_TESTS=OFF \
-+	-DCPUINFO_BUILD_MOCK_TESTS=OFF \
-+	-DCPUINFO_BUILD_BENCHMARKS=OFF
++GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
++GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
++GEMMLOWP_LICENSE = Apache-2.0
++GEMMLOWP_LICENSE_FILES = LICENSE
++GEMMLOWP_INSTALL_STAGING = YES
++GEMMLOWP_INSTALL_TARGET = NO
++GEMMLOWP_SUBDIR = contrib
 +
 +$(eval $(cmake-package))
 -- 
