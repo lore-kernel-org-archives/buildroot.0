@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CB9C46467
-	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 11:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E06CC4321E
+	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 11:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6E92404DA;
-	Tue, 29 Nov 2022 11:41:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6E92404DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB00D60D5B;
+	Tue, 29 Nov 2022 11:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB00D60D5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jvfa0df8FOpy; Tue, 29 Nov 2022 11:41:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 72EYKhuwaOFK; Tue, 29 Nov 2022 11:41:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E907C404BB;
-	Tue, 29 Nov 2022 11:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E907C404BB
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2E1460D70;
+	Tue, 29 Nov 2022 11:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2E1460D70
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB101BF2C3
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 220F91BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 06F7D81406
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06F7D81406
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B10181409
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B10181409
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yWb4RNgSdAae for <buildroot@lists.busybox.net>;
- Tue, 29 Nov 2022 11:40:57 +0000 (UTC)
+ with ESMTP id P_lZsRojN3FY for <buildroot@lists.busybox.net>;
+ Tue, 29 Nov 2022 11:41:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87EF4812E7
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87EF4812E7
- for <buildroot@busybox.net>; Tue, 29 Nov 2022 11:40:57 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id v1so21606698wrt.11
- for <buildroot@busybox.net>; Tue, 29 Nov 2022 03:40:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDDA1812E7
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDDA1812E7
+ for <buildroot@busybox.net>; Tue, 29 Nov 2022 11:41:05 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id q7so20736153wrr.8
+ for <buildroot@busybox.net>; Tue, 29 Nov 2022 03:41:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FNeNM1ZgPhHyYr5cDYwvoY84PX/KWJ70RjDxL11srYQ=;
- b=4xR1v5KxUk2CmfuBqGFH2sFyqyB3a0DG7+QfN2p+NcGTrp4tiTkN21K+QavgTIEn2k
- V1FzAoO/ms2uu1t7yy5UmzizL3zSzXed+UWw1cuSjgfv72F9VgqVc8Wl3k3eeWzyy5yq
- IbdQo6bIIfk69+VDo5TqOIYLlBhJ2+Pkl1syXRw3OqG8hEwi8AAZzrNd7FtgKKrS/j41
- +yYLBreM1bwgHeMSlUqCEjbnYDTVCK/e2OM9qKYlMzd2xptXIAbg5jPO6csC9DADxEDI
- D+4tagfyg227xHi/k7GhEd4v1FL7HJSkpUfiupO8HHkrEX3lT6H0tOdTbqFkV1k2TRXZ
- dbOg==
-X-Gm-Message-State: ANoB5plgnb8n00lkkqQnXUdaWbx+wupm71/TNPhvFzV6u3MldWjUazUQ
- ii1cPBBID9O1nlTViee/NtKAxXBRS0M=
-X-Google-Smtp-Source: AA0mqf791PGNYHF5hWAfuNyUSmQvT24ZxyyC8cpFKKFRWMN3qcAnro2pX4kL3sqGiwoPktz0zucUDA==
-X-Received: by 2002:adf:ea90:0:b0:242:1ae0:f2a4 with SMTP id
- s16-20020adfea90000000b002421ae0f2a4mr4969521wrm.209.1669722055584; 
- Tue, 29 Nov 2022 03:40:55 -0800 (PST)
+ bh=sIM/H4rTax6ufnrWhnc//1Gtwqi1K10mrrz8JuVfgec=;
+ b=0V5958YY4ALxOpUD7MGhvTcL68JJ4KXLJxzmLd++yA+GMu9fA+dYHKaYL0g+JO66Eg
+ v/xJT7VoPX3ecIx7I+xvoidsVm/0BC8zAsxHa48U1M7CJ98uauNnXOJR8lpMQeYg4wZT
+ xguWAiK1AsNSWsdpPHCY6JGKBA46wgjnrbXAJprxYs99HtOozV2FWVmdZ8OuGQyvdroQ
+ VwGC8LRDNnRM8mgJAydCnPfXo0yo31ZQCeUJ/kZaKOBQn4ET2K3GavQtSxGas9LxhLE0
+ s0e8GEiaFXm5B44XZg3Rzv3RS00fhonuu/iOsqtEy+nU7grmVCfk4e8Jk/6n11Qifute
+ J9ZA==
+X-Gm-Message-State: ANoB5pnYyephD9bhWmqE5OnRRLxRyOu1H680sYQOFbBD2kIZmIhGI57m
+ l3M07SqJOei+GagB5U9C5U2qZouLSoo=
+X-Google-Smtp-Source: AA0mqf5yLnd3QpCCvLzauJGU0RpRKC+ppus/InJcA1mBJh5F7iD8uiEZBkHxroWcvYK5FEUeLI5ryA==
+X-Received: by 2002:adf:ec8f:0:b0:235:470e:a9f3 with SMTP id
+ z15-20020adfec8f000000b00235470ea9f3mr33328597wrn.263.1669722064158; 
+ Tue, 29 Nov 2022 03:41:04 -0800 (PST)
 Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- i28-20020a05600c4b1c00b003cfd4e6400csm1788685wmp.19.2022.11.29.03.40.54
+ u1-20020a5d5141000000b002365cd93d05sm13252799wrt.102.2022.11.29.03.41.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Nov 2022 03:40:55 -0800 (PST)
+ Tue, 29 Nov 2022 03:41:03 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 29 Nov 2022 12:40:42 +0100
-Message-Id: <20221129114042.1372248-1-francois.perrad@gadz.org>
+Date: Tue, 29 Nov 2022 12:40:59 +0100
+Message-Id: <20221129114059.1372269-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FNeNM1ZgPhHyYr5cDYwvoY84PX/KWJ70RjDxL11srYQ=;
- b=RoMbwi1vQQJ3/4mzcri0XQm2nF3p2NC9v9eKCBBSUvyw2zZ1cuW5O+N3ju+pvnYeme
- xAewZbGlGLjdWoIVtdhx0tmRoU43kOtomKtiAKtoh2/BWduXSkYPFGbxOnUe/Z9wyX8s
- Kcs4FM9uzHuZxg7KXDur4/wY4C2fSLXtNsc281fvdeNaju/pPBX7K6N+XMFE/1d+PwNR
- eC5jZzg4d7ZNHVQ10xPNIaIfyy8yNb3JDA/mDlsCsNxXJeVgcr1+Z+Zyb17HDzDnwAaU
- SKjh2Mw96l+tp9Lz0OZu+DW3jkjnro3v+AjQWqZWtis2K+JA3qNDrBxzAn+lfQKgpxnT
- tr7A==
+ bh=sIM/H4rTax6ufnrWhnc//1Gtwqi1K10mrrz8JuVfgec=;
+ b=hoJ0NevmUe0OfYQHCEMXC04bMOw9I8aCRNiQ8TtTdSYFoZRcaQl1DEN7wPlizcOEiL
+ Q7J2/RbSsom3rcA/YANPUGrSsU8RdpLdqgfJncMzrBGrG06zHY7FrHnYem8L5o4kX8I4
+ hrK+CJURRodP3D+YPtl2fg7RyXqsCHAcB1rABp+mweieyH54DMvWT9ACnhpn07Ig0ho+
+ /iUdSoZKA6Kig5zkEhh01wma0S2M6OKTBnuOONfeA7TYx15M4r38e0I3f4IC3AwXpslv
+ RFWLFMJjXhG5Fn5cibXC+AqYfFh1ndXWxhKHxoNF9B0i7unoEEYhzcXYjwQdMwZuVC/S
+ kw1g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RoMbwi1v
-Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.35
+ header.a=rsa-sha256 header.s=20210112 header.b=hoJ0Nevm
+Subject: [Buildroot] [PATCH] package/libpng: bump to version 1.6.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,63 +101,54 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libgtk3/0002-fix-introspection-check.patch | 2 +-
- package/libgtk3/0003-disable-atk-bridge.patch      | 2 +-
- package/libgtk3/libgtk3.hash                       | 4 ++--
- package/libgtk3/libgtk3.mk                         | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch | 4 ++--
+ package/libpng/libpng.hash                                | 8 ++++----
+ package/libpng/libpng.mk                                  | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libgtk3/0002-fix-introspection-check.patch b/package/libgtk3/0002-fix-introspection-check.patch
-index b12e1a4fc..7edf7db71 100644
---- a/package/libgtk3/0002-fix-introspection-check.patch
-+++ b/package/libgtk3/0002-fix-introspection-check.patch
-@@ -14,7 +14,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+diff --git a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
+index d232e4d62..d16bdb2b1 100644
+--- a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
++++ b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
+@@ -40,8 +40,8 @@ index a66f6aa..4e67782 100644
+ -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
+ +bin_PROGRAMS =
+  @PNG_ARM_NEON_TRUE@am__append_2 = arm/arm_init.c\
+- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
+- 
++ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c \
++ @PNG_ARM_NEON_TRUE@	arm/palette_neon_intrinsics.c
+ -- 
+ 2.7.3
  
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1679,7 +1679,10 @@
-+@@ -1690,7 +1690,10 @@
-  # GObject introspection
-  ##################################################
- 
-diff --git a/package/libgtk3/0003-disable-atk-bridge.patch b/package/libgtk3/0003-disable-atk-bridge.patch
-index 09ede9661..390fc012f 100644
---- a/package/libgtk3/0003-disable-atk-bridge.patch
-+++ b/package/libgtk3/0003-disable-atk-bridge.patch
-@@ -7,7 +7,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
- 
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1375,11 +1375,7 @@
-+@@ -1386,11 +1386,7 @@
-  # Check for Accessibility Toolkit flags
-  ########################################
- 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index c68c6e90f..1715b94e7 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.34.sha256sum
--sha256  dbc69f90ddc821b8d1441f00374dc1da4323a2eafa9078e61edbe5eeefa852ec  gtk+-3.24.34.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.35.sha256sum
-+sha256  ec10fe6d712ef0b3c63b5f932639c9d1ae99fce94f500f6f06965629fef60bd1  gtk+-3.24.35.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 53d7f6898..f277fce2e 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 34b0a8a8b..c1f65c93a 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.38/
+-md5  122e6b7837811698563083b352bc8ca2  libpng-1.6.38.tar.xz
+-sha1  60960ed110094843e5efa221df6a7d21614a4dba  libpng-1.6.38.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.39/
++md5  aa1ae92e172417039bda072b702f6326  libpng-1.6.39.tar.xz
++sha1  3f2386d61eccae211ec4f57899e4ac2ca60d390b  libpng-1.6.39.tar.xz
+ # Locally computed:
+-sha256  b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be  libpng-1.6.38.tar.xz
++sha256  1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937  libpng-1.6.39.tar.xz
+ sha256  dfe5a536b0e5a531f844fb9c101a3089aca60772a503893b8e15f9457e369960  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 43b4f373f..a18c36fe7 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).34
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).35
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+-LIBPNG_VERSION = 1.6.38
++LIBPNG_VERSION = 1.6.39
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 -- 
 2.37.2
 
