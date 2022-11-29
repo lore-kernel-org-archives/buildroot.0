@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E06CC4321E
-	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 11:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D71FCC4321E
+	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 11:41:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB00D60D5B;
-	Tue, 29 Nov 2022 11:41:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB00D60D5B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AFF54097F;
+	Tue, 29 Nov 2022 11:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AFF54097F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 72EYKhuwaOFK; Tue, 29 Nov 2022 11:41:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sFJTjfz5dLaw; Tue, 29 Nov 2022 11:41:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2E1460D70;
-	Tue, 29 Nov 2022 11:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2E1460D70
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55CA9408C6;
+	Tue, 29 Nov 2022 11:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55CA9408C6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 220F91BF2C3
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 211F51BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B10181409
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B10181409
+ by smtp1.osuosl.org (Postfix) with ESMTP id 087AF8142E
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 11:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 087AF8142E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P_lZsRojN3FY for <buildroot@lists.busybox.net>;
- Tue, 29 Nov 2022 11:41:06 +0000 (UTC)
+ with ESMTP id YzCtd0VXp3i1 for <buildroot@lists.busybox.net>;
+ Tue, 29 Nov 2022 11:41:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDDA1812E7
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DDDA1812E7
- for <buildroot@busybox.net>; Tue, 29 Nov 2022 11:41:05 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id q7so20736153wrr.8
- for <buildroot@busybox.net>; Tue, 29 Nov 2022 03:41:05 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14F4381465
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 14F4381465
+ for <buildroot@busybox.net>; Tue, 29 Nov 2022 11:41:12 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ l39-20020a05600c1d2700b003cf93c8156dso10579574wms.4
+ for <buildroot@busybox.net>; Tue, 29 Nov 2022 03:41:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=sIM/H4rTax6ufnrWhnc//1Gtwqi1K10mrrz8JuVfgec=;
- b=0V5958YY4ALxOpUD7MGhvTcL68JJ4KXLJxzmLd++yA+GMu9fA+dYHKaYL0g+JO66Eg
- v/xJT7VoPX3ecIx7I+xvoidsVm/0BC8zAsxHa48U1M7CJ98uauNnXOJR8lpMQeYg4wZT
- xguWAiK1AsNSWsdpPHCY6JGKBA46wgjnrbXAJprxYs99HtOozV2FWVmdZ8OuGQyvdroQ
- VwGC8LRDNnRM8mgJAydCnPfXo0yo31ZQCeUJ/kZaKOBQn4ET2K3GavQtSxGas9LxhLE0
- s0e8GEiaFXm5B44XZg3Rzv3RS00fhonuu/iOsqtEy+nU7grmVCfk4e8Jk/6n11Qifute
- J9ZA==
-X-Gm-Message-State: ANoB5pnYyephD9bhWmqE5OnRRLxRyOu1H680sYQOFbBD2kIZmIhGI57m
- l3M07SqJOei+GagB5U9C5U2qZouLSoo=
-X-Google-Smtp-Source: AA0mqf5yLnd3QpCCvLzauJGU0RpRKC+ppus/InJcA1mBJh5F7iD8uiEZBkHxroWcvYK5FEUeLI5ryA==
-X-Received: by 2002:adf:ec8f:0:b0:235:470e:a9f3 with SMTP id
- z15-20020adfec8f000000b00235470ea9f3mr33328597wrn.263.1669722064158; 
- Tue, 29 Nov 2022 03:41:04 -0800 (PST)
+ bh=aUdr52qZuR/yEpJE/Fr3LajpKSpUnvhtVa4dJXsRyl0=;
+ b=YkRb3q0m64cnmkAccp30nJIBCj0cSxcSAYf4cOUkkqOwNcTj+FHz6rtMqjPaeDllbr
+ IrGJgqvzTzxLbOiGqpOg1bJ76TUajHQwyhavpHA6guyoDJiEE8tVwzSE+FS8CsmPbW2j
+ B7fz2b2xyKzdgFsQQUOmRZQ5rl3prV/TcVYroy7JnDQ5Kgo/Sc0plkRwzGlWoBLPhnbw
+ cJ57NfugZp5mckFWnz5DEGwGeKLtS08RFGWjYb1qgCzX+tBiXhIxFxiNtrSQF7qNnZ9V
+ c/V209QcpQKSiC1mp9vqQpwKkSEGaNe2bUhvZlYBEcVha6dsOaYmGdHNZq2xxzzmlsWP
+ HI8g==
+X-Gm-Message-State: ANoB5pnWvmKWda07VLO6d7NXEcHIsjgZOzMJShlaYQFgvoMpOdNu6Qz9
+ oEmBa38V3r4xJuqvIpWGwby1JsI7dEI=
+X-Google-Smtp-Source: AA0mqf5Qh24lvHpwrIEFTt3dlXllDD/VsFkp+VhaAOXnE7s/tTzcDbD2hNMLwyZHNZ6v8r+W0G6utw==
+X-Received: by 2002:a05:600c:1f0f:b0:3d0:2a82:1cb2 with SMTP id
+ bd15-20020a05600c1f0f00b003d02a821cb2mr26848507wmb.206.1669722071081; 
+ Tue, 29 Nov 2022 03:41:11 -0800 (PST)
 Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- u1-20020a5d5141000000b002365cd93d05sm13252799wrt.102.2022.11.29.03.41.03
+ bo24-20020a056000069800b00241d544c9b1sm15644344wrb.90.2022.11.29.03.41.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Nov 2022 03:41:03 -0800 (PST)
+ Tue, 29 Nov 2022 03:41:10 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 29 Nov 2022 12:40:59 +0100
-Message-Id: <20221129114059.1372269-1-francois.perrad@gadz.org>
+Date: Tue, 29 Nov 2022 12:41:08 +0100
+Message-Id: <20221129114108.1372290-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sIM/H4rTax6ufnrWhnc//1Gtwqi1K10mrrz8JuVfgec=;
- b=hoJ0NevmUe0OfYQHCEMXC04bMOw9I8aCRNiQ8TtTdSYFoZRcaQl1DEN7wPlizcOEiL
- Q7J2/RbSsom3rcA/YANPUGrSsU8RdpLdqgfJncMzrBGrG06zHY7FrHnYem8L5o4kX8I4
- hrK+CJURRodP3D+YPtl2fg7RyXqsCHAcB1rABp+mweieyH54DMvWT9ACnhpn07Ig0ho+
- /iUdSoZKA6Kig5zkEhh01wma0S2M6OKTBnuOONfeA7TYx15M4r38e0I3f4IC3AwXpslv
- RFWLFMJjXhG5Fn5cibXC+AqYfFh1ndXWxhKHxoNF9B0i7unoEEYhzcXYjwQdMwZuVC/S
- kw1g==
+ bh=aUdr52qZuR/yEpJE/Fr3LajpKSpUnvhtVa4dJXsRyl0=;
+ b=Pep64Mu2KWV9uPpBF7i4+2nTMyZXNkDkZCF3mlRzehLdZvCuO82DmuekjWo4a1X6bi
+ 2KgYVityDRL4fHZD1toWEtOreQn3NtP3quC7fAVYFZde/1EOkaO0m8uvvD0vcTfh3Mla
+ 2wCt4P1JYINWo39CLrCne4qPRm/xrI7xKlAx40prVbiYuUl+pwvYHcFmecg0On6j5dgG
+ cFyy2Truoq03RnDs8WOWm70qBgLcMTfqURtZmMlv23l9TIjB1ugz4XO67ssGwHOwssl2
+ pmHnRJOIv3BK13F9//yh82Y2BIpz7zR6dmuc+rECT/PIc/1iYNJFeyNZWjhgMU12MdcZ
+ oD1g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hoJ0Nevm
-Subject: [Buildroot] [PATCH] package/libpng: bump to version 1.6.39
+ header.a=rsa-sha256 header.s=20210112 header.b=Pep64Mu2
+Subject: [Buildroot] [PATCH] package/pango: bump to version 1.50.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,54 +102,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch | 4 ++--
- package/libpng/libpng.hash                                | 8 ++++----
- package/libpng/libpng.mk                                  | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-index d232e4d62..d16bdb2b1 100644
---- a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-+++ b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-@@ -40,8 +40,8 @@ index a66f6aa..4e67782 100644
- -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
- +bin_PROGRAMS =
-  @PNG_ARM_NEON_TRUE@am__append_2 = arm/arm_init.c\
-- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
-- 
-+ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c \
-+ @PNG_ARM_NEON_TRUE@	arm/palette_neon_intrinsics.c
- -- 
- 2.7.3
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index d073526cf..60a6809ab 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.11.sha256sum
+-sha256  8800f812d89ee61388188703203f3a7878963c22f8695aaf1fa0a1a1428d17ae  pango-1.50.11.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.12.sha256sum
++sha256  caef96d27bbe792a6be92727c73468d832b13da57c8071ef79b9df69ee058fe3  pango-1.50.12.tar.xz
  
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 34b0a8a8b..c1f65c93a 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.38/
--md5  122e6b7837811698563083b352bc8ca2  libpng-1.6.38.tar.xz
--sha1  60960ed110094843e5efa221df6a7d21614a4dba  libpng-1.6.38.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.39/
-+md5  aa1ae92e172417039bda072b702f6326  libpng-1.6.39.tar.xz
-+sha1  3f2386d61eccae211ec4f57899e4ac2ca60d390b  libpng-1.6.39.tar.xz
- # Locally computed:
--sha256  b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be  libpng-1.6.38.tar.xz
-+sha256  1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937  libpng-1.6.39.tar.xz
- sha256  dfe5a536b0e5a531f844fb9c101a3089aca60772a503893b8e15f9457e369960  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 43b4f373f..a18c36fe7 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index a61473431..698894d0c 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBPNG_VERSION = 1.6.38
-+LIBPNG_VERSION = 1.6.39
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).11
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.37.2
 
