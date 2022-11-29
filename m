@@ -4,93 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1ADFC4321E
-	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 21:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2875CC4321E
+	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 22:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 684B541723;
-	Tue, 29 Nov 2022 21:42:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 684B541723
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8DC2415EB;
+	Tue, 29 Nov 2022 22:06:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8DC2415EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3HcQrLKeNqup; Tue, 29 Nov 2022 21:42:45 +0000 (UTC)
+	with ESMTP id yMBLMYs3P-Qc; Tue, 29 Nov 2022 22:06:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DD8641726;
-	Tue, 29 Nov 2022 21:42:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DD8641726
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 703951BF2BB
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 21:42:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92EEE4171E;
+	Tue, 29 Nov 2022 22:06:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92EEE4171E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 184E01BF5AD
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 22:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AEA960C0C
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 21:42:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AEA960C0C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0021C40194
+ for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 22:06:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0021C40194
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sj4M8Ieh2NvI for <buildroot@lists.busybox.net>;
- Tue, 29 Nov 2022 21:42:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0fA7EDkoEJIG for <buildroot@lists.busybox.net>;
+ Tue, 29 Nov 2022 22:06:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5FEB60B9E
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C5FEB60B9E
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 21:42:40 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- ja4-20020a05600c556400b003cf6e77f89cso527547wmb.0
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 13:42:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF98E400DD
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AF98E400DD
+ for <buildroot@buildroot.org>; Tue, 29 Nov 2022 22:06:46 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id o5so15279565wrm.1
+ for <buildroot@buildroot.org>; Tue, 29 Nov 2022 14:06:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=vNCvyXh9X91rPwWBFs2HkGqtGIEU6F9ddkKfYTpCspk=;
- b=DIXfnSB4+tKdbQytny8nn6pvhAcATpjJIOUDVIJkdjtvwHb3/XHJkvho9dkaVytj8i
- YEfW8nAB0/n0rZIaKkhMYlJOeAkx6YNk7j3fc6yFN2j7iWmZ2oIjwfgmdagDe+iHtL9p
- XHL84GlRBfWsYsqz7JIgf8mvuJcH7HU+I1zg9nl+0fCx5GgXu1Daes8edXEgAByFITeB
- GAxt7WKlyQcT0O8sDbOknbyTbc9jY/Vbcdpll57IoLg8QZncTmAvvwHD1xPbq03fOpEl
- XVQiIDpqpqr/WBB9xJp1mSNVjV/PlqHgw8gmwtoEQeXhUEjQwjZn2G4524b1rLJTpU4M
- hzsQ==
-X-Gm-Message-State: ANoB5pmwI2k3yHA7Hhx17faXwQ0deMhF3Dn1SymJQmjOskkBF9S5TV7i
- vzKJhQ5Y7krjv1m/3cLDhOky1g==
-X-Google-Smtp-Source: AA0mqf6CJXuaXqhqKCEzszlzdeBm+HyuI6V6VEdp5tj4x/P5BjuvBY8nIRj27q1Y17qB53TSF8HWxA==
-X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id
- a21-20020a05600c349500b003cfae53918fmr31622958wmq.131.1669758158923; 
- Tue, 29 Nov 2022 13:42:38 -0800 (PST)
+ bh=Vy5aDB/HPxwE2fFeH8f1/3WKR3X13EcyHNcBaTRwUNo=;
+ b=SfiNFN3kX6b1kKRG9d36ia0f+k6NZhooFM4fpM6G6eIvrh61Wj8aIm7DXlnVfP/JMF
+ rgY4c7cNGhD138qmBL63QzkdxtIY3+m3wxYrGRfSdNOXQIGjVUl3rA8fbdf0WDI6zHWM
+ JV55fien3a4VxyijlV8A0NIwDlLxe9SxD2ZB/aZ0Ym6pYHwhgx+2uUUXAwud3MB3GQHc
+ WGZ+Byse4VcsSwTO/f+kzuj7b69elHvQcqdkyw9TTKCTOGJv7jYmBM8wsbSzNCJXacay
+ lFZMaH2ZqpsYtKzQ8hmr9CyYgVBfWFN+/NMZ/Egbvusb2i7QSCUu1W0zn+Zaij7yf0lg
+ brsg==
+X-Gm-Message-State: ANoB5pnl4KGigtM8KLPQMc37df7kVgrKfYF7DwjQQYnC0Da4LPYTcTKO
+ TIkuNWaCYlrfhBtKPtuARpEbgcivK627bg==
+X-Google-Smtp-Source: AA0mqf7OLNIE7O2Xdk0VDtpvfRFMsuJMdfNZac12edFBpRpmqRbOdrr1iKDXx2ewnI9T6sy0evIQ6w==
+X-Received: by 2002:a5d:68c1:0:b0:242:15b5:59ac with SMTP id
+ p1-20020a5d68c1000000b0024215b559acmr7851491wrw.128.1669759604668; 
+ Tue, 29 Nov 2022 14:06:44 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- a12-20020adfe5cc000000b0022cc3e67fc5sm14335180wrn.65.2022.11.29.13.42.38
+ k13-20020a05600c1c8d00b003c6bd91caa5sm4002954wms.17.2022.11.29.14.06.43
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 29 Nov 2022 13:42:38 -0800 (PST)
-Message-ID: <c29e48e0-d7e7-3f61-082a-b7b3fba976f4@mind.be>
-Date: Tue, 29 Nov 2022 22:42:36 +0100
+ Tue, 29 Nov 2022 14:06:44 -0800 (PST)
+Message-ID: <63beead1-bbe5-e6cd-5c29-59eb3557aaf6@mind.be>
+Date: Tue, 29 Nov 2022 23:06:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20221128175851.1913859-1-james.hilliard1@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20221129140533.438862-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20221128175851.1913859-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221129140533.438862-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=vNCvyXh9X91rPwWBFs2HkGqtGIEU6F9ddkKfYTpCspk=;
- b=VC2tUpGTofIJofhbxVh0pLKjNPMaehRwyzWt8wwJWHFTVX42FZbBK6JuJ0TQblCdMi
- s+QHC/y18IuBgX7g1NAHnkSI6KqxX9c429wh4xJRpC0nrXk0LSSVnMG3PpwCqBQvXXeS
- 47qTk4OR05SHOX7coJlzyXvaXS+I4ZSWVKrpEfoVw19pH9RL/kymw2422C8YhtC3wHmP
- EUkZjnCU603O1tmRnnaEKk6LEsj+tjL57iGIRW324Y0hxP9PDFVw/C+vzkdUhp8Dpedo
- XVcKRvqWqZU7ZxGTnOH7EfXKmRf5C8A3Cq3w7HsyZ7QIyCwLIRMs0w2KRSrMNwsFeWoP
- 3lvg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Vy5aDB/HPxwE2fFeH8f1/3WKR3X13EcyHNcBaTRwUNo=;
+ b=WSAAoeZGOMMZ8J3kaeLXO46/jt4KNkim3PbVQE7c/48X0HtUPB+7nkd1VwRkxGKn+p
+ MoQ42Vf8Izh+O6EZMUZgnixZyRz6XkXM25TrOemixAsatzqLRms1BzsGRWG/ocOSGa6m
+ aQRnJOaloCOeoNqF1VbfH0IFbiGJ5JFCKr/kNN0zwCrdd2cOeWaxuMsxFSHkPvOavHSU
+ 3IhDIohBNne9Tf30mR/0VwuPArs8A51ewBrrqZaEBtFnc/ur1kNKx2Niraz8N+kkZ/Z8
+ qGVGBvN9juBuA4BaM1g/YzHlWJRphtFhkgt71WLohqhKczlAqmBWP6izp4Hzyt5TEoN9
+ CLAw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VC2tUpGT
-Subject: Re: [Buildroot] [PATCH v2 1/8] package/flatbuffers: build position
- independent code
+ header.a=rsa-sha256 header.s=google header.b=WSAAoeZG
+Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to latest version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,10 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Hager <stefan.hager@ginzinger.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -113,46 +109,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 28/11/2022 18:58, James Hilliard wrote:
-> The upcoming tensorflow-lite package requires flatbuffers to be
-> built with position independent code.
-> 
+On 29/11/2022 15:05, Giulio Benetti wrote:
 > Fixes:
-> /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libflatbuffers.a(util.cpp.o): relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZN11flatbuffers11CharToUpperEc' which may bind externally can not be used when making a shared object; recompile with -fPIC
+> http://autobuild.buildroot.net/results/8bcb4d0adabc141ff8144f9e22bd549e3cd8858a/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-  This looks like something that would happen any time you try to link 
-flatbuffers - so it should happen for kodi as well. In that case, the patch 
-should be applied to master. Can you check if this is the case? You 
-unfortunately can't rely on autobuilders, kodi has so many dependencies that it 
-(almost?) never gets built. There were 91 configurations in 2022 that included 
-kodi [1]; all of them failed, and I think all of them failed before reaching kodi...
+  Applied to master, thanks, after updating the commit message to include the 
+date instead of "latest" and the branch name.
 
   Regards,
   Arnout
 
-[1] 
-http://autobuild.buildroot.net/index.php?date%5Bfrom%5D=2022-01-01&symbols%5BBR2_PACKAGE_KODI%5D=y
-
-
-
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->   package/flatbuffers/flatbuffers.mk | 1 +
->   1 file changed, 1 insertion(+)
+>   package/rtl8188eu/rtl8188eu.hash | 2 +-
+>   package/rtl8188eu/rtl8188eu.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-> index 9d286bf9e1..487d85ee1f 100644
-> --- a/package/flatbuffers/flatbuffers.mk
-> +++ b/package/flatbuffers/flatbuffers.mk
-> @@ -14,6 +14,7 @@ FLATBUFFERS_DEPENDENCIES = host-flatbuffers
+> diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+> index 0ad7786328..29ce0e32c2 100644
+> --- a/package/rtl8188eu/rtl8188eu.hash
+> +++ b/package/rtl8188eu/rtl8188eu.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  50529c110e0a45fbe3169d0e237c4d0959300840f5e162c24256452976fb2670  rtl8188eu-c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba.tar.gz
+> +sha256  c573529862861a7a75534a4f2bc34ba7e3b116125298b5bc0d432b3065bd7df6  rtl8188eu-f4af53305cb1e9a0d8d9957a042f7c01b7121bfc.tar.gz
+>   sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+> diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+> index 199362d7ae..3698115d3c 100644
+> --- a/package/rtl8188eu/rtl8188eu.mk
+> +++ b/package/rtl8188eu/rtl8188eu.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   FLATBUFFERS_CONF_OPTS += \
->   	-DCMAKE_CXX_FLAGS="-std=c++11" \
-> +	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
->   	-DFLATBUFFERS_BUILD_TESTS=OFF \
->   	-DFLATBUFFERS_FLATC_EXECUTABLE=$(HOST_DIR)/bin/flatc
->   
+> -RTL8188EU_VERSION = c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba
+> +RTL8188EU_VERSION = f4af53305cb1e9a0d8d9957a042f7c01b7121bfc
+>   RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+>   RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+>   RTL8188EU_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
