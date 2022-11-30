@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C31C4321E
-	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 16:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47203C4321E
+	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 21:26:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D34040574;
-	Wed, 30 Nov 2022 16:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D34040574
+	by smtp2.osuosl.org (Postfix) with ESMTP id CED70405AF;
+	Wed, 30 Nov 2022 21:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED70405AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xitjQl0UjVKQ; Wed, 30 Nov 2022 16:14:01 +0000 (UTC)
+	with ESMTP id DTgGJULDxvrS; Wed, 30 Nov 2022 21:26:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11973404B1;
-	Wed, 30 Nov 2022 16:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11973404B1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B269C1BF47E
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 16:13:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C475140529;
+	Wed, 30 Nov 2022 21:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C475140529
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E877C1BF40B
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 21:26:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9799761017
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 16:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9799761017
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDC354051F
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 21:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDC354051F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FRuPoptGUbzm for <buildroot@lists.busybox.net>;
- Wed, 30 Nov 2022 16:13:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7717161010
- for <buildroot@buildroot.org>; Wed, 30 Nov 2022 16:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7717161010
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63B8A84F1A; Wed, 30 Nov 2022 16:13:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1yWDvqNZ30Gl for <buildroot@lists.busybox.net>;
+ Wed, 30 Nov 2022 21:26:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13D1D400F2
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 13D1D400F2
+ for <buildroot@buildroot.org>; Wed, 30 Nov 2022 21:26:30 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout10.t-online.de (Postfix) with SMTP id DF8B21465A;
+ Wed, 30 Nov 2022 22:26:15 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd70.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p0Uat-0mHBM90; Wed, 30 Nov 2022 22:26:15 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42310)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p0Uas-0001SX-2W;
+ Wed, 30 Nov 2022 22:26:15 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed, 30 Nov 2022 16:36:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb894b2e98e944e517cb74278df555fa4147d3b3
-X-Git-Newrev: 43899226b25aeb85aeb699f0df0c7ecf8d48616c
-X-Patchwork-Hint: ignore
-Message-Id: <20221130161357.63B8A84F1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot: add upstream security fix
- for CVE-2022-30550
+Date: Wed, 30 Nov 2022 22:26:14 +0100
+Message-Id: <20221130212614.1215778-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1669843575-50A2B689-FDA8673D/0/0 CLEAN NORMAL
+X-TOI-MSGID: a7f99a2a-4135-46f3-9589-fde48777f003
+Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump version to 3.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,191 +65,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Simon Dawson <spdawson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43899226b25aeb85aeb699f0df0c7ecf8d48616c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Removed patch 0010, a different fix was applied upstream:
+https://code.videolan.org/videolan/vlc/-/commit/05445b74a38d045cb28f71f96ccbe882445a031e
 
-An issue was discovered in the auth component in Dovecot 2.2 and 2.3 before
-2.3.20.  When two passdb configuration entries exist with the same driver
-and args settings, incorrect username_filter and mechanism settings can be
-applied to passdb definitions.  These incorrectly applied settings can lead
-to an unintended security configuration and can permit privilege escalation
-in certain configurations.  The documentation does not advise against the
-use of passdb definitions that have the same driver and args settings.  One
-such configuration would be where an administrator wishes to use the same
-PAM configuration or passwd file for both normal and master users but use
-the username_filter setting to restrict which of the users is able to be a
-master user.
+Removed patch 0011 which was backported from upstream.
+Renumbered patch 0012 -> 0010.
 
-https://dovecot.org/pipermail/dovecot-news/2022-July/000477.html
+Release notes:
+http://www.videolan.org/vlc/releases/3.0.18.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes CVE-2022-41325:
+http://www.videolan.org/security/sb-vlc3018.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ndling-passdbs-with-identical-driver-args.patch | 136 +++++++++++++++++++++
- package/dovecot/dovecot.mk                         |   3 +
- 2 files changed, 139 insertions(+)
+ ...ive555.cpp-fix-build-with-live555-20.patch | 36 --------
+ ...> 0010-opengl-missing-library-check.patch} |  0
+ ...-fix-compilation-with-upcoming-dav1d.patch | 88 -------------------
+ package/vlc/vlc.hash                          |  8 +-
+ package/vlc/vlc.mk                            |  2 +-
+ 5 files changed, 5 insertions(+), 129 deletions(-)
+ delete mode 100644 package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
+ rename package/vlc/{0012-opengl-missing-library-check.patch => 0010-opengl-missing-library-check.patch} (100%)
+ delete mode 100644 package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
 
-diff --git a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-new file mode 100644
-index 0000000000..04b8f5392a
---- /dev/null
-+++ b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-@@ -0,0 +1,136 @@
-+From 7bad6a24160e34bce8f10e73dbbf9e5fbbcd1904 Mon Sep 17 00:00:00 2001
-+From: Timo Sirainen <timo.sirainen@open-xchange.com>
-+Date: Mon, 9 May 2022 15:23:33 +0300
-+Subject: [PATCH] auth: Fix handling passdbs with identical driver/args but
-+ different mechanisms/username_filter
-+
-+The passdb was wrongly deduplicated in this situation, causing wrong
-+mechanisms or username_filter setting to be used. This would be a rather
-+unlikely configuration though.
-+
-+Fixed by moving mechanisms and username_filter from struct passdb_module
-+to struct auth_passdb, which is where they should have been in the first
-+place.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/auth/auth-request.c |  6 +++---
-+ src/auth/auth.c         | 18 ++++++++++++++++++
-+ src/auth/auth.h         |  5 +++++
-+ src/auth/passdb.c       | 15 ++-------------
-+ src/auth/passdb.h       |  4 ----
-+ 5 files changed, 28 insertions(+), 20 deletions(-)
-+
-+diff --git a/src/auth/auth-request.c b/src/auth/auth-request.c
-+index cd08b1fa02..0ca29f3674 100644
-+--- a/src/auth/auth-request.c
-++++ b/src/auth/auth-request.c
-+@@ -534,8 +534,8 @@ auth_request_want_skip_passdb(struct auth_request *request,
-+ 			      struct auth_passdb *passdb)
-+ {
-+ 	/* if mechanism is not supported, skip */
-+-	const char *const *mechs = passdb->passdb->mechanisms;
-+-	const char *const *username_filter = passdb->passdb->username_filter;
-++	const char *const *mechs = passdb->mechanisms;
-++	const char *const *username_filter = passdb->username_filter;
-+ 	const char *username;
-+ 
-+ 	username = request->fields.user;
-+@@ -548,7 +548,7 @@ auth_request_want_skip_passdb(struct auth_request *request,
-+ 		return TRUE;
-+ 	}
-+ 
-+-	if (passdb->passdb->username_filter != NULL &&
-++	if (passdb->username_filter != NULL &&
-+ 	    !auth_request_username_accepted(username_filter, username)) {
-+ 		auth_request_log_debug(request,
-+ 				       request->mech != NULL ? AUTH_SUBSYS_MECH
-+diff --git a/src/auth/auth.c b/src/auth/auth.c
-+index f2f3fda20c..9f6c4ba60c 100644
-+--- a/src/auth/auth.c
-++++ b/src/auth/auth.c
-+@@ -99,6 +99,24 @@ auth_passdb_preinit(struct auth *auth, const struct auth_passdb_settings *set,
-+ 	auth_passdb->override_fields_tmpl =
-+ 		passdb_template_build(auth->pool, set->override_fields);
-+ 
-++	if (*set->mechanisms == '\0') {
-++		auth_passdb->mechanisms = NULL;
-++	} else if (strcasecmp(set->mechanisms, "none") == 0) {
-++		auth_passdb->mechanisms = (const char *const[]){ NULL };
-++	} else {
-++		auth_passdb->mechanisms =
-++			(const char *const *)p_strsplit_spaces(auth->pool,
-++				set->mechanisms, " ,");
-++	}
-++
-++	if (*set->username_filter == '\0') {
-++		auth_passdb->username_filter = NULL;
-++	} else {
-++		auth_passdb->username_filter =
-++			(const char *const *)p_strsplit_spaces(auth->pool,
-++				set->username_filter, " ,");
-++	}
-++
-+ 	/* for backwards compatibility: */
-+ 	if (set->pass)
-+ 		auth_passdb->result_success = AUTH_DB_RULE_CONTINUE;
-+diff --git a/src/auth/auth.h b/src/auth/auth.h
-+index f700e29d5c..460a179765 100644
-+--- a/src/auth/auth.h
-++++ b/src/auth/auth.h
-+@@ -41,6 +41,11 @@ struct auth_passdb {
-+ 	struct passdb_template *default_fields_tmpl;
-+ 	struct passdb_template *override_fields_tmpl;
-+ 
-++	/* Supported authentication mechanisms, NULL is all, {NULL} is none */
-++	const char *const *mechanisms;
-++	/* Username filter, NULL is no filter */
-++	const char *const *username_filter;
-++
-+ 	enum auth_passdb_skip skip;
-+ 	enum auth_db_rule result_success;
-+ 	enum auth_db_rule result_failure;
-+diff --git a/src/auth/passdb.c b/src/auth/passdb.c
-+index eb4ac8ae82..f5eed1af4f 100644
-+--- a/src/auth/passdb.c
-++++ b/src/auth/passdb.c
-+@@ -224,19 +224,8 @@ passdb_preinit(pool_t pool, const struct auth_passdb_settings *set)
-+ 	passdb->id = ++auth_passdb_id;
-+ 	passdb->iface = *iface;
-+ 	passdb->args = p_strdup(pool, set->args);
-+-	if (*set->mechanisms == '\0') {
-+-		passdb->mechanisms = NULL;
-+-	} else if (strcasecmp(set->mechanisms, "none") == 0) {
-+-		passdb->mechanisms = (const char *const[]){NULL};
-+-	} else {
-+-		passdb->mechanisms = (const char* const*)p_strsplit_spaces(pool, set->mechanisms, " ,");
-+-	}
-+-
-+-	if (*set->username_filter == '\0') {
-+-		passdb->username_filter = NULL;
-+-	} else {
-+-		passdb->username_filter = (const char* const*)p_strsplit_spaces(pool, set->username_filter, " ,");
-+-	}
-++	/* NOTE: if anything else than driver & args are added here,
-++	   passdb_find() also needs to be updated. */
-+ 	array_push_back(&passdb_modules, &passdb);
-+ 	return passdb;
-+ }
-+diff --git a/src/auth/passdb.h b/src/auth/passdb.h
-+index 2e95328e5c..e466a9fdb6 100644
-+--- a/src/auth/passdb.h
-++++ b/src/auth/passdb.h
-+@@ -63,10 +63,6 @@ struct passdb_module {
-+ 	/* Default password scheme for this module.
-+ 	   If default_cache_key is set, must not be NULL. */
-+ 	const char *default_pass_scheme;
-+-	/* Supported authentication mechanisms, NULL is all, [NULL] is none*/
-+-	const char *const *mechanisms;
-+-	/* Username filter, NULL is no filter */
-+-	const char *const *username_filter;
-+ 
-+ 	/* If blocking is set to TRUE, use child processes to access
-+ 	   this passdb. */
-+-- 
-+2.30.2
-+
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 7619250985..e28f500b7b 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -21,6 +21,9 @@ DOVECOT_DEPENDENCIES = \
- # is part of the Red Hat packaging and not part of upstream dovecot
- DOVECOT_IGNORE_CVES += CVE-2016-4983
+diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
+deleted file mode 100644
+index 5f046648d4..0000000000
+--- a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 22 May 2021 22:56:04 +0200
+-Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
+- 2020.12.11
+-
+-Since live555-2020.12.11, connectionEndpointAddress() member function
+-use a "struct sockaddr_storage" in preparation for eventual support of
+-IPv6: http://www.live555.com/liveMedia/public/changelog.txt
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- modules/access/live555.cpp | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
+-index 9d6e01ae32..32a6c294eb 100644
+---- a/modules/access/live555.cpp
+-+++ b/modules/access/live555.cpp
+-@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
+-             if( !p_sys->b_multicast )
+-             {
+-                 /* We need different rollover behaviour for multicast */
+--                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
+-+                struct sockaddr_storage tempAddr;
+-+                sub->getConnectionEndpointAddress( tempAddr );
+-+                p_sys->b_multicast = IsMulticastAddress( tempAddr );
+-             }
+- 
+-             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
+--- 
+-2.30.2
+-
+diff --git a/package/vlc/0012-opengl-missing-library-check.patch b/package/vlc/0010-opengl-missing-library-check.patch
+similarity index 100%
+rename from package/vlc/0012-opengl-missing-library-check.patch
+rename to package/vlc/0010-opengl-missing-library-check.patch
+diff --git a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch b/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
+deleted file mode 100644
+index 74b8645379..0000000000
+--- a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
++++ /dev/null
+@@ -1,88 +0,0 @@
+-From 2202c892c8dc1381b596c53c2ebd3ca680061f95 Mon Sep 17 00:00:00 2001
+-From: Steve Lhomme <robux4@ycbcr.xyz>
+-Date: Fri, 18 Mar 2022 11:42:49 +0100
+-Subject: [PATCH] dav1d: fix compilation with (upcoming) dav1d 1.0
+-
+-(cherry picked from commit dbf45cea2a8abdfbef897b8a71f3eb782bb1b712) (edited)
+-edited:
+-- 3.0 has the 128 pixels padding elsewhere
+-- 3.0 has an extra parameter for add_integer_with_range()
+-- 3.0 was setting i_extra_picture_buffers further down in the code
+-- 3.0 uses 16 threads max
+-
+-Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
+-
+-Downloaded from upstream commit
+-https://code.videolan.org/videolan/vlc/-/commit/2202c892c8dc1381b596c53c2ebd3ca680061f95
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- modules/codec/dav1d.c | 22 +++++++++++++++++++++-
+- 1 file changed, 21 insertions(+), 1 deletion(-)
+-
+-diff --git a/modules/codec/dav1d.c b/modules/codec/dav1d.c
+-index 039165f52ec..cfabbc27cb3 100644
+---- a/modules/codec/dav1d.c
+-+++ b/modules/codec/dav1d.c
+-@@ -63,10 +63,16 @@ vlc_module_begin ()
+-     set_category(CAT_INPUT)
+-     set_subcategory(SUBCAT_INPUT_VCODEC)
+- 
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_THREADS,
+-+                THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
+-+    add_obsolete_string("dav1d-thread-tiles") // unused with dav1d 1.0
+-+#else
+-     add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_FRAME_THREADS,
+-                 THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
+-     add_integer_with_range("dav1d-thread-tiles", 0, 0, DAV1D_MAX_TILE_THREADS,
+-                 THREAD_TILES_TEXT, THREAD_TILES_LONGTEXT, false)
+-+#endif
+- vlc_module_end ()
+- 
+- /*****************************************************************************
+-@@ -294,6 +300,11 @@ static int OpenDecoder(vlc_object_t *p_this)
+-         return VLC_ENOMEM;
+- 
+-     dav1d_default_settings(&p_sys->s);
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    p_sys->s.n_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
+-+    if (p_sys->s.n_threads == 0)
+-+        p_sys->s.n_threads = (i_core_count < 16) ? i_core_count : 16;
+-+#else
+-     p_sys->s.n_tile_threads = var_InheritInteger(p_this, "dav1d-thread-tiles");
+-     if (p_sys->s.n_tile_threads == 0)
+-         p_sys->s.n_tile_threads =
+-@@ -303,6 +314,7 @@ static int OpenDecoder(vlc_object_t *p_this)
+-     p_sys->s.n_frame_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
+-     if (p_sys->s.n_frame_threads == 0)
+-         p_sys->s.n_frame_threads = (i_core_count < 16) ? i_core_count : 16;
+-+#endif
+-     p_sys->s.allocator.cookie = dec;
+-     p_sys->s.allocator.alloc_picture_callback = NewPicture;
+-     p_sys->s.allocator.release_picture_callback = FreePicture;
+-@@ -313,12 +325,20 @@ static int OpenDecoder(vlc_object_t *p_this)
+-         return VLC_EGENERIC;
+-     }
+- 
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    msg_Dbg(p_this, "Using dav1d version %s with %d threads",
+-+            dav1d_version(), p_sys->s.n_threads);
+-+
+-+    dec->i_extra_picture_buffers = (p_sys->s.n_threads - 1);
+-+#else
+-     msg_Dbg(p_this, "Using dav1d version %s with %d/%d frame/tile threads",
+-             dav1d_version(), p_sys->s.n_frame_threads, p_sys->s.n_tile_threads);
+- 
+-+    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
+-+#endif
+-+
+-     dec->pf_decode = Decode;
+-     dec->pf_flush = FlushDecoder;
+--    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
+- 
+-     dec->fmt_out.video.i_width = dec->fmt_in.video.i_width;
+-     dec->fmt_out.video.i_height = dec->fmt_in.video.i_height;
+--- 
+-GitLab
+-
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 9060097906..64b6bc5a3b 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha256
+-sha256  8c5a62d88a4fb45c1b095cf10befef217dfa87aedcec5184b9e7d590b6dd4133  vlc-3.0.17.4.tar.xz
+-# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha1
+-sha1  ebcd9939103fda141267c5a8f1c603df4533218e  vlc-3.0.17.4.tar.xz
++# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha256
++sha256  57094439c365d8aa8b9b41fa3080cc0eef2befe6025bb5cef722accc625aedec  vlc-3.0.18.tar.xz
++# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha1
++sha1  b11ccaa0f5ee15a550564817d60458eb0946f80e *vlc-3.0.18.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index aee3b735a9..c6ae46f469 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-+DOVECOT_IGNORE_CVES += CVE-2022-30550
-+
- DOVECOT_CONF_ENV = \
- 	RPCGEN=__disable_RPCGEN_rquota \
- 	i_cv_epoll_works=yes \
+-VLC_VERSION = 3.0.17.4
++VLC_VERSION = 3.0.18
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
