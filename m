@@ -1,92 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EE2BC4321E
-	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 14:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22FD3C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 04:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E911341BBC;
-	Fri,  2 Dec 2022 14:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E911341BBC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75BA5403A9;
+	Wed, 30 Nov 2022 04:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75BA5403A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mbJb5K8O_-ml; Fri,  2 Dec 2022 14:02:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MKwdiRyBwLVH; Wed, 30 Nov 2022 04:32:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFA9141BAD;
-	Fri,  2 Dec 2022 14:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFA9141BAD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A67651BF293
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 14:02:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9775B4032B;
+	Wed, 30 Nov 2022 04:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9775B4032B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F17981BF279
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 04:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81D5960FCE
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 14:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81D5960FCE
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA14D4032B
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 04:32:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA14D4032B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrUOpPd8Vesw for <buildroot@lists.busybox.net>;
- Fri,  2 Dec 2022 14:02:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2E8060F29
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A2E8060F29
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 14:02:09 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id w23so4685132ply.12
- for <buildroot@buildroot.org>; Fri, 02 Dec 2022 06:02:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=c6SiSt180fOD6l9qKfskeYpJxgqyncifxkAN/zHF4FE=;
- b=qHAbn15K9u1u33bdehhAQ4UJJNpZW3EN2dxJN2s3O5ymUsfx7wAjjnjBTGYo/xy6nP
- xUAKETApG6Y8KKpt0o5/ew7RXEfm8R2SasEQ8jMKKPIqIEdGgX7eNiyvIP4T/7HSXUrK
- 9ikoySBwWgE80BZO/tY8QyrnW1k8CjzYWLCYcygbq1v178jzwhed+anUTxQPfmjhaCXR
- T+VUsRDYt5mwksDeCuJZDORo/zai+8n7exDSAov0tyvKrV0oyrTCKB0vlrs2BEreAb/t
- h8vY6P1GZ4DcYN5HDHn2EyT3CLCBLGwGjJL7gAhWGyjVs1aYHjMOIvq+kYNiKZkqE3Ud
- 4Qig==
-X-Gm-Message-State: ANoB5pkX3rpmOKQhALvJRxOYVcDuEAgheV33UmMIXz7Rl/FIyendWLnT
- kfwbwDYA5XakGgekHHm5oNLr/7b8M3w=
-X-Google-Smtp-Source: AA0mqf4uOJVsXZ72vRFlJiHSH4hJIssRBj5QwTTGhsMg4tXwDojA6FI34Xea3KcExDuvw9QGTY0dzA==
-X-Received: by 2002:a17:902:b20c:b0:189:1318:714 with SMTP id
- t12-20020a170902b20c00b0018913180714mr64562566plr.122.1669989728862; 
- Fri, 02 Dec 2022 06:02:08 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-19.three.co.id.
- [180.214.233.19]) by smtp.gmail.com with ESMTPSA id
- z20-20020aa79f94000000b0056be4dbd4besm5145805pfr.111.2022.12.02.06.02.07
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 02 Dec 2022 06:02:08 -0800 (PST)
-Message-ID: <38529777-79a9-dfb5-ec42-b7c37e617281@gmail.com>
-Date: Fri, 2 Dec 2022 21:02:06 +0700
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d9XrodkKjiDd for <buildroot@lists.busybox.net>;
+ Wed, 30 Nov 2022 04:32:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8CA2400CE
+ for <buildroot@uclibc.org>; Wed, 30 Nov 2022 04:32:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8CA2400CE
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id D55CD83F4D; Wed, 30 Nov 2022 04:32:15 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Wed, 30 Nov 2022 04:32:15 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2022.08.2
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: luffy.jiang@montage-lz.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15161-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To: Buildroot Mailman <buildroot@buildroot.org>
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=c6SiSt180fOD6l9qKfskeYpJxgqyncifxkAN/zHF4FE=;
- b=ocNLNkXpLa4I+M+ThONVqHy9SXG7+RmJYclM1kx3Ez9Yd3tsIyV8zYwg0LLC1jjcKT
- gaIPT2o931XJ/82D64479e9+jt5kqoV5muq2qrY3teBhPfFXOjE+olyf1zsLW94vxtbH
- HLscCUkHoOy5lITHvukn5SM3roQJ2Hu8ebuQlS7hKOwims1fpmkcQAkNfhfKKun6RSW7
- vFA0hF5+RvYIfqBHd1H7cxDY2HCSAzPKtLqNWO22zIZIO6OGbRIwrpkflvD1+KeFdb6j
- bKfRXAv8WFGCNMiuLKEIuDxwVPjoZFiGctOHQm/ziKCMg2YEGA2+bp5y7rW4aWU0Ar2/
- tDHQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ocNLNkXp
-Subject: [Buildroot] <PACKAGE>_SOURCE with <PACKAGE>_SITE_METHOD = git can
- result to tar.gz with mismatched file extension
+Subject: [Buildroot] [Bug 15161] New: kernel can't support SUBDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,46 +78,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=15161
 
-I noticed odd behavior when <PACKAGE>_SOURCE is set whereas <PACKAGE>
-is downloaded via git (<PACKAGE>_SITE_METHOD = git).
+            Bug ID: 15161
+           Summary: kernel can't support SUBDIR
+           Product: buildroot
+           Version: 2022.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: luffy.jiang@montage-lz.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-For example, I'm trying to bump Git package to commit
-c000d916380bb59db69c78546928eadd076b9c7d (v2.39.0-rc0). On the makefile
-(package/git/git.mk), I bumped by:
+My kernel path is top/kernel/linux-x.y.z
+I must keep to relative path because of some special reason
 
----- >8 ----
-diff --git a/package/git/git.mk b/package/git/git.mk
-index dc587170e8..1990bf8e67 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.31.4
-+GIT_VERSION = c000d916380bb59db69c78546928eadd076b9c7d
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
--GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
-+GIT_SITE = file:///home/bagas/repo/git-scm
-+GIT_SITE_METHOD = git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_CPE_ID_VENDOR = git-scm
+the local.mk like this
+LINUX_OVERRIDE_SRCDIR = ../kernel
+LINUX_SUBDIR = linux-x.y.z
 
-(note: I fetch from my local Git project repository, hence file:// URI).
+After run make, I found the build directory follow my idea, the
+top/kernel/linux-x.y.z be copied as output/build/linux-custom/linux-x.y.z/
 
-When I fetch the sources (make source), the generated tarball is actually
-.tar.gz with $(GIT_VERSION) as the filename. This causes extracting the
-tarball to fail. In this case, the tarball is decompressed first with
-xzcat, and it complains due to unrecognized compressed format (gzip
-instead of xz).
+but make oldconfig failed, because it use LINUX_DIR, I hope it use LINUX_SRCDIR
+in package/pkg-kconfig.mk, I saw this code:
+$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): $$($(2)_KCONFIG_FILE)
+$$($(2)_KCONFIG_FRAGMENT_FILES)
+        $$(call prepare-per-package-directory,$$($(2)_KCONFIG_DEPENDENCIES))
+        $$(call
+kconfig-package-merge-config,$(2),$$(@D)/$$($(2)_KCONFIG_DOTCONFIG),\
+                $$($(2)_KCONFIG_FRAGMENT_FILES))
+        $$(Q)touch $$(@D)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
 
-Thanks.
+
+
+
+build log:
+
+lujiang@cn028lnx02:~/work/mt_sdk/symphony/Lznux/linux/buildroot $ make V=1
+/usr/bin/install -m 0644 -D
+../kernel/linux-x.y.z/arch/arm64/configs/symphony6_fpga_dbg_defconfig
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.config
+support/kconfig/merge_config.sh -m -O
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.config
+Using
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.config
+as base
+#
+# merged configuration written to
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.config
+(needs make)
+#
+(yes "" |
+PATH="/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/bin:/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/sbin:/home/lujiang/work/mt_sdk/symphony/Lznux/linux/build/script/mt-pkg-config-dir:/home/lujiang/bin:/home/lujiang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lujiang/crosstool-ng/crosstool-ng-1.24.0/bin:/home/lujiang/bin:/usr/local/crosstool-ng/gcc-9.3-glibc-2.28-mipsel-linux-gnu-rm2.0/bin:/usr/local/linaro/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin:/usr/local/linaro/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin"
+PKG_CONFIG="/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/bin/pkg-config"
+PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG_LIBDIR="/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/lib/pkgconfig:/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/share/pkgconfig"
+BR_BINARIES_DIR=/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/images
+KCFLAGS=-Wno-attribute-alias /usr/bin/make -j33 -C
+/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom
+HOSTCC="/usr/bin/gcc" HOSTCC="/usr/bin/gcc -O2
+-I/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/include
+-L/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/lib
+-Wl,-rpath,/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/lib"
+ARCH=arm64
+INSTALL_MOD_PATH=/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/target
+CROSS_COMPILE="/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/bin/aarch64-none-linux-gnu-"
+WERROR=0
+DEPMOD=/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/host/sbin/depmod
+INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" oldconfig)
+make[1]: Entering directory
+'/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom'
+make[1]: *** No rule to make target 'oldconfig'.  Stop.
+make[1]: Leaving directory
+'/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom'
+linux/linux.mk:617: recipe for target
+'/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.stamp_dotconfig'
+failed
+make: ***
+[/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/.stamp_dotconfig]
+Error 2
+
+
+
+
+you can see, the kernel config file be copied as
+output/build/linux-custom/.config, but I want it be copied as
+output/build/linux-custom/linux-x.y.z/.config
+
+and make oldconfig in output/build/linux-custom/.config,
+but I want to i run in output/build/linux-custom/linux-x.y.z
+
+
+
+
+
+I print the var LINUX_SRCDIR and LINUX_DIR
+$ make show-vars VARS=LINUX_SRCDIR
+the value is
+"/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom/linux-x.y.z"
+$ make show-vars VARS=LINUX_DIR
+the value is
+"/home/lujiang/work/mt_sdk/symphony/Lznux/linux/buildroot/output/build/linux-custom"
 
 -- 
-An old man doll... just what I always wanted! - Clara
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
