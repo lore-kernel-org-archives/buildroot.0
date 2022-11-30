@@ -1,94 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D2EC4321E
-	for <buildroot@archiver.kernel.org>; Tue, 29 Nov 2022 22:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09352C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 00:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0530F415FA;
-	Tue, 29 Nov 2022 22:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0530F415FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 576354013C;
+	Wed, 30 Nov 2022 00:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 576354013C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6kLzrI3u8Zwt; Tue, 29 Nov 2022 22:27:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p2EhgVFJdsEa; Wed, 30 Nov 2022 00:42:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D886741675;
-	Tue, 29 Nov 2022 22:27:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D886741675
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B36A4010D;
+	Wed, 30 Nov 2022 00:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B36A4010D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D28141BF5AD
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 22:27:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 725E41BF95F
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 00:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD45B400DD
- for <buildroot@lists.busybox.net>; Tue, 29 Nov 2022 22:27:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD45B400DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4701A4010D
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 00:42:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4701A4010D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d1K4cRypSJTa for <buildroot@lists.busybox.net>;
- Tue, 29 Nov 2022 22:27:04 +0000 (UTC)
+ with ESMTP id KJlej4jfNqLY for <buildroot@lists.busybox.net>;
+ Wed, 30 Nov 2022 00:42:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F8B5400EF
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3F8B5400EF
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 22:27:04 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id d1so24355624wrs.12
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 14:27:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5409F400C0
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
+ [IPv6:2607:f8b0:4864:20::1033])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5409F400C0
+ for <buildroot@buildroot.org>; Wed, 30 Nov 2022 00:42:36 +0000 (UTC)
+Received: by mail-pj1-x1033.google.com with SMTP id
+ 3-20020a17090a098300b00219041dcbe9so387610pjo.3
+ for <buildroot@buildroot.org>; Tue, 29 Nov 2022 16:42:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=66bkbgBuMwfNZVb0mh/vjbULhOYZwUfAJE0BiLuQsZU=;
- b=ZwHXMtxA7HSpwEQ6gFf7dzs8/IU9OictXwARa1S81JWBukpKr3/l0Ctpx7sAptZdAl
- NN3rz3h045zllk6g3PDlelGuvBSBNCcfbjyycmKgoyDubTP1v7q1dIBFCDZwiwcZgxek
- 2v44i0U28fZeglJVenrW6Nnj2eOTQMjtdnrOxI5nJebUQxgWDnhNJ43eW/KLDi98tg1a
- fyBtDuaSSwoPH4+b4BodsDoY4I7I1lKXv8wyQBR2lolvhsRV5JoWoelD/orQaOUMAFuk
- sduPXhfbDBvwsvjWELwhQgeoGCUh7y1rR6a4DSxXIZ0puS4e2GNi6Fa6Pjvi7EIBxSN6
- W1/Q==
-X-Gm-Message-State: ANoB5plbNiW+kq2dqotIeaUWmo1fzuKfuOomjTRmqXB2FNHYu94HR0uv
- 2YaYW+3dGvZg+TPssPxyaYQzlzBc9b24Rg==
-X-Google-Smtp-Source: AA0mqf7n5hhrTKgVllIr176RNODXk+3rqL6z6cQe5HomP1+q8fY1XBkQ30jx8Fo/DjAtuh/G/gwZRw==
-X-Received: by 2002:a05:6000:1702:b0:241:ffc4:dd1c with SMTP id
- n2-20020a056000170200b00241ffc4dd1cmr17697617wrc.538.1669760822398; 
- Tue, 29 Nov 2022 14:27:02 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- o2-20020a05600c4fc200b003cf78aafdd7sm3843400wmq.39.2022.11.29.14.27.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 29 Nov 2022 14:27:01 -0800 (PST)
-Message-ID: <6f429bf8-bbc3-dbe7-4605-d1c8a766631a@mind.be>
-Date: Tue, 29 Nov 2022 23:27:00 +0100
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=cilK8BxYTMbNNlSBzHR9f1bAu+ieMOyfM20ZWjXoF3M=;
+ b=Sl63S8PeDCk8qwu7T+j5kuYZ3bmt3glUiD8LDfRrllsvNo4Df70OiAIfswguZ4meRs
+ Puz2/ecf+E+kiAjmREJp1QFEag46T9J2gU+SaCTco94WyOpn1XC0EI2PQleRK2YSQfS5
+ TyfQNhrQJAvTBQ62QHHZiHuhUQF856J3IucwJJ9QVuBN4JS76NBjfQWspt4ofprNNJC7
+ CggbaDKmq0KQeCcs9vAuQVpQ/c7cUm/OfZfF1B2HmJUn1pXBnQPGUQySX3ormiQzOSRN
+ YFPmdQ8/PvPEfAW3fUX+uPV5gB30usOjroNbsBBG6TZMu8WzVhxZwixLrop5q2fXmOG7
+ 2nxg==
+X-Gm-Message-State: ANoB5pmPcU8Y/6U1Hh7ebmYKGNMTM+9649LirngRoq0hRu3z7K2Z8NLw
+ QSWgxSbszXJN/cMj/kA+WFbaIemAtzii0RGrWpKsS8rK3Yz+KA==
+X-Google-Smtp-Source: AA0mqf7liwucxl+jZu1MeBsnRo/XqzCN/amrTPxwPRo3fzEOjC/FI7SwDpXrSGzdeDdFa0BWXWS5jp9oA0lbJfFD21Q=
+X-Received: by 2002:a17:902:ec01:b0:186:878e:3b0d with SMTP id
+ l1-20020a170902ec0100b00186878e3b0dmr39297833pld.149.1669768955603; Tue, 29
+ Nov 2022 16:42:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20221128094125.3183141-1-buildroot@heine.tech>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20221128094125.3183141-1-buildroot@heine.tech>
+References: <20221128175851.1913859-1-james.hilliard1@gmail.com>
+ <c29e48e0-d7e7-3f61-082a-b7b3fba976f4@mind.be>
+In-Reply-To: <c29e48e0-d7e7-3f61-082a-b7b3fba976f4@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 29 Nov 2022 20:42:23 -0400
+Message-ID: <CADvTj4pwrZziwevuFmhGwMoxjV4JV_T3Rw=2+eHtDJo1erFcOg@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=66bkbgBuMwfNZVb0mh/vjbULhOYZwUfAJE0BiLuQsZU=;
- b=gYLX5Alw890gO2YEb1TP1zEhcF9Rqzr7LkreGHusrs9NR0QDG8fIYfH5me2VlMRi0h
- kHkH8CFyKsudFJO0EaS4e98VcBchFEyjr60A8qKZIso/Rq/7xNDnj04+Y4h76xjLJTCk
- cCnzr44qYlhOZqVmbeLTk3UJzEkxq6eAgTcgCxydsVs6iLhXekOuHzZPrOloC/Y74iuA
- vPy26Uq5fQ/fvvb/dq+t3FVKcb+SY1g19ehTNZQ9AOt/CPENkS++x14DDH8rn2J4YZ/3
- 8kB1IUh0xoLrtYSE4Ljyq+S3wjeYp/4V8hzV5+GsGORAjc6BUPL/MfS97U+DrGDcxR1/
- X7PQ==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cilK8BxYTMbNNlSBzHR9f1bAu+ieMOyfM20ZWjXoF3M=;
+ b=CIqNHaRp4/XFy3u2plmN4AaksRq427y3okwHzjj9A/nlpe8JkGuuSyzjFBgNS2jbJj
+ JA5E3qEFOSBWd7WKbAbvEX9+/WDlawe6agfy2l3PGUq4BDap9so0/u+VditAlfH4R5+E
+ 1RT6NOdPyLt1o+Ehz3+Ro2zoQICLTF7rBZ5WCQH6ah8s7Zc7XnPvVeE0AXRAn78CHL9b
+ oLPgCeI8TzDKATuGjQlRGXHufy7Z+4v320+ZJmp7oX4gZRL+oyUSTTGGfVRZF1N1YEpj
+ WxbfYfn4MHH/24SQ2/kWsKEtffbmq4fEbeiP1d6bIDlX+4v4J42oZD8wLFPyPZlpWvby
+ +RjQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=gYLX5Alw
-Subject: Re: [Buildroot] [PATCH] package/usbmount: select util-linux logger
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=CIqNHaRp
+Subject: Re: [Buildroot] [PATCH v2 1/8] package/flatbuffers: build position
+ independent code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,58 +93,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Tue, Nov 29, 2022 at 5:42 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 28/11/2022 18:58, James Hilliard wrote:
+> > The upcoming tensorflow-lite package requires flatbuffers to be
+> > built with position independent code.
+> >
+> > Fixes:
+> > /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libflatbuffers.a(util.cpp.o): relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZN11flatbuffers11CharToUpperEc' which may bind externally can not be used when making a shared object; recompile with -fPIC
+>
+>   This looks like something that would happen any time you try to link
+> flatbuffers - so it should happen for kodi as well. In that case, the patch
+> should be applied to master. Can you check if this is the case? You
+> unfortunately can't rely on autobuilders, kodi has so many dependencies that it
+> (almost?) never gets built. There were 91 configurations in 2022 that included
+> kodi [1]; all of them failed, and I think all of them failed before reaching kodi...
 
+I tried building kodi manually and ran into build issues as well, so unclear if
+this is needed for kodi, but I think it's probably safe to apply to master.
 
-On 28/11/2022 10:41, Michael Nosthoff via buildroot wrote:
-> usbmount has a runtime dependency on "logger" from util-linux.
-> Else it will just fail when it tries to log.
+By the way I think all those autobuilder configs were generated by tweaking
+kconfig probability with this patch using a local override:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220514214612.3221647-1-james.hilliard1@gmail.com/
 
-  If it is just /bin/logger, that is usually provided by busybox (if 
-CONFIG_LOGGER=y). We don't normally add things for stuff provided by busybox, at 
-least if it is enabled by our default configuration.
+I think that plus shuffle mode might allow for coverage of packages with more
+dependencies, some fixes related to shuffle mode:
+https://patchwork.ozlabs.org/project/buildroot/patch/20221016193014.3384022-1-james.hilliard1@gmail.com/
+https://patchwork.ozlabs.org/project/buildroot/patch/20221019234655.1097686-1-james.hilliard1@gmail.com/
 
-  So, do you maybe have a custom busybox config?
-
-  I've marked the patch as Rejected, feel free to revert if you think this is 
-needed after all.
-
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> 
-> ---
-> 
-> I wasn't sure if it is neccessary to also add
-> select BR2_PACKAGE_UTIL_LINUX
-> or if this is done automatically.
-
-  No it's not done automatically, you indeed have to add it.
-
-  Regards,
-  Arnout
-
-> 
-> So please adjust if neccessary.
-> ---
->   package/usbmount/Config.in | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/usbmount/Config.in b/package/usbmount/Config.in
-> index 7760356b7c..5145587b7c 100644
-> --- a/package/usbmount/Config.in
-> +++ b/package/usbmount/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_USBMOUNT
->   	depends on BR2_USE_MMU # lockfile-progs -> liblockfile
->   	depends on BR2_PACKAGE_HAS_UDEV
->   	select BR2_PACKAGE_LOCKFILE_PROGS
-> +	select BR2_PACKAGE_UTIL_LINUX_LOGGER
->   	help
->   	  The usbmount package automatically mounts USB mass storage
->   	  devices when they are plugged in, and unmounts them when
+>
+>   Regards,
+>   Arnout
+>
+> [1]
+> http://autobuild.buildroot.net/index.php?date%5Bfrom%5D=2022-01-01&symbols%5BBR2_PACKAGE_KODI%5D=y
+>
+>
+>
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   package/flatbuffers/flatbuffers.mk | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+> > index 9d286bf9e1..487d85ee1f 100644
+> > --- a/package/flatbuffers/flatbuffers.mk
+> > +++ b/package/flatbuffers/flatbuffers.mk
+> > @@ -14,6 +14,7 @@ FLATBUFFERS_DEPENDENCIES = host-flatbuffers
+> >
+> >   FLATBUFFERS_CONF_OPTS += \
+> >       -DCMAKE_CXX_FLAGS="-std=c++11" \
+> > +     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+> >       -DFLATBUFFERS_BUILD_TESTS=OFF \
+> >       -DFLATBUFFERS_FLATC_EXECUTABLE=$(HOST_DIR)/bin/flatc
+> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
