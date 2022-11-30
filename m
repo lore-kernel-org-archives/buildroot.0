@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B63C2C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 01:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAC46C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 01:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3464D4015F;
-	Wed, 30 Nov 2022 01:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3464D4015F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2726E60BCF;
+	Wed, 30 Nov 2022 01:18:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2726E60BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g8Dyyo8jbaUX; Wed, 30 Nov 2022 01:03:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yQRIxAq3PwkZ; Wed, 30 Nov 2022 01:18:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6E2A4151D;
-	Wed, 30 Nov 2022 01:03:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6E2A4151D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 042CE1BF95F
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 01:03:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4453A60B3C;
+	Wed, 30 Nov 2022 01:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4453A60B3C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 49C3E1BF38B
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 01:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0DD281E82
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 01:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0DD281E82
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22C8E60B3C
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 01:18:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22C8E60B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GB95XsKM_IIg for <buildroot@lists.busybox.net>;
- Wed, 30 Nov 2022 01:03:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 61gAlzUpW9Pl for <buildroot@lists.busybox.net>;
+ Wed, 30 Nov 2022 01:18:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D341881E6F
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D341881E6F
- for <buildroot@buildroot.org>; Wed, 30 Nov 2022 01:03:09 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id r81so11399074iod.2
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 17:03:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2337E60B13
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2337E60B13
+ for <buildroot@buildroot.org>; Wed, 30 Nov 2022 01:18:16 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id h33so9711924pgm.9
+ for <buildroot@buildroot.org>; Tue, 29 Nov 2022 17:18:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EwmuSyre1za5mtVmOMIStwjwWLNeYDPaAA0cvdiRkOQ=;
- b=PUv0DWujsky+0D7ibJaIbNQywJPmo5dnpkmjhz8jdJvPWQQQs5Dk/Ymo/PGKMvBLcB
- S6kxyUbyixlvzNh3CaCkz4vcxpjEJtcj05GYBtOeTJVEux2qUvf+LsUaF/dRJxWITwk8
- 2aeRQMXK7YZaXnNeM6gbU/gzJrtzMTsZ1+Mgn4kCrjzhy87aNX4Uhr64mLb0clnhPo3y
- jDI7VsJe1Z0+1iZtyWBZkyJvmf77zEpj6SSwWHrS3N2yx8vXNULfmofoYx7JP6Nr1zvj
- yWDoEGES9nKqnFyDJ6vLiV8lVggKPZzcvcJo5d1oku1YDlA2d4VOXE8qPjsPG15NxNok
- 5NJw==
-X-Gm-Message-State: ANoB5pk/n9qfP3LVTMlT8LL8H8SKiGn0+zAAYLbFZ+4V9YQWHRBxi4td
- ocWnpqg/mtXfu4VByUzKiuTVhBFX2Dtm/w==
-X-Google-Smtp-Source: AA0mqf5mkc7uSay0wxGZ+dW7bMTFZ+r47FHOzn+f6MQvCd77dKEZN1cp1/l8yAOPyn5qcN5Ox2AE4Q==
-X-Received: by 2002:a05:6638:20f:b0:389:d777:119c with SMTP id
- e15-20020a056638020f00b00389d777119cmr7989245jaq.16.1669770188491; 
- Tue, 29 Nov 2022 17:03:08 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- p1-20020a056638216100b0038a0182e0casm100292jak.11.2022.11.29.17.03.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Nov 2022 17:03:08 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 29 Nov 2022 18:03:06 -0700
-Message-Id: <20221130010306.3797360-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=N/kCTltWHcsvAnCWZTxTiOQyXFjCPY+fp8xA6kZWW6A=;
+ b=vtJqPohZBFV+LrZSsqYwQN03vj0WfdhVIhFDOYqOHh4AbTYrbfuV1SwczTME0Jgi/C
+ 56R6cZ2tZBcsL3nnmpaSDageZM/RnpZKADYPC2rG9B3XzSDidLM6GSrY1mNV0upbiW8g
+ Uh01H0xc41YhwzWbwqx1Bar/l/MJSXQ5J6ngI67bO36OlSa0josFzJLqv32o9dkNSNv+
+ 14WoedfpKfUszDq6LpQsnPl6oOrpf+olnUDCePVplUTfNU6M/nGTUfUOiZFCx6nFsteg
+ Q+S4L+kYBHGHJYwZSH11jsUcmwj4PGW2gMR60R6l8Hlc/b7/LEwpDbuoBGoYG8+DI5RL
+ Chdw==
+X-Gm-Message-State: ANoB5pk68uJn0/XZQfCJ7PfJewFfF0R4LePMzXMFhKkxixbbPCMQKBYQ
+ URAtVhTKqmQsRrDC3ZLMl+83af44Ce7ESA7hC8k=
+X-Google-Smtp-Source: AA0mqf4mY7Sw6nT8ne10vVkefOZ2Yb2UYImEkNTX4G80ftTuKpTTLojEOAWuyDUVfTNfaUVtz3+DXPZeFcf48Q3e/WY=
+X-Received: by 2002:a62:f24e:0:b0:572:149c:e278 with SMTP id
+ y14-20020a62f24e000000b00572149ce278mr61482407pfl.8.1669771095331; Tue, 29
+ Nov 2022 17:18:15 -0800 (PST)
 MIME-Version: 1.0
+References: <20221128175851.1913859-1-james.hilliard1@gmail.com>
+ <c29e48e0-d7e7-3f61-082a-b7b3fba976f4@mind.be>
+ <CADvTj4pwrZziwevuFmhGwMoxjV4JV_T3Rw=2+eHtDJo1erFcOg@mail.gmail.com>
+In-Reply-To: <CADvTj4pwrZziwevuFmhGwMoxjV4JV_T3Rw=2+eHtDJo1erFcOg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 29 Nov 2022 21:18:03 -0400
+Message-ID: <CADvTj4qTkU1UWnNTKZc9eDut_dLYf1SFotYuTDfE0K4yr4-OMA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EwmuSyre1za5mtVmOMIStwjwWLNeYDPaAA0cvdiRkOQ=;
- b=BexzKFcbkLygmyBZmMCdG4RJCHHOMYk7TLORDPUAbXP2HlTTN2C26PGKZ/HsgJYzRD
- DPHV6srjbPhbRPFO95UuCket3e7uQo6VEX44LZZGyWA4r+kuJKn8kQLLrff3g/10oVVJ
- y17D3RdbX1N7MC3SD+mJtD/L14MopcHiey0cJLBlESzngP8K8x/MZst4Y2Uziz4eoDXr
- +gGDBy5MkjPZpVnln/k4S+EJsM4/1udZi3WCrFR9OZ66rNtAMVRWalUdPJ4htliuly6e
- tpl3ZlJcG/kfQgbH1Fh5/tBvXwtqD/9m4C/+gMtp2+M5ExvuxR9UFoxv/zJSyJOxInFL
- 8wmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=N/kCTltWHcsvAnCWZTxTiOQyXFjCPY+fp8xA6kZWW6A=;
+ b=G5BM95GAxRpIAr+vwiH+QBlQL9y3P0W3QBj8h2wVzvZqve44I9Batk/kxX6Rgpp83d
+ Z5NLVwLAFdRa/zWZEK6NA7xdgA0yXeLb5yPNnrcpOnhk5pgUeHa8du3KRcx6I6Kqbj7g
+ fZFtHEoOdaf40INZsKFTf0Oqs6lBpMI5Em6nzSV8SCqeuw/y588bJ8iRBhGcMiWHj08Y
+ CsfyDoCxoy+cfvu87/+SuazLwOTZCVcjEVNe6efK+yKH1Sftihk1OgD/3wD7uC2qKBio
+ F603bwfpYPva1fE3Y/9LL6D9+UJ58V6k9KLaH2Hm3uIacqhC5sgBcX3iXpn5GIpN1J9V
+ w9IA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BexzKFcb
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix Formatting of non-void
- pointers is disallowed
+ header.a=rsa-sha256 header.s=20210112 header.b=G5BM95GA
+Subject: Re: [Buildroot] [PATCH v2 1/8] package/flatbuffers: build position
+ independent code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,88 +93,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport a patch from upstream.
+On Tue, Nov 29, 2022 at 8:42 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> On Tue, Nov 29, 2022 at 5:42 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> >
+> > On 28/11/2022 18:58, James Hilliard wrote:
+> > > The upcoming tensorflow-lite package requires flatbuffers to be
+> > > built with position independent code.
+> > >
+> > > Fixes:
+> > > /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/bin/../lib/gcc/aarch64-buildroot-linux-gnu/11.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: /home/buildroot/buildroot/output/per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libflatbuffers.a(util.cpp.o): relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZN11flatbuffers11CharToUpperEc' which may bind externally can not be used when making a shared object; recompile with -fPIC
+> >
+> >   This looks like something that would happen any time you try to link
+> > flatbuffers - so it should happen for kodi as well. In that case, the patch
+> > should be applied to master. Can you check if this is the case? You
+> > unfortunately can't rely on autobuilders, kodi has so many dependencies that it
+> > (almost?) never gets built. There were 91 configurations in 2022 that included
+> > kodi [1]; all of them failed, and I think all of them failed before reaching kodi...
+>
+> I tried building kodi manually and ran into build issues as well, so unclear if
+> this is needed for kodi, but I think it's probably safe to apply to master.
 
-Fixes:
-/home/buildroot/buildroot/output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/fmt/core.h:1751:17: error: static assertion failed: Formatting of non-void pointers is disallowed.
- 1751 |   static_assert(formattable_pointer,
-      |                 ^~~~~~~~~~~~~~~~~~~
+Fixed the kodi build issues:
+https://patchwork.ozlabs.org/project/buildroot/patch/20221130010306.3797360-1-james.hilliard1@gmail.com/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...char-as-formatting-of-non-void-point.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
+This doesn't seem to be needed for kodi, I did verify it does not cause any
+build issues for kodi so should be safe to apply to master.
 
-diff --git a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
-new file mode 100644
-index 0000000000..1ce106f03a
---- /dev/null
-+++ b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
-@@ -0,0 +1,53 @@
-+From 44b30c116682968bacf8aec566fc9c193026ecc9 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Wed, 6 Jul 2022 22:48:35 +1000
-+Subject: [PATCH] GLUtils: cast as char as formatting of non-void pointers is
-+ disallowed
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+44b30c116682968bacf8aec566fc9c193026ecc9]
-+---
-+ xbmc/utils/GLUtils.cpp | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/xbmc/utils/GLUtils.cpp b/xbmc/utils/GLUtils.cpp
-+index 1ef804709f..c36dcf6a20 100644
-+--- a/xbmc/utils/GLUtils.cpp
-++++ b/xbmc/utils/GLUtils.cpp
-+@@ -148,27 +148,27 @@ void _VerifyGLState(const char* szfile, const char* szfunction, int lineno)
-+ void LogGraphicsInfo()
-+ {
-+ #if defined(HAS_GL) || defined(HAS_GLES)
-+-  const GLubyte *s;
-++  const char* s;
-+ 
-+-  s = glGetString(GL_VENDOR);
-++  s = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-+   if (s)
-+     CLog::Log(LOGINFO, "GL_VENDOR = %s", s);
-+   else
-+     CLog::Log(LOGINFO, "GL_VENDOR = NULL");
-+ 
-+-  s = glGetString(GL_RENDERER);
-++  s = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
-+   if (s)
-+     CLog::Log(LOGINFO, "GL_RENDERER = %s", s);
-+   else
-+     CLog::Log(LOGINFO, "GL_RENDERER = NULL");
-+ 
-+-  s = glGetString(GL_VERSION);
-++  s = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-+   if (s)
-+     CLog::Log(LOGINFO, "GL_VERSION = %s", s);
-+   else
-+     CLog::Log(LOGINFO, "GL_VERSION = NULL");
-+ 
-+-  s = glGetString(GL_SHADING_LANGUAGE_VERSION);
-++  s = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
-+   if (s)
-+     CLog::Log(LOGINFO, "GL_SHADING_LANGUAGE_VERSION = %s", s);
-+   else
-+-- 
-+2.34.1
-+
--- 
-2.34.1
-
+>
+> By the way I think all those autobuilder configs were generated by tweaking
+> kconfig probability with this patch using a local override:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220514214612.3221647-1-james.hilliard1@gmail.com/
+>
+> I think that plus shuffle mode might allow for coverage of packages with more
+> dependencies, some fixes related to shuffle mode:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20221016193014.3384022-1-james.hilliard1@gmail.com/
+> https://patchwork.ozlabs.org/project/buildroot/patch/20221019234655.1097686-1-james.hilliard1@gmail.com/
+>
+> >
+> >   Regards,
+> >   Arnout
+> >
+> > [1]
+> > http://autobuild.buildroot.net/index.php?date%5Bfrom%5D=2022-01-01&symbols%5BBR2_PACKAGE_KODI%5D=y
+> >
+> >
+> >
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > >   package/flatbuffers/flatbuffers.mk | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+> > > index 9d286bf9e1..487d85ee1f 100644
+> > > --- a/package/flatbuffers/flatbuffers.mk
+> > > +++ b/package/flatbuffers/flatbuffers.mk
+> > > @@ -14,6 +14,7 @@ FLATBUFFERS_DEPENDENCIES = host-flatbuffers
+> > >
+> > >   FLATBUFFERS_CONF_OPTS += \
+> > >       -DCMAKE_CXX_FLAGS="-std=c++11" \
+> > > +     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+> > >       -DFLATBUFFERS_BUILD_TESTS=OFF \
+> > >       -DFLATBUFFERS_FLATC_EXECUTABLE=$(HOST_DIR)/bin/flatc
+> > >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
