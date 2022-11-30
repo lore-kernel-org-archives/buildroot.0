@@ -1,75 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9422C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 07:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105DEC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 07:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 753714031F;
-	Wed, 30 Nov 2022 07:45:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 753714031F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8507041722;
+	Wed, 30 Nov 2022 07:54:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8507041722
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v4R_0aKdhh25; Wed, 30 Nov 2022 07:45:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HUKOIpjbrAgQ; Wed, 30 Nov 2022 07:54:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA3A940BA7;
-	Wed, 30 Nov 2022 07:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA3A940BA7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 932E31BF853
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 07:44:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D6AA41737;
+	Wed, 30 Nov 2022 07:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D6AA41737
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A5531BF853
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 07:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D26E40BAA
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 07:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D26E40BAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2498A41737
+ for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 07:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2498A41737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yBzN7Th3cfMx for <buildroot@lists.busybox.net>;
- Wed, 30 Nov 2022 07:44:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD7140BA7
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com
- [209.85.214.176])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDD7140BA7
- for <buildroot@buildroot.org>; Wed, 30 Nov 2022 07:44:49 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id y4so15870628plb.2
- for <buildroot@buildroot.org>; Tue, 29 Nov 2022 23:44:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Vnj3k0u88d8aMrOB94bUgxxRxjUMBenPsqpNykReiB8=;
- b=8NI6sWlJnGxM8B78jx+SiESv7Gn95zHK1qXzK01WKF7bngcrh1Lnp30OViNkWy6Oxh
- 95ldDvqRW/sWyl41Ej4xHQ52u26Frv4LXuxVExTqC1VdnXdzYUkdbf7fGDqy6PETTCer
- TMb82fEGzneyna2gaYfbKPCHLnkWSH7Q9U7LZWhgC9ZseO2WyhCNZg6rkR9rjI/y6F1F
- dHRc0ccJ5eDHcZJ09j57ssJ85/aMT/l70y8fnKSrt6ZC73WS91D+Mua5POw5fN8kpZae
- aeDfKLnFhXCakdtyDDupcINUb90qTpmrKA5rxicX4Z9fSIKFXPiCvykgOTpZJh2iHBdn
- sFmw==
-X-Gm-Message-State: ANoB5plVuftmzgyVk52N0nKVTipnk63rfCuDeZc2jtKOoZqYu4xA1Bbt
- DZRBgcAg5/pYz7AXxTyBPFkjoI7eklg=
-X-Google-Smtp-Source: AA0mqf48pJ546h4XXKgewnbjJ33paAViHytKWBbwXQUqg2+x22mSFUshTBqSp+dB5dSmzo9+vOFhmQ==
-X-Received: by 2002:a17:90a:a88e:b0:213:13ab:c309 with SMTP id
- h14-20020a17090aa88e00b0021313abc309mr62998263pjq.80.1669794288975; 
- Tue, 29 Nov 2022 23:44:48 -0800 (PST)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- w64-20020a17090a6bc600b00219025945dcsm2512810pjj.19.2022.11.29.23.44.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Nov 2022 23:44:48 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Ma80pZHW6EM for <buildroot@lists.busybox.net>;
+ Wed, 30 Nov 2022 07:54:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16AB541722
+Received: from serv15.avernis.de (15-133.avernis.de
+ [IPv6:2a01:4f8:151:30a2::cafe])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 16AB541722
+ for <buildroot@buildroot.org>; Wed, 30 Nov 2022 07:54:28 +0000 (UTC)
+Received: from iago.. (unknown [151.57.69.37])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 8B36DBDEB0A6;
+ Wed, 30 Nov 2022 08:54:26 +0100 (CET)
+From: Andreas Ziegler <br015@umbiko.net>
 To: buildroot@buildroot.org
-Date: Tue, 29 Nov 2022 23:44:44 -0800
-Message-Id: <20221130074444.829636-2-christian@paral.in>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221130074444.829636-1-christian@paral.in>
-References: <20221130074444.829636-1-christian@paral.in>
+Date: Wed, 30 Nov 2022 08:53:57 +0100
+Message-Id: <20221130075357.92377-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add Christian Stewart to
- balena-engine package
+X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH] package/mpd: update to version 0.23.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,35 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Andreas Ziegler <br015@umbiko.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Mostly fixes for build and runtime failures; no new features.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bfebf8163c..bcfbbc9b22 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -531,6 +531,7 @@ N:	Christian Kellermann <christian.kellermann@solectrix.de>
- F:	package/python-pylibftdi/
+Standard directory for default database and cache changed from ~/.cache to
+~/.cache/mpd.
  
- N:	Christian Stewart <christian@paral.in>
-+F:	package/balena-engine/
- F:	package/batman-adv/
- F:	package/catatonit/
- F:	package/cni-plugins/
+Full change log:
+	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.11/NEWS
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index fca0ee8539..8c488d0357 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  2becaba980402e8dc7972ccc3476e493b7ae2eeb720d31fa6712472ed48e9f2d  mpd-0.23.9.tar.xz
++sha256  edb4e7a8f9dff238b5610f9e2461940ea98c727a5462fafb1cdf836304dfdca9  mpd-0.23.11.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 5c15953984..449600eda2 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).9
++MPD_VERSION = $(MPD_VERSION_MAJOR).11
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 -- 
-2.38.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
