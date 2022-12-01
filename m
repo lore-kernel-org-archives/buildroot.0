@@ -1,72 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3014AC43217
-	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 08:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6313C4321E
+	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 08:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B08F180C52;
-	Thu,  1 Dec 2022 08:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B08F180C52
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3889160C04;
+	Thu,  1 Dec 2022 08:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3889160C04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8bBPL0u4m62x; Thu,  1 Dec 2022 08:38:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PopDhEKAzZww; Thu,  1 Dec 2022 08:38:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2C7180C1A;
-	Thu,  1 Dec 2022 08:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2C7180C1A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7769D1BF3BB
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 08:38:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 751DB60777;
+	Thu,  1 Dec 2022 08:38:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 751DB60777
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C259F1BF3BB
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 08:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 520ED80BE8
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 08:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 520ED80BE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2A914019E
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 08:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2A914019E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ecaGOps8XxA6 for <buildroot@lists.busybox.net>;
- Thu,  1 Dec 2022 08:38:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IXachksSznFi for <buildroot@lists.busybox.net>;
+ Thu,  1 Dec 2022 08:38:46 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4B5A80B45
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A4B5A80B45
- for <buildroot@buildroot.org>; Thu,  1 Dec 2022 08:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52F1C400C8
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52F1C400C8
+ for <buildroot@buildroot.org>; Thu,  1 Dec 2022 08:38:46 +0000 (UTC)
 Received: from booty (unknown [77.244.183.192])
  (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 343D2C000F;
- Thu,  1 Dec 2022 08:38:28 +0000 (UTC)
-Date: Thu, 1 Dec 2022 09:38:26 +0100
-To: "Frager, Neal" <neal.frager@amd.com>
-Message-ID: <20221201093826.38b70973@booty>
-In-Reply-To: <CH2PR12MB5004F3E15B61D2B076B2B497F0129@CH2PR12MB5004.namprd12.prod.outlook.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 01BCE60015;
+ Thu,  1 Dec 2022 08:38:42 +0000 (UTC)
+Date: Thu, 1 Dec 2022 09:38:41 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221201093841.7d21d5c9@booty>
+In-Reply-To: <20221126105350.14687-2-neal.frager@amd.com>
 References: <20221126105350.14687-1-neal.frager@amd.com>
- <20221129115033.0fe9ae00@booty>
- <CH2PR12MB5004F3E15B61D2B076B2B497F0129@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20221126105350.14687-2-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1669883909;
+ d=bootlin.com; s=gm1; t=1669883923;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xYdY3K+IhOMgF1fryhv9GBGMKwz8RpBRbjR3LSrTfIc=;
- b=FrIkuM4jymHND7nTBPQp418dnU0JmvsNZLRRzEEVhozpjdjGI3MhXsgRdsiOMsClz/gwjv
- sCQASfAIvzUK4IxeuiHtA1O2D/4LiPF+1t7MM1MQgR1X9wx4/GLAJZyiJrQ6NFQ1i8Kh0J
- chucq5yCWgPLl9rcPvtuhKm6M1dNstomNmFL7VOJycjIF4QndyFxaM1lw/iZxYmUIRO6mI
- 2/w/0izX5oE4AD8eEK01hY/ImpRl0+ZKFECgcuyiw5srNlQnPCjvuZ38v6elhk7TD9zSc8
- FTb+eexMu+9DhwM3qnQNQRQFW5KPADw9FVm1djtX/x1CtbUlRLwZdOd8q5lgIg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=79PXLQDxmcX7ZT8ZaNzfyc1n567S8OxQebHU1Ieg8jA=;
+ b=Fr+Kf+BW6ZnT66wBw/0ie8+EBQI2tkvqluFIKYN4Fa6ARQX9iDBB40S53d+uAJigEpYj7c
+ MZiN4470EXBsCH6iGjU/alw6Y2m2pdIkEfbd4S+oJwKuuSA9dB7b5jG40CeSSaxPcpkcTH
+ uDVfykQuX36mRvEHv5AT8ppp0WHzyDfzTxvl8R8GTsEc12sDfGPyPLAF9qYOiucHQjLW6L
+ D6lDPlF3285DxhZ+AeHUwJYjT+zA8E3uj7yVNwAkc5Br8SpF1ycMF209+7qH804dCfO/jq
+ rlspe5uriOrJiMD56ZzZH60+69fP091VqShxRH7tLP49RgAFwgcp1gWTO0yGvQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FrIkuM4j
-Subject: Re: [Buildroot] [PATCH v1 1/3] configs/zynqmp_zcu102_defconfig:
+ header.s=gm1 header.b=Fr+Kf+BW
+Subject: Re: [Buildroot] [PATCH v1 2/3] configs/zynqmp_zcu106_defconfig:
  bump to Xilinx 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -81,84 +80,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
 Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "O'Neal, Terry" <terry.oneal@amd.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: michal.simek@amd.com, thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 29 Nov 2022 11:11:35 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
+On Sat, 26 Nov 2022 03:53:49 -0700
+Neal Frager <neal.frager@amd.com> wrote:
 
-> Hi Luca,
+> This patch bumps the zynqmp_zcu106_defconfig to Xilinx release 2022.2.
 > 
-> > This patch bumps the zynqmp_zcu102_defconfig to Xilinx release 2022.2.
-> > 
-> > Xilinx 2022.2 includes:
-> > - U-Boot 2022.01 bug fixes
-> > - Linux bump to Linux 5.15.36 with bug fixes
-> > - TF-A 2.6 bug fixes
-> > - PMUFW bug fixes
-> > 
-> > Signed-off-by: Neal Frager <neal.frager@amd.com>
-> > ---
-> >  configs/zynqmp_zcu102_defconfig | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/configs/zynqmp_zcu102_defconfig 
-> > b/configs/zynqmp_zcu102_defconfig index e27dfdb6c9..6047d4299c 100644
-> > --- a/configs/zynqmp_zcu102_defconfig
-> > +++ b/configs/zynqmp_zcu102_defconfig
-> > @@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-> >  BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> >  BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
-> > @@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y  # 
-> > BR2_TARGET_ROOTFS_TAR is not set  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y  
-> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-> > -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-> >  BR2_TARGET_UBOOT=y
-> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> >  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> > -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-> > +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
-> >  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
-> >  BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
-> >  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> > @@ -29,7 +29,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y  
-> > BR2_TARGET_UBOOT_SPL=y  BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-> >  BR2_TARGET_UBOOT_ZYNQMP=y
-> > -BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/v2022.1_22.04_1/xlnx-firmware/zcu102/zcu102_pmufw.elf"
-> > +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/zcu102/zcu102_pmufw.elf"  
+> Xilinx 2022.2 includes:
+> - U-Boot 2022.01 bug fixes
+> - Linux bump to Linux 5.15.36 with bug fixes
+> - TF-A 2.6 bug fixes
+> - PMUFW bug fixes
 > 
-> > It would be nice to stay on Xilinx official firmwares, but there seem
-> > to be no 2022.2 firmwares now on the Xilinx repo after Vivado 2022.2
-> > has been released more than 1 month ago.  
-> 
-> I completely agree.  I am in an ongoing discussion within AMD regarding these firmware binaries, and my hope is that an official location will be maintained starting with 2023.1.
-> The firmware repo will cover both zynqmp and versal families.
-> 
-> Once the official location is available, I will be moving the buildroot zynqmp and versal support over to the Xilinx github and deprecating my github.
-> 
-> > One option would be to keep on using a 2022.1 pmufw and upgrade the
-> > other components. Do you think that would work? I think nowadays the
-> > interface provided by the PMUFW is quite stable, isn't it?  
-> 
-> Yes, we can do this as a temporary solution for the zcu102 and zcu106.  The 2022.1 pmufw does work with the other 2022.2 images.
-
-Well, I think it's fine after all. Hoping it get solved soon on the
-Xilinx side...
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
