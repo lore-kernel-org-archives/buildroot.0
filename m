@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960B7C47088
-	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 20:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D097C4321E
+	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 20:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CA2A4195E;
-	Thu,  1 Dec 2022 20:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CA2A4195E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CF0JDO99uJ4w; Thu,  1 Dec 2022 20:01:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0A8441971;
-	Thu,  1 Dec 2022 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0A8441971
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F18F21BF379
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:01:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D940C610F6
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D940C610F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2089610F7;
+	Thu,  1 Dec 2022 20:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2089610F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZWrACk8bWQvJ for <buildroot@lists.busybox.net>;
- Thu,  1 Dec 2022 20:01:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E796610ED
-Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E796610ED
- for <buildroot@buildroot.org>; Thu,  1 Dec 2022 20:01:26 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.87.80])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 0pkKpOmailDUz0pkKpk2Qs; Thu, 01 Dec 2022 21:01:25 +0100
-Message-ID: <f96ea944-d86b-2f06-4889-343f9a331781@benettiengineering.com>
-Date: Thu, 1 Dec 2022 21:01:24 +0100
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5_GeWObDHA36; Thu,  1 Dec 2022 20:26:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C900060030;
+	Thu,  1 Dec 2022 20:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C900060030
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EDCB1BF83C
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:26:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1850D8210A
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1850D8210A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tx9bZKRplHxr for <buildroot@lists.busybox.net>;
+ Thu,  1 Dec 2022 20:26:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22848820EB
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22848820EB
+ for <buildroot@buildroot.org>; Thu,  1 Dec 2022 20:26:04 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9d7e:5704:aa80:b7b1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E05DAB00548;
+ Thu,  1 Dec 2022 21:25:58 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 01 Dec 2022 21:25:58 +0100
+Date: Thu, 1 Dec 2022 21:25:58 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Luca Pesce <luca.pesce@vimar.com>
+Message-ID: <20221201202558.GB978091@scaer>
+References: <AS8PR08MB6870E377EFDB1E28448EBF5581049@AS8PR08MB6870.eurprd08.prod.outlook.com>
+ <1669815827-23415-1-git-send-email-luca.pesce@vimar.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20221201143858.1486116-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221201143858.1486116-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfItm1yF4RjZx64tiOn8ZbwnHGVmmyGilmNeVGxspXHghXex0rPoTIKa/X9QAR6VSeDV1auMhQ0u6ztPva6Un8njp+579h0q1cDvzol/wieYwNNA7d7dc
- I4pZXtyK3moMmdNtvFh5EGl7iH2t9EMJFoUNxHeCzSmxN+RgoPXnA0KCx2ChBwuh+Iw5kFaSZc8U3x7e1v+QPFFRuOrQZxcAVRzYG0C1YGFYKnJ3NxLJMsN/
- CQhp2cWU5z28wJVhrqiivj1ROd4EIs9kJW9f5xsMprQ=
+Content-Disposition: inline
+In-Reply-To: <1669815827-23415-1-git-send-email-luca.pesce@vimar.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1669924885; bh=LEPwGe7wBTMPEBIsVwOiSfoatAqy44+G2Y7KrmrQhn4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=A/qyQsIggortLYDav7scapaAYwaksEpk3qyLGy7KaEw9A9n7GaHrlhy1sdyCjLfGc
- RgItgxPI+CK8pcsLj+q0EN41idk0qIQCIerYqUK/yC1729smmA/j9jJ79lJS/RBNX/
- /RnIQbS1SrqkolKQ5H99GKciqqrxytWENf1OCgf34ohkk+CojQ2YkbZHNilzV7s756
- +Gi6kxzbwe4kpHD80TPbOfC5elQJJhXr1uuttifg1QxW96kbyEnfUlWZepwE3MSnWq
- B48Ppgx0l3AxMfSLK2C8tOFp3kM/ZBMyHmn6z+ZcUZ2/mHtXEgMJ9ItU2KglhPC8kl
- LlxOIyJBN7ZJg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=A/qyQsIg
-Subject: Re: [Buildroot] [PATCH] package/rtl8723ds: fix build failure on
- PowerPC
+ d=free.fr; s=smtp-20201208; t=1669926361;
+ bh=5hVFsJXMoECK2S8oksvQFEzAjXadBAg0qvx9MnRgOx8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=j3v2q8lvKicPtXaUZF0EZQNMddLK36bHz2wGvpUqRy+W2NQkIhOIyPzuYhM4r+peB
+ NkPusBEKQTB83JiuNdbyWpGffUMjWzW8CcyB0cKsXFcf0jJZLfJOgKACUGclZDxNj3
+ 2UasGgtoJZa5t6NyorAWckqZHGWx3BwApA7BJiLoSOFU/5qm+2hgKQiXtyUnmHv/kU
+ IPnq0B3rUEGOVC1lQ8HOowahu8kjXVCiXcWlWNL7CdTvEVUhG+GDAtqaH7roOi5j78
+ MubwUvM0Pj/38I6/3rt40Co4bhEtT04YqRHspKAAZqAaNpv2mOUszprMCyFu326TvB
+ rGmyo0JboFEzw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=j3v2q8lv
+Subject: Re: [Buildroot] [PATCH] support/download/dl-wrapper: make the whole
+ dl_dir writeable for the group
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,155 +78,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pending patch has been upstreamed, so let's drop this patch and this [0]
-other patch in favor of this new one [1] that bumps package to latest
-version that basically fix the build failure on PowerPC and fix minor
-bugs.
+Luca, All,
 
-[0]: 
-https://patchwork.ozlabs.org/project/buildroot/patch/20221128194131.3102770-1-giulio.benetti@benettiengineering.com/
-[1]: 
-https://patchwork.ozlabs.org/project/buildroot/patch/20221201200044.2138064-1-giulio.benetti@benettiengineering.com/
-
-Best regards
--- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
-
-On 01/12/22 15:38, Giulio Benetti wrote:
-> Add local patch(pending upstream[0]) to fix build failure with PowerPC due
-> to a package re-defition of get_ra() that is only defined in Linux PowerPC
-> implementation.
+On 2022-11-30 14:43 +0100, Luca Pesce via buildroot spake thusly:
+> Root makefile imposes 'umask 0022', which means that every file/folder in
+> the per-package download directories has no write permission for the group.
+> These are writeable just for the owner - the user that issued the first build
+> that populated the per-package dl dir for the first time (say user A).
+> Thus, if a BR package changes its version (e.g. for buildroot update), and
+> another user (say user B, in the same group of A) starts a build, BR fails the
+> creation of package-xxx.tar.gz inside the dl dir, because user B has no write
+> permissions on that path. Furthermore, in the case of the git backend, this
+> makes the git cache not updatable by a different user.
 > 
-> [0]: https://github.com/lwfinger/rtl8723ds/pull/32
+> So, to allow sharing of a rw BR2_DL_DIR location among users of the same group
+> on a host machine (e.g. a build server used by many users, all belonging to a
+> certain "developers" group), set group write permission to the whole package
+> dl dir.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/fa2/fa2482674d789e7674dc0d83c5f54393beed4d70/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
 > ---
->   ...8723ds-get_ra-exists-only-on-PowerPC.patch | 105 ++++++++++++++++++
->   1 file changed, 105 insertions(+)
->   create mode 100644 package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
+>  support/download/dl-wrapper | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
-> new file mode 100644
-> index 0000000000..ceb9483a32
-> --- /dev/null
-> +++ b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
-> @@ -0,0 +1,105 @@
-> +From aaf31f36eb21b16bc628671a0c49b65ff2736a22 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Thu, 1 Dec 2022 15:24:08 +0100
-> +Subject: [PATCH] rtl8723ds: get_ra() exists only on PowerPC
-> +
-> +In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
-> +that has a completely different purpose. So let's rename local get_ra()
-> +to wifi_get_ra() to make it different from Linux's get_ra().
-> +
-> +[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h?h=v6.1-rc7#n49
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + core/rtw_odm.c                | 6 +++---
-> + core/rtw_recv.c               | 6 +++---
-> + include/wifi.h                | 2 +-
-> + os_dep/linux/ioctl_cfg80211.c | 2 +-
-> + 4 files changed, 8 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/core/rtw_odm.c b/core/rtw_odm.c
-> +index d9b7db1..962560a 100644
-> +--- a/core/rtw_odm.c
-> ++++ b/core/rtw_odm.c
-> +@@ -430,7 +430,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
-> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
-> + 					, *phys & 0xf
-> + 					, MAC_ARG(get_ta(wlanhdr))
-> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-> + 					, HDATA_RATE(attrib->data_rate)
-> + 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
-> + 				);
-> +@@ -546,7 +546,7 @@ type1_end:
-> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
-> + 					, *phys & 0xf
-> + 					, MAC_ARG(get_ta(wlanhdr))
-> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-> + 					, HDATA_RATE(attrib->data_rate)
-> + 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
-> + 					, pkt_cch, pkt_bw
-> +@@ -564,7 +564,7 @@ type1_end:
-> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
-> + 					, *phys & 0xf
-> + 					, MAC_ARG(get_ta(wlanhdr))
-> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-> + 					, HDATA_RATE(attrib->data_rate)
-> + 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
-> + 				);
-> +diff --git a/core/rtw_recv.c b/core/rtw_recv.c
-> +index 87a6b2a..6a3c26d 100644
-> +--- a/core/rtw_recv.c
-> ++++ b/core/rtw_recv.c
-> +@@ -4444,10 +4444,10 @@ void rx_query_phy_status(
-> + 		&& _rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN);
-> +
-> + 	pkt_info.bToSelf = (!pattrib->icv_err) && (!pattrib->crc_err)
-> +-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-> ++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-> +
-> + 	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID
-> +-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-> ++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-> +
-> + 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID
-> + 				 && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
-> +@@ -4549,7 +4549,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
-> + 	_adapter *iface = NULL;
-> + 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
-> +
-> +-	pda = get_ra(pbuf);
-> ++	pda = wifi_get_ra(pbuf);
-> +
-> + 	if (IS_MCAST(pda) == _FALSE) { /*unicast packets*/
-> + 		iface = rtw_get_iface_by_macddr(primary_padapter , pda);
-> +diff --git a/include/wifi.h b/include/wifi.h
-> +index ce78bf6..ccdbd0f 100644
-> +--- a/include/wifi.h
-> ++++ b/include/wifi.h
-> +@@ -455,7 +455,7 @@ __inline static int IS_MCAST(unsigned char *da)
-> + 		return _FALSE;
-> + }
-> +
-> +-__inline static unsigned char *get_ra(unsigned char *pframe)
-> ++__inline static unsigned char *wifi_get_ra(unsigned char *pframe)
-> + {
-> + 	unsigned char	*ra;
-> + 	ra = GetAddr1Ptr(pframe);
-> +diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-> +index a197612..4fff23a 100644
-> +--- a/os_dep/linux/ioctl_cfg80211.c
-> ++++ b/os_dep/linux/ioctl_cfg80211.c
-> +@@ -4735,7 +4735,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
-> +
-> + indicate:
-> + 	#if defined(RTW_DEDICATED_P2P_DEVICE)
-> +-	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
-> ++	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), wifi_get_ra(frame), &wdev))
-> + 		if (0)
-> + 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
-> + 	#endif
-> +--
-> +2.34.1
-> +
+> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+> index 09a6ac1..b7a4319 100755
+> --- a/support/download/dl-wrapper
+> +++ b/support/download/dl-wrapper
+> @@ -190,6 +190,10 @@ main() {
+>      new_mode=$(printf "%04o" $((0${new_mode} & ~0$(umask))))
 
+This code was written before we enforced our umask, so it is now indeed
+incorrect (at least, the comment above is misleading).
+
+>      chmod ${new_mode} "${tmp_output}"
+>  
+> +    # Make the whole dl_dir writeable for the group, so other users within
+> +    # the group can download new versions and update any vcs cache in it.
+> +    chmod -f -R g+w "${dl_dir}"
+
+But what if the user initially had umask 0022 to begin with? By forcing
+the group authorization with the chmod, you are overriding the user's
+umask settings, which is not good... I for one would not want to have
+group-writable directories (or files) created when I would have not
+expected it.
+
+Instead, what about something like:
+
+    diff --git a/Makefile b/Makefile
+    index 827ab230ef..949f27f1eb 100644
+    --- a/Makefile
+    +++ b/Makefile
+    @@ -83,10 +83,15 @@ $(MAKECMDGOALS): _all
+     _all:
+     	@umask $(REQ_UMASK) && \
+     		$(MAKE) -C $(CANONICAL_CURDIR) --no-print-directory \
+    +			BR_ORIG_UMASK=$(shell umask) \
+     			$(MAKECMDGOALS) $(EXTRAMAKEARGS)
+     
+     else # umask / $(CURDIR) / $(O)
+     
+    +# Save the user's original umask, as we may need it later on, like
+    +# during the download dl-wrapper
+    +export BR_ORIG_UMASK := $(or $(BR_ORIG_UMASK),$(shell umask))
+    +
+     # This is our default rule, so must come first
+     all:
+     .PHONY: all
+    diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+    index 0718f21aad..e9dfec635d 100644
+    --- a/package/pkg-download.mk
+    +++ b/package/pkg-download.mk
+    @@ -107,9 +107,11 @@ endif
+     #
+     ################################################################################
+     
+    +# Use user's original umask, in case they have provisions set to share
+    +# the download directory with their group (or the whole world).
+     define DOWNLOAD
+    -$(Q)mkdir -p $($(2)_DL_DIR)
+    -		$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
+    +	$(Q)umask $(BR_ORIG_UMASK); mkdir -p $($(2)_DL_DIR)
+    +	$(Q)umask $(BR_ORIG_UMASK); $(EXTRA_ENV) $($(2)_DL_ENV) \
+     		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+     		-c '$($(2)_DL_VERSION)' \
+     		-d '$($(2)_DL_DIR)' \
+
+The comments are only mostly stubs and need being expanded a bit...
+
+Regards,
+Yann E. MORIN.
+
+>      # We must *not* unlink tmp_output, otherwise there is a small window
+>      # during which another download process may create the same tmp_output
+>      # name (very, very unlikely; but not impossible.)
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
