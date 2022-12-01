@@ -1,66 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91759C43217
-	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 14:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E03A4C43217
+	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 15:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FAD260A6B;
-	Thu,  1 Dec 2022 14:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FAD260A6B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bNsxhUkBGw19; Thu,  1 Dec 2022 14:39:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D92260B3F;
-	Thu,  1 Dec 2022 14:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D92260B3F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BA9F1BF2FF
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 14:39:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7E30418CA
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 14:39:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E30418CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BC38418FF;
+	Thu,  1 Dec 2022 15:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BC38418FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3lJ0New9GJDu for <buildroot@lists.busybox.net>;
- Thu,  1 Dec 2022 14:39:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18A26418C9
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18A26418C9
- for <buildroot@buildroot.org>; Thu,  1 Dec 2022 14:39:00 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.87.80])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 0kiIpmm4K3dg30kiJp67Zj; Thu, 01 Dec 2022 15:38:59 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  1 Dec 2022 15:38:58 +0100
-Message-Id: <20221201143858.1486116-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hcNr-py6IGqO; Thu,  1 Dec 2022 15:52:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A19418DC;
+	Thu,  1 Dec 2022 15:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32A19418DC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 179A11BF83E
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 15:51:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D109240949
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 15:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D109240949
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NLK-Fcls0vAa for <buildroot@lists.busybox.net>;
+ Thu,  1 Dec 2022 15:51:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33116404EC
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 33116404EC
+ for <buildroot@buildroot.org>; Thu,  1 Dec 2022 15:51:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 23F06100010;
+ Thu,  1 Dec 2022 15:51:51 +0000 (UTC)
+Date: Thu, 1 Dec 2022 16:51:50 +0100
+To: Leonid Yuriev <leo@yuriev.ru>
+Message-ID: <20221201165150.4746c32e@windsurf>
+In-Reply-To: <3b7ef091-b01c-59d3-d31b-8b28e59bf1df@yuriev.ru>
+References: <20221201104313.25K7I8a6@myt5-1a3effcffc39.qloud-c.yandex.net>
+ <3b7ef091-b01c-59d3-d31b-8b28e59bf1df@yuriev.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfN+7USBMI6yoUiNKqf6OaC3MFfSLyG9nLGfqqu3KK+U0jNPsJRotvv1EkLfUHisiiRoRIFp2cz66D7EccUDluGc35FUuYPkgjWl7ZCjLpY9t+uBbiRL4
- hWkta8Q+gsN/VxszeSaZNKrfUhrZWqTuzLbVUuL1vjGaWR6MyG9kbkY3Llh80vEQQiO/tbeamLQMPSvfYWTzzQM+kuWMUCDFr9DtMYB2lY9nlO1iWJtYOHCd
- wss5efSPu8hIeQ8NXiPaBbZIjfykDbPvebxPkI9Q7mVXuF/lULQz84jW5wqpdzkpKla8eS3BGWd/r5G8BEXBJS6b7F7PJ1FzICL28Sm9cWs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1669905539; bh=aBPc12dLXkCFvU9wSXHBuPfr+lTX70iqVlYkaGOPvFI=;
- h=From:To:Subject:Date:MIME-Version;
- b=JXreEUAcYonT2ovaEZl76aCqoSjMxeq2eZkMPt4iUYQLFueM9qGMPaMcFInvTiYZ8
- Quz6v7JIzk2P/kF+9LIgTFtOb43VElwC38jm/AGsD0igQtw6VkvTYfbqXL5vQh35oY
- q7o+1VfIoGK73NmKODfBj0uSw23w/7XcSP352nQrJCWN+a/PyQGlarTDbjxCM6ytlg
- /IodO+ApSTbuHG8nTjUsB1PoqVnVZ5193/YJR32SJpFkK/MMNkSPqGPJ39TTMZfMDO
- q7NPh36JI+2Oa23GaqenlMmZLVy8eCNSUKW0dnJ+vGLG+d0c5Ij8V9qlH43SFwOTu1
- PTnv0zhJq5Wiw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=JXreEUAc
-Subject: [Buildroot] [PATCH] package/rtl8723ds: fix build failure on PowerPC
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1669909913;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mRL8+d58xtRQQ5F0v5/cIySSOetcxJxKLC/TUDJUm7s=;
+ b=RWfPUnQuu6OUAVBYfc7rZ6kws4VGkyFr56jgsNVxs2PL9PDL+4gw9D3KBAIH9xaVmsSYoX
+ w88L8rZohTgnxMEKIFxha8pw04YTf83CUs1f1fAreYQxWj8REaHpa6Wl9UZnPjrD8zvL36
+ ylK5pcPQNiWZZ1FDMUar8ln7Qvt7XLIvUXmQQcs1vKsDYnBK4xJuhLMP14uYiIJqxJTzlm
+ 76BqAJLgO+sqMftQVtqxg8jUHU3Asc6L8dcF763BMymQgevXHk4JS0YkiYF43HXUA0XPuN
+ /pDl5Mm2oKO23JbHGyvnQoAPv5KgDHf+kmOApNmlnp9n97WhyLVWqyQgdV4KPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RWfPUnQu
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-11-30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,143 +76,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch(pending upstream[0]) to fix build failure with PowerPC due
-to a package re-defition of get_ra() that is only defined in Linux PowerPC
-implementation.
-
-[0]: https://github.com/lwfinger/rtl8723ds/pull/32
-
-Fixes:
-http://autobuild.buildroot.net/results/fa2/fa2482674d789e7674dc0d83c5f54393beed4d70/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...8723ds-get_ra-exists-only-on-PowerPC.patch | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
-
-diff --git a/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
-new file mode 100644
-index 0000000000..ceb9483a32
---- /dev/null
-+++ b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
-@@ -0,0 +1,105 @@
-+From aaf31f36eb21b16bc628671a0c49b65ff2736a22 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 1 Dec 2022 15:24:08 +0100
-+Subject: [PATCH] rtl8723ds: get_ra() exists only on PowerPC
-+
-+In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
-+that has a completely different purpose. So let's rename local get_ra()
-+to wifi_get_ra() to make it different from Linux's get_ra().
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h?h=v6.1-rc7#n49
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ core/rtw_odm.c                | 6 +++---
-+ core/rtw_recv.c               | 6 +++---
-+ include/wifi.h                | 2 +-
-+ os_dep/linux/ioctl_cfg80211.c | 2 +-
-+ 4 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/core/rtw_odm.c b/core/rtw_odm.c
-+index d9b7db1..962560a 100644
-+--- a/core/rtw_odm.c
-++++ b/core/rtw_odm.c
-+@@ -430,7 +430,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
-+ 				);
-+@@ -546,7 +546,7 @@ type1_end:
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
-+ 					, pkt_cch, pkt_bw
-+@@ -564,7 +564,7 @@ type1_end:
-+ 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
-+ 					, *phys & 0xf
-+ 					, MAC_ARG(get_ta(wlanhdr))
-+-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
-++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
-+ 					, HDATA_RATE(attrib->data_rate)
-+ 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
-+ 				);
-+diff --git a/core/rtw_recv.c b/core/rtw_recv.c
-+index 87a6b2a..6a3c26d 100644
-+--- a/core/rtw_recv.c
-++++ b/core/rtw_recv.c
-+@@ -4444,10 +4444,10 @@ void rx_query_phy_status(
-+ 		&& _rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN);
-+ 
-+ 	pkt_info.bToSelf = (!pattrib->icv_err) && (!pattrib->crc_err)
-+-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-+ 
-+ 	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID
-+-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
-+ 
-+ 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID
-+ 				 && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
-+@@ -4549,7 +4549,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
-+ 	_adapter *iface = NULL;
-+ 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
-+ 
-+-	pda = get_ra(pbuf);
-++	pda = wifi_get_ra(pbuf);
-+ 
-+ 	if (IS_MCAST(pda) == _FALSE) { /*unicast packets*/
-+ 		iface = rtw_get_iface_by_macddr(primary_padapter , pda);
-+diff --git a/include/wifi.h b/include/wifi.h
-+index ce78bf6..ccdbd0f 100644
-+--- a/include/wifi.h
-++++ b/include/wifi.h
-+@@ -455,7 +455,7 @@ __inline static int IS_MCAST(unsigned char *da)
-+ 		return _FALSE;
-+ }
-+ 
-+-__inline static unsigned char *get_ra(unsigned char *pframe)
-++__inline static unsigned char *wifi_get_ra(unsigned char *pframe)
-+ {
-+ 	unsigned char	*ra;
-+ 	ra = GetAddr1Ptr(pframe);
-+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-+index a197612..4fff23a 100644
-+--- a/os_dep/linux/ioctl_cfg80211.c
-++++ b/os_dep/linux/ioctl_cfg80211.c
-+@@ -4735,7 +4735,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
-+ 
-+ indicate:
-+ 	#if defined(RTW_DEDICATED_P2P_DEVICE)
-+-	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
-++	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), wifi_get_ra(frame), &wdev))
-+ 		if (0)
-+ 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
-+ 	#endif
-+-- 
-+2.34.1
-+
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTGVvbmlkLAoKVGhhbmtzIGZvciB5b3VyIGZlZWRiYWNrLiBDb3VsZCB5b3UgcHJvdmlk
+ZSBtb3JlIHNwZWNpZmljLCBzdWNoIGFzCndoaWNoIHNwZWNpZmljIHZlcnNpb24gYnVtcCBmaXhl
+ZCB0aGlzIGlzc3VlPwoKQmVzdCByZWdhcmRzLAoKVGhvbWFzIFBldGF6em9uaQoKT24gVGh1LCAx
+IERlYyAyMDIyIDE4OjM3OjAyICswMzAwCkxlb25pZCBZdXJpZXYgPGxlb0B5dXJpZXYucnU+IHdy
+b3RlOgoKPiBIaSwKPiAKPiBKdXN0IGluIGNhc2UsIEkgZGVjaWRlZCB0byBub3RpZnkgdGhhdCB0
+aGUgcHJvYmxlbSBoYXMgYmVlbiBmaXhlZCBpbiB0aGUgCj4gbGF0ZXN0IHZlcnNpb24uCj4gSS5l
+LiBpdCBpcyBlbm91Z2ggdG8gYmFja3BvcnQgYSBsaWJtZGJ4JyBwYWNrYWdlIHBhdGNoZXMgZnJv
+bSB0aGUgbWFzdGVyIAo+IGJyYW5jaC4KPiAKPiBSZWdhcmRzLAo+IExlb25pZC4KPiAKPiAwMS4x
+Mi4yMDIyIDEwOjQzLCBUaG9tYXMgUGV0YXp6b25pINC/0LjRiNC10YI6Cj4gPiBIZWxsbywKPiA+
+Cj4gPiBBdXRvYnVpbGRlciBmYWlsdXJlcwo+ID4gPT09PT09PT09PT09PT09PT09PT0KPiA+Cj4g
+PiBCZWxvdyBpcyBhIGxpc3Qgb2YgYnVpbGQgZmFpbHVyZXMgcmVwb3J0ZWQgYnkgdGhlIEJ1aWxk
+cm9vdCBhdXRvYnVpbGRlcnMKPiA+IGluIHJlbGF0aW9uIHRvIHBhY2thZ2VzIG9yIENQVSBhcmNo
+aXRlY3R1cmVzIHlvdSBhcmUgaW4gY2hhcmdlIG9mLgo+ID4gUGxlYXNlIGhlbHAgdXMgaW1wcm92
+aW5nIHRoZSBxdWFsaXR5IG9mIEJ1aWxkcm9vdCBieSBpbnZlc3RpZ2F0aW5nIHRob3NlCj4gPiBi
+dWlsZCBmYWlsdXJlcyBhbmQgc2VuZGluZyBwYXRjaGVzIHRvIGZpeCB0aGVtLgo+ID4KPiA+IFJl
+c3VsdHMgZm9yIHRoZSAnbWFzdGVyJyBicmFuY2gKPiA+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0KPiA+Cj4gPiBCdWlsZCBmYWlsdXJlcyByZWxhdGVkIHRvIHlvdXIgcGFja2FnZXM6
+Cj4gPgo+ID4gICAgICBhcmNoICAgICB8ICAgICAgICAgICAgIHJlYXNvbiAgICAgICAgICAgICB8
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdXJsCj4gPiAtLS0tLS0tLS0t
+LS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQo+ID4gICBtaWNyb2JsYXplICB8ICAgICAgICBsaWJtZGJ4LTAuMTEuMTIgICAgICAgICB8
+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzA2ZDlmM2M1YWQ2YTQ0MTU2
+ODVkZWE2YzVmYjJmN2FlZDkxMGFhNmUKPiA+Cj4gPgo+ID4gVGhhbmtzIGZvciB5b3VyIGNvbnRy
+aWJ1dGlvbiB0byBCdWlsZHJvb3QhCj4gPiAgCgoKCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1v
+d25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
+bmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
