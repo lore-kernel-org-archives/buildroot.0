@@ -1,67 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417D0C43217
-	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 20:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960B7C47088
+	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 20:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C222E610ED;
-	Thu,  1 Dec 2022 20:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C222E610ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CA2A4195E;
+	Thu,  1 Dec 2022 20:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CA2A4195E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CF0JDO99uJ4w; Thu,  1 Dec 2022 20:01:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0A8441971;
+	Thu,  1 Dec 2022 20:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0A8441971
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F18F21BF379
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:01:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D940C610F6
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D940C610F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VjmZvVKPXIja; Thu,  1 Dec 2022 20:00:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F12A0610F1;
-	Thu,  1 Dec 2022 20:00:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12A0610F1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 153A01BF379
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:00:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E43AB820FA
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 20:00:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E43AB820FA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X9HqO8LeHE-b for <buildroot@lists.busybox.net>;
- Thu,  1 Dec 2022 20:00:47 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZWrACk8bWQvJ for <buildroot@lists.busybox.net>;
+ Thu,  1 Dec 2022 20:01:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 942AB81C40
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id 942AB81C40
- for <buildroot@buildroot.org>; Thu,  1 Dec 2022 20:00:46 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.87.80])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E796610ED
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E796610ED
+ for <buildroot@buildroot.org>; Thu,  1 Dec 2022 20:01:26 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.87.80])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 0pjgpVAHvTSJi0pjhp6i3y; Thu, 01 Dec 2022 21:00:45 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  1 Dec 2022 21:00:44 +0100
-Message-Id: <20221201200044.2138064-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id 0pkKpOmailDUz0pkKpk2Qs; Thu, 01 Dec 2022 21:01:25 +0100
+Message-ID: <f96ea944-d86b-2f06-4889-343f9a331781@benettiengineering.com>
+Date: Thu, 1 Dec 2022 21:01:24 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGGBNx20fLWg1shZW4pYJpIMYVhgdrqCGnJASZId1GZ7RVX8RuDz+z4FTRbkxQOvchisW+JpIORW8aaRZuuK01BsvJdTW0HJNhlxA6MJKEKLftXTqwU/
- faWLai2/ujjxEn2B4Unew6UdxBzadr1HttFtLcn7JPNFiw8wPu6+J0eycIjAWPSquTsnFj3x1ntzmQoEnQ4RAiFrJ5GZudGusV2PwKau8xCxOv9OvCwKF+bJ
- stCEZQKdKZ/sK31cE15c365R/tpvVx7wTWP8NYiLQNInFhYRS0Z4hftLNbciFlzCzjojnfp3mBhFdHL3qgabB2Im+WCZrmgnSjqScFVt5X0=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20221201143858.1486116-1-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221201143858.1486116-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfItm1yF4RjZx64tiOn8ZbwnHGVmmyGilmNeVGxspXHghXex0rPoTIKa/X9QAR6VSeDV1auMhQ0u6ztPva6Un8njp+579h0q1cDvzol/wieYwNNA7d7dc
+ I4pZXtyK3moMmdNtvFh5EGl7iH2t9EMJFoUNxHeCzSmxN+RgoPXnA0KCx2ChBwuh+Iw5kFaSZc8U3x7e1v+QPFFRuOrQZxcAVRzYG0C1YGFYKnJ3NxLJMsN/
+ CQhp2cWU5z28wJVhrqiivj1ROd4EIs9kJW9f5xsMprQ=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1669924845; bh=P//T73lMJtI995tl+COCSSPfuVbMC9h2G2ElIkgATds=;
- h=From:To:Subject:Date:MIME-Version;
- b=CJ55HPh9B5w47P5Redc2OGmq6reORqe7T04pBUqYSh0FVNj93DBkiwY4z0dRkhza/
- /H9/dkXax9veW4Nx2lq+1QNjFHHTPCBiOht0LdAt7CC5mSa4mWH858vOg/sbMdKsU9
- pd/T71SHmg81R2/BSiHEnO98n8tjOz4erXb0cbv2UFGi6X2BNTmOUCY0y4G2/JlwqJ
- kLsk9fULvjvIWEIrJ0WK9fDimpi6arBzG6uYjqqBEEU8FKR4Cn6s+k9I+9Sue3Aarp
- pe5jiBjH/MFhhPja/0SK0D2b8Wfh/i2bnPuNAkNLbrmlfA1XmveOEdh0REZPMWYZ68
- l/20VL15dumYw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1669924885; bh=LEPwGe7wBTMPEBIsVwOiSfoatAqy44+G2Y7KrmrQhn4=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=A/qyQsIggortLYDav7scapaAYwaksEpk3qyLGy7KaEw9A9n7GaHrlhy1sdyCjLfGc
+ RgItgxPI+CK8pcsLj+q0EN41idk0qIQCIerYqUK/yC1729smmA/j9jJ79lJS/RBNX/
+ /RnIQbS1SrqkolKQ5H99GKciqqrxytWENf1OCgf34ohkk+CojQ2YkbZHNilzV7s756
+ +Gi6kxzbwe4kpHD80TPbOfC5elQJJhXr1uuttifg1QxW96kbyEnfUlWZepwE3MSnWq
+ B48Ppgx0l3AxMfSLK2C8tOFp3kM/ZBMyHmn6z+ZcUZ2/mHtXEgMJ9ItU2KglhPC8kl
+ LlxOIyJBN7ZJg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=CJ55HPh9
-Subject: [Buildroot] [PATCH] package/rtl8723ds: bump to 2022-12-01 version
- on master branch
+ header.a=rsa-sha256 header.s=a1 header.b=A/qyQsIg
+Subject: Re: [Buildroot] [PATCH] package/rtl8723ds: fix build failure on
+ PowerPC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,94 +77,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop local patch that has been upstreamed.
+Pending patch has been upstreamed, so let's drop this patch and this [0]
+other patch in favor of this new one [1] that bumps package to latest
+version that basically fix the build failure on PowerPC and fix minor
+bugs.
 
-Fixes:
-http://autobuild.buildroot.net/results/fa2/fa2482674d789e7674dc0d83c5f54393beed4d70/
+[0]: 
+https://patchwork.ozlabs.org/project/buildroot/patch/20221128194131.3102770-1-giulio.benetti@benettiengineering.com/
+[1]: 
+https://patchwork.ozlabs.org/project/buildroot/patch/20221201200044.2138064-1-giulio.benetti@benettiengineering.com/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 39 -------------------
- package/rtl8723ds/rtl8723ds.hash              |  2 +-
- package/rtl8723ds/rtl8723ds.mk                |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
- delete mode 100644 package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-
-diff --git a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index 4495817358..0000000000
---- a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 769a1943cb409f89f3c91208294a89b09bf47b86 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 16 Nov 2022 16:08:21 +0100
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index aa57f85..3d91574 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -1738,6 +1737,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- rtk_core :=	core/rtw_cmd.o \
---- 
--2.34.1
--
-diff --git a/package/rtl8723ds/rtl8723ds.hash b/package/rtl8723ds/rtl8723ds.hash
-index cbc77e14c1..d5abf9913c 100644
---- a/package/rtl8723ds/rtl8723ds.hash
-+++ b/package/rtl8723ds/rtl8723ds.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  691040a85d838f8d8d7da0f2ed460f1ea5f6734c40dc73770ba7e260b6cda9cc  rtl8723ds-5ab2d3f3858dc4c833013c47a79faa05b10198f6.tar.gz
-+sha256  97f3ebc5d977ba35d10c9c06e6817e4a00458727b651b56fc00c207c05a61995  rtl8723ds-a638cc8639015b8b9390af3350fab0366b6c87e7.tar.gz
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-index 0d96e6b03a..7e27fa75ea 100644
---- a/package/rtl8723ds/rtl8723ds.mk
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8723DS_VERSION = 5ab2d3f3858dc4c833013c47a79faa05b10198f6
-+RTL8723DS_VERSION = a638cc8639015b8b9390af3350fab0366b6c87e7
- RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
- RTL8723DS_LICENSE = GPL-2.0
- 
+Best regards
 -- 
-2.34.1
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
+
+On 01/12/22 15:38, Giulio Benetti wrote:
+> Add local patch(pending upstream[0]) to fix build failure with PowerPC due
+> to a package re-defition of get_ra() that is only defined in Linux PowerPC
+> implementation.
+> 
+> [0]: https://github.com/lwfinger/rtl8723ds/pull/32
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/fa2/fa2482674d789e7674dc0d83c5f54393beed4d70/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   ...8723ds-get_ra-exists-only-on-PowerPC.patch | 105 ++++++++++++++++++
+>   1 file changed, 105 insertions(+)
+>   create mode 100644 package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
+> 
+> diff --git a/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
+> new file mode 100644
+> index 0000000000..ceb9483a32
+> --- /dev/null
+> +++ b/package/rtl8723ds/0002-rtl8723ds-get_ra-exists-only-on-PowerPC.patch
+> @@ -0,0 +1,105 @@
+> +From aaf31f36eb21b16bc628671a0c49b65ff2736a22 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Thu, 1 Dec 2022 15:24:08 +0100
+> +Subject: [PATCH] rtl8723ds: get_ra() exists only on PowerPC
+> +
+> +In PowerPc Linux only get_ra() exists[0] and conflicts with local get_ra()
+> +that has a completely different purpose. So let's rename local get_ra()
+> +to wifi_get_ra() to make it different from Linux's get_ra().
+> +
+> +[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/include/asm/disassemble.h?h=v6.1-rc7#n49
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + core/rtw_odm.c                | 6 +++---
+> + core/rtw_recv.c               | 6 +++---
+> + include/wifi.h                | 2 +-
+> + os_dep/linux/ioctl_cfg80211.c | 2 +-
+> + 4 files changed, 8 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/core/rtw_odm.c b/core/rtw_odm.c
+> +index d9b7db1..962560a 100644
+> +--- a/core/rtw_odm.c
+> ++++ b/core/rtw_odm.c
+> +@@ -430,7 +430,7 @@ void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
+> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u)\n"
+> + 					, *phys & 0xf
+> + 					, MAC_ARG(get_ta(wlanhdr))
+> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
+> + 					, HDATA_RATE(attrib->data_rate)
+> + 					, phys_t0->band, phys_t0->channel, phys_t0->rxsc
+> + 				);
+> +@@ -546,7 +546,7 @@ type1_end:
+> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, rf_mode:%u, l_rxsc:%u, ht_rxsc:%u) => %u,%u\n"
+> + 					, *phys & 0xf
+> + 					, MAC_ARG(get_ta(wlanhdr))
+> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
+> + 					, HDATA_RATE(attrib->data_rate)
+> + 					, phys_t1->band, phys_t1->channel, phys_t1->rf_mode, phys_t1->l_rxsc, phys_t1->ht_rxsc
+> + 					, pkt_cch, pkt_bw
+> +@@ -564,7 +564,7 @@ type1_end:
+> + 				RTW_PRINT("phys_t%u ta="MAC_FMT" %s, %s(band:%u, ch:%u, l_rxsc:%u, ht_rxsc:%u)\n"
+> + 					, *phys & 0xf
+> + 					, MAC_ARG(get_ta(wlanhdr))
+> +-					, is_broadcast_mac_addr(get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(get_ra(wlanhdr)) ? "MC" : "UC"
+> ++					, is_broadcast_mac_addr(wifi_get_ra(wlanhdr)) ? "BC" : is_multicast_mac_addr(wifi_get_ra(wlanhdr)) ? "MC" : "UC"
+> + 					, HDATA_RATE(attrib->data_rate)
+> + 					, phys_t2->band, phys_t2->channel, phys_t2->l_rxsc, phys_t2->ht_rxsc
+> + 				);
+> +diff --git a/core/rtw_recv.c b/core/rtw_recv.c
+> +index 87a6b2a..6a3c26d 100644
+> +--- a/core/rtw_recv.c
+> ++++ b/core/rtw_recv.c
+> +@@ -4444,10 +4444,10 @@ void rx_query_phy_status(
+> + 		&& _rtw_memcmp(get_hdr_bssid(wlanhdr), get_bssid(&padapter->mlmepriv), ETH_ALEN);
+> +
+> + 	pkt_info.bToSelf = (!pattrib->icv_err) && (!pattrib->crc_err)
+> +-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
+> ++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
+> +
+> + 	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID
+> +-		&& _rtw_memcmp(get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
+> ++		&& _rtw_memcmp(wifi_get_ra(wlanhdr), adapter_mac_addr(padapter), ETH_ALEN);
+> +
+> + 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID
+> + 				 && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
+> +@@ -4549,7 +4549,7 @@ s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status)
+> + 	_adapter *iface = NULL;
+> + 	_adapter *primary_padapter = precvframe->u.hdr.adapter;
+> +
+> +-	pda = get_ra(pbuf);
+> ++	pda = wifi_get_ra(pbuf);
+> +
+> + 	if (IS_MCAST(pda) == _FALSE) { /*unicast packets*/
+> + 		iface = rtw_get_iface_by_macddr(primary_padapter , pda);
+> +diff --git a/include/wifi.h b/include/wifi.h
+> +index ce78bf6..ccdbd0f 100644
+> +--- a/include/wifi.h
+> ++++ b/include/wifi.h
+> +@@ -455,7 +455,7 @@ __inline static int IS_MCAST(unsigned char *da)
+> + 		return _FALSE;
+> + }
+> +
+> +-__inline static unsigned char *get_ra(unsigned char *pframe)
+> ++__inline static unsigned char *wifi_get_ra(unsigned char *pframe)
+> + {
+> + 	unsigned char	*ra;
+> + 	ra = GetAddr1Ptr(pframe);
+> +diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+> +index a197612..4fff23a 100644
+> +--- a/os_dep/linux/ioctl_cfg80211.c
+> ++++ b/os_dep/linux/ioctl_cfg80211.c
+> +@@ -4735,7 +4735,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
+> +
+> + indicate:
+> + 	#if defined(RTW_DEDICATED_P2P_DEVICE)
+> +-	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
+> ++	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), wifi_get_ra(frame), &wdev))
+> + 		if (0)
+> + 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
+> + 	#endif
+> +--
+> +2.34.1
+> +
 
 _______________________________________________
 buildroot mailing list
