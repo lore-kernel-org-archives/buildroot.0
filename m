@@ -1,59 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47203C4321E
-	for <buildroot@archiver.kernel.org>; Wed, 30 Nov 2022 21:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C0D8C4321E
+	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 00:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CED70405AF;
-	Wed, 30 Nov 2022 21:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED70405AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B90F860BE9;
+	Thu,  1 Dec 2022 00:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B90F860BE9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DTgGJULDxvrS; Wed, 30 Nov 2022 21:26:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JuUdj4HEqZQa; Thu,  1 Dec 2022 00:45:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C475140529;
-	Wed, 30 Nov 2022 21:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C475140529
+	by smtp3.osuosl.org (Postfix) with ESMTP id E953560746;
+	Thu,  1 Dec 2022 00:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E953560746
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E877C1BF40B
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 21:26:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C61F71BF968
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 00:45:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDC354051F
- for <buildroot@lists.busybox.net>; Wed, 30 Nov 2022 21:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDC354051F
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE9A04049F
+ for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 00:45:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE9A04049F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1yWDvqNZ30Gl for <buildroot@lists.busybox.net>;
- Wed, 30 Nov 2022 21:26:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13D1D400F2
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 13D1D400F2
- for <buildroot@buildroot.org>; Wed, 30 Nov 2022 21:26:30 +0000 (UTC)
-Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout10.t-online.de (Postfix) with SMTP id DF8B21465A;
- Wed, 30 Nov 2022 22:26:15 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd70.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p0Uat-0mHBM90; Wed, 30 Nov 2022 22:26:15 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42310)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p0Uas-0001SX-2W;
- Wed, 30 Nov 2022 22:26:15 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id iIVuQid7bJ3f for <buildroot@lists.busybox.net>;
+ Thu,  1 Dec 2022 00:45:05 +0000 (UTC)
+X-Greylist: delayed 11:25:08 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D78C440143
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net
+ [20.232.28.96]) by smtp2.osuosl.org (Postfix) with SMTP id D78C440143
+ for <buildroot@buildroot.org>; Thu,  1 Dec 2022 00:45:04 +0000 (UTC)
+Received: from E0005128LT.eswin.cn (unknown [10.12.98.229])
+ by app2 (Coremail) with SMTP id EggMCgA3CS4M+YdjFmgUAA--.62444S5;
+ Thu, 01 Dec 2022 08:45:01 +0800 (CST)
+From: Zikui Zhao <zhaozikui@eswincomputing.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Nov 2022 22:26:14 +0100
-Message-Id: <20221130212614.1215778-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  1 Dec 2022 08:44:58 +0800
+Message-Id: <20221201004458.673-2-zhaozikui@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
+In-Reply-To: <20221201004458.673-1-zhaozikui@eswincomputing.com>
+References: <20221201004458.673-1-zhaozikui@eswincomputing.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1669843575-50A2B689-FDA8673D/0/0 CLEAN NORMAL
-X-TOI-MSGID: a7f99a2a-4135-46f3-9589-fde48777f003
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump version to 3.0.18
+X-CM-TRANSID: EggMCgA3CS4M+YdjFmgUAA--.62444S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw1UAF4UAw1kCr4DAw1kZrb_yoW7WFW3pa
+ 95Ww13KrZ5J3W5Arn7uw1v9Fyfu3s7ZFW5JryUZ345KF15GF1IvrsFyanIqw15X393ZFya
+ vrW8WrW8Ja4qq3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDU0xBIdaVrnRJUUUBI14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+ rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+ x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+ Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+ A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+ e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+ 8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+ jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28Icx
+ kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+ xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42
+ IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+ 6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+ CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU==
+X-CM-SenderInfo: p2kd06plnxxqphvzx0xfrp13pwlqwhhfrp/
+Subject: [Buildroot] [PATCH 1/1] BUILDROOT: fixed some spelling mistakes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,207 +76,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Zikui Zhao <zhaozikui@eswincomputing.com>,
+ Bilal Wasim <bilalwasim676@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch 0010, a different fix was applied upstream:
-https://code.videolan.org/videolan/vlc/-/commit/05445b74a38d045cb28f71f96ccbe882445a031e
+Fixed some spelling mistakes of countable nouns.
 
-Removed patch 0011 which was backported from upstream.
-Renumbered patch 0012 -> 0010.
-
-Release notes:
-http://www.videolan.org/vlc/releases/3.0.18.html
-
-Fixes CVE-2022-41325:
-http://www.videolan.org/security/sb-vlc3018.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Zikui Zhao <zhaozikui@eswincomputing.com>
 ---
- ...ive555.cpp-fix-build-with-live555-20.patch | 36 --------
- ...> 0010-opengl-missing-library-check.patch} |  0
- ...-fix-compilation-with-upcoming-dav1d.patch | 88 -------------------
- package/vlc/vlc.hash                          |  8 +-
- package/vlc/vlc.mk                            |  2 +-
- 5 files changed, 5 insertions(+), 129 deletions(-)
- delete mode 100644 package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
- rename package/vlc/{0012-opengl-missing-library-check.patch => 0010-opengl-missing-library-check.patch} (100%)
- delete mode 100644 package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
+ board/chromebook/elm/readme.txt               | 2 +-
+ board/chromebook/snow/readme.txt              | 2 +-
+ docs/manual/customize-directory-structure.txt | 4 ++--
+ docs/manual/writing-rules.txt                 | 4 ++--
+ support/kconfig/menu.c                        | 2 +-
+ support/kconfig/streamline_config.pl          | 2 +-
+ support/kconfig/zconf.lex.c_shipped           | 4 ++--
+ support/testing/tests/package/test_crudini.py | 2 +-
+ 8 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-deleted file mode 100644
-index 5f046648d4..0000000000
---- a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 22 May 2021 22:56:04 +0200
--Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
-- 2020.12.11
--
--Since live555-2020.12.11, connectionEndpointAddress() member function
--use a "struct sockaddr_storage" in preparation for eventual support of
--IPv6: http://www.live555.com/liveMedia/public/changelog.txt
--
--Fixes:
-- - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- modules/access/live555.cpp | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
--index 9d6e01ae32..32a6c294eb 100644
----- a/modules/access/live555.cpp
--+++ b/modules/access/live555.cpp
--@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
--             if( !p_sys->b_multicast )
--             {
--                 /* We need different rollover behaviour for multicast */
---                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
--+                struct sockaddr_storage tempAddr;
--+                sub->getConnectionEndpointAddress( tempAddr );
--+                p_sys->b_multicast = IsMulticastAddress( tempAddr );
--             }
-- 
--             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
---- 
--2.30.2
--
-diff --git a/package/vlc/0012-opengl-missing-library-check.patch b/package/vlc/0010-opengl-missing-library-check.patch
-similarity index 100%
-rename from package/vlc/0012-opengl-missing-library-check.patch
-rename to package/vlc/0010-opengl-missing-library-check.patch
-diff --git a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch b/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
-deleted file mode 100644
-index 74b8645379..0000000000
---- a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From 2202c892c8dc1381b596c53c2ebd3ca680061f95 Mon Sep 17 00:00:00 2001
--From: Steve Lhomme <robux4@ycbcr.xyz>
--Date: Fri, 18 Mar 2022 11:42:49 +0100
--Subject: [PATCH] dav1d: fix compilation with (upcoming) dav1d 1.0
--
--(cherry picked from commit dbf45cea2a8abdfbef897b8a71f3eb782bb1b712) (edited)
--edited:
--- 3.0 has the 128 pixels padding elsewhere
--- 3.0 has an extra parameter for add_integer_with_range()
--- 3.0 was setting i_extra_picture_buffers further down in the code
--- 3.0 uses 16 threads max
--
--Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
--
--Downloaded from upstream commit
--https://code.videolan.org/videolan/vlc/-/commit/2202c892c8dc1381b596c53c2ebd3ca680061f95
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/codec/dav1d.c | 22 +++++++++++++++++++++-
-- 1 file changed, 21 insertions(+), 1 deletion(-)
--
--diff --git a/modules/codec/dav1d.c b/modules/codec/dav1d.c
--index 039165f52ec..cfabbc27cb3 100644
----- a/modules/codec/dav1d.c
--+++ b/modules/codec/dav1d.c
--@@ -63,10 +63,16 @@ vlc_module_begin ()
--     set_category(CAT_INPUT)
--     set_subcategory(SUBCAT_INPUT_VCODEC)
-- 
--+#if DAV1D_API_VERSION_MAJOR >= 6
--+    add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_THREADS,
--+                THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
--+    add_obsolete_string("dav1d-thread-tiles") // unused with dav1d 1.0
--+#else
--     add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_FRAME_THREADS,
--                 THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
--     add_integer_with_range("dav1d-thread-tiles", 0, 0, DAV1D_MAX_TILE_THREADS,
--                 THREAD_TILES_TEXT, THREAD_TILES_LONGTEXT, false)
--+#endif
-- vlc_module_end ()
-- 
-- /*****************************************************************************
--@@ -294,6 +300,11 @@ static int OpenDecoder(vlc_object_t *p_this)
--         return VLC_ENOMEM;
-- 
--     dav1d_default_settings(&p_sys->s);
--+#if DAV1D_API_VERSION_MAJOR >= 6
--+    p_sys->s.n_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
--+    if (p_sys->s.n_threads == 0)
--+        p_sys->s.n_threads = (i_core_count < 16) ? i_core_count : 16;
--+#else
--     p_sys->s.n_tile_threads = var_InheritInteger(p_this, "dav1d-thread-tiles");
--     if (p_sys->s.n_tile_threads == 0)
--         p_sys->s.n_tile_threads =
--@@ -303,6 +314,7 @@ static int OpenDecoder(vlc_object_t *p_this)
--     p_sys->s.n_frame_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
--     if (p_sys->s.n_frame_threads == 0)
--         p_sys->s.n_frame_threads = (i_core_count < 16) ? i_core_count : 16;
--+#endif
--     p_sys->s.allocator.cookie = dec;
--     p_sys->s.allocator.alloc_picture_callback = NewPicture;
--     p_sys->s.allocator.release_picture_callback = FreePicture;
--@@ -313,12 +325,20 @@ static int OpenDecoder(vlc_object_t *p_this)
--         return VLC_EGENERIC;
--     }
-- 
--+#if DAV1D_API_VERSION_MAJOR >= 6
--+    msg_Dbg(p_this, "Using dav1d version %s with %d threads",
--+            dav1d_version(), p_sys->s.n_threads);
--+
--+    dec->i_extra_picture_buffers = (p_sys->s.n_threads - 1);
--+#else
--     msg_Dbg(p_this, "Using dav1d version %s with %d/%d frame/tile threads",
--             dav1d_version(), p_sys->s.n_frame_threads, p_sys->s.n_tile_threads);
-- 
--+    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
--+#endif
--+
--     dec->pf_decode = Decode;
--     dec->pf_flush = FlushDecoder;
---    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
-- 
--     dec->fmt_out.video.i_width = dec->fmt_in.video.i_width;
--     dec->fmt_out.video.i_height = dec->fmt_in.video.i_height;
---- 
--GitLab
--
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 9060097906..64b6bc5a3b 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha256
--sha256  8c5a62d88a4fb45c1b095cf10befef217dfa87aedcec5184b9e7d590b6dd4133  vlc-3.0.17.4.tar.xz
--# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha1
--sha1  ebcd9939103fda141267c5a8f1c603df4533218e  vlc-3.0.17.4.tar.xz
-+# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha256
-+sha256  57094439c365d8aa8b9b41fa3080cc0eef2befe6025bb5cef722accc625aedec  vlc-3.0.18.tar.xz
-+# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha1
-+sha1  b11ccaa0f5ee15a550564817d60458eb0946f80e *vlc-3.0.18.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index aee3b735a9..c6ae46f469 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/chromebook/elm/readme.txt b/board/chromebook/elm/readme.txt
+index b63e7e8bcf..3387933ab4 100644
+--- a/board/chromebook/elm/readme.txt
++++ b/board/chromebook/elm/readme.txt
+@@ -30,7 +30,7 @@ The important files are:
+ 	rootfs.tar
+ 	bootsd.img (SD card image containing both kernel and rootfs)
  
--VLC_VERSION = 3.0.17.4
-+VLC_VERSION = 3.0.18
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-Write the image directly to some SD card.
++Write the image directly to some SD cards.
+ WARNING: make sure there is nothing important on that card,
+ and double-check the device name!
+ 
+diff --git a/board/chromebook/snow/readme.txt b/board/chromebook/snow/readme.txt
+index 1afd949829..9533bf69b0 100644
+--- a/board/chromebook/snow/readme.txt
++++ b/board/chromebook/snow/readme.txt
+@@ -30,7 +30,7 @@ The important files are:
+ 	rootfs.tar
+ 	bootsd.img (SD card image containing both kernel and rootfs)
+ 
+-Write the image directly to some SD card.
++Write the image directly to some SD cards.
+ WARNING: make sure there is nothing important on that card,
+ and double-check the device name!
+ 
+diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+index a3a7ad4cb9..1249421da2 100644
+--- a/docs/manual/customize-directory-structure.txt
++++ b/docs/manual/customize-directory-structure.txt
+@@ -27,10 +27,10 @@ to you.
+ |           +-- post_image.sh
+ |           +-- rootfs_overlay/
+ |           |   +-- etc/
+-|           |   +-- <some file>
++|           |   +-- <some files>
+ |           +-- patches/
+ |               +-- foo/
+-|               |   +-- <some patch>
++|               |   +-- <some patches>
+ |               +-- libbar/
+ |                   +-- <some other patches>
+ |
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index 758965d80a..1b88a411e6 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -6,8 +6,8 @@
+ Overall, these coding style rules are here to help you to add new files in
+ Buildroot or refactor existing ones.
+ 
+-If you slightly modify some existing file, the important thing is
+-to keep the consistency of the whole file, so you can:
++If you slightly modify some existing files, the important thing is
++to keep the consistency of the whole files, so you can:
+ 
+ * either follow the potentially deprecated coding style used in this
+ file,
+diff --git a/support/kconfig/menu.c b/support/kconfig/menu.c
+index 5c5c1374b1..53ed230484 100644
+--- a/support/kconfig/menu.c
++++ b/support/kconfig/menu.c
+@@ -376,7 +376,7 @@ void menu_finalize(struct menu *parent)
+ 					 *
+ 					 * 2. The property belongs to a symbol
+ 					 *    defined in multiple locations and
+-					 *    is from some other location. It
++					 *    is from some other locations. It
+ 					 *    will be handled there in that
+ 					 *    case.
+ 					 *
+diff --git a/support/kconfig/streamline_config.pl b/support/kconfig/streamline_config.pl
+index a2e83ab17d..c9ded50735 100755
+--- a/support/kconfig/streamline_config.pl
++++ b/support/kconfig/streamline_config.pl
+@@ -24,7 +24,7 @@
+ #  3. Copy the configuraton file to this directory as .config
+ #  4. Have all your devices that you need modules for connected and
+ #      operational (make sure that their corresponding modules are loaded)
+-#  5. Run this script redirecting the output to some other file
++#  5. Run this script redirecting the output to some other files
+ #       like config_strip.
+ #  6. Back up your old config (if you want too).
+ #  7. copy the config_strip file to .config
+diff --git a/support/kconfig/zconf.lex.c_shipped b/support/kconfig/zconf.lex.c_shipped
+index 33913d43c7..83b4eacd41 100644
+--- a/support/kconfig/zconf.lex.c_shipped
++++ b/support/kconfig/zconf.lex.c_shipped
+@@ -247,7 +247,7 @@ struct yy_buffer_state
+ 
+ #define YY_BUFFER_NEW 0
+ #define YY_BUFFER_NORMAL 1
+-	/* When an EOF's been seen but there's still some text to process
++	/* When an EOF's been seen but there's still some texts to process
+ 	 * then we mark the buffer as YY_EOF_PENDING, to indicate that we
+ 	 * shouldn't try reading from the input source any more.  We might
+ 	 * still have a bunch of tokens to match, though, because of
+@@ -1549,7 +1549,7 @@ static int yy_get_next_buffer (void)
+ 
+ 		else
+ 			{
+-			/* We matched some text prior to the EOB, first
++			/* We matched some texts prior to the EOB, first
+ 			 * process it.
+ 			 */
+ 			return EOB_ACT_LAST_MATCH;
+diff --git a/support/testing/tests/package/test_crudini.py b/support/testing/tests/package/test_crudini.py
+index 470a714eb6..abb188c1b7 100644
+--- a/support/testing/tests/package/test_crudini.py
++++ b/support/testing/tests/package/test_crudini.py
+@@ -22,7 +22,7 @@ class TestCrudiniBase(TestPythonPackageBase):
+ 
+         self.emulator.login()
+ 
+-        # 1. Create some sample .ini file
++        # 1. Create some sample .ini files
+         cmd = "echo -e '%s' > config.ini" % INI_FILE_CONTENT
+         _, ret = self.emulator.run(cmd)
+         self.assertEqual(ret, 0)
 -- 
-2.34.1
+2.17.1
+
 
 _______________________________________________
 buildroot mailing list
