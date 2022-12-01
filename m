@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21890C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64191C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6E2C44673;
-	Mon, 20 Feb 2023 21:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6E2C44673
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0781242D0C;
+	Mon, 20 Feb 2023 21:28:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0781242D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f93N1qQfa-gx; Mon, 20 Feb 2023 21:27:53 +0000 (UTC)
+	with ESMTP id Lai1yl5SA3ID; Mon, 20 Feb 2023 21:28:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C2E444969;
-	Mon, 20 Feb 2023 21:27:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C2E444969
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1CCCA1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61A7644C23;
+	Mon, 20 Feb 2023 21:28:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61A7644C23
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 026D51BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33F84610DD
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33F84610DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 426C640C29
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 426C640C29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mx7gY4w_DXaG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ksi8YM0ghmfN for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6167A610CC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6167A610CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 245284156D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 245284156D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A3C381979; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+ id 118AD86496; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Nov 2022 22:33:57 +0100
+Date: Thu, 1 Dec 2022 21:54:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6ebfe647b6df76016fb8a50b718d60fdff15fe87
-X-Git-Newrev: 354f9387f33b5fab023cb98e52d84d58624f0ecf
+X-Git-Oldrev: 61bdd02e933e194a6f8aa5c1541f675d8ab71d09
+X-Git-Newrev: 6866076d79ff2e022762b79421f511a8037fda73
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.5A3C381979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8723ds: fix build
- failure due to endianness and Linux version 6.0
+Message-Id: <20230220205154.118AD86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vlc: security bump
+ version to 3.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,114 +57,207 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=354f9387f33b5fab023cb98e52d84d58624f0ecf
+commit: https://git.buildroot.net/buildroot/commit/?id=6866076d79ff2e022762b79421f511a8037fda73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add local patch pending upstream[0] to override CFLAGS to set endianness
-according to BR2_ENDIAN. Let's also bump version to latest to support up to
-Linux 6.1.
+Removed patch 0010, a different fix was applied upstream:
+https://code.videolan.org/videolan/vlc/-/commit/05445b74a38d045cb28f71f96ccbe882445a031e
 
-[0]: https://github.com/lwfinger/rtl8723ds/pull/29
+Removed patch 0011 which was backported from upstream.
+Renumbered patch 0012 -> 0010.
 
-Fixes:
-http://autobuild.buildroot.net/results/2646ec0512f867e20c25c1d0a6417826218942d6/
+Release notes:
+http://www.videolan.org/vlc/releases/3.0.18.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes CVE-2022-41325:
+http://www.videolan.org/security/sb-vlc3018.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: fix sha1 hash entry]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ve-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 39 ++++++++++++++++++++++
- package/rtl8723ds/rtl8723ds.hash                   |  2 +-
- package/rtl8723ds/rtl8723ds.mk                     | 10 ++++--
- 3 files changed, 48 insertions(+), 3 deletions(-)
+ ...ess-live555.cpp-fix-build-with-live555-20.patch | 36 ---------
+ ...tch => 0010-opengl-missing-library-check.patch} |  0
+ ...dav1d-fix-compilation-with-upcoming-dav1d.patch | 88 ----------------------
+ package/vlc/vlc.hash                               |  8 +-
+ package/vlc/vlc.mk                                 |  2 +-
+ 5 files changed, 5 insertions(+), 129 deletions(-)
 
-diff --git a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-new file mode 100644
-index 0000000000..4495817358
---- /dev/null
-+++ b/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-@@ -0,0 +1,39 @@
-+From 769a1943cb409f89f3c91208294a89b09bf47b86 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Nov 2022 16:08:21 +0100
-+Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-+ end of EXTRA_FLAGS assignment
-+
-+At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
-+since it's assigned at the beginning of the Makefile. For example it's not
-+possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
-+allow to build these modules for big endian architectures. So let's move
-+the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
-+EXTRA_CFLAGS assignment.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index aa57f85..3d91574 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,4 +1,3 @@
-+-EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-+ EXTRA_CFLAGS += -O1
-+ #EXTRA_CFLAGS += -O3
-+ #EXTRA_CFLAGS += -Wall
-+@@ -1738,6 +1737,8 @@ ifneq ($(USER_MODULE_NAME),)
-+ MODULE_NAME := $(USER_MODULE_NAME)
-+ endif
-+ 
-++EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-++
-+ ifneq ($(KERNELRELEASE),)
-+ 
-+ rtk_core :=	core/rtw_cmd.o \
-+-- 
-+2.34.1
-+
-diff --git a/package/rtl8723ds/rtl8723ds.hash b/package/rtl8723ds/rtl8723ds.hash
-index 440ce75ef4..cbc77e14c1 100644
---- a/package/rtl8723ds/rtl8723ds.hash
-+++ b/package/rtl8723ds/rtl8723ds.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch b/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
+deleted file mode 100644
+index 5f046648d4..0000000000
+--- a/package/vlc/0010-modules-access-live555.cpp-fix-build-with-live555-20.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From eba390d13ec4089cd6b9d8687ab3f8905b9d3ac8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 22 May 2021 22:56:04 +0200
+-Subject: [PATCH] modules/access/live555.cpp: fix build with live555 >=
+- 2020.12.11
+-
+-Since live555-2020.12.11, connectionEndpointAddress() member function
+-use a "struct sockaddr_storage" in preparation for eventual support of
+-IPv6: http://www.live555.com/liveMedia/public/changelog.txt
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/83170984f96238756c45bf1f4e542363afafd45f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- modules/access/live555.cpp | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
+-index 9d6e01ae32..32a6c294eb 100644
+---- a/modules/access/live555.cpp
+-+++ b/modules/access/live555.cpp
+-@@ -850,7 +850,9 @@ static int SessionsSetup( demux_t *p_demux )
+-             if( !p_sys->b_multicast )
+-             {
+-                 /* We need different rollover behaviour for multicast */
+--                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
+-+                struct sockaddr_storage tempAddr;
+-+                sub->getConnectionEndpointAddress( tempAddr );
+-+                p_sys->b_multicast = IsMulticastAddress( tempAddr );
+-             }
+- 
+-             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
+--- 
+-2.30.2
+-
+diff --git a/package/vlc/0012-opengl-missing-library-check.patch b/package/vlc/0010-opengl-missing-library-check.patch
+similarity index 100%
+rename from package/vlc/0012-opengl-missing-library-check.patch
+rename to package/vlc/0010-opengl-missing-library-check.patch
+diff --git a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch b/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
+deleted file mode 100644
+index 74b8645379..0000000000
+--- a/package/vlc/0011-dav1d-fix-compilation-with-upcoming-dav1d.patch
++++ /dev/null
+@@ -1,88 +0,0 @@
+-From 2202c892c8dc1381b596c53c2ebd3ca680061f95 Mon Sep 17 00:00:00 2001
+-From: Steve Lhomme <robux4@ycbcr.xyz>
+-Date: Fri, 18 Mar 2022 11:42:49 +0100
+-Subject: [PATCH] dav1d: fix compilation with (upcoming) dav1d 1.0
+-
+-(cherry picked from commit dbf45cea2a8abdfbef897b8a71f3eb782bb1b712) (edited)
+-edited:
+-- 3.0 has the 128 pixels padding elsewhere
+-- 3.0 has an extra parameter for add_integer_with_range()
+-- 3.0 was setting i_extra_picture_buffers further down in the code
+-- 3.0 uses 16 threads max
+-
+-Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
+-
+-Downloaded from upstream commit
+-https://code.videolan.org/videolan/vlc/-/commit/2202c892c8dc1381b596c53c2ebd3ca680061f95
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- modules/codec/dav1d.c | 22 +++++++++++++++++++++-
+- 1 file changed, 21 insertions(+), 1 deletion(-)
+-
+-diff --git a/modules/codec/dav1d.c b/modules/codec/dav1d.c
+-index 039165f52ec..cfabbc27cb3 100644
+---- a/modules/codec/dav1d.c
+-+++ b/modules/codec/dav1d.c
+-@@ -63,10 +63,16 @@ vlc_module_begin ()
+-     set_category(CAT_INPUT)
+-     set_subcategory(SUBCAT_INPUT_VCODEC)
+- 
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_THREADS,
+-+                THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
+-+    add_obsolete_string("dav1d-thread-tiles") // unused with dav1d 1.0
+-+#else
+-     add_integer_with_range("dav1d-thread-frames", 0, 0, DAV1D_MAX_FRAME_THREADS,
+-                 THREAD_FRAMES_TEXT, THREAD_FRAMES_LONGTEXT, false)
+-     add_integer_with_range("dav1d-thread-tiles", 0, 0, DAV1D_MAX_TILE_THREADS,
+-                 THREAD_TILES_TEXT, THREAD_TILES_LONGTEXT, false)
+-+#endif
+- vlc_module_end ()
+- 
+- /*****************************************************************************
+-@@ -294,6 +300,11 @@ static int OpenDecoder(vlc_object_t *p_this)
+-         return VLC_ENOMEM;
+- 
+-     dav1d_default_settings(&p_sys->s);
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    p_sys->s.n_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
+-+    if (p_sys->s.n_threads == 0)
+-+        p_sys->s.n_threads = (i_core_count < 16) ? i_core_count : 16;
+-+#else
+-     p_sys->s.n_tile_threads = var_InheritInteger(p_this, "dav1d-thread-tiles");
+-     if (p_sys->s.n_tile_threads == 0)
+-         p_sys->s.n_tile_threads =
+-@@ -303,6 +314,7 @@ static int OpenDecoder(vlc_object_t *p_this)
+-     p_sys->s.n_frame_threads = var_InheritInteger(p_this, "dav1d-thread-frames");
+-     if (p_sys->s.n_frame_threads == 0)
+-         p_sys->s.n_frame_threads = (i_core_count < 16) ? i_core_count : 16;
+-+#endif
+-     p_sys->s.allocator.cookie = dec;
+-     p_sys->s.allocator.alloc_picture_callback = NewPicture;
+-     p_sys->s.allocator.release_picture_callback = FreePicture;
+-@@ -313,12 +325,20 @@ static int OpenDecoder(vlc_object_t *p_this)
+-         return VLC_EGENERIC;
+-     }
+- 
+-+#if DAV1D_API_VERSION_MAJOR >= 6
+-+    msg_Dbg(p_this, "Using dav1d version %s with %d threads",
+-+            dav1d_version(), p_sys->s.n_threads);
+-+
+-+    dec->i_extra_picture_buffers = (p_sys->s.n_threads - 1);
+-+#else
+-     msg_Dbg(p_this, "Using dav1d version %s with %d/%d frame/tile threads",
+-             dav1d_version(), p_sys->s.n_frame_threads, p_sys->s.n_tile_threads);
+- 
+-+    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
+-+#endif
+-+
+-     dec->pf_decode = Decode;
+-     dec->pf_flush = FlushDecoder;
+--    dec->i_extra_picture_buffers = (p_sys->s.n_frame_threads - 1);
+- 
+-     dec->fmt_out.video.i_width = dec->fmt_in.video.i_width;
+-     dec->fmt_out.video.i_height = dec->fmt_in.video.i_height;
+--- 
+-GitLab
+-
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 9060097906..4b9940df33 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha256
+-sha256  8c5a62d88a4fb45c1b095cf10befef217dfa87aedcec5184b9e7d590b6dd4133  vlc-3.0.17.4.tar.xz
+-# From https://get.videolan.org/vlc/3.0.17.4/vlc-3.0.17.4.tar.xz.sha1
+-sha1  ebcd9939103fda141267c5a8f1c603df4533218e  vlc-3.0.17.4.tar.xz
++# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha256
++sha256  57094439c365d8aa8b9b41fa3080cc0eef2befe6025bb5cef722accc625aedec  vlc-3.0.18.tar.xz
++# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha1
++sha1  b11ccaa0f5ee15a550564817d60458eb0946f80e  vlc-3.0.18.tar.xz
  # Locally computed
--sha256  cc5dcf9d17cefabfeba3e68671367c7d69091936e40f71dc5e1165c61195a9fb  rtl8723ds-76146e85847beb2427b1d4958fa275822f2b04ab.tar.gz
-+sha256  691040a85d838f8d8d7da0f2ed460f1ea5f6734c40dc73770ba7e260b6cda9cc  rtl8723ds-5ab2d3f3858dc4c833013c47a79faa05b10198f6.tar.gz
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-index 8598f906a9..0d96e6b03a 100644
---- a/package/rtl8723ds/rtl8723ds.mk
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -4,14 +4,20 @@
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index aee3b735a9..c6ae46f469 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8723DS_VERSION = 76146e85847beb2427b1d4958fa275822f2b04ab
-+RTL8723DS_VERSION = 5ab2d3f3858dc4c833013c47a79faa05b10198f6
- RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
- RTL8723DS_LICENSE = GPL-2.0
- 
-+# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
-+RTL8723DS_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
-+# Set endianness
-+RTL8723DS_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-+
- RTL8723DS_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8723DS=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	KSRC=$(LINUX_DIR)
-+	KSRC=$(LINUX_DIR) \
-+	USER_EXTRA_CFLAGS="$(RTL8723DS_USER_EXTRA_CLAGS)"
- 
- define RTL8723DS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+-VLC_VERSION = 3.0.17.4
++VLC_VERSION = 3.0.18
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
