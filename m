@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A70C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13123C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDB2940996;
-	Mon, 20 Feb 2023 21:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDB2940996
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0C7742E56;
+	Mon, 20 Feb 2023 21:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C7742E56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6hbR3aNvjHoG; Mon, 20 Feb 2023 21:26:58 +0000 (UTC)
+	with ESMTP id RnWZOqPz_0VW; Mon, 20 Feb 2023 21:27:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8170E43DF8;
-	Mon, 20 Feb 2023 21:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8170E43DF8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A3B61BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 435C143DF8;
+	Mon, 20 Feb 2023 21:27:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435C143DF8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2048E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01493610D9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01493610D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1470E415A5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1470E415A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H37nbjqliGMc for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hU3u7ZplQDtS for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0700B610CA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0700B610CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09A7F4010E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09A7F4010E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01F1B8648F; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 06E0386494; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Nov 2022 19:08:08 +0100
+Date: Thu, 1 Dec 2022 21:49:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 81a02457b0f161d6a0b7c9f2f916d55983e5cb44
-X-Git-Newrev: b91eb32120d5a810a7f5a8bb2ad17baf16eedd6a
+X-Git-Oldrev: 8aa68a529ecdcf6f83d81a71863d59eb2147522b
+X-Git-Newrev: 61bdd02e933e194a6f8aa5c1541f675d8ab71d09
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.01F1B8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gptfdisk: fix runtime
- failure with popt 1.19
+Message-Id: <20230220205154.06E0386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: fix build with
+ fmt >= 9.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b91eb32120d5a810a7f5a8bb2ad17baf16eedd6a
+commit: https://git.buildroot.net/buildroot/commit/?id=61bdd02e933e194a6f8aa5c1541f675d8ab71d09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following runtime failure raised since bump of popt to version
-1.19 in commit 895bfba93f6e5535f2132aeea144d2cd87ebc71b:
+For details see https://github.com/xbmc/xbmc/pull/21674
 
-Problem opening  for reading! Error is 2.
-The specified file does not exist!
+Build-tested using this previously broken defconfig:
 
-Fixes:
- - No autobuilder failure
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-crash-of-sgdisk-when-compiled-with-lates.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ ...t-as-char-as-formatting-of-non-void-point.patch | 54 ++++++++++++++++++++++
+ ...1-cast-as-char-as-formatting-of-non-void-.patch | 33 +++++++++++++
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch b/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
+diff --git a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
 new file mode 100644
-index 0000000000..bdeedd95cc
+index 0000000000..af68de220c
 --- /dev/null
-+++ b/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
-@@ -0,0 +1,60 @@
-+From 5d5e76d369a412bfb3d2cebb5fc0a7509cef878d Mon Sep 17 00:00:00 2001
-+From: Rod Smith <rodsmith@rodsbooks.com>
-+Date: Fri, 15 Apr 2022 18:10:14 -0400
-+Subject: [PATCH] Fix failure & crash of sgdisk when compiled with latest
-+ popt (commit 740; presumably eventually release 1.19)
++++ b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
+@@ -0,0 +1,54 @@
++From 44b30c116682968bacf8aec566fc9c193026ecc9 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Wed, 6 Jul 2022 22:48:35 +1000
++Subject: [PATCH] GLUtils: cast as char as formatting of non-void pointers
++ is disallowed
 +
-+[Retrieved from:
-+https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Downloaded from upstream commit:
++https://github.com/xbmc/xbmc/commit/44b30c116682968bacf8aec566fc9c193026ecc9
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ NEWS      | 8 ++++++++
-+ gptcl.cc  | 2 +-
-+ support.h | 2 +-
-+ 3 files changed, 10 insertions(+), 2 deletions(-)
++ xbmc/utils/GLUtils.cpp | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
 +
-+diff --git a/NEWS b/NEWS
-+index c7add56..9e153fd 100644
-+--- a/NEWS
-++++ b/NEWS
-+@@ -1,3 +1,11 @@
-++1.0.10 (?/??/2022):
-++-------------------
-++
-++- Fixed problem that caused sgdisk to crash with errors about being unable
-++  to read the disk's partition table when compiled with the latest popt
-++  (commit 740, which is pre-release as I type; presumably version 1.19 and
-++  later once released).
-++
-+ 1.0.9 (4/14/2022):
-+ ------------------
++diff --git a/xbmc/utils/GLUtils.cpp b/xbmc/utils/GLUtils.cpp
++index 1ef804709f..c36dcf6a20 100644
++--- a/xbmc/utils/GLUtils.cpp
+++++ b/xbmc/utils/GLUtils.cpp
++@@ -148,27 +148,27 @@ void _VerifyGLState(const char* szfile, const char* szfunction, int lineno)
++ void LogGraphicsInfo()
++ {
++ #if defined(HAS_GL) || defined(HAS_GLES)
++-  const GLubyte *s;
+++  const char* s;
 + 
-+diff --git a/gptcl.cc b/gptcl.cc
-+index 34c9421..0d578eb 100644
-+--- a/gptcl.cc
-++++ b/gptcl.cc
-+@@ -155,7 +155,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
-+    } // while
++-  s = glGetString(GL_VENDOR);
+++  s = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
++   if (s)
++     CLog::Log(LOGINFO, "GL_VENDOR = %s", s);
++   else
++     CLog::Log(LOGINFO, "GL_VENDOR = NULL");
 + 
-+    // Assume first non-option argument is the device filename....
-+-   device = (char*) poptGetArg(poptCon);
-++   device = strdup((char*) poptGetArg(poptCon));
-+    poptResetContext(poptCon);
++-  s = glGetString(GL_RENDERER);
+++  s = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
++   if (s)
++     CLog::Log(LOGINFO, "GL_RENDERER = %s", s);
++   else
++     CLog::Log(LOGINFO, "GL_RENDERER = NULL");
 + 
-+    if (device != NULL) {
-+diff --git a/support.h b/support.h
-+index 8ba9ad1..f91f1bc 100644
-+--- a/support.h
-++++ b/support.h
-+@@ -8,7 +8,7 @@
-+ #include <stdlib.h>
-+ #include <string>
++-  s = glGetString(GL_VERSION);
+++  s = reinterpret_cast<const char*>(glGetString(GL_VERSION));
++   if (s)
++     CLog::Log(LOGINFO, "GL_VERSION = %s", s);
++   else
++     CLog::Log(LOGINFO, "GL_VERSION = NULL");
 + 
-+-#define GPTFDISK_VERSION "1.0.9"
-++#define GPTFDISK_VERSION "1.0.9.1"
-+ 
-+ #if defined (__FreeBSD__) || defined (__FreeBSD_kernel__) || defined (__APPLE__)
-+ // Darwin (Mac OS) & FreeBSD: disk IOCTLs are different, and there is no lseek64
++-  s = glGetString(GL_SHADING_LANGUAGE_VERSION);
+++  s = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
++   if (s)
++     CLog::Log(LOGINFO, "GL_SHADING_LANGUAGE_VERSION = %s", s);
++   else
 +-- 
-+2.35.1
++2.30.2
++
+diff --git a/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch b/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
+new file mode 100644
+index 0000000000..41dc3356bd
+--- /dev/null
++++ b/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
+@@ -0,0 +1,33 @@
++From 651c82853fe69dc5aa3e6a50f2eb2f752caafba0 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Mon, 11 Jul 2022 09:39:02 +0000
++Subject: [PATCH] WinSystemX11: cast as char as formatting of non-void
++ pointers is disallowed
++
++Downloaded from upstream commit:
++https://github.com/xbmc/xbmc/commit/651c82853fe69dc5aa3e6a50f2eb2f752caafba0
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/windowing/X11/WinSystemX11.cpp | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/xbmc/windowing/X11/WinSystemX11.cpp b/xbmc/windowing/X11/WinSystemX11.cpp
++index 8a18288fd8..033c0f77bf 100644
++--- a/xbmc/windowing/X11/WinSystemX11.cpp
+++++ b/xbmc/windowing/X11/WinSystemX11.cpp
++@@ -1038,7 +1038,10 @@ bool CWinSystemX11::HasWindowManager()
++ 
++   if(status == Success && items_read)
++   {
++-    CLog::Log(LOGDEBUG,"Window Manager Name: %s", data);
+++    const char* s;
+++
+++    s = reinterpret_cast<const char*>(data);
+++    CLog::Log(LOGDEBUG, "Window Manager Name: {}", s);
++   }
++   else
++     CLog::Log(LOGDEBUG,"Window Manager Name: ");
++-- 
++2.30.2
 +
 _______________________________________________
 buildroot mailing list
