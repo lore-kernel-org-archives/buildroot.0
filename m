@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD78EC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9962CC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA0444E48;
-	Mon, 20 Feb 2023 21:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EA0444E48
+	by smtp4.osuosl.org (Postfix) with ESMTP id 394C942CEB;
+	Mon, 20 Feb 2023 21:29:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 394C942CEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6TYSqgSvAERy; Mon, 20 Feb 2023 21:29:03 +0000 (UTC)
+	with ESMTP id Xqbq1jfYgI9R; Mon, 20 Feb 2023 21:29:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24A8945750;
-	Mon, 20 Feb 2023 21:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A8945750
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 136191BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE62345AC9;
+	Mon, 20 Feb 2023 21:29:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE62345AC9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 27E921BF94D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62E146106F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62E146106F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83BB14159E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83BB14159E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RnSQhECC0hWR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rdAXkIDVxPof for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F18CA610C8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F18CA610C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 200254159D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 200254159D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC48886494; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 1C25B86495; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 17:41:25 +0100
+Date: Thu, 1 Dec 2022 22:22:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e24033f76ad339b1a66fb5b259b8e28f076de97e
-X-Git-Newrev: bd42aa1d0a3ed7a5845c7b5e7c8aeb82d899699c
+X-Git-Oldrev: 6866076d79ff2e022762b79421f511a8037fda73
+X-Git-Newrev: 0b71948c32bdc7f849190cb9501f72faa608dc17
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205151.DC48886494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/asterisk: security
- bump to version 16.28.0
+Message-Id: <20230220205154.1C25B86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libmdbx: bump version
+ to 0.11.13 "Swashplate"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,105 +58,79 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2434228879083252967=="
+Content-Type: multipart/mixed; boundary="===============0256124020649705706=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2434228879083252967==
+--===============0256124020649705706==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd42aa1d0a3ed7a5845c7b5e7c8aeb82d899699c
+commit: https://git.buildroot.net/buildroot/commit/?id=0b71948c32bdc7f849190cb9501f72faa608dc17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Asterisk 16.26.0 fixed the following security issues:
+This is stable bugfix release of libmdbx, in Family Glory and
+in memory of Boris Yuriev (the inventor of Helicopter and
+Swashplate in 1911) on his 133rd birthday.
 
-- [ASTERISK-29476] – res_stir_shaken: Blind SSRF vulnerabilities
-  https://issues.asterisk.org/jira/browse/ASTERISK-29476
+It is reasonable to backport this patch to all applicable releases/branches of Buildroot.
 
-- [ASTERISK-29838] – ${SQL_ESC()} not correctly escaping a terminating \
-  https://issues.asterisk.org/jira/browse/ASTERISK-29838
+Release notes for v0.11.13
+--------------------------
 
-- [ASTERISK-29872] – res_stir_shaken: Resource exhaustion with large files
-  https://issues.asterisk.org/jira/browse/ASTERISK-29872
+Fixes:
 
-https://www.asterisk.org/asterisk-news/asterisk-16-26-0-now-available/
+ - Fixed builds with older libc versions after using `fcntl64()` (backport).
+ - Fixed builds with  older `stdatomic.h` versions,
+   where the `ATOMIC_*_LOCK_FREE` macros mistakenly redefined using functions (backport).
+ - Added workaround for `mremap()` defect to avoid assertion failure (backport).
+ - Workaround for `encryptfs` bug(s) in the `copy_file_range` implementation  (backport).
+ - Fixed unexpected `MDBX_BUSY` from `mdbx_env_set_option()`, `mdbx_env_set_syncbytes()`
+   and `mdbx_env_set_syncperiod()` (backport).
+ - CMake requirements lowered to version 3.0.2 (backport).
+ - Added admonition of insecure for RISC-V (backport).
 
-It unfortunately also introduced a change to chan_iax2, breaking builds
-without OpenSSL:
-https://github.com/asterisk/asterisk/commit/59a8cdaca2dbb5eeb7382dfbe78c0c1cbed8ce6d
+Minors:
 
-Which was again fixed in 16.28.0:
-https://github.com/asterisk/asterisk/commit/f812dfb68c6ed7ae55b4c163716fd1ddc063ff54
+ - Minor clarification output of `--help` for `mdbx_test` (backport).
+ - Added admonition of insecure for RISC-V (backport).
+ - Stochastic scripts and CMake files synchronized with the `devel` branch.
+ - Use `--dont-check-ram-size` for small-tests make-targets (backport).
 
-So bump to 16.28.0:
-https://www.asterisk.org/asterisk-news/asterisk-16-28-0-now-available/
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
 
-The libxml2 support now uses pkg-config, so drop the libxml2-config handling:
-https://github.com/asterisk/asterisk/commit/bf9dafa7c22302b2f1a12b8216da63102116d9c9
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[yann.morin.1998@free.fr:
-  - add host-pkgconf dep, don't rely on implicit dep from host-asterisk
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 8 +++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 880d67562d..9792d82ac5 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 79af189633..e3fb309461 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  0fb817943a276f5e540c2a9432e8841cd3393e7c1bd1250055c620902f6eafc8  asterisk-16.25.2.tar.gz
-+sha256  6e9c2f350db018df854b1301687ced8993facb2787698336e55cd19e0ae3ebfe  asterisk-16.28.0.tar.gz
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  dde8f3626509bb764b17c93fe0629389625cb50362502eb1c27ca208342f3894  libmdbx-amalgamated-0.11.12.tar.xz
++sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 9b59997b80..e0f28ae7ee 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index ac1a3a0d6f..a139e062f6 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.25.2
-+ASTERISK_VERSION = 16.28.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-@@ -31,6 +31,7 @@ ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ith
- 
- ASTERISK_DEPENDENCIES = \
- 	host-asterisk \
-+	host-pkgconf \
- 	jansson \
- 	libcurl \
- 	libedit \
-@@ -115,8 +116,7 @@ ASTERISK_CONF_OPTS += --without-avcodec
- ASTERISK_CONF_OPTS += --without-spandsp
- 
- ASTERISK_CONF_ENV = \
--	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true \
--	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
-+	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-@@ -314,8 +314,6 @@ HOST_ASTERISK_LICENSE_FILES = COPYING
- # so do not inherit the target setup.
- HOST_ASTERISK_AUTORECONF = NO
- 
--HOST_ASTERISK_CONF_ENV = CONFIG_LIBXML2=$(HOST_DIR)/bin/xml2-config
--
- HOST_ASTERISK_CONF_OPTS = \
- 	--without-newt \
- 	--without-curses \
+-LIBMDBX_VERSION = 0.11.12
++LIBMDBX_VERSION = 0.11.13
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
 
---===============2434228879083252967==
+--===============0256124020649705706==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -167,4 +141,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2434228879083252967==--
+--===============0256124020649705706==--
