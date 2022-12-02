@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 842D4C4321E
-	for <buildroot@archiver.kernel.org>; Thu,  1 Dec 2022 21:22:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E26C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 03:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29332610B7;
-	Thu,  1 Dec 2022 21:22:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29332610B7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BCED81346;
+	Fri,  2 Dec 2022 03:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BCED81346
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 91Cx1C7aFyyw; Thu,  1 Dec 2022 21:22:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9eFz1Xekkaor; Fri,  2 Dec 2022 03:48:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52D4A61100;
-	Thu,  1 Dec 2022 21:22:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52D4A61100
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B86EB1BF2C5
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 21:22:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72224812FE;
+	Fri,  2 Dec 2022 03:48:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72224812FE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C93741BF95D
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 03:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F69240112
- for <buildroot@lists.busybox.net>; Thu,  1 Dec 2022 21:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F69240112
+ by smtp1.osuosl.org (Postfix) with ESMTP id B15B3812BF
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 03:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B15B3812BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eYaK5Lam0DTi for <buildroot@lists.busybox.net>;
- Thu,  1 Dec 2022 21:22:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B789D4048C
- for <buildroot@buildroot.org>; Thu,  1 Dec 2022 21:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B789D4048C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A21BB84894; Thu,  1 Dec 2022 21:22:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tH5_7IC54qmT for <buildroot@lists.busybox.net>;
+ Fri,  2 Dec 2022 03:48:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 058E581284
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net
+ [20.232.28.96]) by smtp1.osuosl.org (Postfix) with SMTP id 058E581284
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 03:48:49 +0000 (UTC)
+Received: from E0005128LT.eswin.cn (unknown [10.12.98.229])
+ by app2 (Coremail) with SMTP id EggMCgC3iC2bdYljV+IUAA--.28394S5;
+ Fri, 02 Dec 2022 11:48:44 +0800 (CST)
+From: Zikui Zhao <zhaozikui@eswincomputing.com>
 To: buildroot@buildroot.org
-Date: Thu, 1 Dec 2022 22:22:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6866076d79ff2e022762b79421f511a8037fda73
-X-Git-Newrev: 0b71948c32bdc7f849190cb9501f72faa608dc17
-X-Patchwork-Hint: ignore
-Message-Id: <20221201212240.A21BB84894@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.11.13
- "Swashplate"
+Date: Fri,  2 Dec 2022 11:48:41 +0800
+Message-Id: <20221202034841.1172-2-zhaozikui@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
+In-Reply-To: <20221202034841.1172-1-zhaozikui@eswincomputing.com>
+References: <20221202034841.1172-1-zhaozikui@eswincomputing.com>
+MIME-Version: 1.0
+X-CM-TRANSID: EggMCgC3iC2bdYljV+IUAA--.28394S5
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr1kGF1UGFWDtw48WrWxZwb_yoW3trg_Aa
+ yxXFn5WrZ8Ar17tF4Ska1xuFy09w4xCw1DZF13t3y8Zas5Kw1DJF9rKrZ0kr15CFyfAFyr
+ Kwn8Wr4UJanrWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+ 9fnUUIcSsGvfJTRUUUbqkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+ 6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
+ 0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+ wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
+ 8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+ xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+ vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+ r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x
+ 0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
+ F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+ 1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+ xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+ 1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq
+ Ap5UUUUU=
+X-CM-SenderInfo: p2kd06plnxxqphvzx0xfrp13pwlqwhhfrp/
+Subject: [Buildroot] [PATCH v2 1/1] docs/manual: fixed some spelling mistakes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,88 +77,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7799399838821796479=="
+Cc: jinyanjiang@eswincomputing.com, zhengyu@eswincomputing.com,
+ zhuwenjun@eswincomputing.com, Zikui Zhao <zhaozikui@eswincomputing.com>,
+ zhangdongdong@eswincomputing.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7799399838821796479==
-Content-Type: text/plain
+Fixed some spelling mistakes of countable nouns.
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b71948c32bdc7f849190cb9501f72faa608dc17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is stable bugfix release of libmdbx, in Family Glory and
-in memory of Boris Yuriev (the inventor of Helicopter and
-Swashplate in 1911) on his 133rd birthday.
-
-It is reasonable to backport this patch to all applicable releases/branches of Buildroot.
-
-Release notes for v0.11.13
---------------------------
-
-Fixes:
-
- - Fixed builds with older libc versions after using `fcntl64()` (backport).
- - Fixed builds with  older `stdatomic.h` versions,
-   where the `ATOMIC_*_LOCK_FREE` macros mistakenly redefined using functions (backport).
- - Added workaround for `mremap()` defect to avoid assertion failure (backport).
- - Workaround for `encryptfs` bug(s) in the `copy_file_range` implementation  (backport).
- - Fixed unexpected `MDBX_BUSY` from `mdbx_env_set_option()`, `mdbx_env_set_syncbytes()`
-   and `mdbx_env_set_syncperiod()` (backport).
- - CMake requirements lowered to version 3.0.2 (backport).
- - Added admonition of insecure for RISC-V (backport).
-
-Minors:
-
- - Minor clarification output of `--help` for `mdbx_test` (backport).
- - Added admonition of insecure for RISC-V (backport).
- - Stochastic scripts and CMake files synchronized with the `devel` branch.
- - Use `--dont-check-ram-size` for small-tests make-targets (backport).
-
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Zikui Zhao <zhaozikui@eswincomputing.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/customize-directory-structure.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 79af189633..e3fb309461 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  dde8f3626509bb764b17c93fe0629389625cb50362502eb1c27ca208342f3894  libmdbx-amalgamated-0.11.12.tar.xz
-+sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
- 
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index ac1a3a0d6f..a139e062f6 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMDBX_VERSION = 0.11.12
-+LIBMDBX_VERSION = 0.11.13
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============7799399838821796479==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+index a3a7ad4cb9..1249421da2 100644
+--- a/docs/manual/customize-directory-structure.txt
++++ b/docs/manual/customize-directory-structure.txt
+@@ -27,10 +27,10 @@ to you.
+ |           +-- post_image.sh
+ |           +-- rootfs_overlay/
+ |           |   +-- etc/
+-|           |   +-- <some file>
++|           |   +-- <some files>
+ |           +-- patches/
+ |               +-- foo/
+-|               |   +-- <some patch>
++|               |   +-- <some patches>
+ |               +-- libbar/
+ |                   +-- <some other patches>
+ |
+-- 
+2.31.1.windows.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7799399838821796479==--
