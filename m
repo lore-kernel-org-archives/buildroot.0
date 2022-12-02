@@ -1,51 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D2A7C4321E
-	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 18:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B740AC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 19:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD41F60E09;
-	Fri,  2 Dec 2022 18:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD41F60E09
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E36C82210;
+	Fri,  2 Dec 2022 19:15:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E36C82210
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X9X6Y4Ki9wef; Fri,  2 Dec 2022 18:51:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id POMy61amKzxP; Fri,  2 Dec 2022 19:15:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D48F661162;
-	Fri,  2 Dec 2022 18:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D48F661162
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2652B82212;
+	Fri,  2 Dec 2022 19:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2652B82212
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4615C1BF348
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 18:51:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 097611BF319
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 19:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21C5460E09
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 18:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C5460E09
+ by smtp3.osuosl.org (Postfix) with ESMTP id D542B60B44
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 19:15:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D542B60B44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QL0mH9fnfv7r for <buildroot@lists.busybox.net>;
- Fri,  2 Dec 2022 18:51:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 112246114D
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 18:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 112246114D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F338784FA6; Fri,  2 Dec 2022 18:51:28 +0000 (UTC)
+ with ESMTP id xZf7j4dzIAQg for <buildroot@lists.busybox.net>;
+ Fri,  2 Dec 2022 19:15:28 +0000 (UTC)
+X-Greylist: delayed 00:38:49 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45CD260B35
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 45CD260B35
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 19:15:27 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0EF6640008;
+ Fri,  2 Dec 2022 19:15:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1p1BVM-008hoX-Uj; Fri, 02 Dec 2022 20:15:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 2 Dec 2022 19:49:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c997c457a4ee33d81e6b93e4f6f147bb9e861e9
-X-Git-Newrev: 5bbc20154e2291b967b7fc66ca4f85a2b47dcfd1
-X-Patchwork-Hint: ignore
-Message-Id: <20221202185128.F338784FA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_kria_kv260_defconfig: bump
- to Xilinx 2022.2
+Date: Fri,  2 Dec 2022 20:15:19 +0100
+Message-Id: <20221202191520.2074994-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/rabbitmq-server: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +60,266 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Frank Vanbever <frank.vanbever@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bbc20154e2291b967b7fc66ca4f85a2b47dcfd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The packaged version has a number of security issues, newer versions require
+erlang 23+ and nobody has stepped up to maintain it since the issues were
+reported:
 
-This patch bumps the zynqmp_kria_kv260_defconfig to Xilinx release 2022.2.
+http://lists.busybox.net/pipermail/buildroot/2022-November/656230.html
 
-Xilinx 2022.2 includes:
-- U-Boot 2022.01 bug fixes
-- Linux bump to Linux 5.15.36 with bug fixes
-- TF-A 2.6 bug fixes
-- PMUFW bug fixes
+So drop the package and add legacy handling for it.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynqmp_kria_kv260_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Config.in.legacy                              |  7 ++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ package/rabbitmq-server/Config.in             | 14 ----
+ package/rabbitmq-server/S50rabbitmq-server    | 30 --------
+ package/rabbitmq-server/rabbitmq-server.hash  | 25 -------
+ package/rabbitmq-server/rabbitmq-server.mk    | 69 -------------------
+ .../rabbitmq-server/rabbitmq-server.service   | 16 -----
+ 8 files changed, 7 insertions(+), 156 deletions(-)
+ delete mode 100644 package/rabbitmq-server/Config.in
+ delete mode 100644 package/rabbitmq-server/S50rabbitmq-server
+ delete mode 100644 package/rabbitmq-server/rabbitmq-server.hash
+ delete mode 100644 package/rabbitmq-server/rabbitmq-server.mk
+ delete mode 100644 package/rabbitmq-server/rabbitmq-server.service
 
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 25bab4cbb4..7afc7748b0 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/smk-k26-revA-sck-kv-g-revB"
-@@ -15,14 +15,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/kv260/uboot.fragment"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-@@ -30,7 +30,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.1/kv260/kv260_pmufw.bin"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/kv260/kv260_pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b3c35d6b07..49f63fd14c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2022.11"
+ 
++config BR2_PACKAGE_RABBITMQ_SERVER
++	bool "rabbitmq-server removed"
++	select BR2_LEGACY
++	help
++	  Package was removed because it was unmaintained and had
++	  known security issues.
++
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
+ 	bool "libopenssl rc5 was never enabled"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bfebf8163c..8bcce1fd37 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1074,7 +1074,6 @@ F:	package/libdmtx/
+ F:	package/libsodium/
+ F:	package/php-amqp/
+ F:	package/python-cherrypy/
+-F:	package/rabbitmq-server/
+ F:	package/sane-backends/
+ F:	package/ucl/
+ F:	package/upx/
+diff --git a/package/Config.in b/package/Config.in
+index aef80f9ab0..682faf3697 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2394,7 +2394,6 @@ endif
+ 	source "package/pure-ftpd/Config.in"
+ 	source "package/putty/Config.in"
+ 	source "package/quagga/Config.in"
+-	source "package/rabbitmq-server/Config.in"
+ 	source "package/radvd/Config.in"
+ 	source "package/reaver/Config.in"
+ 	source "package/redir/Config.in"
+diff --git a/package/rabbitmq-server/Config.in b/package/rabbitmq-server/Config.in
+deleted file mode 100644
+index b3b7639e28..0000000000
+--- a/package/rabbitmq-server/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_RABBITMQ_SERVER
+-	bool "rabbitmq-server"
+-	depends on BR2_PACKAGE_ERLANG
+-	select BR2_PACKAGE_LIBXSLT
+-	select BR2_PACKAGE_OPENSSL # Required to build Erlang's crypto and ssl
+-	                           # applications
+-	help
+-	  High-performance AMQP-compliant message broker written in
+-	  Erlang.
+-
+-	  http://www.rabbitmq.com
+-
+-comment "rabbitmq-server needs erlang"
+-	depends on !BR2_PACKAGE_ERLANG
+diff --git a/package/rabbitmq-server/S50rabbitmq-server b/package/rabbitmq-server/S50rabbitmq-server
+deleted file mode 100644
+index 35f7844860..0000000000
+--- a/package/rabbitmq-server/S50rabbitmq-server
++++ /dev/null
+@@ -1,30 +0,0 @@
+-#!/bin/sh
+-#
+-# Start/stop rabbitmq-server
+-#
+-
+-INSTALLUSER=rabbitmq
+-RUNDIR=/var/run/rabbitmq
+-LOGDIR=/var/log/rabbitmq
+-
+-case "$1" in
+-  start)
+-	install -d -o "$INSTALLUSER" -g "$INSTALLUSER" "$RUNDIR" || exit 1
+-	install -d -o "$INSTALLUSER" -g "$INSTALLUSER" "$LOGDIR" || exit 1
+-        printf "Starting rabbitmq-server: "
+-        su -c "/usr/sbin/rabbitmq-server -detached" - "$INSTALLUSER" 2>/dev/null
+-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+-	;;
+-  stop)
+-        printf "Stopping rabbitmq-server: "
+-        su -c "/usr/sbin/rabbitmqctl stop" - "$INSTALLUSER"
+-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+-	;;
+-  restart|reload)
+-        "$0" stop || true
+-        "$0" start
+-	;;
+-  *)
+-        echo "Usage: $0 {start|stop|restart}"
+-        exit 1
+-esac
+diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
+deleted file mode 100644
+index 693ab208ec..0000000000
+--- a/package/rabbitmq-server/rabbitmq-server.hash
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# Locally computed
+-sha256  8c6729b985cb21bab13363b1c806cfa15845b046be9e641ab1496bd5a1eaf19d  rabbitmq-server-3.8.2.tar.xz
+-sha256  a96b7ed2e7def9c86d84d9ca0e79e4a55fc8e6e202ac89caa4f9791ccb9cf2a3  LICENSE
+-sha256  acd82bfce369b066e7e612197206da4fa38b8614486658775d0b6f66ac30114a  LICENSE-APACHE2
+-sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE-APACHE2-excanvas
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE-APACHE2-ExplorerCanvas
+-sha256  b04c8850fdf64d17233f0acbe4eb632f03bd663094233c949bdbe788858bb841  LICENSE-APL2-Stomp-Websocket
+-sha256  3c69f8327beaaa45d2f3d7831edf211d0f37d1d9c7754267478320697e1882e9  LICENSE-BSD-base64js
+-sha256  af7b5cdf5e16446c64d6e755b2a6386e38c56500ae27587edcd94c96d330ee35  LICENSE-BSD-recon
+-sha256  7615ea96ccddc822655cb48a9d2a5cac2f176fca7fe28131af934ce21f48cbc8  LICENSE-erlcloud
+-sha256  c69d6e3fc8c51730a706aba5dcd5df978cb0c7b20c7bfe788e063cbc7fc1b234  LICENSE-httpc_aws
+-sha256  c0e940d13f488849c27963e7d87f3fc27a2f5843cfd49148029a558251014689  LICENSE-ISC-cowboy
+-sha256  af399cded8f343407fb68eeb51755676e9700c65c380f073376afd8d20f428a1  LICENSE-MIT-EJS
+-sha256  b2614726fe57ee8267324ecfdebe6e578e5aaa5a77a7f84b9d26463c058147d1  LICENSE-MIT-EJS10
+-sha256  0f26e121a7a1dab675bd8474cdc517428863036a668260033467c7278f488cd4  LICENSE-MIT-Erlware-Commons
+-sha256  52cb566b16d84314b92b91361ed072eaaf166e8d3dfa3d0fd3577613925f205c  LICENSE-MIT-Flot
+-sha256  8cb9a8ff8cafd6a085fd4f086e797b719c334a621df19354dc286591003da3f5  LICENSE-MIT-jQuery
+-sha256  44f25d51c90aa55dd4b3ba7f3d6e9a594073fcbefe651e16e74cabd48005b476  LICENSE-MIT-jQuery164
+-sha256  fc93cc7361401413887f4c1349e4b0be4bcef936eaafbcc7485038abe197c692  LICENSE-MIT-Mochi
+-sha256  b80081a5bb527dbe6b79f18a40f44b4ba6303e4856cadd249672c97b90e6dd7c  LICENSE-MIT-Sammy
+-sha256  cfc50fa0d7ee02c2d71c8866ef211a4814e8c89c50b725d27e8bdf550291a9ed  LICENSE-MIT-Sammy060
+-sha256  c008551400c9629d5f35a4f4fb6a671cf574d41cb365ae57e3d90341e51b3bdd  LICENSE-MPL
+-sha256  c008551400c9629d5f35a4f4fb6a671cf574d41cb365ae57e3d90341e51b3bdd  LICENSE-MPL-RabbitMQ
+-sha256  66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172  LICENSE-MPL2
+-sha256  c69d6e3fc8c51730a706aba5dcd5df978cb0c7b20c7bfe788e063cbc7fc1b234  LICENSE-rabbitmq_aws
+diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
+deleted file mode 100644
+index 969e61e2b5..0000000000
+--- a/package/rabbitmq-server/rabbitmq-server.mk
++++ /dev/null
+@@ -1,69 +0,0 @@
+-################################################################################
+-#
+-# rabbitmq-server
+-#
+-################################################################################
+-
+-RABBITMQ_SERVER_VERSION = 3.8.2
+-RABBITMQ_SERVER_SITE = https://github.com/rabbitmq/rabbitmq-server/releases/download/v$(RABBITMQ_SERVER_VERSION)
+-RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
+-RABBITMQ_SERVER_LICENSE = MPL-1.1, Apache-2.0, BSD-3-Clause, BSD-2-Clause, MIT, MPL-2.0, ISC
+-RABBITMQ_SERVER_LICENSE_FILES = \
+-	LICENSE \
+-	LICENSE-APACHE2 \
+-	LICENSE-APACHE2-excanvas \
+-	LICENSE-APACHE2-ExplorerCanvas \
+-	LICENSE-APL2-Stomp-Websocket \
+-	LICENSE-BSD-base64js \
+-	LICENSE-BSD-recon \
+-	LICENSE-erlcloud \
+-	LICENSE-httpc_aws \
+-	LICENSE-ISC-cowboy \
+-	LICENSE-MIT-EJS \
+-	LICENSE-MIT-EJS10 \
+-	LICENSE-MIT-Erlware-Commons \
+-	LICENSE-MIT-Flot \
+-	LICENSE-MIT-jQuery \
+-	LICENSE-MIT-jQuery164 \
+-	LICENSE-MIT-Mochi \
+-	LICENSE-MIT-Sammy \
+-	LICENSE-MIT-Sammy060 \
+-	LICENSE-MPL \
+-	LICENSE-MPL-RabbitMQ \
+-	LICENSE-MPL2 \
+-	LICENSE-rabbitmq_aws
+-RABBITMQ_SERVER_CPE_ID_VENDOR = vmware
+-RABBITMQ_SERVER_CPE_ID_PRODUCT = rabbitmq
+-RABBITMQ_SERVER_SELINUX_MODULES = rabbitmq
+-
+-RABBITMQ_SERVER_DEPENDENCIES = host-elixir host-libxslt host-zip erlang libxslt
+-RABBITMQ_SERVER_TARGET_BINS = rabbitmq-plugins rabbitmq-server rabbitmqctl rabbitmq-env rabbitmq-defaults
+-
+-define RABBITMQ_SERVER_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define RABBITMQ_SERVER_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
+-
+-	for bin in $(RABBITMQ_SERVER_TARGET_BINS); do \
+-		ln -sf ../lib/erlang/lib/rabbitmq_server-$(RABBITMQ_SERVER_VERSION)/sbin/$$bin \
+-			$(TARGET_DIR)/usr/sbin/$$bin; \
+-	done
+-endef
+-
+-define RABBITMQ_SERVER_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0644 package/rabbitmq-server/rabbitmq-server.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/rabbitmq-server.service
+-endef
+-
+-define RABBITMQ_SERVER_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/rabbitmq-server/S50rabbitmq-server \
+-		$(TARGET_DIR)/etc/init.d/S50rabbitmq-server
+-endef
+-
+-define RABBITMQ_SERVER_USERS
+-	rabbitmq -1 rabbitmq -1 * /var/lib/rabbitmq /bin/sh - rabbitmq-server daemon
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/rabbitmq-server/rabbitmq-server.service b/package/rabbitmq-server/rabbitmq-server.service
+deleted file mode 100644
+index f69b33d455..0000000000
+--- a/package/rabbitmq-server/rabbitmq-server.service
++++ /dev/null
+@@ -1,16 +0,0 @@
+-[Unit]
+-Description=RabbitMQ Messaging Server
+-After=syslog.target network.target
+-
+-[Service]
+-Type=simple
+-User=rabbitmq
+-Group=rabbitmq
+-Environment=HOME=/var/lib/rabbitmq
+-WorkingDirectory=/var/lib/rabbitmq
+-LogsDirectory=/var/log/rabbitmq
+-ExecStart=/usr/sbin/rabbitmq-server
+-ExecStop=/usr/sbin/rabbitmqctl stop
+-
+-[Install]
+-WantedBy=multi-user.target
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
