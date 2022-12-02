@@ -1,86 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44988C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 21:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C0AC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 21:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91EC0403AA;
-	Fri,  2 Dec 2022 21:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91EC0403AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48F54414A1;
+	Fri,  2 Dec 2022 21:45:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F54414A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zOarsir8_iek; Fri,  2 Dec 2022 21:31:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id axYvBhZoXBEN; Fri,  2 Dec 2022 21:45:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A468D40286;
-	Fri,  2 Dec 2022 21:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A468D40286
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC22D414C5;
+	Fri,  2 Dec 2022 21:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC22D414C5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A5AB1BF3CA
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:31:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7DA481BF3CA
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2DEA40286
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DEA40286
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F64540286
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F64540286
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f07CrzEweMlb for <buildroot@lists.busybox.net>;
- Fri,  2 Dec 2022 21:31:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8810400CB
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E8810400CB
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 21:31:35 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id v13so6622342oie.3
- for <buildroot@buildroot.org>; Fri, 02 Dec 2022 13:31:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=xKyuk+KkvCHb5at5c4MckjaNOwjrmI7YWbe8iwyDxoI=;
- b=u1xc4QKlgNEDqDIjgE/xbhNhpI+s/rEdD+7eOxqw8xnKfsVsXQ85b7LQeA06Dqe9Gj
- Rc6uO5nT3ZWcMMxVSG8dPvE8nW2FtdwM3gKv0p96RqchqbKThSEipfth6Y62rB+CN711
- KoyzeBjRH/KTRPUTDUfLWT4p9DDUcdOZlekA+EpbN2yYXgKNvM8XgCUMk2T6tcG4sS2j
- VBXgGV9iFPhSNa/puMYUGr3MJN5Uo8XGx4JiuXv/pWx9WNIa+xH+lKdMHAmumwjhi4Em
- 3TPTCusYBzKmiGwcJuUOAZwW7ccuaZuZEb8CFaLl3xRSWTUu/11Fxd3xYPitKTlAJxfz
- 2dIw==
-X-Gm-Message-State: ANoB5pm02JVW+up9db4y0OVJtsRAFswxaCEtXYnQ0370BwUUmIm+SpEk
- HE26kf7zChyYGla5iL3YMMSRkX0SoVX1ZIBMGELyGuMPdgJf/Q==
-X-Google-Smtp-Source: AA0mqf4t1Uu5RW0XjpNAXHccp2DvIjPgXNA0Mejsv1nEUVR/ODBQ2rxLBnbrHlVOds4tmMnKmxd0U1LWXBCusr1CW+o=
-X-Received: by 2002:a54:4886:0:b0:35b:8d24:4786 with SMTP id
- r6-20020a544886000000b0035b8d244786mr18641187oic.110.1670016694943; Fri, 02
- Dec 2022 13:31:34 -0800 (PST)
+ with ESMTP id Mj7-yIsGRtM1 for <buildroot@lists.busybox.net>;
+ Fri,  2 Dec 2022 21:44:55 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 623A5400CB
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 623A5400CB
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 21:44:55 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout01.t-online.de (Postfix) with SMTP id B40BB1FE58
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 22:44:52 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd83.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p1Dq0-3sU5r70; Fri, 2 Dec 2022 22:44:52 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39588)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p1Dpz-0000YE-2i
+ for buildroot@buildroot.org; Fri, 02 Dec 2022 22:44:51 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Fri,  2 Dec 2022 22:44:51 +0100
+Message-Id: <20221202214451.415808-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <6381c264.df0a0220.f5907.df2dSMTPIN_ADDED_MISSING@mx.google.com>
- <CAEyMn7bgj1VgmCNyn89AnepPPvSfOChpA6NQbz8Rw14HAeZVxg@mail.gmail.com>
- <CAEyMn7afOkcPGNp6CYrxXUinWPrAyzbMr0cnCQQ9QGujdh96HQ@mail.gmail.com>
-In-Reply-To: <CAEyMn7afOkcPGNp6CYrxXUinWPrAyzbMr0cnCQQ9QGujdh96HQ@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 2 Dec 2022 17:31:21 -0400
-Message-ID: <CADvTj4oAxttuZ8dmoOLeXFsZ-tepm+-=F_rYF0ATSfWZVYndEA@mail.gmail.com>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=xKyuk+KkvCHb5at5c4MckjaNOwjrmI7YWbe8iwyDxoI=;
- b=Oq4KwcbiwbumhfWIUmPi2ftjMcCu0j8p7gImOFlbvOWc0qwLFh4hsoBeO1G2FDLwDO
- bgKHvS3tXBYUxPkXduttXxXkWCjxn6DDbXfBaNe68TCAhOyuMH3Tl5b1/bZeX8yWFqjF
- aERdt31uh2RaaRym5Zai8xShSLwed12ON2iTuvQwE0h+LLRVuQ0WpbXy+rj3ac32I/PO
- FDZ/fDQHFAVOM0Xvt95qJNbAIxoFEsGo0doiLWb1ywkv5BxatgBy2YYJJiFu3uqfUOHG
- CuoOalZtlhS+glKD2l9XOdP/HYbFuEtlxLslvZ0Djl+WZRIQwEbGH3RYQDyvRCbWLxhW
- 9raw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Oq4Kwcbi
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-11-25
+X-TOI-EXPURGATEID: 150726::1670017492-61A0C2DC-79C36C9B/0/0 CLEAN NORMAL
+X-TOI-MSGID: ca44202d-7886-42b2-8777-187ec3024872
+Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,82 +66,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Dec 2, 2022 at 3:55 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> Hi James,
->
-> Am Sa., 26. Nov. 2022 um 10:14 Uhr schrieb Heiko Thiery
-> <heiko.thiery@gmail.com>:
-> >
-> > Hi James,
-> >
-> >
-> >
-> > Am Sa., 26. Nov. 2022 um 08:38 Uhr schrieb Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com>:
-> > >
-> > > Hello,
-> > >
-> > > Autobuilder failures
-> > > ====================
-> > >
-> > > Below is a list of build failures reported by the Buildroot autobuilders
-> > > in relation to packages or CPU architectures you are in charge of.
-> > > Please help us improving the quality of Buildroot by investigating those
-> > > build failures and sending patches to fix them.
-> > >
-> > > Results for the 'master' branch
-> > > -------------------------------
-> > >
-> > > Build failures related to your packages:
-> > >
-> > >     arch     |             reason             |                                       url
-> > > -------------+--------------------------------+---------------------------------------------------------------------------------
-> > >    mips64    |       libnetconf2-2.1.11       | http://autobuild.buildroot.net/results/1fcfb9929b07a6b89d85dbfa4c7f2cfeb4b3ae1b
-> > > powerpc64le  |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/8dff570499024da0f9d0c922619c8f07462633ec
-> > >    mipsel    |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/31214bf6399e7f1bbafc96fd7055ca4629c4021f
-> > >    s390x     |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/30e18e048fe426ec6a1522875cf37fb224b56bbf
-> > >
-> >
-> > The autobuild failures appear since some time. I now tried to
-> > reproduce it on my machine but I'm not able to do so. I see that it
-> > probably only happens on the autobuild machines of yours.
-> >
-> > What I know so far is that there is a script [1] that looks for the
-> > supported timestamp for PTP in the kernel sources. With that a define
-> > is set -DHAVE_ONESTEP_P2P. But then when compiling the sources the
-> > definition is not found.
-> >
-> > [1] https://github.com/richardcochran/linuxptp/blob/master/incdefs.sh
->
->
-> I just checked again the output of a autobuild failure and see that
-> the include path -I is not set on the builds that are running on your
-> machines. I do not know why this is the case. Are you willing to do
-> some tests to figure out what is going on?
+Removed xmvc support due to upstream removal:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
 
-You can reproduce the error by using make version 4.4 which was recently
-released.
+Removed comment concerning gallium-xlib due to upstream removal:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=5bed3d4ad659c30cb0ef4b40172f1aab877ccc98
 
->
-> [1] https://github.com/richardcochran/linuxptp/blob/master/incdefs.sh#L79
->
-> --
-> Heiko
->
-> > --
-> > Heiko
-> >
-> > > Thanks for your contribution to Buildroot!
-> > >
-> > > --
-> > > http://autobuild.buildroot.net
+Rebased patch 0004 due to upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.3&id=c0b891ecca2b92c9ef2945440c77f45345df3290
+
+Please note that patch 0004 can be removed when buildroot toolchains are
+updated to uClibc 1.0.42:
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ Config.in.legacy                           |  8 ++++++++
+ package/mesa3d-headers/mesa3d-headers.mk   |  2 +-
+ package/mesa3d/0004-Fix-uClibc-build.patch |  4 ++--
+ package/mesa3d/Config.in                   | 18 ------------------
+ package/mesa3d/mesa3d.hash                 |  6 +++---
+ package/mesa3d/mesa3d.mk                   | 10 +---------
+ 6 files changed, 15 insertions(+), 33 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b3c35d6b07..edd7a23bdd 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,14 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2023.02"
++
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "mesa Gallium XvMC state tracker removed"
++	select BR2_LEGACY
++	help
++	  The Gallium XvMC state tracker was removed upstream.
++
+ comment "Legacy options removed in 2022.11"
+ 
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3712c79db0..d33d492ba7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.2.2
++MESA3D_HEADERS_VERSION = 22.3.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+index c8c82fe0dc..95ca95fd67 100644
+--- a/package/mesa3d/0004-Fix-uClibc-build.patch
++++ b/package/mesa3d/0004-Fix-uClibc-build.patch
+@@ -58,9 +58,9 @@ index 22b18303826..8f73ee72693 100644
+ --- a/src/util/macros.h
+ +++ b/src/util/macros.h
+ @@ -27,6 +27,7 @@
+- #include <stdio.h>
+- #include <assert.h>
++ #include <stddef.h>
+  #include <stdint.h>
++ #include <stdio.h>
+ +#include "util/compiler.h"
+  
+  /* Compute the size of an array */
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 40f7009492..cae2161aa3 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -299,24 +299,6 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600,
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
+ 
+-config BR2_PACKAGE_MESA3D_XVMC
+-	bool "Gallium XvMC state tracker"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+-	select BR2_PACKAGE_MESA3D_NEEDS_X11
+-	select BR2_PACKAGE_XLIB_LIBXV
+-	select BR2_PACKAGE_XLIB_LIBXVMC
+-	help
+-	  XvMC state tracker (needs r600 or nouveau gallium drivers).
+-
+-comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouveau"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_XORG7 || \
+-		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)
+-
+ comment "Vulkan drivers"
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f10f8fe112..77223676ea 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
+-sha256  2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9  mesa-22.2.2.tar.xz
+-sha512  a1eb67e1ae4880c79b1fdc570f4389baba0b8ba796da7e695c9af19a7d92b6c06b95570e6c796548b61355989025fb7efbf9acac74cbd695f7e297dc913b933c  mesa-22.2.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-November/000695.html
++sha256  644bf936584548c2b88762111ad58b4aa3e4688874200e5a4eb74e53ce301746  mesa-22.3.0.tar.xz
++sha512  bf4d344459f97d266a5943b33aecf062b0825e13c1617afdab71c4ba6a87a201440761c9a32a6e0060910a0917122e3f4d29f666d6b94a38a71c94b9ff3ab9da  mesa-22.3.0.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index bac071ecb3..c3bd44c2fa 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.2.2
++MESA3D_VERSION = 22.3.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -77,7 +77,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ # glx:
+ #  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
+ #  xlib         : xlib conflicts with any dri driver
+-#  gallium-xlib : Gallium-xlib based GLX requires at least one gallium driver || Gallium-xlib based GLX requires softpipe or llvmpipe || gallium-xlib conflicts with any dri driver.
+ # Always enable glx-direct; without it, many GLX applications don't work.
+ MESA3D_CONF_OPTS += \
+ 	-Dglx=dri \
+@@ -212,13 +211,6 @@ else
+ MESA3D_CONF_OPTS += -Dgles1=disabled -Dgles2=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+-MESA3D_DEPENDENCIES += xlib_libXv xlib_libXvMC
+-MESA3D_CONF_OPTS += -Dgallium-xvmc=enabled
+-else
+-MESA3D_CONF_OPTS += -Dgallium-xvmc=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_VALGRIND),y)
+ MESA3D_CONF_OPTS += -Dvalgrind=enabled
+ MESA3D_DEPENDENCIES += valgrind
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
