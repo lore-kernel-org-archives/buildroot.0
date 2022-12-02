@@ -1,72 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBAC1C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 19:42:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44988C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 21:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6337F82212;
-	Fri,  2 Dec 2022 19:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6337F82212
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91EC0403AA;
+	Fri,  2 Dec 2022 21:31:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91EC0403AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZMdKu1B2EUHm; Fri,  2 Dec 2022 19:42:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zOarsir8_iek; Fri,  2 Dec 2022 21:31:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF05681FF8;
-	Fri,  2 Dec 2022 19:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF05681FF8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF0421BF319
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 19:42:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A468D40286;
+	Fri,  2 Dec 2022 21:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A468D40286
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A5AB1BF3CA
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D675B41C61
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 19:42:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D675B41C61
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2DEA40286
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DEA40286
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nlZP9ezML7bC for <buildroot@lists.busybox.net>;
- Fri,  2 Dec 2022 19:42:26 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C340841C5D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C340841C5D
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 19:42:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c0ba:9ce3:3496:4e04])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 756EDB0052C;
- Fri,  2 Dec 2022 20:42:17 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 02 Dec 2022 20:42:16 +0100
-Date: Fri, 2 Dec 2022 20:42:16 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Zikui Zhao <zhaozikui@eswincomputing.com>
-Message-ID: <20221202194216.GB3302@scaer>
-References: <20221202034841.1172-1-zhaozikui@eswincomputing.com>
- <20221202034841.1172-2-zhaozikui@eswincomputing.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f07CrzEweMlb for <buildroot@lists.busybox.net>;
+ Fri,  2 Dec 2022 21:31:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8810400CB
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8810400CB
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 21:31:35 +0000 (UTC)
+Received: by mail-oi1-x22b.google.com with SMTP id v13so6622342oie.3
+ for <buildroot@buildroot.org>; Fri, 02 Dec 2022 13:31:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xKyuk+KkvCHb5at5c4MckjaNOwjrmI7YWbe8iwyDxoI=;
+ b=u1xc4QKlgNEDqDIjgE/xbhNhpI+s/rEdD+7eOxqw8xnKfsVsXQ85b7LQeA06Dqe9Gj
+ Rc6uO5nT3ZWcMMxVSG8dPvE8nW2FtdwM3gKv0p96RqchqbKThSEipfth6Y62rB+CN711
+ KoyzeBjRH/KTRPUTDUfLWT4p9DDUcdOZlekA+EpbN2yYXgKNvM8XgCUMk2T6tcG4sS2j
+ VBXgGV9iFPhSNa/puMYUGr3MJN5Uo8XGx4JiuXv/pWx9WNIa+xH+lKdMHAmumwjhi4Em
+ 3TPTCusYBzKmiGwcJuUOAZwW7ccuaZuZEb8CFaLl3xRSWTUu/11Fxd3xYPitKTlAJxfz
+ 2dIw==
+X-Gm-Message-State: ANoB5pm02JVW+up9db4y0OVJtsRAFswxaCEtXYnQ0370BwUUmIm+SpEk
+ HE26kf7zChyYGla5iL3YMMSRkX0SoVX1ZIBMGELyGuMPdgJf/Q==
+X-Google-Smtp-Source: AA0mqf4t1Uu5RW0XjpNAXHccp2DvIjPgXNA0Mejsv1nEUVR/ODBQ2rxLBnbrHlVOds4tmMnKmxd0U1LWXBCusr1CW+o=
+X-Received: by 2002:a54:4886:0:b0:35b:8d24:4786 with SMTP id
+ r6-20020a544886000000b0035b8d244786mr18641187oic.110.1670016694943; Fri, 02
+ Dec 2022 13:31:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221202034841.1172-2-zhaozikui@eswincomputing.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670010143;
- bh=fU0bXgnbeojI1etzQlmr60Kzn5UHXhubr97q3qd8pNo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bB2+l8HdS+zek/dViby7jEbGEz4b49jgKt6aC99pqFIHNcPbnbmJRrxN3OvdU1T40
- iuS5UaKXsVO6h+gtSLVG6mmiNdQiOI2jFB/BBDQOv6Aa/Tj4p+svb2fHXLjNhlPY6/
- MSt3arwZY1RdwHEti8kPLM2vqEtwACbaTIaPuD0I79MpPdk8EBzfcxHqvo6UHPfRIy
- SD9RMIJBOQt/ytTSpN1M3TAML+/mKgeUuDheiZQXP0Dt5HxgL0TNwZU7GgnV9ZuJ6P
- ZShaINgJgc0RRehgXoAhQvyHuFRbqq9QJPhldPTnE2L8A9rwOe9RN6gJ1UqxOwAkC4
- UI0vGD8Lspepw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bB2+l8Hd
-Subject: Re: [Buildroot] [PATCH v2 1/1] docs/manual: fixed some spelling
- mistakes
+References: <6381c264.df0a0220.f5907.df2dSMTPIN_ADDED_MISSING@mx.google.com>
+ <CAEyMn7bgj1VgmCNyn89AnepPPvSfOChpA6NQbz8Rw14HAeZVxg@mail.gmail.com>
+ <CAEyMn7afOkcPGNp6CYrxXUinWPrAyzbMr0cnCQQ9QGujdh96HQ@mail.gmail.com>
+In-Reply-To: <CAEyMn7afOkcPGNp6CYrxXUinWPrAyzbMr0cnCQQ9QGujdh96HQ@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 2 Dec 2022 17:31:21 -0400
+Message-ID: <CADvTj4oAxttuZ8dmoOLeXFsZ-tepm+-=F_rYF0ATSfWZVYndEA@mail.gmail.com>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=xKyuk+KkvCHb5at5c4MckjaNOwjrmI7YWbe8iwyDxoI=;
+ b=Oq4KwcbiwbumhfWIUmPi2ftjMcCu0j8p7gImOFlbvOWc0qwLFh4hsoBeO1G2FDLwDO
+ bgKHvS3tXBYUxPkXduttXxXkWCjxn6DDbXfBaNe68TCAhOyuMH3Tl5b1/bZeX8yWFqjF
+ aERdt31uh2RaaRym5Zai8xShSLwed12ON2iTuvQwE0h+LLRVuQ0WpbXy+rj3ac32I/PO
+ FDZ/fDQHFAVOM0Xvt95qJNbAIxoFEsGo0doiLWb1ywkv5BxatgBy2YYJJiFu3uqfUOHG
+ CuoOalZtlhS+glKD2l9XOdP/HYbFuEtlxLslvZ0Djl+WZRIQwEbGH3RYQDyvRCbWLxhW
+ 9raw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Oq4Kwcbi
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2022-11-25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,64 +92,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: jinyanjiang@eswincomputing.com, zhuwenjun@eswincomputing.com,
- zhengyu@eswincomputing.com, zhangdongdong@eswincomputing.com,
- buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Zhao, All,
+On Fri, Dec 2, 2022 at 3:55 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> Hi James,
+>
+> Am Sa., 26. Nov. 2022 um 10:14 Uhr schrieb Heiko Thiery
+> <heiko.thiery@gmail.com>:
+> >
+> > Hi James,
+> >
+> >
+> >
+> > Am Sa., 26. Nov. 2022 um 08:38 Uhr schrieb Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com>:
+> > >
+> > > Hello,
+> > >
+> > > Autobuilder failures
+> > > ====================
+> > >
+> > > Below is a list of build failures reported by the Buildroot autobuilders
+> > > in relation to packages or CPU architectures you are in charge of.
+> > > Please help us improving the quality of Buildroot by investigating those
+> > > build failures and sending patches to fix them.
+> > >
+> > > Results for the 'master' branch
+> > > -------------------------------
+> > >
+> > > Build failures related to your packages:
+> > >
+> > >     arch     |             reason             |                                       url
+> > > -------------+--------------------------------+---------------------------------------------------------------------------------
+> > >    mips64    |       libnetconf2-2.1.11       | http://autobuild.buildroot.net/results/1fcfb9929b07a6b89d85dbfa4c7f2cfeb4b3ae1b
+> > > powerpc64le  |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/8dff570499024da0f9d0c922619c8f07462633ec
+> > >    mipsel    |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/31214bf6399e7f1bbafc96fd7055ca4629c4021f
+> > >    s390x     |         linuxptp-3.1.1         | http://autobuild.buildroot.net/results/30e18e048fe426ec6a1522875cf37fb224b56bbf
+> > >
+> >
+> > The autobuild failures appear since some time. I now tried to
+> > reproduce it on my machine but I'm not able to do so. I see that it
+> > probably only happens on the autobuild machines of yours.
+> >
+> > What I know so far is that there is a script [1] that looks for the
+> > supported timestamp for PTP in the kernel sources. With that a define
+> > is set -DHAVE_ONESTEP_P2P. But then when compiling the sources the
+> > definition is not found.
+> >
+> > [1] https://github.com/richardcochran/linuxptp/blob/master/incdefs.sh
+>
+>
+> I just checked again the output of a autobuild failure and see that
+> the include path -I is not set on the builds that are running on your
+> machines. I do not know why this is the case. Are you willing to do
+> some tests to figure out what is going on?
 
-On 2022-12-02 11:48 +0800, Zikui Zhao spake thusly:
-> Fixed some spelling mistakes of countable nouns.
-> 
-> Signed-off-by: Zikui Zhao <zhaozikui@eswincomputing.com>
-> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+You can reproduce the error by using make version 4.4 which was recently
+released.
 
-Actually, I did not provide my Reviewed-by tag; you can't add such a tag
-unless explicitly provided by the reviewer. It's not because I did a
-review of your previous patch that this implicitly grants the tag on a
-respin.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/customize-directory-structure.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
-> index a3a7ad4cb9..1249421da2 100644
-> --- a/docs/manual/customize-directory-structure.txt
-> +++ b/docs/manual/customize-directory-structure.txt
-> @@ -27,10 +27,10 @@ to you.
->  |           +-- post_image.sh
->  |           +-- rootfs_overlay/
->  |           |   +-- etc/
-> -|           |   +-- <some file>
-> +|           |   +-- <some files>
->  |           +-- patches/
->  |               +-- foo/
-> -|               |   +-- <some patch>
-> +|               |   +-- <some patches>
->  |               +-- libbar/
->  |                   +-- <some other patches>
->  |
-> -- 
-> 2.31.1.windows.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> [1] https://github.com/richardcochran/linuxptp/blob/master/incdefs.sh#L79
+>
+> --
+> Heiko
+>
+> > --
+> > Heiko
+> >
+> > > Thanks for your contribution to Buildroot!
+> > >
+> > > --
+> > > http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
