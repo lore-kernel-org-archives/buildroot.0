@@ -1,60 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C0AC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 21:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54343C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Dec 2022 21:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48F54414A1;
-	Fri,  2 Dec 2022 21:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F54414A1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id axYvBhZoXBEN; Fri,  2 Dec 2022 21:45:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC22D414C5;
-	Fri,  2 Dec 2022 21:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC22D414C5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7DA481BF3CA
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:44:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F64540286
- for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F64540286
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAC74405A7;
+	Fri,  2 Dec 2022 21:59:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAC74405A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mj7-yIsGRtM1 for <buildroot@lists.busybox.net>;
- Fri,  2 Dec 2022 21:44:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 623A5400CB
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 623A5400CB
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 21:44:55 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout01.t-online.de (Postfix) with SMTP id B40BB1FE58
- for <buildroot@buildroot.org>; Fri,  2 Dec 2022 22:44:52 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd83.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p1Dq0-3sU5r70; Fri, 2 Dec 2022 22:44:52 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39588)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p1Dpz-0000YE-2i
- for buildroot@buildroot.org; Fri, 02 Dec 2022 22:44:51 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LSYjnd_RPEtw; Fri,  2 Dec 2022 21:59:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13DEF402E0;
+	Fri,  2 Dec 2022 21:59:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13DEF402E0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DAC831BF25B
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:59:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B626F60B24
+ for <buildroot@lists.busybox.net>; Fri,  2 Dec 2022 21:59:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B626F60B24
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E7XykvGnZg1a for <buildroot@lists.busybox.net>;
+ Fri,  2 Dec 2022 21:59:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56B6960A4F
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 56B6960A4F
+ for <buildroot@buildroot.org>; Fri,  2 Dec 2022 21:59:13 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 125-20020a1c0283000000b003d076ee89d6so4818728wmc.0
+ for <buildroot@buildroot.org>; Fri, 02 Dec 2022 13:59:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SOsuu7086zpjMn4pI+036uKBTVFzy5aYQ7J0osuVq5s=;
+ b=GL632CuNEN1KlOsTTZP0JgtFlD6RdAYcgyKYzmZa35xLWEbeQjwVsTn36TfGgtAZKH
+ R9MdHLfPzvgHXeFdXK0f5eokabIGVeH+qXSTGHpRdwZcLmSAjsG/Xm9a95XAE2gu7y9y
+ tPh7vPs/Td3XUw4UV5g1cp1NG3L9jAO8I5l3YEP84trnXbaLJMmRCCj8QbICxGwz4Djt
+ i3BuR2yxeC7vbYG5Zpgpj3zMlAmA+AKm89Mp5UIh0sKqMtIxB9oGWfG+rcXFD43SrE3q
+ RmWHSlszKLIJRssgMBvl/9llZfgORdAM7D+dcskYO4LHz5j7GbXfl9DYlEQUiI05wTNq
+ BL6A==
+X-Gm-Message-State: ANoB5plCWAHK09XphDqeb9wM4jiIlWUxxdunOv3hhDovJPSxuj5nRnR5
+ z8DdMBVMIU6+nz3kmBSxUDBcpbl304M=
+X-Google-Smtp-Source: AA0mqf4RGXImRjjyQ/T2EePvoflRfkSRY56lCSTjX41k+iuWQUua9Aa3ucYA5FJ90Oym3r7BL7HZdQ==
+X-Received: by 2002:a1c:7504:0:b0:3cf:8ebf:69b with SMTP id
+ o4-20020a1c7504000000b003cf8ebf069bmr44725659wmc.86.1670018351144; 
+ Fri, 02 Dec 2022 13:59:11 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ s11-20020a5d424b000000b00241cfe6e286sm8162484wrr.98.2022.12.02.13.59.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 02 Dec 2022 13:59:10 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  2 Dec 2022 22:44:51 +0100
-Message-Id: <20221202214451.415808-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+Date: Fri,  2 Dec 2022 22:59:05 +0100
+Message-Id: <20221202215905.7800-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670017492-61A0C2DC-79C36C9B/0/0 CLEAN NORMAL
-X-TOI-MSGID: ca44202d-7886-42b2-8777-187ec3024872
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=SOsuu7086zpjMn4pI+036uKBTVFzy5aYQ7J0osuVq5s=;
+ b=csq+t8QVw7dj+y2TlCWuI5s0eMDAQPG6D5Yn9SQtxL5y2DrdyxagO0NyvinTujb2pu
+ pbUcLRgKsGIftBuAIypie6NEP+1V9z6TBLT4CsNtmk2xpPRw0rqpEklJH967NtL1P7E1
+ DkIKqUe6uG+voXGZvkpQZPcHGo2LggHRXllEYkP6o5W0QWVCc/9j6btatDhmFzANqsPd
+ XWu+FE9RYJ/CiECwq+WB7FX1cQkuI2muOt9XseVYBNd0VB/8l5duCheZIV1/29F6rXfR
+ JhAZp22wwKz7pOIKooaz+xeaMqg8Bbk9SZVEqn32FIGmNPSkbtTDSzCb6AKQzMal/kBq
+ Ym/Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=csq+t8QV
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: fix CVE-2022-36227
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,161 +94,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed xmvc support due to upstream removal:
-https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
+In libarchive 3.6.1, the software does not check for an error after
+calling calloc function that can return with a NULL pointer if the
+function fails, which leads to a resultant NULL pointer dereference.
+NOTE: the discoverer cites this CWE-476 remark but third parties dispute
+the code-execution impact: "In rare circumstances, when NULL is
+equivalent to the 0x0 memory address and privileged code can access it,
+then writing or reading memory is possible, which may lead to code
+execution."
 
-Removed comment concerning gallium-xlib due to upstream removal:
-https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=5bed3d4ad659c30cb0ef4b40172f1aab877ccc98
-
-Rebased patch 0004 due to upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.3&id=c0b891ecca2b92c9ef2945440c77f45345df3290
-
-Please note that patch 0004 can be removed when buildroot toolchains are
-updated to uClibc 1.0.42:
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in.legacy                           |  8 ++++++++
- package/mesa3d-headers/mesa3d-headers.mk   |  2 +-
- package/mesa3d/0004-Fix-uClibc-build.patch |  4 ++--
- package/mesa3d/Config.in                   | 18 ------------------
- package/mesa3d/mesa3d.hash                 |  6 +++---
- package/mesa3d/mesa3d.mk                   | 10 +---------
- 6 files changed, 15 insertions(+), 33 deletions(-)
+ ...chive-Handle-a-calloc-returning-NULL.patch | 38 +++++++++++++++++++
+ package/libarchive/libarchive.mk              |  3 ++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b3c35d6b07..edd7a23bdd 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,14 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2023.02"
+diff --git a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
+new file mode 100644
+index 0000000000..75ce6112fe
+--- /dev/null
++++ b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
+@@ -0,0 +1,38 @@
++From bff38efe8c110469c5080d387bec62a6ca15b1a5 Mon Sep 17 00:00:00 2001
++From: obiwac <obiwac@gmail.com>
++Date: Fri, 22 Jul 2022 22:41:10 +0200
++Subject: [PATCH] libarchive: Handle a `calloc` returning NULL (fixes #1754)
 +
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "mesa Gallium XvMC state tracker removed"
-+	select BR2_LEGACY
-+	help
-+	  The Gallium XvMC state tracker was removed upstream.
++[Retrieved from:
++https://github.com/libarchive/libarchive/commit/bff38efe8c110469c5080d387bec62a6ca15b1a5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libarchive/archive_write.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
- comment "Legacy options removed in 2022.11"
++diff --git a/libarchive/archive_write.c b/libarchive/archive_write.c
++index 66592e826..27626b541 100644
++--- a/libarchive/archive_write.c
+++++ b/libarchive/archive_write.c
++@@ -201,6 +201,10 @@ __archive_write_allocate_filter(struct archive *_a)
++ 	struct archive_write_filter *f;
++ 
++ 	f = calloc(1, sizeof(*f));
+++
+++	if (f == NULL)
+++		return (NULL);
+++
++ 	f->archive = _a;
++ 	f->state = ARCHIVE_WRITE_FILTER_STATE_NEW;
++ 	if (a->filter_first == NULL)
++@@ -548,6 +552,10 @@ archive_write_open2(struct archive *_a, void *client_data,
++ 	a->client_data = client_data;
++ 
++ 	client_filter = __archive_write_allocate_filter(_a);
+++
+++	if (client_filter == NULL)
+++		return (ARCHIVE_FATAL);
+++
++ 	client_filter->open = archive_write_client_open;
++ 	client_filter->write = archive_write_client_write;
++ 	client_filter->close = archive_write_client_close;
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 865f605e2f..649b7dd4dc 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -12,6 +12,9 @@ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
+ LIBARCHIVE_CPE_ID_VENDOR = libarchive
  
- config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3712c79db0..d33d492ba7 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.2.2
-+MESA3D_HEADERS_VERSION = 22.3.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
-index c8c82fe0dc..95ca95fd67 100644
---- a/package/mesa3d/0004-Fix-uClibc-build.patch
-+++ b/package/mesa3d/0004-Fix-uClibc-build.patch
-@@ -58,9 +58,9 @@ index 22b18303826..8f73ee72693 100644
- --- a/src/util/macros.h
- +++ b/src/util/macros.h
- @@ -27,6 +27,7 @@
-- #include <stdio.h>
-- #include <assert.h>
-+ #include <stddef.h>
-  #include <stdint.h>
-+ #include <stdio.h>
- +#include "util/compiler.h"
-  
-  /* Compute the size of an array */
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 40f7009492..cae2161aa3 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -299,24 +299,6 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600,
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
- 
--config BR2_PACKAGE_MESA3D_XVMC
--	bool "Gallium XvMC state tracker"
--	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
--	select BR2_PACKAGE_MESA3D_NEEDS_X11
--	select BR2_PACKAGE_XLIB_LIBXV
--	select BR2_PACKAGE_XLIB_LIBXVMC
--	help
--	  XvMC state tracker (needs r600 or nouveau gallium drivers).
--
--comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouveau"
--	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_PACKAGE_XORG7 || \
--		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)
--
- comment "Vulkan drivers"
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f10f8fe112..77223676ea 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
--sha256  2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9  mesa-22.2.2.tar.xz
--sha512  a1eb67e1ae4880c79b1fdc570f4389baba0b8ba796da7e695c9af19a7d92b6c06b95570e6c796548b61355989025fb7efbf9acac74cbd695f7e297dc913b933c  mesa-22.2.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2022-November/000695.html
-+sha256  644bf936584548c2b88762111ad58b4aa3e4688874200e5a4eb74e53ce301746  mesa-22.3.0.tar.xz
-+sha512  bf4d344459f97d266a5943b33aecf062b0825e13c1617afdab71c4ba6a87a201440761c9a32a6e0060910a0917122e3f4d29f666d6b94a38a71c94b9ff3ab9da  mesa-22.3.0.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index bac071ecb3..c3bd44c2fa 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.2.2
-+MESA3D_VERSION = 22.3.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
-@@ -77,7 +77,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- # glx:
- #  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
- #  xlib         : xlib conflicts with any dri driver
--#  gallium-xlib : Gallium-xlib based GLX requires at least one gallium driver || Gallium-xlib based GLX requires softpipe or llvmpipe || gallium-xlib conflicts with any dri driver.
- # Always enable glx-direct; without it, many GLX applications don't work.
- MESA3D_CONF_OPTS += \
- 	-Dglx=dri \
-@@ -212,13 +211,6 @@ else
- MESA3D_CONF_OPTS += -Dgles1=disabled -Dgles2=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
--MESA3D_DEPENDENCIES += xlib_libXv xlib_libXvMC
--MESA3D_CONF_OPTS += -Dgallium-xvmc=enabled
--else
--MESA3D_CONF_OPTS += -Dgallium-xvmc=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_VALGRIND),y)
- MESA3D_CONF_OPTS += -Dvalgrind=enabled
- MESA3D_DEPENDENCIES += valgrind
++# 0001-libarchive-Handle-a-calloc-returning-NULL.patch
++LIBARCHIVE_IGNORE_CVES += CVE-2022-36227
++
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBARCHIVE_CONF_OPTS += --enable-bsdtar=static
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
