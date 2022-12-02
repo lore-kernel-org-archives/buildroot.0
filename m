@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A13CEC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E756C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42D3E41CD3;
-	Mon, 20 Feb 2023 21:37:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42D3E41CD3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E218E4981D;
+	Mon, 20 Feb 2023 21:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E218E4981D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PW2o_TSHao2s; Mon, 20 Feb 2023 21:37:10 +0000 (UTC)
+	with ESMTP id YjZTVSjDK6X2; Mon, 20 Feb 2023 21:37:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC4194B398;
-	Mon, 20 Feb 2023 21:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC4194B398
+	by smtp4.osuosl.org (Postfix) with ESMTP id 935664B59B;
+	Mon, 20 Feb 2023 21:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 935664B59B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 35FAD1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 115BF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B585610F5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 261786108A
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B585610F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 261786108A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RbGlJiSeckUJ for <buildroot@lists.busybox.net>;
+ with ESMTP id 3gXq-jGNdcdo for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35C51610CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 538EC610BE
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35C51610CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 538EC610BE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3110D8648F; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+ id 51DC9828C8; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 2 Dec 2022 19:41:06 +0100
+Date: Fri, 2 Dec 2022 19:49:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1ad6bc2f587a31c7e1475103a59c93f6a398e8ae
-X-Git-Newrev: 0c6d4d7be81ac9ea0ed031e5f0796ef2d2a28770
+X-Git-Oldrev: c1d783d4ddcda520fa8bcf4d8cd3f68eaa2188a8
+X-Git-Newrev: 818d0e18a81190b9ca256fa7e465ee37d65820f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.3110D8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8723ds: bump to
- 2022-12-01 version to fix build issue
+Message-Id: <20230220205154.51DC9828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/zynqmp_zcu102_defconfig: bump to Xilinx 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c6d4d7be81ac9ea0ed031e5f0796ef2d2a28770
+commit: https://git.buildroot.net/buildroot/commit/?id=818d0e18a81190b9ca256fa7e465ee37d65820f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop local patch that has been upstreamed.
+This patch bumps the zynqmp_zcu102_defconfig to Xilinx release 2022.2.
 
-Fixes:
-http://autobuild.buildroot.net/results/fa2/fa2482674d789e7674dc0d83c5f54393beed4d70/
+Xilinx 2022.2 includes:
+- U-Boot 2022.01 bug fixes
+- Linux bump to Linux 5.15.36 with bug fixes
+- TF-A 2.6 bug fixes
+- PMUFW bug fixes
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ve-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 39 ----------------------
- package/rtl8723ds/rtl8723ds.hash                   |  2 +-
- package/rtl8723ds/rtl8723ds.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ configs/zynqmp_zcu102_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index 4495817358..0000000000
---- a/package/rtl8723ds/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 769a1943cb409f89f3c91208294a89b09bf47b86 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 16 Nov 2022 16:08:21 +0100
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index aa57f85..3d91574 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -1738,6 +1737,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- rtk_core :=	core/rtw_cmd.o \
---- 
--2.34.1
--
-diff --git a/package/rtl8723ds/rtl8723ds.hash b/package/rtl8723ds/rtl8723ds.hash
-index cbc77e14c1..d5abf9913c 100644
---- a/package/rtl8723ds/rtl8723ds.hash
-+++ b/package/rtl8723ds/rtl8723ds.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  691040a85d838f8d8d7da0f2ed460f1ea5f6734c40dc73770ba7e260b6cda9cc  rtl8723ds-5ab2d3f3858dc4c833013c47a79faa05b10198f6.tar.gz
-+sha256  97f3ebc5d977ba35d10c9c06e6817e4a00458727b651b56fc00c207c05a61995  rtl8723ds-a638cc8639015b8b9390af3350fab0366b6c87e7.tar.gz
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-index 0d96e6b03a..7e27fa75ea 100644
---- a/package/rtl8723ds/rtl8723ds.mk
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8723DS_VERSION = 5ab2d3f3858dc4c833013c47a79faa05b10198f6
-+RTL8723DS_VERSION = a638cc8639015b8b9390af3350fab0366b6c87e7
- RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
- RTL8723DS_LICENSE = GPL-2.0
- 
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index e27dfdb6c9..6047d4299c 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+@@ -29,7 +29,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/v2022.1_22.04_1/xlnx-firmware/zcu102/zcu102_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/zcu102/zcu102_pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
