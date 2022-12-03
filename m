@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D93C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9AF3C4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02CBF60A47;
-	Mon,  5 Dec 2022 12:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02CBF60A47
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9070A81E4B;
+	Mon,  5 Dec 2022 12:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9070A81E4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NnEhD3rhP7O; Mon,  5 Dec 2022 12:19:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l4b0oCkqcl3W; Mon,  5 Dec 2022 12:19:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB3AF605DB;
-	Mon,  5 Dec 2022 12:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3AF605DB
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF33381E51;
+	Mon,  5 Dec 2022 12:19:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF33381E51
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 265CC1BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3726D1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAB5C4052F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5F0A405E0
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB5C4052F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5F0A405E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tr0XmhYMeNwL for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
+ with ESMTP id SBn_pmudkkKh for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 159A2408E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78511408E9
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 159A2408E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78511408E9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0219885B9B; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
+ id 6720B85BA2; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 25 Nov 2022 23:09:14 +0100
+Date: Sat, 3 Dec 2022 15:53:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d47982fa2d1b0ab04a253906944ff3f8ce99340
-X-Git-Newrev: 288207cd5bcbd88d0c11bcb5089b7411d1fd921b
+X-Git-Oldrev: 9943c86392f05ceec8807b6755772b91754b9f99
+X-Git-Newrev: 17a1cd835e788cd86109e8a4223ea75dc9342553
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112612.0219885B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/versal-firmware: new package
+Message-Id: <20221205112612.6720B85BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/edk2-platforms: bump in sync with
+ edk2-stable202208
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,115 +59,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0729059969414174496=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=288207cd5bcbd88d0c11bcb5089b7411d1fd921b
+--===============0729059969414174496==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=17a1cd835e788cd86109e8a4223ea75dc9342553
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds support for downloading versal microblaze firmware binaries.
-These are necessary for booting Xilinx versal devices.
+Bump the edk2-platforms commit to the one corresponding to version
+edk2-stable202208 of edk2, based on the timestamps.
 
-The location of these binaries is temporary, and will soon be added to the
-Xilinx firmware repository.  The temporary location is using the same free
-distribution license as the Xilinx firmware repository.
+Note: the Marvell Armada Devicetree files have been moved out of
+edk2-platforms by commit 4b53da6b12a8 ("Marvell/Armada7k8k: Remove device
+tree sources from edk2-platforms") and they are now in edk2-non-osi.
 
-Once these files are available on the Xilinx repository, this package will
-be updated to the new location.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/versal-firmware/Config.in          | 24 ++++++++++++++++++++++++
- package/versal-firmware/versal-firmware.mk | 21 +++++++++++++++++++++
- 4 files changed, 47 insertions(+)
+ package/edk2-platforms/edk2-platforms.hash | 2 +-
+ package/edk2-platforms/edk2-platforms.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a2c60f38fd..61a50b5863 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2195,6 +2195,7 @@ F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
- F:	configs/zynqmp_kria_kv260_defconfig
- F:	package/bootgen/
-+F:	package/versal-firmware/
+diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
+index 30ae235078..405a09241c 100644
+--- a/package/edk2-platforms/edk2-platforms.hash
++++ b/package/edk2-platforms/edk2-platforms.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dfdc34fea86e5037a3a6cbd2a83b1f655f16b4c9ab4f5ff9da91e45a358c9a14  edk2-platforms-db922e1253cb6f1fc456805bc42fb7d401eed5c2.tar.gz
++sha256  1ed3f369a2743cc5a5fa4804d0af154e37b578f4e68c2e7f69734701a9b874db  edk2-platforms-3c3b1168017073c2bb2d97336c5929ebae805be1.tar.gz
+ sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
+diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
+index 7de59c1afc..898937a5ab 100644
+--- a/package/edk2-platforms/edk2-platforms.mk
++++ b/package/edk2-platforms/edk2-platforms.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/package/Config.in b/package/Config.in
-index 7d227f8112..1a2bda4639 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -443,6 +443,7 @@ menu "Firmware"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-+	source "package/versal-firmware/Config.in"
- 	source "package/wilc-firmware/Config.in"
- 	source "package/wilink-bt-firmware/Config.in"
- 	source "package/zd1211-firmware/Config.in"
-diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
-new file mode 100644
-index 0000000000..8d13816149
---- /dev/null
-+++ b/package/versal-firmware/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_VERSAL_FIRMWARE
-+	bool "versal-firmware"
-+	depends on BR2_aarch64
-+	help
-+	  Pre-built firmware files for Xilinx Versal boards.
-+
-+	  https://github.com/nealfrager/buildroot-firmware
-+
-+if BR2_PACKAGE_VERSAL_FIRMWARE
-+
-+config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
-+	string "firmware version"
-+	default "v2022.2"
-+	help
-+	  Release version of Versal firmware.
-+
-+config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
-+	string "board name"
-+	default "vck190"
-+	help
-+	  Name of Versal target board.
-+	  Used for installing the appropriate firmware.
-+
-+endif # BR2_PACKAGE_VERSAL_FIRMWARE
-diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
-new file mode 100644
-index 0000000000..3e4b9e558d
---- /dev/null
-+++ b/package/versal-firmware/versal-firmware.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# versal-firmware
-+#
-+################################################################################
-+
-+VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_SITE = $(call github,nealfrager,buildroot-firmware,$(VERSAL_FIRMWARE_VERSION))
-+VERSAL_FIRMWARE_LICENSE = Xilinx-Binary-Only
-+VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
-+VERSAL_FIRMWARE_INSTALL_TARGET = NO
-+VERSAL_FIRMWARE_INSTALL_IMAGES = YES
-+
-+define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(foreach f,plm.elf psmfw.elf vpl_gen_fixed.pdi,\
-+		$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f) \
-+			$(BINARIES_DIR)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)_$(f)
-+	)
-+endef
-+
-+$(eval $(generic-package))
+ # Keep in sync with latest commit as of the release date for boot/edk2
+-EDK2_PLATFORMS_VERSION = db922e1253cb6f1fc456805bc42fb7d401eed5c2
++EDK2_PLATFORMS_VERSION = 3c3b1168017073c2bb2d97336c5929ebae805be1
+ EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
+ EDK2_PLATFORMS_LICENSE = BSD-2-Clause
+ EDK2_PLATFORMS_LICENSE_FILES = License.txt
+
+--===============0729059969414174496==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0729059969414174496==--
