@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89260C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A52C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39E3846702;
-	Mon, 20 Feb 2023 21:42:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E3846702
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1244045790;
+	Mon, 20 Feb 2023 21:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1244045790
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZcjPe0kWU-2u; Mon, 20 Feb 2023 21:42:17 +0000 (UTC)
+	with ESMTP id o2kUW9Owhi5t; Mon, 20 Feb 2023 21:42:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E39CE4E456;
-	Mon, 20 Feb 2023 21:42:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39CE4E456
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 67C5C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA524E456;
+	Mon, 20 Feb 2023 21:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA524E456
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86E771BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7459415AF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7459415AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3EAE61103
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3EAE61103
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gNprcyRljFP0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fo1uSb8-6L_k for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14F87415BC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14F87415BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B407610F3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B407610F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0588986496; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+ id 0B9808648F; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:01 +0100
+Date: Sat, 3 Dec 2022 22:30:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b97079d921d8e62ce73d08e11069f5c04734e048
-X-Git-Newrev: 228780fbde4c2b645ea52a870df5ec020912ddf8
+X-Git-Oldrev: b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff
+X-Git-Newrev: a63fbb0d9762a0e6a454b1bea9ce44d620a6860a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205158.0588986496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xutil_makedepend: bump version to 1.0.7
+Message-Id: <20230220205155.0B9808648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox-keyboard: add
+ libpng dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=228780fbde4c2b645ea52a870df5ec020912ddf8
+commit: https://git.buildroot.net/buildroot/commit/?id=a63fbb0d9762a0e6a454b1bea9ce44d620a6860a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003243.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+libpng is a mandatory dependency since bump to version 0.1.1 in commit
+e2511d88e83acae4144be89ce5e258b724067bd5 and
+https://git.yoctoproject.org/matchbox-keyboard/commit/?id=1d7c5f1e0ad736205151c0df5aa738f942bd3e97:
+
+checking for PNG... no
+configure: error: Package requirements (libpng) were not met:
+
+Package 'libpng', required by 'virtual:world', not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4495f0720d7053a52ff8fef82d18a70a6f20c66b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.hash | 8 +++-----
- package/x11r7/xutil_makedepend/xutil_makedepend.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/matchbox-keyboard/Config.in            | 1 +
+ package/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.hash b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-index 079fa9ef8f..3a7496e1a4 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002985.html
--md5  b2ca7f2f21f1c04a88b6a254c19c9b68  makedepend-1.0.6.tar.bz2
--sha1  3f321f7b570ec98f1fabc441267d29347a2e1456  makedepend-1.0.6.tar.bz2
--sha256  d558a52e8017d984ee59596a9582c8d699a1962391b632bec3bb6804bf4d501c  makedepend-1.0.6.tar.bz2
--sha512  eb0e8ee8ab7515806d7d98a060cdcd392ec38e4225e5e05db26daa6651f185d0b764aab403edeea904d4d23211b1f7db20daeee6eafce8abe65225784ed0aa42  makedepend-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003243.html
-+sha256  a729cfd3c0f4e16c0db1da351e7f53335222e058e3434e84f91251fd6d407065  makedepend-1.0.7.tar.xz
-+sha512  fd575de737aa56ef8e475d1ddb7b2392e730ee1b23c0b853bbb21975b757c3fc56f94d57ecc5a784dceed2be653feb10909e86fd96fdc074b50fbbd0e27a19db  makedepend-1.0.7.tar.xz
- # Locally computed
- sha256  0530078db78c47ae978dc2bd77f4f427e6cd97df868672c95b1ef284113c8cb7  COPYING
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index 18f8eb1f6a..b16bbe0978 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XUTIL_MAKEDEPEND_VERSION = 1.0.6
--XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.bz2
--XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
-+XUTIL_MAKEDEPEND_VERSION = 1.0.7
-+XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.xz
-+XUTIL_MAKEDEPEND_SITE = https://xorg.freedesktop.org/archive/individual/util
- XUTIL_MAKEDEPEND_LICENSE = MIT
- XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
+diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+index 260a57c6a4..3d7a9d203c 100644
+--- a/package/matchbox-keyboard/Config.in
++++ b/package/matchbox-keyboard/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "matchbox-keyboard"
++	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
+index 242c4831d1..a1e3c61543 100644
+--- a/package/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox-keyboard/matchbox-keyboard.mk
+@@ -11,7 +11,7 @@ MATCHBOX_KEYBOARD_SITE = \
+ MATCHBOX_KEYBOARD_LICENSE = LGPL-2.1, GPL-2.0+ (applet.c)
+ MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING applet/applet.c
+ MATCHBOX_KEYBOARD_DEPENDENCIES = \
+-	host-pkgconf matchbox-lib matchbox-fakekey expat xlib_libXrender
++	host-pkgconf matchbox-lib matchbox-fakekey expat libpng xlib_libXrender
+ # From git
+ MATCHBOX_KEYBOARD_AUTORECONF = YES
  
 _______________________________________________
 buildroot mailing list
