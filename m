@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3D1C64ED9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:40:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0C1AC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E336E451C5;
-	Mon, 20 Feb 2023 21:40:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E336E451C5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8190A44E77;
+	Mon, 20 Feb 2023 21:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8190A44E77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3sqlvNucH-LO; Mon, 20 Feb 2023 21:40:37 +0000 (UTC)
+	with ESMTP id xZfdavBolF4B; Mon, 20 Feb 2023 21:40:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE5294AA84;
-	Mon, 20 Feb 2023 21:40:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE5294AA84
+	by smtp4.osuosl.org (Postfix) with ESMTP id 867034D462;
+	Mon, 20 Feb 2023 21:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 867034D462
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A1C51BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3744B1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3117610FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE126610EE
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3117610FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE126610EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zexa4iBcV3mw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ with ESMTP id fSTIxYRQSNOY for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0B64610C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id C61EF610E7
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0B64610C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C61EF610E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD8DB86495; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id C02248648F; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 19:18:57 +0100
+Date: Sat, 3 Dec 2022 15:42:40 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
-X-Git-Newrev: 1978e9b0219712b2b839d9f44a0b98b2e8280f75
+X-Git-Oldrev: 89815bad0a531d01ee2733dd9c17576a7647e1d9
+X-Git-Newrev: e87d92966630a6c05857c3e29d1781fce3c16bad
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.DD8DB86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8723bu: fix build
- failure due to missing Linux options
+Message-Id: <20230220205154.C02248648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linuxptp: add patch to
+ fix build failures with make 4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +56,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1978e9b0219712b2b839d9f44a0b98b2e8280f75
+commit: https://git.buildroot.net/buildroot/commit/?id=e87d92966630a6c05857c3e29d1781fce3c16bad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This driver requires:
-CONFIG_NET
-CONFIG_WIRELESS
-CONFIG_CFG80211
-CONFIG_USB_SUPPORT
-CONFIG_USB
-to build so let's add them to RTL8723BU_LINUX_CONFIG_FIXUPS.
+When using make 4.4 the KBOUD_OUTPUT environment variable provided to
+the linuxptp makefile is not utilized. The added patch will fix that
+behavior.
 
-Fixes:
-http://autobuild.buildroot.net/results/7f3637760ad88d314e6812865f3667d1de091957/
+Fixes: http://autobuild.buildroot.net/results/5294fac7ed04945d47ea4eb2d1448bcbea5352bb/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rtl8723bu/rtl8723bu.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ ...-conditional-assignment-for-KBUILD_OUTPUT.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index 3da8d9cecf..82c487b4e1 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -12,6 +12,14 @@ RTL8723BU_MODULE_MAKE_OPTS = \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	KSRC=$(LINUX_DIR)
- 
-+define RTL8723BU_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-+endef
+diff --git a/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch b/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch
+new file mode 100644
+index 0000000000..73cd34f744
+--- /dev/null
++++ b/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch
+@@ -0,0 +1,43 @@
++From: Changqing Li <changqing.li@windriver.com>
++Date: Wed, 23 Nov 2022 08:23:46 +0800
++Subject: [Linuxptp-devel] [PATCH] makefile: use conditional assignment for KBUILD_OUTPUT
 +
- define RTL8723BU_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/rtl8723b_fw.bin $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723b_fw.bin
- endef
++Refer [1],from make 4.4, all variables that are marked as export will
++also be passed to the shell started by the shell function. use "=" will
++make KBUILD_OUTPUT always empty for shell function, use "?=" to make
++"export KBUILD_OUTPUT" in enrironment can work.
++
++[snip of 4.4 NEWS]
++* WARNING: Backward-incompatibility!
++   Previously makefile variables marked as export were not exported to commands
++   started by the $(shell ...) function.  Now, all exported variables are
++   exported to $(shell ...).
++[snip]
++
++[1] https://git.savannah.gnu.org/cgit/make.git/tree/NEWS?h=4.4&id=ed493f6c9116cc217b99c2cfa6a95f15803235a2#n74
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++
++[Retrieved from mailing list. The patch was not yet accepted and applied:
++https://www.mail-archive.com/linuxptp-devel@lists.sourceforge.net/msg06151.html]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++
++---
++ makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/makefile b/makefile
++index 9aed383..ba3fb38 100644
++--- a/makefile
+++++ b/makefile
++@@ -15,7 +15,7 @@
++ # with this program; if not, write to the Free Software Foundation, Inc.,
++ # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ 
++-KBUILD_OUTPUT =
+++KBUILD_OUTPUT ?=
++ 
++ DEBUG	=
++ CC	= $(CROSS_COMPILE)gcc
++-- 
++2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
