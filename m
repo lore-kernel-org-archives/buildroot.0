@@ -1,88 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CE1CC352A1
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 15:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DD8CC4708D
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 16:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3DAA40356;
-	Sat,  3 Dec 2022 15:56:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3DAA40356
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8E1F607F9;
+	Sat,  3 Dec 2022 16:05:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8E1F607F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ly8Xz6vkTJMr; Sat,  3 Dec 2022 15:56:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e9YoaXimOScy; Sat,  3 Dec 2022 16:05:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FB964035A;
-	Sat,  3 Dec 2022 15:56:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FB964035A
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9B7760A77;
+	Sat,  3 Dec 2022 16:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9B7760A77
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 46DC91BF59B
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 15:56:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 673AE1BF59A
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 16:05:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21FC9818A2
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 15:56:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21FC9818A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C3998195D
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 16:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C3998195D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ctQ2Hq0f0C_4 for <buildroot@lists.busybox.net>;
- Sat,  3 Dec 2022 15:56:01 +0000 (UTC)
+ with ESMTP id 8Y__SJlWJqUQ for <buildroot@lists.busybox.net>;
+ Sat,  3 Dec 2022 16:05:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCBEE81A12
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CCBEE81A12
- for <buildroot@buildroot.org>; Sat,  3 Dec 2022 15:56:00 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id h12so12281105wrv.10
- for <buildroot@buildroot.org>; Sat, 03 Dec 2022 07:56:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=H5mQYed5ex9jDEO9ZUgxkIlEmeEeFGs9V+iJhy7ngDc=;
- b=lw1ZcN3cR3CKVlhzBBwR/2CwNIRvBaf4EplyrMSzO2Zx8ltu+gNOl162PUcoNsJyhe
- LnIKc0bH8fVcFMuYj7YgiFSJjlrpZRpDCbQBPHje9wuBjYjlIkyhGQeMBw2KOu5kjKIa
- gSbwJC+7gbj+6/PW7KIwrJ52TzRTo1iwpc9ubnxjAtlgD8B7oIqDm0LSCZJ8csPQToCL
- 0isLhztnMtElXPznoi3panYimL6EjYDj3hLtW2HAT6r2lNSQWL6orHwN/ndDi6toSQU2
- 6yhwBu7ZAp/LTlBTE+2JjZMO+vsfB/t7WwBkyGopnS7+nZ88boLDiZcbtZHM7yAmvgMV
- ULUA==
-X-Gm-Message-State: ANoB5pmMHo/lX5bo80HoTPDy8qZ1buMRHvoBIMX1Zpc6Q0bIF4/U6TDO
- 6pCr085YqaWtfo640dol3EZYqebHx8k=
-X-Google-Smtp-Source: AA0mqf7cUKq0rNndlfhZZhMz6c0WM/W7sTPrSmoUEFMSy+PVnwm5316GqwgLqnbap9wVh3pbX6qyMA==
-X-Received: by 2002:a5d:5a0c:0:b0:242:1c5f:ee55 with SMTP id
- bq12-20020a5d5a0c000000b002421c5fee55mr16815374wrb.712.1670082958577; 
- Sat, 03 Dec 2022 07:55:58 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- v128-20020a1cac86000000b003cfa80443a0sm11949475wme.35.2022.12.03.07.55.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 03 Dec 2022 07:55:57 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  3 Dec 2022 16:55:45 +0100
-Message-Id: <20221203155545.48559-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0032981951
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0032981951
+ for <buildroot@buildroot.org>; Sat,  3 Dec 2022 16:05:12 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c0ba:9ce3:3496:4e04])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id CE680B005A3;
+ Sat,  3 Dec 2022 17:05:06 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 03 Dec 2022 17:05:06 +0100
+Date: Sat, 3 Dec 2022 17:05:06 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20221203160506.GD3302@scaer>
+References: <38529777-79a9-dfb5-ec42-b7c37e617281@gmail.com>
+ <20221203155247.428cb5a1@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=H5mQYed5ex9jDEO9ZUgxkIlEmeEeFGs9V+iJhy7ngDc=;
- b=UCMXhE3VQz1UzsUXMKktio8zQkf7GEeP+v/qFzfxRFPDOXAchf+6jp50+/ma6xOFJn
- tmmMGyznU2gtImcs8xNG0PtRs+4t7y+/IazZa0fVzslTVhDXJdu+gNGGjIJ3d9IBikxQ
- mzCGOGtMMxtqxd+hkKhnPabWI/uOkdkumTXvC79wmzoBwh7Dw9cqmlJ/g7FTR3v9N0eb
- bnTfI2SpaXJSZXRiKioRqqYS3o6gPMgJo2BqCSKQiCP8SG7FSTR2UwNm1DNHSEiO7x3X
- hmlNZUOZz1HyilXptyxr2GKoEwSpILqPjEsAqFY1vuUV2+DpCIlRTKDdf6YzG41bpudi
- UgEw==
+Content-Disposition: inline
+In-Reply-To: <20221203155247.428cb5a1@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670083510;
+ bh=eaEntdWnC9gleTIOddmoVk/49GvHySjO61Imjti7AtY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=h1Gew3BVkBDUXiBxZmzU5hQjFrv/B8eIcHOfpK6uGXAUrf5LAeteQknjO8nYpF3su
+ R5X9yb3AiqOzRlpbCe8oQGWrzCqAcNQbVsqyTx4LArCiI91s2MY2/+4KZQFnpKhhsE
+ wKUCZZt+lFgl9x+JB9txeOwaAUnmA281rBkmwPoCy9FCivJEGy1SegdnmfOmTRFAcw
+ caJ4jLLRpt9/4gVafAMDd0VYCpwFXEPiaklNcSkO78i2WR0FrSeS/eYoKBVcvIqNU2
+ hlKCqLv0MoMRHnSCNkHvhaRNVoLOTcPBBv3LzjhHI6xQ/FRg/VW4klwYN/xg58ezG+
+ DvsIn/RjswyVg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UCMXhE3V
-Subject: [Buildroot] [PATCH 1/1] package/memcached: fix static with shared
- build
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=h1Gew3BV
+Subject: Re: [Buildroot] <PACKAGE>_SOURCE with <PACKAGE>_SITE_METHOD = git
+ can result to tar.gz with mismatched file extension
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +78,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
+ Buildroot Mailman <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When BR2_SHARED_STATIC_LIBS is enabled, both --enable-static and
---enable-shared are passed to configure. memcached configure.ac only
-looks for --enable-static to make the build static. But when linking
-against openssl pkg-config only returns dynamic linking dependencies,
-resulting in the following build failure:
+Thomas, Bagas, All,
 
-/home/thomas/autobuild/instance-1/output-1/host/bin/aarch64_be-buildroot-linux-gnu-gcc -std=gnu99  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2 -pthread  -Wall -pedantic -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls  -static  -o timedrun timedrun.o  -levent  -L/home/thomas/autobuild/instance-1/output-1/host/bin/../aarch64_be-buildroot-linux-gnu/sysroot/usr/lib -lssl -lcrypto  -ldl
-/home/thomas/autobuild/instance-1/output-1/host/lib/gcc/aarch64_be-buildroot-linux-gnu/11.3.0/../../../../aarch64_be-buildroot-linux-gnu/bin/ld: memcached-memcached.o: in function `conn_new':
-memcached.c:(.text+0x1668): undefined reference to `SSL_set_info_callback'
+On 2022-12-03 15:52 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 2 Dec 2022 21:02:06 +0700
+> Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+> > Hello,
+> > 
+> > I noticed odd behavior when <PACKAGE>_SOURCE is set whereas <PACKAGE>
+> > is downloaded via git (<PACKAGE>_SITE_METHOD = git).
+> > 
+> > For example, I'm trying to bump Git package to commit
+> > c000d916380bb59db69c78546928eadd076b9c7d (v2.39.0-rc0). On the makefile
+> > (package/git/git.mk), I bumped by:
+> > 
+> > ---- >8 ----  
+> > diff --git a/package/git/git.mk b/package/git/git.mk
+> > index dc587170e8..1990bf8e67 100644
+> > --- a/package/git/git.mk
+> > +++ b/package/git/git.mk
+> > @@ -4,9 +4,10 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -GIT_VERSION = 2.31.4
+> > +GIT_VERSION = c000d916380bb59db69c78546928eadd076b9c7d
+> >  GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+> > -GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+> > +GIT_SITE = file:///home/bagas/repo/git-scm
+> > +GIT_SITE_METHOD = git
+> >  GIT_LICENSE = GPL-2.0, LGPL-2.1+
+> >  GIT_LICENSE_FILES = COPYING LGPL-2.1
+> >  GIT_CPE_ID_VENDOR = git-scm
+> > 
+> > (note: I fetch from my local Git project repository, hence file:// URI).
+> > 
+> > When I fetch the sources (make source), the generated tarball is actually
+> > .tar.gz with $(GIT_VERSION) as the filename. This causes extracting the
+> > tarball to fail. In this case, the tarball is decompressed first with
+> > xzcat, and it complains due to unrecognized compressed format (gzip
+> > instead of xz).
+> 
+> I think you're right. We assume that _SOURCE is not defined when a
+> _SITE_METHOD using a VCS (git, cvs, svn, hg) is used.
+> 
+> I guess we have two options here:
+> 
+>  (1) Detect this situation, and error out, to prevent this situation
+>  from happening
+> 
+>  (2) Actually support overriding _SOURCE, but in this case, we should
+>  comply with the specified compression algorithm
+> 
+> Yann, thoughts? (1) seems easier to me, I don't know if the benefits of
+> (2) are really relevant.
 
-BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
-binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
-static only build.
+I think the only meaningful solution is to go for (1): detect and abort.
+I too do not think letting packages each request a different compression
+would be interesting...
 
-Fixes:
- - http://autobuild.buildroot.org/results/363c84eaa69350e02bec0b35b88d4bdf4dad804c
- - http://autobuild.buildroot.org/results/0bde41bb700100d8df5ebdb1b64dfdc76c7af475
+If we believe that gzip is too slow/big, then we can think about
+switching to another scheme globaly, but that's orthogonal...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/memcached/memcached.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+So, yes: detect and abort.
 
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index c7d89054bd..7b4069e820 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -29,4 +29,8 @@ else
- MEMCACHED_CONF_OPTS += --disable-tls
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),)
-+MEMCACHED_CONF_OPTS += --disable-static
-+endif
-+
- $(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
 -- 
-2.35.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
