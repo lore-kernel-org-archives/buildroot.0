@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19331C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:41:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F17C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8EF84DFF8;
-	Mon, 20 Feb 2023 21:41:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8EF84DFF8
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5E874DFB0;
+	Mon, 20 Feb 2023 21:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E874DFB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ce50UwWHwIG; Mon, 20 Feb 2023 21:41:48 +0000 (UTC)
+	with ESMTP id 2gUfiQw6O747; Mon, 20 Feb 2023 21:42:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B90E4D81E;
-	Mon, 20 Feb 2023 21:41:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B90E4D81E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 648A21BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A0924E2AC;
+	Mon, 20 Feb 2023 21:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A0924E2AC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67D031BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEE45415D6
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEE45415D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id D854261101
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D854261101
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7jRUbkzA22Wf for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B7lGlBdbT-x0 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0F12415B0
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0F12415B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3D87610C8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3D87610C8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE9C086495; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+ id EED0D828C8; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:33:58 +0100
+Date: Sat, 3 Dec 2022 22:11:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8bf8f441d10848bddd47b9b0c84575177db2b4af
-X-Git-Newrev: b97079d921d8e62ce73d08e11069f5c04734e048
+X-Git-Oldrev: 1978e9b0219712b2b839d9f44a0b98b2e8280f75
+X-Git-Newrev: b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205157.EE9C086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xlib_libXinerama: bump version to 1.1.5
+Message-Id: <20230220205154.EED0D828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package: optee-client: fix
+ identation issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97079d921d8e62ce73d08e11069f5c04734e048
+commit: https://git.buildroot.net/buildroot/commit/?id=b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003244.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fix issues reported by utils/check-package:
+    package/optee-client/S30optee:40: should be indented with tabs (http://nightly.buildroot.org/#adding-packages-start-script)
+    package/optee-client/S30optee:46: should be indented with tabs (http://nightly.buildroot.org/#adding-packages-start-script)
+    package/optee-client/S30optee:47: should be indented with tabs (http://nightly.buildroot.org/#adding-packages-start-script)
+    package/optee-client/S30optee:48: should be indented with tabs (http://nightly.buildroot.org/#adding-packages-start-script)
+    package/optee-client/S30optee:0: filename should be S<number><number><daemon name> (http://nightly.buildroot.org/#adding-packages-start-script)
+    package/optee-client/S30tee-supplicant:0: run 'shellcheck' and fix the warnings
+
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[yann.morin.1998@free.fr:
+  - fix shellcheck SC2086
+  - rename the file
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXinerama/xlib_libXinerama.hash | 8 +++-----
- package/x11r7/xlib_libXinerama/xlib_libXinerama.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/optee-client/{S30optee => S30tee-supplicant} | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
-index ca4081d375..e3ac880b39 100644
---- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
-+++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002905.html
--md5  0d5f826a197dae74da67af4a9ef35885  libXinerama-1.1.4.tar.bz2
--sha1  34a1d9908ffbd46805d2357c6b05f5e341a8dc7c  libXinerama-1.1.4.tar.bz2
--sha256  0008dbd7ecf717e1e507eed1856ab0d9cf946d03201b85d5dcf61489bb02d720  libXinerama-1.1.4.tar.bz2
--sha512  cff777ad942614fbf6bc6d8529f399e62debf3ecbf6cc0694a94e38c022bf929ffd5636fb59f55533c394d89b23af3ea51fa5128927f12a85787e16239330f14  libXinerama-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003244.html
-+sha256  5094d1f0fcc1828cb1696d0d39d9e866ae32520c54d01f618f1a3c1e30c2085c  libXinerama-1.1.5.tar.xz
-+sha512  735b5320de4782005b379e409bf2f976131c17d496b297d33a0e127ca1443034778586b6b25c077b2ad73a4ab34d440d7510475e0041f38202bb40f15fb08ff7  libXinerama-1.1.5.tar.xz
- # Locally computed
- sha256  f661fd883b6e980b3b118e0fbe230fbf10eef8d4d4a35931355f29ed647ddbe3  COPYING
-diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-index 48e32d55e2..67e3398c71 100644
---- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-+++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/optee-client/S30optee b/package/optee-client/S30tee-supplicant
+similarity index 83%
+rename from package/optee-client/S30optee
+rename to package/optee-client/S30tee-supplicant
+index 17e6d6d2b8..8a605dbe5f 100644
+--- a/package/optee-client/S30optee
++++ b/package/optee-client/S30tee-supplicant
+@@ -7,6 +7,7 @@ DAEMON_ARGS="-d /dev/teepriv0"
  
--XLIB_LIBXINERAMA_VERSION = 1.1.4
--XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.bz2
--XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXINERAMA_VERSION = 1.1.5
-+XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.xz
-+XLIB_LIBXINERAMA_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXINERAMA_LICENSE = MIT
- XLIB_LIBXINERAMA_LICENSE_FILES = COPYING
- XLIB_LIBXINERAMA_CPE_ID_VENDOR = x
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
+ 	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- $DAEMON_ARGS
+ 	status=$?
+@@ -37,13 +38,13 @@ restart() {
+ }
+ 
+ case "$1" in
+-        start|stop|restart)
++	start|stop|restart)
+ 		"$1";;
+ 	reload)
+ 		# Restart, since there is no true "reload" feature (does not
+ 		# reconfigure/restart on SIGHUP, just closes all open files).
+ 		restart;;
+-        *)
+-                echo "Usage: $0 {start|stop|restart|reload}"
+-                exit 1
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
