@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94ACBC352A1
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 14:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC7DCC352A1
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 14:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E9518191E;
-	Sat,  3 Dec 2022 14:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E9518191E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F4E68191E;
+	Sat,  3 Dec 2022 14:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F4E68191E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pzrdLqCMNcLw; Sat,  3 Dec 2022 14:47:57 +0000 (UTC)
+	with ESMTP id lBnqofUq0vho; Sat,  3 Dec 2022 14:52:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57931818DC;
-	Sat,  3 Dec 2022 14:47:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57931818DC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8805A818DC;
+	Sat,  3 Dec 2022 14:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8805A818DC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C77341BF36A
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:47:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACF041BF36A
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93CC240866
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93CC240866
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A0D44154D
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A0D44154D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LmTBjH4nC9Dk for <buildroot@lists.busybox.net>;
- Sat,  3 Dec 2022 14:47:53 +0000 (UTC)
+ with ESMTP id 3IDWsLl6Ru9N for <buildroot@lists.busybox.net>;
+ Sat,  3 Dec 2022 14:52:52 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A1D14069B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2A1D14069B
- for <buildroot@buildroot.org>; Sat,  3 Dec 2022 14:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1501A41517
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1501A41517
+ for <buildroot@buildroot.org>; Sat,  3 Dec 2022 14:52:51 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1D923FF803;
- Sat,  3 Dec 2022 14:47:49 +0000 (UTC)
-Date: Sat, 3 Dec 2022 15:47:46 +0100
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20221203154746.2f8ced10@windsurf>
-In-Reply-To: <20221202214451.415808-1-bernd.kuhls@t-online.de>
-References: <20221202214451.415808-1-bernd.kuhls@t-online.de>
+ by mail.gandi.net (Postfix) with ESMTPSA id D102D1C0007;
+ Sat,  3 Dec 2022 14:52:49 +0000 (UTC)
+Date: Sat, 3 Dec 2022 15:52:47 +0100
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Message-ID: <20221203155247.428cb5a1@windsurf>
+In-Reply-To: <38529777-79a9-dfb5-ec42-b7c37e617281@gmail.com>
+References: <38529777-79a9-dfb5-ec42-b7c37e617281@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670078870;
+ d=bootlin.com; s=gm1; t=1670079170;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=RZyl3CAFRKLg/3woikHKPYbMwi+eqnpqhnnfARSPeRg=;
- b=V29faymrhdJ3i7DyY0DtGuJlfR+c8nEZogvq47BbvRjK4p6+Fyovxr2gHsQaHRY6TGJB2H
- bHOzIuUBB6SQeU+qtSChXMMS0mHEqPY+BLoCrCC2kZFOtfkh7qZzF8tYyoo9nuJ5wt3iAk
- u6ICxnPLu7J0Hn5P2whEPqpfRYTXmJjH2bxP1saCfMiB2qiEeR8Twg32pDa2CdajoKzfUS
- nRJhDRmJOv8j/BkdDa8hV9ZXbhj12ggMVCL9f96pin2YYwWLKDAaRPvYNROnDhjLL/7gl/
- E+QUiSwdSZNYYm75JGTabDIq0wxXerjcD8iL5mb2BJp/gnN1qgCF5VK8gDGFBg==
+ bh=uY1qMcfxfxn4S2j2Mm0n6T0/FyLYxCAwyAncZmeRg2w=;
+ b=RnkOtQGJ9d5i1o2XqdSeUUkZCynQVqx8p6L9MMJdsHLM9YFjSSXzoYRmcjKSR8AfKzgIK/
+ IC1dqoFvQ1SoI+ESsQwuKa4NCiFxVyX/O8PGzWDvE+G5XnqgqtrzDjS5OkXNjctROg1293
+ YwtRpJGp+8IkwY3KUGJpbk02dCaOvGW8ykBf8buiVGpC5Tz6Rio6cgd5BIxQFp7jO28xNx
+ U4U0wQBFJ9RMvmrLo96pg68lCCcz9hvJhe7gwzSEotKS9onSEcNumEaZu5Z01DU1z9gMMP
+ w9MaNDS8zoDchGzwLl9KDw0y/vCV2EDpxIBnm/wl2d5pu9c83fyEhJGkuU4XpA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=V29faymr
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.0
+ header.s=gm1 header.b=RnkOtQGJ
+Subject: Re: [Buildroot] <PACKAGE>_SOURCE with <PACKAGE>_SITE_METHOD = git
+ can result to tar.gz with mismatched file extension
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,48 +78,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Buildroot Mailman <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  2 Dec 2022 22:44:51 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Removed xmvc support due to upstream removal:
-> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
-> 
-> Removed comment concerning gallium-xlib due to upstream removal:
-> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=5bed3d4ad659c30cb0ef4b40172f1aab877ccc98
-> 
-> Rebased patch 0004 due to upstream commit:
-> https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.3&id=c0b891ecca2b92c9ef2945440c77f45345df3290
-> 
-> Please note that patch 0004 can be removed when buildroot toolchains are
-> updated to uClibc 1.0.42:
-> https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  Config.in.legacy                           |  8 ++++++++
->  package/mesa3d-headers/mesa3d-headers.mk   |  2 +-
->  package/mesa3d/0004-Fix-uClibc-build.patch |  4 ++--
->  package/mesa3d/Config.in                   | 18 ------------------
->  package/mesa3d/mesa3d.hash                 |  6 +++---
->  package/mesa3d/mesa3d.mk                   | 10 +---------
->  6 files changed, 15 insertions(+), 33 deletions(-)
++Yann Morin in Cc.
 
-This patch does not apply on the current next branch: the change on
-package/mesa3d/0004-Fix-uClibc-build.patch causes a conflict. Could you
-have a look?
+On Fri, 2 Dec 2022 21:02:06 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-Thanks!
+> Hello,
+> 
+> I noticed odd behavior when <PACKAGE>_SOURCE is set whereas <PACKAGE>
+> is downloaded via git (<PACKAGE>_SITE_METHOD = git).
+> 
+> For example, I'm trying to bump Git package to commit
+> c000d916380bb59db69c78546928eadd076b9c7d (v2.39.0-rc0). On the makefile
+> (package/git/git.mk), I bumped by:
+> 
+> ---- >8 ----  
+> diff --git a/package/git/git.mk b/package/git/git.mk
+> index dc587170e8..1990bf8e67 100644
+> --- a/package/git/git.mk
+> +++ b/package/git/git.mk
+> @@ -4,9 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -GIT_VERSION = 2.31.4
+> +GIT_VERSION = c000d916380bb59db69c78546928eadd076b9c7d
+>  GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+> -GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+> +GIT_SITE = file:///home/bagas/repo/git-scm
+> +GIT_SITE_METHOD = git
+>  GIT_LICENSE = GPL-2.0, LGPL-2.1+
+>  GIT_LICENSE_FILES = COPYING LGPL-2.1
+>  GIT_CPE_ID_VENDOR = git-scm
+> 
+> (note: I fetch from my local Git project repository, hence file:// URI).
+> 
+> When I fetch the sources (make source), the generated tarball is actually
+> .tar.gz with $(GIT_VERSION) as the filename. This causes extracting the
+> tarball to fail. In this case, the tarball is decompressed first with
+> xzcat, and it complains due to unrecognized compressed format (gzip
+> instead of xz).
+
+I think you're right. We assume that _SOURCE is not defined when a
+_SITE_METHOD using a VCS (git, cvs, svn, hg) is used.
+
+I guess we have two options here:
+
+ (1) Detect this situation, and error out, to prevent this situation
+ from happening
+
+ (2) Actually support overriding _SOURCE, but in this case, we should
+ comply with the specified compression algorithm
+
+Yann, thoughts? (1) seems easier to me, I don't know if the benefits of
+(2) are really relevant.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
