@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C67CC352A1
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 18:21:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82AD4C352A1
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 18:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B389960B0E;
-	Sat,  3 Dec 2022 18:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B389960B0E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3338060B45;
+	Sat,  3 Dec 2022 18:21:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3338060B45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 89z64_wSJAWD; Sat,  3 Dec 2022 18:21:25 +0000 (UTC)
+	with ESMTP id exmlcLYAiBeb; Sat,  3 Dec 2022 18:21:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 104DC60B05;
-	Sat,  3 Dec 2022 18:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 104DC60B05
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E6331BF232
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F43860B1A;
+	Sat,  3 Dec 2022 18:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F43860B1A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CAF741BF232
  for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 18:21:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69FD660B05
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4E5B41568
  for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 18:21:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69FD660B05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E5B41568
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XpoHLphjWIP8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h7H1pWI5F8Bk for <buildroot@lists.busybox.net>;
  Sat,  3 Dec 2022 18:21:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 981CE60AFB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C57441583
  for <buildroot@buildroot.org>; Sat,  3 Dec 2022 18:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 981CE60AFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C57441583
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 863CF85168; Sat,  3 Dec 2022 18:21:21 +0000 (UTC)
+ id 7CC5A85167; Sat,  3 Dec 2022 18:21:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 19:18:57 +0100
+Date: Sat, 3 Dec 2022 19:18:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
-X-Git-Newrev: 1978e9b0219712b2b839d9f44a0b98b2e8280f75
+X-Git-Oldrev: e87d92966630a6c05857c3e29d1781fce3c16bad
+X-Git-Newrev: c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
 X-Patchwork-Hint: ignore
-Message-Id: <20221203182121.863CF85168@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8723bu: fix build failure due
- to missing Linux options
+Message-Id: <20221203182121.7CC5A85167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/memcached: fix static with shared
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1978e9b0219712b2b839d9f44a0b98b2e8280f75
+commit: https://git.buildroot.net/buildroot/commit/?id=c7ca04fcb42051c53ff146cb7566d9ddd95a3a71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This driver requires:
-CONFIG_NET
-CONFIG_WIRELESS
-CONFIG_CFG80211
-CONFIG_USB_SUPPORT
-CONFIG_USB
-to build so let's add them to RTL8723BU_LINUX_CONFIG_FIXUPS.
+When BR2_SHARED_STATIC_LIBS is enabled, both --enable-static and
+--enable-shared are passed to configure. memcached configure.ac only
+looks for --enable-static to make the build static. But when linking
+against openssl pkg-config only returns dynamic linking dependencies,
+resulting in the following build failure:
+
+/home/thomas/autobuild/instance-1/output-1/host/bin/aarch64_be-buildroot-linux-gnu-gcc -std=gnu99  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2 -pthread  -Wall -pedantic -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls  -static  -o timedrun timedrun.o  -levent  -L/home/thomas/autobuild/instance-1/output-1/host/bin/../aarch64_be-buildroot-linux-gnu/sysroot/usr/lib -lssl -lcrypto  -ldl
+/home/thomas/autobuild/instance-1/output-1/host/lib/gcc/aarch64_be-buildroot-linux-gnu/11.3.0/../../../../aarch64_be-buildroot-linux-gnu/bin/ld: memcached-memcached.o: in function `conn_new':
+memcached.c:(.text+0x1668): undefined reference to `SSL_set_info_callback'
+
+BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
+binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
+static only build.
 
 Fixes:
-http://autobuild.buildroot.net/results/7f3637760ad88d314e6812865f3667d1de091957/
+ - http://autobuild.buildroot.org/results/363c84eaa69350e02bec0b35b88d4bdf4dad804c
+ - http://autobuild.buildroot.org/results/0bde41bb700100d8df5ebdb1b64dfdc76c7af475
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8723bu/rtl8723bu.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/memcached/memcached.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index 3da8d9cecf..82c487b4e1 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -12,6 +12,14 @@ RTL8723BU_MODULE_MAKE_OPTS = \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	KSRC=$(LINUX_DIR)
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index c7d89054bd..7b4069e820 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -29,4 +29,8 @@ else
+ MEMCACHED_CONF_OPTS += --disable-tls
+ endif
  
-+define RTL8723BU_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-+endef
++ifeq ($(BR2_STATIC_LIBS),)
++MEMCACHED_CONF_OPTS += --disable-static
++endif
 +
- define RTL8723BU_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/rtl8723b_fw.bin $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723b_fw.bin
- endef
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
