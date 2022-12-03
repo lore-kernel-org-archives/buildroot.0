@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E83C352A1
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 14:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94ACBC352A1
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 14:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88EFD40122;
-	Sat,  3 Dec 2022 14:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88EFD40122
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E9518191E;
+	Sat,  3 Dec 2022 14:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E9518191E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfAS0o0g_HPB; Sat,  3 Dec 2022 14:45:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pzrdLqCMNcLw; Sat,  3 Dec 2022 14:47:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE5C640102;
-	Sat,  3 Dec 2022 14:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE5C640102
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A4B391BF36A
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:45:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57931818DC;
+	Sat,  3 Dec 2022 14:47:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57931818DC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C77341BF36A
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D2A040102
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:45:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D2A040102
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93CC240866
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 14:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93CC240866
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0hZf7OVCNuTe for <buildroot@lists.busybox.net>;
- Sat,  3 Dec 2022 14:45:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LmTBjH4nC9Dk for <buildroot@lists.busybox.net>;
+ Sat,  3 Dec 2022 14:47:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89E4E400E2
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89E4E400E2
- for <buildroot@buildroot.org>; Sat,  3 Dec 2022 14:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A1D14069B
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A1D14069B
+ for <buildroot@buildroot.org>; Sat,  3 Dec 2022 14:47:52 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 291F86000A;
- Sat,  3 Dec 2022 14:45:14 +0000 (UTC)
-Date: Sat, 3 Dec 2022 15:45:11 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221203154511.120d233d@windsurf>
-In-Reply-To: <20221202191520.2074994-1-peter@korsgaard.com>
-References: <20221202191520.2074994-1-peter@korsgaard.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 1D923FF803;
+ Sat,  3 Dec 2022 14:47:49 +0000 (UTC)
+Date: Sat, 3 Dec 2022 15:47:46 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20221203154746.2f8ced10@windsurf>
+In-Reply-To: <20221202214451.415808-1-bernd.kuhls@t-online.de>
+References: <20221202214451.415808-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670078715;
+ d=bootlin.com; s=gm1; t=1670078870;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=vFhGNfuC47xh7/SSOr1HNY97hrqPMIz/WideejR9/J0=;
- b=lnpTnhJQofdbaR15uXKvR7l8V20vrvnD1dSws41EzgRViwZdLIqlxlQAANY3BwtYHI0lPM
- HWT/ufT1vpugDb+TiJJ8BzewF6NOfF8b3HK01YVlTcaORI8mZvbEfpbtHHvrofo4KyF6I3
- AwJ8Z2p4Ji4bXN+VhVBoQJhcdwAlma/s4+XC1h3WSZVcN4+tkjWoDtsfJud5x0Vm5Uj5Ca
- dVslJisUkAQ2nCaI7H55tFJnnoxAOEjIBFprN5ZoJLYQagqztyB8b1v5Hwfj48yaq84NIa
- lIJgcGt2oxmA4OKz1DgFJh3pEUbOl4fAIMH6ualJMn+fnPLLaH+KTxGNjprueA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=RZyl3CAFRKLg/3woikHKPYbMwi+eqnpqhnnfARSPeRg=;
+ b=V29faymrhdJ3i7DyY0DtGuJlfR+c8nEZogvq47BbvRjK4p6+Fyovxr2gHsQaHRY6TGJB2H
+ bHOzIuUBB6SQeU+qtSChXMMS0mHEqPY+BLoCrCC2kZFOtfkh7qZzF8tYyoo9nuJ5wt3iAk
+ u6ICxnPLu7J0Hn5P2whEPqpfRYTXmJjH2bxP1saCfMiB2qiEeR8Twg32pDa2CdajoKzfUS
+ nRJhDRmJOv8j/BkdDa8hV9ZXbhj12ggMVCL9f96pin2YYwWLKDAaRPvYNROnDhjLL/7gl/
+ E+QUiSwdSZNYYm75JGTabDIq0wxXerjcD8iL5mb2BJp/gnN1qgCF5VK8gDGFBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lnpTnhJQ
-Subject: Re: [Buildroot] [PATCH] package/rabbitmq-server: drop package
+ header.s=gm1 header.b=V29faymr
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,41 +78,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Frank Vanbever <frank.vanbever@mind.be>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  2 Dec 2022 20:15:19 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Fri,  2 Dec 2022 22:44:51 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> The packaged version has a number of security issues, newer versions require
-> erlang 23+ and nobody has stepped up to maintain it since the issues were
-> reported:
+> Removed xmvc support due to upstream removal:
+> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
 > 
-> http://lists.busybox.net/pipermail/buildroot/2022-November/656230.html
+> Removed comment concerning gallium-xlib due to upstream removal:
+> https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=5bed3d4ad659c30cb0ef4b40172f1aab877ccc98
 > 
-> So drop the package and add legacy handling for it.
+> Rebased patch 0004 due to upstream commit:
+> https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.3&id=c0b891ecca2b92c9ef2945440c77f45345df3290
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Please note that patch 0004 can be removed when buildroot toolchains are
+> updated to uClibc 1.0.42:
+> https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  Config.in.legacy                              |  7 ++
->  DEVELOPERS                                    |  1 -
->  package/Config.in                             |  1 -
->  package/rabbitmq-server/Config.in             | 14 ----
->  package/rabbitmq-server/S50rabbitmq-server    | 30 --------
->  package/rabbitmq-server/rabbitmq-server.hash  | 25 -------
->  package/rabbitmq-server/rabbitmq-server.mk    | 69 -------------------
->  .../rabbitmq-server/rabbitmq-server.service   | 16 -----
->  8 files changed, 7 insertions(+), 156 deletions(-)
->  delete mode 100644 package/rabbitmq-server/Config.in
->  delete mode 100644 package/rabbitmq-server/S50rabbitmq-server
->  delete mode 100644 package/rabbitmq-server/rabbitmq-server.hash
->  delete mode 100644 package/rabbitmq-server/rabbitmq-server.mk
->  delete mode 100644 package/rabbitmq-server/rabbitmq-server.service
+>  Config.in.legacy                           |  8 ++++++++
+>  package/mesa3d-headers/mesa3d-headers.mk   |  2 +-
+>  package/mesa3d/0004-Fix-uClibc-build.patch |  4 ++--
+>  package/mesa3d/Config.in                   | 18 ------------------
+>  package/mesa3d/mesa3d.hash                 |  6 +++---
+>  package/mesa3d/mesa3d.mk                   | 10 +---------
+>  6 files changed, 15 insertions(+), 33 deletions(-)
 
-Applied to master, thanks.
+This patch does not apply on the current next branch: the change on
+package/mesa3d/0004-Fix-uClibc-build.patch causes a conflict. Could you
+have a look?
+
+Thanks!
 
 Thomas
 -- 
