@@ -1,85 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10828C47088
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 10:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CED6EC352A1
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 13:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98DE860AC4;
-	Sat,  3 Dec 2022 10:21:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98DE860AC4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FCC0415DA;
+	Sat,  3 Dec 2022 13:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FCC0415DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nOeijf22jJEt; Sat,  3 Dec 2022 10:21:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o3oq9fvl1RRX; Sat,  3 Dec 2022 13:30:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B36D560A8B;
-	Sat,  3 Dec 2022 10:21:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36D560A8B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57E401BF831
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 10:21:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED018416C5;
+	Sat,  3 Dec 2022 13:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED018416C5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E70F91BF2AA
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 13:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32AFC81E3D
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 10:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32AFC81E3D
+ by smtp4.osuosl.org (Postfix) with ESMTP id C062D416C5
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 13:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C062D416C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hEZ51mhTDx7Q for <buildroot@lists.busybox.net>;
- Sat,  3 Dec 2022 10:21:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ymojjeDC-Mr for <buildroot@lists.busybox.net>;
+ Sat,  3 Dec 2022 13:30:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44E9C81E3A
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
- [IPv6:2607:f8b0:4864:20::1029])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 44E9C81E3A
- for <buildroot@buildroot.org>; Sat,  3 Dec 2022 10:21:53 +0000 (UTC)
-Received: by mail-pj1-x1029.google.com with SMTP id
- q17-20020a17090aa01100b002194cba32e9so10569112pjp.1
- for <buildroot@buildroot.org>; Sat, 03 Dec 2022 02:21:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=kbgWHgl23i9b/RLdIQXr6Yr5/Cb7pgvii8m1i33cMjQ=;
- b=j6oSRGZfzffuGu/cEjvdveQWkWprjiPWiYLoFyFPm0f+IVgj1bFnNyH0Z6ZYfkbGTk
- ulsjIGHGIsLuDec7Z6oBqlBEFUNaojikhzmQdlN02V36vnTevl/BLzu7jNh63ADDjgyi
- by6NHsxwNE7CPkYX9b7wuRYTU94B4QEV3jCOvDaLWDQBy4+UlHLTY5ZnGTvaeSGDPvz8
- d6pA22rx5QUyrXVVr0UTb7PrFIvMsDmFTPF/xGFcooLyDYD3Gc6rcEmYCfIt6/cxmC+f
- j0WHQyWVv7Idwkib3BfUrqLvVGLnRA3gpPqYxHChnzeuoEZA7EHQlq4DF4JU2RIXsyYz
- etow==
-X-Gm-Message-State: ANoB5pnkU1BIs/eiQ5mbkC+1VVDoMlSzZT1peRsNEGck+qEC9pyjwpLB
- /3EAFir5Wai8kMizEuozTnsQCOPNMZF5NW8oxivz1tbasgU=
-X-Google-Smtp-Source: AA0mqf4j66VQWvERZA8jwLmFSW1rhExR/dwxdhTPMvSVrhbzvGwLbKNdMOAxQNPDICW/7lI9KMNvBUW6yHiHsNuvQOE=
-X-Received: by 2002:a17:902:c115:b0:189:c9ac:7428 with SMTP id
- 21-20020a170902c11500b00189c9ac7428mr1167849pli.159.1670062911764; Sat, 03
- Dec 2022 02:21:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C05F7415DA
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C05F7415DA
+ for <buildroot@buildroot.org>; Sat,  3 Dec 2022 13:30:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c0ba:9ce3:3496:4e04])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 779CCB00539;
+ Sat,  3 Dec 2022 14:29:57 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 03 Dec 2022 14:29:56 +0100
+Date: Sat, 3 Dec 2022 14:29:56 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: PGE <pge@ik.me>
+Message-ID: <20221203132956.GC3302@scaer>
+References: <20221122212002.139494-1-pge@ik.me>
 MIME-Version: 1.0
-References: <20221203101803.23169-1-heiko.thiery@gmail.com>
-In-Reply-To: <20221203101803.23169-1-heiko.thiery@gmail.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 3 Dec 2022 11:21:39 +0100
-Message-ID: <CAEyMn7asTUGpTOKCvt=Z9xpR3ODbBy6UTnc_xP_RTkFXGjM=Pw@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=kbgWHgl23i9b/RLdIQXr6Yr5/Cb7pgvii8m1i33cMjQ=;
- b=NeNmv0bFh+jSOa0YN4rxBv/noP7sFhYuoB61ln7lACAelWETus9BjBGtL9iK8o0ctc
- Du+tLxZAk95uxu0xTUukKkKVg/qe/f9DFyK4R5ybrIo+XOAoUBtd+/iTNl8Aywotkr/Z
- Q3MRAu/EJPVjUKboyB7Yga6N/jXDajj8PNp8mxOjVFjsdVWbITPgpGBxs924ASwmQfMI
- nJgjD8ZyGDc4UM7CQkyLle6EqF8+r5EJChASdEdI0Rln3nbwQA9dzDIUSLqDkszU77tD
- u/LRlFlU5ViVe+uoZytg6AoKEsoi1UfIfjgJwOFXK942JGkZsVtEHkIjelT6eikZljwQ
- PJmA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NeNmv0bF
-Subject: Re: [Buildroot] [PATCH] linuxptp: add patch to fix build failures
- with make 4.4
+Content-Disposition: inline
+In-Reply-To: <20221122212002.139494-1-pge@ik.me>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670074199;
+ bh=HHS6m5KYLz0GDn1Kz36nLG1Plsipwp722jj/LSIdHD0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=VmN5OM0a//609otsMGAeuly4+DqnqSbpNHOoexjYEa3tT5iVwwdD7S6nC79LtFY9B
+ OrdBfl50hYN65NLlTACPwIv/SFkb6DD0seR6biaPeNCutQUN0eVdIiMxG4mjx6dOhj
+ h9RphmnlsOEL4R4IPYFPFB3/QdY3M4+CVQnd94/c2fvrWXnHGRHvkkQNJ7sfCYvPxt
+ 215Ah/9s2o5REeW3/bLO824uX6G7TPO/JVdUmRDZC7z9S7uD26R9VJHvpJyI7upuag
+ IwMxQmmUgpdYYC94zrZKHHvJUP6ATg76hFrubVsSLSjA/qAfQ/FLWxFrh3c1VcEAYX
+ qHRZXEtySKYWg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VmN5OM0a
+Subject: Re: [Buildroot] [PATCH] package/pkg-golang: enable pkg specific go
+ env also for download step
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,89 +77,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Petr Kulhavy <brain@jikos.cz>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
-
-just realized that I forgot to add the "package/" prefix in the
-subject line. Can this be changed before applying or should I resend
-v2?
-
--- 
-Heiko
-
-Am Sa., 3. Dez. 2022 um 11:18 Uhr schrieb Heiko Thiery <heiko.thiery@gmail.com>:
->
-> When using make 4.4 the KBOUD_OUTPUT environment variable provided to
-> the linuxptp makefile is not utilized. The added patch will fix that
-> behavior.
->
-> Fixes: http://autobuild.buildroot.net/results/5294fac7ed04945d47ea4eb2d1448bcbea5352bb/
->
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  ...itional-assignment-for-KBUILD_OUTPUT.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch
->
-> diff --git a/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch b/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch
-> new file mode 100644
-> index 0000000000..73cd34f744
-> --- /dev/null
-> +++ b/package/linuxptp/0002-makefile-use-conditional-assignment-for-KBUILD_OUTPUT.patch
-> @@ -0,0 +1,43 @@
-> +From: Changqing Li <changqing.li@windriver.com>
-> +Date: Wed, 23 Nov 2022 08:23:46 +0800
-> +Subject: [Linuxptp-devel] [PATCH] makefile: use conditional assignment for KBUILD_OUTPUT
-> +
-> +Refer [1],from make 4.4, all variables that are marked as export will
-> +also be passed to the shell started by the shell function. use "=" will
-> +make KBUILD_OUTPUT always empty for shell function, use "?=" to make
-> +"export KBUILD_OUTPUT" in enrironment can work.
-> +
-> +[snip of 4.4 NEWS]
-> +* WARNING: Backward-incompatibility!
-> +   Previously makefile variables marked as export were not exported to commands
-> +   started by the $(shell ...) function.  Now, all exported variables are
-> +   exported to $(shell ...).
-> +[snip]
-> +
-> +[1] https://git.savannah.gnu.org/cgit/make.git/tree/NEWS?h=4.4&id=ed493f6c9116cc217b99c2cfa6a95f15803235a2#n74
-> +
-> +Signed-off-by: Changqing Li <changqing.li@windriver.com>
-> +
-> +[Retrieved from mailing list. The patch was not yet accepted and applied:
-> +https://www.mail-archive.com/linuxptp-devel@lists.sourceforge.net/msg06151.html]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +
-> +---
-> + makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/makefile b/makefile
-> +index 9aed383..ba3fb38 100644
-> +--- a/makefile
-> ++++ b/makefile
-> +@@ -15,7 +15,7 @@
-> + # with this program; if not, write to the Free Software Foundation, Inc.,
-> + # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-> +
-> +-KBUILD_OUTPUT =
-> ++KBUILD_OUTPUT ?=
-> +
-> + DEBUG =
-> + CC    = $(CROSS_COMPILE)gcc
-> +--
-> +2.25.1
-> --
-> 2.20.1
->
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UEdFLCBBbGwsCgpXZSByZXF1aXJlIHRoYXQgc3VibWl0dGVycyB1c2UgdGhlaXIgcmVhbCBpZGVu
+dGl0eTsgaW5pdGlhbHMgYXJlIG5vdAplbm91Z2guCgpPbiAyMDIyLTExLTIyIDIyOjIwICswMTAw
+LCBQR0UgdmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gQ3VycmVudGx5IHBhY2thZ2Ugc2Vj
+aWZpYyBnbyBlbnYgaXMgdXNlZCBvbmx5IGR1cmluZyBwYWNrYWdlIGJ1aWxkIHN0ZXAuCj4gCj4g
+R28gdmVuZGVyaW5nIGlzIGRvbmUgZHVyaW5nIHRoZSBkb3dubG9hZCBzdGVwIGFuZCBpdCdzIHNv
+bWV0aW1lcyByZXF1aXJlZAo+IHRvIHNwZWNpZnkgcGFja2FnZSBzZWNpZmljIGdvIGVudiBhbHNv
+IGZvciB0aGlzIHN0ZXAuCj4gCj4gRm9yIGV4YW1wbGUsIHdoZW4gaW1wb3J0aW5nIGN1c3RvbSBn
+byBtb2R1bGVzIHdobyBhcmUgaG9zdGVkIG9uIGEgcHJpdmF0ZQo+IGhvc3QsIGl04oCZcyByZXF1
+aXJlZCB0byBzZXQgR09QUklWQVRFIHRvIGF2b2lkIHB1YmxpYyBzdW0gY2hlY2tpbmcuCgpJIGFt
+IG5vdCBzdXJlIEkgZnVsbHkgdW5kZXJzdGFuZCB3aGF0ICJzZXQgR09QUklWQVRFIHRvIGF2b2lk
+IHB1YmxpYyBzdW0KY2hlY2tpbmciIGlzIHN1cHBvc2VkIHRvIG1lYW4uCgpEb2VzIHRoYXQgbWVh
+biB0aGF0IHNldHRpbmcgR09QUklWQVRFICh0byB3aGF0IHZhbHVlOiBib29sZWFuPyBsaXN0IG9m
+Cm1vZHVsZXM/IHNvbWV0aGluZyBlbHNlPykgd291bGQgcHJldmVudCBnbyAodGhlIHByb2dyYW0p
+IGZyb20gcGVyZm9ybWluZwpjaGVja3N1bSB2ZXJpZmljYXRpb24gb24gdGhlIG1vZHVsZXMgaXQg
+ZG93bmxvYWRzPwoKQXMgYSBjb25zZXF1ZW5jZSwgd2hhdCBpbXBhY3QgZG9lcyB0aGF0IGhhdmUg
+b24gdGhlIHJlcHJvZHVjaWJpbGl0eSBvZgp0aGUgdmVuZG9yZWQgYXJjaGl2ZT8gQW5kIHNvLCB3
+aGF0IGFib3V0IHRoZSBoYXNoZXMgbWFhbmdlZCBieQpCdWlsZHJvb3Q/CgoKV2UgYWxzbyByZXF1
+aXJlIHRoYXQgc3VibWlzc2lvbnMgaW5jbHVkZSBhIHNpZ24tb2ZmIHRhZywgbWF0Y2hpbmcgdGhl
+CnJlYWwgaWRlbnRpdHkuCgpQbGVhc2Ugc2VlOwogICAgaHR0cHM6Ly9idWlsZHJvb3Qub3JnL2Rv
+d25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwjc3VibWl0dGluZy1wYXRjaGVzCgo+IC0tLQo+ICBw
+YWNrYWdlL3BrZy1nb2xhbmcubWsgfCAzICsrLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLWdvbGFu
+Zy5tayBiL3BhY2thZ2UvcGtnLWdvbGFuZy5tawo+IGluZGV4IDBiM2RjM2QzMmYuLmNkYzY3YjMy
+YzAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wa2ctZ29sYW5nLm1rCj4gKysrIGIvcGFja2FnZS9w
+a2ctZ29sYW5nLm1rCj4gQEAgLTg3LDcgKzg3LDggQEAgJCgyKV9QT1NUX1BBVENIX0hPT0tTICs9
+ICQoMilfR0VOX0dPTU9ECj4gICQoMilfRE9XTkxPQURfUE9TVF9QUk9DRVNTID0gZ28KPiAgJCgy
+KV9ETF9FTlYgKz0gXAo+ICAJJCQoSE9TVF9HT19DT01NT05fRU5WKSBcCj4gLQlHT1BST1hZPWRp
+cmVjdAo+ICsJR09QUk9YWT1kaXJlY3QgXAo+ICsJJCQoJCgyKV9HT19FTlYpCgpDdXJyZW50bHks
+IHdlIGhhdmUgdHdvIHBhY2thZ2VzIHRoYXQgc2V0IF9HT19FTlY6CgogIC0gZG9ja2VyLWNsaTog
+SSBkb24ndCB0aGluayB0aGlzIHdvdWxkIGhhdmUgYW4gaW1wYWN0IG9tbiB0aGUgZG93bmxvYWQK
+ICAgIHN0ZXAgYW5kIHRoZSB2ZW5kb3Jpbmc6CiAgICAgICAgRE9DS0VSX0NMSV9HT19FTlYgPSBD
+R09fRU5CQUxFRD1ubwoKICAtIG1lbmRlci1hcnRpZmFjdHM6IHRoZXJlIHdlIGRvIGVjcGxpY2l0
+bHkgcmVmZXIgdG8gYW4gaW5jb25zaXN0ZW5jeQogICAgYWJvdXQgdGhlIHZlbmRvcmluZzoKICAg
+ICAgICBIT1NUX01FTkRFUl9BUlRJRkFDVF9HT19FTlYgPSBHT0ZMQUdTPSItbW9kPXZlbmRvciIK
+CiAgICBzbyBJIHdvbmRlciBob3cgdGhhdCB3b3VsZCBwbGF5IHdoZW4gd2UgYWxzbyBwYXNzIHRo
+aXMgZHVyaW5nIHRoZQogICAgdmVuZG9yaW5nIHN0ZXAuIEkgaG9wZSB0aGF0IGl0IHdvdWxkIGhh
+dmUgbm8gZWZmZWN0LCBiZWNhdXNlCiAgICAndmVuZG9yJyBpcyBhY3R1YWxseSB0aGUgcGF0aCB3
+aGVyZSB0aGUgdmVuZG9yaW5nIGhhcHBlbnMuCgpEaWQgeW91IGNoZWNrIGlmIHRoZXkgd2VyZSBp
+bXBhY3RlZCBieSB0aGlzIGNoYW5nZT8KCkJhcnJpbmcgYW55IGlzc3VlIHdpdGggdGhlIGFib3Zl
+IHF1ZXN0aW9ucywgSSB0aGluayB0aGlzIGlzIGEgZ29vZApjaGFuZ2UuIFBsZWFzZSByZXNwaW4g
+d2l0aCB5b3VyIHJlYWwgaWRlbnRpdHksIGEgcHJvcGVyIHNpZ24tb2ZmIHRhZy4KClJlZ2FyZHMs
+Cllhbm4gRS4gTU9SSU4uCgo+ICAjIER1ZSB0byB2ZW5kb3JpbmcsIGl0IGlzIHByZXR0eSBsaWtl
+bHkgdGhhdCBub3QgYWxsIGxpY2Vuc2VzIGFyZQo+ICAjIGxpc3RlZCBpbiA8cGtnPl9MSUNFTlNF
+Lgo+IC0tIAo+IDIuMjUuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBS
+ZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6
+IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04g
+ICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0t
+LS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRw
+Oi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2
+ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
+Xi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
