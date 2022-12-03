@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7707C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 21:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB5BCC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Dec 2022 22:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A958409FD;
-	Sat,  3 Dec 2022 21:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A958409FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6751160B46;
+	Sat,  3 Dec 2022 22:19:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6751160B46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mUreWeuq7A2v; Sat,  3 Dec 2022 21:41:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RZHzffkGjRCW; Sat,  3 Dec 2022 22:19:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDA23410BB;
-	Sat,  3 Dec 2022 21:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDA23410BB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B2361BF5DC
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 21:41:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C88160AC1;
+	Sat,  3 Dec 2022 22:19:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C88160AC1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C8FC1BF48B
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 22:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA887400DB
- for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 21:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA887400DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0024D60AC1
+ for <buildroot@lists.busybox.net>; Sat,  3 Dec 2022 22:19:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0024D60AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7wcg2qn5-_2F for <buildroot@lists.busybox.net>;
- Sat,  3 Dec 2022 21:41:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA0CE400C8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA0CE400C8
- for <buildroot@buildroot.org>; Sat,  3 Dec 2022 21:41:23 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d16b:268a:13f6:6145])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id C091C19F5A1;
- Sat,  3 Dec 2022 22:41:17 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 03 Dec 2022 22:41:17 +0100
-Date: Sat, 3 Dec 2022 22:41:17 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Max Filippov <jcmvbkbc@gmail.com>
-Message-ID: <20221203214117.GJ3302@scaer>
-References: <20221130021821.2660112-1-jcmvbkbc@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cHnSYjwOopFV for <buildroot@lists.busybox.net>;
+ Sat,  3 Dec 2022 22:19:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF5A6606ED
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF5A6606ED
+ for <buildroot@buildroot.org>; Sat,  3 Dec 2022 22:19:31 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ ja4-20020a05600c556400b003cf6e77f89cso6647163wmb.0
+ for <buildroot@buildroot.org>; Sat, 03 Dec 2022 14:19:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=3NhCHEQ4nCZ+vEnThBRKN86FPlCC1PddxKNZ+/A3UzQ=;
+ b=XiAwL44UjsQ06xFUQ3biZcjGLNKfYHZlTIEHhbarX+W0porhy7IuemEeI7n6P2Zrrg
+ Xpc9axci6HDyAD62QUTws9MJfrerfypBMCTt0x8B1s2jGdm8EWqwBu8WTgtbS/qjXndY
+ LrsEOmmdviHy6y8NFwtKzqB5xdfgI1TgioJFTF+O7sRHnx8H6gYUbgCw9usnJClZHM3l
+ yKkmFVBjMBotdb3dpMY56D4jb66X9SraFjbCg6G9aloIm0woBl6Xd7cCj2KOxqr8ndjG
+ CD5dcfGv48TcBe/LbGh4ESey24cjlU+35NZjuiRnikMou8r8hs0iy87bTF3oi1v6iK9Q
+ ix+g==
+X-Gm-Message-State: ANoB5pnSQQBo4A2EzuW8XHCA/SpFIQtxA4YPijrLaHeU69OYw8ooxPPH
+ mWx2V7pQulGBoUFXVMI2sa5inNvP6oU=
+X-Google-Smtp-Source: AA0mqf7zRh1nStk38uiy8HMFZ7e3yq7i2K2EXPfkA/sMKT7OxFUOzI1a0IUzmBJA8xHbSZAKZUfZ9A==
+X-Received: by 2002:a05:600c:34d3:b0:3cf:a7a8:b712 with SMTP id
+ d19-20020a05600c34d300b003cfa7a8b712mr41811111wmq.124.1670105969290; 
+ Sat, 03 Dec 2022 14:19:29 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ h20-20020a05600c351400b003b47ff307e1sm14148209wmq.31.2022.12.03.14.19.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 03 Dec 2022 14:19:28 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  3 Dec 2022 23:19:26 +0100
+Message-Id: <20221203221926.1188703-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221130021821.2660112-1-jcmvbkbc@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670103682;
- bh=7/oBo9228nst5zS7PtMQfUfqqOlFpUYwU/tIYSEEw/w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=LoqM0fVkWSfjDYS5RuvL1cCtfukzjLDieM9jOSI9atJJEVaWr/1yV9pfjxhmigKLG
- OCwN0HslQkCt68m0Du8zOGQyELcXmQdb4oqkflKwvIzyUDXQWnktBNiGo9kftKad2a
- 09jw/EG3OeokiYP4SBSFzdIh+A4MIWjoXJLPnd2/YCcdvwTTaRuz/+XbBQd0/ykAhB
- jNN7q6DZe6awX9OTwzxiwAlNPtfKCuc0IWCf+WTQB4XD/h6jIW4dimKF5WgYx6LSK0
- aq/GkO/PsRM+0T0EKbDIYHZNrdqcfJ7RGUcVsvU5q5kg+K6PGgdqaxrBntT2jyyah1
- AUgHsX+P6nJ5Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LoqM0fVk
-Subject: Re: [Buildroot] [PATCH] package/elf2flt: fix text relocations on
- xtensa
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=3NhCHEQ4nCZ+vEnThBRKN86FPlCC1PddxKNZ+/A3UzQ=;
+ b=nG1Es5rJX6UDE0O8Z6XpkhdSNB8QHdKezrEYNkoGPb/BWeVN5q5D2bh2Q1bn4XUTTu
+ KhwLgtpJsbQ132p5i8zvekzcTMq3XTnGhbfOu7GNxkNXsbboPT9vvjnN8SHTiHNPAhu2
+ Iz40A+DO9lYcweCHIbUqFFK3zEGrWTFCTKwCXDl5IY1nxvNbYkG7uM0sGiXrN6WJMiyT
+ NaPcvNl2074S42wjE6yj9A3jM3gAClECKubBmslJccZwdP9LSWm5KLg8reF73mPSlGlX
+ 5B/eTErusBwJ4ue62paYVadgm2K5pdf3kC1No9Tg2DXIB0DTaeTeuPNYZPgYaO9QY/bV
+ VMxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=nG1Es5rJ
+Subject: [Buildroot] [PATCH 1/1] package/gdb: zlib is mandatory, not optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,114 +94,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Max, All,
+zlib is a mandatory dependency of gdb and by default, gdb will use its
+internal one. Moreover, --with-zlib has been replaced by
+--with-system-zlib since version 7.10 and
+https://github.com/bminor/binutils-gdb/commit/fa1f5da0b6ff3622f9bf60e348e149b76920abba
 
-On 2022-11-29 18:18 -0800, Max Filippov spake thusly:
-> elf2flt 2021.08 has changed endianness swapping logic for relocated
-> entries in the text segment. This broke little-endian xtensa FLAT images
-> which now fail to start with the following message:
-> 
->   binfmt_flat: reloc outside program 0x24c80100 (0 - 0x6e430/0x56a20)
-> 
-> Fix it by restoring old endianness swapping logic for relocated entries
-> in the text segment when building for xtensa.
-> 
-> Reported-by: Niklas Cassel <niklas.cassel@wdc.com>
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=15131
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gdb/Config.in |  1 +
+ package/gdb/gdb.mk    | 12 ++++--------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> I've tested a couple other prominent candidates, but it looks like
-> only xtensa has this issue. I've submitted pull request to elf2flt
-> with the patch below.
-> 
->  ...-elf2flt-xtensa-fix-text-relocations.patch | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch
-> 
-> diff --git a/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch b/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch
-> new file mode 100644
-> index 000000000000..3664775906ea
-> --- /dev/null
-> +++ b/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch
-> @@ -0,0 +1,51 @@
-> +From e248d9774506fdd8698b14a7edead113f19ecdb0 Mon Sep 17 00:00:00 2001
-> +From: Max Filippov <jcmvbkbc@gmail.com>
-> +Date: Tue, 29 Nov 2022 17:47:54 -0800
-> +Subject: [PATCH] xtensa: fix text relocations
-> +
-> +The commit 5e08f1968316 ("Don't always update text in !pic_with_got case")
-> +changed good_32bit_resolved_reloc to not do endianness swapping for
-> +relocated entries in the text segment. This broke little-endian xtensa
-> +FLAT images which after this change fail to start with the following
-> +message:
-> +
-> +  binfmt_flat: reloc outside program 0x24c80100 (0 - 0x6e430/0x56a20)
-> +
-> +Fix it by preserving 'update_text' when building for xtensa.
-> +
-> +Fixes: 5e08f1968316 ("Don't always update text in !pic_with_got case")
-> +Reported-by: Niklas Cassel <niklas.cassel@wdc.com>
-> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> +---
-> + elf2flt.c | 15 ++++++++++++++-
-> + 1 file changed, 14 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/elf2flt.c b/elf2flt.c
-> +index b93aecdaced3..cec3f4a22239 100644
-> +--- a/elf2flt.c
-> ++++ b/elf2flt.c
-> +@@ -808,7 +808,20 @@ output_relocs (
-> + 					continue;
-> + 				case R_XTENSA_32:
-> + 				case R_XTENSA_PLT:
-> +-					goto good_32bit_resolved_reloc;
-> ++					if (bfd_big_endian (abs_bfd))
-> ++						sym_addr =
-> ++							(r_mem[0] << 24)
-> ++							+ (r_mem[1] << 16)
-> ++							+ (r_mem[2] << 8)
-> ++							+ r_mem[3];
-> ++					else
-> ++						sym_addr =
-> ++							r_mem[0]
-> ++							+ (r_mem[1] << 8)
-> ++							+ (r_mem[2] << 16)
-> ++							+ (r_mem[3] << 24);
-> ++					relocation_needed = 1;
-> ++					break;
-> + 				default:
-> + 					goto bad_resolved_reloc;
-> + #else
-> +-- 
-> +2.30.2
-> +
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 273b3072ae..80b1185b5e 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_ZLIB
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 45ce126bab..4b9c5c6b70 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -32,7 +32,8 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
+ # also need ncurses.
+ # As for libiberty, gdb may use a system-installed one if present, so
+ # we must ensure ours is installed first.
+-HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
++GDB_DEPENDENCIES = zlib
++HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
+ 
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+@@ -130,6 +131,7 @@ GDB_CONF_OPTS = \
+ 	--disable-sim \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--disable-werror \
+ 	--enable-static \
+ 	--without-mpfr
+@@ -212,13 +214,6 @@ else
+ GDB_CONF_OPTS += --without-lzma
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GDB_CONF_OPTS += --with-zlib
+-GDB_DEPENDENCIES += zlib
+-else
+-GDB_CONF_OPTS += --without-zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+@@ -256,6 +251,7 @@ HOST_GDB_CONF_OPTS = \
+ 	--enable-threads \
+ 	--disable-werror \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--with-curses \
+ 	--without-mpfr \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
