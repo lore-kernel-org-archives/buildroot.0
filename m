@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F7EBC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  4 Dec 2022 09:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D48C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Dec 2022 09:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C290160C13;
-	Sun,  4 Dec 2022 09:10:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C290160C13
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA52981404;
+	Sun,  4 Dec 2022 09:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA52981404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vDMrvqXkcS49; Sun,  4 Dec 2022 09:10:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VZijsMa7Fn3o; Sun,  4 Dec 2022 09:48:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 047C960BBD;
-	Sun,  4 Dec 2022 09:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 047C960BBD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33F02813F3;
+	Sun,  4 Dec 2022 09:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33F02813F3
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DE2B31BF284
- for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:10:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 312621BF284
+ for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9DA340492
- for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9DA340492
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B82A40121
+ for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:48:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B82A40121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmRvS0uzYDgy for <buildroot@lists.busybox.net>;
- Sun,  4 Dec 2022 09:10:45 +0000 (UTC)
+ with ESMTP id 8VTqFjKO6i9h for <buildroot@lists.busybox.net>;
+ Sun,  4 Dec 2022 09:48:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF930400CB
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AF930400CB
- for <buildroot@buildroot.org>; Sun,  4 Dec 2022 09:10:44 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id h12so14320397wrv.10
- for <buildroot@buildroot.org>; Sun, 04 Dec 2022 01:10:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BD8D400CB
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8BD8D400CB
+ for <buildroot@buildroot.org>; Sun,  4 Dec 2022 09:48:44 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id m19so6662704wms.5
+ for <buildroot@buildroot.org>; Sun, 04 Dec 2022 01:48:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=iI0mGWep6GXiSLwVqqnBlHTj2aNCFMXZI3O0lbBCd3c=;
- b=bDOVZB+R2UQKahId4JnxRxA6PuHmX+7YIZbsprbOKxIkk2BSWec7D/4C4XKQjicNiy
- ubBAd91lvTi9hjmaMirsmibOMU/SSPOJPLoqVAfe5mgXxB+PtYUrPaTPEvGMGgsNEeMs
- 2Dkn8EQ6/hAhgHJFy79XmW1iva+pZbEPLOFgkRJmZQNQTkodnm1u4iRc991Kb+dth4On
- NOCsEaa0utzotKK9HzhKVs+oguhRy6JiMuFXPjthEJ9YIzLWVtM2AyN288wWR/4j8clw
- mv8hhhe6I/qPNAI4L7muxECVcSvXwqFs4GHnM6fRMtFJiFfRnlrK2Stt34nFlTY/m6RF
- HFVQ==
-X-Gm-Message-State: ANoB5pnuCr/lXq6PI0Jov2FB4ywu4Vq1DlJuooF6mMWxyl4uq6UNXN5b
- /KnHf3ve0+5HD1ZtCzb+hVUP5fsOWNw=
-X-Google-Smtp-Source: AA0mqf7QdcS2f0lcn+YepJs+nTeVjJdfBkrxN3mV1O6U8KmsvSGXpqouhmx/3r08zEV/d6wk7imViA==
-X-Received: by 2002:a05:6000:1b05:b0:242:4a6e:a8b2 with SMTP id
- f5-20020a0560001b0500b002424a6ea8b2mr4645024wrz.283.1670145042486; 
- Sun, 04 Dec 2022 01:10:42 -0800 (PST)
+ bh=JkVQlnBOXp3ylHmIbM73RelpfhE75iH84SXt7SK6U10=;
+ b=NC0AXw3fhj0yGUJXMFRKTribx8Jff/df8zO+AYozGDe1yDhZmcs1UTDkCzkLTr7s2g
+ VHwQoiX95ATn6WhtZ1xDK1dp7wM/jtV1uiq0CUWlfBA60KuLMHGMZH/7PZjO/8IMOHze
+ tVhBR4tHJenCW4m1dt/dLX1huanaicLyNflwOYZqU1GHUwWHxpDrIGDy00WnirKMKueV
+ vn+TtbwkZE2aGibX78k+Ur+0IHYPK1PCYg8/+bzzHYJWIP89tjknpqMnfJb57h7HVU17
+ WYf1TWBWhVX7I3C0llGkx8jpKaQAt8+cwZuyW+0czkjk1c71xFt1uA+R5O5tr0n75Vn1
+ aRQA==
+X-Gm-Message-State: ANoB5pmsJwfl7Gwly/P23pI18Kesxs8IRC742WJGVoIidn2j4nH0gbcs
+ 3BP3eJRVwSDL2vK6pBpXfwff6lRJuTk=
+X-Google-Smtp-Source: AA0mqf4D2LbCvTem7S9teH0tHJWRJhFYBJ+LA2GEFuy/K9HZav1BE6hfa80LFKgoyEZn+uPt2WGuMA==
+X-Received: by 2002:a05:600c:4fc4:b0:3c6:c109:2d9 with SMTP id
+ o4-20020a05600c4fc400b003c6c10902d9mr47539779wmq.149.1670147322228; 
+ Sun, 04 Dec 2022 01:48:42 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- z2-20020a05600c220200b003cfd10a33afsm16909142wml.11.2022.12.04.01.10.41
+ e4-20020adff344000000b00236488f62d6sm11701856wrp.79.2022.12.04.01.48.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Dec 2022 01:10:42 -0800 (PST)
+ Sun, 04 Dec 2022 01:48:41 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Dec 2022 10:10:39 +0100
-Message-Id: <20221204091039.4362-1-fontaine.fabrice@gmail.com>
+Date: Sun,  4 Dec 2022 10:48:29 +0100
+Message-Id: <20221204094829.148341-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iI0mGWep6GXiSLwVqqnBlHTj2aNCFMXZI3O0lbBCd3c=;
- b=JTSAqOvW6mnl0K8U34qiTc+E+aM0NNUFgUzkhu94wJet80SyPoJl+58CV8sDv2og1f
- JQiTc7oKvR1PGkdjimsi/cda99FzGvY1oJ2lvyAykGUHuS1Lu4VkNqTPuiYDd4liwmxl
- kR0xZosH/W47LISgAqJsdT8ST4c+Jir7jkJRwc9efVC0e2Tk3p+BJrAbAFjxfJtrCpXf
- W2fIX6xydfTKsKgd+grtnIKdmeXVjk7BPyjR0T4o+qSWO2rlqSUQgQWAiC2bkgBd49Wt
- oi9vfCGUBaGL4eg9yEgMNnLgeyHl+lHrAmTCYAQVDS+WHgnBFnpsmfNPaqFC4IGdpVKN
- fzqQ==
+ bh=JkVQlnBOXp3ylHmIbM73RelpfhE75iH84SXt7SK6U10=;
+ b=Q7OaTX+9wP17lQOCFwIMiBuX/40gRRTV7nzZcOKb8GrnLRdjYSMQO1qCSRIJUC+DQL
+ 5lnj406VP/EDLQbYqrU8C2Edm/bgX3nGPkGSBX5OVnTwAgRZpUrEZiQua03U9nFgGD/k
+ ZctupAir9xdvTBXXn8aa98d9dpsdLmFvxj8k6GYh6RhL8Nc0zLBe1Ksp0uuvJ7E1XafI
+ Dhio5dcpLkKOambds1hpwlM8/dn1v9CL+Rx40WeSKPWj6deicz1G/E7QE+GkzLg+IV2E
+ hfnwAarkXWu74qf628TwMrV5EE2M9Uqlzk7LqP8e8DIDr5hew+aj4F8RpuGS5y8/sxBF
+ 8erA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JTSAqOvW
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: rename S30optee
+ header.a=rsa-sha256 header.s=20210112 header.b=Q7OaTX+9
+Subject: [Buildroot] [PATCH 1/1] package/python-scipy: fix sh4 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,42 +93,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Jagan Teki <jagan@amarulasolutions.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff forgot to rename
-S30optee in optee-client.mk resulting in the following build failure:
+Fix the following sh4 build failure raised since the addition of the
+package in commit e10431db29e08c3ae56c145165bf110bd17f2a6c:
 
-/usr/bin/install -m 0755 -D package/optee-client//S30optee /home/autobuild/autobuild/instance-0/output-1/target/etc/init.d/S30optee
-/usr/bin/install: cannot stat 'package/optee-client//S30optee': No such file or directory
+INFO: sh4aeb-linux-gcc: scipy/special/_test_round.c
+scipy/special/_test_round.c: In function '__pyx_pf_5scipy_7special_11_test_round_have_fenv':
+scipy/special/_test_round.c:2353:30: error: 'FE_UPWARD' undeclared (first use in this function)
+ 2353 |     __pyx_t_1 = ((fesetround(FE_UPWARD) != 0) != 0);
+      |                              ^~~~~~~~~
+
+Retrieve debian patch as upstream doesn't want to fix this SH4 specific
+issue: https://github.com/scipy/scipy/issues/15584
 
 Fixes:
- - http://autobuild.buildroot.org/results/21fc165933e6d226de277b62d4ce99342cef0ffb
+ - http://autobuild.buildroot.org/results/b82d8ed02ba5d094a0d4054e0de28e95c9d3554d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/optee-client/optee-client.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-scipy/0001-build_sh4_FE.patch | 27 ++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/python-scipy/0001-build_sh4_FE.patch
 
-diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-index 252841ba10..3fbbe9484c 100644
---- a/package/optee-client/optee-client.mk
-+++ b/package/optee-client/optee-client.mk
-@@ -27,8 +27,8 @@ OPTEE_CLIENT_CONF_OPTS += -DCFG_TEE_SUPP_PLUGINS=OFF
- endif
- 
- define OPTEE_CLIENT_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
--		$(TARGET_DIR)/etc/init.d/S30optee
-+	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30tee-supplicant \
-+		$(TARGET_DIR)/etc/init.d/S30tee-supplicant
- endef
- 
- $(eval $(cmake-package))
+diff --git a/package/python-scipy/0001-build_sh4_FE.patch b/package/python-scipy/0001-build_sh4_FE.patch
+new file mode 100644
+index 0000000000..17031b89f1
+--- /dev/null
++++ b/package/python-scipy/0001-build_sh4_FE.patch
+@@ -0,0 +1,27 @@
++build sh4 FE
++
++ensures FE_UPWARD and FE_DOWNWARD are defined for sh4 architecture.
++
++Closes: #1007769.
++
++[Retrieved from:
++https://salsa.debian.org/python-team/packages/scipy/-/blob/master/debian/patches/build_sh4_FE.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++Index: scipy/scipy/special/_round.h
++===================================================================
++--- scipy.orig/scipy/special/_round.h	2021-08-17 17:46:09.254650951 +0200
+++++ scipy/scipy/special/_round.h	2022-06-14 08:40:23.531748220 +0200
++@@ -69,5 +69,12 @@
++ 
++ #endif
++ 
+++/* SH4 is not C99 compliant, see https://github.com/scipy/scipy/issues/15584 */
+++#ifndef FE_UPWARD
+++#define FE_UPWARD -1
+++#endif
+++#ifndef FE_DOWNWARD
+++#define FE_DOWNWARD -1
+++#endif
++ 
++ #endif /* _round.h */
 -- 
 2.35.1
 
