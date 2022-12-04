@@ -4,84 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D48C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  4 Dec 2022 09:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17B96C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Dec 2022 11:17:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA52981404;
-	Sun,  4 Dec 2022 09:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA52981404
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8803481D0C;
+	Sun,  4 Dec 2022 11:17:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8803481D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VZijsMa7Fn3o; Sun,  4 Dec 2022 09:48:48 +0000 (UTC)
+	with ESMTP id foJgkgYjUQ3N; Sun,  4 Dec 2022 11:17:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33F02813F3;
-	Sun,  4 Dec 2022 09:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33F02813F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id C75FE81CDC;
+	Sun,  4 Dec 2022 11:17:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C75FE81CDC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 312621BF284
- for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:48:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF5F71BF3B0
+ for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 11:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B82A40121
- for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 09:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B82A40121
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9387D4049C
+ for <buildroot@lists.busybox.net>; Sun,  4 Dec 2022 11:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9387D4049C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8VTqFjKO6i9h for <buildroot@lists.busybox.net>;
- Sun,  4 Dec 2022 09:48:44 +0000 (UTC)
+ with ESMTP id Uq0yUhBTvt1t for <buildroot@lists.busybox.net>;
+ Sun,  4 Dec 2022 11:17:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BD8D400CB
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8BD8D400CB
- for <buildroot@buildroot.org>; Sun,  4 Dec 2022 09:48:44 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id m19so6662704wms.5
- for <buildroot@buildroot.org>; Sun, 04 Dec 2022 01:48:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=JkVQlnBOXp3ylHmIbM73RelpfhE75iH84SXt7SK6U10=;
- b=NC0AXw3fhj0yGUJXMFRKTribx8Jff/df8zO+AYozGDe1yDhZmcs1UTDkCzkLTr7s2g
- VHwQoiX95ATn6WhtZ1xDK1dp7wM/jtV1uiq0CUWlfBA60KuLMHGMZH/7PZjO/8IMOHze
- tVhBR4tHJenCW4m1dt/dLX1huanaicLyNflwOYZqU1GHUwWHxpDrIGDy00WnirKMKueV
- vn+TtbwkZE2aGibX78k+Ur+0IHYPK1PCYg8/+bzzHYJWIP89tjknpqMnfJb57h7HVU17
- WYf1TWBWhVX7I3C0llGkx8jpKaQAt8+cwZuyW+0czkjk1c71xFt1uA+R5O5tr0n75Vn1
- aRQA==
-X-Gm-Message-State: ANoB5pmsJwfl7Gwly/P23pI18Kesxs8IRC742WJGVoIidn2j4nH0gbcs
- 3BP3eJRVwSDL2vK6pBpXfwff6lRJuTk=
-X-Google-Smtp-Source: AA0mqf4D2LbCvTem7S9teH0tHJWRJhFYBJ+LA2GEFuy/K9HZav1BE6hfa80LFKgoyEZn+uPt2WGuMA==
-X-Received: by 2002:a05:600c:4fc4:b0:3c6:c109:2d9 with SMTP id
- o4-20020a05600c4fc400b003c6c10902d9mr47539779wmq.149.1670147322228; 
- Sun, 04 Dec 2022 01:48:42 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- e4-20020adff344000000b00236488f62d6sm11701856wrp.79.2022.12.04.01.48.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Dec 2022 01:48:41 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  4 Dec 2022 10:48:29 +0100
-Message-Id: <20221204094829.148341-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4248940499
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4248940499
+ for <buildroot@buildroot.org>; Sun,  4 Dec 2022 11:17:28 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:d16b:268a:13f6:6145])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id DC0FF19F5A6;
+ Sun,  4 Dec 2022 12:17:22 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 04 Dec 2022 12:17:22 +0100
+Date: Sun, 4 Dec 2022 12:17:22 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Etienne Carriere <etienne.carriere@linaro.org>
+Message-ID: <20221204111722.GK3302@scaer>
+References: <20221130075452.2507453-1-etienne.carriere@linaro.org>
+ <20221130075452.2507453-6-etienne.carriere@linaro.org>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JkVQlnBOXp3ylHmIbM73RelpfhE75iH84SXt7SK6U10=;
- b=Q7OaTX+9wP17lQOCFwIMiBuX/40gRRTV7nzZcOKb8GrnLRdjYSMQO1qCSRIJUC+DQL
- 5lnj406VP/EDLQbYqrU8C2Edm/bgX3nGPkGSBX5OVnTwAgRZpUrEZiQua03U9nFgGD/k
- ZctupAir9xdvTBXXn8aa98d9dpsdLmFvxj8k6GYh6RhL8Nc0zLBe1Ksp0uuvJ7E1XafI
- Dhio5dcpLkKOambds1hpwlM8/dn1v9CL+Rx40WeSKPWj6deicz1G/E7QE+GkzLg+IV2E
- hfnwAarkXWu74qf628TwMrV5EE2M9Uqlzk7LqP8e8DIDr5hew+aj4F8RpuGS5y8/sxBF
- 8erA==
+Content-Disposition: inline
+In-Reply-To: <20221130075452.2507453-6-etienne.carriere@linaro.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670152645;
+ bh=y0OrKLgXxT1R4jOFGJKV3hylCXEh2cTQA4w5qprbgPU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XNWaU3uqWAM3/THLtK/zWbOiYNJmgEZxTZWw1Ep9UahsfG8W8TfWsDVun6crjBGNs
+ g/l/fGyxNKBigfM0086KNXbnRaE3C2drUoLCJvg+SqZbEtveZaYww7zW/WNUvxBmXe
+ OBS5EfR21zZsYCa4kdP4obZRBE8v/aKQzpXKwvnU90q2h9AmOmYRWai94wnlZEl63R
+ o29tc0z7AAIrw2BxrcGNniz6wVf5BZxR1ZbuZAOFkl5B5v6iTquxOYKzFlsZR+ixyn
+ VB92pODqQ2pGW7c/iSBKSeDwCXSHst+103Tyj/CmnC6xy0nzhFQcFLGVdgXECTuV71
+ mk1lannv5dzTQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Q7OaTX+9
-Subject: [Buildroot] [PATCH 1/1] package/python-scipy: fix sh4 build
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XNWaU3uq
+Subject: Re: [Buildroot] [PATCH 6/7] package: optee-client: select
+ util-linux-libs, libuuid and pkgconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,71 +78,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Jagan Teki <jagan@amarulasolutions.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following sh4 build failure raised since the addition of the
-package in commit e10431db29e08c3ae56c145165bf110bd17f2a6c:
+Etienne, All,
 
-INFO: sh4aeb-linux-gcc: scipy/special/_test_round.c
-scipy/special/_test_round.c: In function '__pyx_pf_5scipy_7special_11_test_round_have_fenv':
-scipy/special/_test_round.c:2353:30: error: 'FE_UPWARD' undeclared (first use in this function)
- 2353 |     __pyx_t_1 = ((fesetround(FE_UPWARD) != 0) != 0);
-      |                              ^~~~~~~~~
+On 2022-11-30 08:54 +0100, Etienne Carriere spake thusly:
+> In order to use login methods `TEEC_LOGIN_USER` and `TEEC_LOGIN_GROUP`,
+> a user space application must initialize the tokens with the SHA1
+> hashed UUID of the user or group.
+> 
+> Select host-pkgconf, util-linux and libuuid in order to use `libuuid`
+> and add supporting libraries to optee_client for this type of ACL based
+> login initialization.
 
-Retrieve debian patch as upstream doesn't want to fix this SH4 specific
-issue: https://github.com/scipy/scipy/issues/15584
+Looking at the upstream code for optee-client, it looks like this is a
+mandatory dependency, so that should be part of the patch that bumps the
+version. Otherwise, this means that just applying the version bumps
+introduces breakage.
 
-Fixes:
- - http://autobuild.buildroot.org/results/b82d8ed02ba5d094a0d4054e0de28e95c9d3554d
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-scipy/0001-build_sh4_FE.patch | 27 ++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/python-scipy/0001-build_sh4_FE.patch
+> This change is based on commit [1] from Eero Aaltonen, merged in OP-TEE
+> test build environment.
+> 
+> Link: [1] https://github.com/OP-TEE/build/commit/4a27543494278a5d93e2f44d58e413d90739b08a
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  package/optee-client/Config.in       | 3 +++
+>  package/optee-client/optee-client.mk | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+> index cc7f176c77..ed7da4edbc 100644
+> --- a/package/optee-client/Config.in
+> +++ b/package/optee-client/Config.in
+> @@ -2,6 +2,9 @@ config BR2_PACKAGE_OPTEE_CLIENT
+>  	bool "optee-client"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # MMC_IOC_MULTI_CMD
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Enable the OP-TEE client package that brings non-secure
+>  	  client application resources for OP-TEE support. OP-TEE
+> diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+> index 54cc112c5c..a671b66662 100644
+> --- a/package/optee-client/optee-client.mk
+> +++ b/package/optee-client/optee-client.mk
+> @@ -9,6 +9,7 @@ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+>  OPTEE_CLIENT_LICENSE = BSD-2-Clause
+>  OPTEE_CLIENT_LICENSE_FILES = LICENSE
+>  OPTEE_CLIENT_INSTALL_STAGING = YES
+> +OPTEE_CLIENT_EXT_DEPENDENCIES = host-pkgconf util-linux-libs
+>  
+>  OPTEE_CLIENT_CONF_OPTS = \
+>  	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/python-scipy/0001-build_sh4_FE.patch b/package/python-scipy/0001-build_sh4_FE.patch
-new file mode 100644
-index 0000000000..17031b89f1
---- /dev/null
-+++ b/package/python-scipy/0001-build_sh4_FE.patch
-@@ -0,0 +1,27 @@
-+build sh4 FE
-+
-+ensures FE_UPWARD and FE_DOWNWARD are defined for sh4 architecture.
-+
-+Closes: #1007769.
-+
-+[Retrieved from:
-+https://salsa.debian.org/python-team/packages/scipy/-/blob/master/debian/patches/build_sh4_FE.patch]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+Index: scipy/scipy/special/_round.h
-+===================================================================
-+--- scipy.orig/scipy/special/_round.h	2021-08-17 17:46:09.254650951 +0200
-++++ scipy/scipy/special/_round.h	2022-06-14 08:40:23.531748220 +0200
-+@@ -69,5 +69,12 @@
-+ 
-+ #endif
-+ 
-++/* SH4 is not C99 compliant, see https://github.com/scipy/scipy/issues/15584 */
-++#ifndef FE_UPWARD
-++#define FE_UPWARD -1
-++#endif
-++#ifndef FE_DOWNWARD
-++#define FE_DOWNWARD -1
-++#endif
-+ 
-+ #endif /* _round.h */
 -- 
-2.35.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
