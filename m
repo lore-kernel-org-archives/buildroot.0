@@ -1,51 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC283C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F82FC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:21:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90A6C60C0A;
-	Mon,  5 Dec 2022 12:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90A6C60C0A
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2CB240577;
+	Mon,  5 Dec 2022 12:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2CB240577
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JNN5rNvYX7Bl; Mon,  5 Dec 2022 12:21:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HZwe1vYzhfY8; Mon,  5 Dec 2022 12:21:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB05860BDA;
-	Mon,  5 Dec 2022 12:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB05860BDA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39411404F5;
+	Mon,  5 Dec 2022 12:21:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39411404F5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DDE941BF352
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDD9C1BF352
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 520CF408E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5156A408D5
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 520CF408E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5156A408D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Z5eX1JoOksx for <buildroot@lists.busybox.net>;
+ with ESMTP id b0uw-enwOeUZ for <buildroot@lists.busybox.net>;
  Mon,  5 Dec 2022 11:26:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B14934056A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8048A408EB
  for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B14934056A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8048A408EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FBE685BA3; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 7989885BA3; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 4 Dec 2022 18:29:08 +0100
+Date: Sun, 4 Dec 2022 13:51:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9fcf6ea43505918d28e12511c782b74eaba663a0
-X-Git-Newrev: cd95a33511b9d9de6f6885ec75e6f39608238b9d
+X-Git-Oldrev: 17a1cd835e788cd86109e8a4223ea75dc9342553
+X-Git-Newrev: 95f72fb61aae6a64ea822b535cf9d2c2e01e6fc9
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112612.9FBE685BA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang: use package go env for
- download step
+Message-Id: <20221205112612.7989885BA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/edk2-non-osi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +55,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7406345790405148896=="
+Content-Type: multipart/mixed; boundary="===============6708742158804575950=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7406345790405148896==
+--===============6708742158804575950==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd95a33511b9d9de6f6885ec75e6f39608238b9d
+commit: https://git.buildroot.net/buildroot/commit/?id=95f72fb61aae6a64ea822b535cf9d2c2e01e6fc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently package secific go env is used only during package build step.
+Add a package to install the additional edk2 platforms files, not
+compatible with the normal licensing requirements and held in the
+edk2-non-osi repository.
 
-Go vendering is done during the download step and it's sometimes required
-to specify package secific go env also for this step.
+Only the Marvell Armada files are copied at this point, to support building
+edk2 for the MACCHIATObin platform.
 
-For example, when importing custom go modules who are hosted on a private
-host, it’s required to set GOPRIVATE to avoid public sum checking.
+The referenced commit corresponds to version edk2-stable202208 of edk2,
+based on the timestamps.
 
-Of all the environment variables driving the behaviour of the go command
-[0], there is none that obviously have an impact on the behaviour of
-go-mod, unless they are explicitly listed as such [1], so it seems
-pretty safe to include the generic environment variables for the
-download step.
+This package is heavily inspired from package/edk2-platforms.
 
-[0] https://pkg.go.dev/cmd/go#hdr-Environment_variables
-[1] https://go.dev/ref/mod#environment-variables
-
-Signed-off-by: Patrick Gerber <pge@ik.me>
-[yann.morin.1998@free.fr: add [0] and [1] and corresponding blurb]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-golang.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/edk2-non-osi/Config.in         | 11 +++++++++++
+ package/edk2-non-osi/edk2-non-osi.hash |  3 +++
+ package/edk2-non-osi/edk2-non-osi.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 0b3dc3d32f..cdc67b32c0 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -87,7 +87,8 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
- $(2)_DOWNLOAD_POST_PROCESS = go
- $(2)_DL_ENV += \
- 	$$(HOST_GO_COMMON_ENV) \
--	GOPROXY=direct
-+	GOPROXY=direct \
-+	$$($(2)_GO_ENV)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ab9cfe5ee9..233fda4c71 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3002,6 +3002,7 @@ F:	package/utp_com/
+ N:	Vincent Stehlé <vincent.stehle@arm.com>
+ F:	board/qemu/aarch64-ebbr/
+ F:	configs/qemu_aarch64_ebbr_defconfig
++F:	package/edk2-non-osi/
  
- # Due to vendoring, it is pretty likely that not all licenses are
- # listed in <pkg>_LICENSE.
+ N:	Vincent Stehlé <vincent.stehle@laposte.net>
+ F:	board/bananapi/bananapi-m2-zero/
+diff --git a/package/Config.in b/package/Config.in
+index 1a2bda4639..ce0d55bbf2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -489,6 +489,7 @@ endmenu
+ 	source "package/dvb-apps/Config.in"
+ 	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
++	source "package/edk2-non-osi/Config.in"
+ 	source "package/edk2-platforms/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
+diff --git a/package/edk2-non-osi/Config.in b/package/edk2-non-osi/Config.in
+new file mode 100644
+index 0000000000..6c540c8a40
+--- /dev/null
++++ b/package/edk2-non-osi/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_EDK2_NON_OSI
++	bool
++	help
++	  EDK2 description files for additional platforms, not
++	  compatible with the normal licensing requirements.
++	  The main EDK2 bootloader package will depend on these
++	  description files while building firmware for some platforms.
++
++	  Only the Marvell Armada files are copied at this point.
++
++	  https://github.com/tianocore/edk2-non-osi
+diff --git a/package/edk2-non-osi/edk2-non-osi.hash b/package/edk2-non-osi/edk2-non-osi.hash
+new file mode 100644
+index 0000000000..7941df1f2f
+--- /dev/null
++++ b/package/edk2-non-osi/edk2-non-osi.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  7d27b1e6d90a26f3585ab58a2e051da69eae1b97754d3e2d80a5372879ae2501  edk2-non-osi-61662e8596dd9a64e3372f9a3ba6622d2628607c.tar.gz
++sha256  38d73db2f9dfb32e1666d898cb9d7c1ccd78302dd9922d5fac4a9cf61fa872d9  Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
+diff --git a/package/edk2-non-osi/edk2-non-osi.mk b/package/edk2-non-osi/edk2-non-osi.mk
+new file mode 100644
+index 0000000000..0abb3770c7
+--- /dev/null
++++ b/package/edk2-non-osi/edk2-non-osi.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# edk2-non-osi
++#
++################################################################################
++
++# Keep in sync with latest commit as of the release date for boot/edk2
++EDK2_NON_OSI_VERSION = 61662e8596dd9a64e3372f9a3ba6622d2628607c
++EDK2_NON_OSI_SITE = $(call github,tianocore,edk2-non-osi,$(EDK2_NON_OSI_VERSION))
++EDK2_NON_OSI_INSTALL_TARGET = NO
++EDK2_NON_OSI_INSTALL_STAGING = YES
++
++# Copy Marvell Armada files
++EDK2_NON_OSI_LICENSE += BSD-2-Clause-Patent (Marvell Armada)
++EDK2_NON_OSI_LICENSE_FILES += Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
++EDK2_NON_OSI_DIRS += Silicon/Marvell/Armada7k8k/DeviceTree
++
++# There is nothing to build for edk2-non-osi. All we need to do is to copy
++# the selected description files to staging, for other packages to build with.
++define EDK2_NON_OSI_INSTALL_STAGING_CMDS
++	$(foreach d,$(EDK2_NON_OSI_DIRS),\
++		mkdir -p $(STAGING_DIR)/usr/share/edk2-non-osi/$(d) && \
++		cp -rf $(@D)/$(d)/* $(STAGING_DIR)/usr/share/edk2-non-osi/$(d)/
++	)
++endef
++
++$(eval $(generic-package))
 
---===============7406345790405148896==
+--===============6708742158804575950==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -118,4 +186,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7406345790405148896==--
+--===============6708742158804575950==--
