@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D28C47089
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBB8DC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDEE180E3F;
-	Mon,  5 Dec 2022 12:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDEE180E3F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9768A60C11;
+	Mon,  5 Dec 2022 12:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9768A60C11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8FCwfJDZm9yG; Mon,  5 Dec 2022 12:08:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qtQN7Bie6UcC; Mon,  5 Dec 2022 12:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E096F80EC1;
-	Mon,  5 Dec 2022 12:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E096F80EC1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3DD9B1BF352
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1E7060BD9;
+	Mon,  5 Dec 2022 12:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1E7060BD9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CE701BF8C7
  for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:27:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 547A5408B7
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 547A5408B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7D30415D6
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 11:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7D30415D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QarMHSj-2EjU for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 11:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Ioljm3DF_CN for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93E2540602
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E2540602
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95DED416B1
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95DED416B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F60885B9B; Mon,  5 Dec 2022 11:26:08 +0000 (UTC)
+ id 85E1285BBE; Mon,  5 Dec 2022 11:26:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Nov 2022 23:18:57 +0100
+Date: Sun, 4 Dec 2022 13:51:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c0def2452fc919b1eb4f790669f240392cde84f
-X-Git-Newrev: 0954c013bc24888f22625716b1d4783373b3e8f3
+X-Git-Oldrev: 95f72fb61aae6a64ea822b535cf9d2c2e01e6fc9
+X-Git-Newrev: 17cb635a8a2dde2fbd7b21ba8639862e282027dd
 X-Patchwork-Hint: ignore
-Message-Id: <20221205112608.8F60885B9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_xxx_defconfig: use
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
+Message-Id: <20221205112612.85E1285BBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: bump version to
+ edk2-stable202208
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,91 +59,165 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6365015452310533397=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0954c013bc24888f22625716b1d4783373b3e8f3
+--===============6365015452310533397==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=17cb635a8a2dde2fbd7b21ba8639862e282027dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch migrates the u-boot device tree definition
-from uboot.fragment files to use BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
-instead for the zynq_zc706, zynq_zed and zynq_microzed defconfigs.
+The Marvell Armada Devicetree files have been moved out of edk2-platforms
+by commit 4b53da6b12a8 ("Marvell/Armada7k8k: Remove device tree sources
+from edk2-platforms") and they are now in edk2-non-osi.
+Therefore update the MACCHIATObin recipe to depend on the new edk2-non-osi
+package and rework a bit the packages path to support that.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Also, drop the backported patch as it is not necessary anymore.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/zynq/microzed/uboot.fragment | 1 -
- board/zynq/zc706/uboot.fragment    | 1 -
- board/zynq/zed/uboot.fragment      | 1 -
- configs/zynq_microzed_defconfig    | 2 +-
- configs/zynq_zc706_defconfig       | 2 +-
- configs/zynq_zed_defconfig         | 2 +-
- 6 files changed, 3 insertions(+), 6 deletions(-)
+ ...ModulePkg-UsbBusDxe-fix-NOOPT-build-error.patch | 48 ----------------------
+ boot/edk2/Config.in                                |  1 +
+ boot/edk2/edk2.hash                                |  2 +-
+ boot/edk2/edk2.mk                                  |  9 ++--
+ 4 files changed, 8 insertions(+), 52 deletions(-)
 
-diff --git a/board/zynq/microzed/uboot.fragment b/board/zynq/microzed/uboot.fragment
+diff --git a/boot/edk2/0001-MdeModulePkg-UsbBusDxe-fix-NOOPT-build-error.patch b/boot/edk2/0001-MdeModulePkg-UsbBusDxe-fix-NOOPT-build-error.patch
 deleted file mode 100644
-index bc4dffaffa..0000000000
---- a/board/zynq/microzed/uboot.fragment
+index f4f1b1565a..0000000000
+--- a/boot/edk2/0001-MdeModulePkg-UsbBusDxe-fix-NOOPT-build-error.patch
 +++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_DEFAULT_DEVICE_TREE="zynq-microzed"
-diff --git a/board/zynq/zc706/uboot.fragment b/board/zynq/zc706/uboot.fragment
-deleted file mode 100644
-index ad5efa6204..0000000000
---- a/board/zynq/zc706/uboot.fragment
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_DEFAULT_DEVICE_TREE="zynq-zc706"
-diff --git a/board/zynq/zed/uboot.fragment b/board/zynq/zed/uboot.fragment
-deleted file mode 100644
-index d58fcd5439..0000000000
---- a/board/zynq/zed/uboot.fragment
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_DEFAULT_DEVICE_TREE="zynq-zed"
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 10a4f4095f..5f3fc5e6ab 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -21,7 +21,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/microzed/uboot.fragment"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-microzed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 82c47be7a5..0daaeca872 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -21,7 +21,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/zc706/uboot.fragment"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 34e1b67184..74c2e8c4d3 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -21,7 +21,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynq/zed/uboot.fragment"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
+@@ -1,48 +0,0 @@
+-From 59aa67f7a4d8efc564b46fe467aaf6eccec17183 Mon Sep 17 00:00:00 2001
+-From: Gerd Hoffmann <kraxel@redhat.com>
+-Date: Mon, 20 Dec 2021 22:32:38 +0800
+-Subject: [PATCH] MdeModulePkg/UsbBusDxe: fix NOOPT build error
+-
+-gcc-11 (fedora 35):
+-
+-/home/kraxel/projects/edk2/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBus.c: In function ?UsbIoBulkTransfer?:
+-/home/kraxel/projects/edk2/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBus.c:277:12: error: ?UsbHcBulkTransfer? accessing 80 bytes in a region of size 8 [-Werror=stringop-overflow=]
+-
+-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+-Reviewed-by: Hao A Wu <hao.a.wu@intel.com>
+-(cherry picked from commit ae8272ef787d80950803c521a13a308651bdc62e)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c | 2 +-
+- MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.h | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c b/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c
+-index 7529e03e85..b2ce97ca37 100644
+---- a/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c
+-+++ b/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c
+-@@ -285,7 +285,7 @@ UsbHcBulkTransfer (
+-   IN  UINT8                               DevSpeed,
+-   IN  UINTN                               MaxPacket,
+-   IN  UINT8                               BufferNum,
+--  IN  OUT VOID                            *Data[EFI_USB_MAX_BULK_BUFFER_NUM],
+-+  IN  OUT VOID                            *Data[],
+-   IN  OUT UINTN                           *DataLength,
+-   IN  OUT UINT8                           *DataToggle,
+-   IN  UINTN                               TimeOut,
+-diff --git a/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.h b/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.h
+-index 1d2b8a6174..1316a5981f 100644
+---- a/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.h
+-+++ b/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.h
+-@@ -149,7 +149,7 @@ UsbHcBulkTransfer (
+-   IN  UINT8                               DevSpeed,
+-   IN  UINTN                               MaxPacket,
+-   IN  UINT8                               BufferNum,
+--  IN  OUT VOID                            *Data[EFI_USB_MAX_BULK_BUFFER_NUM],
+-+  IN  OUT VOID                            *Data[],
+-   IN  OUT UINTN                           *DataLength,
+-   IN  OUT UINT8                           *DataToggle,
+-   IN  UINTN                               TimeOut,
+--- 
+-2.35.3
+-
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index df723122ee..855a62f70b 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -88,6 +88,7 @@ config BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN
+ 	bool "SolidRun MacchiatoBin"
+ 	depends on BR2_aarch64
+ 	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
++	select BR2_PACKAGE_EDK2_NON_OSI
+ 	select BR2_PACKAGE_HOST_DTC
+ 	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
+ 	help
+diff --git a/boot/edk2/edk2.hash b/boot/edk2/edk2.hash
+index f28e9ce841..94ee22ddc4 100644
+--- a/boot/edk2/edk2.hash
++++ b/boot/edk2/edk2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  04791c13b414a6d1877182a6d565cb762c30aa63e49bb4d495fca68ef4dd209d  edk2-edk2-stable202102-br1.tar.gz
++sha256  c10520f269557d566e35fe8104141aa2865f9085ad2b3a30aae8a7e78a3ca5aa  edk2-edk2-stable202208-br1.tar.gz
+ sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 5cbd9d152e..c377b49877 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EDK2_VERSION = edk2-stable202102
++EDK2_VERSION = edk2-stable202208
+ EDK2_SITE = https://github.com/tianocore/edk2
+ EDK2_SITE_METHOD = git
+ EDK2_LICENSE = BSD-2-Clause
+@@ -47,7 +47,7 @@ endif
+ 
+ EDK2_GIT_SUBMODULES = YES
+ EDK2_BUILD_PACKAGES = $(@D)/Build/Buildroot
+-EDK2_PACKAGES_PATH = $(@D):$(EDK2_BUILD_PACKAGES):$(STAGING_DIR)/usr/share/edk2-platforms
++EDK2_PACKAGES_PATHS = $(@D) $(EDK2_BUILD_PACKAGES) $(STAGING_DIR)/usr/share/edk2-platforms
+ 
+ ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_I386),y)
+ EDK2_ARCH = IA32
+@@ -102,12 +102,13 @@ endef
+ 
+ else ifeq ($(BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN),y)
+ EDK2_ARCH = AARCH64
+-EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware
++EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware edk2-non-osi
+ EDK2_PACKAGE_NAME = Platform/SolidRun/Armada80x0McBin
+ EDK2_PLATFORM_NAME = Armada80x0McBin
+ EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
+ EDK2_BUILD_ENV += DTC_PREFIX=$(HOST_DIR)/bin/
+ EDK2_BUILD_OPTS += -D INCLUDE_TFTP_COMMAND
++EDK2_PACKAGES_PATHS += $(STAGING_DIR)/usr/share/edk2-non-osi
+ 
+ else ifeq ($(BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA),y)
+ EDK2_ARCH = AARCH64
+@@ -128,6 +129,8 @@ EDK2_BASETOOLS_OPTS = \
+ 	EXTRA_LDFLAGS="$(HOST_LDFLAGS)" \
+ 	EXTRA_OPTFLAGS="$(HOST_CPPFLAGS)"
+ 
++EDK2_PACKAGES_PATH = $(subst $(space),:,$(strip $(EDK2_PACKAGES_PATHS)))
++
+ EDK2_BUILD_ENV += \
+ 	WORKSPACE=$(@D) \
+ 	PACKAGES_PATH=$(EDK2_PACKAGES_PATH) \
+
+--===============6365015452310533397==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6365015452310533397==--
