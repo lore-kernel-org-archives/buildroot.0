@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA94C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBC75C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:32:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3DEF47488;
-	Mon, 20 Feb 2023 21:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3DEF47488
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77E2642D41;
+	Mon, 20 Feb 2023 21:32:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E2642D41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oWZz9oiSizPD; Mon, 20 Feb 2023 21:31:51 +0000 (UTC)
+	with ESMTP id dh6827vzjY97; Mon, 20 Feb 2023 21:32:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DD7642D47;
-	Mon, 20 Feb 2023 21:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DD7642D47
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 120D21BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F80B483A9;
+	Mon, 20 Feb 2023 21:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F80B483A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 17A021BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E447D61067
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E447D61067
+ by smtp2.osuosl.org (Postfix) with ESMTP id 150A3415A8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150A3415A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eDt9Rd4p13S1 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3jOYNAjrmdi for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19198610DC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19198610DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56212415AA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56212415AA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 069FE828C8; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+ id 51ECB86494; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 23:30:45 +0100
+Date: Sun, 4 Dec 2022 12:56:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ecc33ec02a9c137387b9eb820e8e3b55b732d9b5
-X-Git-Newrev: e3959a039059d6b3bc95100409975e87e9c14d3b
+X-Git-Oldrev: 92d96e8513c75a8ab496c90841920e896085915f
+X-Git-Newrev: 3341ceb1e58536cf43a4c000e4bb3cdbff3f6de5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205153.069FE828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/heimdal: security bump
- to version 7.7.1
+Message-Id: <20230220205155.51ECB86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdb: zlib is mandatory,
+ not optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,93 +57,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3959a039059d6b3bc95100409975e87e9c14d3b
+commit: https://git.buildroot.net/buildroot/commit/?id=3341ceb1e58536cf43a4c000e4bb3cdbff3f6de5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This release fixes the following Security Vulnerabilities:
+zlib is a mandatory dependency of gdb and by default, gdb will use its
+internal one. Moreover, --with-zlib has been replaced by
+--with-system-zlib since version 7.10 and
+https://github.com/bminor/binutils-gdb/commit/fa1f5da0b6ff3622f9bf60e348e149b76920abba
 
-- CVE-2022-42898 PAC parse integer overflows
-- CVE-2022-3437 Overflows and non-constant time leaks in DES{,3} and
-  arcfour
-- CVE-2022-41916 Fix Unicode normalization read of 1 bytes past end of
-  array
-- CVE-2021-44758 NULL dereference DoS in SPNEGO acceptors
-- CVE-2021-3671 A null pointer de-reference when handling missing sname
-  in TGS-REQ
-- CVE-2022-44640 Heimdal KDC: invalid free in ASN.1 codec
-
-  Note that CVE-2022-44640 is a severe vulnerability, possibly a 10.0
-  on the Common Vulnerability Scoring System (CVSS) v3, as we believe
-  it should be possible to get an RCE on a KDC, which means that
-  credentials can be compromised that can be used to impersonate
-  anyone in a realm or forest of realms.
-
-  Heimdal's ASN.1 compiler generates code that allows specially
-  crafted DER encodings of CHOICEs to invoke the wrong free function
-  on the decoded structure upon decode error. This is known to impact
-  the Heimdal KDC, leading to an invalid free() of an address partly
-  or wholly under the control of the attacker, in turn leading to a
-  potential remote code execution (RCE) vulnerability.
-
-  This error affects the DER codec for all extensible CHOICE types
-  used in Heimdal, though not all cases will be exploitable. We have
-  not completed a thorough analysis of all the Heimdal components
-  affected, thus the Kerberos client, the X.509 library, and other
-  parts, may be affected as well.
-
-  This bug has been in Heimdal's ASN.1 compiler since 2005, but it may
-  only affect Heimdal 1.6 and up. It was first reported by Douglas
-  Bagnall, though it had been found independently by the Heimdal
-  maintainers via fuzzing a few weeks earlier.
-
-  While no zero-day exploit is known, such an exploit will likely be
-  available soon after public disclosure.
-
-- CVE-2019-14870: Validate client attributes in protocol-transition
-
-- CVE-2019-14870: Apply forwardable policy in protocol-transition
-- CVE-2019-14870: Always lookup impersonate client in DB
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=15131
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/heimdal/heimdal.hash | 4 ++--
- package/heimdal/heimdal.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gdb/Config.in |  1 +
+ package/gdb/gdb.mk    | 12 ++++--------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
-index 005447a43b..cf822340da 100644
---- a/package/heimdal/heimdal.hash
-+++ b/package/heimdal/heimdal.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/heimdal/heimdal/releases
--sha1  5dd16703be7255f66a4d65440f0c622aeeca60d9  heimdal-7.7.0.tar.gz
--sha256  f02d3314d634cc55eb9cf04a1eae0d96b293e45a1f837de9d894e800161b7d1b  heimdal-7.7.0.tar.gz
-+sha1  a33fdc957f84ab13f39f164b04fe1deeaab3179e  heimdal-7.7.1.tar.gz
-+sha256  117cb1ede7848db24cf27311c46f7f735a99f9c836c22e80aec92b91efe56644  heimdal-7.7.1.tar.gz
- # Locally computed
- sha256  0c4b07bf5b98f7a1d01f8e60722d6c6747ef052c2aa6d2043daf690d4e1b0a7f  LICENSE
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index a8d87531ec..21b6c0ccb3 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 273b3072ae..80b1185b5e 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_ZLIB
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 45ce126bab..4b9c5c6b70 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -32,7 +32,8 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
+ # also need ncurses.
+ # As for libiberty, gdb may use a system-installed one if present, so
+ # we must ensure ours is installed first.
+-HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
++GDB_DEPENDENCIES = zlib
++HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
  
--HEIMDAL_VERSION = 7.7.0
-+HEIMDAL_VERSION = 7.7.1
- HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
- HEIMDAL_INSTALL_STAGING = YES
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+@@ -130,6 +131,7 @@ GDB_CONF_OPTS = \
+ 	--disable-sim \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--disable-werror \
+ 	--enable-static \
+ 	--without-mpfr
+@@ -212,13 +214,6 @@ else
+ GDB_CONF_OPTS += --without-lzma
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GDB_CONF_OPTS += --with-zlib
+-GDB_DEPENDENCIES += zlib
+-else
+-GDB_CONF_OPTS += --without-zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+@@ -256,6 +251,7 @@ HOST_GDB_CONF_OPTS = \
+ 	--enable-threads \
+ 	--disable-werror \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--with-curses \
+ 	--without-mpfr \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
