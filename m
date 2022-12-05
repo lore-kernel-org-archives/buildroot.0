@@ -1,50 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F07C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 07:23:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 627BEC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 07:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EE43606E6;
-	Mon,  5 Dec 2022 07:23:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EE43606E6
+	by smtp2.osuosl.org (Postfix) with ESMTP id B53D7403E2;
+	Mon,  5 Dec 2022 07:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B53D7403E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xWwdjZ9hV4h1; Mon,  5 Dec 2022 07:23:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LQcHog4L5zbt; Mon,  5 Dec 2022 07:55:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D49A60888;
-	Mon,  5 Dec 2022 07:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D49A60888
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3F7A4047C;
+	Mon,  5 Dec 2022 07:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3F7A4047C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA2E21BF336
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 07:23:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0CBA31BF336
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 07:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCA6E80FA8
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 07:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCA6E80FA8
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC065818D0
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 07:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC065818D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C1ZpqRqamuF6 for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 07:23:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD28380DA5
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 07:23:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD28380DA5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9AF6856F4; Mon,  5 Dec 2022 07:23:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id flLihGuDGyZt for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 07:55:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AD13818B5
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
+ [IPv6:2607:f8b0:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AD13818B5
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 07:55:17 +0000 (UTC)
+Received: by mail-pg1-x530.google.com with SMTP id 136so9810427pga.1
+ for <buildroot@buildroot.org>; Sun, 04 Dec 2022 23:55:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=hFjkRPNwiRFzSykIRBHGvjvvV/U5nIKn/V5+hCweQGQ=;
+ b=HKA1RpowS4VONcghl6ocxYrsPizrh0a/BvC9knS5fkYuD/uSDB4cHHw3k9LJuHMqh+
+ aEN2IlZQky/7pEnv/XXr9nzKNEWjcGAyW3yW3PMOqLjpw7br1CcFeRLAbmBFUbVKaNXS
+ MaZNFrL6hXmLmWErngYqmAHNA3Tg8P2xZLi5uBYO5CJ6UkU7ohluhqGfSxYS9mvXRfir
+ WeWpdnYi9M4bi9VNKV6CP6xfZgYcm6aiFyNZlxr4K6BSqsXBPv8zBSue0Lcdwpf33FwK
+ DxRALt/vDX7hpNj8yfG876r7+ZawG6M9GCueQa681WY6vFJI75Usa4UfJo9RdoC+roEi
+ 6Pyw==
+X-Gm-Message-State: ANoB5plOdwdpnOYx9OzYLWrEIWtLadusV0XkU3NbN7vTOCIlVVbvIj4b
+ n73S03KJW4pm/3IIYV08NPeblxh8uT4=
+X-Google-Smtp-Source: AA0mqf5zthv3QNdl4vGls5I2j9oNkyU6vs8DYo2FM7PAjJGWp7veNJtH6jqu05TtO9utZQshQkZrZg==
+X-Received: by 2002:aa7:9552:0:b0:576:755a:777b with SMTP id
+ w18-20020aa79552000000b00576755a777bmr12872194pfq.58.1670226916732; 
+ Sun, 04 Dec 2022 23:55:16 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-83.three.co.id.
+ [180.214.233.83]) by smtp.gmail.com with ESMTPSA id
+ e14-20020a170902784e00b0017f9db0236asm9895486pln.82.2022.12.04.23.55.15
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 04 Dec 2022 23:55:16 -0800 (PST)
+Message-ID: <7d7a72ef-07fb-1732-fa90-d629ce90dfdf@gmail.com>
+Date: Mon, 5 Dec 2022 14:54:33 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
 To: buildroot@buildroot.org
-Date: Mon, 5 Dec 2022 08:23:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 74b1d385b67dc5933eca3ebeb456d400bd5296d9
-X-Git-Newrev: 40bd4a32aadaa1d041a8525628ecaaf7f5a7fde6
-X-Patchwork-Hint: ignore
-Message-Id: <20221205072340.A9AF6856F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.11
+References: <e7c091e6-afdf-4f1b-0d38-dfabc267bde0@loongson.cn>
+ <914d20f0-6668-50ae-fc9c-22103ff65e57@gmail.com>
+ <499fc771.104a2.184e100fe86.Coremail.duanzhiwei@loongson.cn>
+Content-Language: en-US
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <499fc771.104a2.184e100fe86.Coremail.duanzhiwei@loongson.cn>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=hFjkRPNwiRFzSykIRBHGvjvvV/U5nIKn/V5+hCweQGQ=;
+ b=KUwed2IMQeKUSxYlZi10oTek9GseLEAs+eE5GYSVPck+NhWMrkgsHiq3RBSxUs2GKg
+ ok2f+4w0Ral6BlnvfaOkdtPRx30WViC2uZPmhpaamRfEix5ZHvlt3XqqOwdzXggSKoTe
+ p9aLgn3C5LDjlXFZhUmO7E6lj/BbAyEJTkyCeDjzPSAs/vFT7MW0IrBs1yfmUZqi9gQZ
+ 5bAtfbdxLTN/0PNjdSBMWj8YiH85kMPngIJyBPWXowyZuR883SdczsNCjjqfX8VYS300
+ sARnA0JabGxyNXcXQGXWbhuCu9Gp8WePXTuDH2fuz42CywRe4jZer/CsLdNXG8B4RAiV
+ 0uWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=KUwed2IM
+Subject: Re: [Buildroot] [PATCH] buildroot: Add support for LoongArch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,172 +101,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40bd4a32aadaa1d041a8525628ecaaf7f5a7fde6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 20 ++++++++++++++++++++
- Makefile                   |  2 +-
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 18 ++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 51 insertions(+), 13 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 79b010a9b8..f71e53fe4b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,23 @@
-+2022.11, released December 5th, 2022
-+
-+	Fixes all over the tree.
-+
-+	Defconfigs: Nitrogen8*: Bump rootfs size, Zynqmp
-+	kv260/zcu102/zcu106: Update to Xilinx 2022.2,
-+
-+	Updated/fixed packages: dash, dovecot, elf2flt, exim, gcc,
-+	gdb, git, kodi, libarchive, libmdbx, linuxptp, lxc,
-+	matchbox-keyboard, memcached, netsnmp, optee-client,
-+	python-scipy, python3, qt6base, qt6serialport, rtl8188eu,
-+	rtl8723bu, rtl8723ds, rtl8821au, vim, vlc, wilc-driver
-+
-+	Removed packages: rabbitmq-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15131: Target GDB uses internal zlib
-+	#15151: Busybox /etc/init.d scripts are not executable
-+
- 2022.11-rc3, released November 24th, 2022
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 827ab230ef..89f3648bb7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.11-rc3
-+export BR2_VERSION := 2022.11
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1669308000
- 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index a92f630611..6f7007529c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,40 +42,40 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2022.08.2</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2022.11</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2022.08.2.tar.gz">buildroot-2022.08.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.08.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.11.tar.gz">buildroot-2022.11.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.11.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.08.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.08.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.08.2.tar.xz">buildroot-2022.08.2.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.08.2.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.11.tar.xz">buildroot-2022.11.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.11.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -114,7 +114,7 @@
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-   </div>
--
-+-->
-   <div class="panel panel-primary">
-     <div class="panel-heading">Source code</div>
-     <div class="panel-body">
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 1d76cc3cf5..9be00982cb 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 December 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2022.11 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.11.tar.xz">2022.11 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 40c7c4e1ce..02fe6bca67 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.08.2'
-+RELEASE='2022.11'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMTIvNS8yMiAxMzozNywg5q615b+X5LyfIHdyb3RlOgo+IEFkZCBiYXNpYyBzdXBwb3J0IGZv
+ciBMb29uZ0FyY2ggYXJjaGl0ZWN0dXJlLgo+IEJvdGggZXh0ZXJuYWwgdG9vbCBjaGFpbnMgYW5k
+IGludGVybmFsIHRvb2wgY2hhaW5zIGNhbiBjb21waWxlIHJvb3Rmcy4KPiAKClBsZWFzZSBzZW5k
+IHYyIHdpdGggbXkgc3VnZ2VzdGlvbnMgYWRkcmVzc2VkIGluc3RlYWQuCgotLSAKQW4gb2xkIG1h
+biBkb2xsLi4uIGp1c3Qgd2hhdCBJIGFsd2F5cyB3YW50ZWQhIC0gQ2xhcmEKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
