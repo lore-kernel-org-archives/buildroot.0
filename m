@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 782C2C64ED9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A8CAC6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A8D041D5A;
-	Mon, 20 Feb 2023 20:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A8D041D5A
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9C9041D6A;
+	Mon, 20 Feb 2023 20:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C9041D6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iumg2ttPRNHh; Mon, 20 Feb 2023 20:58:06 +0000 (UTC)
+	with ESMTP id 3DZSpNw4NDgg; Mon, 20 Feb 2023 20:58:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECEEE41D5E;
-	Mon, 20 Feb 2023 20:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECEEE41D5E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0DE831BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B28F441D36;
+	Mon, 20 Feb 2023 20:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B28F441D36
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FBA01BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F24F56108E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F24F56108E
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB6E5822EA
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB6E5822EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gjqjrs-Js3Fh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HN2zwBxe9YWE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 749056101C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 749056101C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FB7D822DD
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FB7D822DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72F3F828C8; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 1E345828C8; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 16:03:30 +0100
+Date: Mon, 5 Dec 2022 10:01:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a848418db4f956486a17dedc08f09803b26c84a1
-X-Git-Newrev: adc1c5d8f14f69a62a2a4260465363ab120816ab
+X-Git-Oldrev: e40f96af34e3706fff2ebd6e9a6cebd14091d4ca
+X-Git-Newrev: 6ca0edcb5f20c00336e7fb52ffa74cca2c2d5ef6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.72F3F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libopenssl: don't
- build the afalg engine
+Message-Id: <20230220205156.1E345828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Merge branch 'next'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +57,17 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0483269088579558916=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0483269088579558916==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=adc1c5d8f14f69a62a2a4260465363ab120816ab
+commit: https://git.buildroot.net/buildroot/commit/?id=6ca0edcb5f20c00336e7fb52ffa74cca2c2d5ef6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The openssl configure script disables the afalg engine when it detects
-cross-compilation, but the detection missfires because it is based on
-the CROSS_COMPILE environment variable, which we do not set (as we pass
-fully qualified CC et al.).
-
-So, the afalg engine is built, but it is built for the host, not the
-target, so it does not make sense to build and install it. Besides, it
-leaks build host info.
-
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
-[yann.morin.1998@free.fr: extend commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libopenssl/libopenssl.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c7a2d65cc4..50d41a6533 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -83,6 +83,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			no-tests \
- 			no-fuzz-libfuzzer \
- 			no-fuzz-afl \
-+			no-afalgeng \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5),,no-rc5) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
-
---===============0483269088579558916==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0483269088579558916==--
