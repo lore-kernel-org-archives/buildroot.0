@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74A0C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 12:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F86CC4321E
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 13:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4152D415FB;
-	Mon,  5 Dec 2022 12:54:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4152D415FB
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE0B760C0A;
+	Mon,  5 Dec 2022 13:20:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE0B760C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fiR-XbV_xWXH; Mon,  5 Dec 2022 12:54:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 11z1-K_6gKTE; Mon,  5 Dec 2022 13:20:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD86415FE;
-	Mon,  5 Dec 2022 12:54:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD86415FE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 785361BF4E2
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 12:54:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BDB460BCC;
+	Mon,  5 Dec 2022 13:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BDB460BCC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C0ACA1BF3E5
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 13:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EABB818C0
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 12:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EABB818C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C09C4047D
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 13:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C09C4047D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dR7nkEjeoYoO for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 12:54:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E145381D2D
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E145381D2D
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 12:54:33 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0FF451814B9; Mon,  5 Dec 2022 13:54:30 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QW2k9T6PGYcE for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 13:20:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04AF440125
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 13:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04AF440125
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E565385C5A; Mon,  5 Dec 2022 13:20:00 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  5 Dec 2022 13:54:22 +0100
-Message-Id: <20221205125423.13983-1-buildroot@heine.tech>
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1670244871; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=d8aOo/vQ1jw2kD0TyCyVctcAOgEji5Cf+tireDxitz0=;
- b=O5s71O3Cj//tRfGNy+Pjg9dxqJaE0i4wqFevgzqT8Z4JzgXVTyMtzvkOFYjp7g2RYWwl3K
- Iw7WU+JSo7IAq83X6lni6gSJ1rvftQt3CGTKBgGP85OMa7odPxqc6SIuID6EsEsj9C4SI6
- IH8qmY/kZhPWZDhYWoQYakT7EKpGJv4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=O5s71O3C
-Subject: [Buildroot] [PATCH] [RFC] package/boost: Boost.Atomic needs atomic
- intrinsics
+Date: Mon, 5 Dec 2022 14:18:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ac96a65a29c73456b7cc8fd707b405e6ca67ac20
+X-Git-Newrev: 2313f68e4c56faf9d5366bc3c61d03cf814f5a43
+X-Patchwork-Hint: ignore
+Message-Id: <20221205132000.E565385C5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdl2_ttf: fix legal-info after
+ bump to 2.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +57,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Michael <buildroot@heine.tech>
+commit: https://git.buildroot.net/buildroot/commit/?id=2313f68e4c56faf9d5366bc3c61d03cf814f5a43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-similar to previous problems with nios2 and not-available atomic ints
-the build for Boost.Atomics also fails for ARC Targets which don't
-have the ATOMICS_EXT flag set.
+Commit 93d8b71371962 (package/sdl2_ttf: bump version to 2.20.1) dropped the
+hash for COPYING.txt and added a hash for LICENSE.txt but forgot to adjust
+SDL2_TTF_LICENSE_FILES, breaking legal-info:
 
-according to [0] "Boost.Atomic has a hard requirement of the native
-atomic operations on bytes". The same tests mentioned there fail for
-ARC.
+>>> sdl2_ttf 2.20.1 Collecting legal info
+ERROR: No hash found for COPYING.txt
+cp: cannot stat '/path/to/output/build/sdl2_ttf-2.20.1/COPYING.txt': No such file or directory
+make[1]: *** [package/sdl2_ttf/sdl2_ttf.mk:38: sdl2_ttf-legal-info] Error 1
 
-so introduce a dependency on BR2_ARC_ATOMIC_EXT for BR2_arc.
-
-Fixes:
-  http://autobuild.buildroot.net/results/4ca54a85672d7b9328b1909b457e548c6032a493
-
-[0] https://github.com/boostorg/atomic/issues/42#issuecomment-734130348
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ package/sdl2_ttf/sdl2_ttf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not 100% sure if BR2_ARC_ATOMIC_EXT is the correct
-flag to use. I'm open to suggestions for better ways and what to
-propagate to dependent packages.
----
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index b99b01f22e..e012f5050f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -19,6 +19,7 @@ if BR2_PACKAGE_BOOST
- config BR2_PACKAGE_BOOST_ATOMIC
- 	bool "boost-atomic"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
- 	help
- 	  C++11-style atomic<>.
- 
--- 
-2.37.1 (Apple Git-137.1)
-
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 4b44b0fc41..f859d097ff 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -8,7 +8,7 @@ SDL2_TTF_VERSION = 2.20.1
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
+-SDL2_TTF_LICENSE_FILES = COPYING.txt
++SDL2_TTF_LICENSE_FILES = LICENSE.txt
+ SDL2_TTF_INSTALL_STAGING = YES
+ SDL2_TTF_DEPENDENCIES = sdl2 freetype host-pkgconf
+ SDL2_TTF_CONF_OPTS = --disable-freetype-builtin --disable-harfbuzz-builtin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
