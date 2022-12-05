@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64557C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F2DC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01A9B48D88;
-	Mon, 20 Feb 2023 21:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01A9B48D88
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD98E42D72;
+	Mon, 20 Feb 2023 21:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD98E42D72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WkPFOoLzvkpD; Mon, 20 Feb 2023 21:46:39 +0000 (UTC)
+	with ESMTP id szwh6BgEe-15; Mon, 20 Feb 2023 21:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B646D4EBD9;
-	Mon, 20 Feb 2023 21:46:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B646D4EBD9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E36F4EBE4;
+	Mon, 20 Feb 2023 21:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E36F4EBE4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C16781BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B4341BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A70F661108
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4F6361102
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A70F661108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F6361102
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WQjFjf1IsUFw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+ with ESMTP id yMFXtnJLDDCJ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3DCE610E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDC4961100
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3DCE610E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC4961100
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDF52828C8; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ id BEC7B828C8; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 5 Dec 2022 09:20:54 +0100
+Date: Mon, 5 Dec 2022 08:23:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6aca1d4d70bfe0b8a627d9e08692b36dd19a92d2
-X-Git-Newrev: e40f96af34e3706fff2ebd6e9a6cebd14091d4ca
+X-Git-Oldrev: 74b1d385b67dc5933eca3ebeb456d400bd5296d9
+X-Git-Newrev: 40bd4a32aadaa1d041a8525628ecaaf7f5a7fde6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.EDF52828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: remove Sven
- Haardiek
+Message-Id: <20230220205155.BEC7B828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2022.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,42 +56,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e40f96af34e3706fff2ebd6e9a6cebd14091d4ca
+commit: https://git.buildroot.net/buildroot/commit/?id=40bd4a32aadaa1d041a8525628ecaaf7f5a7fde6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-His e-mail address no longer exists:
-
-Your message to sven.haardiek@iotec-gmbh.de couldn't be delivered.
-sven.haardiek wasn't found at iotec-gmbh.de.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+ CHANGES                    | 20 ++++++++++++++++++++
+ Makefile                   |  2 +-
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 18 ++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 51 insertions(+), 13 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9da61cca13..7b5eda1615 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2728,10 +2728,6 @@ F:	configs/rock_pi_n8_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-toolchain/
+diff --git a/CHANGES b/CHANGES
+index 79b010a9b8..f71e53fe4b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,23 @@
++2022.11, released December 5th, 2022
++
++	Fixes all over the tree.
++
++	Defconfigs: Nitrogen8*: Bump rootfs size, Zynqmp
++	kv260/zcu102/zcu106: Update to Xilinx 2022.2,
++
++	Updated/fixed packages: dash, dovecot, elf2flt, exim, gcc,
++	gdb, git, kodi, libarchive, libmdbx, linuxptp, lxc,
++	matchbox-keyboard, memcached, netsnmp, optee-client,
++	python-scipy, python3, qt6base, qt6serialport, rtl8188eu,
++	rtl8723bu, rtl8723ds, rtl8821au, vim, vlc, wilc-driver
++
++	Removed packages: rabbitmq-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15131: Target GDB uses internal zlib
++	#15151: Busybox /etc/init.d scripts are not executable
++
+ 2022.11-rc3, released November 24th, 2022
  
--N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
--F:	package/lcdproc/
--F:	package/python-influxdb/
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 827ab230ef..89f3648bb7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.11-rc3
++export BR2_VERSION := 2022.11
+ # Actual time the release is cut (for reproducible builds)
+ BR2_VERSION_EPOCH = 1669308000
+ 
+diff --git a/docs/website/download.html b/docs/website/download.html
+index a92f630611..6f7007529c 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,40 +42,40 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2022.08.2</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2022.11</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2022.08.2.tar.gz">buildroot-2022.08.2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.08.2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11.tar.gz">buildroot-2022.11.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.08.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.08.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.08.2.tar.xz">buildroot-2022.08.2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.08.2.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11.tar.xz">buildroot-2022.11.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
 -
- N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
++<!--
+       <h3 style="text-align: center;">Latest release candidate: <b>2022.11-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+@@ -114,7 +114,7 @@
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+   </div>
+-
++-->
+   <div class="panel panel-primary">
+     <div class="panel-heading">Source code</div>
+     <div class="panel-body">
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 1d76cc3cf5..9be00982cb 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,24 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.11 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 December 2022</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2022.11 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.11.tar.xz">2022.11 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 40c7c4e1ce..02fe6bca67 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2022.08.2'
++RELEASE='2022.11'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
