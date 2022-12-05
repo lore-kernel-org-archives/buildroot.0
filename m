@@ -4,67 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 866C1C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 20:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF65C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 20:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E97EB41701;
-	Mon,  5 Dec 2022 20:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E97EB41701
+	by smtp4.osuosl.org (Postfix) with ESMTP id D988E4023F;
+	Mon,  5 Dec 2022 20:14:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D988E4023F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pG4fFIBQzVdt; Mon,  5 Dec 2022 20:13:59 +0000 (UTC)
+	with ESMTP id J2VlLB1E0dcp; Mon,  5 Dec 2022 20:14:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5899941704;
-	Mon,  5 Dec 2022 20:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5899941704
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 36DD61BF2B3
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 20:13:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEB2F401F4;
+	Mon,  5 Dec 2022 20:14:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEB2F401F4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 105021BF2B3
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 20:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CC7841704
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 20:13:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CC7841704
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFEDE8139B
+ for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 20:14:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEDE8139B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iCD7tvEl7a5m for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 20:13:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A7DB41701
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com
- [209.85.218.47])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A7DB41701
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 20:13:53 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id n21so1175719ejb.9
- for <buildroot@buildroot.org>; Mon, 05 Dec 2022 12:13:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3+MFAbZf96xFZN/1iEI8y/jXZrUabyG9JVtLiyOJEwQ=;
- b=fVxX68lBoqhrdG6/eHr3LZR20+S0AhPkg01deAuBIafnhQzf4rHeViKJnkzicNL9Tr
- cgwVSYltWq4sjCt24gT/Idu809QslSTgg5YmulvwUpoC0Utx/H+bTQYEVJ5AQnRn5k5R
- VYQvfyi+s6fuc+srxIxf927m1vGvqo3EU4WDumb1DIogKm2htIqMDIr+ZviWRsVUQgJy
- 5UTatBcQJzzxPoAju65X6hEOoUYrQwNsmTKTVRQdEeThD9BHnew7yepCmgNaIA2ncC7m
- JZhx0cAu1luzfahuRIzZjVm7DBbWmUk7HKMx+GN++f02lygM2JxCbEnG7JLNsh6XbcN/
- ZhSQ==
-X-Gm-Message-State: ANoB5pnc2VqrTSRDeLY7qi7QDFfn/Qb625JkCRleBncdsm0LRL+Uw8wV
- 1Ep/3XwufNjxXkkDe+APF9QPN63+DdT1oCk0M6RiHw==
-X-Google-Smtp-Source: AA0mqf7r0pr5AGcd7u9FBppZmLIdptkNBf8T/Wc3vQgJBxt9NWMpf5YITV3gcJDrQIOhMTCNJE6TzTBQnr8Q1Ge5Dtg=
-X-Received: by 2002:a17:906:5156:b0:7c0:efb6:8744 with SMTP id
- jr22-20020a170906515600b007c0efb68744mr6087133ejc.267.1670271232127; Mon, 05
- Dec 2022 12:13:52 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZG6KlI0Vw_0a for <buildroot@lists.busybox.net>;
+ Mon,  5 Dec 2022 20:14:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C80B481397
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C80B481397
+ for <buildroot@buildroot.org>; Mon,  5 Dec 2022 20:14:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPA id 5B4851814B9; Mon,  5 Dec 2022 21:14:46 +0100 (CET)
+In-Reply-To: <20221205181907.2cbb01e7@windsurf>
+Date: Mon, 05 Dec 2022 21:14:46 +0100
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-References: <20221117001511.1753592-1-gadiyar@ti.com>
- <20221117001511.1753592-2-gadiyar@ti.com>
-In-Reply-To: <20221117001511.1753592-2-gadiyar@ti.com>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 5 Dec 2022 21:13:39 +0100
-Message-ID: <CAB0FRst82ZiNue8PJC_Exma44kenMmQ-WhYmn9cqNNZEbRsYUg@mail.gmail.com>
-To: Anand Gadiyar <gadiyar@ti.com>
-Subject: Re: [Buildroot] [PATCH v6 1/3] boot/ti-k3-r5-loader: add new package
+Message-ID: <150f01-638e5100-5-37d57a00@103574002>
+User-Agent: SOGoMail 5.7.1
+X-Last-TLS-Session-Version: None
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1670271286; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to;
+ bh=sYpGE5wQktF0I0xWfW3BgqmYRCEXDSDtOJ6xRistnq4=;
+ b=Q9LIYGrIMlXxomE0e93PEd3Kd+F4cVVKDjxxmSE3N+DeaftI3X57godsdZBwwos6PR0wVq
+ ZOwjs4QBWPboVA+cCdEiH0tE4M0MjG4J6YsrOz7J3/J33LVYmWz1RIWvanzcbMJnizJ90Q
+ C9+K3iEMoeIheXW1JlCxuIyXiJwBdyc=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=Q9LIYGrI
+Subject: Re: [Buildroot] 
+ =?utf-8?q?=5BPATCH=5D_=5BRFC=5D_package/boost=3A_Boo?=
+ =?utf-8?q?st=2EAtomic_needs_atomic_intrinsics?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,458 +69,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>,
- Xuanhao Shi <X15000177@gmail.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
-Content-Type: multipart/mixed; boundary="===============1077656422708510007=="
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1077656422708510007==
-Content-Type: multipart/alternative; boundary="00000000000078493a05ef1a5318"
+Hi Thomas,
 
---00000000000078493a05ef1a5318
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Monday, December 05, 2022 18:19 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Le jeu. 17 nov. 2022 =C3=A0 01:16, Anand Gadiyar via buildroot <
-buildroot@buildroot.org> a =C3=A9crit :
+> On Mon,  5 Dec 2022 13:54:22 +0100
+> Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > From: Michael <buildroot@heine.tech>
+> > 
+> > similar to previous problems with nios2 and not-available atomic ints
+> > the build for Boost.Atomics also fails for ARC Targets which don't
+> > have the ATOMICS_EXT flag set.
+> > 
+> > according to [0] "Boost.Atomic has a hard requirement of the native
+> > atomic operations on bytes". The same tests mentioned there fail for
+> > ARC.
+> > 
+> > so introduce a dependency on BR2_ARC_ATOMIC_EXT for BR2_arc.
+> > 
+> > Fixes:
+> >   http://autobuild.buildroot.net/results/4ca54a85672d7b9328b1909b457e548c6032a493
+> > 
+> > [0] https://github.com/boostorg/atomic/issues/42#issuecomment-734130348
+> > 
+> > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> 
+> I wish it would be this simple, but this new "depends on" needs to be
+> propagated to all places where BR2_PACKAGE_BOOST_ATOMIC is selected.
+> 
+> Aka:
+> 
+> package/boost/Config.in:        select BR2_PACKAGE_BOOST_ATOMIC
+> package/boost/Config.in:        select BR2_PACKAGE_BOOST_ATOMIC
+> package/domoticz/Config.in:     select BR2_PACKAGE_BOOST_ATOMIC
+> package/gnuradio/Config.in:     select BR2_PACKAGE_BOOST_ATOMIC
+> package/libcpprestsdk/Config.in:        select BR2_PACKAGE_BOOST_ATOMIC
+> package/log4cxx/Config.in:      select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> package/uhd/Config.in:  select BR2_PACKAGE_BOOST_ATOMIC
+> 
+> And of course, if there's anything that selects those options, the new
+> depends on should be propagated to them again.
 
-> From: Xuanhao Shi <x-shi@ti.com>
->
-> This is a separate U-Boot package that would build
-> the intermediate spl binary for the R5 core on TI's k3 boards.
-> Usually, the resulting spl will be used for k3-image-gen
-> to build the full R5 boot binary tiboot3.bin.
->
-> Signed-off-by: Xuanhao Shi <x-shi@ti.com>
-> Signed-off-by: Anand Gadiyar <gadiyar@ti.com>
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Acked-by: Andrew Davis <afd@ti.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Bryan Brattlof <bb@ti.com>
-> ---
->  DEVELOPERS                                |  6 +++
->  boot/Config.in                            |  1 +
->  boot/ti-k3-r5-loader/Config.in            | 32 +++++++++++++++
->  boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |  2 +
->  boot/ti-k3-r5-loader/ti-k3-r5-loader.mk   | 49 +++++++++++++++++++++++
->  5 files changed, 90 insertions(+)
->  create mode 100644 boot/ti-k3-r5-loader/Config.in
->  create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
->  create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index bc026da4aa..cf1cb8808b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -128,6 +128,9 @@ F:  package/dcron/
->  F:     package/libxmlrpc/
->  F:     package/python-docopt/
->
-> +N:     Anand Gadiyar <gadiyar@ti.com>
-> +F:     boot/ti-k3-r5-loader/
-> +
->  N:     Andr=C3=A9 Zwing <nerv@dawncrow.de>
->  F:     package/libkrb5/
->  F:     package/openal/
-> @@ -3045,6 +3048,9 @@ F:        package/python-pyusb/
->  N:     Wojciech Nizi=C5=84ski <niziak@spox.org>
->  F:     package/fwup/
->
-> +N:     Xuanhao Shi <X15000177@gmail.com>
-> +F:     boot/ti-k3-r5-loader/
-> +
->  N:     Yair Ben Avraham <yairba@protonmail.com>
->  F:     package/casync/
->  F:     package/gloox/
-> diff --git a/boot/Config.in b/boot/Config.in
-> index 40472ae07d..ce17b2df6b 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -22,6 +22,7 @@ source "boot/s500-bootloader/Config.in"
->  source "boot/shim/Config.in"
->  source "boot/sun20i-d1-spl/Config.in"
->  source "boot/syslinux/Config.in"
-> +source "boot/ti-k3-r5-loader/Config.in"
->  source "boot/uboot/Config.in"
->  source "boot/vexpress-firmware/Config.in"
->
-> diff --git a/boot/ti-k3-r5-loader/Config.in
-> b/boot/ti-k3-r5-loader/Config.in
-> new file mode 100644
-> index 0000000000..bb6140f8a6
-> --- /dev/null
-> +++ b/boot/ti-k3-r5-loader/Config.in
-> @@ -0,0 +1,32 @@
-> +config BR2_TARGET_TI_K3_R5_LOADER
-> +       bool "ti-k3-r5-loader"
-> +       help
-> +         Separate U-Boot build for R5 cores on TI's k3 boards.
-> +         Usually used to build tiboot3.bin with k3-image-gen.
-> +
-> +if BR2_TARGET_TI_K3_R5_LOADER
-> +choice
-> +       prompt "K3 R5 Loader configuration"
-> +       default BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
-> +
-> +config BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
-> +       bool "Using an in-tree board defconfig file"
-> +
-> +config BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG
-> +       bool "Using a custom board (def)config file"
-> +
-> +endchoice
-> +
-> +config BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG
-> +       string "Board defconfig"
-> +       depends on BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
-> +       help
-> +         Name of the board for which TI K3 R5 Loader should be
-> +         built, without the _defconfig suffix.
-> +
-> +config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
-> +       string "Configuration file path"
-> +       depends on BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG
-> +       help
-> +         Path to the TI K3 R5 Loader configuration file.
-> +endif
-> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> new file mode 100644
-> index 0000000000..fb6ce7c2a6
-> --- /dev/null
-> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256  6d69d5e4635cb3fa7852bf15f88ca342ef7740196e71961d3572deb58ba44bea
-> u-boot-2022.10-rc1.tar.bz2
-> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> new file mode 100644
-> index 0000000000..535c9b999b
-> --- /dev/null
-> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> @@ -0,0 +1,49 @@
->
-> +########################################################################=
-########
-> +#
-> +# ti-k3-r5-loader.mk
-> +#
->
-> +########################################################################=
-########
-> +
-> +TI_K3_R5_LOADER_VERSION =3D 2022.10
-> +TI_K3_R5_LOADER_SITE =3D https://ftp.denx.de/pub/u-boot
-> +TI_K3_R5_LOADER_SOURCE =3D u-boot-$(TI_K3_R5_LOADER_VERSION).tar.bz2
-> +TI_K3_R5_LOADER_LICENSE =3D GPL-2.0+
-> +TI_K3_R5_LOADER_LICENSE_FILES =3D Licenses/gpl-2.0.txt
-> +TI_K3_R5_LOADER_CPE_ID_VENDOR =3D denx
-> +TI_K3_R5_LOADER_CPE_ID_PRODUCT =3D u-boot
-> +TI_K3_R5_LOADER_INSTALL_IMAGES =3D YES
-> +TI_K3_R5_LOADER_DEPENDENCIES =3D \
-> +       host-pkgconf \
-> +       $(BR2_MAKE_HOST_DEPENDENCY) \
-> +       host-arm-gnu-toolchain \
-> +       host-openssl
-> +
-> +TI_K3_R5_LOADER_MAKE =3D $(BR2_MAKE)
-> +TI_K3_R5_LOADER_MAKE_ENV =3D $(TARGET_MAKE_ENV)
-> +TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES =3D \
-> +       host-arm-gnu-toolchain \
-> +       $(BR2_MAKE_HOST_DEPENDENCY) \
-> +       $(BR2_BISON_HOST_DEPENDENCY) \
-> +       $(BR2_FLEX_HOST_DEPENDENCY)
-> +
-> +TI_K3_R5_LOADER_BOARD =3D $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOA=
-RD))
-> +ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG),y)
-> +TI_K3_R5_LOADER_KCONFIG_DEFCONFIG =3D $(call
-> qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG))_defconfig
-> +else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG),y)
-> +TI_K3_R5_LOADER_KCONFIG_FILE =3D $(call
-> qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE))
-> +endif # BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG
-> +TI_K3_R5_LOADER_MAKE_OPTS +=3D \
->
-here `=3D` is enough, `+=3D` not needed
+I'm aware of these dependencies. That's why I submitted this RFC Patch because I wanted to be sure to
+use the right dependency before going through all those packages. (I guess you missed my "below the commit
+message" part).
 
-Fran=C3=A7ois
+Does it make sense to add 
+  depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
+to all those packages or is there something "smarter"?
 
+Would it make sense to group it with the dependency on 
+BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS  and add something like 
+BR2_PACKAGE_BOOST_ATOMIC_ARCH_SUPPORT?
 
-> +       CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- \
-> +       ARCH=3Darm \
-> +       HOSTCC=3D"$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem
-> /,$(HOST_CFLAGS)))" \
-> +       HOSTLDFLAGS=3D"$(HOST_LDFLAGS)"
-> +
-> +define TI_K3_R5_LOADER_BUILD_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D)
-> $(TI_K3_R5_LOADER_MAKE_OPTS)
-> +endef
-> +
-> +define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
-> +       cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
-> +endef
-> +
-> +$(eval $(kconfig-package))
-> --
-> 2.34.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---00000000000078493a05ef1a5318
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 17 nov. 2022 =C3=A0=C2=
-=A001:16, Anand Gadiyar via buildroot &lt;<a href=3D"mailto:buildroot@build=
-root.org">buildroot@buildroot.org</a>&gt; a =C3=A9crit=C2=A0:<br></div><blo=
-ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
-:1px solid rgb(204,204,204);padding-left:1ex">From: Xuanhao Shi &lt;<a href=
-=3D"mailto:x-shi@ti.com" target=3D"_blank">x-shi@ti.com</a>&gt;<br>
-<br>
-This is a separate U-Boot package that would build<br>
-the intermediate spl binary for the R5 core on TI&#39;s k3 boards.<br>
-Usually, the resulting spl will be used for k3-image-gen<br>
-to build the full R5 boot binary tiboot3.bin.<br>
-<br>
-Signed-off-by: Xuanhao Shi &lt;<a href=3D"mailto:x-shi@ti.com" target=3D"_b=
-lank">x-shi@ti.com</a>&gt;<br>
-Signed-off-by: Anand Gadiyar &lt;<a href=3D"mailto:gadiyar@ti.com" target=
-=3D"_blank">gadiyar@ti.com</a>&gt;<br>
-Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettieng=
-ineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>&g=
-t;<br>
-Acked-by: Andrew Davis &lt;<a href=3D"mailto:afd@ti.com" target=3D"_blank">=
-afd@ti.com</a>&gt;<br>
-Cc: Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_b=
-lank">romain.naour@gmail.com</a>&gt;<br>
-Cc: Bryan Brattlof &lt;<a href=3D"mailto:bb@ti.com" target=3D"_blank">bb@ti=
-.com</a>&gt;<br>
----<br>
-=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 6 +++<br>
-=C2=A0boot/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 1 +<br>
-=C2=A0boot/ti-k3-r5-loader/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 | 32 +++++++++++++++<br>
-=C2=A0boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |=C2=A0 2 +<br>
-=C2=A0boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"nor=
-eferrer" target=3D"_blank">ti-k3-r5-loader.mk</a>=C2=A0 =C2=A0| 49 ++++++++=
-+++++++++++++++<br>
-=C2=A05 files changed, 90 insertions(+)<br>
-=C2=A0create mode 100644 boot/ti-k3-r5-loader/Config.in<br>
-=C2=A0create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.hash<br>
-=C2=A0create mode 100644 boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-lo=
-ader.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
-<br>
-diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index bc026da4aa..cf1cb8808b 100644<br>
---- a/DEVELOPERS<br>
-+++ b/DEVELOPERS<br>
-@@ -128,6 +128,9 @@ F:=C2=A0 package/dcron/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libxmlrpc/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/python-docopt/<br>
-<br>
-+N:=C2=A0 =C2=A0 =C2=A0Anand Gadiyar &lt;<a href=3D"mailto:gadiyar@ti.com" =
-target=3D"_blank">gadiyar@ti.com</a>&gt;<br>
-+F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
-+<br>
-=C2=A0N:=C2=A0 =C2=A0 =C2=A0Andr=C3=A9 Zwing &lt;<a href=3D"mailto:nerv@daw=
-ncrow.de" target=3D"_blank">nerv@dawncrow.de</a>&gt;<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libkrb5/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/openal/<br>
-@@ -3045,6 +3048,9 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/python-pyusb/<b=
-r>
-=C2=A0N:=C2=A0 =C2=A0 =C2=A0Wojciech Nizi=C5=84ski &lt;<a href=3D"mailto:ni=
-ziak@spox.org" target=3D"_blank">niziak@spox.org</a>&gt;<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/fwup/<br>
-<br>
-+N:=C2=A0 =C2=A0 =C2=A0Xuanhao Shi &lt;<a href=3D"mailto:X15000177@gmail.co=
-m" target=3D"_blank">X15000177@gmail.com</a>&gt;<br>
-+F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
-+<br>
-=C2=A0N:=C2=A0 =C2=A0 =C2=A0Yair Ben Avraham &lt;<a href=3D"mailto:yairba@p=
-rotonmail.com" target=3D"_blank">yairba@protonmail.com</a>&gt;<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/casync/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/gloox/<br>
-diff --git a/boot/Config.in b/boot/Config.in<br>
-index 40472ae07d..ce17b2df6b 100644<br>
---- a/boot/Config.in<br>
-+++ b/boot/Config.in<br>
-@@ -22,6 +22,7 @@ source &quot;boot/s500-bootloader/Config.in&quot;<br>
-=C2=A0source &quot;boot/shim/Config.in&quot;<br>
-=C2=A0source &quot;boot/sun20i-d1-spl/Config.in&quot;<br>
-=C2=A0source &quot;boot/syslinux/Config.in&quot;<br>
-+source &quot;boot/ti-k3-r5-loader/Config.in&quot;<br>
-=C2=A0source &quot;boot/uboot/Config.in&quot;<br>
-=C2=A0source &quot;boot/vexpress-firmware/Config.in&quot;<br>
-<br>
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.i=
-n<br>
-new file mode 100644<br>
-index 0000000000..bb6140f8a6<br>
---- /dev/null<br>
-+++ b/boot/ti-k3-r5-loader/Config.in<br>
-@@ -0,0 +1,32 @@<br>
-+config BR2_TARGET_TI_K3_R5_LOADER<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;ti-k3-r5-loader&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Separate U-Boot build for R5 cores on TI=
-&#39;s k3 boards.<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Usually used to build tiboot3.bin with k=
-3-image-gen.<br>
-+<br>
-+if BR2_TARGET_TI_K3_R5_LOADER<br>
-+choice<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0prompt &quot;K3 R5 Loader configuration&quot;<b=
-r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0default BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFI=
-G<br>
-+<br>
-+config BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Using an in-tree board defconfig fil=
-e&quot;<br>
-+<br>
-+config BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Using a custom board (def)config fil=
-e&quot;<br>
-+<br>
-+endchoice<br>
-+<br>
-+config BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;Board defconfig&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCO=
-NFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Name of the board for which TI K3 R5 Loa=
-der should be<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0built, without the _defconfig suffix.<br=
->
-+<br>
-+config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;Configuration file path&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTO=
-M_CONFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Path to the TI K3 R5 Loader configuratio=
-n file.<br>
-+endif<br>
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-load=
-er/ti-k3-r5-loader.hash<br>
-new file mode 100644<br>
-index 0000000000..fb6ce7c2a6<br>
---- /dev/null<br>
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash<br>
-@@ -0,0 +1,2 @@<br>
-+# Locally computed:<br>
-+sha256=C2=A0 6d69d5e4635cb3fa7852bf15f88ca342ef7740196e71961d3572deb58ba44=
-bea=C2=A0 u-boot-2022.10-rc1.tar.bz2<br>
-diff --git a/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> b/boot/ti-k3-r5-lo=
-ader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"noreferrer" target=3D"_bl=
-ank">ti-k3-r5-loader.mk</a><br>
-new file mode 100644<br>
-index 0000000000..535c9b999b<br>
---- /dev/null<br>
-+++ b/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"nor=
-eferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
-@@ -0,0 +1,49 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# <a href=3D"http://ti-k3-r5-loader.mk" rel=3D"noreferrer" target=3D"_blan=
-k">ti-k3-r5-loader.mk</a><br>
-+#<br>
-+##########################################################################=
-######<br>
-+<br>
-+TI_K3_R5_LOADER_VERSION =3D 2022.10<br>
-+TI_K3_R5_LOADER_SITE =3D <a href=3D"https://ftp.denx.de/pub/u-boot" rel=3D=
-"noreferrer" target=3D"_blank">https://ftp.denx.de/pub/u-boot</a><br>
-+TI_K3_R5_LOADER_SOURCE =3D u-boot-$(TI_K3_R5_LOADER_VERSION).tar.bz2<br>
-+TI_K3_R5_LOADER_LICENSE =3D GPL-2.0+<br>
-+TI_K3_R5_LOADER_LICENSE_FILES =3D Licenses/gpl-2.0.txt<br>
-+TI_K3_R5_LOADER_CPE_ID_VENDOR =3D denx<br>
-+TI_K3_R5_LOADER_CPE_ID_PRODUCT =3D u-boot<br>
-+TI_K3_R5_LOADER_INSTALL_IMAGES =3D YES<br>
-+TI_K3_R5_LOADER_DEPENDENCIES =3D \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-pkgconf \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(BR2_MAKE_HOST_DEPENDENCY) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-arm-gnu-toolchain \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-openssl<br>
-+<br>
-+TI_K3_R5_LOADER_MAKE =3D $(BR2_MAKE)<br>
-+TI_K3_R5_LOADER_MAKE_ENV =3D $(TARGET_MAKE_ENV)<br>
-+TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES =3D \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-arm-gnu-toolchain \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(BR2_MAKE_HOST_DEPENDENCY) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(BR2_BISON_HOST_DEPENDENCY) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(BR2_FLEX_HOST_DEPENDENCY)<br>
-+<br>
-+TI_K3_R5_LOADER_BOARD =3D $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOARD=
-))<br>
-+ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG),y)<br>
-+TI_K3_R5_LOADER_KCONFIG_DEFCONFIG =3D $(call qstrip,$(BR2_TARGET_TI_K3_R5_=
-LOADER_BOARD_DEFCONFIG))_defconfig<br>
-+else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG),y)<br>
-+TI_K3_R5_LOADER_KCONFIG_FILE =3D $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADE=
-R_CUSTOM_CONFIG_FILE))<br>
-+endif # BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG<br>
-+TI_K3_R5_LOADER_MAKE_OPTS +=3D \<br></blockquote><div>here `=3D` is enough=
-, `+=3D` not needed<br></div><div><br></div><div>Fran=C3=A7ois<br></div><di=
-v>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
- 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- =
-\<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0ARCH=3Darm \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0HOSTCC=3D&quot;$(HOSTCC) $(subst -I/,-isystem /=
-,$(subst -I /,-isystem /,$(HOST_CFLAGS)))&quot; \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0HOSTLDFLAGS=3D&quot;$(HOST_LDFLAGS)&quot;<br>
-+<br>
-+define TI_K3_R5_LOADER_BUILD_CMDS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE=
-) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)<br>
-+endef<br>
-+<br>
-+define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-=
-u-boot-spl.bin<br>
-+endef<br>
-+<br>
-+$(eval $(kconfig-package))<br>
--- <br>
-2.34.1<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div></div>
-
---00000000000078493a05ef1a5318--
-
---===============1077656422708510007==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Regards,
+Michael
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1077656422708510007==--
