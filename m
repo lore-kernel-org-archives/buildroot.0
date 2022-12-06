@@ -4,67 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30189C4321E
-	for <buildroot@archiver.kernel.org>; Mon,  5 Dec 2022 21:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FEA8C3A5A7
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 04:41:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAC1140289;
-	Mon,  5 Dec 2022 21:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAC1140289
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEFA40529;
+	Tue,  6 Dec 2022 04:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEFA40529
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eHluA6NvQlYs; Mon,  5 Dec 2022 21:56:11 +0000 (UTC)
+	with ESMTP id h3hJJC0AOE64; Tue,  6 Dec 2022 04:41:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACEDB40484;
-	Mon,  5 Dec 2022 21:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACEDB40484
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E0221BF3E8
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 21:56:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA597403D6;
+	Tue,  6 Dec 2022 04:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA597403D6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D0D431BF358
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4277460F69
- for <buildroot@lists.busybox.net>; Mon,  5 Dec 2022 21:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4277460F69
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC22281430
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC22281430
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 67T7EYuCPZwl for <buildroot@lists.busybox.net>;
- Mon,  5 Dec 2022 21:56:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A33260D53
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A33260D53
- for <buildroot@buildroot.org>; Mon,  5 Dec 2022 21:56:06 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:3834:9ccb:80f2:4b42])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0E0E2200417;
- Mon,  5 Dec 2022 22:55:59 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 05 Dec 2022 22:55:58 +0100
-Date: Mon, 5 Dec 2022 22:55:58 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Message-ID: <20221205215558.GI2855@scaer>
-References: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jSh7chSsH8kH for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E525B8142F
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E525B8142F
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 04:41:25 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id h6so3267517iof.9
+ for <buildroot@buildroot.org>; Mon, 05 Dec 2022 20:41:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lPKi5iJnA2EkFY+R3RthDlg33CJZSOJMJFdTR4iz2aw=;
+ b=3uqxNpEEnetMVoW+qVlzR6Tnxj258n0oo6vFmLJi5ins1hsa20mdnyrtpxplFYBj9v
+ KgqcWrWLKNnO4tCyNoM6fCa0Kk6Qcx/pgzuwxs8gfaJTM1wzdiVTdAEVR12RYkCbu+GV
+ LjTvXGbavFu3ih98qHXYc2JI/OgjSz0Ql7hBjFOg1VYP4fiGM+hRGdgaLYuugclihJfl
+ izv9OAm1KwnP5y+dmsCOqCPqj+iMJHcxQuOvuOKLkYgt02/I0F5o8Hh2SCybeets7fC0
+ EUord+QqNHQmFsL9j3YLBuIXO1FLYMULIxYkmEzP5wL90f6QZex5J8CjgRAWIeBbFrdU
+ U17g==
+X-Gm-Message-State: ANoB5pnLmK1Zc6mThNNckE7+MqZiS89gpKuaZfZRXrme/O71X9pky7ir
+ DxLFOX4sHWWVjJiXkMbuz/Nwxxldx+Rt00UA
+X-Google-Smtp-Source: AA0mqf7ZElFuGMjP+/X+KDDzwdGVhQWzp24ED441owXsm4CaHfxTojMA6PX3tIXHSXQvZz2YN/uqCw==
+X-Received: by 2002:a05:6638:3b4:b0:38a:46d2:18a5 with SMTP id
+ z20-20020a05663803b400b0038a46d218a5mr3594629jap.155.1670301684606; 
+ Mon, 05 Dec 2022 20:41:24 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ u30-20020a02cbde000000b0038a55bcfb47sm871093jaq.58.2022.12.05.20.41.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 05 Dec 2022 20:41:24 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  5 Dec 2022 21:41:20 -0700
+Message-Id: <20221206044120.2803159-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670277363;
- bh=7HHmHDIwD3kyYrHvnvDDFn4EY+mYMnK7SdT4CUlkL4U=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kJYB51s8o7JkCqSw9e1B3U2nmgMb1tukOH23VkRStFIQ+9kRUI5GaQZWN5fnfSwuj
- QQr51pb0SK7sPtO3h0iSiG6rDEnGi1h+1zvbUqBXH2Wr/P3siuK/ntAi1Xyr0Q6Hr0
- F0ghwEL+pcZ0PVCKmKhZhUsRdSiaftaAgtQFWWzScN20d/lhfFOQUCEmu28TXUvTfe
- LKyW4bd8v0+bD1R3apAIYMB0tf0WhLeojRwsG94GoqwexPTWqZlRo2uuSQf7u2c8ab
- i6MKEn2yKMky+YQYri4hjawDXurWvBAe6XJGXoOeaxVo8/8oFulbL1PSr5r0tk6vMj
- reB6QHy38sTRA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kJYB51s8
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/shadow: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lPKi5iJnA2EkFY+R3RthDlg33CJZSOJMJFdTR4iz2aw=;
+ b=KEq6AD/p8F/v8CrxdP1NgxSOxVokILQQNwC/a7CY2dGjgk5ediXII7uc6aQrkvpDDU
+ l37A/wjElwM1GrEthW7f7LXSgSL0qYjcDtK01ZCWSiKWDIF+YgWrOo6TJOB2BVwCnGTE
+ op28o5BM1kFUyy+DTTaqqUf8xliUMKis6M+PGlfm5/1DM8M+fKRVYMTIlknrLeAUdCAW
+ +e+MdsVsc1p5hIJQRFvGH14sSgcB0ThBgt5ecurc4nllHzrD5jVDo9dwa4ohbVHdNads
+ 9rXmo/T1diwXbZ7MBTB3I+DNn5/g/+bJGf6WSicHl19yA4uo8inQ4D7CB4kN/WyIoaPw
+ ly5Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=KEq6AD/p
+Subject: [Buildroot] [PATCH 1/1] package/python-pypa-build: drop
+ host-python-tomli dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,172 +94,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Raphael, All,
+The host-python-tomli dependency is not required on python version
+3.11 and newer.
 
-On 2022-10-13 18:34 +0200, Raphael Pavlidis spake thusly:
-> shadow provides utilities to deal with user accounts.
-> 
-> The shadow package includes the necessary programs for converting UNIX
-> password files to the shadow password format, plus programs for managing
-> user and group accounts. Especially it is useful if rootless podman
-> container should be used, which requires newuidmap and newgidmap.
-> 
-> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-pypa-build/python-pypa-build.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I was about to apply this, after fixing the minor issues (see below),
-but there is a rather major blocker, see below too...
-
-> ---
-[--SNIP--]
-> diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-> new file mode 100644
-> index 0000000000..6b1fe0a61f
-> --- /dev/null
-> +++ b/package/shadow/Config.in
-> @@ -0,0 +1,61 @@
-[--SNIP--]
-> +config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
-> +	bool "account-tools-setuid"
-> +	depends on BR2_USE_MMU  # linux-pam
-> +	depends on BR2_ENABLE_LOCALE  # linux-pam
-> +	depends on BR2_USE_WCHAR  # linux-pam
-> +	depends on !BR2_STATIC_LIBS  # linux-pam
-> +	select BR2_PACKAGE_LINUX_PAM
-> +	help
-> +	  Install the user and group management tools (e.g. groupadd) with setuid and
-
-    $ make check-package
-    package/shadow/Config.in:24: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-
-[--SNIP--]
-> +config BR2_PACKAGE_SHADOW_SUBORDINATE_IDS
-> +	bool "subordinate-ids"
-> +	help
-> +	  Support subordinate ids. Helpful to use container solution like podman
-
-    $ make check-package
-    package/shadow/Config.in:39: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-
-[--SNIP--]
-> diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-> new file mode 100644
-> index 0000000000..261f28dd28
-> --- /dev/null
-> +++ b/package/shadow/shadow.mk
-> @@ -0,0 +1,133 @@
-> +################################################################################
-> +#
-> +# shadow
-> +#
-> +################################################################################
-> +
-> +SHADOW_VERSION = 4.11.1
-
-Why 4.11.1? It was released in 2022-01-03, and is affected by
-CVE-2013-4235, with version 4.12.2 being the first to include the fix
-for it, and there is now 4.13:
-
-    https://www.cve.org/CVERecord?id=CVE-2013-4235
-    https://github.com/shadow-maint/shadow/releases/tag/4.12.2
-    https://github.com/shadow-maint/shadow/pull/545
-
-> +SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/v$(SHADOW_VERSION)
-> +SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
-> +SHADOW_LICENSE = BSD-3-Clause
-> +SHADOW_LICENSE_FILES = COPYING
-
-And:
-
-    SHADOW_CPE_ID_VENDOR = debian
-
-=> https://nvd.nist.gov/products/cpe/detail/11DE0412-97D8-4ABC-9807-101628A40DBE?namingFormat=2.3&orderBy=CPEURI&keyword=shadow&status=FINAL
-
-> +SHADOW_CONF_OPTS = \
-> +	--disable-man \
-> +    --without-btrfs \
-> +    --without-nscd \
-> +    --without-skey \
-> +    --without-sssd \
-> +    --without-su \
-> +    --without-tcb
-
-    $ make check-package
-    package/shadow/shadow.mk:15: expected indent with tabs
-    package/shadow/shadow.mk:16: expected indent with tabs
-    package/shadow/shadow.mk:17: expected indent with tabs
-    package/shadow/shadow.mk:18: expected indent with tabs
-    package/shadow/shadow.mk:19: expected indent with tabs
-    package/shadow/shadow.mk:20: expected indent with tabs
-
-> +ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
-> +SHADOW_CONF_OPTS += --enable-shadowgrp
-> +else
-> +SHADOW_CONF_OPTS += --disable-shadowgrp
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
-> +SHADOW_CONF_OPTS += --enable-account-tools-setuid
-> +define SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS
-
-This is named SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS, but [0]...
-
-> +	/usr/sbin/chgpasswd f 4755 0 0 - - - - -
-> +	/usr/sbin/chpasswd f 4755 0 0 - - - - -
-> +	/usr/sbin/groupadd f 4755 0 0 - - - - -
-> +	/usr/sbin/groupdel f 4755 0 0 - - - - -
-> +	/usr/sbin/groupmod f 4755 0 0 - - - - -
-> +	/usr/sbin/newusers f 4755 0 0 - - - - -
-> +	/usr/sbin/useradd f 4755 0 0 - - - - -
-> +	/usr/sbin/usermod f 4755 0 0 - - - - -
-
-What about userdel?
-
-[--SNIP--]
-> +define SHADOW_PERMISSIONS
-> +	/usr/bin/chage f 4755 0 0 - - - - -
-> +	/usr/bin/chfn f 4755 0 0 - - - - -
-> +	/usr/bin/chsh f 4755 0 0 - - - - -
-> +	/usr/bin/expiry f 4755 0 0 - - - - -
-> +	/usr/bin/gpasswd f 4755 0 0 - - - - -
-> +	/usr/bin/newgrp f 4755 0 0 - - - - -
-> +	/usr/bin/passwd f 4755 0 0 - - - - -
-> +	$(SHADOW_ACCOUNT_TOOLS_SETUID)
-
-... [0] here the expansion uses the wrong name...
-
-So, I had fixed all the minor issues, but the version bump will require
-a bit more testing that I can do locally. Nicolas (in Cc) who reviewed
-this patch, said he had a runtime test; maybe you can both sync to get
-that test part of the series when you respin?
-
-Regards,
-Yann E. MORIN.
-
-> +	$(SHADOW_SUBORDINATE_IDS_PERMISSIONS)
-> +endef
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-pypa-build/python-pypa-build.mk b/package/python-pypa-build/python-pypa-build.mk
+index b78aefe855..adc124b074 100644
+--- a/package/python-pypa-build/python-pypa-build.mk
++++ b/package/python-pypa-build/python-pypa-build.mk
+@@ -12,7 +12,6 @@ PYTHON_PYPA_BUILD_LICENSE_FILES = LICENSE
+ PYTHON_PYPA_BUILD_SETUP_TYPE = setuptools
+ HOST_PYTHON_PYPA_BUILD_DEPENDENCIES = \
+ 	host-python-packaging \
+-	host-python-pep517 \
+-	host-python-tomli
++	host-python-pep517
+ 
+ $(eval $(host-python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
