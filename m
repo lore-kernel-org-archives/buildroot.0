@@ -4,115 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86345C352A1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 15:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A03BC3A5A7
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 16:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10D3060F8F;
-	Tue,  6 Dec 2022 15:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10D3060F8F
+	by smtp3.osuosl.org (Postfix) with ESMTP id D80B561037;
+	Tue,  6 Dec 2022 16:58:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D80B561037
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NZ7pifu6Wku1; Tue,  6 Dec 2022 15:52:38 +0000 (UTC)
+	with ESMTP id uoxZoWRHmPm4; Tue,  6 Dec 2022 16:58:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D93560E28;
-	Tue,  6 Dec 2022 15:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D93560E28
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 63FD11BF3FF
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 15:52:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDE4B6102F;
+	Tue,  6 Dec 2022 16:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDE4B6102F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 694DB1BF5AE
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 16:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23CB360E28
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 15:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CB360E28
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51C3C409EA
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 16:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51C3C409EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2VzJsK9hZ8-d for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 15:52:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oyjZ-5qIHK3b for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 16:58:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC29260758
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on20631.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e89::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC29260758
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 15:52:33 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CpriJrXt6D6mOgE0F1IOHhBAquDUiNDZxXjFE5jo51TyjHSi2g3hxQLS097RBhCUwajJPKiBRhw/JXa+IWkL9mTFN6C45hdcqnaJR0YnjX4LgJdfgntq9DMyX2Q8BofxCCm/fOBbQnXVbJ/fsrCKfgI9hTLljBZaee1TW5rXX/8NyAW3ZYhnM7a9/bMX7u2D11bTKBGEQcJWMCp+pW94v0kZ+/cj0zcP2A9S4vSLeE7p2p59eIcuuzaKIH2uqFp4d4e/qiu9CsGxe4jmxh4hhZMSqks+ErGNPzbF82yU5Z6Ke9f+uWUW398rDzzhbNq6Y5g5YoAnJe7d+rdjPnhvxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=npvWh45DjpeeZ+M28DJmK7FGUwnlNG892OR8hIF+S8A=;
- b=cAVnBWWtUOgKWQlV8UeSbdrmeuzRhOWcDmFXysrBARghU71Ha/aQM2Z9YrYCaez51ZWW9D1ZeP/VCK3TVncFCMT0HdJ08Y/n9dufmydQ+pIITpvTQu+Q9IkMXXubj8T3neIwDzLAgLOdFPNDqDjUPXWc0A1RChQs2ar/t/lZRXmlTPyAm1xdtmJG/vFiF0jNtkYtvCrKL04Yzv4Sp6lR25pPKgloqkJVYxXGKQBHXE7MhkdW5SOgpuQxuY6203tE/6Dyznkl57agvH+Bt4NRgdmqfMi2kis8jm0pWseI0TZpfiedgy0jq0lmHECQsiYmFN+Ei/jzvA8aKaTFHjz6Wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from DS7PR05CA0068.namprd05.prod.outlook.com (2603:10b6:8:57::20) by
- IA1PR12MB7541.namprd12.prod.outlook.com (2603:10b6:208:42f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
- 2022 15:52:31 +0000
-Received: from DM6NAM11FT094.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:57:cafe::16) by DS7PR05CA0068.outlook.office365.com
- (2603:10b6:8:57::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5901.8 via Frontend
- Transport; Tue, 6 Dec 2022 15:52:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT094.mail.protection.outlook.com (10.13.172.195) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5901.14 via Frontend Transport; Tue, 6 Dec 2022 15:52:30 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Dec
- 2022 09:52:29 -0600
-Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 6 Dec 2022 09:52:29 -0600
-To: <buildroot@buildroot.org>
-Date: Tue, 6 Dec 2022 08:52:26 -0700
-Message-ID: <20221206155226.54290-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.17.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 223A340949
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com
+ [IPv6:2607:f8b0:4864:20::c33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 223A340949
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 16:58:13 +0000 (UTC)
+Received: by mail-oo1-xc33.google.com with SMTP id
+ j6-20020a4ab1c6000000b004809a59818cso2251993ooo.0
+ for <buildroot@buildroot.org>; Tue, 06 Dec 2022 08:58:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=eCBc773FZf7VxeVuD7wMczyhGfeTPPHrDA79CvoN6Nw=;
+ b=yceqN3QH4IGv4tdV/kHCdsciWV9C5sviWAOj25AiwIbQlMp0q0yhaiWlPCrO/lwakR
+ Vd90it8RBuSw07gfjk4QQWUh41qoCPEtamOuEVzKvxvFrPQdsZhn3miBrwFHjnQqrhv2
+ Ccwgc+a9TtNDITmRAGkSP1JEKuXJDZP60LLwPXe49DuQb+UZJY39cNeanE2TRGYD05iC
+ 0UsUh69DLjC7zipu80gWpVMuhFJ6Z4WiAopi2CAnDAQaQOKXcJla9QOjeOvo2Du11xKG
+ JpctNUJbLD4/5+xLayG1xMczdD3ke0K5Qi9FytS9+6yUFarq20Zmj3FLM9iteDuFQAmW
+ GI2g==
+X-Gm-Message-State: ANoB5pkTUxVDOp/MPlEruAxzyf2cKL5tMSB64ixM8wXMt95I+K1ejrKu
+ Os3YqKGqq10PGr/78ILPG058z3mN+G9tgfAZ5Cuk3ksHgc+g6HLc
+X-Google-Smtp-Source: AA0mqf7ssVg5X6VROct8TKHmMzdQZidNb9EOpTggypXLw7mVUS0sQb1I7ksZsuOBpFSbHkj8Jzq7cjBFg6i+P16ik28=
+X-Received: by 2002:a4a:9693:0:b0:4a0:1add:b26f with SMTP id
+ s19-20020a4a9693000000b004a01addb26fmr24210620ooi.59.1670345891841; Tue, 06
+ Dec 2022 08:58:11 -0800 (PST)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT094:EE_|IA1PR12MB7541:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d6c6879-797e-43fb-b05f-08dad7a1e1cf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jMrjnsnSn89Kd1yKBr7g996SohSOVb3fWlj/zgY2ClO7pBH8OEVS3ArELpeQUf2y5g5ZbjZw+tw83K0YfrbkQ1nqYeDxH/wpz9cpRUKCN/vjJk4zZTbaLGqsqax5mcIIaplPVev9NCos1JXlT6jax/+V7MfoqlzbwDymwQsF8Cm+1XdhXJHP108zSTFzaIzL8r9VNTVUOb0hj4lnu1e+5dE/qsfV8ROV7Ep/8rk5OH4/jySziX2iPW6umrDF8xwyZJ6MXokTl88fFOh5cIL5Bjwt6oty9uJ5uVQCUZ1Fm6FY48OsvkcCsdX5xojqqhl8WaTG8dKPZa4ctAxcxz6+m6mKA5bM/obNTrilXrgxBc7XUGDyVyVmeEutME2/A4x8UWEeXTZJ4ZRp7FkcQNCskqd+eETLHatoabx1+dJWjeaC68Hk2VvvEgNR/f9zcrWksaJBB0tJ95uk5/MSiGLt15vG4s9qR4Zb46xMOmn01xi0vF2m0adagZS/JegjN6kxtH3HkUAGmwc7m7akwPu9/SWGiL+FN/5VZaqO7cgPNAUQzaWpJlZgFKDROAacsCFWhNDE8DlumV3WG0Zp0YVB6fyetfuc7kJAphxR8aExyuo9QqGCQgpIi0RrXli0UmZclXNJUNYMs0uIiJ6SZzqstWQJhLa7TqkOlrz6AuQvlrb8Kyq2YWEFpwMbxeXehiah6jY6Ayurlx+uqZSYSPpocPoJqvpSvmomYadYpRtPkyiokh1DwsYfqVNlLf0WWeH++DrbpzWeB3AkWDizPfiN9A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230022)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199015)(40470700004)(36840700001)(46966006)(83380400001)(36860700001)(81166007)(86362001)(8936002)(44832011)(356005)(82740400003)(5660300002)(4326008)(2906002)(40460700003)(41300700001)(82310400005)(8676002)(40480700001)(186003)(26005)(478600001)(336012)(426003)(6666004)(47076005)(1076003)(6916009)(2616005)(966005)(54906003)(316002)(70206006)(70586007)(36756003)(36900700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 15:52:30.3756 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d6c6879-797e-43fb-b05f-08dad7a1e1cf
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT094.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7541
+References: <20221102165629.755750-1-jwood+buildroot@starry.com>
+ <20221106105124.GP3918838@scaer> <87o7t9i8yy.fsf@dell.be.48ers.dk>
+In-Reply-To: <87o7t9i8yy.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Dec 2022 11:58:01 -0500
+Message-ID: <CANWKTsNrZyn6cytFmfa8oMZw+zLmMNUB9SKJyqVYEsYd5yP+mQ@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=npvWh45DjpeeZ+M28DJmK7FGUwnlNG892OR8hIF+S8A=;
- b=Xv2j9IKDSDMs6sSYYfXxndwB4qZqDaViikM2G2kVKcWCrzvU7o/10LD5lO38bHEfAUyLKKST7WtT93fIeQxCr47hLENTpoLUEERXCLqUNn9F00wyafOwO5vYa7Pcj3MzpVgIZoko73iAP5KAjaXK2A8pLVVHPtTGdL49VGMDQYo=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Xv2j9IKD
-Subject: [Buildroot] [PATCH v1 1/1] board/zynqmp/kria/kv260/uboot.fragment:
- move to board/zynqmp/kria
+ d=starry.com; s=google;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=eCBc773FZf7VxeVuD7wMczyhGfeTPPHrDA79CvoN6Nw=;
+ b=F+MVLQeHHlRGXjOqFXA4IEPAQ1YMA3/Wl9t6yPJUdXyGEZ4rxob6E8DgiX9KAeJotr
+ ySGZoWO+ajEEWqPtRXbb56FKVLl8Ye09tc1mH2GPPaySghngKUVupPk2HjX5Aq/TeTtJ
+ o8LQW/CadtfzO7JtJLZ+HUnqSnQoN58YbZe4M=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=starry.com header.i=@starry.com
+ header.a=rsa-sha256 header.s=google header.b=F+MVLQeH
+Subject: Re: [Buildroot] [PATCH 1/1] package/ca-certificates: add support
+ for cryptography > 3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,52 +87,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: michal.simek@amd.com, luca.ceresoli@bootlin.com,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Justin Wood via buildroot <buildroot@buildroot.org>
+Reply-To: Justin Wood <jwood+buildroot@starry.com>
+Content-Type: multipart/mixed; boundary="===============8098441624527951226=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch moves the board/zynqmp/kria/kv260/uboot.fragment file
-to the board/zynqmp/kria directory.  The reason is that this file
-is the same for any kria starter kit and is not specific to the kv260.
-By moving the file, it can be logically re-used with the kr260 when
-support for this starter kit is added to buildroot.
+--===============8098441624527951226==
+Content-Type: multipart/alternative; boundary="00000000000089286405ef2bb5b3"
 
-KR260 Starter Kit:
-https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
+--00000000000089286405ef2bb5b3
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
- board/zynqmp/kria/{kv260 => }/uboot.fragment | 0
- configs/zynqmp_kria_kv260_defconfig          | 2 +-
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename board/zynqmp/kria/{kv260 => }/uboot.fragment (100%)
+Just to follow up for this list, this was merged upstream:
 
-diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/uboot.fragment
-similarity index 100%
-rename from board/zynqmp/kria/kv260/uboot.fragment
-rename to board/zynqmp/kria/uboot.fragment
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index df01ad30b8..3214d45fa9 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/kv260/uboot.fragment"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/uboot.fragment"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--- 
-2.17.1
+https://salsa.debian.org/debian/ca-certificates/-/commit/c7a3136aa0290f09080ff90d2c21d43b70710310
+
+~Justin Wood
+
+On Mon, Nov 14, 2022 at 3:20 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > Justin, All,
+>  > On 2022-11-02 12:56 -0400, jwood+buildroot@starry.com spake thusly:
+>  >> From: Justin Wood <jwood@starry.com>
+>  >>
+>  >> This patch was originally submitted upstream at
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1008244
+>  >> by Wataru Ashihara <wsh@iij.ad.jp>.  Minor changes by me to account
+> for the Buildroot change in 0001-*.patch.
+>  >>
+>  >> Building ca-certificates with a newer cryptography is breaking without
+> this patch, and building buildroots
+>  >> `python-cryptography` package first doesn't change the broken behavior.
+>
+>  > I've reworded the commit log in a more logical manner (explain what
+>  > breaks and why, then how we fix it).
+>
+>  > I also notice that the bug report states that cryptography 3.0 is also
+>  > affected, so I tweaked the commit title accordingly.
+>
+>  >> Signed-off-by: Justin Wood <jwood@starry.com>
+>
+>  > Applied to master, thanks.
+>
+> This is patching code we've added ourselves in patch 0001, so perhaps it
+> makes sense to invert the order of the patches, merge them or simply
+> drop the certdata2pem.py call completely? We don't build
+> host-python-cryptography automatically, so it can only happen if the
+> recently added optee-os option is selected (or a custom package), and
+> they happen to build before ca-certificates.
+>
+> Committed to 2022.08.x, thanks (we don't have host-python-cryptography
+> in 2022.02.x).
+>
+> --
+> Bye, Peter Korsgaard
+>
+
+--00000000000089286405ef2bb5b3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Just to follow up for this list, this was merged=
+ upstream:</div><br><a href=3D"https://salsa.debian.org/debian/ca-certifica=
+tes/-/commit/c7a3136aa0290f09080ff90d2c21d43b70710310" target=3D"_blank">ht=
+tps://salsa.debian.org/debian/ca-certificates/-/commit/c7a3136aa0290f09080f=
+f90d2c21d43b70710310</a><br><br></div>~Justin Wood</div><br><div class=3D"g=
+mail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Nov 14, 2022 at 3=
+:20 PM Peter Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@kor=
+sgaard.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">&gt;&gt;&gt;&gt;&gt; &quot;Yann&quot; =3D=3D Yann E MORIN &lt;<a=
+ href=3D"mailto:yann.morin.1998@free.fr" target=3D"_blank">yann.morin.1998@=
+free.fr</a>&gt; writes:<br>
+<br>
+=C2=A0&gt; Justin, All,<br>
+=C2=A0&gt; On 2022-11-02 12:56 -0400, <a href=3D"mailto:jwood%2Bbuildroot@s=
+tarry.com" target=3D"_blank">jwood+buildroot@starry.com</a> spake thusly:<b=
+r>
+=C2=A0&gt;&gt; From: Justin Wood &lt;<a href=3D"mailto:jwood@starry.com" ta=
+rget=3D"_blank">jwood@starry.com</a>&gt;<br>
+=C2=A0&gt;&gt; <br>
+=C2=A0&gt;&gt; This patch was originally submitted upstream at <a href=3D"h=
+ttps://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1008244" rel=3D"noreferr=
+er" target=3D"_blank">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1=
+008244</a><br>
+=C2=A0&gt;&gt; by Wataru Ashihara &lt;<a href=3D"mailto:wsh@iij.ad.jp" targ=
+et=3D"_blank">wsh@iij.ad.jp</a>&gt;.=C2=A0 Minor changes by me to account f=
+or the Buildroot change in 0001-*.patch.<br>
+=C2=A0&gt;&gt; <br>
+=C2=A0&gt;&gt; Building ca-certificates with a newer cryptography is breaki=
+ng without this patch, and building buildroots<br>
+=C2=A0&gt;&gt; `python-cryptography` package first doesn&#39;t change the b=
+roken behavior.<br>
+<br>
+=C2=A0&gt; I&#39;ve reworded the commit log in a more logical manner (expla=
+in what<br>
+=C2=A0&gt; breaks and why, then how we fix it).<br>
+<br>
+=C2=A0&gt; I also notice that the bug report states that cryptography 3.0 i=
+s also<br>
+=C2=A0&gt; affected, so I tweaked the commit title accordingly.<br>
+<br>
+=C2=A0&gt;&gt; Signed-off-by: Justin Wood &lt;<a href=3D"mailto:jwood@starr=
+y.com" target=3D"_blank">jwood@starry.com</a>&gt;<br>
+<br>
+=C2=A0&gt; Applied to master, thanks.<br>
+<br>
+This is patching code we&#39;ve added ourselves in patch 0001, so perhaps i=
+t<br>
+makes sense to invert the order of the patches, merge them or simply<br>
+drop the certdata2pem.py call completely? We don&#39;t build<br>
+host-python-cryptography automatically, so it can only happen if the<br>
+recently added optee-os option is selected (or a custom package), and<br>
+they happen to build before ca-certificates.<br>
+<br>
+Committed to 2022.08.x, thanks (we don&#39;t have host-python-cryptography<=
+br>
+in 2022.02.x).<br>
+<br>
+-- <br>
+Bye, Peter Korsgaard<br>
+</blockquote></div>
+
+--00000000000089286405ef2bb5b3--
+
+--===============8098441624527951226==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8098441624527951226==--
