@@ -4,84 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B961DC3A5A7
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 482FBC3A5A7
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 23:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 679D740904;
-	Tue,  6 Dec 2022 22:29:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 679D740904
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91A0740A81;
+	Tue,  6 Dec 2022 23:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91A0740A81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CQNhWR6frfOn; Tue,  6 Dec 2022 22:29:42 +0000 (UTC)
+	with ESMTP id 8AU9_g_KxX8Q; Tue,  6 Dec 2022 23:10:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93B9340A82;
-	Tue,  6 Dec 2022 22:29:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93B9340A82
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E1C631BF39E
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:29:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D172F40A8A;
+	Tue,  6 Dec 2022 23:10:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D172F40A8A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 160431BF292
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 23:10:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA70460BF4
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:29:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA70460BF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id F273F40904
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 23:10:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F273F40904
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AInEOSoJZO0K for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 22:29:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RaUGPN_1DMTv for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 23:10:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC70960BEF
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AC70960BEF
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:29:38 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id w15so25572308wrl.9
- for <buildroot@buildroot.org>; Tue, 06 Dec 2022 14:29:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AS7Kxe5rDzO773KO9Z4jXka445zGLeIOYe/yhpEf9BQ=;
- b=WdFUoygiW/Nojd8Ua0jCj208tcCHFTPPlhpLNl8xhKN3cKB3PlG7JIQoaAAnddJnZK
- p5s16G9wd3pgrOYOCMp273K0uXCBqSb/q+aY98q/mtRIr8lFoO4hnQ9rHRxwo3DKzv96
- bOVo+l3RJ9TkW61JmJO0XtaD7lK4h7xqT2hpSLKLkZW1eh5dDgeNHlrtiUMw+8LEDm5V
- 417FzXCU9o6Yj8BDDbrQdPOFPM86f6dx+WM0nJa9y5fSRjPCYGr2mjbt6aSc2oOocBKr
- ia+YZ/vyOczoVsVtybnlcalSPngDPlWG2ZQCg+NHsFjpad5Dzj1Z0HoOVr4p1TZwh/Dr
- 3vMA==
-X-Gm-Message-State: ANoB5pmdOgB9r8mNPqyHDGZOT+qDV6SOUU9wpFfynI0IRvvEp+PO8Id2
- 6miYHpUbeALpNF7WwbqYsnVUfi0wZW0=
-X-Google-Smtp-Source: AA0mqf6e0pQKBPdT+QxzamqFtxE0elK0qvAItYCAJS/olIO8pO/+79TFOgK7cndhNu4YSmFaIH0KtA==
-X-Received: by 2002:a05:6000:239:b0:242:423c:4ce9 with SMTP id
- l25-20020a056000023900b00242423c4ce9mr13161369wrz.399.1670365776322; 
- Tue, 06 Dec 2022 14:29:36 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- t16-20020a5d6910000000b0024217e7aaa7sm17485060wru.50.2022.12.06.14.29.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Dec 2022 14:29:35 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44936405B3
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 44936405B3
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 23:10:45 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.170.31.211])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B689913F86F;
+ Wed,  7 Dec 2022 00:10:40 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  6 Dec 2022 23:29:16 +0100
-Message-Id: <20221206222916.1375344-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Wed,  7 Dec 2022 00:10:34 +0100
+Message-Id: <20221206231034.48408-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AS7Kxe5rDzO773KO9Z4jXka445zGLeIOYe/yhpEf9BQ=;
- b=F3NmiDGbF0M1jgWKx6X4rtSHXKWZ2FJVaQALMu2CyqlEUrCSOroLuz+DENnESrgfKQ
- hOQCGcYjxYhgJrPMHgyFN48+krl+osoWi9tEtrcnPLC7yDATjpyMznifx/qv0fRY3ppJ
- 2Z7zH0pr5Te86kSzDM8VvraaaVOgMX/lSH5r2h2p21GF+gzWA9ELuAh5Am0MQO86BHBQ
- s7X18feZjn3oycQDoj7BOFxWxDlHwV5v4IYs/RbgkH1phmXQJhxdna4w8B9StelnFfIw
- 6Bhgs2qcVQxfOxG9FtukXgjSRnqVm34gLZGl+l6i5T+NdT2NHbr/kHccuzTU04zm5oC1
- JfRA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=F3NmiDGb
-Subject: [Buildroot] [PATCH 1/1] package/proftpd: bump to version 1.3.8
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670368242;
+ bh=LnjiTi33YtARqpFyZs+PKbu7HfpjsvMm0jxAwfraouM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=P3G1Ljpl6KzNdw4gjLSWJlv9gXp3c0nP7n+DwKNDY/uyj8UwBv7flEwFGZ+85UTFc
+ Gs3MgFFdvlOilxbbZ6F8RJBzIrNtUPnRqmurycetZTUB+Z4YlCvMlhTJXBtHUFiTmj
+ 6opE7IQhmeaTXiVJwzOi/HzRykCfGWtOTnqHctK1VwfESnK+N9q9znzNBcjwDPduWR
+ Xtv2ZaXZIduvi+kfiPomiLK+ZADzS6HfEmmAykQWNpb610/GSMd3q7P0HyfvLWTqDI
+ eJsRJMB3qsjMi/ohN4F176XV1hRkDyo7J8uBB/Z2To0FDT8AduhyXULk+DNbc4y2fG
+ piOwoJXH9JMRA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P3G1Ljpl
+Subject: [Buildroot] [PATCH 1/1] package/z3: introduce _ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,114 +70,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+z3 package was initially added with a depends on !BR2_nios2. This was
+detected by testing with "./utils/test-pkg -a -p z3". It turned out that
+few other architectures are also not supported. The actual z3
+requirement is to have a libc that provides <fenv.h> AND also provides
+all the four macros: FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO,
+FE_UPWARD.
 
-http://proftpd.org/docs/NEWS-1.3.8
-http://proftpd.org/docs/RELEASE_NOTES-1.3.8
+Quoting glibc manual, or "man fenv":
+https://www.gnu.org/software/libc/manual/html_node/Rounding.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+"fenv.h defines constants which you can use to refer to the various
+rounding modes. Each one will be defined if and only if the FPU
+supports the corresponding rounding mode."
+
+This patch introduces _ARCH_SUPPORTS to limit only to the architectures
+with a FPU that has those rounding modes.
+
+Fixes:
+- http://autobuild.buildroot.net/results/2809dd1ae2f3ada8ee7b3f3e388341c7cfb633fb
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...tab-fix-build-failure-against-gcc-10.patch | 56 -------------------
- package/proftpd/proftpd.hash                  |  2 +-
- package/proftpd/proftpd.mk                    |  4 +-
- 3 files changed, 3 insertions(+), 59 deletions(-)
- delete mode 100644 package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
+ package/z3/Config.in | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch b/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
-deleted file mode 100644
-index 5f4eb66c71..0000000000
---- a/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 9c9623c8a47fb5580dfea1a59296c6d224479504 Mon Sep 17 00:00:00 2001
--From: Sergei Trofimovich <slyfox@gentoo.org>
--Date: Mon, 2 Mar 2020 23:45:22 +0000
--Subject: [PATCH] mod_quotatab: fix build failure against gcc-10
--
--On gcc-10 (and gcc-9 -fno-common) build fails as:
--
--```
--$ ./configure --with-modules=mod_quotatab && make
--...
--ld: modules/module_glue.o:(.data.rel+0x68):
--  undefined reference to `quotatab_file_module'
--collect2: error: ld returned 1 exit status
--make: *** [Makefile:56: proftpd] Error 1
--```
--
--gcc-10 will change the default from -fcommon to fno-common:
--https://gcc.gnu.org/PR85678.
--
--The error also happens if CFLAGS=-fno-common passed explicitly.
--
--Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
--
--[Retrieved from:
--https://github.com/proftpd/proftpd/commit/9c9623c8a47fb5580dfea1a59296c6d224479504]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- contrib/mod_quotatab.c | 1 +
-- contrib/mod_quotatab.h | 2 +-
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/contrib/mod_quotatab.c b/contrib/mod_quotatab.c
--index 4fa6c1f44..0ee480163 100644
----- a/contrib/mod_quotatab.c
--+++ b/contrib/mod_quotatab.c
--@@ -50,6 +50,7 @@ typedef struct regtab_obj {
-- module quotatab_module;
-- 
-- /* Quota objects for the current session */
--+quota_deltas_t quotatab_deltas;
-- static quota_table_t *limit_tab = NULL;
-- static quota_limit_t sess_limit;
-- 
--diff --git a/contrib/mod_quotatab.h b/contrib/mod_quotatab.h
--index ed30333f5..c818395a0 100644
----- a/contrib/mod_quotatab.h
--+++ b/contrib/mod_quotatab.h
--@@ -188,7 +188,7 @@ typedef struct table_obj {
-- #define QUOTATAB_TALLY_SRC      0x0002
-- 
-- /* Quota objects for the current session. */
---quota_deltas_t quotatab_deltas;
--+extern quota_deltas_t quotatab_deltas;
-- 
-- /* Function prototypes necessary for quotatab sub-modules */
-- int quotatab_log(const char *, ...)
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index 983500bb8e..f950f26b86 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2dbe684034ab592742ebdb778a8a234b70f959efeb30feedee3ea77f26f74fbb  proftpd-1.3.6e.tar.gz
-+sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 64c16a84eb..8e7d108c9e 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PROFTPD_VERSION = 1.3.6e
--PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
-+PROFTPD_VERSION = 1.3.8
-+PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
- PROFTPD_CPE_ID_VENDOR = proftpd
+diff --git a/package/z3/Config.in b/package/z3/Config.in
+index 55b0e8bb3b..8cd3128687 100644
+--- a/package/z3/Config.in
++++ b/package/z3/Config.in
+@@ -1,11 +1,33 @@
++# z3 supports arch for which libc fenv.h provides all four macros:
++# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
++# See for example in glibc https://sourceware.org/git/glibc.git
++# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
++config BR2_PACKAGE_Z3_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arceb || BR2_arcle
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386
++	default y if BR2_m68k
++	# BR2_microblaze has only FE_TONEAREST
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	# BR2_nios2 has only FE_TONEAREST
++	default y if BR2_or1k
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_riscv
++	default y if BR2_s390x
++	# BR2_sh has only FE_{TONEAREST,TOWARDZERO}
++	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_x86_64
++	# BR2_xtensa supports only uclibc which does not have fenv.h
++
+ config BR2_PACKAGE_Z3
+ 	bool "z3"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
+ 	# z3 needs fenv.h which is not provided by uclibc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+-	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+-	depends on !BR2_nios2
++	depends on BR2_PACKAGE_Z3_ARCH_SUPPORTS
+ 	help
+ 	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
+ 	  satisfiability modulo theories (SMT) solver.
 -- 
-2.35.1
+2.38.1
 
 _______________________________________________
 buildroot mailing list
