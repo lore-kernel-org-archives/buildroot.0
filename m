@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F66C3A5A7
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B80EEC3A5A7
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C018A41805;
-	Tue,  6 Dec 2022 22:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C018A41805
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CA2A4035D;
+	Tue,  6 Dec 2022 22:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CA2A4035D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xAsQYVTVgt6O; Tue,  6 Dec 2022 22:03:50 +0000 (UTC)
+	with ESMTP id F3ZcKb4lon6G; Tue,  6 Dec 2022 22:11:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE13B417DC;
-	Tue,  6 Dec 2022 22:03:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE13B417DC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1EA1C1BF37E
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:03:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E9364162D;
+	Tue,  6 Dec 2022 22:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E9364162D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A14CC1BF39E
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EEE7D60F63
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEE7D60F63
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C60F81E7B
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:11:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C60F81E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QbpCMvgwM1Yt for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 22:03:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MZGEkeVoRXfs for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 22:11:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AA5060AD6
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7AA5060AD6
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:03:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F72481E79
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3F72481E79
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:11:45 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8E059100002;
- Tue,  6 Dec 2022 22:03:36 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 83746240006
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:11:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p2g2J-00FYkw-Jp; Tue, 06 Dec 2022 23:03:35 +0100
+ (envelope-from <peter@korsgaard.com>) id 1p2gA9-00FZGT-HB
+ for buildroot@buildroot.org; Tue, 06 Dec 2022 23:11:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20221125203244.097E784689@busybox.osuosl.org>
-Date: Tue, 06 Dec 2022 23:03:35 +0100
-In-Reply-To: <20221125203244.097E784689@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Fri, 25 Nov 2022 21:31:56 +0100")
-Message-ID: <87zgc05gw8.fsf@dell.be.48ers.dk>
+To: buildroot@buildroot.org
+References: <20221125140907.3796987-1-peter@korsgaard.com>
+Date: Tue, 06 Dec 2022 23:11:41 +0100
+In-Reply-To: <20221125140907.3796987-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 25 Nov 2022 15:09:06 +0100")
+Message-ID: <87sfhs5giq.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] toolchain/Config.in: fix check-package
- warning
+Subject: Re: [Buildroot] [PATCH] package/netsnmp: security bump to version
+ 5.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +63,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=3d5d447c5d531479ea5fa60ca3231ec91bde5354
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes the following security issues:
+ > - CVE-2022-24805 A buffer overflow in the handling of the INDEX of
+ >   NET-SNMP-VACM-MIB can cause an out-of-bounds memory access.
 
- > toolchain/Config.in:236: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
+ > - CVE-2022-24809 A malformed OID in a GET-NEXT to the nsVacmAccessTable can
+ >   cause a NULL pointer dereference.
 
- > Fixes:
+ > - CVE-2022-24806 Improper Input Validation when SETing malformed OIDs in
+ >   master agent and subagent simultaneously
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/3381962216
+ > - CVE-2022-24807 A malformed OID in a SET request to
+ >   SNMP-VIEW-BASED-ACM-MIB::vacmAccessTable can cause an out-of-bounds memory
+ >   access.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > - CVE-2022-24808 A malformed OID in a SET request to
+ >   NET-SNMP-AGENT-MIB::nsLogTable can cause a NULL pointer dereference
+
+ > - CVE-2022-24810 A malformed OID in a SET to the nsVacmAccessTable
+ >   can cause a NULL pointer dereference.
+
+ > Drop openssl linking patches as they are merged upstream / upstream changed
+ > to use pkg-config for openssl since:
+
+ > https://github.com/net-snmp/net-snmp/commit/8c3a094fbe9ebe38ed762488082d52c6d4e04ddb
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2022.08.x and 2022.02.x, thanks.
 
