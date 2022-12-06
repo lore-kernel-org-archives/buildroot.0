@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837ACC3A5A7
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:12:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8114C352A1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2454560E3C;
-	Tue,  6 Dec 2022 22:12:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2454560E3C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 472FF4098F;
+	Tue,  6 Dec 2022 22:13:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 472FF4098F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pxKwm19gEQiR; Tue,  6 Dec 2022 22:12:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0RRDelT8ppqp; Tue,  6 Dec 2022 22:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77DAA60FE8;
-	Tue,  6 Dec 2022 22:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77DAA60FE8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65072408EA;
+	Tue,  6 Dec 2022 22:13:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65072408EA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 38CE31BF39E
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:12:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B8FE1BF39E
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 148DD81E7E
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:12:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 148DD81E7E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41C0E81E7B
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41C0E81E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HNaHuEtqEiXs for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 22:12:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25A8F81E7B
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 25A8F81E7B
- for <buildroot@busybox.net>; Tue,  6 Dec 2022 22:12:31 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2665D1BF205;
- Tue,  6 Dec 2022 22:12:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p2gAu-00FZL9-4x; Tue, 06 Dec 2022 23:12:28 +0100
+ with ESMTP id 0vuOyN2JDf29 for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 22:12:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AD9781E79
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:12:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AD9781E79
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4193C85CCA; Tue,  6 Dec 2022 22:12:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <58294107fad727dfc01e76ca23a47ab08a1ef9ea.1669368933.git.baruch@tkos.co.il>
-Date: Tue, 06 Dec 2022 23:12:28 +0100
-In-Reply-To: <58294107fad727dfc01e76ca23a47ab08a1ef9ea.1669368933.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Fri, 25 Nov 2022 11:35:33
- +0200")
-Message-ID: <87o7sg5ghf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/dash: fix static with shared build
+To: buildroot@buildroot.org
+Date: Tue, 6 Dec 2022 23:01:07 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 33f30c4ce71b3f3a71f174f756c269635434d486
+X-Git-Newrev: 696f05ad892ff14e5fd61b1b1236034cd47f1ffd
+X-Patchwork-Hint: ignore
+Message-Id: <20221206221242.4193C85CCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/gcc: ensure
+ __register_frame is optimized out for glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +57,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=696f05ad892ff14e5fd61b1b1236034cd47f1ffd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > When BR2_SHARED_STATIC_LIBS is enabled we pass both --enable-static and
- > --enable-shared to configure. dash configure.ac only looks for
- > --enable-static to make the build static. But when linking against
- > libedit pkg-config only returns dynamic linking dependencies, so the
- > indirect ncurses dependency in not mentioned. The end result is that
- > libedit can't find ncurses symbols on link.
+On some architectures when building with -O0 the __register_frame
+symbol fails to get optimized out which can cause linking failures
+when building glibc.
 
- > BR2_SHARED_STATIC_LIBS only makes sense for libraries, not executable
- > binaries. Pass --disable-static unless BR2_STATIC_LIBS is enabled for
- > static only build.
+To fix this set -O1 for GCC target libs when building with glibc
+and BR2_OPTIMIZE_0 on the problematic target architectures.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/137d39cc5ec436759a2fde3f26ce5633e0ad6c2e/
- > http://autobuild.buildroot.net/results/55a38e0e45212bf7403d9ccb626c9422e3affe72/
- > http://autobuild.buildroot.net/results/8f109f1a04a6a2ff6d8c4c920e499fbaec3f72b9/
+This was reported both to GCC [1] and glibc [2] upstream. It is not
+entirely clear yet where the bug lies exactly. At the moment the
+assumption is that it's GCC, so create a symbol
+BR2_TOOLCHAIN_HAS_GCC_BUG_107728.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This issue only seems to occur when linking glibc, not with anything
+else, so only compile libgcc from host-gcc-initial with -O1.
 
-Committed to 2022.08.x and 2022.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/89b/89b6c6924240b7cf82035a844f3573673e91b364
+ - http://autobuild.buildroot.net/results/46f/46f4ec99d2b23d354a4bb5e92123d64f0da6ed27
+ - http://autobuild.buildroot.net/results/839/839f929f700cf181ebdf34389c7806a96f55813e
+ - http://autobuild.buildroot.net/results/0e2/0e202bf53a683930f3cad6edef2a4dea629eaecb
+ - http://autobuild.buildroot.net/results/8a8/8a8c917f597fdcca744e696e19e9300b64004335
+ - http://autobuild.buildroot.net/results/c05/c058b27ed2834dfa633b63ec6c3639ab1e8bf412
+ - http://autobuild.buildroot.net/results/8ba/8ba8882a861cf7df359c23969c09b2be0725b2e5
 
--- 
-Bye, Peter Korsgaard
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
+[2] https://sourceware.org/bugzilla/show_bug.cgi?id=29621
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 0fc5c1ccdb11af5185471272ef5eeece81b5e866)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc-initial/gcc-initial.mk |  7 +++++++
+ toolchain/Config.in                    | 12 ++++++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index f5bc6c5b77..ebd8e8f017 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -43,6 +43,13 @@ HOST_GCC_INITIAL_CONF_OPTS = \
+ HOST_GCC_INITIAL_CONF_ENV = \
+ 	$(HOST_GCC_COMMON_CONF_ENV)
+ 
++# Enable GCC target libs optimizations to optimize out __register_frame
++# when needed for some architectures when building with glibc.
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_107728),y)
++HOST_GCC_INITIAL_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS) -O1"
++HOST_GCC_INITIAL_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS) -O1"
++endif
++
+ HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc all-target-libgcc
+ HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc install-target-libgcc
+ 
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 219578092b..5fdebc6385 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -227,6 +227,18 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_104028
+ 	bool
+ 	default y if BR2_m68k
+ 
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
++# https://sourceware.org/bugzilla/show_bug.cgi?id=29621
++config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
++	bool
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_OPTIMIZE_0
++	default y if BR2_microblazebe || BR2_microblazeel \
++		|| BR2_mips || BR2_mipsel \
++		|| BR2_nios2 \
++		|| BR2_or1k \
++		|| BR2_sh
++
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
