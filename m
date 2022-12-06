@@ -4,48 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3F57C352A1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C02BC352A1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 22:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E7A280DE9;
-	Tue,  6 Dec 2022 22:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E7A280DE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5F9881E29;
+	Tue,  6 Dec 2022 22:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5F9881E29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ax6B6cz6W9hP; Tue,  6 Dec 2022 22:14:48 +0000 (UTC)
+	with ESMTP id CYo-aCPWoj06; Tue,  6 Dec 2022 22:17:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD34381E29;
-	Tue,  6 Dec 2022 22:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD34381E29
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EF7380C65;
+	Tue,  6 Dec 2022 22:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EF7380C65
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E5EE41BF39E
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:13:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 206F01BF39E
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B12904098F
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:13:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B12904098F
+ by smtp2.osuosl.org (Postfix) with ESMTP id EFE8340904
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 22:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFE8340904
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVWuLoQxDl8T for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 22:13:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 803C6408EA
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 803C6408EA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7000585D10; Tue,  6 Dec 2022 22:13:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id MxnYrfPK_8d4 for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 22:17:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1EEC405B0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1EEC405B0
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 22:17:41 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id h11so25491237wrw.13
+ for <buildroot@buildroot.org>; Tue, 06 Dec 2022 14:17:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZOMy166vH24b6RU/t7ZxU7DpXOiTAF3EgUfcSi1yqS4=;
+ b=yt2hctloHD8ohHucX/i8z58WmJK/gDkeSYgf5sDlIWYbbiZqqCJgpqVXZk1wELO3mt
+ tRk2IYEIimCJENZey4J9ED+HLe9suXNTMii0DO4jGZ9auLM+vdHrgyuxCS0bTsUaF0WM
+ BFdCTLtQMskUWt/s4G+UDoUXQp4oFt1yF5li3Rys/ZLaeNJuPKe+qkLsQ3U42Xhw+Jrg
+ GjNQ9KKUzgUyYEX8Cw8WSDQdGuxJUj3F1/j77gxaErVDBHx1G7CuRYvYJIFxwUPSNjDF
+ ItXYWQLxMGdvvsSw6ua/5S1uy8r41pk/RlO4o5zImDBSghbDUJTMml+VozlzAE+4M/se
+ pIiw==
+X-Gm-Message-State: ANoB5pmul6Gy9IdqQmLbJeQ3lWBElbixmR/y1RJTgvNyWY7ayEUoCOGB
+ rMTdUiB1h0gwSRInFoZHFNW7IB7wyCc=
+X-Google-Smtp-Source: AA0mqf6umdl1ivEl2vg7FHvte+68WkZ6ecDbPRhxhYEjmPb0Pq+TavcvXRCgTnX0wqd942pxqOOOHw==
+X-Received: by 2002:adf:f3c5:0:b0:242:5caa:5fbf with SMTP id
+ g5-20020adff3c5000000b002425caa5fbfmr7464397wrp.300.1670365059823; 
+ Tue, 06 Dec 2022 14:17:39 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ ay5-20020a5d6f05000000b00242710c9910sm4700278wrb.8.2022.12.06.14.17.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 06 Dec 2022 14:17:39 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 6 Dec 2022 23:02:03 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ecda7f786a7cb51fd4d0195495bfdf1fcda19344
-X-Git-Newrev: 5aac65cd8e72691988eb4d184b379e1777e10918
-X-Patchwork-Hint: ignore
-Message-Id: <20221206221352.7000585D10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: ensure
- __register_frame is optimized out for glibc
+Date: Tue,  6 Dec 2022 23:17:35 +0100
+Message-Id: <20221206221735.1359325-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZOMy166vH24b6RU/t7ZxU7DpXOiTAF3EgUfcSi1yqS4=;
+ b=n1OQabwkv1qMlQ4F5NFiPxty2VWPvmLwxBHqJUEMu4SATFydlQB8wVVYP9unAaoTVG
+ LnAuHZnK05EZKfUpqI42R2dcsq6h0VfdZ6qyJjxY6QFCvF1TN+EQT4VZnU7NY+K/YB/2
+ ehm3TO6ZwBD+ppYP4dfgYLUNpVjYTQhbPuxossTJJxFpy98qCfQdv5dBwj64nROTF9YW
+ 62EqaJAuxr+YuejWzpqvLXHTTDtauy9+gNQXOW/GSf3EWBSMnSp2pEaFY+focj9Lk5us
+ UoIaegmosO0chSrd1ulQntI6QwWWTGh8GufYo9+JgUaNXigwVhMs2y6OgxmTgX2KoyHe
+ BH6A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=n1OQabwk
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: bump to version 2.88
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,92 +93,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aac65cd8e72691988eb4d184b379e1777e10918
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2022q4/016767.html
 
-On some architectures when building with -O0 the __register_frame
-symbol fails to get optimized out which can cause linking failures
-when building glibc.
-
-To fix this set -O1 for GCC target libs when building with glibc
-and BR2_OPTIMIZE_0 on the problematic target architectures.
-
-This was reported both to GCC [1] and glibc [2] upstream. It is not
-entirely clear yet where the bug lies exactly. At the moment the
-assumption is that it's GCC, so create a symbol
-BR2_TOOLCHAIN_HAS_GCC_BUG_107728.
-
-This issue only seems to occur when linking glibc, not with anything
-else, so only compile libgcc from host-gcc-initial with -O1.
-
-Fixes:
- - http://autobuild.buildroot.net/results/89b/89b6c6924240b7cf82035a844f3573673e91b364
- - http://autobuild.buildroot.net/results/46f/46f4ec99d2b23d354a4bb5e92123d64f0da6ed27
- - http://autobuild.buildroot.net/results/839/839f929f700cf181ebdf34389c7806a96f55813e
- - http://autobuild.buildroot.net/results/0e2/0e202bf53a683930f3cad6edef2a4dea629eaecb
- - http://autobuild.buildroot.net/results/8a8/8a8c917f597fdcca744e696e19e9300b64004335
- - http://autobuild.buildroot.net/results/c05/c058b27ed2834dfa633b63ec6c3639ab1e8bf412
- - http://autobuild.buildroot.net/results/8ba/8ba8882a861cf7df359c23969c09b2be0725b2e5
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
-[2] https://sourceware.org/bugzilla/show_bug.cgi?id=29621
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0fc5c1ccdb11af5185471272ef5eeece81b5e866)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gcc/gcc-initial/gcc-initial.mk |  7 +++++++
- toolchain/Config.in                    | 12 ++++++++++++
- 2 files changed, 19 insertions(+)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index f5bc6c5b77..ebd8e8f017 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -43,6 +43,13 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- HOST_GCC_INITIAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 78127ca714..fd015d38ac 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.87.tar.xz.asc
+-sha256  0228c0364a7f2356fd7e7f1549937cbf3099a78d3b2eb1ba5bb0c31e2b89de7a  dnsmasq-2.87.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.88.tar.xz.asc
++sha256  23544deda10340c053bea6f15a93fed6ea7f5aaa85316bfc671ffa6d22fbc1b3  dnsmasq-2.88.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 46a40c4bbb..3945e4256a 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Enable GCC target libs optimizations to optimize out __register_frame
-+# when needed for some architectures when building with glibc.
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_107728),y)
-+HOST_GCC_INITIAL_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS) -O1"
-+HOST_GCC_INITIAL_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS) -O1"
-+endif
-+
- HOST_GCC_INITIAL_MAKE_OPTS = $(HOST_GCC_COMMON_MAKE_OPTS) all-gcc all-target-libgcc
- HOST_GCC_INITIAL_INSTALL_OPTS = install-gcc install-target-libgcc
- 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 3c9d61c66b..cb073950de 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -228,6 +228,18 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_104028
- 	bool
- 	default y if BR2_m68k
- 
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=29621
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
-+	bool
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_OPTIMIZE_0
-+	default y if BR2_microblazebe || BR2_microblazeel \
-+		|| BR2_mips || BR2_mipsel \
-+		|| BR2_nios2 \
-+		|| BR2_or1k \
-+		|| BR2_sh
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
+-DNSMASQ_VERSION = 2.87
++DNSMASQ_VERSION = 2.88
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
