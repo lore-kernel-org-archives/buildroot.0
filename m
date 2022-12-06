@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 511BDC352A1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 20:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3C8C352A1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 20:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1B2580B99;
-	Tue,  6 Dec 2022 20:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1B2580B99
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C10B401B2;
+	Tue,  6 Dec 2022 20:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C10B401B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4M8odKWtPQP7; Tue,  6 Dec 2022 20:19:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4LMPwRTdufnk; Tue,  6 Dec 2022 20:19:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FCF680BED;
-	Tue,  6 Dec 2022 20:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FCF680BED
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A856F1BF3DB
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 20:19:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F513401B5;
+	Tue,  6 Dec 2022 20:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F513401B5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F00C51BF3DB
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 20:19:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90BEF60C02
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 20:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90BEF60C02
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB81C4052A
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 20:19:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB81C4052A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VzCvAGS1oV6V for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 20:19:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eaI_3fLcytND for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 20:19:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A63760AF4
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com
- [209.85.217.45])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1A63760AF4
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 20:19:29 +0000 (UTC)
-Received: by mail-vs1-f45.google.com with SMTP id 125so15285247vsi.9
- for <buildroot@buildroot.org>; Tue, 06 Dec 2022 12:19:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C2DB400BB
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com
+ [209.85.222.44])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C2DB400BB
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 20:19:50 +0000 (UTC)
+Received: by mail-ua1-f44.google.com with SMTP id q6so5353034uao.9
+ for <buildroot@buildroot.org>; Tue, 06 Dec 2022 12:19:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bbrWlSxdHimV3+TW/ShIhskfzyR/hi5w9Wjd8CfRkOo=;
- b=EheDToWyzp4k2iLmhYd4CaVkKI8NQKauF5KgshFbHLISFR86TyYfKPW+ATZslkhLdO
- 3yHrD0yXfa627jlO9l5GJGC+ipjKdziH6c25SbS9aLkSHegfPP2yYnlmDLK57gEEDhGk
- PfOzGJv0j20lwtIIiwo+zHFGsXHLcO4Ysl4GUl3fKFK5KYi3ahD3aUS78+PMKHPKHc0i
- SYTycb6Y3WAsc7SBdRFtxxbkbj+TcPughFKowFAja+fuCf6V2g0NAqqWsx/sUYjUtP7y
- VLkm2A/PU1zxKHtd6uBl8hsw20OjCvbxF7PuwRxmkkPrydrWdGXXTQmreU2Ls2GfW9MS
- oGTw==
-X-Gm-Message-State: ANoB5pk0c3+Iy99VukgFDgDe678k8ElVTCR4h9N7Z00NpLVogcBeUDH3
- gpBw6S8UeNHeTMuCDCGSYBHV4forjWz9INKPikVT1A==
-X-Google-Smtp-Source: AA0mqf7PKIXU7gkcDY+oVxlq/lJzEOk6vztIfYTshOYSEUOEjqikPm3YYFmfmf/vq4+PJ6MlFK/j9s/B9/rADS9sJZI=
-X-Received: by 2002:a05:6102:c4e:b0:3aa:3bdf:75fd with SMTP id
- y14-20020a0561020c4e00b003aa3bdf75fdmr38102684vss.15.1670357967864; Tue, 06
- Dec 2022 12:19:27 -0800 (PST)
+ bh=WSJez7/cHeEW+g9+7p2avLpEkUW8H1/ppQsCmKVxGdM=;
+ b=iAGm5S94GDPeqdMyAoQFvUtzj+Apg07F/88qVLHkg85wtmP9oRetS+OaW9spY+vsfd
+ d02YOjf8ZR6En5WO15kdgykW25ip/Be558pWvJAMkBj+oLaquaJ0H+46vQNZH7WuPIVT
+ lWRcREZ0yg1s6GzModzvmmRZVZ+q3rPgSHSn16Q9aiA8yPH3o21TQQJcL2OpmNYzJWic
+ F+QJ0C0fuVBTKLAFCaw0y9dpKENzVv5OZDZ0A+ZFBLjkazgw7eKH5kEy4mm7p/PxG03y
+ S1ORCANKwsckzPtz0TNbBh2AVndtSW2F8m5GKiFJYkUGNS4Lb9g+eeSBILfURUrZ6G/V
+ LyCw==
+X-Gm-Message-State: ANoB5pnp4QGuqgYI+mGoKdAZl6DA8I8luWKKqHWqcbgRYq8cSuThBY1z
+ +XMj6SaTWLs4eFDYWm1S7cEFoWCWdaoSP6hOJe38QBB8ZDZE08wuZPE=
+X-Google-Smtp-Source: AA0mqf6QL3L49HEGJfgev/3whjowVBxNSaGmQIrlyv57RhcGqOB1+RxoccuAbVRWkd+F9HAV2OSezkEskoyJNjjLO3o=
+X-Received: by 2002:ab0:5517:0:b0:409:5403:c18 with SMTP id
+ t23-20020ab05517000000b0040954030c18mr40835079uaa.51.1670357988968; Tue, 06
+ Dec 2022 12:19:48 -0800 (PST)
 MIME-Version: 1.0
 References: <20221206171719.747581-1-gadiyar@ti.com>
- <20221206171719.747581-3-gadiyar@ti.com>
-In-Reply-To: <20221206171719.747581-3-gadiyar@ti.com>
+ <20221206171719.747581-4-gadiyar@ti.com>
+In-Reply-To: <20221206171719.747581-4-gadiyar@ti.com>
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 6 Dec 2022 21:19:15 +0100
-Message-ID: <CAB0FRssDs26J8ij4SN=yv3M32a__3aaK4aEzcsjn19Lp5KJoWQ@mail.gmail.com>
+Date: Tue, 6 Dec 2022 21:19:36 +0100
+Message-ID: <CAB0FRsthaAju9rt-_H4-EAOHqkP8onaabFiuOMPXi-WYZmSKoA@mail.gmail.com>
 To: Anand Gadiyar <gadiyar@ti.com>
-Subject: Re: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
+Subject: Re: [Buildroot] [PATCH v7 3/3] board/ti/am64x_sk: add new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,14 +80,14 @@ Cc: Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>,
  Xuanhao Shi <X15000177@gmail.com>, buildroot@buildroot.org,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>
-Content-Type: multipart/mixed; boundary="===============2561325888891878287=="
+Content-Type: multipart/mixed; boundary="===============6689700665060523118=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2561325888891878287==
-Content-Type: multipart/alternative; boundary="000000000000529ab705ef2e85b9"
+--===============6689700665060523118==
+Content-Type: multipart/alternative; boundary="00000000000094a2ca05ef2e866a"
 
---000000000000529ab705ef2e85b9
+--00000000000094a2ca05ef2e866a
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -96,11 +96,16 @@ Le mar. 6 d=C3=A9c. 2022 =C3=A0 18:41, Anand Gadiyar <gadiyar@ti.com> a =C3=
 
 > From: Xuanhao Shi <x-shi@ti.com>
 >
-> This is the image generator that builds the full boot binary,
-> tiboot3.bin, for the R5 core on TI's k3 devices.
-> This requires the R5 spl output from the ti-k3-r5-loader package.
+> Adds support for ti's am64x_sk board.
+> Adds the configs for generating output sdcard image.
+> Adds the defconfigs for am64x_sk.
 >
-> https://git.ti.com/cgit/k3-image-gen/k3-image-gen
+> The AM64x_sk board is designed for the AM642 SoC with
+> two ARM Cortex-A53 and four ARM Cortex-R5. It also
+> supports RJ 45 Ethernet, Wi-Fi, and Bluetooth.
+>
+> More information about the board can be found at:
+> https://www.ti.com/tool/SK-AM64
 >
 > Signed-off-by: Xuanhao Shi <x-shi@ti.com>
 > Signed-off-by: Anand Gadiyar <gadiyar@ti.com>
@@ -115,163 +120,187 @@ Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 > Cc: Romain Naour <romain.naour@gmail.com>
 > Cc: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  DEVELOPERS                                |  2 ++
->  boot/Config.in                            |  1 +
->  boot/ti-k3-image-gen/Config.in            | 30 ++++++++++++++++
->  boot/ti-k3-image-gen/ti-k3-image-gen.hash |  2 ++
->  boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 42 +++++++++++++++++++++++
->  5 files changed, 77 insertions(+)
->  create mode 100644 boot/ti-k3-image-gen/Config.in
->  create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
->  create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
+>  DEVELOPERS                     |  4 +++
+>  board/ti/am64x_sk/genimage.cfg | 27 +++++++++++++++++++
+>  board/ti/am64x_sk/readme.txt   | 49 ++++++++++++++++++++++++++++++++++
+>  configs/am64x_sk_defconfig     | 44 ++++++++++++++++++++++++++++++
+>  4 files changed, 124 insertions(+)
+>  create mode 100644 board/ti/am64x_sk/genimage.cfg
+>  create mode 100644 board/ti/am64x_sk/readme.txt
+>  create mode 100644 configs/am64x_sk_defconfig
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 62d77b6c4b..b5b6cd0a99 100644
+> index b5b6cd0a99..84886e1fa4 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -129,6 +129,7 @@ F:  package/libxmlrpc/
+> @@ -129,8 +129,10 @@ F: package/libxmlrpc/
 >  F:     package/python-docopt/
 >
 >  N:     Anand Gadiyar <gadiyar@ti.com>
-> +F:     boot/ti-k3-image-gen/
+> +F:     board/ti/am64x_sk/
+>  F:     boot/ti-k3-image-gen/
 >  F:     boot/ti-k3-r5-loader/
+> +F:     configs/am64x_sk_defconfig
 >
 >  N:     Andr=C3=A9 Zwing <nerv@dawncrow.de>
-> @@ -3059,6 +3060,7 @@ N:        Wojciech Nizi=C5=84ski <niziak@spox.org>
+>  F:     package/libkrb5/
+> @@ -3060,8 +3062,10 @@ N:       Wojciech Nizi=C5=84ski <niziak@spox.org>
 >  F:     package/fwup/
 >
 >  N:     Xuanhao Shi <X15000177@gmail.com>
-> +F:     boot/ti-k3-image-gen/
+> +F:     board/ti/am64x_sk/
+>  F:     boot/ti-k3-image-gen/
 >  F:     boot/ti-k3-r5-loader/
+> +F:     configs/am64x_sk_defconfig
 >
 >  N:     Yair Ben Avraham <yairba@protonmail.com>
-> diff --git a/boot/Config.in b/boot/Config.in
-> index ce17b2df6b..1b25bacfee 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -22,6 +22,7 @@ source "boot/s500-bootloader/Config.in"
->  source "boot/shim/Config.in"
->  source "boot/sun20i-d1-spl/Config.in"
->  source "boot/syslinux/Config.in"
-> +source "boot/ti-k3-image-gen/Config.in"
->  source "boot/ti-k3-r5-loader/Config.in"
->  source "boot/uboot/Config.in"
->  source "boot/vexpress-firmware/Config.in"
-> diff --git a/boot/ti-k3-image-gen/Config.in
-> b/boot/ti-k3-image-gen/Config.in
+>  F:     package/casync/
+> diff --git a/board/ti/am64x_sk/genimage.cfg
+> b/board/ti/am64x_sk/genimage.cfg
 > new file mode 100644
-> index 0000000000..02018f2f78
+> index 0000000000..26304fe98f
 > --- /dev/null
-> +++ b/boot/ti-k3-image-gen/Config.in
-> @@ -0,0 +1,30 @@
-> +config BR2_TARGET_TI_K3_IMAGE_GEN
-> +       bool "ti-k3-image-gen"
-> +       select BR2_TARGET_TI_K3_R5_LOADER
-> +       help
-> +         Use TI's k3-image-gen to build a separate bare metal
-> +         boot binary from a separate spl. Currently supports
-> +         version 08.05.00.004 as default.
+> +++ b/board/ti/am64x_sk/genimage.cfg
+> @@ -0,0 +1,27 @@
+> +image boot.vfat {
+> +       vfat {
+> +               files =3D {
+> +                       "tiboot3.bin",
+> +                       "tispl.bin",
+> +                       "u-boot.img",
+> +               }
+> +       }
 > +
-> +         https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
+> +       size =3D 16M
+> +}
 > +
-> +if BR2_TARGET_TI_K3_IMAGE_GEN
-> +config BR2_TARGET_TI_K3_IMAGE_GEN_SOC
-> +       string "SOC type for image gen"
-> +       help
-> +         The target SoC option for image gen.
-> +         For example, "am64x" for AM64X boards.
+> +image sdcard.img {
+> +       hdimage {
+> +       }
 > +
-> +config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE
-> +       string "SOC security type for image gen"
-> +       help
-> +         The security type option for image gen.
-> +         Options are "gp", "hs-fs", or "hs-se".
+> +       partition u-boot {
+> +               partition-type =3D 0xC
+> +               bootable =3D "true"
+> +               image =3D "boot.vfat"
+> +       }
 > +
-> +config BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG
-> +       string "CONFIG type for image gen"
-> +       help
-> +         The board config option for image gen.
-> +         Usually "sk" or "evm".
-> +endif
-> +
-> diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-> b/boot/ti-k3-image-gen/ti-k3-image-gen.hash
+> +       partition rootfs {
+> +               partition-type =3D 0x83
+> +               image =3D "rootfs.ext4"
+> +       }
+> +}
+> diff --git a/board/ti/am64x_sk/readme.txt b/board/ti/am64x_sk/readme.txt
 > new file mode 100644
-> index 0000000000..82c5b17060
+> index 0000000000..8096fcb2d4
 > --- /dev/null
-> +++ b/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  d13e9556bfba32d14071e172589683e48f6fea705a0b05ddd7fe984002089888
-> k3-image-gen-08.05.00.004.tar.gz
-> diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-> b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
+> +++ b/board/ti/am64x_sk/readme.txt
+> @@ -0,0 +1,49 @@
+> +Texas Instuments AM64x SK Test and Development Board
+> +
+> +Description
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +These configurations will build a complete image and
+> +device tree blobs for the the TI AM64x_sk board.
+> +
+> +How to build it
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Select the default configuration for the target:
+> +$ make am64x_sk_defconfig
+> +
+> +Optional: modify the configuration:
+> +$ make menuconfig
+> +
+> +Build:
+> +$ make
+> +
+> +Result of the build:
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +output/images/
+> ++-- soc
+> ++-- ti-connectivity
+> ++-- bl31.bin
+> ++-- boot.vfat
+> ++-- Image
+> ++-- k3-am642-sk.dtb
+> ++-- r5-u-boot-spl.bin
+> ++-- rootfs.ext2
+> ++-- rootfs.ext4
+> ++-- rootfs.tar
+> ++-- sdcard.img
+> ++-- tee.bin
+> ++-- tee-header_v2.bin
+> ++-- tee-pageable_v2.bin
+> ++-- tee-pager_v2.bin
+> ++-- tiboot3.bin
+> ++-- tispl.bin
+> ++-- u-boot.img
+> +
+> +To copy the image file to the sdcard use dd:
+> +$ dd if=3Doutput/images/sdcard.img of=3D/dev/sdX
+> +
+> +Insert the SDcard into the AM64x_sk board, and power it up with
+> +a USB Type-C connector. The system should come up. You can use
+> +a micro-USB to connect to the connector labled MAIN_UART0 to
+> +communicate with the board.
+> diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig
 > new file mode 100644
-> index 0000000000..f8e6105bfb
+> index 0000000000..b8ad2fb68a
 > --- /dev/null
-> +++ b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-> @@ -0,0 +1,42 @@
->
-> +########################################################################=
-########
-> +#
-> +# ti-k3-image-gen
-> +#
->
-> +########################################################################=
-########
-> +
-> +TI_K3_IMAGE_GEN_VERSION =3D 08.05.00.004
-> +TI_K3_IMAGE_GEN_SITE =3D
-> https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot
-> +TI_K3_IMAGE_GEN_SOURCE
-> <https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot+TI_K3_IMAGE_G=
-EN_SOURCE>
-> =3D k3-image-gen-$(TI_K3_IMAGE_GEN_VERSION).tar.gz
-> +TI_K3_IMAGE_GEN_LICENSE =3D BSD-3-Clause
-> +TI_K3_IMAGE_GEN_LICENSE_FILES =3D LICENSE
-> +TI_K3_IMAGE_GEN_INSTALL_IMAGES =3D YES
-> +
-> +# ti-k3-image-gen is used to build tiboot3.bin, using the
-> r5-u-boot-spl.bin file
-> +# from the ti-k3-r5-loader package. Hence the dependency on
-> ti-k3-r5-loader.
-> +TI_K3_IMAGE_GEN_DEPENDENCIES =3D host-arm-gnu-toolchain ti-k3-r5-loader
-> +
-> +# The ti-k3-image-gen makefiles seem to need some feature from Make v4.0=
-,
-> +# similar to u-boot. Explicitly use $(BR2_MAKE) here, as the build
-> +# otherwise fails with some misleading error message.
-> +TI_K3_IMAGE_GEN_MAKE =3D $(BR2_MAKE)
-> +TI_K3_IMAGE_GEN_SOC =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC))
-> +TI_K3_IMAGE_GEN_SOC_TYPE =3D $(call
-> qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE))
-> +TI_K3_IMAGE_GEN_CONFIG =3D $(call
-> qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG))
-> +TI_K3_IMAGE_GEN_MAKE_OPTS =3D \
-> +       SOC=3D$(TI_K3_IMAGE_GEN_SOC) \
-> +       SOC_TYPE=3D$(TI_K3_IMAGE_GEN_SOC_TYPE) \
-> +       CONFIG=3D$(TI_K3_IMAGE_GEN_CONFIG) \
-> +       CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- \
-> +       SBL=3D$(BINARIES_DIR)/r5-u-boot-spl.bin \
-> +       O=3D$(@D)/tmp \
-> +       BIN_DIR=3D$(@D)
-> +
-> +define TI_K3_IMAGE_GEN_BUILD_CMDS
-> +       $(TI_K3_IMAGE_GEN_MAKE) -C $(@D) $(TI_K3_IMAGE_GEN_MAKE_OPTS)
-> +endef
-> +
-> +define TI_K3_IMAGE_GEN_INSTALL_IMAGES_CMDS
-> +       cp $(@D)/tiboot3.bin $(BINARIES_DIR)
-> +endef
-> +
-> +$(eval $(generic-package))
+> +++ b/configs/am64x_sk_defconfig
+> @@ -0,0 +1,44 @@
+> +BR2_aarch64=3Dy
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS=3D"-c board/ti/am64x_sk/genimage.cfg"
+> +BR2_LINUX_KERNEL=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.0.9"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"ti/k3-am642-sk"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy
+> +BR2_TARGET_ROOTFS_EXT2=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_SIZE=3D"120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D"v2.7.0"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D"k3"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD=3D"lite"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy
+> +BR2_TARGET_OPTEE_OS=3Dy
+> +BR2_TARGET_OPTEE_OS_PLATFORM=3D"k3"
+> +BR2_TARGET_TI_K3_IMAGE_GEN=3Dy
+> +BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D"am64x"
+> +BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D"gp"
+> +BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D"evm"
+> +BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG=3D"am64x_evm_r5"
+> +BR2_TARGET_UBOOT=3Dy
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D"2022.10"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"am64x_evm_a53"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_IMG=3Dy
+> +BR2_TARGET_UBOOT_SPL=3Dy
+> +BR2_TARGET_UBOOT_SPL_NAME=3D"tispl.bin"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS=3D"TEE=3D$(BINARIES_DIR)/tee-pager_v2.b=
+in"
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+> +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> +BR2_PACKAGE_HOST_MTOOLS=3Dy
 > --
 > 2.34.1
 >
 >
 
---000000000000529ab705ef2e85b9
+--00000000000094a2ca05ef2e866a
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -283,13 +312,17 @@ Content-Transfer-Encoding: quoted-printable
 adding-left:1ex">From: Xuanhao Shi &lt;<a href=3D"mailto:x-shi@ti.com" targ=
 et=3D"_blank">x-shi@ti.com</a>&gt;<br>
 <br>
-This is the image generator that builds the full boot binary,<br>
-tiboot3.bin, for the R5 core on TI&#39;s k3 devices.<br>
-This requires the R5 spl output from the ti-k3-r5-loader package.<br>
+Adds support for ti&#39;s am64x_sk board.<br>
+Adds the configs for generating output sdcard image.<br>
+Adds the defconfigs for am64x_sk.<br>
 <br>
-<a href=3D"https://git.ti.com/cgit/k3-image-gen/k3-image-gen" rel=3D"norefe=
-rrer" target=3D"_blank">https://git.ti.com/cgit/k3-image-gen/k3-image-gen</=
-a><br>
+The AM64x_sk board is designed for the AM642 SoC with<br>
+two ARM Cortex-A53 and four ARM Cortex-R5. It also<br>
+supports RJ 45 Ethernet, Wi-Fi, and Bluetooth.<br>
+<br>
+More information about the board can be found at:<br>
+<a href=3D"https://www.ti.com/tool/SK-AM64" rel=3D"noreferrer" target=3D"_b=
+lank">https://www.ti.com/tool/SK-AM64</a><br>
 <br>
 Signed-off-by: Xuanhao Shi &lt;<a href=3D"mailto:x-shi@ti.com" target=3D"_b=
 lank">x-shi@ti.com</a>&gt;<br>
@@ -311,191 +344,208 @@ Cc: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=
 =3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
 ---<br>
 =C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 ++<br>
-=C2=A0boot/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 1 +<br>
-=C2=A0boot/ti-k3-image-gen/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 | 30 ++++++++++++++++<br>
-=C2=A0boot/ti-k3-image-gen/ti-k3-image-gen.hash |=C2=A0 2 ++<br>
-=C2=A0boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=3D"nor=
-eferrer" target=3D"_blank">ti-k3-image-gen.mk</a>=C2=A0 =C2=A0| 42 ++++++++=
-+++++++++++++++<br>
-=C2=A05 files changed, 77 insertions(+)<br>
-=C2=A0create mode 100644 boot/ti-k3-image-gen/Config.in<br>
-=C2=A0create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash<br>
-=C2=A0create mode 100644 boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image=
--gen.mk" rel=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a><br>
+=A0 =C2=A0 =C2=A0|=C2=A0 4 +++<br>
+=C2=A0board/ti/am64x_sk/genimage.cfg | 27 +++++++++++++++++++<br>
+=C2=A0board/ti/am64x_sk/readme.txt=C2=A0 =C2=A0| 49 +++++++++++++++++++++++=
++++++++++++<br>
+=C2=A0configs/am64x_sk_defconfig=C2=A0 =C2=A0 =C2=A0| 44 ++++++++++++++++++=
+++++++++++++<br>
+=C2=A04 files changed, 124 insertions(+)<br>
+=C2=A0create mode 100644 board/ti/am64x_sk/genimage.cfg<br>
+=C2=A0create mode 100644 board/ti/am64x_sk/readme.txt<br>
+=C2=A0create mode 100644 configs/am64x_sk_defconfig<br>
 <br>
 diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index 62d77b6c4b..b5b6cd0a99 100644<br>
+index b5b6cd0a99..84886e1fa4 100644<br>
 --- a/DEVELOPERS<br>
 +++ b/DEVELOPERS<br>
-@@ -129,6 +129,7 @@ F:=C2=A0 package/libxmlrpc/<br>
+@@ -129,8 +129,10 @@ F: package/libxmlrpc/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/python-docopt/<br>
 <br>
 =C2=A0N:=C2=A0 =C2=A0 =C2=A0Anand Gadiyar &lt;<a href=3D"mailto:gadiyar@ti.=
 com" target=3D"_blank">gadiyar@ti.com</a>&gt;<br>
-+F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
++F:=C2=A0 =C2=A0 =C2=A0board/ti/am64x_sk/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
++F:=C2=A0 =C2=A0 =C2=A0configs/am64x_sk_defconfig<br>
 <br>
 =C2=A0N:=C2=A0 =C2=A0 =C2=A0Andr=C3=A9 Zwing &lt;<a href=3D"mailto:nerv@daw=
 ncrow.de" target=3D"_blank">nerv@dawncrow.de</a>&gt;<br>
-@@ -3059,6 +3060,7 @@ N:=C2=A0 =C2=A0 =C2=A0 =C2=A0 Wojciech Nizi=C5=84ski =
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libkrb5/<br>
+@@ -3060,8 +3062,10 @@ N:=C2=A0 =C2=A0 =C2=A0 =C2=A0Wojciech Nizi=C5=84ski =
 &lt;<a href=3D"mailto:niziak@spox.org" target=3D"_blank">niziak@spox.org</a=
 >&gt;<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/fwup/<br>
 <br>
 =C2=A0N:=C2=A0 =C2=A0 =C2=A0Xuanhao Shi &lt;<a href=3D"mailto:X15000177@gma=
 il.com" target=3D"_blank">X15000177@gmail.com</a>&gt;<br>
-+F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
++F:=C2=A0 =C2=A0 =C2=A0board/ti/am64x_sk/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-image-gen/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0boot/ti-k3-r5-loader/<br>
++F:=C2=A0 =C2=A0 =C2=A0configs/am64x_sk_defconfig<br>
 <br>
 =C2=A0N:=C2=A0 =C2=A0 =C2=A0Yair Ben Avraham &lt;<a href=3D"mailto:yairba@p=
 rotonmail.com" target=3D"_blank">yairba@protonmail.com</a>&gt;<br>
-diff --git a/boot/Config.in b/boot/Config.in<br>
-index ce17b2df6b..1b25bacfee 100644<br>
---- a/boot/Config.in<br>
-+++ b/boot/Config.in<br>
-@@ -22,6 +22,7 @@ source &quot;boot/s500-bootloader/Config.in&quot;<br>
-=C2=A0source &quot;boot/shim/Config.in&quot;<br>
-=C2=A0source &quot;boot/sun20i-d1-spl/Config.in&quot;<br>
-=C2=A0source &quot;boot/syslinux/Config.in&quot;<br>
-+source &quot;boot/ti-k3-image-gen/Config.in&quot;<br>
-=C2=A0source &quot;boot/ti-k3-r5-loader/Config.in&quot;<br>
-=C2=A0source &quot;boot/uboot/Config.in&quot;<br>
-=C2=A0source &quot;boot/vexpress-firmware/Config.in&quot;<br>
-diff --git a/boot/ti-k3-image-gen/Config.in b/boot/ti-k3-image-gen/Config.i=
-n<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/casync/<br>
+diff --git a/board/ti/am64x_sk/genimage.cfg b/board/ti/am64x_sk/genimage.cf=
+g<br>
 new file mode 100644<br>
-index 0000000000..02018f2f78<br>
+index 0000000000..26304fe98f<br>
 --- /dev/null<br>
-+++ b/boot/ti-k3-image-gen/Config.in<br>
-@@ -0,0 +1,30 @@<br>
-+config BR2_TARGET_TI_K3_IMAGE_GEN<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;ti-k3-image-gen&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_TARGET_TI_K3_R5_LOADER<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Use TI&#39;s k3-image-gen to build a sep=
-arate bare metal<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0boot binary from a separate spl. Current=
-ly supports<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0version 08.05.00.004 as default.<br>
++++ b/board/ti/am64x_sk/genimage.cfg<br>
+@@ -0,0 +1,27 @@<br>
++image boot.vfat {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0vfat {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0files =3D {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;tiboot3.bin&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;tispl.bin&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0&quot;u-boot.img&quot;,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
 +<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://git.ti.com/cgit/k3-im=
-age-gen/k3-image-gen/" rel=3D"noreferrer" target=3D"_blank">https://git.ti.=
-com/cgit/k3-image-gen/k3-image-gen/</a><br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size =3D 16M<br>
++}<br>
 +<br>
-+if BR2_TARGET_TI_K3_IMAGE_GEN<br>
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;SOC type for image gen&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The target SoC option for image gen.<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0For example, &quot;am64x&quot; for AM64X=
- boards.<br>
++image sdcard.img {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0hdimage {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
 +<br>
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;SOC security type for image gen&qu=
-ot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The security type option for image gen.<=
-br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Options are &quot;gp&quot;, &quot;hs-fs&=
-quot;, or &quot;hs-se&quot;.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0partition u-boot {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0partition-type =3D =
+0xC<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0bootable =3D &quot;=
+true&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;boo=
+t.vfat&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
 +<br>
-+config BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;CONFIG type for image gen&quot;<br=
++=C2=A0 =C2=A0 =C2=A0 =C2=A0partition rootfs {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0partition-type =3D =
+0x83<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0image =3D &quot;roo=
+tfs.ext4&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++}<br>
+diff --git a/board/ti/am64x_sk/readme.txt b/board/ti/am64x_sk/readme.txt<br=
 >
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The board config option for image gen.<b=
-r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Usually &quot;sk&quot; or &quot;evm&quot=
-;.<br>
-+endif<br>
-+<br>
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash b/boot/ti-k3-image-g=
-en/ti-k3-image-gen.hash<br>
 new file mode 100644<br>
-index 0000000000..82c5b17060<br>
+index 0000000000..8096fcb2d4<br>
 --- /dev/null<br>
-+++ b/boot/ti-k3-image-gen/ti-k3-image-gen.hash<br>
-@@ -0,0 +1,2 @@<br>
-+# Locally calculated<br>
-+sha256=C2=A0 d13e9556bfba32d14071e172589683e48f6fea705a0b05ddd7fe984002089=
-888=C2=A0 k3-image-gen-08.05.00.004.tar.gz<br>
-diff --git a/boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=
-=3D"noreferrer" target=3D"_blank">ti-k3-image-gen.mk</a> b/boot/ti-k3-image=
--gen/<a href=3D"http://ti-k3-image-gen.mk" rel=3D"noreferrer" target=3D"_bl=
-ank">ti-k3-image-gen.mk</a><br>
++++ b/board/ti/am64x_sk/readme.txt<br>
+@@ -0,0 +1,49 @@<br>
++Texas Instuments AM64x SK Test and Development Board<br>
++<br>
++Description<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++<br>
++These configurations will build a complete image and<br>
++device tree blobs for the the TI AM64x_sk board.<br>
++<br>
++How to build it<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++<br>
++Select the default configuration for the target:<br>
++$ make am64x_sk_defconfig<br>
++<br>
++Optional: modify the configuration:<br>
++$ make menuconfig<br>
++<br>
++Build:<br>
++$ make<br>
++<br>
++Result of the build:<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++output/images/<br>
+++-- soc<br>
+++-- ti-connectivity<br>
+++-- bl31.bin<br>
+++-- boot.vfat<br>
+++-- Image<br>
+++-- k3-am642-sk.dtb<br>
+++-- r5-u-boot-spl.bin<br>
+++-- rootfs.ext2<br>
+++-- rootfs.ext4<br>
+++-- rootfs.tar<br>
+++-- sdcard.img<br>
+++-- tee.bin<br>
+++-- tee-header_v2.bin<br>
+++-- tee-pageable_v2.bin<br>
+++-- tee-pager_v2.bin<br>
+++-- tiboot3.bin<br>
+++-- tispl.bin<br>
+++-- u-boot.img<br>
++<br>
++To copy the image file to the sdcard use dd:<br>
++$ dd if=3Doutput/images/sdcard.img of=3D/dev/sdX<br>
++<br>
++Insert the SDcard into the AM64x_sk board, and power it up with<br>
++a USB Type-C connector. The system should come up. You can use<br>
++a micro-USB to connect to the connector labled MAIN_UART0 to<br>
++communicate with the board.<br>
+diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig<br>
 new file mode 100644<br>
-index 0000000000..f8e6105bfb<br>
+index 0000000000..b8ad2fb68a<br>
 --- /dev/null<br>
-+++ b/boot/ti-k3-image-gen/<a href=3D"http://ti-k3-image-gen.mk" rel=3D"nor=
-eferrer" target=3D"_blank">ti-k3-image-gen.mk</a><br>
-@@ -0,0 +1,42 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# ti-k3-image-gen<br>
-+#<br>
-+##########################################################################=
-######<br>
-+<br>
-+TI_K3_IMAGE_GEN_VERSION =3D 08.05.00.004<br>
-+TI_K3_IMAGE_GEN_SITE =3D <a href=3D"https://git.ti.com/cgit/k3-image-gen/k=
-3-image-gen/snapshot+TI_K3_IMAGE_GEN_SOURCE" rel=3D"noreferrer" target=3D"_=
-blank">https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot<br>
-+TI_K3_IMAGE_GEN_SOURCE</a> =3D k3-image-gen-$(TI_K3_IMAGE_GEN_VERSION).tar=
-.gz<br>
-+TI_K3_IMAGE_GEN_LICENSE =3D BSD-3-Clause<br>
-+TI_K3_IMAGE_GEN_LICENSE_FILES =3D LICENSE<br>
-+TI_K3_IMAGE_GEN_INSTALL_IMAGES =3D YES<br>
-+<br>
-+# ti-k3-image-gen is used to build tiboot3.bin, using the r5-u-boot-spl.bi=
-n file<br>
-+# from the ti-k3-r5-loader package. Hence the dependency on ti-k3-r5-loade=
-r.<br>
-+TI_K3_IMAGE_GEN_DEPENDENCIES =3D host-arm-gnu-toolchain ti-k3-r5-loader<br=
->
-+<br>
-+# The ti-k3-image-gen makefiles seem to need some feature from Make v4.0,<=
++++ b/configs/am64x_sk_defconfig<br>
+@@ -0,0 +1,44 @@<br>
++BR2_aarch64=3Dy<br>
++BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;support/scripts/genimage.sh&quot;<br>
++BR2_ROOTFS_POST_SCRIPT_ARGS=3D&quot;-c board/ti/am64x_sk/genimage.cfg&quot=
+;<br>
++BR2_LINUX_KERNEL=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quot;6.0.9&quot;<br>
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy<br>
++BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>
++BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;ti/k3-am642-sk&quot;<br>
++BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_4=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;120M&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D&quot;v2.7.0&quot;<=
 br>
-+# similar to u-boot. Explicitly use $(BR2_MAKE) here, as the build<br>
-+# otherwise fails with some misleading error message.<br>
-+TI_K3_IMAGE_GEN_MAKE =3D $(BR2_MAKE)<br>
-+TI_K3_IMAGE_GEN_SOC =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC))<b=
-r>
-+TI_K3_IMAGE_GEN_SOC_TYPE =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SO=
-C_TYPE))<br>
-+TI_K3_IMAGE_GEN_CONFIG =3D $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_CONF=
-IG))<br>
-+TI_K3_IMAGE_GEN_MAKE_OPTS =3D \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0SOC=3D$(TI_K3_IMAGE_GEN_SOC) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0SOC_TYPE=3D$(TI_K3_IMAGE_GEN_SOC_TYPE) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0CONFIG=3D$(TI_K3_IMAGE_GEN_CONFIG) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- =
-\<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0SBL=3D$(BINARIES_DIR)/r5-u-boot-spl.bin \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0O=3D$(@D)/tmp \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0BIN_DIR=3D$(@D)<br>
-+<br>
-+define TI_K3_IMAGE_GEN_BUILD_CMDS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TI_K3_IMAGE_GEN_MAKE) -C $(@D) $(TI_K3_IMAGE_=
-GEN_MAKE_OPTS)<br>
-+endef<br>
-+<br>
-+define TI_K3_IMAGE_GEN_INSTALL_IMAGES_CMDS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0cp $(@D)/tiboot3.bin $(BINARIES_DIR)<br>
-+endef<br>
-+<br>
-+$(eval $(generic-package))<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D&quot;k3&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD=3D&quot;lite&quot;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=3Dy<br>
++BR2_TARGET_OPTEE_OS=3Dy<br>
++BR2_TARGET_OPTEE_OS_PLATFORM=3D&quot;k3&quot;<br>
++BR2_TARGET_TI_K3_IMAGE_GEN=3Dy<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_SOC=3D&quot;am64x&quot;<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE=3D&quot;gp&quot;<br>
++BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG=3D&quot;evm&quot;<br>
++BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG=3D&quot;am64x_evm_r5&quot;<br>
++BR2_TARGET_UBOOT=3Dy<br>
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy<br>
++BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy<br>
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D&quot;2022.10&quot;<br>
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;am64x_evm_a53&quot;<br>
++BR2_TARGET_UBOOT_NEEDS_DTC=3Dy<br>
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy<br>
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy<br>
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set<br>
++BR2_TARGET_UBOOT_FORMAT_IMG=3Dy<br>
++BR2_TARGET_UBOOT_SPL=3Dy<br>
++BR2_TARGET_UBOOT_SPL_NAME=3D&quot;tispl.bin&quot;<br>
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS=3D&quot;TEE=3D$(BINARIES_DIR)/tee-pager_v=
+2.bin&quot;<br>
++BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>
++BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>
++BR2_PACKAGE_HOST_MTOOLS=3Dy<br>
 -- <br>
 2.34.1<br>
 <br>
 </blockquote></div></div>
 
---000000000000529ab705ef2e85b9--
+--00000000000094a2ca05ef2e866a--
 
---===============2561325888891878287==
+--===============6689700665060523118==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -506,4 +556,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2561325888891878287==--
+--===============6689700665060523118==--
