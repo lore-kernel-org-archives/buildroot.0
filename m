@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FEA8C3A5A7
-	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 04:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8FDDC352A1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Dec 2022 04:42:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEFA40529;
-	Tue,  6 Dec 2022 04:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEFA40529
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3650C4091E;
+	Tue,  6 Dec 2022 04:42:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3650C4091E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h3hJJC0AOE64; Tue,  6 Dec 2022 04:41:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id llXrdZLTxpaw; Tue,  6 Dec 2022 04:42:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA597403D6;
-	Tue,  6 Dec 2022 04:41:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA597403D6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D0D431BF358
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48F9C40917;
+	Tue,  6 Dec 2022 04:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F9C40917
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F1A41BF358
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC22281430
- for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC22281430
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE5B860AD6
+ for <buildroot@lists.busybox.net>; Tue,  6 Dec 2022 04:42:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE5B860AD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jSh7chSsH8kH for <buildroot@lists.busybox.net>;
- Tue,  6 Dec 2022 04:41:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p8ns6jSDRY-F for <buildroot@lists.busybox.net>;
+ Tue,  6 Dec 2022 04:42:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E525B8142F
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E525B8142F
- for <buildroot@buildroot.org>; Tue,  6 Dec 2022 04:41:25 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id h6so3267517iof.9
- for <buildroot@buildroot.org>; Mon, 05 Dec 2022 20:41:25 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 186BB60AAC
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 186BB60AAC
+ for <buildroot@buildroot.org>; Tue,  6 Dec 2022 04:42:00 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id v1so4432058ioe.4
+ for <buildroot@buildroot.org>; Mon, 05 Dec 2022 20:41:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=lPKi5iJnA2EkFY+R3RthDlg33CJZSOJMJFdTR4iz2aw=;
- b=3uqxNpEEnetMVoW+qVlzR6Tnxj258n0oo6vFmLJi5ins1hsa20mdnyrtpxplFYBj9v
- KgqcWrWLKNnO4tCyNoM6fCa0Kk6Qcx/pgzuwxs8gfaJTM1wzdiVTdAEVR12RYkCbu+GV
- LjTvXGbavFu3ih98qHXYc2JI/OgjSz0Ql7hBjFOg1VYP4fiGM+hRGdgaLYuugclihJfl
- izv9OAm1KwnP5y+dmsCOqCPqj+iMJHcxQuOvuOKLkYgt02/I0F5o8Hh2SCybeets7fC0
- EUord+QqNHQmFsL9j3YLBuIXO1FLYMULIxYkmEzP5wL90f6QZex5J8CjgRAWIeBbFrdU
- U17g==
-X-Gm-Message-State: ANoB5pnLmK1Zc6mThNNckE7+MqZiS89gpKuaZfZRXrme/O71X9pky7ir
- DxLFOX4sHWWVjJiXkMbuz/Nwxxldx+Rt00UA
-X-Google-Smtp-Source: AA0mqf7ZElFuGMjP+/X+KDDzwdGVhQWzp24ED441owXsm4CaHfxTojMA6PX3tIXHSXQvZz2YN/uqCw==
-X-Received: by 2002:a05:6638:3b4:b0:38a:46d2:18a5 with SMTP id
- z20-20020a05663803b400b0038a46d218a5mr3594629jap.155.1670301684606; 
- Mon, 05 Dec 2022 20:41:24 -0800 (PST)
+ bh=DNLF7VqTZVAFCwQ/zrC5fzmM0E4C+4GrkpmtZZCvGY4=;
+ b=M70B8YEQyx9zkq2P1LesZRBczAAzlYdB6mESq6zTj/2BRjv9SFWib355H1a7IOcU8U
+ Q88ahV9BpABEd/Nna7OPXhFQrRkXG73Tjd4s5TtFUa0aNy/4MckL0LDKOolMyDjtzVqL
+ bp+/Zc/Q9a3oAQ1mxsbhsMuAdEfznWHyerZ5nihpWXTQP+nHN+WyuwegA1gx+fHAmD6W
+ neuT/T0yi/3WKQEbE/mrk71aosZGt6xh6jGBE7B8wo68DT5mURWv9dY+aoZKdPlAXFUc
+ jKGAVnqvbnxAOnGs0f5aH9e0A8MT7MdE2B24OOShJc6ZOd1rNneRBx6hybayBN58/Jyw
+ P0sQ==
+X-Gm-Message-State: ANoB5plWhwASbObzfufWOhLHY9sF2aJMxqx8UwYmxdzcYyVEhc2861Rd
+ j8VLcuiBYwrHLdlr9VYJ9SZiVJSXYOk+W+rZ
+X-Google-Smtp-Source: AA0mqf5yB73cBkQ0cE+tpC1a75zgGQcXTYr6COxPDqOs2qst0G0aPWNiJ/ioV+idr0HDWkbWwGJg5A==
+X-Received: by 2002:a5e:a505:0:b0:6df:80f5:c0e5 with SMTP id
+ 5-20020a5ea505000000b006df80f5c0e5mr18106878iog.44.1670301719002; 
+ Mon, 05 Dec 2022 20:41:59 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- u30-20020a02cbde000000b0038a55bcfb47sm871093jaq.58.2022.12.05.20.41.24
+ n10-20020a02a18a000000b0036332a07adcsm6247184jah.173.2022.12.05.20.41.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 05 Dec 2022 20:41:24 -0800 (PST)
+ Mon, 05 Dec 2022 20:41:58 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  5 Dec 2022 21:41:20 -0700
-Message-Id: <20221206044120.2803159-1-james.hilliard1@gmail.com>
+Date: Mon,  5 Dec 2022 21:41:56 -0700
+Message-Id: <20221206044156.2804371-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lPKi5iJnA2EkFY+R3RthDlg33CJZSOJMJFdTR4iz2aw=;
- b=KEq6AD/p8F/v8CrxdP1NgxSOxVokILQQNwC/a7CY2dGjgk5ediXII7uc6aQrkvpDDU
- l37A/wjElwM1GrEthW7f7LXSgSL0qYjcDtK01ZCWSiKWDIF+YgWrOo6TJOB2BVwCnGTE
- op28o5BM1kFUyy+DTTaqqUf8xliUMKis6M+PGlfm5/1DM8M+fKRVYMTIlknrLeAUdCAW
- +e+MdsVsc1p5hIJQRFvGH14sSgcB0ThBgt5ecurc4nllHzrD5jVDo9dwa4ohbVHdNads
- 9rXmo/T1diwXbZ7MBTB3I+DNn5/g/+bJGf6WSicHl19yA4uo8inQ4D7CB4kN/WyIoaPw
- ly5Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=DNLF7VqTZVAFCwQ/zrC5fzmM0E4C+4GrkpmtZZCvGY4=;
+ b=RvCt1yh6vgSvFEecIVnbYu9Y8IJ35DzKeCN1qxTUyORWXX93Z4znqzo7QPYIR4+IM5
+ z3wh6gXxmnCsdLlMah3zk64bGOR8dlXgRaYkXlBfF6tNMdBqrvNHYP3aZyYKJZN1Sl6Y
+ p8JI/cNpIFKuour8Zo/z12U1IzI1Y+mB7yIxSS/w3dOGT3+Br0aBPow8LPXhQ7CcgwBT
+ TeMZHBorEiB+UUOOerPodWkA3teTzEVdeY6N/5n3l00c/HXuFMAMqhpHW9X4Z+HMg+B6
+ bzsA3OdBJ1mcsFyZQi8ihicmd7Wjma51dtL/V4edUJykgwlzlNABxgwSjDkWlivqOgDo
+ aeHA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KEq6AD/p
-Subject: [Buildroot] [PATCH 1/1] package/python-pypa-build: drop
+ header.a=rsa-sha256 header.s=20210112 header.b=RvCt1yh6
+Subject: [Buildroot] [PATCH 1/1] package/python-pep517: drop
  host-python-tomli dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -105,20 +105,18 @@ The host-python-tomli dependency is not required on python version
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pypa-build/python-pypa-build.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/python-pep517/python-pep517.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python-pypa-build/python-pypa-build.mk b/package/python-pypa-build/python-pypa-build.mk
-index b78aefe855..adc124b074 100644
---- a/package/python-pypa-build/python-pypa-build.mk
-+++ b/package/python-pypa-build/python-pypa-build.mk
-@@ -12,7 +12,6 @@ PYTHON_PYPA_BUILD_LICENSE_FILES = LICENSE
- PYTHON_PYPA_BUILD_SETUP_TYPE = setuptools
- HOST_PYTHON_PYPA_BUILD_DEPENDENCIES = \
- 	host-python-packaging \
--	host-python-pep517 \
--	host-python-tomli
-+	host-python-pep517
+diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+index 1fd294fbb4..c43b09faaa 100644
+--- a/package/python-pep517/python-pep517.mk
++++ b/package/python-pep517/python-pep517.mk
+@@ -10,6 +10,5 @@ PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/4d/19/e11fcc88288f6
+ PYTHON_PEP517_LICENSE = MIT
+ PYTHON_PEP517_LICENSE_FILES = LICENSE
+ PYTHON_PEP517_SETUP_TYPE = flit-bootstrap
+-HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
  
  $(eval $(host-python-package))
 -- 
