@@ -1,121 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96559C352A1
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 14:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8FAAC63705
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 14:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 164DB4029B;
-	Wed,  7 Dec 2022 14:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 164DB4029B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 362C940A01;
+	Wed,  7 Dec 2022 14:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 362C940A01
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ut5T6-rYtXOk; Wed,  7 Dec 2022 14:06:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10547402F2;
+	Wed,  7 Dec 2022 14:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10547402F2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B1981BF488
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:06:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6284C4025A
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6284C4025A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WRPW8Y9zB8yV; Wed,  7 Dec 2022 14:04:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5725C401BE;
-	Wed,  7 Dec 2022 14:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5725C401BE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F16D11BF488
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:04:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 889D760AE5
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 889D760AE5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o_73PgYeqmnH for <buildroot@lists.busybox.net>;
- Wed,  7 Dec 2022 14:04:33 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BpS1JhCvNhmb for <buildroot@lists.busybox.net>;
+ Wed,  7 Dec 2022 14:06:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1A2F60A8C
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on20604.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8a::604])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1A2F60A8C
- for <buildroot@buildroot.org>; Wed,  7 Dec 2022 14:04:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8823C4021B
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20618.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eaa::618])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8823C4021B
+ for <buildroot@buildroot.org>; Wed,  7 Dec 2022 14:06:29 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D8a+yTh98U1HbzAq+QmSX4SkBNVFb2ijncnXmLdkeXYGw7NfSuEGKc43LHxl3vsqolxDr1KadyDCe0wLD3ANck1524xhSRBUXR4HAVtQlAGz5B3vrHMLvNnYXE3ix0NHDhuPcmV7sleLiWXZd3+MPONmogrqLt9BiaA+B9ynjrnALbJZjP9rzf3IRZ+txTqImhoTbH2CYnYpMmoZLx4nDpAgXOhAsG2hHJgxALvgq7LyJpHZm3O/pOOsONeWGPy2SXJU0FtKjesXjtmC/+yhwtl0omQ2ieTzcmJOPBOvW4rfnVlKnN+5+ZJDKPHWFnUmq11BQRu60yHxBhsRMaNi/g==
+ b=M3EO3eso0RSHeAoQA9lPjfS2lSN84TEDrQS8AtKET/1S8AYFJlAfV2tHbaRuIldJjO/+A3wCV4c4m9fpX5zpaHF4b7Cy5BMyC1ACZuy1sbTWjTfcy5ApUnmL9d8pjLP18UnDjy99zGDGgJUgh2Ndg5cge8A+eUOpIBnYbOVffgUmYe1azLFTByuvR/fPNsaN2D2iT6EryG9jplVWGPph+ByXxqQEiZEnUyUcqbXvJIYN6vICfmno/W3/qza5ojyW9lmomAd+IjDqvUMZIwA3xf0t1B4DurSOfhMk7MrcoW2xhJMo8rOIDlPBzgW8+XuCnK7r5edPVcZOcGuLBRuo9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
  bh=oAe7Wd2nkM1r2nRs8oxBZblMXUwlgpMbsZxUxU/zReY=;
- b=KF9WGdCSmXMaOixcXZoOX8LkXKjuGfYAZU4ze005/fJjkVbGpDpI8qWh8OFQoX/Xzi2Thledh2L5yhFQ2JZLZFHA1RHBw2uOGFF5jOazMCaDNnK0Du4fsUAwWqbcRPfr10deRbPdYqTdxuTsH5HqQBKT9y0k4rxYJHuIttttTUegur6dq+Ss5zS4t2WfNwC0yuikGhqAYUfbHnhjEB8dq/zxgd84/eqbVx1vnrBVMnprzZnyRFJoH8f8taF3BOd73K1udwjaJiFcUW/tK3Wtz+Tvn+iOCLpgS0EBNKeKzx+XaKYE9VhickWF7sYkUe2+mrne2f6rmAd6fDjrJOv7Bw==
+ b=YyS8BUuwjHVaQyJAzzShtKGNSPb4PMYDW4fQDTeInwqmw4feUCv2/jbWGACUelGokzRLzphP3zHcqWNJgJJWk736ox1eNIZwP4Ltpiib9w3Lo1ssGl4F+DwCjCvo87TFNrN/48XaG79wJKJ1sIDLF0GfEiaYyegsPFK2qJkVUstJZdD71CWvGgB/O2kb+WK3nhyJKCLmSIfRJvc6+gfhggFlELdmNrWKEdDI9q5Y4Mj9eewDk1sf742Y4913BZ81FzyaMpCDTuVylCKbStK0R8SjF+wxoSqU23sLbJ5pcUL4tt8uTIbLABVDwnzQOEnhDlCJUyME4sYkmKmBeRUZig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from DS7PR03CA0096.namprd03.prod.outlook.com (2603:10b6:5:3b7::11)
- by DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17) with
- Microsoft SMTP Server (version=TLS1_2,
+Received: from MN2PR07CA0014.namprd07.prod.outlook.com (2603:10b6:208:1a0::24)
+ by CH2PR12MB4939.namprd12.prod.outlook.com (2603:10b6:610:61::14)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 14:04:28 +0000
-Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::bd) by DS7PR03CA0096.outlook.office365.com
- (2603:10b6:5:3b7::11) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 14:06:24 +0000
+Received: from BL02EPF0000EE3C.namprd05.prod.outlook.com
+ (2603:10b6:208:1a0:cafe::30) by MN2PR07CA0014.outlook.office365.com
+ (2603:10b6:208:1a0::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Wed, 7 Dec 2022 14:04:28 +0000
+ Transport; Wed, 7 Dec 2022 14:06:24 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5901.14 via Frontend Transport; Wed, 7 Dec 2022 14:04:28 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000EE3C.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.8 via Frontend Transport; Wed, 7 Dec 2022 14:06:23 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Dec
- 2022 08:04:28 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Dec
- 2022 06:04:27 -0800
+ 2022 08:06:21 -0600
 Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 7 Dec 2022 08:04:27 -0600
+ Transport; Wed, 7 Dec 2022 08:06:08 -0600
 To: <buildroot@buildroot.org>
-Date: Wed, 7 Dec 2022 07:04:23 -0700
-Message-ID: <20221207140423.34674-1-neal.frager@amd.com>
+Date: Wed, 7 Dec 2022 07:06:06 -0700
+Message-ID: <20221207140606.49933-1-neal.frager@amd.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT060:EE_|DM4PR12MB5278:EE_
-X-MS-Office365-Filtering-Correlation-Id: db2d823b-461f-4fd6-7608-08dad85bf4af
+X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3C:EE_|CH2PR12MB4939:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8590c110-72b6-43e2-ffe9-08dad85c390f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zOo7dsvRjxh4WCs8rcoa90lqkiiGNuRu4XoBL7k/FbgPZS7t6IrdKbSdaofDueEVKd3xiA8XdLIVg8T6ZwTe6guYv6iUvkQQyyZtP2VaN74SoA0MHADMIiozEjooIJO908LSuwe/kvwpkMyMPIAU9zXdlnitXiA1/ZUohZWB1TCEjz0uj11OrchBjVNXtkH9lwqzKVGcXNC1KURxb6FypKCmcCeEzJgFxT5jVubt5kSmqy0Z417LL8UjySUl2qcUHdDGv6pVtqlH8itV6ZiprR8edZe0R98yFSywGK0Ig1c3FymBCQayYEAD3BxZkiVPpkiCRn3HCok1wjpx5zT8XY1xUlHbRfzWj9jtDlZ+mJ5fWK1mShsW+Dx4TbEGwMwxtvmJ7x4aVoRBBweqcZ4cE+jYVzH0ONCZ98qAYyW6sqXoU+12rq5eye/jh1uGVKUHzY/X915Ses3n7bDjsxbGBQhltQ8IjhKsyubKIOYXOMkMxHs43zMcuTAmPYQvFxlL7KypNdnhMVcCEd7CA0+ovzlZjJ5TBw6Io30nXhOhWFmmXoH5zxirT3miQX0mRp56Ro5TfxjIwiy+WjdhMdy00pEWFIr0NY9da3zeufJeakbTUsax1d8aPVunSjJixwotHJY7IjR377fEs9O5xgv3Auw8XXqDb+pcLjA7rudVOGgFeOSgj4Viat3q6yOV0YXrInQQbrdrrJielyIFVZQWpDbeSEHqpbrll88wsJZpVjEcJmNEghMjD/im8BT4Tka/gcS41jO1xiIRQ/PTav2D72wXNK3NxEX+ehV4uNwZr98b4lBcUwe7Qkfix0o9eSzE
+X-Microsoft-Antispam-Message-Info: qaRi19RX3/EOtX/CaTG0OfMehvhDbfLUSC36wQ9pKibOqv+lEXb6Pht3viVd5Vsbi0n/0Z+Ga4ZlXzLJ9zkpt3IlRVvM4R1kvx7kjoKurpi+Z27g46Q6ufohDxxjej9iMRuVLnJTh8BHTa+0fsqh80s96skZCZrC3+JywFi2f7kHpVCnAkVPb/a1s+7KyJfKvj2mXZEzYWN/fU7iRvEJ3b1fvkb0l3AWVOVDz1sQOITWerbcB44UHCShuYgHDrNoblJhNbcQ4NYpd9xtdWR0tOZajVpNX+kGlPTJAhRdjLVf9NTeYYJMW6IEIVkXbMJbTCOFox4TizcGDYvM7n96TaDHVTwRmopDrlPIXne1+EaBHJI82vW9zQWWRlyf3jkOIo2uTpPmA6ovZ3mPFSAxlP3iKhvvt7p8Nn7bSz7xO4RMe27DZdXlx3tuUIYrRS93ALsa4iPunZoSkl+A7WJefywlrUlphgDgBWqlr/xq5VucLcui30SYs8xrsg2zQXxdAwxlz34RyxM73NTmxuB6f04suFSorJ3kXcUV0PUXpf+Rwn44FKbVOTE3otrPPFrnYA/rF1yUquIbHF0S7J1tD2F80FEBZ/EOf0+VpKbYy6sbkV1WXRnPrFCTvg8ak5ZfIsteO/wOktTOPXkm4skIjCf3yiIUlxwX1FoPRgt9ye+l7sSBGYktJ6kvJYI0exzC7atK1CWNoFEkz0pvvhpbyD0XximrgLS3lOrbtq0gPjcgbMtVyHNMCNYJHbuKAeyAFiKdUnx+t5+bd3t2wAPFGmU9gWAhrz1JaX+/tRHVJ6lveFqpySCStF/QEngPTOku
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230022)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199015)(36840700001)(46966006)(40470700004)(966005)(86362001)(83380400001)(36860700001)(30864003)(41300700001)(356005)(4326008)(8676002)(81166007)(70206006)(8936002)(70586007)(44832011)(2906002)(40460700003)(82310400005)(336012)(478600001)(26005)(426003)(186003)(47076005)(6666004)(40480700001)(54906003)(2616005)(316002)(6916009)(1076003)(82740400003)(5660300002)(36756003)(36900700001);
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199015)(46966006)(40470700004)(36840700001)(86362001)(70206006)(40460700003)(36756003)(82310400005)(40480700001)(186003)(1076003)(41300700001)(70586007)(336012)(44832011)(30864003)(966005)(4326008)(8676002)(426003)(47076005)(2616005)(8936002)(5660300002)(6916009)(478600001)(316002)(54906003)(26005)(356005)(81166007)(82740400003)(83380400001)(2906002)(36860700001)(36900700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 14:04:28.4328 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: db2d823b-461f-4fd6-7608-08dad85bf4af
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 14:06:23.1818 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8590c110-72b6-43e2-ffe9-08dad85c390f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3C.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5278
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4939
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=oAe7Wd2nkM1r2nRs8oxBZblMXUwlgpMbsZxUxU/zReY=;
- b=JMFG3XLlw3gftz47Nqj08nJgQfCaTuztLYfnQEYNQlmMUQcUoJhJKlMxMQWmHq35bDocc0TdFTaEW/loexE+sT1eaUAXyBh5w0anTY7HlkfuLX1u/ccC/V4hE2yFLiq8Q/tM8EpherPSi90Z9HWQF73POlJemqFjprX0MTPFKo0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=GK/qlh+uJsIo4nPa+luyadShPdMGvqd+b2Qb4GTsqSvkOTBGuGXQ8JDhpqE1b5r8wNPe9R1u667rMQYd4US4cP+0Er3hequidO5QQcKR5XnuGfpyHFDyQckHSw2xAnnYKPrFBjMQ0UE1vgkQBBfsWg2qOhkpmwWwBHwM+F2Tdvc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=JMFG3XLl
-Subject: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kr260_defconfig: new
+ header.s=selector1 header.b=GK/qlh+u
+Subject: [Buildroot] [PATCH v2 1/1] configs/zynqmp_kria_kr260_defconfig: new
  defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
