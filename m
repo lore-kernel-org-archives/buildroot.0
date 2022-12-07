@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D33DEC4708E
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 12:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 119D0C4708E
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 12:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BE2B4189D;
-	Wed,  7 Dec 2022 12:44:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE2B4189D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EF1E60EA7;
+	Wed,  7 Dec 2022 12:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EF1E60EA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id adzK9WXe9iWo; Wed,  7 Dec 2022 12:44:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GroBQ37wO0er; Wed,  7 Dec 2022 12:44:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76E5A4189A;
-	Wed,  7 Dec 2022 12:44:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76E5A4189A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13F7E1BF4DB
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 12:44:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0A3260F15;
+	Wed,  7 Dec 2022 12:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0A3260F15
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F9F11BF4DB
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 12:44:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFC534189A
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 12:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFC534189A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BA6B40A01
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 12:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BA6B40A01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fPRSCShEqMfK for <buildroot@lists.busybox.net>;
- Wed,  7 Dec 2022 12:44:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fl-S0W1GWhXc for <buildroot@lists.busybox.net>;
+ Wed,  7 Dec 2022 12:44:33 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDF8C41896
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43D37408E2
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BDF8C41896
- for <buildroot@buildroot.org>; Wed,  7 Dec 2022 12:44:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 43D37408E2
+ for <buildroot@buildroot.org>; Wed,  7 Dec 2022 12:44:33 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 79A311C0007;
- Wed,  7 Dec 2022 12:44:25 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7FB231C0006;
+ Wed,  7 Dec 2022 12:44:31 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p2tmi-00GR6w-AG; Wed, 07 Dec 2022 13:44:24 +0100
+ id 1p2tmo-00GR74-RF; Wed, 07 Dec 2022 13:44:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
 References: <20221002144629.2105385-1-bernd.kuhls@t-online.de>
- <87v8muc0kl.fsf@dell.be.48ers.dk>
-Date: Wed, 07 Dec 2022 13:44:24 +0100
-In-Reply-To: <87v8muc0kl.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 01 Dec 2022 21:48:26 +0100")
-Message-ID: <877cz35qon.fsf@dell.be.48ers.dk>
+ <20221002144629.2105385-2-bernd.kuhls@t-online.de>
+ <87r0xic0hm.fsf@dell.be.48ers.dk>
+Date: Wed, 07 Dec 2022 13:44:30 +0100
+In-Reply-To: <87r0xic0hm.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 01 Dec 2022 21:50:13 +0100")
+Message-ID: <87359r5qoh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/kodi: add comment to display
- udev dependency for gbm when wayland/x11 are disabled
+Subject: Re: [Buildroot] [PATCH 2/2] package/kodi: fix build with fmt >= 9.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,15 +71,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Without this additional comment only the comment
- >> kodi needs an OpenGL EGL backend with OpenGL or GLES support
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- >> is displayed which is not enough to guide users.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> For details see https://github.com/xbmc/xbmc/pull/21674
+ >> Build-tested using this previously broken defconfig:
+
+ >> BR2_x86_64=y
+ >> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ >> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ >> BR2_PACKAGE_KODI=y
+ >> BR2_PACKAGE_MESA3D=y
+ >> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+ >> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+ >> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+ >> BR2_PACKAGE_PYTHON3=y
+ >> BR2_PACKAGE_PYTHON3_PY_ONLY=y
 
  >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2022.08.x and 2022.02.x, thanks.
+ > Committed, thanks.
+
+Committed to 2022.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
