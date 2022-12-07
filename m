@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1206EC4708E
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 764AAC4708E
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B662481FE1;
-	Wed,  7 Dec 2022 13:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B662481FE1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lD391DB_nrT4; Wed,  7 Dec 2022 13:37:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F22380D2A;
-	Wed,  7 Dec 2022 13:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F22380D2A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 578B51BF955
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32D8760BAA
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32D8760BAA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B7E260EA4;
+	Wed,  7 Dec 2022 13:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B7E260EA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jmOuLJJmyJY1 for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EPNM8YXSeJPE; Wed,  7 Dec 2022 13:37:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7BC60E21;
+	Wed,  7 Dec 2022 13:37:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F7BC60E21
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BE1D1BF95D
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40E1440B74
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40E1440B74
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5KHQEb9B4ggy for <buildroot@lists.busybox.net>;
  Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A5B560DB7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 667FA40B42
  for <buildroot@buildroot.org>; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A5B560DB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 667FA40B42
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58CE485DB2; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
+ id 4EB6D85DB1; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 14:35:11 +0100
+Date: Wed, 7 Dec 2022 14:34:09 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b21c9a55c3881a4d58c0413626159a6c2bedb1e9
-X-Git-Newrev: 9be3210e8200bbd79163cf72c30eafbc882a9c7f
+X-Git-Oldrev: e422d1d882f162ba288ab41f3d5fe54564de59ea
+X-Git-Newrev: b21c9a55c3881a4d58c0413626159a6c2bedb1e9
 X-Patchwork-Hint: ignore
-Message-Id: <20221207133706.58CE485DB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] docs/manual: fixed some
- spelling mistakes
+Message-Id: <20221207133706.4EB6D85DB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/git: security
+ bump to version 2.31.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9be3210e8200bbd79163cf72c30eafbc882a9c7f
+commit: https://git.buildroot.net/buildroot/commit/?id=b21c9a55c3881a4d58c0413626159a6c2bedb1e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixed some spelling mistakes of countable nouns.
+Fixes:
+ * CVE-2022-39253:
+   When relying on the `--local` clone optimization, Git dereferences
+   symbolic links in the source repository before creating hardlinks
+   (or copies) of the dereferenced link in the destination repository.
+   This can lead to surprising behavior where arbitrary files are
+   present in a repository's `$GIT_DIR` when cloning from a malicious
+   repository.
 
-Signed-off-by: Zikui Zhao <zhaozikui@eswincomputing.com>
-Reviewed-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a34dcba9ebcda5a1dcb95b332486454776cd305b)
+   Git will no longer dereference symbolic links via the `--local`
+   clone mechanism, and will instead refuse to clone repositories that
+   have symbolic links present in the `$GIT_DIR/objects` directory.
+
+   Additionally, the value of `protocol.file.allow` is changed to be
+   "user" by default.
+
+ * CVE-2022-39260:
+   An overly-long command string given to `git shell` can result in
+   overflow in `split_cmdline()`, leading to arbitrary heap writes and
+   remote code execution when `git shell` is exposed and the directory
+   `$HOME/git-shell-commands` exists.
+
+   `git shell` is taught to refuse interactive commands that are
+   longer than 4MiB in size. `split_cmdline()` is hardened to reject
+   inputs larger than 2GiB.
+
+https://github.com/git/git/blob/v2.31.5/Documentation/RelNotes/2.31.5.txt
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c1d783d4ddcda520fa8bcf4d8cd3f68eaa2188a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/customize-directory-structure.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
-index a3a7ad4cb9..1249421da2 100644
---- a/docs/manual/customize-directory-structure.txt
-+++ b/docs/manual/customize-directory-structure.txt
-@@ -27,10 +27,10 @@ to you.
- |           +-- post_image.sh
- |           +-- rootfs_overlay/
- |           |   +-- etc/
--|           |   +-- <some file>
-+|           |   +-- <some files>
- |           +-- patches/
- |               +-- foo/
--|               |   +-- <some patch>
-+|               |   +-- <some patches>
- |               +-- libbar/
- |                   +-- <some other patches>
- |
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 41afa83f86..af09ea817b 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  84fc20acf8fbea5cad7d5d7be0dfeb32494f1dac8e6c61675c904d1fd3d8c016  git-2.31.4.tar.xz
++sha256  dbc80f88d36fcde2c7acaaa9343cfab0f56effe9aee60e5eb00f3f36b8a619b4  git-2.31.5.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index dc587170e8..653b4f46ad 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.31.4
++GIT_VERSION = 2.31.5
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
