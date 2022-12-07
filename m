@@ -1,51 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5BB1C352A1
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89523C4708E
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 14:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6989381FC2;
-	Wed,  7 Dec 2022 13:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6989381FC2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E455460F23;
+	Wed,  7 Dec 2022 14:03:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E455460F23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ISpNod3a7qF; Wed,  7 Dec 2022 13:40:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0zvfIovAAS4c; Wed,  7 Dec 2022 14:03:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9509D81F03;
-	Wed,  7 Dec 2022 13:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9509D81F03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03B1C60EF2;
+	Wed,  7 Dec 2022 14:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B1C60EF2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 76F231BF955
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:39:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B1EE1BF4D8
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51CB3401D2
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51CB3401D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE12F418A0
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 14:03:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE12F418A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qVDzDTdEnUqm for <buildroot@lists.busybox.net>;
- Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACF89401B7
- for <buildroot@buildroot.org>; Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF89401B7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9844285DBC; Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 8idX_3rf-qQ2 for <buildroot@lists.busybox.net>;
+ Wed,  7 Dec 2022 14:03:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FAD84189F
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9FAD84189F
+ for <buildroot@buildroot.org>; Wed,  7 Dec 2022 14:03:02 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id r26so24979357edc.10
+ for <buildroot@buildroot.org>; Wed, 07 Dec 2022 06:03:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=23+XvUSYpLPvb5In3wkMTVztA99unfaHiPobIh0UGYw=;
+ b=z7BiKto+Hk8Hoqu/K0raD4jV4DruJtb8FYaDTmi2b5DKorN4+LNye9oMRalOKEmTf1
+ YUnaGoTbKGRN0FYSd3HjAagFs8BXzXERXQz11tsSxda9+a/DfQQUps3xnxzNHLbL1D0I
+ 22UnYsEo4ihRKl7+eybds+cVNXTqfjxIuArOTiFDfonruI5k7unUqQDje4gBUAMpUeUa
+ QlQnCblrT+BCncRoWlFXFh1odZZF8FzvlYyqHVgMmBEmH5aEG45Hn4gbiZDU6f+jZ62Q
+ sTlM7eQqKynKHogU0iPFenLIAyZADkGzA4C+lxDhYdt59OPbtM+KgkNT+iddWz8vsYM/
+ WZVQ==
+X-Gm-Message-State: ANoB5plTLJu0qBfEzWfgC7yOgY4dG7ckziDR0RX7sbMqJ/c4wrxb0qC2
+ 0O3ksBxTp0MCIHQirA4WuBr0q61Z0u8=
+X-Google-Smtp-Source: AA0mqf4KP0SEnromo5w6CXplZGYGEztaiNmWtoIE7UGqLJWXqGnkWpMBvNwHpF40OqokPIzG7mDXdw==
+X-Received: by 2002:aa7:db91:0:b0:458:bd09:1b20 with SMTP id
+ u17-20020aa7db91000000b00458bd091b20mr82951741edt.176.1670421780441; 
+ Wed, 07 Dec 2022 06:03:00 -0800 (PST)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ va13-20020a17090711cd00b007c09d37eac7sm8560716ejb.216.2022.12.07.06.02.59
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Wed, 07 Dec 2022 06:02:59 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 14:33:35 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 55b4b4ce653e13de2c55b3c9d4d7a68d670bf61e
-X-Git-Newrev: 0e96939212a5f4379712c57a24e2cc199f51deaf
-X-Patchwork-Hint: ignore
-Message-Id: <20221207133943.9844285DBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/vim: security
- bump to version 9.0.0951
+Date: Wed,  7 Dec 2022 15:02:53 +0100
+Message-Id: <20221207140253.20533-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=23+XvUSYpLPvb5In3wkMTVztA99unfaHiPobIh0UGYw=;
+ b=YRX3736OX1gZsE6PaStrrNQP7XRFF4XPADoLRJn4f94lnlhTg7HutAK9eTKKjrdrR/
+ acCZdJyaJhQ2gzv7+dQ0XFU2T3tZi6UBE43sajg3mvy0DoZG0BMDhxffBfadXtCnCSbK
+ zK0qd86dofmHdZVI/Gz/oDoEinJNpBCGmUdHKjxIIpihGYMkqJGpuKxwV26hQIaslJOV
+ lBzO62vVaglHvS31pf6xRWx9wgR/+QcNiHe45ve9EQQg5/b6UuNWpBpLikcc1AqF+uA4
+ R0dtJ71UCC+vFsIMgm8/0I+uYS2YFe4DpHhZJBNmdlklMs80uoh6kR2xeypabX4lO896
+ mc8g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YRX3736O
+Subject: [Buildroot] [PATCH] package/python-dicttoxml: bump to version 1.7.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +90,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Asaf Kahlon <asafka7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e96939212a5f4379712c57a24e2cc199f51deaf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fix CVE-2022-3705: A vulnerability was found in vim and classified as
-problematic. Affected by this issue is the function qf_update_buffer of
-the file quickfix.c of the component autocmd Handler. The manipulation
-leads to use after free. The attack may be launched remotely. Upgrading
-to version 9.0.0805 is able to address this issue. The name of the patch
-is d0fab10ed2a86698937e3c3fed2f10bd9bb5e731. It is recommended to
-upgrade the affected component. The identifier of this vulnerability is
-VDB-212324.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d40c8b31d50c55f6bf2536f2e3ad2af4c6dd5730)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-dicttoxml/python-dicttoxml.hash | 4 ++--
+ package/python-dicttoxml/python-dicttoxml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index ef3bc46cdc..03ee908db4 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/python-dicttoxml/python-dicttoxml.hash b/package/python-dicttoxml/python-dicttoxml.hash
+index d8c43d0144..de31782104 100644
+--- a/package/python-dicttoxml/python-dicttoxml.hash
++++ b/package/python-dicttoxml/python-dicttoxml.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/dicttoxml/json
+-md5  ec5643a048cf32dad3c28db236b923e4  dicttoxml-1.7.4.tar.gz
++md5  234550e3aa875c6f3520aa9a2dff1ef1  dicttoxml-1.7.15.tar.gz
  # Locally computed
--sha256  f50ab9c023e7c276a61a7076c840d36254ce83691dba28af9ac5c513b6ace3b4  vim-9.0.0709.tar.gz
-+sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 22c1eb91a8..d814c68630 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
+-sha256  ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45  dicttoxml-1.7.4.tar.gz
++sha256  5540fe7dfde2d2ed9467e67fcc981cbd2e164dc3120c862bdb7333202ac48838  dicttoxml-1.7.15.tar.gz
+ sha256  4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
+diff --git a/package/python-dicttoxml/python-dicttoxml.mk b/package/python-dicttoxml/python-dicttoxml.mk
+index 537afff601..3e5f90e9de 100644
+--- a/package/python-dicttoxml/python-dicttoxml.mk
++++ b/package/python-dicttoxml/python-dicttoxml.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.0709
-+VIM_VERSION = 9.0.0951
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-PYTHON_DICTTOXML_VERSION = 1.7.4
++PYTHON_DICTTOXML_VERSION = 1.7.15
+ PYTHON_DICTTOXML_SOURCE = dicttoxml-$(PYTHON_DICTTOXML_VERSION).tar.gz
+-PYTHON_DICTTOXML_SITE = https://pypi.python.org/packages/74/36/534db111db9e7610a41641a1f6669a964aacaf51858f466de264cc8dcdd9
++PYTHON_DICTTOXML_SITE = https://files.pythonhosted.org/packages/45/b5/efa170fd88e8b8bc025c59592eade0fb7de6ae02ed3dd63957956adc1396
+ PYTHON_DICTTOXML_SETUP_TYPE = distutils
+ PYTHON_DICTTOXML_LICENSE = GPL-2.0
+ PYTHON_DICTTOXML_LICENSE_FILES = LICENCE.txt
+-- 
+2.17.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
