@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 160ADC4708E
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA6E9C352A1
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B691C81F24;
-	Wed,  7 Dec 2022 13:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B691C81F24
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58FE381FE1;
+	Wed,  7 Dec 2022 13:34:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58FE381FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mFJfoTdQ4Z6z; Wed,  7 Dec 2022 13:33:58 +0000 (UTC)
+	with ESMTP id 61UexZ-eE59T; Wed,  7 Dec 2022 13:34:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 101E781403;
-	Wed,  7 Dec 2022 13:33:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 101E781403
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE9F21BF4D8
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:33:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91FCE81FB8;
+	Wed,  7 Dec 2022 13:34:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91FCE81FB8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 092421BF955
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9D6240B67
+ by smtp1.osuosl.org (Postfix) with ESMTP id E67D281403
  for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9D6240B67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E67D281403
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2LgjTQ-QB74j for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9yw8tZcZMFhp for <buildroot@lists.busybox.net>;
  Wed,  7 Dec 2022 13:33:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DF5A405F5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 411A581380
  for <buildroot@buildroot.org>; Wed,  7 Dec 2022 13:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DF5A405F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 411A581380
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE1F485D9B; Wed,  7 Dec 2022 13:33:54 +0000 (UTC)
+ id 30F1085D9C; Wed,  7 Dec 2022 13:33:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 09:38:11 +0100
+Date: Wed, 7 Dec 2022 14:28:49 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 48462e9fae8c49bfa216e04db0133f94a0e11db0
-X-Git-Newrev: f91c90e080b270082f077688e8ceb5599dc802a3
+X-Git-Oldrev: 4ef065cd5f7f6a07f5123c0a4607d2a7bf2b0972
+X-Git-Newrev: 55b4b4ce653e13de2c55b3c9d4d7a68d670bf61e
 X-Patchwork-Hint: ignore
-Message-Id: <20221207133354.EE1F485D9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/kodi: add comment
- to display udev dependency for gbm when wayland/x11 are disabled
+Message-Id: <20221207133355.30F1085D9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/netsnmp: drop
+ autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f91c90e080b270082f077688e8ceb5599dc802a3
+commit: https://git.buildroot.net/buildroot/commit/?id=55b4b4ce653e13de2c55b3c9d4d7a68d670bf61e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Without this additional comment only the comment
+Commit 83b4337354014 (package/netsnmp: security bump to version 5.9.3)
+dropped the patches, but forgot to remove the autoreconf.  Do so now.
 
-  kodi needs an OpenGL EGL backend with OpenGL or GLES support
-
-is displayed which is not enough to guide users.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8aa68a529ecdcf6f83d81a71863d59eb2147522b)
+(cherry picked from commit 1ad6bc2f587a31c7e1475103a59c93f6a398e8ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/netsnmp/netsnmp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 90710683db..7bd8bc2943 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -27,6 +27,9 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 56a07e2ccd..15bc318e36 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -40,7 +40,6 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_MAKE = $(MAKE1)
+ NETSNMP_CONFIG_SCRIPTS = net-snmp-config
+-NETSNMP_AUTORECONF = YES
  
-+comment "kodi needs udev support for gbm"
-+	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
- 	bool
- 	default y
+ ifeq ($(BR2_ENDIAN),"BIG")
+ NETSNMP_CONF_OPTS += --with-endianness=big
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
