@@ -4,69 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC942C352A1
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 03:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0014C47089
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 05:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 172FE40AA6;
-	Wed,  7 Dec 2022 03:16:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 172FE40AA6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 564CA40B13;
+	Wed,  7 Dec 2022 05:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 564CA40B13
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X4OuDhDpnDf5; Wed,  7 Dec 2022 03:16:11 +0000 (UTC)
+	with ESMTP id 7rSbdEHKjbfA; Wed,  7 Dec 2022 05:21:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 365E0404EC;
-	Wed,  7 Dec 2022 03:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 365E0404EC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D212C1BF307
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 03:16:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 963AF40AD9;
+	Wed,  7 Dec 2022 05:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 963AF40AD9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7987E1BF3E1
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 05:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA3B96106F
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 03:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA3B96106F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CFC94183F
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 05:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CFC94183F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z08QyrPG8ohI for <buildroot@lists.busybox.net>;
- Wed,  7 Dec 2022 03:16:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B44C6106C
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com
- [209.85.215.169])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B44C6106C
- for <buildroot@buildroot.org>; Wed,  7 Dec 2022 03:16:05 +0000 (UTC)
-Received: by mail-pg1-f169.google.com with SMTP id s196so15121809pgs.3
- for <buildroot@buildroot.org>; Tue, 06 Dec 2022 19:16:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UkLz6BZqo2PVfa5fJsJgZGdQNqPZd0/YCap4ZQ5XyVs=;
- b=LAn4ixx2cVWCcQO6LgpuEgM3U1UKj2rUEbcwNkQmhKKJlno8FEhUSSAN4rTEWjvhbs
- 9nY7jWS3/KmpKKnP69bIrN3Kdpi2IekzMOI/Sm13cpeFR19jENateWASMsJlc/vLAiKT
- Kj9J9DbHq1Da21eGXW6omYbV1OP4l02MR1NDOVHhEuUm3l4OKwPk8bQ84kjkjYBgYBbz
- oWIJkL3/YC7L37fyZIMZJbKZiKhKz0Nq7/a3rQu96pN6LYOfdQVo2cDUUL7gRAn76WAd
- x7SYLK0aW5JinPk9MFMFuYT5Kc/L7+mCgRagUfaMkUHpDOZzG9larx4D9yPL/H+UhzCE
- FiPA==
-X-Gm-Message-State: ANoB5plazMXmbd6pT7a74xgS9e8hTmnYLd15xcWbH81M7CdnA3j/fTG4
- D+dkgF+5UFdmyVE7t8QUAPCXBrGzl5o=
-X-Google-Smtp-Source: AA0mqf5nEp3yCBFXkzAjoPx7LXYM99m2b1qCiBuX3FGQJbRtuln2Ed20aaR9fIrIPm979ntM5+pIww==
-X-Received: by 2002:a63:1e44:0:b0:478:91e1:ff60 with SMTP id
- p4-20020a631e44000000b0047891e1ff60mr18131899pgm.206.1670382964059; 
- Tue, 06 Dec 2022 19:16:04 -0800 (PST)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- c15-20020a170903234f00b00186ff402525sm5128439plh.213.2022.12.06.19.16.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Dec 2022 19:16:03 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 64mLbXkSwCRM for <buildroot@lists.busybox.net>;
+ Wed,  7 Dec 2022 05:21:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 960B341836
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 960B341836
+ for <buildroot@buildroot.org>; Wed,  7 Dec 2022 05:21:48 +0000 (UTC)
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1p2msL-0000J2-Kl; Wed, 07 Dec 2022 08:21:46 +0300
 To: buildroot@buildroot.org
-Date: Tue,  6 Dec 2022 19:16:01 -0800
-Message-Id: <20221207031601.80964-1-christian@paral.in>
-X-Mailer: git-send-email 2.38.0
+Date: Wed,  7 Dec 2022 08:21:43 +0300
+Message-Id: <20221207052143.18521-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/go: security bump to version 1.19.4
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD908190A22B884CF14AB7A44B281FF59334C8EFCA778AA0724182A05F5380850401A63D9220DEE013BBC10D48A37355C73860C52E179C5B3360B847269F4F05316
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE79145AB6E9E75F07EEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637F832FB01FC7F589C8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D84C19184B0BB8F6BDFB066DA364031ACA6F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC55D5BE2F85BDEC5FA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F4460429728776938767073520C65AC60A1F0286FEF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE33AC447995A7AD182BEBFE083D3B9BA73A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E7358CCB3ED2A1DE2304C4224003CC83647689D4C264860C145E
+X-C1DE0DAB: 0D63561A33F958A5EEA24FEE9AD6894A51C1B0639420EC3A1C0B2229ED0C5B464EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF50F2237FE565727C05
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34BF5454112BD5BFD7FD19DAC7747271DE4487E7DBD0702523F8E090F1ABA3FA7CB9D13268D0BF4E1E1D7E09C32AA3244C220F440A5DBC1E4DEAEAC3791B39162B250262A5EE9971B0729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj0NDJWmbmL/AiDLZui2m5QA==
+X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF52BDE7C2956E8B7910347398A38F6ADEA98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=GtSHWIu54+VrLWsOToc0A6fqwFHL5oPJDqnCdgm6GA4=; 
+ t=1670390508;x=1670480508; 
+ b=Jw/t8qw6pljv4UAuJA9nCU6zVuSZ27QvuSPhfFTxN9b5KgESnoKsmrlQ6LrAizZ99CQamOA5bGbmeZY7FsbtBgizDZZWgroeg5A7Qg7gGLQvI6elafjdq332k/53mTNJX1Ni7aVlO5mi92AUO8fdKVifjSO+vF60onns9FNGIT7QKx/UIVo10sunt12eOJMhAXpzjkX9yS2TH51uKkjtCeK93fs8w3RN1tzj8iYTPMqD8hHrTfTiGgfT52IeWYR78ExMK5FVuC+tew5qk9zh07rrErcqhTOYBJzxqvG5T8GRh6g8wcGgyBiAnGsONQmphTKWxWJyD+YLwU0qt5pTYw==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=Jw/t8qw6
+X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 14.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,54 +75,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Includes 2 security fixes following the security policy.
+Release notes: https://www.postgresql.org/docs/release/14.6/
 
- - CVE-2022-41720: https://go.dev/issue/56694
- - CVE-2022-41717: https://go.dev/issue/56350
-
-https://groups.google.com/g/golang-nuts/c/rQgaDWEvUrE
-https://github.com/golang/go/issues?q=milestone%3AGo1.19.4+label%3ACherryPickApproved+
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 866e7e0d59..d35db10213 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  18ac263e39210bcf68d85f4370e97fb1734166995a1f63fb38b4f6e07d90d212  go1.19.3.src.tar.gz
-+sha256  eda74db4ac494800a3e66ee784e495bfbb9b8e535df924a8b01b1a8028b7f368  go1.19.4.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index fd4caa2e5a..44e0c622c9 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 8fdaadde99..26bb626943 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v14.5/postgresql-14.5.tar.bz2.sha256
+-sha256  d4f72cb5fb857c9a9f75ec8cf091a1771272802f2178f0b2e65b7b6ff64f4a30  postgresql-14.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
++sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 631a959122..502860bc99 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.19.3
-+GO_VERSION = 1.19.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-POSTGRESQL_VERSION = 14.5
++POSTGRESQL_VERSION = 14.6
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-2.38.0
+2.37.2
 
 _______________________________________________
 buildroot mailing list
