@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B738C4708E
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5BB1C352A1
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22DA1610CE;
-	Wed,  7 Dec 2022 13:40:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22DA1610CE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6989381FC2;
+	Wed,  7 Dec 2022 13:40:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6989381FC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nyxNkOyL1o8X; Wed,  7 Dec 2022 13:40:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5ISpNod3a7qF; Wed,  7 Dec 2022 13:40:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11796610BC;
-	Wed,  7 Dec 2022 13:40:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11796610BC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D5091BF4D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9509D81F03;
+	Wed,  7 Dec 2022 13:40:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9509D81F03
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 76F231BF955
  for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:39:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4917840156
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51CB3401D2
  for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4917840156
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51CB3401D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NLEW565Wj_hE for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qVDzDTdEnUqm for <buildroot@lists.busybox.net>;
  Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC064402F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACF89401B7
  for <buildroot@buildroot.org>; Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC064402F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF89401B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B978B85DE3; Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
+ id 9844285DBC; Wed,  7 Dec 2022 13:39:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 14:35:46 +0100
+Date: Wed, 7 Dec 2022 14:33:35 +0100
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: e101c2edd67be39b8aea95a6386f4663c6fbaf39
-X-Git-Newrev: bad10e2f946bf9c1ccfc8e9ecea162697908d0fc
+X-Git-Oldrev: 55b4b4ce653e13de2c55b3c9d4d7a68d670bf61e
+X-Git-Newrev: 0e96939212a5f4379712c57a24e2cc199f51deaf
 X-Patchwork-Hint: ignore
-Message-Id: <20221207133943.B978B85DE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/libarchive: fix
- CVE-2022-36227
+Message-Id: <20221207133943.9844285DBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/vim: security
+ bump to version 9.0.0951
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,85 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bad10e2f946bf9c1ccfc8e9ecea162697908d0fc
+commit: https://git.buildroot.net/buildroot/commit/?id=0e96939212a5f4379712c57a24e2cc199f51deaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-In libarchive 3.6.1, the software does not check for an error after
-calling calloc function that can return with a NULL pointer if the
-function fails, which leads to a resultant NULL pointer dereference.
-NOTE: the discoverer cites this CWE-476 remark but third parties dispute
-the code-execution impact: "In rare circumstances, when NULL is
-equivalent to the 0x0 memory address and privileged code can access it,
-then writing or reading memory is possible, which may lead to code
-execution."
+Fix CVE-2022-3705: A vulnerability was found in vim and classified as
+problematic. Affected by this issue is the function qf_update_buffer of
+the file quickfix.c of the component autocmd Handler. The manipulation
+leads to use after free. The attack may be launched remotely. Upgrading
+to version 9.0.0805 is able to address this issue. The name of the patch
+is d0fab10ed2a86698937e3c3fed2f10bd9bb5e731. It is recommended to
+upgrade the affected component. The identifier of this vulnerability is
+VDB-212324.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d74137341d009e9a0dd79bca80015548f5af92ff)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d40c8b31d50c55f6bf2536f2e3ad2af4c6dd5730)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...libarchive-Handle-a-calloc-returning-NULL.patch | 38 ++++++++++++++++++++++
- package/libarchive/libarchive.mk                   |  3 ++
- 2 files changed, 41 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
-new file mode 100644
-index 0000000000..75ce6112fe
---- /dev/null
-+++ b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
-@@ -0,0 +1,38 @@
-+From bff38efe8c110469c5080d387bec62a6ca15b1a5 Mon Sep 17 00:00:00 2001
-+From: obiwac <obiwac@gmail.com>
-+Date: Fri, 22 Jul 2022 22:41:10 +0200
-+Subject: [PATCH] libarchive: Handle a `calloc` returning NULL (fixes #1754)
-+
-+[Retrieved from:
-+https://github.com/libarchive/libarchive/commit/bff38efe8c110469c5080d387bec62a6ca15b1a5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libarchive/archive_write.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/libarchive/archive_write.c b/libarchive/archive_write.c
-+index 66592e826..27626b541 100644
-+--- a/libarchive/archive_write.c
-++++ b/libarchive/archive_write.c
-+@@ -201,6 +201,10 @@ __archive_write_allocate_filter(struct archive *_a)
-+ 	struct archive_write_filter *f;
-+ 
-+ 	f = calloc(1, sizeof(*f));
-++
-++	if (f == NULL)
-++		return (NULL);
-++
-+ 	f->archive = _a;
-+ 	f->state = ARCHIVE_WRITE_FILTER_STATE_NEW;
-+ 	if (a->filter_first == NULL)
-+@@ -548,6 +552,10 @@ archive_write_open2(struct archive *_a, void *client_data,
-+ 	a->client_data = client_data;
-+ 
-+ 	client_filter = __archive_write_allocate_filter(_a);
-++
-++	if (client_filter == NULL)
-++		return (ARCHIVE_FATAL);
-++
-+ 	client_filter->open = archive_write_client_open;
-+ 	client_filter->write = archive_write_client_write;
-+ 	client_filter->close = archive_write_client_close;
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 865f605e2f..649b7dd4dc 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -12,6 +12,9 @@ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
- LIBARCHIVE_CPE_ID_VENDOR = libarchive
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index ef3bc46cdc..03ee908db4 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  f50ab9c023e7c276a61a7076c840d36254ce83691dba28af9ac5c513b6ace3b4  vim-9.0.0709.tar.gz
++sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 22c1eb91a8..d814c68630 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-libarchive-Handle-a-calloc-returning-NULL.patch
-+LIBARCHIVE_IGNORE_CVES += CVE-2022-36227
-+
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBARCHIVE_CONF_OPTS += --enable-bsdtar=static
+-VIM_VERSION = 9.0.0709
++VIM_VERSION = 9.0.0951
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
