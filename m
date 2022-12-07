@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3C36C4708E
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1206EC4708E
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 13:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EDB341742;
-	Wed,  7 Dec 2022 13:37:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EDB341742
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YfrSwYPtb499; Wed,  7 Dec 2022 13:37:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3754741724;
-	Wed,  7 Dec 2022 13:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3754741724
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A2C51BF4D8
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2630181FEF
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2630181FEF
+	by smtp1.osuosl.org (Postfix) with ESMTP id B662481FE1;
+	Wed,  7 Dec 2022 13:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B662481FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w3URAXa_A2GY for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lD391DB_nrT4; Wed,  7 Dec 2022 13:37:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F22380D2A;
+	Wed,  7 Dec 2022 13:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F22380D2A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 578B51BF955
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32D8760BAA
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 13:37:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32D8760BAA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jmOuLJJmyJY1 for <buildroot@lists.busybox.net>;
  Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5791E81FE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A5B560DB7
  for <buildroot@buildroot.org>; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5791E81FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A5B560DB7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 433F385DB0; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
+ id 58CE485DB2; Wed,  7 Dec 2022 13:37:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 14:33:39 +0100
+Date: Wed, 7 Dec 2022 14:35:11 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7e8b9b8dd433ea75b1964786cae94d390ddccc29
-X-Git-Newrev: e422d1d882f162ba288ab41f3d5fe54564de59ea
+X-Git-Oldrev: b21c9a55c3881a4d58c0413626159a6c2bedb1e9
+X-Git-Newrev: 9be3210e8200bbd79163cf72c30eafbc882a9c7f
 X-Patchwork-Hint: ignore
-Message-Id: <20221207133706.433F385DB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/vim: security
- bump to version 9.0.0951
+Message-Id: <20221207133706.58CE485DB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] docs/manual: fixed some
+ spelling mistakes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e422d1d882f162ba288ab41f3d5fe54564de59ea
+commit: https://git.buildroot.net/buildroot/commit/?id=9be3210e8200bbd79163cf72c30eafbc882a9c7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-3705: A vulnerability was found in vim and classified as
-problematic. Affected by this issue is the function qf_update_buffer of
-the file quickfix.c of the component autocmd Handler. The manipulation
-leads to use after free. The attack may be launched remotely. Upgrading
-to version 9.0.0805 is able to address this issue. The name of the patch
-is d0fab10ed2a86698937e3c3fed2f10bd9bb5e731. It is recommended to
-upgrade the affected component. The identifier of this vulnerability is
-VDB-212324.
+Fixed some spelling mistakes of countable nouns.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d40c8b31d50c55f6bf2536f2e3ad2af4c6dd5730)
+Signed-off-by: Zikui Zhao <zhaozikui@eswincomputing.com>
+Reviewed-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a34dcba9ebcda5a1dcb95b332486454776cd305b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/customize-directory-structure.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index ef3bc46cdc..03ee908db4 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  f50ab9c023e7c276a61a7076c840d36254ce83691dba28af9ac5c513b6ace3b4  vim-9.0.0709.tar.gz
-+sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 22c1eb91a8..d814c68630 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = 9.0.0709
-+VIM_VERSION = 9.0.0951
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+index a3a7ad4cb9..1249421da2 100644
+--- a/docs/manual/customize-directory-structure.txt
++++ b/docs/manual/customize-directory-structure.txt
+@@ -27,10 +27,10 @@ to you.
+ |           +-- post_image.sh
+ |           +-- rootfs_overlay/
+ |           |   +-- etc/
+-|           |   +-- <some file>
++|           |   +-- <some files>
+ |           +-- patches/
+ |               +-- foo/
+-|               |   +-- <some patch>
++|               |   +-- <some patches>
+ |               +-- libbar/
+ |                   +-- <some other patches>
+ |
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
