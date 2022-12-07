@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBC51C47089
-	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 07:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DADFC352A1
+	for <buildroot@archiver.kernel.org>; Wed,  7 Dec 2022 07:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A50540B64;
-	Wed,  7 Dec 2022 07:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A50540B64
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X5g32hM733_8; Wed,  7 Dec 2022 07:11:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FD2B40B4D;
-	Wed,  7 Dec 2022 07:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FD2B40B4D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46A1C1BF28B
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 07:10:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77A1F4088A
- for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 07:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77A1F4088A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3865841850;
+	Wed,  7 Dec 2022 07:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3865841850
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oQl_oKboZM6W for <buildroot@lists.busybox.net>;
- Wed,  7 Dec 2022 07:10:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 171B84085B
- for <buildroot@buildroot.org>; Wed,  7 Dec 2022 07:10:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 171B84085B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBF9985D51; Wed,  7 Dec 2022 07:10:14 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZqTB-NTc8z3e; Wed,  7 Dec 2022 07:11:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 393E441843;
+	Wed,  7 Dec 2022 07:11:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 393E441843
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B7101BF28B
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 07:10:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7ED261080
+ for <buildroot@lists.busybox.net>; Wed,  7 Dec 2022 07:10:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7ED261080
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NDsDdnZFxr3m for <buildroot@lists.busybox.net>;
+ Wed,  7 Dec 2022 07:10:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4F0460F2E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D4F0460F2E
+ for <buildroot@buildroot.org>; Wed,  7 Dec 2022 07:10:48 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1A3BE40002;
+ Wed,  7 Dec 2022 07:10:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p2oZq-00Fvwg-45; Wed, 07 Dec 2022 08:10:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Dec 2022 08:09:55 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 893edc07abdbe4d5d1b4a5c3280d5de82699d0a5
-X-Git-Newrev: 30d090e3261215544fdaf977a3bd8be33e73c278
-X-Patchwork-Hint: ignore
-Message-Id: <20221207071014.EBF9985D51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/dovecot: add
- upstream security fix for CVE-2022-30550
+References: <20221127223653.302788-1-peter@korsgaard.com>
+Date: Wed, 07 Dec 2022 08:10:46 +0100
+In-Reply-To: <20221127223653.302788-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 27 Nov 2022 23:36:52 +0100")
+Message-ID: <87bkof664p.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/dovecot: add upstream security fix
+ for CVE-2022-30550
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,193 +64,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30d090e3261215544fdaf977a3bd8be33e73c278
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-An issue was discovered in the auth component in Dovecot 2.2 and 2.3 before
-2.3.20.  When two passdb configuration entries exist with the same driver
-and args settings, incorrect username_filter and mechanism settings can be
-applied to passdb definitions.  These incorrectly applied settings can lead
-to an unintended security configuration and can permit privilege escalation
-in certain configurations.  The documentation does not advise against the
-use of passdb definitions that have the same driver and args settings.  One
-such configuration would be where an administrator wishes to use the same
-PAM configuration or passwd file for both normal and master users but use
-the username_filter setting to restrict which of the users is able to be a
-master user.
+ > An issue was discovered in the auth component in Dovecot 2.2 and 2.3 before
+ > 2.3.20.  When two passdb configuration entries exist with the same driver
+ > and args settings, incorrect username_filter and mechanism settings can be
+ > applied to passdb definitions.  These incorrectly applied settings can lead
+ > to an unintended security configuration and can permit privilege escalation
+ > in certain configurations.  The documentation does not advise against the
+ > use of passdb definitions that have the same driver and args settings.  One
+ > such configuration would be where an administrator wishes to use the same
+ > PAM configuration or passwd file for both normal and master users but use
+ > the username_filter setting to restrict which of the users is able to be a
+ > master user.
 
-https://dovecot.org/pipermail/dovecot-news/2022-July/000477.html
+ > https://dovecot.org/pipermail/dovecot-news/2022-July/000477.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 43899226b25aeb85aeb699f0df0c7ecf8d48616c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ndling-passdbs-with-identical-driver-args.patch | 136 +++++++++++++++++++++
- package/dovecot/dovecot.mk                         |   3 +
- 2 files changed, 139 insertions(+)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-new file mode 100644
-index 0000000000..04b8f5392a
---- /dev/null
-+++ b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-@@ -0,0 +1,136 @@
-+From 7bad6a24160e34bce8f10e73dbbf9e5fbbcd1904 Mon Sep 17 00:00:00 2001
-+From: Timo Sirainen <timo.sirainen@open-xchange.com>
-+Date: Mon, 9 May 2022 15:23:33 +0300
-+Subject: [PATCH] auth: Fix handling passdbs with identical driver/args but
-+ different mechanisms/username_filter
-+
-+The passdb was wrongly deduplicated in this situation, causing wrong
-+mechanisms or username_filter setting to be used. This would be a rather
-+unlikely configuration though.
-+
-+Fixed by moving mechanisms and username_filter from struct passdb_module
-+to struct auth_passdb, which is where they should have been in the first
-+place.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/auth/auth-request.c |  6 +++---
-+ src/auth/auth.c         | 18 ++++++++++++++++++
-+ src/auth/auth.h         |  5 +++++
-+ src/auth/passdb.c       | 15 ++-------------
-+ src/auth/passdb.h       |  4 ----
-+ 5 files changed, 28 insertions(+), 20 deletions(-)
-+
-+diff --git a/src/auth/auth-request.c b/src/auth/auth-request.c
-+index cd08b1fa02..0ca29f3674 100644
-+--- a/src/auth/auth-request.c
-++++ b/src/auth/auth-request.c
-+@@ -534,8 +534,8 @@ auth_request_want_skip_passdb(struct auth_request *request,
-+ 			      struct auth_passdb *passdb)
-+ {
-+ 	/* if mechanism is not supported, skip */
-+-	const char *const *mechs = passdb->passdb->mechanisms;
-+-	const char *const *username_filter = passdb->passdb->username_filter;
-++	const char *const *mechs = passdb->mechanisms;
-++	const char *const *username_filter = passdb->username_filter;
-+ 	const char *username;
-+ 
-+ 	username = request->fields.user;
-+@@ -548,7 +548,7 @@ auth_request_want_skip_passdb(struct auth_request *request,
-+ 		return TRUE;
-+ 	}
-+ 
-+-	if (passdb->passdb->username_filter != NULL &&
-++	if (passdb->username_filter != NULL &&
-+ 	    !auth_request_username_accepted(username_filter, username)) {
-+ 		auth_request_log_debug(request,
-+ 				       request->mech != NULL ? AUTH_SUBSYS_MECH
-+diff --git a/src/auth/auth.c b/src/auth/auth.c
-+index f2f3fda20c..9f6c4ba60c 100644
-+--- a/src/auth/auth.c
-++++ b/src/auth/auth.c
-+@@ -99,6 +99,24 @@ auth_passdb_preinit(struct auth *auth, const struct auth_passdb_settings *set,
-+ 	auth_passdb->override_fields_tmpl =
-+ 		passdb_template_build(auth->pool, set->override_fields);
-+ 
-++	if (*set->mechanisms == '\0') {
-++		auth_passdb->mechanisms = NULL;
-++	} else if (strcasecmp(set->mechanisms, "none") == 0) {
-++		auth_passdb->mechanisms = (const char *const[]){ NULL };
-++	} else {
-++		auth_passdb->mechanisms =
-++			(const char *const *)p_strsplit_spaces(auth->pool,
-++				set->mechanisms, " ,");
-++	}
-++
-++	if (*set->username_filter == '\0') {
-++		auth_passdb->username_filter = NULL;
-++	} else {
-++		auth_passdb->username_filter =
-++			(const char *const *)p_strsplit_spaces(auth->pool,
-++				set->username_filter, " ,");
-++	}
-++
-+ 	/* for backwards compatibility: */
-+ 	if (set->pass)
-+ 		auth_passdb->result_success = AUTH_DB_RULE_CONTINUE;
-+diff --git a/src/auth/auth.h b/src/auth/auth.h
-+index f700e29d5c..460a179765 100644
-+--- a/src/auth/auth.h
-++++ b/src/auth/auth.h
-+@@ -41,6 +41,11 @@ struct auth_passdb {
-+ 	struct passdb_template *default_fields_tmpl;
-+ 	struct passdb_template *override_fields_tmpl;
-+ 
-++	/* Supported authentication mechanisms, NULL is all, {NULL} is none */
-++	const char *const *mechanisms;
-++	/* Username filter, NULL is no filter */
-++	const char *const *username_filter;
-++
-+ 	enum auth_passdb_skip skip;
-+ 	enum auth_db_rule result_success;
-+ 	enum auth_db_rule result_failure;
-+diff --git a/src/auth/passdb.c b/src/auth/passdb.c
-+index eb4ac8ae82..f5eed1af4f 100644
-+--- a/src/auth/passdb.c
-++++ b/src/auth/passdb.c
-+@@ -224,19 +224,8 @@ passdb_preinit(pool_t pool, const struct auth_passdb_settings *set)
-+ 	passdb->id = ++auth_passdb_id;
-+ 	passdb->iface = *iface;
-+ 	passdb->args = p_strdup(pool, set->args);
-+-	if (*set->mechanisms == '\0') {
-+-		passdb->mechanisms = NULL;
-+-	} else if (strcasecmp(set->mechanisms, "none") == 0) {
-+-		passdb->mechanisms = (const char *const[]){NULL};
-+-	} else {
-+-		passdb->mechanisms = (const char* const*)p_strsplit_spaces(pool, set->mechanisms, " ,");
-+-	}
-+-
-+-	if (*set->username_filter == '\0') {
-+-		passdb->username_filter = NULL;
-+-	} else {
-+-		passdb->username_filter = (const char* const*)p_strsplit_spaces(pool, set->username_filter, " ,");
-+-	}
-++	/* NOTE: if anything else than driver & args are added here,
-++	   passdb_find() also needs to be updated. */
-+ 	array_push_back(&passdb_modules, &passdb);
-+ 	return passdb;
-+ }
-+diff --git a/src/auth/passdb.h b/src/auth/passdb.h
-+index 2e95328e5c..e466a9fdb6 100644
-+--- a/src/auth/passdb.h
-++++ b/src/auth/passdb.h
-+@@ -63,10 +63,6 @@ struct passdb_module {
-+ 	/* Default password scheme for this module.
-+ 	   If default_cache_key is set, must not be NULL. */
-+ 	const char *default_pass_scheme;
-+-	/* Supported authentication mechanisms, NULL is all, [NULL] is none*/
-+-	const char *const *mechanisms;
-+-	/* Username filter, NULL is no filter */
-+-	const char *const *username_filter;
-+ 
-+ 	/* If blocking is set to TRUE, use child processes to access
-+ 	   this passdb. */
-+-- 
-+2.30.2
-+
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 7619250985..e28f500b7b 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -21,6 +21,9 @@ DOVECOT_DEPENDENCIES = \
- # is part of the Red Hat packaging and not part of upstream dovecot
- DOVECOT_IGNORE_CVES += CVE-2016-4983
- 
-+# 0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
-+DOVECOT_IGNORE_CVES += CVE-2022-30550
-+
- DOVECOT_CONF_ENV = \
- 	RPCGEN=__disable_RPCGEN_rquota \
- 	i_cv_epoll_works=yes \
+Committed to 2022.08.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
