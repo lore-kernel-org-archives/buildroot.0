@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32057C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41DF6C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9828A41918;
-	Thu,  8 Dec 2022 22:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9828A41918
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBECE400FE;
+	Thu,  8 Dec 2022 22:39:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBECE400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OvrjPfsTOuK0; Thu,  8 Dec 2022 22:38:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vuwx-rhe546h; Thu,  8 Dec 2022 22:39:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 496E841914;
-	Thu,  8 Dec 2022 22:38:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 496E841914
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DDE21BF969
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE640401B7;
+	Thu,  8 Dec 2022 22:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE640401B7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FD951BF96B
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52FA2820DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5433F60B08
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52FA2820DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5433F60B08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o2AIrwA72Y61 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iUzptX9SX_xU for <buildroot@lists.busybox.net>;
  Thu,  8 Dec 2022 22:38:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E02F8820A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3111960AD7
 Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E02F8820A7
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3111960AD7
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:23 +0000 (UTC)
 Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout08.t-online.de (Postfix) with SMTP id 7640F13758
+ by mailout08.t-online.de (Postfix) with SMTP id 785F813759
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:20 +0100 (CET)
 Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd87.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PWz-0RSxso0; Thu, 8 Dec 2022 23:38:17 +0100
+ esmtp id 1p3PX0-0RSxsp0; Thu, 8 Dec 2022 23:38:18 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PWz-00048i-2i
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PWz-00048i-2H
  for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:17 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:37:14 +0100
-Message-Id: <20221208223817.1088619-8-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 23:37:12 +0100
+Message-Id: <20221208223817.1088619-6-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539098-3BFEC81E-5DFB8109/0/0 CLEAN NORMAL
-X-TOI-MSGID: 6a4883aa-862a-4af0-b652-7b65341d77a7
-Subject: [Buildroot] [PATCH 07/70] package/x11r7/xapp_xkbcomp: bump version
- to 1.4.6
+X-TOI-EXPURGATEID: 150726::1670539098-3BFEC81E-3B65E94E/0/0 CLEAN NORMAL
+X-TOI-MSGID: ebbd1edc-a121-44c7-9a8e-04f73f90ca70
+Subject: [Buildroot] [PATCH 05/70] package/x11r7/xlib_libfontenc: bump
+ version to 1.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,42 +73,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2022-December/003283.html
+https://lists.x.org/archives/xorg-announce/2022-December/003285.html
+https://lists.x.org/archives/xorg-announce/2022-August/003204.html
+https://lists.x.org/archives/xorg-announce/2022-August/003199.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 7 +++----
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.hash | 8 +++-----
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index bccaae6f57..b626e50236 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-March/003075.html
--sha256  6851086c4244b6fd0cc562880d8ff193fb2bbf1e141c73632e10731b31d4b05e  xkbcomp-1.4.5.tar.bz2
--sha512  2e84f8d6b083e2e818cb95e5d2a184da00e50d71b280e92d1a71465a9a4348f922f4ddccb42cfeee6f76705bbfc8580ef67aedd0d958aaa1ae6bbcc66ccd8154  xkbcomp-1.4.5.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003283.html
-+sha256  fa50d611ef41e034487af7bd8d8c718df53dd18002f591cca16b0384afc58e98  xkbcomp-1.4.6.tar.xz
-+sha512  90e69dd1c78c28f77a5acc7821b43afec1b9ac4895bc6f3462b4902baaadc26f3869da69e3bd023b4bc74adb5f1be0c43ca24b3dab37ac9a479c5622684baa81  xkbcomp-1.4.6.tar.xz
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
+index cf09f61c3e..a061ca4a4b 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002956.html
+-md5  6447db6a689fb530c218f0f8328c3abc  libfontenc-1.1.4.tar.bz2
+-sha1  d4f232b0b07487b984e13422ce4130b61a8b9edb  libfontenc-1.1.4.tar.bz2
+-sha256  2cfcce810ddd48f2e5dc658d28c1808e86dcf303eaff16728b9aa3dbc0092079  libfontenc-1.1.4.tar.bz2
+-sha512  76fa851d00113241f15fdd5b5bb7e927b8d8b9a82ce3fcb0678b8c7e32cb5e8d898c4bda1d60dafb7748145049d3240627ac34a2360c64e98a7a912ea7c30582  libfontenc-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003285.html
++sha256  c0d36991faee06551ddbaf5d99266e97becdc05edfae87a833c3ff7bf73cfec2  libfontenc-1.1.7.tar.xz
++sha512  fd8578a81090fa938dd75ad9081ab62c6c54fa2535d1c6291afd799ac8dc7c344a43f07cea5cd4433af16df0d926c22e7c169877bc8b13d92584e7dec173d701  libfontenc-1.1.7.tar.xz
  # Locally computed
- sha256  6b833fdc05906ce57f016dc791db86830d49ee4da2861ce45806c50b3f4dda9e  COPYING
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index b52f5e6850..61922c7cc9 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+ sha256  a4dda7a643b517794bfa23dc9605da030055df38ac8a5b9e1905e690975a59c4  COPYING
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index a55b90d680..e12086b125 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.4.5
--XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
-+XAPP_XKBCOMP_VERSION = 1.4.6
-+XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.xz
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
- XAPP_XKBCOMP_LICENSE_FILES = COPYING
+-XLIB_LIBFONTENC_VERSION = 1.1.4
+-XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
++XLIB_LIBFONTENC_VERSION = 1.1.7
++XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.xz
+ XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFONTENC_LICENSE = MIT
+ XLIB_LIBFONTENC_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
