@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC46C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D400FC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A834C60B2F;
-	Thu,  8 Dec 2022 22:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A834C60B2F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75CE440898;
+	Thu,  8 Dec 2022 22:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75CE440898
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2-T90MEjbT8q; Thu,  8 Dec 2022 22:47:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QYHKbnAuq2_Z; Thu,  8 Dec 2022 22:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6494960B16;
-	Thu,  8 Dec 2022 22:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6494960B16
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26B00408BB;
+	Thu,  8 Dec 2022 22:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B00408BB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 69BC81BF969
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A7E21BF969
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52C43400FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC7F4401B7
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C43400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC7F4401B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FoXgZXghMEr8 for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 22:38:33 +0000 (UTC)
+ with ESMTP id hncvy_OCRUEQ for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3382B401B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4925401D2
 Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3382B401B7
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D4925401D2
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:33 +0000 (UTC)
 Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout11.t-online.de (Postfix) with SMTP id 91AE1246C7
+ by mailout11.t-online.de (Postfix) with SMTP id 8FF32246C5
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:29 +0100 (CET)
 Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PX4-21qtnP0; Thu, 8 Dec 2022 23:38:22 +0100
+ esmtp id 1p3PX3-1y2xpl0; Thu, 8 Dec 2022 23:38:21 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX3-00048i-3C
- for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:22 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX3-00048i-0C
+ for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:21 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:38:17 +0100
-Message-Id: <20221208223817.1088619-71-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 23:38:03 +0100
+Message-Id: <20221208223817.1088619-57-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539102-C13271D1-B49F8F04/0/0 CLEAN NORMAL
-X-TOI-MSGID: f339c597-44d6-447b-86ce-529d355707d1
-Subject: [Buildroot] [PATCH 70/70] package/x11r7/xdriver_xf86-video-tga:
- remove package
+X-TOI-EXPURGATEID: 150726::1670539101-C13271D1-886A70C6/0/0 CLEAN NORMAL
+X-TOI-MSGID: 235d4ff8-2f8f-456a-9795-5be60c1aab23
+Subject: [Buildroot] [PATCH 56/70] package/x11r7/xdriver_xf86-input-vmmouse:
+ bump version to 13.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,147 +73,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building this package is broken with X.org xserver 21.
-
-Fixes:
-http://autobuild.buildroot.net/results/de5/de5efd922edb9eb7dc9981b5f10ea402487ee431/
+https://lists.x.org/archives/xorg-announce/2022-October/003217.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                              |  6 +++
- package/x11r7/Config.in                       |  1 -
- .../0001-mibstore.patch                       | 47 -------------------
- .../x11r7/xdriver_xf86-video-tga/Config.in    |  5 --
- .../xdriver_xf86-video-tga.hash               |  4 --
- .../xdriver_xf86-video-tga.mk                 | 14 ------
- 6 files changed, 6 insertions(+), 71 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
- delete mode 100644 package/x11r7/xdriver_xf86-video-tga/Config.in
- delete mode 100644 package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
- delete mode 100644 package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
+ .../xdriver_xf86-input-vmmouse.hash                         | 5 +++--
+ .../xdriver_xf86-input-vmmouse.mk                           | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9565c5905f..acf9671ad7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
+index fd6221fa23..2a221a4c12 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-June/002616.html
+-sha256  0af558957ac1be1b2863712c2475de8f4d7f14921fd01ded2e2fde4921b19319  xf86-input-vmmouse-13.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003217.html
++sha256  56f077580ab8f02e2f40358c5c46b0ae3e1828fc77744526b24adf1ceea339b8  xf86-input-vmmouse-13.2.0.tar.xz
++sha512  26a01347a679db058abdc7cbd9a363bb4fccd1a727dc18e279d15b8a0dce71f67af5ff54df28b908391da8d2fc311d8c1813f26dcded4e9a2668db7b55ca5687  xf86-input-vmmouse-13.2.0.tar.xz
+ # Locally calculated
+ sha256  804737a1582428fdde4e2bfd1e9f3ca07971fc3bdce20ba2d06cc2bba6c84a9e  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+index b8c77de5f6..178e1344b2 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
-+	bool "xf86-video-tga removed"
-+	select BR2_LEGACY
-+	help
-+	  The X.org xf86-video-tga package was removed.
-+
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
- 	bool "xf86-video-glint removed"
- 	select BR2_LEGACY
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 273db98e89..da79c4e851 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -180,7 +180,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
- 		source package/x11r7/xdriver_xf86-video-sis/Config.in
- 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
--		source package/x11r7/xdriver_xf86-video-tga/Config.in
- 		source package/x11r7/xdriver_xf86-video-trident/Config.in
- 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
- 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
-deleted file mode 100644
-index 07bcd04f25..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From b7022db0559cd1b6cd3eb6b5abf6896a607b478d Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Tue, 25 Sep 2012 12:55:00 +0000
--Subject: Remove mibstore.h
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-tga/commit/?id=b7022db0559cd1b6cd3eb6b5abf6896a607b478d
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/tga_accel.c b/src/tga_accel.c
--index 35af1a4..b414df5 100644
----- a/src/tga_accel.c
--+++ b/src/tga_accel.c
--@@ -37,7 +37,6 @@
-- #include "xf86cmap.h"
-- #include "mipointer.h"
-- 
---#include "mibstore.h"
-- #include "miline.h"
-- 
-- #include "tga_regs.h"
--diff --git a/src/tga_driver.c b/src/tga_driver.c
--index dd4f3e6..90d2660 100644
----- a/src/tga_driver.c
--+++ b/src/tga_driver.c
--@@ -46,8 +46,6 @@
-- 
-- /* software cursor */
-- #include "mipointer.h"
---/* backing store */
---#include "mibstore.h"
-- 
-- /*  #include "mibank.h" */
-- /* colormap manipulation */
--@@ -1451,7 +1449,6 @@ TGAScreenInit(SCREEN_INIT_ARGS_DECL)
--     
--     fbPictureInit (pScreen, 0, 0);
--     
---    miInitializeBackingStore(pScreen);
--     xf86SetBackingStore(pScreen);
--     xf86SetSilkenMouse(pScreen);
-- 
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-tga/Config.in b/package/x11r7/xdriver_xf86-video-tga/Config.in
-deleted file mode 100644
-index 7c75661acc..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/Config.in
-+++ /dev/null
-@@ -1,5 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
--	bool "xf86-video-tga"
--	select BR2_PACKAGE_XORGPROTO
--	help
--	  X.Org driver for tga cards
-diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
-deleted file mode 100644
-index 4f8c10965c..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# From http://lists.x.org/archives/xorg-announce/2012-July/002025.html
--sha256  2023818000200eb50a59476e36d59b07a361b110e73b1d9cc526beb669306131  xf86-video-tga-1.2.2.tar.bz2
--# Locally calculated
--sha256  92e36c6b7c99c8335e5823d53686e58ebd82ee8051a6360f60c8c0fb05745954  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-deleted file mode 100644
-index 421b09be22..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# xdriver_xf86-video-tga
--#
--################################################################################
--
--XDRIVER_XF86_VIDEO_TGA_VERSION = 1.2.2
--XDRIVER_XF86_VIDEO_TGA_SOURCE = xf86-video-tga-$(XDRIVER_XF86_VIDEO_TGA_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_TGA_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_TGA_LICENSE = MIT
--XDRIVER_XF86_VIDEO_TGA_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_TGA_DEPENDENCIES = xserver_xorg-server xorgproto
--
--$(eval $(autotools-package))
+-XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.1.0
+-XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMOUSE_VERSION).tar.bz2
+-XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.2.0
++XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMOUSE_VERSION).tar.xz
++XDRIVER_XF86_INPUT_VMMOUSE_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
+ XDRIVER_XF86_INPUT_VMMOUSE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
 -- 
 2.34.1
 
