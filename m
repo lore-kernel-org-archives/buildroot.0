@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7A83C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 09:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9112C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 09:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BA38403E7;
-	Thu,  8 Dec 2022 09:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BA38403E7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 494054185E;
+	Thu,  8 Dec 2022 09:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 494054185E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1fesrf7FKFVW; Thu,  8 Dec 2022 09:58:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bz3fLr2wAOVC; Thu,  8 Dec 2022 09:58:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7EEB840629;
-	Thu,  8 Dec 2022 09:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EEB840629
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 25E121BF3ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32E8D4183B;
+	Thu,  8 Dec 2022 09:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32E8D4183B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C2EFF1BF3ED
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 09:57:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01014401CC
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 09:57:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01014401CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id A991B82010
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 09:57:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A991B82010
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZnKI5B8Z94Zz for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 09:57:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IftuVwWl842l for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 09:57:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1D4A402E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7CB082019
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 09:57:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1D4A402E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7CB082019
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D06DD85E3C; Thu,  8 Dec 2022 09:57:41 +0000 (UTC)
+ id C5A7E85E42; Thu,  8 Dec 2022 09:57:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 8 Dec 2022 10:56:46 +0100
+Date: Thu, 8 Dec 2022 10:55:26 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a69856d9024c8334b361ef5702cab6e8685907f7
-X-Git-Newrev: 404d6e29bf165b2415c7e7507771cc85239121bc
+X-Git-Oldrev: 096dfb90eb02b4e4772b3ebc58044a2bb0597168
+X-Git-Newrev: a69856d9024c8334b361ef5702cab6e8685907f7
 X-Patchwork-Hint: ignore
-Message-Id: <20221208095741.D06DD85E3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python3: fix
- CVE-2022-37454
+Message-Id: <20221208095741.C5A7E85E42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/optee-client:
+ rename S30optee
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,149 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=404d6e29bf165b2415c7e7507771cc85239121bc
+commit: https://git.buildroot.net/buildroot/commit/?id=a69856d9024c8334b361ef5702cab6e8685907f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The Keccak XKCP SHA-3 reference implementation before fdc6fef has an
-integer overflow and resultant buffer overflow that allows attackers to
-execute arbitrary code or eliminate expected cryptographic properties.
-This occurs in the sponge function interface.
+Commit b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff forgot to rename
+S30optee in optee-client.mk resulting in the following build failure:
 
-Python 3.11 and later switched to using tiny_sha3 in GH-32060, so they
-should not be affected.
+/usr/bin/install -m 0755 -D package/optee-client//S30optee /home/autobuild/autobuild/instance-0/output-1/target/etc/init.d/S30optee
+/usr/bin/install: cannot stat 'package/optee-client//S30optee': No such file or directory
 
-https://github.com/python/cpython/issues/98517
+Fixes:
+ - http://autobuild.buildroot.org/results/21fc165933e6d226de277b62d4ce99342cef0ffb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 92d96e8513c75a8ab496c90841920e896085915f)
+(cherry picked from commit cac489ce1dc9f280a76dce92960ea7807a5e86c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...8517-Fix-buffer-overflows-in-_sha3-module.patch | 101 +++++++++++++++++++++
- package/python3/python3.mk                         |   3 +
- 2 files changed, 104 insertions(+)
+ package/optee-client/optee-client.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/0034-3-10-gh-98517-Fix-buffer-overflows-in-_sha3-module.patch b/package/python3/0034-3-10-gh-98517-Fix-buffer-overflows-in-_sha3-module.patch
-new file mode 100644
-index 0000000000..5c50dd16cb
---- /dev/null
-+++ b/package/python3/0034-3-10-gh-98517-Fix-buffer-overflows-in-_sha3-module.patch
-@@ -0,0 +1,101 @@
-+From 0e4e058602d93b88256ff90bbef501ba20be9dd3 Mon Sep 17 00:00:00 2001
-+From: Theo Buehler <botovq@users.noreply.github.com>
-+Date: Fri, 21 Oct 2022 21:26:01 +0200
-+Subject: [PATCH] [3.10] gh-98517: Fix buffer overflows in _sha3 module
-+ (#98519)
-+
-+This is a port of the applicable part of XKCP's fix [1] for
-+CVE-2022-37454 and avoids the segmentation fault and the infinite
-+loop in the test cases published in [2].
-+
-+[1]: https://github.com/XKCP/XKCP/commit/fdc6fef075f4e81d6b1bc38364248975e08e340a
-+[2]: https://mouha.be/sha-3-buffer-overflow/
-+
-+Regression test added by: Gregory P. Smith [Google LLC] <greg@krypto.org>
-+
-+[Retrieved from:
-+https://github.com/python/cpython/commit/0e4e058602d93b88256ff90bbef501ba20be9dd3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Lib/test/test_hashlib.py                          |  9 +++++++++
-+ .../2022-10-21-13-31-47.gh-issue-98517.SXXGfV.rst |  1 +
-+ Modules/_sha3/kcp/KeccakSponge.inc                | 15 ++++++++-------
-+ 3 files changed, 18 insertions(+), 7 deletions(-)
-+ create mode 100644 Misc/NEWS.d/next/Security/2022-10-21-13-31-47.gh-issue-98517.SXXGfV.rst
-+
-+diff --git a/Lib/test/test_hashlib.py b/Lib/test/test_hashlib.py
-+index 535f4aa3e04c..9aa6c1f0a3b6 100644
-+--- a/Lib/test/test_hashlib.py
-++++ b/Lib/test/test_hashlib.py
-+@@ -495,6 +495,15 @@ def test_case_md5_huge(self, size):
-+     def test_case_md5_uintmax(self, size):
-+         self.check('md5', b'A'*size, '28138d306ff1b8281f1a9067e1a1a2b3')
-+ 
-++    @unittest.skipIf(sys.maxsize < _4G - 1, 'test cannot run on 32-bit systems')
-++    @bigmemtest(size=_4G - 1, memuse=1, dry_run=False)
-++    def test_sha3_update_overflow(self, size):
-++        """Regression test for gh-98517 CVE-2022-37454."""
-++        h = hashlib.sha3_224()
-++        h.update(b'\x01')
-++        h.update(b'\x01'*0xffff_ffff)
-++        self.assertEqual(h.hexdigest(), '80762e8ce6700f114fec0f621fd97c4b9c00147fa052215294cceeed')
-++
-+     # use the three examples from Federal Information Processing Standards
-+     # Publication 180-1, Secure Hash Standard,  1995 April 17
-+     # http://www.itl.nist.gov/div897/pubs/fip180-1.htm
-+diff --git a/Misc/NEWS.d/next/Security/2022-10-21-13-31-47.gh-issue-98517.SXXGfV.rst b/Misc/NEWS.d/next/Security/2022-10-21-13-31-47.gh-issue-98517.SXXGfV.rst
-+new file mode 100644
-+index 000000000000..2d23a6ad93c7
-+--- /dev/null
-++++ b/Misc/NEWS.d/next/Security/2022-10-21-13-31-47.gh-issue-98517.SXXGfV.rst
-+@@ -0,0 +1 @@
-++Port XKCP's fix for the buffer overflows in SHA-3 (CVE-2022-37454).
-+diff --git a/Modules/_sha3/kcp/KeccakSponge.inc b/Modules/_sha3/kcp/KeccakSponge.inc
-+index e10739deafa8..cf92e4db4d36 100644
-+--- a/Modules/_sha3/kcp/KeccakSponge.inc
-++++ b/Modules/_sha3/kcp/KeccakSponge.inc
-+@@ -171,7 +171,7 @@ int SpongeAbsorb(SpongeInstance *instance, const unsigned char *data, size_t dat
-+     i = 0;
-+     curData = data;
-+     while(i < dataByteLen) {
-+-        if ((instance->byteIOIndex == 0) && (dataByteLen >= (i + rateInBytes))) {
-++        if ((instance->byteIOIndex == 0) && (dataByteLen-i >= rateInBytes)) {
-+ #ifdef SnP_FastLoop_Absorb
-+             /* processing full blocks first */
-+ 
-+@@ -199,10 +199,10 @@ int SpongeAbsorb(SpongeInstance *instance, const unsigned char *data, size_t dat
-+         }
-+         else {
-+             /* normal lane: using the message queue */
-+-
-+-            partialBlock = (unsigned int)(dataByteLen - i);
-+-            if (partialBlock+instance->byteIOIndex > rateInBytes)
-++            if (dataByteLen-i > rateInBytes-instance->byteIOIndex)
-+                 partialBlock = rateInBytes-instance->byteIOIndex;
-++            else
-++                partialBlock = (unsigned int)(dataByteLen - i);
-+             #ifdef KeccakReference
-+             displayBytes(1, "Block to be absorbed (part)", curData, partialBlock);
-+             #endif
-+@@ -281,7 +281,7 @@ int SpongeSqueeze(SpongeInstance *instance, unsigned char *data, size_t dataByte
-+     i = 0;
-+     curData = data;
-+     while(i < dataByteLen) {
-+-        if ((instance->byteIOIndex == rateInBytes) && (dataByteLen >= (i + rateInBytes))) {
-++        if ((instance->byteIOIndex == rateInBytes) && (dataByteLen-i >= rateInBytes)) {
-+             for(j=dataByteLen-i; j>=rateInBytes; j-=rateInBytes) {
-+                 SnP_Permute(instance->state);
-+                 SnP_ExtractBytes(instance->state, curData, 0, rateInBytes);
-+@@ -299,9 +299,10 @@ int SpongeSqueeze(SpongeInstance *instance, unsigned char *data, size_t dataByte
-+                 SnP_Permute(instance->state);
-+                 instance->byteIOIndex = 0;
-+             }
-+-            partialBlock = (unsigned int)(dataByteLen - i);
-+-            if (partialBlock+instance->byteIOIndex > rateInBytes)
-++            if (dataByteLen-i > rateInBytes-instance->byteIOIndex)
-+                 partialBlock = rateInBytes-instance->byteIOIndex;
-++            else
-++                partialBlock = (unsigned int)(dataByteLen - i);
-+             i += partialBlock;
-+ 
-+             SnP_ExtractBytes(instance->state, curData, instance->byteIOIndex, partialBlock);
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index a10f04cb97..617caf0db5 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -16,6 +16,9 @@ PYTHON3_CPE_ID_PRODUCT = python
- # 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
- PYTHON3_IGNORE_CVES += CVE-2022-45061
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index dda9a2855d..13a9eb6b20 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -27,8 +27,8 @@ OPTEE_CLIENT_CONF_OPTS += -DCFG_TEE_SUPP_PLUGINS=OFF
+ endif
  
-+# 0034-3-10-gh-98517-Fix-buffer-overflows-in-_sha3-module.patch
-+PYTHON3_IGNORE_CVES += CVE-2022-37454
-+
- # This host Python is installed in $(HOST_DIR), as it is needed when
- # cross-compiling third-party Python modules.
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+-		$(TARGET_DIR)/etc/init.d/S30optee
++	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30tee-supplicant \
++		$(TARGET_DIR)/etc/init.d/S30tee-supplicant
+ endef
  
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
