@@ -1,73 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FBB6C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 21:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5842FC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 21:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39526401B7;
-	Thu,  8 Dec 2022 21:27:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39526401B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7BC34022F;
+	Thu,  8 Dec 2022 21:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7BC34022F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7iCaywU3cDUi; Thu,  8 Dec 2022 21:27:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0j2vKFu1TKig; Thu,  8 Dec 2022 21:29:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EE69400FE;
-	Thu,  8 Dec 2022 21:27:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EE69400FE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D41F41BF396
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:27:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6C1C40213;
+	Thu,  8 Dec 2022 21:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C1C40213
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FD841BF396
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB76360B3A
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:27:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB76360B3A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 552BE40213
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 552BE40213
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t5Vq4Sg2P5Km for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 21:27:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8b8HW7ZluPQ3 for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 21:29:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0899960AD6
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com
- [209.85.216.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0899960AD6
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 21:27:51 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id
- u15-20020a17090a3fcf00b002191825cf02so2878817pjm.2
- for <buildroot@buildroot.org>; Thu, 08 Dec 2022 13:27:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201E5401B5
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com
+ [209.85.214.181])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 201E5401B5
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 21:29:44 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id d7so2799055pll.9
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 13:29:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rai1ePRqUEWXH4v4DJIixgyfSwKr7sZeARGSMkgAAX8=;
- b=t3I3UwjvjcxqxK83l/c93vFI05649axOKTcSINbm2E6ND5MXbZnGPXfDYrgEIAKMbr
- PcsmCn17RDjK2+PGSJMvxZ1AUGvPFwui8ND/pUDlPofxzPd5q0u9Eti3nHlXSyOnOc0r
- vYeb7dDqy+V4kLW/9MM7XkWlll5LP7VlG8DBMJ4uU6K9FoZlm25HqCvRx9wJSRTaR4Ni
- F1M0PArOEcaa8am+tpHOI/g9su3ZxJ48c3HrC8ajCFUqs5/qCSQ1iLRWRksCcLthU3Kn
- 0LjwYkNsWxlZoBIlZkAwG7irYu6c2Tv08aj+XuorDBAM5jmcUBwVDWWpTUAhcTsB6gHY
- fjNw==
-X-Gm-Message-State: ANoB5pll/mzWSK1ZYavh63yixkNvukfEZdVvSvFYH8j9ANLgu3j64++Q
- /iFsmEBGFdpS1jJb10+U1SOmJCx/ljI=
-X-Google-Smtp-Source: AA0mqf7uyJ5oJceyodm2VJ4KDFzmng0jqZXgcIx+DTdizDFvT3R2SOiGt3BKqB3YJa2OvxOU3eHZYg==
-X-Received: by 2002:a17:902:ebc1:b0:189:65e7:e16b with SMTP id
- p1-20020a170902ebc100b0018965e7e16bmr3306014plg.66.1670534871057; 
- Thu, 08 Dec 2022 13:27:51 -0800 (PST)
+ bh=omC4Vla3gW3Awk7nmYEGxgwZVFr4kOlVJCuk5kFo0O4=;
+ b=Jay3bKayuH76s3B5adFYYycxX4rQZC5CQ4ADXlLVeahw5uq6+heKSPCR+a0dtk1shb
+ UOEVKquuKNMHh/+mgIxefRVvq61p8I/PA/HWQipq8dXtqZnZKDKmsmIPtYFlDgyHM8r1
+ /hgqygCWxoF3TOZ1j8sOGdLlhzhPbLU5Q5yIE2QRmHqzwFdIeJeNCuv85cjyaMzb3uhg
+ 8pOKx2ejrNBiXZC/An+cZq9bVpx7cWgHy7bvlLPSyilc9Gzpn65ppFn8hoYJMZnCkhHE
+ z3idYmsKDqKZawDQxthNSqSnsOYx34HveTQCXBB8oFE12f0tVpbgSyWJqj119cBf5TmV
+ y4Pg==
+X-Gm-Message-State: ANoB5pnG2jX+TBTUYUb98rNpa2oFl3DZLh4y+CWiZjE10d4QKjlpDSOs
+ witHesV1ZsdW7S/atik2CBQGSUZAwjU=
+X-Google-Smtp-Source: AA0mqf5nLaYyCQx+r6HOuOHF1kwpwA80DAC0Yvlw7msxh1FdkT6V8Cirg4oKyfxJ2sKYwRCIZ6D91A==
+X-Received: by 2002:a17:902:c244:b0:189:7e79:d92f with SMTP id
+ 4-20020a170902c24400b001897e79d92fmr3537280plg.40.1670534984119; 
+ Thu, 08 Dec 2022 13:29:44 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- d12-20020a170903230c00b0016c9e5f291bsm17127927plh.111.2022.12.08.13.27.49
+ o8-20020a170902778800b00189a7fbff33sm16990040pll.170.2022.12.08.13.29.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Dec 2022 13:27:50 -0800 (PST)
+ Thu, 08 Dec 2022 13:29:43 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 13:27:48 -0800
-Message-Id: <20221208212748.4132861-1-christian@paral.in>
+Date: Thu,  8 Dec 2022 13:29:41 -0800
+Message-Id: <20221208212941.4134613-1-christian@paral.in>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/crun: bump to version 1.7.2
+Subject: [Buildroot] [PATCH 1/1] package/delve: bump to version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,39 +88,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfixes:
-
-https://github.com/containers/crun/releases/tag/1.7.2
+https://github.com/go-delve/delve/blob/master/CHANGELOG.md#1200-2022-12-07
+https://github.com/go-delve/delve/releases/tag/v1.20.0
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/crun/crun.hash | 2 +-
- package/crun/crun.mk   | 2 +-
+ package/delve/delve.hash | 2 +-
+ package/delve/delve.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/crun/crun.hash b/package/crun/crun.hash
-index de61310e08..2b21800f02 100644
---- a/package/crun/crun.hash
-+++ b/package/crun/crun.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  acd24012daa951cf1674b20b2d5f87975d5d6c8e8c80bfe12e4cffa3495cae67  crun-1.5.tar.gz
-+sha256  f669ecd3d1895dcaa8425eabb707c06eb3bdb5ae5201a50a423c3cace36c4a05  crun-1.7.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
-diff --git a/package/crun/crun.mk b/package/crun/crun.mk
-index 65f166e657..8c9993993c 100644
---- a/package/crun/crun.mk
-+++ b/package/crun/crun.mk
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+index 04ea4954cc..bf730b9047 100644
+--- a/package/delve/delve.hash
++++ b/package/delve/delve.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  086106a4776fa155bf20c37d27b9caed55255be6359c7f0bda1893d3adbb614e  delve-1.8.0.tar.gz
++sha256  39d2e3ae965abf5e71f3d8efbef368b1ee1d7154ea6604ec71d508350d419d03  delve-1.20.0.tar.gz
+ sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+index 4ca1786ffc..b43d0f03c8 100644
+--- a/package/delve/delve.mk
++++ b/package/delve/delve.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CRUN_VERSION = 1.5
-+CRUN_VERSION = 1.7.2
- CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
- CRUN_DEPENDENCIES = host-pkgconf yajl
- 
+-DELVE_VERSION = 1.8.0
++DELVE_VERSION = 1.20.0
+ DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
+ DELVE_LICENSE = MIT
+ DELVE_LICENSE_FILES = LICENSE
 -- 
 2.38.1
 
