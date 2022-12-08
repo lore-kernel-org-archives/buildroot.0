@@ -1,62 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F136EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4A11C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 990B660AD7;
-	Thu,  8 Dec 2022 22:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 990B660AD7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59A1B40108;
+	Thu,  8 Dec 2022 22:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59A1B40108
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M8AqE-hqvfdE; Thu,  8 Dec 2022 22:56:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1pcDst3j5c8k; Thu,  8 Dec 2022 22:57:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9087760A8D;
-	Thu,  8 Dec 2022 22:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9087760A8D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4697640145;
+	Thu,  8 Dec 2022 22:57:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4697640145
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 87DC51BF35F
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F114E1BF35F
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A39ED400FE
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A39ED400FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7E2B40145
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7E2B40145
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KjAHKpgewyJf for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 22:38:38 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46F03401B7
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 46F03401B7
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:38 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout04.t-online.de (Postfix) with SMTP id 107385A5E
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:34 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd75.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PX2-3PxxNn0; Thu, 8 Dec 2022 23:38:20 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX2-00048i-1K
- for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:20 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id LVxTp5dtEpUB for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 22:38:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02C35400FE
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com
+ [209.85.214.174])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02C35400FE
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:53 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id d3so2954480plr.10
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 14:38:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=noEb7ITd9ReOg9vnXn3/TbDncnZmgmw7JcAHHNyHYAk=;
+ b=1yewsYLeAyJXuukGQ3Et4JNXYoS8xJ32kJuln9OqP80tg0O0G3Q1XEAmOjDeAGLIm9
+ uQ5xdVanjqXC+plVws7bF7FyfA/Hd0PY3DlKj2VTmeDP3aNQKtjl5j5YoRTVWwndBp0S
+ 0q9qH6vIOF3MbcbdMvuaT+A37uf6x9r20XGldkcRiTkZkpbpUXC8VS8COMFLIeA4Qgqw
+ eymKmewTJjpv2OHaUz4lA/qQnmvfrBJnXS8x7Cb+nKRDQYy7uWrAPrlfAH3sP3120dTe
+ eW6dRPudyidW05d0mHEpOh/mHQnFeTQu6p2YgWGooRjwPwwCAC09fn3ZtiD/DhTJnkkc
+ D6Wg==
+X-Gm-Message-State: ANoB5plF9gyoiNZWm8GSF9tjS+DMrLL+sLVSwWmWvU+smfybcaP1Q9K5
+ BrH8MWxZGCMFPS4fpvte953GRLuIjEo=
+X-Google-Smtp-Source: AA0mqf524+v60RiZl7ilj+w5cL0d8sX47PXzjjdS/9GwTVQ8UhdE+qLEXH3wUwdz0Dzsw9QQq9gSOQ==
+X-Received: by 2002:a17:902:b68c:b0:188:63e1:bafc with SMTP id
+ c12-20020a170902b68c00b0018863e1bafcmr3623523pls.0.1670539133075; 
+ Thu, 08 Dec 2022 14:38:53 -0800 (PST)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ i17-20020a170902c95100b00189847cd4acsm17273620pla.237.2022.12.08.14.38.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 08 Dec 2022 14:38:52 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:37:53 +0100
-Message-Id: <20221208223817.1088619-47-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
-References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 14:38:50 -0800
+Message-Id: <20221208223850.32191-1-christian@paral.in>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539100-3C882535-3D505600/0/0 CLEAN NORMAL
-X-TOI-MSGID: 78401ade-a62f-48d0-a4f7-b15b6b689f94
-Subject: [Buildroot] [PATCH 46/70] package/x11r7/xcb-util-keysyms: bump
- version to 0.4.1
+Subject: [Buildroot] [PATCH 1/1] package/mosh: bump to version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,57 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2022-October/003233.html
+Many new features & bugfixes.
 
-Added license file.
+https://github.com/mobile-shell/mosh/releases
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash |  7 +++++--
- package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk   | 10 ++++------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/mosh/mosh.hash | 2 +-
+ package/mosh/mosh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
-index 6437d070f4..20a341ca22 100644
---- a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
-+++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2014-October/002485.html
--sha256  0ef8490ff1dede52b7de533158547f8b454b241aa3e4dcca369507f66f216dd9  xcb-util-keysyms-0.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003233.html
-+sha256  7c260a5294412aed429df1da2f8afd3bd07b7cba3fec772fba15a613a6d5c638  xcb-util-keysyms-0.4.1.tar.xz
-+sha512  dd53a36b52647f22bf0da8cded4b2974a51899eaac799797017ed8534f14bc2d2d339a14fa5ef387ae4528b7d9a5d31920bb0c71b09ca34f58e5081e768e2bbf  xcb-util-keysyms-0.4.1.tar.xz
-+# Locally computed
-+sha256  d499c1bf2c2a5f0a0498e5204d998388e308dcf2273dfbe2250a5b9a73f66537  COPYING
-diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-index 9036b06fe8..364dc5b6da 100644
---- a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-+++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-@@ -4,13 +4,11 @@
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+index 3558bf9030..6c1d0e7af3 100644
+--- a/package/mosh/mosh.hash
++++ b/package/mosh/mosh.hash
+@@ -1,5 +1,5 @@
+ # From https://mailman.mit.edu/pipermail/mosh-users/2017-July/000357.html
+-sha256  da600573dfa827d88ce114e0fed30210689381bbdcff543c931e4d6a2e851216  mosh-1.3.2.tar.gz
++sha256  872e4b134e5df29c8933dff12350785054d2fd2839b5ae6b5587b14db1465ddd  mosh-1.4.0.tar.gz
+ # Locally calculcated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  8042495ddc8d99b883335d53552554eccf825fc1f0ba487d0f8e6656baaa8199  COPYING.iOS
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index f9e335799d..c938f70719 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XCB_UTIL_KEYSYMS_VERSION = 0.4.0
--XCB_UTIL_KEYSYMS_SOURCE = xcb-util-keysyms-$(XCB_UTIL_KEYSYMS_VERSION).tar.bz2
--XCB_UTIL_KEYSYMS_SITE = http://xcb.freedesktop.org/dist
--
--# unfortunately, no license file
-+XCB_UTIL_KEYSYMS_VERSION = 0.4.1
-+XCB_UTIL_KEYSYMS_SOURCE = xcb-util-keysyms-$(XCB_UTIL_KEYSYMS_VERSION).tar.xz
-+XCB_UTIL_KEYSYMS_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XCB_UTIL_KEYSYMS_LICENSE = MIT
--
-+XCB_UTIL_KEYSYMS_LICENSE_FILES = COPYING
- XCB_UTIL_KEYSYMS_INSTALL_STAGING = YES
- 
- XCB_UTIL_KEYSYMS_DEPENDENCIES = host-pkgconf libxcb
+-MOSH_VERSION = 1.3.2
++MOSH_VERSION = 1.4.0
+ MOSH_SITE = https://mosh.org
+ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
 -- 
-2.34.1
+2.38.1
 
 _______________________________________________
 buildroot mailing list
