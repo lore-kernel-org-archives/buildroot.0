@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A2A0C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32057C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A42D760AD7;
-	Thu,  8 Dec 2022 22:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42D760AD7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9828A41918;
+	Thu,  8 Dec 2022 22:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9828A41918
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nHql2f-KBrh6; Thu,  8 Dec 2022 22:38:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OvrjPfsTOuK0; Thu,  8 Dec 2022 22:38:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B76360B43;
-	Thu,  8 Dec 2022 22:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B76360B43
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C7B91BF35F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 496E841914;
+	Thu,  8 Dec 2022 22:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 496E841914
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DDE21BF969
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6131D40145
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52FA2820DE
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6131D40145
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52FA2820DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kDvZuGC42CWb for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o2AIrwA72Y61 for <buildroot@lists.busybox.net>;
  Thu,  8 Dec 2022 22:38:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E09AA400FE
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E09AA400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E02F8820A7
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E02F8820A7
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:22 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout05.t-online.de (Postfix) with SMTP id 7D97FBFE7
+Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
+ by mailout08.t-online.de (Postfix) with SMTP id 7640F13758
  for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:20 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd83.t-online.de
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd87.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PX0-2btxJZ0; Thu, 8 Dec 2022 23:38:18 +0100
+ esmtp id 1p3PWz-0RSxso0; Thu, 8 Dec 2022 23:38:17 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX0-00048i-0y
- for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:18 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PWz-00048i-2i
+ for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:17 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:37:21 +0100
-Message-Id: <20221208223817.1088619-15-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 23:37:14 +0100
+Message-Id: <20221208223817.1088619-8-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539098-62A0A2DC-FDCAF26F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3ccca3e5-db23-4199-a7dd-c4760bb1fbf4
-Subject: [Buildroot] [PATCH 14/70] package/x11r7/xdriver_xf86-video-r128:
- bump version to 6.12.1
+X-TOI-EXPURGATEID: 150726::1670539098-3BFEC81E-5DFB8109/0/0 CLEAN NORMAL
+X-TOI-MSGID: 6a4883aa-862a-4af0-b652-7b65341d77a7
+Subject: [Buildroot] [PATCH 07/70] package/x11r7/xapp_xkbcomp: bump version
+ to 1.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,45 +73,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2022-December/003275.html
+https://lists.x.org/archives/xorg-announce/2022-December/003283.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash  | 8 +++-----
- .../xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk    | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 7 +++----
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-index 455c3d4439..cf9b21ebe8 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-October/002926.html
--md5  105ebcfe1bac06fe84645ac3def91184  xf86-video-r128-6.12.0.tar.bz2
--sha1  7cfa41d386fa43b5d30299203e4845d8afba4899  xf86-video-r128-6.12.0.tar.bz2
--sha256  801c86882cbd2bbb3084d471dcc5cfee2c1754dcbfb4dc446676d58a6bd9e057  xf86-video-r128-6.12.0.tar.bz2
--sha512  0e667e2cfa8a87a00846361d86528c93754c403c812b66798953fa4c857b2143b2c4c44885da467e7f910d8cb910b69492cdcb6f25e2197bae6617364d152e38  xf86-video-r128-6.12.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003275.html
-+sha256  7d023c2b171f1664e43d12a1d21674079d8065536f82bb95b448bfce4981c741  xf86-video-r128-6.12.1.tar.xz
-+sha512  18b2408fe68161c32f84c7147717f8e6c6377e81e9d59e2f098843c54cd0ae757aab5059568da8c71ef38100807d56ee22447417c236c1b3deea292bb676e700  xf86-video-r128-6.12.1.tar.xz
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index bccaae6f57..b626e50236 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-March/003075.html
+-sha256  6851086c4244b6fd0cc562880d8ff193fb2bbf1e141c73632e10731b31d4b05e  xkbcomp-1.4.5.tar.bz2
+-sha512  2e84f8d6b083e2e818cb95e5d2a184da00e50d71b280e92d1a71465a9a4348f922f4ddccb42cfeee6f76705bbfc8580ef67aedd0d958aaa1ae6bbcc66ccd8154  xkbcomp-1.4.5.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2022-December/003283.html
++sha256  fa50d611ef41e034487af7bd8d8c718df53dd18002f591cca16b0384afc58e98  xkbcomp-1.4.6.tar.xz
++sha512  90e69dd1c78c28f77a5acc7821b43afec1b9ac4895bc6f3462b4902baaadc26f3869da69e3bd023b4bc74adb5f1be0c43ca24b3dab37ac9a479c5622684baa81  xkbcomp-1.4.6.tar.xz
  # Locally computed
- sha256  69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index 1931dbecd7..49514e3d3a 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-@@ -4,9 +4,9 @@
+ sha256  6b833fdc05906ce57f016dc791db86830d49ee4da2861ce45806c50b3f4dda9e  COPYING
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index b52f5e6850..61922c7cc9 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.0
--XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.1
-+XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_R128_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
+-XAPP_XKBCOMP_VERSION = 1.4.5
+-XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
++XAPP_XKBCOMP_VERSION = 1.4.6
++XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.xz
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
+ XAPP_XKBCOMP_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
