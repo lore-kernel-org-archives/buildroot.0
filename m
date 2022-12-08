@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBFAC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33B5DC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16B62401B7;
-	Thu,  8 Dec 2022 22:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16B62401B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2088409AE;
+	Thu,  8 Dec 2022 22:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2088409AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y0OeM1fmrD79; Thu,  8 Dec 2022 22:51:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ASQTT6f0F6SQ; Thu,  8 Dec 2022 22:52:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0CF0F40108;
-	Thu,  8 Dec 2022 22:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CF0F40108
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A54E1BF969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8D640933;
+	Thu,  8 Dec 2022 22:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E8D640933
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 532011BF35F
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6863B60B08
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6863B60B08
+ by smtp2.osuosl.org (Postfix) with ESMTP id 454BD403A5
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 454BD403A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQKkSFG1KUww for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0_8dtqjYZGu2 for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 22:38:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87D2260A8D
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 87D2260A8D
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout10.t-online.de (Postfix) with SMTP id 6443E20C14
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:32 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd88.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28693401D2
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 28693401D2
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:36 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout04.t-online.de (Postfix) with SMTP id 0A1825A5A
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:34 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd75.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PX0-0X2tPU0; Thu, 8 Dec 2022 23:38:18 +0100
+ esmtp id 1p3PX2-3PxxNj0; Thu, 8 Dec 2022 23:38:20 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX0-00048i-2e
- for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:18 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX1-00048i-34
+ for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:20 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:37:29 +0100
-Message-Id: <20221208223817.1088619-23-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 23:37:46 +0100
+Message-Id: <20221208223817.1088619-40-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539098-E20B2E65-C6A5B697/0/0 CLEAN NORMAL
-X-TOI-MSGID: 167e2514-1fac-4ec5-a5b5-c20c1d85024f
-Subject: [Buildroot] [PATCH 22/70] package/x11r7/xapp_xfd: bump version to
- 1.1.4
+X-TOI-EXPURGATEID: 150726::1670539100-3C882535-9884594A/0/0 CLEAN NORMAL
+X-TOI-MSGID: cbd55812-e359-4a04-975b-153cccfaf144
+Subject: [Buildroot] [PATCH 39/70] package/x11r7/xapp_x11perf: bump version
+ to 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,45 +73,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2022-December/003266.html
+https://lists.x.org/archives/xorg-announce/2022-October/003242.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xfd/xapp_xfd.hash | 8 +++-----
- package/x11r7/xapp_xfd/xapp_xfd.mk   | 6 +++---
+ package/x11r7/xapp_x11perf/xapp_x11perf.hash | 8 +++-----
+ package/x11r7/xapp_x11perf/xapp_x11perf.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.hash b/package/x11r7/xapp_xfd/xapp_xfd.hash
-index ec85170180..5965958828 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.hash
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.hash
+diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.hash b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
+index 673d3602ba..3370d7df53 100644
+--- a/package/x11r7/xapp_x11perf/xapp_x11perf.hash
++++ b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002968.html
--md5  f9c9f2b101a96d4b50c2a4ab9b5ab5b1  xfd-1.1.3.tar.bz2
--sha1  ca6dbe2027b205992a52c6bb717a43508f12a8c4  xfd-1.1.3.tar.bz2
--sha256  192f938ba5830e84cc807d8ead2ad9655b43eaed6500c830f3e083aad10ed958  xfd-1.1.3.tar.bz2
--sha512  68e2d4ce5e24215353b6f3231191d69639c4dd90a703e03ccf152bbfe4012da071c387ba289f918fb0336a3be9ee49dc05cbec7273fa85f5e476ead7e10795f0  xfd-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003266.html
-+sha256  d5470ffb66fd45a1e1b03d6df01f12d4caf0cf675cde0345cda237243e9076fd  xfd-1.1.4.tar.xz
-+sha512  fa1f8a7b5d89be20fb2b1e3e0e8f4d7f9463e91fd385d21e1403a398c2e263112043b568417c420c5ee33bec60e06658498dd55df6d7ac19da3af0844f932209  xfd-1.1.4.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002983.html
+-md5  e96b56756990c56c24d2d02c2964456b  x11perf-1.6.1.tar.bz2
+-sha1  c54ebef80b6cb565397fe2e3069e0d7470027e5a  x11perf-1.6.1.tar.bz2
+-sha256  1c7e0b8ffc2794b4ccf11e04d551823abe0ea47b4f7db0637390db6fbe817c34  x11perf-1.6.1.tar.bz2
+-sha512  b386151bfe3d7c04ab9953ae1882f3c5b627d6d1afb9a8cfe87c58236a88883fc11bbadb2226b9aa61df84b4fce625a1c9e3d146a124ac17e8d7d605b35d9c0b  x11perf-1.6.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003242.html
++sha256  5a0e7cea47716ad07ceca38bbd07ae06459ee4d837b9c9dfc21ccb94e3e24fcc  x11perf-1.6.2.tar.xz
++sha512  5be9e601071a42d103adbab5f30c1900a3779a5b2c06c709df99a85487c9790d36b835d43f5c6d74cc7d950cc3ad06927210d7b1f58939cfd0b4a6f3e5e32112  x11perf-1.6.2.tar.xz
  # Locally computed
- sha256  57ae10f24fc110dafb3b8d7735cf26b1905ff74e716745b2520e4ccd7751095c  COPYING
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
-index 149e24b79a..1ef1d69db3 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.mk
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
+ sha256  f467ff659142e2eb4cb7275c48c789d249af398b09a405d3e181dcc339b3b922  COPYING
+diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.mk b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+index ec10590b73..3a1d579939 100644
+--- a/package/x11r7/xapp_x11perf/xapp_x11perf.mk
++++ b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XFD_VERSION = 1.1.3
--XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.bz2
--XAPP_XFD_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XFD_VERSION = 1.1.4
-+XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.xz
-+XAPP_XFD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XFD_LICENSE = MIT
- XAPP_XFD_LICENSE_FILES = COPYING
- XAPP_XFD_DEPENDENCIES = \
+-XAPP_X11PERF_VERSION = 1.6.1
+-XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.bz2
+-XAPP_X11PERF_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_X11PERF_VERSION = 1.6.2
++XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.xz
++XAPP_X11PERF_SITE = https://xorg.freedesktop.org/archive/individual/test
+ XAPP_X11PERF_LICENSE = MIT
+ XAPP_X11PERF_LICENSE_FILES = COPYING
+ XAPP_X11PERF_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXft
 -- 
 2.34.1
 
