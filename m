@@ -1,73 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A72B7C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A2A0C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E11E820EB;
-	Thu,  8 Dec 2022 22:32:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E11E820EB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AatIQdknTcw3; Thu,  8 Dec 2022 22:32:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D6E7820E4;
-	Thu,  8 Dec 2022 22:31:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D6E7820E4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A31F11BF35F
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:31:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7783060AD7
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:31:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7783060AD7
+	by smtp3.osuosl.org (Postfix) with ESMTP id A42D760AD7;
+	Thu,  8 Dec 2022 22:38:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42D760AD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h6lOHJihHuNX for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 22:31:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68DC760A74
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
- [209.85.214.180])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 68DC760A74
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:31:57 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id p24so2966955plw.1
- for <buildroot@buildroot.org>; Thu, 08 Dec 2022 14:31:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=iJZV3pxifws1aJ5aPz6c90J7LwTFknz5fvkSPKcOzlA=;
- b=Ev3UWlfEczLMtXB7oNdz2H+LBxeElwOHDMuB/q/yqw0iX4UpGlzY2J1LDvy23oTbf6
- 0cEHliMsI7x5yuHMDaBPbF9MuDWuwduuRXLXtLoQYFkXcWkX0ablcVRvEyUK6rNX35e5
- c8SVlfAlyoMVPijsKzWkrd+ZfZuMxKr/zVkKWXTmSRAwIe9JDrGBlV309qynkO/aWfAA
- 56S8n/KKjKTz12D2RP8rsFjX1kYVWUaoJRDtVzCBurdAyVcDD7fKoVsvLgW7ymNfOSDw
- oPDUbRZXkGtBGVfGiBAk87v9mAekvXf7JsdE93d6xwDxo0yFuKKSJSjXXJaabTK4vnf8
- hX7w==
-X-Gm-Message-State: ANoB5pm5q+o4AnkAdAzMxqWpFKqt5CJ8Hokd17aiCYywcrT1UD9qbCs3
- 7QVyH6ZyoCdW/Tz6ZMFtifbQIWEPYgg=
-X-Google-Smtp-Source: AA0mqf6OcQe7VGIO0crHH0rrW5vq8hRzl2UILoOcx6mxOJxpMTGEa92tCpaaAHX5Bjir2sjeXUYP9A==
-X-Received: by 2002:a05:6a21:168e:b0:a7:9730:6c13 with SMTP id
- np14-20020a056a21168e00b000a797306c13mr4188624pzb.21.1670538716429; 
- Thu, 08 Dec 2022 14:31:56 -0800 (PST)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- ij27-20020a170902ab5b00b00188f7ad561asm17046280plb.249.2022.12.08.14.31.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Dec 2022 14:31:55 -0800 (PST)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nHql2f-KBrh6; Thu,  8 Dec 2022 22:38:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B76360B43;
+	Thu,  8 Dec 2022 22:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B76360B43
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C7B91BF35F
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6131D40145
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6131D40145
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kDvZuGC42CWb for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 22:38:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E09AA400FE
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E09AA400FE
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:22 +0000 (UTC)
+Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
+ by mailout05.t-online.de (Postfix) with SMTP id 7D97FBFE7
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:20 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd83.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p3PX0-2btxJZ0; Thu, 8 Dec 2022 23:38:18 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX0-00048i-0y
+ for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:18 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 14:31:53 -0800
-Message-Id: <20221208223153.4189684-1-christian@paral.in>
-X-Mailer: git-send-email 2.38.1
+Date: Thu,  8 Dec 2022 23:37:21 +0100
+Message-Id: <20221208223817.1088619-15-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
+References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/moby-buildkit: security bump to
- version 0.10.6
+X-TOI-EXPURGATEID: 150726::1670539098-62A0A2DC-FDCAF26F/0/0 CLEAN NORMAL
+X-TOI-MSGID: 3ccca3e5-db23-4199-a7dd-c4760bb1fbf4
+Subject: [Buildroot] [PATCH 14/70] package/x11r7/xdriver_xf86-video-r128:
+ bump version to 6.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,52 +68,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CVE-2022-39253: git vulnerability mitigation.
-
-... and other bugfixes.
-
-https://github.com/moby/buildkit/releases/tag/v0.10.6
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+https://lists.x.org/archives/xorg-announce/2022-December/003275.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/moby-buildkit/moby-buildkit.hash | 2 +-
- package/moby-buildkit/moby-buildkit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash  | 8 +++-----
+ .../xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk    | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
-index cfd1c0c946..43ee1b12c9 100644
---- a/package/moby-buildkit/moby-buildkit.hash
-+++ b/package/moby-buildkit/moby-buildkit.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5877faf02cbddfb6c988f44b5b373739fed87f4aeb8802c6777fe7be2f772506  moby-buildkit-0.10.0.tar.gz
-+sha256  5ffe5a2d11736719649dae962461f66df394ae4cc1e58294e5f2bd4d4632d9d0  moby-buildkit-0.10.6.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index 667383bf50..59d68a7dca 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+index 455c3d4439..cf9b21ebe8 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-October/002926.html
+-md5  105ebcfe1bac06fe84645ac3def91184  xf86-video-r128-6.12.0.tar.bz2
+-sha1  7cfa41d386fa43b5d30299203e4845d8afba4899  xf86-video-r128-6.12.0.tar.bz2
+-sha256  801c86882cbd2bbb3084d471dcc5cfee2c1754dcbfb4dc446676d58a6bd9e057  xf86-video-r128-6.12.0.tar.bz2
+-sha512  0e667e2cfa8a87a00846361d86528c93754c403c812b66798953fa4c857b2143b2c4c44885da467e7f910d8cb910b69492cdcb6f25e2197bae6617364d152e38  xf86-video-r128-6.12.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003275.html
++sha256  7d023c2b171f1664e43d12a1d21674079d8065536f82bb95b448bfce4981c741  xf86-video-r128-6.12.1.tar.xz
++sha512  18b2408fe68161c32f84c7147717f8e6c6377e81e9d59e2f098843c54cd0ae757aab5059568da8c71ef38100807d56ee22447417c236c1b3deea292bb676e700  xf86-video-r128-6.12.1.tar.xz
+ # Locally computed
+ sha256  69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+index 1931dbecd7..49514e3d3a 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MOBY_BUILDKIT_VERSION = 0.10.0
-+MOBY_BUILDKIT_VERSION = 0.10.6
- MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
- MOBY_BUILDKIT_LICENSE = Apache-2.0
- MOBY_BUILDKIT_LICENSE_FILES = LICENSE
+-XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.0
+-XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.1
++XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_R128_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
 -- 
-2.38.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
