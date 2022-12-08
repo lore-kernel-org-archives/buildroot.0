@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8259C001B2
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 20:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B625AC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 20:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DC34820C5;
-	Thu,  8 Dec 2022 20:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DC34820C5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CAD660B32;
+	Thu,  8 Dec 2022 20:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CAD660B32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MH_my6-6b6XS; Thu,  8 Dec 2022 20:21:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ftzIQGQmDwse; Thu,  8 Dec 2022 20:23:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2820D820B0;
-	Thu,  8 Dec 2022 20:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2820D820B0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0773160B2F;
+	Thu,  8 Dec 2022 20:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0773160B2F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F3C621BF591
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:21:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 878991BF591
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB6EE401B7
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB6EE401B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E9E8401B7
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:23:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9E8401B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rtl971ebLYpv for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 20:21:11 +0000 (UTC)
+ with ESMTP id FsId85_WZ-la for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 20:23:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B28BD400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B45E400FE
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
  [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B28BD400FE
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 20:21:10 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- n9-20020a05600c3b8900b003d0944dba41so1930968wms.4
- for <buildroot@buildroot.org>; Thu, 08 Dec 2022 12:21:10 -0800 (PST)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B45E400FE
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 20:23:43 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id n7so2090762wms.3
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 12:23:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PjpGCts08b2e1hEXQgip7HtFGnvKYOz22dh2HoqEweI=;
- b=pajIka+i9MICy1zCSYv+d3D90n9ovpAPSNwBDcytqhGs4wmsZU7mwCfS86vjWpJQ2j
- iDbGoUZ3bqUjq2+FfTK3ct14p9a+hXdUtdOx9GPNpJzQ2hRJBRUdO44uRp+vhF8zjoR5
- 3ud6EDpKQCu8JnUG16D3RU+t4NOKOjFReMKYOATna1NvXYJ7RpvWjT+QlfvjGY1/hdNK
- UlrTk1ag2FgzvIbQXET6DEImMPRluqAevfYQbjB+oMUoXvgDRvmYtRhw2X5fSoHEx1In
- LUWgovXVrNRgh+QB/QrijNBF3AmrXrU2f8n3T4Hgf6y5PdbsqJx9SKLRWMj/jG7TKCBI
- CvUg==
-X-Gm-Message-State: ANoB5pmeq/EzIeXQgAe1mTnJfeGtuN4QMT7BNDe4QnQavhutZ5a3Hd5u
- H49Dxp23Xtfltp3rg5stwtJiB2KTZmQ=
-X-Google-Smtp-Source: AA0mqf7C3A4EmY5C6UhAmLdz0tjPby1z8Z93MRm5kiW6oZAuyXKtjqxmvXC9bIQuhC5LxPqt25ga5g==
-X-Received: by 2002:a05:600c:3d8c:b0:3d0:7fd2:4756 with SMTP id
- bi12-20020a05600c3d8c00b003d07fd24756mr3090625wmb.8.1670530868334; 
- Thu, 08 Dec 2022 12:21:08 -0800 (PST)
+ bh=9+aCS0j7Y+aLpobFS88jfae/wHs/f2C0ggBNpYjI1CY=;
+ b=sKC48vgV9sMIto5LbvIJ58wueh9fsPRsqEFJiG9vLlw/q66WWBoczbT2FMVadMw5aI
+ AsEMH8V0ufF/Tv9hsrfgPMhyZmdaZEEB6dIEFmMrz9ElTp59O450ghwg/Ap4P/MeKEPx
+ XPb9btHmZrhKJDWiXxr5QRcpvr5e38r0DuFlJlOn8/mUIWrBbwPibnYdu8SZUX4twgYq
+ K6W7jHLDZHClpz7+VQ0viu8/5JDPpv/bNo1cUwZqjoOgZh1j9hpL/Xm79DS/lSTvckfK
+ 37TAAimmEw5A9egjL8cY88Xm/xQ6PzTasOWaji5+aODo4V5obmYFC8Mrmok26OwXRgRG
+ KaAQ==
+X-Gm-Message-State: ANoB5pltWlz7xuJFcWgMjVuy5cCdvgrVHN1FiZPBDjgZliPePX1TJRv1
+ PhAfKC4Cn5w2y892AVGf7tXaRTj0ro4=
+X-Google-Smtp-Source: AA0mqf58JSBXRDEBNxIS3HsVCyjeNdj3l0CTyxKVoY0vGeDKvBX5fFnRoNG6/aUpIqHx3Lxj+5I6zg==
+X-Received: by 2002:a05:600c:5398:b0:3cf:d0b1:8aa1 with SMTP id
+ hg24-20020a05600c539800b003cfd0b18aa1mr3049640wmb.0.1670531021182; 
+ Thu, 08 Dec 2022 12:23:41 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j10-20020a05600c1c0a00b003b49bd61b19sm7021367wms.15.2022.12.08.12.21.07
+ az40-20020a05600c602800b003d1e1f421bfsm6382121wmb.10.2022.12.08.12.23.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Dec 2022 12:21:07 -0800 (PST)
+ Thu, 08 Dec 2022 12:23:40 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 21:21:04 +0100
-Message-Id: <20221208202104.3041-1-fontaine.fabrice@gmail.com>
+Date: Thu,  8 Dec 2022 21:23:38 +0100
+Message-Id: <20221208202338.4085-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PjpGCts08b2e1hEXQgip7HtFGnvKYOz22dh2HoqEweI=;
- b=GC3R9n28q6fSfawM6ujJLHDrNkwLqi1jcGivioaq9DljleTwyM7V5aAmZoBi3kH1TH
- 9ftlSVT6WGAuPTZvaANyaVZ0RQYgFoBwYhwDZ6uYMPfDdQyijxQuXoug3t0UEzFAoph6
- XaFdM0JjyIGMKBe5Y5hx1cM5URFg8sJCCVvsPOIXljOaPSIqQo7x1IVcqkQD2TyH2NE/
- kl1qNGZshJJ7FWhtJivtUlS76yTkADoJc604JP88VoNh44JrPelU2QnLY39s09eeciI+
- NFXOccMInpUKzdQGkiqN4GMJ8wYO87adlydwL9YxLh4WQ2XeQj8PvzzsFSHTeUi7vQuO
- QbJA==
+ bh=9+aCS0j7Y+aLpobFS88jfae/wHs/f2C0ggBNpYjI1CY=;
+ b=Ps1F/VzWsZjxUAx3WFJhkHQSzU/SkN4g8vJzREQZPeSYb6nrqjHfhMVXC09eAQ80mr
+ QTkzViU3Gx7wX4flEShmHLRtf2kEVBo72glo5UWJV8wo6vnBAZv70f64gh7dCuLr8cuN
+ 95nJIyfYr7eQGxgk2aqj1ynunq39ETlZlBrj0htyXt3IzUaf5wv7PmrHWZYDbNS88NwH
+ XFY2v5vZY5qBPYvTZ5lkz2+3wtgH+utH3GebTtKRq5A/pGKt2t46/hpYNssR8ELnzBTl
+ BLSjcACyr/1/risKE8QvKM0QnNQn+1jrkIAkQBJth5uo4LOik5ICbRGTiHk4yoUR04eg
+ ua1Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GC3R9n28
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: security bump to version
- 0.9.2
+ header.a=rsa-sha256 header.s=20210112 header.b=Ps1F/VzW
+Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix static build with
+ libusb and -latomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,59 +94,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Koen Martens <gmc@sonologic.nl>,
+Cc: Daniel Sangue <daniel.sangue@sangue.ch>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-46149: Cap'n Proto is a data interchange format and remote
-procedure call (RPC) system. Cap'n Proro prior to versions 0.7.1, 0.8.1,
-0.9.2, and 0.10.3, as well as versions of Cap'n Proto's Rust
-implementation prior to 0.13.7, 0.14.11, and 0.15.2 are vulnerable to
-out-of-bounds read due to logic error handling list-of-list. This issue
-may lead someone to remotely segfault a peer by sending it a malicious
-message, if the victim performs certain actions on a list-of-pointer
-type. Exfiltration of memory is possible if the victim performs
-additional certain actions on a list-of-pointer type. To be vulnerable,
-an application must perform a specific sequence of actions, described in
-the GitHub Security Advisory. The bug is present in inlined code,
-therefore the fix will require rebuilding dependent applications. Cap'n
-Proto has C++ fixes available in versions 0.7.1, 0.8.1, 0.9.2, and
-0.10.3.
+Use pkg-config to retrieve libusb dependencies such as -latomic and
+avoid the following static build failure raised since bump of libusb to
+version 1.0.25 in commit aad609936fc83acfe1eac6ffc86d29ac35dcf54e:
 
-https://github.com/capnproto/capnproto/security/advisories/GHSA-qqff-4vw4-f6hx
-https://dwrensha.github.io/capnproto-rust/2022/11/30/out_of_bounds_memory_access_bug.html
+/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
+/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/capnproto/capnproto.hash | 2 +-
- package/capnproto/capnproto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ix-static-build-with-libusb-and-lato.patch | 47 +++++++++++++++++++
+ package/libftdi1/libftdi1.mk                  |  2 +-
+ 2 files changed, 48 insertions(+), 1 deletion(-)
+ create mode 100644 package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
 
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-index 7fd0e6158b..c3233e7c8b 100644
---- a/package/capnproto/capnproto.hash
-+++ b/package/capnproto/capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  daf49f794560f715e2f4651c842aaece2d065d4216834c5c3d3254962e35b535  capnproto-0.9.1.tar.gz
-+sha256  4fe1ca8ab90859f33f08d2c4fcd7099e2983b0b946beecebd2fe051e3a64c67e  capnproto-0.9.2.tar.gz
- sha256  9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 7fc07043fb..23f128455a 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAPNPROTO_VERSION = 0.9.1
-+CAPNPROTO_VERSION = 0.9.2
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
+diff --git a/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
+new file mode 100644
+index 0000000000..c818c58d68
+--- /dev/null
++++ b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
+@@ -0,0 +1,47 @@
++From b5b8fab6063ad90bb5ef05a72708ecde1796bc81 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 13 May 2022 18:11:50 +0200
++Subject: [PATCH] CMakeLists.txt: fix static build with libusb and -latomic
++
++Use pkg-config to retrieve libusb dependencies such as -latomic and
++avoid the following static build failure:
++
++/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
++/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++http://developer.intra2net.com/git/?p=libftdi;a=commit;h=b5b8fab6063ad90bb5ef05a72708ecde1796bc81]
++---
++ CMakeLists.txt |   12 ++++++++++--
++ 1 files changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 58f664a..d20aa94 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -25,8 +25,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
++ endif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
++ 
++ # find libusb
++-find_package ( USB1 REQUIRED )
++-include_directories ( ${LIBUSB_INCLUDE_DIR} )
+++find_package( PkgConfig )
+++if (PkgConfig_FOUND)
+++  pkg_check_modules( LIBUSB libusb-1.0 )
+++  if (LIBUSB_FOUND)
+++    include_directories ( ${LIBUSB_INCLUDE_DIRS} )
+++  else()
+++    find_package ( USB1 REQUIRED )
+++    include_directories ( ${LIBUSB_INCLUDE_DIR} )
+++  endif()
+++endif()
++ 
++ # Find Boost
++ if (FTDIPP OR BUILD_TESTS)
++-- 
++1.7.1
++
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index d2e3f42e14..66798addc4 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -8,7 +8,7 @@ LIBFTDI1_VERSION = 1.5
+ LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
+ LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
+ LIBFTDI1_INSTALL_STAGING = YES
+-LIBFTDI1_DEPENDENCIES = libusb
++LIBFTDI1_DEPENDENCIES = host-pkgconf libusb
+ LIBFTDI1_LICENSE = LGPL-2.1 (libftdi1), MIT (libftdi1)
+ LIBFTDI1_LICENSE_FILES = LICENSE COPYING.LIB
+ LIBFTDI1_CONFIG_SCRIPTS = libftdi1-config
 -- 
 2.35.1
 
