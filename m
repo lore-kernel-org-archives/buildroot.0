@@ -1,75 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A8CC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 21:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F24C001B2
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 21:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E767820ED;
-	Thu,  8 Dec 2022 21:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E767820ED
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R7Z5tCd9IK31; Thu,  8 Dec 2022 21:22:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E83C820EB;
-	Thu,  8 Dec 2022 21:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E83C820EB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1FD31BF396
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:22:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93945400E7
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93945400E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BB93401B7;
+	Thu,  8 Dec 2022 21:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BB93401B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ClAzezKhA_RZ for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 21:22:20 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zdDrukJRZfpH; Thu,  8 Dec 2022 21:24:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 218D7400FE;
+	Thu,  8 Dec 2022 21:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 218D7400FE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 08FAB1BF396
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:24:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D520F607EC
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 21:24:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D520F607EC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xnRQWJ22V7FS for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 21:24:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9A0B400FE
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com
- [209.85.216.48])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D9A0B400FE
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 21:22:20 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id js9so1771448pjb.2
- for <buildroot@buildroot.org>; Thu, 08 Dec 2022 13:22:20 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 193D46076C
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com
+ [209.85.210.169])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 193D46076C
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 21:24:33 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id d82so2270052pfd.11
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 13:24:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=RCQIUEsUYyKpufcja9NPEdXN5Cn92FOHJIKOWejJnkU=;
- b=EySk52tvsRRJcqSFGAZdsYRu72aPu7Lr1O6sHF/NjBcE01AD+wYkRELw5wcQugIwn3
- InoeP7g1HM4MDMOF0ltTvt/+iY6JmQKnd0/Ly4qr8TCnWKzYkumeLjYt5DPpqaVk57uG
- 7+xJOjxTSIwG0Rf1gmVwLNDlJPavDEC4NwML+TKyq6ZeszLHBOvyGQzE0+KGY0fMuX5O
- nSOyaIWEb0xsZz2hSnC8sOGPhzQOtSmXHPZyi6dpFjaoHp7tyev8YG7eZhai4ukmOQZJ
- mWaifPb/nGUuVhVQos3yrEg7HYiq2WJg7VMvbqfZc572+g21C8ISjrxnORqLiSnY8fwG
- DWdQ==
-X-Gm-Message-State: ANoB5pnQjuH9ORTaKj0iNmT4R8C3wMYJchxtts6E6d3RV/8bq1GhAuNl
- YH8XFTofH09Dw0vBgMBtjoKIT++DPbA=
-X-Google-Smtp-Source: AA0mqf5HhZOb6C2OoKAHsGB5mVN8751lc74FTd0sqjxWA3XjxWz9YHbLtRUpbwSjfgDPZaSV+1k8HA==
-X-Received: by 2002:a17:902:eb8d:b0:189:89b1:ac95 with SMTP id
- q13-20020a170902eb8d00b0018989b1ac95mr3146734plg.29.1670534539910; 
- Thu, 08 Dec 2022 13:22:19 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=oCpmYQCzXLRAhlLSstD5jq/K0rty+cgZmYwukK0k8kU=;
+ b=iJ65iL+LWpAZLP0zgj6Arb5tUtgNqKfsU+qK5PJjjeknk2PEjH3zJTwPDCyLct81hy
+ Fn/UOocNjxez+tXVXe7sn8QFwk2YZDpDopil7JLhKXZ7rc1Vl1D9zFHoYCRX8kH4EEJ4
+ oJMB330u3TTncXDPzEynbsGDbVBmqBS7xKjamtBvaFHphEkFncqU+5K2eVSqjZ8wHvGk
+ pHqD7D1uM2he0pVy2bX3hKWB4hhV6IKBZ0Dm38QsjkE18WnCEP658D5rtEKy8xQQLTdY
+ tbf2CKNA7RyAkSD5WfqIf3kAujCx6uUrmEKUysURngIUE3aqIRdOi6DowseduHv/Oh7z
+ PXiQ==
+X-Gm-Message-State: ANoB5pnq684Llt4S04GX/57fyhREjMBNMr4xn9Oj7+KQtkUMGA5C1iLt
+ ODeDd+sceVMfErRqmEB2BlXXMwCtsrk=
+X-Google-Smtp-Source: AA0mqf5PD1A+2SxIuWKpzAvOoyRthK2+fcQ6biTitJXveOfXicQHFnsK41RherEAJ4VQ8e+nfa6A9w==
+X-Received: by 2002:aa7:8252:0:b0:574:c62c:2f55 with SMTP id
+ e18-20020aa78252000000b00574c62c2f55mr2940206pfn.3.1670534671933; 
+ Thu, 08 Dec 2022 13:24:31 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- i16-20020a17090332d000b00182d25a1e4bsm17031940plr.259.2022.12.08.13.22.18
+ x18-20020aa79ad2000000b005773bd639besm5688248pfp.10.2022.12.08.13.24.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Dec 2022 13:22:19 -0800 (PST)
+ Thu, 08 Dec 2022 13:24:31 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 13:22:15 -0800
-Message-Id: <20221208212215.4109073-2-christian@paral.in>
+Date: Thu,  8 Dec 2022 13:24:29 -0800
+Message-Id: <20221208212429.4112736-1-christian@paral.in>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221208212215.4109073-1-christian@paral.in>
-References: <20221208212215.4109073-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/docker-cli: security bump to
- version 20.10.21
+Subject: [Buildroot] [PATCH 1/1] package/batman-adv: bump to version 2022.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,38 +88,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
+Bug fixes and code cleanups.
 
-https://github.com/moby/moby/releases/tag/v20.10.21
+https://www.open-mesh.org/news/110
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/batman-adv/batman-adv.hash | 2 +-
+ package/batman-adv/batman-adv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 153e0e5d00..d9477cf3af 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f4398ad858274605f8e4e55d4618b2f5bdff6969a4afa232842bb2417d8a98db  docker-cli-20.10.19.tar.gz
-+sha256  f0f62ca1c80e8fd5b9e140ca64ef3e75dc7cf7a28040b3d10b260307128946e8  docker-cli-20.10.21.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 1fac21790b..a14edb2c31 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index c5add4cdea..14a92c231a 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -2,6 +2,6 @@
+ sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
+ 
+ # Hash for license files
+-sha256  8aca27c6f168b137a7ed7031d58169396c1a97f958c2ea95b9c30a9b92576fe0  batman-adv-2022.2.tar.gz
++sha256  218ffb534fead1c9b5b0d90ec1b2fba688209cdf00e861bece1cbf469fe69953  batman-adv-2022.3.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index d279694bf5..75b8292ee1 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.19
-+DOCKER_CLI_VERSION = 20.10.21
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+-BATMAN_ADV_VERSION = 2022.2
++BATMAN_ADV_VERSION = 2022.3
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 -- 
 2.38.1
 
