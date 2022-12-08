@@ -1,67 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B38EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 19:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC70EC4167B
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 20:03:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C36354088D;
-	Thu,  8 Dec 2022 19:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C36354088D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17B3C60B1A;
+	Thu,  8 Dec 2022 20:03:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17B3C60B1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AfeyBtdNNXvR; Thu,  8 Dec 2022 19:47:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aJ8Ei93P0QLf; Thu,  8 Dec 2022 20:03:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D46484161C;
-	Thu,  8 Dec 2022 19:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D46484161C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 95E521BF2F0
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 19:47:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 533E760A8D;
+	Thu,  8 Dec 2022 20:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 533E760A8D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A51F1BF2F0
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71C6E40192
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 19:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71C6E40192
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64F1160A8D
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 20:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64F1160A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZEKAqEYK8wX0 for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 19:47:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A823400FE
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A823400FE
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 19:47:44 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.87.80])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 3Mrvp52zwQipd3MrvpiTxX; Thu, 08 Dec 2022 20:47:43 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gSdAZ4fKYfEX for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 20:03:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3396C60A7B
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3396C60A7B
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 20:03:50 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id ud5so6602076ejc.4
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 12:03:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=g8PDjIOEeREckbwOpvX63K+5F36Kn3svD8K17UPcSBU=;
+ b=6GyBRQCORHEc1Uv6EYP8z4fcjq6MnfuBlbg9xCXf/v5ax7l+0ImIJ9xOiDRLJSx3Xd
+ 81HeLRyL9gAcEUM+BXaOyVMOqd+3RHn0ky3V/1mrfnR6UHlEaNLcoAA7HctGcZp25YLB
+ DfIPfAKF4FN8XDfoLpX1Dyh2LOm/CciP79AIFiJEEczYi4uz+vQ+wU8bNGsMaJERUFTb
+ a3hVyM/9K/e8EcDfUdwKPuYl5QhQRrZVZ+fnx+eOugXMq3L3WMhyEWeS7WdhAe3MVl2J
+ LvdIJSjVW7EWeIhQ44Gtn1pDBdcSFKSa6pwSgMwTQKsnPlKtbhQ3Qpuz7+gMxU6JSUnj
+ BOww==
+X-Gm-Message-State: ANoB5plWJOG7cvXQGRdZ/4Fe0dgLnzEUAvb6NHBboYT6PORVV7/kB3QW
+ Uj9N0GAP8CYJEAPKOtuSmCll55DUnvrX7g==
+X-Google-Smtp-Source: AA0mqf6K3aXH3O3/sdrag4q+YDLDM6xrk+XNwOQTHh6V2av3Pd/q8jLp5TfqyybmbQ77OXa3TO0iug==
+X-Received: by 2002:a17:907:d18:b0:7ae:1438:5892 with SMTP id
+ gn24-20020a1709070d1800b007ae14385892mr4202891ejc.36.1670529827755; 
+ Thu, 08 Dec 2022 12:03:47 -0800 (PST)
+Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
+ [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
+ vs21-20020a170907139500b007c0ae137404sm9187021ejb.97.2022.12.08.12.03.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 08 Dec 2022 12:03:46 -0800 (PST)
+From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 20:47:42 +0100
-Message-Id: <20221208194742.763582-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  8 Dec 2022 21:03:40 +0100
+Message-Id: <20221208200339.12108-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfEvuJ9jL/PQDkv3dafaEzR60fOZmlIR3WjNQ32bGTUCr/xrJBimRQdTpYzWznzMop9llWnE85bU252LpNdE7amskZfbB2SEO5eu3iHRZW62GyCaSh5lJ
- kmAqUHgYwK1uIPV7QEBAH0ljh6T56tGfTe8jNjak8OJiIbtlNNa+9aJyLtomhsU8T5ch98av5Ys2c0sXxkozgHvjQUvVxZWqcIVUgvvXQs9sUYU4X6o4JNi7
- Iyrs57jS7kmIQvh43P3fG0TgTbtGnV4bfxOjBbr2Jks//9GuH7ZQmVySM9RrJVy6YHzzatn0e38XlQ/rTEWpbg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1670528863; bh=WcbfjHpjY5ll5j9ReKFkG3dYZXSfS9K6T9yOeYu5T1U=;
- h=From:To:Subject:Date:MIME-Version;
- b=gv9nJKi1BETT+CmjZKdsfLlRyW/U9sKTZpmWS2G/ZDFTPyEvszcqS4zyVo1M0hOwv
- KdJMM3iZPxZyOV+XxHND7WILbuv/zw2UkY2YvMFPyrkmh/BvFXKFIvZmY+DEbX2es7
- NGFvUxsxinXOIoDiss4UQM/2t7NbZk2wtYwIiYreQf5AMEBKgSL6lCTExqpdqsS1pT
- 2CRkGNa1AX0WVM4sjYeq98icUqUROvneCoHZZGLTIZQXuFonp+VcEaYR8423GIF/y1
- s6uHeJOuJhnFWb22LU/UsYetlhODPUE+vsIKvjDhLo4cyIwVoafu11Yvx9PiHKDqgF
- gpavMT7usFYFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=gv9nJKi1
-Subject: [Buildroot] [PATCH v2] package/xr819-xradio: fix build failure with
- Linux 6.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=g8PDjIOEeREckbwOpvX63K+5F36Kn3svD8K17UPcSBU=;
+ b=PURfdp2jbdQzhH6x4GWNKkAgyahTH6LXIYh1JGhX5hE2wS5ZAbgCTgZ2iGZgwYJRNL
+ +c68tMuk9hzud5gKb2GblQNz7rj0l90E9WGi1Q6fjgWSJB62uC983hTwAPx/VywlBVdD
+ hb0ZTfYLPbDc/bY+mRmwpHKh4Uss50IYcZ7bEVqNwtfxTSsGWTCeYsfjgeOBmO9gZL/z
+ UJYSYtUDV5LVvrY6ONWWSMR9cK6PDVC1psbM8VHBkPsL8QomzSMO+EWZ5F1wVk5xoJuB
+ Aznkcj3mXWt3Eqwlh1BbbSGkFAr8Z0DNeQg81f1fZMa4Rxg0nEv+uzfXFrUfkRDEqrn9
+ 3eCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=PURfdp2j
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: add 'setup' to meson
+ command in config step
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,52 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ "Guillaume W . Bres" <guillaume.bressaix@gmail.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to latest version to fix build failure with Linux 6.0.
+When building/configure meson packages the following warning is displayed:
+WARNING: Running the setup command as meson [options] instead of meson setup [options] is ambiguous and deprecated.
 
-Fixes:
-http://autobuild.buildroot.net/results/434c1d2a5104090366519278314bf750324d3710/
+This warning was introduced in meson release 0.64.0 [1].
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Follow the advise and add the 'setup' argument to the meson command.
+
+[1] https://github.com/mesonbuild/meson/commit/3c7ab542c0c4770241eae149b0d4cd8de329aee0
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
-V1->V2:
-* add Fixes: to commit log as suggested by Sergey Matyukevich
----
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-meson.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 89201a8eb7..08a3b6e8cc 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  0d0449a85488b990d10ecdf67ac88bfbd39fa81c2df5dfcfed583975222afd33  xr819-xradio-4f0cfd5e869ca101e7c624d9ce05ba5d2b2a0bc2.tar.gz
-+sha256  839fdae93eba29121d4116de335b00a026ef63874caf516747dbdf24c17f208b  xr819-xradio-58d597bcf081e44904335916e6033bc8ef28b043.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index 835e229347..8c1cb1587f 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XR819_XRADIO_VERSION = 4f0cfd5e869ca101e7c624d9ce05ba5d2b2a0bc2
-+XR819_XRADIO_VERSION = 58d597bcf081e44904335916e6033bc8ef28b043
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index d675f7f733..4aa6e44afa 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -149,7 +149,7 @@ define $(2)_CONFIGURE_CMDS
+ 	CC_FOR_BUILD="$$(HOSTCC)" \
+ 	CXX_FOR_BUILD="$$(HOSTCXX)" \
+ 	$$($$(PKG)_CONF_ENV) \
+-	$$(MESON) \
++	$$(MESON) setup \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+@@ -169,7 +169,7 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
+ 	$$(HOST_CONFIGURE_OPTS) \
+-	$$($$(PKG)_CONF_ENV) $$(MESON) \
++	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
+ 		--prefix=$$(HOST_DIR) \
+ 		--libdir=lib \
+ 		--sysconfdir=$$(HOST_DIR)/etc \
 -- 
-2.34.1
+2.20.1
 
 _______________________________________________
 buildroot mailing list
