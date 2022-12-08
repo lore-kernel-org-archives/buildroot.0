@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B77EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC46C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Dec 2022 22:47:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D753F60B08;
-	Thu,  8 Dec 2022 22:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D753F60B08
+	by smtp3.osuosl.org (Postfix) with ESMTP id A834C60B2F;
+	Thu,  8 Dec 2022 22:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A834C60B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LIWpzkWxh1AT; Thu,  8 Dec 2022 22:47:11 +0000 (UTC)
+	with ESMTP id 2-T90MEjbT8q; Thu,  8 Dec 2022 22:47:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD17760A6B;
-	Thu,  8 Dec 2022 22:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD17760A6B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 458DC1BF35F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6494960B16;
+	Thu,  8 Dec 2022 22:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6494960B16
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 69BC81BF969
  for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB4E9820DE
- for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB4E9820DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52C43400FE
+ for <buildroot@lists.busybox.net>; Thu,  8 Dec 2022 22:38:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C43400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l1ryndf2-XPt for <buildroot@lists.busybox.net>;
- Thu,  8 Dec 2022 22:38:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FoXgZXghMEr8 for <buildroot@lists.busybox.net>;
+ Thu,  8 Dec 2022 22:38:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC66820EB
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4AC66820EB
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:26 +0000 (UTC)
-Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
- by mailout03.t-online.de (Postfix) with SMTP id D4B961ABA9
- for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:22 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd86.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3382B401B7
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3382B401B7
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 22:38:33 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout11.t-online.de (Postfix) with SMTP id 91AE1246C7
+ for <buildroot@buildroot.org>; Thu,  8 Dec 2022 23:38:29 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p3PX1-325S410; Thu, 8 Dec 2022 23:38:19 +0100
+ esmtp id 1p3PX4-21qtnP0; Thu, 8 Dec 2022 23:38:22 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35946)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX1-00048i-0x
- for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:19 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p3PX3-00048i-3C
+ for buildroot@buildroot.org; Thu, 08 Dec 2022 23:38:22 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu,  8 Dec 2022 23:37:36 +0100
-Message-Id: <20221208223817.1088619-30-bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2022 23:38:17 +0100
+Message-Id: <20221208223817.1088619-71-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670539099-D924D9D3-13B54486/0/0 CLEAN NORMAL
-X-TOI-MSGID: 5b5e0407-32b4-4998-b3b8-5f1a6acd87a2
-Subject: [Buildroot] [PATCH 29/70] package/x11r7/xapp_xlsatoms: bump version
- to 1.1.4
+X-TOI-EXPURGATEID: 150726::1670539102-C13271D1-B49F8F04/0/0 CLEAN NORMAL
+X-TOI-MSGID: f339c597-44d6-447b-86ce-529d355707d1
+Subject: [Buildroot] [PATCH 70/70] package/x11r7/xdriver_xf86-video-tga:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,45 +73,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2022-November/003258.html
+Building this package is broken with X.org xserver 21.
+
+Fixes:
+http://autobuild.buildroot.net/results/de5/de5efd922edb9eb7dc9981b5f10ea402487ee431/
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 8 +++-----
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ Config.in.legacy                              |  6 +++
+ package/x11r7/Config.in                       |  1 -
+ .../0001-mibstore.patch                       | 47 -------------------
+ .../x11r7/xdriver_xf86-video-tga/Config.in    |  5 --
+ .../xdriver_xf86-video-tga.hash               |  4 --
+ .../xdriver_xf86-video-tga.mk                 | 14 ------
+ 6 files changed, 6 insertions(+), 71 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tga/Config.in
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
 
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-index 21484fdcdf..be9ed6f0b4 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
--md5  61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
--sha1  9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
--sha256  57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
--sha512  c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003258.html
-+sha256  f4bfa15f56c066d326a5d5b292646708f25b9247506840b9047cd2687dcc71b7  xlsatoms-1.1.4.tar.xz
-+sha512  82f0d1e17850770537eac82947eff4514639f8122bd864e02685ede49db110a4c90c7782702ffb677a2b581f3eacd10dba80e63e29e7a1ed1c9255ee163fe0c4  xlsatoms-1.1.4.tar.xz
- # Locally computed
- sha256  f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-index a3230fc2dc..2ef09ef2d5 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9565c5905f..acf9671ad7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--XAPP_XLSATOMS_VERSION = 1.1.3
--XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
--XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XLSATOMS_VERSION = 1.1.4
-+XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.xz
-+XAPP_XLSATOMS_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XLSATOMS_LICENSE = MIT
- XAPP_XLSATOMS_LICENSE_FILES = COPYING
- XAPP_XLSATOMS_DEPENDENCIES = xlib_libX11 xlib_libXmu
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
++	bool "xf86-video-tga removed"
++	select BR2_LEGACY
++	help
++	  The X.org xf86-video-tga package was removed.
++
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
+ 	bool "xf86-video-glint removed"
+ 	select BR2_LEGACY
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 273db98e89..da79c4e851 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -180,7 +180,6 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
+ 		source package/x11r7/xdriver_xf86-video-sis/Config.in
+ 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
+-		source package/x11r7/xdriver_xf86-video-tga/Config.in
+ 		source package/x11r7/xdriver_xf86-video-trident/Config.in
+ 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
+ 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
+deleted file mode 100644
+index 07bcd04f25..0000000000
+--- a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From b7022db0559cd1b6cd3eb6b5abf6896a607b478d Mon Sep 17 00:00:00 2001
+-From: Adam Jackson <ajax@redhat.com>
+-Date: Tue, 25 Sep 2012 12:55:00 +0000
+-Subject: Remove mibstore.h
+-
+-Signed-off-by: Adam Jackson <ajax@redhat.com>
+----
+-Fetch from:
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-tga/commit/?id=b7022db0559cd1b6cd3eb6b5abf6896a607b478d
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-
+-diff --git a/src/tga_accel.c b/src/tga_accel.c
+-index 35af1a4..b414df5 100644
+---- a/src/tga_accel.c
+-+++ b/src/tga_accel.c
+-@@ -37,7 +37,6 @@
+- #include "xf86cmap.h"
+- #include "mipointer.h"
+- 
+--#include "mibstore.h"
+- #include "miline.h"
+- 
+- #include "tga_regs.h"
+-diff --git a/src/tga_driver.c b/src/tga_driver.c
+-index dd4f3e6..90d2660 100644
+---- a/src/tga_driver.c
+-+++ b/src/tga_driver.c
+-@@ -46,8 +46,6 @@
+- 
+- /* software cursor */
+- #include "mipointer.h"
+--/* backing store */
+--#include "mibstore.h"
+- 
+- /*  #include "mibank.h" */
+- /* colormap manipulation */
+-@@ -1451,7 +1449,6 @@ TGAScreenInit(SCREEN_INIT_ARGS_DECL)
+-     
+-     fbPictureInit (pScreen, 0, 0);
+-     
+--    miInitializeBackingStore(pScreen);
+-     xf86SetBackingStore(pScreen);
+-     xf86SetSilkenMouse(pScreen);
+- 
+---
+-cgit v0.9.0.2-2-gbebe
+diff --git a/package/x11r7/xdriver_xf86-video-tga/Config.in b/package/x11r7/xdriver_xf86-video-tga/Config.in
+deleted file mode 100644
+index 7c75661acc..0000000000
+--- a/package/x11r7/xdriver_xf86-video-tga/Config.in
++++ /dev/null
+@@ -1,5 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
+-	bool "xf86-video-tga"
+-	select BR2_PACKAGE_XORGPROTO
+-	help
+-	  X.Org driver for tga cards
+diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
+deleted file mode 100644
+index 4f8c10965c..0000000000
+--- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# From http://lists.x.org/archives/xorg-announce/2012-July/002025.html
+-sha256  2023818000200eb50a59476e36d59b07a361b110e73b1d9cc526beb669306131  xf86-video-tga-1.2.2.tar.bz2
+-# Locally calculated
+-sha256  92e36c6b7c99c8335e5823d53686e58ebd82ee8051a6360f60c8c0fb05745954  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
+deleted file mode 100644
+index 421b09be22..0000000000
+--- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# xdriver_xf86-video-tga
+-#
+-################################################################################
+-
+-XDRIVER_XF86_VIDEO_TGA_VERSION = 1.2.2
+-XDRIVER_XF86_VIDEO_TGA_SOURCE = xf86-video-tga-$(XDRIVER_XF86_VIDEO_TGA_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_TGA_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_TGA_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_TGA_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_TGA_DEPENDENCIES = xserver_xorg-server xorgproto
+-
+-$(eval $(autotools-package))
 -- 
 2.34.1
 
