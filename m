@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FB8C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD250C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E825940CE2;
-	Fri,  9 Dec 2022 17:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E825940CE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A4B66118A;
+	Fri,  9 Dec 2022 17:11:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A4B66118A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rI8cVpObOgrr; Fri,  9 Dec 2022 17:11:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2457610D2;
+	Fri,  9 Dec 2022 17:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2457610D2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1324F1BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B52141024
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B52141024
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iFpk60DOhCWo; Fri,  9 Dec 2022 17:11:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 304C6401DD;
-	Fri,  9 Dec 2022 17:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 304C6401DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 740381BF973
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D57E41A69
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D57E41A69
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hRpvBWC-k66E for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3xODegIM_TZ for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5A8341A66
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5A8341A66
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C72541025
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C72541025
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D37DD85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 4A7CA85E9E; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:39 +0100
+Date: Fri, 9 Dec 2022 17:34:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fefd30f06c88f36cc75b52b767293586e1770af1
-X-Git-Newrev: 07f7d434a438421eb382a27349e67cffd97d8a3f
+X-Git-Oldrev: c999fb9a0527e371f4d9f433436afcc1dc88d4af
+X-Git-Newrev: f7f74ba0b3f8d5dd0dcf5af42e0622749e57a7e4
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.D37DD85EA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbevd: bump version to
- 1.1.5
+Message-Id: <20221209170104.4A7CA85E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xcb-util-wm: bump version to
+ 0.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f7d434a438421eb382a27349e67cffd97d8a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=f7f74ba0b3f8d5dd0dcf5af42e0622749e57a7e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-November/003255.html
+https://lists.x.org/archives/xorg-announce/2022-October/003235.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xkbevd/xapp_xkbevd.hash | 5 +++--
- package/x11r7/xapp_xkbevd/xapp_xkbevd.mk   | 6 +++---
+ package/x11r7/xcb-util-wm/xcb-util-wm.hash | 5 +++--
+ package/x11r7/xcb-util-wm/xcb-util-wm.mk   | 6 +++---
  2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
-index c3cf2f32b2..40b813fcf2 100644
---- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
-+++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
+diff --git a/package/x11r7/xcb-util-wm/xcb-util-wm.hash b/package/x11r7/xcb-util-wm/xcb-util-wm.hash
+index 444212accf..7383f015f2 100644
+--- a/package/x11r7/xcb-util-wm/xcb-util-wm.hash
++++ b/package/x11r7/xcb-util-wm/xcb-util-wm.hash
 @@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002577.html
--sha256  2430a2e5302a4cb4a5530c1df8cb3721a149bbf8eb377a2898921a145197f96a  xkbevd-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003255.html
-+sha256  38357b702de9d3457c4ff75053390f457b84c4accc7f088101255c37c684926b  xkbevd-1.1.5.tar.xz
-+sha512  9e4a56484771e5eb5444fbd11e7d0bb952a2746eea79b84298e2000ada96896d501b886727c4ef08c120b5dcce550fca2d3e3dd762f4ca0327c38d9609961c5b  xkbevd-1.1.5.tar.xz
- # Locally computed
- sha256  38c6dbf8f88b1c920561ff3a4d1ffdb85c069c664f5f8b64a9adb477ef347b7c  COPYING
-diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
-index 7a9a8fb18f..5b99e6967f 100644
---- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
-+++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
+-# From http://lists.x.org/archives/xorg-announce/2014-February/002401.html
+-sha256  28bf8179640eaa89276d2b0f1ce4285103d136be6c98262b6151aaee1d3c2a3f  xcb-util-wm-0.4.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003235.html
++sha256  62c34e21d06264687faea7edbf63632c9f04d55e72114aa4a57bb95e4f888a0b  xcb-util-wm-0.4.2.tar.xz
++sha512  eab6588e6a47d28a3b25ecd13b5018529419db6b49c74458c093699b60a194933be1e1f6f7799abf03344f7ebc7af88586ff2935938d53644bdd5c763a7fa9b0  xcb-util-wm-0.4.2.tar.xz
+ # License file, locally calculated
+ sha256  12ab3559977a4b22ae3030b90c64a386e6ec51ab0e4eab1ff530f81a2639400a  COPYING
+diff --git a/package/x11r7/xcb-util-wm/xcb-util-wm.mk b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
+index 37df3fd92d..0c4f6e86fa 100644
+--- a/package/x11r7/xcb-util-wm/xcb-util-wm.mk
++++ b/package/x11r7/xcb-util-wm/xcb-util-wm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XKBEVD_VERSION = 1.1.4
--XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.bz2
--XAPP_XKBEVD_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XKBEVD_VERSION = 1.1.5
-+XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.xz
-+XAPP_XKBEVD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XKBEVD_LICENSE = MIT
- XAPP_XKBEVD_LICENSE_FILES = COPYING
- XAPP_XKBEVD_DEPENDENCIES = xlib_libxkbfile
+-XCB_UTIL_WM_VERSION = 0.4.1
+-XCB_UTIL_WM_SITE = http://xcb.freedesktop.org/dist
+-XCB_UTIL_WM_SOURCE = xcb-util-wm-$(XCB_UTIL_WM_VERSION).tar.bz2
++XCB_UTIL_WM_VERSION = 0.4.2
++XCB_UTIL_WM_SITE = https://xorg.freedesktop.org/archive/individual/lib
++XCB_UTIL_WM_SOURCE = xcb-util-wm-$(XCB_UTIL_WM_VERSION).tar.xz
+ XCB_UTIL_WM_INSTALL_STAGING = YES
+ XCB_UTIL_WM_LICENSE = MIT
+ XCB_UTIL_WM_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
