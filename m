@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B216C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10843C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B96B7470D7;
-	Mon, 20 Feb 2023 21:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B96B7470D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4F4B47A21;
+	Mon, 20 Feb 2023 21:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4F4B47A21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LPQQNauhUto6; Mon, 20 Feb 2023 21:45:16 +0000 (UTC)
+	with ESMTP id f-GmWMrRXqxq; Mon, 20 Feb 2023 21:45:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AA684EBCA;
-	Mon, 20 Feb 2023 21:45:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AA684EBCA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 424941BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62F0A4EBB3;
+	Mon, 20 Feb 2023 21:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F0A4EBB3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 157281BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7585261106
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7585261106
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89763415C2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89763415C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GiaTFScvcHrZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tEc2St-Db3Q4 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C1CA610ED
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C1CA610ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4B4B415C4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B4B415C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 751158648F; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ id B283886496; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 4 Dec 2022 20:57:43 +0100
+Date: Fri, 9 Dec 2022 17:35:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bdc9f8a247309f1bf007a77576480091d20e2d1d
-X-Git-Newrev: d37b3f384c3c783dfdd786062847f621e52b069b
+X-Git-Oldrev: ef8faec32df85cf6172a9e26f68d6c6f704265e2
+X-Git-Newrev: 0f18b8dcb4e622f973d73332732d3dd6f548d3a3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.751158648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: fix
- license
+Message-Id: <20230220205158.B283886496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xditview:
+ bump version to 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d37b3f384c3c783dfdd786062847f621e52b069b
+commit: https://git.buildroot.net/buildroot/commit/?id=0f18b8dcb4e622f973d73332732d3dd6f548d3a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 343974b99528702842e8c1dad945fcd4f0defd6c forgot to change the
-licensing information which has been updated with
-https://code.qt.io/cgit/qt/qtbase.git/commit/?id=05fc3aef53348fb58be6308076e000825b704e58
-resulting in the following build failure:
-
-ERROR: LICENSE.GPL2 has wrong sha256 hash:
-ERROR: expected: 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-ERROR: got     :
-
-Fixes:
- - http://autobuild.buildroot.org/results/bf20b7457349f1bb7a82d471ad2c9e4307ac540c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr:
-  - one-item per line, both for _LICENSE and _LICENSE_FILES
-  - fix check-package
-]
+https://lists.x.org/archives/xorg-announce/2022-October/003220.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/qt6/qt6base/qt6base.hash | 14 +++++++++-----
- package/qt6/qt6base/qt6base.mk   | 23 +++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xditview/xapp_xditview.hash | 8 +++-----
+ package/x11r7/xapp_xditview/xapp_xditview.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-index 5dd26973fa..6544a371c6 100644
---- a/package/qt6/qt6base/qt6base.hash
-+++ b/package/qt6/qt6base/qt6base.hash
-@@ -2,8 +2,12 @@
- sha256  cb6475a0bd8567c49f7ffbb072a05516ee6671171bed55db75b22b94ead9b37d  qtbase-everywhere-src-6.4.0.tar.xz
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.hash b/package/x11r7/xapp_xditview/xapp_xditview.hash
+index 4586c0b5a4..dbaf5e42b7 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.hash
++++ b/package/x11r7/xapp_xditview/xapp_xditview.hash
+@@ -1,7 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002570.html
+-md5  3a909116a3b2abe3845215cf49e09fa5  xditview-1.0.5.tar.bz2
+-sha1  f06f65bca31168c86bcebd7f92dbbda08817a5cc  xditview-1.0.5.tar.bz2
+-sha256  eecb1ed51ab4edc7f454476d1248cfb7799a17c5679b3dd834e8b4658331c04b  xditview-1.0.5.tar.bz2
+-sha512  e20c903f38394b496111267e142d84d11e69a3b89f91869652d1f2ee5c997a13f90bfa2966651b42cd3979a330b348a6e397cc6a74c45b1f3f91643e7c06765d  xditview-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003220.html
++sha256  517700df205d4fdf65db182698157c959f1e7c10597670a7f45b1fcb2319819f  xditview-1.0.6.tar.xz
++sha512  249769d27980e9a69ac8f056f329dfa514f3ab6267d6ed69814c5695f315d2a7021c560a0e26fdd2568290a071793d7f2eafdd92f9981ed556047deb244ebf5a  xditview-1.0.6.tar.xz
+ # Locally computed
+ sha256  023d879308a49249181f78bbb567e93c45138ad847fe969d191e4802e7a1a005  COPYING
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.mk b/package/x11r7/xapp_xditview/xapp_xditview.mk
+index 388710034c..8655bd3e92 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.mk
++++ b/package/x11r7/xapp_xditview/xapp_xditview.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Hashes for license files
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
--sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
--sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
--sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSE.FDL
-+sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5  LICENSES/BSL-1.0.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index b7ee6037f3..2f159f380b 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -7,8 +7,27 @@
- QT6BASE_VERSION = $(QT6_VERSION)
- QT6BASE_SITE = $(QT6_SITE)
- QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
--QT6BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
--QT6BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+
-+QT6BASE_LICENSE = \
-+	GPL-2.0+ or LGPL-3.0, \
-+	GPL-3.0 with exception (tools), \
-+	GFDL-1.3 (docs), \
-+	Apache-2.0, \
-+	BSD-3-Clause, \
-+	BSL-1.0, \
-+	MIT
-+
-+QT6BASE_LICENSE_FILES = \
-+	LICENSES/Apache-2.0.txt \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/BSL-1.0.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/MIT.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
- QT6BASE_DEPENDENCIES = \
- 	host-ninja \
- 	host-qt6base \
+-XAPP_XDITVIEW_VERSION = 1.0.5
+-XAPP_XDITVIEW_SOURCE = xditview-$(XAPP_XDITVIEW_VERSION).tar.bz2
+-XAPP_XDITVIEW_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XDITVIEW_VERSION = 1.0.6
++XAPP_XDITVIEW_SOURCE = xditview-$(XAPP_XDITVIEW_VERSION).tar.xz
++XAPP_XDITVIEW_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XDITVIEW_LICENSE = MIT
+ XAPP_XDITVIEW_LICENSE_FILES = COPYING
+ XAPP_XDITVIEW_DEPENDENCIES = xlib_libXaw
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
