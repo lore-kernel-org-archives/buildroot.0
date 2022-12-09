@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7525C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F5A6C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B2156118A;
-	Fri,  9 Dec 2022 17:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B2156118A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16908402F3;
+	Fri,  9 Dec 2022 17:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16908402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DMvBZ9Byqtv3; Fri,  9 Dec 2022 17:05:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BN8dlfM4jP5g; Fri,  9 Dec 2022 17:05:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94F14610D2;
-	Fri,  9 Dec 2022 17:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94F14610D2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0A3911BF37A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4316C40492;
+	Fri,  9 Dec 2022 17:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4316C40492
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 345671BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDBA560EC6
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDBA560EC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7782B41A53
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7782B41A53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VNS38yVNWuGb for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OBlMz9ceh8jX for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9739611A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D96941A5C
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9739611A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D96941A5C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA5FF85E9E; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 461AF85EA1; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:30 +0100
+Date: Fri, 9 Dec 2022 17:31:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e20641dcf85dada48621f46e1f30966c90696317
-X-Git-Newrev: 7b0c8c6aee402bc6e9128bc8bb535ad1ef1f2fc5
+X-Git-Oldrev: 7f08e0d7def20cc04ad39b952bcfffd91ceda13d
+X-Git-Newrev: 481860051016bbaab467621e5651500327f4f004
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.BA5FF85E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xlsatoms: bump version
- to 1.1.4
+Message-Id: <20221209170103.461AF85EA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xstdcmap: bump version
+ to 1.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b0c8c6aee402bc6e9128bc8bb535ad1ef1f2fc5
+commit: https://git.buildroot.net/buildroot/commit/?id=481860051016bbaab467621e5651500327f4f004
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-November/003258.html
+https://lists.x.org/archives/xorg-announce/2022-December/003272.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 8 +++-----
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 6 +++---
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash | 8 +++-----
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-index 21484fdcdf..be9ed6f0b4 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
+index 3f601c7249..028980bdca 100644
+--- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
++++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
--md5  61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
--sha1  9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
--sha256  57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
--sha512  c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003258.html
-+sha256  f4bfa15f56c066d326a5d5b292646708f25b9247506840b9047cd2687dcc71b7  xlsatoms-1.1.4.tar.xz
-+sha512  82f0d1e17850770537eac82947eff4514639f8122bd864e02685ede49db110a4c90c7782702ffb677a2b581f3eacd10dba80e63e29e7a1ed1c9255ee163fe0c4  xlsatoms-1.1.4.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002954.html
+-md5  da67142c128d18386ff145882e0afc66  xstdcmap-1.0.4.tar.bz2
+-sha1  a5eff72ba31625e5b11506add800140019a39636  xstdcmap-1.0.4.tar.bz2
+-sha256  06898b3f1eaad0b205ff3c75bdefa3207868b889d4cb37b32b8267b2bbfe6f8b  xstdcmap-1.0.4.tar.bz2
+-sha512  2adbb0aec1766341e04090efa962241ff6c9e32c612851b7221cec0ee16852107d406a08ec5251070f39df882c13e3c8c9edcd88f278187a9f373e1727643a8f  xstdcmap-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003272.html
++sha256  365847e379398499ec9ad9a299cc47a0d6e7feba9546dfd4e5b422204b5ac180  xstdcmap-1.0.5.tar.xz
++sha512  3f2047af1d328a34d38ededc13de00298db3300eab1d1dbdff7d2aa4a3cd543a79305bfbd2e6424c5e023cf866a4f7a70aa9a3014444d543268d2f812a322a49  xstdcmap-1.0.5.tar.xz
  # Locally computed
  sha256  f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-index a3230fc2dc..2ef09ef2d5 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
+index dd5b0ee349..60825556e7 100644
+--- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
++++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XLSATOMS_VERSION = 1.1.3
--XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
--XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XLSATOMS_VERSION = 1.1.4
-+XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.xz
-+XAPP_XLSATOMS_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XLSATOMS_LICENSE = MIT
- XAPP_XLSATOMS_LICENSE_FILES = COPYING
- XAPP_XLSATOMS_DEPENDENCIES = xlib_libX11 xlib_libXmu
+-XAPP_XSTDCMAP_VERSION = 1.0.4
+-XAPP_XSTDCMAP_SOURCE = xstdcmap-$(XAPP_XSTDCMAP_VERSION).tar.bz2
+-XAPP_XSTDCMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XSTDCMAP_VERSION = 1.0.5
++XAPP_XSTDCMAP_SOURCE = xstdcmap-$(XAPP_XSTDCMAP_VERSION).tar.xz
++XAPP_XSTDCMAP_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XSTDCMAP_LICENSE = MIT
+ XAPP_XSTDCMAP_LICENSE_FILES = COPYING
+ XAPP_XSTDCMAP_DEPENDENCIES = xlib_libX11 xlib_libXmu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
