@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF12C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:49:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA84C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB11F42CD7;
-	Mon, 20 Feb 2023 21:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB11F42CD7
+	by smtp4.osuosl.org (Postfix) with ESMTP id A840A4700B;
+	Mon, 20 Feb 2023 21:49:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A840A4700B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pgjLCVOjVr4F; Mon, 20 Feb 2023 21:49:10 +0000 (UTC)
+	with ESMTP id a9JTGBZegCyO; Mon, 20 Feb 2023 21:49:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE1EC42CAF;
-	Mon, 20 Feb 2023 21:49:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE1EC42CAF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60B811BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FA9042E5F;
+	Mon, 20 Feb 2023 21:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA9042E5F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 134721BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EA426110F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EA426110F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7660C41699
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7660C41699
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5O4fu1BF_Zkp for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pthOPsGIo8B5 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AF6C610FA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AF6C610FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3D91415B8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3D91415B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B649828C8; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 9FD8C86494; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:21 +0100
+Date: Fri, 9 Dec 2022 19:01:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7436867eb1d07a1cf0c9c809b6c13c11596a1159
-X-Git-Newrev: 38e38370277366777ba850608c38f528f152a1e8
+X-Git-Oldrev: 090d126da88c1d529bf073626e423fceeb3cf9d5
+X-Git-Newrev: f276188ef7967ce8332fb38fdecd98b080b7e3db
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205156.8B649828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xkbcomp:
- bump version to 1.4.6
+Message-Id: <20230220205159.9FD8C86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/botan: security bump
+ to version 2.19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38e38370277366777ba850608c38f528f152a1e8
+commit: https://git.buildroot.net/buildroot/commit/?id=f276188ef7967ce8332fb38fdecd98b080b7e3db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-December/003283.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 7 +++----
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+Fix CVE-2022-43705: In Botan before 2.19.3, it is possible to forge OCSP
+responses due to a certificate verification error. This issue was
+introduced in Botan 1.11.34 (November 2016).
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index bccaae6f57..b626e50236 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-March/003075.html
--sha256  6851086c4244b6fd0cc562880d8ff193fb2bbf1e141c73632e10731b31d4b05e  xkbcomp-1.4.5.tar.bz2
--sha512  2e84f8d6b083e2e818cb95e5d2a184da00e50d71b280e92d1a71465a9a4348f922f4ddccb42cfeee6f76705bbfc8580ef67aedd0d958aaa1ae6bbcc66ccd8154  xkbcomp-1.4.5.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003283.html
-+sha256  fa50d611ef41e034487af7bd8d8c718df53dd18002f591cca16b0384afc58e98  xkbcomp-1.4.6.tar.xz
-+sha512  90e69dd1c78c28f77a5acc7821b43afec1b9ac4895bc6f3462b4902baaadc26f3869da69e3bd023b4bc74adb5f1be0c43ca24b3dab37ac9a479c5622684baa81  xkbcomp-1.4.6.tar.xz
+https://github.com/randombit/botan/security/advisories/GHSA-4v9w-qvcq-6q7w
+https://github.com/randombit/botan/blob/2.19.3/news.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index d768c669ea..64da04415e 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  3af5f17615c6b5cd8b832d269fb6cb4d54ec64f9eb09ddbf1add5093941b4d75  Botan-2.19.2.tar.xz
++sha256  dae047f399c5a47f087db5d3d9d9e8f11ae4985d14c928d71da1aff801802d55  Botan-2.19.3.tar.xz
  # Locally computed
- sha256  6b833fdc05906ce57f016dc791db86830d49ee4da2861ce45806c50b3f4dda9e  COPYING
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index b52f5e6850..61922c7cc9 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-@@ -4,8 +4,8 @@
+ sha256  472faf6d2231130382779f96de506be19296473750356449fc426ddc9cb03b50  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index b0ebe594b1..59fbc950b0 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.4.5
--XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
-+XAPP_XKBCOMP_VERSION = 1.4.6
-+XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.xz
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
- XAPP_XKBCOMP_LICENSE_FILES = COPYING
+-BOTAN_VERSION = 2.19.2
++BOTAN_VERSION = 2.19.3
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
