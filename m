@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D15C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0DF8C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9B4B4ECC5;
-	Mon, 20 Feb 2023 21:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B4B4ECC5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6225F4ECD6;
+	Mon, 20 Feb 2023 21:54:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6225F4ECD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gPUCRkAT9783; Mon, 20 Feb 2023 21:54:26 +0000 (UTC)
+	with ESMTP id pCKpMEZYeJih; Mon, 20 Feb 2023 21:54:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F6254ECC2;
-	Mon, 20 Feb 2023 21:54:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F6254ECC2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FB671BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 115CB4ECD9;
+	Mon, 20 Feb 2023 21:54:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 115CB4ECD9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EFB3A1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12255416A3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12255416A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6AFBC6112A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AFBC6112A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l9ryUIzWiwHs for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OKWDOcpRzCCH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 254E1416A1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 254E1416A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2C4C610FA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2C4C610FA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 182B4828C8; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+ id 926BC828C8; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:24 +0100
+Date: Fri, 9 Dec 2022 17:32:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1eeac3dbfe32130bd15b9e9675891e68b12c38d0
-X-Git-Newrev: 09c966af735ca53b447f52965d123c21e43ae522
+X-Git-Oldrev: e20641dcf85dada48621f46e1f30966c90696317
+X-Git-Newrev: 7b0c8c6aee402bc6e9128bc8bb535ad1ef1f2fc5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.182B4828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-can: bump to
- version 4.1.0
+Message-Id: <20230220205157.926BC828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xlsatoms:
+ bump version to 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09c966af735ca53b447f52965d123c21e43ae522
+commit: https://git.buildroot.net/buildroot/commit/?id=7b0c8c6aee402bc6e9128bc8bb535ad1ef1f2fc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop spurious setuptools runtime dependency.
-
-Add new msgpack runtime dependency.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-November/003258.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-can/Config.in       | 2 +-
- package/python-can/python-can.hash | 5 +++--
- package/python-can/python-can.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 8 +++-----
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index e92d9668e0..5d21e29d88 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_AENUM # runtime
-+	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	select BR2_PACKAGE_PYTHON_WRAPT # runtime
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index dd8a9b107d..73be230201 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/python-can
--sha256  59d92846ffb981e634e9e0f2d14a6b4967a875e3869bd2ba168c92c4db6b8b5d  python-can-4.0.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/python-can/json
-+md5  d8365b7a09e49f47dac0da75d8518808  python-can-4.1.0.tar.gz
-+sha256  3f2b6b0dc5f459591d171ee0c0136dce79acedc2740ce695024aa3444e911bb9  python-can-4.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 9284a9cf99..ba98337d5d 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+index 21484fdcdf..be9ed6f0b4 100644
+--- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
++++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
+-md5  61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
+-sha1  9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
+-sha256  57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
+-sha512  c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003258.html
++sha256  f4bfa15f56c066d326a5d5b292646708f25b9247506840b9047cd2687dcc71b7  xlsatoms-1.1.4.tar.xz
++sha512  82f0d1e17850770537eac82947eff4514639f8122bd864e02685ede49db110a4c90c7782702ffb677a2b581f3eacd10dba80e63e29e7a1ed1c9255ee163fe0c4  xlsatoms-1.1.4.tar.xz
+ # Locally computed
+ sha256  f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
+diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+index a3230fc2dc..2ef09ef2d5 100644
+--- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
++++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 4.0.0
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/1f/f7/a643cba269d59e108fe4c1854a8e71d5cdadadd4de1b9c8862b190171122
-+PYTHON_CAN_VERSION = 4.1.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/90/55/898e69e37d5d4692bf21ba8750e095493d2ecbb29be7394d5cb735f0ab0f
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-XAPP_XLSATOMS_VERSION = 1.1.3
+-XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
+-XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XLSATOMS_VERSION = 1.1.4
++XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.xz
++XAPP_XLSATOMS_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XLSATOMS_LICENSE = MIT
+ XAPP_XLSATOMS_LICENSE_FILES = COPYING
+ XAPP_XLSATOMS_DEPENDENCIES = xlib_libX11 xlib_libXmu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
