@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD25DC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539F5C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6607482127;
-	Fri,  9 Dec 2022 17:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6607482127
+	by smtp1.osuosl.org (Postfix) with ESMTP id 007A882137;
+	Fri,  9 Dec 2022 17:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 007A882137
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X0wKGv3oZ2Md; Fri,  9 Dec 2022 17:03:57 +0000 (UTC)
+	with ESMTP id CglF7Ck6k9qG; Fri,  9 Dec 2022 17:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 870F082137;
-	Fri,  9 Dec 2022 17:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 870F082137
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BEDBE1BF37A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 325578211C;
+	Fri,  9 Dec 2022 17:04:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 325578211C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E57521BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0236E41A53
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0236E41A53
+ by smtp1.osuosl.org (Postfix) with ESMTP id C06CC81E13
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C06CC81E13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AoQ0n2M3s_bY for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HhYxjn7iTodb for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1DAB841A59
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DAB841A59
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1915682116
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1915682116
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A2E085EA1; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 08FC285EA7; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:27 +0100
+Date: Fri, 9 Dec 2022 17:36:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6e3bcfb376b59a2503f111b6339202752b794c9
-X-Git-Newrev: bc8b91fdadd8abf22035c127bcd2bbb5961cf43e
+X-Git-Oldrev: a49f6567142eee59817d07afa380337260f81634
+X-Git-Newrev: fe85dbf818ab4321f3a18f742458f3313ed1b3ec
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.0A2E085EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXv: bump version to
- 1.0.12
+Message-Id: <20221209170105.08FC285EA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_showfont: bump version
+ to 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc8b91fdadd8abf22035c127bcd2bbb5961cf43e
+commit: https://git.buildroot.net/buildroot/commit/?id=fe85dbf818ab4321f3a18f742458f3313ed1b3ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003280.html
+https://lists.x.org/archives/xorg-announce/2022-August/003207.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXv/xlib_libXv.hash | 6 +++---
- package/x11r7/xlib_libXv/xlib_libXv.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_showfont/xapp_showfont.hash | 5 +++--
+ package/x11r7/xapp_showfont/xapp_showfont.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXv/xlib_libXv.hash b/package/x11r7/xlib_libXv/xlib_libXv.hash
-index a6f7e3d55c..0852f27f8b 100644
---- a/package/x11r7/xlib_libXv/xlib_libXv.hash
-+++ b/package/x11r7/xlib_libXv/xlib_libXv.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2016-October/002727.html
--sha256  d26c13eac99ac4504c532e8e76a1c8e4bd526471eb8a0a4ff2a88db60cb0b088  libXv-1.0.11.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003280.html
-+sha256  aaf7fa09f689f7a2000fe493c0d64d1487a1210db154053e9e2336b860c63848  libXv-1.0.12.tar.xz
-+sha512  bdd00de1ce6a8911056181ab4de32f9e319a68567389162d4bc2e3c9946d5f3c60f87eb6c53f74c9b6a342255e591d5fef4a445a4ac8ca3c1b6fe87d42c51c1e  libXv-1.0.12.tar.xz
- # Locally calculated
- sha256  4fac4d581d00f11c459d68b7cb970f3d4e5a5bbfb53784d85f59a90076280301  COPYING
-diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
-index 1105b5925d..808b1e6e7b 100644
---- a/package/x11r7/xlib_libXv/xlib_libXv.mk
-+++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/x11r7/xapp_showfont/xapp_showfont.hash b/package/x11r7/xapp_showfont/xapp_showfont.hash
+index ff35e9c9eb..7bec4e8728 100644
+--- a/package/x11r7/xapp_showfont/xapp_showfont.hash
++++ b/package/x11r7/xapp_showfont/xapp_showfont.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-December/002513.html
+-sha256  e9735c1c530b8a52edfab7415cc0fd7f8d2889095114f4cb689a27476461ac89  showfont-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-August/003207.html
++sha256  2b9b9f06e65e095ed76ce560b701b9fc47fa63310ee706b54c8787af061d0e56  showfont-1.0.6.tar.xz
++sha512  21a318519492f4ba46a8bcb3590097fc5f96fe01fdb557257ae56bae813671952a2aad6c0df8cd69659e06708571c398e6d97969224cf692e22c8a35c8e6c363  showfont-1.0.6.tar.xz
+ # Locally computed
+ sha256  c32217021e0507207e2ee6da3fcee3d9e32816003a7153b3357c08cdc97934a8  COPYING
+diff --git a/package/x11r7/xapp_showfont/xapp_showfont.mk b/package/x11r7/xapp_showfont/xapp_showfont.mk
+index c0b8c9a3a2..a805f35231 100644
+--- a/package/x11r7/xapp_showfont/xapp_showfont.mk
++++ b/package/x11r7/xapp_showfont/xapp_showfont.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXV_VERSION = 1.0.11
--XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
-+XLIB_LIBXV_VERSION = 1.0.12
-+XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.xz
- XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXV_LICENSE = ISC-like
- XLIB_LIBXV_LICENSE_FILES = COPYING
+-XAPP_SHOWFONT_VERSION = 1.0.5
+-XAPP_SHOWFONT_SOURCE = showfont-$(XAPP_SHOWFONT_VERSION).tar.bz2
+-XAPP_SHOWFONT_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_SHOWFONT_VERSION = 1.0.6
++XAPP_SHOWFONT_SOURCE = showfont-$(XAPP_SHOWFONT_VERSION).tar.xz
++XAPP_SHOWFONT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SHOWFONT_LICENSE = MIT
+ XAPP_SHOWFONT_LICENSE_FILES = COPYING
+ XAPP_SHOWFONT_DEPENDENCIES = xlib_libFS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
