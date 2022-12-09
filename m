@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4DAC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4DFFC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E39314EBE6;
-	Mon, 20 Feb 2023 21:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39314EBE6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74CEE429E9;
+	Mon, 20 Feb 2023 21:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74CEE429E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p0OIvGvTMdAO; Mon, 20 Feb 2023 21:47:06 +0000 (UTC)
+	with ESMTP id W5BVXnghMPYF; Mon, 20 Feb 2023 21:47:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB324EBF3;
-	Mon, 20 Feb 2023 21:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB324EBF3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 890531BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 457F949986;
+	Mon, 20 Feb 2023 21:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 457F949986
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 03AD31BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE39C415B0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE39C415B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18DE86108E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18DE86108E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I99O3aj6Xakr for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qq2BFSIJXgyT for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2323B415BC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2323B415BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57B18610CC
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57B18610CC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 134D486495; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+ id 55F678648F; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:14 +0100
+Date: Fri, 9 Dec 2022 17:31:04 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e2745a3b89ccc74f5d15ff812feb0b62da860e12
-X-Git-Newrev: 2f7d13d9588cf3632a7c73bd81dddb52a4263309
+X-Git-Oldrev: 82abffdbb7784ab30874544f740abf23f6c0c695
+X-Git-Newrev: d8ae5b86edcf172d824982c0740c5099ea087697
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.134D486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXft:
- bump version to 2.3.6
+Message-Id: <20230220205156.55F678648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libICE:
+ bump version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f7d13d9588cf3632a7c73bd81dddb52a4263309
+commit: https://git.buildroot.net/buildroot/commit/?id=d8ae5b86edcf172d824982c0740c5099ea087697
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-September/003211.html
-https://lists.x.org/archives/xorg-announce/2022-September/003209.html
+https://lists.x.org/archives/xorg-announce/2022-December/003288.html
+https://lists.x.org/archives/xorg-announce/2022-December/003274.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
- package/x11r7/xlib_libXft/xlib_libXft.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libICE/xlib_libICE.hash | 8 +++-----
+ package/x11r7/xlib_libICE/xlib_libICE.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
-index 8743a9b7d1..484764be3d 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.hash
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-August/003104.html
--sha256  57dedaab20914002146bdae0cb0c769ba3f75214c4c91bd2613d6ef79fc9abdd  libXft-2.3.4.tar.bz2
--sha512  5bb019750982ed4643880efd7368bc226ad49cfa8c0c8c6d4614dfeed74f588c65e1ba69adcc12284ec07d841e5b58fc1c27f3fddf83fe1a2837b29dd9ecec51  libXft-2.3.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-September/003211.html
-+sha256  60a6e7319fc938bbb8d098c9bcc86031cc2327b5d086d3335fc5c76323c03022  libXft-2.3.6.tar.xz
-+sha512  732f8c635fcac6010012ba8c10c23d2dd6ec79b0f096d6bcc9b7e36d2ca0817387faa7ee5bb6f43cff02adc68e4234c1b8f95021ebc548f61c492e0b76836d90  libXft-2.3.6.tar.xz
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.hash b/package/x11r7/xlib_libICE/xlib_libICE.hash
+index 2bfbe54788..4a58f97698 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.hash
++++ b/package/x11r7/xlib_libICE/xlib_libICE.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003006.html
+-md5  76d77499ee7120a56566891ca2c0dbcf  libICE-1.0.10.tar.bz2
+-sha1  5b5eb125d4f43a3ab8153b0f850963ee6c982c24  libICE-1.0.10.tar.bz2
+-sha256  6f86dce12cf4bcaf5c37dddd8b1b64ed2ddf1ef7b218f22b9942595fb747c348  libICE-1.0.10.tar.bz2
+-sha512  2f1ef2c32c833c71894a08fa7e7ed53f301f6c7bd22485d71c12884d8e8b36b99f362ec886349dcc84d08edc81c8b2cea035320831d64974edeba021b433c468  libICE-1.0.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003288.html
++sha256  03e77afaf72942c7ac02ccebb19034e6e20f456dcf8dddadfeb572aa5ad3e451  libICE-1.1.1.tar.xz
++sha512  2f7833a25f31cc743ca95cb88f9a8403b50e19ffb5bf43bfef87ba405857d359789daaa9ec2391351237d958f16d35dbf082adb76d301e46d3a54162a6b452d3  libICE-1.1.1.tar.xz
  # Locally computed
- sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
-index b1640a6613..a86501900c 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.mk
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+ sha256  60105b7ea93cb07a67fee8443b092b727e3db7f0dff4fbe05bc6cd7747fb53c8  COPYING
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index 2b56aaab98..d92e81c0ab 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXFT_VERSION = 2.3.4
--XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
-+XLIB_LIBXFT_VERSION = 2.3.6
-+XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
- XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFT_LICENSE = MIT
- XLIB_LIBXFT_LICENSE_FILES = COPYING
+-XLIB_LIBICE_VERSION = 1.0.10
+-XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
++XLIB_LIBICE_VERSION = 1.1.1
++XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.xz
+ XLIB_LIBICE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
+ XLIB_LIBICE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
