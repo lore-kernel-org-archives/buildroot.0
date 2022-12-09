@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B760C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 865B8C04FDE
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 304AB41A67;
-	Fri,  9 Dec 2022 17:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 304AB41A67
+	by smtp1.osuosl.org (Postfix) with ESMTP id 376A281341;
+	Fri,  9 Dec 2022 17:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 376A281341
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dv3UxgmIZ7fy; Fri,  9 Dec 2022 17:08:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lHz5iDqyoCPq; Fri,  9 Dec 2022 17:08:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 266F041B6A;
-	Fri,  9 Dec 2022 17:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 266F041B6A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3DC2E1BF973
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86C2880FB3;
+	Fri,  9 Dec 2022 17:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86C2880FB3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 434941BF976
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B98841A60
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B98841A60
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCE2E40FF8
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCE2E40FF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D8mRvrsdTKXP for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1WsknvAWaUK3 for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B8F441B36
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CBBB41024
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B8F441B36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CBBB41024
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 097C585EA6; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id 1DAEC85C7A; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:33:58 +0100
+Date: Fri, 9 Dec 2022 17:34:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bf8f441d10848bddd47b9b0c84575177db2b4af
-X-Git-Newrev: b97079d921d8e62ce73d08e11069f5c04734e048
+X-Git-Oldrev: 228780fbde4c2b645ea52a870df5ec020912ddf8
+X-Git-Newrev: 1261e78ee2a7994f0cf764c0a61d457984daf673
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.097C585EA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXinerama: bump
- version to 1.1.5
+Message-Id: <20221209170104.1DAEC85C7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_x11perf: bump version
+ to 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97079d921d8e62ce73d08e11069f5c04734e048
+commit: https://git.buildroot.net/buildroot/commit/?id=1261e78ee2a7994f0cf764c0a61d457984daf673
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003244.html
+https://lists.x.org/archives/xorg-announce/2022-October/003242.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXinerama/xlib_libXinerama.hash | 8 +++-----
- package/x11r7/xlib_libXinerama/xlib_libXinerama.mk   | 6 +++---
+ package/x11r7/xapp_x11perf/xapp_x11perf.hash | 8 +++-----
+ package/x11r7/xapp_x11perf/xapp_x11perf.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
-index ca4081d375..e3ac880b39 100644
---- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
-+++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
+diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.hash b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
+index 673d3602ba..3370d7df53 100644
+--- a/package/x11r7/xapp_x11perf/xapp_x11perf.hash
++++ b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002905.html
--md5  0d5f826a197dae74da67af4a9ef35885  libXinerama-1.1.4.tar.bz2
--sha1  34a1d9908ffbd46805d2357c6b05f5e341a8dc7c  libXinerama-1.1.4.tar.bz2
--sha256  0008dbd7ecf717e1e507eed1856ab0d9cf946d03201b85d5dcf61489bb02d720  libXinerama-1.1.4.tar.bz2
--sha512  cff777ad942614fbf6bc6d8529f399e62debf3ecbf6cc0694a94e38c022bf929ffd5636fb59f55533c394d89b23af3ea51fa5128927f12a85787e16239330f14  libXinerama-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003244.html
-+sha256  5094d1f0fcc1828cb1696d0d39d9e866ae32520c54d01f618f1a3c1e30c2085c  libXinerama-1.1.5.tar.xz
-+sha512  735b5320de4782005b379e409bf2f976131c17d496b297d33a0e127ca1443034778586b6b25c077b2ad73a4ab34d440d7510475e0041f38202bb40f15fb08ff7  libXinerama-1.1.5.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002983.html
+-md5  e96b56756990c56c24d2d02c2964456b  x11perf-1.6.1.tar.bz2
+-sha1  c54ebef80b6cb565397fe2e3069e0d7470027e5a  x11perf-1.6.1.tar.bz2
+-sha256  1c7e0b8ffc2794b4ccf11e04d551823abe0ea47b4f7db0637390db6fbe817c34  x11perf-1.6.1.tar.bz2
+-sha512  b386151bfe3d7c04ab9953ae1882f3c5b627d6d1afb9a8cfe87c58236a88883fc11bbadb2226b9aa61df84b4fce625a1c9e3d146a124ac17e8d7d605b35d9c0b  x11perf-1.6.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003242.html
++sha256  5a0e7cea47716ad07ceca38bbd07ae06459ee4d837b9c9dfc21ccb94e3e24fcc  x11perf-1.6.2.tar.xz
++sha512  5be9e601071a42d103adbab5f30c1900a3779a5b2c06c709df99a85487c9790d36b835d43f5c6d74cc7d950cc3ad06927210d7b1f58939cfd0b4a6f3e5e32112  x11perf-1.6.2.tar.xz
  # Locally computed
- sha256  f661fd883b6e980b3b118e0fbe230fbf10eef8d4d4a35931355f29ed647ddbe3  COPYING
-diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-index 48e32d55e2..67e3398c71 100644
---- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-+++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+ sha256  f467ff659142e2eb4cb7275c48c789d249af398b09a405d3e181dcc339b3b922  COPYING
+diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.mk b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+index ec10590b73..3a1d579939 100644
+--- a/package/x11r7/xapp_x11perf/xapp_x11perf.mk
++++ b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXINERAMA_VERSION = 1.1.4
--XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.bz2
--XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXINERAMA_VERSION = 1.1.5
-+XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.xz
-+XLIB_LIBXINERAMA_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXINERAMA_LICENSE = MIT
- XLIB_LIBXINERAMA_LICENSE_FILES = COPYING
- XLIB_LIBXINERAMA_CPE_ID_VENDOR = x
+-XAPP_X11PERF_VERSION = 1.6.1
+-XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.bz2
+-XAPP_X11PERF_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_X11PERF_VERSION = 1.6.2
++XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.xz
++XAPP_X11PERF_SITE = https://xorg.freedesktop.org/archive/individual/test
+ XAPP_X11PERF_LICENSE = MIT
+ XAPP_X11PERF_LICENSE_FILES = COPYING
+ XAPP_X11PERF_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXft
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
