@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E756C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F00D8C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E218E4981D;
-	Mon, 20 Feb 2023 21:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E218E4981D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9843E43FF2;
+	Mon, 20 Feb 2023 21:37:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9843E43FF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YjZTVSjDK6X2; Mon, 20 Feb 2023 21:37:23 +0000 (UTC)
+	with ESMTP id BhIkNOzQ9Cby; Mon, 20 Feb 2023 21:37:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 935664B59B;
-	Mon, 20 Feb 2023 21:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 935664B59B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 115BF1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4242643C4C;
+	Mon, 20 Feb 2023 21:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4242643C4C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DCD11BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 261786108A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 261786108A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8E0A40C42
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8E0A40C42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3gXq-jGNdcdo for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N39tAwD-JRkc for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 538EC610BE
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 538EC610BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E66A9415AF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E66A9415AF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 51DC9828C8; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E338A828C8; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 2 Dec 2022 19:49:09 +0100
+Date: Fri, 9 Dec 2022 17:31:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c1d783d4ddcda520fa8bcf4d8cd3f68eaa2188a8
-X-Git-Newrev: 818d0e18a81190b9ca256fa7e465ee37d65820f3
+X-Git-Oldrev: 4df6b365b77c3838858b43c201f0e2af4db7a498
+X-Git-Newrev: 7f08e0d7def20cc04ad39b952bcfffd91ceda13d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.51DC9828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynqmp_zcu102_defconfig: bump to Xilinx 2022.2
+Message-Id: <20230220205156.E338A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xvinfo:
+ bump version to 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=818d0e18a81190b9ca256fa7e465ee37d65820f3
+commit: https://git.buildroot.net/buildroot/commit/?id=7f08e0d7def20cc04ad39b952bcfffd91ceda13d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynqmp_zcu102_defconfig to Xilinx release 2022.2.
-
-Xilinx 2022.2 includes:
-- U-Boot 2022.01 bug fixes
-- Linux bump to Linux 5.15.36 with bug fixes
-- TF-A 2.6 bug fixes
-- PMUFW bug fixes
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+https://lists.x.org/archives/xorg-announce/2022-December/003273.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/zynqmp_zcu102_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.hash | 8 +++-----
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index e27dfdb6c9..6047d4299c 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.1)/xlnx_rebase_v5.15_LTS_2022.1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
-@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.1)/xlnx_rebase_v2.6_2022.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.1)/xlnx_rebase_v2022.01_2022.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-@@ -29,7 +29,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/v2022.1_22.04_1/xlnx-firmware/zcu102/zcu102_pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/zcu102/zcu102_pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
+index 3d8ace9ae5..7dd5820c08 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002955.html
+-md5  b13afec137b9b331814a9824ab03ec80  xvinfo-1.1.4.tar.bz2
+-sha1  136a70a72b23c81f4fe8f4c8cb7073316be16b44  xvinfo-1.1.4.tar.bz2
+-sha256  0353220d6606077ba42363db65f50410759f9815352f77adc799e2adfa76e73f  xvinfo-1.1.4.tar.bz2
+-sha512  85e1f936c5c826f0fdde3670bd77d5cde8641c6e8e7849e42142e91b5aa01d7e0e60d2b064eb6fef4f5666321813ca2dc9f9656756ccbe6dcda37b119ee8a63e  xvinfo-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003273.html
++sha256  3ede71ecb26d9614ccbc6916720285e95a2c7e0c5e19b8570eaaf72ad7c5c404  xvinfo-1.1.5.tar.xz
++sha512  18467161b248c68f6bde15e1c1b4b8cf812daf46777602558aee5fb7cb4d2649218de88fa93842fea4f316d954440f03a37d71fa4fda92eda3c7d80970e19cbb  xvinfo-1.1.5.tar.xz
+ # Locally computed
+ sha256  7725b0484faa1832534814ecb577f5a86acc74f1bcce25f92c55dfc1b693717d  COPYING
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+index 7b3b97f073..6fa392f018 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XAPP_XVINFO_VERSION = 1.1.4
+-XAPP_XVINFO_SOURCE = xvinfo-$(XAPP_XVINFO_VERSION).tar.bz2
+-XAPP_XVINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XVINFO_VERSION = 1.1.5
++XAPP_XVINFO_SOURCE = xvinfo-$(XAPP_XVINFO_VERSION).tar.xz
++XAPP_XVINFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XVINFO_LICENSE = MIT
+ XAPP_XVINFO_LICENSE_FILES = COPYING
+ XAPP_XVINFO_DEPENDENCIES = xlib_libX11 xlib_libXv
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
