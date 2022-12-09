@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C324C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F5A3C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07859448AC;
-	Mon, 20 Feb 2023 21:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07859448AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id A591B4AD3F;
+	Mon, 20 Feb 2023 21:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A591B4AD3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ChnMLNmjji7B; Mon, 20 Feb 2023 21:39:27 +0000 (UTC)
+	with ESMTP id 9sIXg_tqM4da; Mon, 20 Feb 2023 21:39:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9E574B530;
-	Mon, 20 Feb 2023 21:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9E574B530
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3467C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FDA94C88F;
+	Mon, 20 Feb 2023 21:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FDA94C88F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 485131BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71464610FD
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71464610FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D9D140C23
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D9D140C23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qov3bERdLPUf for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uz3sT4Q3btLQ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89CB3610EF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89CB3610EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66367415B5
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66367415B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73000828C8; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
+ id 62C3786496; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 2 Dec 2022 20:41:13 +0100
+Date: Fri, 9 Dec 2022 17:32:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5bbc20154e2291b967b7fc66ca4f85a2b47dcfd1
-X-Git-Newrev: a34dcba9ebcda5a1dcb95b332486454776cd305b
+X-Git-Oldrev: 9e1546672ce900d82a39f991237246a201874d47
+X-Git-Newrev: 327d7453ba3d4991c4ddc64a0164ca7f80ea0ef1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205154.73000828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/manual: fixed some
- spelling mistakes
+Message-Id: <20230220205157.62C3786496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXrandr:
+ bump version to 1.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34dcba9ebcda5a1dcb95b332486454776cd305b
+commit: https://git.buildroot.net/buildroot/commit/?id=327d7453ba3d4991c4ddc64a0164ca7f80ea0ef1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixed some spelling mistakes of countable nouns.
-
-Signed-off-by: Zikui Zhao <zhaozikui@eswincomputing.com>
-Reviewed-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+https://lists.x.org/archives/xorg-announce/2022-November/003262.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/customize-directory-structure.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash | 8 +++-----
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
-index a3a7ad4cb9..1249421da2 100644
---- a/docs/manual/customize-directory-structure.txt
-+++ b/docs/manual/customize-directory-structure.txt
-@@ -27,10 +27,10 @@ to you.
- |           +-- post_image.sh
- |           +-- rootfs_overlay/
- |           |   +-- etc/
--|           |   +-- <some file>
-+|           |   +-- <some files>
- |           +-- patches/
- |               +-- foo/
--|               |   +-- <some patch>
-+|               |   +-- <some patches>
- |               +-- libbar/
- |                   +-- <some other patches>
- |
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+index 4b12328df0..3d3bb640ed 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002979.html
+-md5  18f3b20d522f45e4dadd34afb5bea048  libXrandr-1.5.2.tar.bz2
+-sha1  7a1f6df239341b76fd59ebbe101d6f180adb43bb  libXrandr-1.5.2.tar.bz2
+-sha256  8aea0ebe403d62330bb741ed595b53741acf45033d3bda1792f1d4cc3daee023  libXrandr-1.5.2.tar.bz2
+-sha512  fcd005f9839e7ef980607128a5d76d7b671cc2f5755949e03c569c500d7e987cb3f6932750ab8bf6e2c1086ec69dde09d5831f0c2098b9f9ad46be4f56db0d87  libXrandr-1.5.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003262.html
++sha256  897639014a78e1497704d669c5dd5682d721931a4452c89a7ba62676064eb428  libXrandr-1.5.3.tar.xz
++sha512  0c385fc304a872048ffca5cfb8789dfe3132e3126894d54b2fe642dff19d286e7ade1d2f6da894e03788df9c5cf31427c674e987143037b7d385b19285590edb  libXrandr-1.5.3.tar.xz
+ # Locally computed
+ sha256  73777e5be1cef2827d843e4b186803f050c66db472cf8076d88e2b5f71696e67  COPYING
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index aa2761330a..5e88173ed7 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXRANDR_VERSION = 1.5.2
+-XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
+-XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXRANDR_VERSION = 1.5.3
++XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.xz
++XLIB_LIBXRANDR_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
+ XLIB_LIBXRANDR_LICENSE_FILES = COPYING
+ XLIB_LIBXRANDR_CPE_ID_VENDOR = x.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
