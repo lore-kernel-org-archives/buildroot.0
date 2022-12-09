@@ -4,84 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A503C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 07:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BACFC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 07:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADBA1410DF;
-	Fri,  9 Dec 2022 07:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADBA1410DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id C10BD40A00;
+	Fri,  9 Dec 2022 07:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C10BD40A00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rvN_as-ttbuZ; Fri,  9 Dec 2022 07:51:18 +0000 (UTC)
+	with ESMTP id KmFi7sr8uBmN; Fri,  9 Dec 2022 07:51:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC9CC410C4;
-	Fri,  9 Dec 2022 07:51:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC9CC410C4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7348C1BF5DE
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 07:51:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC17F410E7;
+	Fri,  9 Dec 2022 07:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC17F410E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA741BF5DE
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 07:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BACC4014B
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 07:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BACC4014B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5545960B16
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 07:51:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5545960B16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0WKJf2jOVwgF for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 07:51:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vGQHQqUTqVbo for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 07:51:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C92840127
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C92840127
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 07:51:15 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id o5so4373580wrm.1
- for <buildroot@buildroot.org>; Thu, 08 Dec 2022 23:51:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F19760593
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3F19760593
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 07:51:16 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id bx10so4382667wrb.0
+ for <buildroot@buildroot.org>; Thu, 08 Dec 2022 23:51:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jC1QUsXfMlRDdl2sP2egoMj1Z8y/mqsPr5U1zYeJrUY=;
- b=xDNpHx4MNGXlI3k0YRekFNYpe4+wpd4ZFh+Upic0Qoz6Us0BYhbzFlZKA6F/8sL0ua
- cXUHR7nEeT9lsb6x9XR6TLCJSu16C/ZBOjN7f7V9l6O60+GueeO6rU0SgXTeEyMIZY+V
- M1jgP4Lk654COhuWprkyCNtQLJW9KoZ7HeCNJipbbkQ0M4PIz0DUzcmR8ahyU6quocPU
- tzHpxCR4ePr3O7XLEi3ycMtJDtJ+X8ZeK+QauscbZwLB66TdtIQbkAEE/5NgMxAET7BY
- ubGSJWrKPQRB1zO//uz9pY/F+WUVjk0xwpYpim4h+OQEQo5PgVA8Sw/ily5FrdhvJFRg
- GPKw==
-X-Gm-Message-State: ANoB5pnSXnDnYmCHaztyqpSwOgc9tBZZPsFufnU9TmWGIrmvf63jdIcv
- 7YahMzBxBv0s6Af2UjRZ/Xmo95H4M+nTm0X5
-X-Google-Smtp-Source: AA0mqf7xUsBanmioLluusLw7i/rbvGKMArWpc9XW/4QmazNcliyAGjjL4Db3TqO1W0piDzTE1xczWg==
-X-Received: by 2002:a5d:4086:0:b0:242:509a:ad42 with SMTP id
- o6-20020a5d4086000000b00242509aad42mr3000343wrp.36.1670572273182; 
- Thu, 08 Dec 2022 23:51:13 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=xYSvYU/DBhkzNGhieTYX36BzIGMILdl08OPT9Q9bp4c=;
+ b=KvY7L9dZxPUkR3f49Ifn/VMNZQlfyRDpmxa1Su+Uh3+zyoxnLkn7tG5TMVVibmvXg7
+ srwwyCTRYwKtYdrVc+F2OXdT8Y78/UC8BWgtgd8Pa8dM8w+5AELzsFNgiR+vjBsR9AcD
+ uzkIsbb76zh/4DSOqGvzAryXQyRDYMVMHrsAa0j75isTYy6xYAapRADZwS2hUenPrqPE
+ T0eqOM0CrvfC7ZL1TtE7o4G/2VBpmleIt2ZdKme84uS9RG83gB+xL45ZVN109hcUNMx3
+ 4shvAJUGG+RfbaaVlxprgGB/E9xRjvdtRn+6DIyjb9JPZzzNXZjq8hq3oFPYRY70MPC5
+ d74Q==
+X-Gm-Message-State: ANoB5pmLpnx6glBSESJOoADhp2+DGcAxlTdpYB3qStJ8of9DghyVDMJS
+ ALEGRt/gZIkBaQxBImb+uY4PL72Q99wnkyLD
+X-Google-Smtp-Source: AA0mqf5EvTOEfP9WVUFhq2A2AOn3hEY+e3VA7QuvMpZEPoou55QbEfXDXoSbD6NPj5T4c6csvvJPew==
+X-Received: by 2002:adf:a743:0:b0:242:1c1a:37ec with SMTP id
+ e3-20020adfa743000000b002421c1a37ecmr2546737wrd.17.1670572274104; 
+ Thu, 08 Dec 2022 23:51:14 -0800 (PST)
 Received: from lmecxl1178.home (lfbn-nan-1-127-214.w90-49.abo.wanadoo.fr.
  [90.49.211.214]) by smtp.gmail.com with ESMTPSA id
- bp3-20020a5d5a83000000b002415dd45320sm664507wrb.112.2022.12.08.23.51.12
+ bp3-20020a5d5a83000000b002415dd45320sm664507wrb.112.2022.12.08.23.51.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Dec 2022 23:51:12 -0800 (PST)
+ Thu, 08 Dec 2022 23:51:13 -0800 (PST)
 From: Etienne Carriere <etienne.carriere@linaro.org>
 To: buildroot@buildroot.org
-Date: Fri,  9 Dec 2022 08:51:00 +0100
-Message-Id: <20221209075104.1168297-1-etienne.carriere@linaro.org>
+Date: Fri,  9 Dec 2022 08:51:01 +0100
+Message-Id: <20221209075104.1168297-2-etienne.carriere@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221209075104.1168297-1-etienne.carriere@linaro.org>
+References: <20221209075104.1168297-1-etienne.carriere@linaro.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linaro.org; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jC1QUsXfMlRDdl2sP2egoMj1Z8y/mqsPr5U1zYeJrUY=;
- b=YJLDwNGD7U5YoDu0uTXmsadbdLV293lBrKsuUXuyg3JSPJDkbh36knZzhcs174tStI
- 1CgdruegLI04KtUTT5+eWXQZJ9mGkVOZdDArycJ7o9hT9sqb5bgZgvVsanfu1VgLLrtn
- gn0xMJi4pBWqMLZxr2cIDaIgT+8dqAWxeb4I0yvi7RZIXl2maxsm4I2UVlNzlqSQIC+P
- KEPhNABrPTfYeykRbhb0jJ0TrvqDia/4Yi+2s1Y/df92adnY0JG3B9x4OvymPHv+q0jB
- HtEu+YVLw3qeuwoGJYU7V+1W1uL0raM7DR9XB8LSewD3T/CUEEpWtXoUAWE0zLD6RzDw
- EFbA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xYSvYU/DBhkzNGhieTYX36BzIGMILdl08OPT9Q9bp4c=;
+ b=eBgBhyXEwWOealOvQqatUK/FBe0uN8PLqnOvFcReHyWrlDN/Uldxv3scl3NNPG8xJG
+ Y5ATtEOJVBmIEkiJBObLlqf5yeNWoIrKUsZLhmmxnbOAVD/r3hJ43R7RpkX86jqjwWOO
+ EZbHiD11WE64xO0x9Gsr+CiWVIs98qqrjrnWb8hyNq37hDND0fK42y1yBWZ7U7xTSWOn
+ EH1EImBOSC2WJSrud4YiWyMkx/ToUR55+sbwT9ZBsUY/I3QIs/Zy6w+T5Ahuvvco3mph
+ E1afLjAB6opY1QeOrpO992b0CTyIgPH1jfRo9rtTSFNhR+AMgroKAKEmEjP2s2hOVtoH
+ A/Hg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org
- header.a=rsa-sha256 header.s=google header.b=YJLDwNGD
-Subject: [Buildroot] [PATCH v2 1/5] boot/optee-os: bump to version 3.19.0
+ header.a=rsa-sha256 header.s=google header.b=eBgBhyXE
+Subject: [Buildroot] [PATCH v2 2/5] package/optee-benchmark: bump to version
+ 3.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,49 +103,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bumps OP-TEE OS package version to OP-TEE release 3.19.0.
+Bumps OP-TEE benchmark package version to OP-TEE release 3.19.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
-No change since v1
+No change since v1.
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/optee-benchmark/optee-benchmark.hash | 4 ++--
+ package/optee-benchmark/optee-benchmark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 5244700bc2..8bcce22306 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.18.0"
-+	bool "3.19.0"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
- 	help
-@@ -70,7 +70,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.18.0"	if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.19.0"	if BR2_TARGET_OPTEE_OS_LATEST
- 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 38f68bec5d..a87f21a9bf 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
+diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
+index 27c91e0fb0..d74a24c8ab 100644
+--- a/package/optee-benchmark/optee-benchmark.hash
++++ b/package/optee-benchmark/optee-benchmark.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.18.0/optee-os-3.18.0.tar.gz
--sha256  bdd309697745ec4406951652094b50d9adb06c3612f01bd8a3d72682ec8e03e8  optee-os-3.18.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.19.0/optee-os-3.19.0.tar.gz
-+sha256  5e0c03bbc4d106f262a6bd33333c002c3380205ae6b82334aa7b644721ff7868  optee-os-3.19.0.tar.gz
+-# From https://github.com/linaro-swg/optee_benchmark/archive/3.18.0/optee-benchmark-3.18.0.tar.gz
+-sha256  2151aa5da062402518f35823d9c9dffa2e012f924625d2f7123e0d21d350a86b  optee-benchmark-3.18.0.tar.gz
++# From https://github.com/linaro-swg/optee_benchmark/archive/3.19.0/optee-benchmark-3.19.0.tar.gz
++sha256  32f41854bf07eb7bb89dfc702da023c3a99518c33fbe7edf0e1f004e29a8c90c  optee-benchmark-3.19.0.tar.gz
  # Locally computed
- sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+ sha256  0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
+diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
+index 1071c4bb5c..338a51ada4 100644
+--- a/package/optee-benchmark/optee-benchmark.mk
++++ b/package/optee-benchmark/optee-benchmark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_BENCHMARK_VERSION = 3.18.0
++OPTEE_BENCHMARK_VERSION = 3.19.0
+ OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
+ OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
+ OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
