@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3752AC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27675C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3C5040981;
-	Mon, 20 Feb 2023 21:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3C5040981
+	by smtp4.osuosl.org (Postfix) with ESMTP id C31D045BE9;
+	Mon, 20 Feb 2023 21:43:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C31D045BE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VkDk7Drl5aw8; Mon, 20 Feb 2023 21:43:40 +0000 (UTC)
+	with ESMTP id AF6Xp9Ov-jwu; Mon, 20 Feb 2023 21:43:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D88EE42B30;
-	Mon, 20 Feb 2023 21:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D88EE42B30
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B8CC1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A94A42D5D;
+	Mon, 20 Feb 2023 21:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A94A42D5D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C56E1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CAAD610F2
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CAAD610F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23407415D0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23407415D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EueQaiET03pX for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LnCqdtUFbvs2 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6997E610FA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6997E610FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44B75415B3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44B75415B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62B6E828C8; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ id 350BD86495; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 4 Dec 2022 14:16:07 +0100
+Date: Fri, 9 Dec 2022 17:34:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3341ceb1e58536cf43a4c000e4bb3cdbff3f6de5
-X-Git-Newrev: bdc9f8a247309f1bf007a77576480091d20e2d1d
+X-Git-Oldrev: 51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
+X-Git-Newrev: c93b50a34a3f46c27fd21c72332c7fde18e0a3f8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.62B6E828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-scipy: fix sh4
- build
+Message-Id: <20230220205158.350BD86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXrender:
+ bump version to 0.9.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,80 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdc9f8a247309f1bf007a77576480091d20e2d1d
+commit: https://git.buildroot.net/buildroot/commit/?id=c93b50a34a3f46c27fd21c72332c7fde18e0a3f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following sh4 build failure raised since the addition of the
-package in commit e10431db29e08c3ae56c145165bf110bd17f2a6c:
-
-INFO: sh4aeb-linux-gcc: scipy/special/_test_round.c
-scipy/special/_test_round.c: In function '__pyx_pf_5scipy_7special_11_test_round_have_fenv':
-scipy/special/_test_round.c:2353:30: error: 'FE_UPWARD' undeclared (first use in this function)
- 2353 |     __pyx_t_1 = ((fesetround(FE_UPWARD) != 0) != 0);
-      |                              ^~~~~~~~~
-
-Retrieve debian patch as upstream doesn't want to fix this SH4 specific
-issue: https://github.com/scipy/scipy/issues/15584
-
-Fixes:
- - http://autobuild.buildroot.org/results/b82d8ed02ba5d094a0d4054e0de28e95c9d3554d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003239.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-scipy/0001-build-sh4-FE.patch | 36 ++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/x11r7/xlib_libXrender/xlib_libXrender.hash | 6 +++---
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-scipy/0001-build-sh4-FE.patch b/package/python-scipy/0001-build-sh4-FE.patch
-new file mode 100644
-index 0000000000..d50dd84462
---- /dev/null
-+++ b/package/python-scipy/0001-build-sh4-FE.patch
-@@ -0,0 +1,36 @@
-+From aae8b63ddffe014e9353c3e8d2604628433eb7d7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 4 Dec 2022 14:14:21 +0100
-+Subject: [PATCH] build sh4 FE
-+
-+ensures FE_UPWARD and FE_DOWNWARD are defined for sh4 architecture.
-+
-+Closes: #1007769.
-+
-+[Retrieved from:
-+https://salsa.debian.org/python-team/packages/scipy/-/blob/master/debian/patches/build_sh4_FE.patch]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ scipy/special/_round.h | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/scipy/special/_round.h b/scipy/special/_round.h
-+index 013a25620..c321a1939 100644
-+--- a/scipy/special/_round.h
-++++ b/scipy/special/_round.h
-+@@ -69,5 +69,12 @@ int fegetround()
-+ 
-+ #endif
-+ 
-++/* SH4 is not C99 compliant, see https://github.com/scipy/scipy/issues/15584 */
-++#ifndef FE_UPWARD
-++#define FE_UPWARD -1
-++#endif
-++#ifndef FE_DOWNWARD
-++#define FE_DOWNWARD -1
-++#endif
-+ 
-+ #endif /* _round.h */
-+-- 
-+2.38.1
-+
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.hash b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+index 680c765237..015fa0af21 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.hash
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002725.html
+-sha256  c06d5979f86e64cabbde57c223938db0b939dff49fdb5a793a1d3d0396650949  libXrender-0.9.10.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2022-October/003239.html
++sha256  bc53759a3a83d1ff702fb59641b3d2f7c56e05051fa0cfa93501166fa782dc24  libXrender-0.9.11.tar.xz
++sha512  2327cc1b530382d81df29b8d579f801f1f990202107cc84506986bcf5d15010d414e9418987b200e3f222d188afce46f0d7754febcdca62a5fc1e541b3bb82de  libXrender-0.9.11.tar.xz
+ # Locally calculated
+ sha256  bbe1db89c48816c48248796adac91defd8fbde1141b145f01511781ab87f29a1  COPYING
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+index 0ef0ec48d9..fd97c83cf6 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXRENDER_VERSION = 0.9.10
+-XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.bz2
+-XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXRENDER_VERSION = 0.9.11
++XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.xz
++XLIB_LIBXRENDER_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXRENDER_LICENSE = MIT
+ XLIB_LIBXRENDER_LICENSE_FILES = COPYING
+ XLIB_LIBXRENDER_CPE_ID_VENDOR = x.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
