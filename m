@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A8FC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEBF0C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D20540932;
-	Mon, 20 Feb 2023 22:05:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D20540932
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6444B4EE3F;
+	Mon, 20 Feb 2023 22:06:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6444B4EE3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IfPG4-bpJlDc; Mon, 20 Feb 2023 22:05:48 +0000 (UTC)
+	with ESMTP id 2wujI-1-MWm5; Mon, 20 Feb 2023 22:06:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C13F4EE2C;
-	Mon, 20 Feb 2023 22:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C13F4EE2C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E77C51BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19C874EE3C;
+	Mon, 20 Feb 2023 22:06:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19C874EE3C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F4761BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9237416BF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9237416BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id C896861150
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C896861150
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Pwu72o7jSV5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ClU620nE_3dg for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE41241694
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE41241694
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE89061140
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE89061140
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB00386494; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id BD207828C8; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:18 +0100
+Date: Fri, 9 Dec 2022 19:02:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d85a17270de1595d4b63c999e4c76b3bd53eccab
-X-Git-Newrev: 33f493781cf55c556769024e8058ee223d122507
+X-Git-Oldrev: c29929c123a2e84e358a08916168d8010fbb3e9d
+X-Git-Newrev: 583e06a495e401c564adfd0c13c4ebad33e34e63
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.CB00386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-ujson: bump to
- version 5.6.0
+Message-Id: <20230220205159.BD207828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/proftpd: bump to
+ version 1.3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33f493781cf55c556769024e8058ee223d122507
+commit: https://git.buildroot.net/buildroot/commit/?id=583e06a495e401c564adfd0c13c4ebad33e34e63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-ujson/python-ujson.hash | 4 ++--
- package/python-ujson/python-ujson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Drop patch (already in version)
 
-diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
-index 27df5aa355..3dfc681167 100644
---- a/package/python-ujson/python-ujson.hash
-+++ b/package/python-ujson/python-ujson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ujson/json
--md5  73b42e3f4bf3130073cfffbd82608275  ujson-5.5.0.tar.gz
--sha256  b25077a971c7da47bd6846a912a747f6963776d90720c88603b1b55d81790780  ujson-5.5.0.tar.gz
-+md5  45a74680e2936470821bf74a8f043a71  ujson-5.6.0.tar.gz
-+sha256  f881e2d8a022e9285aa2eab6ba8674358dbcb2b57fa68618d88d62937ac3ff04  ujson-5.6.0.tar.gz
- # Locally computed sha256 checksums
- sha256  6a00a8f8b4050303368b694147bde1aed9c96bdff869c181dbbf3ccb784a1501  LICENSE.txt
-diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
-index 95cb0ebad1..24ad4822b8 100644
---- a/package/python-ujson/python-ujson.mk
-+++ b/package/python-ujson/python-ujson.mk
-@@ -4,9 +4,9 @@
+http://proftpd.org/docs/NEWS-1.3.8
+http://proftpd.org/docs/RELEASE_NOTES-1.3.8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...quotatab-fix-build-failure-against-gcc-10.patch | 56 ----------------------
+ package/proftpd/proftpd.hash                       |  2 +-
+ package/proftpd/proftpd.mk                         |  4 +-
+ 3 files changed, 3 insertions(+), 59 deletions(-)
+
+diff --git a/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch b/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
+deleted file mode 100644
+index 5f4eb66c71..0000000000
+--- a/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 9c9623c8a47fb5580dfea1a59296c6d224479504 Mon Sep 17 00:00:00 2001
+-From: Sergei Trofimovich <slyfox@gentoo.org>
+-Date: Mon, 2 Mar 2020 23:45:22 +0000
+-Subject: [PATCH] mod_quotatab: fix build failure against gcc-10
+-
+-On gcc-10 (and gcc-9 -fno-common) build fails as:
+-
+-```
+-$ ./configure --with-modules=mod_quotatab && make
+-...
+-ld: modules/module_glue.o:(.data.rel+0x68):
+-  undefined reference to `quotatab_file_module'
+-collect2: error: ld returned 1 exit status
+-make: *** [Makefile:56: proftpd] Error 1
+-```
+-
+-gcc-10 will change the default from -fcommon to fno-common:
+-https://gcc.gnu.org/PR85678.
+-
+-The error also happens if CFLAGS=-fno-common passed explicitly.
+-
+-Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
+-
+-[Retrieved from:
+-https://github.com/proftpd/proftpd/commit/9c9623c8a47fb5580dfea1a59296c6d224479504]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- contrib/mod_quotatab.c | 1 +
+- contrib/mod_quotatab.h | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/contrib/mod_quotatab.c b/contrib/mod_quotatab.c
+-index 4fa6c1f44..0ee480163 100644
+---- a/contrib/mod_quotatab.c
+-+++ b/contrib/mod_quotatab.c
+-@@ -50,6 +50,7 @@ typedef struct regtab_obj {
+- module quotatab_module;
+- 
+- /* Quota objects for the current session */
+-+quota_deltas_t quotatab_deltas;
+- static quota_table_t *limit_tab = NULL;
+- static quota_limit_t sess_limit;
+- 
+-diff --git a/contrib/mod_quotatab.h b/contrib/mod_quotatab.h
+-index ed30333f5..c818395a0 100644
+---- a/contrib/mod_quotatab.h
+-+++ b/contrib/mod_quotatab.h
+-@@ -188,7 +188,7 @@ typedef struct table_obj {
+- #define QUOTATAB_TALLY_SRC      0x0002
+- 
+- /* Quota objects for the current session. */
+--quota_deltas_t quotatab_deltas;
+-+extern quota_deltas_t quotatab_deltas;
+- 
+- /* Function prototypes necessary for quotatab sub-modules */
+- int quotatab_log(const char *, ...)
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index 983500bb8e..f950f26b86 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2dbe684034ab592742ebdb778a8a234b70f959efeb30feedee3ea77f26f74fbb  proftpd-1.3.6e.tar.gz
++sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 64c16a84eb..8e7d108c9e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_UJSON_VERSION = 5.5.0
-+PYTHON_UJSON_VERSION = 5.6.0
- PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
--PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/6e/4a/03ddad85a10dd52e209993a14afa0cb0dc5c348e4647329f1c53856ad9e6
-+PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/45/48/466d672c53fcb93d64a2817e3a0306214103e3baba109821c88e1150c100
- PYTHON_UJSON_SETUP_TYPE = setuptools
- PYTHON_UJSON_LICENSE = BSD-3-Clause
- PYTHON_UJSON_LICENSE_FILES = LICENSE.txt
+-PROFTPD_VERSION = 1.3.6e
+-PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
++PROFTPD_VERSION = 1.3.8
++PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
+ PROFTPD_CPE_ID_VENDOR = proftpd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
