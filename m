@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBA3AC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 827E1C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4819141B6F;
-	Fri,  9 Dec 2022 17:06:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4819141B6F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 155B341BDA;
+	Fri,  9 Dec 2022 17:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 155B341BDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AUwe8sy7LEMT; Fri,  9 Dec 2022 17:06:44 +0000 (UTC)
+	with ESMTP id TED-7X_RqQq0; Fri,  9 Dec 2022 17:07:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFF3A41B76;
-	Fri,  9 Dec 2022 17:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFF3A41B76
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B4C01BF976
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB7C841B87;
+	Fri,  9 Dec 2022 17:07:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB7C841B87
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 185FC1BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E68660F31
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E68660F31
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECD1941040
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECD1941040
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O0G3S83MBx2d for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T55YqdyXlDMW for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14075611B5
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14075611B5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 921DF41010
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 921DF41010
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1233385EA0; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+ id 9027F85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:22 +0100
+Date: Fri, 9 Dec 2022 17:32:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe85dbf818ab4321f3a18f742458f3313ed1b3ec
-X-Git-Newrev: 445abe597ccb099660da911fa8fe1ab29b47e986
+X-Git-Oldrev: 42c8fe191473193c0854bd8a641c046d4f149a97
+X-Git-Newrev: 9e1546672ce900d82a39f991237246a201874d47
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170105.1233385EA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_oclock: bump version to
- 1.0.5
+Message-Id: <20221209170103.9027F85EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xcursorgen: bump
+ version to 1.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=445abe597ccb099660da911fa8fe1ab29b47e986
+commit: https://git.buildroot.net/buildroot/commit/?id=9e1546672ce900d82a39f991237246a201874d47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-August/003206.html
+https://lists.x.org/archives/xorg-announce/2022-December/003264.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_oclock/xapp_oclock.hash | 8 +++-----
- package/x11r7/xapp_oclock/xapp_oclock.mk   | 6 +++---
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash | 8 +++-----
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_oclock/xapp_oclock.hash b/package/x11r7/xapp_oclock/xapp_oclock.hash
-index c8893f88b3..20e899b880 100644
---- a/package/x11r7/xapp_oclock/xapp_oclock.hash
-+++ b/package/x11r7/xapp_oclock/xapp_oclock.hash
+diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
+index 2f64671434..45bff55ed2 100644
+--- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
++++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002856.html
--md5  973f6d25a6f0990720b98a15c9436b92  oclock-1.0.4.tar.bz2
--sha1  0bc8f3f44290950f60af894e20e0ceb0c5e8e862  oclock-1.0.4.tar.bz2
--sha256  cc20cfc1c0d5128d89e1eecd9ba52e58f111075be163e0aeda5690dbaafbaefe  oclock-1.0.4.tar.bz2
--sha512  6e0d36a84572a153226b2929f2253cb7adc3c9e5e3af168aeaf8c487ade2e43517b271a8e9cdb2a2c4a67ca56ed0b99c194ca63a4a822b68bfc72ca6518335e7  oclock-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003206.html
-+sha256  8f09979655e889d056b7a1e50b57f38b32529453e756b53ec659070fb3c3965c  oclock-1.0.5.tar.xz
-+sha512  a87e89afdb25a91c36077e030b05c3907ddc063c6bdc0715a01bfc16edef8730b3b5a0347399ef4c8b2a13e70e068cba9ec5fe8d411f08548c0aa790a1873aff  oclock-1.0.5.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-January/002936.html
+-md5  25cc7ca1ce5dcbb61c2b471c55e686b5  xcursorgen-1.0.7.tar.bz2
+-sha1  109367eb23b0ad52cf5de15f50c02ebe872698ae  xcursorgen-1.0.7.tar.bz2
+-sha256  35b6f844b24f1776e9006c880a745728800764dbe3b327a128772b4610d8eb3d  xcursorgen-1.0.7.tar.bz2
+-sha512  bd13ad23691d3daa2d5dcdc5902cf62e3dcb97a0289aff362e6cd85866a1d8cafb64f98800a75bfb4cf1f3c76244ca20201847dff594543d136d0abaec7011d2  xcursorgen-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003264.html
++sha256  32b33ce27b4e285e64ff375731806bb7988cc626ff10915c65f1dc4da640cc9b  xcursorgen-1.0.8.tar.xz
++sha512  dede5b9e1e09f9253365bbb83fdab26c681641913f3586cef52d4802db9cecc7e252344911cd969a873c3a5c5ebbd4b862f786de263f92ea1bcb2df90236f9c4  xcursorgen-1.0.8.tar.xz
  # Locally computed
- sha256  f6cae4b0c603ef5bd76da2df96b38aa43aa7547e482adb8cb8b83f09af35e4a2  COPYING
-diff --git a/package/x11r7/xapp_oclock/xapp_oclock.mk b/package/x11r7/xapp_oclock/xapp_oclock.mk
-index 0f94cf8c13..4f70df4cbf 100644
---- a/package/x11r7/xapp_oclock/xapp_oclock.mk
-+++ b/package/x11r7/xapp_oclock/xapp_oclock.mk
+ sha256  8c773336b654442ac8018715a52be1a8254895c57c898d5387016e9488cc2009  COPYING
+diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+index bcc696b01c..318cd562db 100644
+--- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
++++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_OCLOCK_VERSION = 1.0.4
--XAPP_OCLOCK_SOURCE = oclock-$(XAPP_OCLOCK_VERSION).tar.bz2
--XAPP_OCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_OCLOCK_VERSION = 1.0.5
-+XAPP_OCLOCK_SOURCE = oclock-$(XAPP_OCLOCK_VERSION).tar.xz
-+XAPP_OCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_OCLOCK_LICENSE = MIT
- XAPP_OCLOCK_LICENSE_FILES = COPYING
- XAPP_OCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu
+-XAPP_XCURSORGEN_VERSION = 1.0.7
+-XAPP_XCURSORGEN_SOURCE = xcursorgen-$(XAPP_XCURSORGEN_VERSION).tar.bz2
+-XAPP_XCURSORGEN_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XCURSORGEN_VERSION = 1.0.8
++XAPP_XCURSORGEN_SOURCE = xcursorgen-$(XAPP_XCURSORGEN_VERSION).tar.xz
++XAPP_XCURSORGEN_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XCURSORGEN_LICENSE = MIT
+ XAPP_XCURSORGEN_LICENSE_FILES = COPYING
+ XAPP_XCURSORGEN_DEPENDENCIES = libpng xlib_libX11 xlib_libXcursor
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
