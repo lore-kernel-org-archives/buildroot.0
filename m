@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980EAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DCB1C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EBA541610;
-	Mon, 20 Feb 2023 21:48:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBA541610
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C14542FBE;
+	Mon, 20 Feb 2023 21:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C14542FBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wG4ZEgpqKp_v; Mon, 20 Feb 2023 21:48:42 +0000 (UTC)
+	with ESMTP id 4s6Q6emEDjfS; Mon, 20 Feb 2023 21:48:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC33E410D5;
-	Mon, 20 Feb 2023 21:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC33E410D5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 84D0F1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED0AF42DC1;
+	Mon, 20 Feb 2023 21:48:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED0AF42DC1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 103BE1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AD3B610C8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AD3B610C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74CB441696
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74CB441696
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wn7CU0xKngCP for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uf6fHpf1cRJW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84FB0610EF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84FB0610EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4DA9415C4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4DA9415C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75BCD8648F; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id B07CD86495; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:14 +0100
+Date: Fri, 9 Dec 2022 19:02:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1cfae45da9c35dd5e9a9bd8c42a8fb008d425f35
-X-Git-Newrev: 8ce4206c9e8871ed02ccb824d584dfff36bbc719
+X-Git-Oldrev: f276188ef7967ce8332fb38fdecd98b080b7e3db
+X-Git-Newrev: c29929c123a2e84e358a08916168d8010fbb3e9d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205156.75BCD8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libfontenc:
- bump version to 1.1.7
+Message-Id: <20230220205159.B07CD86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dnsmasq: bump to
+ version 2.88
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ce4206c9e8871ed02ccb824d584dfff36bbc719
+commit: https://git.buildroot.net/buildroot/commit/?id=c29929c123a2e84e358a08916168d8010fbb3e9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-December/003285.html
-https://lists.x.org/archives/xorg-announce/2022-August/003204.html
-https://lists.x.org/archives/xorg-announce/2022-August/003199.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/x11r7/xlib_libfontenc/xlib_libfontenc.hash | 8 +++-----
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2022q4/016767.html
 
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-index cf09f61c3e..a061ca4a4b 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002956.html
--md5  6447db6a689fb530c218f0f8328c3abc  libfontenc-1.1.4.tar.bz2
--sha1  d4f232b0b07487b984e13422ce4130b61a8b9edb  libfontenc-1.1.4.tar.bz2
--sha256  2cfcce810ddd48f2e5dc658d28c1808e86dcf303eaff16728b9aa3dbc0092079  libfontenc-1.1.4.tar.bz2
--sha512  76fa851d00113241f15fdd5b5bb7e927b8d8b9a82ce3fcb0678b8c7e32cb5e8d898c4bda1d60dafb7748145049d3240627ac34a2360c64e98a7a912ea7c30582  libfontenc-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003285.html
-+sha256  c0d36991faee06551ddbaf5d99266e97becdc05edfae87a833c3ff7bf73cfec2  libfontenc-1.1.7.tar.xz
-+sha512  fd8578a81090fa938dd75ad9081ab62c6c54fa2535d1c6291afd799ac8dc7c344a43f07cea5cd4433af16df0d926c22e7c169877bc8b13d92584e7dec173d701  libfontenc-1.1.7.tar.xz
- # Locally computed
- sha256  a4dda7a643b517794bfa23dc9605da030055df38ac8a5b9e1905e690975a59c4  COPYING
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-index a55b90d680..e12086b125 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-@@ -4,8 +4,8 @@
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 78127ca714..fd015d38ac 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.87.tar.xz.asc
+-sha256  0228c0364a7f2356fd7e7f1549937cbf3099a78d3b2eb1ba5bb0c31e2b89de7a  dnsmasq-2.87.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.88.tar.xz.asc
++sha256  23544deda10340c053bea6f15a93fed6ea7f5aaa85316bfc671ffa6d22fbc1b3  dnsmasq-2.88.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 46a40c4bbb..3945e4256a 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFONTENC_VERSION = 1.1.4
--XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
-+XLIB_LIBFONTENC_VERSION = 1.1.7
-+XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.xz
- XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFONTENC_LICENSE = MIT
- XLIB_LIBFONTENC_LICENSE_FILES = COPYING
+-DNSMASQ_VERSION = 2.87
++DNSMASQ_VERSION = 2.88
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
