@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D3EC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA429C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 936F44A332;
-	Mon, 20 Feb 2023 21:35:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 936F44A332
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C3114AA5C;
+	Mon, 20 Feb 2023 21:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C3114AA5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vcG4pRTkxX_t; Mon, 20 Feb 2023 21:35:47 +0000 (UTC)
+	with ESMTP id aE2hLZW_5S18; Mon, 20 Feb 2023 21:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AAD44A7E8;
-	Mon, 20 Feb 2023 21:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AAD44A7E8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CCC742DA6;
+	Mon, 20 Feb 2023 21:36:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CCC742DA6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B82851BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 918C11BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 642CE40C1F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65307415AA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 642CE40C1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65307415AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OzdB9__sS4k9 for <buildroot@lists.busybox.net>;
+ with ESMTP id kQ8F5wq2fP4h for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82FB9415AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98DB5415A9
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82FB9415AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98DB5415A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8008486495; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+ id 964AE86494; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:17 +0100
+Date: Fri, 9 Dec 2022 17:31:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8ce4206c9e8871ed02ccb824d584dfff36bbc719
-X-Git-Newrev: 7436867eb1d07a1cf0c9c809b6c13c11596a1159
+X-Git-Oldrev: 38e38370277366777ba850608c38f528f152a1e8
+X-Git-Newrev: d6e3bcfb376b59a2503f111b6339202752b794c9
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205156.8008486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXau:
- bump version to 1.0.11
+Message-Id: <20230220205156.964AE86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xlib_libXxf86dga: bump version to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7436867eb1d07a1cf0c9c809b6c13c11596a1159
+commit: https://git.buildroot.net/buildroot/commit/?id=d6e3bcfb376b59a2503f111b6339202752b794c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-December/003284.html
-https://lists.x.org/archives/xorg-announce/2022-August/003201.html
+https://lists.x.org/archives/xorg-announce/2022-December/003281.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXau/xlib_libXau.hash | 8 +++-----
- package/x11r7/xlib_libXau/xlib_libXau.mk   | 4 ++--
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash | 8 +++-----
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk   | 4 ++--
  2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.hash b/package/x11r7/xlib_libXau/xlib_libXau.hash
-index 65ae54ec32..8d2a6ff43c 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.hash
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.hash
+diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
+index 1b05624783..9057d4e8e2 100644
+--- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
++++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002942.html
--md5  c5f16288f2da9f071b29111d68797480  libXau-1.0.9.tar.bz2
--sha1  ef9b1ad00f958c8b6e30a1bbc11fdfac311c9733  libXau-1.0.9.tar.bz2
--sha256  ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec  libXau-1.0.9.tar.bz2
--sha512  3ca454ba466a807ea28b0f715066d73dc76ad312697b121d43e4d5766215052e9b7ffb8fe3ed3e496fa3f2a13f164ac692ff85cc428e26731b679f0f06a1d562  libXau-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003284.html
-+sha256  f3fa3282f5570c3f6bd620244438dbfbdd580fc80f02f549587a0f8ab329bbeb  libXau-1.0.11.tar.xz
-+sha512  f56abba3bef3fdd4739dfa69367a4251b5fab7c89194c9aece9efa66b9ebbf0736690cc9bd654aab19d9db377e4b9a5268c9c020b3d293bb5351bff5fe75a4dd  libXau-1.0.11.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002982.html
+-md5  0ddeafc13b33086357cfa96fae41ee8e  libXxf86dga-1.1.5.tar.bz2
+-sha1  332ba80d1b3d06473f7bbfe1612e7c5b58fbdf69  libXxf86dga-1.1.5.tar.bz2
+-sha256  2b98bc5f506c6140d4eddd3990842d30f5dae733b64f198a504f07461bdb7203  libXxf86dga-1.1.5.tar.bz2
+-sha512  0e77c4003aeba737b10c17d55aeefa935fc57c4ba9e8f79a834f3f8c690d6a1d98f69ad707eded784346c1cf40c41829719d257283b5eae3207147fb4c79ed89  libXxf86dga-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003281.html
++sha256  be44427579808fe3a217d59f51cae756a26913eb6e4c8738ccab65ff56d7980f  libXxf86dga-1.1.6.tar.xz
++sha512  61f7954471df63840ffb5e82347018e285d30d64d4d0a97770ca031c8554a0f52d1b007ab8342a283cd2f0d534f564fb59f57ec92515714f20a7d145912c65d9  libXxf86dga-1.1.6.tar.xz
  # Locally computed
- sha256  56abe29bb1d9806a9e04fa9f80fed2c0f18027594df3f098148d814aef6bddfa  COPYING
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index bac10818f1..0e9f79d38d 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+ sha256  dd27933ebc5c063128b158b085e4c442a36b0e6f704cf753116da119610191da  COPYING
+diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+index a5173fbc7c..1094e1a1ad 100644
+--- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
++++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXAU_VERSION = 1.0.9
--XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.bz2
-+XLIB_LIBXAU_VERSION = 1.0.11
-+XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.xz
- XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAU_LICENSE = MIT
- XLIB_LIBXAU_LICENSE_FILES = COPYING
+-XLIB_LIBXXF86DGA_VERSION = 1.1.5
+-XLIB_LIBXXF86DGA_SOURCE = libXxf86dga-$(XLIB_LIBXXF86DGA_VERSION).tar.bz2
++XLIB_LIBXXF86DGA_VERSION = 1.1.6
++XLIB_LIBXXF86DGA_SOURCE = libXxf86dga-$(XLIB_LIBXXF86DGA_VERSION).tar.xz
+ XLIB_LIBXXF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXXF86DGA_LICENSE = MIT
+ XLIB_LIBXXF86DGA_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
