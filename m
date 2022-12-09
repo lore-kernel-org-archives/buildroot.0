@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25451C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:15:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27AC7C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:15:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA13640FFC;
-	Fri,  9 Dec 2022 17:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA13640FFC
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2A9F41BA2;
+	Fri,  9 Dec 2022 17:15:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2A9F41BA2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kcs_dAkxjXZz; Fri,  9 Dec 2022 17:15:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KyArRMiE6dxY; Fri,  9 Dec 2022 17:15:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06CD240492;
-	Fri,  9 Dec 2022 17:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06CD240492
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F1EE41B90;
+	Fri,  9 Dec 2022 17:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F1EE41B90
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F61D1BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 694871BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D23534102D
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA8E44102F
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D23534102D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA8E44102F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F1bGolsdZa7C for <buildroot@lists.busybox.net>;
+ with ESMTP id n8AC8Ox265lU for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3235941037
+ by smtp2.osuosl.org (Postfix) with ESMTP id 365FC4103A
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3235941037
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 365FC4103A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2314085EA1; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+ id 3476885E9E; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:28 +0100
+Date: Fri, 9 Dec 2022 17:36:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 74440b3cd2bf5cdaf06753d53a471bb5f2c288c4
-X-Git-Newrev: 4649c06bff7e30bdbd7a3ebab59c578f09d67172
+X-Git-Oldrev: 4b1ff446fb74b910ff9005b8725e962a626ef11a
+X-Git-Newrev: d77345d05169d2fe8df1afc3714c2b373e273ef9
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170105.2314085EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfont2: bump version
- to 2.0.6
+Message-Id: <20221209170105.3476885E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xorgproto: bump version to
+ 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4649c06bff7e30bdbd7a3ebab59c578f09d67172
+commit: https://git.buildroot.net/buildroot/commit/?id=d77345d05169d2fe8df1afc3714c2b373e273ef9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-August/003203.html
+https://lists.x.org/archives/xorg-announce/2022-August/003197.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 4 ++--
+ package/x11r7/xorgproto/xorgproto.hash | 6 +++---
+ package/x11r7/xorgproto/xorgproto.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-index 069f2fc616..f2ae5925f8 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-August/003103.html
--sha256  aa7c6f211cf7215c0ab4819ed893dc98034363d7b930b844bb43603c2e10b53e  libXfont2-2.0.5.tar.bz2
--sha512  64d0635d14676bb645d61932afb177eb3808a46525b26e7ee31abc975eca75207743e85523fdd82b08010ce124eb4802338b508ee7b126875d2a3c12f8ac4faa  libXfont2-2.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003203.html
-+sha256  74ca20017eb0fb3f56d8d5e60685f560fc85e5ff3d84c61c4cb891e40c27aef4  libXfont2-2.0.6.tar.xz
-+sha512  24d6baeef8dc2ca2730925c6b790a97f4a3f46ea7b4d908555e7df29cee6e27b63d638b50c88dd30c853cecff7d9b079402cb617f4498f96410c5770b8815cbd  libXfont2-2.0.6.tar.xz
- # Locally calculated
- sha256  97e413bb4962bbb5773085cd5405502bf1d4eadeaf98ff5be015eacacc840462  COPYING
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index fb0bba879c..7f90f67046 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
+index bd9cae2510..cc52013e11 100644
+--- a/package/x11r7/xorgproto/xorgproto.hash
++++ b/package/x11r7/xorgproto/xorgproto.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-April/003160.html
+-sha256  1d2dcc66963f234d2c1e1f8d98a0d3e8725149cdac0a263df4097593c48bc2a6  xorgproto-2022.1.tar.bz2
+-sha512  add275a9c0d005053f31fdca6da009142792a3c7e2cd4b56da93eed3a397adf52d91c441ff6455959b87559f402eb9f46fdd8932e951c7d2d96623975391202a  xorgproto-2022.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-August/003197.html
++sha256  5d13dbf2be08f95323985de53352c4f352713860457b95ccaf894a647ac06b9e  xorgproto-2022.2.tar.xz
++sha512  8e6108110600d076a94cc6d0e465b2e9adfbbe8d7e6b75fae9c5262d99dc6074ab1ed561a74d6d451f00f5b7af9f507a6317be9c0770efeed9e60b64beb7a1c9  xorgproto-2022.2.tar.xz
+ 
+ # Locally computed
+ sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
+diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
+index 89cc248386..c707bdafc0 100644
+--- a/package/x11r7/xorgproto/xorgproto.mk
++++ b/package/x11r7/xorgproto/xorgproto.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXFONT2_VERSION = 2.0.5
--XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
-+XLIB_LIBXFONT2_VERSION = 2.0.6
-+XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
- XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
- XLIB_LIBXFONT2_LICENSE_FILES = COPYING
+-XORGPROTO_VERSION = 2022.1
+-XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.bz2
++XORGPROTO_VERSION = 2022.2
++XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
+ XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
+ XORGPROTO_LICENSE = MIT
+ XORGPROTO_LICENSE_FILES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
