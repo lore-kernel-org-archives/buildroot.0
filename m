@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C494C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AD6DC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:58:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4073B4ED32;
-	Mon, 20 Feb 2023 21:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4073B4ED32
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1D884ED38;
+	Mon, 20 Feb 2023 21:58:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1D884ED38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2YjhNl3IlpYf; Mon, 20 Feb 2023 21:57:55 +0000 (UTC)
+	with ESMTP id Q8MzdkA2XhE8; Mon, 20 Feb 2023 21:58:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6D7649DE5;
-	Mon, 20 Feb 2023 21:57:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D7649DE5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E429C1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B004C4ED45;
+	Mon, 20 Feb 2023 21:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B004C4ED45
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 745C21BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B327C415C4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B327C415C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46D5B61133
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D5B61133
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yN8v7jbuZcKQ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EuofiduRUF-u for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEF45416AC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEF45416AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7142D6112C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7142D6112C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC97686495; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+ id 6FA0E8648F; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:56 +0100
+Date: Fri, 9 Dec 2022 17:34:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ef45500e35fac59e403af4709e16e40d2c9bb4a
-X-Git-Newrev: 9268e835d33b188978145b912f9a9d1359da63a5
+X-Git-Oldrev: cd91f23a6ab9d0bb734fa8084275d81a39d300b2
+X-Git-Newrev: f7b42852817e93423afeff64e637795d8ba80672
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.CC97686495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-filelock: bump
- to version 3.8.2
+Message-Id: <20230220205158.6FA0E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xcb-util-image:
+ bump version to 0.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9268e835d33b188978145b912f9a9d1359da63a5
+commit: https://git.buildroot.net/buildroot/commit/?id=f7b42852817e93423afeff64e637795d8ba80672
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003231.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-filelock/python-filelock.hash | 4 ++--
- package/python-filelock/python-filelock.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xcb-util-image/xcb-util-image.hash | 5 +++--
+ package/x11r7/xcb-util-image/xcb-util-image.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-index e4dd67de07..f9e6bc03e8 100644
---- a/package/python-filelock/python-filelock.hash
-+++ b/package/python-filelock/python-filelock.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/filelock/json
--md5  9bd8d33d5d7dc95012981ccbfb2d2a0f  filelock-3.8.0.tar.gz
--sha256  55447caa666f2198c5b6b13a26d2084d26fa5b115c00d065664b2124680c4edc  filelock-3.8.0.tar.gz
-+md5  d66099b8823ebbdd980cde0dae8f7341  filelock-3.8.2.tar.gz
-+sha256  7565f628ea56bfcd8e54e42bdc55da899c85c1abfe1b5bcfd147e9188cebb3b2  filelock-3.8.2.tar.gz
- # Locally computed sha256 checksums
- sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index 8d5308ddca..86f1220b54 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
+diff --git a/package/x11r7/xcb-util-image/xcb-util-image.hash b/package/x11r7/xcb-util-image/xcb-util-image.hash
+index b2c42d6899..e200853e47 100644
+--- a/package/x11r7/xcb-util-image/xcb-util-image.hash
++++ b/package/x11r7/xcb-util-image/xcb-util-image.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-October/002489.html
+-sha256  2db96a37d78831d643538dd1b595d7d712e04bdccf8896a5e18ce0f398ea2ffc  xcb-util-image-0.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003231.html
++sha256  ccad8ee5dadb1271fd4727ad14d9bd77a64e505608766c4e98267d9aede40d3d  xcb-util-image-0.4.1.tar.xz
++sha512  9b47ba38b91196d76541b6ccabeaf291d3b91036f15422909cd6a79b3fd1a9786d5b1728e411bc41cfdf3d60a253485f4ef7c65ffa6ae646fa93439ec782746e  xcb-util-image-0.4.1.tar.xz
+ # License file, locally calculated
+ sha256  19672c6153d8c4870abe734fa4dd2197481a311f4788d02ad729be07e116b26b  COPYING
+diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
+index 8ddb0be86d..446d545ef2 100644
+--- a/package/x11r7/xcb-util-image/xcb-util-image.mk
++++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FILELOCK_VERSION = 3.8.0
-+PYTHON_FILELOCK_VERSION = 3.8.2
- PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
--PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/95/55/b897882bffb8213456363e646bf9e9fa704ffda5a7d140edf935a9e02c7b
-+PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/d8/73/292d9ea2370840a163e6dd2d2816a571244e9335e2f6ad957bf0527c492f
- PYTHON_FILELOCK_SETUP_TYPE = setuptools
- PYTHON_FILELOCK_LICENSE = Public Domain
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
+-XCB_UTIL_IMAGE_VERSION = 0.4.0
+-XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist
+-XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
++XCB_UTIL_IMAGE_VERSION = 0.4.1
++XCB_UTIL_IMAGE_SITE = https://xorg.freedesktop.org/archive/individual/lib
++XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.xz
+ XCB_UTIL_IMAGE_INSTALL_STAGING = YES
+ XCB_UTIL_IMAGE_LICENSE = MIT
+ XCB_UTIL_IMAGE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
