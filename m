@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7813CC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEAE0C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB3E4034E;
-	Fri,  9 Dec 2022 17:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB3E4034E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5937D81762;
+	Fri,  9 Dec 2022 17:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5937D81762
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CLllhBLmnxYp; Fri,  9 Dec 2022 17:14:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ur-CBGbDPU0m; Fri,  9 Dec 2022 17:14:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1527402EC;
-	Fri,  9 Dec 2022 17:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1527402EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8045481758;
+	Fri,  9 Dec 2022 17:14:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8045481758
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5777D1BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 022971BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCED941014
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5ACA4102E
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCED941014
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5ACA4102E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3-Xwy_jZJ04b for <buildroot@lists.busybox.net>;
+ with ESMTP id WFy1n79iHHws for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD30741016
+ by smtp2.osuosl.org (Postfix) with ESMTP id D19B74101F
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD30741016
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D19B74101F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB52585EA0; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id C298785EA1; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:36 +0100
+Date: Fri, 9 Dec 2022 17:32:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df57bbf7279757a11327361e7cd9a1091b2da40f
-X-Git-Newrev: fefd30f06c88f36cc75b52b767293586e1770af1
+X-Git-Oldrev: 7b0c8c6aee402bc6e9128bc8bb535ad1ef1f2fc5
+X-Git-Newrev: df57bbf7279757a11327361e7cd9a1091b2da40f
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.CB52585EA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xkill: bump version to
+Message-Id: <20221209170103.C298785EA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xlogo: bump version to
  1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fefd30f06c88f36cc75b52b767293586e1770af1
+commit: https://git.buildroot.net/buildroot/commit/?id=df57bbf7279757a11327361e7cd9a1091b2da40f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-November/003256.html
+https://lists.x.org/archives/xorg-announce/2022-November/003257.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xkill/xapp_xkill.hash | 8 +++-----
- package/x11r7/xapp_xkill/xapp_xkill.mk   | 6 +++---
+ package/x11r7/xapp_xlogo/xapp_xlogo.hash | 8 +++-----
+ package/x11r7/xapp_xlogo/xapp_xlogo.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkill/xapp_xkill.hash b/package/x11r7/xapp_xkill/xapp_xkill.hash
-index 911a28d0b6..8cee05d871 100644
---- a/package/x11r7/xapp_xkill/xapp_xkill.hash
-+++ b/package/x11r7/xapp_xkill/xapp_xkill.hash
+diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.hash b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
+index c393e7dc33..58f2ac4028 100644
+--- a/package/x11r7/xapp_xlogo/xapp_xlogo.hash
++++ b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002864.html
--md5  938177e4472c346cf031c1aefd8934fc  xkill-1.0.5.tar.bz2
--sha1  c5ee06b33adb252a41e4f737be6bd47651ff582a  xkill-1.0.5.tar.bz2
--sha256  c5f0bb6a95e1ac7c4def8a657496d5d2f21ccd41eb47ef2c9ccb03fb6d6aff6b  xkill-1.0.5.tar.bz2
--sha512  4603a1794f114f5cea2c885020c9d073c8421d1e785c99ff6b936ae97139c8dac8020a187b5bbd0fa6d56ed6fab879441b42ba900cc5f2f5a534dafdc86b9249  xkill-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003256.html
-+sha256  e5a8aa78c475677b11504646da8d93dacc30744258076a2ca418a24438aeb907  xkill-1.0.6.tar.xz
-+sha512  a755a8db51d7860b9942161776390007b9b530c2f7fcf8ddb3383311d36d185a6f08a44c5f6f7735576b146902e66aca21cbd7e746c1289d035e79332e8173b6  xkill-1.0.6.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002963.html
+-md5  e9d21de1dc8c8b9f854509a26a985cd7  xlogo-1.0.5.tar.bz2
+-sha1  f025a0ad30c45cbec1c2f3b1610bff94fb4e9f33  xlogo-1.0.5.tar.bz2
+-sha256  633d7a3aa5df61e4e643b740e5799664741ab1a0ba40593e54fcd15dc30f378e  xlogo-1.0.5.tar.bz2
+-sha512  0d78e269b0be3c5de71de7f362b896bfd9934ecd9d0361b3302399b1269e029c4a9f35418d792121a1edc34405d753f9d69c996cc3a69ac717f2b0d1f736406b  xlogo-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003257.html
++sha256  c16ae461a7f7ea275f55c82acf3ee86ce0eb5e406f3a91ab2bb4d332693f32a0  xlogo-1.0.6.tar.xz
++sha512  f0c921e0e34d2c0959d95ca0fcb7488395043280b8b35bcad4e8a528224f2b38581fbf60e82239d06760ecd637692cb29c3b1c0c46ac7f269f692a139d954ea0  xlogo-1.0.6.tar.xz
  # Locally computed
- sha256  13306c3890e4c8710bc468dee0eba7f9677cd94c7a67d2d81fa932d4f635b21f  COPYING
-diff --git a/package/x11r7/xapp_xkill/xapp_xkill.mk b/package/x11r7/xapp_xkill/xapp_xkill.mk
-index 64ddbca694..84dad0b5c7 100644
---- a/package/x11r7/xapp_xkill/xapp_xkill.mk
-+++ b/package/x11r7/xapp_xkill/xapp_xkill.mk
+ sha256  972b454b6c0da17cec61225ab9dfd4afc69fd8e7e4c629497197c6f79adc6fb0  COPYING
+diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.mk b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
+index 455469e160..27d693bec9 100644
+--- a/package/x11r7/xapp_xlogo/xapp_xlogo.mk
++++ b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XKILL_VERSION = 1.0.5
--XAPP_XKILL_SOURCE = xkill-$(XAPP_XKILL_VERSION).tar.bz2
--XAPP_XKILL_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XKILL_VERSION = 1.0.6
-+XAPP_XKILL_SOURCE = xkill-$(XAPP_XKILL_VERSION).tar.xz
-+XAPP_XKILL_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XKILL_LICENSE = MIT
- XAPP_XKILL_LICENSE_FILES = COPYING
- XAPP_XKILL_DEPENDENCIES = xlib_libX11 xlib_libXmu
+-XAPP_XLOGO_VERSION = 1.0.5
+-XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.bz2
+-XAPP_XLOGO_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XLOGO_VERSION = 1.0.6
++XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.xz
++XAPP_XLOGO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XLOGO_LICENSE = MIT
+ XAPP_XLOGO_LICENSE_FILES = COPYING
+ XAPP_XLOGO_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
