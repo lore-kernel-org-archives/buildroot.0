@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DB33C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F262DC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC24A4ED8A;
-	Mon, 20 Feb 2023 22:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC24A4ED8A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C7014ED97;
+	Mon, 20 Feb 2023 22:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C7014ED97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fos8TBrOkl7N; Mon, 20 Feb 2023 22:01:21 +0000 (UTC)
+	with ESMTP id 4-ODziD6FwZw; Mon, 20 Feb 2023 22:01:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D05D4ED81;
-	Mon, 20 Feb 2023 22:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D05D4ED81
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CAFA71BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 434874EDAA;
+	Mon, 20 Feb 2023 22:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 434874EDAA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 179781BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56041416B5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56041416B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD53861109
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD53861109
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id le-ai71Roc7S for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MWlHth6MCDeW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94B88416AF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94B88416AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id E901861131
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E901861131
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9265B86494; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+ id E74358648F; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:28 +0100
+Date: Fri, 9 Dec 2022 17:36:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ff8b3b7413bceba91198376fa056ce0f90571616
-X-Git-Newrev: 5c2007f5b632efce3c2776b9d360ad3621694648
+X-Git-Oldrev: 5cd2f31a255b4295d83adaeb8db97150c3f660ac
+X-Git-Newrev: 5e2df02d3109131b72880ebf313088e70366c5da
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.9265B86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-numpy: bump to
- version 1.23.5
+Message-Id: <20230220205158.E74358648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXtst:
+ bump version to 1.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c2007f5b632efce3c2776b9d360ad3621694648
+commit: https://git.buildroot.net/buildroot/commit/?id=5e2df02d3109131b72880ebf313088e70366c5da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-September/003214.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-numpy/python-numpy.hash | 4 ++--
- package/python-numpy/python-numpy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXtst/xlib_libXtst.hash | 5 +++--
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index 2a2dec44da..9ac9280c78 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
-@@ -1,5 +1,5 @@
--# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.4
--sha256  ed2cc92af0efad20198638c69bb0fc2870a58dabfba6eb722c933b48556c686c  numpy-1.23.4.tar.gz
-+# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.5
-+sha256  1b1766d6f397c18153d40015ddfc79ddb715cabadc04d2d228d4e5a8bc4ded1a  numpy-1.23.5.tar.gz
- # License files, locally calculated
- sha256  0f88787955e7131224f53a8c3f3e859dc502408e3a539a4dcf61fb7888b5b984  LICENSE.txt
- sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 4f4848c4ba..812bfdae4a 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+index f64a018567..7bdcdb9c17 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.hash
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002726.html
+-sha256  4655498a1b8e844e3d6f21f3b2c4e2b571effb5fd83199d428a6ba7ea4bf5204  libXtst-1.2.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-September/003214.html
++sha256  84f5f30b9254b4ffee14b5b0940e2622153b0d3aed8286a3c5b7eeb340ca33c8  libXtst-1.2.4.tar.xz
++sha512  f2f4e01239b892b8e26284cede90feb4fe7738beb243bca0f6adb349029f8bf87b5a482911edcd2401733c92ef78eec07fcd455b92e5b8c4828374769e60098d  libXtst-1.2.4.tar.xz
+ # Locally computed
+ sha256  940190489c7a0e5ae3d83fc4fcbd79e0cd1b765bf1a4efd408293c1ee0332ceb  COPYING
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+index c79301e064..47103377aa 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NUMPY_VERSION = 1.23.4
-+PYTHON_NUMPY_VERSION = 1.23.5
- PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
- PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
- PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
+-XLIB_LIBXTST_VERSION = 1.2.3
+-XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
+-XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXTST_VERSION = 1.2.4
++XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.xz
++XLIB_LIBXTST_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXTST_LICENSE = MIT
+ XLIB_LIBXTST_LICENSE_FILES = COPYING
+ XLIB_LIBXTST_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
