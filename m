@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 878CFC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C0F8C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D9894312F;
-	Mon, 20 Feb 2023 22:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D9894312F
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEF634ED99;
+	Mon, 20 Feb 2023 22:03:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF634ED99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h29pKp4z2EFW; Mon, 20 Feb 2023 22:03:44 +0000 (UTC)
+	with ESMTP id N6GDeySIQcgU; Mon, 20 Feb 2023 22:03:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C607F49986;
-	Mon, 20 Feb 2023 22:03:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C607F49986
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CA0A1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62F9A4998D;
+	Mon, 20 Feb 2023 22:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F9A4998D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8296B1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1145F416A9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1145F416A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3444561147
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3444561147
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K8Sr-NVl8wzf for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f8M4YifS1SCG for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 567E0416B6
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 567E0416B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6174961126
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6174961126
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5292286495; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+ id 59D65828C8; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:57 +0100
+Date: Fri, 9 Dec 2022 17:36:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b7fa52b837cc3a39534ba675e913c9bae583988d
-X-Git-Newrev: 90817e547c54a26e6554819a545f6ef059ee479b
+X-Git-Oldrev: 4649c06bff7e30bdbd7a3ebab59c578f09d67172
+X-Git-Newrev: 4b1ff446fb74b910ff9005b8725e962a626ef11a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.5292286495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pymodbus: bump
- to version 3.0.2
+Message-Id: <20230220205159.59D65828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libFS: bump
+ version to 1.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90817e547c54a26e6554819a545f6ef059ee479b
+commit: https://git.buildroot.net/buildroot/commit/?id=4b1ff446fb74b910ff9005b8725e962a626ef11a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-August/003200.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pymodbus/python-pymodbus.hash | 4 ++--
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libFS/xlib_libFS.hash | 8 +++-----
+ package/x11r7/xlib_libFS/xlib_libFS.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index b5243567b7..d9337ffe84 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  25a8724539d0eac1b09d9b41812d86f9  pymodbus-3.0.0.tar.gz
--sha256  37c9b6f3e5c82f39ee42047ca48cbc9fd0c49a6731126789500191e9deea6cbc  pymodbus-3.0.0.tar.gz
-+md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
-+sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 2ed7e94afe..54879d38e9 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
+index 50cb94dd3a..6ca152ac4a 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.hash
++++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
+-md5  4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
+-sha1  70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
+-sha256  c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
+-sha512  466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-August/003200.html
++sha256  597379438b3242ccc7d7b0fc432dc6c844eca0d4a82a7b82518bfeb203fc208a  libFS-1.0.9.tar.xz
++sha512  7d012e62736c6d567931bad982eec221199d296f0fe41e1e7fde5575b8b928e9a8c644aa8746242bdfe72393635320b58774d9a519285765bd26d633588092b8  libFS-1.0.9.tar.xz
+ # Locally computed
+ sha256  5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index 9d9aecb74f..0fbf453ca4 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 3.0.0
-+PYTHON_PYMODBUS_VERSION = 3.0.2
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/0f/5a/50e9492f98ef911af18c2b603bc003fef726e84d22bac2ce6e651643b29c
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-XLIB_LIBFS_VERSION = 1.0.8
+-XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
+-XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBFS_VERSION = 1.0.9
++XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.xz
++XLIB_LIBFS_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
+ XLIB_LIBFS_LICENSE_FILES = COPYING
+ XLIB_LIBFS_CPE_ID_VENDOR = x
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
