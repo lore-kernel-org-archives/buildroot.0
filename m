@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 827E1C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9B7EC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 155B341BDA;
-	Fri,  9 Dec 2022 17:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 155B341BDA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C9848211D;
+	Fri,  9 Dec 2022 17:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C9848211D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TED-7X_RqQq0; Fri,  9 Dec 2022 17:07:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gKKxGW_RS9-5; Fri,  9 Dec 2022 17:07:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB7C841B87;
-	Fri,  9 Dec 2022 17:07:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB7C841B87
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 185FC1BF37A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6B278125B;
+	Fri,  9 Dec 2022 17:07:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6B278125B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 273641BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECD1941040
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECD1941040
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97D4841A55
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D4841A55
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T55YqdyXlDMW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qbSGNUFXG_Xv for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 921DF41010
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4D0241A65
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 921DF41010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4D0241A65
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9027F85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id B22CD85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:13 +0100
+Date: Fri, 9 Dec 2022 17:32:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 42c8fe191473193c0854bd8a641c046d4f149a97
-X-Git-Newrev: 9e1546672ce900d82a39f991237246a201874d47
+X-Git-Oldrev: 723eff5808451188ddc097aafc17e6969b849e57
+X-Git-Newrev: e20641dcf85dada48621f46e1f30966c90696317
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.9027F85EA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xcursorgen: bump
- version to 1.0.8
+Message-Id: <20221209170103.B22CD85EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xlsclients: bump
+ version to 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e1546672ce900d82a39f991237246a201874d47
+commit: https://git.buildroot.net/buildroot/commit/?id=e20641dcf85dada48621f46e1f30966c90696317
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003264.html
+https://lists.x.org/archives/xorg-announce/2022-November/003259.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash | 8 +++-----
- package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   | 6 +++---
+ package/x11r7/xapp_xlsclients/xapp_xlsclients.hash | 8 +++-----
+ package/x11r7/xapp_xlsclients/xapp_xlsclients.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
-index 2f64671434..45bff55ed2 100644
---- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
-+++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
+diff --git a/package/x11r7/xapp_xlsclients/xapp_xlsclients.hash b/package/x11r7/xapp_xlsclients/xapp_xlsclients.hash
+index b73917cb4a..ac172acceb 100644
+--- a/package/x11r7/xapp_xlsclients/xapp_xlsclients.hash
++++ b/package/x11r7/xapp_xlsclients/xapp_xlsclients.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-January/002936.html
--md5  25cc7ca1ce5dcbb61c2b471c55e686b5  xcursorgen-1.0.7.tar.bz2
--sha1  109367eb23b0ad52cf5de15f50c02ebe872698ae  xcursorgen-1.0.7.tar.bz2
--sha256  35b6f844b24f1776e9006c880a745728800764dbe3b327a128772b4610d8eb3d  xcursorgen-1.0.7.tar.bz2
--sha512  bd13ad23691d3daa2d5dcdc5902cf62e3dcb97a0289aff362e6cd85866a1d8cafb64f98800a75bfb4cf1f3c76244ca20201847dff594543d136d0abaec7011d2  xcursorgen-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003264.html
-+sha256  32b33ce27b4e285e64ff375731806bb7988cc626ff10915c65f1dc4da640cc9b  xcursorgen-1.0.8.tar.xz
-+sha512  dede5b9e1e09f9253365bbb83fdab26c681641913f3586cef52d4802db9cecc7e252344911cd969a873c3a5c5ebbd4b862f786de263f92ea1bcb2df90236f9c4  xcursorgen-1.0.8.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002866.html
+-md5  4fa92377e0ddc137cd226a7a87b6b29a  xlsclients-1.1.4.tar.bz2
+-sha1  175af1c216a1db3de5023ecd6cce186e7693c6e4  xlsclients-1.1.4.tar.bz2
+-sha256  773f2af49c7ea2c44fba4213bee64325875c1b3c9bc4bbcd8dac9261751809c1  xlsclients-1.1.4.tar.bz2
+-sha512  42fd848d88d3cf31168a37fed63f9f5b60ddc4f36be2956b354e574c93129d75f29e005d6631784380bcef27860b54c64f419ca18ad77f092f4520dec47b10f4  xlsclients-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003259.html
++sha256  68baee57e70250ac4a7759fb78221831f97d88bc8e51dcc2e64eb3f8ca56bae3  xlsclients-1.1.5.tar.xz
++sha512  3896643378603876438772475e89ad5c066f98c16593245db5fa066418ff793798247f976d2bf7aa401d2590fc9807b80c9758bcbcc91566f02ceb856d9702bf  xlsclients-1.1.5.tar.xz
  # Locally computed
- sha256  8c773336b654442ac8018715a52be1a8254895c57c898d5387016e9488cc2009  COPYING
-diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
-index bcc696b01c..318cd562db 100644
---- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
-+++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+ sha256  716d6f1d18cb97cdd4a2ef7b101d944a250ca9de57578a490c038b9aaf950648  COPYING
+diff --git a/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk b/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk
+index 167748b338..a179e06713 100644
+--- a/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk
++++ b/package/x11r7/xapp_xlsclients/xapp_xlsclients.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XCURSORGEN_VERSION = 1.0.7
--XAPP_XCURSORGEN_SOURCE = xcursorgen-$(XAPP_XCURSORGEN_VERSION).tar.bz2
--XAPP_XCURSORGEN_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XCURSORGEN_VERSION = 1.0.8
-+XAPP_XCURSORGEN_SOURCE = xcursorgen-$(XAPP_XCURSORGEN_VERSION).tar.xz
-+XAPP_XCURSORGEN_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XCURSORGEN_LICENSE = MIT
- XAPP_XCURSORGEN_LICENSE_FILES = COPYING
- XAPP_XCURSORGEN_DEPENDENCIES = libpng xlib_libX11 xlib_libXcursor
+-XAPP_XLSCLIENTS_VERSION = 1.1.4
+-XAPP_XLSCLIENTS_SOURCE = xlsclients-$(XAPP_XLSCLIENTS_VERSION).tar.bz2
+-XAPP_XLSCLIENTS_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XLSCLIENTS_VERSION = 1.1.5
++XAPP_XLSCLIENTS_SOURCE = xlsclients-$(XAPP_XLSCLIENTS_VERSION).tar.xz
++XAPP_XLSCLIENTS_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XLSCLIENTS_LICENSE = MIT
+ XAPP_XLSCLIENTS_LICENSE_FILES = COPYING
+ XAPP_XLSCLIENTS_DEPENDENCIES = xlib_libX11 xlib_libXmu libxcb xcb-util
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
