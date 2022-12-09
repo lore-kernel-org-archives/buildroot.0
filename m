@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB54CC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AACF9C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84D4040914;
-	Mon, 20 Feb 2023 22:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D4040914
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C89241C4F;
+	Mon, 20 Feb 2023 22:03:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C89241C4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gduyjo_uaVSg; Mon, 20 Feb 2023 22:03:16 +0000 (UTC)
+	with ESMTP id jbbFVymRbopN; Mon, 20 Feb 2023 22:03:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE65E4EDF1;
-	Mon, 20 Feb 2023 22:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE65E4EDF1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BA5C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03970401EC;
+	Mon, 20 Feb 2023 22:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03970401EC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 705FC1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11767416B7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11767416B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3288C61092
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3288C61092
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VqVSGPcvY82I for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xV9J19VZ4PvT for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40FC740C30
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FC740C30
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5181461135
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5181461135
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C83186494; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+ id 4E5638648F; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:51 +0100
+Date: Fri, 9 Dec 2022 17:36:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0894b7f78b17a2ddb4e922c5ee63379fe00a7259
-X-Git-Newrev: 59ae28ac059852c4adb9e5116006f8724bd8578b
+X-Git-Oldrev: 74440b3cd2bf5cdaf06753d53a471bb5f2c288c4
+X-Git-Newrev: 4649c06bff7e30bdbd7a3ebab59c578f09d67172
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.2C83186494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pycairo: bump
- to version 1.23.0
+Message-Id: <20230220205159.4E5638648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXfont2:
+ bump version to 2.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59ae28ac059852c4adb9e5116006f8724bd8578b
+commit: https://git.buildroot.net/buildroot/commit/?id=4649c06bff7e30bdbd7a3ebab59c578f09d67172
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-August/003203.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pycairo/python-pycairo.hash | 4 ++--
- package/python-pycairo/python-pycairo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index f8018e682f..98bb7f2802 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5  682238eaa8bd7032e36a20b6f53824d1  pycairo-1.21.0.tar.gz
--sha256  251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b  pycairo-1.21.0.tar.gz
-+md5  7a3729d21659098e1b9a411b62e88966  pycairo-1.23.0.tar.gz
-+sha256  9b61ac818723adc04367301317eb2e814a83522f07bbd1f409af0dada463c44c  pycairo-1.23.0.tar.gz
- # Locally computed sha256 checksums
- sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
- sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index 5b231f6b1e..f9933df187 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+index 069f2fc616..f2ae5925f8 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-August/003103.html
+-sha256  aa7c6f211cf7215c0ab4819ed893dc98034363d7b930b844bb43603c2e10b53e  libXfont2-2.0.5.tar.bz2
+-sha512  64d0635d14676bb645d61932afb177eb3808a46525b26e7ee31abc975eca75207743e85523fdd82b08010ce124eb4802338b508ee7b126875d2a3c12f8ac4faa  libXfont2-2.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-August/003203.html
++sha256  74ca20017eb0fb3f56d8d5e60685f560fc85e5ff3d84c61c4cb891e40c27aef4  libXfont2-2.0.6.tar.xz
++sha512  24d6baeef8dc2ca2730925c6b790a97f4a3f46ea7b4d908555e7df29cee6e27b63d638b50c88dd30c853cecff7d9b079402cb617f4498f96410c5770b8815cbd  libXfont2-2.0.6.tar.xz
+ # Locally calculated
+ sha256  97e413bb4962bbb5773085cd5405502bf1d4eadeaf98ff5be015eacacc840462  COPYING
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index fb0bba879c..7f90f67046 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.21.0
-+PYTHON_PYCAIRO_VERSION = 1.23.0
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/92/a4/506564f574fa74c90b98690e8ecc8dbae1629f31fcfe0be69de45d9e1605
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/69/ca/9e9fa2e8be0876a9bbf046a1be7ee33e61d4fdfbd1fd25c76c1bdfddf8c4
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-XLIB_LIBXFONT2_VERSION = 2.0.5
+-XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
++XLIB_LIBXFONT2_VERSION = 2.0.6
++XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
+ XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFONT2_LICENSE = MIT
+ XLIB_LIBXFONT2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
