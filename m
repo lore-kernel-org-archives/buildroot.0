@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 295BAC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A06EC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD32F4087E;
-	Fri,  9 Dec 2022 17:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD32F4087E
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDD1E611A4;
+	Fri,  9 Dec 2022 17:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD1E611A4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cPeZxWGioHgo; Fri,  9 Dec 2022 17:27:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31D9B61197;
+	Fri,  9 Dec 2022 17:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31D9B61197
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BA4A11BF5DD
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:27:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9477541296
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9477541296
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5f06__HkNiWB; Fri,  9 Dec 2022 17:16:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80A68408B0;
-	Fri,  9 Dec 2022 17:16:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80A68408B0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AEA81BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:03:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12D3A82127
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:03:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12D3A82127
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BNS5YYgZCE29 for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:03:36 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nzZN7nQfC9ff for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:27:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BD838211B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0BD838211B
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:03:35 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.98.184])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E42D7B005A8;
- Fri,  9 Dec 2022 18:03:31 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 09 Dec 2022 18:03:31 +0100
-Date: Fri, 9 Dec 2022 18:03:31 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20221209170331.GN2855@scaer>
-References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
- <20221208223817.1088619-49-bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CB2E40947
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CB2E40947
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:27:15 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id y2so226198ily.5
+ for <buildroot@buildroot.org>; Fri, 09 Dec 2022 09:27:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Bjhv6vhD94TS9Nk1Rd0GRmOFDxZAO6/IFJlJ2tIUf3c=;
+ b=SyaIzTLBtic+FWTdMCozWLzSGptlLu4GYE6xbbVR24q2wbDXzD/cQBnx2dzHge+Rl2
+ zvcGAXYJs/CcEmqQqNdEbbnB8/bl48OQOAtZSGm6KxTUZxuEDFRMKVlmJNqovRLBNPGl
+ BRJwFxanwAiVkYU8F/mpIKstgrxCgHHMZoYaF9NpB06CElmWonWaTb/jKsSNA5JTBDRR
+ HEa6lA2ArdcM7fN53EZjtJvqeHwT5Mz5JgbTZi3yXaSZWVnJYlUmbFsckNfqTk35qf3u
+ jhOQLEfYsdRybNQIOcplKVL7Vc1P4UH/EHUyGfNID3O9iCTZBPyhqzsHZAc5CEO136O+
+ EPhA==
+X-Gm-Message-State: ANoB5pmB2h90zQmL/2DSwXzK0pyYsN7ifAG0XNfwjIz6AGvfdWjWeg69
+ nqbsor59cQyTJwG8vKzO3YQ78Amr2izZY4i4
+X-Google-Smtp-Source: AA0mqf5HK9m/OX2QVT9dzwV0qNSMrRh7Jj8m3RxdgzpTW2rpIIRg4EeU6IupzVLqYnrBMTznh6HrJQ==
+X-Received: by 2002:a92:c5ac:0:b0:303:2770:4e75 with SMTP id
+ r12-20020a92c5ac000000b0030327704e75mr3652432ilt.18.1670606834259; 
+ Fri, 09 Dec 2022 09:27:14 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ h2-20020a92c082000000b002f916f15625sm616872ile.23.2022.12.09.09.27.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Dec 2022 09:27:14 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  9 Dec 2022 10:27:12 -0700
+Message-Id: <20221209172712.3928585-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221208223817.1088619-49-bernd.kuhls@t-online.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670605414;
- bh=sPufgVrfnSbJ54c8J2ZKsxZI1zYEQQP/AifevHlIcxA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Al7JdyXJK1opX6WnUB0b300FjubOk9+ezHHKTH9kAxc0rpmncOsVOny5JuhKzyWRH
- 21vEq/u5kYrhCuU/wu2du3sOKYZc7K4KMCFLNsdQX+71iavW9baeu636WDC6B4My4P
- vFNPsrDbABgEh9tUSSmhyySvfykAby1Eubuw+gEVqwQGyWsioB1s6GQ8Mi50hK4Fl0
- 4Gwp6qPVatQEBgHRKqXxN4+QGdnj74inMyvAWL0Dik7jMFOuh+uOmBM0mRAue9NZ+v
- fGCRa3024Qn+RuJtT2Wv8amSTmwRxQZ7LwCwoirpLqzZ6Dozi6tUXqRnb998Dv187O
- TAqjCi7qFjPAQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Al7JdyXJ
-Subject: Re: [Buildroot] [PATCH 48/70] package/x11r7/xcb-util-cursor: bump
- version to 0.1.4
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Bjhv6vhD94TS9Nk1Rd0GRmOFDxZAO6/IFJlJ2tIUf3c=;
+ b=b5Hwu940/Ipe3qMMY0GjWy2JBRNQwr9mTvIgpcHcYRhIW8PVLShnvqzvBuHmcikEAy
+ 3JrwUC3xxhEhjxuyEl6YDHkRIUF3SmdcnRCLoA0XIAnq0qUfrGP3KjKzGP9bEv130dIV
+ MVGFB6VO0iFkEBadEmfFMpK4IxBTPVB1L2gHQSenkOmOt8qWPBUyiNZndgj7aT9P+Flb
+ JEwYX6MWFrhhJaG8nOgdaGWvwwqitt519OobSUnotQtmIfd9400uYMmK1nRMJ/KZcvDQ
+ i06JK4OJV6A8WM5W4i9PhJ9g12yvMVpH/uEOBXyHkP79UJwGU2gZc2vGmbsJatGHhpu8
+ +JXw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=b5Hwu940
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,75 +93,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Add support for new optional gsettings meson config option.
 
-On 2022-12-08 23:37 +0100, Bernd Kuhls spake thusly:
-> https://lists.x.org/archives/xorg-announce/2022-October/003230.html
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xcb-util-cursor/xcb-util-cursor.hash | 5 +++--
->  package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-> index 14cea17138..fc861fb4d9 100644
-> --- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-> +++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-> @@ -1,4 +1,5 @@
-> -# From https://lists.x.org/archives/xorg-announce/2016-May/002691.html
-> -sha1  26562eb6d4151307f7b6a53453d360ecfc0563ac  xcb-util-cursor-0.1.3.tar.bz2
-> +# From https://lists.x.org/archives/xorg-announce/2022-October/003230.html
-> +sha256  28dcfe90bcab7b3561abe0dd58eb6832aa9cc77cfe42fcdfa4ebe20d605231fb  xcb-util-cursor-0.1.4.tar.xz
-> +sha512 d27dd59a4d7ded9994dca77774421dd9533e3ee823b880af35d3219bd7340c89fbc61d1d0fa10e2991de2cac9e6395e09497769d7b8728eedc691e76649107b1  xcb-util-cursor-0.1.4.tar.xz
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-    $ make check-package
-    package/x11r7/xcb-util-cursor/xcb-util-cursor.hash:3: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
-
-Applied to master after fixing that, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  # Locally computed
->  sha256  0dde91ae1d443105dc9e13cbaed6674c36683b7095836ad9ddfce26be270aad5  COPYING
-> diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-> index 07b37c5e47..0fb131693b 100644
-> --- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-> +++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -XCB_UTIL_CURSOR_VERSION = 0.1.3
-> -XCB_UTIL_CURSOR_SITE = http://xcb.freedesktop.org/dist
-> -XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.bz2
-> +XCB_UTIL_CURSOR_VERSION = 0.1.4
-> +XCB_UTIL_CURSOR_SITE = https://xorg.freedesktop.org/archive/individual/lib
-> +XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.xz
->  XCB_UTIL_CURSOR_LICENSE = MIT
->  XCB_UTIL_CURSOR_LICENSE_FILES = COPYING
->  XCB_UTIL_CURSOR_INSTALL_STAGING = YES
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 4585534569..d8b5b0cc86 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  8164eb53c9eafedfa22fe1adc4b8e38f3173c6f33695c735a17ed1a3d43c664e  pipewire-0.3.60.tar.bz2
++sha256  24b218cf3bb1fb279c8c489c14cc9ae483e1da7b4c8215b2ee5a5ee831bae94f  pipewire-0.3.62.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 9fef605878..6bcda0a93d 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.60
++PIPEWIRE_VERSION = 0.3.62
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -166,6 +166,13 @@ else
+ PIPEWIRE_CONF_OPTS += -Dx11-xfixes=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++PIPEWIRE_CONF_OPTS += -Dgsettings=enabled
++PIPEWIRE_DEPENDENCIES += libglib2
++else
++PIPEWIRE_CONF_OPTS += -Dgsettings=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ PIPEWIRE_CONF_OPTS += -Dlibusb=enabled
+ PIPEWIRE_DEPENDENCIES += libusb
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
