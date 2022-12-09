@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1909FC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90551C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5A594AAEE;
-	Mon, 20 Feb 2023 21:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A594AAEE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A1A44EC55;
+	Mon, 20 Feb 2023 21:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A1A44EC55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id njFn9GOSiM_i; Mon, 20 Feb 2023 21:50:45 +0000 (UTC)
+	with ESMTP id JbusY7zRjTuf; Mon, 20 Feb 2023 21:50:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FB604EC5B;
-	Mon, 20 Feb 2023 21:50:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FB604EC5B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 427091BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEEE84EC66;
+	Mon, 20 Feb 2023 21:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEEE84EC66
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EA7891BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A7CE416A0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A7CE416A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3EE7610FF
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3EE7610FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l7nh1fVRStTO for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V6JjKHmuuudW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50D5E40C26
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50D5E40C26
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB5B9610E7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB5B9610E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 416BC86495; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+ id D673086495; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 18:13:23 +0100
+Date: Fri, 9 Dec 2022 17:31:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 712ee21876562b46947142f35dfe1186d88ad241
-X-Git-Newrev: 34cea39024bf8dedaa071bc5f2d903755501215c
+X-Git-Oldrev: d39f7ecd4938158183adfc13147a9d3b61c85a8e
+X-Git-Newrev: 4df6b365b77c3838858b43c201f0e2af4db7a498
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205200.416BC86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gnuradio: restrict gcc
- to >= 8
+Message-Id: <20230220205156.D673086495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xdriver_xf86-video-r128: bump version to 6.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34cea39024bf8dedaa071bc5f2d903755501215c
+commit: https://git.buildroot.net/buildroot/commit/?id=4df6b365b77c3838858b43c201f0e2af4db7a498
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With gnuradio 3.10 boost/filesystem was replaced by std::filesystem.
-This feature was introduced with gcc 8 (requirering -lstdc++fs (with
-gcc 9 explicit -lstdc++fs is no more explicitely required)).
-
-With gcc < 8 build fails with error:
-
-In file included from /home/br-user/work/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/include/boost/dll/runtime_symbol_info.hpp:11:0,
-                 from /home/br-user/work/instance-0/output-1/build/gnuradio-3.10.4.0/buildroot-build/gnuradio-runtime/lib/constants.cc:16:
-/home/br-user/work/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/include/boost/dll/config.hpp:42:10: fatal error: filesystem: No such file or directory
- #include <filesystem>
-          ^~~~~~~~~~~~
-compilation terminated.
-
-Add a dependency to gcc >= 8.
-
-BR2_TOOLCHAIN_HAS_GCC_BUG_64735 only affects gcc <7, so we drop it.
-
-Adding this restriction on gcc >= 8 also covers the dependency for volk,
-which requires gcc >= 7, which was not propagated to gnuradio so far.
-
-Tested with bootlin toolchain 2020.02-2 (gcc 8.3.0)
-
-Fixes:
-- http://autobuild.buildroot.net/results/6a82605c58f9ef9eb6c14603777dd8523dd00aa5/
-- http://autobuild.buildroot.net/results/c7c4ae76954e388ab639b39fd521d90acfe4edc9/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+https://lists.x.org/archives/xorg-announce/2022-December/003275.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gnuradio/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ .../x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash    | 8 +++-----
+ package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk  | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index de19732cfb..1824589263 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -1,12 +1,12 @@
--comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
-+comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+index 455c3d4439..cf9b21ebe8 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-October/002926.html
+-md5  105ebcfe1bac06fe84645ac3def91184  xf86-video-r128-6.12.0.tar.bz2
+-sha1  7cfa41d386fa43b5d30299203e4845d8afba4899  xf86-video-r128-6.12.0.tar.bz2
+-sha256  801c86882cbd2bbb3084d471dcc5cfee2c1754dcbfb4dc446676d58a6bd9e057  xf86-video-r128-6.12.0.tar.bz2
+-sha512  0e667e2cfa8a87a00846361d86528c93754c403c812b66798953fa4c857b2143b2c4c44885da467e7f910d8cb910b69492cdcb6f25e2197bae6617364d152e38  xf86-video-r128-6.12.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003275.html
++sha256  7d023c2b171f1664e43d12a1d21674079d8065536f82bb95b448bfce4981c741  xf86-video-r128-6.12.1.tar.xz
++sha512  18b2408fe68161c32f84c7147717f8e6c6377e81e9d59e2f098843c54cd0ae757aab5059568da8c71ef38100807d56ee22447417c236c1b3deea292bb676e700  xf86-video-r128-6.12.1.tar.xz
+ # Locally computed
+ sha256  69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+index 1931dbecd7..49514e3d3a 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--comment "gnuradio needs a toolchain not affected by GCC bug 43744 and 64735"
-+comment "gnuradio needs a toolchain not affected by GCC bug 43744"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_GNURADIO
- 	bool "gnuradio"
-@@ -16,8 +16,8 @@ config BR2_PACKAGE_GNURADIO
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic, boost-thread
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_ATOMIC
- 	select BR2_PACKAGE_BOOST_DATE_TIME
+-XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.0
+-XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.1
++XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_R128_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
