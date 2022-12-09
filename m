@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B615C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93005C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 478C542D71;
-	Mon, 20 Feb 2023 21:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 478C542D71
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38B904EC4D;
+	Mon, 20 Feb 2023 21:50:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38B904EC4D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nle64dyNAv6R; Mon, 20 Feb 2023 21:50:18 +0000 (UTC)
+	with ESMTP id l6FMcMRZCszY; Mon, 20 Feb 2023 21:50:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E37934EC46;
-	Mon, 20 Feb 2023 21:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E37934EC46
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32C831BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF5AD4EC4C;
+	Mon, 20 Feb 2023 21:50:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF5AD4EC4C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA8FA1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 166FA40BFA
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 166FA40BFA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99C1B61117
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99C1B61117
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TPTJdYPLDYzZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fs9ODz7Prgen for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 138FE415BC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 138FE415BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id C501661109
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C501661109
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1101886494; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+ id C1BD08648F; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 10:53:38 +0100
+Date: Fri, 9 Dec 2022 17:31:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c552f39c98d271002032b0d74f62c9cfe4348dd
-X-Git-Newrev: 917a961d9c77d5f1aaa47206add9b9ff80e74a82
+X-Git-Oldrev: 6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+X-Git-Newrev: bac3d21a3fb3ef872b538adda01725c2fb77dd75
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205200.1101886494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/optee-client: bump to
- version 3.19.0
+Message-Id: <20230220205156.C1BD08648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXdamage:
+ bump version to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,205 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=917a961d9c77d5f1aaa47206add9b9ff80e74a82
+commit: https://git.buildroot.net/buildroot/commit/?id=bac3d21a3fb3ef872b538adda01725c2fb77dd75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bumps OP-TEE client package version to OP-TEE release 3.19.0.
-
-This package introduces a mandatory dependency on util-linux and
-pk-config packages that were made optional in commit [1], following
-3.19.0 release tag. The dependency is related to new library teeacl
-for access control list based login identification. This change picks
-that commit and defines the dependency only when TEEACL library is
-to be embedded. The patch will be removed once we dump to the next
-OP-TEE release tag, as state by new BR2 boolean config switch
-BR2_PACKAGE_OPTEE_CLIENT_TEEACL.
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[yann.morin.1998@free.fr:
-  - actually backport upstream commit
-  - don't default y for BR2_PACKAGE_OPTEE_CLIENT_TEEACL
-  - select util-linux instead of depending on it
-  - don't select util-linux-libs, there's no circular deps
-  - squash both conditions together in .mk
-  - fix check-package
-]
+https://lists.x.org/archives/xorg-announce/2022-December/003277.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...eacl-condition-libteeacl-with-WITH_TEEACL.patch | 105 +++++++++++++++++++++
- package/optee-client/Config.in                     |   8 ++
- package/optee-client/optee-client.hash             |   4 +-
- package/optee-client/optee-client.mk               |   9 +-
- 4 files changed, 123 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.hash | 8 +++-----
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch b/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch
-new file mode 100644
-index 0000000000..4fdf9afc94
---- /dev/null
-+++ b/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch
-@@ -0,0 +1,105 @@
-+From bbdf665aba39c29a3ce7bd06e4554c62a416ebaa Mon Sep 17 00:00:00 2001
-+From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Thu, 10 Nov 2022 12:05:24 +0100
-+Subject: [PATCH] libteeacl: condition libteeacl with WITH_TEEACL
-+
-+Build and embed libteeacl upon WITH_TEEACL=1 (default configuration).
-+This configuration switch allows one to build OP-TEE client without
-+dependencies on pkg-config and libuuid  when OP-TEE ACL for
-+PKCS11 is not needed:
-+ cmake -DWITH_TEEACL=0 ...
-+or
-+ make WITH_TEEACL=0 ...
-+
-+With the comments below addressed, LGTM.
-+
-+Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
-+Acked-by: Jens Wiklander <jens.wiklander@linaro.org>
-+Reviewed-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
-+[etienne.carriere@linaro.org: backport upstream commit]
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+[yann.morin.1998@free.fr: actually do a backport of bbdf665]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ CMakeLists.txt |  9 ++++++---
-+ Makefile       | 15 ++++++++++++---
-+ 2 files changed, 18 insertions(+), 6 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0786752..9fb5c6a 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -5,6 +5,7 @@ project (optee_client C)
-+ set (CMAKE_TOOLCHAIN_FILE CMakeToolchain.txt)
-+ 
-+ set (CFG_WERROR 1 CACHE BOOL "Build with -Werror")
-++option (WITH_TEEACL "Build libteeacl" TRUE)
-+ 
-+ include(GNUInstallDirs)
-+ 
-+@@ -37,7 +38,9 @@ add_subdirectory (libteec)
-+ add_subdirectory (tee-supplicant)
-+ add_subdirectory (public)
-+ add_subdirectory (libckteec)
-+-find_package (PkgConfig REQUIRED)
-+-pkg_check_modules(uuid REQUIRED IMPORTED_TARGET uuid)
-+-add_subdirectory (libteeacl)
-++if(WITH_TEEACL)
-++    find_package (PkgConfig REQUIRED)
-++    pkg_check_modules(uuid REQUIRED IMPORTED_TARGET uuid)
-++    add_subdirectory (libteeacl)
-++endif(WITH_TEEACL)
-+ add_subdirectory (libseteec)
-+diff --git a/Makefile b/Makefile
-+index 90b487e..2ee5621 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -16,6 +16,8 @@ SBINDIR ?= /usr/sbin
-+ LIBDIR ?= /usr/lib
-+ INCLUDEDIR ?= /usr/include
-+ 
-++WITH_TEEACL ?= 1
-++
-+ .PHONY: all build build-libteec build-libckteec build-libseteec \
-+ 	build-libteeacl check-libuuid install copy_export clean cscope \
-+ 	clean-cscope \
-+@@ -35,8 +37,10 @@ build-tee-supplicant: build-libteec
-+ 	@echo "Building tee-supplicant"
-+ 	$(MAKE) --directory=tee-supplicant  --no-print-directory --no-builtin-variables CFG_TEE_SUPP_LOG_LEVEL=$(CFG_TEE_SUPP_LOG_LEVEL)
-+ 
-+-build: build-libteec build-tee-supplicant build-libckteec build-libseteec \
-+-	build-libteeacl
-++build: build-libteec build-tee-supplicant build-libckteec build-libseteec
-++ifeq ($(WITH_TEEACL),1)
-++build: build-libteeacl
-++endif
-+ 
-+ build-libckteec: build-libteec
-+ 	@echo "Building libckteec.so"
-+@@ -57,7 +61,10 @@ check-libuuid:
-+ install: copy_export
-+ 
-+ clean: clean-libteec clean-tee-supplicant clean-cscope clean-libckteec \
-+-	clean-libseteec clean-libteeacl
-++	clean-libseteec
-++ifeq ($(WITH_TEEACL),1)
-++clean: clean-libteeacl
-++endif
-+ 
-+ clean-libteec:
-+ 	@$(MAKE) --directory=libteec --no-print-directory clean
-+@@ -158,9 +165,11 @@ copy_export: build
-+ 	cp libckteec/include/*.h $(DESTDIR)$(INCLUDEDIR)
-+ 	cp -d ${O}/libckteec/libckteec.so* $(DESTDIR)$(LIBDIR)
-+ 	cp -d ${O}/libckteec/libckteec.a $(DESTDIR)$(LIBDIR)
-++ifeq ($(WITH_TEEACL),1)
-+ 	cp libteeacl/include/*.h $(DESTDIR)$(INCLUDEDIR)
-+ 	cp -d ${O}/libteeacl/libteeacl.so* $(DESTDIR)$(LIBDIR)
-+ 	cp -d ${O}/libteeacl/libteeacl.a $(DESTDIR)$(LIBDIR)
-++endif
-+ 	cp libseteec/include/*.h $(DESTDIR)$(INCLUDEDIR)
-+ 	cp -d ${O}/libseteec/libseteec.so* $(DESTDIR)$(LIBDIR)
-+ 	cp -d ${O}/libseteec/libseteec.a $(DESTDIR)$(LIBDIR)
-+-- 
-+2.25.1
-+
-diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-index cc7f176c77..538948b72c 100644
---- a/package/optee-client/Config.in
-+++ b/package/optee-client/Config.in
-@@ -37,6 +37,14 @@ config BR2_PACKAGE_OPTEE_CLIENT_SUPP_PLUGINS
- 	help
- 	  Enable TEE supplicant plugin support.
- 
-+config BR2_PACKAGE_OPTEE_CLIENT_TEEACL
-+	bool "Enable TEE Access Control List login"
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Enable TEE ACL login identification for OP-TEE service that
-+	  supports them as OP-TEE PKCS#11 services.
-+
- endif
- 
- comment "optee-client needs a toolchain w/ threads, headers >= 4.3"
-diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
-index 8e55bf5725..c067e26f4e 100644
---- a/package/optee-client/optee-client.hash
-+++ b/package/optee-client/optee-client.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_client/archive/3.18.0/optee-client-3.18.0.tar.gz
--sha256  ecc0f04fdd5398aa52fea50427fbd624f7f90274aec7bbf2cc8a5bd16758202b  optee-client-3.18.0.tar.gz
-+# From https://github.com/OP-TEE/optee_client/archive/3.19.0/optee-client-3.19.0.tar.gz
-+sha256  5f0d02efa0e496964e86ca9dd2461ada923d1f9e11a4b9cafb5393bd08337644  optee-client-3.19.0.tar.gz
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+index 9e7cf566a7..41a809ad23 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002973.html
+-md5  e3f554267a7a04b042dc1f6352bd6d99  libXdamage-1.1.5.tar.bz2
+-sha1  719ae6ab8c1b972c6386b654976c479255af5572  libXdamage-1.1.5.tar.bz2
+-sha256  b734068643cac3b5f3d2c8279dd366b5bf28c7219d9e9d8717e1383995e0ea45  libXdamage-1.1.5.tar.bz2
+-sha512  a3ca6cc33b1727f717a3e2aa5593f660508a81a47918a0aa949e9e8fba105e303fe5071983b48caac92feea0fe6e8e01620805e4d19b41f21f20d837b191c124  libXdamage-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003277.html
++sha256  52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11  libXdamage-1.1.6.tar.xz
++sha512  624dcefa1c79064569df952892f7f1351dc19ad338ce73d1a57041e406cb3e18abe531bab352b93d1f0f5c9b5c6b2652cc84a8f1fbfcbba648343812695a8acb  libXdamage-1.1.6.tar.xz
  # Locally computed
- sha256  fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-index 3fbbe9484c..3e0c9269b8 100644
---- a/package/optee-client/optee-client.mk
-+++ b/package/optee-client/optee-client.mk
-@@ -4,7 +4,7 @@
+ sha256  33effe928634be12e668465c3935c5570ff2787b970b15d9243d69df42302c57  COPYING
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+index cc5493ff6c..dba0862211 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--OPTEE_CLIENT_VERSION = 3.18.0
-+OPTEE_CLIENT_VERSION = 3.19.0
- OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
- OPTEE_CLIENT_LICENSE = BSD-2-Clause
- OPTEE_CLIENT_LICENSE_FILES = LICENSE
-@@ -26,6 +26,13 @@ else
- OPTEE_CLIENT_CONF_OPTS += -DCFG_TEE_SUPP_PLUGINS=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_TEEACL),y)
-+OPTEE_CLIENT_EXT_DEPENDENCIES += host-pkgconf util-linux-libs
-+OPTEE_CLIENT_CONF_OPTS += -DWITH_TEEACL=ON
-+else
-+OPTEE_CLIENT_CONF_OPTS += -DWITH_TEEACL=OFF
-+endif
-+
- define OPTEE_CLIENT_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30tee-supplicant \
- 		$(TARGET_DIR)/etc/init.d/S30tee-supplicant
+-XLIB_LIBXDAMAGE_VERSION = 1.1.5
+-XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.bz2
+-XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXDAMAGE_VERSION = 1.1.6
++XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.xz
++XLIB_LIBXDAMAGE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXDAMAGE_LICENSE = MIT
+ XLIB_LIBXDAMAGE_LICENSE_FILES = COPYING
+ XLIB_LIBXDAMAGE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
