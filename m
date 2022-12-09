@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F0BC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 16:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1FB9C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 16:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C360C61195;
-	Fri,  9 Dec 2022 16:20:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C360C61195
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94C8A61197;
+	Fri,  9 Dec 2022 16:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94C8A61197
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYcvK66Mt2go; Fri,  9 Dec 2022 16:20:56 +0000 (UTC)
+	with ESMTP id 41AmTvd_Hzl6; Fri,  9 Dec 2022 16:21:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05ED960F31;
-	Fri,  9 Dec 2022 16:20:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05ED960F31
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 37DCC1BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 16:20:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB83C61195;
+	Fri,  9 Dec 2022 16:21:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB83C61195
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B7261BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 16:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1363040002
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 16:20:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1363040002
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33D44820BA
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 16:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33D44820BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tgCs2xHJWNUw for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 16:20:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ryTWQYVWtFUf for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 16:21:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4692041006
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 16:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4692041006
+ by smtp1.osuosl.org (Postfix) with ESMTP id 501E3820B9
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 16:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 501E3820B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 34DA685E90; Fri,  9 Dec 2022 16:20:27 +0000 (UTC)
+ id 3F9A485E9A; Fri,  9 Dec 2022 16:21:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:19:07 +0100
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 49ec8c2cd4f37e8f7d57dc44d5deba4ddc8bd7b0
-X-Git-Newrev: a2272be318cddda16cb802bcefcc4fba0af1db48
+Date: Fri, 9 Dec 2022 14:47:11 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 404d6e29bf165b2415c7e7507771cc85239121bc
+X-Git-Newrev: fa31c1b67921707dbfdb5bafa3f4ffe886ee5db0
 X-Patchwork-Hint: ignore
-Message-Id: <20221209162027.34DA685E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] utils/genrandconfig: add
- mxs-bootlets board handling
+Message-Id: <20221209162143.3F9A485E9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gdb: zlib is
+ mandatory, not optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2272be318cddda16cb802bcefcc4fba0af1db48
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa31c1b67921707dbfdb5bafa3f4ffe886ee5db0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Add a custom case to make sure that a random configuration with an empty
-board for mxs-bootlets doesn't fail. It reverts to
-BR2_TARGET_MXS_BOOTLETS_STMP37xx in that case.
-
->>> mxs-bootlets 10.12.01 Building
-BOARD= CROSS_COMPILE="/home/thomas/autobuild/instance-1/output-1/per-package/mxs-bootlets/host/bin/arm-buildroot-linux-uclibcgnueabi-" /usr/bin/make -j1 -C /home/thomas/autobuild/instance-1/output-1/build/mxs-bootlets-10.12.01 power_prep
-/home/thomas/autobuild/instance-1/output-1/per-package/xinetd/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -static -DNO_RPC  -I../../include   -c -o inet_aton.o inet_aton.c
-make[1]: Entering directory '/home/thomas/autobuild/instance-1/buildroot'
-make[1]: warning: -j1 forced in submake: resetting jobserver mode.
-build power_prep
-/usr/bin/make -C power_prep ARCH= BOARD=
-make[2]: Entering directory '/home/thomas/autobuild/instance-1/output-1/build/mxs-bootlets-10.12.01/power_prep'
-/usr/bin/make -C ./../mach-/hw
-make[3]: Entering directory '/home/thomas/autobuild/instance-1/output-1/build/mxs-bootlets-10.12.01/power_prep'
-make[3]: *** ../mach-/hw: No such file or directory.  Stop.
+zlib is a mandatory dependency of gdb and by default, gdb will use its
+internal one. Moreover, --with-zlib has been replaced by
+--with-system-zlib since version 7.10 and
+https://github.com/bminor/binutils-gdb/commit/fa1f5da0b6ff3622f9bf60e348e149b76920abba
 
 Fixes:
- - http://autobuild.buildroot.org/results/44a2efc64b9b8ff4541430d6b649e7a11a4e4873
+ - https://bugs.buildroot.org/show_bug.cgi?id=15131
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5c1f67428af623b39312270a490dfc9a6d647773)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3341ceb1e58536cf43a4c000e4bb3cdbff3f6de5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gdb/Config.in |  1 +
+ package/gdb/gdb.mk    | 12 ++++--------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index eccd3a228e..b4ebb9a9be 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -559,6 +559,13 @@ def fixup_config(sysinfo, configfile):
-         if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
-             return False
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index daad6c910d..8923f996eb 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -19,6 +19,7 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_ZLIB
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9bde2beea1..b6a3e2f623 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -47,7 +47,8 @@ endif
+ # also need ncurses.
+ # As for libiberty, gdb may use a system-installed one if present, so
+ # we must ensure ours is installed first.
+-HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
++GDB_DEPENDENCIES = zlib
++HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
  
-+    if 'BR2_TARGET_MXS_BOOTLETS=y\n' in configlines and \
-+       'BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD=y\n' in configlines and \
-+       'BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME=""\n' in configlines:
-+        configlines.remove('BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD=y\n')
-+        configlines.append('BR2_TARGET_MXS_BOOTLETS_STMP37xx=y\n')
-+        configlines.remove('BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME=""\n')
-+
-     if 'BR2_TARGET_MXS_BOOTLETS=y\n' in configlines and \
-        'BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT=y\n' in configlines and \
-        'BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT_URL=""\n' in configlines:
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+@@ -145,6 +146,7 @@ GDB_CONF_OPTS = \
+ 	--disable-sim \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--disable-werror \
+ 	--enable-static \
+ 	--without-mpfr
+@@ -228,13 +230,6 @@ else
+ GDB_CONF_OPTS += --without-lzma
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GDB_CONF_OPTS += --with-zlib
+-GDB_DEPENDENCIES += zlib
+-else
+-GDB_CONF_OPTS += --without-zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+@@ -272,6 +267,7 @@ HOST_GDB_CONF_OPTS = \
+ 	--enable-threads \
+ 	--disable-werror \
+ 	--without-included-gettext \
++	--with-system-zlib \
+ 	--with-curses \
+ 	--without-mpfr \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
