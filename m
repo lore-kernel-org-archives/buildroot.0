@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50528C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 093ABC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E881D40CE2;
-	Fri,  9 Dec 2022 17:04:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E881D40CE2
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3ACC41013;
+	Fri,  9 Dec 2022 17:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3ACC41013
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IE8KYNzorpaW; Fri,  9 Dec 2022 17:04:49 +0000 (UTC)
+	with ESMTP id Guh34XP58zsx; Fri,  9 Dec 2022 17:05:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C6F4402F3;
-	Fri,  9 Dec 2022 17:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C6F4402F3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 939641BF973
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBD3341029;
+	Fri,  9 Dec 2022 17:05:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD3341029
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C1C71BF973
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F13441A55
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F13441A55
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEC9240CE2
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEC9240CE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f2Z-RnYQ0m7i for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4p3Febnsi45s for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22C4A41A67
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72F8541004
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22C4A41A67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72F8541004
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 126F185EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 6208E85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:30 +0100
+Date: Fri, 9 Dec 2022 17:31:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bc8b91fdadd8abf22035c127bcd2bbb5961cf43e
-X-Git-Newrev: 8929d19dfba43af98ae1c981131e33d366f45e8a
+X-Git-Oldrev: 835918d8e8e34ee298580c4da5e57bf0f925f708
+X-Git-Newrev: 3500526b189e4a75f3b969ac54685fc8a4b2e15c
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.126F185EA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXScrnSaver: bump
- version to 1.2.4
+Message-Id: <20221209170103.6208E85EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xprop: bump version to
+ 1.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8929d19dfba43af98ae1c981131e33d366f45e8a
+commit: https://git.buildroot.net/buildroot/commit/?id=3500526b189e4a75f3b969ac54685fc8a4b2e15c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003279.html
+https://lists.x.org/archives/xorg-announce/2022-December/003269.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash | 8 +++-----
- package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xapp_xprop/xapp_xprop.hash | 6 +++---
+ package/x11r7/xapp_xprop/xapp_xprop.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
-index 01f468b77a..a32997e1fe 100644
---- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
-+++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-July/002906.html
--md5  eeea9d5af3e6c143d0ea1721d27a5e49  libXScrnSaver-1.2.3.tar.bz2
--sha1  70c791c5755a298ecf1a0823e239a24fa4b2b42f  libXScrnSaver-1.2.3.tar.bz2
--sha256  f917075a1b7b5a38d67a8b0238eaab14acd2557679835b154cf2bca576e89bf8  libXScrnSaver-1.2.3.tar.bz2
--sha512  7ea628324a11b25ee82c7b11c6bf98f37de219354de51c1e29467b5de422669ba1ab121f3b9dc674093c8f3960e93c5d5428122f5539092f79bc8451c768354a  libXScrnSaver-1.2.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003279.html
-+sha256  75cd2859f38e207a090cac980d76bc71e9da99d48d09703584e00585abc920fe  libXScrnSaver-1.2.4.tar.xz
-+sha512  e4395af85f8496618afb23ffdaca1a75f5e3d213478d8dc73249cbc9840d7b993ba7513dbf6015cb38b48fe3f2223496365158a148dd5e1ac7475c5ee569e28c  libXScrnSaver-1.2.4.tar.xz
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
+index 95e7c4eeed..9db2fb9125 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.hash
++++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-November/003064.html
+-sha256  9b92ed0316bf2486121d8bac88bd1878f16b43bd335f18009b1f941f1eca93a1  xprop-1.2.5.tar.bz2
+-sha512  93cfa621fa76ca6e8e780a252c508380b6dc9db39b67bfca16bb9800f0d39110f5d18189409a8577ef79e98bf5eece17f5e23f2218ca72ae8bb04ee7b429d559  xprop-1.2.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003269.html
++sha256  580b8525b12ecc0144aa16c88b0aafa76d2e799b44c8c6c50f9ce92788b5586e  xprop-1.2.6.tar.xz
++sha512  ab25d4b8bf9de8fb37149060ad4870ffed4d6846ac3b31903a42c36301fcb0d50d3ba15949fdd9079507db97d3f05d4bbd11711d825e5470482cc30772cc3f25  xprop-1.2.6.tar.xz
  # Locally computed
- sha256  5cf3e16f5dd753a4c0853e8227134ab65f5562d9ef89b1a2d7681f5c8ac9feb5  COPYING
-diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
-index 92abb902eb..55ae7a6801 100644
---- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
-+++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+ sha256  f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415  COPYING
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
+index 75f0d37cdc..888e9d3a69 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.mk
++++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXSCRNSAVER_VERSION = 1.2.3
--XLIB_LIBXSCRNSAVER_SOURCE = libXScrnSaver-$(XLIB_LIBXSCRNSAVER_VERSION).tar.bz2
--XLIB_LIBXSCRNSAVER_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXSCRNSAVER_VERSION = 1.2.4
-+XLIB_LIBXSCRNSAVER_SOURCE = libXScrnSaver-$(XLIB_LIBXSCRNSAVER_VERSION).tar.xz
-+XLIB_LIBXSCRNSAVER_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXSCRNSAVER_LICENSE = MIT
- XLIB_LIBXSCRNSAVER_LICENSE_FILES = COPYING
- XLIB_LIBXSCRNSAVER_INSTALL_STAGING = YES
+-XAPP_XPROP_VERSION = 1.2.5
+-XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
+-XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XPROP_VERSION = 1.2.6
++XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.xz
++XAPP_XPROP_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XPROP_LICENSE = MIT
+ XAPP_XPROP_LICENSE_FILES = COPYING
+ XAPP_XPROP_DEPENDENCIES = xlib_libX11 xlib_libXmu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
