@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6981FC04FDE
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A356C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFC4B61197;
-	Fri,  9 Dec 2022 17:02:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFC4B61197
+	by smtp2.osuosl.org (Postfix) with ESMTP id 074CB402F3;
+	Fri,  9 Dec 2022 17:03:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 074CB402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xshEXoOXOSuz; Fri,  9 Dec 2022 17:02:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gG-q_YqJAbif; Fri,  9 Dec 2022 17:03:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18CDB60F3B;
-	Fri,  9 Dec 2022 17:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18CDB60F3B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EE0C1BF37A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40DD14100D;
+	Fri,  9 Dec 2022 17:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40DD14100D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D48C1BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E139B60EC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCD8640002
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E139B60EC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCD8640002
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1_T0gP2XOd9Y for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ckerQArSkL2Y for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35AA360F31
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24D0F402F3
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35AA360F31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24D0F402F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3404985EA7; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 2324685E9E; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:43 +0100
+Date: Fri, 9 Dec 2022 17:31:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d39f7ecd4938158183adfc13147a9d3b61c85a8e
-X-Git-Newrev: 4df6b365b77c3838858b43c201f0e2af4db7a498
+X-Git-Oldrev: 6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+X-Git-Newrev: bac3d21a3fb3ef872b538adda01725c2fb77dd75
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.3404985EA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128:
- bump version to 6.12.1
+Message-Id: <20221209170103.2324685E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXdamage: bump
+ version to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4df6b365b77c3838858b43c201f0e2af4db7a498
+commit: https://git.buildroot.net/buildroot/commit/?id=bac3d21a3fb3ef872b538adda01725c2fb77dd75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003275.html
+https://lists.x.org/archives/xorg-announce/2022-December/003277.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash    | 8 +++-----
- package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk  | 6 +++---
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.hash | 8 +++-----
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   | 6 +++---
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-index 455c3d4439..cf9b21ebe8 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+index 9e7cf566a7..41a809ad23 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-October/002926.html
--md5  105ebcfe1bac06fe84645ac3def91184  xf86-video-r128-6.12.0.tar.bz2
--sha1  7cfa41d386fa43b5d30299203e4845d8afba4899  xf86-video-r128-6.12.0.tar.bz2
--sha256  801c86882cbd2bbb3084d471dcc5cfee2c1754dcbfb4dc446676d58a6bd9e057  xf86-video-r128-6.12.0.tar.bz2
--sha512  0e667e2cfa8a87a00846361d86528c93754c403c812b66798953fa4c857b2143b2c4c44885da467e7f910d8cb910b69492cdcb6f25e2197bae6617364d152e38  xf86-video-r128-6.12.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003275.html
-+sha256  7d023c2b171f1664e43d12a1d21674079d8065536f82bb95b448bfce4981c741  xf86-video-r128-6.12.1.tar.xz
-+sha512  18b2408fe68161c32f84c7147717f8e6c6377e81e9d59e2f098843c54cd0ae757aab5059568da8c71ef38100807d56ee22447417c236c1b3deea292bb676e700  xf86-video-r128-6.12.1.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002973.html
+-md5  e3f554267a7a04b042dc1f6352bd6d99  libXdamage-1.1.5.tar.bz2
+-sha1  719ae6ab8c1b972c6386b654976c479255af5572  libXdamage-1.1.5.tar.bz2
+-sha256  b734068643cac3b5f3d2c8279dd366b5bf28c7219d9e9d8717e1383995e0ea45  libXdamage-1.1.5.tar.bz2
+-sha512  a3ca6cc33b1727f717a3e2aa5593f660508a81a47918a0aa949e9e8fba105e303fe5071983b48caac92feea0fe6e8e01620805e4d19b41f21f20d837b191c124  libXdamage-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003277.html
++sha256  52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11  libXdamage-1.1.6.tar.xz
++sha512  624dcefa1c79064569df952892f7f1351dc19ad338ce73d1a57041e406cb3e18abe531bab352b93d1f0f5c9b5c6b2652cc84a8f1fbfcbba648343812695a8acb  libXdamage-1.1.6.tar.xz
  # Locally computed
- sha256  69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index 1931dbecd7..49514e3d3a 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+ sha256  33effe928634be12e668465c3935c5570ff2787b970b15d9243d69df42302c57  COPYING
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+index cc5493ff6c..dba0862211 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.0
--XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_R128_VERSION = 6.12.1
-+XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_R128_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
+-XLIB_LIBXDAMAGE_VERSION = 1.1.5
+-XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.bz2
+-XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXDAMAGE_VERSION = 1.1.6
++XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.xz
++XLIB_LIBXDAMAGE_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXDAMAGE_LICENSE = MIT
+ XLIB_LIBXDAMAGE_LICENSE_FILES = COPYING
+ XLIB_LIBXDAMAGE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
