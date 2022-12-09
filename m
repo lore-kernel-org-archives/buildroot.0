@@ -1,51 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9426AC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD12C04FDE
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:16:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BBEC60E72;
-	Fri,  9 Dec 2022 17:16:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BBEC60E72
+	by smtp4.osuosl.org (Postfix) with ESMTP id 048D841BF2;
+	Fri,  9 Dec 2022 17:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 048D841BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WEZC8CMFk_7P; Fri,  9 Dec 2022 17:16:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nneKyO1OnvVn; Fri,  9 Dec 2022 17:16:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60AEE6115C;
-	Fri,  9 Dec 2022 17:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60AEE6115C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11AE841B9C;
+	Fri,  9 Dec 2022 17:16:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AE841B9C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CEF031BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A4761BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29FBE41021
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29FBE41021
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1141040002
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1141040002
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J9lqqE3M-3Lg for <buildroot@lists.busybox.net>;
+ with ESMTP id Au5TloLw0WNy for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AEB44103D
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF194103C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CF194103C
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AEB44103D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48F1B85EA1; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:52:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 565f41e27c7a6cfd3b51ddf46071799a40f5eb99
-X-Git-Newrev: 87a09b105bb9762cee1245856a9b0a27a89887d3
-X-Patchwork-Hint: ignore
-Message-Id: <20221209170105.48F1B85EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-tga:
- remove package
+Received: from ymorin.is-a-geek.org (unknown [92.184.98.184])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 51945B0059F;
+ Fri,  9 Dec 2022 18:00:59 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 09 Dec 2022 18:00:58 +0100
+Date: Fri, 9 Dec 2022 18:00:58 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20221209170058.GL2855@scaer>
+References: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221208223817.1088619-1-bernd.kuhls@t-online.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670605261;
+ bh=tJ1gJaA02p2iovOYGKNIsEb8oS9SmFnId/syD1nsc7I=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=fJvcUwuo8M0a3U7R0/kmyJ9Rha5843/xllEAxMTnoZ0G07vJTzRzauZCPRLK6FJjf
+ NKUBFuVfFCpzd57gl/QVoVgblNALUyBgsAOzH8wCTxU9Dz2yLqpGfEsQLjd6IHOD2I
+ G0QqLBFXPMWqQYDeowE7yFAqXt8RNJrQMrT4zGu5VLqncn/fMhJ6Y6P7iStvQ2T9Ps
+ UHmPLw6XiQIlwoQ0GNVefS0gDdIeIpaseCDfvPF9ScSKbAlRxxS0TU5LXJdnngCmRP
+ VHSitLdpE8BVVIZTumPbav/kqmgYKqGLWSWx36UJ+mWfqaOdtyobqFNpZiFw04MvrG
+ CQHCoA4OQoiDQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fJvcUwuo
+Subject: Re: [Buildroot] [PATCH 00/70] package/x11r7: various version bumps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,153 +75,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87a09b105bb9762cee1245856a9b0a27a89887d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Building this package is broken with X.org xserver 21.
+On 2022-12-08 23:37 +0100, Bernd Kuhls spake thusly:
+> this series bumps various X11 packages and, when needed, switches the
+> tarball to xz format and updates _SITE to https.
+> Also two broken X11 drivers for ancient hardware are removed.
 
-Fixes:
-http://autobuild.buildroot.net/results/de5/de5efd922edb9eb7dc9981b5f10ea402487ee431/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy                                   |  6 +++
- package/x11r7/Config.in                            |  1 -
- .../xdriver_xf86-video-tga/0001-mibstore.patch     | 47 ----------------------
- package/x11r7/xdriver_xf86-video-tga/Config.in     |  5 ---
- .../xdriver_xf86-video-tga.hash                    |  4 --
- .../xdriver_xf86-video-tga.mk                      | 14 -------
- 6 files changed, 6 insertions(+), 71 deletions(-)
+Series applied to master, thanks.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index bf3bd55f35..9602a49e3b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
-+	bool "xf86-video-tga removed"
-+	select BR2_LEGACY
-+	help
-+	  The X.org xf86-video-tga package was removed.
-+
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
- 	bool "xf86-video-glint removed"
- 	select BR2_LEGACY
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 273db98e89..da79c4e851 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -180,7 +180,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
- 		source package/x11r7/xdriver_xf86-video-sis/Config.in
- 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
--		source package/x11r7/xdriver_xf86-video-tga/Config.in
- 		source package/x11r7/xdriver_xf86-video-trident/Config.in
- 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
- 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
-deleted file mode 100644
-index 07bcd04f25..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/0001-mibstore.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From b7022db0559cd1b6cd3eb6b5abf6896a607b478d Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Tue, 25 Sep 2012 12:55:00 +0000
--Subject: Remove mibstore.h
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-tga/commit/?id=b7022db0559cd1b6cd3eb6b5abf6896a607b478d
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/tga_accel.c b/src/tga_accel.c
--index 35af1a4..b414df5 100644
----- a/src/tga_accel.c
--+++ b/src/tga_accel.c
--@@ -37,7 +37,6 @@
-- #include "xf86cmap.h"
-- #include "mipointer.h"
-- 
---#include "mibstore.h"
-- #include "miline.h"
-- 
-- #include "tga_regs.h"
--diff --git a/src/tga_driver.c b/src/tga_driver.c
--index dd4f3e6..90d2660 100644
----- a/src/tga_driver.c
--+++ b/src/tga_driver.c
--@@ -46,8 +46,6 @@
-- 
-- /* software cursor */
-- #include "mipointer.h"
---/* backing store */
---#include "mibstore.h"
-- 
-- /*  #include "mibank.h" */
-- /* colormap manipulation */
--@@ -1451,7 +1449,6 @@ TGAScreenInit(SCREEN_INIT_ARGS_DECL)
--     
--     fbPictureInit (pScreen, 0, 0);
--     
---    miInitializeBackingStore(pScreen);
--     xf86SetBackingStore(pScreen);
--     xf86SetSilkenMouse(pScreen);
-- 
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-tga/Config.in b/package/x11r7/xdriver_xf86-video-tga/Config.in
-deleted file mode 100644
-index 7c75661acc..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/Config.in
-+++ /dev/null
-@@ -1,5 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
--	bool "xf86-video-tga"
--	select BR2_PACKAGE_XORGPROTO
--	help
--	  X.Org driver for tga cards
-diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
-deleted file mode 100644
-index 4f8c10965c..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# From http://lists.x.org/archives/xorg-announce/2012-July/002025.html
--sha256  2023818000200eb50a59476e36d59b07a361b110e73b1d9cc526beb669306131  xf86-video-tga-1.2.2.tar.bz2
--# Locally calculated
--sha256  92e36c6b7c99c8335e5823d53686e58ebd82ee8051a6360f60c8c0fb05745954  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-deleted file mode 100644
-index 421b09be22..0000000000
---- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# xdriver_xf86-video-tga
--#
--################################################################################
--
--XDRIVER_XF86_VIDEO_TGA_VERSION = 1.2.2
--XDRIVER_XF86_VIDEO_TGA_SOURCE = xf86-video-tga-$(XDRIVER_XF86_VIDEO_TGA_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_TGA_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_TGA_LICENSE = MIT
--XDRIVER_XF86_VIDEO_TGA_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_TGA_DEPENDENCIES = xserver_xorg-server xorgproto
--
--$(eval $(autotools-package))
+I'll further reply to two patches, for which I had to fix some stuff...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
