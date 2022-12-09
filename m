@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1395EC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF701C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B54C44E545;
-	Mon, 20 Feb 2023 21:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B54C44E545
+	by smtp4.osuosl.org (Postfix) with ESMTP id 837764E804;
+	Mon, 20 Feb 2023 21:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837764E804
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pDa71lNl07J1; Mon, 20 Feb 2023 21:42:58 +0000 (UTC)
+	with ESMTP id miTKSmOzODeC; Mon, 20 Feb 2023 21:43:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73D04466B2;
-	Mon, 20 Feb 2023 21:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73D04466B2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C2491BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 535BE4EB76;
+	Mon, 20 Feb 2023 21:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535BE4EB76
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C8931BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 128E261104
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 128E261104
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2325C415C5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2325C415C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mpw1Zk9sf7pg for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HXL7s8cn5FcB for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30B73610F9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30B73610F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41544415BE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41544415BE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F083828C8; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ id 2A2C686494; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 22:39:25 +0100
+Date: Fri, 9 Dec 2022 17:34:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a63fbb0d9762a0e6a454b1bea9ce44d620a6860a
-X-Git-Newrev: 3781e4efc52f542f58147b2de5f599b4e729bcbb
+X-Git-Oldrev: f28be9b1fd93a3852d4db00041588d52e171638f
+X-Git-Newrev: 51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.1F083828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/elf2flt: fix text
- relocations on xtensa
+Message-Id: <20230220205158.2A2C686494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xsetroot:
+ bump version to 1.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,82 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3781e4efc52f542f58147b2de5f599b4e729bcbb
+commit: https://git.buildroot.net/buildroot/commit/?id=51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-elf2flt 2021.08 has changed endianness swapping logic for relocated
-entries in the text segment. This broke little-endian xtensa FLAT images
-which now fail to start with the following message:
-
-  binfmt_flat: reloc outside program 0x24c80100 (0 - 0x6e430/0x56a20)
-
-Fix it by restoring old endianness swapping logic for relocated entries
-in the text segment when building for xtensa.
-
-Reported-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003240.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0006-elf2flt-xtensa-fix-text-relocations.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.hash | 8 +++-----
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch b/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch
-new file mode 100644
-index 0000000000..3664775906
---- /dev/null
-+++ b/package/elf2flt/0006-elf2flt-xtensa-fix-text-relocations.patch
-@@ -0,0 +1,51 @@
-+From e248d9774506fdd8698b14a7edead113f19ecdb0 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 29 Nov 2022 17:47:54 -0800
-+Subject: [PATCH] xtensa: fix text relocations
-+
-+The commit 5e08f1968316 ("Don't always update text in !pic_with_got case")
-+changed good_32bit_resolved_reloc to not do endianness swapping for
-+relocated entries in the text segment. This broke little-endian xtensa
-+FLAT images which after this change fail to start with the following
-+message:
-+
-+  binfmt_flat: reloc outside program 0x24c80100 (0 - 0x6e430/0x56a20)
-+
-+Fix it by preserving 'update_text' when building for xtensa.
-+
-+Fixes: 5e08f1968316 ("Don't always update text in !pic_with_got case")
-+Reported-by: Niklas Cassel <niklas.cassel@wdc.com>
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ elf2flt.c | 15 ++++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index b93aecdaced3..cec3f4a22239 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -808,7 +808,20 @@ output_relocs (
-+ 					continue;
-+ 				case R_XTENSA_32:
-+ 				case R_XTENSA_PLT:
-+-					goto good_32bit_resolved_reloc;
-++					if (bfd_big_endian (abs_bfd))
-++						sym_addr =
-++							(r_mem[0] << 24)
-++							+ (r_mem[1] << 16)
-++							+ (r_mem[2] << 8)
-++							+ r_mem[3];
-++					else
-++						sym_addr =
-++							r_mem[0]
-++							+ (r_mem[1] << 8)
-++							+ (r_mem[2] << 16)
-++							+ (r_mem[3] << 24);
-++					relocation_needed = 1;
-++					break;
-+ 				default:
-+ 					goto bad_resolved_reloc;
-+ #else
-+-- 
-+2.30.2
-+
+diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
+index 32294c1f3d..43f7cd66d0 100644
+--- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
++++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002874.html
+-md5  5fe769c8777a6e873ed1305e4ce2c353  xsetroot-1.1.2.tar.bz2
+-sha1  42ab81761823b44974feab86477007c49dbace50  xsetroot-1.1.2.tar.bz2
+-sha256  10c442ba23591fb5470cea477a0aa5f679371f4f879c8387a1d9d05637ae417c  xsetroot-1.1.2.tar.bz2
+-sha512  0b9df1b72305e5c24f1e1664578aa4411a5ffcdc5d318458117594e641f01c34700205b0d16c08abf4a8106d36128ccdbe1ea1f1035fce9018d6b52801a8b72b  xsetroot-1.1.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003240.html
++sha256  6081b45a9eb4426e045d259d1e144b32417fb635e5b96aa90647365ac96638d1  xsetroot-1.1.3.tar.xz
++sha512  f333d1bfd92bb943044da36331ae2cf68a811c8f3891719d9ebc1749e2dd0c67068f86face0794c3c4ae584c4dd189bad4998dccb38fe1ac37a8921e5713e7c0  xsetroot-1.1.3.tar.xz
+ # Locally computed
+ sha256  48e9c9572e0dc1c14b93b753542f780e7751dd7f035816374d8a8be0211a4520  COPYING
+diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
+index 98ba344cfa..1ffbb2b6b0 100644
+--- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
++++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XAPP_XSETROOT_VERSION = 1.1.2
+-XAPP_XSETROOT_SOURCE = xsetroot-$(XAPP_XSETROOT_VERSION).tar.bz2
+-XAPP_XSETROOT_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XSETROOT_VERSION = 1.1.3
++XAPP_XSETROOT_SOURCE = xsetroot-$(XAPP_XSETROOT_VERSION).tar.xz
++XAPP_XSETROOT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XSETROOT_LICENSE = MIT
+ XAPP_XSETROOT_LICENSE_FILES = COPYING
+ XAPP_XSETROOT_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXcursor xdata_xbitmaps
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
