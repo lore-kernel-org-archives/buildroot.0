@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F247C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D002BC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A77CD4ED7E;
-	Mon, 20 Feb 2023 22:00:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77CD4ED7E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78F2A4DCCE;
+	Mon, 20 Feb 2023 22:00:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78F2A4DCCE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bb3l5oUQgV8y; Mon, 20 Feb 2023 22:00:26 +0000 (UTC)
+	with ESMTP id lWl8j5QPdFwZ; Mon, 20 Feb 2023 22:00:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A71A42AC1;
-	Mon, 20 Feb 2023 22:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A71A42AC1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2E94EB78;
+	Mon, 20 Feb 2023 22:00:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2E94EB78
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B93F61BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACD8D1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6A0D6113C
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA8556113F
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6A0D6113C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA8556113F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rIVFpuF1ofUO for <buildroot@lists.busybox.net>;
+ with ESMTP id 826B60htGcYD for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9F066112E
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEA7D6112D
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9F066112E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEA7D6112D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C83388648F; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+ id BD2B0828C8; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:35:57 +0100
+Date: Fri, 9 Dec 2022 17:35:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 52264859725c6af2f88b0df6cf59f70b3b6d106d
-X-Git-Newrev: 77c048e6297193ba4e116484bd8005fafdc412e1
+X-Git-Oldrev: 0f18b8dcb4e622f973d73332732d3dd6f548d3a3
+X-Git-Newrev: 52264859725c6af2f88b0df6cf59f70b3b6d106d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205158.C83388648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_smproxy:
+Message-Id: <20230220205158.BD2B0828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_viewres:
  bump version to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,46 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77c048e6297193ba4e116484bd8005fafdc412e1
+commit: https://git.buildroot.net/buildroot/commit/?id=52264859725c6af2f88b0df6cf59f70b3b6d106d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003218.html
+https://lists.x.org/archives/xorg-announce/2022-October/003219.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_smproxy/xapp_smproxy.hash | 5 +++--
- package/x11r7/xapp_smproxy/xapp_smproxy.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_viewres/xapp_viewres.hash | 8 +++-----
+ package/x11r7/xapp_viewres/xapp_viewres.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_smproxy/xapp_smproxy.hash b/package/x11r7/xapp_smproxy/xapp_smproxy.hash
-index db9dd27af3..587864baf7 100644
---- a/package/x11r7/xapp_smproxy/xapp_smproxy.hash
-+++ b/package/x11r7/xapp_smproxy/xapp_smproxy.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002564.html
--sha256  6cf19155a2752237f36dbf8bc4184465ea190d2652f887faccb4e2a6ebf77266  smproxy-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003218.html
-+sha256  4aa99237cc9dab7d87ce9bc7cca4116674a853b5f08dfe3f9db1bb2b2cf9f305  smproxy-1.0.7.tar.xz
-+sha512  cd6a6933b74f76ae65fb16504e57871724bc1102eae1d02e801e99c3fe73fe44e27f87cef3fbf9f75f369d18197b53bb677d637d94cc8185b55acae0cbd44f21  smproxy-1.0.7.tar.xz
+diff --git a/package/x11r7/xapp_viewres/xapp_viewres.hash b/package/x11r7/xapp_viewres/xapp_viewres.hash
+index 3e2928dc4e..a662f4ef2e 100644
+--- a/package/x11r7/xapp_viewres/xapp_viewres.hash
++++ b/package/x11r7/xapp_viewres/xapp_viewres.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-August/003020.html
+-md5  38e6568271d8098327706c5cf855dbc7  viewres-1.0.6.tar.bz2
+-sha1  f1d12e5b4e1180916edb44234599a486b025b480  viewres-1.0.6.tar.bz2
+-sha256  11c15db02066c1d5fc3febf9b185d16c1112f87e37c4b101a484dcefffb80934  viewres-1.0.6.tar.bz2
+-sha512  3f4cfc61608bc6c9b35ef66ceb473661ca01946d3306d54040d32803e8e0eec506a0ce37ea22bfe514544a6ba9645fd30f39b20c063aff696b3c0fda3fe95dff  viewres-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003219.html
++sha256  b15a62085b1a10f55ae1cf17b7ded75b72b21be240c68071685db377c4afc628  viewres-1.0.7.tar.xz
++sha512  75878faee001163891adf8472c79b31273f794e23dd775c80b33acdd1ce76df708eb27a49c20f79b7101ad676e1d50d9c857c2e2e0930c6209eeb7af8a11397c  viewres-1.0.7.tar.xz
  # Locally computed
- sha256  92dce6d8a1fcc0c6b5e56dc44e431e7f73bfa2ed5e83295662aa314067a671d8  COPYING
-diff --git a/package/x11r7/xapp_smproxy/xapp_smproxy.mk b/package/x11r7/xapp_smproxy/xapp_smproxy.mk
-index f51c1ec090..f76752941c 100644
---- a/package/x11r7/xapp_smproxy/xapp_smproxy.mk
-+++ b/package/x11r7/xapp_smproxy/xapp_smproxy.mk
+ sha256  aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_viewres/xapp_viewres.mk b/package/x11r7/xapp_viewres/xapp_viewres.mk
+index 2e05a6e7d9..49933d7af6 100644
+--- a/package/x11r7/xapp_viewres/xapp_viewres.mk
++++ b/package/x11r7/xapp_viewres/xapp_viewres.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_SMPROXY_VERSION = 1.0.6
--XAPP_SMPROXY_SOURCE = smproxy-$(XAPP_SMPROXY_VERSION).tar.bz2
--XAPP_SMPROXY_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_SMPROXY_VERSION = 1.0.7
-+XAPP_SMPROXY_SOURCE = smproxy-$(XAPP_SMPROXY_VERSION).tar.xz
-+XAPP_SMPROXY_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_SMPROXY_LICENSE = MIT
- XAPP_SMPROXY_LICENSE_FILES = COPYING
- XAPP_SMPROXY_DEPENDENCIES = xlib_libXmu xlib_libXt
+-XAPP_VIEWRES_VERSION = 1.0.6
+-XAPP_VIEWRES_SOURCE = viewres-$(XAPP_VIEWRES_VERSION).tar.bz2
+-XAPP_VIEWRES_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_VIEWRES_VERSION = 1.0.7
++XAPP_VIEWRES_SOURCE = viewres-$(XAPP_VIEWRES_VERSION).tar.xz
++XAPP_VIEWRES_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_VIEWRES_LICENSE = MIT
+ XAPP_VIEWRES_LICENSE_FILES = COPYING
+ XAPP_VIEWRES_DEPENDENCIES = xlib_libXaw
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
