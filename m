@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEF5C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F247C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01EAC4D81E;
-	Mon, 20 Feb 2023 22:00:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01EAC4D81E
+	by smtp4.osuosl.org (Postfix) with ESMTP id A77CD4ED7E;
+	Mon, 20 Feb 2023 22:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77CD4ED7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IBni4PbItTW6; Mon, 20 Feb 2023 22:00:13 +0000 (UTC)
+	with ESMTP id bb3l5oUQgV8y; Mon, 20 Feb 2023 22:00:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C73FE4EBB9;
-	Mon, 20 Feb 2023 22:00:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73FE4EBB9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A3341BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A71A42AC1;
+	Mon, 20 Feb 2023 22:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A71A42AC1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B93F61BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4205D416B4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4205D416B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6A0D6113C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6A0D6113C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1m7bq_3y85xE for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rIVFpuF1ofUO for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68037416A5
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68037416A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id C9F066112E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9F066112E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 562A486495; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+ id C83388648F; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:18 +0100
+Date: Fri, 9 Dec 2022 17:35:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 44c986b1266d5f1d2527971aadd1d03a2843a4a7
-X-Git-Newrev: ec022187abdad4cbf286531b236c460d14b97739
+X-Git-Oldrev: 52264859725c6af2f88b0df6cf59f70b3b6d106d
+X-Git-Newrev: 77c048e6297193ba4e116484bd8005fafdc412e1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.562A486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-lmdb: bump to
- version 1.4.0
+Message-Id: <20230220205158.C83388648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_smproxy:
+ bump version to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec022187abdad4cbf286531b236c460d14b97739
+commit: https://git.buildroot.net/buildroot/commit/?id=77c048e6297193ba4e116484bd8005fafdc412e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003218.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_smproxy/xapp_smproxy.hash | 5 +++--
+ package/x11r7/xapp_smproxy/xapp_smproxy.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index e50c35df67..c8137ce4c0 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5  3c955c49be10a7a07a2fcd54d180c3af  lmdb-1.3.0.tar.gz
--sha256  60a11efc21aaf009d06518996360eed346f6000bfc9de05114374230879f992e  lmdb-1.3.0.tar.gz
-+md5  230103e2cd8efbca8ee7cf29151afd0d  lmdb-1.4.0.tar.gz
-+sha256  39f6c4ee145d28d17025d350720abb6f95db816514e868db57444fdef51cbb47  lmdb-1.4.0.tar.gz
- # Locally computed sha256 checksums
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index fba168d340..071106605f 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
+diff --git a/package/x11r7/xapp_smproxy/xapp_smproxy.hash b/package/x11r7/xapp_smproxy/xapp_smproxy.hash
+index db9dd27af3..587864baf7 100644
+--- a/package/x11r7/xapp_smproxy/xapp_smproxy.hash
++++ b/package/x11r7/xapp_smproxy/xapp_smproxy.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002564.html
+-sha256  6cf19155a2752237f36dbf8bc4184465ea190d2652f887faccb4e2a6ebf77266  smproxy-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003218.html
++sha256  4aa99237cc9dab7d87ce9bc7cca4116674a853b5f08dfe3f9db1bb2b2cf9f305  smproxy-1.0.7.tar.xz
++sha512  cd6a6933b74f76ae65fb16504e57871724bc1102eae1d02e801e99c3fe73fe44e27f87cef3fbf9f75f369d18197b53bb677d637d94cc8185b55acae0cbd44f21  smproxy-1.0.7.tar.xz
+ # Locally computed
+ sha256  92dce6d8a1fcc0c6b5e56dc44e431e7f73bfa2ed5e83295662aa314067a671d8  COPYING
+diff --git a/package/x11r7/xapp_smproxy/xapp_smproxy.mk b/package/x11r7/xapp_smproxy/xapp_smproxy.mk
+index f51c1ec090..f76752941c 100644
+--- a/package/x11r7/xapp_smproxy/xapp_smproxy.mk
++++ b/package/x11r7/xapp_smproxy/xapp_smproxy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LMDB_VERSION = 1.3.0
-+PYTHON_LMDB_VERSION = 1.4.0
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/ed/61/41f3c7cbd8a67202ef24fad3375ed936093a0547dc645581dd11c09581b7
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/fd/78/4cdc5927d5f3c3c86c4da0108c2eeba544cd67e773232164d59f3e442ff0
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_SETUP_TYPE = setuptools
+-XAPP_SMPROXY_VERSION = 1.0.6
+-XAPP_SMPROXY_SOURCE = smproxy-$(XAPP_SMPROXY_VERSION).tar.bz2
+-XAPP_SMPROXY_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_SMPROXY_VERSION = 1.0.7
++XAPP_SMPROXY_SOURCE = smproxy-$(XAPP_SMPROXY_VERSION).tar.xz
++XAPP_SMPROXY_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SMPROXY_LICENSE = MIT
+ XAPP_SMPROXY_LICENSE_FILES = COPYING
+ XAPP_SMPROXY_DEPENDENCIES = xlib_libXmu xlib_libXt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
