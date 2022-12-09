@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A52C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77ECEC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1244045790;
-	Mon, 20 Feb 2023 21:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1244045790
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2543C4E3C5;
+	Mon, 20 Feb 2023 21:42:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2543C4E3C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o2kUW9Owhi5t; Mon, 20 Feb 2023 21:42:31 +0000 (UTC)
+	with ESMTP id E-cj_sUFe8Tv; Mon, 20 Feb 2023 21:42:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEA524E456;
-	Mon, 20 Feb 2023 21:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA524E456
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 86E771BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C370046457;
+	Mon, 20 Feb 2023 21:42:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C370046457
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 790D21BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3EAE61103
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3EAE61103
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23809415D1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23809415D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fo1uSb8-6L_k for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QKGKA70PfhK0 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B407610F3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B407610F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D79A415B5
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D79A415B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B9808648F; Mon, 20 Feb 2023 20:51:55 +0000 (UTC)
+ id 58AD586494; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 3 Dec 2022 22:30:56 +0100
+Date: Fri, 9 Dec 2022 17:34:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b1c4c18766e51ee55e8d2e3a7cb12cb2762b12ff
-X-Git-Newrev: a63fbb0d9762a0e6a454b1bea9ce44d620a6860a
+X-Git-Oldrev: f7f74ba0b3f8d5dd0dcf5af42e0622749e57a7e4
+X-Git-Newrev: 8b42c06423c7b31b5fdc8d2d06bdec7cd059eb30
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205155.0B9808648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/matchbox-keyboard: add
- libpng dependency
+Message-Id: <20230220205158.58AD586494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xcb-util-renderutil: bump version to 0.3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a63fbb0d9762a0e6a454b1bea9ce44d620a6860a
+commit: https://git.buildroot.net/buildroot/commit/?id=8b42c06423c7b31b5fdc8d2d06bdec7cd059eb30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libpng is a mandatory dependency since bump to version 0.1.1 in commit
-e2511d88e83acae4144be89ce5e258b724067bd5 and
-https://git.yoctoproject.org/matchbox-keyboard/commit/?id=1d7c5f1e0ad736205151c0df5aa738f942bd3e97:
-
-checking for PNG... no
-configure: error: Package requirements (libpng) were not met:
-
-Package 'libpng', required by 'virtual:world', not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/4495f0720d7053a52ff8fef82d18a70a6f20c66b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003234.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/matchbox-keyboard/Config.in            | 1 +
- package/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash | 5 +++--
+ package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index 260a57c6a4..3d7a9d203c 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "matchbox-keyboard"
-+	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index 242c4831d1..a1e3c61543 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -11,7 +11,7 @@ MATCHBOX_KEYBOARD_SITE = \
- MATCHBOX_KEYBOARD_LICENSE = LGPL-2.1, GPL-2.0+ (applet.c)
- MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING applet/applet.c
- MATCHBOX_KEYBOARD_DEPENDENCIES = \
--	host-pkgconf matchbox-lib matchbox-fakekey expat xlib_libXrender
-+	host-pkgconf matchbox-lib matchbox-fakekey expat libpng xlib_libXrender
- # From git
- MATCHBOX_KEYBOARD_AUTORECONF = YES
+diff --git a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+index 19ed9d4640..cb3ed55cea 100644
+--- a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
++++ b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+@@ -1,4 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-June/002446.html
+-sha256  c6e97e48fb1286d6394dddb1c1732f00227c70bd1bedb7d1acabefdd340bea5b  xcb-util-renderutil-0.3.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003234.html
++sha256  3e15d4f0e22d8ddbfbb9f5d77db43eacd7a304029bf25a6166cc63caa96d04ba  xcb-util-renderutil-0.3.10.tar.xz
++sha512  9cfa9201be2df7c0b832e1e1fe506e7c7a1e0f2b1b1d4a4b58620eadc241190a36478fa3ea27c32047fa79bf199f17dcd0b106853dbf5eda8cd584f3fc2b0c15  xcb-util-renderutil-0.3.10.tar.xz
+ # Locally computed
+ sha256  271169dd66674e9c396697af0b4822d1c59ccd2342b7740864d667a02963068b  COPYING
+diff --git a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
+index 9e6683bf3a..d15d19f7e2 100644
+--- a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
++++ b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
+-XCB_UTIL_RENDERUTIL_VERSION = 0.3.9
+-XCB_UTIL_RENDERUTIL_SITE = http://xcb.freedesktop.org/dist
+-XCB_UTIL_RENDERUTIL_SOURCE = xcb-util-renderutil-$(XCB_UTIL_RENDERUTIL_VERSION).tar.bz2
++XCB_UTIL_RENDERUTIL_VERSION = 0.3.10
++XCB_UTIL_RENDERUTIL_SITE = https://xorg.freedesktop.org/archive/individual/lib
++XCB_UTIL_RENDERUTIL_SOURCE = xcb-util-renderutil-$(XCB_UTIL_RENDERUTIL_VERSION).tar.xz
+ XCB_UTIL_RENDERUTIL_LICENSE = MIT
+ XCB_UTIL_RENDERUTIL_LICENSE_FILES = COPYING
+ XCB_UTIL_RENDERUTIL_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
