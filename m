@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3879C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D77C3C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9082A41B87;
-	Fri,  9 Dec 2022 17:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9082A41B87
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8707382116;
+	Fri,  9 Dec 2022 17:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8707382116
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W1Hi1CRgCdMd; Fri,  9 Dec 2022 17:12:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MKhSjb5ETJXD; Fri,  9 Dec 2022 17:13:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 799AC40591;
-	Fri,  9 Dec 2022 17:12:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 799AC40591
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 067701BF37A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C90AA820E6;
+	Fri,  9 Dec 2022 17:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C90AA820E6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7490E1BF37A
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7202141025
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7202141025
+ by smtp3.osuosl.org (Postfix) with ESMTP id 03BB3611AB
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03BB3611AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HdHJHWN2gULU for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5LbVchmHeBqN for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5F114102E
+ by smtp3.osuosl.org (Postfix) with ESMTP id F176D611B3
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5F114102E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F176D611B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A413D85EA7; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id D00D585EA0; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:35:54 +0100
+Date: Fri, 9 Dec 2022 17:36:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f18b8dcb4e622f973d73332732d3dd6f548d3a3
-X-Git-Newrev: 52264859725c6af2f88b0df6cf59f70b3b6d106d
+X-Git-Oldrev: 5e2df02d3109131b72880ebf313088e70366c5da
+X-Git-Newrev: 4b8022395d32d8bda95ca084436659a983932c11
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.A413D85EA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_viewres: bump version
- to 1.0.7
+Message-Id: <20221209170104.D00D585EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXxf86vm: bump
+ version to 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52264859725c6af2f88b0df6cf59f70b3b6d106d
+commit: https://git.buildroot.net/buildroot/commit/?id=4b8022395d32d8bda95ca084436659a983932c11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003219.html
+https://lists.x.org/archives/xorg-announce/2022-September/003213.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_viewres/xapp_viewres.hash | 8 +++-----
- package/x11r7/xapp_viewres/xapp_viewres.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash | 7 +++----
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_viewres/xapp_viewres.hash b/package/x11r7/xapp_viewres/xapp_viewres.hash
-index 3e2928dc4e..a662f4ef2e 100644
---- a/package/x11r7/xapp_viewres/xapp_viewres.hash
-+++ b/package/x11r7/xapp_viewres/xapp_viewres.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-August/003020.html
--md5  38e6568271d8098327706c5cf855dbc7  viewres-1.0.6.tar.bz2
--sha1  f1d12e5b4e1180916edb44234599a486b025b480  viewres-1.0.6.tar.bz2
--sha256  11c15db02066c1d5fc3febf9b185d16c1112f87e37c4b101a484dcefffb80934  viewres-1.0.6.tar.bz2
--sha512  3f4cfc61608bc6c9b35ef66ceb473661ca01946d3306d54040d32803e8e0eec506a0ce37ea22bfe514544a6ba9645fd30f39b20c063aff696b3c0fda3fe95dff  viewres-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003219.html
-+sha256  b15a62085b1a10f55ae1cf17b7ded75b72b21be240c68071685db377c4afc628  viewres-1.0.7.tar.xz
-+sha512  75878faee001163891adf8472c79b31273f794e23dd775c80b33acdd1ce76df708eb27a49c20f79b7101ad676e1d50d9c857c2e2e0930c6209eeb7af8a11397c  viewres-1.0.7.tar.xz
- # Locally computed
- sha256  aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
-diff --git a/package/x11r7/xapp_viewres/xapp_viewres.mk b/package/x11r7/xapp_viewres/xapp_viewres.mk
-index 2e05a6e7d9..49933d7af6 100644
---- a/package/x11r7/xapp_viewres/xapp_viewres.mk
-+++ b/package/x11r7/xapp_viewres/xapp_viewres.mk
+diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
+index 0601360c0e..d181310c69 100644
+--- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
++++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
+@@ -1,6 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-February/002539.html
+-sha1  78ef18ca2be157131899e01c62679e247409a13f  libXxf86vm-1.1.4.tar.bz2
+-sha256  afee27f93c5f31c0ad582852c0fb36d50e4de7cd585fcf655e278a633d85cd57  libXxf86vm-1.1.4.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2022-September/003213.html
++sha256  247fef48b3e0e7e67129e41f1e789e8d006ba47dba1c0cdce684b9b703f888e7  libXxf86vm-1.1.5.tar.xz
++sha512  68226fcb9773a583ea417ab413146203dd7db6ff8a4d388285da972353355e11e179861a77c9fa284aefac025bb3bbf5a9537fa0bf246c782e0116a667c9d9b6  libXxf86vm-1.1.5.tar.xz
+ # Locally calculated
+ sha256  f3da8eaed19e27e4f67e6f076d4ebdb8d649e15a8ad33a415fb65a23de1b6689  COPYING
+diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+index 8871bd507e..0f3decb04e 100644
+--- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
++++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_VIEWRES_VERSION = 1.0.6
--XAPP_VIEWRES_SOURCE = viewres-$(XAPP_VIEWRES_VERSION).tar.bz2
--XAPP_VIEWRES_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_VIEWRES_VERSION = 1.0.7
-+XAPP_VIEWRES_SOURCE = viewres-$(XAPP_VIEWRES_VERSION).tar.xz
-+XAPP_VIEWRES_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_VIEWRES_LICENSE = MIT
- XAPP_VIEWRES_LICENSE_FILES = COPYING
- XAPP_VIEWRES_DEPENDENCIES = xlib_libXaw
+-XLIB_LIBXXF86VM_VERSION = 1.1.4
+-XLIB_LIBXXF86VM_SOURCE = libXxf86vm-$(XLIB_LIBXXF86VM_VERSION).tar.bz2
+-XLIB_LIBXXF86VM_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXXF86VM_VERSION = 1.1.5
++XLIB_LIBXXF86VM_SOURCE = libXxf86vm-$(XLIB_LIBXXF86VM_VERSION).tar.xz
++XLIB_LIBXXF86VM_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXXF86VM_LICENSE = MIT
+ XLIB_LIBXXF86VM_LICENSE_FILES = COPYING
+ XLIB_LIBXXF86VM_CPE_ID_VENDOR = x
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
