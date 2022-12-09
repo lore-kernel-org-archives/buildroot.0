@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31680C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7DA2C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE59181771;
-	Fri,  9 Dec 2022 17:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE59181771
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D40240898;
+	Fri,  9 Dec 2022 17:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D40240898
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fEASkSJYfeR4; Fri,  9 Dec 2022 17:15:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1xBEw_qeOH84; Fri,  9 Dec 2022 17:15:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 108848135D;
-	Fri,  9 Dec 2022 17:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 108848135D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EB2A41B9C;
+	Fri,  9 Dec 2022 17:15:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EB2A41B9C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1731BF37A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F63A1BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA11A41016
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA11A41016
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01D934101F
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01D934101F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Z3efFSAYQA6 for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+ with ESMTP id MiZX8CRQTFSA for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CB8941036
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CB8941036
+ by smtp2.osuosl.org (Postfix) with ESMTP id EEB7241021
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEB7241021
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A96385E9E; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+ id ECE9285EA0; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:25 +0100
+Date: Fri, 9 Dec 2022 17:32:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 445abe597ccb099660da911fa8fe1ab29b47e986
-X-Git-Newrev: 74440b3cd2bf5cdaf06753d53a471bb5f2c288c4
+X-Git-Oldrev: 671c130b0cc0eee99665554e52af7fad5f99500e
+X-Git-Newrev: 5ded7c84b569bc9b9e8bbbb23c768302098c8cfc
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170105.1A96385E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_ico: bump version to
- 1.0.6
+Message-Id: <20221209170103.ECE9285EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_sessreg: bump version
+ to 1.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74440b3cd2bf5cdaf06753d53a471bb5f2c288c4
+commit: https://git.buildroot.net/buildroot/commit/?id=5ded7c84b569bc9b9e8bbbb23c768302098c8cfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-August/003205.html
+https://lists.x.org/archives/xorg-announce/2022-October/003246.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_ico/xapp_ico.hash | 8 +++-----
- package/x11r7/xapp_ico/xapp_ico.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xapp_sessreg/xapp_sessreg.hash | 8 +++-----
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_ico/xapp_ico.hash b/package/x11r7/xapp_ico/xapp_ico.hash
-index a0970cd507..0258537fd5 100644
---- a/package/x11r7/xapp_ico/xapp_ico.hash
-+++ b/package/x11r7/xapp_ico/xapp_ico.hash
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.hash b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
+index b8f55b50c5..1f1b54b877 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.hash
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002880.html
--md5  7895f2d109f4206b6d2db37257e07d12  ico-1.0.5.tar.bz2
--sha1  8759ec954375f3a1b37dc920a12790bfbfb0cad3  ico-1.0.5.tar.bz2
--sha256  d73b62f29eb98d850f16b76d759395180b860b613fbe1686b18eee99a6e3773f  ico-1.0.5.tar.bz2
--sha512  93a94a66d4a41b39d4b3657050e58f8269d352dae5d5916c9ecdda1cb14f23b9d159d67c50fdfa654b4b1c2ad11434bed140ace70703c82b05d3fe8686aab8f6  ico-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003205.html
-+sha256  38f369d431e753280fde70fa489cc94ce204f9f8eabd2f49fc7d32afa69f4405  ico-1.0.6.tar.xz
-+sha512  0ada451b8026ea10d1a5633f847b7bf833292e4cd01e3f1079d82c91fd142c06c6c4005b7146900ee34ac7acc8fd981db37ada9052dff49c2cfce995b9146c8c  ico-1.0.6.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-June/002994.html
+-md5  92be564d4be7d8aa7b5024057b715210  sessreg-1.1.2.tar.bz2
+-sha1  169c1ff9fb152b4b4ca0cfbd3e1aee33af042016  sessreg-1.1.2.tar.bz2
+-sha256  dfcb9e954273ace63879aec053c7880466f8755752a35aa9ced3fa5f04fd2c33  sessreg-1.1.2.tar.bz2
+-sha512  7e3c2bdcadb7133aace463b58d8c6108d315ec95d2a42509073eeddc7f02644092a4b3168bd3b426c041736a016291092e0bf8368acd620dbeff96d53d12f98c  sessreg-1.1.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003246.html
++sha256  022acd5de8077dddc4f919961f79e102ecd5f3228a333681af5cd0e7344facc2  sessreg-1.1.3.tar.xz
++sha512  bc1e83afc598ac5b4c6ab0861799b6c8727c123ee662c1fb9cbdd9ee926973b7a00cc62e32f6b4e462c0da3516f8b824337d9cf17587ebabd3f4753502641a60  sessreg-1.1.3.tar.xz
  # Locally computed
- sha256  97ef3a622f2f385cabfc8ab7aff13dc46468c10a5520670b5edfa33f2c3999eb  COPYING
-diff --git a/package/x11r7/xapp_ico/xapp_ico.mk b/package/x11r7/xapp_ico/xapp_ico.mk
-index 8b0d4f90f3..56dbd64b38 100644
---- a/package/x11r7/xapp_ico/xapp_ico.mk
-+++ b/package/x11r7/xapp_ico/xapp_ico.mk
-@@ -4,9 +4,9 @@
+ sha256  ac8f5cc696e6c473aea4caaf18650316dc8912fcf0f370cae1df5f395cea8631  COPYING
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+index 7f488e2423..b196bb947e 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XAPP_ICO_VERSION = 1.0.5
--XAPP_ICO_SOURCE = ico-$(XAPP_ICO_VERSION).tar.bz2
--XAPP_ICO_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_ICO_VERSION = 1.0.6
-+XAPP_ICO_SOURCE = ico-$(XAPP_ICO_VERSION).tar.xz
-+XAPP_ICO_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_ICO_LICENSE = MIT
- XAPP_ICO_LICENSE_FILES = COPYING
- XAPP_ICO_DEPENDENCIES = xlib_libX11
+-XAPP_SESSREG_VERSION = 1.1.2
+-XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
++XAPP_SESSREG_VERSION = 1.1.3
++XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.xz
+ XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SESSREG_LICENSE = MIT
+ XAPP_SESSREG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
