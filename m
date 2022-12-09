@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E59BBC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 014D9C4708E
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 922C740012;
-	Fri,  9 Dec 2022 17:08:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 922C740012
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C5EC402F3;
+	Fri,  9 Dec 2022 17:08:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C5EC402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yIuHm-Jbokk3; Fri,  9 Dec 2022 17:08:13 +0000 (UTC)
+	with ESMTP id ojZJboEasl4l; Fri,  9 Dec 2022 17:08:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BAFCF40492;
-	Fri,  9 Dec 2022 17:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAFCF40492
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A1714101F;
+	Fri,  9 Dec 2022 17:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A1714101F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F9E71BF976
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1365A1BF37A
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADF4461197
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF4461197
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E2E4611A2
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E2E4611A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uBHq28NffIQ5 for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+ with ESMTP id VM5Nrixskv5D for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B2DF611B7
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B2DF611B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5887611A3
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5887611A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BBF185EA0; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+ id E3E5885E9E; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:31 +0100
+Date: Fri, 9 Dec 2022 17:32:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4649c06bff7e30bdbd7a3ebab59c578f09d67172
-X-Git-Newrev: 4b1ff446fb74b910ff9005b8725e962a626ef11a
+X-Git-Oldrev: 59d64c57c755338306e9eddc9ff98a948ef79694
+X-Git-Newrev: 671c130b0cc0eee99665554e52af7fad5f99500e
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170105.2BBF185EA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libFS: bump version to
- 1.0.9
+Message-Id: <20221209170103.E3E5885E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
+ 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b1ff446fb74b910ff9005b8725e962a626ef11a
+commit: https://git.buildroot.net/buildroot/commit/?id=671c130b0cc0eee99665554e52af7fad5f99500e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-August/003200.html
+Update license hash due to upstream commits
+https://gitlab.freedesktop.org/xorg/lib/libx11/-/commit/a04b84f0f7bb3a78088756759f4b9b8bb363251e
+https://gitlab.freedesktop.org/xorg/lib/libx11/-/commit/a35d706cd8dc7b498bca2a3fc4a3732047439ed7
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libFS/xlib_libFS.hash | 8 +++-----
- package/x11r7/xlib_libFS/xlib_libFS.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 8 ++++----
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
-index 50cb94dd3a..6ca152ac4a 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.hash
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
--md5  4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
--sha1  70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
--sha256  c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
--sha512  466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003200.html
-+sha256  597379438b3242ccc7d7b0fc432dc6c844eca0d4a82a7b82518bfeb203fc208a  libFS-1.0.9.tar.xz
-+sha512  7d012e62736c6d567931bad982eec221199d296f0fe41e1e7fde5575b8b928e9a8c644aa8746242bdfe72393635320b58774d9a519285765bd26d633588092b8  libFS-1.0.9.tar.xz
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 5a8f639165..4f5027d62d 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-June/003168.html
+-sha256  1bc41aa1bbe01401f330d76dfa19f386b79c51881c7bbfee9eb4e27f22f2d9f7  libX11-1.8.1.tar.xz
+-sha512  2e36d2c47519e0cb2697f588c0ccdf73fbe75c2163f0855c78f7052dc9e920bca081f9d5e39c707a14067f101faef74fc758c8862eeba675b1535b43119d533a  libX11-1.8.1.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-November/003253.html
++sha256  ed91d573d570db83b8ae546f4890dccfcd0b9dfe1e50a1b401b63a74c152ed04  libX11-1.8.2.tar.xz
++sha512  662ee8043d9ba27df82f647515b701d6f302a52715f21afdaba391f3b70691753e3649e7ff8322e07858be4297df9cbb19227958d676ed6dea198cce64330d1d  libX11-1.8.2.tar.xz
  # Locally computed
- sha256  5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 9d9aecb74f..0fbf453ca4 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
-@@ -4,9 +4,9 @@
+-sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
++sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 9ed9f1ddb3..26d4b4d306 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFS_VERSION = 1.0.8
--XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
--XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBFS_VERSION = 1.0.9
-+XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.xz
-+XLIB_LIBFS_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBFS_LICENSE = MIT
- XLIB_LIBFS_LICENSE_FILES = COPYING
- XLIB_LIBFS_CPE_ID_VENDOR = x
+-XLIB_LIBX11_VERSION = 1.8.1
++XLIB_LIBX11_VERSION = 1.8.2
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
