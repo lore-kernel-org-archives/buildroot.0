@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EF94C04FDE
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70416C04FDE
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:02:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF0B82129;
-	Fri,  9 Dec 2022 17:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BF0B82129
+	by smtp4.osuosl.org (Postfix) with ESMTP id 130B441A6F;
+	Fri,  9 Dec 2022 17:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 130B441A6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VPV2vKENcXTK; Fri,  9 Dec 2022 17:02:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MB8PSVscRYgF; Fri,  9 Dec 2022 17:02:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 614E082135;
-	Fri,  9 Dec 2022 17:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 614E082135
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20A671BF97A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B97A41B36;
+	Fri,  9 Dec 2022 17:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B97A41B36
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3488D1BF976
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF2B160E24
+ by smtp4.osuosl.org (Postfix) with ESMTP id B782041B4F
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF2B160E24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B782041B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VIF_RF4fq8Lr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y6EU9j5yoBz2 for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C5FB60EC6
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C5FB60EC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id E17AE41A55
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E17AE41A55
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A94685EA7; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id C899485EA1; Fri,  9 Dec 2022 17:01:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:33 +0100
+Date: Fri, 9 Dec 2022 17:31:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8929d19dfba43af98ae1c981131e33d366f45e8a
-X-Git-Newrev: 6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+X-Git-Oldrev: d8ae5b86edcf172d824982c0740c5099ea087697
+X-Git-Newrev: 79a72dd0a5c8563533f75914d276022c401b3ffa
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.1A94685EA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXres: bump version
- to 1.2.2
+Message-Id: <20221209170102.C899485EA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: bump
+ version to 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+commit: https://git.buildroot.net/buildroot/commit/?id=79a72dd0a5c8563533f75914d276022c401b3ffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003278.html
+https://lists.x.org/archives/xorg-announce/2022-December/003287.html
+https://lists.x.org/archives/xorg-announce/2022-October/003229.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++----
- package/x11r7/xlib_libXres/xlib_libXres.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash | 8 +++-----
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
-index 700590ad8c..2e6d3d5c55 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.hash
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-March/003078.html
--sha256  b6e6fb1ebb61610e56017edd928fb89a5f53b3f4f990078309877468663b2b11  libXres-1.2.1.tar.bz2
--sha512  c17d28406e17e305dc4976f095e88059735f5bd8c600adf2e556523c9e0dd7fa01dcbf7a9d28a642e77e49a5b30f54bb9b2fc34bfbedce467ee2a020bba5cdf1  libXres-1.2.1.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003278.html
-+sha256  9a7446f3484b9b7538ac5ee30d2c1ce9e5b7fbbaf1440e02f6cca186a1fa745f  libXres-1.2.2.tar.xz
-+sha512  897f2d426ea6f41169a5a52c356d1a1cb2ffb9144ae41b9fedd06455c3d81042930fe55be269ce4b8545ee65fcfe168101192a599053d810e8810f627c94f810  libXres-1.2.2.tar.xz
- # Locally calculated
- sha256  0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
-index de3637a04a..25498090fe 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.mk
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
+index 3ec055a792..e8f83d427f 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002840.html
+-md5  42dda8016943dc12aff2c03a036e0937  libxshmfence-1.3.tar.bz2
+-sha1  3472218fc0e8ee8183533d22dbcd4bbe90bf3ab8  libxshmfence-1.3.tar.bz2
+-sha256  b884300d26a14961a076fbebc762a39831cb75f92bed5ccf9836345b459220c7  libxshmfence-1.3.tar.bz2
+-sha512  c446e055f8fac62b9aa266132289a4cfc030282147974c45ce96d1768a98d1afb997470e58e4a68513174c404cbf373bdde2f0cd4b34abdbce1d89dd0b6fe2b7  libxshmfence-1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003287.html
++sha256  870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f  libxshmfence-1.3.2.tar.xz
++sha512  e20a6827e370726cf50489a69f4a52b897f1c44e3eba8c72a4e626b08724e877d090770b8016765736d887d5d5eaba1fda9c29066e62d259b4d1e2064bc1626c  libxshmfence-1.3.2.tar.xz
+ # Locally computed
+ sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index 605408fff7..4241102855 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXRES_VERSION = 1.2.1
--XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
--XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXRES_VERSION = 1.2.2
-+XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.xz
-+XLIB_LIBXRES_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXRES_LICENSE = MIT
- XLIB_LIBXRES_LICENSE_FILES = COPYING
- XLIB_LIBXRES_CPE_ID_VENDOR = x
+-XLIB_LIBXSHMFENCE_VERSION = 1.3
+-XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.bz2
++XLIB_LIBXSHMFENCE_VERSION = 1.3.2
++XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.xz
+ XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSHMFENCE_LICENSE = MIT
+ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
