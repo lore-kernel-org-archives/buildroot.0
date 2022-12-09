@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20FA9C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5715C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:59:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBFE04157D;
-	Mon, 20 Feb 2023 21:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBFE04157D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 907864ED4B;
+	Mon, 20 Feb 2023 21:59:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 907864ED4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rTnfUoY-Hpkz; Mon, 20 Feb 2023 21:58:49 +0000 (UTC)
+	with ESMTP id OaLGXf-5ozCd; Mon, 20 Feb 2023 21:59:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93C0246BE3;
-	Mon, 20 Feb 2023 21:58:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93C0246BE3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29F411BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A26E4ED39;
+	Mon, 20 Feb 2023 21:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A26E4ED39
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86A981BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D350C416B2
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D350C416B2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C69861136
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C69861136
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S9jQXCu2DquA for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1dCk9a7CbFlq for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13081416A9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13081416A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 661346110E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 661346110E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 09F6D86494; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+ id 6472A828C8; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:05 +0100
+Date: Fri, 9 Dec 2022 17:34:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 027ad7bbd6fd6ab57781f0730e9587acb26efc76
-X-Git-Newrev: 77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
+X-Git-Oldrev: 8b42c06423c7b31b5fdc8d2d06bdec7cd059eb30
+X-Git-Newrev: cd91f23a6ab9d0bb734fa8084275d81a39d300b2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.09F6D86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-influxdb: bump
- to version 5.3.1
+Message-Id: <20230220205158.6472A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xcb-util-keysyms: bump version to 0.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
+commit: https://git.buildroot.net/buildroot/commit/?id=cd91f23a6ab9d0bb734fa8084275d81a39d300b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://lists.x.org/archives/xorg-announce/2022-October/003233.html
+
+Added license file.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-influxdb/python-influxdb.hash | 4 ++--
- package/python-influxdb/python-influxdb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash |  7 +++++--
+ package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk   | 10 ++++------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-influxdb/python-influxdb.hash b/package/python-influxdb/python-influxdb.hash
-index 7b43091eca..e86bd8c2ca 100644
---- a/package/python-influxdb/python-influxdb.hash
-+++ b/package/python-influxdb/python-influxdb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/influxdb/json
--md5  d528c8ccd8ab40bc608ad1e507e7788a  influxdb-5.3.0.tar.gz
--sha256  9bcaafd57ac152b9824ab12ed19f204206ef5df8af68404770554c5b55b475f6  influxdb-5.3.0.tar.gz
-+md5  e5888a7023e9a49d8a372538b625f908  influxdb-5.3.1.tar.gz
-+sha256  46f85e7b04ee4b3dee894672be6a295c94709003a7ddea8820deec2ac4d8b27a  influxdb-5.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b654917e2c25a69d2bd56e72dddbc6eb29bf7e40384d7c46bb291d5c5185213b  LICENSE
-diff --git a/package/python-influxdb/python-influxdb.mk b/package/python-influxdb/python-influxdb.mk
-index e5b1aea70f..d77cb89d2d 100644
---- a/package/python-influxdb/python-influxdb.mk
-+++ b/package/python-influxdb/python-influxdb.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
+index 6437d070f4..20a341ca22 100644
+--- a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
++++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-October/002485.html
+-sha256  0ef8490ff1dede52b7de533158547f8b454b241aa3e4dcca369507f66f216dd9  xcb-util-keysyms-0.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003233.html
++sha256  7c260a5294412aed429df1da2f8afd3bd07b7cba3fec772fba15a613a6d5c638  xcb-util-keysyms-0.4.1.tar.xz
++sha512  dd53a36b52647f22bf0da8cded4b2974a51899eaac799797017ed8534f14bc2d2d339a14fa5ef387ae4528b7d9a5d31920bb0c71b09ca34f58e5081e768e2bbf  xcb-util-keysyms-0.4.1.tar.xz
++# Locally computed
++sha256  d499c1bf2c2a5f0a0498e5204d998388e308dcf2273dfbe2250a5b9a73f66537  COPYING
+diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
+index 9036b06fe8..364dc5b6da 100644
+--- a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
++++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--PYTHON_INFLUXDB_VERSION = 5.3.0
-+PYTHON_INFLUXDB_VERSION = 5.3.1
- PYTHON_INFLUXDB_SOURCE = influxdb-$(PYTHON_INFLUXDB_VERSION).tar.gz
--PYTHON_INFLUXDB_SITE = https://files.pythonhosted.org/packages/be/8d/85ec8f11299a6dfc115244db71fd8f13e9a69f5e9eb77dc3392f4f959e9a
-+PYTHON_INFLUXDB_SITE = https://files.pythonhosted.org/packages/86/4f/a9c524576677c1694b149e09d4fd6342e4a1d9a5f409e437168a14d6d150
- PYTHON_INFLUXDB_SETUP_TYPE = setuptools
- PYTHON_INFLUXDB_LICENSE = MIT
- PYTHON_INFLUXDB_LICENSE_FILES = LICENSE
+-XCB_UTIL_KEYSYMS_VERSION = 0.4.0
+-XCB_UTIL_KEYSYMS_SOURCE = xcb-util-keysyms-$(XCB_UTIL_KEYSYMS_VERSION).tar.bz2
+-XCB_UTIL_KEYSYMS_SITE = http://xcb.freedesktop.org/dist
+-
+-# unfortunately, no license file
++XCB_UTIL_KEYSYMS_VERSION = 0.4.1
++XCB_UTIL_KEYSYMS_SOURCE = xcb-util-keysyms-$(XCB_UTIL_KEYSYMS_VERSION).tar.xz
++XCB_UTIL_KEYSYMS_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XCB_UTIL_KEYSYMS_LICENSE = MIT
+-
++XCB_UTIL_KEYSYMS_LICENSE_FILES = COPYING
+ XCB_UTIL_KEYSYMS_INSTALL_STAGING = YES
+ 
+ XCB_UTIL_KEYSYMS_DEPENDENCIES = host-pkgconf libxcb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
