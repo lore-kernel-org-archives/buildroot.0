@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A1C5C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:09:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4AE4C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E554982132;
-	Fri,  9 Dec 2022 17:09:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E554982132
+	by smtp4.osuosl.org (Postfix) with ESMTP id 900CD41B71;
+	Fri,  9 Dec 2022 17:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 900CD41B71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d-PaRO5VRdBq; Fri,  9 Dec 2022 17:09:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OIeLSoJEzl7F; Fri,  9 Dec 2022 17:09:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F6E481341;
-	Fri,  9 Dec 2022 17:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F6E481341
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 233B21BF37A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E94541B8C;
+	Fri,  9 Dec 2022 17:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E94541B8C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E1A11BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F452611B4
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F452611B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DD2B41A65
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DD2B41A65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id op0eO4NZr5tY for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qt7tRBr26p-H for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BCA6611A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B39741B38
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BCA6611A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B39741B38
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 154B185E9E; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id 3919985EA0; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:01 +0100
+Date: Fri, 9 Dec 2022 17:34:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b97079d921d8e62ce73d08e11069f5c04734e048
-X-Git-Newrev: 228780fbde4c2b645ea52a870df5ec020912ddf8
+X-Git-Oldrev: 51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
+X-Git-Newrev: c93b50a34a3f46c27fd21c72332c7fde18e0a3f8
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.154B185E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xutil_makedepend: bump
- version to 1.0.7
+Message-Id: <20221209170104.3919985EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrender: bump
+ version to 0.9.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=228780fbde4c2b645ea52a870df5ec020912ddf8
+commit: https://git.buildroot.net/buildroot/commit/?id=c93b50a34a3f46c27fd21c72332c7fde18e0a3f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003243.html
+https://lists.x.org/archives/xorg-announce/2022-October/003239.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.hash | 8 +++-----
- package/x11r7/xutil_makedepend/xutil_makedepend.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xlib_libXrender/xlib_libXrender.hash | 6 +++---
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.hash b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-index 079fa9ef8f..3a7496e1a4 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002985.html
--md5  b2ca7f2f21f1c04a88b6a254c19c9b68  makedepend-1.0.6.tar.bz2
--sha1  3f321f7b570ec98f1fabc441267d29347a2e1456  makedepend-1.0.6.tar.bz2
--sha256  d558a52e8017d984ee59596a9582c8d699a1962391b632bec3bb6804bf4d501c  makedepend-1.0.6.tar.bz2
--sha512  eb0e8ee8ab7515806d7d98a060cdcd392ec38e4225e5e05db26daa6651f185d0b764aab403edeea904d4d23211b1f7db20daeee6eafce8abe65225784ed0aa42  makedepend-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003243.html
-+sha256  a729cfd3c0f4e16c0db1da351e7f53335222e058e3434e84f91251fd6d407065  makedepend-1.0.7.tar.xz
-+sha512  fd575de737aa56ef8e475d1ddb7b2392e730ee1b23c0b853bbb21975b757c3fc56f94d57ecc5a784dceed2be653feb10909e86fd96fdc074b50fbbd0e27a19db  makedepend-1.0.7.tar.xz
- # Locally computed
- sha256  0530078db78c47ae978dc2bd77f4f427e6cd97df868672c95b1ef284113c8cb7  COPYING
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index 18f8eb1f6a..b16bbe0978 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.hash b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+index 680c765237..015fa0af21 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.hash
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002725.html
+-sha256  c06d5979f86e64cabbde57c223938db0b939dff49fdb5a793a1d3d0396650949  libXrender-0.9.10.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2022-October/003239.html
++sha256  bc53759a3a83d1ff702fb59641b3d2f7c56e05051fa0cfa93501166fa782dc24  libXrender-0.9.11.tar.xz
++sha512  2327cc1b530382d81df29b8d579f801f1f990202107cc84506986bcf5d15010d414e9418987b200e3f222d188afce46f0d7754febcdca62a5fc1e541b3bb82de  libXrender-0.9.11.tar.xz
+ # Locally calculated
+ sha256  bbe1db89c48816c48248796adac91defd8fbde1141b145f01511781ab87f29a1  COPYING
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+index 0ef0ec48d9..fd97c83cf6 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XUTIL_MAKEDEPEND_VERSION = 1.0.6
--XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.bz2
--XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
-+XUTIL_MAKEDEPEND_VERSION = 1.0.7
-+XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.xz
-+XUTIL_MAKEDEPEND_SITE = https://xorg.freedesktop.org/archive/individual/util
- XUTIL_MAKEDEPEND_LICENSE = MIT
- XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
- 
+-XLIB_LIBXRENDER_VERSION = 0.9.10
+-XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.bz2
+-XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXRENDER_VERSION = 0.9.11
++XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.xz
++XLIB_LIBXRENDER_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXRENDER_LICENSE = MIT
+ XLIB_LIBXRENDER_LICENSE_FILES = COPYING
+ XLIB_LIBXRENDER_CPE_ID_VENDOR = x.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
