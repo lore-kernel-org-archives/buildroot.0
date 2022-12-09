@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06741C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FB8C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BF47403D8;
-	Fri,  9 Dec 2022 17:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF47403D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E825940CE2;
+	Fri,  9 Dec 2022 17:11:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E825940CE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Usr9HvQbx5q5; Fri,  9 Dec 2022 17:11:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iFpk60DOhCWo; Fri,  9 Dec 2022 17:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DC4641B78;
-	Fri,  9 Dec 2022 17:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DC4641B78
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 528EA1BF37A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 304C6401DD;
+	Fri,  9 Dec 2022 17:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 304C6401DD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 740381BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFCE7611A4
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFCE7611A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D57E41A69
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D57E41A69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p7BqUYsNw93m for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hRpvBWC-k66E for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7189E611AB
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7189E611AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5A8341A66
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5A8341A66
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FA1785EA0; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id D37DD85EA6; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:35:11 +0100
+Date: Fri, 9 Dec 2022 17:32:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7b42852817e93423afeff64e637795d8ba80672
-X-Git-Newrev: 6111bac9e5d2f1cea5db127ad59f2379f86b90fd
+X-Git-Oldrev: fefd30f06c88f36cc75b52b767293586e1770af1
+X-Git-Newrev: 07f7d434a438421eb382a27349e67cffd97d8a3f
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.6FA1785EA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xcb-util-cursor: bump
- version to 0.1.4
+Message-Id: <20221209170103.D37DD85EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbevd: bump version to
+ 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6111bac9e5d2f1cea5db127ad59f2379f86b90fd
+commit: https://git.buildroot.net/buildroot/commit/?id=07f7d434a438421eb382a27349e67cffd97d8a3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003230.html
+https://lists.x.org/archives/xorg-announce/2022-November/003255.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xcb-util-cursor/xcb-util-cursor.hash | 5 +++--
- package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   | 6 +++---
+ package/x11r7/xapp_xkbevd/xapp_xkbevd.hash | 5 +++--
+ package/x11r7/xapp_xkbevd/xapp_xkbevd.mk   | 6 +++---
  2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-index 14cea17138..ca316d3ce8 100644
---- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-+++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
+diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
+index c3cf2f32b2..40b813fcf2 100644
+--- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
++++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
 @@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2016-May/002691.html
--sha1  26562eb6d4151307f7b6a53453d360ecfc0563ac  xcb-util-cursor-0.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003230.html
-+sha256  28dcfe90bcab7b3561abe0dd58eb6832aa9cc77cfe42fcdfa4ebe20d605231fb  xcb-util-cursor-0.1.4.tar.xz
-+sha512  d27dd59a4d7ded9994dca77774421dd9533e3ee823b880af35d3219bd7340c89fbc61d1d0fa10e2991de2cac9e6395e09497769d7b8728eedc691e76649107b1  xcb-util-cursor-0.1.4.tar.xz
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002577.html
+-sha256  2430a2e5302a4cb4a5530c1df8cb3721a149bbf8eb377a2898921a145197f96a  xkbevd-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003255.html
++sha256  38357b702de9d3457c4ff75053390f457b84c4accc7f088101255c37c684926b  xkbevd-1.1.5.tar.xz
++sha512  9e4a56484771e5eb5444fbd11e7d0bb952a2746eea79b84298e2000ada96896d501b886727c4ef08c120b5dcce550fca2d3e3dd762f4ca0327c38d9609961c5b  xkbevd-1.1.5.tar.xz
  # Locally computed
- sha256  0dde91ae1d443105dc9e13cbaed6674c36683b7095836ad9ddfce26be270aad5  COPYING
-diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-index 07b37c5e47..0fb131693b 100644
---- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-+++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
+ sha256  38c6dbf8f88b1c920561ff3a4d1ffdb85c069c664f5f8b64a9adb477ef347b7c  COPYING
+diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
+index 7a9a8fb18f..5b99e6967f 100644
+--- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
++++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XCB_UTIL_CURSOR_VERSION = 0.1.3
--XCB_UTIL_CURSOR_SITE = http://xcb.freedesktop.org/dist
--XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.bz2
-+XCB_UTIL_CURSOR_VERSION = 0.1.4
-+XCB_UTIL_CURSOR_SITE = https://xorg.freedesktop.org/archive/individual/lib
-+XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.xz
- XCB_UTIL_CURSOR_LICENSE = MIT
- XCB_UTIL_CURSOR_LICENSE_FILES = COPYING
- XCB_UTIL_CURSOR_INSTALL_STAGING = YES
+-XAPP_XKBEVD_VERSION = 1.1.4
+-XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.bz2
+-XAPP_XKBEVD_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XKBEVD_VERSION = 1.1.5
++XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.xz
++XAPP_XKBEVD_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XKBEVD_LICENSE = MIT
+ XAPP_XKBEVD_LICENSE_FILES = COPYING
+ XAPP_XKBEVD_DEPENDENCIES = xlib_libxkbfile
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
