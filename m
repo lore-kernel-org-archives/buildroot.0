@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 092C6C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:35:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30953C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 990744A483;
-	Mon, 20 Feb 2023 21:35:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 990744A483
+	by smtp4.osuosl.org (Postfix) with ESMTP id C456242D9B;
+	Mon, 20 Feb 2023 21:35:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C456242D9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8PMHBQTRdvjX; Mon, 20 Feb 2023 21:35:06 +0000 (UTC)
+	with ESMTP id U793TIyvORon; Mon, 20 Feb 2023 21:35:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E32A4A150;
-	Mon, 20 Feb 2023 21:35:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E32A4A150
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 854701BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E9CF4A332;
+	Mon, 20 Feb 2023 21:35:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E9CF4A332
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A83E81BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AD09610F0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AD09610F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49554415B2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49554415B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vy8kUK58aW-D for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9y6SzPr9oNTI for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B95C961095
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B95C961095
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F04F415AA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F04F415AA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B78288648F; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id 5FAC586494; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 29 Nov 2022 22:54:40 +0100
+Date: Fri, 9 Dec 2022 17:31:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3c14de0dfc047817917fb4dbc20c211e751bb3f
-X-Git-Newrev: 1fe4f83bf41fd403fde7d0ad23187e0d50aa0bbd
+X-Git-Oldrev: d8ae5b86edcf172d824982c0740c5099ea087697
+X-Git-Newrev: 79a72dd0a5c8563533f75914d276022c401b3ffa
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205153.B78288648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8188eu: bump to
- 2022-11-29 version on v5.2.2.4 branch
+Message-Id: <20230220205156.5FAC586494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xlib_libxshmfence: bump version to 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fe4f83bf41fd403fde7d0ad23187e0d50aa0bbd
+commit: https://git.buildroot.net/buildroot/commit/?id=79a72dd0a5c8563533f75914d276022c401b3ffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/8bcb4d0adabc141ff8144f9e22bd549e3cd8858a/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+https://lists.x.org/archives/xorg-announce/2022-December/003287.html
+https://lists.x.org/archives/xorg-announce/2022-October/003229.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash | 8 +++-----
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 0ad7786328..29ce0e32c2 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
+index 3ec055a792..e8f83d427f 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002840.html
+-md5  42dda8016943dc12aff2c03a036e0937  libxshmfence-1.3.tar.bz2
+-sha1  3472218fc0e8ee8183533d22dbcd4bbe90bf3ab8  libxshmfence-1.3.tar.bz2
+-sha256  b884300d26a14961a076fbebc762a39831cb75f92bed5ccf9836345b459220c7  libxshmfence-1.3.tar.bz2
+-sha512  c446e055f8fac62b9aa266132289a4cfc030282147974c45ce96d1768a98d1afb997470e58e4a68513174c404cbf373bdde2f0cd4b34abdbce1d89dd0b6fe2b7  libxshmfence-1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003287.html
++sha256  870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f  libxshmfence-1.3.2.tar.xz
++sha512  e20a6827e370726cf50489a69f4a52b897f1c44e3eba8c72a4e626b08724e877d090770b8016765736d887d5d5eaba1fda9c29066e62d259b4d1e2064bc1626c  libxshmfence-1.3.2.tar.xz
  # Locally computed
--sha256  50529c110e0a45fbe3169d0e237c4d0959300840f5e162c24256452976fb2670  rtl8188eu-c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba.tar.gz
-+sha256  c573529862861a7a75534a4f2bc34ba7e3b116125298b5bc0d432b3065bd7df6  rtl8188eu-f4af53305cb1e9a0d8d9957a042f7c01b7121bfc.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 199362d7ae..3698115d3c 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
+ sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index 605408fff7..4241102855 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RTL8188EU_VERSION = c4908ca4caf861d858c4d9e8452a2ad5c88cf2ba
-+RTL8188EU_VERSION = f4af53305cb1e9a0d8d9957a042f7c01b7121bfc
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+-XLIB_LIBXSHMFENCE_VERSION = 1.3
+-XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.bz2
++XLIB_LIBXSHMFENCE_VERSION = 1.3.2
++XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.xz
+ XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSHMFENCE_LICENSE = MIT
+ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
