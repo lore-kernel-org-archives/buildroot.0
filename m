@@ -1,84 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5452EC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 10:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52541C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 10:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E356F82021;
-	Fri,  9 Dec 2022 10:27:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E356F82021
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4DD440C8F;
+	Fri,  9 Dec 2022 10:33:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4DD440C8F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jJ5L7439KJvl; Fri,  9 Dec 2022 10:27:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pQ5OCtKqtLlx; Fri,  9 Dec 2022 10:33:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22CC482029;
-	Fri,  9 Dec 2022 10:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22CC482029
+	by smtp2.osuosl.org (Postfix) with ESMTP id 286FC40C93;
+	Fri,  9 Dec 2022 10:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 286FC40C93
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E5D61BF34F
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 10:27:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 923381BF34F
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 10:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E5A3E41A2A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 10:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5A3E41A2A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 672FF41A3E
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 10:33:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 672FF41A3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jvWpDyNJ4dgG for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 10:27:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C57B4154A
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7C57B4154A
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 10:27:53 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id b2so10433561eja.7
- for <buildroot@buildroot.org>; Fri, 09 Dec 2022 02:27:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=slQy4nujmGO1u51obxkBR6Czgdbl1825K7NVxW9fnX4=;
- b=4f2JzVaVAoGhVtfI1jd7DxUjCzSETNy2VwDU2K5Gjnws+pn3cdu7KRD4OiBzwc6zp4
- my2qLBSNZ6AGg26ecy5qUefl9r+qb41SkVma6mYvo0ascolK21sqewbbkqgGSA67pm2k
- qNmEgiFSDNDACufTLMupxSyka2qnUtRtpHGfeOA3twU74n+g03O1LaCEv+7nP3rOomwL
- CWhQZz+9P+SZKWqswn5rHOlz5H5qiRDqhlykNkiZASDrNAcf/m7/CNRnkcfTMzQfbnx0
- n4+P8un9BHIzop3wvOIB66xUH2jjXZTuzhpIBDwVtwiZKmOcFpm4fF5FBJbslJwPsLer
- zAlw==
-X-Gm-Message-State: ANoB5pkt63vI4/wmFJGttL7qtdWbInSzeJFxS7AjTNXZWJNTEuHnkeWw
- p/Wsx0a0MprYIxBa1LHxvaQnyG6y5uk=
-X-Google-Smtp-Source: AA0mqf7oGgk4d2/o6fCTbAMw4NTsRA0QoUDfa1fHmGf+KJZ9bGNufxoyyyqxAC2jjWw4iGs9AO2D5w==
-X-Received: by 2002:a17:907:a803:b0:78d:f454:3762 with SMTP id
- vo3-20020a170907a80300b0078df4543762mr5554323ejc.5.1670581671236; 
- Fri, 09 Dec 2022 02:27:51 -0800 (PST)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- j6-20020a170906830600b007c10fe64c5dsm396393ejx.86.2022.12.09.02.27.50
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Fri, 09 Dec 2022 02:27:50 -0800 (PST)
+ with ESMTP id 9YYO3WEL3T9W for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 10:33:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 632F541A2A
+Received: from mail (kmf.trabucayre.com [91.121.117.161])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 632F541A2A
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 10:33:10 +0000 (UTC)
+Received: from localhost.localdomain (localhost [127.0.0.1])
+ by mail (Postfix) with ESMTP id 2F89639857;
+ Fri,  9 Dec 2022 10:57:05 +0100 (CET)
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 To: buildroot@buildroot.org
-Date: Fri,  9 Dec 2022 11:27:42 +0100
-Message-Id: <20221209102742.23798-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=slQy4nujmGO1u51obxkBR6Czgdbl1825K7NVxW9fnX4=;
- b=M5oIhaMYFcZ+rKc7OsKn05zNcHsNGfw9q0wS6vLt9khpDUVP0zYma5cIc6DopXHxNg
- dfIdZdz6px/gnM1kaKjHN7dXnEYXH+ylqbSKCh0up1+sd2AhJNrtVIxtmFdLIxDAATqJ
- jKNhOpMT/o9FsxJ2xClHC3I3iDquYpQq5ud5EMvia9LPeApuWGsrZINprz3X231svqqf
- rtpWWTWuGWgkIfLFlWQdvkWj6yDcaVzZEwH92BGQ5XWk7dih3UwZOa9KrERe3ReTTqfX
- 2nsVNqP61xAH7fFY92jExyGuUgU2wYsygnv8MU5catf+RO6hnaNnCfg4eNblXzEtqjpZ
- cHVg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=M5oIhaMY
-Subject: [Buildroot] [PATCH] package/python-munch: new package
+Date: Fri,  9 Dec 2022 10:57:03 +0100
+Message-Id: <1670579823-1721-1-git-send-email-gwenj@trabucayre.com>
+X-Mailer: git-send-email 1.6.4.2
+Subject: [Buildroot] [PATCH] package/gnuradio: restrict gcc to >= 9.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,88 +55,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Since commit 5a15095f65c655356989c91e52da1746cd96f41b gnuradio requires
+gcc >= 9.3.0
+
+This patch add this dependency and removes BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+dependency because it is only required for gcc < 7.
+
+Also gcc restriction is required because volk needs a toolchain with a gcc > 7.
+
+fix:
+- http://autobuild.buildroot.net/results/6a82605c58f9ef9eb6c14603777dd8523dd00aa5/
+- http://autobuild.buildroot.net/results/c7c4ae76954e388ab639b39fd521d90acfe4edc9/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/Config.in                      |  1 +
- package/python-munch/Config.in         |  7 +++++++
- package/python-munch/python-munch.hash |  5 +++++
- package/python-munch/python-munch.mk   | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-munch/Config.in
- create mode 100644 package/python-munch/python-munch.hash
- create mode 100644 package/python-munch/python-munch.mk
+ package/gnuradio/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f4a423c7a6..d5a673295d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1128,6 +1128,7 @@ menu "External python modules"
- 	source "package/python-msgfy/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-+	source "package/python-munch/Config.in"
- 	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
- 	source "package/python-mwscrape/Config.in"
-diff --git a/package/python-munch/Config.in b/package/python-munch/Config.in
-new file mode 100644
-index 0000000000..9db2623674
---- /dev/null
-+++ b/package/python-munch/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MUNCH
-+	bool "python-munch"
-+	help
-+	  Munch is a dictionary that supports attribute-style access,
-+	  a la JavaScript.
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index de19732cfb..2028cfb483 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -4,10 +4,13 @@ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+-comment "gnuradio needs a toolchain not affected by GCC bug 43744 and 64735"
++comment "gnuradio needs a toolchain not affected by GCC bug 43744"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
++comment "gnuradio needs a gcc >= 9.3.0"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_9
 +
-+	  https://github.com/Infinidat/munch
-diff --git a/package/python-munch/python-munch.hash b/package/python-munch/python-munch.hash
-new file mode 100644
-index 0000000000..7e32282833
---- /dev/null
-+++ b/package/python-munch/python-munch.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/munch/json
-+md5  ed84c3718416c8d4d03d0a6ef46e8e0c  munch-2.5.0.tar.gz
-+sha256  2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2  munch-2.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  57ca95c92059c8380625192462979bd32994aae3fcdf902ff6eb1e467eeb0469  LICENSE.txt
-diff --git a/package/python-munch/python-munch.mk b/package/python-munch/python-munch.mk
-new file mode 100644
-index 0000000000..85f6803f07
---- /dev/null
-+++ b/package/python-munch/python-munch.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-munch
-+#
-+################################################################################
-+
-+PYTHON_MUNCH_VERSION = 2.5.0
-+PYTHON_MUNCH_SOURCE = munch-$(PYTHON_MUNCH_VERSION).tar.gz
-+PYTHON_MUNCH_SITE = https://files.pythonhosted.org/packages/43/a1/ec48010724eedfe2add68eb7592a0d238590e14e08b95a4ffb3c7b2f0808
-+PYTHON_MUNCH_SETUP_TYPE = setuptools
-+PYTHON_MUNCH_LICENSE = MIT
-+PYTHON_MUNCH_LICENSE_FILES = LICENSE.txt
-+PYTHON_MUNCH_DEPENDENCIES = host-python-pbr
-+
-+$(eval $(python-package))
+ config BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -16,8 +19,8 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic, boost-thread
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
 -- 
-2.17.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
