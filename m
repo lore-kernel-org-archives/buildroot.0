@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 635A1C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA92C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 116648211C;
-	Fri,  9 Dec 2022 17:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 116648211C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B65961197;
+	Fri,  9 Dec 2022 17:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B65961197
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fQS-zTNktpD0; Fri,  9 Dec 2022 17:13:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y_l-uuXDFWVH; Fri,  9 Dec 2022 17:13:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CE31820E6;
-	Fri,  9 Dec 2022 17:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CE31820E6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1152F1BF973
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFDD86115C;
+	Fri,  9 Dec 2022 17:13:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFDD86115C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F2CE1BF976
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92ED04102A
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92ED04102A
+ by smtp4.osuosl.org (Postfix) with ESMTP id E138341B38
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E138341B38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xsF6yBkbJJ0X for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5U1oS0zEXmAO for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABB6D41013
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABB6D41013
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E44641B4A
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E44641B4A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9E5285EA1; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+ id 3EC3E85EA6; Fri,  9 Dec 2022 17:01:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:21 +0100
+Date: Fri, 9 Dec 2022 17:49:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d2fff78049392f2dae82f5ea9f5a0dbac225f4d
-X-Git-Newrev: 723eff5808451188ddc097aafc17e6969b849e57
+X-Git-Oldrev: d77345d05169d2fe8df1afc3714c2b373e273ef9
+X-Git-Newrev: 565f41e27c7a6cfd3b51ddf46071799a40f5eb99
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170103.A9E5285EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXdmcp: bump version
- to 1.1.4
+Message-Id: <20221209170105.3EC3E85EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-glint:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=723eff5808451188ddc097aafc17e6969b849e57
+commit: https://git.buildroot.net/buildroot/commit/?id=565f41e27c7a6cfd3b51ddf46071799a40f5eb99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-November/003260.html
+Building this package is broken with X.org xserver 21:
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
+
+Fixes:
+http://autobuild.buildroot.net/results/f9d/f9d650ccb4173085cfc8873f1e52ee56caf982fa/
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash | 8 +++-----
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ Config.in.legacy                                           |  7 +++++++
+ package/x11r7/Config.in                                    |  1 -
+ package/x11r7/xdriver_xf86-video-glint/Config.in           | 10 ----------
+ .../xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash |  4 ----
+ .../xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk   | 14 --------------
+ 5 files changed, 7 insertions(+), 29 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-index 9f7f968350..83609413fd 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002974.html
--md5  115c5c12ecce0e749cd91d999a5fd160  libXdmcp-1.1.3.tar.bz2
--sha1  0a8f8a274f829331efb1e8e2027c38631b204dd0  libXdmcp-1.1.3.tar.bz2
--sha256  20523b44aaa513e17c009e873ad7bbc301507a3224c232610ce2e099011c6529  libXdmcp-1.1.3.tar.bz2
--sha512  cb1d4650f97d66e73acd2465ec7d757b9b797cce2f85e301860a44997a461837eea845ec9bd5b639ec5ca34c804f8bdd870697a5ce3f4e270b687c9ef74f25ec  libXdmcp-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003260.html
-+sha256  2dce5cc317f8f0b484ec347d87d81d552cdbebb178bd13c5d8193b6b7cd6ad00  libXdmcp-1.1.4.tar.xz
-+sha512  83b384d43bfb034c395f83f97d1c6e73aa3d5faa8f8756b08e697c0b9c3c87189651b51e8213fbd1f5f9cbc2d8136cbf143627481744345d78cfe0ff2ad074a9  libXdmcp-1.1.4.tar.xz
- # Locally computed
- sha256  8a3c3f35b0dbcb60a4e242b9e4394a352a65bb27deb2938ea1e2e62a626e16e9  COPYING
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 51db9908e5..a79e2615db 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 522102a0c0..bf3bd55f35 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
--XLIB_LIBXDMCP_VERSION = 1.1.3
--XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
--XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXDMCP_VERSION = 1.1.4
-+XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.xz
-+XLIB_LIBXDMCP_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
- XLIB_LIBXDMCP_LICENSE_FILES = COPYING
- XLIB_LIBXDMCP_CPE_ID_VENDOR = x.org
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
++	bool "xf86-video-glint removed"
++	select BR2_LEGACY
++	help
++	  The X.org xf86-video-glint package no longer builds with
++	  Xserver 21 and is unmaintained.
++
+ config BR2_PACKAGE_USBREDIR_SERVER
+ 	bool "usbredirserver removed"
+ 	select BR2_LEGACY
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 63259e88da..273db98e89 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -164,7 +164,6 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xdriver_xf86-video-fbdev/Config.in
+ 		source package/x11r7/xdriver_xf86-video-fbturbo/Config.in
+ 		source package/x11r7/xdriver_xf86-video-geode/Config.in
+-		source package/x11r7/xdriver_xf86-video-glint/Config.in
+ 		source package/x11r7/xdriver_xf86-video-i128/Config.in
+ 		source package/x11r7/xdriver_xf86-video-imx/Config.in
+ 		source package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-glint/Config.in b/package/x11r7/xdriver_xf86-video-glint/Config.in
+deleted file mode 100644
+index c474f6c912..0000000000
+--- a/package/x11r7/xdriver_xf86-video-glint/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
+-	bool "xf86-video-glint"
+-	depends on BR2_PACKAGE_MESA3D
+-	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_XORGPROTO
+-	help
+-	  GLINT/Permedia video driver
+-
+-comment "xf86-video-glint needs mesa3d"
+-	depends on !BR2_PACKAGE_MESA3D
+diff --git a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash
+deleted file mode 100644
+index 40474ebc7b..0000000000
+--- a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002759.html
+-sha256  852833ab2ea9ce519195dfd061a6c7aa5945a093cdc19546d1e9e69df7d577d2  xf86-video-glint-1.2.9.tar.bz2
+-# Locally calculated
+-sha256  6ca8e1a7e1d491f3618d3f14df1be64dbc8adefae7bbaf11d4920240dfb12f6e  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
+deleted file mode 100644
+index fba0030757..0000000000
+--- a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# xdriver_xf86-video-glint
+-#
+-################################################################################
+-
+-XDRIVER_XF86_VIDEO_GLINT_VERSION = 1.2.9
+-XDRIVER_XF86_VIDEO_GLINT_SOURCE = xf86-video-glint-$(XDRIVER_XF86_VIDEO_GLINT_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_GLINT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_GLINT_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_GLINT_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_GLINT_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
