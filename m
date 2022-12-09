@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 834ABC04FDE
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08470C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:10:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2924F40CE2;
-	Fri,  9 Dec 2022 17:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2924F40CE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id A899F6118A;
+	Fri,  9 Dec 2022 17:10:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A899F6118A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3jC1y6lCtJ3; Fri,  9 Dec 2022 17:10:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5QS5raqYopU2; Fri,  9 Dec 2022 17:10:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6904E41004;
-	Fri,  9 Dec 2022 17:10:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6904E41004
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 14C8E1BF37A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6849610D2;
+	Fri,  9 Dec 2022 17:10:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6849610D2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F7FB1BF37A
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EA33402F3
+ by smtp3.osuosl.org (Postfix) with ESMTP id A580F611A3
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EA33402F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A580F611A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDtKWkhuUtep for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nPwySl8i09f2 for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 694DA41029
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3ECD5611A9
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 694DA41029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ECD5611A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 663EB85E9E; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id 2FBB585EA6; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:26 +0100
+Date: Fri, 9 Dec 2022 17:34:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd91f23a6ab9d0bb734fa8084275d81a39d300b2
-X-Git-Newrev: f7b42852817e93423afeff64e637795d8ba80672
+X-Git-Oldrev: f28be9b1fd93a3852d4db00041588d52e171638f
+X-Git-Newrev: 51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.663EB85E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xcb-util-image: bump version
- to 0.4.1
+Message-Id: <20221209170104.2FBB585EA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xsetroot: bump version
+ to 1.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7b42852817e93423afeff64e637795d8ba80672
+commit: https://git.buildroot.net/buildroot/commit/?id=51818b18b9a1fe1a5e0b31298f86cb80309ae9ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003231.html
+https://lists.x.org/archives/xorg-announce/2022-October/003240.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xcb-util-image/xcb-util-image.hash | 5 +++--
- package/x11r7/xcb-util-image/xcb-util-image.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.hash | 8 +++-----
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.hash b/package/x11r7/xcb-util-image/xcb-util-image.hash
-index b2c42d6899..e200853e47 100644
---- a/package/x11r7/xcb-util-image/xcb-util-image.hash
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2014-October/002489.html
--sha256  2db96a37d78831d643538dd1b595d7d712e04bdccf8896a5e18ce0f398ea2ffc  xcb-util-image-0.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003231.html
-+sha256  ccad8ee5dadb1271fd4727ad14d9bd77a64e505608766c4e98267d9aede40d3d  xcb-util-image-0.4.1.tar.xz
-+sha512  9b47ba38b91196d76541b6ccabeaf291d3b91036f15422909cd6a79b3fd1a9786d5b1728e411bc41cfdf3d60a253485f4ef7c65ffa6ae646fa93439ec782746e  xcb-util-image-0.4.1.tar.xz
- # License file, locally calculated
- sha256  19672c6153d8c4870abe734fa4dd2197481a311f4788d02ad729be07e116b26b  COPYING
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
-index 8ddb0be86d..446d545ef2 100644
---- a/package/x11r7/xcb-util-image/xcb-util-image.mk
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
+diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
+index 32294c1f3d..43f7cd66d0 100644
+--- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
++++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002874.html
+-md5  5fe769c8777a6e873ed1305e4ce2c353  xsetroot-1.1.2.tar.bz2
+-sha1  42ab81761823b44974feab86477007c49dbace50  xsetroot-1.1.2.tar.bz2
+-sha256  10c442ba23591fb5470cea477a0aa5f679371f4f879c8387a1d9d05637ae417c  xsetroot-1.1.2.tar.bz2
+-sha512  0b9df1b72305e5c24f1e1664578aa4411a5ffcdc5d318458117594e641f01c34700205b0d16c08abf4a8106d36128ccdbe1ea1f1035fce9018d6b52801a8b72b  xsetroot-1.1.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-October/003240.html
++sha256  6081b45a9eb4426e045d259d1e144b32417fb635e5b96aa90647365ac96638d1  xsetroot-1.1.3.tar.xz
++sha512  f333d1bfd92bb943044da36331ae2cf68a811c8f3891719d9ebc1749e2dd0c67068f86face0794c3c4ae584c4dd189bad4998dccb38fe1ac37a8921e5713e7c0  xsetroot-1.1.3.tar.xz
+ # Locally computed
+ sha256  48e9c9572e0dc1c14b93b753542f780e7751dd7f035816374d8a8be0211a4520  COPYING
+diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
+index 98ba344cfa..1ffbb2b6b0 100644
+--- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
++++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XCB_UTIL_IMAGE_VERSION = 0.4.0
--XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist
--XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
-+XCB_UTIL_IMAGE_VERSION = 0.4.1
-+XCB_UTIL_IMAGE_SITE = https://xorg.freedesktop.org/archive/individual/lib
-+XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.xz
- XCB_UTIL_IMAGE_INSTALL_STAGING = YES
- XCB_UTIL_IMAGE_LICENSE = MIT
- XCB_UTIL_IMAGE_LICENSE_FILES = COPYING
+-XAPP_XSETROOT_VERSION = 1.1.2
+-XAPP_XSETROOT_SOURCE = xsetroot-$(XAPP_XSETROOT_VERSION).tar.bz2
+-XAPP_XSETROOT_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XSETROOT_VERSION = 1.1.3
++XAPP_XSETROOT_SOURCE = xsetroot-$(XAPP_XSETROOT_VERSION).tar.xz
++XAPP_XSETROOT_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XSETROOT_LICENSE = MIT
+ XAPP_XSETROOT_LICENSE_FILES = COPYING
+ XAPP_XSETROOT_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXcursor xdata_xbitmaps
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
