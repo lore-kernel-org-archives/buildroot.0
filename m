@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24894C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7338C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD23C61197;
-	Fri,  9 Dec 2022 17:07:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD23C61197
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A52041B97;
+	Fri,  9 Dec 2022 17:08:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A52041B97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hfQmJEjheUYT; Fri,  9 Dec 2022 17:07:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 62Y-gQmwdPja; Fri,  9 Dec 2022 17:08:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C42CA610D2;
-	Fri,  9 Dec 2022 17:07:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C42CA610D2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11FAB1BF37A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 476EF41B71;
+	Fri,  9 Dec 2022 17:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 476EF41B71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A6411BF973
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF67F40012
- for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF67F40012
+ by smtp4.osuosl.org (Postfix) with ESMTP id A12BA41A5C
+ for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A12BA41A5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZCu3B615HiUy for <buildroot@lists.busybox.net>;
- Fri,  9 Dec 2022 17:01:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qHghV_ki2-Nu for <buildroot@lists.busybox.net>;
+ Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 293DB41023
- for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 293DB41023
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB0B541A69
+ for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB0B541A69
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2746185EA1; Fri,  9 Dec 2022 17:01:04 +0000 (UTC)
+ id DBADF85EA7; Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:07 +0100
+Date: Fri, 9 Dec 2022 17:32:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1261e78ee2a7994f0cf764c0a61d457984daf673
-X-Git-Newrev: f28be9b1fd93a3852d4db00041588d52e171638f
+X-Git-Oldrev: 07f7d434a438421eb382a27349e67cffd97d8a3f
+X-Git-Newrev: 59d64c57c755338306e9eddc9ff98a948ef79694
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170104.2746185EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXext: bump version
- to 1.3.5
+Message-Id: <20221209170103.DBADF85EA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xcompmgr: bump version
+ to 1.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f28be9b1fd93a3852d4db00041588d52e171638f
+commit: https://git.buildroot.net/buildroot/commit/?id=59d64c57c755338306e9eddc9ff98a948ef79694
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-October/003241.html
-
-Updated license hash due to upstream commits
-https://gitlab.freedesktop.org/xorg/lib/libxext/-/commit/81a3d082b1c73393a59131aa57fe32bb0d76e149
-https://gitlab.freedesktop.org/xorg/lib/libxext/-/commit/b6929c143e8372eb6838a331942d34a8d2b13b7b
-
+https://lists.x.org/archives/xorg-announce/2022-November/003254.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXext/xlib_libXext.hash | 10 ++++------
- package/x11r7/xlib_libXext/xlib_libXext.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash | 8 +++-----
+ package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.hash b/package/x11r7/xlib_libXext/xlib_libXext.hash
-index e6b41a3dba..2ab509598b 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.hash
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.hash
+diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
+index 6f0d755261..b9675a5ecf 100644
+--- a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
++++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002975.html
--md5  f5b48bb76ba327cd2a8dc7a383532a95  libXext-1.3.4.tar.bz2
--sha1  14e2451162e8766173b5b14c73e94a22b1fcab55  libXext-1.3.4.tar.bz2
--sha256  59ad6fcce98deaecc14d39a672cf218ca37aba617c9a0f691cac3bcd28edf82b  libXext-1.3.4.tar.bz2
--sha512  09146397d95f80c04701be1cc0a9c580ab5a085842ac31d17dfb6d4c2e42b4253b89cba695e54444e520be359883a76ffd02f42484c9e2ba2c33a5a40c29df4a  libXext-1.3.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003241.html
-+sha256  db14c0c895c57ea33a8559de8cb2b93dc76c42ea4a39e294d175938a133d7bca  libXext-1.3.5.tar.xz
-+sha512  fd9805982dabfb14b1526c0cb71f94508003fa3fcd60560d387465afd891c1dca61927ae86278436d53f4b840cacd1f412071fdc3dce1d6f730610a9c163d59b  libXext-1.3.5.tar.xz
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002989.html
+-md5  ef8c7d4140c11efb8de4141b3968208c  xcompmgr-1.1.8.tar.bz2
+-sha1  7bb28329b4bb687763df2d2c1723cb6ecb20945a  xcompmgr-1.1.8.tar.bz2
+-sha256  0b89daf4f060fa3fa83cca862c45d531fef7121b5d06552c1d73d396ad9a7243  xcompmgr-1.1.8.tar.bz2
+-sha512  ccf29426ffb0797a53653d1ce152de5eee0cec284811fed4b8e634ea0d948180531e4619d96f47e4f9594432c57322624fe0fdaee2c9200efac427fc0904953d  xcompmgr-1.1.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-November/003254.html
++sha256  4875b6698672d01eb3a5080bde6eac9a989d486a82226a2d5e23624f1527a6f0  xcompmgr-1.1.9.tar.xz
++sha512  699117492af7fd84b36d317dcbf422d5ec86a7f21e29370caa737cd940d8ff866a5c8704ba2e7bd17a64e085d77fd23b628263d619813dead85cd669ff5b860e  xcompmgr-1.1.9.tar.xz
  # Locally computed
--sha256  80767ac915f2f0f94de9efb15f0197a59b6f1e609cae85059f8703272dc3e146  COPYING
-+sha256  fd62910be4b13829d94e76c1447cf840953f0e225c4dc6c79349c84dd0557f22  COPYING
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
-index 6002e59e0d..0bb3efa31f 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.mk
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
+ sha256  c843545f72771b3ff95eb88defc2e3ed8f9a1802d9bb6c32c196bb5eec3d3a5d  COPYING
+diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
+index 24ebad7bda..c754ea37b3 100644
+--- a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
++++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXEXT_VERSION = 1.3.4
--XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.bz2
--XLIB_LIBXEXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXEXT_VERSION = 1.3.5
-+XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.xz
-+XLIB_LIBXEXT_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXEXT_LICENSE = MIT
- XLIB_LIBXEXT_LICENSE_FILES = COPYING
- XLIB_LIBXEXT_CPE_ID_VENDOR = x
+-XAPP_XCOMPMGR_VERSION = 1.1.8
+-XAPP_XCOMPMGR_SOURCE = xcompmgr-$(XAPP_XCOMPMGR_VERSION).tar.bz2
+-XAPP_XCOMPMGR_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XCOMPMGR_VERSION = 1.1.9
++XAPP_XCOMPMGR_SOURCE = xcompmgr-$(XAPP_XCOMPMGR_VERSION).tar.xz
++XAPP_XCOMPMGR_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XCOMPMGR_LICENSE = MIT
+ XAPP_XCOMPMGR_LICENSE_FILES = COPYING
+ XAPP_XCOMPMGR_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
