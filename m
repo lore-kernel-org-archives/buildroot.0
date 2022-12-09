@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9009EC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 061B7C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  9 Dec 2022 17:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 113F160F3B;
-	Fri,  9 Dec 2022 17:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 113F160F3B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DB368211B;
+	Fri,  9 Dec 2022 17:01:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DB368211B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GC_BOU5PO401; Fri,  9 Dec 2022 17:01:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id evapIDjLLQtY; Fri,  9 Dec 2022 17:01:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37B2E60EC6;
-	Fri,  9 Dec 2022 17:01:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37B2E60EC6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA2B31BF976
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5C2582116;
+	Fri,  9 Dec 2022 17:01:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5C2582116
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D23F91BF977
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5E3D611B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADD9D4103E
  for <buildroot@lists.busybox.net>; Fri,  9 Dec 2022 17:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5E3D611B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADD9D4103E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gnrSh9fdOUws for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lbRH0tLVt7WK for <buildroot@lists.busybox.net>;
  Fri,  9 Dec 2022 17:01:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0310660E24
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08EC940002
  for <buildroot@buildroot.org>; Fri,  9 Dec 2022 17:01:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0310660E24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08EC940002
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E3BC285EAA; Fri,  9 Dec 2022 17:01:02 +0000 (UTC)
+ id ED2F185E9E; Fri,  9 Dec 2022 17:01:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:17 +0100
+Date: Fri, 9 Dec 2022 17:31:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ce4206c9e8871ed02ccb824d584dfff36bbc719
-X-Git-Newrev: 7436867eb1d07a1cf0c9c809b6c13c11596a1159
+X-Git-Oldrev: 7436867eb1d07a1cf0c9c809b6c13c11596a1159
+X-Git-Newrev: 38e38370277366777ba850608c38f528f152a1e8
 X-Patchwork-Hint: ignore
-Message-Id: <20221209170102.E3BC285EAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXau: bump version to
- 1.0.11
+Message-Id: <20221209170102.ED2F185E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbcomp: bump version
+ to 1.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7436867eb1d07a1cf0c9c809b6c13c11596a1159
+commit: https://git.buildroot.net/buildroot/commit/?id=38e38370277366777ba850608c38f528f152a1e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003284.html
-https://lists.x.org/archives/xorg-announce/2022-August/003201.html
+https://lists.x.org/archives/xorg-announce/2022-December/003283.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXau/xlib_libXau.hash | 8 +++-----
- package/x11r7/xlib_libXau/xlib_libXau.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 7 +++----
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.hash b/package/x11r7/xlib_libXau/xlib_libXau.hash
-index 65ae54ec32..8d2a6ff43c 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.hash
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002942.html
--md5  c5f16288f2da9f071b29111d68797480  libXau-1.0.9.tar.bz2
--sha1  ef9b1ad00f958c8b6e30a1bbc11fdfac311c9733  libXau-1.0.9.tar.bz2
--sha256  ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec  libXau-1.0.9.tar.bz2
--sha512  3ca454ba466a807ea28b0f715066d73dc76ad312697b121d43e4d5766215052e9b7ffb8fe3ed3e496fa3f2a13f164ac692ff85cc428e26731b679f0f06a1d562  libXau-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003284.html
-+sha256  f3fa3282f5570c3f6bd620244438dbfbdd580fc80f02f549587a0f8ab329bbeb  libXau-1.0.11.tar.xz
-+sha512  f56abba3bef3fdd4739dfa69367a4251b5fab7c89194c9aece9efa66b9ebbf0736690cc9bd654aab19d9db377e4b9a5268c9c020b3d293bb5351bff5fe75a4dd  libXau-1.0.11.tar.xz
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index bccaae6f57..b626e50236 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-March/003075.html
+-sha256  6851086c4244b6fd0cc562880d8ff193fb2bbf1e141c73632e10731b31d4b05e  xkbcomp-1.4.5.tar.bz2
+-sha512  2e84f8d6b083e2e818cb95e5d2a184da00e50d71b280e92d1a71465a9a4348f922f4ddccb42cfeee6f76705bbfc8580ef67aedd0d958aaa1ae6bbcc66ccd8154  xkbcomp-1.4.5.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2022-December/003283.html
++sha256  fa50d611ef41e034487af7bd8d8c718df53dd18002f591cca16b0384afc58e98  xkbcomp-1.4.6.tar.xz
++sha512  90e69dd1c78c28f77a5acc7821b43afec1b9ac4895bc6f3462b4902baaadc26f3869da69e3bd023b4bc74adb5f1be0c43ca24b3dab37ac9a479c5622684baa81  xkbcomp-1.4.6.tar.xz
  # Locally computed
- sha256  56abe29bb1d9806a9e04fa9f80fed2c0f18027594df3f098148d814aef6bddfa  COPYING
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index bac10818f1..0e9f79d38d 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+ sha256  6b833fdc05906ce57f016dc791db86830d49ee4da2861ce45806c50b3f4dda9e  COPYING
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index b52f5e6850..61922c7cc9 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXAU_VERSION = 1.0.9
--XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.bz2
-+XLIB_LIBXAU_VERSION = 1.0.11
-+XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.xz
- XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAU_LICENSE = MIT
- XLIB_LIBXAU_LICENSE_FILES = COPYING
+-XAPP_XKBCOMP_VERSION = 1.4.5
+-XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
++XAPP_XKBCOMP_VERSION = 1.4.6
++XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.xz
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
+ XAPP_XKBCOMP_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
