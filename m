@@ -1,64 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C2CAC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 12:31:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6207BC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 12:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C94881CE1;
-	Sat, 10 Dec 2022 12:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C94881CE1
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF019402D4;
+	Sat, 10 Dec 2022 12:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF019402D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A8Q2Oiv5xCkt; Sat, 10 Dec 2022 12:31:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AXftbiXoKdqR; Sat, 10 Dec 2022 12:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A704E81D3D;
-	Sat, 10 Dec 2022 12:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A704E81D3D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9538E1BF399
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0244440184;
+	Sat, 10 Dec 2022 12:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0244440184
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CC5211BF399
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D41460B0C
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D41460B0C
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4F1C40184
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4F1C40184
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J0fribZ5QJuq for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 12:31:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g_usvrjJUZjX for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C44E660A65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEC15400DC
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C44E660A65
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:31:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AEC15400DC
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.166.222.34])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2F42113F895;
- Sat, 10 Dec 2022 13:30:55 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 46F9913F8C6;
+ Sat, 10 Dec 2022 13:31:01 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 13:30:47 +0100
-Message-Id: <20221210123048.306724-1-ju.o@free.fr>
+Date: Sat, 10 Dec 2022 13:30:48 +0100
+Message-Id: <20221210123048.306724-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221210123048.306724-1-ju.o@free.fr>
+References: <20221210123048.306724-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670675459;
- bh=i0ETP8cjlLFx30q1eJQYC+f81lKo2xJo9xNSS4ubpv4=;
- h=From:To:Cc:Subject:Date:From;
- b=dQXh/Dsy8o5aEAGJWqiILvB/VC433fBFCrb1G0K2YnnrpVFaPaCBJqi2a+v/ExQEI
- 3cTOVw1Ii0en+3EZxyNkMUGMdbuu6hdv3tBXBzKg5bGtGtFyeHltkCbrcYevZQ8vbE
- VGbuJXVCJRyCt8JpV5TpZime1yhjmgXPYAe08Qgi6Hi/G/rwCznjxFPtmGRPa1tlyw
- S4pipQKoWpWjSIjXiPECGlhFQpiQgSrkvXx0vswVYoTqx816MGhOoD+vBNQUQeAxF6
- xedZGmqXwYp4B64WvuovwZ1KXcIKOp3skutsSOb9G245uvFrH2W1nUs6iCEXOMSyWW
- COiI47XeDeKbQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1670675465;
+ bh=nVKUbboDTE+QPya4x+Wqjyo7+VKNtI+LgAAOaEYVy/g=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=uK0lowZ/jehTQOaeIDOjzl/FyIp7nmr+5xDI53/ZPXrUTBIciIrspv8zkP/aSo1Xy
+ ujBfzOslDbLc02mOGvz0o5xo0Dowx4j6MuMRbguLMM/H5w1AXMMRK/d2XNPeV8KxXj
+ vFIQIoKZnUmGBHtMH/vRqwLt2p+Rr7BBZZ8IIUy3gd4Bl0KknMy2P4K9oWAZa18Zgs
+ 2Q9zw8wwlbV3MAi1riaOn+xJzFma8McQmnQgvxKMgVUXehKu54INjZuinU/PMw4fkF
+ hhYcEDLVQEVUs+v62V8S9JBqNd8iKm1GxXuemgenR45gI1kX7oeJduwRvR9l8S0XMB
+ RUirQgYlFJOAQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dQXh/Dsy
-Subject: [Buildroot] [PATCH 1/2] package/ncdu: bump to version 1.18
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uK0lowZ/
+Subject: [Buildroot] [PATCH 2/2] support/testing/tests/package/test_ncdu.py:
+ new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,43 +79,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 1.17, see:
-- https://dev.yorhel.nl/ncdu/changes
-
-This commit also adds md5 and sha1 hashes published on the web site.
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ncdu/ncdu.hash | 4 +++-
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Tested on master branch at commit 4744cfb with commands:
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index c47b4f9bac..1e31eaea8e 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,5 +1,7 @@
- # From https://dev.yorhel.nl/ncdu
--sha256  810745a8ed1ab3788c87d3aea4cc1a14edf6ee226f764bcc383e024ba56adbf1  ncdu-1.17.tar.gz
-+md5  4186b5be477cc3a0944619ade81f123b  ncdu-1.18.tar.gz
-+sha1  d47ce3cdf317adadc1426817d07899c90b767aba  ncdu-1.18.tar.gz
-+sha256  3c37a1a96580c9c5d2cc352dc3c5eef0d909158c05f1cc29db4712544c8b9f95  ncdu-1.18.tar.gz
- 
- # computed locally
- sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index acfd496ec8..240ef9d8ea 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NCDU_VERSION = 1.17
-+NCDU_VERSION = 1.18
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+    make check-package
+    ...
+    0 warnings generated
+
+    python3 -m flake8  support/testing/tests/package/test_ncdu.py
+    [no-output]
+
+    ./utils/test-pkg -p ncdu
+    ...
+    6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_ncdu.TestNcdu
+    ...
+    OK
+---
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_ncdu.py | 23 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 support/testing/tests/package/test_ncdu.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 20677ef8ce..04047d43da 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1683,6 +1683,7 @@ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
+ F:	support/testing/tests/package/sample_python_pyalsa.py
+ F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_ncdu.py
+ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+diff --git a/support/testing/tests/package/test_ncdu.py b/support/testing/tests/package/test_ncdu.py
+new file mode 100644
+index 0000000000..cbbb27f751
+--- /dev/null
++++ b/support/testing/tests/package/test_ncdu.py
+@@ -0,0 +1,23 @@
++import os
++
++import infra.basetest
++
++
++class TestNcdu(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_NCDU=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("ncdu --version")
++        self.assertRunOk("ncdu -x -o /tmp/ncdu.list /")
++        self.assertRunOk("grep -F '\"name\":\"ncdu\"' /tmp/ncdu.list")
 -- 
 2.38.1
 
