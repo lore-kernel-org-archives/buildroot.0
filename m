@@ -1,69 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8098C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 08:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D307DC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 08:29:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26215400C0;
-	Sat, 10 Dec 2022 08:20:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26215400C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3AC41514;
+	Sat, 10 Dec 2022 08:29:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C3AC41514
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A2FNLquay5Yo; Sat, 10 Dec 2022 08:20:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T-9F16zOPFQD; Sat, 10 Dec 2022 08:29:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4C7540176;
-	Sat, 10 Dec 2022 08:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4C7540176
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BD6541521;
+	Sat, 10 Dec 2022 08:29:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BD6541521
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D8E7A1BF44A
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:20:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 014C11BF44A
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B437D40176
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:20:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B437D40176
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDAC940176
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDAC940176
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tjGWbwJI0jPu for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 08:20:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A36DF400C0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A36DF400C0
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 08:20:33 +0000 (UTC)
+ with ESMTP id BjSrQ1ucsTVT for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 08:29:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD317400C0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD317400C0
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 08:29:04 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [92.184.110.151])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4EED3780306;
- Sat, 10 Dec 2022 09:20:26 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4725D780310;
+ Sat, 10 Dec 2022 09:28:58 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Dec 2022 09:20:25 +0100
-Date: Sat, 10 Dec 2022 09:20:25 +0100
+ Sat, 10 Dec 2022 09:28:57 +0100
+Date: Sat, 10 Dec 2022 09:28:57 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221210082025.GO2855@scaer>
-References: <20221208204349.12391-1-fontaine.fabrice@gmail.com>
+To: Nicolas Carrier <Nicolas.Carrier@orolia.com>
+Message-ID: <20221210082857.GP2855@scaer>
+References: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
+ <20221205215558.GI2855@scaer>
+ <883c29be-2a05-00f6-76d6-cf894e497da5@gmail.com>
+ <AS4P251MB061200F650240CFFE6FEF439841D9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
+ <97b952a4-2e1b-363c-36f0-0fe2c0da26b7@gmail.com>
+ <AS4P251MB0612D4DF753A307318923B9A841C9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20221208204349.12391-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <AS4P251MB0612D4DF753A307318923B9A841C9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670660430;
- bh=Ps6RycXzxr7AiOaPMmGFmhKjDNO3MCWV5PGI/uamHPA=;
+ d=free.fr; s=smtp-20201208; t=1670660943;
+ bh=9+4KOD7eID3ec/bqNCv23EPYoVWF3o82uEWIr4ajpUE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=C8V6wk4p0NgERCkd4bsyxzbae/P0e0Bm4nR78+94eHvxGWcaEkOnU9QQr9BbnZqQ7
- MHgyIL9KXTOB2PHXg3fqw5f22gZaaB+3duIMB/DJVpJka1O97mq1anTk0Jqwevyemx
- Pq5aapNt52dHbqnJODDfuy621chIoZD553k/MHhsz5oY8/3uPYr42ZBrcpykXyWXdO
- hqJsCcOMbkYRzyn3D6EMz8luzCP50A95SFjGYO9XuiFA2YIMx88DBvivR6fj0X5l4Z
- xIcuASS0Fxn31QcPfZfDo4uKtAHPc/nwf1BqAXcBrJpUo873A+5py6mkg9dOI7DF5P
- xZ0+vSdBXCYjQ==
+ b=efDeVEa63PRBScJnpQprlsI3CRfxZv+mW8maBVor6NgK56SDAkpJ8uUAtLI3glTeY
+ Bf0QUwPrs4+kvC5x3STDzZLX2t7k4pou3TgPxR3TXYgHBtdDJc7D+DtaEOqw9l81yX
+ QUqUArHBSyo2d84uz6fsfQNoovvI/S8gLbhLvMH1TfcWCOs37sKsnfSrW2MT0d5arI
+ 7O6YBWcE/kN9t25WLD0G41/2tDPAbKckWCVQ4Jy4MVZAb8ygcJTc4aNknhRj8vz8WZ
+ IqGI9/F3TshPjO8NhKntb/Xv+YNxtsFJUAONGOqYjTtjkFGLb92TpX3Ml6LglfQK68
+ T/Ny5iu1Br0rg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=C8V6wk4p
-Subject: Re: [Buildroot] [PATCH 1/1] package/connman: fix CVE-2022-3229{2, 3}
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=efDeVEa6
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,436 +80,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Nicolas, All,
 
-On 2022-12-08 21:43 +0100, Fabrice Fontaine spake thusly:
-> Fix CVE-2022-32292: In ConnMan through 1.41, remote attackers able to
-> send HTTP requests to the gweb component are able to exploit a
-> heap-based buffer overflow in received_data to execute code.
-> 
-> Fix CVE-2022-32293: In ConnMan through 1.41, a man-in-the-middle attack
-> against a WISPR HTTP query could be used to trigger a use-after-free in
-> WISPR handling, leading to crashes or code execution.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2022-12-09 11:07 +0000, Nicolas Carrier spake thusly:
+> About the author name, don't bother, I don't mind if you take the
+> ownership (read: the blame :D) of the script.
 
-Applied to master, thanks.
+What one can do in this case, is add a co-author tag, like;
+
+    Co-authored-by: Nicolas Carrier <Nicolas.Carrier@orolia.com>
+    [Nicolas.Carrier@orolia.com provided the test case]
+    Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+
+> That said, maybe buildroot maintainers would like it to be expanded?
+> I don't know the policy for this kind of tests, is it sufficient
+> that it demonstrates that the package is able to build something that
+> works or is it expected to have something more exhaustive?
+
+It is perfectly fine to have a test case that demonstrates the basics of
+the package. This helps prove that there are no missing runtime
+dependencies (e.g. for pythn packages), that the basic features do work
+as expected, at least in the use-case the submitter is interested in.
+
+If there are more to test, it can be added as time passes (e.g. when we
+get a report that something does not work).
+
+We definitely do not want to be able to run the full test-suite of the
+package itself; that's not our role.
+
+> Also, there are those:
+> self.assertRunOk(f'userdel {username} || true')
+> self.assertRunOk(f'groupdel {username} || true')
+> Which I had to had, but I never fully understood why they were needed.
+
+assertRunOk() checks that the return code is zero, and drops the output.
+So, if self.assertRunOk(f'userdel {username}') fails, then it means that
+userdel in the target did fail, so it would be interesting to check why:
+
+    output, ret = self.emulator.run(f'userdel {username}')
+    self.assertEqual(ret, 0, f'Failed with {output!r}')
+
+(I think in fact ythat this is what we should do in assertRunOk())
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  ...-gweb-Fix-OOB-write-in-received_data.patch |  36 ++++
->  ...-reference-counter-to-portal-context.patch | 142 ++++++++++++++
->  ...spr-Update-portal-context-references.patch | 175 ++++++++++++++++++
->  package/connman/connman.mk                    |   7 +
->  4 files changed, 360 insertions(+)
->  create mode 100644 package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
->  create mode 100644 package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
->  create mode 100644 package/connman/0003-wispr-Update-portal-context-references.patch
-> 
-> diff --git a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-> new file mode 100644
-> index 0000000000..d1a9d8f8fe
-> --- /dev/null
-> +++ b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-> @@ -0,0 +1,36 @@
-> +From d1a5ede5d255bde8ef707f8441b997563b9312bd Mon Sep 17 00:00:00 2001
-> +From: Nathan Crandall <ncrandall@tesla.com>
-> +Date: Tue, 12 Jul 2022 08:56:34 +0200
-> +Subject: gweb: Fix OOB write in received_data()
-> +
-> +There is a mismatch of handling binary vs. C-string data with memchr
-> +and strlen, resulting in pos, count, and bytes_read to become out of
-> +sync and result in a heap overflow.  Instead, do not treat the buffer
-> +as an ASCII C-string. We calculate the count based on the return value
-> +of memchr, instead of strlen.
-> +
-> +Fixes: CVE-2022-32292
-> +
-> +[Retrieved from:
-> +https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + gweb/gweb.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/gweb/gweb.c b/gweb/gweb.c
-> +index 12fcb1d8..13c6c5f2 100644
-> +--- a/gweb/gweb.c
-> ++++ b/gweb/gweb.c
-> +@@ -918,7 +918,7 @@ static gboolean received_data(GIOChannel *channel, GIOCondition cond,
-> + 		}
-> + 
-> + 		*pos = '\0';
-> +-		count = strlen((char *) ptr);
-> ++		count = pos - ptr;
-> + 		if (count > 0 && ptr[count - 1] == '\r') {
-> + 			ptr[--count] = '\0';
-> + 			bytes_read--;
-> +-- 
-> +cgit 
-> +
-> diff --git a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-> new file mode 100644
-> index 0000000000..c2cebdfdcc
-> --- /dev/null
-> +++ b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-> @@ -0,0 +1,142 @@
-> +From 72343929836de80727a27d6744c869dff045757c Mon Sep 17 00:00:00 2001
-> +From: Daniel Wagner <wagi@monom.org>
-> +Date: Tue, 5 Jul 2022 08:32:12 +0200
-> +Subject: wispr: Add reference counter to portal context
-> +
-> +Track the connman_wispr_portal_context live time via a
-> +refcounter. This only adds the infrastructure to do proper reference
-> +counting.
-> +
-> +Fixes: CVE-2022-32293
-> +
-> +[Retrieved from:
-> +https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/wispr.c | 52 ++++++++++++++++++++++++++++++++++++++++++----------
-> + 1 file changed, 42 insertions(+), 10 deletions(-)
-> +
-> +diff --git a/src/wispr.c b/src/wispr.c
-> +index a07896ca..bde7e63b 100644
-> +--- a/src/wispr.c
-> ++++ b/src/wispr.c
-> +@@ -56,6 +56,7 @@ struct wispr_route {
-> + };
-> + 
-> + struct connman_wispr_portal_context {
-> ++	int refcount;
-> + 	struct connman_service *service;
-> + 	enum connman_ipconfig_type type;
-> + 	struct connman_wispr_portal *wispr_portal;
-> +@@ -97,6 +98,11 @@ static char *online_check_ipv4_url = NULL;
-> + static char *online_check_ipv6_url = NULL;
-> + static bool enable_online_to_ready_transition = false;
-> + 
-> ++#define wispr_portal_context_ref(wp_context) \
-> ++	wispr_portal_context_ref_debug(wp_context, __FILE__, __LINE__, __func__)
-> ++#define wispr_portal_context_unref(wp_context) \
-> ++	wispr_portal_context_unref_debug(wp_context, __FILE__, __LINE__, __func__)
-> ++
-> + static void connman_wispr_message_init(struct connman_wispr_message *msg)
-> + {
-> + 	DBG("");
-> +@@ -162,9 +168,6 @@ static void free_connman_wispr_portal_context(
-> + {
-> + 	DBG("context %p", wp_context);
-> + 
-> +-	if (!wp_context)
-> +-		return;
-> +-
-> + 	if (wp_context->wispr_portal) {
-> + 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-> + 			wp_context->wispr_portal->ipv4_context = NULL;
-> +@@ -201,9 +204,38 @@ static void free_connman_wispr_portal_context(
-> + 	g_free(wp_context);
-> + }
-> + 
-> ++static struct connman_wispr_portal_context *
-> ++wispr_portal_context_ref_debug(struct connman_wispr_portal_context *wp_context,
-> ++			const char *file, int line, const char *caller)
-> ++{
-> ++	DBG("%p ref %d by %s:%d:%s()", wp_context,
-> ++		wp_context->refcount + 1, file, line, caller);
-> ++
-> ++	__sync_fetch_and_add(&wp_context->refcount, 1);
-> ++
-> ++	return wp_context;
-> ++}
-> ++
-> ++static void wispr_portal_context_unref_debug(
-> ++		struct connman_wispr_portal_context *wp_context,
-> ++		const char *file, int line, const char *caller)
-> ++{
-> ++	if (!wp_context)
-> ++		return;
-> ++
-> ++	DBG("%p ref %d by %s:%d:%s()", wp_context,
-> ++		wp_context->refcount - 1, file, line, caller);
-> ++
-> ++	if (__sync_fetch_and_sub(&wp_context->refcount, 1) != 1)
-> ++		return;
-> ++
-> ++	free_connman_wispr_portal_context(wp_context);
-> ++}
-> ++
-> + static struct connman_wispr_portal_context *create_wispr_portal_context(void)
-> + {
-> +-	return g_try_new0(struct connman_wispr_portal_context, 1);
-> ++	return wispr_portal_context_ref(
-> ++		g_new0(struct connman_wispr_portal_context, 1));
-> + }
-> + 
-> + static void free_connman_wispr_portal(gpointer data)
-> +@@ -215,8 +247,8 @@ static void free_connman_wispr_portal(gpointer data)
-> + 	if (!wispr_portal)
-> + 		return;
-> + 
-> +-	free_connman_wispr_portal_context(wispr_portal->ipv4_context);
-> +-	free_connman_wispr_portal_context(wispr_portal->ipv6_context);
-> ++	wispr_portal_context_unref(wispr_portal->ipv4_context);
-> ++	wispr_portal_context_unref(wispr_portal->ipv6_context);
-> + 
-> + 	g_free(wispr_portal);
-> + }
-> +@@ -452,7 +484,7 @@ static void portal_manage_status(GWebResult *result,
-> + 		connman_info("Client-Timezone: %s", str);
-> + 
-> + 	if (!enable_online_to_ready_transition)
-> +-		free_connman_wispr_portal_context(wp_context);
-> ++		wispr_portal_context_unref(wp_context);
-> + 
-> + 	__connman_service_ipconfig_indicate_state(service,
-> + 					CONNMAN_SERVICE_STATE_ONLINE, type);
-> +@@ -616,7 +648,7 @@ static void wispr_portal_request_wispr_login(struct connman_service *service,
-> + 				return;
-> + 		}
-> + 
-> +-		free_connman_wispr_portal_context(wp_context);
-> ++		wispr_portal_context_unref(wp_context);
-> + 		return;
-> + 	}
-> + 
-> +@@ -952,7 +984,7 @@ static int wispr_portal_detect(struct connman_wispr_portal_context *wp_context)
-> + 
-> + 		if (wp_context->token == 0) {
-> + 			err = -EINVAL;
-> +-			free_connman_wispr_portal_context(wp_context);
-> ++			wispr_portal_context_unref(wp_context);
-> + 		}
-> + 	} else if (wp_context->timeout == 0) {
-> + 		wp_context->timeout = g_idle_add(no_proxy_callback, wp_context);
-> +@@ -1001,7 +1033,7 @@ int __connman_wispr_start(struct connman_service *service,
-> + 
-> + 	/* If there is already an existing context, we wipe it */
-> + 	if (wp_context)
-> +-		free_connman_wispr_portal_context(wp_context);
-> ++		wispr_portal_context_unref(wp_context);
-> + 
-> + 	wp_context = create_wispr_portal_context();
-> + 	if (!wp_context)
-> +-- 
-> +cgit 
-> +
-> diff --git a/package/connman/0003-wispr-Update-portal-context-references.patch b/package/connman/0003-wispr-Update-portal-context-references.patch
-> new file mode 100644
-> index 0000000000..61c4e21f94
-> --- /dev/null
-> +++ b/package/connman/0003-wispr-Update-portal-context-references.patch
-> @@ -0,0 +1,175 @@
-> +From 416bfaff988882c553c672e5bfc2d4f648d29e8a Mon Sep 17 00:00:00 2001
-> +From: Daniel Wagner <wagi@monom.org>
-> +Date: Tue, 5 Jul 2022 09:11:09 +0200
-> +Subject: wispr: Update portal context references
-> +
-> +Maintain proper portal context references to avoid UAF.
-> +
-> +Fixes: CVE-2022-32293
-> +
-> +[Retrieved from:
-> +https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/wispr.c | 34 ++++++++++++++++++++++------------
-> + 1 file changed, 22 insertions(+), 12 deletions(-)
-> +
-> +diff --git a/src/wispr.c b/src/wispr.c
-> +index bde7e63b..84bed33f 100644
-> +--- a/src/wispr.c
-> ++++ b/src/wispr.c
-> +@@ -105,8 +105,6 @@ static bool enable_online_to_ready_transition = false;
-> + 
-> + static void connman_wispr_message_init(struct connman_wispr_message *msg)
-> + {
-> +-	DBG("");
-> +-
-> + 	msg->has_error = false;
-> + 	msg->current_element = NULL;
-> + 
-> +@@ -166,8 +164,6 @@ static void free_wispr_routes(struct connman_wispr_portal_context *wp_context)
-> + static void free_connman_wispr_portal_context(
-> + 		struct connman_wispr_portal_context *wp_context)
-> + {
-> +-	DBG("context %p", wp_context);
-> +-
-> + 	if (wp_context->wispr_portal) {
-> + 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-> + 			wp_context->wispr_portal->ipv4_context = NULL;
-> +@@ -483,9 +479,6 @@ static void portal_manage_status(GWebResult *result,
-> + 				&str))
-> + 		connman_info("Client-Timezone: %s", str);
-> + 
-> +-	if (!enable_online_to_ready_transition)
-> +-		wispr_portal_context_unref(wp_context);
-> +-
-> + 	__connman_service_ipconfig_indicate_state(service,
-> + 					CONNMAN_SERVICE_STATE_ONLINE, type);
-> + 
-> +@@ -546,14 +539,17 @@ static void wispr_portal_request_portal(
-> + {
-> + 	DBG("");
-> + 
-> ++	wispr_portal_context_ref(wp_context);
-> + 	wp_context->request_id = g_web_request_get(wp_context->web,
-> + 					wp_context->status_url,
-> + 					wispr_portal_web_result,
-> + 					wispr_route_request,
-> + 					wp_context);
-> + 
-> +-	if (wp_context->request_id == 0)
-> ++	if (wp_context->request_id == 0) {
-> + 		wispr_portal_error(wp_context);
-> ++		wispr_portal_context_unref(wp_context);
-> ++	}
-> + }
-> + 
-> + static bool wispr_input(const guint8 **data, gsize *length,
-> +@@ -618,13 +614,15 @@ static void wispr_portal_browser_reply_cb(struct connman_service *service,
-> + 		return;
-> + 
-> + 	if (!authentication_done) {
-> +-		wispr_portal_error(wp_context);
-> + 		free_wispr_routes(wp_context);
-> ++		wispr_portal_error(wp_context);
-> ++		wispr_portal_context_unref(wp_context);
-> + 		return;
-> + 	}
-> + 
-> + 	/* Restarting the test */
-> + 	__connman_service_wispr_start(service, wp_context->type);
-> ++	wispr_portal_context_unref(wp_context);
-> + }
-> + 
-> + static void wispr_portal_request_wispr_login(struct connman_service *service,
-> +@@ -700,11 +698,13 @@ static bool wispr_manage_message(GWebResult *result,
-> + 
-> + 		wp_context->wispr_result = CONNMAN_WISPR_RESULT_LOGIN;
-> + 
-> ++		wispr_portal_context_ref(wp_context);
-> + 		if (__connman_agent_request_login_input(wp_context->service,
-> + 					wispr_portal_request_wispr_login,
-> +-					wp_context) != -EINPROGRESS)
-> ++					wp_context) != -EINPROGRESS) {
-> + 			wispr_portal_error(wp_context);
-> +-		else
-> ++			wispr_portal_context_unref(wp_context);
-> ++		} else
-> + 			return true;
-> + 
-> + 		break;
-> +@@ -753,6 +753,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 		if (length > 0) {
-> + 			g_web_parser_feed_data(wp_context->wispr_parser,
-> + 								chunk, length);
-> ++			wispr_portal_context_unref(wp_context);
-> + 			return true;
-> + 		}
-> + 
-> +@@ -770,6 +771,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 
-> + 	switch (status) {
-> + 	case 000:
-> ++		wispr_portal_context_ref(wp_context);
-> + 		__connman_agent_request_browser(wp_context->service,
-> + 				wispr_portal_browser_reply_cb,
-> + 				wp_context->status_url, wp_context);
-> +@@ -781,11 +783,14 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 		if (g_web_result_get_header(result, "X-ConnMan-Status",
-> + 						&str)) {
-> + 			portal_manage_status(result, wp_context);
-> ++			wispr_portal_context_unref(wp_context);
-> + 			return false;
-> +-		} else
-> ++		} else {
-> ++			wispr_portal_context_ref(wp_context);
-> + 			__connman_agent_request_browser(wp_context->service,
-> + 					wispr_portal_browser_reply_cb,
-> + 					wp_context->redirect_url, wp_context);
-> ++		}
-> + 
-> + 		break;
-> + 	case 300:
-> +@@ -798,6 +803,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 			!g_web_result_get_header(result, "Location",
-> + 							&redirect)) {
-> + 
-> ++			wispr_portal_context_ref(wp_context);
-> + 			__connman_agent_request_browser(wp_context->service,
-> + 					wispr_portal_browser_reply_cb,
-> + 					wp_context->status_url, wp_context);
-> +@@ -808,6 +814,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 
-> + 		wp_context->redirect_url = g_strdup(redirect);
-> + 
-> ++		wispr_portal_context_ref(wp_context);
-> + 		wp_context->request_id = g_web_request_get(wp_context->web,
-> + 				redirect, wispr_portal_web_result,
-> + 				wispr_route_request, wp_context);
-> +@@ -820,6 +827,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 
-> + 		break;
-> + 	case 505:
-> ++		wispr_portal_context_ref(wp_context);
-> + 		__connman_agent_request_browser(wp_context->service,
-> + 				wispr_portal_browser_reply_cb,
-> + 				wp_context->status_url, wp_context);
-> +@@ -832,6 +840,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-> + 	wp_context->request_id = 0;
-> + done:
-> + 	wp_context->wispr_msg.message_type = -1;
-> ++	wispr_portal_context_unref(wp_context);
-> + 	return false;
-> + }
-> + 
-> +@@ -890,6 +899,7 @@ static void proxy_callback(const char *proxy, void *user_data)
-> + 					xml_wispr_parser_callback, wp_context);
-> + 
-> + 	wispr_portal_request_portal(wp_context);
-> ++	wispr_portal_context_unref(wp_context);
-> + }
-> + 
-> + static gboolean no_proxy_callback(gpointer user_data)
-> +-- 
-> +cgit 
-> +
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index a76a339e6f..fbd7318e4e 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -13,6 +13,13 @@ CONNMAN_LICENSE = GPL-2.0
->  CONNMAN_LICENSE_FILES = COPYING
->  CONNMAN_CPE_ID_VENDOR = intel
->  
-> +# 0001-gweb-Fix-OOB-write-in-received_data.patch
-> +CONNMAN_IGNORE_CVES += CVE-2022-32292
-> +
-> +# 0002-wispr-Add-reference-counter-to-portal-context.patch
-> +# 0003-wispr-Update-portal-context-references.patch
-> +CONNMAN_IGNORE_CVES += CVE-2022-32293
-> +
->  CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
->  
->  ifeq ($(BR2_INIT_SYSTEMD),y)
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
