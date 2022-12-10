@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF0DC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2873CC64ED9
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 123A04ADED;
-	Mon, 20 Feb 2023 21:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 123A04ADED
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD3204AE4C;
+	Mon, 20 Feb 2023 21:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD3204AE4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NI28C13Hn_Iq; Mon, 20 Feb 2023 21:49:50 +0000 (UTC)
+	with ESMTP id L6qVs6Cg7BnC; Mon, 20 Feb 2023 21:50:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFC9549AA0;
-	Mon, 20 Feb 2023 21:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFC9549AA0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16A731BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79CD84EC45;
+	Mon, 20 Feb 2023 21:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79CD84EC45
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 233721BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9535761114
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9535761114
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1D324169B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1D324169B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vnPltGUnJBDr for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d41JE5umK8vp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9AAD610FF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9AAD610FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5BA341694
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5BA341694
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6B10828C8; Mon, 20 Feb 2023 20:51:56 +0000 (UTC)
+ id E05D486494; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:31:33 +0100
+Date: Sat, 10 Dec 2022 09:47:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8929d19dfba43af98ae1c981131e33d366f45e8a
-X-Git-Newrev: 6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+X-Git-Oldrev: 1567fbd72d4b547f70a7509247bf9abb73ab58e3
+X-Git-Newrev: de82d57b56dd895c7eb56948c631fa30c4935a2a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205156.B6B10828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXres:
- bump version to 1.2.2
+Message-Id: <20230220205159.E05D486494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libftdi1: fix static
+ build with libusb and -latomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b6ea10c528c1c7b3f6ac7bbba7ba519974b2c3a
+commit: https://git.buildroot.net/buildroot/commit/?id=de82d57b56dd895c7eb56948c631fa30c4935a2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-December/003278.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Use pkg-config to retrieve libusb dependencies such as -latomic and
+avoid the following static build failure raised since bump of libusb to
+version 1.0.25 in commit aad609936fc83acfe1eac6ffc86d29ac35dcf54e:
+
+/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
+/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXres/xlib_libXres.hash | 7 +++----
- package/x11r7/xlib_libXres/xlib_libXres.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ ...txt-fix-static-build-with-libusb-and-lato.patch | 47 ++++++++++++++++++++++
+ package/libftdi1/libftdi1.mk                       |  2 +-
+ 2 files changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
-index 700590ad8c..2e6d3d5c55 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.hash
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-March/003078.html
--sha256  b6e6fb1ebb61610e56017edd928fb89a5f53b3f4f990078309877468663b2b11  libXres-1.2.1.tar.bz2
--sha512  c17d28406e17e305dc4976f095e88059735f5bd8c600adf2e556523c9e0dd7fa01dcbf7a9d28a642e77e49a5b30f54bb9b2fc34bfbedce467ee2a020bba5cdf1  libXres-1.2.1.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003278.html
-+sha256  9a7446f3484b9b7538ac5ee30d2c1ce9e5b7fbbaf1440e02f6cca186a1fa745f  libXres-1.2.2.tar.xz
-+sha512  897f2d426ea6f41169a5a52c356d1a1cb2ffb9144ae41b9fedd06455c3d81042930fe55be269ce4b8545ee65fcfe168101192a599053d810e8810f627c94f810  libXres-1.2.2.tar.xz
- # Locally calculated
- sha256  0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
-index de3637a04a..25498090fe 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.mk
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XLIB_LIBXRES_VERSION = 1.2.1
--XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
--XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXRES_VERSION = 1.2.2
-+XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.xz
-+XLIB_LIBXRES_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXRES_LICENSE = MIT
- XLIB_LIBXRES_LICENSE_FILES = COPYING
- XLIB_LIBXRES_CPE_ID_VENDOR = x
+diff --git a/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
+new file mode 100644
+index 0000000000..c818c58d68
+--- /dev/null
++++ b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
+@@ -0,0 +1,47 @@
++From b5b8fab6063ad90bb5ef05a72708ecde1796bc81 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 13 May 2022 18:11:50 +0200
++Subject: [PATCH] CMakeLists.txt: fix static build with libusb and -latomic
++
++Use pkg-config to retrieve libusb dependencies such as -latomic and
++avoid the following static build failure:
++
++/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
++/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++http://developer.intra2net.com/git/?p=libftdi;a=commit;h=b5b8fab6063ad90bb5ef05a72708ecde1796bc81]
++---
++ CMakeLists.txt |   12 ++++++++++--
++ 1 files changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 58f664a..d20aa94 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -25,8 +25,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
++ endif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
++ 
++ # find libusb
++-find_package ( USB1 REQUIRED )
++-include_directories ( ${LIBUSB_INCLUDE_DIR} )
+++find_package( PkgConfig )
+++if (PkgConfig_FOUND)
+++  pkg_check_modules( LIBUSB libusb-1.0 )
+++  if (LIBUSB_FOUND)
+++    include_directories ( ${LIBUSB_INCLUDE_DIRS} )
+++  else()
+++    find_package ( USB1 REQUIRED )
+++    include_directories ( ${LIBUSB_INCLUDE_DIR} )
+++  endif()
+++endif()
++ 
++ # Find Boost
++ if (FTDIPP OR BUILD_TESTS)
++-- 
++1.7.1
++
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index d2e3f42e14..66798addc4 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -8,7 +8,7 @@ LIBFTDI1_VERSION = 1.5
+ LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
+ LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
+ LIBFTDI1_INSTALL_STAGING = YES
+-LIBFTDI1_DEPENDENCIES = libusb
++LIBFTDI1_DEPENDENCIES = host-pkgconf libusb
+ LIBFTDI1_LICENSE = LGPL-2.1 (libftdi1), MIT (libftdi1)
+ LIBFTDI1_LICENSE_FILES = LICENSE COPYING.LIB
+ LIBFTDI1_CONFIG_SCRIPTS = libftdi1-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
