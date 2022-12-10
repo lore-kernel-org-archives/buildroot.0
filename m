@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD2C5C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 18:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82A11C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 18:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 443D060ADE;
-	Sat, 10 Dec 2022 18:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 443D060ADE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 297E94047D;
+	Sat, 10 Dec 2022 18:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 297E94047D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wqcJJjS8c-tf; Sat, 10 Dec 2022 18:11:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ssKYxbPTA35O; Sat, 10 Dec 2022 18:13:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8316560AB3;
-	Sat, 10 Dec 2022 18:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8316560AB3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D377B1BF2E4
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 18:11:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6133A40376;
+	Sat, 10 Dec 2022 18:13:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6133A40376
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D29B1BF2E4
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 18:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEC7F60AB3
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 18:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEC7F60AB3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0485C40866
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 18:13:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0485C40866
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RrmDNfX1cZL1 for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 18:11:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pW9T5t1kWbfw for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 18:13:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFDAA60776
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CFDAA60776
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 18:11:23 +0000 (UTC)
-Received: by mail-io1-xd2a.google.com with SMTP id z144so3749319iof.3
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 10:11:23 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD5B1403A7
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD5B1403A7
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 18:13:51 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id d123so3741432iof.6
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 10:13:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PDACWHmzdid9Jpj66M/DrukUuoWluDlLEhzhVXj8/SQ=;
- b=GeIJ1sUceW0HAXfAVBDsKGhr8fMOcTM80SZJwJTmS+iBgIvEmltOOBegwm0e25Z425
- 9JZEw5usraG5PXTc8kpCdq1C8HVInW5287mUz2d5urTg9dTeuklHcMrMuuRRCRn/ymch
- AP5dE9WFODvSl3JQ4NvyhJbupdx50sPI99ifImnP+3F3IMhXj3dXf36mT0RirwBboU4G
- Bys0f/aBkRRdBHOo0Gcty+Yw8rqZU9AFqwjTLNFUdaRMyESz4JzUtvNYg71FUg+5eE+a
- OsNez7usi63KXZYfJOftBZ8/NERdy71Za1UokYxIk/dZj+Z08dx/2iMCn2AcdTvkKpZl
- W9eg==
-X-Gm-Message-State: ANoB5pl+uuvMier5K+IcYGB0lQg8X5yC/kqYhaWhM6TjvHIXT7SbUAGh
- vGBtB6LWlM/G4HZvvd2Qp84yUaCy7zUD2A==
-X-Google-Smtp-Source: AA0mqf4duPjkPQWKXHd2l+pFqJtIoq/TK5jnO1xZyvNFN3wDn9hyv0kfiSNPGWEES1nl27XQ5lByUg==
-X-Received: by 2002:a6b:d10f:0:b0:6cc:a195:ce91 with SMTP id
- l15-20020a6bd10f000000b006cca195ce91mr5670650iob.7.1670695882728; 
- Sat, 10 Dec 2022 10:11:22 -0800 (PST)
+ bh=5gCsh41APpyHzArS1qNYuwj/C6We8fXR39wWvXmxWUk=;
+ b=2h2xIZQvFIq4F8kzktDEuM7nqzPw0C7V4bHYcRKNJNlTS6xQo2Fpgq7cYMz0h2bqT5
+ ltRL0uX+niB5ys9AXg4FZk3M1Irmev7zJvmK9W/D8b+ME0xkKUUpqytD43QEDShYxM72
+ ZsC+6Gd0RCdsjZdNo2qoCPS9ofCmqqjS0Jnyj+zkfmSyz/A5FBsCFxa+5cgYoxKMsn3B
+ +Tve2Fj8/+Yigc0kn/0PwigacTcx3fzGtk8Ga6kz+nfKC1WBIZ/xsh5QkRblUN4G3sq9
+ 7wiigNsVvLm/vSmIEq6Vk1EfeMMbIcECMe+TiGi1tuQCzXFjw49ySI1sb8XCDeIzx/bQ
+ xq1w==
+X-Gm-Message-State: ANoB5pkBkesNTMQlsvcRi7KcfSZmOrlxiILCCQ5QFyVTadGQ4pQsnCc8
+ J/qUcSd663ymLcYZ8kAgC22aS/KYP4FIAw==
+X-Google-Smtp-Source: AA0mqf4z313NT2WmI4me+JyI2Vt2/7iS/gziOWp1TvtcINJregHUbSCRlBq50pmvkHIByiIztqmEjg==
+X-Received: by 2002:a05:6602:24d7:b0:6dc:2c1:d43c with SMTP id
+ h23-20020a05660224d700b006dc02c1d43cmr5414429ioe.14.1670696030663; 
+ Sat, 10 Dec 2022 10:13:50 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- p25-20020a02b019000000b00363a4fcd3a8sm1570197jah.5.2022.12.10.10.11.22
+ q30-20020a02a99e000000b0038a6da37802sm1580794jam.24.2022.12.10.10.13.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 10:11:22 -0800 (PST)
+ Sat, 10 Dec 2022 10:13:50 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 11:11:20 -0700
-Message-Id: <20221210181120.2851513-1-james.hilliard1@gmail.com>
+Date: Sat, 10 Dec 2022 11:13:48 -0700
+Message-Id: <20221210181348.2864692-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PDACWHmzdid9Jpj66M/DrukUuoWluDlLEhzhVXj8/SQ=;
- b=j5DJAsVVwMofKv3MmDiwFT/cSVzzK3dXtXgEBQvYmuRAXbFgVfNFkTqC+PKYbDb+38
- Y6pdfA+ly5lbhTL7QNmyCkd5Ht1oZdZlORs0K5t6dY1fv0mo33bgdd1QsFos20QFO/hL
- uk24Qh/Cp+YEFKuCO2w7WhnzWgbXMlFjttrw4ZzDwgsagSGTtsstSRVET3qh5LJ8B+FB
- FTKrHTpKr7v8AwXyMVN74A+PaGSqxxvZzVT2BvEK8HXMrGCIoCCkMAbu7oljFPpGGXzE
- YQNU4nErztU0435sL4ESHBcnCbIAPRdtLPWf0M8h0KQ6AY9V76ZU6l5bde2UajVeF00t
- ftjQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5gCsh41APpyHzArS1qNYuwj/C6We8fXR39wWvXmxWUk=;
+ b=JgwokDno4YP+JdRdDOz+b/mH2ybz9eCWmVg8QywLZ86b0dkXT1/pO0uKaeWusPyPIc
+ H2tkr0W2nj/r+pk24H8KXzhkZfzBGjBXfgpDvJ5273ysFy4h994OSSlaAjFWadZoKrFP
+ n/XbHVEUZKMgkdkgjnJIprs7ClYaE1bz6xGouDFYr1wkuG8uSBKPKhHvWdHtIoKXZhJG
+ Ls3MfPIYQ6hSItDneEjL3k/Pg2XTKAyVNaAQSIu7Jq30nZrLWNkAbfBbh4X8/RzbRPqR
+ CV1t01GRldmMbKR47qfBZ36olJQCT8NULbxbiVR3LfXOsNXlq/aqH2rPmT4766gTnwVX
+ qiaw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=j5DJAsVV
-Subject: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
- 8.7.0
+ header.a=rsa-sha256 header.s=20210112 header.b=JgwokDno
+Subject: [Buildroot] [PATCH 1/1] package/python-jedi: bump to version 0.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +94,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,39 +102,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
+ package/python-jedi/python-jedi.hash | 4 ++--
+ package/python-jedi/python-jedi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index e61727e045..aae34f6f9b 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
+diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+index d0f083e942..dee8810e89 100644
+--- a/package/python-jedi/python-jedi.hash
++++ b/package/python-jedi/python-jedi.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
--sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
-+md5  3adf9fca317512e5b3516a9ac25b3442  ipython-8.7.0.tar.gz
-+sha256  882899fe78d5417a0aa07f995db298fa28b58faeba2112d2e3a4c95fe14bb738  ipython-8.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/jedi/json
+-md5  d8dba4a98a35530f7f5b461c20aff180  jedi-0.18.1.tar.gz
+-sha256  74137626a64a99c8eb6ae5832d99b3bdd7d29a3850fe2aa80a4126b2a7d949ab  jedi-0.18.1.tar.gz
++md5  47e89a2b8bedcfeb1527fac37b9ba1b3  jedi-0.18.2.tar.gz
++sha256  bae794c30d07f6d910d32a7048af09b5a39ed740918da923c6b780790ebac612  jedi-0.18.2.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f3aac75db1..1af1081741 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+ sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
+ sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
+diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+index b0508de701..40de61f0e8 100644
+--- a/package/python-jedi/python-jedi.mk
++++ b/package/python-jedi/python-jedi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 8.6.0
-+PYTHON_IPYTHON_VERSION = 8.7.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/82/2b/026af47da09998404f51064d328f5f1f68c78829082d2945be489343fde6
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+-PYTHON_JEDI_VERSION = 0.18.1
++PYTHON_JEDI_VERSION = 0.18.2
+ PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+-PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/c2/25/273288df952e07e3190446efbbb30b0e4871a0d63b4246475f3019d4f55e
++PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/15/02/afd43c5066de05f6b3188f3aa74136a3289e6c30e7a45f351546cab0928c
+ PYTHON_JEDI_SETUP_TYPE = setuptools
+ PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
+ PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
 -- 
 2.34.1
 
