@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BDA6C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85D47C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD8E660B3B;
-	Sat, 10 Dec 2022 21:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD8E660B3B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37A44404AB;
+	Sat, 10 Dec 2022 21:10:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37A44404AB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d2yiowfAnGyM; Sat, 10 Dec 2022 21:10:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E375404A0;
+	Sat, 10 Dec 2022 21:10:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E375404A0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E036C1BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:10:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C933460B12
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:10:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C933460B12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bB-1tV3AmhI5; Sat, 10 Dec 2022 21:09:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C80A60AD1;
-	Sat, 10 Dec 2022 21:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C80A60AD1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7217A1BF3DF
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:09:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A6EC80BFC
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6EC80BFC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4GDMs8fKNs4M for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 21:09:14 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FVx_xZNMBTy2 for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 21:10:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 091AA80B2B
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 091AA80B2B
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:09:13 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- n9-20020a05600c3b8900b003d0944dba41so2184470wms.4
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:09:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4CED60AD1
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D4CED60AD1
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:09:59 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id x11so1598059ilo.13
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:09:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=clWy23jrKnF0H8dwYSqlD0mC7ntJNvu3gZ2B5FPwSQY=;
- b=g73wqsrwYrJUdzYu/bzo4ud1B/eUXM81id9lxhS6yfKyzJWlNy2IbIYGdtK9g/8I/v
- 5afj3La31MRixcx/AIHZsegDoCNPyIQciEnzOwckdR7s3K7Omis/wGEPPfinpyoeHjqA
- 9y6wxHFDiAWZ7CTpblLx9ikbuMx/LBNAnbZrg0gK/js0Z/koQvoJfrTt4fb2cqjysOvw
- ZiTjRSWpDfHkhiHeTWKI0eyi9qwXOq4M97FxHL4k8cNJvZnP3/2C0v7yt5QnZ0hokBAP
- FUppSFUZpBDBY4LyZ4/MidnUyGxCWO1w036fftlNd/wCglcB3cdcDToFfrBJlMFH2X9N
- SC7g==
-X-Gm-Message-State: ANoB5pkuEmLRMiXP8TBI4LEYSs3r28DqE5gBHM09YEv/xKlVS6i2FOaa
- uIVVi/nibImT5pdjt5CIchYiDjN6w6Y=
-X-Google-Smtp-Source: AA0mqf56G3MxmfVYy7UptcJgTCtYJnhV2C+6N/GMPrCZ3RDdF4ue89o5C5H4RLVu3kRYwZ5nfVkhgQ==
-X-Received: by 2002:a05:600c:3b0e:b0:3cf:b067:4161 with SMTP id
- m14-20020a05600c3b0e00b003cfb0674161mr8580168wms.15.1670706551637; 
- Sat, 10 Dec 2022 13:09:11 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- iv15-20020a05600c548f00b003d1f3e9df3csm4369205wmb.7.2022.12.10.13.09.10
+ bh=xLB5RximxkQQykQ2khNvCh2owxTwRukrQaomtvnX2qA=;
+ b=CVLDQ3al/S++ImoGxCW54JSp+d9nPeouUAtv/w3aRKw6u3eG53CFDtK9FZXkG3V4k3
+ X9ZC949iF+s0slBPVvE0nGX0b9/7I083/6D9GIJCP+7Jr/5SXVa+F1Ir4SO4vp0fKNC9
+ uWCpcPJ9agjjlDC9dISuUYUpE+W3Pb3pBZzHwvoZvgu3bGFY8zACoCPg+2Lr5ztd4Q9D
+ aEPhlRLjL/i7J0IRoJniYCui4YxQdAaYpkEhkAwz4Jhxk40cdtFFQgbNxUc2eZkQ9w3K
+ mz7p6641IyED3LliEtnW6nuCtL2poPIl7eNFTKAPH7pFN3eHFbLgLKQ85p1XBvCSXXtU
+ 7JxQ==
+X-Gm-Message-State: ANoB5plp1/7tZI0gIHN0LqKqqvKA1Dyl5gkluRRNlodlQBgdgb8IeXcM
+ JV81X0vkCPcfVMZ/tUMDcNQQjUWnSglDRPAH
+X-Google-Smtp-Source: AA0mqf4XvXGuGhxnB6/xqXv3gGhCy1OYLOmKrcx0P6ompr3IwIPYHMMuYlXKKYEsPTqtDUaUX9vqEw==
+X-Received: by 2002:a92:6707:0:b0:303:7b0e:fdb7 with SMTP id
+ b7-20020a926707000000b003037b0efdb7mr5832118ilc.0.1670706598806; 
+ Sat, 10 Dec 2022 13:09:58 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ q6-20020a05663810c600b00388660ca27dsm1689007jad.4.2022.12.10.13.09.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 13:09:11 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 10 Dec 2022 13:09:58 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 22:09:05 +0100
-Message-Id: <20221210210905.14201-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 10 Dec 2022 14:09:57 -0700
+Message-Id: <20221210210957.3664251-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=clWy23jrKnF0H8dwYSqlD0mC7ntJNvu3gZ2B5FPwSQY=;
- b=p2qhEzg+Z4gbAtdZTI92WJKa5Lt9MJWZHVxWE1V8iU8/SMNPgnt1GcsjiVtH+JzH8m
- N3bR482VbagNC6wuxwUnzVh0iNFFbZR0sWhcUhE5LvzI3M0PnyHEwqECaeqsBqKc4Zvw
- L0oDDRVZHzf6QI9sG3GisvHsrShdcPuQ8Zkp6kKTZPgn36ff6SJU1Cbhj1zw+OitXSZ7
- tFWxwP6Bqy681Z7w0h8FVzDwZSSH3VvhevjOEUCa6hp3DeVb0Cdwh5WSfGTcErXS7Osw
- e6cV2jXJzhLo+txRAeYQwDSpYQMxt+DLJsAJi5izM2AvyPqaNsNdu6TefDZ7pkhrlla3
- Tweg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xLB5RximxkQQykQ2khNvCh2owxTwRukrQaomtvnX2qA=;
+ b=NpNLHkNkqH1hjsNhgNkXpCbBFs1wgrit3Hw/4/BLtwsb6Lpq6VRxc0yd/OdmScPhxF
+ gFhWZLp/Gy5ZjCwCLw9vE9gyf1k6FTggi5KtN8qhqIUIKNcg4ScCkrpSe11Cx9tSrhSA
+ u5ewnCWo9/0LWts4j1vC5zxjmZqai5SWkhqw7PNw/1oggAjKOQGPgu7yHLhGb+CV7WTI
+ 0xYaPtvnVipdg8U5Zc1l5Ev9e3iswGvfVOT0Jks+5Rm3pmJcpeWrQTavbT0w9YwGL3Bt
+ XYA66QomFIJQTlc0h6pvZtB7MlVjGmCKkwFb85GCylBXSfnKPg+GzWZcLTq2BMXGfv8x
+ lVJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=p2qhEzg+
-Subject: [Buildroot] [PATCH 1/1] package/gqrx: fix dependencies
+ header.a=rsa-sha256 header.s=20210112 header.b=NpNLHkNk
+Subject: [Buildroot] [PATCH 1/1] package/python-websocket-client: bump to
+ version 1.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,61 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 34cea39024bf8dedaa071bc5f2d903755501215c forgot to update
-gnuradio dependencies
-
-Fixes:
- - No autobuilder failures (yet)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/gqrx/Config.in | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ package/python-websocket-client/python-websocket-client.hash | 4 ++--
+ package/python-websocket-client/python-websocket-client.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index adcdbb0896..442b28e546 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -1,15 +1,16 @@
--comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
-+comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_USE_MMU # gnuradio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+index 08a6c260ca..5da778027b 100644
+--- a/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/websocket-client/json
+-md5  1e8b6daae0cad86f8cd9210b24bdf95b  websocket-client-1.4.1.tar.gz
+-sha256  f9611eb65c8241a67fb373bef040b3cf8ad377a9f6546a12b620b6511e8ea9ef  websocket-client-1.4.1.tar.gz
++md5  26d1d8db59c9417570d8ec73ace1687b  websocket-client-1.4.2.tar.gz
++sha256  d6e8f90ca8e2dd4e8027c4561adeb9456b54044312dba655e7cae652ceb9ae59  websocket-client-1.4.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  638eb70dcc4af2e6d8388de0636ced399f7c24716e11b8573a6b06f879e80691  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+index 7e21187e22..79cde7e590 100644
+--- a/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "gqrx needs qt5"
- 	depends on !BR2_PACKAGE_QT5
- 
--comment "gqrx needs a toolchain not affected by GCC bug 43744 and 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744 || BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+comment "gqrx needs a toolchain not affected by GCC bug 43744"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
- 
- config BR2_PACKAGE_GQRX
- 	bool "gqrx"
-@@ -21,8 +22,8 @@ config BR2_PACKAGE_GQRX
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # gnuradio -> boost-atomic
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # gnuradio
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_BOOST_SYSTEM
+-PYTHON_WEBSOCKET_CLIENT_VERSION = 1.4.1
++PYTHON_WEBSOCKET_CLIENT_VERSION = 1.4.2
+ PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket-client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
+-PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/99/11/01fe7ebcb7545a1990c53c11f31230afe1388b0b34256e3fd20e49482245
++PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/75/af/1d13b93e7a21aca7f8ab8645fcfcfad21fc39716dc9dce5dc2a97f73ff78
+ PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKET_CLIENT_LICENSE = Apache-2.0
+ PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
