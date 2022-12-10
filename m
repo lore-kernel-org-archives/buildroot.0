@@ -1,87 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AB38C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 13:22:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0612C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 14:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7A8B409FE;
-	Sat, 10 Dec 2022 13:22:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A8B409FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D27C60AFC;
+	Sat, 10 Dec 2022 14:09:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D27C60AFC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TLXe5WxUKTCa; Sat, 10 Dec 2022 14:09:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D6E160A99;
+	Sat, 10 Dec 2022 14:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D6E160A99
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 736981BF3C3
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 14:09:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DE424026E
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 14:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DE424026E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gJV5O-FrUw5w; Sat, 10 Dec 2022 13:22:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E433C40544;
-	Sat, 10 Dec 2022 13:22:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E433C40544
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C05DA1BF855
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 13:22:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9842181CAD
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 13:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9842181CAD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GOpbj3SHAVpA for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 13:22:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E6E681BBD
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E6E681BBD
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:22:46 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id o15so1781606wmr.4
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 05:22:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2k+PG2KHw4DO48IoLRgJkdpYidf8P//N8dnhUNC3bsc=;
- b=PcF88bu61zEly0erbCKvleznUGUPXdePj8EhynASwsbfUOfeAGrALElgb7YFvn4BF7
- FYuIsQLcU5bmzSBJqXGqBQhzclSSMihNVNp/MQgK0cHofoRp1ZHJq1kOMYttq5jkpQHh
- wXi3MExT22QqbPyw7AKfb7PeT+jMWzTVv4Qd/WHxqb54twMILQYcb0VzyX36yXIY8qRO
- eFBnm9Y+ty8dx06Tx/v0us8aRJ3nVDt2J5TLrewBZ4TSm4lYk+din2yhNvODGwe/CVmI
- MOHmbj8yl5+t00ihTR53frEW6vv8ckfAaQ3gPcS8G7PKCTFm+h/jpjBLP/oX9bGm33Md
- 9Ulw==
-X-Gm-Message-State: ANoB5pmBi+FGqbPxiNHhzLBX702WbllzyG7BsPbyR9Rdj4mruVHqsBNw
- ExHrPtkcm7xoD6qG1PurdkChldlKCe4=
-X-Google-Smtp-Source: AA0mqf69s28UH/QpOe6AI9QsIC4R3q9aoO3CUwYxdRdcFHnWpRyuR3bIUrJtMXjwcKvjXtZXpeZnyw==
-X-Received: by 2002:a05:600c:1c25:b0:3d0:a768:a702 with SMTP id
- j37-20020a05600c1c2500b003d0a768a702mr7507033wms.19.1670678564798; 
- Sat, 10 Dec 2022 05:22:44 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- h22-20020a05600c351600b003d21759db42sm2695593wmq.5.2022.12.10.05.22.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 05:22:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i-WQyn1444nh for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 14:09:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2439B4026C
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 14:09:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2439B4026C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0EDC485EEF; Sat, 10 Dec 2022 14:09:46 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 14:22:40 +0100
-Message-Id: <20221210132240.10559-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2k+PG2KHw4DO48IoLRgJkdpYidf8P//N8dnhUNC3bsc=;
- b=YlzwRT3qxsX/3Muu1NjqU3KTMGw+q+q6h7qNKFDri35pkKLqUvndl1thDot3ez6pmy
- qsQ+NLN50gSdF1HP7J5BxkMpsEpgvSUZRfkx0oUPmNKkHppEmUHY/eQaWFZKQ8pBLE1j
- 8g004mfaVN5z73JwNpA6vLRi4GwqyqjX1ePHdjgVTEHhUcxTVjuwtkIuB6WgmVBBzCAK
- +lhmrSB7ApjXCwhaygcwRkrRbJiLGzA8tI4rmeayxTYCjpmaP1Yl3gp0IB648pBngW/Q
- egiITA2dcG7xyGZphxPdWQLd1YvpOSx21cxMO2/hMFfHwDUS9uqWtN1DCNXU6eevbUMt
- Bztw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YlzwRT3q
-Subject: [Buildroot] [PATCH 1/1] package/neon: bump to version 0.32.4
+Date: Sat, 10 Dec 2022 15:09:22 +0100
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: a2272be318cddda16cb802bcefcc4fba0af1db48
+X-Git-Newrev: 1fad7a933d28a17ce4064898e49e2ad4d6ba8bd3
+X-Patchwork-Hint: ignore
+Message-Id: <20221210140946.0EDC485EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] Update for 2022.08.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +56,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/notroj/neon/blob/0.32.4/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=1fad7a933d28a17ce4064898e49e2ad4d6ba8bd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/neon/neon.hash | 2 +-
- package/neon/neon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES                  | 16 ++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/package/neon/neon.hash b/package/neon/neon.hash
-index 5a5a77a58b..9bd6195e39 100644
---- a/package/neon/neon.hash
-+++ b/package/neon/neon.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  986566468c6295fc5d0fb141a5981e31c9f82ee38e938374abed8471ef2fb286  neon-0.32.2.tar.gz
-+sha256  b1e2120e4ae07df952c4a858731619733115c5f438965de4fab41d6bf7e7a508  neon-0.32.4.tar.gz
- # Hash for license files
- sha256  ce2421ee38d6c0e02c85ac076478a0f92da6ef92b92b7a174877cabf01b2e531  README.md
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  src/COPYING.LIB
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index eae6bfbad6..1ce8f1ff16 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/CHANGES b/CHANGES
+index 61605da4e3..b5dfc5ba85 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,19 @@
++2022.08.3, released December 10th, 2022
++
++	Important / security related fixes.
++
++	Updated/fixed packages: asterisk, dash, dovecot, edk2,
++	edk2-platforms, elf2flt, exim, freerdp, gcc, gdb, git, gnupg2,
++	heimdal, iwd, kodi, libarchive, libkrb5, libksba, libmdbx,
++	libopenssl, matchbox-keyboard, memcached, netsnmp, nginx,
++	nodejs, openpgm, optee-client, python-scipy, python3, rsync,
++	rtl8723bu, samba4, sdl, sdl2, swupdate, sysstat, systemd,
++	uboot, vim, vlc, wilc-driver, xen, xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	15131: Target GDB uses internal zlib
++
+ 2022.08.2, released November 16th, 2022
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 699879fca6..e5bf820757 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.08.2
++export BR2_VERSION := 2022.08.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1668618000
++BR2_VERSION_EPOCH = 1670681000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 40c7c4e1ce..64a4794c65 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
  ################################################################################
  
--NEON_VERSION = 0.32.2
-+NEON_VERSION = 0.32.4
- NEON_SITE = https://notroj.github.io/neon
- NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
- NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README.md
--- 
-2.35.1
-
+ # Buildroot version to use
+-RELEASE='2022.08.2'
++RELEASE='2022.08.3'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
