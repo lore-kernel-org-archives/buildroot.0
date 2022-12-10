@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E42D9C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 10:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A31C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 10:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93CFA401A1;
-	Sat, 10 Dec 2022 10:12:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93CFA401A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63A1A60AB0;
+	Sat, 10 Dec 2022 10:12:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63A1A60AB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id noszfU2XHkfb; Sat, 10 Dec 2022 10:11:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jd2DqycXTbaT; Sat, 10 Dec 2022 10:12:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95FCF4018F;
-	Sat, 10 Dec 2022 10:11:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95FCF4018F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B83660AF2;
+	Sat, 10 Dec 2022 10:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B83660AF2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AC3A21BF3AA
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:11:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12C061BF3AA
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 945E360AF2
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:11:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 945E360AF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id E27CA60B12
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E27CA60B12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y-fYRqm4K61T for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 10:11:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 338DA60AB0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 338DA60AB0
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 10:11:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.110.151])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id D1873780333;
- Sat, 10 Dec 2022 11:11:50 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Dec 2022 11:11:50 +0100
-Date: Sat, 10 Dec 2022 11:11:50 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Etienne Carriere <etienne.carriere@linaro.org>
-Message-ID: <20221210101150.GS2855@scaer>
-References: <20221209075104.1168297-1-etienne.carriere@linaro.org>
- <20221209075104.1168297-3-etienne.carriere@linaro.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221209075104.1168297-3-etienne.carriere@linaro.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670667113;
- bh=pTjpCMagFPC9DL3kQwY6iuZ0Indj2DsOm/l5iDVrZ+4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MDjigokB/8NlDt+VbmWSN1Csx734f5ePtjkb3QvT0Ctu8ctCE4IaCZD2GB3aTH/ar
- pD0zvRt6HbMiuI6KlOJ7DenFKuDAc9gSdRdWbpmNCqGtZfxRiB3FmPB0x+KoyYUZ2O
- ub24PiF3AsjlJfbVQuYDqHyBwWQXPMgg9CJCZM0rkVIePhw+PIJ60UEV4x+Q2PZ2uN
- 7MM3ZAC8Gbrm7RU3MO6cpWJBc1fJ3cYA3/C9vGSWPkVjF9OXW8CXq8vdpZcTdxUWPJ
- y/LZ24U9XzMmud1sla5tYuOjvcIEuh70reiBjo39oG0DW9719mZAGAo8/Yk9uNa+5e
- IzSNyguGepx3w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MDjigokB
-Subject: Re: [Buildroot] [PATCH v2 3/5] package/optee-client: bump to
- version 3.19.0
+ with ESMTP id nzVh24UGuYtF for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7CB060AB0
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7CB060AB0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B614485EE3; Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 10 Dec 2022 10:53:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9c552f39c98d271002032b0d74f62c9cfe4348dd
+X-Git-Newrev: 917a961d9c77d5f1aaa47206add9b9ff80e74a82
+X-Patchwork-Hint: ignore
+Message-Id: <20221210101202.B614485EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-client: bump to version
+ 3.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,122 +57,212 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-w4l0aWVubmUsIEFsbCwKCk9uIDIwMjItMTItMDkgMDg6NTEgKzAxMDAsIEV0aWVubmUgQ2Fycmll
-cmUgc3Bha2UgdGh1c2x5Ogo+IEJ1bXBzIE9QLVRFRSBjbGllbnQgcGFja2FnZSB2ZXJzaW9uIHRv
-IE9QLVRFRSByZWxlYXNlIDMuMTkuMC4KPiAKPiBUaGlzIHBhY2thZ2UgaW50cm9kdWNlcyBhIG1h
-bmRhdG9yeSBkZXBlbmRlbmN5IG9uIHV0aWwtbGludXggYW5kCj4gcGstY29uZmlnIHBhY2thZ2Vz
-IHRoYXQgd2VyZSBtYWRlIG9wdGlvbmFsIGluIGNvbW1pdCBbMV0sIGZvbGxvd2luZwo+IDMuMTku
-MCByZWxlYXNlIHRhZy4gVGhlIGRlcGVuZGVuY3kgaXMgcmVsYXRlZCB0byBuZXcgbGlicmFyeSB0
-ZWVhY2wKPiBmb3IgYWNjZXNzIGNvbnRyb2wgbGlzdCBiYXNlZCBsb2dpbiBpZGVudGlmaWNhdGlv
-bi4gVGhpcyBjaGFuZ2UgcGlja3MKPiB0aGF0IGNvbW1pdCBhbmQgZGVmaW5lcyB0aGUgZGVwZW5k
-ZW5jeSBvbmx5IHdoZW4gVEVFQUNMIGxpYnJhcnkgaXMKPiB0byBiZSBlbWJlZGRlZC4gVGhlIHBh
-dGNoIHdpbGwgYmUgcmVtb3ZlZCBvbmNlIHdlIGR1bXAgdG8gdGhlIG5leHQKPiBPUC1URUUgcmVs
-ZWFzZSB0YWcsIGFzIHN0YXRlIGJ5IG5ldyBCUjIgYm9vbGVhbiBjb25maWcgc3dpdGNoCj4gQlIy
-X1BBQ0tBR0VfT1BURUVfQ0xJRU5UX1RFRUFDTC4KCldlIHVzdWFsbHkgZG8gbm90IGxpa2UgdG8g
-Y2FycnkgZmVhdHVyZSBwYXRjaGVzLCBidXQgdGhpcyBvbmUgaXMKYWN0dWFsbHkgdXBzdHJlYW0s
-IHNvIHRoYXQncyBPSy1pc2guIFNvIEkga2VwdCBpdC4KCj4gU2lnbmVkLW9mZi1ieTogRXRpZW5u
-ZSBDYXJyaWVyZSA8ZXRpZW5uZS5jYXJyaWVyZUBsaW5hcm8ub3JnPgo+IC0tLQo+IENoYW5nZXMg
-c2luY2UgdjE6Cj4gLSBTcXVhc2hlcyAyIGNvbW1pdHMgZnJvbSB2MSBzZXJpZXMuCj4gLSBBZGRz
-IE9QLVRFRSBDbGllbnQgZml4dXAgY29tbWl0IGFuZCBuZXcgcGFja2FnZSBjb25maWcgc3dpdGNo
-Cj4gICBCUjJfUEFDS0FHRV9PUFRFRV9DTElFTlRfVEVFQUNMIHRvIG5vdCBtYW5kYXRlIGRlcGVu
-ZGVuY3kgb24KPiAgIHBrZy1jb25maWcgYW5kIHVzci1saW51eCAobGlidXVpZCkuCj4gCj4gU2ln
-bmVkLW9mZi1ieTogRXRpZW5uZSBDYXJyaWVyZSA8ZXRpZW5uZS5jYXJyaWVyZUBsaW5hcm8ub3Jn
-Pgo+IC0tLQo+ICAuLi5jb25kaXRpb24tbGlidGVlYWNsLXdpdGgtV0lUSF9URUVBQ0wucGF0Y2gg
-fCAxMDIgKysrKysrKysrKysrKysrKysrCj4gIHBhY2thZ2Uvb3B0ZWUtY2xpZW50L0NvbmZpZy5p
-biAgICAgICAgICAgICAgICB8ICAxMCArKwo+ICBwYWNrYWdlL29wdGVlLWNsaWVudC9vcHRlZS1j
-bGllbnQuaGFzaCAgICAgICAgfCAgIDQgKy0KPiAgcGFja2FnZS9vcHRlZS1jbGllbnQvb3B0ZWUt
-Y2xpZW50Lm1rICAgICAgICAgIHwgIDEyICsrLQo+ICA0IGZpbGVzIGNoYW5nZWQsIDEyNSBpbnNl
-cnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9v
-cHRlZS1jbGllbnQvMDAwMS1saWJ0ZWVhY2wtY29uZGl0aW9uLWxpYnRlZWFjbC13aXRoLVdJVEhf
-VEVFQUNMLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3B0ZWUtY2xpZW50LzAwMDEt
-bGlidGVlYWNsLWNvbmRpdGlvbi1saWJ0ZWVhY2wtd2l0aC1XSVRIX1RFRUFDTC5wYXRjaCBiL3Bh
-Y2thZ2Uvb3B0ZWUtY2xpZW50LzAwMDEtbGlidGVlYWNsLWNvbmRpdGlvbi1saWJ0ZWVhY2wtd2l0
-aC1XSVRIX1RFRUFDTC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAw
-MDAwMC4uNTNlN2M0YmY5MQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL29wdGVlLWNs
-aWVudC8wMDAxLWxpYnRlZWFjbC1jb25kaXRpb24tbGlidGVlYWNsLXdpdGgtV0lUSF9URUVBQ0wu
-cGF0Y2gKPiBAQCAtMCwwICsxLDEwMiBAQAo+ICtGcm9tIDhlMDYwNDQxYTUwMjAxYjEwYWE2MWJj
-ODNjNTdkNzU4YmZlMTljZjEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCgpOb3Qgc3VyZSB3aGVy
-ZSB5b3UgZ290IHRoYXQgc2hhMSwgYnV0IHVwc3RyZWFtIGNvbW1pdCBpcwpiYmRmNjY1YWJhMzlj
-MjlhM2NlN2JkMDZlNDU1NGM2MmE0MTZlYmFhLCBzbyBJIGFjdHVhbGx5IGJhY2twb3J0ZWQgdGhh
-dAppbnN0ZWFkLgoKPiArRnJvbTogRXRpZW5uZSBDYXJyaWVyZSA8ZXRpZW5uZS5jYXJyaWVyZUBs
-aW5hcm8ub3JnPgo+ICtEYXRlOiBUaHUsIDEwIE5vdiAyMDIyIDEyOjA1OjI0ICswMTAwCj4gK1N1
-YmplY3Q6IFtQQVRDSF0gbGlidGVlYWNsOiBjb25kaXRpb24gbGlidGVlYWNsIHdpdGggV0lUSF9U
-RUVBQ0wKPiArCj4gK0J1aWxkIGFuZCBlbWJlZCBsaWJ0ZWVhY2wgdXBvbiBXSVRIX1RFRUFDTD0x
-IChkZWZhdWx0IGNvbmZpZ3VyYXRpb24pLgo+ICtUaGlzIGNvbmZpZ3VyYXRpb24gc3dpdGNoIGFs
-bG93cyBvbmUgdG8gYnVpbGQgT1AtVEVFIGNsaWVudCB3aXRob3V0Cj4gK2RlcGVuZGVuY2llcyBv
-biBwa2ctY29uZmlnIGFuZCBsaWJ1dWlkICB3aGVuIE9QLVRFRSBBQ0wgZm9yCj4gK1BLQ1MxMSBp
-cyBub3QgbmVlZGVkOgo+ICsgY21ha2UgLURXSVRIX1RFRUFDTD0wIC4uLgo+ICtvcgo+ICsgbWFr
-ZSBXSVRIX1RFRUFDTD0wIC4uLgo+ICsKPiArV2l0aCB0aGUgY29tbWVudHMgYmVsb3cgYWRkcmVz
-c2VkLCBMR1RNLgo+ICsKPiArQWNrZWQtYnk6IEplcm9tZSBGb3Jpc3NpZXIgPGplcm9tZS5mb3Jp
-c3NpZXJAbGluYXJvLm9yZz4KPiArQWNrZWQtYnk6IEplbnMgV2lrbGFuZGVyIDxqZW5zLndpa2xh
-bmRlckBsaW5hcm8ub3JnPgo+ICtSZXZpZXdlZC1ieTogRWVybyBBYWx0b25lbiA8ZWVyby5hYWx0
-b25lbkB2YWlzYWxhLmNvbT4KPiArU2lnbmVkLW9mZi1ieTogRXRpZW5uZSBDYXJyaWVyZSA8ZXRp
-ZW5uZS5jYXJyaWVyZUBsaW5hcm8ub3JnPgoKV2UgYWxzbyBsaWtlIHRvIHNlZSBhIGNvbW1lbnQg
-dGhhdCB0aGlzIGlzIGFuIGFjdHVhbCBiYWNrcG9ydCwgc28gSQphZGRlZCBpdC4KClstLVNOSVAt
-LV0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcHRlZS1jbGllbnQvQ29uZmlnLmluIGIvcGFja2Fn
-ZS9vcHRlZS1jbGllbnQvQ29uZmlnLmluCj4gaW5kZXggY2M3ZjE3NmM3Ny4uMzMwN2EwZWE4MyAx
-MDA2NDQKPiAtLS0gYS9wYWNrYWdlL29wdGVlLWNsaWVudC9Db25maWcuaW4KPiArKysgYi9wYWNr
-YWdlL29wdGVlLWNsaWVudC9Db25maWcuaW4KPiBAQCAtMzcsNiArMzcsMTYgQEAgY29uZmlnIEJS
-Ml9QQUNLQUdFX09QVEVFX0NMSUVOVF9TVVBQX1BMVUdJTlMKPiAgCWhlbHAKPiAgCSAgRW5hYmxl
-IFRFRSBzdXBwbGljYW50IHBsdWdpbiBzdXBwb3J0Lgo+ICAKPiArY29uZmlnIEJSMl9QQUNLQUdF
-X09QVEVFX0NMSUVOVF9URUVBQ0wKPiArCWJvb2wgIkVuYWJsZSBURUUgQWNjZXNzIENvbnRyb2wg
-TGlzdCBsb2dpbiIKPiArCWRlZmF1bHQgeQoKV2h5IGRpZCB5b3UgbWFrZSBpdCBkZWZhdWx0IHRv
-ICd5Jz8gSXQgaXMgYSBuZXcgZmVhdHVyZSwgYW5kIHlvdQpiYWNrcG9ydCBhIHBhdGNoIGZyb20g
-dXBzdHJlYW0gdG8gbWFrZSBpdCBvcHRpb25hbCwgc28gdGhlcmUgaXMgbm8KcmVhc29uIHRvIGVu
-YWJsZSBpdCBieSBkZWZhdWx0LCBpcyB0aGVyZT8KCkkgZHJvcHBlZCB0aGF0LCBidXQgaWYgeW91
-IGJlbGlldmUgaXQgc2hvdWxkIGRlZmF1dCB0byB5LCB0aGVuIHBsZWFzZQpzZW5kIGEgZm9sb3ct
-dXAgcGF0Y2ggdGhhdCBleHBsYWlucyB3aHkuCgo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9V
-VElMX0xJTlVYCgpJIGFsc28gY2hhbmdlZCB0aGF0IGludG8gYSBzZWxlY3QsIGxpa2Ugd2UgZG8g
-YWxtb3N0IGV2ZXl3aGVyZSBlbHNlLiBXZQpoYXZlIGEgc2luZ2xlIGxvY2F0aW9uIHRoYXQgZGVw
-ZW5kcyBvbiB1dGlsLWxpbnV4LCBidXQgSSBqdXN0IG5vdGljZWQgaXQKaXMgYSBzcHVyaW91cyBk
-ZXBlbmRlbmN5LCBJJ2xsIHNlbmQgYSBwYXRjaCB0byByZW1vdmUgaXQuCgo+ICsJc2VsZWN0IEJS
-Ml9QQUNLQUdFX1VUSUxfTElOVVhfTElCUwoKVGhhdCBzaG91bGQgdXN1YWxseSBub3QgYmUgbmVl
-ZGVkLCBpcyBvbmx5IHVzZWQgdG8gYnJlYWsgYSBjaXJjdWxhcgpkZXBlbmRlbmN5IGNoYW4gaW4g
-c3BlY2lhbCBjYXNlcy4gSSBjb3VsZCBub3Qgc3BvdCBzdWNoIGEgY2hhaW4gaGVyZSwgc28KSSBk
-cm9wcGVkIHRoZSBfTElCUy4KClstLVNOSVAtLV0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcHRl
-ZS1jbGllbnQvb3B0ZWUtY2xpZW50Lm1rIGIvcGFja2FnZS9vcHRlZS1jbGllbnQvb3B0ZWUtY2xp
-ZW50Lm1rCj4gaW5kZXggM2ZiYmU5NDg0Yy4uZDAzNzkxZDNhZCAxMDA2NDQKPiAtLS0gYS9wYWNr
-YWdlL29wdGVlLWNsaWVudC9vcHRlZS1jbGllbnQubWsKPiArKysgYi9wYWNrYWdlL29wdGVlLWNs
-aWVudC9vcHRlZS1jbGllbnQubWsKPiBAQCAtNCwxMiArNCwxNiBAQAo+ICAjCj4gICMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjCj4gIAo+IC1PUFRFRV9DTElFTlRfVkVSU0lPTiA9IDMuMTguMAo+ICtP
-UFRFRV9DTElFTlRfVkVSU0lPTiA9IDMuMTkuMAo+ICBPUFRFRV9DTElFTlRfU0lURSA9ICQoY2Fs
-bCBnaXRodWIsT1AtVEVFLG9wdGVlX2NsaWVudCwkKE9QVEVFX0NMSUVOVF9WRVJTSU9OKSkKPiAg
-T1BURUVfQ0xJRU5UX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UKPiAgT1BURUVfQ0xJRU5UX0xJQ0VO
-U0VfRklMRVMgPSBMSUNFTlNFCj4gIE9QVEVFX0NMSUVOVF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMK
-PiAgCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfT1BURUVfQ0xJRU5UX1RFRUFDTCkseSkKPiArT1BU
-RUVfQ0xJRU5UX0VYVF9ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgdXRpbC1saW51eC1saWJz
-CgogICAgJCBtYWtlIGNoZWNrLXBhY2thZ2UKICAgIHBhY2thZ2Uvb3B0ZWUtY2xpZW50L29wdGVl
-LWNsaWVudC5tazoxNDogY29uZGl0aW9uYWwgb3ZlcnJpZGUgb2YgdmFyaWFibGUgT1BURUVfQ0xJ
-RU5UX0VYVF9ERVBFTkRFTkNJRVMKCj4gK2VuZGlmCj4gKwo+ICBPUFRFRV9DTElFTlRfQ09ORl9P
-UFRTID0gXAo+ICAJLURDRkdfVEVFX0ZTX1BBUkVOVF9QQVRIPSQoQlIyX1BBQ0tBR0VfT1BURUVf
-Q0xJRU5UX1RFRV9GU19QQVRIKSBcCj4gIAktRENGR19XRVJST1I9T0ZGCj4gQEAgLTI2LDYgKzMw
-LDEyIEBAIGVsc2UKPiAgT1BURUVfQ0xJRU5UX0NPTkZfT1BUUyArPSAtRENGR19URUVfU1VQUF9Q
-TFVHSU5TPU9GRgo+ICBlbmRpZgo+ICAKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9PUFRFRV9DTElF
-TlRfVEVFQUNMKSx5KQo+ICtPUFRFRV9DTElFTlRfQ09ORl9PUFRTID0gLURXSVRIX1RFRUFDTD1P
-Tgo+ICtlbHNlCj4gK09QVEVFX0NMSUVOVF9DT05GX09QVFMgPSAtRFdJVEhfVEVFQUNMPU9GRgoK
-ICAgICQgbWFrZSBjaGVjay1wYWNrYWdlCiAgICBwYWNrYWdlL29wdGVlLWNsaWVudC9vcHRlZS1j
-bGllbnQubWs6MzQ6IGNvbmRpdGlvbmFsIG92ZXJyaWRlIG9mIHZhcmlhYmxlIE9QVEVFX0NMSUVO
-VF9DT05GX09QVFMKICAgIHBhY2thZ2Uvb3B0ZWUtY2xpZW50L29wdGVlLWNsaWVudC5tazozNjog
-Y29uZGl0aW9uYWwgb3ZlcnJpZGUgb2YgdmFyaWFibGUgT1BURUVfQ0xJRU5UX0NPTkZfT1BUUwoK
-QWxzbywgd2h5IGRpZCB5b3UgYWRkIHRoZSBjb25kaXRpb24gdHdpY2UsIG9uY2UgdG8gYWRkIHRo
-ZSBkZXBlbmRlbmN5CmFuZCBvbmUgdG8gYWRkIHRoZSBjb25mIG9wdHM/IEkgc3F1YXNoZWQgdGhl
-IHR3byB0b2dldGhlci4KCkFwcGxpZWQgdG8gbWFzdGVyIHdpdGggYWxsIHRoZSBhYm92ZSBmaXhl
-ZCwgdGhhbmtzLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0t
-LS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJ
-SSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3
-YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8
-ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAg
-fCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBf
-LypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0t
-LS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=917a961d9c77d5f1aaa47206add9b9ff80e74a82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bumps OP-TEE client package version to OP-TEE release 3.19.0.
+
+This package introduces a mandatory dependency on util-linux and
+pk-config packages that were made optional in commit [1], following
+3.19.0 release tag. The dependency is related to new library teeacl
+for access control list based login identification. This change picks
+that commit and defines the dependency only when TEEACL library is
+to be embedded. The patch will be removed once we dump to the next
+OP-TEE release tag, as state by new BR2 boolean config switch
+BR2_PACKAGE_OPTEE_CLIENT_TEEACL.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[yann.morin.1998@free.fr:
+  - actually backport upstream commit
+  - don't default y for BR2_PACKAGE_OPTEE_CLIENT_TEEACL
+  - select util-linux instead of depending on it
+  - don't select util-linux-libs, there's no circular deps
+  - squash both conditions together in .mk
+  - fix check-package
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...eacl-condition-libteeacl-with-WITH_TEEACL.patch | 105 +++++++++++++++++++++
+ package/optee-client/Config.in                     |   8 ++
+ package/optee-client/optee-client.hash             |   4 +-
+ package/optee-client/optee-client.mk               |   9 +-
+ 4 files changed, 123 insertions(+), 3 deletions(-)
+
+diff --git a/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch b/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch
+new file mode 100644
+index 0000000000..4fdf9afc94
+--- /dev/null
++++ b/package/optee-client/0001-libteeacl-condition-libteeacl-with-WITH_TEEACL.patch
+@@ -0,0 +1,105 @@
++From bbdf665aba39c29a3ce7bd06e4554c62a416ebaa Mon Sep 17 00:00:00 2001
++From: Etienne Carriere <etienne.carriere@linaro.org>
++Date: Thu, 10 Nov 2022 12:05:24 +0100
++Subject: [PATCH] libteeacl: condition libteeacl with WITH_TEEACL
++
++Build and embed libteeacl upon WITH_TEEACL=1 (default configuration).
++This configuration switch allows one to build OP-TEE client without
++dependencies on pkg-config and libuuid  when OP-TEE ACL for
++PKCS11 is not needed:
++ cmake -DWITH_TEEACL=0 ...
++or
++ make WITH_TEEACL=0 ...
++
++With the comments below addressed, LGTM.
++
++Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
++Acked-by: Jens Wiklander <jens.wiklander@linaro.org>
++Reviewed-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
++[etienne.carriere@linaro.org: backport upstream commit]
++Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++[yann.morin.1998@free.fr: actually do a backport of bbdf665]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ CMakeLists.txt |  9 ++++++---
++ Makefile       | 15 ++++++++++++---
++ 2 files changed, 18 insertions(+), 6 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0786752..9fb5c6a 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -5,6 +5,7 @@ project (optee_client C)
++ set (CMAKE_TOOLCHAIN_FILE CMakeToolchain.txt)
++ 
++ set (CFG_WERROR 1 CACHE BOOL "Build with -Werror")
+++option (WITH_TEEACL "Build libteeacl" TRUE)
++ 
++ include(GNUInstallDirs)
++ 
++@@ -37,7 +38,9 @@ add_subdirectory (libteec)
++ add_subdirectory (tee-supplicant)
++ add_subdirectory (public)
++ add_subdirectory (libckteec)
++-find_package (PkgConfig REQUIRED)
++-pkg_check_modules(uuid REQUIRED IMPORTED_TARGET uuid)
++-add_subdirectory (libteeacl)
+++if(WITH_TEEACL)
+++    find_package (PkgConfig REQUIRED)
+++    pkg_check_modules(uuid REQUIRED IMPORTED_TARGET uuid)
+++    add_subdirectory (libteeacl)
+++endif(WITH_TEEACL)
++ add_subdirectory (libseteec)
++diff --git a/Makefile b/Makefile
++index 90b487e..2ee5621 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -16,6 +16,8 @@ SBINDIR ?= /usr/sbin
++ LIBDIR ?= /usr/lib
++ INCLUDEDIR ?= /usr/include
++ 
+++WITH_TEEACL ?= 1
+++
++ .PHONY: all build build-libteec build-libckteec build-libseteec \
++ 	build-libteeacl check-libuuid install copy_export clean cscope \
++ 	clean-cscope \
++@@ -35,8 +37,10 @@ build-tee-supplicant: build-libteec
++ 	@echo "Building tee-supplicant"
++ 	$(MAKE) --directory=tee-supplicant  --no-print-directory --no-builtin-variables CFG_TEE_SUPP_LOG_LEVEL=$(CFG_TEE_SUPP_LOG_LEVEL)
++ 
++-build: build-libteec build-tee-supplicant build-libckteec build-libseteec \
++-	build-libteeacl
+++build: build-libteec build-tee-supplicant build-libckteec build-libseteec
+++ifeq ($(WITH_TEEACL),1)
+++build: build-libteeacl
+++endif
++ 
++ build-libckteec: build-libteec
++ 	@echo "Building libckteec.so"
++@@ -57,7 +61,10 @@ check-libuuid:
++ install: copy_export
++ 
++ clean: clean-libteec clean-tee-supplicant clean-cscope clean-libckteec \
++-	clean-libseteec clean-libteeacl
+++	clean-libseteec
+++ifeq ($(WITH_TEEACL),1)
+++clean: clean-libteeacl
+++endif
++ 
++ clean-libteec:
++ 	@$(MAKE) --directory=libteec --no-print-directory clean
++@@ -158,9 +165,11 @@ copy_export: build
++ 	cp libckteec/include/*.h $(DESTDIR)$(INCLUDEDIR)
++ 	cp -d ${O}/libckteec/libckteec.so* $(DESTDIR)$(LIBDIR)
++ 	cp -d ${O}/libckteec/libckteec.a $(DESTDIR)$(LIBDIR)
+++ifeq ($(WITH_TEEACL),1)
++ 	cp libteeacl/include/*.h $(DESTDIR)$(INCLUDEDIR)
++ 	cp -d ${O}/libteeacl/libteeacl.so* $(DESTDIR)$(LIBDIR)
++ 	cp -d ${O}/libteeacl/libteeacl.a $(DESTDIR)$(LIBDIR)
+++endif
++ 	cp libseteec/include/*.h $(DESTDIR)$(INCLUDEDIR)
++ 	cp -d ${O}/libseteec/libseteec.so* $(DESTDIR)$(LIBDIR)
++ 	cp -d ${O}/libseteec/libseteec.a $(DESTDIR)$(LIBDIR)
++-- 
++2.25.1
++
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index cc7f176c77..538948b72c 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -37,6 +37,14 @@ config BR2_PACKAGE_OPTEE_CLIENT_SUPP_PLUGINS
+ 	help
+ 	  Enable TEE supplicant plugin support.
+ 
++config BR2_PACKAGE_OPTEE_CLIENT_TEEACL
++	bool "Enable TEE Access Control List login"
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Enable TEE ACL login identification for OP-TEE service that
++	  supports them as OP-TEE PKCS#11 services.
++
+ endif
+ 
+ comment "optee-client needs a toolchain w/ threads, headers >= 4.3"
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index 8e55bf5725..c067e26f4e 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_client/archive/3.18.0/optee-client-3.18.0.tar.gz
+-sha256  ecc0f04fdd5398aa52fea50427fbd624f7f90274aec7bbf2cc8a5bd16758202b  optee-client-3.18.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.19.0/optee-client-3.19.0.tar.gz
++sha256  5f0d02efa0e496964e86ca9dd2461ada923d1f9e11a4b9cafb5393bd08337644  optee-client-3.19.0.tar.gz
+ # Locally computed
+ sha256  fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 3fbbe9484c..3e0c9269b8 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_CLIENT_VERSION = 3.18.0
++OPTEE_CLIENT_VERSION = 3.19.0
+ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+@@ -26,6 +26,13 @@ else
+ OPTEE_CLIENT_CONF_OPTS += -DCFG_TEE_SUPP_PLUGINS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_TEEACL),y)
++OPTEE_CLIENT_EXT_DEPENDENCIES += host-pkgconf util-linux-libs
++OPTEE_CLIENT_CONF_OPTS += -DWITH_TEEACL=ON
++else
++OPTEE_CLIENT_CONF_OPTS += -DWITH_TEEACL=OFF
++endif
++
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30tee-supplicant \
+ 		$(TARGET_DIR)/etc/init.d/S30tee-supplicant
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
