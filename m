@@ -1,89 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0A44C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 10:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C2CAC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 12:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36B1D60AB0;
-	Sat, 10 Dec 2022 10:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B1D60AB0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eQLwS-bbU4K8; Sat, 10 Dec 2022 10:20:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A250607A4;
-	Sat, 10 Dec 2022 10:20:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A250607A4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 525A61BF3AA
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:20:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35E598174D
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35E598174D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C94881CE1;
+	Sat, 10 Dec 2022 12:31:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C94881CE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5kU-fDo_IKHp for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 10:20:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 452788174A
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 452788174A
- for <buildroot@busybox.net>; Sat, 10 Dec 2022 10:20:32 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id co23so7553488wrb.4
- for <buildroot@busybox.net>; Sat, 10 Dec 2022 02:20:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=RiNnABoFvDDIZwNeVBgYt/LuiDbShMW/NHtwKHpaGUY=;
- b=hFf3EDS0dh7Ttr5usX+yjRMCyN3cOe8HhaKPM9Cp63rPNeL9n0vMkP30uqiEG6wUas
- 2qWvzEnldjbylLmeeH5qqIchvho1StcDd5Ntzt4zf67H5u2q9aeONZZ1/Wi5VYYG2Ax9
- DQNIHkq9z5PYgJ2OEnbO8IHlSStf1THzAX03PsEQYXXc/iMDXI7rGRr4EfRbKqCC7HYZ
- Ehjn8DRHSUQ4A6aKFH/uxnNy70Txwm6nzlTzIbp8+PEZWs9jv0UXchXYxKlwX6hILuRm
- 4+GVyA3j1tWEZ56JjcunRqJJNXzRbaEa0gyFj7GJ8mFceiaDi9+WIKLxCxvjJzViKXFZ
- n/SQ==
-X-Gm-Message-State: ANoB5pmBH3LQWCWTpyt3Ru860lRoO6HRnhu5gM4tcei1CEJFUCoOp6vP
- G/W1qtkInfEz1i0c9ce3SfYKFq65q0Y=
-X-Google-Smtp-Source: AA0mqf412+TH9n6gyMsgzCVENrEFRo+p3cUjyk6DDTUWtwdYV2wfksfd1Yefsc/HraB0BacmzKbV/Q==
-X-Received: by 2002:a5d:5402:0:b0:242:12cf:fba7 with SMTP id
- g2-20020a5d5402000000b0024212cffba7mr5833165wrv.14.1670667630546; 
- Sat, 10 Dec 2022 02:20:30 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- t16-20020a5d42d0000000b0023659925b2asm3541308wrr.51.2022.12.10.02.20.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 02:20:29 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 10 Dec 2022 11:20:22 +0100
-Message-Id: <20221210102022.3071346-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A8Q2Oiv5xCkt; Sat, 10 Dec 2022 12:31:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A704E81D3D;
+	Sat, 10 Dec 2022 12:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A704E81D3D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9538E1BF399
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D41460B0C
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 12:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D41460B0C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J0fribZ5QJuq for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 12:31:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C44E660A65
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C44E660A65
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:31:02 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.222.34])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2F42113F895;
+ Sat, 10 Dec 2022 13:30:55 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 10 Dec 2022 13:30:47 +0100
+Message-Id: <20221210123048.306724-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=RiNnABoFvDDIZwNeVBgYt/LuiDbShMW/NHtwKHpaGUY=;
- b=ja/DCsCOdr+yH5PyaMWjMCDQtdWdaiHZfayYDjUte69ptV26CtAEz1xKO0A2X0vAC5
- Guu/MJ9UX4PBCGFKbJGc/H6xjQngh1U4QBPvwB6+bYXRBafJZ5q2w01J7u4QWdij7c6C
- ExH/9Xq0RLBs3KMrwi66hY0v5Wl7C91YnlN7qMOmtEpvou07Jpxbcs0oljZWkTd/oBeQ
- St7x0qu+l8pNlvn0WycuV0I8CMd7WAdoYUS+77WW75aBymromBXmUHe/rhFz/SQkqGve
- HDwHr6NE3CGS4mLlbbwSDFqwi1SZvmHLO7MBQ9PPAWgoOoSscK/7B1XdukjxKlYM0IHT
- Y5Qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ja/DCsCO
-Subject: [Buildroot] [PATCH] package/autoconf-archive: bump to version
- 2022.09.03
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670675459;
+ bh=i0ETP8cjlLFx30q1eJQYC+f81lKo2xJo9xNSS4ubpv4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=dQXh/Dsy8o5aEAGJWqiILvB/VC433fBFCrb1G0K2YnnrpVFaPaCBJqi2a+v/ExQEI
+ 3cTOVw1Ii0en+3EZxyNkMUGMdbuu6hdv3tBXBzKg5bGtGtFyeHltkCbrcYevZQ8vbE
+ VGbuJXVCJRyCt8JpV5TpZime1yhjmgXPYAe08Qgi6Hi/G/rwCznjxFPtmGRPa1tlyw
+ S4pipQKoWpWjSIjXiPECGlhFQpiQgSrkvXx0vswVYoTqx816MGhOoD+vBNQUQeAxF6
+ xedZGmqXwYp4B64WvuovwZ1KXcIKOp3skutsSOb9G245uvFrH2W1nUs6iCEXOMSyWW
+ COiI47XeDeKbQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dQXh/Dsy
+Subject: [Buildroot] [PATCH 1/2] package/ncdu: bump to version 1.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,42 +70,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Bogdan Radulescu <bogdan@nimblex.net>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/autoconf-archive/autoconf-archive.hash | 2 +-
- package/autoconf-archive/autoconf-archive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For change log since 1.17, see:
+- https://dev.yorhel.nl/ncdu/changes
 
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 79ee5ff68..ff7710dc2 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,4 +1,4 @@
- # Computed locally
--sha256  e8a6eb9d28ddcba8ffef3fa211653239e9bf239aba6a01a6b7cfc7ceaec69cbd  autoconf-archive-2021.02.19.tar.xz
-+sha256  e07454f00d8cae7907bed42d0747798927809947684d94c37207a4d63a32f423  autoconf-archive-2022.09.03.tar.xz
- sha256  e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
- sha256  23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index bd4a09d96..0ffdf61dd 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
+This commit also adds md5 and sha1 hashes published on the web site.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ncdu/ncdu.hash | 4 +++-
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index c47b4f9bac..1e31eaea8e 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,5 +1,7 @@
+ # From https://dev.yorhel.nl/ncdu
+-sha256  810745a8ed1ab3788c87d3aea4cc1a14edf6ee226f764bcc383e024ba56adbf1  ncdu-1.17.tar.gz
++md5  4186b5be477cc3a0944619ade81f123b  ncdu-1.18.tar.gz
++sha1  d47ce3cdf317adadc1426817d07899c90b767aba  ncdu-1.18.tar.gz
++sha256  3c37a1a96580c9c5d2cc352dc3c5eef0d909158c05f1cc29db4712544c8b9f95  ncdu-1.18.tar.gz
+ 
+ # computed locally
+ sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index acfd496ec8..240ef9d8ea 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUTOCONF_ARCHIVE_VERSION = 2021.02.19
-+AUTOCONF_ARCHIVE_VERSION = 2022.09.03
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
+-NCDU_VERSION = 1.17
++NCDU_VERSION = 1.18
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
 -- 
-2.37.2
+2.38.1
 
 _______________________________________________
 buildroot mailing list
