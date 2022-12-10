@@ -4,67 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E708DC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 20:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C7C2C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 20:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64AFA410A5;
-	Sat, 10 Dec 2022 20:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64AFA410A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15DFB409B3;
+	Sat, 10 Dec 2022 20:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15DFB409B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aOJdXedaqPTt; Sat, 10 Dec 2022 20:23:12 +0000 (UTC)
+	with ESMTP id uXnqzZnL6Dfx; Sat, 10 Dec 2022 20:33:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25F87410A6;
-	Sat, 10 Dec 2022 20:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25F87410A6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7AAEE1BF3E9
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:23:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC579410A0;
+	Sat, 10 Dec 2022 20:33:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC579410A0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB38F1BF3E9
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62FCF40292
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62FCF40292
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84B9F410A0
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:33:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B9F410A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LzIlnTYPS62f for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 20:23:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tOffaXj8oFho for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 20:33:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0848440239
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0848440239
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 20:23:07 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9fcf:911b:99f4:8b0a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D64E85FFA2;
- Sat, 10 Dec 2022 21:23:00 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Dec 2022 21:23:00 +0100
-Date: Sat, 10 Dec 2022 21:23:00 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: yegorslists@googlemail.com
-Message-ID: <20221210202300.GE1044805@scaer>
-References: <20221209102742.23798-1-yegorslists@googlemail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62456409B3
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62456409B3
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 20:33:08 +0000 (UTC)
+Received: by mail-il1-x133.google.com with SMTP id o13so1580671ilc.7
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:33:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gh42TsQgfe9EeQZFjk3aMfLAuQX/T4N2RImO7JYDqwM=;
+ b=y3/k1DweAUYNlKn07qu4kzHbtVrrnj1ztm7s7jOCD4x/AF28J3RAjWkiqijqUsDTf7
+ QIcL4CuT/9qXsgNbxxALNxH4zk1U9d788iffoq2EXyooW6JIQZcEZYPEV0hnUm/r/F3i
+ 5GPkZ1R5Ee+slLGNseMmXUxIkYQvKxc6fbquCUnz+Q+kb9PBK2Eo+6Mg2AyzlcYB8ZG/
+ eBpWui3bb3KXCWyOvLhz7BUd+fbY+fBPmhyUs7TwpIO3w6vokOwmRHI4PrASt9A2gEZG
+ InNfrKzRSd3F8Ik1UAPr4brKGfNQZKjr0eNoPJIXzRT561nU9Ak16JWfSv9ULHA3Welj
+ VZ2w==
+X-Gm-Message-State: ANoB5pl81dUUnYxazTQbNuPj6VQPT6dGMWohA3BT0K7SXYR3SnB12hYN
+ y0lNFmS1CceqWf8mtFDvDmyhFXERjWgC9JoI
+X-Google-Smtp-Source: AA0mqf75puL1JzLo6VbWg1YprCw6L/igx+4shnDppiiy29z18mlmqJqidWUOc4qysMtnGfimKrybqg==
+X-Received: by 2002:a92:d205:0:b0:303:11da:8d5 with SMTP id
+ y5-20020a92d205000000b0030311da08d5mr5746686ily.6.1670704387259; 
+ Sat, 10 Dec 2022 12:33:07 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ t10-20020a92cc4a000000b00304aa34b405sm606739ilq.81.2022.12.10.12.33.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 10 Dec 2022 12:33:06 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 10 Dec 2022 13:33:05 -0700
+Message-Id: <20221210203305.3569369-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221209102742.23798-1-yegorslists@googlemail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670703785;
- bh=YNkQ7nQ0Fj7N5+F2hboX44zPRKCPSukGCNmBpr6bx50=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=l3V9QUP0vDj7JiWXkAs3fUNF51nQll6pkbiStYK7gSTOFHInfa6zs/rbSkX4KFh6q
- g+4WcXlPJf/ZA+3FpzSkTP+CJh+jZKab0ojqb987NxJFuRQwMmEB1WKEV+HHt5T5WK
- O1em3H72aqcsZtHOL9m3d6aEz32acWNI9CmpLYZJTTbE3/2/5D6NP8bmlbL8MADqCQ
- I8sFQJp8+0ikNckB6OFEawlgmnHYlxjyzLTg/13FK/2IxaRtXXi+WrC1Sm9g+RGDkI
- sSzcgNU170miCDi4YU8MpephqoAUS3gpulIl9kVfftB9cdB3eUkcGdDwOwgJ4ouRLa
- 7btrquJj6xcTQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=l3V9QUP0
-Subject: Re: [Buildroot] [PATCH] package/python-munch: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gh42TsQgfe9EeQZFjk3aMfLAuQX/T4N2RImO7JYDqwM=;
+ b=KjH5Rn7XhNEFKAcXFdTda4mlGHMLH5R4GH4EwkbmLFDNFvyj74cSDK8qwE17Pg7bUj
+ 3k9IeP6MHUL2Eguf/Lelfui3cbIIEE9pfdv5AK7AO0lwG+M51c9NZiJBA9CcHcOPnapL
+ E9u+diEakXzZO/LyuM5yPWPn//Nqsu9Kh5ZRAeClrvC9EHD24cF2rGZnAZZ/juKG/D5K
+ gI2VhjK0+V7HmlSn4VZjUl1ya2IV8U2wxr3PU1zaDTQmTOCEVE5578PHcOJKLJhNXSoD
+ CIhey5EuFOWMs6Jh9NZGMum5FLP+LXCcW0IrOwZ0D4+RIVOama7SYe+Dtc3f/wvHNUIU
+ vvww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=KjH5Rn7X
+Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to version
+ 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,107 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yegor, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2022-12-09 11:27 +0100, yegorslists--- via buildroot spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/Config.in                      |  1 +
->  package/python-munch/Config.in         |  7 +++++++
->  package/python-munch/python-munch.hash |  5 +++++
->  package/python-munch/python-munch.mk   | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-munch/Config.in
->  create mode 100644 package/python-munch/python-munch.hash
->  create mode 100644 package/python-munch/python-munch.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index f4a423c7a6..d5a673295d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1128,6 +1128,7 @@ menu "External python modules"
->  	source "package/python-msgfy/Config.in"
->  	source "package/python-msgpack/Config.in"
->  	source "package/python-multidict/Config.in"
-> +	source "package/python-munch/Config.in"
->  	source "package/python-mutagen/Config.in"
->  	source "package/python-mwclient/Config.in"
->  	source "package/python-mwscrape/Config.in"
-> diff --git a/package/python-munch/Config.in b/package/python-munch/Config.in
-> new file mode 100644
-> index 0000000000..9db2623674
-> --- /dev/null
-> +++ b/package/python-munch/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_MUNCH
-> +	bool "python-munch"
-> +	help
-> +	  Munch is a dictionary that supports attribute-style access,
-> +	  a la JavaScript.
-> +
-> +	  https://github.com/Infinidat/munch
-> diff --git a/package/python-munch/python-munch.hash b/package/python-munch/python-munch.hash
-> new file mode 100644
-> index 0000000000..7e32282833
-> --- /dev/null
-> +++ b/package/python-munch/python-munch.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/munch/json
-> +md5  ed84c3718416c8d4d03d0a6ef46e8e0c  munch-2.5.0.tar.gz
-> +sha256  2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2  munch-2.5.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  57ca95c92059c8380625192462979bd32994aae3fcdf902ff6eb1e467eeb0469  LICENSE.txt
-> diff --git a/package/python-munch/python-munch.mk b/package/python-munch/python-munch.mk
-> new file mode 100644
-> index 0000000000..85f6803f07
-> --- /dev/null
-> +++ b/package/python-munch/python-munch.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-munch
-> +#
-> +################################################################################
-> +
-> +PYTHON_MUNCH_VERSION = 2.5.0
-> +PYTHON_MUNCH_SOURCE = munch-$(PYTHON_MUNCH_VERSION).tar.gz
-> +PYTHON_MUNCH_SITE = https://files.pythonhosted.org/packages/43/a1/ec48010724eedfe2add68eb7592a0d238590e14e08b95a4ffb3c7b2f0808
-> +PYTHON_MUNCH_SETUP_TYPE = setuptools
-> +PYTHON_MUNCH_LICENSE = MIT
-> +PYTHON_MUNCH_LICENSE_FILES = LICENSE.txt
-> +PYTHON_MUNCH_DEPENDENCIES = host-python-pbr
-> +
-> +$(eval $(python-package))
-> -- 
-> 2.17.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 729ffe94c4..2aa739f398 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  7f31bd0d6d968c711f8b1d928836eaaa  sentry-sdk-1.10.1.tar.gz
+-sha256  105faf7bd7b7fa25653404619ee261527266b14103fe1389e0ce077bd23a9691  sentry-sdk-1.10.1.tar.gz
++md5  4980e01dc73c6bcf794b0b7d3f3e08d7  sentry-sdk-1.11.1.tar.gz
++sha256  675f6279b6bb1fea09fd61751061f9a90dca3b5929ef631dd50dc8b3aeb245e9  sentry-sdk-1.11.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index d8e9e8a2c9..056a015952 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SENTRY_SDK_VERSION = 1.10.1
++PYTHON_SENTRY_SDK_VERSION = 1.11.1
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/43/37/89598a56119199b69a3c4b13e2ce1b57ff69f68313ed393016086d6b487b
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/a3/d5/db26377e9817407ae8d7b65e15b3c3b8d817c301633be15bd2aef61f38a3
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
