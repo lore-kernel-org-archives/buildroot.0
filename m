@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6411C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 16:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C046BC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 16:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41FDC81B52;
-	Sat, 10 Dec 2022 16:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41FDC81B52
+	by smtp4.osuosl.org (Postfix) with ESMTP id 254B140AB9;
+	Sat, 10 Dec 2022 16:24:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 254B140AB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G4OEIgJAYZ4E; Sat, 10 Dec 2022 16:19:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a_al8agQ5IXT; Sat, 10 Dec 2022 16:24:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F74381B35;
-	Sat, 10 Dec 2022 16:19:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F74381B35
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1538F1BF59F
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 16:19:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D7DC40A02;
+	Sat, 10 Dec 2022 16:24:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D7DC40A02
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DCC971BF59F
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 16:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4FCD400AF
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 16:18:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4FCD400AF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3B0840A02
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 16:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3B0840A02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yqSVwFUq5xZ2 for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 16:18:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UG6dbvdlqI7T for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 16:24:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D00A340376
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D00A340376
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 16:18:57 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9fcf:911b:99f4:8b0a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C1D405FFAB;
- Sat, 10 Dec 2022 17:18:51 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Dec 2022 17:18:51 +0100
-Date: Sat, 10 Dec 2022 17:18:51 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Norbert Lange <nolange79@gmail.com>
-Message-ID: <20221210161851.GC1044805@scaer>
-References: <20221210131713.274886-1-nolange79@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 890ED409DB
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 890ED409DB
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 16:24:23 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id e189so3660093iof.1
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 08:24:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gEQYupUTeX1n6pvDxYgYQ5MZ7BjKMVdQ8pNLtq7ICfs=;
+ b=bD74Q5ILNc6YFUoetUASKPb5Teqm3P5wE1koqOSyGWDQkn0yBe3oGiEpkwawsbrPsi
+ oQVtVX0ZynQj43oJqZNxmbstmp9eB9Em4CQKl5sW8KzlOciRq8idBYSdbAZayIaVy93c
+ xkgUSz7RFBCSimQXo76R6GdbcyUY8kkEV2HwseTwyKki4JQ25CPtEBHwh3bRW4c6kZ3Y
+ ejlrW3KNs3lYygLXuZHtTGGJlxUluyrlDly6ZIN/591p/9G5WhUo8RNDD8bfrmrYOMuQ
+ GTH5uZ75h5nUNrB8AeKdAAUAbELiVAg2WwQHhoqmMh1U2YF8RTCbu0lDUMUxOFNAbxvR
+ xPKA==
+X-Gm-Message-State: ANoB5pkTfpwQFNSYIWbmySpE2GZCD63slSfndZ+j1mLWg/vBtA2QhFN5
+ nWQtRoruwZPdGwAYeJGOCF+haCxWeYK48Q==
+X-Google-Smtp-Source: AA0mqf5iryCv1DvrYuOfvtAMweWVudKSDwsZNkvqSJBaHutF7NhXRX5G+kNoMK7chT2Jbaf3UlWZfw==
+X-Received: by 2002:a5e:a713:0:b0:6bc:d71a:5701 with SMTP id
+ b19-20020a5ea713000000b006bcd71a5701mr5860672iod.3.1670689462388; 
+ Sat, 10 Dec 2022 08:24:22 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ g25-20020a05663810f900b00363c2c5f229sm1520311jae.128.2022.12.10.08.24.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 10 Dec 2022 08:24:21 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 10 Dec 2022 09:24:20 -0700
+Message-Id: <20221210162420.2472391-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221210131713.274886-1-nolange79@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670689135;
- bh=4KDOJPudzc+laBnuW83U6f6BvL+itD90qWp1rDHOi+M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=m0+W3CbuuFVXBZPzHGCGaZYjxpR0aE6b8b3wBI74qDrqo+KOasoDnOgbPJMdQpyp1
- whl5vmPR1Ls9AQWZDmEAy0rY3U46iyKTDRkN8TmZF68+4OgLa3FjX+EWk92VyXre3D
- pLCohjeujcoCmK5bBiNpOaupOg7OSp6XjIIQOz1KAubpKQ/XDq/3GgiqSl6U4W6oZ6
- JIC8DBKxjB8Kf2wmKRM4saymap7Ra+zeYlhrY0U5xgzGOdH3nntoajVIcsJSMwIOp8
- cMXf5K1uktvoEcFWDK1jzvtTPTmZ66rxC77fgeDF0PNUCV6GirEjDoLP0ApvWwqniN
- 63w96AuMlVG9Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=m0+W3Cbu
-Subject: Re: [Buildroot] [PATCH] package/libxml-parser-perl: fix build when
- host matches target gcc
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gEQYupUTeX1n6pvDxYgYQ5MZ7BjKMVdQ8pNLtq7ICfs=;
+ b=kI20KN8r+TF8ucS9RNh5IGWnFqZn8Bhw3aGAMnkBVPpVjuFx5AXDbnHb0UsKeddnLt
+ XyxdgW1wq4LMifOlb2SMuVXDtd5apiETHG5hkoTDkDUw6vh0PulUYrXQ6Wap20tCO1fI
+ +xfwVCGt6bUOVCJxvjmO9tj/QqGDaDA1M85kk7ouyr2anCysWuS4qzKP+rZ5ZEXAAU15
+ TItUp5qgI7H7arQoav3W5luwxiomKZWfVLiKmJNpjcxZicIoEJG+L4V+A5o2ao+g98CG
+ nVqDNr0u7dOfHMZg24k/oF+Uu576RXioLm9L36/aU9YuEB9SH5ZWcCoqoV1n1ZcOusqm
+ sCOw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kI20KN8r
+Subject: [Buildroot] [PATCH 1/1] package/python-chardet: bump to version
+ 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,92 +94,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Norbert, All,
+Drop setuptools runtime dependency.
 
-On 2022-12-10 14:17 +0100, Norbert Lange spake thusly:
-> The host configure and build step looks for same compiler name
-> (eg. x86_64-linux-gnu-gcc), and the build potentially breaks
-> if the target compiler is named identically.
-> 
-> revert PATH env variable to not include the target binaries.
+Update description as python 2 is no longer supported.
 
-We pass $(HOST_CONFIGURE_OPTS) in the environment, which contains a
-definition for: CC=$(HOSTCC)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-chardet/Config.in           | 3 +--
+ package/python-chardet/python-chardet.hash | 4 ++--
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-And HOSTCC is defined as:
-
-    ifndef HOSTCC
-    HOSTCC := gcc
-    HOSTCC := $(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
-    endif
-
-In my case, however, I can indeed see that it uses it (single line
-wrapped for readability):
-
-    /usr/bin/gcc -c  -I/home/ymorin/dev/buildroot/O/master/host/include
-    -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fwrapv -fno-strict-aliasing -pipe
-    -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g
-    -DVERSION=\"2.46\" -DXS_VERSION=\"2.46\" -fPIC
-    "-I/usr/lib/x86_64-linux-gnu/perl/5.30/CORE"   Expat.c
-
-So, I looked at the generated Makefile, and I can see;
-
-    # These definitions are from config.sh (via /usr/lib/x86_64-linux-gnu/perl/5.30/Config.pm).
-    # They may have been overridden via Makefile.PL or on the command line.
-
-So, we are passing CC et all in the environment, so they do not override
-the ones my system perl was built with.
-
-We are also even forcing LD, but it is not accounted for either... I
-guess that _may_ work when we are building our own host-perl, but not
-when we are using the system perl...
-
-So, I think the best fix would be to change how we pass CC et al,
-either by passing HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS as options
-instead of in the environment, or by carefully cherry-picking CC, LD and
-maybe a few others, and force them to be passed as options.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/libxml-parser-perl/libxml-parser-perl.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-> index 37cef2e418..4af4485429 100644
-> --- a/package/libxml-parser-perl/libxml-parser-perl.mk
-> +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-> @@ -14,6 +14,7 @@ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
->  
->  HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS = \
->  	$(HOST_CONFIGURE_OPTS) \
-> +	PATH="$(PATH)" \
->  	LD="$(HOSTCC)"
->  
->  define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
+index 869888cfe0..59e7cbfa2c 100644
+--- a/package/python-chardet/Config.in
++++ b/package/python-chardet/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CHARDET
+ 	bool "python-chardet"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+-	  Universal encoding detector for Python 2 and 3.
++	  Universal encoding detector for Python 3.
+ 
+ 	  https://github.com/chardet/chardet
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index 7721814279..7887dd769d 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/chardet/json
+-md5  8013c248c098e165ac53d900e1a1278a  chardet-5.0.0.tar.gz
+-sha256  0368df2bfd78b5fc20572bb4e9bb7fb53e2c094f60ae9993339e8671d0afb8aa  chardet-5.0.0.tar.gz
++md5  394bd03d7a258d2771040bfbd5a7bf66  chardet-5.1.0.tar.gz
++sha256  0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5  chardet-5.1.0.tar.gz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 1d737891a0..42646aa513 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHARDET_VERSION = 5.0.0
++PYTHON_CHARDET_VERSION = 5.1.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/31/a2/12c090713b3d0e141f367236d3a8bdc3e5fca0d83ff3647af4892c16c205
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/41/32/cdc91dcf83849c7385bf8e2a5693d87376536ed000807fa07f5eab33430d
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
