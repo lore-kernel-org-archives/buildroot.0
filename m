@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03882C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BDA6C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C8B960B3B;
-	Sat, 10 Dec 2022 21:07:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C8B960B3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD8E660B3B;
+	Sat, 10 Dec 2022 21:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD8E660B3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7a80xITKF3Gh; Sat, 10 Dec 2022 21:07:43 +0000 (UTC)
+	with ESMTP id bB-1tV3AmhI5; Sat, 10 Dec 2022 21:09:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCD7660AE4;
-	Sat, 10 Dec 2022 21:07:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD7660AE4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B69541BF3DF
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:07:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C80A60AD1;
+	Sat, 10 Dec 2022 21:09:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C80A60AD1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7217A1BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92313404A0
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:07:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92313404A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A6EC80BFC
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6EC80BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aXrwSywxL07Y for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 21:07:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4GDMs8fKNs4M for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 21:09:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCAFE4044D
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BCAFE4044D
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:07:40 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id m15so1619149ilq.2
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:07:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 091AA80B2B
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 091AA80B2B
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:09:13 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ n9-20020a05600c3b8900b003d0944dba41so2184470wms.4
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:09:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ISXvQdemHuqk+0oRl/ZYuLu3mO1UMTZhmiCdZPTbA1w=;
- b=aEw/dxFhkt/DcXeyRzWQ1dlQeeEkLN1JM6QrJCQMVGu0/S9hF429yAXp1JJboKxkOf
- nkE8MvMbBMqh1bAk92qMAO+AwLb+bNKH+TOlQuqm5s1DqBrgb98jsCBbZ85R1HtGEMDR
- Mj9cFldb+Oe0j3aZZWXGSmRq1Ax4kOw58QWAPdgPRblSIcEAbHAQGy3XWMoPG3UlXSch
- M2AAOeAoTIbV6DdEe5AlZHPwVizUh6AweYoptBmjPvODsyc5KmaAOKI+k3BgFVhDH9Z3
- M3CpQ0Y9WqcI8aSQmKOH+GUvssvMdGa8Pro0mPmkJ8nVBvsg/IcJNTAiE6DzwVqmIUZk
- li+Q==
-X-Gm-Message-State: ANoB5pkka2Cs5NZDRSZ4EKQZXHX+xYR0o8+e1F95pQqnOscXWK/iCHef
- 3fbOW/KphRA2Z6DMzS03+/0aL2cGRVvTf+o4
-X-Google-Smtp-Source: AA0mqf4fzkVrrldU0Mz5vAYxXFJCKx2aDfKjLLc4enTPePXy0VITqTMxroxh0yvJS8Z8dUrQduiniw==
-X-Received: by 2002:a92:d141:0:b0:300:c1b:8e4f with SMTP id
- t1-20020a92d141000000b003000c1b8e4fmr5787715ilg.12.1670706459704; 
- Sat, 10 Dec 2022 13:07:39 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- c18-20020a056e020cd200b003030d8b3cb7sm1578954ilj.42.2022.12.10.13.07.39
+ bh=clWy23jrKnF0H8dwYSqlD0mC7ntJNvu3gZ2B5FPwSQY=;
+ b=g73wqsrwYrJUdzYu/bzo4ud1B/eUXM81id9lxhS6yfKyzJWlNy2IbIYGdtK9g/8I/v
+ 5afj3La31MRixcx/AIHZsegDoCNPyIQciEnzOwckdR7s3K7Omis/wGEPPfinpyoeHjqA
+ 9y6wxHFDiAWZ7CTpblLx9ikbuMx/LBNAnbZrg0gK/js0Z/koQvoJfrTt4fb2cqjysOvw
+ ZiTjRSWpDfHkhiHeTWKI0eyi9qwXOq4M97FxHL4k8cNJvZnP3/2C0v7yt5QnZ0hokBAP
+ FUppSFUZpBDBY4LyZ4/MidnUyGxCWO1w036fftlNd/wCglcB3cdcDToFfrBJlMFH2X9N
+ SC7g==
+X-Gm-Message-State: ANoB5pkuEmLRMiXP8TBI4LEYSs3r28DqE5gBHM09YEv/xKlVS6i2FOaa
+ uIVVi/nibImT5pdjt5CIchYiDjN6w6Y=
+X-Google-Smtp-Source: AA0mqf56G3MxmfVYy7UptcJgTCtYJnhV2C+6N/GMPrCZ3RDdF4ue89o5C5H4RLVu3kRYwZ5nfVkhgQ==
+X-Received: by 2002:a05:600c:3b0e:b0:3cf:b067:4161 with SMTP id
+ m14-20020a05600c3b0e00b003cfb0674161mr8580168wms.15.1670706551637; 
+ Sat, 10 Dec 2022 13:09:11 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ iv15-20020a05600c548f00b003d1f3e9df3csm4369205wmb.7.2022.12.10.13.09.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 13:07:39 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 10 Dec 2022 13:09:11 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 14:07:31 -0700
-Message-Id: <20221210210731.3658517-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 10 Dec 2022 22:09:05 +0100
+Message-Id: <20221210210905.14201-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ISXvQdemHuqk+0oRl/ZYuLu3mO1UMTZhmiCdZPTbA1w=;
- b=bdSy7eH13RgP5YZEOsefKIsl1hjzNdVmN+5zC5tiLARZHR/jgLotRCYTASgRASbhfd
- pPxN9NnW+gsLdLkdxozclRW9eDiBQNl4ACi4cvTMj8Nh5xTpUNjN6Z6wi5zhxxmQnKFK
- g3MvOdipS160C85mjFXYi7qpLoRLnkzgO/JX3ClBfedpkTriw/+Hgd5TfAq+pae2xL8N
- +A0Jrydh8qdzNy7eJ22eK5hJrKsAbVUx1sX8LxFmh6l7dqJ5AMA/aV8LbV5lkpR8xSZH
- 3DJf5bSovyf/oATjFeq0nkkg4OecmoOm8SmJJ06kxnV17WH3mR/TBPOw1Yw06NUXjWE/
- PqwA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=clWy23jrKnF0H8dwYSqlD0mC7ntJNvu3gZ2B5FPwSQY=;
+ b=p2qhEzg+Z4gbAtdZTI92WJKa5Lt9MJWZHVxWE1V8iU8/SMNPgnt1GcsjiVtH+JzH8m
+ N3bR482VbagNC6wuxwUnzVh0iNFFbZR0sWhcUhE5LvzI3M0PnyHEwqECaeqsBqKc4Zvw
+ L0oDDRVZHzf6QI9sG3GisvHsrShdcPuQ8Zkp6kKTZPgn36ff6SJU1Cbhj1zw+OitXSZ7
+ tFWxwP6Bqy681Z7w0h8FVzDwZSSH3VvhevjOEUCa6hp3DeVb0Cdwh5WSfGTcErXS7Osw
+ e6cV2jXJzhLo+txRAeYQwDSpYQMxt+DLJsAJi5izM2AvyPqaNsNdu6TefDZ7pkhrlla3
+ Tweg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bdSy7eH1
-Subject: [Buildroot] [PATCH 1/1] package/python-watchdog: bump to version
- 2.2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=p2qhEzg+
+Subject: [Buildroot] [PATCH 1/1] package/gqrx: fix dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-watchdog/python-watchdog.hash | 4 ++--
- package/python-watchdog/python-watchdog.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Commit 34cea39024bf8dedaa071bc5f2d903755501215c forgot to update
+gnuradio dependencies
 
-diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
-index 59facb8fea..3bacccf2d6 100644
---- a/package/python-watchdog/python-watchdog.hash
-+++ b/package/python-watchdog/python-watchdog.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/watchdog/json
--md5  0e60e0a2d3a8c18ba37105f8b44de810  watchdog-2.1.9.tar.gz
--sha256  43ce20ebb36a51f21fa376f76d1d4692452b2527ccd601950d69ed36b9e21609  watchdog-2.1.9.tar.gz
-+md5  d029b806814bcba26745c26769a847bc  watchdog-2.2.0.tar.gz
-+sha256  83cf8bc60d9c613b66a4c018051873d6273d9e45d040eed06d6a96241bd8ec01  watchdog-2.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
-index 71a3f8a0c2..bb9f145e16 100644
---- a/package/python-watchdog/python-watchdog.mk
-+++ b/package/python-watchdog/python-watchdog.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Fixes:
+ - No autobuilder failures (yet)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gqrx/Config.in | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index adcdbb0896..442b28e546 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -1,15 +1,16 @@
+-comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
++comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
+ 	depends on BR2_USE_MMU # gnuradio
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR || BR2_STATIC_LIBS
++		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
  
--PYTHON_WATCHDOG_VERSION = 2.1.9
-+PYTHON_WATCHDOG_VERSION = 2.2.0
- PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
--PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/42/f7/da8e889f8626786eac9454e8d2718fc79359ed517be20cdd50c647167d39
-+PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/c3/fb/bd960970258366b0704307ccd12617d64201407bfb6d31ae412d2762ccf1
- PYTHON_WATCHDOG_SETUP_TYPE = setuptools
- PYTHON_WATCHDOG_LICENSE = Apache-2.0
- PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
+ comment "gqrx needs qt5"
+ 	depends on !BR2_PACKAGE_QT5
+ 
+-comment "gqrx needs a toolchain not affected by GCC bug 43744 and 64735"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744 || BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++comment "gqrx needs a toolchain not affected by GCC bug 43744"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+ 
+ config BR2_PACKAGE_GQRX
+ 	bool "gqrx"
+@@ -21,8 +22,8 @@ config BR2_PACKAGE_GQRX
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # gnuradio -> boost-atomic
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # gnuradio
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_BOOST_SYSTEM
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
