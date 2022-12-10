@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D0F8C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 20:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8DB4C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 20:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA1A5817A9;
-	Sat, 10 Dec 2022 20:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA1A5817A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72012817A9;
+	Sat, 10 Dec 2022 20:48:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72012817A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4pwBJfI7DP2A; Sat, 10 Dec 2022 20:46:12 +0000 (UTC)
+	with ESMTP id 8TpY_jVE-joD; Sat, 10 Dec 2022 20:48:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE9CD81450;
-	Sat, 10 Dec 2022 20:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE9CD81450
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 774F51BF3E9
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:46:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F1C781413;
+	Sat, 10 Dec 2022 20:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F1C781413
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 124E31BF3E9
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:48:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 528B881450
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:46:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 528B881450
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF53260AD1
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 20:48:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF53260AD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PmjVBfWfPDoq for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 20:46:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SFIxSHHLowEO for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 20:48:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D92C81413
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D92C81413
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 20:46:09 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id x11so1578789ilo.13
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:46:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0D3460AC2
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F0D3460AC2
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 20:48:35 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id g20so3876569iob.2
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 12:48:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zPZIWH7nvArh/iWCGpHKvpn0zKhhr0gDl5ETLG03c/k=;
- b=2EdvlS013wIeJE2+Z29CSIlXFpktW0HJv/4rYurIjehZva7iLygA8QjNwfZ3nb3k8o
- kUBSXOa6vxJhwac0+fXHaPLROxUt7hKsrAM8N+sfIvOb+9FEwrBwlsGBCN96zlW/K479
- gNCJo0jTSnH9O5uVXlq7wCkPxm6LeXQmUyt+j34e0l9ElzUjz6drx41OslGmOS4KME8Q
- I9p9VW7cgVcFseKMfi3PrTf8yYeaty9VyS3Eu4uXWBAwddJVIb+WHPMQdgq/w/i944Ip
- YwM/p4Jc6A2Vgi7AqadOx7sDN5SEuXIOzcl4oIVjJ88iA70WGUakMjSSv8Jdrsy1fUc4
- wqzQ==
-X-Gm-Message-State: ANoB5pmRin8cTN1ebXpnTLHh36jzo7H/vBiEt2cVeH27f4ZbvuebfTN7
- YSNqSd7pCIYzQSstcvpP5sfj0TUMoQlwpzNb
-X-Google-Smtp-Source: AA0mqf6buBh+z+4c/yp1w5S4t3HMn5xyBGvVIqjQUdJ4G5ZFtEhIp68lm6CvqWB8Gp55YGKvgfdHSw==
-X-Received: by 2002:a05:6e02:52a:b0:303:4855:fe4a with SMTP id
- h10-20020a056e02052a00b003034855fe4amr6374175ils.32.1670705168175; 
- Sat, 10 Dec 2022 12:46:08 -0800 (PST)
+ bh=4Oq2t5i7KszQ3cHVoAwCsoS23yUr5h4pEssOZHwy8YI=;
+ b=jPorShLu+uoUk74pAjTKU9Zwmg9xuf7LUpx825OyJZNGANGSvv/VDPTCUljJoQHGDr
+ Gqh2hJ3C1YZLahk8JJa0wxmFJjV/goNzF3dOmw9b6fp/k5lb1TBDlyMQee0GN6fs+lJq
+ nr5+rJH+j9VOopJ481eV+RlxY1d1ntl/baBuLUkLsT7zB7HjpjQkeZ7i7J1VMpGcccmr
+ iZtn93TvNDeBBT6GEW80GL3VKIwIFc533dO+6v37yUQ2IY/n/KHfgU8PFdnn+N3ztEJX
+ YE+HfEw2VbpyXj1x7eyczlcw6HUEDlEZcg5dQkSiDUqDoob2/LZtRM9AoFtZ9pV1qu/b
+ lpNg==
+X-Gm-Message-State: ANoB5pn5O2U6klM5tMsSxHRQFcDuJwcqfIDknZfIqMfViQ5Hd2u+wFFJ
+ l0E/X7ji2Wluc40Z/1MVI4XVsiOg8bG6VP+q
+X-Google-Smtp-Source: AA0mqf6wOiwJBV2RP82GIe3bZiKp4iUalZE0nySp668Xw4NlOBbIe2ulvKIgKnm39Ky5N9Sq4ezwxw==
+X-Received: by 2002:a5d:8409:0:b0:6de:38a1:1c28 with SMTP id
+ i9-20020a5d8409000000b006de38a11c28mr6384960ion.3.1670705314854; 
+ Sat, 10 Dec 2022 12:48:34 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- p11-20020a056e0206cb00b00300ea3a86e2sm1591395ils.68.2022.12.10.12.46.07
+ c4-20020a023f44000000b0037b319410c3sm1663185jaf.44.2022.12.10.12.48.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 12:46:07 -0800 (PST)
+ Sat, 10 Dec 2022 12:48:34 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 13:46:06 -0700
-Message-Id: <20221210204606.3603826-1-james.hilliard1@gmail.com>
+Date: Sat, 10 Dec 2022 13:48:33 -0700
+Message-Id: <20221210204833.3609864-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zPZIWH7nvArh/iWCGpHKvpn0zKhhr0gDl5ETLG03c/k=;
- b=S3hJXgsrMAsawIBrlGJ5XhQV5p0OV1WQLha+rAgArKyyN0IG3IpK3Fo8Q0nGp245nv
- DbX1LmQ2UdXwa20q4WmS3Xjh8XzLwT0rFz4Fb9vpTp01hdJvecBAriAN9HBb6OnTNX4o
- MBwaK0Ljf1LUV5jxxtcG8vgi9qh5HV4OCotcL09W0zrTfPtLFmZCgE0l5oHgUZe0zV/u
- 3EPkLXREBoNL4XmtVy3ElylOTyBQUZleEDBnsLIOW9KAQDWkhblDcg1ePF63+JNgPCPK
- SRVrmthq3GOqq8JtPwkTqd+eoyo6Bgtm0nGHLWaHY2OQxESZQjReVGnyOM+w6DSxaUM4
- 6X5w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=4Oq2t5i7KszQ3cHVoAwCsoS23yUr5h4pEssOZHwy8YI=;
+ b=IdJBjKm8+e0tiysSpxv73wca2atkeSg40e2m9TNCa/LHRWJbZwT2/1a1kZBERIZxaT
+ CtobPAePub6GbzJ7hwCYJkWxQyLDQXDN7eD9sdCgjtqrNyMKEYnk581jBl2k6JF9A+0L
+ pCk8BEcRyilL4OjbtltUQB3ts/+6gviVMG3jHWo4l4nThhEEYzcrRhGzTkjeInqAt9AG
+ IgYvbQXOT2rfE+Cm3nqms/5WcjUoFhjxOSkQJuqli/quDZysbDXmHtM8Te4dlKc8g+e0
+ ssO30+EtKm9k6qAU6C+cck8a1V6NQKlsdWiPAACnGSWwqvbFTvHzp5U/NX3kDB942iXF
+ VIAg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=S3hJXgsr
-Subject: [Buildroot] [PATCH 1/1] package/python-termcolor: bump to version
- 2.1.1
+ header.a=rsa-sha256 header.s=20210112 header.b=IdJBjKm8
+Subject: [Buildroot] [PATCH 1/1] package/python-texttable: bump to version
+ 1.6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-termcolor/python-termcolor.hash | 4 ++--
- package/python-termcolor/python-termcolor.mk   | 4 ++--
+ package/python-texttable/python-texttable.hash | 4 ++--
+ package/python-texttable/python-texttable.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
-index 9e0324ed64..73fb9129ed 100644
---- a/package/python-termcolor/python-termcolor.hash
-+++ b/package/python-termcolor/python-termcolor.hash
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
+index a769e91772..560749b238 100644
+--- a/package/python-texttable/python-texttable.hash
++++ b/package/python-texttable/python-texttable.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/termcolor/json
--md5  04e4981838535169d19d26a14a76af17  termcolor-2.1.0.tar.gz
--sha256  b80df54667ce4f48c03fe35df194f052dc27a541ebbf2544e4d6b47b5d6949c4  termcolor-2.1.0.tar.gz
-+md5  f7f59efd147dd1ec2a25e667616e8a52  termcolor-2.1.1.tar.gz
-+sha256  67cee2009adc6449c650f6bcf3bdeed00c8ba53a8cda5362733c53e0a39fb70b  termcolor-2.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/texttable/json
+-md5  15faadc07ba44d337cc1675ea6092a02  texttable-1.6.4.tar.gz
+-sha256  42ee7b9e15f7b225747c3fa08f43c5d6c83bc899f80ff9bae9319334824076e9  texttable-1.6.4.tar.gz
++md5  83eb15fb541dd857ff051a8d0c979b9c  texttable-1.6.7.tar.gz
++sha256  290348fb67f7746931bcdfd55ac7584ecd4e5b0846ab164333f0794b121760f2  texttable-1.6.7.tar.gz
  # Locally computed sha256 checksums
- sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
-diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
-index 8731032fec..d7511d692f 100644
---- a/package/python-termcolor/python-termcolor.mk
-+++ b/package/python-termcolor/python-termcolor.mk
+ sha256  4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
+index 59df5f6ff5..c63fb5786c 100644
+--- a/package/python-texttable/python-texttable.mk
++++ b/package/python-texttable/python-texttable.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TERMCOLOR_VERSION = 2.1.0
-+PYTHON_TERMCOLOR_VERSION = 2.1.1
- PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
--PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/62/1a/e78a930f70dd576f2a7250a98263ac973a80d6f1a395d89328844881a0c0
-+PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/19/da/ff1f0906818a5bd2e69e773d88801ca3c9e92d0d7caa99db1665658819ea
- PYTHON_TERMCOLOR_SETUP_TYPE = pep517
- PYTHON_TERMCOLOR_LICENSE = MIT
- PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
+-PYTHON_TEXTTABLE_VERSION = 1.6.4
++PYTHON_TEXTTABLE_VERSION = 1.6.7
+ PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
+-PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/d5/78/dbc2a5eab57a01fedaf975f2c16f04e76f09336dbeadb9994258aa0a2b1a
++PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/e4/84/4686ee611bb020038375c5f11fe7b6b3bb94ee78614a1faba45effe51591
+ PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
+ PYTHON_TEXTTABLE_LICENSE = MIT
+ PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
