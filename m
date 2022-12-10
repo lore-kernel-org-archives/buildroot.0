@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E8C2C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1834C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E60C241061;
-	Sat, 10 Dec 2022 21:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E60C241061
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C9E281296;
+	Sat, 10 Dec 2022 21:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C9E281296
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q2hxM0Xbkwgs; Sat, 10 Dec 2022 21:24:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HXJSmdKG0iTp; Sat, 10 Dec 2022 21:41:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 442FF410B5;
-	Sat, 10 Dec 2022 21:24:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 442FF410B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id B36F6813D1;
+	Sat, 10 Dec 2022 21:41:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B36F6813D1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 96CED1BF3DF
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:24:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 367011BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:41:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71CFC60AE4
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71CFC60AE4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 115AF607CA
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:41:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 115AF607CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vcpAqaLfX_bD for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 21:24:05 +0000 (UTC)
+ with ESMTP id 6yETh1WvBUIw for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 21:41:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60671605E9
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60671605E9
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:24:05 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id y2so1625414ily.5
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:24:05 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01730605A3
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01730605A3
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:41:00 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id d1so8438373wrs.12
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:41:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ccbWNBGS1Wk9M439ZJ7ipz9rlIBNr9tT5fbPggSlwhU=;
- b=RmLiZu+FHKmr46rp0JpDZ5d0wjGPNE1ARBsHpmkvYv3BaNw0wQMhYzjSNQz1Kc6sAf
- 79kAHjG2PIcN9s6oRws3b1Dg1npjpetqIrHrO0UISkD6epr0x1rTU3vn0c498fmX8cWL
- Av82+/W7689ZBDLW7I7NInkTDvP92HncBjYJKodH/P+9fvFDn12TiENYUk0zW7btArfE
- dJkOoB2hA1wWOxe6q0yrXT4NLcyXlnZB/URlOcxKEtNWBt6eKWJkOQ2obBsnz8M2dMNw
- iJVYuHreGYd7XlWDYyO2q+9ZTMq1ox11SxfFaFdlnB/QcMutmbZ01ERYyzUgJsPOOK6O
- sLPg==
-X-Gm-Message-State: ANoB5pmlqjrVzQbgDi13TW5G5j68H3eVmKe7BqXAfBd1NSaueDjACvKX
- mzFc4Tfze1KzjcZQCUNQ1EcptOp4XvdqBikp
-X-Google-Smtp-Source: AA0mqf6bG8tG63kncMouMNHS+BkkN02q1Yc/fZuYcTOa9Pg9j282plSJiqRg7sq6pPcKi4YV9Y7bcg==
-X-Received: by 2002:a92:d08a:0:b0:303:5d88:ec3c with SMTP id
- h10-20020a92d08a000000b003035d88ec3cmr8490620ilh.3.1670707444252; 
- Sat, 10 Dec 2022 13:24:04 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- b59-20020a0295c1000000b00389d74d7e24sm1705659jai.146.2022.12.10.13.24.03
+ bh=jiRVINog7K9okgYJ5XiBz8NvUwbrsqv0C5ruxfzs3K0=;
+ b=sWaMH5NmYOzPgqBzA7j5s2DqFXP0q55SPbw0vqBi1SKE533m/FZt3+8KlWP+RoSqGX
+ gtbzinSJMASv1Dd2eeK5JYZhFWYMNm52qYa71u+cXWSuw+ulOzC3w7k6ieFPaWvCJOeV
+ j8TRS0R/qjVWAmLFM+XE3FuvXpwMnabFULr8MzAvsA0nr6p9KaCXWxP9kdy6jN0sSniw
+ F/xNjvD3IP1IMUC9gDRq/VJoiepduovkVIAfoLL6Zw8h2rOhaez+4iNlKf/nqNiTdNc9
+ Y3+NRFJxpVe++tkrnUKrfXeOhujiucgFYYMFzGuxjcjjDQVjReK3GPgB72nGm2myHbgb
+ tNFw==
+X-Gm-Message-State: ANoB5pkKpUfiAdjXovQ6pDzY/u0VZnwv5VU7KF/2AxNvLkq3jRWOuPQh
+ JmdmibyRarHSMBX3wpcrGuVRDI2oseg=
+X-Google-Smtp-Source: AA0mqf4XGqw0uA1CBj/hdvr/vvo1Ovf90o2T4H4szBB3lMtO+zaq5Kapj28HPoJVaEXruNfHrvM4OQ==
+X-Received: by 2002:a5d:5243:0:b0:242:1424:6564 with SMTP id
+ k3-20020a5d5243000000b0024214246564mr6963445wrc.39.1670708458648; 
+ Sat, 10 Dec 2022 13:40:58 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ n3-20020a056000170300b002368f6b56desm5736906wrc.18.2022.12.10.13.40.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 13:24:03 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 10 Dec 2022 13:40:58 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 14:24:02 -0700
-Message-Id: <20221210212402.3721087-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 10 Dec 2022 22:40:54 +0100
+Message-Id: <20221210214054.34790-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ccbWNBGS1Wk9M439ZJ7ipz9rlIBNr9tT5fbPggSlwhU=;
- b=exdR9sGSsBUTqCDcwf+ajdFOg42di05sV/O9oTT4cpUR7fGuIQkaUM/udMEy0l2C/o
- Yt2GpgXjnrUgPN+fOBsKI1/SuvI3Y+mNKafOzJ5+K/uNtioqd/iLuut7+jaRaIfBexxM
- f43pJw2mHzou3e0HXSCKArGNhOFYRFfqXzSzJ4wGYQS3AncrjGFrZeui36gpeCb5/34K
- +jZI3XmLg7rSduRvjZzHif+qakSA46OHTSiBuY0VE8qAasnJizpFjsgucv22e48om9Oz
- 0zHNTxhkcSujiBh5/G5VPEUSp9BHTquwdUoD3XGYBrjqPWE79JTUa1n/aKH6520vVRGR
- ZdLQ==
+ bh=jiRVINog7K9okgYJ5XiBz8NvUwbrsqv0C5ruxfzs3K0=;
+ b=Bk8hHBoYxZ9gbdQYgeWAo83mlRomiR7pyAQQPW2fzXyEcM71g8na+M5hNi0/InfEus
+ JEAZh3iTiShlq2kPjV3pJLhNldc7r9J0XFo1E5PNtEp740oHDQyOFUDXU1Q+vCznxydL
+ OyIV4FEhVUSpYV19DKl4XO+U5TvJVyd4uiWPb0W1S6xQ4VR9KktJhMt8oVvT6W7wgVio
+ 02ZRmI2jmdyjeoE0vcyUnse+C0IYQPSz8gmwyrA2vEe9LUFa1uUPE3sBoP3D4SxAaKx2
+ EviMLcNIrs0jQcSFYU+vypASMQxUSlUstP8NjG396lxty4aKlqvEeSfxeS1A5385ctmE
+ dFCQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=exdR9sGS
-Subject: [Buildroot] [PATCH 1/1] package/python3: bump to version 3.11.1
+ header.a=rsa-sha256 header.s=20210112 header.b=Bk8hHBoY
+Subject: [Buildroot] [PATCH 1/1] package/sed: bump to version 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,140 +93,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch which is now upstream.
+Update hash of COPYING (URL updated:
+https://git.savannah.gnu.org/cgit/sed.git/commit/?id=5adab913a82ef1b7f844339ab209531ccf198990)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://git.savannah.gnu.org/cgit/sed.git/tree/NEWS?h=v4.9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...x-quadratic-time-idna-decoding.-GH-9.patch | 86 -------------------
- package/python3/python3.hash                  |  2 +-
- package/python3/python3.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 88 deletions(-)
- delete mode 100644 package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+ package/sed/sed.hash | 6 +++---
+ package/sed/sed.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-deleted file mode 100644
-index d281e7261d..0000000000
---- a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
-+++ /dev/null
-@@ -1,86 +0,0 @@
--From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
--From: "Miss Islington (bot)"
-- <31488909+miss-islington@users.noreply.github.com>
--Date: Mon, 7 Nov 2022 19:23:16 -0800
--Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
-- (GH-99222)
--
--There was an unnecessary quadratic loop in idna decoding. This restores
--the behavior to linear.
--
--(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
--
--(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
--
--Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
--Co-authored-by: Gregory P. Smith <greg@krypto.org>
--[Peter: drop NEWS.d/*]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Lib/encodings/idna.py                         | 32 +++++++++----------
-- Lib/test/test_codecs.py                       |  6 ++++
-- 2 files changed, 23 insertions(+), 17 deletions(-)
--
--diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
--index ea4058512f..bf98f51336 100644
----- a/Lib/encodings/idna.py
--+++ b/Lib/encodings/idna.py
--@@ -39,23 +39,21 @@ def nameprep(label):
-- 
--     # Check bidi
--     RandAL = [stringprep.in_table_d1(x) for x in label]
---    for c in RandAL:
---        if c:
---            # There is a RandAL char in the string. Must perform further
---            # tests:
---            # 1) The characters in section 5.8 MUST be prohibited.
---            # This is table C.8, which was already checked
---            # 2) If a string contains any RandALCat character, the string
---            # MUST NOT contain any LCat character.
---            if any(stringprep.in_table_d2(x) for x in label):
---                raise UnicodeError("Violation of BIDI requirement 2")
---
---            # 3) If a string contains any RandALCat character, a
---            # RandALCat character MUST be the first character of the
---            # string, and a RandALCat character MUST be the last
---            # character of the string.
---            if not RandAL[0] or not RandAL[-1]:
---                raise UnicodeError("Violation of BIDI requirement 3")
--+    if any(RandAL):
--+        # There is a RandAL char in the string. Must perform further
--+        # tests:
--+        # 1) The characters in section 5.8 MUST be prohibited.
--+        # This is table C.8, which was already checked
--+        # 2) If a string contains any RandALCat character, the string
--+        # MUST NOT contain any LCat character.
--+        if any(stringprep.in_table_d2(x) for x in label):
--+            raise UnicodeError("Violation of BIDI requirement 2")
--+        # 3) If a string contains any RandALCat character, a
--+        # RandALCat character MUST be the first character of the
--+        # string, and a RandALCat character MUST be the last
--+        # character of the string.
--+        if not RandAL[0] or not RandAL[-1]:
--+            raise UnicodeError("Violation of BIDI requirement 3")
-- 
--     return label
-- 
--diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
--index 8edd5ac063..2407567261 100644
----- a/Lib/test/test_codecs.py
--+++ b/Lib/test/test_codecs.py
--@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
--         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
--         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
-- 
--+    def test_builtin_decode_length_limit(self):
--+        with self.assertRaisesRegex(UnicodeError, "too long"):
--+            (b"xn--016c"+b"a"*1100).decode("idna")
--+        with self.assertRaisesRegex(UnicodeError, "too long"):
--+            (b"xn--016c"+b"a"*70).decode("idna")
--+
--     def test_stream(self):
--         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
--         r.read(3)
---- 
--2.30.2
--
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index c4ee79305d..db78544bd0 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a57dc82d77358617ba65b9841cee1e3b441f386c3789ddc0676eca077f2951c3  Python-3.11.0.tar.xz
-+sha256  85879192f2cffd56cb16c092905949ebf3e5e394b7f764723529637901dfb58f  Python-3.11.1.tar.xz
- sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 123bc8ef88..219d135b3f 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/sed/sed.hash b/package/sed/sed.hash
+index bb48128526..10e2c36d8f 100644
+--- a/package/sed/sed.hash
++++ b/package/sed/sed.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz.sig
++# https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz.sig
+ # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633  sed-4.8.tar.xz
++sha256  6e226b732e1cd739464ad6862bd1a1aba42d7982922da7a53519631d24975181  sed-4.9.tar.xz
+ # Locally calculated
+-sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 64fb2035b0..8165083658 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-SED_VERSION = 4.8
++SED_VERSION = 4.9
+ SED_SOURCE = sed-$(SED_VERSION).tar.xz
+ SED_SITE = $(BR2_GNU_MIRROR)/sed
+ SED_LICENSE = GPL-3.0
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
