@@ -1,74 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D307DC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 08:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5405BC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 08:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3AC41514;
-	Sat, 10 Dec 2022 08:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C3AC41514
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5F5A60AB0;
+	Sat, 10 Dec 2022 08:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5F5A60AB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T-9F16zOPFQD; Sat, 10 Dec 2022 08:29:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YxfNcUdnfy0T; Sat, 10 Dec 2022 08:43:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BD6541521;
-	Sat, 10 Dec 2022 08:29:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BD6541521
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 014C11BF44A
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:29:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 017B260A63;
+	Sat, 10 Dec 2022 08:43:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 017B260A63
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 40A921BF44A
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDAC940176
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDAC940176
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B7E660A63
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 08:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B7E660A63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BjSrQ1ucsTVT for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 08:29:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD317400C0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD317400C0
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 08:29:04 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.110.151])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4725D780310;
- Sat, 10 Dec 2022 09:28:58 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Dec 2022 09:28:57 +0100
-Date: Sat, 10 Dec 2022 09:28:57 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nicolas Carrier <Nicolas.Carrier@orolia.com>
-Message-ID: <20221210082857.GP2855@scaer>
-References: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
- <20221205215558.GI2855@scaer>
- <883c29be-2a05-00f6-76d6-cf894e497da5@gmail.com>
- <AS4P251MB061200F650240CFFE6FEF439841D9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
- <97b952a4-2e1b-363c-36f0-0fe2c0da26b7@gmail.com>
- <AS4P251MB0612D4DF753A307318923B9A841C9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <AS4P251MB0612D4DF753A307318923B9A841C9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1670660943;
- bh=9+4KOD7eID3ec/bqNCv23EPYoVWF3o82uEWIr4ajpUE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=efDeVEa63PRBScJnpQprlsI3CRfxZv+mW8maBVor6NgK56SDAkpJ8uUAtLI3glTeY
- Bf0QUwPrs4+kvC5x3STDzZLX2t7k4pou3TgPxR3TXYgHBtdDJc7D+DtaEOqw9l81yX
- QUqUArHBSyo2d84uz6fsfQNoovvI/S8gLbhLvMH1TfcWCOs37sKsnfSrW2MT0d5arI
- 7O6YBWcE/kN9t25WLD0G41/2tDPAbKckWCVQ4Jy4MVZAb8ygcJTc4aNknhRj8vz8WZ
- IqGI9/F3TshPjO8NhKntb/Xv+YNxtsFJUAONGOqYjTtjkFGLb92TpX3Ml6LglfQK68
- T/Ny5iu1Br0rg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=efDeVEa6
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/shadow: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pr5KQFTLb1CS for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 08:43:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B151607F5
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 08:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B151607F5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 583E485212; Sat, 10 Dec 2022 08:43:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 10 Dec 2022 09:37:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f2b4c80f44ac0da88fc087017d495e627131350
+X-Git-Newrev: 1567fbd72d4b547f70a7509247bf9abb73ab58e3
+X-Patchwork-Hint: ignore
+Message-Id: <20221210084323.583E485212@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuwsc: fix wolfssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,66 +56,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nicolas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1567fbd72d4b547f70a7509247bf9abb73ab58e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-12-09 11:07 +0000, Nicolas Carrier spake thusly:
-> About the author name, don't bother, I don't mind if you take the
-> ownership (read: the blame :D) of the script.
+libuwsc needs BR2_PACKAGE_WOLFSSL_ALL (which enables openssl compat
+layer) to avoid the following wolfssl build failure raised since the
+addition of the package in commit
+120c04775d7ebe5a2cfc14848f5d11f3a333970b:
 
-What one can do in this case, is add a co-author tag, like;
+/home/br-user/work/instance-1/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+   62 |     SSL_CTX *ctx;
+      |     ^~~~~~~
 
-    Co-authored-by: Nicolas Carrier <Nicolas.Carrier@orolia.com>
-    [Nicolas.Carrier@orolia.com provided the test case]
-    Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Note that we do not select _ALL when wolfssl is enabled, because wolfssl
+is neither the only nor the preferred choice, so the condition would
+have to be a bit more complex:
 
-> That said, maybe buildroot maintainers would like it to be expanded?
-> I don't know the policy for this kind of tests, is it sufficient
-> that it demonstrates that the package is able to build something that
-> works or is it expected to have something more exhaustive?
+    select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL \
+        && !BR2_STATIC_LIBS && !BR2_PACKAGE_OPENSSL
 
-It is perfectly fine to have a test case that demonstrates the basics of
-the package. This helps prove that there are no missing runtime
-dependencies (e.g. for pythn packages), that the basic features do work
-as expected, at least in the use-case the submitter is interested in.
+It is not overly complicated, but it is no longer trivial or obvious,
+and would easily break if the ordering of preferences were to change in
+the .mk fie in the future.
 
-If there are more to test, it can be added as time passes (e.g. when we
-get a report that something does not work).
+Fixes:
+ - http://autobuild.buildroot.org/results/6c2a6ed6fca1f92aab299f6ed9cd900b20e8d512
 
-We definitely do not want to be able to run the full test-suite of the
-package itself; that's not our role.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: explain why we don't select _ALL]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libuwsc/libuwsc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Also, there are those:
-> self.assertRunOk(f'userdel {username} || true')
-> self.assertRunOk(f'groupdel {username} || true')
-> Which I had to had, but I never fully understood why they were needed.
-
-assertRunOk() checks that the return code is zero, and drops the output.
-So, if self.assertRunOk(f'userdel {username}') fails, then it means that
-userdel in the target did fail, so it would be interesting to check why:
-
-    output, ret = self.emulator.run(f'userdel {username}')
-    self.assertEqual(ret, 0, f'Failed with {output!r}')
-
-(I think in fact ythat this is what we should do in assertRunOk())
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+index cad351529d..051ea411fa 100644
+--- a/package/libuwsc/libuwsc.mk
++++ b/package/libuwsc/libuwsc.mk
+@@ -18,7 +18,7 @@ LIBUWSC_CONF_OPTS += \
+ 	-DUWSC_USE_MBEDTLS=OFF \
+ 	-DUWSC_USE_OPENSSL=ON \
+ 	-DUWSC_USE_WOLFSSL=OFF
+-else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ LIBUWSC_DEPENDENCIES += wolfssl
+ LIBUWSC_CONF_OPTS += \
+ 	-DUWSC_SSL_SUPPORT=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
