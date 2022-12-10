@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C93C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 178B1C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D30E4EBDA;
-	Mon, 20 Feb 2023 22:04:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D30E4EBDA
+	by smtp4.osuosl.org (Postfix) with ESMTP id B98034EE21;
+	Mon, 20 Feb 2023 22:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B98034EE21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2TiaZTj6Dyv; Mon, 20 Feb 2023 22:04:52 +0000 (UTC)
+	with ESMTP id ihFxksb35J-9; Mon, 20 Feb 2023 22:05:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C27EC4EE0F;
-	Mon, 20 Feb 2023 22:04:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C27EC4EE0F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D4044EE25;
+	Mon, 20 Feb 2023 22:05:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D4044EE25
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F084C1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2029C1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B01B61135
+ by smtp3.osuosl.org (Postfix) with ESMTP id A98736114C
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B01B61135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98736114C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5-thLx9TVmN9 for <buildroot@lists.busybox.net>;
+ with ESMTP id 98QeIrrHAAMS for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A89AA6113E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D79BA610E7
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A89AA6113E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D79BA610E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93A0B8648F; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D4E99828C8; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 19:00:53 +0100
+Date: Sat, 10 Dec 2022 09:37:40 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 87a09b105bb9762cee1245856a9b0a27a89887d3
-X-Git-Newrev: 090d126da88c1d529bf073626e423fceeb3cf9d5
+X-Git-Oldrev: 2f2b4c80f44ac0da88fc087017d495e627131350
+X-Git-Newrev: 1567fbd72d4b547f70a7509247bf9abb73ab58e3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.93A0B8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/go: security bump to
- version 1.19.4
+Message-Id: <20230220205159.D4E99828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libuwsc: fix wolfssl
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=090d126da88c1d529bf073626e423fceeb3cf9d5
+commit: https://git.buildroot.net/buildroot/commit/?id=1567fbd72d4b547f70a7509247bf9abb73ab58e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Includes 2 security fixes following the security policy.
+libuwsc needs BR2_PACKAGE_WOLFSSL_ALL (which enables openssl compat
+layer) to avoid the following wolfssl build failure raised since the
+addition of the package in commit
+120c04775d7ebe5a2cfc14848f5d11f3a333970b:
 
- - CVE-2022-41720: https://go.dev/issue/56694
- - CVE-2022-41717: https://go.dev/issue/56350
+/home/br-user/work/instance-1/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+   62 |     SSL_CTX *ctx;
+      |     ^~~~~~~
 
-https://groups.google.com/g/golang-nuts/c/rQgaDWEvUrE
-https://github.com/golang/go/issues?q=milestone%3AGo1.19.4+label%3ACherryPickApproved+
+Note that we do not select _ALL when wolfssl is enabled, because wolfssl
+is neither the only nor the preferred choice, so the condition would
+have to be a bit more complex:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    select BR2_PACKAGE_WOLFSSL_ALL if BR2_PACKAGE_WOLFSSL \
+        && !BR2_STATIC_LIBS && !BR2_PACKAGE_OPENSSL
+
+It is not overly complicated, but it is no longer trivial or obvious,
+and would easily break if the ordering of preferences were to change in
+the .mk fie in the future.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6c2a6ed6fca1f92aab299f6ed9cd900b20e8d512
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: explain why we don't select _ALL]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuwsc/libuwsc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 866e7e0d59..d35db10213 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  18ac263e39210bcf68d85f4370e97fb1734166995a1f63fb38b4f6e07d90d212  go1.19.3.src.tar.gz
-+sha256  eda74db4ac494800a3e66ee784e495bfbb9b8e535df924a8b01b1a8028b7f368  go1.19.4.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index fd4caa2e5a..44e0c622c9 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.19.3
-+GO_VERSION = 1.19.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+index cad351529d..051ea411fa 100644
+--- a/package/libuwsc/libuwsc.mk
++++ b/package/libuwsc/libuwsc.mk
+@@ -18,7 +18,7 @@ LIBUWSC_CONF_OPTS += \
+ 	-DUWSC_USE_MBEDTLS=OFF \
+ 	-DUWSC_USE_OPENSSL=ON \
+ 	-DUWSC_USE_WOLFSSL=OFF
+-else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ LIBUWSC_DEPENDENCIES += wolfssl
+ LIBUWSC_CONF_OPTS += \
+ 	-DUWSC_SSL_SUPPORT=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
