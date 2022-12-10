@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB699C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 10:12:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95F90C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 10:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BF4D41687;
-	Sat, 10 Dec 2022 10:12:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BF4D41687
+	by smtp2.osuosl.org (Postfix) with ESMTP id 377FB4018F;
+	Sat, 10 Dec 2022 10:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 377FB4018F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VGW2kYZhnRs3; Sat, 10 Dec 2022 10:12:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mMfe6G0t3n3V; Sat, 10 Dec 2022 10:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0B4415F8;
-	Sat, 10 Dec 2022 10:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0B4415F8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 148211BF855
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89D4C40194;
+	Sat, 10 Dec 2022 10:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89D4C40194
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16A4E1BF859
  for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2CF381A8E
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2462415F8
  for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 10:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2CF381A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2462415F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qqq5crU6JosK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZjYYucjMJN_6 for <buildroot@lists.busybox.net>;
  Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFD1A81A29
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBE814148F
  for <buildroot@buildroot.org>; Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD1A81A29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBE814148F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB27985EE2; Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
+ id 9EE5C85EE1; Sat, 10 Dec 2022 10:12:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 10:34:12 +0100
+Date: Sat, 10 Dec 2022 10:34:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f748fc7489882095bdda22ed71b05149474d9b1
-X-Git-Newrev: 9c552f39c98d271002032b0d74f62c9cfe4348dd
+X-Git-Oldrev: de82d57b56dd895c7eb56948c631fa30c4935a2a
+X-Git-Newrev: 3f748fc7489882095bdda22ed71b05149474d9b1
 X-Patchwork-Hint: ignore
-Message-Id: <20221210101202.AB27985EE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/optee-benchmark: bump to version
- 3.19.0
+Message-Id: <20221210101202.9EE5C85EE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/optee-os: bump to version 3.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +62,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c552f39c98d271002032b0d74f62c9cfe4348dd
+commit: https://git.buildroot.net/buildroot/commit/?id=3f748fc7489882095bdda22ed71b05149474d9b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bumps OP-TEE benchmark package version to OP-TEE release 3.19.0.
+Bumps OP-TEE OS package version to OP-TEE release 3.19.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/optee-benchmark/optee-benchmark.hash | 4 ++--
- package/optee-benchmark/optee-benchmark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/optee-os/Config.in     | 4 ++--
+ boot/optee-os/optee-os.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index 27c91e0fb0..d74a24c8ab 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.18.0/optee-benchmark-3.18.0.tar.gz
--sha256  2151aa5da062402518f35823d9c9dffa2e012f924625d2f7123e0d21d350a86b  optee-benchmark-3.18.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.19.0/optee-benchmark-3.19.0.tar.gz
-+sha256  32f41854bf07eb7bb89dfc702da023c3a99518c33fbe7edf0e1f004e29a8c90c  optee-benchmark-3.19.0.tar.gz
- # Locally computed
- sha256  0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index 1071c4bb5c..338a51ada4 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 5244700bc2..8bcce22306 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
--OPTEE_BENCHMARK_VERSION = 3.18.0
-+OPTEE_BENCHMARK_VERSION = 3.19.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "3.18.0"
++	bool "3.19.0"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
+ 	help
+@@ -70,7 +70,7 @@ endif
+ 
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "3.18.0"	if BR2_TARGET_OPTEE_OS_LATEST
++	default "3.19.0"	if BR2_TARGET_OPTEE_OS_LATEST
+ 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index 38f68bec5d..a87f21a9bf 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_os/archive/3.18.0/optee-os-3.18.0.tar.gz
+-sha256  bdd309697745ec4406951652094b50d9adb06c3612f01bd8a3d72682ec8e03e8  optee-os-3.18.0.tar.gz
++# From https://github.com/OP-TEE/optee_os/archive/3.19.0/optee-os-3.19.0.tar.gz
++sha256  5e0c03bbc4d106f262a6bd33333c002c3380205ae6b82334aa7b644721ff7868  optee-os-3.19.0.tar.gz
+ # Locally computed
+ sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
