@@ -1,88 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4585C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 17:13:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4AFEC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 17:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24361409FE;
-	Sat, 10 Dec 2022 17:13:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24361409FE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5EF2E403BF;
+	Sat, 10 Dec 2022 17:14:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EF2E403BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EhLuwZIzdJGC; Sat, 10 Dec 2022 17:13:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L7hpu4FbGRWR; Sat, 10 Dec 2022 17:14:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E25CD40F4E;
-	Sat, 10 Dec 2022 17:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E25CD40F4E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B0E721BF3FD
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 17:13:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88FBF40126;
+	Sat, 10 Dec 2022 17:14:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88FBF40126
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 46A191BF3FD
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 17:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8856260806
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 17:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8856260806
+ by smtp2.osuosl.org (Postfix) with ESMTP id 221EA40126
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 17:14:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 221EA40126
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zWcl4baYgsIq for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 17:13:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F025606FF
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7F025606FF
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 17:13:33 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id j28so1418530ila.9
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 09:13:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2dVw4KPKnZTGhu1Y/jels7yeFDtW69GJ46POylz7CA0=;
- b=zxNHltyqeKmfpxdK+xwWHUM+klssj+jEIt4nbHqsfrKHQ/0aYqHOcqdRsmNjYdwm5x
- PoiSHvn3OxqVwmZdeMf8QOAwzMjjlT9KLadmnKiIjCYulVu2nRgMK4mdofvX8eanmnYZ
- yS7wJfY7TyoesXf/apbth7I8wg4ltaAfYD0EPQP1SkYcpYUOdd1byOzaZUT7Mz8amKGh
- JcTuVzy1gROhjmaEOZiWsGekxwcVhyZLE2vPFkZMFFoC0GNbU5K0kkmDAAcRUBxLX/CK
- gYX8ZKwLqdeXffBIg//E9DIdrXIg0xFUD+4mDDsouhxLMNCEclmoTJ2DdqQmSFjfEFfZ
- AGhg==
-X-Gm-Message-State: ANoB5pkvUkk9Sb4L17qingvdBFYFs78tIrpDvVJaXpc/zFZjxDPwuw51
- jBo1JdMCsimHWQhd2Pl6SPZ77xYD5jkOoQ==
-X-Google-Smtp-Source: AA0mqf7vmw6Aur70btAJOMY4ZVfbAbIM8WF9fCjHXTM0SBXgkE7HHS0UHggJaTd21awScZmSA5WSMQ==
-X-Received: by 2002:a05:6e02:e12:b0:304:af35:a464 with SMTP id
- a18-20020a056e020e1200b00304af35a464mr248790ilk.8.1670692412296; 
- Sat, 10 Dec 2022 09:13:32 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- m7-20020a026d07000000b003633848da58sm1563440jac.41.2022.12.10.09.13.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 09:13:31 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 34L1bRqI8VbJ for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 17:14:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FAD1400AF
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 17:14:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FAD1400AF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4BF4E85F25; Sat, 10 Dec 2022 17:14:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 10:13:30 -0700
-Message-Id: <20221210171330.2608790-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2dVw4KPKnZTGhu1Y/jels7yeFDtW69GJ46POylz7CA0=;
- b=mTAlaZgqoCFIQPVP/6R5gcqCtpUKeXZ1ERC7kKhxsbFAG8z7seinkf5fgm/SYDrmQl
- uDglETcpkwZGeAonHzAOrNJFdR1IhgbQmM3sptg67AVnGHB5hcRThZc/2DaqqaOei5gZ
- LxjKqS9i9I3FDj+dkUjO4JzEKsaVer7HxWS+zFUDP5caMGQPii0XwDwBqMBk8PqnNoVG
- nDgLAS212I86JvmMzQc9wizflH/NpN0rcCf6y1SufqsLa3KZufVaP0ALnm4KzMlk25xj
- yAhJwaQwPyDmHh9zzy9u0BQpo96ZkOi1X3GSkN6bfGRBs0x1z3Kwqh+ty/QVQdkFGP5Q
- iT3Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mTAlaZgq
-Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: bump to version
- 2.2.1
+Date: Sat, 10 Dec 2022 18:13:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 712ee21876562b46947142f35dfe1186d88ad241
+X-Git-Newrev: 34cea39024bf8dedaa071bc5f2d903755501215c
+X-Patchwork-Hint: ignore
+Message-Id: <20221210171432.4BF4E85F25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: restrict gcc to >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,109 +56,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport patch removing wheel dependency.
+commit: https://git.buildroot.net/buildroot/commit/?id=34cea39024bf8dedaa071bc5f2d903755501215c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new host-python-setuptools-scm build dependency.
+With gnuradio 3.10 boost/filesystem was replaced by std::filesystem.
+This feature was introduced with gcc 8 (requirering -lstdc++fs (with
+gcc 9 explicit -lstdc++fs is no more explicitely required)).
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+With gcc < 8 build fails with error:
+
+In file included from /home/br-user/work/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/include/boost/dll/runtime_symbol_info.hpp:11:0,
+                 from /home/br-user/work/instance-0/output-1/build/gnuradio-3.10.4.0/buildroot-build/gnuradio-runtime/lib/constants.cc:16:
+/home/br-user/work/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/include/boost/dll/config.hpp:42:10: fatal error: filesystem: No such file or directory
+ #include <filesystem>
+          ^~~~~~~~~~~~
+compilation terminated.
+
+Add a dependency to gcc >= 8.
+
+BR2_TOOLCHAIN_HAS_GCC_BUG_64735 only affects gcc <7, so we drop it.
+
+Adding this restriction on gcc >= 8 also covers the dependency for volk,
+which requires gcc >= 7, which was not propagated to gnuradio so far.
+
+Tested with bootlin toolchain 2020.02-2 (gcc 8.3.0)
+
+Fixes:
+- http://autobuild.buildroot.net/results/6a82605c58f9ef9eb6c14603777dd8523dd00aa5/
+- http://autobuild.buildroot.net/results/c7c4ae76954e388ab639b39fd521d90acfe4edc9/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...move-spurious-wheel-build-dependency.patch | 29 +++++++++++++++++++
- .../python-dnspython/python-dnspython.hash    |  4 +--
- package/python-dnspython/python-dnspython.mk  | 20 ++++---------
- 3 files changed, 36 insertions(+), 17 deletions(-)
- create mode 100644 package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
+ package/gnuradio/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
-new file mode 100644
-index 0000000000..b43217edad
---- /dev/null
-+++ b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
-@@ -0,0 +1,29 @@
-+From 53b989e4ce32c941d748ad33502600497595914a Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Wed, 2 Nov 2022 14:01:58 -0600
-+Subject: [PATCH] Remove spurious wheel build dependency
-+
-+Wheel isn't a build dependency so it shouldn't be in setup_requires.
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+53b989e4ce32c941d748ad33502600497595914a]
-+---
-+ setup.cfg | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/setup.cfg b/setup.cfg
-+index 0abd270..2cb3e06 100644
-+--- a/setup.cfg
-++++ b/setup.cfg
-+@@ -46,7 +46,7 @@ packages =
-+     dns.rdtypes.CH
-+ python_requires = >=3.7
-+ test_suite = tests
-+-setup_requires = setuptools>=44; wheel; setuptools_scm[toml]>=3.4.3
-++setup_requires = setuptools>=44; setuptools_scm[toml]>=3.4.3
-+ 
-+ [options.extras_require]
-+ DOH = httpx>=0.21.1; h2>=4.1.0; requests; requests-toolbelt
-+-- 
-+2.34.1
-+
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
-index c9c74c8d75..29441b41ea 100644
---- a/package/python-dnspython/python-dnspython.hash
-+++ b/package/python-dnspython/python-dnspython.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dnspython/json
--md5  8a362d7b2358be3117683e2dbf9654fc  dnspython-2.1.0.zip
--sha256  e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4  dnspython-2.1.0.zip
-+md5  c7172f4115cd7b60fd5037cfcd8f9408  dnspython-2.2.1.tar.gz
-+sha256  0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e  dnspython-2.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index 77e6082807..43030ae476 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -4,24 +4,14 @@
- #
- ################################################################################
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index de19732cfb..1824589263 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,12 +1,12 @@
+-comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
++comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
  
--PYTHON_DNSPYTHON_VERSION = 2.1.0
--PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).zip
--PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/13/27/5277de856f605f3429d752a39af3588e29d10181a3aa2e2ee471d817485a
-+PYTHON_DNSPYTHON_VERSION = 2.2.1
-+PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/99/fb/e7cd35bba24295ad41abfdff30f6b4c271fd6ac70d20132fa503c3e768e0
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
--
--define PYTHON_DNSPYTHON_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(PYTHON_DNSPYTHON_DL_DIR)/$(PYTHON_DNSPYTHON_SOURCE)
--	mv $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)/* $(@D)
--	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
--endef
--
--define HOST_PYTHON_DNSPYTHON_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(HOST_PYTHON_DNSPYTHON_DL_DIR)/$(HOST_PYTHON_DNSPYTHON_SOURCE)
--	mv $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)/* $(@D)
--	$(RM) -r $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)
--endef
-+PYTHON_DNSPYTHON_DEPENDENCIES = host-python-setuptools-scm
-+HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-setuptools-scm
+-comment "gnuradio needs a toolchain not affected by GCC bug 43744 and 64735"
++comment "gnuradio needs a toolchain not affected by GCC bug 43744"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
  
- $(eval $(python-package))
- $(eval $(host-python-package))
--- 
-2.34.1
-
+ config BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+@@ -16,8 +16,8 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic, boost-thread
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
