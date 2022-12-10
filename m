@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB22C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0178C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Dec 2022 21:04:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3385B404B2;
-	Sat, 10 Dec 2022 21:01:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3385B404B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37C0280B4B;
+	Sat, 10 Dec 2022 21:04:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C0280B4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kXm8MkH9m3d4; Sat, 10 Dec 2022 21:01:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ka5-fRMVanfh; Sat, 10 Dec 2022 21:04:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77C97404B5;
-	Sat, 10 Dec 2022 21:01:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C97404B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6521C802CC;
+	Sat, 10 Dec 2022 21:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6521C802CC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 649D71BF3E9
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:01:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11E171BF3E9
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E8974091F
- for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:01:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E8974091F
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC94A410A0
+ for <buildroot@lists.busybox.net>; Sat, 10 Dec 2022 21:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC94A410A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sxIeV00Q0ZOr for <buildroot@lists.busybox.net>;
- Sat, 10 Dec 2022 21:01:16 +0000 (UTC)
+ with ESMTP id HUNtK6mr0DWD for <buildroot@lists.busybox.net>;
+ Sat, 10 Dec 2022 21:04:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27D274071B
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27D274071B
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:01:16 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id z144so3890395iof.3
- for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:01:16 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA93A4091F
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA93A4091F
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 21:04:10 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id h17so1607550ila.6
+ for <buildroot@buildroot.org>; Sat, 10 Dec 2022 13:04:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=VgFdLIZcd1nggDn+1esbzjYs7LvcQqEuZBLXaU+os4c=;
- b=mds/ViUWZbvFI6Qz3UfwA/SrZ5vhSM+byF9osAOvPd/bWzH8uM71SOrQoPcahDmG2j
- vIsxQhhLKdXqUnEE/lNA7EH7vTzvBSY1mMP34J8BWyElyIH3rp73lsPu7JFwsEU8dWWu
- OlSokgQ1RkUQ6EIpd1W6IOj7uchYKpUd3VV5EhN7lhWMnRB7cuf/cBke2F8nK3Dm5aff
- Yz90vGCf5jVrQxoMYgXTZ0slUyxeZGrj7+ji+IYwyY2RTwR+YAujynIRNaLul8LMXOlc
- TPF19ryetUXr6KfHsY9JqbIYjLeSTaFZDp6U51JH38MEOK5HV3rBUCHscFZub8/BzaaR
- kOtw==
-X-Gm-Message-State: ANoB5pn5cS0gXSXnkgR2+ahhkh7rt167jm2YqyuwXRAGBLSDjT5Q6xA3
- riPMjzrKRHHk0l+22YO0YnIVpMd75Hzrqd4U
-X-Google-Smtp-Source: AA0mqf4nSlzmet6LBtXixZjf85PdEu+SFZbQNh+TxnNPTHNHxsPrtav3Mapzi8/0DkTlejZaO6hlYw==
-X-Received: by 2002:a5e:9412:0:b0:6e0:2342:a401 with SMTP id
- q18-20020a5e9412000000b006e02342a401mr6243778ioj.5.1670706074988; 
- Sat, 10 Dec 2022 13:01:14 -0800 (PST)
+ bh=SRt5cRFEbQjfUR3x9NUU5ImZ4WmQusSwebARYIjEHr8=;
+ b=CI2K1Kb/QacqFL7YEbb8yCqYLuCI650dd4aOTKQWZmUXQTTSTpsUUDrNkELBnahb9B
+ 0ruv4/bTw7qzdjwb3+yQsACtMYc/EnUD1DX3VDH4SkjIhdkGAO7xKC5v7fe4FSUlTD/0
+ T6oQhoDvTj0khT+fo9Wp4jCFjGJorZGonDUP5/b9GfSenEPNPemrfCcucfSUjdjoA+6V
+ 1v+W5dpB5Udb5uq8U5uHNqPgQDNCqhrk5VV952Efk68wzgoFl7L/AwCJxQP+Ws+VCqus
+ g3EaY/JGQjxUS6IYcRdDc7khsRoOVkM2cZYF1AJaWo7ftrRqDMPEpfPz9AbShkgmXkiY
+ nrhA==
+X-Gm-Message-State: ANoB5pmvX4ZicHZ2Gy41wOpWpRaIyQ1bkrnnjAHCFrhQeHeJs72MGHLy
+ t1gzKZ5rn7fEL38MKZSzH5LiuR3DAt6+9L5O
+X-Google-Smtp-Source: AA0mqf6xetiCFFsFGFpYP1KkOw9UmMfuYhJ8hJB444blWd7iuKXieVRfp/L9Q6GjszDKReH8slCV8Q==
+X-Received: by 2002:a92:ca90:0:b0:303:7bb:d76c with SMTP id
+ t16-20020a92ca90000000b0030307bbd76cmr6341630ilo.5.1670706249585; 
+ Sat, 10 Dec 2022 13:04:09 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- p11-20020a5d8b8b000000b006dffde23fa9sm2153951iol.24.2022.12.10.13.01.14
+ y4-20020a027304000000b0038a5e911670sm1639372jab.168.2022.12.10.13.04.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Dec 2022 13:01:14 -0800 (PST)
+ Sat, 10 Dec 2022 13:04:09 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 14:01:13 -0700
-Message-Id: <20221210210113.3642706-1-james.hilliard1@gmail.com>
+Date: Sat, 10 Dec 2022 14:04:07 -0700
+Message-Id: <20221210210407.3650134-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VgFdLIZcd1nggDn+1esbzjYs7LvcQqEuZBLXaU+os4c=;
- b=EOZU4xqZdg0GsVsq2UAvBpyY5pNc4SYNwTo9CN3S9JS5TEr5hsJhqIJwYMxOzys7/d
- YtwzX5f4JoZDDhEtOK2GI5UB4xZS91PvRdKeD0coYWnNpRE2S8LI62/pGxBXN0iCh96r
- tgV+pKTwyYAYqG2JE85iFzVEPFqGaGQDL4MF1xsqInmdfmPhop0+WiyDs0jKBgo7FAba
- Ez7/Xoel0bRGjkhBiLgazDWciONRKFf0yWYRWDrvShNSFsXbbSreRxfUcEBC0yBBPQGQ
- 3Vij0+6kQXdCQ28S8d2IHymVtDwHGWLZ056yfIDIlnIxNknhpQ+G4L9E9P0Wfduc0Dmw
- FGLA==
+ bh=SRt5cRFEbQjfUR3x9NUU5ImZ4WmQusSwebARYIjEHr8=;
+ b=XI83h19jC0ejmh/KRtbsDydJx/Uc1spmYsNDHpT9GE4X4LUbI2yT+1fhPw1nThnUIN
+ Pf2Q7PI2iKNTCwablVyJ0ITd/uaQ4WlZ055QtOiZXPRanHop/uehSM1RIRl6JJyXk0Eg
+ CWD4QWDZLSScbPOyT7AqrMpG6mlNSlDz7TSZ9d+GYxr9kLB61u9O73jwvXSPgjiuyp4K
+ oa9LLh68Dge9sVegxQKlUd6/7hx9fK/cQFxrmZrwMgvCziz5AfbRxJbrWRY4+enVguCL
+ AXVDu4vV3vHO1oiKrd0Jd5d3p481IrfMhiLnnaf3ww0kk1VnokwcZCVrwCJSycioNHLx
+ +kdg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EOZU4xqZ
-Subject: [Buildroot] [PATCH 1/1] package/python-ujson: bump to version 5.6.0
+ header.a=rsa-sha256 header.s=20210112 header.b=XI83h19j
+Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: bump to version
+ 1.26.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-ujson/python-ujson.hash | 4 ++--
- package/python-ujson/python-ujson.mk   | 4 ++--
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
-index 27df5aa355..3dfc681167 100644
---- a/package/python-ujson/python-ujson.hash
-+++ b/package/python-ujson/python-ujson.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 8aacf5780a..963967332e 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ujson/json
--md5  73b42e3f4bf3130073cfffbd82608275  ujson-5.5.0.tar.gz
--sha256  b25077a971c7da47bd6846a912a747f6963776d90720c88603b1b55d81790780  ujson-5.5.0.tar.gz
-+md5  45a74680e2936470821bf74a8f043a71  ujson-5.6.0.tar.gz
-+sha256  f881e2d8a022e9285aa2eab6ba8674358dbcb2b57fa68618d88d62937ac3ff04  ujson-5.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  ba308b52b9092184cf4905bc59a88fc0  urllib3-1.26.12.tar.gz
+-sha256  3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e  urllib3-1.26.12.tar.gz
++md5  38f7d1589aa9720101316d07fcbd05c8  urllib3-1.26.13.tar.gz
++sha256  c083dd0dce68dbfbe1129d5271cb90f9447dea7d52097c6e0126120c521ddea8  urllib3-1.26.13.tar.gz
  # Locally computed sha256 checksums
- sha256  6a00a8f8b4050303368b694147bde1aed9c96bdff869c181dbbf3ccb784a1501  LICENSE.txt
-diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
-index 95cb0ebad1..24ad4822b8 100644
---- a/package/python-ujson/python-ujson.mk
-+++ b/package/python-ujson/python-ujson.mk
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 96d3938fd2..5868927440 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_UJSON_VERSION = 5.5.0
-+PYTHON_UJSON_VERSION = 5.6.0
- PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
--PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/6e/4a/03ddad85a10dd52e209993a14afa0cb0dc5c348e4647329f1c53856ad9e6
-+PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/45/48/466d672c53fcb93d64a2817e3a0306214103e3baba109821c88e1150c100
- PYTHON_UJSON_SETUP_TYPE = setuptools
- PYTHON_UJSON_LICENSE = BSD-3-Clause
- PYTHON_UJSON_LICENSE_FILES = LICENSE.txt
+-PYTHON_URLLIB3_VERSION = 1.26.12
++PYTHON_URLLIB3_VERSION = 1.26.13
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/b2/56/d87d6d3c4121c0bcec116919350ca05dc3afd2eeb7dc88d07e8083f8ea94
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c2/51/32da03cf19d17d46cce5c731967bf58de9bd71db3a379932f53b094deda4
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 -- 
 2.34.1
 
