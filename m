@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 936AEC64ED9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A63C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:08:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 392A64EE65;
-	Mon, 20 Feb 2023 22:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 392A64EE65
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6874403F5;
+	Mon, 20 Feb 2023 22:08:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6874403F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a59Mo7zGQyVO; Mon, 20 Feb 2023 22:08:17 +0000 (UTC)
+	with ESMTP id 9jhfyR7ujs6J; Mon, 20 Feb 2023 22:08:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C69D64EE9B;
-	Mon, 20 Feb 2023 22:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C69D64EE9B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29B3C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80CA7402D4;
+	Mon, 20 Feb 2023 22:08:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80CA7402D4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FBD91BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61A65416BB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61A65416BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34D4161142
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34D4161142
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T-WsYwbnQXEb for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xIrGG2yS3xS3 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 815B1416B8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 815B1416B8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6245861126
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6245861126
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EE6186494; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+ id 5FE68828C8; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:32:26 +0100
+Date: Sat, 10 Dec 2022 20:55:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b55dfdb286ddb7fb4f35c20b731a4c93bd3ff201
-X-Git-Newrev: 6936ec7ec6cb6df0e910f8df92961b79b12ee229
+X-Git-Oldrev: 4f9f6180491c697b29aa687f378c2ab58c7f91fd
+X-Git-Newrev: 21321a983615f8a3ca33c92599c7fc6023711949
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205204.7EE6186494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux,
- linux-headers}: bump 4.{9, 14, 19}.x / 5.{4, 10, 15}.x / 6.0.x series
+Message-Id: <20230220205200.5FE68828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website/news.html: add
+ notice about 2022.08.3 release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,82 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6936ec7ec6cb6df0e910f8df92961b79b12ee229
+commit: https://git.buildroot.net/buildroot/commit/?id=21321a983615f8a3ca33c92599c7fc6023711949
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The announcement mail didn't make it to the mailman archive, so use the lore
+link instead.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ docs/website/news.html | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3631fcb6d6..c1c690f4cc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 8f7e22a0b9..74ccd11b08 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.0.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.0.12" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0af02e1326..8739da4f75 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,14 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  6114a208e82739b4a1ab059ace35262be2a83be34cd1ae23cb8a09337db831c7  linux-6.0.9.tar.xz
-+sha256  89b730edf8942b49e02f9894244205886c9a214d629b35b88c4ff06ee9304f01  linux-6.0.12.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c93bb384a97ad1f0a4f18e442ce0291242722f78023eca658b22344541f09489  linux-5.19.17.tar.xz
--sha256  cba39031dbc0eed0785b8afdc8c58cf23df83e47001b2354fa44486ae699c154  linux-5.15.79.tar.xz
--sha256  f1b027526c58e7bd127f35b17736e4a6c865866b9048898f05c5358d4d52d4f3  linux-5.10.155.tar.xz
--sha256  8b7df25b5560620eb2776d7b7c67569764b3916ff2f596767f72567b38d13d36  linux-5.4.224.tar.xz
-+sha256  fceef6bb79bac494663ccde34453521fc616cd94272fd30564752b3742381b65  linux-5.15.82.tar.xz
-+sha256  1e0a24bb5510caa18b3601b25e12cc2a1ce123948de551f4f2cdbb40aea707e7  linux-5.10.158.tar.xz
-+sha256  0c1f552a1d2f63b3ecd4d33189f0003bc91fb8ff79967a7e295d015c280c9a44  linux-5.4.226.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  41bf80c4766ba9915470afe97ead6a16faff484b94590387012ce7f9ce41502b  linux-4.9.333.tar.xz
--sha256  26233603ae992cd31e9f78066d54475b3e3f878ab0e3fd271e74a795ab60b15c  linux-4.14.299.tar.xz
--sha256  37406ead61149283973bccdf670a1fd020c2f19722b7176e88ec8567df6dacd0  linux-4.19.265.tar.xz
-+sha256  ed4fd861fe9f6cd09f409f00dcccfa691e6d1a61c585723e587575dcb60aeb29  linux-4.9.335.tar.xz
-+sha256  acd2ee8e03da098fe9f7e52871dd0790850fc32b78657606bdf65bdd94bbf99b  linux-4.14.301.tar.xz
-+sha256  219bce1ac3f542d06fc606ae6bcb10f8ab1940a46c7903113be59afc486c204f  linux-4.19.268.tar.xz
- # Locally computed
- sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
- sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f72e7f408c..24f51418e6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -392,14 +392,14 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.9.333"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.299"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.265"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.224"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.155"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.79"	if BR2_KERNEL_HEADERS_5_15
-+	default "4.9.335"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.301"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.268"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.226"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.158"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.82"	if BR2_KERNEL_HEADERS_5_15
- 	default "5.19.17"	if BR2_KERNEL_HEADERS_5_19
--	default "6.0.9"		if BR2_KERNEL_HEADERS_6_0
-+	default "6.0.12"	if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.08.3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 December 2022</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2022.08.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2022.08.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.08.3">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87r0x7z5cw.fsf@dell.be.48ers.dk/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.08.3.tar.xz">2022.08.3 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
