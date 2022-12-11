@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8046DC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41FF7C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D6404EE68;
-	Mon, 20 Feb 2023 22:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D6404EE68
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC72742DBD;
+	Mon, 20 Feb 2023 22:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC72742DBD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tr6HniGd6MdN; Mon, 20 Feb 2023 22:06:57 +0000 (UTC)
+	with ESMTP id JvMnXdLPZwWN; Mon, 20 Feb 2023 22:07:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E16324EE5A;
-	Mon, 20 Feb 2023 22:06:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E16324EE5A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 543DB1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFD0D4EE76;
+	Mon, 20 Feb 2023 22:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFD0D4EE76
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 092B11BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0202761140
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0202761140
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1763540C2D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1763540C2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F0ZQMxJwg0PL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IBCpfa0YVRzU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1466761142
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1466761142
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DD4C416B6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DD4C416B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03572828C8; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+ id 4832B86494; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 10:34:12 +0100
+Date: Sun, 11 Dec 2022 10:09:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3f748fc7489882095bdda22ed71b05149474d9b1
-X-Git-Newrev: 9c552f39c98d271002032b0d74f62c9cfe4348dd
+X-Git-Oldrev: 1ea6eecb734ae04988e0f4d4a7ea0f5fb9420c89
+X-Git-Newrev: 3e22b84872dbf76e696de1d5c1031af044597343
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205200.03572828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/optee-benchmark: bump
- to version 3.19.0
+Message-Id: <20230220205204.4832B86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-bleak: bump
+ version to 0.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c552f39c98d271002032b0d74f62c9cfe4348dd
+commit: https://git.buildroot.net/buildroot/commit/?id=3e22b84872dbf76e696de1d5c1031af044597343
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bumps OP-TEE benchmark package version to OP-TEE release 3.19.0.
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/optee-benchmark/optee-benchmark.hash | 4 ++--
- package/optee-benchmark/optee-benchmark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-bleak/Config.in         | 3 ++-
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index 27c91e0fb0..d74a24c8ab 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.18.0/optee-benchmark-3.18.0.tar.gz
--sha256  2151aa5da062402518f35823d9c9dffa2e012f924625d2f7123e0d21d350a86b  optee-benchmark-3.18.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.19.0/optee-benchmark-3.19.0.tar.gz
-+sha256  32f41854bf07eb7bb89dfc702da023c3a99518c33fbe7edf0e1f004e29a8c90c  optee-benchmark-3.19.0.tar.gz
- # Locally computed
- sha256  0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index 1071c4bb5c..338a51ada4 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
+index 085c16fae8..691450f86b 100644
+--- a/package/python-bleak/Config.in
++++ b/package/python-bleak/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_BLEAK
+ 	bool "python-bleak"
+-	select BR2_PACKAGE_PYTHON_DBUS_NEXT # runtime
++	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
++	select BR2_PACKAGE_PYTHON_DBUS_FAST # runtime
+ 	help
+ 	  Bluetooth Low Energy platform Agnostic Klient.
+ 
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 5acac877c9..9a8310b11c 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  0c26b270358a782767012220fc595aa5  bleak-0.12.1.tar.gz
+-sha256  4a80a24cc944e52e856054639f298229c39a2fc720e5f7adbeebb117d10849ed  bleak-0.12.1.tar.gz
++md5  57564087d6e17ad1853109f530279b27  bleak-0.19.1.tar.gz
++sha256  dff7c7f281dcb6629d0d722209c79ec3aa2a6c33867cb5c1ea3d44b72ca155c0  bleak-0.19.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 3ae6d90311..00a4946ef6 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--OPTEE_BENCHMARK_VERSION = 3.18.0
-+OPTEE_BENCHMARK_VERSION = 3.19.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
+-PYTHON_BLEAK_VERSION = 0.12.1
++PYTHON_BLEAK_VERSION = 0.19.1
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/67/4b/ba00c69a24a8d08c86f02caa45727a2ad2844c7bee9630ccb063be226f71
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/30/b9/60e1f455365e2340fe076cf7683f4e6d03db0b759d4f93fa45e68dc371e5
+ PYTHON_BLEAK_SETUP_TYPE = setuptools
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
