@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EAF4C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A44B5C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF614607F6;
-	Sun, 11 Dec 2022 20:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF614607F6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 66wHdZODIC1U; Sun, 11 Dec 2022 20:53:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 034666059F;
-	Sun, 11 Dec 2022 20:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034666059F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 150091BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:53:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1C6D40569
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1C6D40569
+	by smtp2.osuosl.org (Postfix) with ESMTP id 378604056B;
+	Sun, 11 Dec 2022 20:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 378604056B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aWfSHjN3ORRP for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 20:53:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6BF94047B
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:53:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6BF94047B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE6AA865DF; Sun, 11 Dec 2022 20:53:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 21:52:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fc644ed3be1ae52bf883f93083fc96f9fe1f2ee4
-X-Git-Newrev: 8405dcae33b47bd5b8cf5ef4faf0db01644a1d4a
-X-Patchwork-Hint: ignore
-Message-Id: <20221211205309.AE6AA865DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mali-driver: bump to latest
- version to build with Linux version up to 6.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3wM2gb2yBzuG; Sun, 11 Dec 2022 20:54:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84C2840569;
+	Sun, 11 Dec 2022 20:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84C2840569
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B0741BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:54:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6651380C00
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6651380C00
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f0tOxP0z-2vt for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:54:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBB0480BF8
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBB0480BF8
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:54:31 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4351BE0005;
+ Sun, 11 Dec 2022 20:54:30 +0000 (UTC)
+Date: Sun, 11 Dec 2022 21:54:29 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20221211215429.22afbcbe@windsurf>
+In-Reply-To: <20221211152153.1833386-1-giulio.benetti@benettiengineering.com>
+References: <20221211152153.1833386-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670792070;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AMGVXA+05A7ghdqVvmBPbeSZ/G5cp0E8U/QoFXlsq68=;
+ b=mx2yZqaolQ815RKPdh/Y0Gru1XtG0Y18/vOAc1zPyPioUSfneXZd/VaSZ6Q6hMapSRgnzr
+ 4WT4REHNXICdvDih97xxKRlbaWZ6ay823epH3LnpRNJ//D+3vqk3rNfxdtWkwskyFKXGGs
+ JtWX3dvc8tee4t07imeQ0j1yYL3rZBHQt0neh2wEw6D8Isxpwb83P1CokgAb1mY04gqyAC
+ b+Wqm8RstZBjQ0VvR+DHwLsW3XxXJhXA+T4mt5KQDiQh8pQehOiTkKAHPXEvceGI6tVIGY
+ omy9Zx1Vuy/nVCgc5dTLI1pdl5O2xdKmkN+3dHF8kOZkQzZLwhUbEfYpPfj/PA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mx2yZqao
+Subject: Re: [Buildroot] [PATCH] package/mali-driver: bump to latest version
+ to build with Linux version up to 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,51 +78,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8405dcae33b47bd5b8cf5ef4faf0db01644a1d4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Giulio,
 
-Update to the latest upstream version, to which a few fixes were added
-to fix build failures with Aarch64 and Linux 5.18/5.19/6.0
+On Sun, 11 Dec 2022 16:21:53 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Fixes:
+> Add pending patches upstream[0] to fix build failure. Patches fix build
+> failure with Aarch64 and Linux 5.18/5.19/6.0
+> 
+> [0]: https://github.com/bootlin/mali-driver/pull/4
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/6f073fea149533a294dd838ce8373185236fe1d4/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  ...ernel.h-fix-build-failure-on-aarch64.patch | 54 +++++++++++++++++++
+>  ...ence.c-fix-build-failure-on-dma_resv.patch | 53 ++++++++++++++++++
+>  ...ence.c-add-local-dma_resv_reserve_sh.patch | 38 +++++++++++++
+>  ...ence.c-add-local-dma_resv_add_shared.patch | 43 +++++++++++++++
+>  ...ild-failure-with-Linux-version-6.0.0.patch | 49 +++++++++++++++++
+>  5 files changed, 237 insertions(+)
+>  create mode 100644 package/mali-driver/0001-mali_base_kernel.h-fix-build-failure-on-aarch64.patch
+>  create mode 100644 package/mali-driver/0002-mali_kbase_dma_fence.c-fix-build-failure-on-dma_resv.patch
+>  create mode 100644 package/mali-driver/0003-mali_kbase_dma_fence.c-add-local-dma_resv_reserve_sh.patch
+>  create mode 100644 package/mali-driver/0004-mali_kbase_dma_fence.c-add-local-dma_resv_add_shared.patch
+>  create mode 100644 package/mali-driver/0005-Fix-build-failure-with-Linux-version-6.0.0.patch
 
-  http://autobuild.buildroot.net/results/6f073fea149533a294dd838ce8373185236fe1d4/
+I have applied, but what I did is that I merged your pull request in
+the mali-driver project, and then turn this Buildroot change into a
+simpler version bump.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mali-driver/mali-driver.hash | 2 +-
- package/mali-driver/mali-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Also, while at it, I granted you maintainer rights to the
+github.com/bootlin/mali-driver repo so that you can directly push
+things there: you're de facto the person looking into this currently!
 
-diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
-index d18db55fe0..5d32c1af8a 100644
---- a/package/mali-driver/mali-driver.hash
-+++ b/package/mali-driver/mali-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  512ca30916fd9b9abec70073fced1c2d33757cddbcb3d0f1d1c4b8c6c318f207  mali-driver-3d697de9bce8bc68bf9408d5407873ce32d0f4fc.tar.gz
-+sha256  761e3f000b4c546cbd35baf34f5a0d1090f048dd44ee543773674192fd95f6b3  mali-driver-87c13e6994b20b5068e3a5e4f4c1b64db666a4c8.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
-index 515f70c429..bdc9fedeb4 100644
---- a/package/mali-driver/mali-driver.mk
-+++ b/package/mali-driver/mali-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MALI_DRIVER_VERSION = 3d697de9bce8bc68bf9408d5407873ce32d0f4fc
-+MALI_DRIVER_VERSION = 87c13e6994b20b5068e3a5e4f4c1b64db666a4c8
- MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
- MALI_DRIVER_DEPENDENCIES = linux
- MALI_DRIVER_LICENSE = GPL-2.0
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
