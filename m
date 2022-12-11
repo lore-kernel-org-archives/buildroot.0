@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A48FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06DDFC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFD7E47745;
-	Mon, 20 Feb 2023 22:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFD7E47745
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CA1D4F157;
+	Mon, 20 Feb 2023 22:35:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CA1D4F157
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5mYisPFVxOgz; Mon, 20 Feb 2023 22:35:21 +0000 (UTC)
+	with ESMTP id r9dXLC6TxWQK; Mon, 20 Feb 2023 22:35:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87DF64F141;
-	Mon, 20 Feb 2023 22:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87DF64F141
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 18CD91BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70AB64F153;
+	Mon, 20 Feb 2023 22:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70AB64F153
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C2DC21BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA6CE416EC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA6CE416EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A20F611BE
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A20F611BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zvMDjATH9F1J for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VLh0Z1lYc61q for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8286416ED
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8286416ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71EC2611C1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71EC2611C1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDAC186495; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 61C6D828C8; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 14:03:25 +0100
+Date: Sun, 11 Dec 2022 11:45:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af1f90cc07e1b74cbda92402926bbcb88a722a93
-X-Git-Newrev: add21fd600b2db4dbb930e2e62b9fbb1b72cceb9
+X-Git-Oldrev: 260924e239627cbe1379cfc752939245d53a06e0
+X-Git-Newrev: c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205213.DDAC186495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in: update default CPAN
- mirror to https, update mirrors URL
+Message-Id: <20230220205205.61C6D828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/autoconf-archive: bump
+ to version 2022.09.03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,68 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=add21fd600b2db4dbb930e2e62b9fbb1b72cceb9
+commit: https://git.buildroot.net/buildroot/commit/?id=c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The http site automatically redirects to the https variant, so let's
-just use that as the default.
-
-The mirror list URL http://search.cpan.org/mirror seems outdated
-(re-directed to https://metacpan.org/mirrors aka 'Not Found - The
-resource you requested could not be found.').
-
-The closest matching URLs we found were:
-
-  https://www.cpan.org/SITES.html
-  http://mirrors.cpan.org/map.html
-  http://mirrors.cpan.org/
-
-That last one has all the list, so we use that; the second is a world
-map, so we also include it.
-
-Sadly, neither of the mirrors list (table or map) are served as https;
-they are only available as http...
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998@free.fr:
-  - add a little blurb to explain http->https redirect
-  - update the mirror list URL, and...
-  - extend commit message with original explanations from Peter, and..
-  - notice that they are not served via https...
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/autoconf-archive/autoconf-archive.hash | 2 +-
+ package/autoconf-archive/autoconf-archive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 3c57c591a8..64604a0aed 100644
---- a/Config.in
-+++ b/Config.in
-@@ -287,14 +287,15 @@ config BR2_LUAROCKS_MIRROR
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index 79ee5ff68a..ff7710dc2b 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,4 +1,4 @@
+ # Computed locally
+-sha256  e8a6eb9d28ddcba8ffef3fa211653239e9bf239aba6a01a6b7cfc7ceaec69cbd  autoconf-archive-2021.02.19.tar.xz
++sha256  e07454f00d8cae7907bed42d0747798927809947684d94c37207a4d63a32f423  autoconf-archive-2022.09.03.tar.xz
+ sha256  e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
+ sha256  23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index bd4a09d96d..0ffdf61ddf 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_CPAN_MIRROR
- 	string "CPAN mirror (Perl packages)"
--	default "http://cpan.metacpan.org"
-+	default "https://cpan.metacpan.org"
- 	help
- 	  CPAN (Comprehensive Perl Archive Network) is a repository of
- 	  Perl packages. It has multiple software mirrors scattered
- 	  around the world. This option allows you to select a mirror.
- 
- 	  The list of mirrors is available at:
--	  http://search.cpan.org/mirror
-+	  http://mirrors.cpan.org/          (tabular)
-+	  http://mirrors.cpan.org/map.html  (clickable world map)
- 
- endif
- 
+-AUTOCONF_ARCHIVE_VERSION = 2021.02.19
++AUTOCONF_ARCHIVE_VERSION = 2022.09.03
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
