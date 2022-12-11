@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E49C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379CAC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 754B840929;
-	Sun, 11 Dec 2022 08:55:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 754B840929
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id elB4l58275wq; Sun, 11 Dec 2022 08:55:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 469714092F;
-	Sun, 11 Dec 2022 08:55:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 469714092F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 228281BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 934F2404E5
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 934F2404E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0AA7404CF;
+	Sun, 11 Dec 2022 08:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0AA7404CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IyTX_LLGzAyp for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0j9yVj85jN0Z; Sun, 11 Dec 2022 08:56:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC8FD403A7;
+	Sun, 11 Dec 2022 08:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC8FD403A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BEC71BF865
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03BBF409A4
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03BBF409A4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id er6TTHzK82Dn for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA0B540128
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDDEB40929
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA0B540128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDDEB40929
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A831785FAD; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
+ id C571485FAB; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:24 +0100
+Date: Sun, 11 Dec 2022 09:28:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1eeac3dbfe32130bd15b9e9675891e68b12c38d0
-X-Git-Newrev: 09c966af735ca53b447f52965d123c21e43ae522
+X-Git-Oldrev: eff0a0852830e05d2ed79dd8c744afff7d126002
+X-Git-Newrev: 35db8c433e3a283a7611eca1b7e27e8cee474a4f
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085514.A831785FAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-can: bump to version 4.1.0
+Message-Id: <20221211085514.C571485FAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-certifi: bump to version
+ 2022.12.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,62 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09c966af735ca53b447f52965d123c21e43ae522
+commit: https://git.buildroot.net/buildroot/commit/?id=35db8c433e3a283a7611eca1b7e27e8cee474a4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop spurious setuptools runtime dependency.
-
-Add new msgpack runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-can/Config.in       | 2 +-
- package/python-can/python-can.hash | 5 +++--
- package/python-can/python-can.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index e92d9668e0..5d21e29d88 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_AENUM # runtime
-+	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	select BR2_PACKAGE_PYTHON_WRAPT # runtime
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index dd8a9b107d..73be230201 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/python-can
--sha256  59d92846ffb981e634e9e0f2d14a6b4967a875e3869bd2ba168c92c4db6b8b5d  python-can-4.0.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/python-can/json
-+md5  d8365b7a09e49f47dac0da75d8518808  python-can-4.1.0.tar.gz
-+sha256  3f2b6b0dc5f459591d171ee0c0136dce79acedc2740ce695024aa3444e911bb9  python-can-4.1.0.tar.gz
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 0557a5c97c..d3cf24ecfa 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5  ff9c8d5c7e7fb083de6b874609c5ca68  certifi-2022.9.24.tar.gz
+-sha256  0d9c601124e5a6ba9712dbc60d9c53c21e34f5f641fe83002317394311bdce14  certifi-2022.9.24.tar.gz
++md5  d00966473b8ac42c2c033b75f4bed6f4  certifi-2022.12.7.tar.gz
++sha256  35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3  certifi-2022.12.7.tar.gz
  # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 9284a9cf99..ba98337d5d 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+ sha256  a02f6c638f9fb84d06f7764c3ab085d8af7eda5b93c166da54312479077c6fb0  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index 8e2435199f..70f9e69d2c 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 4.0.0
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/1f/f7/a643cba269d59e108fe4c1854a8e71d5cdadadd4de1b9c8862b190171122
-+PYTHON_CAN_VERSION = 4.1.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/90/55/898e69e37d5d4692bf21ba8750e095493d2ecbb29be7394d5cb735f0ab0f
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-PYTHON_CERTIFI_VERSION = 2022.9.24
++PYTHON_CERTIFI_VERSION = 2022.12.7
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/cb/a4/7de7cd59e429bd0ee6521ba58a75adaec136d32f91a761b28a11d8088d44
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/37/f7/2b1b0ec44fdc30a3d31dfebe52226be9ddc40cd6c0f34ffc8923ba423b69
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
