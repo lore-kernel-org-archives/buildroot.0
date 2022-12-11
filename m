@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E148C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29708C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA615404C9;
-	Sun, 11 Dec 2022 09:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA615404C9
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF7FC404C9;
+	Sun, 11 Dec 2022 09:00:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF7FC404C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XMJ5JJDm7Lmg; Sun, 11 Dec 2022 09:00:02 +0000 (UTC)
+	with ESMTP id KFUJ-xioYo76; Sun, 11 Dec 2022 09:00:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B58F403A7;
-	Sun, 11 Dec 2022 09:00:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B58F403A7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA2C31BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D721D4051F;
+	Sun, 11 Dec 2022 09:00:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D721D4051F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 122EE1BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 466236060A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60ADB404E5
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 466236060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60ADB404E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Wfnqf8--2JD for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9mp9robGZkJZ for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E19C600CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79CC7404D8
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E19C600CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79CC7404D8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C5F785FAC; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id 7391485FA6; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:07 +0100
+Date: Sun, 11 Dec 2022 09:29:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
-X-Git-Newrev: 1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
+X-Git-Oldrev: 027ad7bbd6fd6ab57781f0730e9587acb26efc76
+X-Git-Newrev: 77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.7C5F785FAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ipython: bump to version
- 8.7.0
+Message-Id: <20221211085515.7391485FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-influxdb: bump to version
+ 5.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
+commit: https://git.buildroot.net/buildroot/commit/?id=77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
+ package/python-influxdb/python-influxdb.hash | 4 ++--
+ package/python-influxdb/python-influxdb.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index e61727e045..aae34f6f9b 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
--sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
-+md5  3adf9fca317512e5b3516a9ac25b3442  ipython-8.7.0.tar.gz
-+sha256  882899fe78d5417a0aa07f995db298fa28b58faeba2112d2e3a4c95fe14bb738  ipython-8.7.0.tar.gz
+diff --git a/package/python-influxdb/python-influxdb.hash b/package/python-influxdb/python-influxdb.hash
+index 7b43091eca..e86bd8c2ca 100644
+--- a/package/python-influxdb/python-influxdb.hash
++++ b/package/python-influxdb/python-influxdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/influxdb/json
+-md5  d528c8ccd8ab40bc608ad1e507e7788a  influxdb-5.3.0.tar.gz
+-sha256  9bcaafd57ac152b9824ab12ed19f204206ef5df8af68404770554c5b55b475f6  influxdb-5.3.0.tar.gz
++md5  e5888a7023e9a49d8a372538b625f908  influxdb-5.3.1.tar.gz
++sha256  46f85e7b04ee4b3dee894672be6a295c94709003a7ddea8820deec2ac4d8b27a  influxdb-5.3.1.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f3aac75db1..1af1081741 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+ sha256  b654917e2c25a69d2bd56e72dddbc6eb29bf7e40384d7c46bb291d5c5185213b  LICENSE
+diff --git a/package/python-influxdb/python-influxdb.mk b/package/python-influxdb/python-influxdb.mk
+index e5b1aea70f..d77cb89d2d 100644
+--- a/package/python-influxdb/python-influxdb.mk
++++ b/package/python-influxdb/python-influxdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 8.6.0
-+PYTHON_IPYTHON_VERSION = 8.7.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/82/2b/026af47da09998404f51064d328f5f1f68c78829082d2945be489343fde6
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+-PYTHON_INFLUXDB_VERSION = 5.3.0
++PYTHON_INFLUXDB_VERSION = 5.3.1
+ PYTHON_INFLUXDB_SOURCE = influxdb-$(PYTHON_INFLUXDB_VERSION).tar.gz
+-PYTHON_INFLUXDB_SITE = https://files.pythonhosted.org/packages/be/8d/85ec8f11299a6dfc115244db71fd8f13e9a69f5e9eb77dc3392f4f959e9a
++PYTHON_INFLUXDB_SITE = https://files.pythonhosted.org/packages/86/4f/a9c524576677c1694b149e09d4fd6342e4a1d9a5f409e437168a14d6d150
+ PYTHON_INFLUXDB_SETUP_TYPE = setuptools
+ PYTHON_INFLUXDB_LICENSE = MIT
+ PYTHON_INFLUXDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
