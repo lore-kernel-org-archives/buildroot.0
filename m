@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE78C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F34C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C6CA813DA;
-	Sun, 11 Dec 2022 13:37:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C6CA813DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 045F94052B;
+	Sun, 11 Dec 2022 13:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 045F94052B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5TjfhWvXoahn; Sun, 11 Dec 2022 13:37:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tcRvxW8frOKW; Sun, 11 Dec 2022 13:43:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EBE7813B7;
-	Sun, 11 Dec 2022 13:37:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EBE7813B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DBC24052D;
+	Sun, 11 Dec 2022 13:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DBC24052D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3ED01BF3AA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 228BD1BF3AA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FAC940200
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FAC940200
+ by smtp4.osuosl.org (Postfix) with ESMTP id 069B440925
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 069B440925
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vTSfYLFTw7ox for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:34:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F82F4006F
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F82F4006F
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:34:36 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 636E940003;
- Sun, 11 Dec 2022 13:34:35 +0000 (UTC)
-Date: Sun, 11 Dec 2022 14:34:34 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221211143434.16fd1f03@windsurf>
-In-Reply-To: <20221208212503.61937-1-fontaine.fabrice@gmail.com>
-References: <20221208212503.61937-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670765675;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hiMvVV6TMFmhzoAcAJSy0dXrw69i7qutMihiqnQdIgE=;
- b=CyI56GO514+3kmO1p/rPXOr/xG8fHRRLxGCh8EwKyGnTVPKVOtCkNz8PruavGOG5GVBRUG
- oSn586l6d6RXg49yigbp5H6gltSinGVk/7kffCS+Z656HIV8jLajm+JhBDaOD0qDlD20TN
- xN6CK9KGV7qfj842UMWeinwQYZoPrH8MEn5MOgyLetJCurzpQENqHTyt9NUxDiwdrnInlU
- oTwa4/bRRUcxRzwUP8upcQK8hBfbI+3Go2G3Etw83cE86rfzuqp/SuaqGWyhAOp7eiCp+i
- HqfZCdZc++rVTcJrKMb3J29k830QY3gfFNXeL+WdQSn/ef/2pulQC/pAnKsjAQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CyI56GO5
-Subject: Re: [Buildroot] [PATCH 1/1] package/utf8proc: bump to version 2.8.0
+ with ESMTP id 5a7WXZultoyP for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:43:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2360408F1
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:42:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2360408F1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D3462863FB; Sun, 11 Dec 2022 13:42:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 14:42:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: de7850f9464a686fc7f37a8c1f8880f47ebffb00
+X-Git-Newrev: 65e0351adc5075ac679557d7e41a02815f979e90
+X-Patchwork-Hint: ignore
+Message-Id: <20221211134259.D3462863FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: indent with tabs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,30 +57,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  8 Dec 2022 22:25:03 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=65e0351adc5075ac679557d7e41a02815f979e90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/JuliaStrings/utf8proc/blob/v2.8.0/NEWS.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/utf8proc/utf8proc.hash | 2 +-
->  package/utf8proc/utf8proc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
+add staging install") has introduced some commands indented with
+spaces, which check-package doesn't like.
 
-Applied to master, thanks.
+Fix that by using tabs instead, and while we're at it, wrap the line
+that is a bit too long.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swupdate/swupdate.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 54ae03f238..1cd60d1b8f 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -230,8 +230,9 @@ define SWUPDATE_BUILD_CMDS
+ endef
+ 
+ define SWUPDATE_INSTALL_STAGING_CMDS
+-        $(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
+-                $(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) INCLUDEDIR=/usr/include/swupdate install
++	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
++		INCLUDEDIR=/usr/include/swupdate install
+ endef
+ 
+ define SWUPDATE_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
