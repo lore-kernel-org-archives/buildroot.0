@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7AAAC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22339C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B0DE81350;
-	Sun, 11 Dec 2022 13:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B0DE81350
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9148540917;
+	Sun, 11 Dec 2022 13:21:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9148540917
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uhl_PC4o3iGP; Sun, 11 Dec 2022 13:19:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hpnkJNA_JdJ5; Sun, 11 Dec 2022 13:21:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9139F81397;
-	Sun, 11 Dec 2022 13:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9139F81397
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F0194091B;
+	Sun, 11 Dec 2022 13:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F0194091B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C7991BF2BD
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:19:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 654421BF2BD
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77C33605E0
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:19:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77C33605E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E20360BB8
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:21:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E20360BB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NHyE4jLwkp37 for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:19:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 069AA605A9
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 069AA605A9
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:19:25 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BD1CD40003;
- Sun, 11 Dec 2022 13:19:22 +0000 (UTC)
-Date: Sun, 11 Dec 2022 14:19:21 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221211141921.78b14add@windsurf>
-In-Reply-To: <20221211110908.1948270-1-peter@korsgaard.com>
-References: <20221211110908.1948270-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670764763;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FtzRgvgveJH5m98o8i98hd8OT5JVOx3gt4f5rff/mp4=;
- b=aLKJjyITb9b0CcjWwLhS59TkJJKm6KU3e2qDAKDA9iBT1uup0mPl9+pNKfCdydsfKrJJ52
- XUVltqwNeSQBZ31g6YUrlT1I0AVRy81Wql7P51QkUduNg4fG84KHPjMsACL3gfhkXXM0gP
- vRCYITBU54zAPCAL5kQn6wz/2q4nmqB5JWiWbSSq11A8XpxyZqvfON0NRwxjZULEbp4xwm
- K1A8FLJ7qDKLulZ8lNcL4XD9kfqgTkyr0TomzndHgV3zEthzvxFaULtWnelE0NAzerIYM7
- Uf0C15beHji1fRkWbHYO+9KlXuGz+V6QhvqsQXQMdCGeTux2Jt5SLKvmC/ReeQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aLKJjyIT
-Subject: Re: [Buildroot] [PATCH] package/xserver_xorg-server: add upstream
- security fixes for CVE-2022-355{0, 1}
+ with ESMTP id Ci1IWYziu3An for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:21:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 595BF60B94
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 595BF60B94
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 442908628C; Sun, 11 Dec 2022 13:21:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 14:21:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 66f3cc0b96baff46d3a136f9d8bf2a3b44037bdc
+X-Git-Newrev: 040ab175df6337bf39a609adea07a7756c309be8
+X-Patchwork-Hint: ignore
+Message-Id: <20221211132153.442908628C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/capnproto: security bump to
+ version 0.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +58,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Dec 2022 12:09:07 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=040ab175df6337bf39a609adea07a7756c309be8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following security issues:
-> 
-> - CVE-2022-3550: A vulnerability classified as critical was found in X.org
->   Server.  Affected by this vulnerability is the function _GetCountedString
->   of the file xkb/xkb.c.  The manipulation leads to buffer overflow.  It is
->   recommended to apply a patch to fix this issue.  The associated identifier
->   of this vulnerability is VDB-211051.
-> 
-> - CVE-2022-3551: A vulnerability, which was classified as problematic, has
->   been found in X.org Server.  Affected by this issue is the function
->   ProcXkbGetKbdByName of the file xkb/xkb.c.  The manipulation leads to
->   memory leak.  It is recommended to apply a patch to fix this issue.  The
->   identifier of this vulnerability is VDB-211052.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...ntedString-against-request-length-at.patch | 35 +++++++++++
->  ...possible-memleaks-in-XkbGetKbdByName.patch | 60 +++++++++++++++++++
->  .../xserver_xorg-server.mk                    |  7 +++
->  3 files changed, 102 insertions(+)
->  create mode 100644 package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
->  create mode 100644 package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+Fix CVE-2022-46149: Cap'n Proto is a data interchange format and remote
+procedure call (RPC) system. Cap'n Proro prior to versions 0.7.1, 0.8.1,
+0.9.2, and 0.10.3, as well as versions of Cap'n Proto's Rust
+implementation prior to 0.13.7, 0.14.11, and 0.15.2 are vulnerable to
+out-of-bounds read due to logic error handling list-of-list. This issue
+may lead someone to remotely segfault a peer by sending it a malicious
+message, if the victim performs certain actions on a list-of-pointer
+type. Exfiltration of memory is possible if the victim performs
+additional certain actions on a list-of-pointer type. To be vulnerable,
+an application must perform a specific sequence of actions, described in
+the GitHub Security Advisory. The bug is present in inlined code,
+therefore the fix will require rebuilding dependent applications. Cap'n
+Proto has C++ fixes available in versions 0.7.1, 0.8.1, 0.9.2, and
+0.10.3.
 
-Applied to master, thanks.
+https://github.com/capnproto/capnproto/security/advisories/GHSA-qqff-4vw4-f6hx
+https://dwrensha.github.io/capnproto-rust/2022/11/30/out_of_bounds_memory_access_bug.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/capnproto/capnproto.hash | 2 +-
+ package/capnproto/capnproto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
+index 7fd0e6158b..c3233e7c8b 100644
+--- a/package/capnproto/capnproto.hash
++++ b/package/capnproto/capnproto.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  daf49f794560f715e2f4651c842aaece2d065d4216834c5c3d3254962e35b535  capnproto-0.9.1.tar.gz
++sha256  4fe1ca8ab90859f33f08d2c4fcd7099e2983b0b946beecebd2fe051e3a64c67e  capnproto-0.9.2.tar.gz
+ sha256  9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 7fc07043fb..23f128455a 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAPNPROTO_VERSION = 0.9.1
++CAPNPROTO_VERSION = 0.9.2
+ CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
+ CAPNPROTO_LICENSE = MIT
+ CAPNPROTO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
