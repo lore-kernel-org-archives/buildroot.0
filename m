@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECC0C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 892B8C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B872A81417;
-	Sun, 11 Dec 2022 21:48:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B872A81417
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31AC881417;
+	Sun, 11 Dec 2022 21:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31AC881417
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ma9Vcx7yuMI7; Sun, 11 Dec 2022 21:48:00 +0000 (UTC)
+	with ESMTP id VXOJlAcCvWUq; Sun, 11 Dec 2022 21:48:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3B5381414;
-	Sun, 11 Dec 2022 21:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3B5381414
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 007B31BF309
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:47:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7769781414;
+	Sun, 11 Dec 2022 21:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7769781414
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A9D21BF309
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2A1560BDE
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:47:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2A1560BDE
+ by smtp4.osuosl.org (Postfix) with ESMTP id D92064088B
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D92064088B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0bMqb8a1AgGm for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 21:47:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kjj__L22pPcG for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 21:48:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9019F60BD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A174B4054A
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9019F60BD8
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:47:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A174B4054A
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:48:27 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5535A1C0002;
- Sun, 11 Dec 2022 21:47:53 +0000 (UTC)
-Date: Sun, 11 Dec 2022 22:47:52 +0100
-To: Indrek Kruusa <indrek.kruusa@gmail.com>
-Message-ID: <20221211224752.2f4ae448@windsurf>
-In-Reply-To: <20221211201704.25858-1-indrek.kruusa@gmail.com>
-References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id B6A361C0004;
+ Sun, 11 Dec 2022 21:48:25 +0000 (UTC)
+Date: Sun, 11 Dec 2022 22:48:24 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221211224824.29e1b459@windsurf>
+In-Reply-To: <20221211201758.146018-1-james.hilliard1@gmail.com>
+References: <20221211201758.146018-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670795273;
+ d=bootlin.com; s=gm1; t=1670795306;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=AwIc4VsCGklO3+rcUROML5J7/3DXKkw57fHa+f8ZoK4=;
- b=G9FByCiUSJt0upYR4OpW44Dg9I0RUVaBZeb1hQnMVOqTUDVCd+MAGc9nTWKC4tyVjDsowg
- MMwdyCmFjOI++XfQPM11JYTvHk4di5iBydjVU0DGkNuIlRTWpTrcnWHZ9GD3nCma2WMDt9
- phmJtWDGjdfyvkzSQoB7hMWRYLJnqDFqhnSKxjoN6sNC9cHCdYngscNuNOB5uF0HL5eNaT
- Exj4aRzESdJMoB/4+FrWSu88s3+pgl/ZgRTPbKqkoS2EK66YF5lRuGsSWdWMPr+4iPyzTg
- cMvG7VdeOkU/N3nF+EvNkBsvh1kFI8DApiBYJG23yzc1pSV5TiGNABGscpUeKw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=RYCBnm4PPtT3fCuuMleYDegbFDlLrQQLoq7QChb9G6o=;
+ b=FIX9NEUzMNPs8mrfVv109gQOlfzZeO/HYnU+9CrvHJ980JjLOCZt/gz+IOcdY2ew0W3XDA
+ gnIh0ey4j9KVlOXPecmE4N28D3e/mzs3Azz+BNtazhsJJT2CXsH/MuQkCS75MlYmu5Mqw6
+ q66KRPu8/99zXx2LADEbc5pLuA9M7VHAi8TTn+rGnNZKA9vvr1b4e7cpvlFGSKHsyOHbQl
+ shZFIJO4BJCRQU3zEUea1kyde1anufNKFoBoo2o7NFkcu4y003UbzFNUp8D8A5XZL/zJxy
+ nMZh0UEBWkjllsZDpUIZDnPQjKz5KX1q1rewvunFrDRK1VjMc9rO0ZQ+jXYleg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G9FByCiU
-Subject: Re: [Buildroot] [PATCH 1/5] configs/nezha_defconfig: bump versions
- for uboot, sbi and linux kernel
+ header.s=gm1 header.b=FIX9NEUz
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-automat: drop
+ host-python-m2r build dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,33 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Dec 2022 22:17:00 +0200
-Indrek Kruusa <indrek.kruusa@gmail.com> wrote:
+On Sun, 11 Dec 2022 13:17:57 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> kernel: bump to version 6.1.0-rc3 in d1/wip branch
-> u-boot: use the version with full SPL support from d1-wip branch
-> opensbi: take in the latest fixes from d1-wip branch
+> The host-python-m2r package is no longer required to build automat.
 > 
-> Other:
-> remove patches directory definition as no patches are needed anymore
-> update linux headers version
-> update binary name as the new uboot generates it
-> 
-> Signed-off-by: Indrek Kruusa <indrek.kruusa@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  configs/nezha_defconfig | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+>  package/python-automat/python-automat.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for this patch series, however PATCH 3/5 has apparently not made
-its way to the mailing list. Could you double-check?
+Both applied, each time with an extended commit log that explains
+precisely since when the problem is occurring.
 
-Thanks!
+Having more detailed commit logs would *really* be useful.
+
+Thanks a lot!
 
 Thomas
 -- 
