@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FBFC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF375C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6070605A4;
-	Sun, 11 Dec 2022 09:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6070605A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 918A260BB8;
+	Sun, 11 Dec 2022 09:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 918A260BB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0itYjqzWS3t; Sun, 11 Dec 2022 09:09:12 +0000 (UTC)
+	with ESMTP id 1gktpRM-y5A4; Sun, 11 Dec 2022 09:09:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BFD86060A;
-	Sun, 11 Dec 2022 09:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BFD86060A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2C7260B6C;
+	Sun, 11 Dec 2022 09:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2C7260B6C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A785A1BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B82381BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C49E5409AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E88E04093E
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C49E5409AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E88E04093E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FXF7BJiei1fM for <buildroot@lists.busybox.net>;
+ with ESMTP id 3HvZkxLq4aeH for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D950D4093E
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D950D4093E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54CF4409F4
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54CF4409F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C56D485FAB; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+ id 4EDA285FA6; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:06 +0100
+Date: Sun, 11 Dec 2022 09:30:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2733644c8947f8dafa1559bc12b3e67cee99ae6c
-X-Git-Newrev: 225e8745c62c75b20867af928d459abfbb53da94
+X-Git-Oldrev: ca8d70086d31d1f54c31dcbc2bab307d97066910
+X-Git-Newrev: c330d67dae8ca6eefde2aa076151820d87beebe7
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085516.C56D485FAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
- 3.18.0
+Message-Id: <20221211085517.4EDA285FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
+ version 5.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=225e8745c62c75b20867af928d459abfbb53da94
+commit: https://git.buildroot.net/buildroot/commit/?id=c330d67dae8ca6eefde2aa076151820d87beebe7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-simplejson/python-simplejson.hash | 4 ++--
- package/python-simplejson/python-simplejson.mk   | 4 ++--
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index 0f56d4c6cc..1c99b87590 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 6bab9d2c1c..7052f77899 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplejson/json
--md5  0b8f47c9451bf101a791f8b5bccf1f33  simplejson-3.17.6.tar.gz
--sha256  cf98038d2abf63a1ada5730e91e84c642ba6c225b0198c3684151b1f80c5f8a6  simplejson-3.17.6.tar.gz
-+md5  83e24e662f024e06af2fffe698227da4  simplejson-3.18.0.tar.gz
-+sha256  58a429d2c2fa80834115b923ff689622de8f214cf0dc4afa9f59e824b444ab31  simplejson-3.18.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zope-interface/json
+-md5  644f7574b81710a21b1b738d448811e4  zope.interface-5.5.1.tar.gz
+-sha256  6d678475fdeb11394dc9aaa5c564213a1567cc663082e0ee85d52f78d1fbaab2  zope.interface-5.5.1.tar.gz
++md5  5a383d71156ce6f89f59a86d957a8d65  zope.interface-5.5.2.tar.gz
++sha256  bfee1f3ff62143819499e348f5b8a7f3aa0259f9aca5e0ddae7391d059dce671  zope.interface-5.5.2.tar.gz
  # Locally computed sha256 checksums
- sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 52bff7569c..1607d9c90c 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
+ sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index 4f201e5cbf..2bada3a7d4 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEJSON_VERSION = 3.17.6
-+PYTHON_SIMPLEJSON_VERSION = 3.18.0
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/7a/47/c7cc3d4ed15f09917838a2fb4e1759eafb6d2f37ebf7043af984d8b36cf7
-+PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/17/3d/b8bfe1f40558f6a16f70c349adf97480dc71a7d11b2b1a5dc0824a87faa0
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
- PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
+-PYTHON_ZOPE_INTERFACE_VERSION = 5.5.1
++PYTHON_ZOPE_INTERFACE_VERSION = 5.5.2
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/c5/ec/3e116b5c3c54f1fb7296a686c110c14d1242bbea17286c487892075d9858
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/38/6f/fbfb7dde38be7e5644bb342c4c7cdc444cd5e2ffbd70d091263b3858a8cb
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
