@@ -1,95 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A53FAC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:33:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C1DFC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 410BE60BEB;
-	Sun, 11 Dec 2022 20:33:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 410BE60BEB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43BEB8129E;
+	Sun, 11 Dec 2022 20:35:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43BEB8129E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NGaqzWRaNghv; Sun, 11 Dec 2022 20:33:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2Mu0J7oIno_r; Sun, 11 Dec 2022 20:35:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F88D60BE8;
-	Sun, 11 Dec 2022 20:33:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F88D60BE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88BE381290;
+	Sun, 11 Dec 2022 20:35:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88BE381290
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C7541BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:33:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CDA531BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 327CD4031F
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:33:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 327CD4031F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4B5B40890
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4B5B40890
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EwGpf7hLlK8M for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 20:33:14 +0000 (UTC)
+ with ESMTP id 523_pSKJIRyH for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:35:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 164ED402A8
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 164ED402A8
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:33:13 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id n20so23355514ejh.0
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:33:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A27544088B
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A27544088B
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:35:44 +0000 (UTC)
+Received: by mail-il1-x133.google.com with SMTP id m15so2508578ilq.2
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:35:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6V0RPP+38z+DTvDYJFk6pQ327aOlwZFFGuiYtdDWrDA=;
- b=dLHhAwO3MHQh/YV3CLCUcM6B1O6TQ334kCDP5P4G1ItCEarxiStuvs2k67WQwlTqrM
- YT3BTrj5IMHRKogiuwoWmMc6EsTK8M3sIVP73bS4hniX2g5XeF651xJdRUOFuXlv4Xq9
- ZgNHlTPQJGhKbfDIL/Wsodft7dUm2bpXN7tJEXHP7YXr/ILCjl5OG6FrXBX39q2VFXZX
- d7ZnQHYcRmkFARh8FrSgVqafmA4x+GuG2+31QFx2c/CCy7COz6zYuiBEASg1QfZIqW8X
- o7MXpfRvOZCRGdw9/JZ+yIt4sZxjW+6O83mJNfndKB+s+5C2jpGwO0TIKrCmYLneVzMa
- a7kA==
-X-Gm-Message-State: ANoB5pldNS4Bii8iBjqYHEk1z8hFLjF+IiJZxom/b3P1P1gyalUMS8HH
- 96iZayUDsBf4Tu8bMqxHd1MPhe0ocwQmr7jltKA=
-X-Google-Smtp-Source: AA0mqf65W5Ec7PKRYDO9iFmTdA4potoDkk4v/ZOVsUvWZ6Ryq0eWwgs+bKYDVTexAwwYPI/BJngIbA==
-X-Received: by 2002:a17:906:abcd:b0:7ad:2da5:36ec with SMTP id
- kq13-20020a170906abcd00b007ad2da536ecmr12317838ejb.41.1670790791956; 
- Sun, 11 Dec 2022 12:33:11 -0800 (PST)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com.
- [209.85.218.53]) by smtp.gmail.com with ESMTPSA id
- eq17-20020a170907291100b007a4e02e32ffsm2433668ejc.60.2022.12.11.12.33.11
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 11 Dec 2022 12:33:11 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id ud5so23289566ejc.4
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:33:11 -0800 (PST)
-X-Received: by 2002:a17:906:99c8:b0:7b5:ff35:6715 with SMTP id
- s8-20020a17090699c800b007b5ff356715mr59906941ejn.255.1670790790949; Sun, 11
- Dec 2022 12:33:10 -0800 (PST)
+ bh=hrBtoNpQJeerywuMnMlKbTBVTU9vlJjSW9KaN5uR/Oc=;
+ b=2B4DynYdRw96NSwXtRCSr3OE8hQ6bCmFDYOr1X25tKad3cwWeM9x8FIVLNud7JUAlf
+ TDhOI9BadGDKXm1ZlsFqxR+CQfPWt7KsHVQtkD5pyS0JmUlxnKiWn3SCKykVv6BIsK6M
+ hVJ/N0UfMrf+ZvCHBdCI+3R74IQ5i/OWzjPY4exT4qgGBIB1SjNw5bj/9kG3AtT1Znxk
+ 5Fv89+pzELIRHqYCgGYoHdquxNuVP5y3T6Y4iwHFf8/RNYt+XHEnGYsvUydJ4TgPI58m
+ WqQxTD3uPGyzWw0/cPBDZFUN0ETRpj/LsMdkpuWCZhl4aZy0wbcbdTMYbEgZX5sPnRA6
+ q96g==
+X-Gm-Message-State: ANoB5pk81BJzt5TeroZlZyOkt7rttV56wNWF12BgJEUutQuC0rXSoORv
+ 1e/4dzsYEQEFK03KskxbZFPyN3oRxHjh4g==
+X-Google-Smtp-Source: AA0mqf6boemE0ojIkuRJqdbw+71URHTGPEYygYqGV11P5p8pR7duK1negjBVyD0OZFqupPrzv7BiCw==
+X-Received: by 2002:a92:c5d0:0:b0:302:c541:624b with SMTP id
+ s16-20020a92c5d0000000b00302c541624bmr7572122ilt.15.1670790943226; 
+ Sun, 11 Dec 2022 12:35:43 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ o10-20020a02a1ca000000b00375664a365esm2499780jah.1.2022.12.11.12.35.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Dec 2022 12:35:42 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 13:35:41 -0700
+Message-Id: <20221211203541.249923-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221201014538.679048-1-christian@paral.in>
- <20221211212504.4ee65e0e@windsurf>
-In-Reply-To: <20221211212504.4ee65e0e@windsurf>
-Date: Sun, 11 Dec 2022 12:32:59 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
-Message-ID: <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=6V0RPP+38z+DTvDYJFk6pQ327aOlwZFFGuiYtdDWrDA=;
- b=UFCHzm7If4DLKnKhl45yrKf60bgPyfz6HBzv9bBlxQgA+sM4CebDKXNKL8xOIq6tuI
- IyYMnmpa6Opn5mY55uNFdKOZunuHEBixxYGy7x/Tr4U655l10GdZBWOpo6k/qTcZCPmF
- +YyHh6GpSZsOQUNXHzAP6UoWdwJHabHBQ+65vicIh/dBBREMKZXfb1VSyzuCOD4zd16b
- VdpIcpsVtZISeahbmyLizjzpZUa3+k9XpqLPti3uRr4R0LplYY0RNf3zHmBfXuJzEtjf
- IK0BR2VuCrmDgeWXUG3NeXqO6Qt4rM8SA48tfnKEs+8NHHlPXsWNwZ7WHsG8sDJeLyO0
- txyw==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hrBtoNpQJeerywuMnMlKbTBVTU9vlJjSW9KaN5uR/Oc=;
+ b=TPZ8eNpr9iQP8NCBq/+ZBC6Xx4Ae44HcxLUxPP0m6dU5yn7yoVvL9eLBOjHX4Qykci
+ aIKduwwBaath+mLZm7xf0fkAqfLuPfJVnXfclh5JUgVdr3PYWeBbC4iASWaejqp9Z44M
+ 6py5kp3DCMLKdB+P/VPvRDMEpnsZWKR0alVMLrcHXWXHOJ2r5vSHIG4oU6ShlBADBGDU
+ CyY4rBX13Evs0g5ItW1eHvzNZZmb2ktGCNCe5P5OrRjk2+0CU7tWjVCb4UjZ4gSmUamT
+ HzI+PssgNG5KMEnoUTifeuieG+Zmz76yEBqaCcdWiwnRDm2r/l2BYFeBI3MHMRmd0w5d
+ Mxvw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=UFCHzm7I
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/rtl8821cu: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=TPZ8eNpr
+Subject: [Buildroot] [PATCH 1/1] package/swig: depend on host-pcre2 instead
+ of host-pcre
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,38 +94,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-hi Thomas,
+Swig now requires host-pcre2 instead of host-pcre.
 
-On Sun, Dec 11, 2022 at 12:25 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> On Wed, 30 Nov 2022 17:45:38 -0800
->
-> >  .../0001-makefile-cleanup-whitespace.patch    | 122 ++++++++++++++++++
-> >  ...akefile-remove-Wno-date-time-warning.patch |  30 +++++
->> Did you submit these two patches "upstream" ?
+Fixes:
+ - http://autobuild.buildroot.net/results/3a7/3a70042aad7376bcccf56d639ced93f504f47963
 
-The first, yes, and it's been merged:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/swig/swig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://github.com/morrownr/8821cu-20210118/commit/3b594e7654ef1320ff9cac6b6472fa1b17af134b
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index d432cab53d..ad585c3f97 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -7,7 +7,7 @@
+ SWIG_VERSION_MAJOR = 4.1
+ SWIG_VERSION = $(SWIG_VERSION_MAJOR).1
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+-HOST_SWIG_DEPENDENCIES = host-bison host-pcre
++HOST_SWIG_DEPENDENCIES = host-bison host-pcre2
+ HOST_SWIG_CONF_OPTS = \
+ 	--with-pcre \
+ 	--disable-ccache \
+-- 
+2.34.1
 
-The second, no. Since removing the compiler version check for
--Wno-date-time is not something they want, and more of a Buildroot
-thing, I think the patch probably will need to stay.
-
-Shall I resubmit or can you fixup those two little things?
-
-Thanks & best,
-Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
