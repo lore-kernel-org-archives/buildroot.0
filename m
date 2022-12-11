@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC6D4C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23F4EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:27:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 516864F063;
-	Mon, 20 Feb 2023 22:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 516864F063
+	by smtp4.osuosl.org (Postfix) with ESMTP id C133F4F05E;
+	Mon, 20 Feb 2023 22:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C133F4F05E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DsUnHVUnjr6A; Mon, 20 Feb 2023 22:27:31 +0000 (UTC)
+	with ESMTP id dLB-N8Anwjln; Mon, 20 Feb 2023 22:27:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD7404F06C;
-	Mon, 20 Feb 2023 22:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD7404F06C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9FD771BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 733A74F06E;
+	Mon, 20 Feb 2023 22:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 733A74F06E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E2131BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0AD1416D7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0AD1416D7
+ by smtp3.osuosl.org (Postfix) with ESMTP id C185361167
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C185361167
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gEpvAB0L2ZJP for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r_NruNbf9F2d for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 309354015F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 309354015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5BEB6116B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5BEB6116B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A85786495; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D684F828C8; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:52:32 +0100
+Date: Sun, 11 Dec 2022 09:30:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 15f7b944df8be0f20e88f1d2b50534700030981e
-X-Git-Newrev: 63cd5db50914536910b67a0a06e05c22ddcc5a22
+X-Git-Oldrev: 33f493781cf55c556769024e8058ee223d122507
+X-Git-Newrev: 6a265441cf91c8accdf0e2bbdc46171335c357ef
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205212.2A85786495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-maturin: bump
- to version 0.14.5
+Message-Id: <20230220205203.D684F828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-urllib3: bump
+ to version 1.26.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63cd5db50914536910b67a0a06e05c22ddcc5a22
+commit: https://git.buildroot.net/buildroot/commit/?id=6a265441cf91c8accdf0e2bbdc46171335c357ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index d642119786..9d68751c03 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 8aacf5780a..963967332e 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  dd1ee5cd1bb76c434319f305cd30873be2f8221e310168fc376b53b7d0e166ff  maturin-0.14.4.tar.gz
-+sha256  383f60977a330ec8699a51c37ea9c5175ee7e95fc36b06d9415e0eec1f3acaf0  maturin-0.14.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  ba308b52b9092184cf4905bc59a88fc0  urllib3-1.26.12.tar.gz
+-sha256  3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e  urllib3-1.26.12.tar.gz
++md5  38f7d1589aa9720101316d07fcbd05c8  urllib3-1.26.13.tar.gz
++sha256  c083dd0dce68dbfbe1129d5271cb90f9447dea7d52097c6e0126120c521ddea8  urllib3-1.26.13.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index ea055ffcf6..4570ad4535 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 96d3938fd2..5868927440 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATURIN_VERSION = 0.14.4
-+PYTHON_MATURIN_VERSION = 0.14.5
- PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/7c/51/36749c1a0881a4292e4f334bd9ddb0865e0991a83070834d1aaa1af7443f
-+PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/36/83/2bdec738921e253d774ab8b9e99f4540a406ad0d8a1442c84575e5506686
- PYTHON_MATURIN_SETUP_TYPE = setuptools
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
+-PYTHON_URLLIB3_VERSION = 1.26.12
++PYTHON_URLLIB3_VERSION = 1.26.13
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/b2/56/d87d6d3c4121c0bcec116919350ca05dc3afd2eeb7dc88d07e8083f8ea94
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c2/51/32da03cf19d17d46cce5c731967bf58de9bd71db3a379932f53b094deda4
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
