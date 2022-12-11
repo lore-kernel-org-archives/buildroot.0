@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 037D6C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94DF4C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D12D4EED8;
-	Mon, 20 Feb 2023 22:14:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D12D4EED8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 446764EC12;
+	Mon, 20 Feb 2023 22:14:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 446764EC12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gl1h9GsRPSMq; Mon, 20 Feb 2023 22:14:28 +0000 (UTC)
+	with ESMTP id pmZaCupFlNt0; Mon, 20 Feb 2023 22:14:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CF8E4C6C9;
-	Mon, 20 Feb 2023 22:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CF8E4C6C9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61F801BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED00D4EF72;
+	Mon, 20 Feb 2023 22:14:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED00D4EF72
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1712E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53D3B61154
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53D3B61154
+ by smtp2.osuosl.org (Postfix) with ESMTP id 721A8416C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 721A8416C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FDmfuJsHieZh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kPOpZFOF0bmE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62EFE61126
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62EFE61126
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9B57416AD
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9B57416AD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C8C186494; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A5B6286494; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:37 +0100
+Date: Sun, 11 Dec 2022 17:50:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c54e8a01b69983fe0b262b564be799397c432f2
-X-Git-Newrev: 25aedae85112ee9225f23863587807bdef67580c
+X-Git-Oldrev: f2da02b9e38a72ec3d18171e482a0791b5dd24b9
+X-Git-Newrev: c4fc5e48521082d1b3cd9d96efc34979969d745b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.5C8C186494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-cheroot: bump
- to version 9.0.0
+Message-Id: <20230220205207.A5B6286494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sscep: requires
+ blowfish support in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25aedae85112ee9225f23863587807bdef67580c
+commit: https://git.buildroot.net/buildroot/commit/?id=c4fc5e48521082d1b3cd9d96efc34979969d745b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-cheroot/python-cheroot.hash | 4 ++--
- package/python-cheroot/python-cheroot.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Enable blowfish in openssl to fix the following build failure raised
+since the addition of the package in commit
+72fa60dc102679f51b228336ec38f5af78ff7646:
 
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-index e538d1fcdc..c3556109cd 100644
---- a/package/python-cheroot/python-cheroot.hash
-+++ b/package/python-cheroot/python-cheroot.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cheroot/json
--md5  70247d0948899f453b50e6181cddd0d7  cheroot-8.6.0.tar.gz
--sha256  366adf6e7cac9555486c2d1be6297993022eff6f8c4655c1443268cca3f08e25  cheroot-8.6.0.tar.gz
-+md5  1617fdbaba7d6edbe5b0ff48f7563111  cheroot-9.0.0.tar.gz
-+sha256  3d47ad9ee19ecbec144b4758399036692fdbf67a40b96eef1fb1454367b3d338  cheroot-9.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  e20feeb491a7e98084f15719349e9857aad41c4503c5e479f8815b063dbf7564  LICENSE.md
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index 95f2e39480..f75065c7da 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CHEROOT_VERSION = 8.6.0
-+PYTHON_CHEROOT_VERSION = 9.0.0
- PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
--PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/99/c4/9b5ca09208047f2689c24ee63e195aa01ceffb7857d715cabc046559ddd6
-+PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/8c/e7/8e6387d59a352c5799e917a23e7b76771a8bb97322c1ce7e42934d0066c3
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
- PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
+src/sscep.c: In function 'get_cipher_alg':
+src/sscep.c:123:24: warning: implicit declaration of function 'EVP_bf_cbc'; did you mean 'EVP_sm4_cbc'? [-Wimplicit-function-declaration]
+  123 |                 return EVP_bf_cbc();
+      |                        ^~~~~~~~~~
+      |                        EVP_sm4_cbc
+
+Fixes:
+ - http://autobuild.buildroot.org/results/55d2c481d8c148fb3bb61c1331340bcd71274553
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sscep/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sscep/Config.in b/package/sscep/Config.in
+index 4b9039c9b2..2e5e29f7c8 100644
+--- a/package/sscep/Config.in
++++ b/package/sscep/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SSCEP
+ 	bool "sscep"
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  SSCEP is a client-only implementation of the SCEP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
