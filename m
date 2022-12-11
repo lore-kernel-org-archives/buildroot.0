@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CC1FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E81C4C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E484B4F2CB;
-	Mon, 20 Feb 2023 22:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E484B4F2CB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 974F64F2E2;
+	Mon, 20 Feb 2023 22:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974F64F2E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jToTloprrb3l; Mon, 20 Feb 2023 22:46:45 +0000 (UTC)
+	with ESMTP id wVnffc1kZ-mT; Mon, 20 Feb 2023 22:46:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC7084F2EA;
-	Mon, 20 Feb 2023 22:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC7084F2EA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB5E01BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 718704F2F1;
+	Mon, 20 Feb 2023 22:46:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718704F2F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 655A51BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 381D1416EF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 381D1416EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FF496126D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FF496126D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CtxSX6AJkj1y for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BjKftcJjZeXU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6130141700
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6130141700
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC39161185
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC39161185
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50F4E86494; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+ id B461E8648F; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 21:48:33 +0100
+Date: Sun, 11 Dec 2022 17:51:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 216e201cd0f14aacac2e9727e8da8f64d734a064
-X-Git-Newrev: a41f246439c0387f7b028b3f7e40978a2e0f1a50
+X-Git-Oldrev: c4fc5e48521082d1b3cd9d96efc34979969d745b
+X-Git-Newrev: 8f8592b686e4aa1085ace7c7f25c7c777a3fd2ec
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205216.50F4E86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/meson: bump to version
- 1.0.0
+Message-Id: <20230220205207.B461E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
+ version to 14.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a41f246439c0387f7b028b3f7e40978a2e0f1a50
+commit: https://git.buildroot.net/buildroot/commit/?id=8f8592b686e4aa1085ace7c7f25c7c777a3fd2ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Release notes: https://www.postgresql.org/docs/release/14.6/
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 1544bb3897..6993b756ae 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 8fdaadde99..26bb626943 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.64.1/meson-0.64.1.tar.gz.asc
--sha256  3a8e030c2334f782085f81627062cc6d4a6771edf31e055ffe374f9e6b089ab9  meson-0.64.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.0.0/meson-1.0.0.tar.gz.asc
-+sha256  aa50a4ba4557c25e7d48446abfde857957dcdf58385fffbe670ba0e8efacce05  meson-1.0.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 5aae95973a..e417d8d627 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+-# From https://ftp.postgresql.org/pub/source/v14.5/postgresql-14.5.tar.bz2.sha256
+-sha256  d4f72cb5fb857c9a9f75ec8cf091a1771272802f2178f0b2e65b7b6ff64f4a30  postgresql-14.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
++sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 631a959122..502860bc99 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.64.1
-+MESON_VERSION = 1.0.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-POSTGRESQL_VERSION = 14.5
++POSTGRESQL_VERSION = 14.6
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
