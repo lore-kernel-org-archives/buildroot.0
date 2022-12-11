@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2892DC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D15C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C26BA4ECBC;
-	Mon, 20 Feb 2023 21:54:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C26BA4ECBC
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9B4B4ECC5;
+	Mon, 20 Feb 2023 21:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B4B4ECC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sgjepf00wfMQ; Mon, 20 Feb 2023 21:54:12 +0000 (UTC)
+	with ESMTP id gPUCRkAT9783; Mon, 20 Feb 2023 21:54:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 677D54ECD6;
-	Mon, 20 Feb 2023 21:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 677D54ECD6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E053A1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F6254ECC2;
+	Mon, 20 Feb 2023 21:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F6254ECC2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FB671BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67B3061129
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67B3061129
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12255416A3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12255416A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 30hJVHVx_hdD for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l9ryUIzWiwHs for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D47F610EF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D47F610EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 254E1416A1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 254E1416A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C82281979; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+ id 182B4828C8; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:21 +0100
+Date: Sun, 11 Dec 2022 09:28:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7d2fff78049392f2dae82f5ea9f5a0dbac225f4d
-X-Git-Newrev: 723eff5808451188ddc097aafc17e6969b849e57
+X-Git-Oldrev: 1eeac3dbfe32130bd15b9e9675891e68b12c38d0
+X-Git-Newrev: 09c966af735ca53b447f52965d123c21e43ae522
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205157.7C82281979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXdmcp:
- bump version to 1.1.4
+Message-Id: <20230220205201.182B4828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-can: bump to
+ version 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=723eff5808451188ddc097aafc17e6969b849e57
+commit: https://git.buildroot.net/buildroot/commit/?id=09c966af735ca53b447f52965d123c21e43ae522
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-November/003260.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Drop spurious setuptools runtime dependency.
+
+Add new msgpack runtime dependency.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash | 8 +++-----
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/python-can/Config.in       | 2 +-
+ package/python-can/python-can.hash | 5 +++--
+ package/python-can/python-can.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-index 9f7f968350..83609413fd 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002974.html
--md5  115c5c12ecce0e749cd91d999a5fd160  libXdmcp-1.1.3.tar.bz2
--sha1  0a8f8a274f829331efb1e8e2027c38631b204dd0  libXdmcp-1.1.3.tar.bz2
--sha256  20523b44aaa513e17c009e873ad7bbc301507a3224c232610ce2e099011c6529  libXdmcp-1.1.3.tar.bz2
--sha512  cb1d4650f97d66e73acd2465ec7d757b9b797cce2f85e301860a44997a461837eea845ec9bd5b639ec5ca34c804f8bdd870697a5ce3f4e270b687c9ef74f25ec  libXdmcp-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003260.html
-+sha256  2dce5cc317f8f0b484ec347d87d81d552cdbebb178bd13c5d8193b6b7cd6ad00  libXdmcp-1.1.4.tar.xz
-+sha512  83b384d43bfb034c395f83f97d1c6e73aa3d5faa8f8756b08e697c0b9c3c87189651b51e8213fbd1f5f9cbc2d8136cbf143627481744345d78cfe0ff2ad074a9  libXdmcp-1.1.4.tar.xz
- # Locally computed
- sha256  8a3c3f35b0dbcb60a4e242b9e4394a352a65bb27deb2938ea1e2e62a626e16e9  COPYING
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 51db9908e5..a79e2615db 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-can/Config.in b/package/python-can/Config.in
+index e92d9668e0..5d21e29d88 100644
+--- a/package/python-can/Config.in
++++ b/package/python-can/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_PYTHON_CAN
+ 	bool "python-can"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+ 	select BR2_PACKAGE_PYTHON_AENUM # runtime
++	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
+ 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	select BR2_PACKAGE_PYTHON_WRAPT # runtime
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index dd8a9b107d..73be230201 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/python-can
+-sha256  59d92846ffb981e634e9e0f2d14a6b4967a875e3869bd2ba168c92c4db6b8b5d  python-can-4.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-can/json
++md5  d8365b7a09e49f47dac0da75d8518808  python-can-4.1.0.tar.gz
++sha256  3f2b6b0dc5f459591d171ee0c0136dce79acedc2740ce695024aa3444e911bb9  python-can-4.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index 9284a9cf99..ba98337d5d 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XLIB_LIBXDMCP_VERSION = 1.1.3
--XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
--XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXDMCP_VERSION = 1.1.4
-+XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.xz
-+XLIB_LIBXDMCP_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
- XLIB_LIBXDMCP_LICENSE_FILES = COPYING
- XLIB_LIBXDMCP_CPE_ID_VENDOR = x.org
+-PYTHON_CAN_VERSION = 4.0.0
+-PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/1f/f7/a643cba269d59e108fe4c1854a8e71d5cdadadd4de1b9c8862b190171122
++PYTHON_CAN_VERSION = 4.1.0
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/90/55/898e69e37d5d4692bf21ba8750e095493d2ecbb29be7394d5cb735f0ab0f
+ PYTHON_CAN_SETUP_TYPE = setuptools
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
