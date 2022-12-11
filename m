@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D9CEC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E74ACC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01F2580C7A;
-	Sun, 11 Dec 2022 13:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01F2580C7A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F6E48143D;
+	Sun, 11 Dec 2022 13:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F6E48143D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Duto_mDEWF6k; Sun, 11 Dec 2022 13:35:44 +0000 (UTC)
+	with ESMTP id 4lEoIdx6n8Ug; Sun, 11 Dec 2022 13:35:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BE3681380;
-	Sun, 11 Dec 2022 13:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BE3681380
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 718D11BF3AA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D349780C7A;
+	Sun, 11 Dec 2022 13:35:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D349780C7A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B2D11BF3AA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9BC0600B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0F244052D
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9BC0600B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F244052D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XdiYz69cZlcr for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEiJVNsMclo1 for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:34:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DCD3760BC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB17A4052F
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD3760BC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB17A4052F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD2D9863F5; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+ id E8877863F0; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:33:14 +0100
+Date: Sun, 11 Dec 2022 14:33:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 309bc5d2d4b0f3ca133b40e36ee949411b3d532d
-X-Git-Newrev: c833234cb4eb46cf95dbc3d4f32e1d2d2dab23b2
+X-Git-Oldrev: 3046605251d1f946c610faaa5f337d0b3ee7406a
+X-Git-Newrev: de7850f9464a686fc7f37a8c1f8880f47ebffb00
 X-Patchwork-Hint: ignore
-Message-Id: <20221211133400.CD2D9863F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-cli: security bump to
- version 20.10.21
+Message-Id: <20221211133400.E8877863F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fail2ban: bump to version 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c833234cb4eb46cf95dbc3d4f32e1d2d2dab23b2
+commit: https://git.buildroot.net/buildroot/commit/?id=de7850f9464a686fc7f37a8c1f8880f47ebffb00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
+https://github.com/fail2ban/fail2ban/blob/1.0.2/ChangeLog
 
-https://github.com/moby/moby/releases/tag/v20.10.21
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/fail2ban/fail2ban.hash | 2 +-
+ package/fail2ban/fail2ban.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 153e0e5d00..d9477cf3af 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+index 4073efe4c7..b40922e70a 100644
+--- a/package/fail2ban/fail2ban.hash
++++ b/package/fail2ban/fail2ban.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f4398ad858274605f8e4e55d4618b2f5bdff6969a4afa232842bb2417d8a98db  docker-cli-20.10.19.tar.gz
-+sha256  f0f62ca1c80e8fd5b9e140ca64ef3e75dc7cf7a28040b3d10b260307128946e8  docker-cli-20.10.21.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 1fac21790b..a14edb2c31 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+ # sha256 locally computed
+-sha256  62b54679ebae81ac57f32c5e27aba9f2494ec5bafd45a0fd68e7a27fd448e5ac  fail2ban-1.0.1.tar.gz
++sha256  ae8b0b41f27a7be12d40488789d6c258029b23a01168e3c0d347ee80b325ac23  fail2ban-1.0.2.tar.gz
+ sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index 288266c2c7..7ad22d02d1 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.19
-+DOCKER_CLI_VERSION = 20.10.21
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+-FAIL2BAN_VERSION = 1.0.1
++FAIL2BAN_VERSION = 1.0.2
+ FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+ FAIL2BAN_LICENSE = GPL-2.0+
+ FAIL2BAN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
