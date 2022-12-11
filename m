@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C756FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79238C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75F0B4F175;
-	Mon, 20 Feb 2023 22:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75F0B4F175
+	by smtp4.osuosl.org (Postfix) with ESMTP id 294EB4F177;
+	Mon, 20 Feb 2023 22:36:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 294EB4F177
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M7cWHQp680MG; Mon, 20 Feb 2023 22:36:30 +0000 (UTC)
+	with ESMTP id Xov7wzmL5k01; Mon, 20 Feb 2023 22:36:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C7024EEFD;
-	Mon, 20 Feb 2023 22:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C7024EEFD
+	by smtp4.osuosl.org (Postfix) with ESMTP id C66784F17D;
+	Mon, 20 Feb 2023 22:36:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C66784F17D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D78081BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA30A1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67FF6611E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99219611EA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FF6611E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99219611EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3IICQ8XsCTet for <buildroot@lists.busybox.net>;
+ with ESMTP id a7mSqcSdqnPr for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71D7061185
+ by smtp3.osuosl.org (Postfix) with ESMTP id C923D6115B
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D7061185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C923D6115B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F5898648F; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+ id B83B0828C8; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:50:05 +0100
+Date: Sun, 11 Dec 2022 14:16:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
-X-Git-Newrev: 94170d3ecbbf751adfc55c79d6e5619b0a1ce018
+X-Git-Oldrev: 63b540638c72969bf8c3eb6c06e1c49c4fbcbb9a
+X-Git-Newrev: c34e0b1cd5f7e10ce4fc19880e15ba608006ee76
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205205.6F5898648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ncdu: bump to version
- 1.18
+Message-Id: <20230220205205.B83B0828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/asterisk: security
+ bump to version 16.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +59,77 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8234137254147646043=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94170d3ecbbf751adfc55c79d6e5619b0a1ce018
+--===============8234137254147646043==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c34e0b1cd5f7e10ce4fc19880e15ba608006ee76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since 1.17, see:
-- https://dev.yorhel.nl/ncdu/changes
+Fixes the following security issues:
 
-This commit also adds md5 and sha1 hashes published on the web site.
+- CVE-2022-37325: A zero length Called or Calling Party Number can cause a
+  buffer under-run and Asterisk crash.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+  https://downloads.asterisk.org/pub/security/AST-2022-007.html
+
+- CVE-2022-42705: Use after free in res_pjsip_pubsub.c may allow a remote
+  authenticated attacker to crash Asterisk (denial of service) by performing
+  activity on a subscription via a reliable transport at the same time
+  Asterisk is also performing activty on that subscription.
+
+  https://downloads.asterisk.org/pub/security/AST-2022-008.html
+
+- CVE-2022-42706: AMI Users with “config” permissions may read files outside
+  of Asterisk directory via GetConfig AMI Action even if “live_dangerously"
+  is set to "no"
+
+  https://downloads.asterisk.org/pub/security/AST-2022-009.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ncdu/ncdu.hash | 4 +++-
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index c47b4f9bac..1e31eaea8e 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,5 +1,7 @@
- # From https://dev.yorhel.nl/ncdu
--sha256  810745a8ed1ab3788c87d3aea4cc1a14edf6ee226f764bcc383e024ba56adbf1  ncdu-1.17.tar.gz
-+md5  4186b5be477cc3a0944619ade81f123b  ncdu-1.18.tar.gz
-+sha1  d47ce3cdf317adadc1426817d07899c90b767aba  ncdu-1.18.tar.gz
-+sha256  3c37a1a96580c9c5d2cc352dc3c5eef0d909158c05f1cc29db4712544c8b9f95  ncdu-1.18.tar.gz
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 9792d82ac5..98ee3bdc71 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  6e9c2f350db018df854b1301687ced8993facb2787698336e55cd19e0ae3ebfe  asterisk-16.28.0.tar.gz
++sha256  9b93006a87be9c29492299118200e4f66c8369851c66a50fdef5b15dfc4eb2c2  asterisk-16.29.1.tar.gz
  
- # computed locally
- sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index acfd496ec8..240ef9d8ea 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index e0f28ae7ee..22ac0334fd 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NCDU_VERSION = 1.17
-+NCDU_VERSION = 1.18
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+-ASTERISK_VERSION = 16.28.0
++ASTERISK_VERSION = 16.29.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+
+--===============8234137254147646043==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8234137254147646043==--
