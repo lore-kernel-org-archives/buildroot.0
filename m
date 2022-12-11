@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3094C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B3BC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 586E78141D;
-	Mon, 20 Feb 2023 22:55:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 586E78141D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0D2682350;
+	Mon, 20 Feb 2023 22:56:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0D2682350
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1c58QK7MACy8; Mon, 20 Feb 2023 22:55:52 +0000 (UTC)
+	with ESMTP id dyh2DZq0oBtO; Mon, 20 Feb 2023 22:56:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6732B8233D;
-	Mon, 20 Feb 2023 22:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6732B8233D
+	by smtp1.osuosl.org (Postfix) with ESMTP id E71B082346;
+	Mon, 20 Feb 2023 22:56:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E71B082346
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7CE191BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 035421BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5420B61261
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67C07612A2
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5420B61261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67C07612A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GjVRVwgSgt2k for <buildroot@lists.busybox.net>;
+ with ESMTP id fv8UTM7VBBkQ for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CC6F6128E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AC166128D
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CC6F6128E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC166128D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 886958648F; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 7869E828C8; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 20:44:47 +0100
+Date: Sun, 11 Dec 2022 22:44:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 470ce5d85c40a2f3b43dd9efaefac0000b047d23
-X-Git-Newrev: f3b31a39fdffbf738789885f6e318131055e4b9b
+X-Git-Oldrev: 6398d18d50c021992375c4229e3898402c3a1cc8
+X-Git-Newrev: 470ce5d85c40a2f3b43dd9efaefac0000b047d23
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205209.886958648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmbim: fix license
+Message-Id: <20230220205209.7869E828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-m2r: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,38 +56,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3b31a39fdffbf738789885f6e318131055e4b9b
+commit: https://git.buildroot.net/buildroot/commit/?id=470ce5d85c40a2f3b43dd9efaefac0000b047d23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libmbim library is licensed under LGPL-2.1+ since at least version 1.8.0
-and
-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/25cc3ed88d25b17c18fb32f46f96b560834387d3
+Since the bump of python-mistune to version 2.0.4 in commit
+ead539c27dd61ba010b3723b26af91da0779eb98, the python-m2r package fails
+to build: it is no longer maintained and no longer compatible with
+recent versions of python-mistune.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Since the only user of python-m2r, python-automat, no longer needs it,
+we can safely drop this package.
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/9041acc5be4d2b33dee9ff0ad66dcd41d4dbfba1
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmbim/libmbim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in.legacy                   |  6 ++++++
+ package/Config.in                  |  1 -
+ package/python-m2r/Config.in       |  8 --------
+ package/python-m2r/python-m2r.hash |  5 -----
+ package/python-m2r/python-m2r.mk   | 16 ----------------
+ 5 files changed, 6 insertions(+), 30 deletions(-)
 
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 1c12b82298..e728cf58f9 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -6,7 +6,7 @@
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9136ccd0e0..28c6822689 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- LIBMBIM_VERSION = 1.28.2
- LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
--LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-+LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
- LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
- LIBMBIM_CPE_ID_VENDOR = freedesktop
- LIBMBIM_INSTALL_STAGING = YES
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_PYTHON_M2R
++	bool "python-m2r removed"
++	select BR2_LEGACY
++	help
++	  The python-m2r package is unmaintained.
++
+ config BR2_PACKAGE_MESA3D_XVMC
+ 	bool "mesa Gallium XvMC state tracker removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 10a0493b8d..914c3584e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1112,7 +1112,6 @@ menu "External python modules"
+ 	source "package/python-logstash/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-m2crypto/Config.in"
+-	source "package/python-m2r/Config.in"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markdown2/Config.in"
+diff --git a/package/python-m2r/Config.in b/package/python-m2r/Config.in
+deleted file mode 100644
+index 44dafaa464..0000000000
+--- a/package/python-m2r/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PYTHON_M2R
+-	bool "python-m2r"
+-	select BR2_PACKAGE_PYTHON_MISTUNE # runtime
+-	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
+-	help
+-	  Markdown to reStructuredText converter.
+-
+-	  https://github.com/miyakogi/m2r
+diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
+deleted file mode 100644
+index 4bdd7160d8..0000000000
+--- a/package/python-m2r/python-m2r.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/m2r/json
+-md5  255d080f56eb3d3a82d95194850c99c3  m2r-0.3.1.tar.gz
+-sha256  aafb67fc49cfb1d89e46a3443ac747e15f4bb42df20ed04f067ad9efbee256ab  m2r-0.3.1.tar.gz
+-# Locally computed sha256 checksums
+-sha256  28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
+diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
+deleted file mode 100644
+index 8a4708f128..0000000000
+--- a/package/python-m2r/python-m2r.mk
++++ /dev/null
+@@ -1,16 +0,0 @@
+-################################################################################
+-#
+-# python-m2r
+-#
+-################################################################################
+-
+-PYTHON_M2R_VERSION = 0.3.1
+-PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
+-PYTHON_M2R_SITE = https://files.pythonhosted.org/packages/94/65/fd40fbdc608298e760affb95869c3baed237dfe5649d62da1eaa1deca8f3
+-PYTHON_M2R_SETUP_TYPE = setuptools
+-PYTHON_M2R_LICENSE = MIT
+-PYTHON_M2R_LICENSE_FILES = LICENSE
+-HOST_PYTHON_M2R_DEPENDENCIES = host-python-docutils host-python-mistune
+-
+-$(eval $(python-package))
+-$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
