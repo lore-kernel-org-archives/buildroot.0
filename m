@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5067CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D91C1C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1E644EBF3;
-	Mon, 20 Feb 2023 22:06:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E644EBF3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F0344EC21;
+	Mon, 20 Feb 2023 22:06:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F0344EC21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Qc9UQHrCFtQ; Mon, 20 Feb 2023 22:06:29 +0000 (UTC)
+	with ESMTP id 9KIM43ThtNg4; Mon, 20 Feb 2023 22:06:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E55E4EE54;
-	Mon, 20 Feb 2023 22:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E55E4EE54
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 420391BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 334F74EE5B;
+	Mon, 20 Feb 2023 22:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 334F74EE5B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 069561BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB88E610E7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB88E610E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA87C416BC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA87C416BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zc3ePbLWRl68 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AL3Smfg8hc8y for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED29B61131
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED29B61131
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24529416BB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24529416BB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBACB8648F; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+ id 21A6D86494; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 10:34:09 +0100
+Date: Sun, 11 Dec 2022 09:30:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: de82d57b56dd895c7eb56948c631fa30c4935a2a
-X-Git-Newrev: 3f748fc7489882095bdda22ed71b05149474d9b1
+X-Git-Oldrev: c330d67dae8ca6eefde2aa076151820d87beebe7
+X-Git-Newrev: bc4bed533a6c0166b70aeb03ddde9b021ea4058f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.EBACB8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/optee-os: bump to version
- 3.19.0
+Message-Id: <20230220205204.21A6D86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-zopfli: bump to
+ version 0.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f748fc7489882095bdda22ed71b05149474d9b1
+commit: https://git.buildroot.net/buildroot/commit/?id=bc4bed533a6c0166b70aeb03ddde9b021ea4058f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bumps OP-TEE OS package version to OP-TEE release 3.19.0.
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 4 ++--
+ package/python-zopfli/python-zopfli.hash | 4 ++--
+ package/python-zopfli/python-zopfli.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 5244700bc2..8bcce22306 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
+index 969ed97992..29bdfe5e5b 100644
+--- a/package/python-zopfli/python-zopfli.hash
++++ b/package/python-zopfli/python-zopfli.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/zopfli/json
+-md5  505ea595d86b8a7fec55620c839a4859  zopfli-0.2.1.zip
+-sha256  e5263d2806e2c1ccb23f52b2972a235d31d42f22f3fa3032cc9aded51e9bf2c6  zopfli-0.2.1.zip
++md5  0c1e41e5403524e0180f3ed9aaa356ec  zopfli-0.2.2.zip
++sha256  2d49db7540d9991976af464ebc1b9ed12988c04d90691bcb51dc4a373a9e2afc  zopfli-0.2.2.zip
+ # Locally computed sha256 checksums
+ sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
+index 689634fefa..d6af6e4b5f 100644
+--- a/package/python-zopfli/python-zopfli.mk
++++ b/package/python-zopfli/python-zopfli.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.18.0"
-+	bool "3.19.0"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
- 	help
-@@ -70,7 +70,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.18.0"	if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.19.0"	if BR2_TARGET_OPTEE_OS_LATEST
- 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 38f68bec5d..a87f21a9bf 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.18.0/optee-os-3.18.0.tar.gz
--sha256  bdd309697745ec4406951652094b50d9adb06c3612f01bd8a3d72682ec8e03e8  optee-os-3.18.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.19.0/optee-os-3.19.0.tar.gz
-+sha256  5e0c03bbc4d106f262a6bd33333c002c3380205ae6b82334aa7b644721ff7868  optee-os-3.19.0.tar.gz
- # Locally computed
- sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+-PYTHON_ZOPFLI_VERSION = 0.2.1
++PYTHON_ZOPFLI_VERSION = 0.2.2
+ PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
+-PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/91/25/ba6f370e18359292f05ca4df93642eb7d1c424721ef61f61b8610a63d0c5
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/9a/ed/d004d5737f9546167eecf0ecd995ee1a796703e512deb2f2ea26cdbe4b3e
+ PYTHON_ZOPFLI_SETUP_TYPE = setuptools
+ PYTHON_ZOPFLI_LICENSE = Apache-2.0
+ PYTHON_ZOPFLI_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
