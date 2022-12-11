@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E1F8C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 484B1C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C5864EC96;
-	Mon, 20 Feb 2023 21:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C5864EC96
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEDF74CA27;
+	Mon, 20 Feb 2023 21:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEDF74CA27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TyYe1E2rbKmR; Mon, 20 Feb 2023 21:52:49 +0000 (UTC)
+	with ESMTP id YKcTYkGL4HYY; Mon, 20 Feb 2023 21:53:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AA4A4EC8B;
-	Mon, 20 Feb 2023 21:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AA4A4EC8B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD0DB1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A857A4ECA1;
+	Mon, 20 Feb 2023 21:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A857A4ECA1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 769C21BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DB7F6108F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DB7F6108F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99697415B8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99697415B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NlltOcltTzaM for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PAXr5156BGwE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45F5C610CC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45F5C610CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D12FD4169E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D12FD4169E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4293B828C8; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+ id CBE2C86495; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:06 +0100
+Date: Sun, 11 Dec 2022 09:19:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1564c1e6e9e9e72daae419c1a839b986485eff5a
-X-Git-Newrev: e708680a43bdd4bc6cb5b84544a98bc27ccc8d55
+X-Git-Oldrev: 6fc4b59ffd3007ca9e436d33647acc5dfff62970
+X-Git-Newrev: 76423bd3a657f0ca197e2301bbb21e4fc9eee992
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205157.4293B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xfd: bump
- version to 1.1.4
+Message-Id: <20230220205200.CBE2C86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/davfs2: bump to
+ version 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e708680a43bdd4bc6cb5b84544a98bc27ccc8d55
+commit: https://git.buildroot.net/buildroot/commit/?id=76423bd3a657f0ca197e2301bbb21e4fc9eee992
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-December/003266.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://savannah.nongnu.org/forum/forum.php?forum_id=10244
+https://git.savannah.nongnu.org/cgit/davfs2.git/tree/ChangeLog?h=rel-1-7-0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xfd/xapp_xfd.hash | 8 +++-----
- package/x11r7/xapp_xfd/xapp_xfd.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/davfs2/davfs2.hash | 2 +-
+ package/davfs2/davfs2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.hash b/package/x11r7/xapp_xfd/xapp_xfd.hash
-index ec85170180..5965958828 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.hash
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002968.html
--md5  f9c9f2b101a96d4b50c2a4ab9b5ab5b1  xfd-1.1.3.tar.bz2
--sha1  ca6dbe2027b205992a52c6bb717a43508f12a8c4  xfd-1.1.3.tar.bz2
--sha256  192f938ba5830e84cc807d8ead2ad9655b43eaed6500c830f3e083aad10ed958  xfd-1.1.3.tar.bz2
--sha512  68e2d4ce5e24215353b6f3231191d69639c4dd90a703e03ccf152bbfe4012da071c387ba289f918fb0336a3be9ee49dc05cbec7273fa85f5e476ead7e10795f0  xfd-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003266.html
-+sha256  d5470ffb66fd45a1e1b03d6df01f12d4caf0cf675cde0345cda237243e9076fd  xfd-1.1.4.tar.xz
-+sha512  fa1f8a7b5d89be20fb2b1e3e0e8f4d7f9463e91fd385d21e1403a398c2e263112043b568417c420c5ee33bec60e06658498dd55df6d7ac19da3af0844f932209  xfd-1.1.4.tar.xz
- # Locally computed
- sha256  57ae10f24fc110dafb3b8d7735cf26b1905ff74e716745b2520e4ccd7751095c  COPYING
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
-index 149e24b79a..1ef1d69db3 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.mk
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
+index a555779dbc..1cbacc388f 100644
+--- a/package/davfs2/davfs2.hash
++++ b/package/davfs2/davfs2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  ce3eb948ece582a51c934ccb0cc70e659839172717caff173f69a5e2af90c5c0  davfs2-1.6.1.tar.gz
++sha256  251db75a27380cca1330b1b971700c5e5dcc0c90e5a47622285f0140edfe3a2f  davfs2-1.7.0.tar.gz
+ # License file, locally calculated
+ sha256  0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index 42192faa59..a67c506250 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XFD_VERSION = 1.1.3
--XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.bz2
--XAPP_XFD_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XFD_VERSION = 1.1.4
-+XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.xz
-+XAPP_XFD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XFD_LICENSE = MIT
- XAPP_XFD_LICENSE_FILES = COPYING
- XAPP_XFD_DEPENDENCIES = \
+-DAVFS2_VERSION = 1.6.1
++DAVFS2_VERSION = 1.7.0
+ DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
+ DAVFS2_LICENSE = GPL-3.0+
+ DAVFS2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
