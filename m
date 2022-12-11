@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8689C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15261C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:30:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DE56401B1;
-	Sun, 11 Dec 2022 20:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DE56401B1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cXg-W6Q5saHI; Sun, 11 Dec 2022 20:30:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6771040982;
-	Sun, 11 Dec 2022 20:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6771040982
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 82CC21BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:30:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CEB680C67
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:30:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CEB680C67
+	by smtp1.osuosl.org (Postfix) with ESMTP id B43E7813FE;
+	Sun, 11 Dec 2022 20:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B43E7813FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8sC18hUYu6UB for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 20:30:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4599580C1E
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4599580C1E
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:30:01 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1139F100005;
- Sun, 11 Dec 2022 20:29:57 +0000 (UTC)
-Date: Sun, 11 Dec 2022 21:29:57 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20221211212957.27aa9e19@windsurf>
-In-Reply-To: <0D32AFEE-0712-48AE-A855-3FFC249371DD@benettiengineering.com>
-References: <ec8d8bd9-5185-b9fb-f6cb-6aec971a5de1@mind.be>
- <0D32AFEE-0712-48AE-A855-3FFC249371DD@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670790598;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LCTcclfpz0f5V/WH9lfYbPWHQ7hbyoJeTWNMqG/mbQU=;
- b=lsec/QeW2FF7PL4CAHYXBgnBhSAa/QjOboksYoTnDxiq8pYPCv2wASKYm5vETGQv2+BGoH
- 7f3dsNL0EJubltGd0btgdu3rDFxC6egqrG6T8pOJE8VFyCF7PbD/heaU/ie6VWmSmOQ8dg
- VVMdNDtrZSwB/BTFJvbRRYZe1JaU9PDPDW68AQ7lbIkTJdfn73xkftfu9COVPceM18hYLF
- fJiG2St+QU5YdFNgV5qZRbFeESbSVWuGkotLmhD0PPCo0mIlbxSBnfxzOniyuUrOA0PNX5
- wdG53v4sELqSIuATgwWpLL1v1x5PBwl8wiYH4u/jR+d0BePOYiJ/il7Xz4/SXA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lsec/QeW
-Subject: Re: [Buildroot] [PATCH 2/2] package/rtl8192eu: fix build failure on
- Big Endian architectures
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wV8xRJ8jmDtS; Sun, 11 Dec 2022 20:30:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13D2980DF9;
+	Sun, 11 Dec 2022 20:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13D2980DF9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9BC91BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:30:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A274F4051C
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:30:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A274F4051C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SvAqckeDZ7iD for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:30:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA0F24047B
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA0F24047B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D65E9865D7; Sun, 11 Dec 2022 20:30:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 21:30:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1cb92ddbb92264bcef1794dd7c28ee76c9353c36
+X-Git-Newrev: a5d12e66ca9058b86fe90c8e683a5029b1c8bb37
+X-Patchwork-Hint: ignore
+Message-Id: <20221211203048.D65E9865D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/balena-engine: bump to version
+ 20.10.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,35 +58,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 29 Nov 2022 23:25:29 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a5d12e66ca9058b86fe90c8e683a5029b1c8bb37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Clearly, all of this is rubbish in Buildroot context. So what we should do is to set
-> > 
-> > RTL8192EU_MODULE_MAKE_OPTS = ... CONFIG_PLATFORM_I386_PC=n
-> > 
-> > At that point, we can set all the appropriate config options we like, which would be the -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT in USER_EXTRA_CFLAGS.  
-> 
-> Yes, this is another approach, but there is only a patch with my proposed solution applied [1]
-> so maybe for consistency we could keep it the same, what about it?
+https://github.com/balena-os/balena-engine/blob/v20.10.21/CHANGELOG.md
 
-Well, Arnout has a point that having CONFIG_PLATFORM_I386_PC=y is not
-really good. So perhaps 354f9387f33b5fab023cb98e52d84d58624f0ecf also
-needs to be changed like Arnout suggested?
+Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/balena-engine/balena-engine.hash | 2 +-
+ package/balena-engine/balena-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
+index ef590881f5..4adb8ce561 100644
+--- a/package/balena-engine/balena-engine.hash
++++ b/package/balena-engine/balena-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  43f4c985b855a4f731a5cdac214f1adf6c4cc2021cbad3f93856009df246d61c  balena-engine-20.10.12.tar.gz
++sha256  4fb38109d133d499de366466a612fb6f523ea99d56fcd69b45dc494a75fbce0f  balena-engine-20.10.21.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
+index 0afcea3d7e..ecfb62bfbf 100644
+--- a/package/balena-engine/balena-engine.mk
++++ b/package/balena-engine/balena-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BALENA_ENGINE_VERSION = 20.10.12
++BALENA_ENGINE_VERSION = 20.10.21
+ BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
+ 
+ BALENA_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
