@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59927C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF56C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F046B4ECE3;
-	Mon, 20 Feb 2023 22:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F046B4ECE3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D46C84D7ED;
+	Mon, 20 Feb 2023 22:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D46C84D7ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YN5rhaRcaC3B; Mon, 20 Feb 2023 22:40:08 +0000 (UTC)
+	with ESMTP id u5XhQIYgwP57; Mon, 20 Feb 2023 22:40:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF49A4F1FD;
-	Mon, 20 Feb 2023 22:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF49A4F1FD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 27EFC1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9246B4F1FC;
+	Mon, 20 Feb 2023 22:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9246B4F1FC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33C171BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E883281911
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E883281911
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A27E61086
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A27E61086
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q7Ksa7fWqo9T for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:55:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A11F380B55
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A11F380B55
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:55:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 315081C0002;
- Mon, 20 Feb 2023 20:55:32 +0000 (UTC)
-Date: Mon, 20 Feb 2023 21:55:31 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230220215531.7b3a1783@windsurf>
-In-Reply-To: <20230219172440.519540-1-fontaine.fabrice@gmail.com>
-References: <20230219172440.519540-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676926532;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=k01++IUFOpOo81ccWH3YHQ66JWVFZV8dqGlq3n/w0LA=;
- b=iXUcL73HgridyEbkTYeDl12jfHFcTykoRe4G+rAsefBIn53UhuYJD8fyuUFSvHDTp7PV4F
- JIPDxO2fsLhbgZYuxeDn2QlDvGXf9AhiavA2D2pt8IANk2qIy68A+caSNqiSxRV+zssXe/
- nNSJMNWLa13OvZnxZJuOzCRb9QBkK/aKaCwEGmFY/4jonlOyoiINKiOuirocjj538H6NcN
- Y8u6Om84tDoxL6LjGsuLXPsanp0vLgzn77ezsxCQLqozdtSB+mPeeWbNWSNHJGsT0jB/RV
- Ffvt/iBUWePpKQYjKod2fzM5l18+PGfzFiVbLIPgk2AyBLLy3xlwtHNxh06C9Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iXUcL73H
-Subject: Re: [Buildroot] [PATCH v3,
- 1/1] package/libmodsecurity: needs dynamic library with libcurl,
- libssh2 and mbedtls
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GEdAwGRSDm0x for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D667611E7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D667611E7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5B6088648F; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 14:33:11 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: fc47afdc57cb7bdff3c4481607b2887f8a9cae94
+X-Git-Newrev: 309bc5d2d4b0f3ca133b40e36ee949411b3d532d
+X-Patchwork-Hint: ignore
+Message-Id: <20230220205206.5B6088648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-engine:
+ security bump to version 20.10.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,52 +58,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Frank Vanbever <frank.vanbever@mind.be>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=309bc5d2d4b0f3ca133b40e36ee949411b3d532d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 19 Feb 2023 18:24:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
 
-> Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as
-> mbedtls can be pulled in libcurl through libssh2 resulting in the
-> following build failure:
-> 
-> /home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le-buildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_init':
-> md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0): first defined here
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b25959a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3:
->  - Fix syntax
-> Changes v1 -> v2:
->  - Update nginx-modsecurity
+https://github.com/moby/moby/releases/tag/v20.10.21
 
-Isn't that a bit madness? If libmodsecurity has its copy of parts of
-mbedtls, but didn't take care of renaming the symbols, then ultimately
-what we should conclude is that using libmodsecurity in a statically
-linked configuration is not supported.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So I would advocate for simplifying the whole thing and just make
-libmodsecurity and its reverse dependencies depends on !BR2_STATIC_LIBS
-and be done with it.
-
-What do you think?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index dfd4f4e365..10e9727a08 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  228caadac1b37a5ba310eb25418cf1fdd8878336f1d8faf0a2daa87fcc577577  docker-engine-20.10.19.tar.gz
++sha256  61f4c3a2d0426e1bbbda1b0e5dd33ec203776f7d99d1a61522c77c04c4ed09fe  docker-engine-20.10.21.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index dc45baf055..36c66485ba 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 20.10.19
++DOCKER_ENGINE_VERSION = 20.10.21
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
