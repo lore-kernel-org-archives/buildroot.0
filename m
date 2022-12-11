@@ -4,79 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C31EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 14:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2146FC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 15:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8EF740984;
-	Sun, 11 Dec 2022 14:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8EF740984
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47CD6408CA;
+	Sun, 11 Dec 2022 15:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47CD6408CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rud7yLTvkkkB; Sun, 11 Dec 2022 14:09:03 +0000 (UTC)
+	with ESMTP id u13WVvolf_Qd; Sun, 11 Dec 2022 15:19:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B08A940980;
-	Sun, 11 Dec 2022 14:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B08A940980
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 082B11BF398
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 14:09:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45A4140360;
+	Sun, 11 Dec 2022 15:19:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A4140360
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 52D0C1BF860
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:19:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0DDF4026A
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 14:09:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0DDF4026A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A9E540360
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:19:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A9E540360
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ecs3Q8mPcfmt for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 14:09:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99B4A40135
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 99B4A40135
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 14:09:00 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id m18so21965024eji.5
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 06:09:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=BuWwwdELtTFH2Z1oUaaWZ5UN/FnUP8MTntvKFWFNLaQ=;
- b=hdoQ979l8dTFoViYtyGgeCCE7Zn/3GkT9i1d5aZuW5oVNJQiQUIzCGXsTKfR1g3JUq
- rK+lUgeAUQx3D7tJ/Jse24HV/tWsQaPf1H631sOGNRNak3jCAgz6Y4Xf+mqwMOBaj56Z
- MGP0bRDrmnFwpBzFQG0+RuEFfLSj5XNJ423NBdDU4dU/GfcNMI04ZXtu45+dsmOz6T9A
- hmmdlUFCqHGhksUKioFWPOdlMDgbTPgxT468lpiYl962SMWm3isiZchr1p/2z+53Ac2m
- 4fs2zAjeGeBe0Y9HEbEOFVNiA5tF5ZmSHyIWGlXMgKh/RpC2nRgHNHzyJ39X4GeDD4G2
- WuvQ==
-X-Gm-Message-State: ANoB5pmTu7qwvx7xVF3kYw7VPek8ri6JSrizgjg1qvuA+Ee8mJh1JXj+
- 3fJYHkSJacs8Gbtm7jc4rNrPmbTE8+30xBnqDZpDNXIiE2QlYpmy
-X-Google-Smtp-Source: AA0mqf6bEYQV9qW5/nSErRwVXXhKCB8flSp8Y/94wRVPj3yZ9uXXNNjHUDc2k8P/e17DyDRnMgb3yH42TtJXP/L7gd4=
-X-Received: by 2002:a17:906:6a1d:b0:7c0:b569:8efd with SMTP id
- qw29-20020a1709066a1d00b007c0b5698efdmr27167680ejc.652.1670767738707; Sun, 11
- Dec 2022 06:08:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20221206220311.1350707-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20221206220311.1350707-1-fontaine.fabrice@gmail.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sun, 11 Dec 2022 15:08:47 +0100
-Message-ID: <CABGWkvrVBxxiEcA5qV1Cap+-kgtTzRMdbQGORQ-ujDTM2PF32w@mail.gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=BuWwwdELtTFH2Z1oUaaWZ5UN/FnUP8MTntvKFWFNLaQ=;
- b=SVhTBkID1h8y2dq2pHmofjC2YRSe8LzpZTg1FT+MkEv9HxPMAhOyRkPF9nSN7TQonW
- uBm3pULzYEWTK6jAgNUSQ9mR0e35i5nZZIeypnWKvSZA9414tWlbNBwZ/D7tIZf2V4oN
- cXu0OZFO3RFpCW4IS6YoeAm6Vc+yY1APiH6m8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=SVhTBkID
-Subject: Re: [Buildroot] [PATCH 1/1] package/sscep: requires blowfish
- support in openssl
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id seI1GbZo1vNq for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 15:19:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E45B40350
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 15:19:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E45B40350
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2984E8641C; Sun, 11 Dec 2022 15:19:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 15:59:24 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 28f31d4694ad212d9b511c53ba35c6443eeef972
+X-Git-Newrev: 071fdbf963228590b453e5111eadc8a74b579aa2
+X-Patchwork-Hint: ignore
+Message-Id: <20221211151913.2984E8641C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opensc: propagate dependencies
+ from pcsc-lite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,73 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,,
+commit: https://git.buildroot.net/buildroot/commit/?id=071fdbf963228590b453e5111eadc8a74b579aa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Dec 6, 2022 at 11:03 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Enable blowfish in openssl to fix the following build failure raised
-> since the addition of the package in commit
-> 72fa60dc102679f51b228336ec38f5af78ff7646:
->
-> src/sscep.c: In function 'get_cipher_alg':
-> src/sscep.c:123:24: warning: implicit declaration of function 'EVP_bf_cbc'; did you mean 'EVP_sm4_cbc'? [-Wimplicit-function-declaration]
->   123 |                 return EVP_bf_cbc();
->       |                        ^~~~~~~~~~
->       |                        EVP_sm4_cbc
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/55d2c481d8c148fb3bb61c1331340bcd71274553
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/sscep/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/sscep/Config.in b/package/sscep/Config.in
-> index 4b9039c9b2..2e5e29f7c8 100644
-> --- a/package/sscep/Config.in
-> +++ b/package/sscep/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_SSCEP
->         bool "sscep"
-> +       select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
->         select BR2_PACKAGE_OPENSSL
->         help
->           SSCEP is a client-only implementation of the SCEP
-> --
-> 2.35.1
->
-Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Commit d590003e31dd (package/pcsc-lite: needs gcc >= 4.9) propagated
+that new dependency to a bunch of packages that select pcsc-lite.
 
-Thanks and regards,
-Dario
+Then commit 8aaa7ecbce1d (package/opensc: new package) introduced
+opensc, which selects pcsc-lite. However, the package was submitted
+before the dependency to gcc 4.8+ was added to pcsc-lite, and that was
+missed during the review.
 
--- 
+Add it now.
 
-Dario Binacchi
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/opensc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+index 2cec096ac2..8c6a95a41d 100644
+--- a/package/opensc/Config.in
++++ b/package/opensc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENSC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
+ 	select BR2_PACKAGE_PCSC_LITE
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_OPENSC
+ 
+ 	  https://github.com/OpenSC/OpenSC/wiki
+ 
+-comment "opensc needs a toolchain with dynamic library, threads"
++comment "opensc needs a toolchain with dynamic library, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
