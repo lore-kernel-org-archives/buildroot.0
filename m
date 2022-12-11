@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21C9AC4167B
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49AA8C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6ACF60BC4;
-	Sun, 11 Dec 2022 13:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6ACF60BC4
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0EAA81765;
+	Sun, 11 Dec 2022 13:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0EAA81765
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eMKG9d2UGNlZ; Sun, 11 Dec 2022 13:22:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B9iYPU9UxdfS; Sun, 11 Dec 2022 13:22:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDFBB60BB8;
-	Sun, 11 Dec 2022 13:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDFBB60BB8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F4661BF2BD
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:21:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A93E81699;
+	Sun, 11 Dec 2022 13:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A93E81699
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C954B1BF2BD
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 729154091E
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:21:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 729154091E
+ by smtp1.osuosl.org (Postfix) with ESMTP id A240A81699
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A240A81699
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WJGROQW4IMs9 for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:21:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDBDD40917
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DDBDD40917
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:21:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JvmGRqTWR_VN for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:22:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70464813E8
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70464813E8
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:22:35 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AA036C0002;
- Sun, 11 Dec 2022 13:21:52 +0000 (UTC)
-Date: Sun, 11 Dec 2022 14:21:51 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 63E22240003;
+ Sun, 11 Dec 2022 13:22:32 +0000 (UTC)
+Date: Sun, 11 Dec 2022 14:22:30 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221211142151.74caa9d6@windsurf>
-In-Reply-To: <20221208202104.3041-1-fontaine.fabrice@gmail.com>
-References: <20221208202104.3041-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221211142230.7e0e691d@windsurf>
+In-Reply-To: <20221208202721.5592-1-fontaine.fabrice@gmail.com>
+References: <20221208202721.5592-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670764913;
+ d=bootlin.com; s=gm1; t=1670764952;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=9niGWznbwonhCYA57JiRX4mgKI08Cq009gCf6erH7lQ=;
- b=aOgaNc5eTIMCVBbdPe1Uhgu+BetfJSQCHDh1xe4zhXzE2rzUDsXduJrzM5ONgZQ9d8Rkiw
- EM7vh7s6oG2OkDKioZHVrQS6MC9bvSD1/ixA1hvxQDOFz/bW0re1Ie6vKT/QArtD9xyXa4
- YDep3NCw7w0oEjco4E5Zq8gMUPjRPe9bOK+a3qQPxGEPEfY3z74WdxfVD7DLqzO44WF+Sq
- eKj+FUzFhfJUwFqT/3VWHX8+Bvi0F36UqPA/TcclLWgIrM5pGOfLDq8N8glRcATqbCax/2
- R++dlJ2YIuDJ6iUw3mXOZ4jhORC+jaZtsjZEJEEoRVgfgFHGd96bBE78TN5NMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=KFzLFRZQHKGZIIW0WwebeWGgBO0FQzjgjB5gVlyMQzM=;
+ b=M2sp7SWNmcFcF5s8r+R1clJHWsTg8lhdrNeAHsYmflEAq4HFu1I7hl41CIbCprb+tg+H80
+ uNOh7nWC4JuVb3Sx6Hxptc1+PnLwvQL+c7ndAbwYeSiQlSo9yzGlPO55QSxbSKet6Xs/BO
+ Lw68KKcPJwIJvpHTWqpCcqnt65k1fkaVBKiAVEfXhgu2Fhlh1aTG+JJWgdVIdHaKgfvedu
+ JSwNtWMp3TA9ULrJycQPky4u5dtub2dscU0yZcbgM8NQkATK/T6Yd0i80BIut0ErJj8o6p
+ bbs28oXff5kY0cDQI/sQQbyL4MXU9EeCWz8xdVrzeDpEnkCWgws+BR0chuyBLg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aOgaNc5e
-Subject: Re: [Buildroot] [PATCH 1/1] package/capnproto: security bump to
- version 0.9.2
+ header.s=gm1 header.b=M2sp7SWN
+Subject: Re: [Buildroot] [PATCH 1/1] package/lttng-tools: bump to version
+ 2.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,38 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Koen Martens <gmc@sonologic.nl>, buildroot@buildroot.org
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  8 Dec 2022 21:21:04 +0100
+On Thu,  8 Dec 2022 21:27:21 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix CVE-2022-46149: Cap'n Proto is a data interchange format and remote
-> procedure call (RPC) system. Cap'n Proro prior to versions 0.7.1, 0.8.1,
-> 0.9.2, and 0.10.3, as well as versions of Cap'n Proto's Rust
-> implementation prior to 0.13.7, 0.14.11, and 0.15.2 are vulnerable to
-> out-of-bounds read due to logic error handling list-of-list. This issue
-> may lead someone to remotely segfault a peer by sending it a malicious
-> message, if the victim performs certain actions on a list-of-pointer
-> type. Exfiltration of memory is possible if the victim performs
-> additional certain actions on a list-of-pointer type. To be vulnerable,
-> an application must perform a specific sequence of actions, described in
-> the GitHub Security Advisory. The bug is present in inlined code,
-> therefore the fix will require rebuilding dependent applications. Cap'n
-> Proto has C++ fixes available in versions 0.7.1, 0.8.1, 0.9.2, and
-> 0.10.3.
+> This bump will fix the following build failure without NPTL thanks to
+> https://github.com/lttng/lttng-tools/commit/27f2b8400c9db484cd195c4240c379e845b1413d
+> which is raised since bump to version 2.13.2 in commit
+> 8e5f2d0f8e8c04e98f8761f3cba683c56bbefc8c and
+> https://github.com/lttng/lttng-tools/commit/014d7d3b5e9d69989bf776cffb6c21ff7e1d36ff:
 > 
-> https://github.com/capnproto/capnproto/security/advisories/GHSA-qqff-4vw4-f6hx
-> https://dwrensha.github.io/capnproto-rust/2022/11/30/out_of_bounds_memory_access_bug.html
+> In file included from thread.c:10:
+> ../../src/common/compat/pthread.h: In function 'lttng_pthread_setname_np':
+> ../../src/common/compat/pthread.h:63:27: error: 'LTTNG_UST_ABI_PROCNAME_LEN' undeclared (first use in this function)
+>    63 |         if (strnlen(name, LTTNG_UST_ABI_PROCNAME_LEN) >= LTTNG_UST_ABI_PROCNAME_LEN) {
+>       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> https://github.com/lttng/lttng-tools/blob/v2.13.8/ChangeLog
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bbc8d6621822bb5da7513331e69799ca25a03f66
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/capnproto/capnproto.hash | 2 +-
->  package/capnproto/capnproto.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/lttng-tools/lttng-tools.hash | 4 ++--
+>  package/lttng-tools/lttng-tools.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
