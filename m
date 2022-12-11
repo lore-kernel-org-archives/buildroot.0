@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC71C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F755C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DCF942A33;
-	Mon, 20 Feb 2023 22:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCF942A33
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1053D4ED56;
+	Mon, 20 Feb 2023 22:17:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1053D4ED56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uEsTXvUqz9Iz; Mon, 20 Feb 2023 22:17:41 +0000 (UTC)
+	with ESMTP id UPV2vZF14HIj; Mon, 20 Feb 2023 22:17:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 349C24EFA5;
-	Mon, 20 Feb 2023 22:17:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 349C24EFA5
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5AF94EFA5;
+	Mon, 20 Feb 2023 22:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5AF94EFA5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF45B1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF5491BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8F7A61169
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED6AD6116A
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F7A61169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED6AD6116A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qyMLMxo_qqes for <buildroot@lists.busybox.net>;
+ with ESMTP id prpsig_neMkF for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A01E61096
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2828B6115F
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A01E61096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2828B6115F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17AE8828C8; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+ id 242388648F; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:07 +0100
+Date: Sun, 11 Dec 2022 09:29:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 77871541bdeb7c84e0d54b4d4b3f13a83c5cdb6f
-X-Git-Newrev: 1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
+X-Git-Oldrev: 1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
+X-Git-Newrev: 0cc120f42d8cd84cbd73e1b55a088627fc755537
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.17AE8828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-ipython: bump
- to version 8.7.0
+Message-Id: <20230220205202.242388648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-jedi: bump to
+ version 0.18.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
+commit: https://git.buildroot.net/buildroot/commit/?id=0cc120f42d8cd84cbd73e1b55a088627fc755537
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
+ package/python-jedi/python-jedi.hash | 4 ++--
+ package/python-jedi/python-jedi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index e61727e045..aae34f6f9b 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
+diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+index d0f083e942..dee8810e89 100644
+--- a/package/python-jedi/python-jedi.hash
++++ b/package/python-jedi/python-jedi.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  8c98f6def0622ea32975cb779247c3d7  ipython-8.6.0.tar.gz
--sha256  7c959e3dedbf7ed81f9b9d8833df252c430610e2a4a6464ec13cd20975ce20a5  ipython-8.6.0.tar.gz
-+md5  3adf9fca317512e5b3516a9ac25b3442  ipython-8.7.0.tar.gz
-+sha256  882899fe78d5417a0aa07f995db298fa28b58faeba2112d2e3a4c95fe14bb738  ipython-8.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/jedi/json
+-md5  d8dba4a98a35530f7f5b461c20aff180  jedi-0.18.1.tar.gz
+-sha256  74137626a64a99c8eb6ae5832d99b3bdd7d29a3850fe2aa80a4126b2a7d949ab  jedi-0.18.1.tar.gz
++md5  47e89a2b8bedcfeb1527fac37b9ba1b3  jedi-0.18.2.tar.gz
++sha256  bae794c30d07f6d910d32a7048af09b5a39ed740918da923c6b780790ebac612  jedi-0.18.2.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f3aac75db1..1af1081741 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+ sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
+ sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
+diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+index b0508de701..40de61f0e8 100644
+--- a/package/python-jedi/python-jedi.mk
++++ b/package/python-jedi/python-jedi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 8.6.0
-+PYTHON_IPYTHON_VERSION = 8.7.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/7f/59/05e94e067afb61460f0d5229a1edb800e2f65b8436085fad9cd262d80d45
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/82/2b/026af47da09998404f51064d328f5f1f68c78829082d2945be489343fde6
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+-PYTHON_JEDI_VERSION = 0.18.1
++PYTHON_JEDI_VERSION = 0.18.2
+ PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+-PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/c2/25/273288df952e07e3190446efbbb30b0e4871a0d63b4246475f3019d4f55e
++PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/15/02/afd43c5066de05f6b3188f3aa74136a3289e6c30e7a45f351546cab0928c
+ PYTHON_JEDI_SETUP_TYPE = setuptools
+ PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
+ PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
