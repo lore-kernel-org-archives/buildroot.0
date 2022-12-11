@@ -1,88 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D35C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 17:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E32C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 17:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5455B60B49;
-	Sun, 11 Dec 2022 17:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5455B60B49
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11BFB813B8;
+	Sun, 11 Dec 2022 17:46:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11BFB813B8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K5EO2GXNVgPg; Sun, 11 Dec 2022 17:46:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41440813A8;
+	Sun, 11 Dec 2022 17:46:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41440813A8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D7B701BF3D1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:46:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFC0860ADB
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFC0860ADB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l3UGjfSIc-hb; Sun, 11 Dec 2022 17:40:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94B0D608B7;
-	Sun, 11 Dec 2022 17:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94B0D608B7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F36DB1BF3D1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:40:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA76540245
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA76540245
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vEn9mWbQ_qBu for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 17:40:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1FB5401DE
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B1FB5401DE
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 17:40:35 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id y4so3038774iof.0
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 09:40:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8JRz5dKYaSiG4rpjIZrRMvq6irU3zsgxgtpx1hijcEM=;
- b=eyPOTsGyYH2j7RSUpKRFdZQfe7KfqfNISjULABmwHYkWmf3mLxiVfV84000iYr/vn8
- n/WZeldrmslzHdAOPmpEnUn/tlwGBZmClse8Zj1f66BhoscjETUE24Sc5/lNAHX1FFFP
- 7XmYdtCXVfa++yVxhB7g29GmHHVfoB3VdN1ZtGdsyYF9tMtC3LrBIny/ao7LyCzGicmb
- GhtpedAxRRrLhyHOL6vKJItaXD8VThD/fHjqyKvWs3LC/zFvnaJMLUpLjHPrX4un673n
- bSXGtZJYWA5x5sWgXFZIS7nELuMjvR1HEIoyJRC2yhj8C8l27N8PrN2tI2x3hz1HOVNN
- CqTA==
-X-Gm-Message-State: ANoB5pm1dqhL8v8eAyOujKBnYuDgy5K0Vjh37kYxa88VOyKVy+iezZPt
- AsAKL4JVBfEkUdqDpgUJ3Nlf2L0POG7VWrRV
-X-Google-Smtp-Source: AA0mqf5Igq/7GL0zcCx3+RHeueFAhQ3WiguWu3sHRPKVfomgf+Fx2WCC15Jw2tyRrFvJuU3G+BUitA==
-X-Received: by 2002:a05:6602:21c5:b0:6dd:5287:7210 with SMTP id
- c5-20020a05660221c500b006dd52877210mr7216627ioc.3.1670780434481; 
- Sun, 11 Dec 2022 09:40:34 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- a16-20020a027350000000b0038a41eb1ba3sm2438525jae.177.2022.12.11.09.40.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Dec 2022 09:40:33 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VITkSrOS4AAb for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 17:46:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D20FE60640
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 17:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D20FE60640
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BD99D86538; Sun, 11 Dec 2022 17:46:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 10:40:29 -0700
-Message-Id: <20221211174029.1928619-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8JRz5dKYaSiG4rpjIZrRMvq6irU3zsgxgtpx1hijcEM=;
- b=fQlSGCrPi40eWcaLN2mSIdlV5KHnpgeIm+fzOaBK88ajgEX//YJEmVRQRuEa6U6KNi
- RJiZjBW1oHazXPQg/3HGV8/xdoQz0+Y/M2aupJ2UIbHIObSvQ3O6NCrWD4aA+67fcbQy
- IgKUByNicEsI4R5cX+Mnw9gG7RYr8kkwCoVJTbtNm1r3nuChml4bD044yAbG1hrG3+zp
- nv7H/Q/LfjSvqI++k727iLx5+ohbLK3qtTtLBLeW+sR143pQx5bT0DjKAeutN7vmQ2PB
- g4AwuwrIMvQXgshMG6Xj6+FKYnPCmUViu5wA4yDEFLiWD6yNAIiDXwIh+OmobmZ3gIrj
- Vnog==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fQlSGCrP
-Subject: [Buildroot] [PATCH 1/1] package/python-tomli: drop flit-bootstrap
- for host package
+Date: Sun, 11 Dec 2022 18:38:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bbe96083f035b21be58498d055b83b2f7576ce16
+X-Git-Newrev: 93d982207b43f9e741e190a71317901972175796
+X-Patchwork-Hint: ignore
+Message-Id: <20221211174626.BD99D86538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hddtemp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +56,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As tomli is no longer required for bootstrapping our pep517 toolchain
-we no longer need to use flit-bootstrap for the host package.
+commit: https://git.buildroot.net/buildroot/commit/?id=93d982207b43f9e741e190a71317901972175796
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Bernd:
+ - switched to actively maintained fork
+ - package/Config.in: moved to "Hardware handling" (Peter)
+ - added toolchain dependencies (Thomas)
+ - added license hash
+ - fixed build errors related to iconv and execinfo (Peter)
+ - removed hook HDDTEMP_REMOVE_MAN (Thomas)
+ - install hddtemp.db to target
+ - added build/install _CMDS due to
+   https://github.com/vitlav/hddtemp/issues/5]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998@free.fr:
+  - use GETTEXTIZE=YES, drop host-gettext from _DEPENDENCIES
+  - drop custom build and install commands now that we gettextize
+  - explicitly specify the DB path, introduce HDDTEMP_DB_PATH
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-tomli/python-tomli.mk | 1 -
- 1 file changed, 1 deletion(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/hddtemp/Config.in    | 17 +++++++++++++++++
+ package/hddtemp/hddtemp.hash |  3 +++
+ package/hddtemp/hddtemp.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
 
-diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
-index b803d67466..5d259f71a3 100644
---- a/package/python-tomli/python-tomli.mk
-+++ b/package/python-tomli/python-tomli.mk
-@@ -10,7 +10,6 @@ PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/c0/3f/d7af728f075fb0
- PYTHON_TOMLI_LICENSE = MIT
- PYTHON_TOMLI_LICENSE_FILES = LICENSE
- PYTHON_TOMLI_SETUP_TYPE = flit
--HOST_PYTHON_TOMLI_SETUP_TYPE = flit-bootstrap
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
--- 
-2.34.1
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 04047d43da..29dffaadf1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -345,6 +345,7 @@ F:	package/glmark2/
+ F:	package/gpsd/
+ F:	package/gptfdisk/
+ F:	package/hdparm/
++F:	package/hddtemp/
+ F:	package/inih/
+ F:	package/intel-gmmlib/
+ F:	package/intel-mediadriver/
+diff --git a/package/Config.in b/package/Config.in
+index 6804e1d418..10a0493b8d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ endmenu
+ 	source "package/gpsd/Config.in"
+ 	source "package/gptfdisk/Config.in"
+ 	source "package/gvfs/Config.in"
++	source "package/hddtemp/Config.in"
+ 	source "package/hdparm/Config.in"
+ 	source "package/hwdata/Config.in"
+ 	source "package/hwloc/Config.in"
+diff --git a/package/hddtemp/Config.in b/package/hddtemp/Config.in
+new file mode 100644
+index 0000000000..0e02252461
+--- /dev/null
++++ b/package/hddtemp/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_HDDTEMP
++	bool "hddtemp"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	help
++	  hddtemp is a small utility that gives you the temperature of
++	  your hard drive by reading S.M.A.R.T. informations, for drives
++	  that support this feature.
++
++	  https://github.com/vitlav/hddtemp
++	  http://www.guzu.net/linux/hddtemp.php
++
++comment "hddtemp needs dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+diff --git a/package/hddtemp/hddtemp.hash b/package/hddtemp/hddtemp.hash
+new file mode 100644
+index 0000000000..cd82d7f89b
+--- /dev/null
++++ b/package/hddtemp/hddtemp.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  592322c64f0d5f035132249e3d051b752f5d24867514522a17285d5e72d21075  hddtemp-0.4.3.tar.gz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  GPL-2
+diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
+new file mode 100644
+index 0000000000..7023e11e59
+--- /dev/null
++++ b/package/hddtemp/hddtemp.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# hddtemp
++#
++################################################################################
++
++HDDTEMP_VERSION = 0.4.3
++HDDTEMP_SITE = $(call github,vitlav,hddtemp,v$(HDDTEMP_VERSION))
++HDDTEMP_LICENSE = GPLv2
++HDDTEMP_LICENSE_FILES = GPL-2
++
++# Fetched from Github with no configure script
++HDDTEMP_AUTORECONF = YES
++HDDTEMP_GETTEXTIZE = YES
++
++HDDTEMP_DB_PATH = /usr/share/misc/hddtemp.db
++HDDTEMP_CONF_OPTS = --with-db-path=$(HDDTEMP_DB_PATH)
++HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS)"
++
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++HDDTEMP_DEPENDENCIES += libexecinfo
++HDDTEMP_LIBS += -lexecinfo
++endif
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++HDDTEMP_DEPENDENCIES += libiconv
++HDDTEMP_LIBS += -liconv
++endif
++
++define HDDTEMP_INSTALL_HDDTEMP_DB
++	$(INSTALL) -D $(@D)/data/hddtemp.db $(TARGET_DIR)$(HDDTEMP_DB_PATH)
++endef
++HDDTEMP_POST_INSTALL_TARGET_HOOKS += HDDTEMP_INSTALL_HDDTEMP_DB
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
