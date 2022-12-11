@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF41C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D78C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:42:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1582C4F23C;
-	Mon, 20 Feb 2023 22:42:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1582C4F23C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 896134DD08;
+	Mon, 20 Feb 2023 22:42:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 896134DD08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NIKaY9Oycvk6; Mon, 20 Feb 2023 22:42:39 +0000 (UTC)
+	with ESMTP id emCqAm9Jqkd3; Mon, 20 Feb 2023 22:42:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6DFE4F242;
-	Mon, 20 Feb 2023 22:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6DFE4F242
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AFDC51BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80A9A4F263;
+	Mon, 20 Feb 2023 22:42:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80A9A4F263
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C63F91BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93A6B416F7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93A6B416F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id B85DC61247
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85DC61247
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YD1iOqa5S_Z2 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yhyqrelXxOnR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9D9C416E4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9D9C416E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B8A7611DF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B8A7611DF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9E7D86494; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+ id 07413828C8; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Dec 2022 22:15:34 +0100
+Date: Sun, 11 Dec 2022 16:38:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3ce4fa930419e2968f844db4c7bc7a09ef473ba
-X-Git-Newrev: 83b2e53dcde56d478928d917604bf3af1f903d9f
+X-Git-Oldrev: 071fdbf963228590b453e5111eadc8a74b579aa2
+X-Git-Newrev: d23d6fde81b3a8bf701d0382d55fe60e2334c934
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205215.B9E7D86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/open62541: bump to
- version 1.3.4
+Message-Id: <20230220205207.07413828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-meson.mk: add
+ 'setup' as meson command in config step
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83b2e53dcde56d478928d917604bf3af1f903d9f
+commit: https://git.buildroot.net/buildroot/commit/?id=d23d6fde81b3a8bf701d0382d55fe60e2334c934
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+When building/configure meson packages the following warning is
+displayed:
+    WARNING: Running the setup command as meson [options] instead
+    of meson setup [options] is ambiguous and deprecated.
+
+This warning was introduced in meson release 0.64.0 [0], which we are
+using since commit 9afa3e3c7d07 (package/meson: bump to version 0.64.0),
+and is dpcumented in the manual [1].
+
+Follow the advise and the manual, and add the 'setup' argument as the
+meson command.
+
+[0] https://github.com/mesonbuild/meson/commit/3c7ab542c0c4770241eae149b0d4cd8de329aee0
+[1] https://mesonbuild.com/Commands.html#setup
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/open62541/open62541.hash | 2 +-
- package/open62541/open62541.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-meson.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index 22c13851bf..09002436e9 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  283545991c3eb36b18c75a64638c7c2ad8f193654c2403b76aee848abf454e14  open62541-v1.3.3-br1.tar.gz
-+sha256  9a7955ba01e12dbd327e534c25288f4918d275031394c804943a7e45ba903621  open62541-v1.3.4-br1.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index edc95dcf15..2c0e3b17fe 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN62541_VERSION = v1.3.3
-+OPEN62541_VERSION = v1.3.4
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = https://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index d675f7f733..4aa6e44afa 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -149,7 +149,7 @@ define $(2)_CONFIGURE_CMDS
+ 	CC_FOR_BUILD="$$(HOSTCC)" \
+ 	CXX_FOR_BUILD="$$(HOSTCXX)" \
+ 	$$($$(PKG)_CONF_ENV) \
+-	$$(MESON) \
++	$$(MESON) setup \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+@@ -169,7 +169,7 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
+ 	$$(HOST_CONFIGURE_OPTS) \
+-	$$($$(PKG)_CONF_ENV) $$(MESON) \
++	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
+ 		--prefix=$$(HOST_DIR) \
+ 		--libdir=lib \
+ 		--sysconfdir=$$(HOST_DIR)/etc \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
