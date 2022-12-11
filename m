@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 600ADC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35750C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10EA44F21E;
-	Mon, 20 Feb 2023 22:41:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10EA44F21E
+	by smtp4.osuosl.org (Postfix) with ESMTP id C07084F227;
+	Mon, 20 Feb 2023 22:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C07084F227
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xk1emcgy-OiC; Mon, 20 Feb 2023 22:41:16 +0000 (UTC)
+	with ESMTP id oGgsKDTKRmUG; Mon, 20 Feb 2023 22:41:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5BB94F224;
-	Mon, 20 Feb 2023 22:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5BB94F224
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EBF51BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F98E4F229;
+	Mon, 20 Feb 2023 22:41:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F98E4F229
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A249C1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 129CB41701
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 129CB41701
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7109D61242
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7109D61242
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6fmSpB6x6VWA for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ahmc9jdbAR3Q for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A3F0416F8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A3F0416F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id A452C611EE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A452C611EE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5588786494; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A2A7E828C8; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 Dec 2022 09:35:26 +0100
+Date: Sun, 11 Dec 2022 14:42:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5a782cfd23109d9e78726bd820cb89c8146f98b5
-X-Git-Newrev: 2b0ac1d62bb2b998cba17699216e9fed7caeb976
+X-Git-Oldrev: de7850f9464a686fc7f37a8c1f8880f47ebffb00
+X-Git-Newrev: 65e0351adc5075ac679557d7e41a02815f979e90
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205215.5588786494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ncurses: fix legal info
+Message-Id: <20230220205206.A2A7E828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swupdate: indent with
+ tabs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,37 +56,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b0ac1d62bb2b998cba17699216e9fed7caeb976
+commit: https://git.buildroot.net/buildroot/commit/?id=65e0351adc5075ac679557d7e41a02815f979e90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit a38a30eb3a46570705642dc37235ddcc1471b434 forgot to update hash of
-COPYING (update in year)
+Commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
+add staging install") has introduced some commands indented with
+spaces, which check-package doesn't like.
 
-Fixes:
- - http://autobuild.buildroot.org/results/18ed032d1b7e0492ed90f09873cd260997c1deae
+Fix that by using tabs instead, and while we're at it, wrap the line
+that is a bit too long.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ncurses/ncurses.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/swupdate/swupdate.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index 1029c1ddcb..c72a2abf46 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -62,4 +62,4 @@ sha256  32dc21b671ead8b199d66111ebd3404e8cd5f8c4ca5587cfeb5c6a4913b2d103  ncurse
- sha256  8fe3bcacaea784ac7971e102a8eb8ca58c4c2c4c13c1ec33f32334600b9e4f56  ncurses-6.3-20221203.patch.gz
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 54ae03f238..1cd60d1b8f 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -230,8 +230,9 @@ define SWUPDATE_BUILD_CMDS
+ endef
  
- # Locally computed
--sha256  4d1fde61868c73776a539366dccf5d5a4857e7fd7299efb1f02e07c2afe9ea87  COPYING
-+sha256  63de87399e9fc8860236082b6b0520e068e9eb1fad0ebd30202aa30bb6f690ac  COPYING
+ define SWUPDATE_INSTALL_STAGING_CMDS
+-        $(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
+-                $(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) INCLUDEDIR=/usr/include/swupdate install
++	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
++		INCLUDEDIR=/usr/include/swupdate install
+ endef
+ 
+ define SWUPDATE_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
