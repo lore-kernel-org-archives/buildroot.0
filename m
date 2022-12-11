@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DDDAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6FD5C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD1344F267;
-	Mon, 20 Feb 2023 22:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD1344F267
+	by smtp4.osuosl.org (Postfix) with ESMTP id 701904F27F;
+	Mon, 20 Feb 2023 22:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 701904F27F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q-0Yga4ee9TP; Mon, 20 Feb 2023 22:44:00 +0000 (UTC)
+	with ESMTP id gYYfDMByvO2V; Mon, 20 Feb 2023 22:44:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 841C94F27F;
-	Mon, 20 Feb 2023 22:43:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 841C94F27F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DF0F21BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EFD14F28C;
+	Mon, 20 Feb 2023 22:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EFD14F28C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FD2E1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A746C41706
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A746C41706
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29B8761259
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29B8761259
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V8xlOv-MOOgw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v7Cn6dlybzla for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E50C3416FE
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E50C3416FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B15561161
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B15561161
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF98F86494; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+ id 2C2AF828C8; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 20:58:58 +0100
+Date: Sun, 11 Dec 2022 17:17:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 99127efe6ec2c8c056e252845326cc374859fa74
-X-Git-Newrev: 4b473917001fa1145bec2ab118fac97dab0fc26e
+X-Git-Oldrev: 7255c2b31755241d8c4fafc5f733faa68182282d
+X-Git-Newrev: 8e242cde92c10e6605de54a489f1aaee3dac3b5e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205215.DF98F86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/haveged: bump to
- version 1.9.18
+Message-Id: <20230220205207.2C2AF828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xdriver_xf86-video-ast: bump version to 1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b473917001fa1145bec2ab118fac97dab0fc26e
+commit: https://git.buildroot.net/buildroot/commit/?id=8e242cde92c10e6605de54a489f1aaee3dac3b5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/jirka-h/haveged/blob/v1.9.18/ChangeLog
+https://lists.x.org/archives/xorg-announce/2022-December/003291.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash | 5 +++--
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index 8c62ead7c3..61bf6cc9a1 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
+index 2988db98af..12ad79e4b4 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
+@@ -1,4 +1,5 @@
+-# Locally computed
+-sha256  1edbbc55d47d3fd71dec99b15c2483e22738c642623a0fb86ef4a81a9067a2de  xf86-video-ast-1.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003291.html
++sha256  75754fa9c7f9a94fcc706d32cc118942d16c71934d88110442443a143b930daf  xf86-video-ast-1.1.6.tar.xz
++sha512  8482fec8d6be577f293cb820e623544475163f713fd74ec415f899bf5e9cf9453ffe4f96e141da3671437ebf616b47395d30d4b10858053c5893f5f5b7575ef1  xf86-video-ast-1.1.6.tar.xz
  # Locally calculated
--sha256  f882919ccead07ad6687a4784c0c501e617321e96dd0118403464969359cf6ad  haveged-1.9.15.tar.gz
-+sha256  b835fa02b52ee7d06276e028571cadcb14d08f5e5a4b5767adf81451f70561c7  haveged-1.9.18.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 7035142aee..fbf72a96ad 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,7 +4,7 @@
+ sha256  1cdd3d57e2fdcbd21b8a7b788ffbe6f809216a9bdd36b2225cff6c4b4404a170  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+index b39bbf9a15..f29dc29f0b 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.9.15
-+HAVEGED_VERSION = 1.9.18
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.5
+-XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_AST_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.6
++XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_AST_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_AST_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_AST_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_AST_DEPENDENCIES = xorgproto xserver_xorg-server
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
