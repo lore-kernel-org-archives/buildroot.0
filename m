@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CA30C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2EC2C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B97206060A;
-	Sun, 11 Dec 2022 08:59:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B97206060A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E99060A91;
+	Sun, 11 Dec 2022 08:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E99060A91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aiAibUhk_Yaz; Sun, 11 Dec 2022 08:59:37 +0000 (UTC)
+	with ESMTP id TfUuFJlm2ddG; Sun, 11 Dec 2022 08:59:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2BA605DB;
-	Sun, 11 Dec 2022 08:59:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E2BA605DB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE001BF865
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E9AD60B49;
+	Sun, 11 Dec 2022 08:59:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E9AD60B49
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C2651BF3EA
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70F294092F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56614404F6
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70F294092F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56614404F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGblvyY15pIm for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QEAXayCLv4zf for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11F634093A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5662B404D5
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11F634093A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5662B404D5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 024B785FAB; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id 5468C85FA6; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:41 +0100
+Date: Sun, 11 Dec 2022 09:28:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f0ceb49be6a5e3439fa6da226d4e414b5a208ad
-X-Git-Newrev: 9eb2d23a260af9594ce80caace01bfa2deac3ff7
+X-Git-Oldrev: 9268e835d33b188978145b912f9a9d1359da63a5
+X-Git-Newrev: 8144885b83c67b2aba3c06a33126454c8293f96a
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.024B785FAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dicttoxml: bump to version
- 1.7.15
+Message-Id: <20221211085515.5468C85FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gobject: bump to version
+ 3.42.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb2d23a260af9594ce80caace01bfa2deac3ff7
+commit: https://git.buildroot.net/buildroot/commit/?id=8144885b83c67b2aba3c06a33126454c8293f96a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-dicttoxml/python-dicttoxml.hash | 8 ++++----
- package/python-dicttoxml/python-dicttoxml.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-dicttoxml/python-dicttoxml.hash b/package/python-dicttoxml/python-dicttoxml.hash
-index d8c43d0144..dcde7cf1b6 100644
---- a/package/python-dicttoxml/python-dicttoxml.hash
-+++ b/package/python-dicttoxml/python-dicttoxml.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/dicttoxml/json
--md5  ec5643a048cf32dad3c28db236b923e4  dicttoxml-1.7.4.tar.gz
--# Locally computed
--sha256  ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45  dicttoxml-1.7.4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/dicttoxml/json
-+md5  234550e3aa875c6f3520aa9a2dff1ef1  dicttoxml-1.7.15.tar.gz
-+sha256  5540fe7dfde2d2ed9467e67fcc981cbd2e164dc3120c862bdb7333202ac48838  dicttoxml-1.7.15.tar.gz
-+# Locally computed sha256 checksums
- sha256  4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
-diff --git a/package/python-dicttoxml/python-dicttoxml.mk b/package/python-dicttoxml/python-dicttoxml.mk
-index 537afff601..3e5f90e9de 100644
---- a/package/python-dicttoxml/python-dicttoxml.mk
-+++ b/package/python-dicttoxml/python-dicttoxml.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index 0c14efb1d4..4398356006 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
+@@ -1,3 +1,3 @@
+-# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.1.sha256sum
+-sha256  1f34b5f7624de35e44eb5a7eb428353285bd03004d55131a5f7f7fa9b90f3cc9  pygobject-3.42.1.tar.xz
++# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.2.sha256sum
++sha256  ade8695e2a7073849dd0316d31d8728e15e1e0bc71d9ff6d1c09e86be52bc957  pygobject-3.42.2.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index 2fa7504d51..014090540f 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_DICTTOXML_VERSION = 1.7.4
-+PYTHON_DICTTOXML_VERSION = 1.7.15
- PYTHON_DICTTOXML_SOURCE = dicttoxml-$(PYTHON_DICTTOXML_VERSION).tar.gz
--PYTHON_DICTTOXML_SITE = https://pypi.python.org/packages/74/36/534db111db9e7610a41641a1f6669a964aacaf51858f466de264cc8dcdd9
-+PYTHON_DICTTOXML_SITE = https://files.pythonhosted.org/packages/45/b5/efa170fd88e8b8bc025c59592eade0fb7de6ae02ed3dd63957956adc1396
- PYTHON_DICTTOXML_SETUP_TYPE = distutils
- PYTHON_DICTTOXML_LICENSE = GPL-2.0
- PYTHON_DICTTOXML_LICENSE_FILES = LICENCE.txt
+ PYTHON_GOBJECT_VERSION_MAJOR = 3.42
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).2
+ PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
+ PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
