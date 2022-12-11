@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA7DC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C348C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3273F6060A;
-	Sun, 11 Dec 2022 09:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3273F6060A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BeifmZThcsEZ; Sun, 11 Dec 2022 09:02:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71297605EC;
-	Sun, 11 Dec 2022 09:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71297605EC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED0DB1BF868
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0996404E9
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0996404E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id D67AC404D1;
+	Sun, 11 Dec 2022 09:02:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D67AC404D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mi4XyVvZFuQJ for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3k7ls9UZv4Rg; Sun, 11 Dec 2022 09:02:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D9D8403C2;
+	Sun, 11 Dec 2022 09:02:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D9D8403C2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 65C9D1BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6515B40946
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6515B40946
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QYbn_YeuuVyh for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B97B5404ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8A634095F
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B97B5404ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A634095F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B706585FA6; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id 98E2485FAA; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:20 +0100
+Date: Sun, 11 Dec 2022 09:29:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec022187abdad4cbf286531b236c460d14b97739
-X-Git-Newrev: fdda5c1a6dea195260fc57cc2940dfed88071468
+X-Git-Oldrev: fb56da9f18647d3414aa42b4d67133a30a52579f
+X-Git-Newrev: 6f4c7af8a698646d496df64672bbda01d351180b
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.B706585FA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-m2r: bump to version 0.3.1
+Message-Id: <20221211085515.98E2485FAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-keyring: bump to version
+ 23.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdda5c1a6dea195260fc57cc2940dfed88071468
+commit: https://git.buildroot.net/buildroot/commit/?id=6f4c7af8a698646d496df64672bbda01d351180b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-m2r/python-m2r.hash | 4 ++--
- package/python-m2r/python-m2r.mk   | 4 ++--
+ package/python-keyring/python-keyring.hash | 4 ++--
+ package/python-keyring/python-keyring.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
-index 0770e0d1b1..4bdd7160d8 100644
---- a/package/python-m2r/python-m2r.hash
-+++ b/package/python-m2r/python-m2r.hash
+diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
+index 45f5bf7c84..791ee6563b 100644
+--- a/package/python-keyring/python-keyring.hash
++++ b/package/python-keyring/python-keyring.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/m2r/json
--md5  8bdb45c19e2b59bb5ffb9a0348e81ad8  m2r-0.2.1.tar.gz
--sha256  bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99  m2r-0.2.1.tar.gz
-+md5  255d080f56eb3d3a82d95194850c99c3  m2r-0.3.1.tar.gz
-+sha256  aafb67fc49cfb1d89e46a3443ac747e15f4bb42df20ed04f067ad9efbee256ab  m2r-0.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/keyring/json
+-md5  60219a9a22467e15fcd09515b5b2ef39  keyring-23.9.3.tar.gz
+-sha256  69b01dd83c42f590250fe7a1f503fc229b14de83857314b1933a3ddbf595c4a5  keyring-23.9.3.tar.gz
++md5  edf0645c28f16884e2b121b2c51e0770  keyring-23.11.0.tar.gz
++sha256  ad192263e2cdd5f12875dedc2da13534359a7e760e77f8d04b50968a821c2361  keyring-23.11.0.tar.gz
  # Locally computed sha256 checksums
- sha256  28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
-index 47fb154c68..8a4708f128 100644
---- a/package/python-m2r/python-m2r.mk
-+++ b/package/python-m2r/python-m2r.mk
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
+index 8d7833e14f..c1f124cb3e 100644
+--- a/package/python-keyring/python-keyring.mk
++++ b/package/python-keyring/python-keyring.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_M2R_VERSION = 0.2.1
-+PYTHON_M2R_VERSION = 0.3.1
- PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
--PYTHON_M2R_SITE = https://files.pythonhosted.org/packages/39/e7/9fae11a45f5e1a3a21d8a98d02948e597c4afd7848a0dbe1a1ebd235f13e
-+PYTHON_M2R_SITE = https://files.pythonhosted.org/packages/94/65/fd40fbdc608298e760affb95869c3baed237dfe5649d62da1eaa1deca8f3
- PYTHON_M2R_SETUP_TYPE = setuptools
- PYTHON_M2R_LICENSE = MIT
- PYTHON_M2R_LICENSE_FILES = LICENSE
+-PYTHON_KEYRING_VERSION = 23.9.3
++PYTHON_KEYRING_VERSION = 23.11.0
+ PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
+-PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/2a/ef/28d3d5428108111dae4304a2ebec80d113aea9e78c939e25255425d486ff
++PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/1c/35/c22960f14f5e17384296b2f09da259f8b5244fb3831eccec71cf948a49c6
+ PYTHON_KEYRING_SETUP_TYPE = setuptools
+ PYTHON_KEYRING_LICENSE = MIT
+ PYTHON_KEYRING_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
