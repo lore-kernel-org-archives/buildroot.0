@@ -1,93 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B07C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AAAFC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFD6F60BDB;
-	Sun, 11 Dec 2022 20:45:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFD6F60BDB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 219F14056B;
+	Sun, 11 Dec 2022 20:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 219F14056B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JTAlrMPkZQwS; Sun, 11 Dec 2022 20:45:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mxoFmmcFjV5S; Sun, 11 Dec 2022 20:45:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 114F860B49;
-	Sun, 11 Dec 2022 20:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 114F860B49
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE03F1BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:45:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55B5240569;
+	Sun, 11 Dec 2022 20:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55B5240569
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CB2A1BF860
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B98EC813C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECA114047B
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98EC813C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA114047B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f11GFdjGY-9V for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jg7vGrqKfoLv for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 20:45:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFABC813B0
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFABC813B0
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C12B540569
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C12B540569
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:45:16 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id b13so15395990lfo.3
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:45:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ABgCoBEjXuvBYonfZIIqYsxOKXDPuPwGIaXZT3tsw9k=;
- b=H44S1kIpX510wnhUiUyzma/w3MSfaIJL9ns3eu5AlJ8xLDQACBM5QjsMqxsu/b4Kga
- 76bCeqOF7jQIRFBcaF4iIsn5GQjSLBWdAZvL7u4trw0RZGV2GKb12LT+kQnVxyKeld15
- mXNqK30zX6Gm2nT6QWNGnhSKWU2GZHuNRRvGt4YwhYLg9YIE7yrw/VCaekcsaGmmeqr5
- skYGr3qfkXUlhFm8fHFfXZNF4+FyDuF/D5o50anrSMqxOF8M3YuE3XbqPBYHmFf7hYz8
- oew7nB/mBUdXJN1LR64xT46pCeNOItfE5880IZUSzIy6o4yNuTyxB8IIuNw/UOzcKGcg
- Ox1w==
-X-Gm-Message-State: ANoB5pkGnfSMzGwlWBKZIv0qoCv79rEX1lFokrs7hi6aZO2f745UaQ2B
- V7EDdG7U/KRsP5/IcKgtXZuZe2E6rQU=
-X-Google-Smtp-Source: AA0mqf69h6DIt5rveymR8zW8714BvIlKtKYR6bv+Z7PtrfvT0lHW1oEmQQd7oznlIWOlcLjI8r3qhg==
-X-Received: by 2002:ac2:43ca:0:b0:4b3:cc12:1a7a with SMTP id
- u10-20020ac243ca000000b004b3cc121a7amr2841605lfl.51.1670791514562; 
- Sun, 11 Dec 2022 12:45:14 -0800 (PST)
-Received: from stuudio.localdomain (94.246.253.165.cable.starman.ee.
- [94.246.253.165]) by smtp.gmail.com with ESMTPSA id
- q20-20020a05651232b400b0048aa9d67483sm1327756lfe.160.2022.12.11.12.45.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Dec 2022 12:45:14 -0800 (PST)
-Received: by stuudio.localdomain (Postfix, from userid 1000)
- id BB0332A24A7; Sun, 11 Dec 2022 22:17:13 +0200 (EET)
-From: Indrek Kruusa <indrek.kruusa@gmail.com>
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout05.t-online.de (Postfix) with SMTP id 0BB411FB69;
+ Sun, 11 Dec 2022 21:44:57 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd84.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p4TBv-4VxA5B0; Sun, 11 Dec 2022 21:44:55 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59972)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p4TBv-0007ho-0e;
+ Sun, 11 Dec 2022 21:44:55 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 22:17:04 +0200
-Message-Id: <20221211201704.25858-5-indrek.kruusa@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221211201704.25858-1-indrek.kruusa@gmail.com>
-References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
+Date: Sun, 11 Dec 2022 21:44:55 +0100
+Message-Id: <20221211204455.278996-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ABgCoBEjXuvBYonfZIIqYsxOKXDPuPwGIaXZT3tsw9k=;
- b=mjpOxCY6BTHYnIemqKuT7+dOZjlq35P53n1AL+zO6uZ9jyvAH8HjAUskRne4jIRvrB
- Z1Ypk0QAcQ8JUCb8BSKsK6/G3OizYcVdj+BcMaSHZr4lqds20EWg4v0tJarmfFHUXXGz
- EvUD9D2I/qVmgz4+DYwzcak8XyGfe7DiyYA/z2NWJLzmTyhOSEN5rXPSLWuerQeIu+2u
- 7TmDk6dyVBygAGb9iuWtvKkrO3iN07KxIfvHh7AyyS3OeUpHSRLVwdT4R3BuYlYoJCy7
- jq8joH/mww06QmUl2AyRK3RmZxaMIIg6qZKC/dLBi+TxlPK4ClH5/4XC4gp12LjozC19
- 7a/Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mjpOxCY6
-Subject: [Buildroot] [PATCH 5/5] board/nezha/readme.txt: update readme.txt
- about framebuffer console on HDMI
+X-TOI-EXPURGATEID: 150726::1670791495-3F7EFB8C-69BD88B9/0/0 CLEAN NORMAL
+X-TOI-MSGID: e4fde1e5-ff3a-4936-b302-46d98975ae39
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediadriver: fix build
+ without X11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,30 +66,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Indrek Kruusa <indrek.kruusa@gmail.com>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Indrek Kruusa <indrek.kruusa@gmail.com>
----
- board/nezha/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+http://autobuild.buildroot.net/results/52c/52c8f5352b16ced4e85286950f95e1b57c564fa5/
 
-diff --git a/board/nezha/readme.txt b/board/nezha/readme.txt
-index fd4c6707de..8d207ced74 100644
---- a/board/nezha/readme.txt
-+++ b/board/nezha/readme.txt
-@@ -20,5 +20,5 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
- 
-   $ sudo dd if=output/images/sdcard.img of=/dev/sdX
- 
--Connect a TTL UART to the debug connector, insert the microSD card and
-+Connect display cable to the HDMI connection port, insert the microSD card and
- plug in a USB-C cable to the PWR connector to boot the system.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0001-dont-include-va-dricommon-h.patch    | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
+
+diff --git a/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch b/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
+new file mode 100644
+index 0000000000..9d512f9c0b
+--- /dev/null
++++ b/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
+@@ -0,0 +1,36 @@
++From e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Fri, 18 Nov 2022 22:44:52 +1100
++Subject: [PATCH] [Media Common] [VP] dont include va_dricommon.h
++
++<va/va_dricommon.h> is not in non-X11 libva 2.16.0
++The header "media_libva_putsurface_linux.h" is included
++
++Downloaded from upstream commit
++https://github.com/intel/media-driver/commit/e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1
++
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
++index 8695d6c86..6719c07b3 100644
++--- a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
+++++ b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
++@@ -23,7 +23,6 @@
++ //! \file     ddi_vp_functions.cpp
++ //! \brief    ddi vp functions implementaion.
++ //!
++-#include <va/va_dricommon.h>
++ #include "ddi_vp_functions.h"
++ #include "media_libva_util_next.h"
++ #include "media_libva_common_next.h"
++@@ -4700,4 +4699,4 @@ VAStatus DdiVpFunctions::PutSurfaceLinuxHW(
++ 
++     return VA_STATUS_SUCCESS;
++ }
++-#endif // !defined(ANDROID) && defined(X11_FOUND)
++\ No newline at end of file
+++#endif // !defined(ANDROID) && defined(X11_FOUND)
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
