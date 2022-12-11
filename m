@@ -1,106 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C6FC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 18:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C507C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D89ED60BBC;
-	Sun, 11 Dec 2022 18:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D89ED60BBC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D3208131E;
+	Sun, 11 Dec 2022 20:06:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D3208131E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ufGOu7EwQb6e; Sun, 11 Dec 2022 18:53:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6GWMddZ-wy5Q; Sun, 11 Dec 2022 20:06:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2360860BD4;
-	Sun, 11 Dec 2022 18:53:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2360860BD4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63C1881305;
+	Sun, 11 Dec 2022 20:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63C1881305
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 001FE1BF5F5
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 18:53:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B17691BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1EC44030C
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 18:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1EC44030C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7529040448
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7529040448
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 04YF8V-cJajG for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 18:53:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF5D340305
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com
- [64.147.123.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF5D340305
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 18:53:24 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
- by mailout.west.internal (Postfix) with ESMTP id B5C8E3200312
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:53:19 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
- by compute6.internal (MEProxy); Sun, 11 Dec 2022 13:53:19 -0500
-X-ME-Sender: <xms:HieWYw2ihb0DF5tC2QXUWdaQcM5K5Lvg0nGyRJG_W_18noHVfp9-RA>
- <xme:HieWY7HJb7MkHz1F58cHC_G3f2_BQ0C5pBSqZyH5r1mdIC5ko9qgppXdAI2Ok2II8
- NpU5UOz-Sk09vx3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeigdduudekucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
- ertderredtnecuhfhrohhmpedfffgrnhhilhhouceurghrghgvnhdfuceomhgrihhlsegu
- sghrghhnrdgthheqnecuggftrfgrthhtvghrnhepjeeiudeiffeuhfevjeetuddvueejue
- ehffehieefvdeuveffhfejffefhfdtjedtnecuffhomhgrihhnpehhthhtphhsrdgrnhdp
- ghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
- hilhhfrhhomhepmhgrihhlsegusghrghhnrdgthh
-X-ME-Proxy: <xmx:HieWY44-WjojB2bvxwPtrI9bOCmyMyD0ukWD32aGASz_6m2GD159FA>
- <xmx:HieWY52iawDOuLkPhM8lzGOkLhN2lBEbvDuNSKqE7mW8Z14WWKKXyg>
- <xmx:HieWYzEP7SxSPk9wgf4pjV_zUuV7GtqoEOLFtI8a4vL6My89Tlxxuw>
- <xmx:HyeWYzG6pvHGnsXpGq_V8ximQi3TajFHtEK76uEX3Bga1thOnwrvwg>
-Feedback-ID: i1d444086:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
- id 8554331A0063; Sun, 11 Dec 2022 13:53:18 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <86c5154e-e6a1-4f01-86d4-d43b60c603ac@app.fastmail.com>
-In-Reply-To: <20221211171735.GV1044805@scaer>
-References: <20221208110247.7002c3ca@c3po> <20221208141647.0ca26b3c@windsurf>
- <b8157c6b-cf89-4d3d-bafc-fba182f8cf5a@app.fastmail.com>
- <20221211171735.GV1044805@scaer>
-Date: Sun, 11 Dec 2022 19:52:58 +0100
-From: "Danilo Bargen" <mail@dbrgn.ch>
-To: Buildroot <buildroot@buildroot.org>
+ with ESMTP id G3MLM1lGWbBa for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:06:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0782640356
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0782640356
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:06:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4996B240006;
+ Sun, 11 Dec 2022 20:06:01 +0000 (UTC)
+Date: Sun, 11 Dec 2022 21:06:00 +0100
+To: Anand Gadiyar via buildroot <buildroot@buildroot.org>
+Message-ID: <20221211210600.38a372a8@windsurf>
+In-Reply-To: <20221206171719.747581-2-gadiyar@ti.com>
+References: <20221206171719.747581-1-gadiyar@ti.com>
+ <20221206171719.747581-2-gadiyar@ti.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dbrgn.ch; h=cc
- :content-type:date:date:from:from:in-reply-to:in-reply-to
- :message-id:mime-version:references:reply-to:sender:subject
- :subject:to:to; s=fm3; t=1670784799; x=1670871199; bh=A3t+VvvtwM
- 2mcnPc7qQ7CCnzl/FH0LMkk918bnu+jcc=; b=zKKicJs0AvPqX1VJ7qL6slo1Xa
- BfFLhW1zeXyS309LGQaB5/hnf4ZAPGhkQu3L1fpj+Cl34YbDNX3NjuJRZaCXgf/k
- NiPm197zDt5MAco4iZ7+NznVfCWDD5UtwbJLCVxOu+UeZelxPVsRIyS4DQy168CM
- 9UqFiUSqD+zxd3VONLhucIWrSolcXlsKPDMJsvUMfSUUCKSK/MVBEqh9/3fobooI
- dHho42fyzN6UL36bE4iQjQI9BsS2rLBfRlJddGLeQYn1P3QRZsJxmu7RyjiabMyP
- FarChimFsWWFUPR53SvV+CuyEpnYAnAQZLMK5HMewOx4+72GE+p6VJ3hqidQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:content-type:date:date:feedback-id
- :feedback-id:from:from:in-reply-to:in-reply-to:message-id
- :mime-version:references:reply-to:sender:subject:subject:to:to
- :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
- fm2; t=1670784799; x=1670871199; bh=A3t+VvvtwM2mcnPc7qQ7CCnzl/FH
- 0LMkk918bnu+jcc=; b=jwLC5Lf51RRSEhdhKY+LerFM3tQjHhm1kgzXaMn70Ydo
- Iybz6Kyl56iYGrQjNP1jBmkmHkzYcJBoqf+ziwlqiz9fSjPOwLRmu5VBnAcLLCim
- j5B6rE9pHuDvUwq1QljWE3wbf2OM3WD/zy9CFMhw620vdQxhhhVarP5IVSpUj9W0
- XRRz1xfIdL3H/BXQeqU4jPzmm8lsAgp9H/MsPo3YndZMAOV5ScWNcAoexktmxwUd
- aY8PLCrWI8Vt4hA4KiLPVD+2HLPJhvaj6kj1gS9LMW17TjHhwtvX3uTJgroPoRXX
- SYu1q7S6WNUrbBuOGRmTkn7hTdrtdRj6OZ2kzxre2A==
+ d=bootlin.com; s=gm1; t=1670789162;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=b5LhkuDuGeyyIHf3YHR+M/0fZOmHzQu7/go0tsfX1/Q=;
+ b=ECoG/zZnBSA9tdenKulkmWGsT/X8fx5+JewyYCgO2ol8BLvUlMAiLTMrRYQXBb5XygDJga
+ wDBSSNpoLw2yjlIFT9bEBlGoxPNbZI5srJ00T9puIuDrSdxZhBoG561GQi44K1Gu+3yyCp
+ 3zI1gQ+WRL0wkC7mg0t5km40r0T2SwH3/0zK/VzJhW313tnXin0+l6UKoYlhrL8oT2WPnb
+ exNafVP5CZeJqQq4RYyqnJJoOLbIGu26emj9b2i1LtBzk8B+neUKgVNwv6nbiCyqxeXbEL
+ cweJwc1dO4hJEVB0k/1a2W/YDYx+ltdzdfPevvGfcJ59snAlhW7Ceb9o7MC3QA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=dbrgn.ch header.i=@dbrgn.ch
- header.a=rsa-sha256 header.s=fm3 header.b=zKKicJs0; 
  dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm2 header.b=jwLC5Lf5
-Subject: Re: [Buildroot] [PATCH 1/1] package/tealdeer: exclude unsupported
- targets
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ECoG/zZn
+Subject: Re: [Buildroot] [PATCH v7 1/3] boot/ti-k3-r5-loader: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,26 +75,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>,
+ Xuanhao Shi <X15000177@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann
+On Tue, 6 Dec 2022 11:17:17 -0600
+Anand Gadiyar via buildroot <buildroot@buildroot.org> wrote:
 
-Thanks for adapting and merging the patch!
+> diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+> new file mode 100644
+> index 0000000000..bb6140f8a6
+> --- /dev/null
+> +++ b/boot/ti-k3-r5-loader/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_TARGET_TI_K3_R5_LOADER
+> +	bool "ti-k3-r5-loader"
 
-> I think what Thomas meant, was that it is a pity that we need a TLS
-> implementation just to read the equivalent of man-pages, which by virtue
-> of being local oalways work, and that that TLS implementation has
-> limitations on architectures, which man-pages do not...
+Added:
 
-Yes, I understand that :) The only reason is that the current tldr pages are fetched from the domain "tldr.sh" via HTTPS. An alternative to this would be to add a build flag to Tealdeer to not require/support network connectivity at all, and to bundle all current tldr pages with the buildroot package. This way, no network connectivity and no TLS would be needed. This feature was requested by a user a few years ago, and I already implemented it, but never got feedback on the implementation and nobody ever requested that feature again. So in the interest of keeping the codebase simple, I never merged the branch.
+	depends on BR2_aarch64
 
-Anyways, I brought back a build flag to allow linking against OpenSSL instead: https://github.com/dbrgn/tealdeer/pull/303 Initially I had quite some trouble getting it to find OpenSSL, until I discovered that I need to add a dependency on host-pkgconf. Once the next release is out, I can submit a patch to build against OpenSSL instead of Rustls.
+> +	help
+> +	  Separate U-Boot build for R5 cores on TI's k3 boards.
+> +	  Usually used to build tiboot3.bin with k3-image-gen.
+> +
+> +if BR2_TARGET_TI_K3_R5_LOADER
+> +choice
+> +	prompt "K3 R5 Loader configuration"
 
-Cheers,
-Danilo
+Simplified to just "Configuration".
+
+
+> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+> new file mode 100644
+> index 0000000000..fb6ce7c2a6
+> --- /dev/null
+> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256  6d69d5e4635cb3fa7852bf15f88ca342ef7740196e71961d3572deb58ba44bea  u-boot-2022.10-rc1.tar.bz2
+
+You didn't test the build, as this hash file doesn't match the .mk
+file: the .mk file refers to 2022.10, the hash file to 2022.10-rc1.
+
+Another thing: the hash of the license file was missing.
+
+I fixed up those small issues, and applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
