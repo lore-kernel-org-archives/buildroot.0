@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D88C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 10:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE8A5C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 10:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED23460A91;
-	Sun, 11 Dec 2022 10:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED23460A91
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61BA840477;
+	Sun, 11 Dec 2022 10:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61BA840477
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b2_QnWBSWG2x; Sun, 11 Dec 2022 10:41:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O08HTjp59fyG; Sun, 11 Dec 2022 10:41:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DADD607F6;
-	Sun, 11 Dec 2022 10:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DADD607F6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 93B0D1BF2A5
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 10:41:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96245403A7;
+	Sun, 11 Dec 2022 10:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96245403A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C2EE11BF2A5
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 10:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FE8D605D8
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 10:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FE8D605D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8F84A40245
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 10:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F84A40245
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G62ex4KdU8AU for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 10:41:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB915605A1
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 10:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB915605A1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B94886030; Sun, 11 Dec 2022 10:41:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:39:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 271ad374ced4bfe325bf0d8ba21adb92793d2ae7
-X-Git-Newrev: 717cf468c4be8669785027f298f077f903214fc7
-X-Patchwork-Hint: ignore
-Message-Id: <20221211104101.9B94886030@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nerdctl: bump to version 1.0.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PrV6DbT2HJnI for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 10:41:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C94B400B0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C94B400B0
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 10:41:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B0DC040004;
+ Sun, 11 Dec 2022 10:41:27 +0000 (UTC)
+Date: Sun, 11 Dec 2022 11:41:27 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221211114127.327fd5b9@windsurf>
+In-Reply-To: <20221209172712.3928585-1-james.hilliard1@gmail.com>
+References: <20221209172712.3928585-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670755287;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Mm/ZfMbJ4ctaAc5nCV3o4DhEv0GxlkuxrGQD/niNdUc=;
+ b=TIKwrFMsB/wu7zqBg5YJZdRJhunQ7Kd4h10ejmkyRqZFGhuHNdCfg1kyMYobAxFDnbFnU3
+ QHkKmdW3tDXgQ6kTQ1lSnl8b0fZE802nr5xbC3EJljUygxSuXfXS4C27ze/nxWjwwTZrxH
+ /fgZb/pBpbYdhyug/ZCljQeZxQTLVF5GLEFScFD6YX+eJP9MAz/dT4rLvRDYWS6vVll5jb
+ f6Y8jN8dEW9iCo1vsTQ0U29tJtpQFdzUJUuetGeexWU5AvoZgBvelF8acCZujA75Ztxh9C
+ BvIqzhRKy61KSQRkjC4JTWLcUOnc98B3A4kgSxx+CwpfKsNFAJOpO/Avnz4l/w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TIKwrFMs
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=717cf468c4be8669785027f298f077f903214fc7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  9 Dec 2022 10:27:12 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Nerdctl has reached version 1.0.0.
+> Add support for new optional gsettings meson config option.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/pipewire/pipewire.hash | 2 +-
+>  package/pipewire/pipewire.mk   | 9 ++++++++-
+>  2 files changed, 9 insertions(+), 2 deletions(-)
 
-https://github.com/containerd/nerdctl/releases/tag/v1.0.0
+Applied to master, thanks.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nerdctl/nerdctl.hash | 2 +-
- package/nerdctl/nerdctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
-index 22cc97c362..e253fb74b2 100644
---- a/package/nerdctl/nerdctl.hash
-+++ b/package/nerdctl/nerdctl.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  be41804ef139a3f92b774edc8439678e56b44033d7ab3fcf4389f0865c1fe069  nerdctl-0.17.1.tar.gz
-+sha256  ae468c65480e9c6679e0dd23d466b723e7f19bff779d4e2e0fa4629be343af2a  nerdctl-1.0.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
-index 3f3c04aa11..fdf60cb189 100644
---- a/package/nerdctl/nerdctl.mk
-+++ b/package/nerdctl/nerdctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NERDCTL_VERSION = 0.17.1
-+NERDCTL_VERSION = 1.0.0
- NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
- 
- NERDCTL_LICENSE = Apache-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
