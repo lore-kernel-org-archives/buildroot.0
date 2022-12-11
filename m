@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C8BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C86C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:50:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3A9E4F365;
-	Mon, 20 Feb 2023 22:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3A9E4F365
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8434D4ED87;
+	Mon, 20 Feb 2023 22:50:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8434D4ED87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6cpbH6OV_mkZ; Mon, 20 Feb 2023 22:50:38 +0000 (UTC)
+	with ESMTP id 8RkTvOyXnwlb; Mon, 20 Feb 2023 22:50:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0C974F36B;
-	Mon, 20 Feb 2023 22:50:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0C974F36B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34EC84F374;
+	Mon, 20 Feb 2023 22:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34EC84F374
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A2C8A1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B279F1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 503786125F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A8E56126C
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 503786125F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A8E56126C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TADA2bGkhJ8P for <buildroot@lists.busybox.net>;
+ with ESMTP id EaPHqBZMW8N0 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 793296126C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FF1C61227
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 793296126C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FF1C61227
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7716C8648F; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+ id 6A651828C8; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 18:16:20 +0100
+Date: Sun, 11 Dec 2022 18:15:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e4a1183d8f7d8422dbc23432248b984745a428b7
-X-Git-Newrev: 681ef0b18c27815b85a2ad4b43c02dede8af06bf
+X-Git-Oldrev: 7402436bebe225ccc758960dfd822e8afcee9e65
+X-Git-Newrev: e4a1183d8f7d8422dbc23432248b984745a428b7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205208.7716C8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-orjson: bump to
- version 3.8.3
+Message-Id: <20230220205208.6A651828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=681ef0b18c27815b85a2ad4b43c02dede8af06bf
+commit: https://git.buildroot.net/buildroot/commit/?id=e4a1183d8f7d8422dbc23432248b984745a428b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Removed xmvc support due to upstream removal:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
+
+Removed comment concerning gallium-xlib due to upstream removal:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=22.3&id=5bed3d4ad659c30cb0ef4b40172f1aab877ccc98
+
+Rebased patch 0004 due to upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/src/util/macros.h?h=22.3&id=c0b891ecca2b92c9ef2945440c77f45345df3290
+
+Please note that patch 0004 can be removed when buildroot toolchains are
+updated to uClibc 1.0.42:
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=v1.0.42&id=03fbd941e943976bb92cb392882c2ff7ec218704
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                           |  6 ++++++
+ package/mesa3d-headers/mesa3d-headers.mk   |  2 +-
+ package/mesa3d/0004-Fix-uClibc-build.patch |  4 ++--
+ package/mesa3d/Config.in                   | 18 ------------------
+ package/mesa3d/mesa3d.hash                 |  6 +++---
+ package/mesa3d/mesa3d.mk                   | 10 +---------
+ 6 files changed, 13 insertions(+), 33 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index 8563ed544f..515590795b 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
+diff --git a/Config.in.legacy b/Config.in.legacy
+index cb0176a31c..9136ccd0e0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "mesa Gallium XvMC state tracker removed"
++	select BR2_LEGACY
++	help
++	  The Gallium XvMC state tracker was removed upstream.
++
+ config BR2_KERNEL_HEADERS_5_19
+ 	bool "kernel headers version 5.19.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3712c79db0..d33d492ba7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.2.2
++MESA3D_HEADERS_VERSION = 22.3.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0004-Fix-uClibc-build.patch
+index c8c82fe0dc..95ca95fd67 100644
+--- a/package/mesa3d/0004-Fix-uClibc-build.patch
++++ b/package/mesa3d/0004-Fix-uClibc-build.patch
+@@ -58,9 +58,9 @@ index 22b18303826..8f73ee72693 100644
+ --- a/src/util/macros.h
+ +++ b/src/util/macros.h
+ @@ -27,6 +27,7 @@
+- #include <stdio.h>
+- #include <assert.h>
++ #include <stddef.h>
+  #include <stdint.h>
++ #include <stdio.h>
+ +#include "util/compiler.h"
+  
+  /* Compute the size of an array */
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 40f7009492..cae2161aa3 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -299,24 +299,6 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r300, r600,
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
+ 
+-config BR2_PACKAGE_MESA3D_XVMC
+-	bool "Gallium XvMC state tracker"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+-	select BR2_PACKAGE_MESA3D_NEEDS_X11
+-	select BR2_PACKAGE_XLIB_LIBXV
+-	select BR2_PACKAGE_XLIB_LIBXVMC
+-	help
+-	  XvMC state tracker (needs r600 or nouveau gallium drivers).
+-
+-comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouveau"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_XORG7 || \
+-		!(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)
+-
+ comment "Vulkan drivers"
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f10f8fe112..77223676ea 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  dc06889b0ce52d5e96253573f6cbdf5939c5902022cbe2538cedc622e9378372  orjson-3.8.2.tar.gz
-+sha256  0c8d161dfd8b9e4133beabd81e3e1473c246efe55abec571845f72a2ba7b74e4  orjson-3.8.3.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index b18a5cdada..bda0a8ab48 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-October/000689.html
+-sha256  2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9  mesa-22.2.2.tar.xz
+-sha512  a1eb67e1ae4880c79b1fdc570f4389baba0b8ba796da7e695c9af19a7d92b6c06b95570e6c796548b61355989025fb7efbf9acac74cbd695f7e297dc913b933c  mesa-22.2.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-November/000695.html
++sha256  644bf936584548c2b88762111ad58b4aa3e4688874200e5a4eb74e53ce301746  mesa-22.3.0.tar.xz
++sha512  bf4d344459f97d266a5943b33aecf062b0825e13c1617afdab71c4ba6a87a201440761c9a32a6e0060910a0917122e3f4d29f666d6b94a38a71c94b9ff3ab9da  mesa-22.3.0.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index bac071ecb3..c3bd44c2fa 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_ORJSON_VERSION = 3.8.2
-+PYTHON_ORJSON_VERSION = 3.8.3
- PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/13/08/d476fff015ccc0f043d3df6332c807695ae3d6abc1758b24f3d335750550
-+PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/1c/b9/a0b4fb195ded02820e0a933ffe28b782b7e5ef7a4f8c1e1c742d619548e4
- PYTHON_ORJSON_SETUP_TYPE = pep517
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
- PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.2.2
++MESA3D_VERSION = 22.3.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -77,7 +77,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ # glx:
+ #  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
+ #  xlib         : xlib conflicts with any dri driver
+-#  gallium-xlib : Gallium-xlib based GLX requires at least one gallium driver || Gallium-xlib based GLX requires softpipe or llvmpipe || gallium-xlib conflicts with any dri driver.
+ # Always enable glx-direct; without it, many GLX applications don't work.
+ MESA3D_CONF_OPTS += \
+ 	-Dglx=dri \
+@@ -212,13 +211,6 @@ else
+ MESA3D_CONF_OPTS += -Dgles1=disabled -Dgles2=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+-MESA3D_DEPENDENCIES += xlib_libXv xlib_libXvMC
+-MESA3D_CONF_OPTS += -Dgallium-xvmc=enabled
+-else
+-MESA3D_CONF_OPTS += -Dgallium-xvmc=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_VALGRIND),y)
+ MESA3D_CONF_OPTS += -Dvalgrind=enabled
+ MESA3D_DEPENDENCIES += valgrind
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
