@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15BCAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECD2C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B49674EC83;
-	Mon, 20 Feb 2023 22:14:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B49674EC83
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFC734EC42;
+	Mon, 20 Feb 2023 22:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFC734EC42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bCu5MYvTH4CX; Mon, 20 Feb 2023 22:14:55 +0000 (UTC)
+	with ESMTP id DIXCvsYR-Y_G; Mon, 20 Feb 2023 22:15:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2FCB4EBAD;
-	Mon, 20 Feb 2023 22:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2FCB4EBAD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 741631BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A1C24EF92;
+	Mon, 20 Feb 2023 22:15:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1C24EF92
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DD7F1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6BC9061162
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BC9061162
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE7B5416C9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE7B5416C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MeW5uZVuSxJY for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mr44MxHojZdp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 865C661156
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 865C661156
+ by smtp2.osuosl.org (Postfix) with ESMTP id C49BA416C3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C49BA416C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84B73828C8; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id C218D86494; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:43 +0100
+Date: Sun, 11 Dec 2022 17:55:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9eb2d23a260af9594ce80caace01bfa2deac3ff7
-X-Git-Newrev: 045e99044223cfc707f5969791d7db2be8c5aa9b
+X-Git-Oldrev: 8f8592b686e4aa1085ace7c7f25c7c777a3fd2ec
+X-Git-Newrev: ca9b63a1e0bfa474a75522e62d671ed8b080f19f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.84B73828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-django: bump to
- version 4.1.4
+Message-Id: <20230220205207.C218D86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/zynqmp/zcu106/patches:
+ fix build by dropping U-Boot patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +56,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=045e99044223cfc707f5969791d7db2be8c5aa9b
+commit: https://git.buildroot.net/buildroot/commit/?id=ca9b63a1e0bfa474a75522e62d671ed8b080f19f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop no longer required pytz and setuptools runtime dependencies.
+Since commit
+3c997c457a4ee33d81e6b93e4f6f147bb9e861e9 ("configs/zynqmp_zcu106_defconfig:
+bump to Xilinx 2022.2"), we're using U-Boot version Xilinx 2022.2,
+which already carries the psu_init_gpl.c, causing the build to fail as
+our patch doesn't apply.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Fix this by dropping the no longer needed patch.
+
+Fixes: 3c997c457a4ee33d81e6b93e4f6f147bb9e861e9 ("configs/zynqmp_zcu106_defconfig: bump to Xilinx 2022.2")
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-django/Config.in          | 3 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ ...p-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch | 40 ----------------------
+ configs/zynqmp_zcu106_defconfig                    |  1 -
+ 2 files changed, 41 deletions(-)
 
-diff --git a/package/python-django/Config.in b/package/python-django/Config.in
-index 8ffceb7275..5830cadc93 100644
---- a/package/python-django/Config.in
-+++ b/package/python-django/Config.in
-@@ -3,10 +3,7 @@ config BR2_PACKAGE_PYTHON_DJANGO
- 	select BR2_PACKAGE_PYTHON3_UNICODEDATA
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT
- 	select BR2_PACKAGE_PYTHON_ASGIREF # runtime
--	select BR2_PACKAGE_PYTHON_PYTZ # runtime
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SQLPARSE # runtime
+diff --git a/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch b/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch
+deleted file mode 100644
+index 4281880da0..0000000000
+--- a/board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From aaaa10b613165b7790fe1c084de007240b5bd77a Mon Sep 17 00:00:00 2001
+-From: Neal Frager <neal.frager@amd.com>
+-Date: Thu, 5 May 2022 13:34:43 +0100
+-Subject: [PATCH 1/1] arm64: zynqmp: zynqmp-zcu102-revA: Fix DP PLL
+- configuration
 -
- 	help
- 	  Django is a high-level Python Web framework that encourages
- 	  rapid development and clean, pragmatic design. It takes your
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b9ae8a1da1..40526bc0ff 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  60c54c37ecf9e5e635ee6bb07a13a9fa  Django-4.1.3.tar.gz
--sha256  678bbfc8604eb246ed54e2063f0765f13b321a50526bdc8cb1f943eda7fa31f1  Django-4.1.3.tar.gz
-+md5  02e2222d064d800f37c6a0ba78ce87f3  Django-4.1.4.tar.gz
-+sha256  d38a4e108d2386cb9637da66a82dc8d0733caede4c83c4afdbda78af4214211b  Django-4.1.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index c90caa9635..96ec53f82c 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 4.1.3
-+PYTHON_DJANGO_VERSION = 4.1.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d0/ab/33f9c2bd4cf7ff2d319131eca7231247f962f781ebc8a012ebe02582244a
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/de/7d/ca5d224f7d345b0defd0a57c6deb0c6115fbe5304e4d9571f728b617f1a3
- 
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
+-This patch fixes the DP audio and video PLL configurations
+-for the zynqmp-zcu106-revA evaluation board
+-
+-The Linux DP driver expects the DP to be using the following PLL config:
+-  - DP video PLL should use the VPLL (0x0)
+-  - DP audio PLL should use the RPLL (0x3)
+-
+-Register 0xFD1A0070 configures the DP video PLL.
+-Register 0xFD1A0074 configures the DP audio PLL.
+-
+-Signed-off-by: Neal Frager <neal.frager@amd.com>
+-Signed-off-by: Michal Simek <michal.simek@amd.com>
+----
+- board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+-index 15f0be1a43..cbc436289f 100644
+---- a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+-+++ b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+-@@ -81,8 +81,8 @@ static unsigned long psu_clock_init_data(void)
+- 	psu_mask_write(0xFF5E0104, 0x00000007U, 0x00000000U);
+- 	psu_mask_write(0xFF5E0128, 0x01003F07U, 0x01000F00U);
+- 	psu_mask_write(0xFD1A00A0, 0x01003F07U, 0x01000200U);
+--	psu_mask_write(0xFD1A0070, 0x013F3F07U, 0x01010203U);
+--	psu_mask_write(0xFD1A0074, 0x013F3F07U, 0x01013C00U);
+-+	psu_mask_write(0xFD1A0070, 0x013F3F07U, 0x01010500U);
+-+	psu_mask_write(0xFD1A0074, 0x013F3F07U, 0x01013C03U);
+- 	psu_mask_write(0xFD1A007C, 0x013F3F07U, 0x01011303U);
+- 	psu_mask_write(0xFD1A0060, 0x03003F07U, 0x03000100U);
+- 	psu_mask_write(0xFD1A0068, 0x01003F07U, 0x01000200U);
+--- 
+-2.17.1
+-
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index dcbc4319e8..699e528f32 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -36,4 +36,3 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/zcu106/patches"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
