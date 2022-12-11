@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55FBCC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF9AC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEFCA8139E;
-	Sun, 11 Dec 2022 13:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEFCA8139E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 575588148B;
+	Sun, 11 Dec 2022 13:09:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 575588148B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ybGEneTf-diz; Sun, 11 Dec 2022 13:09:32 +0000 (UTC)
+	with ESMTP id TpEp2DumsVGr; Sun, 11 Dec 2022 13:09:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7A9681417;
-	Sun, 11 Dec 2022 13:09:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7A9681417
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 67D9B1BF2BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73AAB814C9;
+	Sun, 11 Dec 2022 13:09:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73AAB814C9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 92BCA1BF865
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43D4F4017B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C42D60B95
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43D4F4017B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C42D60B95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qXSLtw4xtXQ6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jr0tOHxCEafG for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 13:09:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D6E840106
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5C8760B06
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:09:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D6E840106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5C8760B06
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 893C386094; Sun, 11 Dec 2022 13:09:26 +0000 (UTC)
+ id 9428F86097; Sun, 11 Dec 2022 13:09:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:41:52 +0100
+Date: Sun, 11 Dec 2022 11:42:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67895bf33c00e07bc0f85311f39eaa237f58bd45
-X-Git-Newrev: 20f7ed86aa9f2a65af9b44a599f7d1b10075f158
+X-Git-Oldrev: 20f7ed86aa9f2a65af9b44a599f7d1b10075f158
+X-Git-Newrev: 260924e239627cbe1379cfc752939245d53a06e0
 X-Patchwork-Hint: ignore
-Message-Id: <20221211130926.893C386094@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: security bump to version
- 3.1.3
+Message-Id: <20221211130926.9428F86097@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swig: bump to version 4.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20f7ed86aa9f2a65af9b44a599f7d1b10075f158
+commit: https://git.buildroot.net/buildroot/commit/?id=260924e239627cbe1379cfc752939245d53a06e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-fix CVE-2021-33621: HTTP response splitting in CGI
-
-see https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch | 2 +-
- package/ruby/ruby.hash                              | 4 ++--
- package/ruby/ruby.mk                                | 2 +-
+ package/swig/Config.in.host | 2 +-
+ package/swig/swig.hash      | 2 +-
+ package/swig/swig.mk        | 4 ++--
  3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch b/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
-index 039a6466d6..805dfd2f89 100644
---- a/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
-+++ b/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
-@@ -14,7 +14,7 @@ diff --git a/ext/openssl/ossl_pkey.c b/ext/openssl/ossl_pkey.c
- index 2a4835a2..24d0da46 100644
- --- a/ext/openssl/ossl_pkey.c
- +++ b/ext/openssl/ossl_pkey.c
--@@ -670,7 +670,7 @@ ossl_pkey_export_traditional(int argc, VALUE *argv, VALUE self, int to_der)
-+@@ -710,7 +710,7 @@ ossl_pkey_export_traditional(int argc, VALUE *argv, VALUE self, int to_der)
-  	}
-      }
-      else {
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index da6221ec50..42d8a2497f 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
--sha512  4a74e9efc6ea4b3eff4fec7534eb1fff4794d021531defc2e9937e53c6668db8ecdc0fff2bc23d5e6602d0df344a2caa85b31c5414309541e3d5313ec82b6e21  ruby-3.1.2.tar.xz
-+# https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
-+sha512  4b0fd334ae56132ba98b8a69adad54bdcf7f7aeabd5eba5b0f0399a3868e2054f9026ca1b1cb2dbb197a9e9b0610b263481949c0623a62071546bc5adff8ca69  ruby-3.1.3.tar.xz
+diff --git a/package/swig/Config.in.host b/package/swig/Config.in.host
+index fd2049d30a..4c0deebc58 100644
+--- a/package/swig/Config.in.host
++++ b/package/swig/Config.in.host
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_HOST_SWIG
+ 	  written in C and C++ with a variety of high-level
+ 	  programming languages.
  
- # License files, Locally calculated
- sha256  794c384f94396ab07e3e6f53a9f8be093facb7eb4193266024302b93b29e12dc  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index cbdfa4b826..28b1ec13ef 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+-	  http://www.swig.org/
++	  https://www.swig.org/
+diff --git a/package/swig/swig.hash b/package/swig/swig.hash
+index 64fe4f979e..21590c422a 100644
+--- a/package/swig/swig.hash
++++ b/package/swig/swig.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  d53be9730d8d58a16bf0cbd1f8ac0c0c3e1090573168bfa151b01eb47fa906fc  swig-4.0.2.tar.gz
++sha256  2af08aced8fcd65cdb5cc62426768914bedc735b1c250325203716f78e39ac9b  swig-4.1.1.tar.gz
+ sha256  f53abaeed775018d519a1b9615f0ca17894772bd9ca21c2a156bf340ac41c13e  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-GPL
+ sha256  7f50d942373a871211c5efee03f3db2f9efd1cff1002b0ef8e3748baa611a5c2  LICENSE-UNIVERSITIES
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 437cf448be..d432cab53d 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 3.1
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 3.1.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-SWIG_VERSION_MAJOR = 4.0
+-SWIG_VERSION = $(SWIG_VERSION_MAJOR).2
++SWIG_VERSION_MAJOR = 4.1
++SWIG_VERSION = $(SWIG_VERSION_MAJOR).1
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ HOST_SWIG_DEPENDENCIES = host-bison host-pcre
+ HOST_SWIG_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
