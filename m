@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A46A5C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEF5C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45F3D4695D;
-	Mon, 20 Feb 2023 22:00:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45F3D4695D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01EAC4D81E;
+	Mon, 20 Feb 2023 22:00:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01EAC4D81E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C2Yb6S5dimlb; Mon, 20 Feb 2023 21:59:59 +0000 (UTC)
+	with ESMTP id IBni4PbItTW6; Mon, 20 Feb 2023 22:00:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA89A4EBC6;
-	Mon, 20 Feb 2023 21:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA89A4EBC6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A97D71BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C73FE4EBB9;
+	Mon, 20 Feb 2023 22:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73FE4EBB9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A3341BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 895846110E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 895846110E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4205D416B4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4205D416B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EMa6CxGHNz1i for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1m7bq_3y85xE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 990B9610FA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 990B9610FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68037416A5
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68037416A5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84786828C8; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+ id 562A486495; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:35:40 +0100
+Date: Sun, 11 Dec 2022 09:29:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6111bac9e5d2f1cea5db127ad59f2379f86b90fd
-X-Git-Newrev: 0978ae1d5e1acca7f9ab165e4050cfa1c283fed4
+X-Git-Oldrev: 44c986b1266d5f1d2527971aadd1d03a2843a4a7
+X-Git-Newrev: ec022187abdad4cbf286531b236c460d14b97739
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205158.84786828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXmu:
- bump version to 1.1.4
+Message-Id: <20230220205202.562A486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-lmdb: bump to
+ version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0978ae1d5e1acca7f9ab165e4050cfa1c283fed4
+commit: https://git.buildroot.net/buildroot/commit/?id=ec022187abdad4cbf286531b236c460d14b97739
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003224.html
-
-Updated license hash due to upstream commits:
-https://gitlab.freedesktop.org/xorg/lib/libxmu/-/commit/621f61f7d3f5955a84e6aa8b7458699870fdee45
-https://gitlab.freedesktop.org/xorg/lib/libxmu/-/commit/f84dcc7fef5e0842e6408f059c13d73975114ec4
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXmu/xlib_libXmu.hash | 10 ++++------
- package/x11r7/xlib_libXmu/xlib_libXmu.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/python-lmdb/python-lmdb.hash | 4 ++--
+ package/python-lmdb/python-lmdb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.hash b/package/x11r7/xlib_libXmu/xlib_libXmu.hash
-index b443419285..58d3545156 100644
---- a/package/x11r7/xlib_libXmu/xlib_libXmu.hash
-+++ b/package/x11r7/xlib_libXmu/xlib_libXmu.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002978.html
--md5  ac774cff8b493f566088a255dbf91201  libXmu-1.1.3.tar.bz2
--sha1  7ff54ce38379fb795aebed38f6be404ee0dfeec6  libXmu-1.1.3.tar.bz2
--sha256  9c343225e7c3dc0904f2122b562278da5fed639b1b5e880d25111561bac5b731  libXmu-1.1.3.tar.bz2
--sha512  8c6cc65b22aa031ad870dd92736681a068a0878a425a53dbed909943da1136c4a24034d467cfd3785c3a8d78f66850b69f1ebe1eb24aaf9bc176b1d171a5c762  libXmu-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003224.html
-+sha256  210de3ab9c3e9382572c25d17c2518a854ce6e2c62c5f8315deac7579e758244  libXmu-1.1.4.tar.xz
-+sha512  3cf90cb3ff380aafefbb39297bdd95b9e1e6d6618cecb53ff09faf38f9b9c54599d28367f07a9ec77a20214c6c3e661b8d0a12b38082556790a79a59942039c1  libXmu-1.1.4.tar.xz
- # Locally computed
--sha256  e65a4a8bbf8b0dfd2439d6bc6d86df03e2b8e693b757593b25149e099aeb8ec4  COPYING
-+sha256  8f0f2ca7a05cfd10bf9e307a272182de7cb52d7a603feaf17b9943c2c9a4838e  COPYING
-diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.mk b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
-index 3218e0ec39..051968059b 100644
---- a/package/x11r7/xlib_libXmu/xlib_libXmu.mk
-+++ b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index e50c35df67..c8137ce4c0 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/lmdb/json
+-md5  3c955c49be10a7a07a2fcd54d180c3af  lmdb-1.3.0.tar.gz
+-sha256  60a11efc21aaf009d06518996360eed346f6000bfc9de05114374230879f992e  lmdb-1.3.0.tar.gz
++md5  230103e2cd8efbca8ee7cf29151afd0d  lmdb-1.4.0.tar.gz
++sha256  39f6c4ee145d28d17025d350720abb6f95db816514e868db57444fdef51cbb47  lmdb-1.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index fba168d340..071106605f 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXMU_VERSION = 1.1.3
--XLIB_LIBXMU_SOURCE = libXmu-$(XLIB_LIBXMU_VERSION).tar.bz2
--XLIB_LIBXMU_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXMU_VERSION = 1.1.4
-+XLIB_LIBXMU_SOURCE = libXmu-$(XLIB_LIBXMU_VERSION).tar.xz
-+XLIB_LIBXMU_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXMU_LICENSE = MIT
- XLIB_LIBXMU_LICENSE_FILES = COPYING
- XLIB_LIBXMU_INSTALL_STAGING = YES
+-PYTHON_LMDB_VERSION = 1.3.0
++PYTHON_LMDB_VERSION = 1.4.0
+ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+-PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/ed/61/41f3c7cbd8a67202ef24fad3375ed936093a0547dc645581dd11c09581b7
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/fd/78/4cdc5927d5f3c3c86c4da0108c2eeba544cd67e773232164d59f3e442ff0
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
