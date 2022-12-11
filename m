@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B908C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B863C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3925181760;
-	Sun, 11 Dec 2022 13:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3925181760
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 78blPfDJcMHP; Sun, 11 Dec 2022 13:17:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69E4F8137E;
-	Sun, 11 Dec 2022 13:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E4F8137E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3881F1BF2BD
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:17:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21C634017B
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21C634017B
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0A2640520;
+	Sun, 11 Dec 2022 13:17:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0A2640520
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZTo9NIpOay90 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qvsb9RqheJ8m; Sun, 11 Dec 2022 13:17:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D28944017B;
+	Sun, 11 Dec 2022 13:17:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D28944017B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 897731BF2BD
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:17:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 654E08137E
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:17:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 654E08137E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dXkMcq3Eajiz for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 13:17:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 51F3040106
+ by smtp1.osuosl.org (Postfix) with ESMTP id 625C68126C
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:17:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51F3040106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 625C68126C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 416228623A; Sun, 11 Dec 2022 13:17:40 +0000 (UTC)
+ id 5086886286; Sun, 11 Dec 2022 13:17:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:16:27 +0100
+Date: Sun, 11 Dec 2022 14:17:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 63b540638c72969bf8c3eb6c06e1c49c4fbcbb9a
-X-Git-Newrev: c34e0b1cd5f7e10ce4fc19880e15ba608006ee76
+X-Git-Oldrev: c34e0b1cd5f7e10ce4fc19880e15ba608006ee76
+X-Git-Newrev: 66f3cc0b96baff46d3a136f9d8bf2a3b44037bdc
 X-Patchwork-Hint: ignore
-Message-Id: <20221211131740.416228623A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/asterisk: security bump to version
- 16.29.1
+Message-Id: <20221211131740.5086886286@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: add
+ upstream security fixes for CVE-2022-355{0, 1}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,77 +59,162 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2992116515061461871=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2992116515061461871==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c34e0b1cd5f7e10ce4fc19880e15ba608006ee76
+commit: https://git.buildroot.net/buildroot/commit/?id=66f3cc0b96baff46d3a136f9d8bf2a3b44037bdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
-- CVE-2022-37325: A zero length Called or Calling Party Number can cause a
-  buffer under-run and Asterisk crash.
+- CVE-2022-3550: A vulnerability classified as critical was found in X.org
+  Server.  Affected by this vulnerability is the function _GetCountedString
+  of the file xkb/xkb.c.  The manipulation leads to buffer overflow.  It is
+  recommended to apply a patch to fix this issue.  The associated identifier
+  of this vulnerability is VDB-211051.
 
-  https://downloads.asterisk.org/pub/security/AST-2022-007.html
-
-- CVE-2022-42705: Use after free in res_pjsip_pubsub.c may allow a remote
-  authenticated attacker to crash Asterisk (denial of service) by performing
-  activity on a subscription via a reliable transport at the same time
-  Asterisk is also performing activty on that subscription.
-
-  https://downloads.asterisk.org/pub/security/AST-2022-008.html
-
-- CVE-2022-42706: AMI Users with “config” permissions may read files outside
-  of Asterisk directory via GetConfig AMI Action even if “live_dangerously"
-  is set to "no"
-
-  https://downloads.asterisk.org/pub/security/AST-2022-009.html
+- CVE-2022-3551: A vulnerability, which was classified as problematic, has
+  been found in X.org Server.  Affected by this issue is the function
+  ProcXkbGetKbdByName of the file xkb/xkb.c.  The manipulation leads to
+  memory leak.  It is recommended to apply a patch to fix this issue.  The
+  identifier of this vulnerability is VDB-211052.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...etCountedString-against-request-length-at.patch | 35 +++++++++++++
+ ...some-possible-memleaks-in-XkbGetKbdByName.patch | 60 ++++++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  7 +++
+ 3 files changed, 102 insertions(+)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 9792d82ac5..98ee3bdc71 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  6e9c2f350db018df854b1301687ced8993facb2787698336e55cd19e0ae3ebfe  asterisk-16.28.0.tar.gz
-+sha256  9b93006a87be9c29492299118200e4f66c8369851c66a50fdef5b15dfc4eb2c2  asterisk-16.29.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index e0f28ae7ee..22ac0334fd 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 16.28.0
-+ASTERISK_VERSION = 16.29.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-
---===============2992116515061461871==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+new file mode 100644
+index 0000000000..8c1869504c
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+@@ -0,0 +1,35 @@
++From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Tue, 5 Jul 2022 12:06:20 +1000
++Subject: [PATCH] xkb: proof GetCountedString against request length attacks
++
++GetCountedString did a check for the whole string to be within the
++request buffer but not for the initial 2 bytes that contain the length
++field. A swapped client could send a malformed request to trigger a
++swaps() on those bytes, writing into random memory.
++
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xkb/xkb.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/xkb/xkb.c b/xkb/xkb.c
++index f42f59ef3..1841cff26 100644
++--- a/xkb/xkb.c
+++++ b/xkb/xkb.c
++@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
++     CARD16 len;
++ 
++     wire = *wire_inout;
+++
+++    if (client->req_len <
+++        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
+++        return BadValue;
+++
++     len = *(CARD16 *) wire;
++     if (client->swapped) {
++         swaps(&len);
++-- 
++2.30.2
++
+diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+new file mode 100644
+index 0000000000..39afec0988
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+@@ -0,0 +1,60 @@
++From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Wed, 13 Jul 2022 11:23:09 +1000
++Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
++
++GetComponentByName returns an allocated string, so let's free that if we
++fail somewhere.
++
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xkb/xkb.c | 26 ++++++++++++++++++++------
++ 1 file changed, 20 insertions(+), 6 deletions(-)
++
++diff --git a/xkb/xkb.c b/xkb/xkb.c
++index 4692895db..b79a269e3 100644
++--- a/xkb/xkb.c
+++++ b/xkb/xkb.c
++@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
++     xkb = dev->key->xkbInfo->desc;
++     status = Success;
++     str = (unsigned char *) &stuff[1];
++-    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
++-        return BadMatch;
+++    {
+++        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
+++        if (keymap) {
+++            free(keymap);
+++            return BadMatch;
+++        }
+++    }
++     names.keycodes = GetComponentSpec(&str, TRUE, &status);
++     names.types = GetComponentSpec(&str, TRUE, &status);
++     names.compat = GetComponentSpec(&str, TRUE, &status);
++     names.symbols = GetComponentSpec(&str, TRUE, &status);
++     names.geometry = GetComponentSpec(&str, TRUE, &status);
++-    if (status != Success)
+++    if (status == Success) {
+++        len = str - ((unsigned char *) stuff);
+++        if ((XkbPaddedSize(len) / 4) != stuff->length)
+++            status = BadLength;
+++    }
+++
+++    if (status != Success) {
+++        free(names.keycodes);
+++        free(names.types);
+++        free(names.compat);
+++        free(names.symbols);
+++        free(names.geometry);
++         return status;
++-    len = str - ((unsigned char *) stuff);
++-    if ((XkbPaddedSize(len) / 4) != stuff->length)
++-        return BadLength;
+++    }
++ 
++     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
++     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
++-- 
++2.30.2
++
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 18ddd1cb07..8dba9f1ed0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -11,6 +11,13 @@ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+ XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
++
++# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
++XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
++
++# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
++XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
++
+ XSERVER_XORG_SERVER_DEPENDENCIES = \
+ 	xutil_util-macros \
+ 	xlib_libX11 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2992116515061461871==--
