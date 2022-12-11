@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34B07C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24177C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:34:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE1724F137;
-	Mon, 20 Feb 2023 22:34:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE1724F137
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA2E14F135;
+	Mon, 20 Feb 2023 22:34:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA2E14F135
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vscqLva2-6wD; Mon, 20 Feb 2023 22:34:39 +0000 (UTC)
+	with ESMTP id iiC5ClIYyvhD; Mon, 20 Feb 2023 22:34:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 927764F138;
-	Mon, 20 Feb 2023 22:34:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 927764F138
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 788E11BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D6614F142;
+	Mon, 20 Feb 2023 22:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D6614F142
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E5FC1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B3F06416F4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3F06416F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19B5861074
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19B5861074
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QWUeSPSjRCIn for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Gqu_CLaFVe0 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAA5C416E4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA5C416E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5517361161
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5517361161
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3CCE86494; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 44C518648F; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 13:47:41 +0100
+Date: Sun, 11 Dec 2022 11:41:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4cbef389f3e10d1cbdcd9961fb128dfd9b85debf
-X-Git-Newrev: af1f90cc07e1b74cbda92402926bbcb88a722a93
+X-Git-Oldrev: 67895bf33c00e07bc0f85311f39eaa237f58bd45
+X-Git-Newrev: 20f7ed86aa9f2a65af9b44a599f7d1b10075f158
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205213.D3CCE86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lightning; fix build
+Message-Id: <20230220205205.44C518648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ruby: security bump to
+ version 3.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,84 +56,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af1f90cc07e1b74cbda92402926bbcb88a722a93
+commit: https://git.buildroot.net/buildroot/commit/?id=20f7ed86aa9f2a65af9b44a599f7d1b10075f158
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure raised since bump to version 2.2.0 in
-commit af6f7aa76db5aed1eada0b27bd0375610a2fc728 and
-http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
+fix CVE-2021-33621: HTTP response splitting in CGI
 
-jit_disasm.c: In function 'fprintf_styled':
-jit_disasm.c:57:27: error: parameter name omitted
-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-      |                           ^~~~~~
-jit_disasm.c:57:35: error: parameter name omitted
-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+see https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
 
-Fixes:
- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-lib-jit_disasm.c-fix-build.patch          | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch | 2 +-
+ package/ruby/ruby.hash                              | 4 ++--
+ package/ruby/ruby.mk                                | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-new file mode 100644
-index 0000000000..9e79be91a0
---- /dev/null
-+++ b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-@@ -0,0 +1,42 @@
-+From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 19 Dec 2022 23:55:31 +0100
-+Subject: [PATCH] lib/jit_disasm.c: fix build
-+
-+Fix the following build failure raised since
-+http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
-+
-+jit_disasm.c: In function 'fprintf_styled':
-+jit_disasm.c:57:27: error: parameter name omitted
-+   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-+      |                           ^~~~~~
-+jit_disasm.c:57:35: error: parameter name omitted
-+   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ lib/jit_disasm.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
-+index 58a269b..68c966d 100644
-+--- a/lib/jit_disasm.c
-++++ b/lib/jit_disasm.c
-+@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
-+ #endif
-+ 
-+ #if BINUTILS_2_38
-+-static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-++static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
-+ {
-+   va_list args;
-+   int r;
-+-- 
-+2.25.1
-+
+diff --git a/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch b/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
+index 039a6466d6..805dfd2f89 100644
+--- a/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
++++ b/package/ruby/0001-Fix-build-with-LibreSSL-3-5.patch
+@@ -14,7 +14,7 @@ diff --git a/ext/openssl/ossl_pkey.c b/ext/openssl/ossl_pkey.c
+ index 2a4835a2..24d0da46 100644
+ --- a/ext/openssl/ossl_pkey.c
+ +++ b/ext/openssl/ossl_pkey.c
+-@@ -670,7 +670,7 @@ ossl_pkey_export_traditional(int argc, VALUE *argv, VALUE self, int to_der)
++@@ -710,7 +710,7 @@ ossl_pkey_export_traditional(int argc, VALUE *argv, VALUE self, int to_der)
+  	}
+      }
+      else {
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index da6221ec50..42d8a2497f 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
+-sha512  4a74e9efc6ea4b3eff4fec7534eb1fff4794d021531defc2e9937e53c6668db8ecdc0fff2bc23d5e6602d0df344a2caa85b31c5414309541e3d5313ec82b6e21  ruby-3.1.2.tar.xz
++# https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
++sha512  4b0fd334ae56132ba98b8a69adad54bdcf7f7aeabd5eba5b0f0399a3868e2054f9026ca1b1cb2dbb197a9e9b0610b263481949c0623a62071546bc5adff8ca69  ruby-3.1.3.tar.xz
+ 
+ # License files, Locally calculated
+ sha256  794c384f94396ab07e3e6f53a9f8be093facb7eb4193266024302b93b29e12dc  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index cbdfa4b826..28b1ec13ef 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 3.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+ RUBY_VERSION_EXT = 3.1.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
