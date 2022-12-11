@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B821C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6FA6C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEC844F151;
-	Mon, 20 Feb 2023 22:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC844F151
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87E574EEB3;
+	Mon, 20 Feb 2023 22:36:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87E574EEB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 72bGTDksH3bv; Mon, 20 Feb 2023 22:35:49 +0000 (UTC)
+	with ESMTP id uNEn1huOKraE; Mon, 20 Feb 2023 22:36:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0BC4F15A;
-	Mon, 20 Feb 2023 22:35:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B0BC4F15A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28AB81BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D25E4F160;
+	Mon, 20 Feb 2023 22:36:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D25E4F160
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D5C081BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB511416F5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB511416F5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6595F611C1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6595F611C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QY_w6Pdvx0VV for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9qToQgijx_lX for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A1A2416EF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1A2416EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90FB3611C8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90FB3611C8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0340F86494; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 8D029828C8; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 22:10:44 +0100
+Date: Sun, 11 Dec 2022 14:09:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
-X-Git-Newrev: 8cbfbe487ac6fb00c037475ed8aaca3d89899769
+X-Git-Oldrev: 6ad775fc8118927bde9bf442bbb7e8307280e97d
+X-Git-Newrev: 953e2889734d1ccac609f997e0f3ebdeee20c41b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205214.0340F86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/skeleton-systemd:
- systemd-ify mounting /var tmpfs with ro rootfs
+Message-Id: <20230220205205.8D029828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/freeradius-server:
+ disable with libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,111 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1946239472797324489=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1946239472797324489==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=8cbfbe487ac6fb00c037475ed8aaca3d89899769
+commit: https://git.buildroot.net/buildroot/commit/?id=953e2889734d1ccac609f997e0f3ebdeee20c41b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-To mount our /var tmpfs when the rootfs is mounted read-only (really,
-not remounted read-write), we use an entry in fstab.
+Building with libressl results in the following build failure since the
+addition of the package in commit
+736c4c1655d93652a9a7e79235bbe726b3d46176:
 
-However, /etc could also be a tmpfs (for full state-less systems, or
-easy factory-reset, see [0]). It also prevents easily ordering other
-systemd units until after /var is mounted (not impossible, but less
-easy).
+src/modules/rlm_eap/types/rlm_eap_fast/rlm_eap_fast.c: In function '_session_secret':
+src/modules/rlm_eap/types/rlm_eap_fast/rlm_eap_fast.c:228:47: error: invalid use of incomplete typedef 'SSL' {aka 'struct ssl_st'}
+  228 |         eap_fast_session_ticket(tls_session, s->s3->client_random, s->s3->server_random, secret, secret_len);
+      |                                               ^~
 
-So, we register /var as a systemd mount unit, so that we can also have
-the /var factory populated and functional even when /etc is empty. The
-var.mount unit is heavily modelled after systemd's own tmp.mount one, so
-we carry the same license for that file (in case that may apply).
+Disable building with libressl following upstream feedback:
+https://github.com/FreeRADIUS/freeradius-server/pull/4689
 
-This has two side effects:
-  - as hinted previously, it simplifies writing other systemd units to
-    order them after /var is mounted
-  - user can easily replace it with their own, which mounts an actual
-    filesystem
+Fixes:
+ - http://autobuild.buildroot.org/results/c8df444f4c39f83e254dbb642a5852a1c956f7bb
 
-[0] http://0pointer.de/blog/projects/stateless.html
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Norbert Lange <nolange79@gmail.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
-[yann.morin.1998@free.fr:
-  - split original patch in two
-  - this one only handles converting /var mounting into a systemd unit
-  - adapt commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Norbert Lange <nolange79@gmail.com>
-[yann.morin.1998@free.fr (as suggested by Norbert):
-  - fix Before= dependencies
-  - drop [Install] section
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/skeleton-init-systemd/skeleton-init-systemd.mk |  3 ++-
- package/skeleton-init-systemd/var.mount                | 15 +++++++++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ package/freeradius-server/freeradius-server.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index ec908b4fac..ff8bc528c0 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -30,7 +30,6 @@ else
- # back there by the tmpfiles.d mechanism.
- define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
- 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
--	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
- endef
+diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
+index ebd459341d..af3320eb44 100644
+--- a/package/freeradius-server/freeradius-server.mk
++++ b/package/freeradius-server/freeradius-server.mk
+@@ -178,7 +178,7 @@ else
+ FREERADIUS_SERVER_CONF_OPTS += --without-rlm_sql_postgresql
+ endif
  
- define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
-@@ -52,6 +51,8 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 			|| exit 1; \
- 		fi; \
- 	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
-+	$(INSTALL) -D -m 0644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/var.mount \
-+		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 
-diff --git a/package/skeleton-init-systemd/var.mount b/package/skeleton-init-systemd/var.mount
-new file mode 100644
-index 0000000000..e97accef93
---- /dev/null
-+++ b/package/skeleton-init-systemd/var.mount
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: LGPL-2.1-or-later
-+# Modelled after systemd's tmp.mount
-+
-+[Unit]
-+Description=Buildroot /var tmpfs
-+DefaultDependencies=no
-+Conflicts=umount.target
-+Before=local-fs.target umount.target
-+After=swap.target
-+
-+[Mount]
-+What=tmpfs
-+Where=/var
-+Type=tmpfs
-+Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
-
---===============1946239472797324489==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-ifeq ($(BR2_PACKAGE_HAS_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ FREERADIUS_SERVER_DEPENDENCIES += openssl
+ FREERADIUS_SERVER_CONF_OPTS += \
+ 	--with-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1946239472797324489==--
