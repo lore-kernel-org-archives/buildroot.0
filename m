@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88E0C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 16:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65EDDC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 16:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 706B44026A;
-	Sun, 11 Dec 2022 16:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 706B44026A
+	by smtp3.osuosl.org (Postfix) with ESMTP id F22DA60BCC;
+	Sun, 11 Dec 2022 16:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F22DA60BCC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TJvi2fXeSNDS; Sun, 11 Dec 2022 16:20:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BrNwRjYS9UlH; Sun, 11 Dec 2022 16:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC5F64052B;
-	Sun, 11 Dec 2022 16:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC5F64052B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8879B1BF860
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A49D60B6C;
+	Sun, 11 Dec 2022 16:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A49D60B6C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB5181BF2F2
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 16:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6461B813AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id B33DE408EE
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 16:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6461B813AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B33DE408EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E_25cpojS8gN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pwMPqn4N9B27 for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 16:20:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AEF481346
+ by smtp4.osuosl.org (Postfix) with ESMTP id A80AE408EB
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 16:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AEF481346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A80AE408EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85C9E86422; Sun, 11 Dec 2022 16:20:16 +0000 (UTC)
+ id 93AC98644C; Sun, 11 Dec 2022 16:20:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 17:17:46 +0100
+Date: Sun, 11 Dec 2022 17:17:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7255c2b31755241d8c4fafc5f733faa68182282d
-X-Git-Newrev: 8e242cde92c10e6605de54a489f1aaee3dac3b5e
+X-Git-Oldrev: 8e242cde92c10e6605de54a489f1aaee3dac3b5e
+X-Git-Newrev: 8f792825039878323d996d973f0bfd588991fc5c
 X-Patchwork-Hint: ignore
-Message-Id: <20221211162016.85C9E86422@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ast: bump
- version to 1.1.6
+Message-Id: <20221211162016.93AC98644C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vesa:
+ bump version to 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e242cde92c10e6605de54a489f1aaee3dac3b5e
+commit: https://git.buildroot.net/buildroot/commit/?id=8f792825039878323d996d973f0bfd588991fc5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.x.org/archives/xorg-announce/2022-December/003291.html
+https://lists.x.org/archives/xorg-announce/2022-December/003297.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash | 5 +++--
- package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash | 6 +++---
+ package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
-index 2988db98af..12ad79e4b4 100644
---- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
-+++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
-@@ -1,4 +1,5 @@
--# Locally computed
--sha256  1edbbc55d47d3fd71dec99b15c2483e22738c642623a0fb86ef4a81a9067a2de  xf86-video-ast-1.1.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003291.html
-+sha256  75754fa9c7f9a94fcc706d32cc118942d16c71934d88110442443a143b930daf  xf86-video-ast-1.1.6.tar.xz
-+sha512  8482fec8d6be577f293cb820e623544475163f713fd74ec415f899bf5e9cf9453ffe4f96e141da3671437ebf616b47395d30d4b10858053c5893f5f5b7575ef1  xf86-video-ast-1.1.6.tar.xz
- # Locally calculated
- sha256  1cdd3d57e2fdcbd21b8a7b788ffbe6f809216a9bdd36b2225cff6c4b4404a170  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
-index b39bbf9a15..f29dc29f0b 100644
---- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
-+++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+index d179228a74..3e32249f12 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-September/003060.html
+-sha256  1f1624f3c73906801ad1bc98335a2cb5676a7a4d18e5374d9a1d18464e54c659  xf86-video-vesa-2.5.0.tar.bz2
+-sha512  36fd921f54f33eb25966b5f9ea1e1b3e9009965c012c8b9c676686b472111719921b80cf62dafc746058878253e21f0ef341a2ff2d650df22ca1e35e81716a8b  xf86-video-vesa-2.5.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003297.html
++sha256  10082771b1a8f659c60b3d9b70456a4b59948a75b3cade2dfa33b8b05e549bb1  xf86-video-vesa-2.6.0.tar.xz
++sha512  494e117c1e6e0ce4c66ac7798de54667862c62605bfd76dd9373447d40dcd0521100810c9285cbe9c159440e217954c0cad6d5219c5894e075509c7c0bc353c7  xf86-video-vesa-2.6.0.tar.xz
+ # Locally computed
+ sha256  bda49ba1e860501c20fd444423bc790f6da4f769561b69acc0cbe5abff9409b6  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+index b08bab4ec8..8a5a5ebf58 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.5
--XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_AST_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.6
-+XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_AST_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_AST_LICENSE = MIT
- XDRIVER_XF86_VIDEO_AST_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_AST_DEPENDENCIES = xorgproto xserver_xorg-server
+-XDRIVER_XF86_VIDEO_VESA_VERSION = 2.5.0
+-XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_VESA_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_VESA_VERSION = 2.6.0
++XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_VESA_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_VESA_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_VESA_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_VESA_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
