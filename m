@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38AEEC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399D0C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB3884EF63;
-	Mon, 20 Feb 2023 22:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB3884EF63
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF5A441D9F;
+	Mon, 20 Feb 2023 22:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF5A441D9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qzKrdb2NM6wl; Mon, 20 Feb 2023 22:13:04 +0000 (UTC)
+	with ESMTP id 7uJhkzo-xB4p; Mon, 20 Feb 2023 22:13:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B02944EF65;
-	Mon, 20 Feb 2023 22:13:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B02944EF65
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4811BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CB7248E6C;
+	Mon, 20 Feb 2023 22:13:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CB7248E6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DB9491BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C64661152
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C64661152
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AA3D416AF
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AA3D416AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7v9GnKyjF8b for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 456aCWbraL_2 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DD096101C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DD096101C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7775C416B8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7775C416B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E6A786494; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 67E4986494; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:28 +0100
+Date: Sun, 11 Dec 2022 14:33:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d068bf4c4fce1eb376711940fb02a017815127e
-X-Git-Newrev: eff0a0852830e05d2ed79dd8c744afff7d126002
+X-Git-Oldrev: 309bc5d2d4b0f3ca133b40e36ee949411b3d532d
+X-Git-Newrev: c833234cb4eb46cf95dbc3d4f32e1d2d2dab23b2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.2E6A786494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-cbor2: bump to
- version 5.4.6
+Message-Id: <20230220205206.67E4986494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-cli: security
+ bump to version 20.10.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +56,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eff0a0852830e05d2ed79dd8c744afff7d126002
+commit: https://git.buildroot.net/buildroot/commit/?id=c833234cb4eb46cf95dbc3d4f32e1d2d2dab23b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-cbor2/python-cbor2.hash | 4 ++--
- package/python-cbor2/python-cbor2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
 
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index 6098273aa1..70c35ca864 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  358b18e2a96ab96945e33417d5c8cb31  cbor2-5.4.3.tar.gz
--sha256  62b863c5ee6ced4032afe948f3c1484f375550995d3b8498145237fe28e546c2  cbor2-5.4.3.tar.gz
-+md5  74512376482be8a6af10596a63b6d254  cbor2-5.4.6.tar.gz
-+sha256  b893500db0fe033e570c3adc956af6eefc57e280026bd2d86fd53da9f1e594d7  cbor2-5.4.6.tar.gz
- # Locally computed sha256 checksums
- sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index 743ae4ef6f..a2fcd73b74 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
-@@ -4,9 +4,9 @@
+https://github.com/moby/moby/releases/tag/v20.10.21
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 153e0e5d00..d9477cf3af 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f4398ad858274605f8e4e55d4618b2f5bdff6969a4afa232842bb2417d8a98db  docker-cli-20.10.19.tar.gz
++sha256  f0f62ca1c80e8fd5b9e140ca64ef3e75dc7cf7a28040b3d10b260307128946e8  docker-cli-20.10.21.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 1fac21790b..a14edb2c31 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CBOR2_VERSION = 5.4.3
-+PYTHON_CBOR2_VERSION = 5.4.6
- PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/9d/c9/cfa5c35a62642a19c14bf9a12dfbf0ee134466be1f062df2258a2ec2f2f7
-+PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/d9/69/de486293f5211d2e8fe1a19854e69f2811a18448162c52b48c67f8fbcac3
- PYTHON_CBOR2_SETUP_TYPE = setuptools
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+-DOCKER_CLI_VERSION = 20.10.19
++DOCKER_CLI_VERSION = 20.10.21
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
