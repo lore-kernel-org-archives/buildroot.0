@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C0C2C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A20F3C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1BA2408A3;
-	Sun, 11 Dec 2022 21:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1BA2408A3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A89A81413;
+	Sun, 11 Dec 2022 21:23:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A89A81413
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cp-LpTxNkUy7; Sun, 11 Dec 2022 21:22:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R78vlghHJrzk; Sun, 11 Dec 2022 21:23:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E941F402E2;
-	Sun, 11 Dec 2022 21:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E941F402E2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C986813E8;
+	Sun, 11 Dec 2022 21:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C986813E8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BE401BF309
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:22:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C16091BF309
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:23:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 375E54047B
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 375E54047B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D2674047B
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:23:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D2674047B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nu4wMLCj6s_o for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 21:22:34 +0000 (UTC)
+ with ESMTP id VENHQptjsmLA for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 21:23:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2E7140463
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A2E7140463
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BC2C40463
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BC2C40463
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:23:31 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2706B60004;
- Sun, 11 Dec 2022 21:22:30 +0000 (UTC)
-Date: Sun, 11 Dec 2022 22:22:29 +0100
-To: =?UTF-8?B?RnJhbsOnb2lz?= Perrad <francois.perrad@gadz.org>
-Message-ID: <20221211222229.678a56dc@windsurf>
-In-Reply-To: <CAB0FRssQAoVA9syt1SM3mwafto722J3rxWXeHwiVRsWFmCyBPw@mail.gmail.com>
-References: <20221206171719.747581-1-gadiyar@ti.com>
- <20221206171719.747581-3-gadiyar@ti.com>
- <20221211210933.19fb5199@windsurf>
- <CAB0FRssQAoVA9syt1SM3mwafto722J3rxWXeHwiVRsWFmCyBPw@mail.gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 50ED0240002;
+ Sun, 11 Dec 2022 21:23:29 +0000 (UTC)
+Date: Sun, 11 Dec 2022 22:23:28 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20221211222328.461a637a@windsurf>
+In-Reply-To: <20221211204455.278996-1-bernd.kuhls@t-online.de>
+References: <20221211204455.278996-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670793751;
+ d=bootlin.com; s=gm1; t=1670793809;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=2S3haDhNWD0XROm/2WckILdntvJuRP6qcX55T4/DSqs=;
- b=nIm4a97Xk5JaXYZNtewPspe8rHv1CND4UW7Ayc+U6Id3MoVyAHromL534luGeYNCedN2Lt
- 1Ihoof3/ZqCXGqCC8mBlOckG5OH79oqgbXIeDecZJiPUlmua0lHUVbSmqBKUhRw96IRgGo
- sWTQy/OY7G3hFiB6bxYLYilyR15pqkmzh8kQ6KOsK7dXxh++q02GlhDxkrkS+MqQyEmcn9
- 4I/I4ebtVlMwEK/beWpGLbThEQKuqTXGBc+8KaEal+gpfq6NgTgIQ9cKR7T9S6lPZpy+kV
- C1dALwwMeCsG40DXbLVRgubXMNvvwQGk4UsN8zc7HsSitcHIINsoRY/upt8T1g==
+ bh=JlUB+oB6kURIEDe/W8w0la6RCk/TvKkMvX8fGLK9e5g=;
+ b=Wou7kdKksUPQ5n7Kg+lZWdsr93rk7E4SpiWcWASBMQmVgu9XGO0T5usjG5EQdiZ7Nz0sNR
+ b97yi88pyYaUhIE1XRDRnLDJDQbYuuRiXpfuS3SGkTWFhNNV2W4x81DtF96sN6LC3tJyQY
+ gGsVf1Rse8nb8/V9I7ITTONeTUEAW7VImLGVL2g1BPpccG57zTti1ZVFnjZ5WTNPGwOp6c
+ Xe3+O8rb1Lqa/5XiDv0Hc3PErsGUjBOpMv0d+SHBqAuhH2nmV29uPrtKr6E/XbxaWmEa8L
+ 0T8whgpWLbSxinALmLvRLahH1iIIJlJvaSxQsvD9xYl0j2wnO76uhaBiaKPvhA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nIm4a97X
-Subject: Re: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
+ header.s=gm1 header.b=Wou7kdKk
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-mediadriver: fix build
+ without X11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,24 +78,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bryan Brattlof <bb@ti.com>, Andrew Davis <afd@ti.com>,
- Xuanhao Shi <X15000177@gmail.com>,
- Anand Gadiyar via buildroot <buildroot@buildroot.org>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAxMSBEZWMgMjAyMiAyMTo0MToxMSArMDEwMApGcmFuw6dvaXMgUGVycmFkIDxmcmFu
-Y29pcy5wZXJyYWRAZ2Fkei5vcmc+IHdyb3RlOgoKPiBzZWUKPiBodHRwczovL3BhdGNod29yay5v
-emxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIxMjExMjAzODI2LjMxMTc3ODQt
-MS1mcmFuY29pcy5wZXJyYWRAZ2Fkei5vcmcvCj4gdGhpcyBwYXRjaCBkb2VzIHRoaXMgcmV3b3Jr
-LgoKVGhhbmtzLCBidXQgaXQgbmVlZHMgdG8gYmUgaW50ZWdyYXRlZCBpbiBhIHY4IG9mIHRoZSBw
-YXRjaCBzZXJpZXMuCgpUaGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93
-bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmlu
-ZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+On Sun, 11 Dec 2022 21:44:55 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+
+> Fixes:
+> http://autobuild.buildroot.net/results/52c/52c8f5352b16ced4e85286950f95e1b57c564fa5/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0001-dont-include-va-dricommon-h.patch    | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
