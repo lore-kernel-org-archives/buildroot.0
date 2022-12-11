@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B7EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FBFC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72B85607E1;
-	Sun, 11 Dec 2022 09:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72B85607E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6070605A4;
+	Sun, 11 Dec 2022 09:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6070605A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id brL1lAh332p5; Sun, 11 Dec 2022 09:08:59 +0000 (UTC)
+	with ESMTP id v0itYjqzWS3t; Sun, 11 Dec 2022 09:09:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACF9D605EC;
-	Sun, 11 Dec 2022 09:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACF9D605EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BFD86060A;
+	Sun, 11 Dec 2022 09:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BFD86060A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6D701BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A785A1BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3FE7409A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C49E5409AA
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3FE7409A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C49E5409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJa4ydpXo9SK for <buildroot@lists.busybox.net>;
+ with ESMTP id FXF7BJiei1fM for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69AEA40A02
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69AEA40A02
+ by smtp4.osuosl.org (Postfix) with ESMTP id D950D4093E
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D950D4093E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58E5685FAA; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
+ id C56D485FAB; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:31 +0100
+Date: Sun, 11 Dec 2022 09:30:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c330d67dae8ca6eefde2aa076151820d87beebe7
-X-Git-Newrev: bc4bed533a6c0166b70aeb03ddde9b021ea4058f
+X-Git-Oldrev: 2733644c8947f8dafa1559bc12b3e67cee99ae6c
+X-Git-Newrev: 225e8745c62c75b20867af928d459abfbb53da94
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085517.58E5685FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zopfli: bump to version
- 0.2.2
+Message-Id: <20221211085516.C56D485FAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
+ 3.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc4bed533a6c0166b70aeb03ddde9b021ea4058f
+commit: https://git.buildroot.net/buildroot/commit/?id=225e8745c62c75b20867af928d459abfbb53da94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-zopfli/python-zopfli.hash | 4 ++--
- package/python-zopfli/python-zopfli.mk   | 4 ++--
+ package/python-simplejson/python-simplejson.hash | 4 ++--
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
-index 969ed97992..29bdfe5e5b 100644
---- a/package/python-zopfli/python-zopfli.hash
-+++ b/package/python-zopfli/python-zopfli.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index 0f56d4c6cc..1c99b87590 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zopfli/json
--md5  505ea595d86b8a7fec55620c839a4859  zopfli-0.2.1.zip
--sha256  e5263d2806e2c1ccb23f52b2972a235d31d42f22f3fa3032cc9aded51e9bf2c6  zopfli-0.2.1.zip
-+md5  0c1e41e5403524e0180f3ed9aaa356ec  zopfli-0.2.2.zip
-+sha256  2d49db7540d9991976af464ebc1b9ed12988c04d90691bcb51dc4a373a9e2afc  zopfli-0.2.2.zip
+ # md5, sha256 from https://pypi.org/pypi/simplejson/json
+-md5  0b8f47c9451bf101a791f8b5bccf1f33  simplejson-3.17.6.tar.gz
+-sha256  cf98038d2abf63a1ada5730e91e84c642ba6c225b0198c3684151b1f80c5f8a6  simplejson-3.17.6.tar.gz
++md5  83e24e662f024e06af2fffe698227da4  simplejson-3.18.0.tar.gz
++sha256  58a429d2c2fa80834115b923ff689622de8f214cf0dc4afa9f59e824b444ab31  simplejson-3.18.0.tar.gz
  # Locally computed sha256 checksums
- sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
-diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
-index 689634fefa..d6af6e4b5f 100644
---- a/package/python-zopfli/python-zopfli.mk
-+++ b/package/python-zopfli/python-zopfli.mk
+ sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 52bff7569c..1607d9c90c 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ZOPFLI_VERSION = 0.2.1
-+PYTHON_ZOPFLI_VERSION = 0.2.2
- PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
--PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/91/25/ba6f370e18359292f05ca4df93642eb7d1c424721ef61f61b8610a63d0c5
-+PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/9a/ed/d004d5737f9546167eecf0ecd995ee1a796703e512deb2f2ea26cdbe4b3e
- PYTHON_ZOPFLI_SETUP_TYPE = setuptools
- PYTHON_ZOPFLI_LICENSE = Apache-2.0
- PYTHON_ZOPFLI_LICENSE_FILES = COPYING
+-PYTHON_SIMPLEJSON_VERSION = 3.17.6
++PYTHON_SIMPLEJSON_VERSION = 3.18.0
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/7a/47/c7cc3d4ed15f09917838a2fb4e1759eafb6d2f37ebf7043af984d8b36cf7
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/17/3d/b8bfe1f40558f6a16f70c349adf97480dc71a7d11b2b1a5dc0824a87faa0
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
