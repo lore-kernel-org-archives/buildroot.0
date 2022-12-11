@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8CB8C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D76C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8819F41D91;
-	Mon, 20 Feb 2023 22:08:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8819F41D91
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E7B24EC26;
+	Mon, 20 Feb 2023 22:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E7B24EC26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oJ-PjcWMixym; Mon, 20 Feb 2023 22:08:57 +0000 (UTC)
+	with ESMTP id Mb9gbbfw96N0; Mon, 20 Feb 2023 22:09:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1F8D41D84;
-	Mon, 20 Feb 2023 22:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1F8D41D84
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 431561BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B58C471B5;
+	Mon, 20 Feb 2023 22:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B58C471B5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CA071BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 488C661149
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 488C661149
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E0C0416C1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E0C0416C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hsr-CjX6snuI for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UnwJ4ZzIFVPw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFA546112D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFA546112D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 003E7416BA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 003E7416BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C96AD8648F; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id EC82A86494; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 09:18:48 +0100
+Date: Sun, 11 Dec 2022 11:38:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 583e06a495e401c564adfd0c13c4ebad33e34e63
-X-Git-Newrev: 2f2b4c80f44ac0da88fc087017d495e627131350
+X-Git-Oldrev: 498b9c294239d4684641df5ee60e169a4ed85383
+X-Git-Newrev: e744cc249030d0ded5c5bb445b9b4ac46e400957
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.C96AD8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/connman: fix
- CVE-2022-3229{2, 3}
+Message-Id: <20230220205204.EC82A86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gocryptfs: bump to
+ version 2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,421 +56,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f2b4c80f44ac0da88fc087017d495e627131350
+commit: https://git.buildroot.net/buildroot/commit/?id=e744cc249030d0ded5c5bb445b9b4ac46e400957
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix CVE-2022-32292: In ConnMan through 1.41, remote attackers able to
-send HTTP requests to the gweb component are able to exploit a
-heap-based buffer overflow in received_data to execute code.
+Rebase the patch for riscv compatibility as well.
 
-Fix CVE-2022-32293: In ConnMan through 1.41, a man-in-the-middle attack
-against a WISPR HTTP query could be used to trigger a use-after-free in
-WISPR handling, leading to crashes or code execution.
+"go mod tidy" insists on updating x/sys so pin it to the version from upstream
+release v2.3 using a replace statement.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+https://github.com/rfjakob/gocryptfs/releases/tag/v2.3
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-gweb-Fix-OOB-write-in-received_data.patch |  36 +++++
- ...r-Add-reference-counter-to-portal-context.patch | 142 +++++++++++++++++
- ...03-wispr-Update-portal-context-references.patch | 175 +++++++++++++++++++++
- package/connman/connman.mk                         |   7 +
- 4 files changed, 360 insertions(+)
+ ...o.mod-fix-jacobsa-crypto-build-on-riscv64.patch | 84 +++++++++++++++-------
+ package/gocryptfs/gocryptfs.hash                   |  2 +-
+ package/gocryptfs/gocryptfs.mk                     |  2 +-
+ 3 files changed, 61 insertions(+), 27 deletions(-)
 
-diff --git a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-new file mode 100644
-index 0000000000..d1a9d8f8fe
---- /dev/null
-+++ b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-@@ -0,0 +1,36 @@
-+From d1a5ede5d255bde8ef707f8441b997563b9312bd Mon Sep 17 00:00:00 2001
-+From: Nathan Crandall <ncrandall@tesla.com>
-+Date: Tue, 12 Jul 2022 08:56:34 +0200
-+Subject: gweb: Fix OOB write in received_data()
-+
-+There is a mismatch of handling binary vs. C-string data with memchr
-+and strlen, resulting in pos, count, and bytes_read to become out of
-+sync and result in a heap overflow.  Instead, do not treat the buffer
-+as an ASCII C-string. We calculate the count based on the return value
-+of memchr, instead of strlen.
-+
-+Fixes: CVE-2022-32292
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gweb/gweb.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gweb/gweb.c b/gweb/gweb.c
-+index 12fcb1d8..13c6c5f2 100644
-+--- a/gweb/gweb.c
-++++ b/gweb/gweb.c
-+@@ -918,7 +918,7 @@ static gboolean received_data(GIOChannel *channel, GIOCondition cond,
-+ 		}
-+ 
-+ 		*pos = '\0';
-+-		count = strlen((char *) ptr);
-++		count = pos - ptr;
-+ 		if (count > 0 && ptr[count - 1] == '\r') {
-+ 			ptr[--count] = '\0';
-+ 			bytes_read--;
-+-- 
-+cgit 
-+
-diff --git a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-new file mode 100644
-index 0000000000..c2cebdfdcc
---- /dev/null
-+++ b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-@@ -0,0 +1,142 @@
-+From 72343929836de80727a27d6744c869dff045757c Mon Sep 17 00:00:00 2001
-+From: Daniel Wagner <wagi@monom.org>
-+Date: Tue, 5 Jul 2022 08:32:12 +0200
-+Subject: wispr: Add reference counter to portal context
-+
-+Track the connman_wispr_portal_context live time via a
-+refcounter. This only adds the infrastructure to do proper reference
-+counting.
-+
-+Fixes: CVE-2022-32293
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/wispr.c | 52 ++++++++++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 42 insertions(+), 10 deletions(-)
-+
-+diff --git a/src/wispr.c b/src/wispr.c
-+index a07896ca..bde7e63b 100644
-+--- a/src/wispr.c
-++++ b/src/wispr.c
-+@@ -56,6 +56,7 @@ struct wispr_route {
-+ };
-+ 
-+ struct connman_wispr_portal_context {
-++	int refcount;
-+ 	struct connman_service *service;
-+ 	enum connman_ipconfig_type type;
-+ 	struct connman_wispr_portal *wispr_portal;
-+@@ -97,6 +98,11 @@ static char *online_check_ipv4_url = NULL;
-+ static char *online_check_ipv6_url = NULL;
-+ static bool enable_online_to_ready_transition = false;
-+ 
-++#define wispr_portal_context_ref(wp_context) \
-++	wispr_portal_context_ref_debug(wp_context, __FILE__, __LINE__, __func__)
-++#define wispr_portal_context_unref(wp_context) \
-++	wispr_portal_context_unref_debug(wp_context, __FILE__, __LINE__, __func__)
-++
-+ static void connman_wispr_message_init(struct connman_wispr_message *msg)
-+ {
-+ 	DBG("");
-+@@ -162,9 +168,6 @@ static void free_connman_wispr_portal_context(
-+ {
-+ 	DBG("context %p", wp_context);
-+ 
-+-	if (!wp_context)
-+-		return;
-+-
-+ 	if (wp_context->wispr_portal) {
-+ 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-+ 			wp_context->wispr_portal->ipv4_context = NULL;
-+@@ -201,9 +204,38 @@ static void free_connman_wispr_portal_context(
-+ 	g_free(wp_context);
-+ }
-+ 
-++static struct connman_wispr_portal_context *
-++wispr_portal_context_ref_debug(struct connman_wispr_portal_context *wp_context,
-++			const char *file, int line, const char *caller)
-++{
-++	DBG("%p ref %d by %s:%d:%s()", wp_context,
-++		wp_context->refcount + 1, file, line, caller);
-++
-++	__sync_fetch_and_add(&wp_context->refcount, 1);
-++
-++	return wp_context;
-++}
-++
-++static void wispr_portal_context_unref_debug(
-++		struct connman_wispr_portal_context *wp_context,
-++		const char *file, int line, const char *caller)
-++{
-++	if (!wp_context)
-++		return;
-++
-++	DBG("%p ref %d by %s:%d:%s()", wp_context,
-++		wp_context->refcount - 1, file, line, caller);
-++
-++	if (__sync_fetch_and_sub(&wp_context->refcount, 1) != 1)
-++		return;
-++
-++	free_connman_wispr_portal_context(wp_context);
-++}
-++
-+ static struct connman_wispr_portal_context *create_wispr_portal_context(void)
-+ {
-+-	return g_try_new0(struct connman_wispr_portal_context, 1);
-++	return wispr_portal_context_ref(
-++		g_new0(struct connman_wispr_portal_context, 1));
-+ }
-+ 
-+ static void free_connman_wispr_portal(gpointer data)
-+@@ -215,8 +247,8 @@ static void free_connman_wispr_portal(gpointer data)
-+ 	if (!wispr_portal)
-+ 		return;
-+ 
-+-	free_connman_wispr_portal_context(wispr_portal->ipv4_context);
-+-	free_connman_wispr_portal_context(wispr_portal->ipv6_context);
-++	wispr_portal_context_unref(wispr_portal->ipv4_context);
-++	wispr_portal_context_unref(wispr_portal->ipv6_context);
-+ 
-+ 	g_free(wispr_portal);
-+ }
-+@@ -452,7 +484,7 @@ static void portal_manage_status(GWebResult *result,
-+ 		connman_info("Client-Timezone: %s", str);
-+ 
-+ 	if (!enable_online_to_ready_transition)
-+-		free_connman_wispr_portal_context(wp_context);
-++		wispr_portal_context_unref(wp_context);
-+ 
-+ 	__connman_service_ipconfig_indicate_state(service,
-+ 					CONNMAN_SERVICE_STATE_ONLINE, type);
-+@@ -616,7 +648,7 @@ static void wispr_portal_request_wispr_login(struct connman_service *service,
-+ 				return;
-+ 		}
-+ 
-+-		free_connman_wispr_portal_context(wp_context);
-++		wispr_portal_context_unref(wp_context);
-+ 		return;
-+ 	}
-+ 
-+@@ -952,7 +984,7 @@ static int wispr_portal_detect(struct connman_wispr_portal_context *wp_context)
-+ 
-+ 		if (wp_context->token == 0) {
-+ 			err = -EINVAL;
-+-			free_connman_wispr_portal_context(wp_context);
-++			wispr_portal_context_unref(wp_context);
-+ 		}
-+ 	} else if (wp_context->timeout == 0) {
-+ 		wp_context->timeout = g_idle_add(no_proxy_callback, wp_context);
-+@@ -1001,7 +1033,7 @@ int __connman_wispr_start(struct connman_service *service,
-+ 
-+ 	/* If there is already an existing context, we wipe it */
-+ 	if (wp_context)
-+-		free_connman_wispr_portal_context(wp_context);
-++		wispr_portal_context_unref(wp_context);
-+ 
-+ 	wp_context = create_wispr_portal_context();
-+ 	if (!wp_context)
-+-- 
-+cgit 
-+
-diff --git a/package/connman/0003-wispr-Update-portal-context-references.patch b/package/connman/0003-wispr-Update-portal-context-references.patch
-new file mode 100644
-index 0000000000..61c4e21f94
---- /dev/null
-+++ b/package/connman/0003-wispr-Update-portal-context-references.patch
-@@ -0,0 +1,175 @@
-+From 416bfaff988882c553c672e5bfc2d4f648d29e8a Mon Sep 17 00:00:00 2001
-+From: Daniel Wagner <wagi@monom.org>
-+Date: Tue, 5 Jul 2022 09:11:09 +0200
-+Subject: wispr: Update portal context references
-+
-+Maintain proper portal context references to avoid UAF.
-+
-+Fixes: CVE-2022-32293
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/wispr.c | 34 ++++++++++++++++++++++------------
-+ 1 file changed, 22 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/wispr.c b/src/wispr.c
-+index bde7e63b..84bed33f 100644
-+--- a/src/wispr.c
-++++ b/src/wispr.c
-+@@ -105,8 +105,6 @@ static bool enable_online_to_ready_transition = false;
-+ 
-+ static void connman_wispr_message_init(struct connman_wispr_message *msg)
-+ {
-+-	DBG("");
-+-
-+ 	msg->has_error = false;
-+ 	msg->current_element = NULL;
-+ 
-+@@ -166,8 +164,6 @@ static void free_wispr_routes(struct connman_wispr_portal_context *wp_context)
-+ static void free_connman_wispr_portal_context(
-+ 		struct connman_wispr_portal_context *wp_context)
-+ {
-+-	DBG("context %p", wp_context);
-+-
-+ 	if (wp_context->wispr_portal) {
-+ 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-+ 			wp_context->wispr_portal->ipv4_context = NULL;
-+@@ -483,9 +479,6 @@ static void portal_manage_status(GWebResult *result,
-+ 				&str))
-+ 		connman_info("Client-Timezone: %s", str);
-+ 
-+-	if (!enable_online_to_ready_transition)
-+-		wispr_portal_context_unref(wp_context);
-+-
-+ 	__connman_service_ipconfig_indicate_state(service,
-+ 					CONNMAN_SERVICE_STATE_ONLINE, type);
-+ 
-+@@ -546,14 +539,17 @@ static void wispr_portal_request_portal(
-+ {
-+ 	DBG("");
-+ 
-++	wispr_portal_context_ref(wp_context);
-+ 	wp_context->request_id = g_web_request_get(wp_context->web,
-+ 					wp_context->status_url,
-+ 					wispr_portal_web_result,
-+ 					wispr_route_request,
-+ 					wp_context);
-+ 
-+-	if (wp_context->request_id == 0)
-++	if (wp_context->request_id == 0) {
-+ 		wispr_portal_error(wp_context);
-++		wispr_portal_context_unref(wp_context);
-++	}
-+ }
-+ 
-+ static bool wispr_input(const guint8 **data, gsize *length,
-+@@ -618,13 +614,15 @@ static void wispr_portal_browser_reply_cb(struct connman_service *service,
-+ 		return;
-+ 
-+ 	if (!authentication_done) {
-+-		wispr_portal_error(wp_context);
-+ 		free_wispr_routes(wp_context);
-++		wispr_portal_error(wp_context);
-++		wispr_portal_context_unref(wp_context);
-+ 		return;
-+ 	}
-+ 
-+ 	/* Restarting the test */
-+ 	__connman_service_wispr_start(service, wp_context->type);
-++	wispr_portal_context_unref(wp_context);
-+ }
-+ 
-+ static void wispr_portal_request_wispr_login(struct connman_service *service,
-+@@ -700,11 +698,13 @@ static bool wispr_manage_message(GWebResult *result,
-+ 
-+ 		wp_context->wispr_result = CONNMAN_WISPR_RESULT_LOGIN;
-+ 
-++		wispr_portal_context_ref(wp_context);
-+ 		if (__connman_agent_request_login_input(wp_context->service,
-+ 					wispr_portal_request_wispr_login,
-+-					wp_context) != -EINPROGRESS)
-++					wp_context) != -EINPROGRESS) {
-+ 			wispr_portal_error(wp_context);
-+-		else
-++			wispr_portal_context_unref(wp_context);
-++		} else
-+ 			return true;
-+ 
-+ 		break;
-+@@ -753,6 +753,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 		if (length > 0) {
-+ 			g_web_parser_feed_data(wp_context->wispr_parser,
-+ 								chunk, length);
-++			wispr_portal_context_unref(wp_context);
-+ 			return true;
-+ 		}
-+ 
-+@@ -770,6 +771,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 
-+ 	switch (status) {
-+ 	case 000:
-++		wispr_portal_context_ref(wp_context);
-+ 		__connman_agent_request_browser(wp_context->service,
-+ 				wispr_portal_browser_reply_cb,
-+ 				wp_context->status_url, wp_context);
-+@@ -781,11 +783,14 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 		if (g_web_result_get_header(result, "X-ConnMan-Status",
-+ 						&str)) {
-+ 			portal_manage_status(result, wp_context);
-++			wispr_portal_context_unref(wp_context);
-+ 			return false;
-+-		} else
-++		} else {
-++			wispr_portal_context_ref(wp_context);
-+ 			__connman_agent_request_browser(wp_context->service,
-+ 					wispr_portal_browser_reply_cb,
-+ 					wp_context->redirect_url, wp_context);
-++		}
-+ 
-+ 		break;
-+ 	case 300:
-+@@ -798,6 +803,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 			!g_web_result_get_header(result, "Location",
-+ 							&redirect)) {
-+ 
-++			wispr_portal_context_ref(wp_context);
-+ 			__connman_agent_request_browser(wp_context->service,
-+ 					wispr_portal_browser_reply_cb,
-+ 					wp_context->status_url, wp_context);
-+@@ -808,6 +814,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 
-+ 		wp_context->redirect_url = g_strdup(redirect);
-+ 
-++		wispr_portal_context_ref(wp_context);
-+ 		wp_context->request_id = g_web_request_get(wp_context->web,
-+ 				redirect, wispr_portal_web_result,
-+ 				wispr_route_request, wp_context);
-+@@ -820,6 +827,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 
-+ 		break;
-+ 	case 505:
-++		wispr_portal_context_ref(wp_context);
-+ 		__connman_agent_request_browser(wp_context->service,
-+ 				wispr_portal_browser_reply_cb,
-+ 				wp_context->status_url, wp_context);
-+@@ -832,6 +840,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-+ 	wp_context->request_id = 0;
-+ done:
-+ 	wp_context->wispr_msg.message_type = -1;
-++	wispr_portal_context_unref(wp_context);
-+ 	return false;
-+ }
-+ 
-+@@ -890,6 +899,7 @@ static void proxy_callback(const char *proxy, void *user_data)
-+ 					xml_wispr_parser_callback, wp_context);
-+ 
-+ 	wispr_portal_request_portal(wp_context);
-++	wispr_portal_context_unref(wp_context);
-+ }
-+ 
-+ static gboolean no_proxy_callback(gpointer user_data)
-+-- 
-+cgit 
-+
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index a76a339e6f..fbd7318e4e 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -13,6 +13,13 @@ CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CPE_ID_VENDOR = intel
+diff --git a/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch b/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
+index 90e3cc262d..0074932fba 100644
+--- a/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
++++ b/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
+@@ -1,4 +1,4 @@
+-From e9b64ab75e8539a52d60ecb299fc5425f0d27dc7 Mon Sep 17 00:00:00 2001
++From e72d34ef2c87e5c9ffd49c98b651641f48d89c24 Mon Sep 17 00:00:00 2001
+ From: Christian Stewart <christian@paral.in>
+ Date: Sat, 25 Jun 2022 14:57:38 -0700
+ Subject: [PATCH] go.mod: fix jacobsa/crypto build on riscv64
+@@ -11,27 +11,31 @@ Upstream PR: https://github.com/jacobsa/crypto/issues/13
  
-+# 0001-gweb-Fix-OOB-write-in-received_data.patch
-+CONNMAN_IGNORE_CVES += CVE-2022-32292
-+
-+# 0002-wispr-Add-reference-counter-to-portal-context.patch
-+# 0003-wispr-Update-portal-context-references.patch
-+CONNMAN_IGNORE_CVES += CVE-2022-32293
-+
- CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
+ Signed-off-by: Christian Stewart <christian@paral.in>
+ ---
+- go.mod                                        |  9 ++---
+- go.sum                                        |  4 +-
++ go.mod                                        | 15 ++++---
++ go.sum                                        | 16 +++-----
+  .../jacobsa/crypto/cmac/hash_generic.go       | 40 +++++++++++++++++++
+- vendor/modules.txt                            | 13 +-----
+- 4 files changed, 48 insertions(+), 18 deletions(-)
++ vendor/modules.txt                            | 16 ++------
++ 4 files changed, 59 insertions(+), 28 deletions(-)
+  create mode 100644 vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
  
- ifeq ($(BR2_INIT_SYSTEMD),y)
+ diff --git a/go.mod b/go.mod
+-index 29f7c2c..533fcdd 100644
++index 754a667..5103029 100644
+ --- a/go.mod
+ +++ b/go.mod
+-@@ -2,19 +2,18 @@ module github.com/rfjakob/gocryptfs/v2
++@@ -2,19 +2,22 @@ module github.com/rfjakob/gocryptfs/v2
+  
+  go 1.16
+  
+ +// Fixes build against risc-v
+ +// See: https://github.com/jacobsa/crypto/issues/13
+-+replace github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607 // xorblock-generic-1
+++replace github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93 // buildroot-1
+++
+++// Prevent x/sys version from changing and polluting vendor/
+++// Pin it to the current version in the original go.mod.
+++replace golang.org/x/sys => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+ +
+  require (
+- 	github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae
++ 	github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914
+  	github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
+ -	github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd // indirect
+ -	github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff // indirect
+@@ -43,25 +47,52 @@ index 29f7c2c..533fcdd 100644
+  	github.com/spf13/pflag v1.0.5
+  	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+ -	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
+- 	golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+- 	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
++-	golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+++	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
++ 	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
+  )
+ diff --git a/go.sum b/go.sum
+-index be0be5f..c26b80e 100644
++index 4167388..71826e9 100644
+ --- a/go.sum
+ +++ b/go.sum
+ @@ -1,9 +1,9 @@
+-+github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607 h1:N8UVJlxKDhrvHTKXC7oVVfhVvGbgaw2mmlnCgGkfOFc=
+-+github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607/go.mod h1:Om5VFfyh5VipAEOOVoHAUa4hebUCKxQUjggFPTLeH08=
+++github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93 h1:awSzmXfGWzvmRmrU1oSHqUdpxNcVPRMqv0rytbSA8kA=
+++github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93/go.mod h1:SHG0nzlQikn4UxNIXqEKd2hvJM2tRIrdr1FfOrF+/wY=
+  github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
+  github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+- github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae h1:4CB6T4YTUVvnro5ba8ju1QCbOuyGAeF3vvKlo50EJ4k=
+- github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae/go.mod h1:B1nGE/6RBFyBRC1RRnf23UpwCdyJ31eukw34oAKukAc=
++ github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914 h1:hGXMxS1wTE4y+f7iBqFArrJ6X8QozHnEdnVzGZI9Ywc=
++ github.com/hanwen/go-fuse/v2 v2.1.1-0.20211219085202-934a183ed914/go.mod h1:B1nGE/6RBFyBRC1RRnf23UpwCdyJ31eukw34oAKukAc=
+ -github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 h1:YuDUUFNM21CAbyPOpOP8BicaTD/0klJEKt5p8yuw+uY=
+ -github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115/go.mod h1:LadVJg0XuawGk+8L1rYnIED8451UyNxEMdTWCEt5kmU=
+  github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd h1:9GCSedGjMcLZCrusBZuo4tyKLpKUPenUUqi34AkuFmA=
+  github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd/go.mod h1:TlmyIZDpGmwRoTWiakdr+HA1Tukze6C6XbRVidYq02M=
+  github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff h1:2xRHTvkpJ5zJmglXLRqHiZQNjUoOkhUyhTAhEQvPAWw=
++@@ -30,21 +30,17 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
++ golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 h1:HWj/xjIHfjYU5nVXpTM0s39J9CbLn7Cc5a7IC5rwsMQ=
++ golang.org/x/crypto v0.0.0-20210817164053-32db794688a5/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
++ golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
++-golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d h1:LO7XpTYMwTqxjLcGWPijK3vRXg1aWdlNOVOHRq45d7c=
++-golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
+++golang.org/x/net v0.0.0-20220708220712-1185a9018129 h1:vucSRfWwTsoXro7P+3Cjlr6flUMtzCwzlvkxEQtHHB0=
+++golang.org/x/net v0.0.0-20220708220712-1185a9018129/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
++ golang.org/x/sync v0.0.0-20201207232520-09787c993a3a/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
++-golang.org/x/sys v0.0.0-20180830151530-49385e6e1522/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
++-golang.org/x/sys v0.0.0-20201101102859-da207088b7d1/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++-golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++-golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++-golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++ golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2 h1:c8PlLMqBbOHoqtjteWm5/kbe6rNY2pbRfbIMVnepueo=
++ golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++ golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
+++golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
++ golang.org/x/term v0.0.0-20220722155259-a9ba230a4035 h1:Q5284mrmYTpACcm+eAKjKJH48BBwSyfJqmmGDTtT8Vc=
++ golang.org/x/term v0.0.0-20220722155259-a9ba230a4035/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
++ golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
++-golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+++golang.org/x/text v0.3.7/go.mod h1:u+2+/6zg+i71rQMx5EYifcz6MCKuco9NR6JIITiCfzQ=
++ golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
++ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
++ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
+ diff --git a/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go b/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
+ new file mode 100644
+ index 0000000..235e3fc
+@@ -109,7 +140,7 @@ index 0000000..235e3fc
+ +	}
+ +}
+ diff --git a/vendor/modules.txt b/vendor/modules.txt
+-index 662f0c3..9b47daa 100644
++index 0e97e42..634c079 100644
+ --- a/vendor/modules.txt
+ +++ b/vendor/modules.txt
+ @@ -5,19 +5,11 @@ github.com/hanwen/go-fuse/v2/fuse
+@@ -117,7 +148,7 @@ index 662f0c3..9b47daa 100644
+  github.com/hanwen/go-fuse/v2/internal/utimens
+  github.com/hanwen/go-fuse/v2/splice
+ -# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
+-+# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607
+++# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93
+  ## explicit
+  github.com/jacobsa/crypto/cmac
+  github.com/jacobsa/crypto/common
+@@ -133,20 +164,23 @@ index 662f0c3..9b47daa 100644
+  # github.com/pkg/xattr v0.4.3
+  ## explicit
+  github.com/pkg/xattr
+-@@ -40,8 +32,6 @@ golang.org/x/crypto/pbkdf2
++@@ -39,9 +31,7 @@ golang.org/x/crypto/internal/subtle
++ golang.org/x/crypto/pbkdf2
+  golang.org/x/crypto/poly1305
+  golang.org/x/crypto/scrypt
+- golang.org/x/crypto/ssh/terminal
+ -# golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
+ -## explicit
+- # golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
++-# golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+++# golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+  ## explicit
+  golang.org/x/sys/cpu
+-@@ -52,3 +42,4 @@ golang.org/x/sys/windows
+- # golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
++ golang.org/x/sys/internal/unsafeheader
++@@ -51,3 +41,5 @@ golang.org/x/sys/windows
++ # golang.org/x/term v0.0.0-20220722155259-a9ba230a4035
+  ## explicit
+  golang.org/x/term
+-+# github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607
+++# github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v1.0.2-0.20221208222437-85e082e29e93
+++# golang.org/x/sys => golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+ -- 
+-2.35.1
++2.38.1
+ 
+diff --git a/package/gocryptfs/gocryptfs.hash b/package/gocryptfs/gocryptfs.hash
+index ae161d1cd8..28965a0648 100644
+--- a/package/gocryptfs/gocryptfs.hash
++++ b/package/gocryptfs/gocryptfs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  88f32bb8e18fa89e4ab666f7c8ad622281a11e423b4093e50ac260f960bc40b6  gocryptfs-2.2.1.tar.gz
++sha256  bfc98c18e44a2ca24a0e1472b6d9bb96e6072d7fb5651616515d2e7117b8fed9  gocryptfs-2.3.tar.gz
+ sha256  322a7e3b02cf18e38b7e6b18cafefb773df8676c65634b34e8a2beb931294a4b  LICENSE
+diff --git a/package/gocryptfs/gocryptfs.mk b/package/gocryptfs/gocryptfs.mk
+index 8f70dba7c3..077597e7e8 100644
+--- a/package/gocryptfs/gocryptfs.mk
++++ b/package/gocryptfs/gocryptfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GOCRYPTFS_VERSION = 2.2.1
++GOCRYPTFS_VERSION = 2.3
+ GOCRYPTFS_SITE = $(call github,rfjakob,gocryptfs,v$(GOCRYPTFS_VERSION))
+ GOCRYPTFS_LICENSE = MIT
+ GOCRYPTFS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
