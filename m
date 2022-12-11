@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9914C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C74C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FAC840865;
-	Sun, 11 Dec 2022 09:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FAC840865
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09CBD408F8;
+	Sun, 11 Dec 2022 09:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09CBD408F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Smm2gFzsqdBq; Sun, 11 Dec 2022 09:05:14 +0000 (UTC)
+	with ESMTP id k88kwLLc_6Tc; Sun, 11 Dec 2022 09:05:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6782C402A6;
-	Sun, 11 Dec 2022 09:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6782C402A6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9EA631BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE8CC4086B;
+	Sun, 11 Dec 2022 09:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE8CC4086B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A08D81BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A55C040F4E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81483404FC
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A55C040F4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81483404FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e_HI88B5CwWZ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1jf_d8nI_w2J for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D47D040984
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D47D040984
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD9FF404F8
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD9FF404F8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEEAA85FAB; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id BA1E185FA6; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:24 +0100
+Date: Sun, 11 Dec 2022 09:30:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8954158337c3c15a7b7f184cd78fab9b625df08
-X-Git-Newrev: 7d08d1f7bca47a5f73422ebd716f30c79cd99124
+X-Git-Oldrev: c75ac80eeaa30b3888f20e0c32df7a3e5c9172b5
+X-Git-Newrev: 2733644c8947f8dafa1559bc12b3e67cee99ae6c
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.CEEAA85FAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-memory-profiler: bump to
- version 0.61.0
+Message-Id: <20221211085516.BA1E185FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d08d1f7bca47a5f73422ebd716f30c79cd99124
+commit: https://git.buildroot.net/buildroot/commit/?id=2733644c8947f8dafa1559bc12b3e67cee99ae6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-memory-profiler/python-memory-profiler.hash | 4 ++--
- package/python-memory-profiler/python-memory-profiler.mk   | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-memory-profiler/python-memory-profiler.hash b/package/python-memory-profiler/python-memory-profiler.hash
-index 9e3aca517b..bab9018331 100644
---- a/package/python-memory-profiler/python-memory-profiler.hash
-+++ b/package/python-memory-profiler/python-memory-profiler.hash
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 729ffe94c4..2aa739f398 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/memory-profiler/json
--md5  c4d29b47885c32581f5bcefb44d2ca8e  memory_profiler-0.60.0.tar.gz
--sha256  6a12869511d6cebcb29b71ba26985675a58e16e06b3c523b49f67c5497a33d1c  memory_profiler-0.60.0.tar.gz
-+md5  5fe93d5035288095c4f86ef69ee19f37  memory_profiler-0.61.0.tar.gz
-+sha256  4e5b73d7864a1d1292fb76a03e82a3e78ef934d06828a698d9dada76da2067b0  memory_profiler-0.61.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  7f31bd0d6d968c711f8b1d928836eaaa  sentry-sdk-1.10.1.tar.gz
+-sha256  105faf7bd7b7fa25653404619ee261527266b14103fe1389e0ce077bd23a9691  sentry-sdk-1.10.1.tar.gz
++md5  4980e01dc73c6bcf794b0b7d3f3e08d7  sentry-sdk-1.11.1.tar.gz
++sha256  675f6279b6bb1fea09fd61751061f9a90dca3b5929ef631dd50dc8b3aeb245e9  sentry-sdk-1.11.1.tar.gz
  # Locally computed sha256 checksums
- sha256  51926ce91b8283532efa9dfb02518582c15f49c105a3ac18cce1f7a4947e96ae  COPYING
-diff --git a/package/python-memory-profiler/python-memory-profiler.mk b/package/python-memory-profiler/python-memory-profiler.mk
-index 5e43662e07..c7f84043eb 100644
---- a/package/python-memory-profiler/python-memory-profiler.mk
-+++ b/package/python-memory-profiler/python-memory-profiler.mk
+ sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index d8e9e8a2c9..056a015952 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MEMORY_PROFILER_VERSION = 0.60.0
-+PYTHON_MEMORY_PROFILER_VERSION = 0.61.0
- PYTHON_MEMORY_PROFILER_SOURCE = memory_profiler-$(PYTHON_MEMORY_PROFILER_VERSION).tar.gz
--PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/06/dd/7308a8ef1902db9d81c5bc226befe346a87ed8787caff00b8d91ed9f3b86
-+PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/b2/88/e1907e1ca3488f2d9507ca8b0ae1add7b1cd5d3ca2bc8e5b329382ea2c7b
- PYTHON_MEMORY_PROFILER_SETUP_TYPE = setuptools
- PYTHON_MEMORY_PROFILER_LICENSE = BSD-3-Clause
- PYTHON_MEMORY_PROFILER_LICENSE_FILES = COPYING
+-PYTHON_SENTRY_SDK_VERSION = 1.10.1
++PYTHON_SENTRY_SDK_VERSION = 1.11.1
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/43/37/89598a56119199b69a3c4b13e2ce1b57ff69f68313ed393016086d6b487b
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/a3/d5/db26377e9817407ae8d7b65e15b3c3b8d817c301633be15bd2aef61f38a3
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
