@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB6CCC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C34C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 885C8817B5;
-	Sun, 11 Dec 2022 09:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 885C8817B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03A5D403C2;
+	Sun, 11 Dec 2022 09:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03A5D403C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id InagwHgS9zLU; Sun, 11 Dec 2022 09:07:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jzWAk7SBpnAO; Sun, 11 Dec 2022 09:08:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDDBA817B1;
-	Sun, 11 Dec 2022 09:07:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDDBA817B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CB72404CF;
+	Sun, 11 Dec 2022 09:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CB72404CF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DBA381BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC4171BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FD6940929
+ by smtp4.osuosl.org (Postfix) with ESMTP id 937E34093A
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD6940929
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 937E34093A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uANliezB3spb for <buildroot@lists.busybox.net>;
+ with ESMTP id 0H4yFWBzt5JC for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DD45409A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CE2C409B1
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DD45409A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CE2C409B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74D8485FAA; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+ id 5300985FAB; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:51 +0100
+Date: Sun, 11 Dec 2022 09:29:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0894b7f78b17a2ddb4e922c5ee63379fe00a7259
-X-Git-Newrev: 59ae28ac059852c4adb9e5116006f8724bd8578b
+X-Git-Oldrev: 6e25c2ec47755a27fada8cffc2aa822402bb86b9
+X-Git-Newrev: 9371a7994e1099a8681411ddb686a1c2ce53ef10
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085516.74D8485FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pycairo: bump to version
- 1.23.0
+Message-Id: <20221211085516.5300985FAB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-psutil: bump to version
+ 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59ae28ac059852c4adb9e5116006f8724bd8578b
+commit: https://git.buildroot.net/buildroot/commit/?id=9371a7994e1099a8681411ddb686a1c2ce53ef10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pycairo/python-pycairo.hash | 4 ++--
- package/python-pycairo/python-pycairo.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index f8018e682f..98bb7f2802 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5  682238eaa8bd7032e36a20b6f53824d1  pycairo-1.21.0.tar.gz
--sha256  251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b  pycairo-1.21.0.tar.gz
-+md5  7a3729d21659098e1b9a411b62e88966  pycairo-1.23.0.tar.gz
-+sha256  9b61ac818723adc04367301317eb2e814a83522f07bbd1f409af0dada463c44c  pycairo-1.23.0.tar.gz
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index c7b7e46ec1..15927562b1 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  66b847f94545e96b540518ebe19740b4  psutil-5.9.3.tar.gz
+-sha256  7ccfcdfea4fc4b0a02ca2c31de7fcd186beb9cff8207800e14ab66f79c773af6  psutil-5.9.3.tar.gz
++md5  f72751d05b781757b7cd9bc375d2e351  psutil-5.9.4.tar.gz
++sha256  3d7f9739eb435d4b1338944abe23f49584bde5395f27487d2ee25ad9a8774a62  psutil-5.9.4.tar.gz
  # Locally computed sha256 checksums
- sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
- sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index 5b231f6b1e..f9933df187 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
+ sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 578f69d3c7..e764d1accc 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.21.0
-+PYTHON_PYCAIRO_VERSION = 1.23.0
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/92/a4/506564f574fa74c90b98690e8ecc8dbae1629f31fcfe0be69de45d9e1605
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/69/ca/9e9fa2e8be0876a9bbf046a1be7ee33e61d4fdfbd1fd25c76c1bdfddf8c4
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-PYTHON_PSUTIL_VERSION = 5.9.3
++PYTHON_PSUTIL_VERSION = 5.9.4
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/de/eb/1c01a34c86ee3b058c556e407ce5b07cb7d186ebe47b3e69d6f152ca5cc5
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/3d/7d/d05864a69e452f003c0d77e728e155a89a2a26b09e64860ddd70ad64fb26
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
