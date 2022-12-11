@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0384BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B54BC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73F774ED07;
-	Mon, 20 Feb 2023 21:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73F774ED07
+	by smtp4.osuosl.org (Postfix) with ESMTP id 505044ECD9;
+	Mon, 20 Feb 2023 21:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 505044ECD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VFnL_bR-tTqk; Mon, 20 Feb 2023 21:55:07 +0000 (UTC)
+	with ESMTP id Y1vT5yA132-i; Mon, 20 Feb 2023 21:55:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A9194ECEB;
-	Mon, 20 Feb 2023 21:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A9194ECEB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C20E1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0A624ECF4;
+	Mon, 20 Feb 2023 21:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0A624ECF4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 90A001BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 830F3610F9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 830F3610F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3619440C32
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3619440C32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KzrAqMi-QyOW for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jyDuZyN17LqW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B978661109
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B978661109
+ by smtp2.osuosl.org (Postfix) with ESMTP id 575C8416A4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 575C8416A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6A0386494; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+ id 45B1B8648F; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:39 +0100
+Date: Sun, 11 Dec 2022 09:28:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fefd30f06c88f36cc75b52b767293586e1770af1
-X-Git-Newrev: 07f7d434a438421eb382a27349e67cffd97d8a3f
+X-Git-Oldrev: 35db8c433e3a283a7611eca1b7e27e8cee474a4f
+X-Git-Newrev: 870197baf9c22fe45122b1c2db6bfc19f153c27b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205157.B6A0386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xkbevd:
- bump version to 1.1.5
+Message-Id: <20230220205201.45B1B8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-chardet: bump
+ to version 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f7d434a438421eb382a27349e67cffd97d8a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=870197baf9c22fe45122b1c2db6bfc19f153c27b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-November/003255.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Drop setuptools runtime dependency.
+
+Update description as python 2 is no longer supported.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xkbevd/xapp_xkbevd.hash | 5 +++--
- package/x11r7/xapp_xkbevd/xapp_xkbevd.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-chardet/Config.in           | 3 +--
+ package/python-chardet/python-chardet.hash | 4 ++--
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
-index c3cf2f32b2..40b813fcf2 100644
---- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
-+++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002577.html
--sha256  2430a2e5302a4cb4a5530c1df8cb3721a149bbf8eb377a2898921a145197f96a  xkbevd-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003255.html
-+sha256  38357b702de9d3457c4ff75053390f457b84c4accc7f088101255c37c684926b  xkbevd-1.1.5.tar.xz
-+sha512  9e4a56484771e5eb5444fbd11e7d0bb952a2746eea79b84298e2000ada96896d501b886727c4ef08c120b5dcce550fca2d3e3dd762f4ca0327c38d9609961c5b  xkbevd-1.1.5.tar.xz
+diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
+index 869888cfe0..59e7cbfa2c 100644
+--- a/package/python-chardet/Config.in
++++ b/package/python-chardet/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CHARDET
+ 	bool "python-chardet"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+-	  Universal encoding detector for Python 2 and 3.
++	  Universal encoding detector for Python 3.
+ 
+ 	  https://github.com/chardet/chardet
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index 7721814279..7887dd769d 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/chardet/json
+-md5  8013c248c098e165ac53d900e1a1278a  chardet-5.0.0.tar.gz
+-sha256  0368df2bfd78b5fc20572bb4e9bb7fb53e2c094f60ae9993339e8671d0afb8aa  chardet-5.0.0.tar.gz
++md5  394bd03d7a258d2771040bfbd5a7bf66  chardet-5.1.0.tar.gz
++sha256  0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5  chardet-5.1.0.tar.gz
  # Locally computed
- sha256  38c6dbf8f88b1c920561ff3a4d1ffdb85c069c664f5f8b64a9adb477ef347b7c  COPYING
-diff --git a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
-index 7a9a8fb18f..5b99e6967f 100644
---- a/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
-+++ b/package/x11r7/xapp_xkbevd/xapp_xkbevd.mk
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 1d737891a0..42646aa513 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XKBEVD_VERSION = 1.1.4
--XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.bz2
--XAPP_XKBEVD_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XKBEVD_VERSION = 1.1.5
-+XAPP_XKBEVD_SOURCE = xkbevd-$(XAPP_XKBEVD_VERSION).tar.xz
-+XAPP_XKBEVD_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XKBEVD_LICENSE = MIT
- XAPP_XKBEVD_LICENSE_FILES = COPYING
- XAPP_XKBEVD_DEPENDENCIES = xlib_libxkbfile
+-PYTHON_CHARDET_VERSION = 5.0.0
++PYTHON_CHARDET_VERSION = 5.1.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/31/a2/12c090713b3d0e141f367236d3a8bdc3e5fca0d83ff3647af4892c16c205
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/41/32/cdc91dcf83849c7385bf8e2a5693d87376536ed000807fa07f5eab33430d
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
