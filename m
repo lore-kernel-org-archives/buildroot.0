@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E13FC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:57:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1F1C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB16681396;
-	Sun, 11 Dec 2022 08:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB16681396
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7YdJV20QYXPI; Sun, 11 Dec 2022 08:57:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAC2B81369;
-	Sun, 11 Dec 2022 08:57:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAC2B81369
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5682A1BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B630409AC
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B630409AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85EC740946;
+	Sun, 11 Dec 2022 08:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85EC740946
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TkX0ylarDXl5 for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C-WCdtMkunf3; Sun, 11 Dec 2022 08:58:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 762554093E;
+	Sun, 11 Dec 2022 08:58:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 762554093E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A77D91BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D97B960AC2
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D97B960AC2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5QX6w-6bF5bq for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEA2E4092F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E570C605EC
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEA2E4092F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E570C605EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBD5985FAA; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
+ id CF16185FAC; Sun, 11 Dec 2022 08:55:14 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:39 +0100
+Date: Sun, 11 Dec 2022 09:28:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25aedae85112ee9225f23863587807bdef67580c
-X-Git-Newrev: 0f0ceb49be6a5e3439fa6da226d4e414b5a208ad
+X-Git-Oldrev: 35db8c433e3a283a7611eca1b7e27e8cee474a4f
+X-Git-Newrev: 870197baf9c22fe45122b1c2db6bfc19f153c27b
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085514.EBD5985FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cryptography: bump to
- version 38.0.4
+Message-Id: <20221211085514.CF16185FAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-chardet: bump to version
+ 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f0ceb49be6a5e3439fa6da226d4e414b5a208ad
+commit: https://git.buildroot.net/buildroot/commit/?id=870197baf9c22fe45122b1c2db6bfc19f153c27b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop setuptools runtime dependency.
+
+Update description as python 2 is no longer supported.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-chardet/Config.in           | 3 +--
+ package/python-chardet/python-chardet.hash | 4 ++--
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 40d217f666..a01c8810e3 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
+index 869888cfe0..59e7cbfa2c 100644
+--- a/package/python-chardet/Config.in
++++ b/package/python-chardet/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CHARDET
+ 	bool "python-chardet"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+-	  Universal encoding detector for Python 2 and 3.
++	  Universal encoding detector for Python 3.
+ 
+ 	  https://github.com/chardet/chardet
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index 7721814279..7887dd769d 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  cd0b4536eabc6fcb80aa03430fc2ca485d33249eea0cd23f76c1dd9da410c66c  cryptography-38.0.3.tar.gz
-+sha256  2abbeb6d42e8844de036bf2e0d78a42feeee1d57ebf29a07684490f98bdcab37  cryptography-38.0.4.tar.gz
- # Locally computed sha256 checksums
- sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 69eb90d795..4254fa3557 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+ # md5, sha256 from https://pypi.org/pypi/chardet/json
+-md5  8013c248c098e165ac53d900e1a1278a  chardet-5.0.0.tar.gz
+-sha256  0368df2bfd78b5fc20572bb4e9bb7fb53e2c094f60ae9993339e8671d0afb8aa  chardet-5.0.0.tar.gz
++md5  394bd03d7a258d2771040bfbd5a7bf66  chardet-5.1.0.tar.gz
++sha256  0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5  chardet-5.1.0.tar.gz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 1d737891a0..42646aa513 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 38.0.3
-+PYTHON_CRYPTOGRAPHY_VERSION = 38.0.4
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/13/dd/a9608b7aebe5d2dc0c98a4b2090a6b815628efa46cc1c046b89d8cd25f4c
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/e3/3f/41186b1f2fd86a542d399175f6b8e43f82cd4dfa51235a0b030a042b811a
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_CHARDET_VERSION = 5.0.0
++PYTHON_CHARDET_VERSION = 5.1.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/31/a2/12c090713b3d0e141f367236d3a8bdc3e5fca0d83ff3647af4892c16c205
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/41/32/cdc91dcf83849c7385bf8e2a5693d87376536ed000807fa07f5eab33430d
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
