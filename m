@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38061C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 372C3C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1B764048F;
-	Sun, 11 Dec 2022 09:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B764048F
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF64B404CF;
+	Sun, 11 Dec 2022 09:03:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF64B404CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7iLww_EsKCpV; Sun, 11 Dec 2022 09:03:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4gktD93EY9EB; Sun, 11 Dec 2022 09:03:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D866A401D0;
-	Sun, 11 Dec 2022 09:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D866A401D0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF2461BF3EA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CF92404EB;
+	Sun, 11 Dec 2022 09:03:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF92404EB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 86E1A1BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB3E760AE2
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB3E760AE2
+ by smtp2.osuosl.org (Postfix) with ESMTP id F4132404F1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F4132404F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M84SP_WNTh4c for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wwjf9FcRvP5a for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A1D260B01
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A93A404CF
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A1D260B01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A93A404CF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF77885FAC; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+ id 25E2E85FAC; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:14 +0100
+Date: Sun, 11 Dec 2022 09:29:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b9b0bfbdfeb976bf047b9c6e346542159035395c
-X-Git-Newrev: 6b401a65858161cd840378632d934a5fa13120d1
+X-Git-Oldrev: b9f06cbbbce135bb149681fa708650a140a12271
+X-Git-Newrev: bb0fc1d63c96df58782d5473bcca175724924e51
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085516.EF77885FAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-traitlets: bump to version
- 5.7.0
+Message-Id: <20221211085516.25E2E85FAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-posix-ipc: bump to version
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b401a65858161cd840378632d934a5fa13120d1
+commit: https://git.buildroot.net/buildroot/commit/?id=bb0fc1d63c96df58782d5473bcca175724924e51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to date update:
+https://github.com/osvenskan/posix_ipc/commit/4db678001be2f16175c70cb88d4fb9f9126333f5
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-traitlets/python-traitlets.hash | 4 ++--
- package/python-traitlets/python-traitlets.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-posix-ipc/python-posix-ipc.hash | 6 +++---
+ package/python-posix-ipc/python-posix-ipc.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-index 095e85c155..3b48fb6ab8 100644
---- a/package/python-traitlets/python-traitlets.hash
-+++ b/package/python-traitlets/python-traitlets.hash
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index 4258af6348..74d2db0f5e 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/traitlets/json
--md5  d5f87bbea8acf897ac3e435c7b71acdc  traitlets-5.5.0.tar.gz
--sha256  b122f9ff2f2f6c1709dab289a05555be011c87828e911c0cf4074b85cb780a79  traitlets-5.5.0.tar.gz
-+md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
-+sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/posix-ipc/json
+-md5  8c9443859492ecf3aae9182aa6b5c78c  posix_ipc-1.0.5.tar.gz
+-sha256  6cddb1ce2cf4aae383f2a0079c26c69bee257fe2720f372201ef047f8ceb8b97  posix_ipc-1.0.5.tar.gz
++md5  81baeabebd3e4064972ec62fd9eace0b  posix_ipc-1.1.0.tar.gz
++sha256  f86a15b32b38573c78e305ebd9100d8198a3d9facc03ffafe39edc35833738e3  posix_ipc-1.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index 25ab71047a..71bb775a45 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
+-sha256  61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
++sha256  2b58f0bf31a8cbd7e56bfef030e9f7f02758ce8a810d073ccf41753bdc2a0747  LICENSE
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index 359dee6d7c..c25af9ecbd 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TRAITLETS_VERSION = 5.5.0
-+PYTHON_TRAITLETS_VERSION = 5.7.0
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
--PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/dd/a8/278742d17c9e95ccb0dcb86ae216df114d2166d88e72f42b60a7b58b600b
-+PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
- PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
- PYTHON_TRAITLETS_SETUP_TYPE = pep517
+-PYTHON_POSIX_IPC_VERSION = 1.0.5
++PYTHON_POSIX_IPC_VERSION = 1.1.0
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/bc/2f/9a7901aa26fb0e02a671b989ba814d059a0f45af85cea31b9c9eef7e2dda
++PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/41/72/90b6702782921c0e3e0b10a66f2a47d8cfaf9c2255d763ab45cc8cea25eb
+ PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+ PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
