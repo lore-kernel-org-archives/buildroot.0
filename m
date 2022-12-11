@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04C0BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E92DC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E50A41723;
-	Mon, 20 Feb 2023 22:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E50A41723
+	by smtp4.osuosl.org (Postfix) with ESMTP id 522584F044;
+	Mon, 20 Feb 2023 22:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522584F044
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FS3G_s6a4RcJ; Mon, 20 Feb 2023 22:26:08 +0000 (UTC)
+	with ESMTP id 8dgDTUS-ZIBy; Mon, 20 Feb 2023 22:26:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D1CD4F046;
-	Mon, 20 Feb 2023 22:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1CD4F046
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF6484F03A;
+	Mon, 20 Feb 2023 22:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF6484F03A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51BF61BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BB5DE1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7800A61186
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EF966110A
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7800A61186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EF966110A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ILrcod-HdDhn for <buildroot@lists.busybox.net>;
+ with ESMTP id ZJxAftBj76q4 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 917E061166
+ by smtp3.osuosl.org (Postfix) with ESMTP id B286B61167
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 917E061166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B286B61167
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DD6C828C8; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+ id B0A8B828C8; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:08 +0100
+Date: Sun, 11 Dec 2022 09:30:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 225e8745c62c75b20867af928d459abfbb53da94
-X-Git-Newrev: 55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
+X-Git-Oldrev: b9b0bfbdfeb976bf047b9c6e346542159035395c
+X-Git-Newrev: 6b401a65858161cd840378632d934a5fa13120d1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.8DD6C828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-tempora: bump
- to version 5.1.0
+Message-Id: <20230220205203.B0A8B828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-traitlets: bump
+ to version 5.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
+commit: https://git.buildroot.net/buildroot/commit/?id=6b401a65858161cd840378632d934a5fa13120d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-tempora/python-tempora.hash | 4 ++--
- package/python-tempora/python-tempora.mk   | 4 ++--
+ package/python-traitlets/python-traitlets.hash | 4 ++--
+ package/python-traitlets/python-traitlets.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
-index d802a63d87..39249eb4fa 100644
---- a/package/python-tempora/python-tempora.hash
-+++ b/package/python-tempora/python-tempora.hash
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 095e85c155..3b48fb6ab8 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tempora/json
--md5  24b77c173a7e89084004a38fe44e3ce3  tempora-5.0.2.tar.gz
--sha256  31fa5bb33b2641026211f23e808eb8bd351901988b167d45f323c8f450ecf211  tempora-5.0.2.tar.gz
-+md5  f9954a8c3b091f9769eb7bbe0faddccf  tempora-5.1.0.tar.gz
-+sha256  3e7c4a5369a1788c88a99b6be3a4c74c0c7728d3b62fd768a7e81bd0be0e88df  tempora-5.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  d5f87bbea8acf897ac3e435c7b71acdc  traitlets-5.5.0.tar.gz
+-sha256  b122f9ff2f2f6c1709dab289a05555be011c87828e911c0cf4074b85cb780a79  traitlets-5.5.0.tar.gz
++md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
++sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
  # Locally computed sha256 checksums
- sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
-index e22ac52472..68516a8388 100644
---- a/package/python-tempora/python-tempora.mk
-+++ b/package/python-tempora/python-tempora.mk
+ sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 25ab71047a..71bb775a45 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TEMPORA_VERSION = 5.0.2
-+PYTHON_TEMPORA_VERSION = 5.1.0
- PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
--PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/72/2c/9aff4204a4ea5172b0cb3508f8a504ab6562ba539825ea2e33a5b4cb629b
-+PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/a9/4e/41863232e77742b3a5b30a81e1398abd102aa0a67657bc86a53800966b8e
- PYTHON_TEMPORA_LICENSE = MIT
- PYTHON_TEMPORA_LICENSE_FILES = LICENSE
- PYTHON_TEMPORA_SETUP_TYPE = setuptools
+-PYTHON_TRAITLETS_VERSION = 5.5.0
++PYTHON_TRAITLETS_VERSION = 5.7.0
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/dd/a8/278742d17c9e95ccb0dcb86ae216df114d2166d88e72f42b60a7b58b600b
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+ PYTHON_TRAITLETS_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
