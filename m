@@ -4,46 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C1EFC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C242EC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 21:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C482A60A93;
-	Sun, 11 Dec 2022 21:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C482A60A93
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6948260BE2;
+	Sun, 11 Dec 2022 21:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6948260BE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2h-ar_BwxtgL; Sun, 11 Dec 2022 21:46:05 +0000 (UTC)
+	with ESMTP id R5yJLwxPndUy; Sun, 11 Dec 2022 21:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DED7660BF2;
-	Sun, 11 Dec 2022 21:46:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DED7660BF2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92F841BF309
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:45:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F63F60BD8;
+	Sun, 11 Dec 2022 21:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F63F60BD8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E75E1BF309
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A38A4054A
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A38A4054A
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE07081414
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 21:47:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE07081414
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NOb3F1EIwpB4 for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 21:45:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5731A407D7
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:45:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5731A407D7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A1468179A; Sun, 11 Dec 2022 21:45:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 22:44:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6398d18d50c021992375c4229e3898402c3a1cc8
-X-Git-Newrev: 470ce5d85c40a2f3b43dd9efaefac0000b047d23
-X-Patchwork-Hint: ignore
-Message-Id: <20221211214548.3A1468179A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-m2r: remove package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vAfgCii6ri4v for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 21:47:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7348C81413
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7348C81413
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 21:47:08 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 88DEF40002;
+ Sun, 11 Dec 2022 21:47:05 +0000 (UTC)
+Date: Sun, 11 Dec 2022 22:47:04 +0100
+To: Christian Stewart <christian@paral.in>
+Message-ID: <20221211224704.33be71cd@windsurf>
+In-Reply-To: <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
+References: <20221201014538.679048-1-christian@paral.in>
+ <20221211212504.4ee65e0e@windsurf>
+ <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670795225;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Db8U4rOaFHgqgVB5GxYBm7aDyf6Q7+2afnS7ocsVA60=;
+ b=UKd6fa+E1EHOtOkMqhXsKSaLMFILn8ETfbQth0i5QgwJ0S48+dNytrck0yqsLJZyrdnQ/q
+ WulSAIjYGBT/jxBGCgCQ6gBp1J3zjmoHGcvy9fB3Ksz15qLQWceM3WAbH2z6yJIYicyMy4
+ uQD0fWU5CEBMvFhNA3zdiTFrY+A6NC9y8HJr1yPiGbYvK1PPh6qe1Jdy061Rt/nETB0WrD
+ e3njtHPdPoIS7MGPiGobOrCpDu4ksSrBbPKL6ZfRa7GOoLfVTg5VSwFoHNGfhlySmTWqC4
+ egi0E7c0/fP1pM1ID2IZtajBK1RiZ4P1j3hsQ7TCSbmv5sTmKqlQ3aYhi4pi2g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UKd6fa+E
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/rtl8821cu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,113 +79,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=470ce5d85c40a2f3b43dd9efaefac0000b047d23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 11 Dec 2022 12:32:59 -0800
+Christian Stewart <christian@paral.in> wrote:
 
-Since the bump of python-mistune to version 2.0.4 in commit
-ead539c27dd61ba010b3723b26af91da0779eb98, the python-m2r package fails
-to build: it is no longer maintained and no longer compatible with
-recent versions of python-mistune.
+> The first, yes, and it's been merged:
+> 
+> https://github.com/morrownr/8821cu-20210118/commit/3b594e7654ef1320ff9cac6b6472fa1b17af134b
+> 
+> The second, no. Since removing the compiler version check for
+> -Wno-date-time is not something they want, and more of a Buildroot
+> thing, I think the patch probably will need to stay.
+> 
+> Shall I resubmit or can you fixup those two little things?
 
-Since the only user of python-m2r, python-automat, no longer needs it,
-we can safely drop this package.
+If you could resubmit, with the details of the upstream status for each
+patch, and the license hash fixed, it would be great. Thanks!
 
-Fixes:
-
-   http://autobuild.buildroot.net/results/9041acc5be4d2b33dee9ff0ad66dcd41d4dbfba1
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy                   |  6 ++++++
- package/Config.in                  |  1 -
- package/python-m2r/Config.in       |  8 --------
- package/python-m2r/python-m2r.hash |  5 -----
- package/python-m2r/python-m2r.mk   | 16 ----------------
- 5 files changed, 6 insertions(+), 30 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9136ccd0e0..28c6822689 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_PYTHON_M2R
-+	bool "python-m2r removed"
-+	select BR2_LEGACY
-+	help
-+	  The python-m2r package is unmaintained.
-+
- config BR2_PACKAGE_MESA3D_XVMC
- 	bool "mesa Gallium XvMC state tracker removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 10a0493b8d..914c3584e9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1112,7 +1112,6 @@ menu "External python modules"
- 	source "package/python-logstash/Config.in"
- 	source "package/python-lxml/Config.in"
- 	source "package/python-m2crypto/Config.in"
--	source "package/python-m2r/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markdown2/Config.in"
-diff --git a/package/python-m2r/Config.in b/package/python-m2r/Config.in
-deleted file mode 100644
-index 44dafaa464..0000000000
---- a/package/python-m2r/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_M2R
--	bool "python-m2r"
--	select BR2_PACKAGE_PYTHON_MISTUNE # runtime
--	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
--	help
--	  Markdown to reStructuredText converter.
--
--	  https://github.com/miyakogi/m2r
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
-deleted file mode 100644
-index 4bdd7160d8..0000000000
---- a/package/python-m2r/python-m2r.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/m2r/json
--md5  255d080f56eb3d3a82d95194850c99c3  m2r-0.3.1.tar.gz
--sha256  aafb67fc49cfb1d89e46a3443ac747e15f4bb42df20ed04f067ad9efbee256ab  m2r-0.3.1.tar.gz
--# Locally computed sha256 checksums
--sha256  28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
-deleted file mode 100644
-index 8a4708f128..0000000000
---- a/package/python-m2r/python-m2r.mk
-+++ /dev/null
-@@ -1,16 +0,0 @@
--################################################################################
--#
--# python-m2r
--#
--################################################################################
--
--PYTHON_M2R_VERSION = 0.3.1
--PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
--PYTHON_M2R_SITE = https://files.pythonhosted.org/packages/94/65/fd40fbdc608298e760affb95869c3baed237dfe5649d62da1eaa1deca8f3
--PYTHON_M2R_SETUP_TYPE = setuptools
--PYTHON_M2R_LICENSE = MIT
--PYTHON_M2R_LICENSE_FILES = LICENSE
--HOST_PYTHON_M2R_DEPENDENCIES = host-python-docutils host-python-mistune
--
--$(eval $(python-package))
--$(eval $(host-python-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
