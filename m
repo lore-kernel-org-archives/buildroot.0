@@ -1,55 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CBC8C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 11:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B2BBC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 11:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9866580CCE;
-	Sun, 11 Dec 2022 11:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9866580CCE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 193FC60687;
+	Sun, 11 Dec 2022 11:28:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 193FC60687
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mCAKg7tt_ciR; Sun, 11 Dec 2022 11:09:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NmNOUOBUz-Hw; Sun, 11 Dec 2022 11:28:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8F4680C09;
-	Sun, 11 Dec 2022 11:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F4680C09
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A1951BF3C2
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 11:09:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38A166068D;
+	Sun, 11 Dec 2022 11:28:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38A166068D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5983F1BF3C2
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 11:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12783801E8
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 11:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12783801E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A89D4048F
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 11:28:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A89D4048F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QogwTFO3R1Ii for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 11:09:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 594038146A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 594038146A
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 11:09:12 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4B34460009;
- Sun, 11 Dec 2022 11:09:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1p4KCj-008Aqb-0d; Sun, 11 Dec 2022 12:09:09 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x32omfsY2pkS for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 11:28:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5906A4046D
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5906A4046D
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 11:28:38 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout11.t-online.de (Postfix) with SMTP id 8D90E25FE4;
+ Sun, 11 Dec 2022 12:28:34 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd86.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p4KVP-1dBRlx0; Sun, 11 Dec 2022 12:28:28 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43828)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p4KVP-0002lt-1f;
+ Sun, 11 Dec 2022 12:28:27 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 12:09:07 +0100
-Message-Id: <20221211110908.1948270-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Date: Sun, 11 Dec 2022 12:28:24 +0100
+Message-Id: <20221211112824.319583-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/xserver_xorg-server: add upstream
- security fixes for CVE-2022-355{0, 1}
+X-TOI-EXPURGATEID: 150726::1670758108-D924D9D3-A92D0AEA/0/0 CLEAN NORMAL
+X-TOI-MSGID: 413e3cee-ba98-4035-a833-24386ba2bf3d
+Subject: [Buildroot] [PATCH 1/1] package/hddtemp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,162 +65,203 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-- CVE-2022-3550: A vulnerability classified as critical was found in X.org
-  Server.  Affected by this vulnerability is the function _GetCountedString
-  of the file xkb/xkb.c.  The manipulation leads to buffer overflow.  It is
-  recommended to apply a patch to fix this issue.  The associated identifier
-  of this vulnerability is VDB-211051.
-
-- CVE-2022-3551: A vulnerability, which was classified as problematic, has
-  been found in X.org Server.  Affected by this issue is the function
-  ProcXkbGetKbdByName of the file xkb/xkb.c.  The manipulation leads to
-  memory leak.  It is recommended to apply a patch to fix this issue.  The
-  identifier of this vulnerability is VDB-211052.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Bernd:
+ - switched to actively maintained fork
+ - package/Config.in: moved to "Hardware handling" (Peter)
+ - added toolchain dependencies (Thomas)
+ - added license hash
+ - fixed build errors related to iconv and execinfo (Peter)
+ - removed hook HDDTEMP_REMOVE_MAN (Thomas)
+ - install hddtemp.db to target
+ - added build/install _CMDS due to
+   https://github.com/vitlav/hddtemp/issues/5]
 ---
- ...ntedString-against-request-length-at.patch | 35 +++++++++++
- ...possible-memleaks-in-XkbGetKbdByName.patch | 60 +++++++++++++++++++
- .../xserver_xorg-server.mk                    |  7 +++
- 3 files changed, 102 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
- create mode 100644 package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+Imho this package is still relevant despite the fact that is was removed
+from Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1002484
+The drivetemp kernel module is only available since kernel 5.6 and nvme
+support was added to the current hddtemp fork:
+https://github.com/vitlav/hddtemp/commit/edcb4db5acd806010925ccf7bf58f1968cf54df3
 
-diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+Building this defconfig
+
+BR2_PACKAGE_HDDTEMP=y
+
+finished without errors:
+
+                             arm-aarch64 [ 1/44]: OK
+                   bootlin-aarch64-glibc [ 2/44]: OK
+               bootlin-arcle-hs38-uclibc [ 3/44]: OK
+                    bootlin-armv5-uclibc [ 4/44]: OK
+                     bootlin-armv7-glibc [ 5/44]: OK
+                   bootlin-armv7m-uclibc [ 6/44]: SKIPPED
+                      bootlin-armv7-musl [ 7/44]: OK
+                bootlin-m68k-5208-uclibc [ 8/44]: SKIPPED
+               bootlin-m68k-68040-uclibc [ 9/44]: OK
+             bootlin-microblazeel-uclibc [10/44]: OK
+                bootlin-mipsel32r6-glibc [11/44]: OK
+                   bootlin-mipsel-uclibc [12/44]: OK
+                     bootlin-nios2-glibc [13/44]: OK
+                 bootlin-openrisc-uclibc [14/44]: OK
+        bootlin-powerpc64le-power8-glibc [15/44]: OK
+           bootlin-powerpc-e500mc-uclibc [16/44]: OK
+                   bootlin-riscv32-glibc [17/44]: OK
+                   bootlin-riscv64-glibc [18/44]: OK
+                    bootlin-riscv64-musl [19/44]: OK
+                      bootlin-sh4-uclibc [20/44]: OK
+                   bootlin-sparc64-glibc [21/44]: OK
+                    bootlin-sparc-uclibc [22/44]: OK
+                    bootlin-x86-64-glibc [23/44]: OK
+                     bootlin-x86-64-musl [24/44]: OK
+                   bootlin-x86-64-uclibc [25/44]: OK
+                   bootlin-xtensa-uclibc [26/44]: OK
+                            br-arm-basic [27/44]: OK
+                    br-arm-full-nothread [28/44]: OK
+                      br-arm-full-static [29/44]: SKIPPED
+                   br-i386-pentium4-full [30/44]: OK
+                br-i386-pentium-mmx-musl [31/44]: OK
+                      br-mips64-n64-full [32/44]: OK
+                 br-mips64r6-el-hf-glibc [33/44]: OK
+               br-powerpc-603e-basic-cpp [34/44]: OK
+               br-powerpc64-power7-glibc [35/44]: OK
+                       linaro-aarch64-be [36/44]: OK
+                          linaro-aarch64 [37/44]: OK
+                              linaro-arm [38/44]: OK
+                     sourcery-arm-armv4t [39/44]: OK
+                            sourcery-arm [40/44]: OK
+                     sourcery-arm-thumb2 [41/44]: OK
+                         sourcery-mips64 [42/44]: OK
+                           sourcery-mips [43/44]: OK
+                          sourcery-nios2 [44/44]: OK
+44 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/hddtemp/Config.in    | 17 ++++++++++++++
+ package/hddtemp/hddtemp.hash |  3 +++
+ package/hddtemp/hddtemp.mk   | 44 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 66 insertions(+)
+ create mode 100644 package/hddtemp/Config.in
+ create mode 100644 package/hddtemp/hddtemp.hash
+ create mode 100644 package/hddtemp/hddtemp.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6e30f50472..03ff139128 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -345,6 +345,7 @@ F:	package/glmark2/
+ F:	package/gpsd/
+ F:	package/gptfdisk/
+ F:	package/hdparm/
++F:	package/hddtemp/
+ F:	package/inih/
+ F:	package/intel-gmmlib/
+ F:	package/intel-mediadriver/
+diff --git a/package/Config.in b/package/Config.in
+index bf3ee3cc7c..cc240bf7cd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ endmenu
+ 	source "package/gpsd/Config.in"
+ 	source "package/gptfdisk/Config.in"
+ 	source "package/gvfs/Config.in"
++	source "package/hddtemp/Config.in"
+ 	source "package/hdparm/Config.in"
+ 	source "package/hwdata/Config.in"
+ 	source "package/hwloc/Config.in"
+diff --git a/package/hddtemp/Config.in b/package/hddtemp/Config.in
 new file mode 100644
-index 0000000000..8c1869504c
+index 0000000000..0e02252461
 --- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
-@@ -0,0 +1,35 @@
-+From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
-+From: Peter Hutterer <peter.hutterer@who-t.net>
-+Date: Tue, 5 Jul 2022 12:06:20 +1000
-+Subject: [PATCH] xkb: proof GetCountedString against request length attacks
++++ b/package/hddtemp/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_HDDTEMP
++	bool "hddtemp"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	help
++	  hddtemp is a small utility that gives you the temperature of
++	  your hard drive by reading S.M.A.R.T. informations, for drives
++	  that support this feature.
 +
-+GetCountedString did a check for the whole string to be within the
-+request buffer but not for the initial 2 bytes that contain the length
-+field. A swapped client could send a malformed request to trigger a
-+swaps() on those bytes, writing into random memory.
++	  https://github.com/vitlav/hddtemp
++	  http://www.guzu.net/linux/hddtemp.php
 +
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xkb/xkb.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index f42f59ef3..1841cff26 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
-+     CARD16 len;
-+ 
-+     wire = *wire_inout;
-++
-++    if (client->req_len <
-++        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
-++        return BadValue;
-++
-+     len = *(CARD16 *) wire;
-+     if (client->swapped) {
-+         swaps(&len);
-+-- 
-+2.30.2
-+
-diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
++comment "hddtemp needs dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+diff --git a/package/hddtemp/hddtemp.hash b/package/hddtemp/hddtemp.hash
 new file mode 100644
-index 0000000000..39afec0988
+index 0000000000..cd82d7f89b
 --- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-@@ -0,0 +1,60 @@
-+From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
-+From: Peter Hutterer <peter.hutterer@who-t.net>
-+Date: Wed, 13 Jul 2022 11:23:09 +1000
-+Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
++++ b/package/hddtemp/hddtemp.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  592322c64f0d5f035132249e3d051b752f5d24867514522a17285d5e72d21075  hddtemp-0.4.3.tar.gz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  GPL-2
+diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
+new file mode 100644
+index 0000000000..ac93a4ed25
+--- /dev/null
++++ b/package/hddtemp/hddtemp.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# hddtemp
++#
++################################################################################
 +
-+GetComponentByName returns an allocated string, so let's free that if we
-+fail somewhere.
++HDDTEMP_VERSION = 0.4.3
++HDDTEMP_SITE = $(call github,vitlav,hddtemp,v$(HDDTEMP_VERSION))
++HDDTEMP_LICENSE = GPLv2
++HDDTEMP_LICENSE_FILES = GPL-2
++# Fetched from Github with no configure script
++HDDTEMP_AUTORECONF = YES
++# needed for autoreconf
++HDDTEMP_DEPENDENCIES = host-gettext
++HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS)"
 +
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xkb/xkb.c | 26 ++++++++++++++++++++------
-+ 1 file changed, 20 insertions(+), 6 deletions(-)
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++HDDTEMP_DEPENDENCIES += libexecinfo
++HDDTEMP_LIBS += -lexecinfo
++endif
 +
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index 4692895db..b79a269e3 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
-+     xkb = dev->key->xkbInfo->desc;
-+     status = Success;
-+     str = (unsigned char *) &stuff[1];
-+-    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
-+-        return BadMatch;
-++    {
-++        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
-++        if (keymap) {
-++            free(keymap);
-++            return BadMatch;
-++        }
-++    }
-+     names.keycodes = GetComponentSpec(&str, TRUE, &status);
-+     names.types = GetComponentSpec(&str, TRUE, &status);
-+     names.compat = GetComponentSpec(&str, TRUE, &status);
-+     names.symbols = GetComponentSpec(&str, TRUE, &status);
-+     names.geometry = GetComponentSpec(&str, TRUE, &status);
-+-    if (status != Success)
-++    if (status == Success) {
-++        len = str - ((unsigned char *) stuff);
-++        if ((XkbPaddedSize(len) / 4) != stuff->length)
-++            status = BadLength;
-++    }
-++
-++    if (status != Success) {
-++        free(names.keycodes);
-++        free(names.types);
-++        free(names.compat);
-++        free(names.symbols);
-++        free(names.geometry);
-+         return status;
-+-    len = str - ((unsigned char *) stuff);
-+-    if ((XkbPaddedSize(len) / 4) != stuff->length)
-+-        return BadLength;
-++    }
-+ 
-+     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
-+     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
-+-- 
-+2.30.2
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++HDDTEMP_DEPENDENCIES += libiconv
++HDDTEMP_LIBS += -liconv
++endif
 +
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 18ddd1cb07..8dba9f1ed0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -11,6 +11,13 @@ XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
- XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
++# prevent loop in po/ while building
++define HDDTEMP_BUILD_CMDS
++	cd $(@D)/src; \
++		$(TARGET_MAKE_ENV) $(MAKE)
++endef
 +
-+# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
++# prevent loop in po/ while building
++define HDDTEMP_INSTALL_TARGET_CMDS
++	cd $(@D)/src; \
++		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) install
++endef
 +
-+# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
++define HDDTEMP_INSTALL_HDDTEMP_DB
++	$(INSTALL) -D $(@D)/data/hddtemp.db $(TARGET_DIR)/usr/share/misc/hddtemp.db
++endef
++HDDTEMP_POST_INSTALL_TARGET_HOOKS += HDDTEMP_INSTALL_HDDTEMP_DB
 +
- XSERVER_XORG_SERVER_DEPENDENCIES = \
- 	xutil_util-macros \
- 	xlib_libX11 \
++$(eval $(autotools-package))
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
