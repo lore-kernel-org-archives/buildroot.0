@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8418EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE43C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8ACA40218;
-	Sun, 11 Dec 2022 09:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8ACA40218
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7086E4019C;
+	Sun, 11 Dec 2022 09:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7086E4019C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r9YBDgL2K6SO; Sun, 11 Dec 2022 09:04:46 +0000 (UTC)
+	with ESMTP id L8qTUsCM58lX; Sun, 11 Dec 2022 09:05:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C882F401D0;
-	Sun, 11 Dec 2022 09:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C882F401D0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E9A11BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5953C40241;
+	Sun, 11 Dec 2022 09:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5953C40241
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D1661BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0EB04095F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68070404D5
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0EB04095F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68070404D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DsK7zNk3pCx7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EFYEOfk3mzKY for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4CC640992
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4CC640992
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B78F404F5
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B78F404F5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2BC985FAA; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id 9852985FA6; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:28 +0100
+Date: Sun, 11 Dec 2022 09:29:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff8b3b7413bceba91198376fa056ce0f90571616
-X-Git-Newrev: 5c2007f5b632efce3c2776b9d360ad3621694648
+X-Git-Oldrev: b7fa52b837cc3a39534ba675e913c9bae583988d
+X-Git-Newrev: 90817e547c54a26e6554819a545f6ef059ee479b
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.E2BC985FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-numpy: bump to version
- 1.23.5
+Message-Id: <20221211085516.9852985FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymodbus: bump to version
+ 3.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c2007f5b632efce3c2776b9d360ad3621694648
+commit: https://git.buildroot.net/buildroot/commit/?id=90817e547c54a26e6554819a545f6ef059ee479b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-numpy/python-numpy.hash | 4 ++--
- package/python-numpy/python-numpy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pymodbus/python-pymodbus.hash | 4 ++--
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index 2a2dec44da..9ac9280c78 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index b5243567b7..d9337ffe84 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
 @@ -1,5 +1,5 @@
--# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.4
--sha256  ed2cc92af0efad20198638c69bb0fc2870a58dabfba6eb722c933b48556c686c  numpy-1.23.4.tar.gz
-+# Copied from https://github.com/numpy/numpy/releases/tag/v1.23.5
-+sha256  1b1766d6f397c18153d40015ddfc79ddb715cabadc04d2d228d4e5a8bc4ded1a  numpy-1.23.5.tar.gz
- # License files, locally calculated
- sha256  0f88787955e7131224f53a8c3f3e859dc502408e3a539a4dcf61fb7888b5b984  LICENSE.txt
- sha256  c27d0a8026bdb8876562b720ab24d1688e3827a89f6083cd6e7e8caa9584aba3  numpy/core/src/multiarray/dragon4.c
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 4f4848c4ba..812bfdae4a 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  25a8724539d0eac1b09d9b41812d86f9  pymodbus-3.0.0.tar.gz
+-sha256  37c9b6f3e5c82f39ee42047ca48cbc9fd0c49a6731126789500191e9deea6cbc  pymodbus-3.0.0.tar.gz
++md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
++sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 2ed7e94afe..54879d38e9 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NUMPY_VERSION = 1.23.4
-+PYTHON_NUMPY_VERSION = 1.23.5
- PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
- PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
- PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
+-PYTHON_PYMODBUS_VERSION = 3.0.0
++PYTHON_PYMODBUS_VERSION = 3.0.2
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/0f/5a/50e9492f98ef911af18c2b603bc003fef726e84d22bac2ce6e651643b29c
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
