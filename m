@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 618AEC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C756FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F07B4EEB8;
-	Mon, 20 Feb 2023 22:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F07B4EEB8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75F0B4F175;
+	Mon, 20 Feb 2023 22:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75F0B4F175
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1BLo6Yn1lxZE; Mon, 20 Feb 2023 22:36:17 +0000 (UTC)
+	with ESMTP id M7cWHQp680MG; Mon, 20 Feb 2023 22:36:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0FFF4F16B;
-	Mon, 20 Feb 2023 22:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0FFF4F16B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4283F1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C7024EEFD;
+	Mon, 20 Feb 2023 22:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C7024EEFD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D78081BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22A9E416ED
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A9E416ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67FF6611E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FF6611E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dsrw4dpjPPSG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3IICQ8XsCTet for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CEC5416DD
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CEC5416DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71D7061185
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D7061185
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A69C86494; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 6F5898648F; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Dec 2022 08:39:31 +0100
+Date: Sun, 11 Dec 2022 11:50:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3b91fd750180dd4689cafc72b28696c239821f9a
-X-Git-Newrev: 0245d30e569cc88875f7ed5b162029064128e89e
+X-Git-Oldrev: c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
+X-Git-Newrev: 94170d3ecbbf751adfc55c79d6e5619b0a1ce018
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205214.2A69C86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux, linux-headers}: 5.{4,
- 10, 15}.x / 6.{0, 1}.x series
+Message-Id: <20230220205205.6F5898648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ncdu: bump to version
+ 1.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,77 +56,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0245d30e569cc88875f7ed5b162029064128e89e
+commit: https://git.buildroot.net/buildroot/commit/?id=94170d3ecbbf751adfc55c79d6e5619b0a1ce018
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+For change log since 1.17, see:
+- https://dev.yorhel.nl/ncdu/changes
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1bca082cbf..b5c65eded4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+This commit also adds md5 and sha1 hashes published on the web site.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ncdu/ncdu.hash | 4 +++-
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index c47b4f9bac..1e31eaea8e 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,5 +1,7 @@
+ # From https://dev.yorhel.nl/ncdu
+-sha256  810745a8ed1ab3788c87d3aea4cc1a14edf6ee226f764bcc383e024ba56adbf1  ncdu-1.17.tar.gz
++md5  4186b5be477cc3a0944619ade81f123b  ncdu-1.18.tar.gz
++sha1  d47ce3cdf317adadc1426817d07899c90b767aba  ncdu-1.18.tar.gz
++sha256  3c37a1a96580c9c5d2cc352dc3c5eef0d909158c05f1cc29db4712544c8b9f95  ncdu-1.18.tar.gz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index c7bbb6be99..8d85dc4c6f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb  linux-6.1.tar.xz
--sha256  08d3118d6b755769f166de6babed54964393a7c0928029bef11bf55559a72da4  linux-6.0.13.tar.xz
-+sha256  a3e61377cf4435a9e2966b409a37a1056f6aaa59e561add9125a88e3c0971dfb  linux-6.1.1.tar.xz
-+sha256  d484eb3d4f88be14b42507a85ad4b0932e92e7a742acbce74e8be007124a6820  linux-6.0.15.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
--sha256  1ba9bf57b6bf36d76447d5044b80b746cb5fd61d981c811603dc763b7789cea7  linux-5.10.159.tar.xz
--sha256  5eefc5037415f31c942d3cfa430b96c2a273246cf7e51db1e51b1d89887f0593  linux-5.4.227.tar.xz
-+sha256  2c0bae29fac98e0a9408914a4551b2971365ac0000351cb255d6bd9aa0849808  linux-5.15.85.tar.xz
-+sha256  7aaaf6d0bcd8a2cfa14ad75f02ca62bb2de08aad3bee3eff198de49ea5254079  linux-5.10.161.tar.xz
-+sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
- sha256  e32a230d71072a4ee50bd4386aa23ca4e617b8ad07b6f9fb223b65bf004c4c80  linux-4.14.302.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cd36c7c763..60bbe5b768 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -399,11 +399,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.227"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
--	default "6.0.13"	if BR2_KERNEL_HEADERS_6_0
--	default "6.1"		if BR2_KERNEL_HEADERS_6_1
-+	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.161"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.85"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.0.15"	if BR2_KERNEL_HEADERS_6_0
-+	default "6.1.1"		if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # computed locally
+ sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index acfd496ec8..240ef9d8ea 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NCDU_VERSION = 1.17
++NCDU_VERSION = 1.18
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
