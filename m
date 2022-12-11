@@ -4,67 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1063BC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A53FAC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6E6F60BDB;
-	Sun, 11 Dec 2022 20:31:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6E6F60BDB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 410BE60BEB;
+	Sun, 11 Dec 2022 20:33:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 410BE60BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MSezdv9VEbML; Sun, 11 Dec 2022 20:31:16 +0000 (UTC)
+	with ESMTP id NGaqzWRaNghv; Sun, 11 Dec 2022 20:33:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E63F660B49;
-	Sun, 11 Dec 2022 20:31:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E63F660B49
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DF181BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:31:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F88D60BE8;
+	Sun, 11 Dec 2022 20:33:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F88D60BE8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C7541BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 096D88141B
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 096D88141B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 327CD4031F
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 327CD4031F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L2lS7kSLmfXj for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 20:31:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9C38140D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD9C38140D
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:31:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E494B240004;
- Sun, 11 Dec 2022 20:31:00 +0000 (UTC)
-Date: Sun, 11 Dec 2022 21:31:00 +0100
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20221211213100.02469948@windsurf>
-In-Reply-To: <20221130074444.829636-1-christian@paral.in>
-References: <20221130074444.829636-1-christian@paral.in>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EwGpf7hLlK8M for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:33:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 164ED402A8
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 164ED402A8
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:33:13 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id n20so23355514ejh.0
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:33:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6V0RPP+38z+DTvDYJFk6pQ327aOlwZFFGuiYtdDWrDA=;
+ b=dLHhAwO3MHQh/YV3CLCUcM6B1O6TQ334kCDP5P4G1ItCEarxiStuvs2k67WQwlTqrM
+ YT3BTrj5IMHRKogiuwoWmMc6EsTK8M3sIVP73bS4hniX2g5XeF651xJdRUOFuXlv4Xq9
+ ZgNHlTPQJGhKbfDIL/Wsodft7dUm2bpXN7tJEXHP7YXr/ILCjl5OG6FrXBX39q2VFXZX
+ d7ZnQHYcRmkFARh8FrSgVqafmA4x+GuG2+31QFx2c/CCy7COz6zYuiBEASg1QfZIqW8X
+ o7MXpfRvOZCRGdw9/JZ+yIt4sZxjW+6O83mJNfndKB+s+5C2jpGwO0TIKrCmYLneVzMa
+ a7kA==
+X-Gm-Message-State: ANoB5pldNS4Bii8iBjqYHEk1z8hFLjF+IiJZxom/b3P1P1gyalUMS8HH
+ 96iZayUDsBf4Tu8bMqxHd1MPhe0ocwQmr7jltKA=
+X-Google-Smtp-Source: AA0mqf65W5Ec7PKRYDO9iFmTdA4potoDkk4v/ZOVsUvWZ6Ryq0eWwgs+bKYDVTexAwwYPI/BJngIbA==
+X-Received: by 2002:a17:906:abcd:b0:7ad:2da5:36ec with SMTP id
+ kq13-20020a170906abcd00b007ad2da536ecmr12317838ejb.41.1670790791956; 
+ Sun, 11 Dec 2022 12:33:11 -0800 (PST)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com.
+ [209.85.218.53]) by smtp.gmail.com with ESMTPSA id
+ eq17-20020a170907291100b007a4e02e32ffsm2433668ejc.60.2022.12.11.12.33.11
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 11 Dec 2022 12:33:11 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id ud5so23289566ejc.4
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 12:33:11 -0800 (PST)
+X-Received: by 2002:a17:906:99c8:b0:7b5:ff35:6715 with SMTP id
+ s8-20020a17090699c800b007b5ff356715mr59906941ejn.255.1670790790949; Sun, 11
+ Dec 2022 12:33:10 -0800 (PST)
 MIME-Version: 1.0
+References: <20221201014538.679048-1-christian@paral.in>
+ <20221211212504.4ee65e0e@windsurf>
+In-Reply-To: <20221211212504.4ee65e0e@windsurf>
+Date: Sun, 11 Dec 2022 12:32:59 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
+Message-ID: <CA+h8R2qPG=2ghvntT=jXAp0s+0tsZANvJUvV7F1iU7ukLkh1Ng@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670790661;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/ULitTiF/d3LHAEf+E+0td9HRk6ekt+hOcQHR9HFGXs=;
- b=kui65U5N9oFzITY4dxR4/vfpdz9IGYr3AkL/DmWSFC2a6gT6Q31Sqi/422ZJOSIQ4zzvUG
- kmHULafu8JY9l3pBl0VHP+TYo3gHsiSRZpDCUheAPKT3XL+ksuVkoDfQd0BYCLwEQuRJzr
- Ti7SyyKQ7De01JnBa19JX1LtKdGYyMN5PLiPqxQbQmCjgXOrRIeDua1udJHU9dAxkrjJVg
- mHMV9lY+keNfgSPDde31INMaQGsye2vL7A5ak2fO5IpcF8L3HjSr/nltboRKt5erDEP6y1
- vZG+gZptyBPSczXnKzY6gVglIr5BOqdJ6rbYQUNFIIcF/ab6PS0KW86y9vlzSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kui65U5N
-Subject: Re: [Buildroot] [PATCH 1/2] package/balena-engine: bump to version
- 20.10.21
+ d=paral.in; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=6V0RPP+38z+DTvDYJFk6pQ327aOlwZFFGuiYtdDWrDA=;
+ b=UFCHzm7If4DLKnKhl45yrKf60bgPyfz6HBzv9bBlxQgA+sM4CebDKXNKL8xOIq6tuI
+ IyYMnmpa6Opn5mY55uNFdKOZunuHEBixxYGy7x/Tr4U655l10GdZBWOpo6k/qTcZCPmF
+ +YyHh6GpSZsOQUNXHzAP6UoWdwJHabHBQ+65vicIh/dBBREMKZXfb1VSyzuCOD4zd16b
+ VdpIcpsVtZISeahbmyLizjzpZUa3+k9XpqLPti3uRr4R0LplYY0RNf3zHmBfXuJzEtjf
+ IK0BR2VuCrmDgeWXUG3NeXqO6Qt4rM8SA48tfnKEs+8NHHlPXsWNwZ7WHsG8sDJeLyO0
+ txyw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=UFCHzm7I
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/rtl8821cu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +101,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 29 Nov 2022 23:44:43 -0800
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+hi Thomas,
 
-> https://github.com/balena-os/balena-engine/blob/v20.10.21/CHANGELOG.md
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/balena-engine/balena-engine.hash | 2 +-
->  package/balena-engine/balena-engine.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, Dec 11, 2022 at 12:25 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> On Wed, 30 Nov 2022 17:45:38 -0800
+>
+> >  .../0001-makefile-cleanup-whitespace.patch    | 122 ++++++++++++++++++
+> >  ...akefile-remove-Wno-date-time-warning.patch |  30 +++++
+>> Did you submit these two patches "upstream" ?
 
-Both applied to master, thanks!
+The first, yes, and it's been merged:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://github.com/morrownr/8821cu-20210118/commit/3b594e7654ef1320ff9cac6b6472fa1b17af134b
+
+The second, no. Since removing the compiler version check for
+-Wno-date-time is not something they want, and more of a Buildroot
+thing, I think the patch probably will need to stay.
+
+Shall I resubmit or can you fixup those two little things?
+
+Thanks & best,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
