@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC468C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 385DFC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEE14F24A;
-	Mon, 20 Feb 2023 22:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CEE14F24A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D06784F260;
+	Mon, 20 Feb 2023 22:43:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D06784F260
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OYYpUl1-Gtik; Mon, 20 Feb 2023 22:43:06 +0000 (UTC)
+	with ESMTP id 2j-mDXjKGnkg; Mon, 20 Feb 2023 22:43:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FE604F26B;
-	Mon, 20 Feb 2023 22:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FE604F26B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BF96C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B04C84F272;
+	Mon, 20 Feb 2023 22:43:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B04C84F272
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D66FE1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 962F441705
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962F441705
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9C126124B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9C126124B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mnRFMtM4qfjI for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FKlLMDZD0WGz for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98256416DB
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98256416DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A2C0611DC
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A2C0611DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 870B586495; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+ id EDE6386495; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 26 Dec 2022 22:10:32 +0100
+Date: Sun, 11 Dec 2022 15:59:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5dc7e1fc363b217683f009f6470519b751675083
-X-Git-Newrev: eda08c6b88ca466c27cb02004e92ac5ae6e60998
+X-Git-Oldrev: 28f31d4694ad212d9b511c53ba35c6443eeef972
+X-Git-Newrev: 071fdbf963228590b453e5111eadc8a74b579aa2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205215.870B586495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-cjson: bump to
- version 2.1.0.10
+Message-Id: <20230220205206.EDE6386495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opensc: propagate
+ dependencies from pcsc-lite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eda08c6b88ca466c27cb02004e92ac5ae6e60998
+commit: https://git.buildroot.net/buildroot/commit/?id=071fdbf963228590b453e5111eadc8a74b579aa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Commit d590003e31dd (package/pcsc-lite: needs gcc >= 4.9) propagated
+that new dependency to a bunch of packages that select pcsc-lite.
+
+Then commit 8aaa7ecbce1d (package/opensc: new package) introduced
+opensc, which selects pcsc-lite. However, the package was submitted
+before the dependency to gcc 4.8+ was added to pcsc-lite, and that was
+missed during the review.
+
+Add it now.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua-cjson/Config.in      | 2 +-
- package/lua-cjson/lua-cjson.hash | 2 +-
- package/lua-cjson/lua-cjson.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/opensc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
-index 9474b3176c..1c153fa46a 100644
---- a/package/lua-cjson/Config.in
-+++ b/package/lua-cjson/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_LUA_CJSON
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+index 2cec096ac2..8c6a95a41d 100644
+--- a/package/opensc/Config.in
++++ b/package/opensc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENSC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
+ 	select BR2_PACKAGE_PCSC_LITE
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_OPENSC
  
- 	  (C-module)
+ 	  https://github.com/OpenSC/OpenSC/wiki
  
--	  http://www.kyne.com.au/~mark/software/lua-cjson.php
-+	  https://www.kyne.com.au/~mark/software/lua-cjson.php
-diff --git a/package/lua-cjson/lua-cjson.hash b/package/lua-cjson/lua-cjson.hash
-index b052c5199c..5ddc07bcc6 100644
---- a/package/lua-cjson/lua-cjson.hash
-+++ b/package/lua-cjson/lua-cjson.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  455fa7d07d8ac9d61f68f538958f8e28972256f38b0a1c2740873daf809d1837  lua-cjson-2.1.0.6-1.src.rock
-+sha256  02dea368d07753647c75bd9e6660dd4d06ff7d09956d90d5afc4c3f5b78ed187  lua-cjson-2.1.0.10-1.src.rock
- sha256  9576e82ef5013fbe80b3bd446a7d9ddd47328baa2186c31d3d885e2a9a8cd31e  lua-cjson/LICENSE
-diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
-index e029dab5cb..e08d230060 100644
---- a/package/lua-cjson/lua-cjson.mk
-+++ b/package/lua-cjson/lua-cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_CJSON_VERSION = 2.1.0.6-1
-+LUA_CJSON_VERSION = 2.1.0.10-1
- LUA_CJSON_SUBDIR = lua-cjson
- LUA_CJSON_LICENSE = MIT
- LUA_CJSON_LICENSE_FILES = $(LUA_CJSON_SUBDIR)/LICENSE
+-comment "opensc needs a toolchain with dynamic library, threads"
++comment "opensc needs a toolchain with dynamic library, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
