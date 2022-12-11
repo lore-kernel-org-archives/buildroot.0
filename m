@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3DBBC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97751C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D1FE4EBC1;
-	Mon, 20 Feb 2023 22:02:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D1FE4EBC1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 476D44EBA0;
+	Mon, 20 Feb 2023 22:02:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 476D44EBA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VnGGspK9yDQC; Mon, 20 Feb 2023 22:02:31 +0000 (UTC)
+	with ESMTP id COf8l5oaxZAE; Mon, 20 Feb 2023 22:02:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10E244ED9E;
-	Mon, 20 Feb 2023 22:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10E244ED9E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 296551BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14DF34EC0D;
+	Mon, 20 Feb 2023 22:02:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14DF34EC0D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE73B1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 147A061144
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 147A061144
+ by smtp2.osuosl.org (Postfix) with ESMTP id D30CB416B0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D30CB416B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 49gQ6hC3weKW for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G_PkkJzB_AIV for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F96C6110A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F96C6110A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 098B6416A9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 098B6416A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F9C68648F; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+ id 0700386494; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:16 +0100
+Date: Sun, 11 Dec 2022 09:29:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2f7d13d9588cf3632a7c73bd81dddb52a4263309
-X-Git-Newrev: a49f6567142eee59817d07afa380337260f81634
+X-Git-Oldrev: 6e25c2ec47755a27fada8cffc2aa822402bb86b9
+X-Git-Newrev: 9371a7994e1099a8681411ddb686a1c2ce53ef10
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.1F9C68648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xmh: bump
- version to 1.0.4
+Message-Id: <20230220205203.0700386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-psutil: bump to
+ version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a49f6567142eee59817d07afa380337260f81634
+commit: https://git.buildroot.net/buildroot/commit/?id=9371a7994e1099a8681411ddb686a1c2ce53ef10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-August/003208.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xmh/xapp_xmh.hash | 5 +++--
- package/x11r7/xapp_xmh/xapp_xmh.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xmh/xapp_xmh.hash b/package/x11r7/xapp_xmh/xapp_xmh.hash
-index 1dadc34586..f0c9fa9567 100644
---- a/package/x11r7/xapp_xmh/xapp_xmh.hash
-+++ b/package/x11r7/xapp_xmh/xapp_xmh.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002582.html
--sha256  b92f4f912a5fb6346d52cc2b639aea087b347f3b2e4e1a4fc7a165b1345f5689  xmh-1.0.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003208.html
-+sha256  e82c425a4c4156eee2e344d2e952f3fd816e03973005cd656ec1e9acf6f329db  xmh-1.0.4.tar.xz
-+sha512  03bba7d3e7c2070b03378335aed0188dd0fd0a488f19dc5ad3f26674a9b38e6599377d082328041dd3ab72123ed60acae32cff19d7149517545b80e1339db26a  xmh-1.0.4.tar.xz
- # Locally computed
- sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-diff --git a/package/x11r7/xapp_xmh/xapp_xmh.mk b/package/x11r7/xapp_xmh/xapp_xmh.mk
-index c18bbfe5da..db6102eb75 100644
---- a/package/x11r7/xapp_xmh/xapp_xmh.mk
-+++ b/package/x11r7/xapp_xmh/xapp_xmh.mk
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index c7b7e46ec1..15927562b1 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  66b847f94545e96b540518ebe19740b4  psutil-5.9.3.tar.gz
+-sha256  7ccfcdfea4fc4b0a02ca2c31de7fcd186beb9cff8207800e14ab66f79c773af6  psutil-5.9.3.tar.gz
++md5  f72751d05b781757b7cd9bc375d2e351  psutil-5.9.4.tar.gz
++sha256  3d7f9739eb435d4b1338944abe23f49584bde5395f27487d2ee25ad9a8774a62  psutil-5.9.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 578f69d3c7..e764d1accc 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XMH_VERSION = 1.0.3
--XAPP_XMH_SOURCE = xmh-$(XAPP_XMH_VERSION).tar.bz2
--XAPP_XMH_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XMH_VERSION = 1.0.4
-+XAPP_XMH_SOURCE = xmh-$(XAPP_XMH_VERSION).tar.xz
-+XAPP_XMH_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XMH_LICENSE = MIT
- XAPP_XMH_LICENSE_FILES = COPYING
- XAPP_XMH_DEPENDENCIES = xlib_libXaw xdata_xbitmaps
+-PYTHON_PSUTIL_VERSION = 5.9.3
++PYTHON_PSUTIL_VERSION = 5.9.4
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/de/eb/1c01a34c86ee3b058c556e407ce5b07cb7d186ebe47b3e69d6f152ca5cc5
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/3d/7d/d05864a69e452f003c0d77e728e155a89a2a26b09e64860ddd70ad64fb26
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
