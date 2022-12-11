@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE14AC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93EFCC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94C0D4EE95;
-	Mon, 20 Feb 2023 22:15:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94C0D4EE95
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C8D54C5A3;
+	Mon, 20 Feb 2023 22:15:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C8D54C5A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g1cq-tZuSoeY; Mon, 20 Feb 2023 22:15:24 +0000 (UTC)
+	with ESMTP id AILm3Cd9PQps; Mon, 20 Feb 2023 22:15:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FBF44EF92;
-	Mon, 20 Feb 2023 22:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FBF44EF92
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 839791BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCF054EF6C;
+	Mon, 20 Feb 2023 22:15:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF054EF6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DF751BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A55661165
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A55661165
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF395416CA
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF395416CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mXhSVH52zxqR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 38tTCu8PpecD for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA6F36112C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA6F36112C
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0782416C6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0782416C6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9B88828C8; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id DD74386494; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:28:50 +0100
+Date: Sun, 11 Dec 2022 18:04:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5a3fb64466b38f68ed4c49fe3eda86a5094bd411
-X-Git-Newrev: 3ef0959eabce0cf3f155b8959fdd06e6018c86e7
+X-Git-Oldrev: 607665e3cecd967759344d6c702babe82ffa604c
+X-Git-Newrev: c19e0bdc5621518986dfa04ced0dadd3c53e193c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205201.A9B88828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-reedsolo: new
- package
+Message-Id: <20230220205207.DD74386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/versal_vck190_defconfig: use correct u-boot.dtb in boot.bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,79 +56,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ef0959eabce0cf3f155b8959fdd06e6018c86e7
+commit: https://git.buildroot.net/buildroot/commit/?id=c19e0bdc5621518986dfa04ced0dadd3c53e193c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/Config.in                            |  1 +
- package/python-reedsolo/Config.in            |  6 ++++++
- package/python-reedsolo/python-reedsolo.hash |  5 +++++
- package/python-reedsolo/python-reedsolo.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+This patch fixes a problem in the vck190 boot.bin generation as it should be
+using the u-boot.dtb as the u-boot device tree and not the Linux system.dtb.
+While both dtbs are basically the same, it is better not to mix this up.
 
-diff --git a/package/Config.in b/package/Config.in
-index d5a673295d..6804e1d418 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1231,6 +1231,7 @@ menu "External python modules"
- 	source "package/python-qrcode/Config.in"
- 	source "package/python-raven/Config.in"
- 	source "package/python-redis/Config.in"
-+	source "package/python-reedsolo/Config.in"
- 	source "package/python-reentry/Config.in"
- 	source "package/python-regex/Config.in"
- 	source "package/python-remi/Config.in"
-diff --git a/package/python-reedsolo/Config.in b/package/python-reedsolo/Config.in
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/versal/post-image.sh      | 2 +-
+ board/versal/uboot.fragment     | 1 +
+ configs/versal_vck190_defconfig | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
+index 890522c31d..f45f29a155 100755
+--- a/board/versal/post-image.sh
++++ b/board/versal/post-image.sh
+@@ -24,7 +24,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
+ 	  }
+ 	  image {
+ 	    id = 0x1c000000, name=apu_subsystem 
+-	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/system.dtb }
++	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
+ 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
+ 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
+ 	  }
+diff --git a/board/versal/uboot.fragment b/board/versal/uboot.fragment
 new file mode 100644
-index 0000000000..6482b1e98c
+index 0000000000..6f71907379
 --- /dev/null
-+++ b/package/python-reedsolo/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_REEDSOLO
-+	bool "python-reedsolo"
-+	help
-+	  Pure-Python Reed Solomon encoder/decoder.
-+
-+	  https://github.com/tomerfiliba/reedsolomon
-diff --git a/package/python-reedsolo/python-reedsolo.hash b/package/python-reedsolo/python-reedsolo.hash
-new file mode 100644
-index 0000000000..fdafc89f49
---- /dev/null
-+++ b/package/python-reedsolo/python-reedsolo.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/reedsolo/json
-+md5  b67a04027a1825c63a63b6793ec660a3  reedsolo-1.6.0.tar.gz
-+sha256  4e290d3b0a7207ac7aac186790766c752b5fcdf5e0b04dfd260349579052bbac  reedsolo-1.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  0babd7b573efc3dcf5bb3c28b583150726f775d3dd8d54d6cd062834735b3d73  LICENSE
-diff --git a/package/python-reedsolo/python-reedsolo.mk b/package/python-reedsolo/python-reedsolo.mk
-new file mode 100644
-index 0000000000..2a7fd42a05
---- /dev/null
-+++ b/package/python-reedsolo/python-reedsolo.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-reedsolo
-+#
-+################################################################################
-+
-+PYTHON_REEDSOLO_VERSION = 1.6.0
-+PYTHON_REEDSOLO_SOURCE = reedsolo-$(PYTHON_REEDSOLO_VERSION).tar.gz
-+PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/9b/10/28d1492cc82a103bc06f18cb9a9dbb3a9168ab2e4068801fa0aa0c76b231
-+PYTHON_REEDSOLO_SETUP_TYPE = setuptools
-+PYTHON_REEDSOLO_LICENSE = Public Domain
-+PYTHON_REEDSOLO_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
++++ b/board/versal/uboot.fragment
+@@ -0,0 +1 @@
++CONFIG_OF_SEPARATE=y
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index d87df221c6..fcda6eb431 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -25,10 +25,12 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/versal/uboot.fragment"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
++BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_PACKAGE_VERSAL_FIRMWARE=y
+ BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="v2022.2"
+ BR2_PACKAGE_VERSAL_FIRMWARE_BOARD="vck190"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
