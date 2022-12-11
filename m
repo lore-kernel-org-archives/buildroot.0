@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 372D4C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03079C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 20:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA83C80B0D;
-	Sun, 11 Dec 2022 20:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA83C80B0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99ED34018C;
+	Sun, 11 Dec 2022 20:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99ED34018C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id os18xk56extS; Sun, 11 Dec 2022 20:19:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ROAIIbFyJpJB; Sun, 11 Dec 2022 20:19:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 335D780AFA;
-	Sun, 11 Dec 2022 20:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 335D780AFA
+	by smtp4.osuosl.org (Postfix) with ESMTP id A697B40183;
+	Sun, 11 Dec 2022 20:19:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A697B40183
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2BBF81BF2B1
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:19:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A2071BF2B1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07BD080AFA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07BD080AFA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 656BC80B0C
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 20:19:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 656BC80B0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zgeX-0Qy_z79 for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 20:19:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21BEA80AEE
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:19:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21BEA80AEE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F1C98658B; Sun, 11 Dec 2022 20:19:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 21:18:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b119f21867b46184ac6d12ebbcd6f77e5ad84a43
-X-Git-Newrev: b54e0dde3009cb859ff93a704a068d4fd162a035
-X-Patchwork-Hint: ignore
-Message-Id: <20221211201927.0F1C98658B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add test for
+ with ESMTP id D5Jqyd8k5GZY for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 20:19:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ADA980AFA
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7ADA980AFA
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 20:19:36 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F13CA1BF204;
+ Sun, 11 Dec 2022 20:19:33 +0000 (UTC)
+Date: Sun, 11 Dec 2022 21:19:32 +0100
+To: yegorslists--- via buildroot <buildroot@buildroot.org>
+Message-ID: <20221211211932.27bae217@windsurf>
+In-Reply-To: <20221205060414.2046-1-yegorslists@googlemail.com>
+References: <20221205060414.2046-1-yegorslists@googlemail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670789974;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XGAroHf5FgWOjWNOvKdpwn9VK/E7FYi+XOX8KR59rv4=;
+ b=BURjAEoSsz94irWceIj0JwNm22ovqDDvDRF7ovHPgDgVQGiDYxx0lLurEgoegmgTZ+Le+W
+ E7riCsxnZDDBGr8NdfSYRW4un5/US9jsaxYxyDl5vRLwEySeLS6NX5iWmdIe8O68Ri0RoG
+ 71eliGap69RAW39JAQS3Pd+T0nq/aOyFg5fSdtMGbsaZHPyuTHjsaN1FugNceZc7jeihfB
+ X/8OUtv2jSj8bjL+hMQKWF5TEMeE3vVKjJqjGVuKHbjG38omltG5VaU96R6dJKvIm61ejt
+ wT0jWbkGzlybG0P2CGZ+DYLSwxICF1iABeW0agKMQSgi7lY2F5cJRbc6ut3pbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BURjAEoS
+Subject: Re: [Buildroot] [PATCH] support/testing: add test for
  python-dicttoxml2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,74 +78,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b54e0dde3009cb859ff93a704a068d4fd162a035
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  5 Dec 2022 07:04:14 +0100
+yegorslists--- via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                                |  2 ++
- support/testing/tests/package/sample_python_dicttoxml2.py | 11 +++++++++++
- support/testing/tests/package/test_python_dicttoxml2.py   | 12 ++++++++++++
- 3 files changed, 25 insertions(+)
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  DEVELOPERS                                           |  2 ++
+>  .../tests/package/sample_python_dicttoxml2.py        | 11 +++++++++++
+>  .../testing/tests/package/test_python_dicttoxml2.py  | 12 ++++++++++++
+>  3 files changed, 25 insertions(+)
+>  create mode 100644 support/testing/tests/package/sample_python_dicttoxml2.py
+>  create mode 100644 support/testing/tests/package/test_python_dicttoxml2.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8e9a743c70..7f6908d0b4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3117,9 +3117,11 @@ F:	package/wpa_supplicant/
- F:	package/x11r7/xapp_xconsole/
- F:	package/x11r7/xapp_xinput-calibrator/
- F:	package/zlog/
-+F:	support/testing/tests/package/sample_python_dicttoxml2.py
- F:	support/testing/tests/package/sample_python_dtschema.py
- F:	support/testing/tests/package/test_libftdi1.py
- F:	support/testing/tests/package/test_python_can.py
-+F:	support/testing/tests/package/test_python_dicttoxml2.py
- F:	support/testing/tests/package/test_python_dtschema.py
- F:	utils/scanpypi
- 
-diff --git a/support/testing/tests/package/sample_python_dicttoxml2.py b/support/testing/tests/package/sample_python_dicttoxml2.py
-new file mode 100644
-index 0000000000..788c5e2cd7
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_dicttoxml2.py
-@@ -0,0 +1,11 @@
-+from dicttoxml2 import dicttoxml
-+
-+payload: dict = {'mylist': ['foo', 'bar', 'baz'], 'mydict': {'foo': 'bar', 'baz': 1}, 'ok': True}
-+
-+expected: bytes = b'<?xml version="1.0" encoding="UTF-8" ?><root><mylist type="list"><item type="str">' \
-+                  b'<![CDATA[foo]]></item><item type="str"><![CDATA[bar]]></item><item type="str"><![CDATA[baz]]>' \
-+                  b'</item></mylist><mydict type="dict"><foo type="str"><![CDATA[bar]]></foo><baz type="int">' \
-+                  b'<![CDATA[1]]></baz></mydict><ok type="bool"><![CDATA[True]]>' \
-+                  b'</ok></root>'
-+
-+assert dicttoxml(payload, cdata=True) == expected
-diff --git a/support/testing/tests/package/test_python_dicttoxml2.py b/support/testing/tests/package/test_python_dicttoxml2.py
-new file mode 100644
-index 0000000000..437518db7f
---- /dev/null
-+++ b/support/testing/tests/package/test_python_dicttoxml2.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Dicttoxml2(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DICTTOXML2=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_dicttoxml2.py"]
-+    timeout = 40
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
