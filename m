@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEEEDC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DF9EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F53E41D1E;
-	Mon, 20 Feb 2023 21:53:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F53E41D1E
+	by smtp4.osuosl.org (Postfix) with ESMTP id E94464ECB2;
+	Mon, 20 Feb 2023 21:53:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E94464ECB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vIdlEmasIdw6; Mon, 20 Feb 2023 21:53:44 +0000 (UTC)
+	with ESMTP id YCilzsLmcTtK; Mon, 20 Feb 2023 21:53:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD8AB42AE2;
-	Mon, 20 Feb 2023 21:53:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD8AB42AE2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D0ACF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FF8F4C5A3;
+	Mon, 20 Feb 2023 21:53:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FF8F4C5A3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 805031BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5561961127
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5561961127
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8BFB416A8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8BFB416A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pj-qLxFM-b42 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ds4VHjASxTBw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A740610F9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A740610F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3FDD416A3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FDD416A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7148B828C8; Mon, 20 Feb 2023 20:51:57 +0000 (UTC)
+ id C0A8286494; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:32:18 +0100
+Date: Sun, 11 Dec 2022 09:19:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 327d7453ba3d4991c4ddc64a0164ca7f80ea0ef1
-X-Git-Newrev: 7d2fff78049392f2dae82f5ea9f5a0dbac225f4d
+X-Git-Oldrev: 61f03109c7d6b2a66462d920ee5f4b9f7530ca7a
+X-Git-Newrev: 6fc4b59ffd3007ca9e436d33647acc5dfff62970
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205157.7148B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXpm:
- bump version to 3.5.14
+Message-Id: <20230220205200.C0A8286494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ulogd: bump to version
+ 2.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,141 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d2fff78049392f2dae82f5ea9f5a0dbac225f4d
+commit: https://git.buildroot.net/buildroot/commit/?id=6fc4b59ffd3007ca9e436d33647acc5dfff62970
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-November/003261.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- Drop patch (already in version)
+- Update configure options due to
+  https://git.netfilter.org/ulogd2/commit/?id=794f0385ab60fd8c52ff3ce498c8aac78b58ac20
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 8 +++-----
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ .../0001-ulogd-fix-build-with-musl-libc.patch      | 32 ----------------------
+ package/ulogd/ulogd.hash                           |  6 ++--
+ package/ulogd/ulogd.mk                             | 26 +++++++++---------
+ 3 files changed, 15 insertions(+), 49 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index edfdaab335..9ccfb4c8de 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,8 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2019-December/003034.html
--md5  6f0ecf8d103d528cfc803aa475137afa  libXpm-3.5.13.tar.bz2
--sha1  38b1a2728adb49f4e255aba1530f51789815ffc4  libXpm-3.5.13.tar.bz2
--sha256  9cd1da57588b6cb71450eff2273ef6b657537a9ac4d02d0014228845b935ac25  libXpm-3.5.13.tar.bz2
--sha512  3b8f6e926272f39b1d95135c2274c00f5aaee1f9fb2ef79f71628df5edeb7ba20158819ef6a778101cc4092493a3b5b613c53634fdccadcc0fc85f0605e5e9a5  libXpm-3.5.13.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-November/003261.html
-+sha256  f7eb8f69c039281def8258ae6859adb5f050fbe161ab3d6a2d6ef109a603eac2  libXpm-3.5.14.tar.xz
-+sha512  c3fe554453068a6b188d3cad2cb3648e84b7f1909aea8f213daadce3d444b34361c3b2edce14a4fd481f97e4dc45c3125e2483ff4f44b3390a75829ed2782e4b  libXpm-3.5.14.tar.xz
+diff --git a/package/ulogd/0001-ulogd-fix-build-with-musl-libc.patch b/package/ulogd/0001-ulogd-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index af6e13648c..0000000000
+--- a/package/ulogd/0001-ulogd-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 675e762091380590f78ff07a94a25caa459b786b Mon Sep 17 00:00:00 2001
+-From: Cameron Norman <camerontnorman@gmail.com>
+-Date: Sat, 27 Oct 2018 13:05:45 -0700
+-Subject: ulogd: fix build with musl libc
+-
+-The attached patch fixes building ulogd2 with musl libc. It is being
+-used on Void Linux right now.
+-
+-Closes: https://bugzilla.netfilter.org/show_bug.cgi?id=1278
+-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrrieved from:
+-https://git.netfilter.org/ulogd2/commit/?id=675e762091380590f78ff07a94a25caa459b786b]
+----
+- src/ulogd.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/ulogd.c b/src/ulogd.c
+-index b8bc57c..9cd64e8 100644
+---- a/src/ulogd.c
+-+++ b/src/ulogd.c
+-@@ -65,6 +65,7 @@
+- #include <sys/time.h>
+- #include <sys/stat.h>
+- #include <sched.h>
+-+#include <limits.h>
+- #include <ulogd/conffile.h>
+- #include <ulogd/ulogd.h>
+- #ifdef DEBUG
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/ulogd/ulogd.hash b/package/ulogd/ulogd.hash
+index 0e07a714ee..35b518b9ce 100644
+--- a/package/ulogd/ulogd.hash
++++ b/package/ulogd/ulogd.hash
+@@ -1,7 +1,5 @@
+-# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.7.tar.bz2.{md5sum,sha1sum}
+-md5  2bb2868cf51acbb90c35763c9f995f31  ulogd-2.0.7.tar.bz2
+-sha1  f2d90469e2842e2bfbe19c55cf6d56ac107aa4b9  ulogd-2.0.7.tar.bz2
++# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.8.tar.bz2.sha256sum
++sha256  4ead6c3970c3f57fa1e89fe2d7cc483ba6fe2bd1b08701521e0b3afd667df291  ulogd-2.0.8.tar.bz2
+ 
  # Locally calculated
- sha256  ed3b06bb3b75a0954bd6837a96b41a4676f60dfeee647271613aadecc0fd596e  COPYING
- sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 7b645dc9e6..417dcfec38 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,9 +4,9 @@
+-sha256  990a05494d9c16029ba0a83f3b7294fc05c756546b8d60d1c1572dc25249a92b  ulogd-2.0.7.tar.bz2
+ sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index c00a53f3d5..65280a2ba6 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--XLIB_LIBXPM_VERSION = 3.5.13
--XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.bz2
--XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXPM_VERSION = 3.5.14
-+XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
-+XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING COPYRIGHT
- XLIB_LIBXPM_CPE_ID_VENDOR = libxpm_project
+-ULOGD_VERSION = 2.0.7
++ULOGD_VERSION = 2.0.8
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+-ULOGD_CONF_OPTS = --without-dbi
++ULOGD_CONF_OPTS = --disable-dbi
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+ 	libnfnetlink
+@@ -18,39 +18,39 @@ ULOGD_SELINUX_MODULES = ulogd
+ # DB backends need threads
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+-ULOGD_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
++ULOGD_CONF_OPTS += --enable-mysql
+ ULOGD_DEPENDENCIES += mysql
+ else
+-ULOGD_CONF_OPTS += --without-mysql
++ULOGD_CONF_OPTS += --disable-mysql
+ endif
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+-ULOGD_CONF_OPTS += --with-pgsql
++ULOGD_CONF_OPTS += --enable-pgsql
+ ULOGD_DEPENDENCIES += postgresql
+ else
+-ULOGD_CONF_OPTS += --without-pgsql
++ULOGD_CONF_OPTS += --disable-pgsql
+ endif
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+-ULOGD_CONF_OPTS += --with-sqlite
++ULOGD_CONF_OPTS += --enable-sqlite3
+ ULOGD_DEPENDENCIES += sqlite
+ else
+-ULOGD_CONF_OPTS += --without-sqlite
++ULOGD_CONF_OPTS += --disable-sqlite3
+ endif
+ else
+-ULOGD_CONF_OPTS += --without-mysql --without-pgsql --without-sqlite
++ULOGD_CONF_OPTS += --disable-mysql --disable-pgsql --disable-sqlite3
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+-ULOGD_CONF_OPTS += --with-pcap
++ULOGD_CONF_OPTS += --enable-pcap
+ ULOGD_DEPENDENCIES += libpcap
+ else
+-ULOGD_CONF_OPTS += --without-pcap
++ULOGD_CONF_OPTS += --disable-pcap
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JANSSON),y)
+-ULOGD_CONF_OPTS += --with-jansson
++ULOGD_CONF_OPTS += --enable-json
+ ULOGD_DEPENDENCIES += jansson
+ else
+-ULOGD_CONF_OPTS += --without-jansson
++ULOGD_CONF_OPTS += --disable-json
+ endif
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
