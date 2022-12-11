@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71DADC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69883C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06D69813CA;
-	Sun, 11 Dec 2022 08:58:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06D69813CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08F5540929;
+	Sun, 11 Dec 2022 08:58:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F5540929
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 80GuKR8SDHbT; Sun, 11 Dec 2022 08:58:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ayQu-evT8coE; Sun, 11 Dec 2022 08:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A150813A0;
-	Sun, 11 Dec 2022 08:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A150813A0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AF6041BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC1EF4093A;
+	Sun, 11 Dec 2022 08:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC1EF4093A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 18CC41BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D14881373
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66F13409EB
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D14881373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66F13409EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yg40eQTs9qYX for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id edeWyCLwYQMf for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8987B81387
+ by smtp4.osuosl.org (Postfix) with ESMTP id 273044093E
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8987B81387
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 273044093E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8564D85FAD; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id 16DA685FAA; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:09 +0100
+Date: Sun, 11 Dec 2022 09:28:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
-X-Git-Newrev: 0cc120f42d8cd84cbd73e1b55a088627fc755537
+X-Git-Oldrev: 045e99044223cfc707f5969791d7db2be8c5aa9b
+X-Git-Newrev: d7b796406e93b405ad9c276ac96fef7c4007cb15
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.8564D85FAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jedi: bump to version 0.18.2
+Message-Id: <20221211085515.16DA685FAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dnspython: bump to version
+ 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,45 +63,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cc120f42d8cd84cbd73e1b55a088627fc755537
+commit: https://git.buildroot.net/buildroot/commit/?id=d7b796406e93b405ad9c276ac96fef7c4007cb15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Backport patch removing wheel dependency.
+
+Add new host-python-setuptools-scm build dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-jedi/python-jedi.hash | 4 ++--
- package/python-jedi/python-jedi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...01-Remove-spurious-wheel-build-dependency.patch | 29 ++++++++++++++++++++++
+ package/python-dnspython/python-dnspython.hash     |  4 +--
+ package/python-dnspython/python-dnspython.mk       | 20 ++++-----------
+ 3 files changed, 36 insertions(+), 17 deletions(-)
 
-diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
-index d0f083e942..dee8810e89 100644
---- a/package/python-jedi/python-jedi.hash
-+++ b/package/python-jedi/python-jedi.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jedi/json
--md5  d8dba4a98a35530f7f5b461c20aff180  jedi-0.18.1.tar.gz
--sha256  74137626a64a99c8eb6ae5832d99b3bdd7d29a3850fe2aa80a4126b2a7d949ab  jedi-0.18.1.tar.gz
-+md5  47e89a2b8bedcfeb1527fac37b9ba1b3  jedi-0.18.2.tar.gz
-+sha256  bae794c30d07f6d910d32a7048af09b5a39ed740918da923c6b780790ebac612  jedi-0.18.2.tar.gz
+diff --git a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
+new file mode 100644
+index 0000000000..b43217edad
+--- /dev/null
++++ b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
+@@ -0,0 +1,29 @@
++From 53b989e4ce32c941d748ad33502600497595914a Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 2 Nov 2022 14:01:58 -0600
++Subject: [PATCH] Remove spurious wheel build dependency
++
++Wheel isn't a build dependency so it shouldn't be in setup_requires.
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++53b989e4ce32c941d748ad33502600497595914a]
++---
++ setup.cfg | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.cfg b/setup.cfg
++index 0abd270..2cb3e06 100644
++--- a/setup.cfg
+++++ b/setup.cfg
++@@ -46,7 +46,7 @@ packages =
++     dns.rdtypes.CH
++ python_requires = >=3.7
++ test_suite = tests
++-setup_requires = setuptools>=44; wheel; setuptools_scm[toml]>=3.4.3
+++setup_requires = setuptools>=44; setuptools_scm[toml]>=3.4.3
++ 
++ [options.extras_require]
++ DOH = httpx>=0.21.1; h2>=4.1.0; requests; requests-toolbelt
++-- 
++2.34.1
++
+diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
+index c9c74c8d75..29441b41ea 100644
+--- a/package/python-dnspython/python-dnspython.hash
++++ b/package/python-dnspython/python-dnspython.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dnspython/json
+-md5  8a362d7b2358be3117683e2dbf9654fc  dnspython-2.1.0.zip
+-sha256  e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4  dnspython-2.1.0.zip
++md5  c7172f4115cd7b60fd5037cfcd8f9408  dnspython-2.2.1.tar.gz
++sha256  0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e  dnspython-2.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
- sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
-diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
-index b0508de701..40de61f0e8 100644
---- a/package/python-jedi/python-jedi.mk
-+++ b/package/python-jedi/python-jedi.mk
-@@ -4,9 +4,9 @@
+ sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index 77e6082807..43030ae476 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -4,24 +4,14 @@
  #
  ################################################################################
  
--PYTHON_JEDI_VERSION = 0.18.1
-+PYTHON_JEDI_VERSION = 0.18.2
- PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
--PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/c2/25/273288df952e07e3190446efbbb30b0e4871a0d63b4246475f3019d4f55e
-+PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/15/02/afd43c5066de05f6b3188f3aa74136a3289e6c30e7a45f351546cab0928c
- PYTHON_JEDI_SETUP_TYPE = setuptools
- PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
- PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
+-PYTHON_DNSPYTHON_VERSION = 2.1.0
+-PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).zip
+-PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/13/27/5277de856f605f3429d752a39af3588e29d10181a3aa2e2ee471d817485a
++PYTHON_DNSPYTHON_VERSION = 2.2.1
++PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
++PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/99/fb/e7cd35bba24295ad41abfdff30f6b4c271fd6ac70d20132fa503c3e768e0
+ PYTHON_DNSPYTHON_LICENSE = ISC
+ PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
+ PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
+-
+-define PYTHON_DNSPYTHON_EXTRACT_CMDS
+-	$(UNZIP) -d $(@D) $(PYTHON_DNSPYTHON_DL_DIR)/$(PYTHON_DNSPYTHON_SOURCE)
+-	mv $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)/* $(@D)
+-	$(RM) -r $(@D)/dnspython-$(PYTHON_DNSPYTHON_VERSION)
+-endef
+-
+-define HOST_PYTHON_DNSPYTHON_EXTRACT_CMDS
+-	$(UNZIP) -d $(@D) $(HOST_PYTHON_DNSPYTHON_DL_DIR)/$(HOST_PYTHON_DNSPYTHON_SOURCE)
+-	mv $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)/* $(@D)
+-	$(RM) -r $(@D)/dnspython-$(HOST_PYTHON_DNSPYTHON_VERSION)
+-endef
++PYTHON_DNSPYTHON_DEPENDENCIES = host-python-setuptools-scm
++HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
