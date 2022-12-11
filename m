@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C73FAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 554E3C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CDC94F1DC;
-	Mon, 20 Feb 2023 22:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CDC94F1DC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 030324F1C4;
+	Mon, 20 Feb 2023 22:39:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 030324F1C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vf1rsRfDqE86; Mon, 20 Feb 2023 22:39:27 +0000 (UTC)
+	with ESMTP id 9wA7LUZyjluw; Mon, 20 Feb 2023 22:39:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B5784F1E5;
-	Mon, 20 Feb 2023 22:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B5784F1E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA2E74F1EF;
+	Mon, 20 Feb 2023 22:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA2E74F1EF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 437091BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 306941BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08A26611CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F6C261073
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08A26611CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F6C261073
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VDA6GRCaQ7cL for <buildroot@lists.busybox.net>;
+ with ESMTP id Edv_hPV1eyfb for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3808C61086
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42F1161161
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3808C61086
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42F1161161
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 304C78648F; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+ id 3F223828C8; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:33:01 +0100
+Date: Sun, 11 Dec 2022 14:33:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84463af7c42bc0d81ea0e03de911f5b1b4ef57c9
-X-Git-Newrev: 3324161873274b90b0c89e2a5ebb74e915bd6e86
+X-Git-Oldrev: 3324161873274b90b0c89e2a5ebb74e915bd6e86
+X-Git-Newrev: 4634a22cf70ec957ceabbb0dcd9611c824bc7a60
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205206.304C78648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/psmisc: bump to
- version 23.5
+Message-Id: <20230220205206.3F223828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/containerd: security
+ bump to version 1.6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3324161873274b90b0c89e2a5ebb74e915bd6e86
+commit: https://git.buildroot.net/buildroot/commit/?id=4634a22cf70ec957ceabbb0dcd9611c824bc7a60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://gitlab.com/psmisc/psmisc/-/blob/v23.5/ChangeLog
+CVE-2022-23471: https://github.com/advisories/GHSA-2qjp-425j-52j9
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+and other bugfixes, see:
+
+https://github.com/containerd/containerd/releases/tag/v1.6.12
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/psmisc/psmisc.hash | 6 +++---
- package/psmisc/psmisc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
-index 47e44f6921..fe146f90c9 100644
---- a/package/psmisc/psmisc.hash
-+++ b/package/psmisc/psmisc.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/psmisc/files/psmisc/
--md5  8114cd4489b95308efe2509c3a406bbf  psmisc-23.4.tar.xz
--sha1  a4c34111e570c43967efb2bbd8a4f31d94d22e0f  psmisc-23.4.tar.xz
-+md5  014f0b5d5ab32478a2c57812ad01e1fb  psmisc-23.5.tar.xz
-+sha1  a16073f459a19288c1ea2b413a84e1b996cab595  psmisc-23.5.tar.xz
- # Locally computed:
--sha256  7f0cceeace2050c525f3ebb35f3ba01d618b8d690620580bdb8cd8269a0c1679  psmisc-23.4.tar.xz
-+sha256  dc37ecc2f7e4a90a94956accc6e1c77adb71316b7c9cbd39b26738db0c3ae58b  psmisc-23.5.tar.xz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index 8b92be11e8..3229184459 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 285519441a..04a29949d7 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  f5f938513c28377f64f85e84f2750d39f26b01262f3a062b7e8ce35b560ca407  containerd-1.6.8.tar.gz
++sha256  b86e5c42f58b8348422c972513ff49783c0d505ed84e498d0d0245c5992e4320  containerd-1.6.12.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 89bbbf5c03..192175800c 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PSMISC_VERSION = 23.4
-+PSMISC_VERSION = 23.5
- PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
- PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
- PSMISC_LICENSE = GPL-2.0+
+-CONTAINERD_VERSION = 1.6.8
++CONTAINERD_VERSION = 1.6.12
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
