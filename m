@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 875F7C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A13A3C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BA60401CE;
-	Sun, 11 Dec 2022 09:01:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BA60401CE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DBF3817B1;
+	Sun, 11 Dec 2022 09:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DBF3817B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OZsrSRZA4Ml1; Sun, 11 Dec 2022 09:01:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S6TDkc5iGiae; Sun, 11 Dec 2022 09:01:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 206D0401B1;
-	Sun, 11 Dec 2022 09:01:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 206D0401B1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6496D813EC;
+	Sun, 11 Dec 2022 09:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6496D813EC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CBE131BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CE9961BF3EA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31B3D60B09
+ by smtp3.osuosl.org (Postfix) with ESMTP id 594CD600CD
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B3D60B09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 594CD600CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6LdIT4xTIIfc for <buildroot@lists.busybox.net>;
+ with ESMTP id 4c9NKN5jx8Z7 for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D266600CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F657605DB
  for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D266600CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F657605DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E44885FAC; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+ id 8D7AE85FAC; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:47 +0100
+Date: Sun, 11 Dec 2022 09:29:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9371a7994e1099a8681411ddb686a1c2ce53ef10
-X-Git-Newrev: cfd2cb65f2345aa3cda8926c0ec64537f9e4f27b
+X-Git-Oldrev: 24d1bfa38d9f10785e8cd366c9680e9ca8905de6
+X-Git-Newrev: b7fa52b837cc3a39534ba675e913c9bae583988d
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085516.5E44885FAC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pudb: bump to version
- 2022.1.3
+Message-Id: <20221211085516.8D7AE85FAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydal: bump to version
+ 20221110.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfd2cb65f2345aa3cda8926c0ec64537f9e4f27b
+commit: https://git.buildroot.net/buildroot/commit/?id=b7fa52b837cc3a39534ba675e913c9bae583988d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pudb/python-pudb.hash | 4 ++--
- package/python-pudb/python-pudb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydal/python-pydal.hash | 6 ++++--
+ package/python-pydal/python-pydal.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
-index d9943a3601..1ae15ad8a6 100644
---- a/package/python-pudb/python-pudb.hash
-+++ b/package/python-pudb/python-pudb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pudb/json
--md5  c2b4275b76068f18d630f7bae889345b  pudb-2022.1.2.tar.gz
--sha256  6b83ab805bddb53710109690a2237e98bf83c0b3a00033c517cdf5f6a8fa470d  pudb-2022.1.2.tar.gz
-+md5  cda1c28dc52318162e2b131280f09960  pudb-2022.1.3.tar.gz
-+sha256  58e83ada9e19ffe92c1fdc78ae5458ef91aeb892a5b8f0e7379e6fa61e0e664a  pudb-2022.1.3.tar.gz
- # Locally computed sha256 checksums
- sha256  a95343fffff49cde3d9bf33cf6bb71cb3bf0ed83f47d98a7ba04b175d29c79ab  LICENSE
-diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
-index 7df38f0f02..a357c34c44 100644
---- a/package/python-pudb/python-pudb.mk
-+++ b/package/python-pudb/python-pudb.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 852e568ac5..c55a17a545 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
+@@ -1,3 +1,5 @@
+-# sha256 locally computed
+-sha256  0a2dbc5d61d37d2b59d441ed0aab48c1ec906ce66088eb5cee021b009601de02  python-pydal-20220916.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pydal/json
++md5  eeaf44cdcdb6bd2040713c710a4a04be  pydal-20221110.1.tar.gz
++sha256  7c3e891c70f8d8918e36276f210a1959bb7badf3b276f47191986ffcf5b6a390  pydal-20221110.1.tar.gz
++# Locally computed sha256 checksums
+ sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index a3df1ccff1..f55c7fc2c5 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PUDB_VERSION = 2022.1.2
-+PYTHON_PUDB_VERSION = 2022.1.3
- PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
--PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/8b/ef/6dea7c63fdddd7753e2a2930e59799ef32247f2499c0d9bcd233439e7483
-+PYTHON_PUDB_SITE = https://files.pythonhosted.org/packages/85/a5/f1fd378f56bd8168b5921fd09d4b84fd8101a90e81402a509796caea2094
- PYTHON_PUDB_SETUP_TYPE = setuptools
- PYTHON_PUDB_LICENSE = MIT
- PYTHON_PUDB_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 20220916.1
+-PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
++PYTHON_PYDAL_VERSION = 20221110.1
++PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
++PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/73/83/b904c464b6ab060e12b3f406f1fab7deb97bcd9d2021d8c87325e6225c2d
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
