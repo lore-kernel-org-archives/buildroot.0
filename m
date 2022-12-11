@@ -1,49 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E74ACC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49CD7C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F6E48143D;
-	Sun, 11 Dec 2022 13:35:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F6E48143D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00F8260BC9;
+	Sun, 11 Dec 2022 13:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00F8260BC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4lEoIdx6n8Ug; Sun, 11 Dec 2022 13:35:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IubpBJRUyI57; Sun, 11 Dec 2022 13:36:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D349780C7A;
-	Sun, 11 Dec 2022 13:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D349780C7A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B2D11BF3AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41DE960BBD;
+	Sun, 11 Dec 2022 13:36:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41DE960BBD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 748991BF5F5
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0F244052D
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F244052D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D4A860BC4
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D4A860BC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lEiJVNsMclo1 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3OZPCwL7eTC2 for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1575C60BC8
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1575C60BC8
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:34:03 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EC297100004;
  Sun, 11 Dec 2022 13:34:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB17A4052F
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB17A4052F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8877863F0; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:33:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3046605251d1f946c610faaa5f337d0b3ee7406a
-X-Git-Newrev: de7850f9464a686fc7f37a8c1f8880f47ebffb00
-X-Patchwork-Hint: ignore
-Message-Id: <20221211133400.E8877863F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fail2ban: bump to version 1.0.2
+Date: Sun, 11 Dec 2022 14:34:00 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221211143400.74a40cfa@windsurf>
+In-Reply-To: <20221208210726.31762-1-fontaine.fabrice@gmail.com>
+References: <20221208210726.31762-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670765642;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=raL33SmmVzsY8pSOhIAiMx9mSAfE490IVRpaYf5Wk6U=;
+ b=cgaHgazQUXvsUH4nDN7f4zbcRwUfz9cQfwhb/Sz/AvKlvZygXB99pxOVhf/fxnityYYJHJ
+ ncJvopgoKpL2modbA0TaP6xVRp2VQqBei7k76EQAcqdxu8xmvQenjUzp47pZZGKha87bnj
+ 2fAs47If1FgBCnrKMXidGD56Sq6IbDShh/NMiiMjw0cRaRPsy7OoQCgJ+y3X+rdGILmkA/
+ yed8nrdR6hHME32vgE+fGS5I0jrsIziEo8bLPkw3YEg0vQE/q2Nr5H6CYmBK1dh4Qi2sRs
+ SIFzf9MfDBe/yJ/pzFOF5qw0uReCbBlTCbj+/D5Kz7YXPuv4+oqepWwnWVSF9Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cgaHgazQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/ipset: bump to version 7.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de7850f9464a686fc7f37a8c1f8880f47ebffb00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  8 Dec 2022 22:07:26 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-https://github.com/fail2ban/fail2ban/blob/1.0.2/ChangeLog
+> https://ipset.netfilter.org/changelog.html
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/ipset/ipset.hash | 4 ++--
+>  package/ipset/ipset.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fail2ban/fail2ban.hash | 2 +-
- package/fail2ban/fail2ban.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-index 4073efe4c7..b40922e70a 100644
---- a/package/fail2ban/fail2ban.hash
-+++ b/package/fail2ban/fail2ban.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  62b54679ebae81ac57f32c5e27aba9f2494ec5bafd45a0fd68e7a27fd448e5ac  fail2ban-1.0.1.tar.gz
-+sha256  ae8b0b41f27a7be12d40488789d6c258029b23a01168e3c0d347ee80b325ac23  fail2ban-1.0.2.tar.gz
- sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 288266c2c7..7ad22d02d1 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FAIL2BAN_VERSION = 1.0.1
-+FAIL2BAN_VERSION = 1.0.2
- FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
- FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
