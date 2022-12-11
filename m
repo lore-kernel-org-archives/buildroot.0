@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A63C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:08:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 847D4C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6874403F5;
-	Mon, 20 Feb 2023 22:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6874403F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 288A140921;
+	Mon, 20 Feb 2023 22:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 288A140921
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jhfyR7ujs6J; Mon, 20 Feb 2023 22:08:30 +0000 (UTC)
+	with ESMTP id TBD-e-HY-dVs; Mon, 20 Feb 2023 22:08:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80CA7402D4;
-	Mon, 20 Feb 2023 22:08:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80CA7402D4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FBD91BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10E8C41CEF;
+	Mon, 20 Feb 2023 22:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10E8C41CEF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D00E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34D4161142
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34D4161142
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78335416BD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78335416BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xIrGG2yS3xS3 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mRh8PLdkFap3 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6245861126
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6245861126
+ by smtp2.osuosl.org (Postfix) with ESMTP id BEA63416AD
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEA63416AD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FE68828C8; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id AEAC386494; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Dec 2022 20:55:34 +0100
+Date: Sun, 11 Dec 2022 11:33:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4f9f6180491c697b29aa687f378c2ab58c7f91fd
-X-Git-Newrev: 21321a983615f8a3ca33c92599c7fc6023711949
+X-Git-Oldrev: 6987b92da510a8c8b9534a22506850c163d0f035
+X-Git-Newrev: a49ab07e76216dd9cecd86533e39d1a868102df8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205200.5FE68828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website/news.html: add
- notice about 2022.08.3 release
+Message-Id: <20230220205204.AEAC386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/delve: bump to version
+ 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21321a983615f8a3ca33c92599c7fc6023711949
+commit: https://git.buildroot.net/buildroot/commit/?id=a49ab07e76216dd9cecd86533e39d1a868102df8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The announcement mail didn't make it to the mailman archive, so use the lore
-link instead.
+https://github.com/go-delve/delve/blob/master/CHANGELOG.md#1200-2022-12-07
+https://github.com/go-delve/delve/releases/tag/v1.20.0
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/news.html | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/delve/delve.hash | 2 +-
+ package/delve/delve.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 8f7e22a0b9..74ccd11b08 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+index 04ea4954cc..bf730b9047 100644
+--- a/package/delve/delve.hash
++++ b/package/delve/delve.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  086106a4776fa155bf20c37d27b9caed55255be6359c7f0bda1893d3adbb614e  delve-1.8.0.tar.gz
++sha256  39d2e3ae965abf5e71f3d8efbef368b1ee1d7154ea6604ec71d508350d419d03  delve-1.20.0.tar.gz
+ sha256  778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+index 4ca1786ffc..b43d0f03c8 100644
+--- a/package/delve/delve.mk
++++ b/package/delve/delve.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.08.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 December 2022</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2022.08.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2022.08.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.08.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87r0x7z5cw.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.08.3.tar.xz">2022.08.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-DELVE_VERSION = 1.8.0
++DELVE_VERSION = 1.20.0
+ DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
+ DELVE_LICENSE = MIT
+ DELVE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
