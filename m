@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F8E9C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB6CCC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E95C60A91;
-	Sun, 11 Dec 2022 09:07:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E95C60A91
+	by smtp1.osuosl.org (Postfix) with ESMTP id 885C8817B5;
+	Sun, 11 Dec 2022 09:07:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 885C8817B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3YKMwsX1PCC; Sun, 11 Dec 2022 09:07:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id InagwHgS9zLU; Sun, 11 Dec 2022 09:07:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D54E605EC;
-	Sun, 11 Dec 2022 09:07:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D54E605EC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E35371BF865
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDDBA817B1;
+	Sun, 11 Dec 2022 09:07:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDDBA817B1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DBA381BF3EA
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34A52404CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FD6940929
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A52404CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD6940929
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dn-KAeIXTuAV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uANliezB3spb for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7080B404F9
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7080B404F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7DD45409A4
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DD45409A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EAD585FA6; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
+ id 74D8485FAA; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:43:22 +0100
+Date: Sun, 11 Dec 2022 09:29:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c38de8139abee58fb8d1cdc83d061c93aee7fd7f
-X-Git-Newrev: 1ea6eecb734ae04988e0f4d4a7ea0f5fb9420c89
+X-Git-Oldrev: 0894b7f78b17a2ddb4e922c5ee63379fe00a7259
+X-Git-Newrev: 59ae28ac059852c4adb9e5116006f8724bd8578b
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085517.6EAD585FA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pycares: bump to version
- 4.3.0
+Message-Id: <20221211085516.74D8485FAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pycairo: bump to version
+ 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ea6eecb734ae04988e0f4d4a7ea0f5fb9420c89
+commit: https://git.buildroot.net/buildroot/commit/?id=59ae28ac059852c4adb9e5116006f8724bd8578b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
+ package/python-pycairo/python-pycairo.hash | 4 ++--
+ package/python-pycairo/python-pycairo.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index 13f640b1c1..7cdd93dd93 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5  7706a01fdbfc593564b63ac0d71031d9  pycares-4.2.2.tar.gz
--sha256  e1f57a8004370080694bd6fb969a1ffc9171a59c6824d54f791c1b2e4d298385  pycares-4.2.2.tar.gz
-+md5  d11b196cebb45a38caa56e850f4a60d9  pycares-4.3.0.tar.gz
-+sha256  c542696f6dac978e9d99192384745a65f80a7d9450501151e4a7563e06010d45  pycares-4.3.0.tar.gz
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index f8018e682f..98bb7f2802 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5  682238eaa8bd7032e36a20b6f53824d1  pycairo-1.21.0.tar.gz
+-sha256  251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b  pycairo-1.21.0.tar.gz
++md5  7a3729d21659098e1b9a411b62e88966  pycairo-1.23.0.tar.gz
++sha256  9b61ac818723adc04367301317eb2e814a83522f07bbd1f409af0dada463c44c  pycairo-1.23.0.tar.gz
  # Locally computed sha256 checksums
- sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index 858adbf33b..b1c7dcef50 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
+ sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index 5b231f6b1e..f9933df187 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 4.2.2
-+PYTHON_PYCARES_VERSION = 4.3.0
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/ac/a3/21594384c2398420dd7f6e8656aeb5a2c15128ddf2b85ef5f4403342e18d
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/01/50/e3015e6e03a3cf64113f509e8b86b71af37169b59ccedfcb182f3d031329
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-PYTHON_PYCAIRO_VERSION = 1.21.0
++PYTHON_PYCAIRO_VERSION = 1.23.0
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/92/a4/506564f574fa74c90b98690e8ecc8dbae1629f31fcfe0be69de45d9e1605
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/69/ca/9e9fa2e8be0876a9bbf046a1be7ee33e61d4fdfbd1fd25c76c1bdfddf8c4
+ PYTHON_PYCAIRO_SETUP_TYPE = setuptools
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
