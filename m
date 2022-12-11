@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF21EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73C5AC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 08:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8050C40981;
-	Sun, 11 Dec 2022 08:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8050C40981
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wSsN269KwyaY; Sun, 11 Dec 2022 08:58:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70BB04093E;
-	Sun, 11 Dec 2022 08:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70BB04093E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2E61BF865
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62D6C81369
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62D6C81369
+	by smtp1.osuosl.org (Postfix) with ESMTP id 242A3813A0;
+	Sun, 11 Dec 2022 08:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 242A3813A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0MPxqbVgb-Xi for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BELWHfk1hvgt; Sun, 11 Dec 2022 08:58:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6260B81377;
+	Sun, 11 Dec 2022 08:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6260B81377
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C6B91BF868
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F990404C9
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F990404C9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D10BpNPIII3e for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A46F881377
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A46F881377
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B0EC404D1
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B0EC404D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2BCE85FAD; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+ id 2B30485FA6; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:59 +0100
+Date: Sun, 11 Dec 2022 09:28:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90817e547c54a26e6554819a545f6ef059ee479b
-X-Git-Newrev: e8a8ed95901a663fff43217b7c73530eff25d757
+X-Git-Oldrev: 5a3fb64466b38f68ed4c49fe3eda86a5094bd411
+X-Git-Newrev: 3ef0959eabce0cf3f155b8959fdd06e6018c86e7
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085516.A2BCE85FAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyphen: bump to version
- 0.13.2
+Message-Id: <20221211085515.2B30485FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-reedsolo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +62,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8a8ed95901a663fff43217b7c73530eff25d757
+commit: https://git.buildroot.net/buildroot/commit/?id=3ef0959eabce0cf3f155b8959fdd06e6018c86e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyphen/python-pyphen.hash | 4 ++--
- package/python-pyphen/python-pyphen.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                            |  1 +
+ package/python-reedsolo/Config.in            |  6 ++++++
+ package/python-reedsolo/python-reedsolo.hash |  5 +++++
+ package/python-reedsolo/python-reedsolo.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
-index 3a145e0f81..39af62e085 100644
---- a/package/python-pyphen/python-pyphen.hash
-+++ b/package/python-pyphen/python-pyphen.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/Pyphen/json
--md5  a2d6f69468684bbaa88d004b79c02128  pyphen-0.13.0.tar.gz
--sha256  06873cebffd65a8fca7c20c0e3dc032655c7ee8de0f552205cad3b574265c293  pyphen-0.13.0.tar.gz
-+md5  a5039d1a4d8d4bad784cb864927f83f8  pyphen-0.13.2.tar.gz
-+sha256  847f57a043a58408f24670ae0184ff6edfb5fd5731743208228c028ddc514438  pyphen-0.13.2.tar.gz
- # Locally computed sha256 checksums
- sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
- sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
-diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
-index d83eb79736..9ca064c293 100644
---- a/package/python-pyphen/python-pyphen.mk
-+++ b/package/python-pyphen/python-pyphen.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYPHEN_VERSION = 0.13.0
-+PYTHON_PYPHEN_VERSION = 0.13.2
- PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
--PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/53/e7f212c87f91aab928bbf0de95ebc319c4d935e59bd5ed868f2c2bfc9465
-+PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/46/12/aeb28a1e1a3f3cede967cea98ef3a1da844418ab8296a4bb9513f232736c
- PYTHON_PYPHEN_SETUP_TYPE = flit
- PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
- PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
+diff --git a/package/Config.in b/package/Config.in
+index d5a673295d..6804e1d418 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1231,6 +1231,7 @@ menu "External python modules"
+ 	source "package/python-qrcode/Config.in"
+ 	source "package/python-raven/Config.in"
+ 	source "package/python-redis/Config.in"
++	source "package/python-reedsolo/Config.in"
+ 	source "package/python-reentry/Config.in"
+ 	source "package/python-regex/Config.in"
+ 	source "package/python-remi/Config.in"
+diff --git a/package/python-reedsolo/Config.in b/package/python-reedsolo/Config.in
+new file mode 100644
+index 0000000000..6482b1e98c
+--- /dev/null
++++ b/package/python-reedsolo/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_REEDSOLO
++	bool "python-reedsolo"
++	help
++	  Pure-Python Reed Solomon encoder/decoder.
++
++	  https://github.com/tomerfiliba/reedsolomon
+diff --git a/package/python-reedsolo/python-reedsolo.hash b/package/python-reedsolo/python-reedsolo.hash
+new file mode 100644
+index 0000000000..fdafc89f49
+--- /dev/null
++++ b/package/python-reedsolo/python-reedsolo.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/reedsolo/json
++md5  b67a04027a1825c63a63b6793ec660a3  reedsolo-1.6.0.tar.gz
++sha256  4e290d3b0a7207ac7aac186790766c752b5fcdf5e0b04dfd260349579052bbac  reedsolo-1.6.0.tar.gz
++# Locally computed sha256 checksums
++sha256  0babd7b573efc3dcf5bb3c28b583150726f775d3dd8d54d6cd062834735b3d73  LICENSE
+diff --git a/package/python-reedsolo/python-reedsolo.mk b/package/python-reedsolo/python-reedsolo.mk
+new file mode 100644
+index 0000000000..2a7fd42a05
+--- /dev/null
++++ b/package/python-reedsolo/python-reedsolo.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-reedsolo
++#
++################################################################################
++
++PYTHON_REEDSOLO_VERSION = 1.6.0
++PYTHON_REEDSOLO_SOURCE = reedsolo-$(PYTHON_REEDSOLO_VERSION).tar.gz
++PYTHON_REEDSOLO_SITE = https://files.pythonhosted.org/packages/9b/10/28d1492cc82a103bc06f18cb9a9dbb3a9168ab2e4068801fa0aa0c76b231
++PYTHON_REEDSOLO_SETUP_TYPE = setuptools
++PYTHON_REEDSOLO_LICENSE = Public Domain
++PYTHON_REEDSOLO_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
