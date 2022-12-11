@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80AFAC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB54CC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 014B64EDB6;
-	Mon, 20 Feb 2023 22:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 014B64EDB6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84D4040914;
+	Mon, 20 Feb 2023 22:03:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D4040914
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lM1c7GSbJESa; Mon, 20 Feb 2023 22:02:59 +0000 (UTC)
+	with ESMTP id Gduyjo_uaVSg; Mon, 20 Feb 2023 22:03:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 313A04EDD9;
-	Mon, 20 Feb 2023 22:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 313A04EDD9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19FCF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE65E4EDF1;
+	Mon, 20 Feb 2023 22:03:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE65E4EDF1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BA5C1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1ACEF61145
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ACEF61145
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11767416B7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11767416B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D72_N_6ae2bh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VqVSGPcvY82I for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CB096110B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CB096110B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40FC740C30
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FC740C30
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 364EA828C8; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+ id 2C83186494; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:22 +0100
+Date: Sun, 11 Dec 2022 09:29:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fe85dbf818ab4321f3a18f742458f3313ed1b3ec
-X-Git-Newrev: 445abe597ccb099660da911fa8fe1ab29b47e986
+X-Git-Oldrev: 0894b7f78b17a2ddb4e922c5ee63379fe00a7259
+X-Git-Newrev: 59ae28ac059852c4adb9e5116006f8724bd8578b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.364EA828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_oclock:
- bump version to 1.0.5
+Message-Id: <20230220205203.2C83186494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pycairo: bump
+ to version 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=445abe597ccb099660da911fa8fe1ab29b47e986
+commit: https://git.buildroot.net/buildroot/commit/?id=59ae28ac059852c4adb9e5116006f8724bd8578b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-August/003206.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_oclock/xapp_oclock.hash | 8 +++-----
- package/x11r7/xapp_oclock/xapp_oclock.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/python-pycairo/python-pycairo.hash | 4 ++--
+ package/python-pycairo/python-pycairo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_oclock/xapp_oclock.hash b/package/x11r7/xapp_oclock/xapp_oclock.hash
-index c8893f88b3..20e899b880 100644
---- a/package/x11r7/xapp_oclock/xapp_oclock.hash
-+++ b/package/x11r7/xapp_oclock/xapp_oclock.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002856.html
--md5  973f6d25a6f0990720b98a15c9436b92  oclock-1.0.4.tar.bz2
--sha1  0bc8f3f44290950f60af894e20e0ceb0c5e8e862  oclock-1.0.4.tar.bz2
--sha256  cc20cfc1c0d5128d89e1eecd9ba52e58f111075be163e0aeda5690dbaafbaefe  oclock-1.0.4.tar.bz2
--sha512  6e0d36a84572a153226b2929f2253cb7adc3c9e5e3af168aeaf8c487ade2e43517b271a8e9cdb2a2c4a67ca56ed0b99c194ca63a4a822b68bfc72ca6518335e7  oclock-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003206.html
-+sha256  8f09979655e889d056b7a1e50b57f38b32529453e756b53ec659070fb3c3965c  oclock-1.0.5.tar.xz
-+sha512  a87e89afdb25a91c36077e030b05c3907ddc063c6bdc0715a01bfc16edef8730b3b5a0347399ef4c8b2a13e70e068cba9ec5fe8d411f08548c0aa790a1873aff  oclock-1.0.5.tar.xz
- # Locally computed
- sha256  f6cae4b0c603ef5bd76da2df96b38aa43aa7547e482adb8cb8b83f09af35e4a2  COPYING
-diff --git a/package/x11r7/xapp_oclock/xapp_oclock.mk b/package/x11r7/xapp_oclock/xapp_oclock.mk
-index 0f94cf8c13..4f70df4cbf 100644
---- a/package/x11r7/xapp_oclock/xapp_oclock.mk
-+++ b/package/x11r7/xapp_oclock/xapp_oclock.mk
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index f8018e682f..98bb7f2802 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5  682238eaa8bd7032e36a20b6f53824d1  pycairo-1.21.0.tar.gz
+-sha256  251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b  pycairo-1.21.0.tar.gz
++md5  7a3729d21659098e1b9a411b62e88966  pycairo-1.23.0.tar.gz
++sha256  9b61ac818723adc04367301317eb2e814a83522f07bbd1f409af0dada463c44c  pycairo-1.23.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index 5b231f6b1e..f9933df187 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_OCLOCK_VERSION = 1.0.4
--XAPP_OCLOCK_SOURCE = oclock-$(XAPP_OCLOCK_VERSION).tar.bz2
--XAPP_OCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_OCLOCK_VERSION = 1.0.5
-+XAPP_OCLOCK_SOURCE = oclock-$(XAPP_OCLOCK_VERSION).tar.xz
-+XAPP_OCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_OCLOCK_LICENSE = MIT
- XAPP_OCLOCK_LICENSE_FILES = COPYING
- XAPP_OCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu
+-PYTHON_PYCAIRO_VERSION = 1.21.0
++PYTHON_PYCAIRO_VERSION = 1.23.0
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/92/a4/506564f574fa74c90b98690e8ecc8dbae1629f31fcfe0be69de45d9e1605
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/69/ca/9e9fa2e8be0876a9bbf046a1be7ee33e61d4fdfbd1fd25c76c1bdfddf8c4
+ PYTHON_PYCAIRO_SETUP_TYPE = setuptools
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
