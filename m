@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDE2C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD92C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B2614F355;
-	Mon, 20 Feb 2023 22:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2614F355
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FF6D4F326;
+	Mon, 20 Feb 2023 22:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FF6D4F326
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oK72aaMAIkqK; Mon, 20 Feb 2023 22:49:30 +0000 (UTC)
+	with ESMTP id Fu1tKmoQwaXd; Mon, 20 Feb 2023 22:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FE134F331;
-	Mon, 20 Feb 2023 22:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FE134F331
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CA5C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E323A4F351;
+	Mon, 20 Feb 2023 22:49:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E323A4F351
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 906771BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E012C416E4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E012C416E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FE836109A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FE836109A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O4q2vBagNNUj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 22R4q6A_5c92 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24B674170B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24B674170B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C2466125F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2466125F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 224D086494; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 2CF2C8648F; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 28 Dec 2022 20:50:19 +0100
+Date: Sun, 11 Dec 2022 18:05:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a04be749374c99790ee7d185427b352db84fb07a
-X-Git-Newrev: ad71850aa039e344a1c32cd07876c1a83bdf5d5d
+X-Git-Oldrev: c0e09a1b0a6a57f3bda48d87f7292af136d59949
+X-Git-Newrev: ef708b0c195d168c311b1096c1ab2b7bf6c2aa1e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205217.224D086494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qemu: reorder
- dependencies alphabetically
+Message-Id: <20230220205208.2CF2C8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-maturin: drop
+ host-python-tomli dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +56,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad71850aa039e344a1c32cd07876c1a83bdf5d5d
+commit: https://git.buildroot.net/buildroot/commit/?id=ef708b0c195d168c311b1096c1ab2b7bf6c2aa1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/qemu/qemu.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+The host-python-tomli dependency is not required on python version
+3.11 and newer.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index cbcbbc2bc5..be84452862 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -23,10 +23,10 @@ QEMU_CPE_ID_VENDOR = qemu
- QEMU_DEPENDENCIES = \
- 	host-meson \
- 	host-pkgconf \
-+	host-python3 \
- 	libglib2 \
--	zlib \
- 	pixman \
--	host-python3
-+	zlib
- 
- # Need the LIBS variable because librt and libm are
- # not automatically pulled. :-(
-@@ -253,12 +253,12 @@ $(eval $(generic-package))
- # Host-qemu
- 
- HOST_QEMU_DEPENDENCIES = \
--	host-meson \
--	host-pkgconf \
--	host-zlib \
- 	host-libglib2 \
-+	host-meson \
- 	host-pixman \
--	host-python3
-+	host-pkgconf \
-+	host-python3 \
-+	host-zlib
- 
- #       BR ARCH         qemu
- #       -------         ----
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-maturin/python-maturin.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+index ab87df3842..3dedfdce11 100644
+--- a/package/python-maturin/python-maturin.mk
++++ b/package/python-maturin/python-maturin.mk
+@@ -12,7 +12,6 @@ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+ PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
+ HOST_PYTHON_MATURIN_DEPENDENCIES = \
+ 	host-python-setuptools-rust \
+-	host-python-tomli \
+ 	host-rustc
+ HOST_PYTHON_MATURIN_ENV = \
+ 	$(HOST_PKG_CARGO_ENV) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
