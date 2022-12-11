@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C0F8C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D7FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEF634ED99;
-	Mon, 20 Feb 2023 22:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF634ED99
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7142042AF6;
+	Mon, 20 Feb 2023 22:04:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7142042AF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N6GDeySIQcgU; Mon, 20 Feb 2023 22:03:57 +0000 (UTC)
+	with ESMTP id CXPpZvlOVPtl; Mon, 20 Feb 2023 22:04:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62F9A4998D;
-	Mon, 20 Feb 2023 22:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F9A4998D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8296B1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29AF94EDCF;
+	Mon, 20 Feb 2023 22:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29AF94EDCF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CD431BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3444561147
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3444561147
+ by smtp2.osuosl.org (Postfix) with ESMTP id 402F640C30
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 402F640C30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f8M4YifS1SCG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RcGWXQ-Ti66U for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6174961126
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6174961126
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79E47416AF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79E47416AF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59D65828C8; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
+ id 6A52E86494; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:36:31 +0100
+Date: Sun, 11 Dec 2022 09:30:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4649c06bff7e30bdbd7a3ebab59c578f09d67172
-X-Git-Newrev: 4b1ff446fb74b910ff9005b8725e962a626ef11a
+X-Git-Oldrev: e8a8ed95901a663fff43217b7c73530eff25d757
+X-Git-Newrev: c75ac80eeaa30b3888f20e0c32df7a3e5c9172b5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205159.59D65828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libFS: bump
- version to 1.0.9
+Message-Id: <20230220205203.6A52E86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-redis: bump to
+ version 4.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b1ff446fb74b910ff9005b8725e962a626ef11a
+commit: https://git.buildroot.net/buildroot/commit/?id=c75ac80eeaa30b3888f20e0c32df7a3e5c9172b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-August/003200.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+License hash changed due to syntax update:
+https://github.com/redis/redis-py/commit/2a0405d07e20ac7f695ff67415ad6c8368fd6066
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libFS/xlib_libFS.hash | 8 +++-----
- package/x11r7/xlib_libFS/xlib_libFS.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/python-redis/python-redis.hash | 6 +++---
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
-index 50cb94dd3a..6ca152ac4a 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.hash
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
--md5  4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
--sha1  70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
--sha256  c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
--sha512  466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-August/003200.html
-+sha256  597379438b3242ccc7d7b0fc432dc6c844eca0d4a82a7b82518bfeb203fc208a  libFS-1.0.9.tar.xz
-+sha512  7d012e62736c6d567931bad982eec221199d296f0fe41e1e7fde5575b8b928e9a8c644aa8746242bdfe72393635320b58774d9a519285765bd26d633588092b8  libFS-1.0.9.tar.xz
- # Locally computed
- sha256  5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 9d9aecb74f..0fbf453ca4 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 9465e251f8..209ff35b78 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5  15f05dbef3d166c6244f7afa6c3cacf8  redis-4.3.4.tar.gz
+-sha256  ddf27071df4adf3821c4f2ca59d67525c3a82e5f268bed97b813cb4fabf87880  redis-4.3.4.tar.gz
++md5  4ab691af57ac346c2e630ce2787a424f  redis-4.4.0.tar.gz
++sha256  7b8c87d19c45d3f1271b124858d2a5c13160c4e74d4835e28273400fa34d5228  redis-4.4.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
++sha256  7801a39e3a1aec58a7ea7c9f4dc1238cf0922c36a1fc8eff0bb7d684ff6dd354  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index 7c18f31507..bbbd6f1df2 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBFS_VERSION = 1.0.8
--XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
--XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBFS_VERSION = 1.0.9
-+XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.xz
-+XLIB_LIBFS_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBFS_LICENSE = MIT
- XLIB_LIBFS_LICENSE_FILES = COPYING
- XLIB_LIBFS_CPE_ID_VENDOR = x
+-PYTHON_REDIS_VERSION = 4.3.4
++PYTHON_REDIS_VERSION = 4.4.0
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/8f/d4/78ef2d3f316041fa6c92daa7ac2c8056c39858c3775fad35fd84b9b3a6fb
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/7a/05/671367bb466b3301bc4543fdad6ac107214ca327c8d97165b30246d87e88
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
