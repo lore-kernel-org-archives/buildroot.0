@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F755C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14ACCC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1053D4ED56;
-	Mon, 20 Feb 2023 22:17:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1053D4ED56
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE5F54EFC6;
+	Mon, 20 Feb 2023 22:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE5F54EFC6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UPV2vZF14HIj; Mon, 20 Feb 2023 22:17:55 +0000 (UTC)
+	with ESMTP id wK7AG67cF66M; Mon, 20 Feb 2023 22:18:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5AF94EFA5;
-	Mon, 20 Feb 2023 22:17:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5AF94EFA5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF5491BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78C2C4EFA5;
+	Mon, 20 Feb 2023 22:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78C2C4EFA5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF8FC1BF94D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED6AD6116A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED6AD6116A
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE8D6416CD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8D6416CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id prpsig_neMkF for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jycoo43D47MD for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2828B6115F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2828B6115F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E28D3416C3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E28D3416C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 242388648F; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id E067686495; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:09 +0100
+Date: Sun, 11 Dec 2022 21:21:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1bf1b6f75b8b2e1f1cfaa99aa62f2818b81534d6
-X-Git-Newrev: 0cc120f42d8cd84cbd73e1b55a088627fc755537
+X-Git-Oldrev: 6ba57676c52a41f9f2efa311f101eb637c39897b
+X-Git-Newrev: 54fc7aa2be7adc170d30f6f0ec64e34951e52ddd
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.242388648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-jedi: bump to
- version 0.18.2
+Message-Id: <20230220205208.E067686495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mpd: update to version
+ 0.23.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +56,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cc120f42d8cd84cbd73e1b55a088627fc755537
+commit: https://git.buildroot.net/buildroot/commit/?id=54fc7aa2be7adc170d30f6f0ec64e34951e52ddd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-jedi/python-jedi.hash | 4 ++--
- package/python-jedi/python-jedi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Mostly fixes for build and runtime failures; no new features.
 
-diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
-index d0f083e942..dee8810e89 100644
---- a/package/python-jedi/python-jedi.hash
-+++ b/package/python-jedi/python-jedi.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jedi/json
--md5  d8dba4a98a35530f7f5b461c20aff180  jedi-0.18.1.tar.gz
--sha256  74137626a64a99c8eb6ae5832d99b3bdd7d29a3850fe2aa80a4126b2a7d949ab  jedi-0.18.1.tar.gz
-+md5  47e89a2b8bedcfeb1527fac37b9ba1b3  jedi-0.18.2.tar.gz
-+sha256  bae794c30d07f6d910d32a7048af09b5a39ed740918da923c6b780790ebac612  jedi-0.18.2.tar.gz
- # Locally computed sha256 checksums
- sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
- sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
-diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
-index b0508de701..40de61f0e8 100644
---- a/package/python-jedi/python-jedi.mk
-+++ b/package/python-jedi/python-jedi.mk
-@@ -4,9 +4,9 @@
- #
+Standard directory for default database and cache changed from ~/.cache to
+~/.cache/mpd.
+
+Full change log:
+	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.11/NEWS
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index fca0ee8539..8c488d0357 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  2becaba980402e8dc7972ccc3476e493b7ae2eeb720d31fa6712472ed48e9f2d  mpd-0.23.9.tar.xz
++sha256  edb4e7a8f9dff238b5610f9e2461940ea98c727a5462fafb1cdf836304dfdca9  mpd-0.23.11.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 5c15953984..449600eda2 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_JEDI_VERSION = 0.18.1
-+PYTHON_JEDI_VERSION = 0.18.2
- PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
--PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/c2/25/273288df952e07e3190446efbbb30b0e4871a0d63b4246475f3019d4f55e
-+PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/15/02/afd43c5066de05f6b3188f3aa74136a3289e6c30e7a45f351546cab0928c
- PYTHON_JEDI_SETUP_TYPE = setuptools
- PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
- PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).9
++MPD_VERSION = $(MPD_VERSION_MAJOR).11
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
