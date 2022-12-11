@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF8E8C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51122C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F7A040354;
-	Mon, 20 Feb 2023 22:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F7A040354
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDF1046E38;
+	Mon, 20 Feb 2023 22:14:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDF1046E38
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7fbmKzvLbiMf; Mon, 20 Feb 2023 22:13:47 +0000 (UTC)
+	with ESMTP id SAmySOuumhDZ; Mon, 20 Feb 2023 22:14:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F10FA429F3;
-	Mon, 20 Feb 2023 22:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F10FA429F3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAD041BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4EBD41B48;
+	Mon, 20 Feb 2023 22:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4EBD41B48
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CF571BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53EC741148
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53EC741148
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5940B61160
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5940B61160
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lXysOBZx8kcH for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2M0J1kFOUiFp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9920B416AD
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9920B416AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ED376110A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ED376110A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 950A886494; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+ id 695CA86495; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:33:25 +0100
+Date: Sun, 11 Dec 2022 09:28:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3046605251d1f946c610faaa5f337d0b3ee7406a
-X-Git-Newrev: de7850f9464a686fc7f37a8c1f8880f47ebffb00
+X-Git-Oldrev: 25aedae85112ee9225f23863587807bdef67580c
+X-Git-Newrev: 0f0ceb49be6a5e3439fa6da226d4e414b5a208ad
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205206.950A886494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fail2ban: bump to
- version 1.0.2
+Message-Id: <20230220205201.695CA86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cryptography:
+ bump to version 38.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de7850f9464a686fc7f37a8c1f8880f47ebffb00
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0ceb49be6a5e3439fa6da226d4e414b5a208ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/fail2ban/fail2ban/blob/1.0.2/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/fail2ban/fail2ban.hash | 2 +-
- package/fail2ban/fail2ban.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-index 4073efe4c7..b40922e70a 100644
---- a/package/fail2ban/fail2ban.hash
-+++ b/package/fail2ban/fail2ban.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  62b54679ebae81ac57f32c5e27aba9f2494ec5bafd45a0fd68e7a27fd448e5ac  fail2ban-1.0.1.tar.gz
-+sha256  ae8b0b41f27a7be12d40488789d6c258029b23a01168e3c0d347ee80b325ac23  fail2ban-1.0.2.tar.gz
- sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 288266c2c7..7ad22d02d1 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 40d217f666..a01c8810e3 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  cd0b4536eabc6fcb80aa03430fc2ca485d33249eea0cd23f76c1dd9da410c66c  cryptography-38.0.3.tar.gz
++sha256  2abbeb6d42e8844de036bf2e0d78a42feeee1d57ebf29a07684490f98bdcab37  cryptography-38.0.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 69eb90d795..4254fa3557 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FAIL2BAN_VERSION = 1.0.1
-+FAIL2BAN_VERSION = 1.0.2
- FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
- FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
+-PYTHON_CRYPTOGRAPHY_VERSION = 38.0.3
++PYTHON_CRYPTOGRAPHY_VERSION = 38.0.4
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/13/dd/a9608b7aebe5d2dc0c98a4b2090a6b815628efa46cc1c046b89d8cd25f4c
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/e3/3f/41186b1f2fd86a542d399175f6b8e43f82cd4dfa51235a0b030a042b811a
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
