@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6DAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82F5CC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EBCA4EE73;
-	Mon, 20 Feb 2023 22:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EBCA4EE73
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26C03410CA;
+	Mon, 20 Feb 2023 22:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C03410CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8oclWKLo1kM; Mon, 20 Feb 2023 22:52:43 +0000 (UTC)
+	with ESMTP id etUWYVBNds31; Mon, 20 Feb 2023 22:52:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A13D4F3A5;
-	Mon, 20 Feb 2023 22:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A13D4F3A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5571E1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E42734F3B4;
+	Mon, 20 Feb 2023 22:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E42734F3B4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E54AE1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0915641715
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0915641715
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA14961293
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA14961293
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IRBKKoVi8D8H for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FZqkXOY0985o for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A8F841194
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A8F841194
+ by smtp3.osuosl.org (Postfix) with ESMTP id D80AA61288
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D80AA61288
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0856F86495; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+ id D3D938648F; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:04:19 +0100
+Date: Sun, 11 Dec 2022 21:19:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7a2afdb7b1180bed3b6ad92c22c908805467ead3
-X-Git-Newrev: 96d3e5fd2f5310e9f626084669a9ddaa55c92eda
+X-Git-Oldrev: b54e0dde3009cb859ff93a704a068d4fd162a035
+X-Git-Newrev: 6ba57676c52a41f9f2efa311f101eb637c39897b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205218.0856F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/capnproto: bump
- version to 0.10.3
+Message-Id: <20230220205208.D3D938648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zfs: bump version to
+ 2.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +59,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1421681165933652373=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96d3e5fd2f5310e9f626084669a9ddaa55c92eda
+--===============1421681165933652373==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6ba57676c52a41f9f2efa311f101eb637c39897b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The 0.10 line offers minor improvements and bug fixes.
-
-The previous security bump from 0.9.1 to 0.9.2 fixed CVE-2022-46149,
-which was also present in 0.10.2, but is fixed within 0.10.3.
-
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/capnproto/capnproto.hash | 2 +-
- package/capnproto/capnproto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zfs/zfs.hash | 4 ++--
+ package/zfs/zfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-index c3233e7c8b..0faf69d069 100644
---- a/package/capnproto/capnproto.hash
-+++ b/package/capnproto/capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4fe1ca8ab90859f33f08d2c4fcd7099e2983b0b946beecebd2fe051e3a64c67e  capnproto-0.9.2.tar.gz
-+sha256  e07446f56043c983e009038e69d18ff86a2924909f0b518ccf47eccf5ac03919  capnproto-0.10.3.tar.gz
- sha256  9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 23f128455a..84acf5fc65 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index b73fc3b703..0bce3817fe 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.6/zfs-2.1.6.sha256.asc
+-sha256  15339014f8d2131348eb937bf8893849806b6d2645ea607a18c7f117749dbd7a  zfs-2.1.6.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.7/zfs-2.1.7.sha256.asc
++sha256  6462e63e185de6ff10c64ffa6ed773201a082f9dd13e603d7e8136fcb4aca71b  zfs-2.1.7.tar.gz
+ sha256  96a27353fe717ff2c8b95deb8b009c4eb750303c6400e2d8a2582ab1ec12b25a  bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ 
+ # Hash for license files:
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index f7e673c23f..84e9099ba9 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CAPNPROTO_VERSION = 0.9.2
-+CAPNPROTO_VERSION = 0.10.3
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
+-ZFS_VERSION = 2.1.6
++ZFS_VERSION = 2.1.7
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_PATCH = https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ ZFS_LICENSE = CDDL
+
+--===============1421681165933652373==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1421681165933652373==--
