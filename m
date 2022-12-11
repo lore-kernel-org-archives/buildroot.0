@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B343EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F215C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31B5F40533;
-	Sun, 11 Dec 2022 13:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B5F40533
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E0E84052E;
+	Sun, 11 Dec 2022 13:34:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E0E84052E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ap9kC4mxghW7; Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
+	with ESMTP id qAgF9NiQxjxK; Sun, 11 Dec 2022 13:34:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 261DA4053C;
-	Sun, 11 Dec 2022 13:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 261DA4053C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AE6471BF3AA
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4D634052F;
+	Sun, 11 Dec 2022 13:34:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4D634052F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 95DE61BF3AA
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B45A4091D
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B45A4091D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66E8840543
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66E8840543
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nrGReWEOHlWF for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:33:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41DF040308
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 41DF040308
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:33:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7A0DDC0004;
- Sun, 11 Dec 2022 13:33:57 +0000 (UTC)
-Date: Sun, 11 Dec 2022 14:33:56 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221211143356.686efe06@windsurf>
-In-Reply-To: <20221208210342.23228-1-fontaine.fabrice@gmail.com>
-References: <20221208210342.23228-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670765637;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EpYt0ZFQuWEq+MQgeOwQqaQ/s1+r6IffJWRa1OWRGsI=;
- b=jhDm8G2g1r5tvlO0DlylYtMJ48fPAJXVY4YMjwlJv7+dfYkdytd7ECtGiFKiZU1Dq/e1Jh
- PT713S+N1dHPBBmYUOd/3wfGKSqH60jcWklPZ6FSht+cuSwRxebumcB54Kd42oAEDqKBum
- 3sr9tzJsnvuLv/diKqswv0/MYczal/dtb1z0b6mYsPHh1VIEDNK6PaxBQmUBj4xwJrvsmX
- JJhKEh70gMoga5vzvzs8nIW9JgvjFYogwSc0mK655skipS6UHo2YCK9v8yjc1ZIHlmfe81
- 6u6NOfSlDdJwsJvh0Bh8q5QtRI2hxPYAD+4Bl8GnqSFpyhI6HvdEGqOV/4Ea7w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jhDm8G2g
-Subject: Re: [Buildroot] [PATCH 1/1] package/hans: bump to version 1.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BDjs4W8KJGkF for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CAE344052C
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE344052C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8FBD863F0; Sun, 11 Dec 2022 13:34:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 14:33:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4634a22cf70ec957ceabbb0dcd9611c824bc7a60
+X-Git-Newrev: fc47afdc57cb7bdff3c4481607b2887f8a9cae94
+X-Patchwork-Hint: ignore
+Message-Id: <20221211133400.B8FBD863F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pugixml: bump to version 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,30 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  8 Dec 2022 22:03:42 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc47afdc57cb7bdff3c4481607b2887f8a9cae94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/friedrich/hans/blob/v1.1/CHANGES
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/hans/hans.hash | 6 +++---
->  package/hans/hans.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+https://pugixml.org/docs/manual.html#v1.13
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pugixml/pugixml.hash | 2 +-
+ package/pugixml/pugixml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
+index 190dfb6a6e..b828e03561 100644
+--- a/package/pugixml/pugixml.hash
++++ b/package/pugixml/pugixml.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  dcf671a919cc4051210f08ffd3edf9e4247f79ad583c61577a13ee93af33afc7  pugixml-1.12.1.tar.gz
++sha256  40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe  pugixml-1.13.tar.gz
+ sha256  206f671b6d342557adcc973088c2c638df0ec0b1dabbcd24e65aadd2191778d2  LICENSE.md
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 9137f04630..c796186827 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PUGIXML_VERSION = 1.12.1
++PUGIXML_VERSION = 1.13
+ PUGIXML_SITE = https://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
+ PUGIXML_LICENSE = MIT
+ PUGIXML_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
