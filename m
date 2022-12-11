@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16920C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4096C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF30A4EBD4;
-	Mon, 20 Feb 2023 22:24:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF30A4EBD4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47FE541D99;
+	Mon, 20 Feb 2023 22:25:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FE541D99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LEkZc0GqXNXd; Mon, 20 Feb 2023 22:24:46 +0000 (UTC)
+	with ESMTP id ePVFEeMaQ40A; Mon, 20 Feb 2023 22:25:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EFC64F01C;
-	Mon, 20 Feb 2023 22:24:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EFC64F01C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 680BF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EDCC4F029;
+	Mon, 20 Feb 2023 22:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EDCC4F029
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F9C51BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8B1A416DC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8B1A416DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D29C6117F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D29C6117F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q83doMcT7O1j for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9RQYl0LjbIIg for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 083CC416C3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 083CC416C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E3386110A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E3386110A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04BAD828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5EBA2828C8; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:31:23 +0100
+Date: Sun, 11 Dec 2022 09:29:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9febd64bb01f0660a9ac877d2484525438955333
-X-Git-Newrev: c2baa583c350b9d594e87f9cab1db597789904df
+X-Git-Oldrev: 90817e547c54a26e6554819a545f6ef059ee479b
+X-Git-Newrev: e8a8ed95901a663fff43217b7c73530eff25d757
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.04BAD828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mbedtls: security bump
- to version 2.28.2
+Message-Id: <20230220205203.5EBA2828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyphen: bump to
+ version 0.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,153 +58,51 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1423218947344086649=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1423218947344086649==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c2baa583c350b9d594e87f9cab1db597789904df
+commit: https://git.buildroot.net/buildroot/commit/?id=e8a8ed95901a663fff43217b7c73530eff25d757
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following security issues:
-- Fix potential heap buffer overread and overwrite in DTLS if
-  MBEDTLS_SSL_DTLS_CONNECTION_ID is enabled and
-  MBEDTLS_SSL_CID_IN_LEN_MAX > 2 * MBEDTLS_SSL_CID_OUT_LEN_MAX.
-- An adversary with access to precise enough information about memory
-  accesses (typically, an untrusted operating system attacking a secure
-  enclave) could recover an RSA private key after observing the victim
-  performing a single private-key operation if the window size used for
-  the exponentiation was 3 or smaller.
-
-Drop patch (already in version:
-https://github.com/Mbed-TLS/mbedtls/commit/9d9d45c6b2aeaedfdfdadfec3d05d168db685968)
-
-https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ----------------------
- package/mbedtls/mbedtls.hash                       |  4 +-
- package/mbedtls/mbedtls.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 77 deletions(-)
+ package/python-pyphen/python-pyphen.hash | 4 ++--
+ package/python-pyphen/python-pyphen.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-deleted file mode 100644
-index 60bf53f6e4..0000000000
---- a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Mon, 27 Aug 2018 22:50:57 +0200
--Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes #1910
--
--With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
--assembly fails to build with GCC < 5 in PIC mode with the following error:
--
--include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
--
--This is because older GCC versions treated the x86 ebx register (which is
--used for the GOT) as a fixed reserved register when building as PIC.
--
--This is fixed by an improved register allocator in GCC 5+.  From the release
--notes:
--
--Register allocation improvements: Reuse of the PIC hard register, instead of
--using a fixed register, was implemented on x86/x86-64 targets.  This
--improves generated PIC code performance as more hard registers can be used.
--
--https://www.gnu.org/software/gcc/gcc-5/changes.html
--
--As a workaround, detect this situation and disable the inline assembly,
--similar to the MULADDC_CANNOT_USE_R7 logic.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-----
-- include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
-- 1 file changed, 17 insertions(+), 1 deletion(-)
--
--diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
--index b587317d9..74a2d29be 100644
----- a/include/mbedtls/bn_mul.h
--+++ b/include/mbedtls/bn_mul.h
--@@ -50,13 +50,29 @@
-- #if defined(__GNUC__) && \
--     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
-- 
--+/*
--+ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
--+ * fixed reserved register when building as PIC, leading to errors
--+ * like: bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
--+ *
--+ * This is fixed by an improved register allocator in GCC 5+. From the
--+ * release notes:
--+ * Register allocation improvements: Reuse of the PIC hard register,
--+ * instead of using a fixed register, was implemented on x86/x86-64
--+ * targets. This improves generated PIC code performance as more hard
--+ * registers can be used.
--+ */
--+#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
--+#define MULADDC_CANNOT_USE_EBX
--+#endif
--+
-- /*
--  * Disable use of the i386 assembly code below if option -O0, to disable all
--  * compiler optimisations, is passed, detected with __OPTIMIZE__
--  * This is done as the number of registers used in the assembly code doesn't
--  * work with the -O0 option.
--  */
---#if defined(__i386__) && defined(__OPTIMIZE__)
--+#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
-- 
-- #define MULADDC_INIT                        \
--     asm(                                    \
---- 
--2.11.0
--
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 38182fe119..876cd7b77e 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.1:
--sha256  6797a7b6483ef589deeab8d33d401ed235d7be25eeecda1be8ddfed406d40ff4  mbedtls-2.28.1.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
-+sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 49ea7886f6..7a605ac5b1 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
+index 3a145e0f81..39af62e085 100644
+--- a/package/python-pyphen/python-pyphen.hash
++++ b/package/python-pyphen/python-pyphen.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/Pyphen/json
+-md5  a2d6f69468684bbaa88d004b79c02128  pyphen-0.13.0.tar.gz
+-sha256  06873cebffd65a8fca7c20c0e3dc032655c7ee8de0f552205cad3b574265c293  pyphen-0.13.0.tar.gz
++md5  a5039d1a4d8d4bad784cb864927f83f8  pyphen-0.13.2.tar.gz
++sha256  847f57a043a58408f24670ae0184ff6edfb5fd5731743208228c028ddc514438  pyphen-0.13.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
+ sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
+diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
+index d83eb79736..9ca064c293 100644
+--- a/package/python-pyphen/python-pyphen.mk
++++ b/package/python-pyphen/python-pyphen.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 2.28.1
-+MBEDTLS_VERSION = 2.28.2
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-
---===============1423218947344086649==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_PYPHEN_VERSION = 0.13.0
++PYTHON_PYPHEN_VERSION = 0.13.2
+ PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
+-PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/53/e7f212c87f91aab928bbf0de95ebc319c4d935e59bd5ed868f2c2bfc9465
++PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/46/12/aeb28a1e1a3f3cede967cea98ef3a1da844418ab8296a4bb9513f232736c
+ PYTHON_PYPHEN_SETUP_TYPE = flit
+ PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
+ PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1423218947344086649==--
