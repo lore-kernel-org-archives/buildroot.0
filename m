@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EDCCC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ADA3C64ED9
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C17554EDC2;
-	Mon, 20 Feb 2023 22:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C17554EDC2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 944624F010;
+	Mon, 20 Feb 2023 22:22:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 944624F010
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZkeyYkSfGol5; Mon, 20 Feb 2023 22:22:00 +0000 (UTC)
+	with ESMTP id unwUazk1hRA1; Mon, 20 Feb 2023 22:22:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67A714ED37;
-	Mon, 20 Feb 2023 22:21:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67A714ED37
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D5181BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B7AC4F005;
+	Mon, 20 Feb 2023 22:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B7AC4F005
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B881A1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20093416D9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20093416D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id B8B8261178
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8B8261178
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JyU5pt6uRIH9 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OAXbXaRfVUNh for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 466754015F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 466754015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1ADD6115B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1ADD6115B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3702A86495; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id C1676828C8; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 21:20:53 +0100
+Date: Sun, 11 Dec 2022 09:29:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8e8d312418e7eb4b0b2c14fdb17560d185f0ea9b
-X-Git-Newrev: 0a3a7169d66b610c968128688b6475ffc333cc96
+X-Git-Oldrev: 101272d1313827f655e247bab740783a7e6dee0f
+X-Git-Newrev: b9f06cbbbce135bb149681fa708650a140a12271
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205210.3702A86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/sun20i-d1-spl: drop
- package
+Message-Id: <20230220205202.C1676828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pathspec: bump
+ to version 0.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,115 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a3a7169d66b610c968128688b6475ffc333cc96
+commit: https://git.buildroot.net/buildroot/commit/?id=b9f06cbbbce135bb149681fa708650a140a12271
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-U-Boot has now gained SPL support for D1, so this temporary bootloader is no
-longer supported.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                      |  7 +++++++
- DEVELOPERS                            |  1 -
- boot/Config.in                        |  1 -
- boot/sun20i-d1-spl/Config.in          |  8 --------
- boot/sun20i-d1-spl/sun20i-d1-spl.hash |  2 --
- boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 23 -----------------------
- 6 files changed, 7 insertions(+), 35 deletions(-)
+ package/python-pathspec/python-pathspec.hash | 4 ++--
+ package/python-pathspec/python-pathspec.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 28c6822689..852189f0ff 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
+index 91e4fb85b7..5eb76cb5f9 100644
+--- a/package/python-pathspec/python-pathspec.hash
++++ b/package/python-pathspec/python-pathspec.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pathspec/json
+-md5  6f4fde5e701d328a2846d206edb63aa9  pathspec-0.10.1.tar.gz
+-sha256  7ace6161b621d31e7902eb6b5ae148d12cfd23f4a249b9ffb6b9fee12084323d  pathspec-0.10.1.tar.gz
++md5  d89408b52aff020ac768a14c0ef1c7de  pathspec-0.10.3.tar.gz
++sha256  56200de4077d9d0791465aa9095a01d421861e405b5096955051deefd697d6f6  pathspec-0.10.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
+index ccb794cce9..e88bce231f 100644
+--- a/package/python-pathspec/python-pathspec.mk
++++ b/package/python-pathspec/python-pathspec.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_TARGET_SUN20I_D1_SPL
-+	bool "sun20-d1-spl removed"
-+	select BR2_LEGACY
-+	help
-+	  U-Boot has gained SPL support for D1, so this temporary
-+	  bootloader is no longer supported.
-+
- config BR2_PACKAGE_PYTHON_M2R
- 	bool "python-m2r removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f0dcc42de7..831e60982e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2305,7 +2305,6 @@ F:	board/pandaboard/
- F:	board/roseapplepi/
- F:	board/visionfive/
- F:	boot/shim/
--F:	boot/sun20i-d1-spl/
- F:	configs/avenger96_defconfig
- F:	configs/beagleboneai_defconfig
- F:	configs/lafrite_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index ce17b2df6b..2d4d077632 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -20,7 +20,6 @@ source "boot/optee-os/Config.in"
- source "boot/opensbi/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
--source "boot/sun20i-d1-spl/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
-diff --git a/boot/sun20i-d1-spl/Config.in b/boot/sun20i-d1-spl/Config.in
-deleted file mode 100644
-index 9d94d87b1c..0000000000
---- a/boot/sun20i-d1-spl/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_TARGET_SUN20I_D1_SPL
--	bool "sun20-d1-spl"
--	depends on BR2_RISCV_64
--	help
--	  Allwinner D1 boot0 code with modifications to use as U-Boot
--	  SPL.
--
--	  https://github.com/smaeul/sun20i_d1_spl
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-deleted file mode 100644
-index 11d17a9a16..0000000000
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256  08e2d0574e58c99734cd1d9ea89b86464242bf2db4f6769b23803bf9dcdac3c4  sun20i-d1-spl-882671fcf53137aaafc3a94fa32e682cb7b921f1.tar.gz
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-deleted file mode 100644
-index 6bcea0fa96..0000000000
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-+++ /dev/null
-@@ -1,23 +0,0 @@
--################################################################################
--#
--# sun20i-d1-spl
--#
--################################################################################
--
--# Commit on the 'mainline' branch
--SUN20I_D1_SPL_VERSION = 882671fcf53137aaafc3a94fa32e682cb7b921f1
--SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
--SUN20I_D1_SPL_INSTALL_TARGET = NO
--SUN20I_D1_SPL_INSTALL_IMAGES = YES
--SUN20I_D1_SPL_LICENSE = GPL-2.0+
--
--define SUN20I_D1_SPL_BUILD_CMDS
--	$(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)" p=sun20iw1p1 mmc
--endef
--
--define SUN20I_D1_SPL_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/nboot/boot0_sdcard_sun20iw1p1.bin \
--		$(BINARIES_DIR)/boot0_sdcard_sun20iw1p1.bin
--endef
--
--$(eval $(generic-package))
+-PYTHON_PATHSPEC_VERSION = 0.10.1
++PYTHON_PATHSPEC_VERSION = 0.10.3
+ PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
+-PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/24/9f/a9ae1e6efa11992dba2c4727d94602bd2f6ee5f0dedc29ee2d5d572c20f7
++PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/32/1a/6baf904503c3e943cae9605c9c88a43b964dea5b59785cf956091b341b08
+ PYTHON_PATHSPEC_LICENSE = MPL-2.0
+ PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
+ PYTHON_PATHSPEC_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
