@@ -1,67 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13774C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 15:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 762F8C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 15:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76A7C605D5;
-	Sun, 11 Dec 2022 15:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76A7C605D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE6C0404AA;
+	Sun, 11 Dec 2022 15:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE6C0404AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zHSXLR2qCiJK; Sun, 11 Dec 2022 15:22:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y6UoX2qgatSr; Sun, 11 Dec 2022 15:36:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52D0460761;
-	Sun, 11 Dec 2022 15:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52D0460761
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44E3B1BF3D6
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:21:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 954B54050F;
+	Sun, 11 Dec 2022 15:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 954B54050F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 48CF31BF3D6
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CC9081386
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:21:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC9081386
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A9F94050F
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 15:36:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9F94050F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DDRguMvVAP6T for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 15:21:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC69E8137F
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC69E8137F
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 15:21:56 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.6])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 4O9KpdwXfwtj04O9Kpr9vQ; Sun, 11 Dec 2022 16:21:54 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0bRQWlk-ntSu for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 15:36:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6AA404AA
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE6AA404AA
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 15:36:12 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id ud5so22293295ejc.4
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 07:36:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bnpsw5wPaWAmDhb5ChX5cBEmLXNHNcsu8nmPBqUkJFg=;
+ b=qPd+9zm8lH0J8rUS9m6G3N36LmdkhIh/06wGDbM5/Mtqcf6uETxb65ShQpClZ2IhwY
+ 2TIfeudt4gSxDGQBbT7ZgAFYBQ25I3POrXoAbPIUZfpwJwDIttWwkArpmYlcCLml7z1l
+ eb3JVjm6MBgE5Sqa3M2xdbONJbN3Pc65/iLoH4zJ5Fb9scL0RKpXRmQvZ2CHD7yOQmGn
+ YvEIiY0Z/ct2yH+DJdiZZL2mpqswfD/mSkW73ReO5rm4s6cpUtRT+eEFxDriR8vNQ/HR
+ fcqDuLeUVDZd0bYXk3Flvi5tdyJ2FfwqjzlwHWw/O7swfK/g0NXsS1B7lGranpDTRu1T
+ J9SQ==
+X-Gm-Message-State: ANoB5pmHbDKa2thhbU7kfOUU0tF6tNWhSSk2JR0gsPXUnv7qgg1517NR
+ i9dgV5RJq/Fny8SjiH723tEuutCAaw+o7qGn
+X-Google-Smtp-Source: AA0mqf6u+Z77T9UpB8/WG6XCSpc3mxqFzhI61ASnUMuihkEKbkH9JRKK5nE8zwV8RSMNgeyUJZhtCg==
+X-Received: by 2002:a17:907:2175:b0:7c1:a0e:1607 with SMTP id
+ rl21-20020a170907217500b007c10a0e1607mr10611876ejb.12.1670772970605; 
+ Sun, 11 Dec 2022 07:36:10 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-82-54-95-136.retail.telecomitalia.it. [82.54.95.136])
+ by smtp.gmail.com with ESMTPSA id
+ 1-20020a170906210100b007c1675d2626sm797785ejt.96.2022.12.11.07.36.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Dec 2022 07:36:10 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 16:21:53 +0100
-Message-Id: <20221211152153.1833386-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 11 Dec 2022 16:36:02 +0100
+Message-Id: <20221211153602.2530749-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfO8ksOJ9y0rhoo8LEENOrIAilJ/hXPEccZ8F3OFefvaq7gnQRCjUunM/m8IBKbjDc9gKc1R6seEmx0+UcXptNMi71ys8ZJM17pAqOisEApJgD0XMDUFI
- ZI9Fk+rwCYD4lxQGXgN3M2D568ay6h7/qSiMnf99IEMPtf2usOPgq707OXpPTLEpwLONBQMTFWD3mQi89yjJ7w2wp+95UKSDTDq3+y+fDk56radsPlgFLcj3
- Hkmy54iKJATCxpWd4MHuE0eWwHFe0vJKA49fqFCGQuA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1670772114; bh=Ih63tpKGUxadHLDrd5B13rSOOZ/gvz7h6FESzco6p0Y=;
- h=From:To:Subject:Date:MIME-Version;
- b=A0+YqLZDQ4CsJdNElG+5x6CFFaGjokftFpbD98MPRUOZ7pKcfKJZDKuN5agn+QMgV
- p7p0how6ke9emVXdufcyDTKq78YQRqmEMIAeNgHEBPhg/vNf0ecuGmAuMAGz575nmB
- UCbENcy7dBv/rQSTlEhoPYKSwxmxZrc7eUR3s7GybIzrsRM1TB+CaZBv/Y7qBTcgvR
- vQayc4NC+gdl0IodIGQ9jM72IOIR5519DTX8rSv5Db1exbH5ivBn1I4NArwWwI0fMA
- ROdYIYzzvq9WkNvXIXGo2cBTC5w4XTYpxX+geXFMOYnHdNSrZZCuUCX2mX6PuO1Xt1
- kvYHoocvQNHKQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=A0+YqLZD
-Subject: [Buildroot] [PATCH] package/mali-driver: bump to latest version to
- build with Linux version up to 6.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bnpsw5wPaWAmDhb5ChX5cBEmLXNHNcsu8nmPBqUkJFg=;
+ b=F77nqe+OJ1GfOc6oHaCVosn2TwgPdPQU2Ac9+zP3dmc4JD9IOLXsIHbMbmuhkOfiRF
+ HTCj7K0G0oXztlV4Zt8Xz+SxVppvTI5564X3XLmeJGnNZpfGUvHejSPcbPiTJVxyChE3
+ pzV24WyDs5qkZMU91IMcJklbnAxBiEsQMJ73k=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=F77nqe+O
+Subject: [Buildroot] [PATCH 1/1] package/sscep: fix linking error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,303 +92,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add pending patches upstream[0] to fix build failure. Patches fix build
-failure with Aarch64 and Linux 5.18/5.19/6.0
+The patch fixes the following linking error:
+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
+buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os):(.data+0x8):
+multiple definition of `optind'; src/getopt.o:(.data+0x0): first defined here
+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
+buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `__GI_getopt':
+getopt.c:(.text+0x5a4): multiple definition of `getopt'; src/getopt.o:getopt.c:(.text+0x0): first defined here
+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
+buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `getopt_long':
+getopt.c:(.text+0x5b0): multiple definition of `getopt_long'; src/getopt.o:getopt.c:(.text+0x128): first defined here
+collect2: error: ld returned 1 exit status
+make[2]: *** [Makefile:507: sscep] Error 1
+make[1]: *** [package/pkg-generic.mk:293: buildroot/output/build/sscep-0.10.0/.stamp_built] Error 2
 
-[0]: https://github.com/bootlin/mali-driver/pull/4
+Patch submitted upstream: https://github.com/certnanny/sscep/pull/163
 
-Fixes:
-http://autobuild.buildroot.net/results/6f073fea149533a294dd838ce8373185236fe1d4/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- ...ernel.h-fix-build-failure-on-aarch64.patch | 54 +++++++++++++++++++
- ...ence.c-fix-build-failure-on-dma_resv.patch | 53 ++++++++++++++++++
- ...ence.c-add-local-dma_resv_reserve_sh.patch | 38 +++++++++++++
- ...ence.c-add-local-dma_resv_add_shared.patch | 43 +++++++++++++++
- ...ild-failure-with-Linux-version-6.0.0.patch | 49 +++++++++++++++++
- 5 files changed, 237 insertions(+)
- create mode 100644 package/mali-driver/0001-mali_base_kernel.h-fix-build-failure-on-aarch64.patch
- create mode 100644 package/mali-driver/0002-mali_kbase_dma_fence.c-fix-build-failure-on-dma_resv.patch
- create mode 100644 package/mali-driver/0003-mali_kbase_dma_fence.c-add-local-dma_resv_reserve_sh.patch
- create mode 100644 package/mali-driver/0004-mali_kbase_dma_fence.c-add-local-dma_resv_add_shared.patch
- create mode 100644 package/mali-driver/0005-Fix-build-failure-with-Linux-version-6.0.0.patch
+ .../sscep/0001-Fix-getopt-linking-error.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/sscep/0001-Fix-getopt-linking-error.patch
 
-diff --git a/package/mali-driver/0001-mali_base_kernel.h-fix-build-failure-on-aarch64.patch b/package/mali-driver/0001-mali_base_kernel.h-fix-build-failure-on-aarch64.patch
+diff --git a/package/sscep/0001-Fix-getopt-linking-error.patch b/package/sscep/0001-Fix-getopt-linking-error.patch
 new file mode 100644
-index 0000000000..e2b7c99272
+index 000000000000..b32613b3cc18
 --- /dev/null
-+++ b/package/mali-driver/0001-mali_base_kernel.h-fix-build-failure-on-aarch64.patch
-@@ -0,0 +1,54 @@
-+From 255d18a2f1c0c7e55e5165602c83b0b9950de0a4 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Nov 2022 22:48:21 +0100
-+Subject: [PATCH] mali_base_kernel.h: fix build failure on aarch64
++++ b/package/sscep/0001-Fix-getopt-linking-error.patch
+@@ -0,0 +1,55 @@
++From c4fc8d9e282e05fcfa0cee9362c60742b26f4b33 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Fri, 9 Dec 2022 18:18:27 +0100
++Subject: [PATCH] Fix getopt linking error
 +
-+Aarch64 PAGE_SHIFT is not 12 and this leads to build failure:
-+```
-+/home/giuliobenetti/br_reproduce/0e9207ab5806efc3885c27d1e98c7625574e57a3/output-1/build/mali-driver-3d697de9bce8bc68bf9408d5407873ce32d0f4fc/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c:2266:9: error: duplicate case value
-+ 2266 |         case PFN_DOWN(BASEP_MEM_WRITE_ALLOC_PAGES_HANDLE):
-+      |         ^~~~
-+/home/giuliobenetti/br_reproduce/0e9207ab5806efc3885c27d1e98c7625574e57a3/output-1/build/mali-driver-3d697de9bce8bc68bf9408d5407873ce32d0f4fc/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c:2265:9: note: previously used here
-+ 2265 |         case PFN_DOWN(BASEP_MEM_INVALID_HANDLE):
-+      |         ^~~~
-+```
-+This because PFN_DOWN(x) expands to ((x) >> PAGE_SHIFT), PAGE_SHIFT is not
-+always 12 and can be more like in Aarch64. This leads to override all
-+switch case PFN_DOWN(0) with a 0 and so compiler complains for duplicate
-+case values since all case values will be 0. Let's substitute magic number
-+12 with Linux PAGE_SHIFT macro to fix this.
++The buildroot project, to which the sscep application was added, has
++configurations that raise the following linking error:
++buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os):(.data+0x8): multiple definition of `optind'; src/getopt.o:(.data+0x0): first defined here
++buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `__GI_getopt':
++getopt.c:(.text+0x5a4): multiple definition of `getopt'; src/getopt.o:getopt.c:(.text+0x0): first defined here
++buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `getopt_long':
++getopt.c:(.text+0x5b0): multiple definition of `getopt_long'; src/getopt.o:getopt.c:(.text+0x128): first defined here
++collect2: error: ld returned 1 exit status
++make[2]: *** [Makefile:507: sscep] Error 1
++make[1]: *** [package/pkg-generic.mk:293: buildroot/output/build/sscep-0.10.0/.stamp_built] Error 2
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++The patch re-added a check that commit
++81f56f635259b9 ("Replaced GNU getopt by a BSD licensed alternative")
++removed.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 +---
-+ r8p0/drivers/gpu/arm/midgard/mali_base_kernel.h | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
++ src/getopt.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
 +
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_base_kernel.h b/r8p0/drivers/gpu/arm/midgard/mali_base_kernel.h
-+index 6f5c68e..ded874d 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_base_kernel.h
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_base_kernel.h
-+@@ -270,14 +270,14 @@ struct base_mem_import_user_buffer {
-+  */
-+ #define BASE_MEM_WRITE_ALLOC_PAGES_HANDLE ((base_mem_handle) { {BASEP_MEM_WRITE_ALLOC_PAGES_HANDLE} })
++diff --git a/src/getopt.c b/src/getopt.c
++index eae36a64afff..0109406ba4ac 100644
++--- a/src/getopt.c
+++++ b/src/getopt.c
++@@ -31,6 +31,16 @@
++ #include <stddef.h>
++ #include <string.h>
 + 
-+-#define BASEP_MEM_INVALID_HANDLE               (0ull  << 12)
-+-#define BASE_MEM_MMU_DUMP_HANDLE               (1ull  << 12)
-+-#define BASE_MEM_TRACE_BUFFER_HANDLE           (2ull  << 12)
-+-#define BASE_MEM_MAP_TRACKING_HANDLE           (3ull  << 12)
-+-#define BASEP_MEM_WRITE_ALLOC_PAGES_HANDLE     (4ull  << 12)
-++#define BASEP_MEM_INVALID_HANDLE               (0ull  << PAGE_SHIFT)
-++#define BASE_MEM_MMU_DUMP_HANDLE               (1ull  << PAGE_SHIFT)
-++#define BASE_MEM_TRACE_BUFFER_HANDLE           (2ull  << PAGE_SHIFT)
-++#define BASE_MEM_MAP_TRACKING_HANDLE           (3ull  << PAGE_SHIFT)
-++#define BASEP_MEM_WRITE_ALLOC_PAGES_HANDLE     (4ull  << PAGE_SHIFT)
-+ /* reserved handles ..-64<<PAGE_SHIFT> for future special handles */
-+-#define BASE_MEM_COOKIE_BASE                   (64ul  << 12)
-+-#define BASE_MEM_FIRST_FREE_ADDRESS            ((BITS_PER_LONG << 12) + \
-++#define BASE_MEM_COOKIE_BASE                   (64ul  << PAGE_SHIFT)
-++#define BASE_MEM_FIRST_FREE_ADDRESS            ((BITS_PER_LONG << PAGE_SHIFT) + \
-+ 						BASE_MEM_COOKIE_BASE)
-+ 
-+ /* Mask to detect 4GB boundary alignment */
-+-- 
-+2.34.1
-+
-diff --git a/package/mali-driver/0002-mali_kbase_dma_fence.c-fix-build-failure-on-dma_resv.patch b/package/mali-driver/0002-mali_kbase_dma_fence.c-fix-build-failure-on-dma_resv.patch
-new file mode 100644
-index 0000000000..1d73afc722
---- /dev/null
-+++ b/package/mali-driver/0002-mali_kbase_dma_fence.c-fix-build-failure-on-dma_resv.patch
-@@ -0,0 +1,53 @@
-+From fc06033c81bec1a8dd78982d523150e8e1ccb2f0 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Nov 2022 23:16:27 +0100
-+Subject: [PATCH] mali_kbase_dma_fence.c: fix build failure on
-+ dma_resv_get_fences() Linux 5.18 and 5.19
-+
-+dma_resv_get_fences() 2nd attribute pfence_excl is not required anymore
-+starting from Linux 5.18[0] and it's been substituted with bool write that
-+in our case we want set to true since previous dma_resv_get_fences() does
-+write back all fences. Same goes for Linux 5.19[1] that introduces enum
-+dma_resv_usage and for that we pass DMA_RESV_USAGE_WRITE.
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=75ab2b3633ccddd8f7bdf6c76f9ab3f9b2fc5d9d
-+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7bc80a5462c37eab58a9ea386064307c0f447fd1
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ .../gpu/arm/midgard/mali_kbase_dma_fence.c    | 19 ++++++++++++++++++-
-+ 1 file changed, 18 insertions(+), 1 deletion(-)
-+
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+index 6b7e745..dadf5d3 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+@@ -218,7 +218,24 @@ kbase_dma_fence_cb(struct dma_fence *fence, struct dma_fence_cb *cb)
-+ 		kbase_dma_fence_queue_work(katom);
-+ }
-+ 
-+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 14, 0))
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
-++static int dma_resv_get_fences_rcu(struct dma_resv *obj,
-++		struct dma_fence **pfence_excl,
-++		unsigned int *pshared_count,
-++		struct dma_fence ***pshared)
-++{
-++	return dma_resv_get_fences(obj, DMA_RESV_USAGE_WRITE, pshared_count,
-++				   pshared);
-++}
-++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0))
-++static int dma_resv_get_fences_rcu(struct dma_resv *obj,
-++		struct dma_fence **pfence_excl,
-++		unsigned int *pshared_count,
-++		struct dma_fence ***pshared)
-++{
-++	return dma_resv_get_fences(obj, true, pshared_count, pshared);
-++}
-++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 14, 0))
-+ static int dma_resv_get_fences_rcu(struct dma_resv *obj,
-+ 	        struct dma_fence **pfence_excl,
-+ 	        unsigned int *pshared_count,
-+-- 
-+2.34.1
-+
-diff --git a/package/mali-driver/0003-mali_kbase_dma_fence.c-add-local-dma_resv_reserve_sh.patch b/package/mali-driver/0003-mali_kbase_dma_fence.c-add-local-dma_resv_reserve_sh.patch
-new file mode 100644
-index 0000000000..45ed969ab7
---- /dev/null
-+++ b/package/mali-driver/0003-mali_kbase_dma_fence.c-add-local-dma_resv_reserve_sh.patch
-@@ -0,0 +1,38 @@
-+From 4b24cf96eaee891ac66ca46a166686461e8ccf2c Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Nov 2022 23:38:57 +0100
-+Subject: [PATCH] mali_kbase_dma_fence.c: add local dma_resv_reserve_shared()
-+ for Linux 5.19
-+
-+Starting from Linux 5.19[0] dma_resv_reserve_shared() is renamed to
-+dma_resv_reserve_fences() so let's implement locally
-+dma_resv_reserve_shared() calling dma_resv_reserve_fences().
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c8d4c18bfbc4ab467188dbe45cc8155759f49d9e
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+index dadf5d3..bb1565a 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+@@ -332,6 +332,13 @@ void kbase_dma_fence_add_reservation(struct dma_resv *resv,
-+ 	(info->dma_fence_resv_count)++;
-+ }
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
-++int dma_resv_reserve_shared(struct dma_resv *obj, unsigned int num_fences)
-++{
-++	return dma_resv_reserve_fences(obj, num_fences);
-++}
+++#define GETOPT_INTERFACE_VERSION 2
+++#if !defined _LIBC && defined __GLIBC__ && __GLIBC__ >= 2
+++# include <gnu-versions.h>
+++# if _GNU_GETOPT_INTERFACE_VERSION == GETOPT_INTERFACE_VERSION
+++#  define ELIDE_CODE
+++# endif
 ++#endif
 ++
-+ int kbase_dma_fence_wait(struct kbase_jd_atom *katom,
-+ 			 struct kbase_dma_fence_resv_info *info)
-+ {
-+-- 
-+2.34.1
-+
-diff --git a/package/mali-driver/0004-mali_kbase_dma_fence.c-add-local-dma_resv_add_shared.patch b/package/mali-driver/0004-mali_kbase_dma_fence.c-add-local-dma_resv_add_shared.patch
-new file mode 100644
-index 0000000000..a1e6bcd7da
---- /dev/null
-+++ b/package/mali-driver/0004-mali_kbase_dma_fence.c-add-local-dma_resv_add_shared.patch
-@@ -0,0 +1,43 @@
-+From 6aca0b5ae4b981bf836a6130bba8be53bb9a4e8f Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Nov 2022 23:49:48 +0100
-+Subject: [PATCH] mali_kbase_dma_fence.c: add local
-+ dma_resv_add_shared/excl_fence() for Linux 5.19
-+
-+Starting from Linux 5.19[0] dma_resv_add_shared/excl_fence() functions get
-+hidden and unified with function dma_resv_add_fence() which third argument
-+'enum dma_resv_usage usage' decides if create a shared(DMA_RESV_USAGE_READ)
-+or exclusive(DMA_RESV_USAGE_WRITE) fence. So let's implement locally both
-+functions calling dma_resv_add_fence() accordingly.
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=73511edf8b196e6f1ccda0fdf294ff57aa2dc9db
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+index bb1565a..52194b2 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_dma_fence.c
-+@@ -337,6 +337,16 @@ int dma_resv_reserve_shared(struct dma_resv *obj, unsigned int num_fences)
-+ {
-+ 	return dma_resv_reserve_fences(obj, num_fences);
+++#ifndef ELIDE_CODE
+++
++ char* optarg;
++ int optopt;
++ /* The variable optind [...] shall be initialized to 1 by the system. */
++@@ -226,3 +236,5 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
++   ++optind;
++   return retval;
 + }
 ++
-++void dma_resv_add_shared_fence(struct dma_resv *obj, struct dma_fence *fence)
-++{
-++	dma_resv_add_fence(obj, fence, DMA_RESV_USAGE_READ);
-++}
-++
-++void dma_resv_add_excl_fence(struct dma_resv *obj, struct dma_fence *fence)
-++{
-++	dma_resv_add_fence(obj, fence, DMA_RESV_USAGE_WRITE);
-++}
-+ #endif
-+ 
-+ int kbase_dma_fence_wait(struct kbase_jd_atom *katom,
+++#endif	/* Not ELIDE_CODE.  */
 +-- 
-+2.34.1
-+
-diff --git a/package/mali-driver/0005-Fix-build-failure-with-Linux-version-6.0.0.patch b/package/mali-driver/0005-Fix-build-failure-with-Linux-version-6.0.0.patch
-new file mode 100644
-index 0000000000..af5b15b302
---- /dev/null
-+++ b/package/mali-driver/0005-Fix-build-failure-with-Linux-version-6.0.0.patch
-@@ -0,0 +1,49 @@
-+From bac84845f27b689fc614fb5b4a964e0177572905 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 10 Oct 2022 23:35:26 +0200
-+Subject: [PATCH] Fix build failure with Linux version >= 6.0.0
-+
-+Function regsiter_shrinker() now needs a string as a second argument to
-+log the caller, so let's pass "mali" string if Linux version >= 6.0.0
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c | 4 ++++
-+ r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_pool.c  | 4 ++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
-+index 20f86b9..710ebac 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_linux.c
-+@@ -446,7 +446,11 @@ int kbase_mem_evictable_init(struct kbase_context *kctx)
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 1, 0)
-+ 	kctx->reclaim.batch = 0;
-+ #endif
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0)
-++	register_shrinker(&kctx->reclaim, "mali");
-++#else
-+ 	register_shrinker(&kctx->reclaim);
-++#endif
-+ 	return 0;
-+ }
-+ 
-+diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_pool.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_pool.c
-+index 696730a..4d908ac 100644
-+--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_pool.c
-++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_mem_pool.c
-+@@ -379,7 +379,11 @@ int kbase_mem_pool_init(struct kbase_mem_pool *pool,
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 1, 0)
-+ 	pool->reclaim.batch = 0;
-+ #endif
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0)
-++	register_shrinker(&pool->reclaim, "mali");
-++#else
-+ 	register_shrinker(&pool->reclaim);
-++#endif
-+ 
-+ 	pool_dbg(pool, "initialized\n");
-+ 
-+-- 
-+2.34.1
++2.32.0
 +
 -- 
-2.34.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
