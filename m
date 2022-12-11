@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE2F0C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69241C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 13:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 753978143C;
-	Sun, 11 Dec 2022 13:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 753978143C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tah9bhRN7x3i; Sun, 11 Dec 2022 13:47:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A890D81421;
-	Sun, 11 Dec 2022 13:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A890D81421
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 073F41BF20B
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:46:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4A4F60BBC
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4A4F60BBC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C35960BC0;
+	Sun, 11 Dec 2022 13:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C35960BC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e0xilhyaLCsO for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 13:46:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32A23608F5
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32A23608F5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F2048640E; Sun, 11 Dec 2022 13:46:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:43:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65e0351adc5075ac679557d7e41a02815f979e90
-X-Git-Newrev: b5dc226a41998b7f0f92d4fd1330e1e233310e3d
-X-Patchwork-Hint: ignore
-Message-Id: <20221211134640.1F2048640E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/json-for-modern-cpp: bump to
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xaf1KgVAcx0i; Sun, 11 Dec 2022 13:47:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59A8660BBC;
+	Sun, 11 Dec 2022 13:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59A8660BBC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4526E1BF20B
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:46:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FF1C4053C
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 13:46:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FF1C4053C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ntM5hqH3USH9 for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 13:46:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECE634026A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ECE634026A
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 13:46:53 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5182F20002;
+ Sun, 11 Dec 2022 13:46:50 +0000 (UTC)
+Date: Sun, 11 Dec 2022 14:46:49 +0100
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Message-ID: <20221211144649.6b5a920b@windsurf>
+In-Reply-To: <20221208103928.3274412-1-buildroot@heine.tech>
+References: <20221208103928.3274412-1-buildroot@heine.tech>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1670766411;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eAsFFzfq78EVKLsZhIBQXo7SzOgMkZj5qNRa0xlg/04=;
+ b=BiuW27/jeyWrJ3tWBoFkSy6TblnzP49ltFCYfQhfZmX6a0ZZu62wCEEa1eLA7GCkOWrJba
+ vtcypULMbYm8mobsB3ww4rss8vKqcNg2VGvdqzySSwdUrmlTsL3BF5czbmstf3Ol+cqkZy
+ sFSZYFAk3yaWD4RxhAeoTp9UnKeRRR52WLGQXZ4GDd/P47vx70UYF6kbLBQl1Ip7XhiQZC
+ dpL2yneKnyE0cP2fj/86xv/0KV+rmgnelpHEX/omORX/L6CKGBMH860T1B9PEvrTy4eK4i
+ lkiGm0ADrzD1yLFf0PsMswRixEwJhAlqQZX6cL0P4pcmEAXVHSWY62N74nVsgw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BiuW27/j
+Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to
  version 3.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,44 +78,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5dc226a41998b7f0f92d4fd1330e1e233310e3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  8 Dec 2022 11:39:21 +0100
+Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+>  package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index a193fa6d49..7668f67249 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5daca6ca216495edf89d167f808d1d03c4a4d929cef7da5e10f135ae1540c7e4  json-3.10.5.tar.gz
-+sha256  d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2ffcd9a143d9273  json-3.11.2.tar.gz
- sha256  86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index fd13ce1fd1..435644fd53 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_FOR_MODERN_CPP_VERSION = 3.10.5
-+JSON_FOR_MODERN_CPP_VERSION = 3.11.2
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
