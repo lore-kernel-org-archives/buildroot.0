@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 221D8C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B3BC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:57:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCAAE4ED20;
-	Mon, 20 Feb 2023 21:56:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCAAE4ED20
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C75E4D462;
+	Mon, 20 Feb 2023 21:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C75E4D462
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0j4vLgnOD2Wz; Mon, 20 Feb 2023 21:56:46 +0000 (UTC)
+	with ESMTP id a0sCbKl_3OLQ; Mon, 20 Feb 2023 21:57:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 579894CF91;
-	Mon, 20 Feb 2023 21:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579894CF91
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F62B1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08E9D4ED1F;
+	Mon, 20 Feb 2023 21:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E9D4ED1F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C44DA1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4CF261130
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4CF261130
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8208F416A6
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8208F416A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zdxI_1Yn1IZP for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W5SkjNdzX8bw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F5F76110A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F5F76110A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FECB415C4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FECB415C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 105C2828C8; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+ id 9D2A886494; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:04 +0100
+Date: Sun, 11 Dec 2022 09:28:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 228780fbde4c2b645ea52a870df5ec020912ddf8
-X-Git-Newrev: 1261e78ee2a7994f0cf764c0a61d457984daf673
+X-Git-Oldrev: d7b796406e93b405ad9c276ac96fef7c4007cb15
+X-Git-Newrev: 5a3fb64466b38f68ed4c49fe3eda86a5094bd411
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205158.105C2828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_x11perf:
- bump version to 1.6.2
+Message-Id: <20230220205201.9D2A886494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-dtschema: bump
+ to version 2022.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1261e78ee2a7994f0cf764c0a61d457984daf673
+commit: https://git.buildroot.net/buildroot/commit/?id=5a3fb64466b38f68ed4c49fe3eda86a5094bd411
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003242.html
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_x11perf/xapp_x11perf.hash | 8 +++-----
- package/x11r7/xapp_x11perf/xapp_x11perf.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/python-dtschema/python-dtschema.hash | 4 ++--
+ package/python-dtschema/python-dtschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.hash b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
-index 673d3602ba..3370d7df53 100644
---- a/package/x11r7/xapp_x11perf/xapp_x11perf.hash
-+++ b/package/x11r7/xapp_x11perf/xapp_x11perf.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002983.html
--md5  e96b56756990c56c24d2d02c2964456b  x11perf-1.6.1.tar.bz2
--sha1  c54ebef80b6cb565397fe2e3069e0d7470027e5a  x11perf-1.6.1.tar.bz2
--sha256  1c7e0b8ffc2794b4ccf11e04d551823abe0ea47b4f7db0637390db6fbe817c34  x11perf-1.6.1.tar.bz2
--sha512  b386151bfe3d7c04ab9953ae1882f3c5b627d6d1afb9a8cfe87c58236a88883fc11bbadb2226b9aa61df84b4fce625a1c9e3d146a124ac17e8d7d605b35d9c0b  x11perf-1.6.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003242.html
-+sha256  5a0e7cea47716ad07ceca38bbd07ae06459ee4d837b9c9dfc21ccb94e3e24fcc  x11perf-1.6.2.tar.xz
-+sha512  5be9e601071a42d103adbab5f30c1900a3779a5b2c06c709df99a85487c9790d36b835d43f5c6d74cc7d950cc3ad06927210d7b1f58939cfd0b4a6f3e5e32112  x11perf-1.6.2.tar.xz
- # Locally computed
- sha256  f467ff659142e2eb4cb7275c48c789d249af398b09a405d3e181dcc339b3b922  COPYING
-diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.mk b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
-index ec10590b73..3a1d579939 100644
---- a/package/x11r7/xapp_x11perf/xapp_x11perf.mk
-+++ b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
+index 32e6e99fa7..734ff3f681 100644
+--- a/package/python-dtschema/python-dtschema.hash
++++ b/package/python-dtschema/python-dtschema.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dtschema/json
+-md5  69f39814b2e90809b32cbeafc3e6aaab  dtschema-2022.11.tar.gz
+-sha256  825e51b8bb82a2d4833d15c25ff2b9a3f5a53b36a490d7c4b6b136037e823320  dtschema-2022.11.tar.gz
++md5  3fd3ba2d98ad320c06277274ca40d045  dtschema-2022.12.tar.gz
++sha256  f532d433a915e507d4b426b7ef57a6730d23c0938b682fb4866f9dfa80a58ec6  dtschema-2022.12.tar.gz
+ # Locally computed sha256 checksums
+ sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
+diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
+index 90fffd4255..dbdf43160c 100644
+--- a/package/python-dtschema/python-dtschema.mk
++++ b/package/python-dtschema/python-dtschema.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_X11PERF_VERSION = 1.6.1
--XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.bz2
--XAPP_X11PERF_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_X11PERF_VERSION = 1.6.2
-+XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.xz
-+XAPP_X11PERF_SITE = https://xorg.freedesktop.org/archive/individual/test
- XAPP_X11PERF_LICENSE = MIT
- XAPP_X11PERF_LICENSE_FILES = COPYING
- XAPP_X11PERF_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXft
+-PYTHON_DTSCHEMA_VERSION = 2022.11
++PYTHON_DTSCHEMA_VERSION = 2022.12
+ PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
+-PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/9a/15/41ece48fc9524ad815238cfbd164b8ac9dde889759790afbcc4903564dbd
++PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/f2/61/7d7e907ea6eed33708ce07766258b961fe476221fbd2e759a1921487e381
+ PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
+ PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
+ PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
