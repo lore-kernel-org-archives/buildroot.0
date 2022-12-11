@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C348C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 129A1C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 09:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D67AC404D1;
-	Sun, 11 Dec 2022 09:02:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D67AC404D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4FF8404D8;
+	Sun, 11 Dec 2022 09:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4FF8404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3k7ls9UZv4Rg; Sun, 11 Dec 2022 09:02:13 +0000 (UTC)
+	with ESMTP id ir4ZjwDvlokn; Sun, 11 Dec 2022 09:02:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D9D8403C2;
-	Sun, 11 Dec 2022 09:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D9D8403C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 65C9D1BF3EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id D880B404FC;
+	Sun, 11 Dec 2022 09:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D880B404FC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DEF511BF3EA
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6515B40946
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A245605DB
  for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 08:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6515B40946
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A245605DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QYbn_YeuuVyh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZjENdv-8yNkO for <buildroot@lists.busybox.net>;
  Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8A634095F
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A634095F
+ by smtp3.osuosl.org (Postfix) with ESMTP id D151060AE2
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D151060AE2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98E2485FAA; Sun, 11 Dec 2022 08:55:15 +0000 (UTC)
+ id CF7DA85FAC; Sun, 11 Dec 2022 08:55:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:13 +0100
+Date: Sun, 11 Dec 2022 09:30:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb56da9f18647d3414aa42b4d67133a30a52579f
-X-Git-Newrev: 6f4c7af8a698646d496df64672bbda01d351180b
+X-Git-Oldrev: 225e8745c62c75b20867af928d459abfbb53da94
+X-Git-Newrev: 55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
 X-Patchwork-Hint: ignore
-Message-Id: <20221211085515.98E2485FAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-keyring: bump to version
- 23.11.0
+Message-Id: <20221211085516.CF7DA85FAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tempora: bump to version
+ 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f4c7af8a698646d496df64672bbda01d351180b
+commit: https://git.buildroot.net/buildroot/commit/?id=55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-keyring/python-keyring.hash | 4 ++--
- package/python-keyring/python-keyring.mk   | 4 ++--
+ package/python-tempora/python-tempora.hash | 4 ++--
+ package/python-tempora/python-tempora.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
-index 45f5bf7c84..791ee6563b 100644
---- a/package/python-keyring/python-keyring.hash
-+++ b/package/python-keyring/python-keyring.hash
+diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
+index d802a63d87..39249eb4fa 100644
+--- a/package/python-tempora/python-tempora.hash
++++ b/package/python-tempora/python-tempora.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/keyring/json
--md5  60219a9a22467e15fcd09515b5b2ef39  keyring-23.9.3.tar.gz
--sha256  69b01dd83c42f590250fe7a1f503fc229b14de83857314b1933a3ddbf595c4a5  keyring-23.9.3.tar.gz
-+md5  edf0645c28f16884e2b121b2c51e0770  keyring-23.11.0.tar.gz
-+sha256  ad192263e2cdd5f12875dedc2da13534359a7e760e77f8d04b50968a821c2361  keyring-23.11.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tempora/json
+-md5  24b77c173a7e89084004a38fe44e3ce3  tempora-5.0.2.tar.gz
+-sha256  31fa5bb33b2641026211f23e808eb8bd351901988b167d45f323c8f450ecf211  tempora-5.0.2.tar.gz
++md5  f9954a8c3b091f9769eb7bbe0faddccf  tempora-5.1.0.tar.gz
++sha256  3e7c4a5369a1788c88a99b6be3a4c74c0c7728d3b62fd768a7e81bd0be0e88df  tempora-5.1.0.tar.gz
  # Locally computed sha256 checksums
  sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-index 8d7833e14f..c1f124cb3e 100644
---- a/package/python-keyring/python-keyring.mk
-+++ b/package/python-keyring/python-keyring.mk
+diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
+index e22ac52472..68516a8388 100644
+--- a/package/python-tempora/python-tempora.mk
++++ b/package/python-tempora/python-tempora.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_KEYRING_VERSION = 23.9.3
-+PYTHON_KEYRING_VERSION = 23.11.0
- PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
--PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/2a/ef/28d3d5428108111dae4304a2ebec80d113aea9e78c939e25255425d486ff
-+PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/1c/35/c22960f14f5e17384296b2f09da259f8b5244fb3831eccec71cf948a49c6
- PYTHON_KEYRING_SETUP_TYPE = setuptools
- PYTHON_KEYRING_LICENSE = MIT
- PYTHON_KEYRING_LICENSE_FILES = LICENSE
+-PYTHON_TEMPORA_VERSION = 5.0.2
++PYTHON_TEMPORA_VERSION = 5.1.0
+ PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
+-PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/72/2c/9aff4204a4ea5172b0cb3508f8a504ab6562ba539825ea2e33a5b4cb629b
++PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/a9/4e/41863232e77742b3a5b30a81e1398abd102aa0a67657bc86a53800966b8e
+ PYTHON_TEMPORA_LICENSE = MIT
+ PYTHON_TEMPORA_LICENSE_FILES = LICENSE
+ PYTHON_TEMPORA_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
