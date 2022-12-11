@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65BEAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:57:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 303DAC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D8004ECF4;
-	Mon, 20 Feb 2023 21:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D8004ECF4
+	by smtp4.osuosl.org (Postfix) with ESMTP id D06C74ED0E;
+	Mon, 20 Feb 2023 21:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D06C74ED0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1h-kbG75rceM; Mon, 20 Feb 2023 21:57:13 +0000 (UTC)
+	with ESMTP id FS71sgdY_9Ds; Mon, 20 Feb 2023 21:57:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B59424571A;
-	Mon, 20 Feb 2023 21:57:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59424571A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 44A5A1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86C244ED2E;
+	Mon, 20 Feb 2023 21:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86C244ED2E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D43D71BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A1AF61121
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A1AF61121
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D3A840C0C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D3A840C0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gkSJk7tH9Mgp for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U75JSoqFILHz for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2ABFB6110B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ABFB6110B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7A8F4169E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7A8F4169E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BF5E8648F; Mon, 20 Feb 2023 20:51:58 +0000 (UTC)
+ id C124C86494; Mon, 20 Feb 2023 20:52:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Dec 2022 17:34:07 +0100
+Date: Sun, 11 Dec 2022 09:28:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1261e78ee2a7994f0cf764c0a61d457984daf673
-X-Git-Newrev: f28be9b1fd93a3852d4db00041588d52e171638f
+X-Git-Oldrev: 25b67238f53867f40b485b79eddaa7ef6fad9ca4
+X-Git-Newrev: 3ef45500e35fac59e403af4709e16e40d2c9bb4a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205158.1BF5E8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXext:
- bump version to 1.3.5
+Message-Id: <20230220205201.C124C86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-falcon: bump to
+ version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f28be9b1fd93a3852d4db00041588d52e171638f
+commit: https://git.buildroot.net/buildroot/commit/?id=3ef45500e35fac59e403af4709e16e40d2c9bb4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://lists.x.org/archives/xorg-announce/2022-October/003241.html
+Always build cython modules as sdist does not contain prebuilt
+cython sources.
 
-Updated license hash due to upstream commits
-https://gitlab.freedesktop.org/xorg/lib/libxext/-/commit/81a3d082b1c73393a59131aa57fe32bb0d76e149
-https://gitlab.freedesktop.org/xorg/lib/libxext/-/commit/b6929c143e8372eb6838a331942d34a8d2b13b7b
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libXext/xlib_libXext.hash | 10 ++++------
- package/x11r7/xlib_libXext/xlib_libXext.mk   |  6 +++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/python-falcon/python-falcon.hash | 4 ++--
+ package/python-falcon/python-falcon.mk   | 7 ++-----
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.hash b/package/x11r7/xlib_libXext/xlib_libXext.hash
-index e6b41a3dba..2ab509598b 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.hash
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002975.html
--md5  f5b48bb76ba327cd2a8dc7a383532a95  libXext-1.3.4.tar.bz2
--sha1  14e2451162e8766173b5b14c73e94a22b1fcab55  libXext-1.3.4.tar.bz2
--sha256  59ad6fcce98deaecc14d39a672cf218ca37aba617c9a0f691cac3bcd28edf82b  libXext-1.3.4.tar.bz2
--sha512  09146397d95f80c04701be1cc0a9c580ab5a085842ac31d17dfb6d4c2e42b4253b89cba695e54444e520be359883a76ffd02f42484c9e2ba2c33a5a40c29df4a  libXext-1.3.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003241.html
-+sha256  db14c0c895c57ea33a8559de8cb2b93dc76c42ea4a39e294d175938a133d7bca  libXext-1.3.5.tar.xz
-+sha512  fd9805982dabfb14b1526c0cb71f94508003fa3fcd60560d387465afd891c1dca61927ae86278436d53f4b840cacd1f412071fdc3dce1d6f730610a9c163d59b  libXext-1.3.5.tar.xz
- # Locally computed
--sha256  80767ac915f2f0f94de9efb15f0197a59b6f1e609cae85059f8703272dc3e146  COPYING
-+sha256  fd62910be4b13829d94e76c1447cf840953f0e225c4dc6c79349c84dd0557f22  COPYING
-diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
-index 6002e59e0d..0bb3efa31f 100644
---- a/package/x11r7/xlib_libXext/xlib_libXext.mk
-+++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index d4e99a6998..497b5d2b57 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5  0172450908573a4449a5937810d512b9  falcon-3.1.0.tar.gz
+-sha256  f2760bd18c16393a6fb5e55f371f67921edb72febe693a82b3c5e82195d087b7  falcon-3.1.0.tar.gz
++md5  383673fc6378428d0db5861a416cad0d  falcon-3.1.1.tar.gz
++sha256  5dd393dbf01cbaf99493893de4832121bd495dc49a46c571915b79c59aad7ef4  falcon-3.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index 01b5eca4a2..b5ebc399dc 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
+@@ -4,15 +4,12 @@
  #
  ################################################################################
  
--XLIB_LIBXEXT_VERSION = 1.3.4
--XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.bz2
--XLIB_LIBXEXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXEXT_VERSION = 1.3.5
-+XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.xz
-+XLIB_LIBXEXT_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXEXT_LICENSE = MIT
- XLIB_LIBXEXT_LICENSE_FILES = COPYING
- XLIB_LIBXEXT_CPE_ID_VENDOR = x
+-PYTHON_FALCON_VERSION = 3.1.0
++PYTHON_FALCON_VERSION = 3.1.1
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/36/53/4fd90c6c841bc2e4be29ab92c65e5406df9096c421f138bef9d95d43afc9
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/29/bc/c11c9a14bb5b4d18a024ee51da15b793d1c869d151bb4101e324e0d055a8
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
+-
+-ifeq ($(BR2_PACKAGE_HOST_PYTHON_CYTHON),y)
+ PYTHON_FALCON_DEPENDENCIES += host-python-cython
+-endif
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
