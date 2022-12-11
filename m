@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C21AC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51757C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D43242DA6;
-	Mon, 20 Feb 2023 22:25:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D43242DA6
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA07A40986;
+	Mon, 20 Feb 2023 22:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA07A40986
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NES29Nhbt9yW; Mon, 20 Feb 2023 22:25:14 +0000 (UTC)
+	with ESMTP id 4wWR8CrgoIRc; Mon, 20 Feb 2023 22:25:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21A704F029;
-	Mon, 20 Feb 2023 22:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21A704F029
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 783E91BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBD374EDEA;
+	Mon, 20 Feb 2023 22:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBD374EDEA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 41C0C1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1066A40C25
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1066A40C25
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7146C6116F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7146C6116F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0VHfl6KYBG9 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vaUt93K1rJx1 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AE574015F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AE574015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id A11E361171
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A11E361171
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B38181979; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 996C48648F; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:33:49 +0100
+Date: Sun, 11 Dec 2022 09:30:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: de93736550f8443925dc218b04f82daedfc63c79
-X-Git-Newrev: 46686174e55c4f53d4fd680e65371ee8d227fbce
+X-Git-Oldrev: 55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
+X-Git-Newrev: cd7d4548cb434c2ed999ed62224d4aaad091c11b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.3B38181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgeos: bump version
- to 3.11.1
+Message-Id: <20230220205203.996C48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-termcolor: bump
+ to version 2.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46686174e55c4f53d4fd680e65371ee8d227fbce
+commit: https://git.buildroot.net/buildroot/commit/?id=cd7d4548cb434c2ed999ed62224d4aaad091c11b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/libgeos/geos/releases/tag/3.11.1
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgeos/libgeos.hash | 2 +-
- package/libgeos/libgeos.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-termcolor/python-termcolor.hash | 4 ++--
+ package/python-termcolor/python-termcolor.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
-index 34b2b855d6..cd0a4e0330 100644
---- a/package/libgeos/libgeos.hash
-+++ b/package/libgeos/libgeos.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  79ab8cabf4aa8604d161557b52e3e4d84575acdc0d08cb09ab3f7aaefa4d858a  geos-3.11.0.tar.bz2
-+sha256  6d0eb3cfa9f92d947731cc75f1750356b3bdfc07ea020553daf6af1c768e0be2  geos-3.11.1.tar.bz2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
-index 55c975eb4a..c6d470dc97 100644
---- a/package/libgeos/libgeos.mk
-+++ b/package/libgeos/libgeos.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
+index 9e0324ed64..73fb9129ed 100644
+--- a/package/python-termcolor/python-termcolor.hash
++++ b/package/python-termcolor/python-termcolor.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/termcolor/json
+-md5  04e4981838535169d19d26a14a76af17  termcolor-2.1.0.tar.gz
+-sha256  b80df54667ce4f48c03fe35df194f052dc27a541ebbf2544e4d6b47b5d6949c4  termcolor-2.1.0.tar.gz
++md5  f7f59efd147dd1ec2a25e667616e8a52  termcolor-2.1.1.tar.gz
++sha256  67cee2009adc6449c650f6bcf3bdeed00c8ba53a8cda5362733c53e0a39fb70b  termcolor-2.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
+diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
+index 8731032fec..d7511d692f 100644
+--- a/package/python-termcolor/python-termcolor.mk
++++ b/package/python-termcolor/python-termcolor.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBGEOS_VERSION = 3.11.0
-+LIBGEOS_VERSION = 3.11.1
- LIBGEOS_SITE = http://download.osgeo.org/geos
- LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
- LIBGEOS_LICENSE = LGPL-2.1
+-PYTHON_TERMCOLOR_VERSION = 2.1.0
++PYTHON_TERMCOLOR_VERSION = 2.1.1
+ PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
+-PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/62/1a/e78a930f70dd576f2a7250a98263ac973a80d6f1a395d89328844881a0c0
++PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/19/da/ff1f0906818a5bd2e69e773d88801ca3c9e92d0d7caa99db1665658819ea
+ PYTHON_TERMCOLOR_SETUP_TYPE = pep517
+ PYTHON_TERMCOLOR_LICENSE = MIT
+ PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
