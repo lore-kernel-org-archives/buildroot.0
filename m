@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFA9C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8FBDC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E93D84ED03;
-	Mon, 20 Feb 2023 22:20:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E93D84ED03
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B32B4EE9F;
+	Mon, 20 Feb 2023 22:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B32B4EE9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x5FYDt_c_Q4K; Mon, 20 Feb 2023 22:20:11 +0000 (UTC)
+	with ESMTP id DPbZBwcfuq_T; Mon, 20 Feb 2023 22:20:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97D7E4EFD8;
-	Mon, 20 Feb 2023 22:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D7E4EFD8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 260081BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7004EFDC;
+	Mon, 20 Feb 2023 22:20:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7004EFDC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B7C41BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 687F6416D5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 687F6416D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EDA66116C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EDA66116C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id txGBNGAqiZ6k for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v-iDCmfkzLIY for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4B8B416C8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4B8B416C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A10561126
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A10561126
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A254C86494; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 85DA98648F; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 21:07:03 +0100
+Date: Sun, 11 Dec 2022 09:29:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3d1d5a2dab19a954915c807e90ac74708b7e9ce
-X-Git-Newrev: 67a6bc3d19afffffe75b1e6ffa1f0e1b89dea39f
+X-Git-Oldrev: 7d08d1f7bca47a5f73422ebd716f30c79cd99124
+X-Git-Newrev: ff8b3b7413bceba91198376fa056ce0f90571616
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205209.A254C86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libbluray: bump
- version to 1.3.4
+Message-Id: <20230220205202.85DA98648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-multidict: bump
+ to version 6.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67a6bc3d19afffffe75b1e6ffa1f0e1b89dea39f
+commit: https://git.buildroot.net/buildroot/commit/?id=ff8b3b7413bceba91198376fa056ce0f90571616
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
-https://code.videolan.org/videolan/libbluray/-/blob/1.3.4/ChangeLog
-
-Added a configure option to build without external libudfread introduced
-in version 1.3.4:
-https://code.videolan.org/videolan/libbluray/-/commit/2f10fb73b869337f2a2fb6fc8c8b45ef88383b78
-
-Using --with-external-libudfread is broken so this option was not added.
-Since the default to build with optional libudfread support was kept
-upstream there is no change in behaviour.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libbluray/libbluray.hash | 4 ++--
- package/libbluray/libbluray.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
-index 6e62bb49a1..a631722bb0 100644
---- a/package/libbluray/libbluray.hash
-+++ b/package/libbluray/libbluray.hash
-@@ -1,4 +1,4 @@
--# From http://download.videolan.org/pub/videolan/libbluray/1.3.1/libbluray-1.3.1.tar.bz2.sha512
--sha512  f39fc8a11771e8fdd5eeebf0ab23535ffab44721f64b350e5d153eee44555b31c618b6d765da114254dc83ff0ff89e84c6b185f61cdbcfedd2d47a5f6e26b75a  libbluray-1.3.1.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libbluray/1.3.4/libbluray-1.3.4.tar.bz2.sha512
-+sha512  94dbf3b68d1c23fe4648c153cc2f0c251886fac0a6b6bbe3a77caabaa5322682f712afe4a7b6b16ca3f06744fbc0e1ca872209a32898dcf0ae182055d335aec1  libbluray-1.3.4.tar.bz2
- # Locally computed
- sha256  b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index a9eb3c67c6..54f4caa368 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 999c8867d0..eae60af37c 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  f8230905ad1f50c87e8d9cc6b0bb7ca2  multidict-6.0.2.tar.gz
+-sha256  5ff3bd75f38e4c43f1f470f2df7a4d430b821c4ce22be384e1459cb57d6bb013  multidict-6.0.2.tar.gz
++md5  b5875cf0a0578956dcfffc123d8344ca  multidict-6.0.3.tar.gz
++sha256  2523a29006c034687eccd3ee70093a697129a3ffe8732535d3b2df6a4ecc279d  multidict-6.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  06a240ea10ba868fda2de58df859886961df873aa74bbab1e0f13eaf99f92b7b  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index 1a9aec7ba7..bfffb84709 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBBLURAY_VERSION = 1.3.1
-+LIBBLURAY_VERSION = 1.3.4
- LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
- LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
- LIBBLURAY_INSTALL_STAGING = YES
-@@ -21,6 +21,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
- LIBBLURAY_DEPENDENCIES += libudfread
-+else
-+LIBBLURAY_CONF_OPTS += --without-external-libudfread
- endif
- 
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
+-PYTHON_MULTIDICT_VERSION = 6.0.2
++PYTHON_MULTIDICT_VERSION = 6.0.3
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/fa/a7/71c253cdb8a1528802bac7503bf82fe674367e4055b09c28846fdfa4ab90
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/b5/5b/1dd3b9cf73c474ea1d0f0b1f8b7b712b0f13817493fd93101256ec856b59
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
