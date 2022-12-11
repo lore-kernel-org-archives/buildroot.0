@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC26C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9055C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 330834EC88;
-	Mon, 20 Feb 2023 22:31:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330834EC88
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70C134F112;
+	Mon, 20 Feb 2023 22:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70C134F112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WLSC-zqOz-Tf; Mon, 20 Feb 2023 22:31:52 +0000 (UTC)
+	with ESMTP id CF_9QWhbgJbu; Mon, 20 Feb 2023 22:32:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2D124F0FB;
-	Mon, 20 Feb 2023 22:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2D124F0FB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4061B1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFCB34F105;
+	Mon, 20 Feb 2023 22:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFCB34F105
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF51C1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2621A4015F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2621A4015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84706611C4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84706611C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BKGCFeh1S2E0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yb1HABRe1k1u for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3C26416C3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3C26416C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33F3861097
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33F3861097
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2DB486494; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2D430828C8; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 15:53:20 +0100
+Date: Sun, 11 Dec 2022 09:41:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2a2db09451371d317ee119d742a62817d5f41c5f
-X-Git-Newrev: 286628bcc2d1931807c4648ef4359873bb3ee559
+X-Git-Oldrev: bc4bed533a6c0166b70aeb03ddde9b021ea4058f
+X-Git-Newrev: c38de8139abee58fb8d1cdc83d061c93aee7fd7f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205212.E2DB486494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/lichee_rv: new
- defconfig
+Message-Id: <20230220205204.2D430828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python3: bump to
+ version 3.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,149 +63,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=286628bcc2d1931807c4648ef4359873bb3ee559
+commit: https://git.buildroot.net/buildroot/commit/?id=c38de8139abee58fb8d1cdc83d061c93aee7fd7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Lichee RV - Nezha CM is a compute module with modular design, equipped
-with Allwinner D1 chip (based on T-Head XuanTie C906 core), 512MB DDR3
-RAM.
-Board support is based on the nezha defconfig already available in
-buildroot.
+Update license hash:
+  - http://www.cwi.nl -> https://www.cwi.nl
+  - http://www.cnri.reston.va.us -> https://www.cnri.reston.va.us
+  - http://www.opensource.org -> https://opensource.org
 
-https://wiki.sipeed.com/hardware/en/lichee/RV/RV.html
-https://linux-sunxi.org/Sipeed_Lichee_RV
+Drop patch which is now upstream.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Reviewed-by: Indrek Kruusa <indrek.kruusa@gmail.com>
-Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                         |  2 ++
- board/sipeed/lichee_rv/genimage.cfg                | 19 +++++++++++++
- .../lichee_rv/overlay/boot/extlinux/extlinux.conf  |  4 +++
- board/sipeed/lichee_rv/readme.txt                  | 26 +++++++++++++++++
- configs/sipeed_lichee_rv_defconfig                 | 33 ++++++++++++++++++++++
- 5 files changed, 84 insertions(+)
+ ...33-Fix-quadratic-time-idna-decoding.-GH-9.patch | 86 ----------------------
+ package/python3/python3.hash                       |  4 +-
+ package/python3/python3.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 89 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b52a065dbc..2f27ddb110 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -157,6 +157,8 @@ N:	Andrey Yurovsky <yurovsky@gmail.com>
- F:	package/rauc/
+diff --git a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch b/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+deleted file mode 100644
+index d281e7261d..0000000000
+--- a/package/python3/0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
++++ /dev/null
+@@ -1,86 +0,0 @@
+-From 9bb8e18ca46fe66fa6802602f8a7228a24dd785f Mon Sep 17 00:00:00 2001
+-From: "Miss Islington (bot)"
+- <31488909+miss-islington@users.noreply.github.com>
+-Date: Mon, 7 Nov 2022 19:23:16 -0800
+-Subject: [PATCH] [3.11] gh-98433: Fix quadratic time idna decoding. (GH-99092)
+- (GH-99222)
+-
+-There was an unnecessary quadratic loop in idna decoding. This restores
+-the behavior to linear.
+-
+-(cherry picked from commit d315722564927c7202dd6e111dc79eaf14240b0d)
+-
+-(cherry picked from commit a6f6c3a3d6f2b580f2d87885c9b8a9350ad7bf15)
+-
+-Co-authored-by: Miss Islington (bot) <31488909+miss-islington@users.noreply.github.com>
+-Co-authored-by: Gregory P. Smith <greg@krypto.org>
+-[Peter: drop NEWS.d/*]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Lib/encodings/idna.py                         | 32 +++++++++----------
+- Lib/test/test_codecs.py                       |  6 ++++
+- 2 files changed, 23 insertions(+), 17 deletions(-)
+-
+-diff --git a/Lib/encodings/idna.py b/Lib/encodings/idna.py
+-index ea4058512f..bf98f51336 100644
+---- a/Lib/encodings/idna.py
+-+++ b/Lib/encodings/idna.py
+-@@ -39,23 +39,21 @@ def nameprep(label):
+- 
+-     # Check bidi
+-     RandAL = [stringprep.in_table_d1(x) for x in label]
+--    for c in RandAL:
+--        if c:
+--            # There is a RandAL char in the string. Must perform further
+--            # tests:
+--            # 1) The characters in section 5.8 MUST be prohibited.
+--            # This is table C.8, which was already checked
+--            # 2) If a string contains any RandALCat character, the string
+--            # MUST NOT contain any LCat character.
+--            if any(stringprep.in_table_d2(x) for x in label):
+--                raise UnicodeError("Violation of BIDI requirement 2")
+--
+--            # 3) If a string contains any RandALCat character, a
+--            # RandALCat character MUST be the first character of the
+--            # string, and a RandALCat character MUST be the last
+--            # character of the string.
+--            if not RandAL[0] or not RandAL[-1]:
+--                raise UnicodeError("Violation of BIDI requirement 3")
+-+    if any(RandAL):
+-+        # There is a RandAL char in the string. Must perform further
+-+        # tests:
+-+        # 1) The characters in section 5.8 MUST be prohibited.
+-+        # This is table C.8, which was already checked
+-+        # 2) If a string contains any RandALCat character, the string
+-+        # MUST NOT contain any LCat character.
+-+        if any(stringprep.in_table_d2(x) for x in label):
+-+            raise UnicodeError("Violation of BIDI requirement 2")
+-+        # 3) If a string contains any RandALCat character, a
+-+        # RandALCat character MUST be the first character of the
+-+        # string, and a RandALCat character MUST be the last
+-+        # character of the string.
+-+        if not RandAL[0] or not RandAL[-1]:
+-+            raise UnicodeError("Violation of BIDI requirement 3")
+- 
+-     return label
+- 
+-diff --git a/Lib/test/test_codecs.py b/Lib/test/test_codecs.py
+-index 8edd5ac063..2407567261 100644
+---- a/Lib/test/test_codecs.py
+-+++ b/Lib/test/test_codecs.py
+-@@ -1535,6 +1535,12 @@ def test_builtin_encode(self):
+-         self.assertEqual("pyth\xf6n.org".encode("idna"), b"xn--pythn-mua.org")
+-         self.assertEqual("pyth\xf6n.org.".encode("idna"), b"xn--pythn-mua.org.")
+- 
+-+    def test_builtin_decode_length_limit(self):
+-+        with self.assertRaisesRegex(UnicodeError, "too long"):
+-+            (b"xn--016c"+b"a"*1100).decode("idna")
+-+        with self.assertRaisesRegex(UnicodeError, "too long"):
+-+            (b"xn--016c"+b"a"*70).decode("idna")
+-+
+-     def test_stream(self):
+-         r = codecs.getreader("idna")(io.BytesIO(b"abc"))
+-         r.read(3)
+--- 
+-2.30.2
+-
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index c4ee79305d..7f079865d9 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a57dc82d77358617ba65b9841cee1e3b441f386c3789ddc0676eca077f2951c3  Python-3.11.0.tar.xz
+-sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
++sha256  85879192f2cffd56cb16c092905949ebf3e5e394b7f764723529637901dfb58f  Python-3.11.1.tar.xz
++sha256  d4a223f033419313218c9b8444167e91e87a5bebdb43fb8490df441df5220a8b  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 123bc8ef88..219d135b3f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+F:	board/sipeed/lichee_rv/
-+F:	configs/sipeed_lichee_rv*
- F:	package/apparmor/
- F:	package/corkscrew/
- F:	package/cups/
-diff --git a/board/sipeed/lichee_rv/genimage.cfg b/board/sipeed/lichee_rv/genimage.cfg
-new file mode 100644
-index 0000000000..d5df41203d
---- /dev/null
-+++ b/board/sipeed/lichee_rv/genimage.cfg
-@@ -0,0 +1,19 @@
-+# Minimal SD card image for the sipeed Lichee RV
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		bootable = "true"
-+		offset = 1M
-+	}
-+}
-diff --git a/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf b/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..91b2298628
---- /dev/null
-+++ b/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /boot/Image
-+  # use devicetree from u-boot
-+  append console=ttyS0,115200 root=/dev/mmcblk0p1 ro rootwait
-diff --git a/board/sipeed/lichee_rv/readme.txt b/board/sipeed/lichee_rv/readme.txt
-new file mode 100644
-index 0000000000..24e8141851
---- /dev/null
-+++ b/board/sipeed/lichee_rv/readme.txt
-@@ -0,0 +1,26 @@
-+Lichee RV
-+===============
-+
-+Lichee RV - Nezha CM is a compute module with modular design, equipped
-+with Allwinner D1 chip (based on T-Head XuanTie C906 core), 512MB DDR3 RAM.
-+It can boot from TF card or SD-NAND, uses two sets of M.2 b key 67 pin
-+connectors to route all IO, making it convient for wide use and easy to replace.
-+
-+How to build
-+============
-+
-+$ make sipeed_lichee_rv_defconfig
-+$ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Connect a TTL UART to the debug connector, insert the microSD card and
-+plug in a USB-C cable to the PWR connector to boot the system.
-diff --git a/configs/sipeed_lichee_rv_defconfig b/configs/sipeed_lichee_rv_defconfig
-new file mode 100644
-index 0000000000..f9782f870b
---- /dev/null
-+++ b/configs/sipeed_lichee_rv_defconfig
-@@ -0,0 +1,33 @@
-+BR2_riscv=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,ca67838d84af4c9f85d06311c9e98e1adf46308f)/linux-ca67838d84af4c9f85d06311c9e98e1adf46308f.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,528ae9bc6c55edd3ffe642734b4132a8246ea777)/uboot-528ae9bc6c55edd3ffe642734b4132a8246ea777.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="lichee_rv_dock"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_GENIMAGE=y
+ PYTHON3_VERSION_MAJOR = 3.11
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
