@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D244C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 17:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A84C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 11 Dec 2022 17:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93A0140545;
-	Sun, 11 Dec 2022 17:03:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93A0140545
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8FB34054A;
+	Sun, 11 Dec 2022 17:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8FB34054A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 36Pp0Npsglas; Sun, 11 Dec 2022 17:03:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nK1O8XUcBqvz; Sun, 11 Dec 2022 17:04:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E403E4052F;
-	Sun, 11 Dec 2022 17:03:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E403E4052F
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD61940510;
+	Sun, 11 Dec 2022 17:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD61940510
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 77C4B1BF2F2
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:03:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0D6FD1BF3D1
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4DB8D81432
- for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DB8D81432
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD09F812C2
+ for <buildroot@lists.busybox.net>; Sun, 11 Dec 2022 17:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD09F812C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WWiQTjLErNbi for <buildroot@lists.busybox.net>;
- Sun, 11 Dec 2022 17:03:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 523EE8134F
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 523EE8134F
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 17:03:39 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6FA8C100002;
- Sun, 11 Dec 2022 17:03:37 +0000 (UTC)
-Date: Sun, 11 Dec 2022 18:03:36 +0100
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20221211180336.79ea5b05@windsurf>
-In-Reply-To: <20221207124855.1831-1-neal.frager@amd.com>
-References: <20221207124855.1831-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670778217;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=HVduS492/PtN2ASK/S5IOiqfdjZ88AaMV+ggK+aizWE=;
- b=QeV3tsZd7/8guKjT9uoO3IojyikWyqVE/fELAROG41SOIahxrprCrcv4kZQcOaG9PaOxLo
- oiTEwskmvPAx7+TH5RDwAHCQc6DqhCHXvSC1YF13cY+bS67K/N8CwnHvrGJrfKc/IjA2v8
- tiOn4KnmKDG6X6XgWwcd858M2HcqsanKueJOdLKAReSOCdUpy5gHRgseUcVNQl3CSID2o8
- 885c0vLnJxuchw/ZX+04jJn8vPo+esLsi2B1fBCd4gLMxGg88ArUNNJq8SVuVHGrOROY39
- rQUonCYjpLBRrr4Wo4OMNLPQjZtXA4pGhf/FG1gcJ7RpkUXXAjBX5PJ2qrL+pg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QeV3tsZd
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
- fix linux dts name
+ with ESMTP id Iquzb_anSe6g for <buildroot@lists.busybox.net>;
+ Sun, 11 Dec 2022 17:04:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2052480D20
+ for <buildroot@buildroot.org>; Sun, 11 Dec 2022 17:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2052480D20
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 09065864B6; Sun, 11 Dec 2022 17:04:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Dec 2022 18:04:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 607665e3cecd967759344d6c702babe82ffa604c
+X-Git-Newrev: c19e0bdc5621518986dfa04ced0dadd3c53e193c
+X-Patchwork-Hint: ignore
+Message-Id: <20221211170444.09065864B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/versal_vck190_defconfig: use
+ correct u-boot.dtb in boot.bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,59 +58,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: luca.ceresoli@bootlin.com, michal.simek@amd.com,
- Neal Frager <neal.frager@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c19e0bdc5621518986dfa04ced0dadd3c53e193c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 7 Dec 2022 05:48:55 -0700
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+This patch fixes a problem in the vck190 boot.bin generation as it should be
+using the u-boot.dtb as the u-boot device tree and not the Linux system.dtb.
+While both dtbs are basically the same, it is better not to mix this up.
 
-> The Linux DTS name has changed for the zynqmp_kria_kv260 with Xilinx 2022.2.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  configs/zynqmp_kria_kv260_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-> index df01ad30b8..aef67b3cb4 100644
-> --- a/configs/zynqmp_kria_kv260_defconfig
-> +++ b/configs/zynqmp_kria_kv260_defconfig
-> @@ -8,7 +8,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/smk-k26-revA-sck-kv-g-revB"
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/versal/post-image.sh      | 2 +-
+ board/versal/uboot.fragment     | 1 +
+ configs/versal_vck190_defconfig | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-Do you test your patches before sending them? Because it's quite
-worrying to have some many fixes.
-
-And in fact, it seems this patch is also broken: there is no Device
-Tree named zynqmp-smk-k26-revA-sck-kv-g-revB.dts:
-
-$ make zynqmp_kria_kv260_defconfig
-$ make linux-patch
-$ find output/build/linux-custom/ -name 'zynqmp-smk-k26-revA-sck-kv-g-revB.dts'
-$
-
-So unless I'm wrong, this patch doesn't look correct.
-
-Please make sure to do a full build of your defconfigs (make clean;
-make foobar_defconfig; make) before sending an update to your defconfig.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
+index 890522c31d..f45f29a155 100755
+--- a/board/versal/post-image.sh
++++ b/board/versal/post-image.sh
+@@ -24,7 +24,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
+ 	  }
+ 	  image {
+ 	    id = 0x1c000000, name=apu_subsystem 
+-	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/system.dtb }
++	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
+ 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
+ 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
+ 	  }
+diff --git a/board/versal/uboot.fragment b/board/versal/uboot.fragment
+new file mode 100644
+index 0000000000..6f71907379
+--- /dev/null
++++ b/board/versal/uboot.fragment
+@@ -0,0 +1 @@
++CONFIG_OF_SEPARATE=y
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index d87df221c6..fcda6eb431 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -25,10 +25,12 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/versal/uboot.fragment"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
++BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_PACKAGE_VERSAL_FIRMWARE=y
+ BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="v2022.2"
+ BR2_PACKAGE_VERSAL_FIRMWARE_BOARD="vck190"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
