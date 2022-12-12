@@ -1,88 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B3B2C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 17:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C1F5C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 17:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD95160E2A;
-	Mon, 12 Dec 2022 17:35:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD95160E2A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6269415A3;
+	Mon, 12 Dec 2022 17:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6269415A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JW4gzMGJxNOV; Mon, 12 Dec 2022 17:35:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zRwxD6AHq5_O; Mon, 12 Dec 2022 17:56:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36F3560AE3;
-	Mon, 12 Dec 2022 17:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36F3560AE3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BAB1415A9;
+	Mon, 12 Dec 2022 17:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BAB1415A9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E15C1BF2AB
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:35:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA9771BF2AB
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69C2E813DB
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:35:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69C2E813DB
+ by smtp1.osuosl.org (Postfix) with ESMTP id C32078134B
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C32078134B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TegOxipHGKgO for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 17:35:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D8CC81340
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D8CC81340
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:35:47 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- h8-20020a1c2108000000b003d1efd60b65so5864876wmh.0
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 09:35:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=TDQUrMgbqy7LBdDq2lyBpxFomMTnw4kboL5lhaC/73o=;
- b=XPG3z7yUgwm9UPFtdMYk3vNcg4zwSFsnex6pypma7T75kW2JX4VxVd3tExw1Es5mWv
- zNqpeVqS6tY26S/WR5qCnzOMwszl3hy58RplNxiV/mp2FQiXqjquN626vfdodPJFgmLB
- QPtT2+jfYnmO/IM0bmPalyKkq5O9uZjAvGihtIiUNaLmkj10PFInrtpKSZFy7X/AkmNU
- Ad7rmWD8flE2QuV9e1xrA+fldY69ti4yfXAZGa+oKjP2gj9yys16Eq9RpaL8dXm6cgFf
- WWuOhdJskHqx6h+6Jv1d5f7BalYT8yw86Yrg6yjwpwwlZTqFUzJtXIUEpvEnkSHfMrTs
- YQqA==
-X-Gm-Message-State: ANoB5pmoGBa6vRndHEfI1Kn9f+cGm9sSI+f+L6IKsTBqii1CYdjzvwgT
- Dv+xiAM9pOa5q0KfIlgh0LfKhOLD/Tc=
-X-Google-Smtp-Source: AA0mqf6e7SD80Cy7h6QI/2pUP6rFv8zifBsARZlYiEDt/ohdLgRHFOAtlMbfijnprdNsGc4Q0WRAgw==
-X-Received: by 2002:a05:600c:4e41:b0:3cf:8b72:e6fd with SMTP id
- e1-20020a05600c4e4100b003cf8b72e6fdmr13243473wmq.20.1670866544953; 
- Mon, 12 Dec 2022 09:35:44 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- m37-20020a05600c3b2500b003cfd4cf0761sm11337050wms.1.2022.12.12.09.35.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Dec 2022 09:35:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 18:35:42 +0100
-Message-Id: <20221212173542.8469-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id qxkDOBWgY9aG for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 17:56:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EC1B81342
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0EC1B81342
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:56:53 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C35F82000B;
+ Mon, 12 Dec 2022 17:56:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p4n2n-00F69i-JG; Mon, 12 Dec 2022 18:56:49 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Frank Hunleth <fhunleth@troodon-software.com>
+References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
+ <87359lytkg.fsf@dell.be.48ers.dk>
+ <_Xy-l8Ny6TGT7WRiixo_CPZYHzdUIuGYexyAlFzMnPCN0loQWU_ydtPGjnGDOAPHohUUzztFqL1rbhYa5bVk7cO2NN6fK_cUPe8cL4MiTMo=@troodon-software.com>
+Date: Mon, 12 Dec 2022 18:56:49 +0100
+In-Reply-To: <_Xy-l8Ny6TGT7WRiixo_CPZYHzdUIuGYexyAlFzMnPCN0loQWU_ydtPGjnGDOAPHohUUzztFqL1rbhYa5bVk7cO2NN6fK_cUPe8cL4MiTMo=@troodon-software.com>
+ (Frank Hunleth's message of "Mon, 12 Dec 2022 15:32:40 +0000")
+Message-ID: <87pmcoy07y.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TDQUrMgbqy7LBdDq2lyBpxFomMTnw4kboL5lhaC/73o=;
- b=d8O/y2hHgfkOEvjbA/pIg8RmWlKQgGMUY2hloVe58iQ5aJH5x++9sU15AFufO7dbyv
- 1h+JzOeikUGiwwczCLfnyc7484E9+tdoDIK4i2krw0RPqwviPW2bjvKeMjH3JXGw9E6r
- OTe8sLanfJF1dDZFh90YZ8sjP5zJjaIayJX9A7xL0arpLdh3r3slZm5M6Wkj+9ig7FxM
- Hp3ISsupOy5tH/8k+xOZzaLkeWUIzF3oMtYfja0ZPwH/2oifrDDsc89BacSUIp5BsWpY
- SZcKM956hw5i5nwumZaLHZwurRWmU/QRO1CumijTvybYvgY+PXEIP0y3bB5d4ZNxErfR
- dufg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=d8O/y2hH
-Subject: [Buildroot] [PATCH 1/1] package/vuejs-router: fix license hash
+Subject: Re: [Buildroot] [PATCH 1/5] configs/nezha_defconfig: bump versions
+ for uboot, sbi and linux kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,37 +66,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 2fce36d928082685d7f77c3587e15b7827ce0b42 forgot to update LICENSE
-hash (update in year:
-https://github.com/vuejs/router/commit/ed238db64b2a605f785ee4e2f847a6788c06a2ea)
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/beac411246342a9445495bc7c8f6a7e7369b9c53
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/vuejs-router/vuejs-router.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> >>>>> "Indrek" == Indrek Kruusa indrek.kruusa@gmail.com writes:
+ >> 
+ >> > BR2_TARGET_OPENSBI=y
+ >> 
+ >> > BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
+ >> 
+ >> > -BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call
+ >> > github,smaeul,opensbi,e6793dc36a71537023f078034fe795c64a9992a3)/opensbi-e6793dc36a71537023f078034fe795c64a9992a3.tar.gz"
+ >> 
+ >> > +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call
+ >> > github,smaeul,opensbi,5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3)/opensbi-5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3.tar.gz"
+ >> 
+ >> 
+ >> Why still use this custom opensbi? There is D1 support in version 1.1 as
+ >> mentioned on https://linux-sunxi.org/Allwinner_Nezha
+ >> 
 
-diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
-index 147e730f20..b48e59ef48 100644
---- a/package/vuejs-router/vuejs-router.hash
-+++ b/package/vuejs-router/vuejs-router.hash
-@@ -1,3 +1,3 @@
- # Locally computed
- sha256  437558a84b99d0d89743d4897ec16a90a96a1d3a6786e697a8808a044bcb9b8f  vue-router-4.1.6.tgz
--sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
-+sha256  91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2  LICENSE
+ > Just in case it helps, I've been testing both the Korsgaard and Kruusa
+ > patches on a MangoPI MQ Pro. This board is close, but not exactly like
+ > the Nezha, so I expect differences.
+
+ > Using OpenSBI 1.1 results in a non-booting Linux kernel for me. Here's the error:
+
+Just to be sure, is this with the 5.19 based kernel we used to use
+(fe178cf0153d98b71cb01a46c8cc050826a17e77) or the "new" 6.1-rc3 based
+one (ca67838d84af4c9f85d06311c9e98e1adf46308f)?
+
+
+ > Unhandled exception: Store/AMO access fault
+ > EPC: 000000005ff8f838 RA: 000000005ffb6346 TVAL: 0000000040040000
+ > EPC: 0000000042e01838 RA: 0000000042e28346 reloc adjusted
+
+ > Code: b383 0385 be03 0405 be83 0485 bf03 0505 (e110)
+
+Sounds like access to an invalid address to me. When does this trigger?
+Early doing Linux boot?
+
+I see the mangopi mq-pro only has 512MB RAM. 0x5xxx.xxxx is at the very
+end of that (memory starts at 0x4xxx.xxxx), did you update the memory
+size in the device tree passed to OpenSBI?
+
+I just did a clean rebuild of nezha_defconfig here, and it boots without
+any issues:
+
+U-Boot SPL 2022.10 (Dec 12 2022 - 17:20:45 +0100)
+sunxi_ram_probe: dram-controller@3102000: probing
+DRAM only have internal ZQ!!
+ddr_efuse_type: 0x0
+[AUTO DEBUG] two rank and full DQ!
+ddr_efuse_type: 0x0
+[AUTO DEBUG] rank 0 row = 15
+[AUTO DEBUG] rank 0 bank = 8
+[AUTO DEBUG] rank 0 page size = 2 KB
+[AUTO DEBUG] rank 1 row = 15
+[AUTO DEBUG] rank 1 bank = 8
+[AUTO DEBUG] rank 1 page size = 2 KB
+rank1 config same as rank0
+DRAM BOOT DRIVE INFO: V0.24
+DRAM CLK = 792 MHz
+DRAM Type = 3 (2:DDR2,3:DDR3)
+DRAMC ZQ value: 0x7b7bfb
+DRAM ODT value: 0x42.
+ddr_efuse_type: 0x0
+DRAM SIZE =1024 M
+DRAM simple test OK.
+mxstatus=0xc0408000 mhcr=0x00000109 mcor=0x00000003 mhint=0x00004000
+Trying to boot from MMC1
+PLL reg = 0xf8216300, freq = 1200000000
+SPL size = 81920, sector = 160
+sunxi_ram_get_info: dram-controller@3102000: getting info
+
+OpenSBI v1.1
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name             : Allwinner D1 Nezha
+Platform Features         : medeleg
+Platform HART Count       : 1
+Platform IPI Device       : ---
+Platform Timer Device     : --- @ 0Hz
+Platform Console Device   : uart8250
+Platform HSM Device       : sun20i-d1-ppu
+Platform Reboot Device    : sunxi-wdt-reset
+Platform Shutdown Device  : ---
+Firmware Base             : 0x40000000
+Firmware Size             : 288 KB
+Runtime SBI Version       : 1.0
+
+Domain0 Name              : root
+Domain0 Boot HART         : 0
+Domain0 HARTs             : 0*
+Domain0 Region00          : 0x0000000040000000-0x000000004007ffff ()
+Domain0 Region01          : 0x0000000000000000-0xffffffffffffffff (R,W,X)
+Domain0 Next Address      : 0x0000000042e00000
+Domain0 Next Arg1         : 0x0000000042e8b978
+Domain0 Next Mode         : S-mode
+Domain0 SysReset          : yes
+
+Boot HART ID              : 0
+Boot HART Domain          : root
+Boot HART Priv Version    : v1.11
+Boot HART Base ISA        : rv64imafdcvx
+Boot HART ISA Extensions  : time
+Boot HART PMP Count       : 8
+Boot HART PMP Granularity : 2048
+Boot HART PMP Address Bits: 38
+Boot HART MHPM Count      : 0
+Boot HART MIDELEG         : 0x0000000000000222
+Boot HART MEDELEG         : 0x000000000000b109
+sunxi_set_gate: (CLK#24) unhandled
+
+
+U-Boot 2022.10 (Dec 12 2022 - 17:20:45 +0100) Allwinner Technology
+
+..
+
+Starting kernel ...
+
+[    0.000000] Linux version 6.1.0-rc3 (peko@dell) (riscv64-buildroot-linux-gnu-gcc.br_real (Buildroot 2022.11-477-g5cb74c92f7) 11.3.0, GNU ld (GNU Binutils) 2.38) #1 PREEMPT Mon Dec 12 17:28:21 CET 2022
+
+..
+
+# uptime
+ 00:07:05 up 6 min,  load average: 0.00, 0.00, 0.00
+
 -- 
-2.35.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
