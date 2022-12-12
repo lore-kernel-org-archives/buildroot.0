@@ -4,87 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BB55C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 06:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 639FFC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 07:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7351F402E2;
-	Mon, 12 Dec 2022 06:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7351F402E2
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE45140255;
+	Mon, 12 Dec 2022 07:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE45140255
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t3LWWtlfWW1B; Mon, 12 Dec 2022 06:49:08 +0000 (UTC)
+	with ESMTP id ThZXi4QGMvl2; Mon, 12 Dec 2022 07:23:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B6484049A;
-	Mon, 12 Dec 2022 06:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B6484049A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A8F5D1BF2BD
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 06:49:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFF5C40240;
+	Mon, 12 Dec 2022 07:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF5C40240
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D08421BF288
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 07:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83F0F40136
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 06:49:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83F0F40136
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7FD260AC0
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 07:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7FD260AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Msj_IoHtKpt for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 06:49:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80A984011C
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 80A984011C
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 06:49:04 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id x28so16958945lfn.6
- for <buildroot@buildroot.org>; Sun, 11 Dec 2022 22:49:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=y/wRLrcj+ORdpZKxpe7kxBGfpsibKhrZHci53GgIgCw=;
- b=dCr9pURb1gemcMOfYWjvaPlSztfLXkdI3IwVRV/4hKparC1M230u9TgwMG1XSPERPZ
- T4e9E3RJzzPE/xagmLA8uGP/Oyc7iaVq60k+Z7VOKbEG8j9s022Ph5D/PX/b0XAp02gr
- OMDNLVKUaBFN5ibBvSgLJGr6hukyqLZlpKl+Ym/6Y52WH3SyEtjVLsov0Q0PSlG6dMlf
- 57Z4g5gL6e2mAFH4Nfg6nWvbtZAFnPMcFeTKm5mrh3HSbAnIUJT40/ryRUmTzVuX2Qry
- 7HaE0e1i4kA8TL2ZCoefzZlXtP6RluAkbVzqvfvbYG1gF4JH3rMdiJs6Pgk5YevM3N1w
- ggFQ==
-X-Gm-Message-State: ANoB5pn9aH1dLlwQDsmPsIR92H0KK6RVYLjOosme+C2e6lUThgUAycMP
- x/GeHPW0Bg4S4QrQN/Wr7ZeZrqPRd2s=
-X-Google-Smtp-Source: AA0mqf5NLX1p6pz5l/085ySzvrTVXdDKuQrRnniEzjwWSG9EQwYI28ryAnuSNmCken3icnnwIcW6iQ==
-X-Received: by 2002:a05:6512:3416:b0:4a4:68b9:19dd with SMTP id
- i22-20020a056512341600b004a468b919ddmr4244576lfr.5.1670827741249; 
- Sun, 11 Dec 2022 22:49:01 -0800 (PST)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
- by smtp.gmail.com with ESMTPSA id
- y28-20020a19641c000000b004b564e1a4e0sm1507943lfb.76.2022.12.11.22.48.59
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Dec 2022 22:49:00 -0800 (PST)
-Date: Mon, 12 Dec 2022 07:49:11 +0100
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: buildroot@buildroot.org
-Message-ID: <Y5bO5xA2u7NbOxpa@gmail.com>
-References: <20221128091158.5049-1-marcus.folkesson@gmail.com>
- <CAM8FrKJYV5b0u5aorY2WtvCdEL4R+ybb6ekXNqPDXrOLmQeRLg@mail.gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ayma1XVfqpPY for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 07:22:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 463EA6080A
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 463EA6080A
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 07:22:59 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2A2DE1C0007;
+ Mon, 12 Dec 2022 07:22:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p4d9L-00BsAe-6i; Mon, 12 Dec 2022 08:22:55 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Indrek Kruusa <indrek.kruusa@gmail.com>
+References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
+Date: Mon, 12 Dec 2022 08:22:55 +0100
+In-Reply-To: <20221211201704.25858-1-indrek.kruusa@gmail.com> (Indrek Kruusa's
+ message of "Sun, 11 Dec 2022 22:17:00 +0200")
+Message-ID: <87359lytkg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <CAM8FrKJYV5b0u5aorY2WtvCdEL4R+ybb6ekXNqPDXrOLmQeRLg@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=y/wRLrcj+ORdpZKxpe7kxBGfpsibKhrZHci53GgIgCw=;
- b=Yp7Wrh8doXr8z5oGubU8OVmViq9PV7rHgqe6EPZDdjO2jek41aFKDbxVfahhSpHkAp
- MXPHT3b9wyEvox6RVfcMpU3B0Q1qagKLhJL0+rmhCoz53Q+18NsRyEC4XLyDxZiIvC4Q
- 3BsU6DLs42xQuKdhTDYdREtp9GoJttGDuaWqYi0Mdu99HzfczMB6nd8whrmboNCbaUK+
- NGORNFgJThNI1e0SU01Kqvh1Z7ufl44rwHpWF+g7LdwJqYZkYsQ0WfnYH+9wt1V9odqT
- KZZDfBGSwtuspXyaA8dPrLLr7XA4sR46EkuVtgFZzKrTtqF+mSo+2JRG05DK7puCcRdg
- lTgg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Yp7Wrh8d
-Subject: Re: [Buildroot] [PATCH] package/libostree: bump to version 2022.7
+Subject: Re: [Buildroot] [PATCH 1/5] configs/nezha_defconfig: bump versions
+ for uboot, sbi and linux kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,117 +64,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1682715123200169524=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+>>>>> "Indrek" == Indrek Kruusa <indrek.kruusa@gmail.com> writes:
 
---===============1682715123200169524==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="xsfI3ZIxXhReAs3/"
-Content-Disposition: inline
+ > kernel: bump to version 6.1.0-rc3 in d1/wip branch
+ > u-boot: use the version with full SPL support from d1-wip branch
+ > opensbi: take in the latest fixes from d1-wip branch
+
+ > Other:
+ > remove patches directory definition as no patches are needed anymore
+ > update linux headers version
+ > update binary name as the new uboot generates it
+
+Thanks. Funny enough I was just working on doing pretty much the same
+thing here. I've CC'ed you on the patch series I just sent.
+
+This patch does a bunch of different things, but it doesn't do enough -
+E.G. it doesn't update genimage.cfg so the build is broken after this
+commit - So that is not good. Maybe have a look at my series where I
+update each component (U-Boot/OpenSBI/Linux) separately.
+
+ > Signed-off-by: Indrek Kruusa <indrek.kruusa@gmail.com>
+
+ > @@ -17,14 +16,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ >  # BR2_TARGET_ROOTFS_TAR is not set
+ >  BR2_TARGET_OPENSBI=y
+ >  BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
+ > -BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,e6793dc36a71537023f078034fe795c64a9992a3)/opensbi-e6793dc36a71537023f078034fe795c64a9992a3.tar.gz"
+ > +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3)/opensbi-5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3.tar.gz"
+
+Why still use this custom opensbi? There is D1 support in version 1.1 as
+mentioned on https://linux-sunxi.org/Allwinner_Nezha
 
 
---xsfI3ZIxXhReAs3/
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ >  BR2_TARGET_OPENSBI_PLAT="generic"
+ >  # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+ >  BR2_TARGET_SUN20I_D1_SPL=y
+
+You are still enabling the old sun20i-d1-spl even though you change to
+use U-Boot SPL?
 
 
-Bump again.
-
-Am I doing something wrong in my patch-workflow or have you maintainers jus=
-t been too busy
-for a while?
-
-/Marcus
-
-On Mon, Dec 05, 2022 at 09:43:04AM +0100, Marcus Folkesson wrote:
-> Bump
->=20
-> Med v=E4nliga h=E4lsningar / Best regards
-> Marcus Folkesson
->=20
->=20
-> Den m=E5n 28 nov. 2022 kl 10:12 skrev Marcus Folkesson <
-> marcus.folkesson@gmail.com>:
->=20
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > ---
-> >  package/libostree/libostree.hash | 2 +-
-> >  package/libostree/libostree.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/libostree/libostree.hash
-> > b/package/libostree/libostree.hash
-> > index 582af4b7b9..ed31109fdb 100644
-> > --- a/package/libostree/libostree.hash
-> > +++ b/package/libostree/libostree.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> > -sha256  835ef47d9a0b35a10c77ffd7f0fbd2e2b87f7cccb588da27442a05ff71ffad=
-8c
-> > libostree-2022.6.tar.xz
-> > +sha256  8be2a9261c94e8b9ec4113380ffc480f8598245fb321a009bad4fae4b82241=
-1f
-> > libostree-2022.7.tar.xz
-> >  sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd6=
-9c
-> > COPYING
-> > diff --git a/package/libostree/libostree.mk b/package/libostree/
-> > libostree.mk
-> > index e99da9d2cb..8e8ec63213 100644
-> > --- a/package/libostree/libostree.mk
-> > +++ b/package/libostree/libostree.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >
-> >  ######################################################################=
-##########
-> >
-> > -LIBOSTREE_VERSION =3D 2022.6
-> > +LIBOSTREE_VERSION =3D 2022.7
-> >  LIBOSTREE_SOURCE =3D libostree-$(LIBOSTREE_VERSION).tar.xz
-> >  LIBOSTREE_SITE =3D
-> > https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERS=
-ION)
-> >
-> > --
-> > 2.38.1
-> >
-> >
-
---xsfI3ZIxXhReAs3/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmOWzuEACgkQiIBOb1ld
-UjLN7xAAqdHTgIUSky5srkdarR5/4FL4UZ896obx0qQ77Mtds/Sr/4aNrInYNhPS
-OZq1xIQkAaMwV0YgKIzSBLRqQH+V/Q5prI/kQMB04uDMEQp7ATxw4VFeP/SwPQg7
-dmjMMVLgtK/uh3TqiTp4Bh/LaLJi5MWy9cNtG4tFYwmNYYxCXOAb2igbkfgytq6D
-Itwc9fjxctOMo9dBWc72WY3vBbWlX1q/Fby3tDeKLHYHX0zXB++9G4AX8B2uZV4t
-0dcWxWAewqPBiE9+PKyW6WtUHnVHcEicTsTjgofXhpd0Wcn8Jh1ft/N0llSSLcKC
-tcrXbHBaCAtCNbe74ZU4Q65ESOh20YijlUVXMaR+B7eDG+lW3GzxlzvqR2NJK3iJ
-xO01QDaShh14LEVS5PvQIhzcJJNc3qKeWc2WpHM+HG4K6/TW+gvrsGovI+K0cVFa
-TNUIv2nPqc4q+PMOac+3mTDzZlu0DetRqbBC/Xl6vvNppz9FKyXiNzixXwdvv9qf
-YGoFI1v2VFoAXbSbx89jgomQuFFKEaEeYDj9GtUjLxpq5E3iof3LWY8JoMMEcpU3
-8kxeyY3A4ex6xuoIFbGh+Zi+RMtsA0xnJAyC5UnkALR+j/kUJsaAVWrxHQtuH8xj
-ccEZ3M6K6I+bETzV1ISLIbFy0g/ti4+qNHzLL+0kBgkRylQkJ8g=
-=t+jz
------END PGP SIGNATURE-----
-
---xsfI3ZIxXhReAs3/--
-
---===============1682715123200169524==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1682715123200169524==--
