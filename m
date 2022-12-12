@@ -1,59 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20F0BC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 22:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05077C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 22:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9893E40332;
-	Mon, 12 Dec 2022 22:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9893E40332
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7332B60BBD;
+	Mon, 12 Dec 2022 22:35:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7332B60BBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1MfAp3vgWOh4; Mon, 12 Dec 2022 22:08:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AKEJTs-60P9s; Mon, 12 Dec 2022 22:35:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ACFB40327;
-	Mon, 12 Dec 2022 22:08:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ACFB40327
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC93260C05;
+	Mon, 12 Dec 2022 22:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC93260C05
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52E271BF362
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:08:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A763E1BF2B6
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E19240004
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:08:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E19240004
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F5024023B
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:35:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F5024023B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kD3u3Canb1Jx for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 22:08:02 +0000 (UTC)
+ with ESMTP id XErkFGzvVQZA for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 22:35:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C52740002
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5C52740002
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 22:08:02 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout09.t-online.de (Postfix) with SMTP id 301AC22081
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 23:07:59 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd71.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p4qxp-35Gc890; Mon, 12 Dec 2022 23:07:57 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58794)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p4qxp-0006p8-0g
- for buildroot@buildroot.org; Mon, 12 Dec 2022 23:07:57 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 23:07:57 +0100
-Message-Id: <20221212220757.2941808-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4048740002
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4048740002
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 22:35:53 +0000 (UTC)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BCMZkje030890;
+ Mon, 12 Dec 2022 16:35:46 -0600
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BCMZkcH026274
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 12 Dec 2022 16:35:46 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 12
+ Dec 2022 16:35:45 -0600
+Received: from DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f]) by
+ DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f%17]) with mapi id
+ 15.01.2507.016; Mon, 12 Dec 2022 16:35:45 -0600
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?utf-8?B?RnJhbsOnb2lzIFBlcnJhZA==?= <francois.perrad@gadz.org>
+Thread-Topic: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
+Thread-Index: AQHZCZauh/Hy9PckcU+c+irWCzQtXq5pil+AgAAI14CAAAuKgIABQa9Q
+Date: Mon, 12 Dec 2022 22:35:45 +0000
+Message-ID: <d94714457a334901ba5caf994403f81f@ti.com>
+References: <20221206171719.747581-1-gadiyar@ti.com>
+ <20221206171719.747581-3-gadiyar@ti.com>	<20221211210933.19fb5199@windsurf>
+ <CAB0FRssQAoVA9syt1SM3mwafto722J3rxWXeHwiVRsWFmCyBPw@mail.gmail.com>
+ <20221211222229.678a56dc@windsurf>
+In-Reply-To: <20221211222229.678a56dc@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.247.24.77]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670882877-00E07ECF-C84D0DDE/0/0 CLEAN NORMAL
-X-TOI-MSGID: c6f3615a-7714-4fb4-a716-7eb3c010e97e
-Subject: [Buildroot] [PATCH 1/1] package/inih: bump version to 56
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ti.com; s=ti-com-17Q1; t=1670884546;
+ bh=OFwDvyTtyueznDtPyWJkIhU7hev63x1Syv3i4KpXagU=;
+ h=From:To:CC:Subject:Date:References:In-Reply-To;
+ b=JQR5e56y7dYUHJ/bve1cyeVsHF6wXlDl+orXallELCArYpGMf6eAO4rcItlFZchol
+ GAYN+LwNOURnnumD0ItVfv0E8D5yxk0YpoqfUwkvWgxnlVPZHbtus/25/qyDWW59XR
+ mLTjRYbrJuXKUzSocaAtDZsYFgnRXDuIBc1US1mQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=JQR5e56y
+Subject: Re: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +89,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Gadiyar, Anand via buildroot" <buildroot@buildroot.org>
+Reply-To: "Gadiyar, Anand" <gadiyar@ti.com>
+Cc: "Brattlof, Bryan" <bb@ti.com>, "Davis, Andrew" <afd@ti.com>,
+ Xuanhao Shi <X15000177@gmail.com>,
+ Anand Gadiyar via buildroot <buildroot@buildroot.org>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/benhoyt/inih/releases/tag/r56
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/inih/inih.hash | 2 +-
- package/inih/inih.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/inih/inih.hash b/package/inih/inih.hash
-index af921b294d..e2ed923c7a 100644
---- a/package/inih/inih.hash
-+++ b/package/inih/inih.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ba55f8ae2a8caf0653f30f48567241e14ea916acfc13481f502d8a9c8f507f68  inih-55.tar.gz
-+sha256  4f2ba6bd122d30281a8c7a4d5723b7af90b56aa828c0e88256d7fceda03a491a  inih-56.tar.gz
- sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
-diff --git a/package/inih/inih.mk b/package/inih/inih.mk
-index 7f36175576..c43412894a 100644
---- a/package/inih/inih.mk
-+++ b/package/inih/inih.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INIH_VERSION = 55
-+INIH_VERSION = 56
- INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
- INIH_INSTALL_STAGING = YES
- INIH_LICENSE = BSD-3-Clause
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+PiBGcm9tOiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPg0K
+PiBTZW50OiBTdW5kYXksIERlY2VtYmVyIDExLCAyMDIyIDM6MjIgUE0NCj4gDQo+IE9uIFN1biwg
+MTEgRGVjIDIwMjIgMjE6NDE6MTEgKzAxMDANCj4gRnJhbsOnb2lzIFBlcnJhZCA8ZnJhbmNvaXMu
+cGVycmFkQGdhZHoub3JnPiB3cm90ZToNCj4gDQo+ID4gc2VlDQo+ID4NCj4gaHR0cHM6Ly9wYXRj
+aHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIyMTIxMTIwMzgyNi4z
+MTE3Nzg0LTEtZnJhbmNvaXMucGVycmFkQGdhZHoub3JnLw0KPiA+IHRoaXMgcGF0Y2ggZG9lcyB0
+aGlzIHJld29yay4NCj4gDQo+IFRoYW5rcywgYnV0IGl0IG5lZWRzIHRvIGJlIGludGVncmF0ZWQg
+aW4gYSB2OCBvZiB0aGUgcGF0Y2ggc2VyaWVzLg0KPiANCj4gVGhhbmtzIQ0KPiANCj4gVGhvbWFz
+DQoNClRoYW5rcyBmb3IgdGhlIGNvbW1lbnRzIFRob21hcyBhbmQgSSBhcG9sb2dpemUgZm9yIG5v
+dA0KY2F0Y2hpbmcgdGhlc2UgcG9pbnRzIGVhcmxpZXIuIFdlIGRpZCBidWlsZCBidXQgZGlkbid0
+IHJlYWQgdGhlDQpsb2cgbWVzc2FnZXMgb2J2aW91c2x5Lg0KDQpJIHdpbGwgcmV3b3JrIGFuZCBy
+ZXN1Ym1pdCB2OCBzaG9ydGx5Lg0KDQpCZXN0IFJlZ2FyZHMsDQpBbmFuZA0KDQpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
