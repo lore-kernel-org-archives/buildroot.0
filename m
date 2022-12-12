@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C89A7C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 19:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC8AC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 19:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50FD440469;
-	Mon, 12 Dec 2022 19:45:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50FD440469
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22F7381831;
+	Mon, 12 Dec 2022 19:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22F7381831
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NPuZeh9rTZ33; Mon, 12 Dec 2022 19:45:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hJbeTtHTg0Ac; Mon, 12 Dec 2022 19:47:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91BFF408A3;
-	Mon, 12 Dec 2022 19:45:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91BFF408A3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E42D817E4;
+	Mon, 12 Dec 2022 19:47:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E42D817E4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E2BE51BF868
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 19:45:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A148F1BF35E
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 19:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBABC60DCB
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 19:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBABC60DCB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8950F60E40
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 19:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8950F60E40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4aiPkRZHa_4l for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 19:45:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F132360D78
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 19:45:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F132360D78
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEB4586019; Mon, 12 Dec 2022 19:45:29 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 20:44:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3b31a39fdffbf738789885f6e318131055e4b9b
-X-Git-Newrev: d3d1d5a2dab19a954915c807e90ac74708b7e9ce
-X-Patchwork-Hint: ignore
-Message-Id: <20221212194529.DEB4586019@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] packaeg/libmbim: fix license files
+ with ESMTP id UkOI2S46xZQH for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 19:46:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 248B060E2A
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 248B060E2A
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 19:46:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ed9d:5312:e657:8b79])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id B73C12003D0;
+ Mon, 12 Dec 2022 20:46:51 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 12 Dec 2022 20:46:51 +0100
+Date: Mon, 12 Dec 2022 20:46:51 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221212194651.GA1807803@scaer>
+References: <20221212172724.4364-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221212172724.4364-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1670874416;
+ bh=lQ0To9MmeIL0TigG6lOzK3alxiDjWRENpt4ddbYtDiE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=W+Se8pDWk5TcXb1uWAoBvtOlQs7IMcP5j7+k0ZvJlb86HgrI/fxI7el6pLTmzQs7M
+ kLmUo1FZnGrxUlWD8kxp/l265ysyOFt1SgEtxSc1hQrdNINeaq3sxpTsG6XXKyAiBB
+ Q03cyRUXFIvthXxhKlVnl4OdKTSYSqLs3LRDT7Id5AfN2uLP6L/F0Dul0lAij7vbMc
+ cPqft3dErLEnXz6BS0EKHJcCHl9F2idtWGVgodOg1IIHvOV9bDihKgfnQyBknoH1wC
+ QmPKHg8++iJVAyP38mWAyQOAIs7jkjCufmW8DcEy/ljsevoPgoQXAbn2wSwo1371LI
+ WgxFRAVG7Kewg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=W+Se8pDW
+Subject: Re: [Buildroot] [PATCH 1/2] package/libmbim: fix license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +76,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3d1d5a2dab19a954915c807e90ac74708b7e9ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit i57bea338e95e49bf1f2405908462686306044825 forgot to update
-license files:
-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/bb3091e2c8d44caccfb868505a730a4ac5a48b44
-
-Fixes:
- - http://autobuild.buildroot.org/results/06cb9426d097657b669b7970994584592bac9868
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libmbim/libmbim.hash | 4 ++--
- package/libmbim/libmbim.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 2e2b46fcdb..8e7633cb94 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  cf74682c56f4c34ca4aee86de3b8c425a89fc2c0782052815295faf6a8e0a9fb  libmbim-1.28.2.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index e728cf58f9..59f55a57bc 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -7,7 +7,8 @@
- LIBMBIM_VERSION = 1.28.2
- LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
- LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
--LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
-+LIBMBIM_LICENSE_FILES = \
-+	LICENSES/GPL-2.0-or-later.txt LICENSES/LGPL-2.1-or-later.txt
- LIBMBIM_CPE_ID_VENDOR = freedesktop
- LIBMBIM_INSTALL_STAGING = YES
- 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmFicmljZSwgQWxsLAoKK1BldGVyIGZvciBiYWNrcG9ydHMKCk9uIDIwMjItMTItMTIgMTg6Mjcg
+KzAxMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5Ogo+IGxpYm1iaW0gbGlicmFyeSBp
+cyBsaWNlbnNlZCB1bmRlciBMR1BMLTIuMSsgc2luY2UgYXQgbGVhc3QgdmVyc2lvbiAxLjguMAo+
+IGFuZAo+IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9tb2JpbGUtYnJvYWRiYW5kL2xp
+Ym1iaW0vLS9jb21taXQvMjVjYzNlZDg4ZDI1YjE3YzE4ZmIzMmY0NmY5NmI1NjA4MzQzODdkMwo+
+IAo+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRoYW5rcyBmb3IgbWFraW5nIHRo
+YXQgYSBzZXBhcmF0ZSBwYXRjaCwgd2UgY2FuIGJhY2twb3J0IGl0IHRvIHN0YWJsZQpicmFuY2hl
+cyEg8J+RjQoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIHBhY2thZ2UvbGlibWJp
+bS9saWJtYmltLm1rIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJtYmltL2xpYm1iaW0ubWsg
+Yi9wYWNrYWdlL2xpYm1iaW0vbGlibWJpbS5tawo+IGluZGV4IDFjMTJiODIyOTguLmU3MjhjZjU4
+ZjkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJtYmltL2xpYm1iaW0ubWsKPiArKysgYi9wYWNr
+YWdlL2xpYm1iaW0vbGlibWJpbS5tawo+IEBAIC02LDcgKzYsNyBAQAo+ICAKPiAgTElCTUJJTV9W
+RVJTSU9OID0gMS4yOC4yCj4gIExJQk1CSU1fU0lURSA9IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNr
+dG9wLm9yZy9tb2JpbGUtYnJvYWRiYW5kL2xpYm1iaW0vLS9hcmNoaXZlLyQoTElCTUJJTV9WRVJT
+SU9OKQo+IC1MSUJNQklNX0xJQ0VOU0UgPSBMR1BMLTIuMCsgKGxpYnJhcnkpLCBHUEwtMi4wKyAo
+cHJvZ3JhbXMpCj4gK0xJQk1CSU1fTElDRU5TRSA9IExHUEwtMi4xKyAobGlicmFyeSksIEdQTC0y
+LjArIChwcm9ncmFtcykKPiAgTElCTUJJTV9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORyBDT1BZSU5H
+LkxJQgo+ICBMSUJNQklNX0NQRV9JRF9WRU5ET1IgPSBmcmVlZGVza3RvcAo+ICBMSUJNQklNX0lO
+U1RBTExfU1RBR0lORyA9IFlFUwo+IC0tIAo+IDIuMzUuMQo+IAo+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+
+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0t
+LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAg
+WWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwg
+RXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWdu
+ZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5
+OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhl
+cmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwg
+SFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
+LScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
