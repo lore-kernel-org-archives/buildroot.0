@@ -4,57 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C1F5C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 17:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A73EBC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 18:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6269415A3;
-	Mon, 12 Dec 2022 17:56:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6269415A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE9CD4049C;
+	Mon, 12 Dec 2022 18:06:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE9CD4049C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zRwxD6AHq5_O; Mon, 12 Dec 2022 17:56:58 +0000 (UTC)
+	with ESMTP id OcOKRwAZlzBS; Mon, 12 Dec 2022 18:06:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BAB1415A9;
-	Mon, 12 Dec 2022 17:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BAB1415A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DBC1408C5;
+	Mon, 12 Dec 2022 18:06:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DBC1408C5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA9771BF2AB
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:56:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1791BF364
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 18:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C32078134B
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 17:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C32078134B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47CA98135E
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 18:06:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47CA98135E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qxkDOBWgY9aG for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 17:56:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EC1B81342
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0EC1B81342
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:56:53 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C35F82000B;
- Mon, 12 Dec 2022 17:56:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p4n2n-00F69i-JG; Mon, 12 Dec 2022 18:56:49 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Frank Hunleth <fhunleth@troodon-software.com>
-References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
- <87359lytkg.fsf@dell.be.48ers.dk>
- <_Xy-l8Ny6TGT7WRiixo_CPZYHzdUIuGYexyAlFzMnPCN0loQWU_ydtPGjnGDOAPHohUUzztFqL1rbhYa5bVk7cO2NN6fK_cUPe8cL4MiTMo=@troodon-software.com>
-Date: Mon, 12 Dec 2022 18:56:49 +0100
-In-Reply-To: <_Xy-l8Ny6TGT7WRiixo_CPZYHzdUIuGYexyAlFzMnPCN0loQWU_ydtPGjnGDOAPHohUUzztFqL1rbhYa5bVk7cO2NN6fK_cUPe8cL4MiTMo=@troodon-software.com>
- (Frank Hunleth's message of "Mon, 12 Dec 2022 15:32:40 +0000")
-Message-ID: <87pmcoy07y.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ with ESMTP id h5ARQn0idpwg for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 18:05:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BB88135B
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 76BB88135B
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 18:05:57 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id h17so3765946ila.6
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 10:05:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fpPWaxeiIEwaOCEA7QjZu4BJ7wQlbWH0/UpHJ4rdg4M=;
+ b=3Q+wzSPEEOns+o7/TbHczelENXfxpS+xMB8DWVcMPX2pZdcddUM+tlsEvZHRiqEFxv
+ LpZ8H0S1eu9HcmFg7WK2juYtMVj1lEOjwLBZqXR/amHRj5FRBPZHfVaGQW2xozMTzH9t
+ WjqoMy3xMNT1RE++XaexlWnjglWeSMnff6WSgGFrq4wNCgq2n95FkQj+mxODMhZoD2CL
+ r5BQO+sSnMn7ahCxJbKBC7g59935FU47b5mNNEvjFp1gBKX2btllgq4B9oNF8XNIJhEW
+ VDlCmmGWGMiOFsQiQ7rHVvQGZYrp95tpBoy+7Oz/8QIQJHWgerD4orA0nzilzM4Q4muk
+ 3D5Q==
+X-Gm-Message-State: ANoB5pmQcS4u5y8QZSYrFKWCFsgzgsiFxo7cOkDZ0m3I6Ixd1esIUIcH
+ mBCm89G8tVCF6qlger6cjwWJKvlliUJhRQ==
+X-Google-Smtp-Source: AA0mqf6xKFptTqYSFMPjp+wvml0hxqe+0WcN3EAs2JK5hbI/2DcF976ver3/sUsT6GcT8EdB28wcsA==
+X-Received: by 2002:a05:6e02:1a4b:b0:302:b5d0:d090 with SMTP id
+ u11-20020a056e021a4b00b00302b5d0d090mr12973023ilv.25.1670868355052; 
+ Mon, 12 Dec 2022 10:05:55 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ h9-20020a056e020d4900b00300df8bfcf5sm339282ilj.14.2022.12.12.10.05.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 12 Dec 2022 10:05:54 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Dec 2022 11:05:45 -0700
+Message-Id: <20221212180545.3159689-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/5] configs/nezha_defconfig: bump versions
- for uboot, sbi and linux kernel
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fpPWaxeiIEwaOCEA7QjZu4BJ7wQlbWH0/UpHJ4rdg4M=;
+ b=iH7vjyMy4C2BTm9yvV4Zu5TZswSjLMho+aVX7n6HAI59chzLz4qwArjhTAOTljp2Hs
+ kvoa1aaf9apPIAyCmOrcMx/8dU5kE4GpnfSqzcIYKXVSoBUBGbZwNZKhFSv+dls7kA41
+ Aq20tMVoaY3KqOCmZ+J7b0O1aQDdqhY0b4ExsprNZd2GkwRL3+rr53oAbJmVluoO9oVh
+ udl11ZK8CzVu4qiC7eKEhKiVrzsXHrDpLe8py4lsQt+pmBxo44RJvKlC9WbhkSDT1UIg
+ Pmz6R4X0tqtUDXoH9P4NuevZHC0LwjYVV/h3zPsLAJkk1VH9dzsCkVtKJTgwHj5mXD5J
+ Cv2w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iH7vjyMy
+Subject: [Buildroot] [PATCH 1/1] package/bearssl: fix build with make
+ shuffle mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,149 +94,1290 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+The make targets in bearssl are missing the $(OBJDIR) target which
+causes build failures when using make with shuffle mode.
 
-Hi,
+Add a patch which adds the missing $(OBJDIR) targets.
 
- >> >>>>> "Indrek" == Indrek Kruusa indrek.kruusa@gmail.com writes:
- >> 
- >> > BR2_TARGET_OPENSBI=y
- >> 
- >> > BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
- >> 
- >> > -BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call
- >> > github,smaeul,opensbi,e6793dc36a71537023f078034fe795c64a9992a3)/opensbi-e6793dc36a71537023f078034fe795c64a9992a3.tar.gz"
- >> 
- >> > +BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call
- >> > github,smaeul,opensbi,5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3)/opensbi-5307908fb651a01cc6a2f3fd9fc7b9b471bbccb3.tar.gz"
- >> 
- >> 
- >> Why still use this custom opensbi? There is D1 support in version 1.1 as
- >> mentioned on https://linux-sunxi.org/Allwinner_Nezha
- >> 
+Fixes:
+Assembler messages:
+Fatal error: can't create build/obj/x509_minimal_full.o: No such file or directory
+make[2]: *** [mk/Rules.mk:1190: build/obj/x509_minimal_full.o] Error 1 shuffle=reverse
 
- > Just in case it helps, I've been testing both the Korsgaard and Kruusa
- > patches on a MangoPI MQ Pro. This board is close, but not exactly like
- > the Nezha, so I expect differences.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../0001-Fix-missing-objdir-dependency.patch  | 1252 +++++++++++++++++
+ 1 file changed, 1252 insertions(+)
+ create mode 100644 package/bearssl/0001-Fix-missing-objdir-dependency.patch
 
- > Using OpenSBI 1.1 results in a non-booting Linux kernel for me. Here's the error:
-
-Just to be sure, is this with the 5.19 based kernel we used to use
-(fe178cf0153d98b71cb01a46c8cc050826a17e77) or the "new" 6.1-rc3 based
-one (ca67838d84af4c9f85d06311c9e98e1adf46308f)?
-
-
- > Unhandled exception: Store/AMO access fault
- > EPC: 000000005ff8f838 RA: 000000005ffb6346 TVAL: 0000000040040000
- > EPC: 0000000042e01838 RA: 0000000042e28346 reloc adjusted
-
- > Code: b383 0385 be03 0405 be83 0485 bf03 0505 (e110)
-
-Sounds like access to an invalid address to me. When does this trigger?
-Early doing Linux boot?
-
-I see the mangopi mq-pro only has 512MB RAM. 0x5xxx.xxxx is at the very
-end of that (memory starts at 0x4xxx.xxxx), did you update the memory
-size in the device tree passed to OpenSBI?
-
-I just did a clean rebuild of nezha_defconfig here, and it boots without
-any issues:
-
-U-Boot SPL 2022.10 (Dec 12 2022 - 17:20:45 +0100)
-sunxi_ram_probe: dram-controller@3102000: probing
-DRAM only have internal ZQ!!
-ddr_efuse_type: 0x0
-[AUTO DEBUG] two rank and full DQ!
-ddr_efuse_type: 0x0
-[AUTO DEBUG] rank 0 row = 15
-[AUTO DEBUG] rank 0 bank = 8
-[AUTO DEBUG] rank 0 page size = 2 KB
-[AUTO DEBUG] rank 1 row = 15
-[AUTO DEBUG] rank 1 bank = 8
-[AUTO DEBUG] rank 1 page size = 2 KB
-rank1 config same as rank0
-DRAM BOOT DRIVE INFO: V0.24
-DRAM CLK = 792 MHz
-DRAM Type = 3 (2:DDR2,3:DDR3)
-DRAMC ZQ value: 0x7b7bfb
-DRAM ODT value: 0x42.
-ddr_efuse_type: 0x0
-DRAM SIZE =1024 M
-DRAM simple test OK.
-mxstatus=0xc0408000 mhcr=0x00000109 mcor=0x00000003 mhint=0x00004000
-Trying to boot from MMC1
-PLL reg = 0xf8216300, freq = 1200000000
-SPL size = 81920, sector = 160
-sunxi_ram_get_info: dram-controller@3102000: getting info
-
-OpenSBI v1.1
-   ____                    _____ ____ _____
-  / __ \                  / ____|  _ \_   _|
- | |  | |_ __   ___ _ __ | (___ | |_) || |
- | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
- | |__| | |_) |  __/ | | |____) | |_) || |_
-  \____/| .__/ \___|_| |_|_____/|____/_____|
-        | |
-        |_|
-
-Platform Name             : Allwinner D1 Nezha
-Platform Features         : medeleg
-Platform HART Count       : 1
-Platform IPI Device       : ---
-Platform Timer Device     : --- @ 0Hz
-Platform Console Device   : uart8250
-Platform HSM Device       : sun20i-d1-ppu
-Platform Reboot Device    : sunxi-wdt-reset
-Platform Shutdown Device  : ---
-Firmware Base             : 0x40000000
-Firmware Size             : 288 KB
-Runtime SBI Version       : 1.0
-
-Domain0 Name              : root
-Domain0 Boot HART         : 0
-Domain0 HARTs             : 0*
-Domain0 Region00          : 0x0000000040000000-0x000000004007ffff ()
-Domain0 Region01          : 0x0000000000000000-0xffffffffffffffff (R,W,X)
-Domain0 Next Address      : 0x0000000042e00000
-Domain0 Next Arg1         : 0x0000000042e8b978
-Domain0 Next Mode         : S-mode
-Domain0 SysReset          : yes
-
-Boot HART ID              : 0
-Boot HART Domain          : root
-Boot HART Priv Version    : v1.11
-Boot HART Base ISA        : rv64imafdcvx
-Boot HART ISA Extensions  : time
-Boot HART PMP Count       : 8
-Boot HART PMP Granularity : 2048
-Boot HART PMP Address Bits: 38
-Boot HART MHPM Count      : 0
-Boot HART MIDELEG         : 0x0000000000000222
-Boot HART MEDELEG         : 0x000000000000b109
-sunxi_set_gate: (CLK#24) unhandled
-
-
-U-Boot 2022.10 (Dec 12 2022 - 17:20:45 +0100) Allwinner Technology
-
-..
-
-Starting kernel ...
-
-[    0.000000] Linux version 6.1.0-rc3 (peko@dell) (riscv64-buildroot-linux-gnu-gcc.br_real (Buildroot 2022.11-477-g5cb74c92f7) 11.3.0, GNU ld (GNU Binutils) 2.38) #1 PREEMPT Mon Dec 12 17:28:21 CET 2022
-
-..
-
-# uptime
- 00:07:05 up 6 min,  load average: 0.00, 0.00, 0.00
-
+diff --git a/package/bearssl/0001-Fix-missing-objdir-dependency.patch b/package/bearssl/0001-Fix-missing-objdir-dependency.patch
+new file mode 100644
+index 0000000000..4d4d9ee705
+--- /dev/null
++++ b/package/bearssl/0001-Fix-missing-objdir-dependency.patch
+@@ -0,0 +1,1252 @@
++From 6fddb4056e0b8f72c2602ef82dcd973704354962 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Mon, 12 Dec 2022 10:12:58 -0700
++Subject: [PATCH] Fix missing objdir dependency.
++
++Make targets within $(OBJDIR) must depend on the $(OBJDIR)
++target.
++
++Fixes:
++Assembler messages:
++Fatal error: can't create build/obj/x509_minimal_full.o: No such file or directory
++make[2]: *** [mk/Rules.mk:1190: build/obj/x509_minimal_full.o] Error 1 shuffle=reverse
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Cc: Thomas Pornin <thomas.pornin@nccgroup.com>
++Cc: Thomas Pornin <pornin@bolet.org>
++[Upstream status: emailed patch to maintainer]
++---
++ mk/Rules.mk   | 594 +++++++++++++++++++++++++-------------------------
++ mk/mkrules.sh |   8 +-
++ 2 files changed, 301 insertions(+), 301 deletions(-)
++
++diff --git a/mk/Rules.mk b/mk/Rules.mk
++index b480bd6..a868977 100644
++--- a/mk/Rules.mk
+++++ b/mk/Rules.mk
++@@ -358,893 +358,893 @@ $(TESTSPEED): $(BEARSSLLIB) $(OBJTESTSPEED)
++ $(TESTX509): $(BEARSSLLIB) $(OBJTESTX509)
++ 	$(LD) $(LDFLAGS) $(LDOUT)$(TESTX509) $(OBJTESTX509) $(BEARSSLLIB)
++ 
++-$(OBJDIR)$Psettings$O: src$Psettings.c $(HEADERSPRIV)
+++$(OBJDIR)$Psettings$O: $(OBJDIR) src$Psettings.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psettings$O src$Psettings.c
++ 
++-$(OBJDIR)$Pccm$O: src$Paead$Pccm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pccm$O: $(OBJDIR) src$Paead$Pccm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pccm$O src$Paead$Pccm.c
++ 
++-$(OBJDIR)$Peax$O: src$Paead$Peax.c $(HEADERSPRIV)
+++$(OBJDIR)$Peax$O: $(OBJDIR) src$Paead$Peax.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Peax$O src$Paead$Peax.c
++ 
++-$(OBJDIR)$Pgcm$O: src$Paead$Pgcm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pgcm$O: $(OBJDIR) src$Paead$Pgcm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pgcm$O src$Paead$Pgcm.c
++ 
++-$(OBJDIR)$Pccopy$O: src$Pcodec$Pccopy.c $(HEADERSPRIV)
+++$(OBJDIR)$Pccopy$O: $(OBJDIR) src$Pcodec$Pccopy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pccopy$O src$Pcodec$Pccopy.c
++ 
++-$(OBJDIR)$Pdec16be$O: src$Pcodec$Pdec16be.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec16be$O: $(OBJDIR) src$Pcodec$Pdec16be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec16be$O src$Pcodec$Pdec16be.c
++ 
++-$(OBJDIR)$Pdec16le$O: src$Pcodec$Pdec16le.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec16le$O: $(OBJDIR) src$Pcodec$Pdec16le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec16le$O src$Pcodec$Pdec16le.c
++ 
++-$(OBJDIR)$Pdec32be$O: src$Pcodec$Pdec32be.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec32be$O: $(OBJDIR) src$Pcodec$Pdec32be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec32be$O src$Pcodec$Pdec32be.c
++ 
++-$(OBJDIR)$Pdec32le$O: src$Pcodec$Pdec32le.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec32le$O: $(OBJDIR) src$Pcodec$Pdec32le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec32le$O src$Pcodec$Pdec32le.c
++ 
++-$(OBJDIR)$Pdec64be$O: src$Pcodec$Pdec64be.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec64be$O: $(OBJDIR) src$Pcodec$Pdec64be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec64be$O src$Pcodec$Pdec64be.c
++ 
++-$(OBJDIR)$Pdec64le$O: src$Pcodec$Pdec64le.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdec64le$O: $(OBJDIR) src$Pcodec$Pdec64le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdec64le$O src$Pcodec$Pdec64le.c
++ 
++-$(OBJDIR)$Penc16be$O: src$Pcodec$Penc16be.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc16be$O: $(OBJDIR) src$Pcodec$Penc16be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc16be$O src$Pcodec$Penc16be.c
++ 
++-$(OBJDIR)$Penc16le$O: src$Pcodec$Penc16le.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc16le$O: $(OBJDIR) src$Pcodec$Penc16le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc16le$O src$Pcodec$Penc16le.c
++ 
++-$(OBJDIR)$Penc32be$O: src$Pcodec$Penc32be.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc32be$O: $(OBJDIR) src$Pcodec$Penc32be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc32be$O src$Pcodec$Penc32be.c
++ 
++-$(OBJDIR)$Penc32le$O: src$Pcodec$Penc32le.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc32le$O: $(OBJDIR) src$Pcodec$Penc32le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc32le$O src$Pcodec$Penc32le.c
++ 
++-$(OBJDIR)$Penc64be$O: src$Pcodec$Penc64be.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc64be$O: $(OBJDIR) src$Pcodec$Penc64be.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc64be$O src$Pcodec$Penc64be.c
++ 
++-$(OBJDIR)$Penc64le$O: src$Pcodec$Penc64le.c $(HEADERSPRIV)
+++$(OBJDIR)$Penc64le$O: $(OBJDIR) src$Pcodec$Penc64le.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Penc64le$O src$Pcodec$Penc64le.c
++ 
++-$(OBJDIR)$Ppemdec$O: src$Pcodec$Ppemdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppemdec$O: $(OBJDIR) src$Pcodec$Ppemdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppemdec$O src$Pcodec$Ppemdec.c
++ 
++-$(OBJDIR)$Ppemenc$O: src$Pcodec$Ppemenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppemenc$O: $(OBJDIR) src$Pcodec$Ppemenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppemenc$O src$Pcodec$Ppemenc.c
++ 
++-$(OBJDIR)$Pec_all_m15$O: src$Pec$Pec_all_m15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_all_m15$O: $(OBJDIR) src$Pec$Pec_all_m15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_all_m15$O src$Pec$Pec_all_m15.c
++ 
++-$(OBJDIR)$Pec_all_m31$O: src$Pec$Pec_all_m31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_all_m31$O: $(OBJDIR) src$Pec$Pec_all_m31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_all_m31$O src$Pec$Pec_all_m31.c
++ 
++-$(OBJDIR)$Pec_c25519_i15$O: src$Pec$Pec_c25519_i15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_c25519_i15$O: $(OBJDIR) src$Pec$Pec_c25519_i15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_c25519_i15$O src$Pec$Pec_c25519_i15.c
++ 
++-$(OBJDIR)$Pec_c25519_i31$O: src$Pec$Pec_c25519_i31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_c25519_i31$O: $(OBJDIR) src$Pec$Pec_c25519_i31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_c25519_i31$O src$Pec$Pec_c25519_i31.c
++ 
++-$(OBJDIR)$Pec_c25519_m15$O: src$Pec$Pec_c25519_m15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_c25519_m15$O: $(OBJDIR) src$Pec$Pec_c25519_m15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_c25519_m15$O src$Pec$Pec_c25519_m15.c
++ 
++-$(OBJDIR)$Pec_c25519_m31$O: src$Pec$Pec_c25519_m31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_c25519_m31$O: $(OBJDIR) src$Pec$Pec_c25519_m31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_c25519_m31$O src$Pec$Pec_c25519_m31.c
++ 
++-$(OBJDIR)$Pec_curve25519$O: src$Pec$Pec_curve25519.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_curve25519$O: $(OBJDIR) src$Pec$Pec_curve25519.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_curve25519$O src$Pec$Pec_curve25519.c
++ 
++-$(OBJDIR)$Pec_default$O: src$Pec$Pec_default.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_default$O: $(OBJDIR) src$Pec$Pec_default.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_default$O src$Pec$Pec_default.c
++ 
++-$(OBJDIR)$Pec_keygen$O: src$Pec$Pec_keygen.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_keygen$O: $(OBJDIR) src$Pec$Pec_keygen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_keygen$O src$Pec$Pec_keygen.c
++ 
++-$(OBJDIR)$Pec_p256_m15$O: src$Pec$Pec_p256_m15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_p256_m15$O: $(OBJDIR) src$Pec$Pec_p256_m15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_p256_m15$O src$Pec$Pec_p256_m15.c
++ 
++-$(OBJDIR)$Pec_p256_m31$O: src$Pec$Pec_p256_m31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_p256_m31$O: $(OBJDIR) src$Pec$Pec_p256_m31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_p256_m31$O src$Pec$Pec_p256_m31.c
++ 
++-$(OBJDIR)$Pec_prime_i15$O: src$Pec$Pec_prime_i15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_prime_i15$O: $(OBJDIR) src$Pec$Pec_prime_i15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_prime_i15$O src$Pec$Pec_prime_i15.c
++ 
++-$(OBJDIR)$Pec_prime_i31$O: src$Pec$Pec_prime_i31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_prime_i31$O: $(OBJDIR) src$Pec$Pec_prime_i31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_prime_i31$O src$Pec$Pec_prime_i31.c
++ 
++-$(OBJDIR)$Pec_pubkey$O: src$Pec$Pec_pubkey.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_pubkey$O: $(OBJDIR) src$Pec$Pec_pubkey.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_pubkey$O src$Pec$Pec_pubkey.c
++ 
++-$(OBJDIR)$Pec_secp256r1$O: src$Pec$Pec_secp256r1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_secp256r1$O: $(OBJDIR) src$Pec$Pec_secp256r1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_secp256r1$O src$Pec$Pec_secp256r1.c
++ 
++-$(OBJDIR)$Pec_secp384r1$O: src$Pec$Pec_secp384r1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_secp384r1$O: $(OBJDIR) src$Pec$Pec_secp384r1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_secp384r1$O src$Pec$Pec_secp384r1.c
++ 
++-$(OBJDIR)$Pec_secp521r1$O: src$Pec$Pec_secp521r1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pec_secp521r1$O: $(OBJDIR) src$Pec$Pec_secp521r1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pec_secp521r1$O src$Pec$Pec_secp521r1.c
++ 
++-$(OBJDIR)$Pecdsa_atr$O: src$Pec$Pecdsa_atr.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_atr$O: $(OBJDIR) src$Pec$Pecdsa_atr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_atr$O src$Pec$Pecdsa_atr.c
++ 
++-$(OBJDIR)$Pecdsa_default_sign_asn1$O: src$Pec$Pecdsa_default_sign_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_default_sign_asn1$O: $(OBJDIR) src$Pec$Pecdsa_default_sign_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_default_sign_asn1$O src$Pec$Pecdsa_default_sign_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_default_sign_raw$O: src$Pec$Pecdsa_default_sign_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_default_sign_raw$O: $(OBJDIR) src$Pec$Pecdsa_default_sign_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_default_sign_raw$O src$Pec$Pecdsa_default_sign_raw.c
++ 
++-$(OBJDIR)$Pecdsa_default_vrfy_asn1$O: src$Pec$Pecdsa_default_vrfy_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_default_vrfy_asn1$O: $(OBJDIR) src$Pec$Pecdsa_default_vrfy_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_default_vrfy_asn1$O src$Pec$Pecdsa_default_vrfy_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_default_vrfy_raw$O: src$Pec$Pecdsa_default_vrfy_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_default_vrfy_raw$O: $(OBJDIR) src$Pec$Pecdsa_default_vrfy_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_default_vrfy_raw$O src$Pec$Pecdsa_default_vrfy_raw.c
++ 
++-$(OBJDIR)$Pecdsa_i15_bits$O: src$Pec$Pecdsa_i15_bits.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i15_bits$O: $(OBJDIR) src$Pec$Pecdsa_i15_bits.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i15_bits$O src$Pec$Pecdsa_i15_bits.c
++ 
++-$(OBJDIR)$Pecdsa_i15_sign_asn1$O: src$Pec$Pecdsa_i15_sign_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i15_sign_asn1$O: $(OBJDIR) src$Pec$Pecdsa_i15_sign_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i15_sign_asn1$O src$Pec$Pecdsa_i15_sign_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_i15_sign_raw$O: src$Pec$Pecdsa_i15_sign_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i15_sign_raw$O: $(OBJDIR) src$Pec$Pecdsa_i15_sign_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i15_sign_raw$O src$Pec$Pecdsa_i15_sign_raw.c
++ 
++-$(OBJDIR)$Pecdsa_i15_vrfy_asn1$O: src$Pec$Pecdsa_i15_vrfy_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i15_vrfy_asn1$O: $(OBJDIR) src$Pec$Pecdsa_i15_vrfy_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i15_vrfy_asn1$O src$Pec$Pecdsa_i15_vrfy_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_i15_vrfy_raw$O: src$Pec$Pecdsa_i15_vrfy_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i15_vrfy_raw$O: $(OBJDIR) src$Pec$Pecdsa_i15_vrfy_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i15_vrfy_raw$O src$Pec$Pecdsa_i15_vrfy_raw.c
++ 
++-$(OBJDIR)$Pecdsa_i31_bits$O: src$Pec$Pecdsa_i31_bits.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i31_bits$O: $(OBJDIR) src$Pec$Pecdsa_i31_bits.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i31_bits$O src$Pec$Pecdsa_i31_bits.c
++ 
++-$(OBJDIR)$Pecdsa_i31_sign_asn1$O: src$Pec$Pecdsa_i31_sign_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i31_sign_asn1$O: $(OBJDIR) src$Pec$Pecdsa_i31_sign_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i31_sign_asn1$O src$Pec$Pecdsa_i31_sign_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_i31_sign_raw$O: src$Pec$Pecdsa_i31_sign_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i31_sign_raw$O: $(OBJDIR) src$Pec$Pecdsa_i31_sign_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i31_sign_raw$O src$Pec$Pecdsa_i31_sign_raw.c
++ 
++-$(OBJDIR)$Pecdsa_i31_vrfy_asn1$O: src$Pec$Pecdsa_i31_vrfy_asn1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i31_vrfy_asn1$O: $(OBJDIR) src$Pec$Pecdsa_i31_vrfy_asn1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i31_vrfy_asn1$O src$Pec$Pecdsa_i31_vrfy_asn1.c
++ 
++-$(OBJDIR)$Pecdsa_i31_vrfy_raw$O: src$Pec$Pecdsa_i31_vrfy_raw.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_i31_vrfy_raw$O: $(OBJDIR) src$Pec$Pecdsa_i31_vrfy_raw.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_i31_vrfy_raw$O src$Pec$Pecdsa_i31_vrfy_raw.c
++ 
++-$(OBJDIR)$Pecdsa_rta$O: src$Pec$Pecdsa_rta.c $(HEADERSPRIV)
+++$(OBJDIR)$Pecdsa_rta$O: $(OBJDIR) src$Pec$Pecdsa_rta.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pecdsa_rta$O src$Pec$Pecdsa_rta.c
++ 
++-$(OBJDIR)$Pdig_oid$O: src$Phash$Pdig_oid.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdig_oid$O: $(OBJDIR) src$Phash$Pdig_oid.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdig_oid$O src$Phash$Pdig_oid.c
++ 
++-$(OBJDIR)$Pdig_size$O: src$Phash$Pdig_size.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdig_size$O: $(OBJDIR) src$Phash$Pdig_size.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdig_size$O src$Phash$Pdig_size.c
++ 
++-$(OBJDIR)$Pghash_ctmul$O: src$Phash$Pghash_ctmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Pghash_ctmul$O: $(OBJDIR) src$Phash$Pghash_ctmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pghash_ctmul$O src$Phash$Pghash_ctmul.c
++ 
++-$(OBJDIR)$Pghash_ctmul32$O: src$Phash$Pghash_ctmul32.c $(HEADERSPRIV)
+++$(OBJDIR)$Pghash_ctmul32$O: $(OBJDIR) src$Phash$Pghash_ctmul32.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pghash_ctmul32$O src$Phash$Pghash_ctmul32.c
++ 
++-$(OBJDIR)$Pghash_ctmul64$O: src$Phash$Pghash_ctmul64.c $(HEADERSPRIV)
+++$(OBJDIR)$Pghash_ctmul64$O: $(OBJDIR) src$Phash$Pghash_ctmul64.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pghash_ctmul64$O src$Phash$Pghash_ctmul64.c
++ 
++-$(OBJDIR)$Pghash_pclmul$O: src$Phash$Pghash_pclmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Pghash_pclmul$O: $(OBJDIR) src$Phash$Pghash_pclmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pghash_pclmul$O src$Phash$Pghash_pclmul.c
++ 
++-$(OBJDIR)$Pghash_pwr8$O: src$Phash$Pghash_pwr8.c $(HEADERSPRIV)
+++$(OBJDIR)$Pghash_pwr8$O: $(OBJDIR) src$Phash$Pghash_pwr8.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pghash_pwr8$O src$Phash$Pghash_pwr8.c
++ 
++-$(OBJDIR)$Pmd5$O: src$Phash$Pmd5.c $(HEADERSPRIV)
+++$(OBJDIR)$Pmd5$O: $(OBJDIR) src$Phash$Pmd5.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pmd5$O src$Phash$Pmd5.c
++ 
++-$(OBJDIR)$Pmd5sha1$O: src$Phash$Pmd5sha1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pmd5sha1$O: $(OBJDIR) src$Phash$Pmd5sha1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pmd5sha1$O src$Phash$Pmd5sha1.c
++ 
++-$(OBJDIR)$Pmgf1$O: src$Phash$Pmgf1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pmgf1$O: $(OBJDIR) src$Phash$Pmgf1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pmgf1$O src$Phash$Pmgf1.c
++ 
++-$(OBJDIR)$Pmultihash$O: src$Phash$Pmultihash.c $(HEADERSPRIV)
+++$(OBJDIR)$Pmultihash$O: $(OBJDIR) src$Phash$Pmultihash.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pmultihash$O src$Phash$Pmultihash.c
++ 
++-$(OBJDIR)$Psha1$O: src$Phash$Psha1.c $(HEADERSPRIV)
+++$(OBJDIR)$Psha1$O: $(OBJDIR) src$Phash$Psha1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psha1$O src$Phash$Psha1.c
++ 
++-$(OBJDIR)$Psha2big$O: src$Phash$Psha2big.c $(HEADERSPRIV)
+++$(OBJDIR)$Psha2big$O: $(OBJDIR) src$Phash$Psha2big.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psha2big$O src$Phash$Psha2big.c
++ 
++-$(OBJDIR)$Psha2small$O: src$Phash$Psha2small.c $(HEADERSPRIV)
+++$(OBJDIR)$Psha2small$O: $(OBJDIR) src$Phash$Psha2small.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psha2small$O src$Phash$Psha2small.c
++ 
++-$(OBJDIR)$Pi15_add$O: src$Pint$Pi15_add.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_add$O: $(OBJDIR) src$Pint$Pi15_add.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_add$O src$Pint$Pi15_add.c
++ 
++-$(OBJDIR)$Pi15_bitlen$O: src$Pint$Pi15_bitlen.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_bitlen$O: $(OBJDIR) src$Pint$Pi15_bitlen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_bitlen$O src$Pint$Pi15_bitlen.c
++ 
++-$(OBJDIR)$Pi15_decmod$O: src$Pint$Pi15_decmod.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_decmod$O: $(OBJDIR) src$Pint$Pi15_decmod.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_decmod$O src$Pint$Pi15_decmod.c
++ 
++-$(OBJDIR)$Pi15_decode$O: src$Pint$Pi15_decode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_decode$O: $(OBJDIR) src$Pint$Pi15_decode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_decode$O src$Pint$Pi15_decode.c
++ 
++-$(OBJDIR)$Pi15_decred$O: src$Pint$Pi15_decred.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_decred$O: $(OBJDIR) src$Pint$Pi15_decred.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_decred$O src$Pint$Pi15_decred.c
++ 
++-$(OBJDIR)$Pi15_encode$O: src$Pint$Pi15_encode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_encode$O: $(OBJDIR) src$Pint$Pi15_encode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_encode$O src$Pint$Pi15_encode.c
++ 
++-$(OBJDIR)$Pi15_fmont$O: src$Pint$Pi15_fmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_fmont$O: $(OBJDIR) src$Pint$Pi15_fmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_fmont$O src$Pint$Pi15_fmont.c
++ 
++-$(OBJDIR)$Pi15_iszero$O: src$Pint$Pi15_iszero.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_iszero$O: $(OBJDIR) src$Pint$Pi15_iszero.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_iszero$O src$Pint$Pi15_iszero.c
++ 
++-$(OBJDIR)$Pi15_moddiv$O: src$Pint$Pi15_moddiv.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_moddiv$O: $(OBJDIR) src$Pint$Pi15_moddiv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_moddiv$O src$Pint$Pi15_moddiv.c
++ 
++-$(OBJDIR)$Pi15_modpow$O: src$Pint$Pi15_modpow.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_modpow$O: $(OBJDIR) src$Pint$Pi15_modpow.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_modpow$O src$Pint$Pi15_modpow.c
++ 
++-$(OBJDIR)$Pi15_modpow2$O: src$Pint$Pi15_modpow2.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_modpow2$O: $(OBJDIR) src$Pint$Pi15_modpow2.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_modpow2$O src$Pint$Pi15_modpow2.c
++ 
++-$(OBJDIR)$Pi15_montmul$O: src$Pint$Pi15_montmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_montmul$O: $(OBJDIR) src$Pint$Pi15_montmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_montmul$O src$Pint$Pi15_montmul.c
++ 
++-$(OBJDIR)$Pi15_mulacc$O: src$Pint$Pi15_mulacc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_mulacc$O: $(OBJDIR) src$Pint$Pi15_mulacc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_mulacc$O src$Pint$Pi15_mulacc.c
++ 
++-$(OBJDIR)$Pi15_muladd$O: src$Pint$Pi15_muladd.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_muladd$O: $(OBJDIR) src$Pint$Pi15_muladd.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_muladd$O src$Pint$Pi15_muladd.c
++ 
++-$(OBJDIR)$Pi15_ninv15$O: src$Pint$Pi15_ninv15.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_ninv15$O: $(OBJDIR) src$Pint$Pi15_ninv15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_ninv15$O src$Pint$Pi15_ninv15.c
++ 
++-$(OBJDIR)$Pi15_reduce$O: src$Pint$Pi15_reduce.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_reduce$O: $(OBJDIR) src$Pint$Pi15_reduce.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_reduce$O src$Pint$Pi15_reduce.c
++ 
++-$(OBJDIR)$Pi15_rshift$O: src$Pint$Pi15_rshift.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_rshift$O: $(OBJDIR) src$Pint$Pi15_rshift.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_rshift$O src$Pint$Pi15_rshift.c
++ 
++-$(OBJDIR)$Pi15_sub$O: src$Pint$Pi15_sub.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_sub$O: $(OBJDIR) src$Pint$Pi15_sub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_sub$O src$Pint$Pi15_sub.c
++ 
++-$(OBJDIR)$Pi15_tmont$O: src$Pint$Pi15_tmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi15_tmont$O: $(OBJDIR) src$Pint$Pi15_tmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi15_tmont$O src$Pint$Pi15_tmont.c
++ 
++-$(OBJDIR)$Pi31_add$O: src$Pint$Pi31_add.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_add$O: $(OBJDIR) src$Pint$Pi31_add.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_add$O src$Pint$Pi31_add.c
++ 
++-$(OBJDIR)$Pi31_bitlen$O: src$Pint$Pi31_bitlen.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_bitlen$O: $(OBJDIR) src$Pint$Pi31_bitlen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_bitlen$O src$Pint$Pi31_bitlen.c
++ 
++-$(OBJDIR)$Pi31_decmod$O: src$Pint$Pi31_decmod.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_decmod$O: $(OBJDIR) src$Pint$Pi31_decmod.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_decmod$O src$Pint$Pi31_decmod.c
++ 
++-$(OBJDIR)$Pi31_decode$O: src$Pint$Pi31_decode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_decode$O: $(OBJDIR) src$Pint$Pi31_decode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_decode$O src$Pint$Pi31_decode.c
++ 
++-$(OBJDIR)$Pi31_decred$O: src$Pint$Pi31_decred.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_decred$O: $(OBJDIR) src$Pint$Pi31_decred.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_decred$O src$Pint$Pi31_decred.c
++ 
++-$(OBJDIR)$Pi31_encode$O: src$Pint$Pi31_encode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_encode$O: $(OBJDIR) src$Pint$Pi31_encode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_encode$O src$Pint$Pi31_encode.c
++ 
++-$(OBJDIR)$Pi31_fmont$O: src$Pint$Pi31_fmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_fmont$O: $(OBJDIR) src$Pint$Pi31_fmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_fmont$O src$Pint$Pi31_fmont.c
++ 
++-$(OBJDIR)$Pi31_iszero$O: src$Pint$Pi31_iszero.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_iszero$O: $(OBJDIR) src$Pint$Pi31_iszero.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_iszero$O src$Pint$Pi31_iszero.c
++ 
++-$(OBJDIR)$Pi31_moddiv$O: src$Pint$Pi31_moddiv.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_moddiv$O: $(OBJDIR) src$Pint$Pi31_moddiv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_moddiv$O src$Pint$Pi31_moddiv.c
++ 
++-$(OBJDIR)$Pi31_modpow$O: src$Pint$Pi31_modpow.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_modpow$O: $(OBJDIR) src$Pint$Pi31_modpow.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_modpow$O src$Pint$Pi31_modpow.c
++ 
++-$(OBJDIR)$Pi31_modpow2$O: src$Pint$Pi31_modpow2.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_modpow2$O: $(OBJDIR) src$Pint$Pi31_modpow2.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_modpow2$O src$Pint$Pi31_modpow2.c
++ 
++-$(OBJDIR)$Pi31_montmul$O: src$Pint$Pi31_montmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_montmul$O: $(OBJDIR) src$Pint$Pi31_montmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_montmul$O src$Pint$Pi31_montmul.c
++ 
++-$(OBJDIR)$Pi31_mulacc$O: src$Pint$Pi31_mulacc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_mulacc$O: $(OBJDIR) src$Pint$Pi31_mulacc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_mulacc$O src$Pint$Pi31_mulacc.c
++ 
++-$(OBJDIR)$Pi31_muladd$O: src$Pint$Pi31_muladd.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_muladd$O: $(OBJDIR) src$Pint$Pi31_muladd.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_muladd$O src$Pint$Pi31_muladd.c
++ 
++-$(OBJDIR)$Pi31_ninv31$O: src$Pint$Pi31_ninv31.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_ninv31$O: $(OBJDIR) src$Pint$Pi31_ninv31.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_ninv31$O src$Pint$Pi31_ninv31.c
++ 
++-$(OBJDIR)$Pi31_reduce$O: src$Pint$Pi31_reduce.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_reduce$O: $(OBJDIR) src$Pint$Pi31_reduce.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_reduce$O src$Pint$Pi31_reduce.c
++ 
++-$(OBJDIR)$Pi31_rshift$O: src$Pint$Pi31_rshift.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_rshift$O: $(OBJDIR) src$Pint$Pi31_rshift.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_rshift$O src$Pint$Pi31_rshift.c
++ 
++-$(OBJDIR)$Pi31_sub$O: src$Pint$Pi31_sub.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_sub$O: $(OBJDIR) src$Pint$Pi31_sub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_sub$O src$Pint$Pi31_sub.c
++ 
++-$(OBJDIR)$Pi31_tmont$O: src$Pint$Pi31_tmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi31_tmont$O: $(OBJDIR) src$Pint$Pi31_tmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi31_tmont$O src$Pint$Pi31_tmont.c
++ 
++-$(OBJDIR)$Pi32_add$O: src$Pint$Pi32_add.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_add$O: $(OBJDIR) src$Pint$Pi32_add.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_add$O src$Pint$Pi32_add.c
++ 
++-$(OBJDIR)$Pi32_bitlen$O: src$Pint$Pi32_bitlen.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_bitlen$O: $(OBJDIR) src$Pint$Pi32_bitlen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_bitlen$O src$Pint$Pi32_bitlen.c
++ 
++-$(OBJDIR)$Pi32_decmod$O: src$Pint$Pi32_decmod.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_decmod$O: $(OBJDIR) src$Pint$Pi32_decmod.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_decmod$O src$Pint$Pi32_decmod.c
++ 
++-$(OBJDIR)$Pi32_decode$O: src$Pint$Pi32_decode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_decode$O: $(OBJDIR) src$Pint$Pi32_decode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_decode$O src$Pint$Pi32_decode.c
++ 
++-$(OBJDIR)$Pi32_decred$O: src$Pint$Pi32_decred.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_decred$O: $(OBJDIR) src$Pint$Pi32_decred.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_decred$O src$Pint$Pi32_decred.c
++ 
++-$(OBJDIR)$Pi32_div32$O: src$Pint$Pi32_div32.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_div32$O: $(OBJDIR) src$Pint$Pi32_div32.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_div32$O src$Pint$Pi32_div32.c
++ 
++-$(OBJDIR)$Pi32_encode$O: src$Pint$Pi32_encode.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_encode$O: $(OBJDIR) src$Pint$Pi32_encode.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_encode$O src$Pint$Pi32_encode.c
++ 
++-$(OBJDIR)$Pi32_fmont$O: src$Pint$Pi32_fmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_fmont$O: $(OBJDIR) src$Pint$Pi32_fmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_fmont$O src$Pint$Pi32_fmont.c
++ 
++-$(OBJDIR)$Pi32_iszero$O: src$Pint$Pi32_iszero.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_iszero$O: $(OBJDIR) src$Pint$Pi32_iszero.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_iszero$O src$Pint$Pi32_iszero.c
++ 
++-$(OBJDIR)$Pi32_modpow$O: src$Pint$Pi32_modpow.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_modpow$O: $(OBJDIR) src$Pint$Pi32_modpow.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_modpow$O src$Pint$Pi32_modpow.c
++ 
++-$(OBJDIR)$Pi32_montmul$O: src$Pint$Pi32_montmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_montmul$O: $(OBJDIR) src$Pint$Pi32_montmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_montmul$O src$Pint$Pi32_montmul.c
++ 
++-$(OBJDIR)$Pi32_mulacc$O: src$Pint$Pi32_mulacc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_mulacc$O: $(OBJDIR) src$Pint$Pi32_mulacc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_mulacc$O src$Pint$Pi32_mulacc.c
++ 
++-$(OBJDIR)$Pi32_muladd$O: src$Pint$Pi32_muladd.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_muladd$O: $(OBJDIR) src$Pint$Pi32_muladd.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_muladd$O src$Pint$Pi32_muladd.c
++ 
++-$(OBJDIR)$Pi32_ninv32$O: src$Pint$Pi32_ninv32.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_ninv32$O: $(OBJDIR) src$Pint$Pi32_ninv32.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_ninv32$O src$Pint$Pi32_ninv32.c
++ 
++-$(OBJDIR)$Pi32_reduce$O: src$Pint$Pi32_reduce.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_reduce$O: $(OBJDIR) src$Pint$Pi32_reduce.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_reduce$O src$Pint$Pi32_reduce.c
++ 
++-$(OBJDIR)$Pi32_sub$O: src$Pint$Pi32_sub.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_sub$O: $(OBJDIR) src$Pint$Pi32_sub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_sub$O src$Pint$Pi32_sub.c
++ 
++-$(OBJDIR)$Pi32_tmont$O: src$Pint$Pi32_tmont.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi32_tmont$O: $(OBJDIR) src$Pint$Pi32_tmont.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi32_tmont$O src$Pint$Pi32_tmont.c
++ 
++-$(OBJDIR)$Pi62_modpow2$O: src$Pint$Pi62_modpow2.c $(HEADERSPRIV)
+++$(OBJDIR)$Pi62_modpow2$O: $(OBJDIR) src$Pint$Pi62_modpow2.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pi62_modpow2$O src$Pint$Pi62_modpow2.c
++ 
++-$(OBJDIR)$Phkdf$O: src$Pkdf$Phkdf.c $(HEADERSPRIV)
+++$(OBJDIR)$Phkdf$O: $(OBJDIR) src$Pkdf$Phkdf.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Phkdf$O src$Pkdf$Phkdf.c
++ 
++-$(OBJDIR)$Phmac$O: src$Pmac$Phmac.c $(HEADERSPRIV)
+++$(OBJDIR)$Phmac$O: $(OBJDIR) src$Pmac$Phmac.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Phmac$O src$Pmac$Phmac.c
++ 
++-$(OBJDIR)$Phmac_ct$O: src$Pmac$Phmac_ct.c $(HEADERSPRIV)
+++$(OBJDIR)$Phmac_ct$O: $(OBJDIR) src$Pmac$Phmac_ct.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Phmac_ct$O src$Pmac$Phmac_ct.c
++ 
++-$(OBJDIR)$Paesctr_drbg$O: src$Prand$Paesctr_drbg.c $(HEADERSPRIV)
+++$(OBJDIR)$Paesctr_drbg$O: $(OBJDIR) src$Prand$Paesctr_drbg.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paesctr_drbg$O src$Prand$Paesctr_drbg.c
++ 
++-$(OBJDIR)$Phmac_drbg$O: src$Prand$Phmac_drbg.c $(HEADERSPRIV)
+++$(OBJDIR)$Phmac_drbg$O: $(OBJDIR) src$Prand$Phmac_drbg.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Phmac_drbg$O src$Prand$Phmac_drbg.c
++ 
++-$(OBJDIR)$Psysrng$O: src$Prand$Psysrng.c $(HEADERSPRIV)
+++$(OBJDIR)$Psysrng$O: $(OBJDIR) src$Prand$Psysrng.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psysrng$O src$Prand$Psysrng.c
++ 
++-$(OBJDIR)$Prsa_default_keygen$O: src$Prsa$Prsa_default_keygen.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_keygen$O: $(OBJDIR) src$Prsa$Prsa_default_keygen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_keygen$O src$Prsa$Prsa_default_keygen.c
++ 
++-$(OBJDIR)$Prsa_default_modulus$O: src$Prsa$Prsa_default_modulus.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_modulus$O: $(OBJDIR) src$Prsa$Prsa_default_modulus.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_modulus$O src$Prsa$Prsa_default_modulus.c
++ 
++-$(OBJDIR)$Prsa_default_oaep_decrypt$O: src$Prsa$Prsa_default_oaep_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_oaep_decrypt$O: $(OBJDIR) src$Prsa$Prsa_default_oaep_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_oaep_decrypt$O src$Prsa$Prsa_default_oaep_decrypt.c
++ 
++-$(OBJDIR)$Prsa_default_oaep_encrypt$O: src$Prsa$Prsa_default_oaep_encrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_oaep_encrypt$O: $(OBJDIR) src$Prsa$Prsa_default_oaep_encrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_oaep_encrypt$O src$Prsa$Prsa_default_oaep_encrypt.c
++ 
++-$(OBJDIR)$Prsa_default_pkcs1_sign$O: src$Prsa$Prsa_default_pkcs1_sign.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_pkcs1_sign$O: $(OBJDIR) src$Prsa$Prsa_default_pkcs1_sign.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_pkcs1_sign$O src$Prsa$Prsa_default_pkcs1_sign.c
++ 
++-$(OBJDIR)$Prsa_default_pkcs1_vrfy$O: src$Prsa$Prsa_default_pkcs1_vrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_pkcs1_vrfy$O: $(OBJDIR) src$Prsa$Prsa_default_pkcs1_vrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_pkcs1_vrfy$O src$Prsa$Prsa_default_pkcs1_vrfy.c
++ 
++-$(OBJDIR)$Prsa_default_priv$O: src$Prsa$Prsa_default_priv.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_priv$O: $(OBJDIR) src$Prsa$Prsa_default_priv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_priv$O src$Prsa$Prsa_default_priv.c
++ 
++-$(OBJDIR)$Prsa_default_privexp$O: src$Prsa$Prsa_default_privexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_privexp$O: $(OBJDIR) src$Prsa$Prsa_default_privexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_privexp$O src$Prsa$Prsa_default_privexp.c
++ 
++-$(OBJDIR)$Prsa_default_pub$O: src$Prsa$Prsa_default_pub.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_pub$O: $(OBJDIR) src$Prsa$Prsa_default_pub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_pub$O src$Prsa$Prsa_default_pub.c
++ 
++-$(OBJDIR)$Prsa_default_pubexp$O: src$Prsa$Prsa_default_pubexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_default_pubexp$O: $(OBJDIR) src$Prsa$Prsa_default_pubexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_default_pubexp$O src$Prsa$Prsa_default_pubexp.c
++ 
++-$(OBJDIR)$Prsa_i15_keygen$O: src$Prsa$Prsa_i15_keygen.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_keygen$O: $(OBJDIR) src$Prsa$Prsa_i15_keygen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_keygen$O src$Prsa$Prsa_i15_keygen.c
++ 
++-$(OBJDIR)$Prsa_i15_modulus$O: src$Prsa$Prsa_i15_modulus.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_modulus$O: $(OBJDIR) src$Prsa$Prsa_i15_modulus.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_modulus$O src$Prsa$Prsa_i15_modulus.c
++ 
++-$(OBJDIR)$Prsa_i15_oaep_decrypt$O: src$Prsa$Prsa_i15_oaep_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_oaep_decrypt$O: $(OBJDIR) src$Prsa$Prsa_i15_oaep_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_oaep_decrypt$O src$Prsa$Prsa_i15_oaep_decrypt.c
++ 
++-$(OBJDIR)$Prsa_i15_oaep_encrypt$O: src$Prsa$Prsa_i15_oaep_encrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_oaep_encrypt$O: $(OBJDIR) src$Prsa$Prsa_i15_oaep_encrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_oaep_encrypt$O src$Prsa$Prsa_i15_oaep_encrypt.c
++ 
++-$(OBJDIR)$Prsa_i15_pkcs1_sign$O: src$Prsa$Prsa_i15_pkcs1_sign.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_pkcs1_sign$O: $(OBJDIR) src$Prsa$Prsa_i15_pkcs1_sign.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_pkcs1_sign$O src$Prsa$Prsa_i15_pkcs1_sign.c
++ 
++-$(OBJDIR)$Prsa_i15_pkcs1_vrfy$O: src$Prsa$Prsa_i15_pkcs1_vrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_pkcs1_vrfy$O: $(OBJDIR) src$Prsa$Prsa_i15_pkcs1_vrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_pkcs1_vrfy$O src$Prsa$Prsa_i15_pkcs1_vrfy.c
++ 
++-$(OBJDIR)$Prsa_i15_priv$O: src$Prsa$Prsa_i15_priv.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_priv$O: $(OBJDIR) src$Prsa$Prsa_i15_priv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_priv$O src$Prsa$Prsa_i15_priv.c
++ 
++-$(OBJDIR)$Prsa_i15_privexp$O: src$Prsa$Prsa_i15_privexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_privexp$O: $(OBJDIR) src$Prsa$Prsa_i15_privexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_privexp$O src$Prsa$Prsa_i15_privexp.c
++ 
++-$(OBJDIR)$Prsa_i15_pub$O: src$Prsa$Prsa_i15_pub.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_pub$O: $(OBJDIR) src$Prsa$Prsa_i15_pub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_pub$O src$Prsa$Prsa_i15_pub.c
++ 
++-$(OBJDIR)$Prsa_i15_pubexp$O: src$Prsa$Prsa_i15_pubexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i15_pubexp$O: $(OBJDIR) src$Prsa$Prsa_i15_pubexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i15_pubexp$O src$Prsa$Prsa_i15_pubexp.c
++ 
++-$(OBJDIR)$Prsa_i31_keygen$O: src$Prsa$Prsa_i31_keygen.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_keygen$O: $(OBJDIR) src$Prsa$Prsa_i31_keygen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_keygen$O src$Prsa$Prsa_i31_keygen.c
++ 
++-$(OBJDIR)$Prsa_i31_keygen_inner$O: src$Prsa$Prsa_i31_keygen_inner.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_keygen_inner$O: $(OBJDIR) src$Prsa$Prsa_i31_keygen_inner.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_keygen_inner$O src$Prsa$Prsa_i31_keygen_inner.c
++ 
++-$(OBJDIR)$Prsa_i31_modulus$O: src$Prsa$Prsa_i31_modulus.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_modulus$O: $(OBJDIR) src$Prsa$Prsa_i31_modulus.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_modulus$O src$Prsa$Prsa_i31_modulus.c
++ 
++-$(OBJDIR)$Prsa_i31_oaep_decrypt$O: src$Prsa$Prsa_i31_oaep_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_oaep_decrypt$O: $(OBJDIR) src$Prsa$Prsa_i31_oaep_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_oaep_decrypt$O src$Prsa$Prsa_i31_oaep_decrypt.c
++ 
++-$(OBJDIR)$Prsa_i31_oaep_encrypt$O: src$Prsa$Prsa_i31_oaep_encrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_oaep_encrypt$O: $(OBJDIR) src$Prsa$Prsa_i31_oaep_encrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_oaep_encrypt$O src$Prsa$Prsa_i31_oaep_encrypt.c
++ 
++-$(OBJDIR)$Prsa_i31_pkcs1_sign$O: src$Prsa$Prsa_i31_pkcs1_sign.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_pkcs1_sign$O: $(OBJDIR) src$Prsa$Prsa_i31_pkcs1_sign.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_pkcs1_sign$O src$Prsa$Prsa_i31_pkcs1_sign.c
++ 
++-$(OBJDIR)$Prsa_i31_pkcs1_vrfy$O: src$Prsa$Prsa_i31_pkcs1_vrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_pkcs1_vrfy$O: $(OBJDIR) src$Prsa$Prsa_i31_pkcs1_vrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_pkcs1_vrfy$O src$Prsa$Prsa_i31_pkcs1_vrfy.c
++ 
++-$(OBJDIR)$Prsa_i31_priv$O: src$Prsa$Prsa_i31_priv.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_priv$O: $(OBJDIR) src$Prsa$Prsa_i31_priv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_priv$O src$Prsa$Prsa_i31_priv.c
++ 
++-$(OBJDIR)$Prsa_i31_privexp$O: src$Prsa$Prsa_i31_privexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_privexp$O: $(OBJDIR) src$Prsa$Prsa_i31_privexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_privexp$O src$Prsa$Prsa_i31_privexp.c
++ 
++-$(OBJDIR)$Prsa_i31_pub$O: src$Prsa$Prsa_i31_pub.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_pub$O: $(OBJDIR) src$Prsa$Prsa_i31_pub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_pub$O src$Prsa$Prsa_i31_pub.c
++ 
++-$(OBJDIR)$Prsa_i31_pubexp$O: src$Prsa$Prsa_i31_pubexp.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i31_pubexp$O: $(OBJDIR) src$Prsa$Prsa_i31_pubexp.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i31_pubexp$O src$Prsa$Prsa_i31_pubexp.c
++ 
++-$(OBJDIR)$Prsa_i32_oaep_decrypt$O: src$Prsa$Prsa_i32_oaep_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_oaep_decrypt$O: $(OBJDIR) src$Prsa$Prsa_i32_oaep_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_oaep_decrypt$O src$Prsa$Prsa_i32_oaep_decrypt.c
++ 
++-$(OBJDIR)$Prsa_i32_oaep_encrypt$O: src$Prsa$Prsa_i32_oaep_encrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_oaep_encrypt$O: $(OBJDIR) src$Prsa$Prsa_i32_oaep_encrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_oaep_encrypt$O src$Prsa$Prsa_i32_oaep_encrypt.c
++ 
++-$(OBJDIR)$Prsa_i32_pkcs1_sign$O: src$Prsa$Prsa_i32_pkcs1_sign.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_pkcs1_sign$O: $(OBJDIR) src$Prsa$Prsa_i32_pkcs1_sign.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_pkcs1_sign$O src$Prsa$Prsa_i32_pkcs1_sign.c
++ 
++-$(OBJDIR)$Prsa_i32_pkcs1_vrfy$O: src$Prsa$Prsa_i32_pkcs1_vrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_pkcs1_vrfy$O: $(OBJDIR) src$Prsa$Prsa_i32_pkcs1_vrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_pkcs1_vrfy$O src$Prsa$Prsa_i32_pkcs1_vrfy.c
++ 
++-$(OBJDIR)$Prsa_i32_priv$O: src$Prsa$Prsa_i32_priv.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_priv$O: $(OBJDIR) src$Prsa$Prsa_i32_priv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_priv$O src$Prsa$Prsa_i32_priv.c
++ 
++-$(OBJDIR)$Prsa_i32_pub$O: src$Prsa$Prsa_i32_pub.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i32_pub$O: $(OBJDIR) src$Prsa$Prsa_i32_pub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i32_pub$O src$Prsa$Prsa_i32_pub.c
++ 
++-$(OBJDIR)$Prsa_i62_keygen$O: src$Prsa$Prsa_i62_keygen.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_keygen$O: $(OBJDIR) src$Prsa$Prsa_i62_keygen.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_keygen$O src$Prsa$Prsa_i62_keygen.c
++ 
++-$(OBJDIR)$Prsa_i62_oaep_decrypt$O: src$Prsa$Prsa_i62_oaep_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_oaep_decrypt$O: $(OBJDIR) src$Prsa$Prsa_i62_oaep_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_oaep_decrypt$O src$Prsa$Prsa_i62_oaep_decrypt.c
++ 
++-$(OBJDIR)$Prsa_i62_oaep_encrypt$O: src$Prsa$Prsa_i62_oaep_encrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_oaep_encrypt$O: $(OBJDIR) src$Prsa$Prsa_i62_oaep_encrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_oaep_encrypt$O src$Prsa$Prsa_i62_oaep_encrypt.c
++ 
++-$(OBJDIR)$Prsa_i62_pkcs1_sign$O: src$Prsa$Prsa_i62_pkcs1_sign.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_pkcs1_sign$O: $(OBJDIR) src$Prsa$Prsa_i62_pkcs1_sign.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_pkcs1_sign$O src$Prsa$Prsa_i62_pkcs1_sign.c
++ 
++-$(OBJDIR)$Prsa_i62_pkcs1_vrfy$O: src$Prsa$Prsa_i62_pkcs1_vrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_pkcs1_vrfy$O: $(OBJDIR) src$Prsa$Prsa_i62_pkcs1_vrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_pkcs1_vrfy$O src$Prsa$Prsa_i62_pkcs1_vrfy.c
++ 
++-$(OBJDIR)$Prsa_i62_priv$O: src$Prsa$Prsa_i62_priv.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_priv$O: $(OBJDIR) src$Prsa$Prsa_i62_priv.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_priv$O src$Prsa$Prsa_i62_priv.c
++ 
++-$(OBJDIR)$Prsa_i62_pub$O: src$Prsa$Prsa_i62_pub.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_i62_pub$O: $(OBJDIR) src$Prsa$Prsa_i62_pub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_i62_pub$O src$Prsa$Prsa_i62_pub.c
++ 
++-$(OBJDIR)$Prsa_oaep_pad$O: src$Prsa$Prsa_oaep_pad.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_oaep_pad$O: $(OBJDIR) src$Prsa$Prsa_oaep_pad.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_oaep_pad$O src$Prsa$Prsa_oaep_pad.c
++ 
++-$(OBJDIR)$Prsa_oaep_unpad$O: src$Prsa$Prsa_oaep_unpad.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_oaep_unpad$O: $(OBJDIR) src$Prsa$Prsa_oaep_unpad.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_oaep_unpad$O src$Prsa$Prsa_oaep_unpad.c
++ 
++-$(OBJDIR)$Prsa_pkcs1_sig_pad$O: src$Prsa$Prsa_pkcs1_sig_pad.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_pkcs1_sig_pad$O: $(OBJDIR) src$Prsa$Prsa_pkcs1_sig_pad.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_pkcs1_sig_pad$O src$Prsa$Prsa_pkcs1_sig_pad.c
++ 
++-$(OBJDIR)$Prsa_pkcs1_sig_unpad$O: src$Prsa$Prsa_pkcs1_sig_unpad.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_pkcs1_sig_unpad$O: $(OBJDIR) src$Prsa$Prsa_pkcs1_sig_unpad.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_pkcs1_sig_unpad$O src$Prsa$Prsa_pkcs1_sig_unpad.c
++ 
++-$(OBJDIR)$Prsa_ssl_decrypt$O: src$Prsa$Prsa_ssl_decrypt.c $(HEADERSPRIV)
+++$(OBJDIR)$Prsa_ssl_decrypt$O: $(OBJDIR) src$Prsa$Prsa_ssl_decrypt.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Prsa_ssl_decrypt$O src$Prsa$Prsa_ssl_decrypt.c
++ 
++-$(OBJDIR)$Pprf$O: src$Pssl$Pprf.c $(HEADERSPRIV)
+++$(OBJDIR)$Pprf$O: $(OBJDIR) src$Pssl$Pprf.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pprf$O src$Pssl$Pprf.c
++ 
++-$(OBJDIR)$Pprf_md5sha1$O: src$Pssl$Pprf_md5sha1.c $(HEADERSPRIV)
+++$(OBJDIR)$Pprf_md5sha1$O: $(OBJDIR) src$Pssl$Pprf_md5sha1.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pprf_md5sha1$O src$Pssl$Pprf_md5sha1.c
++ 
++-$(OBJDIR)$Pprf_sha256$O: src$Pssl$Pprf_sha256.c $(HEADERSPRIV)
+++$(OBJDIR)$Pprf_sha256$O: $(OBJDIR) src$Pssl$Pprf_sha256.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pprf_sha256$O src$Pssl$Pprf_sha256.c
++ 
++-$(OBJDIR)$Pprf_sha384$O: src$Pssl$Pprf_sha384.c $(HEADERSPRIV)
+++$(OBJDIR)$Pprf_sha384$O: $(OBJDIR) src$Pssl$Pprf_sha384.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pprf_sha384$O src$Pssl$Pprf_sha384.c
++ 
++-$(OBJDIR)$Pssl_ccert_single_ec$O: src$Pssl$Pssl_ccert_single_ec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_ccert_single_ec$O: $(OBJDIR) src$Pssl$Pssl_ccert_single_ec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_ccert_single_ec$O src$Pssl$Pssl_ccert_single_ec.c
++ 
++-$(OBJDIR)$Pssl_ccert_single_rsa$O: src$Pssl$Pssl_ccert_single_rsa.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_ccert_single_rsa$O: $(OBJDIR) src$Pssl$Pssl_ccert_single_rsa.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_ccert_single_rsa$O src$Pssl$Pssl_ccert_single_rsa.c
++ 
++-$(OBJDIR)$Pssl_client$O: src$Pssl$Pssl_client.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_client$O: $(OBJDIR) src$Pssl$Pssl_client.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_client$O src$Pssl$Pssl_client.c
++ 
++-$(OBJDIR)$Pssl_client_default_rsapub$O: src$Pssl$Pssl_client_default_rsapub.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_client_default_rsapub$O: $(OBJDIR) src$Pssl$Pssl_client_default_rsapub.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_client_default_rsapub$O src$Pssl$Pssl_client_default_rsapub.c
++ 
++-$(OBJDIR)$Pssl_client_full$O: src$Pssl$Pssl_client_full.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_client_full$O: $(OBJDIR) src$Pssl$Pssl_client_full.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_client_full$O src$Pssl$Pssl_client_full.c
++ 
++-$(OBJDIR)$Pssl_engine$O: src$Pssl$Pssl_engine.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine$O: $(OBJDIR) src$Pssl$Pssl_engine.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine$O src$Pssl$Pssl_engine.c
++ 
++-$(OBJDIR)$Pssl_engine_default_aescbc$O: src$Pssl$Pssl_engine_default_aescbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_aescbc$O: $(OBJDIR) src$Pssl$Pssl_engine_default_aescbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_aescbc$O src$Pssl$Pssl_engine_default_aescbc.c
++ 
++-$(OBJDIR)$Pssl_engine_default_aesccm$O: src$Pssl$Pssl_engine_default_aesccm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_aesccm$O: $(OBJDIR) src$Pssl$Pssl_engine_default_aesccm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_aesccm$O src$Pssl$Pssl_engine_default_aesccm.c
++ 
++-$(OBJDIR)$Pssl_engine_default_aesgcm$O: src$Pssl$Pssl_engine_default_aesgcm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_aesgcm$O: $(OBJDIR) src$Pssl$Pssl_engine_default_aesgcm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_aesgcm$O src$Pssl$Pssl_engine_default_aesgcm.c
++ 
++-$(OBJDIR)$Pssl_engine_default_chapol$O: src$Pssl$Pssl_engine_default_chapol.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_chapol$O: $(OBJDIR) src$Pssl$Pssl_engine_default_chapol.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_chapol$O src$Pssl$Pssl_engine_default_chapol.c
++ 
++-$(OBJDIR)$Pssl_engine_default_descbc$O: src$Pssl$Pssl_engine_default_descbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_descbc$O: $(OBJDIR) src$Pssl$Pssl_engine_default_descbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_descbc$O src$Pssl$Pssl_engine_default_descbc.c
++ 
++-$(OBJDIR)$Pssl_engine_default_ec$O: src$Pssl$Pssl_engine_default_ec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_ec$O: $(OBJDIR) src$Pssl$Pssl_engine_default_ec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_ec$O src$Pssl$Pssl_engine_default_ec.c
++ 
++-$(OBJDIR)$Pssl_engine_default_ecdsa$O: src$Pssl$Pssl_engine_default_ecdsa.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_ecdsa$O: $(OBJDIR) src$Pssl$Pssl_engine_default_ecdsa.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_ecdsa$O src$Pssl$Pssl_engine_default_ecdsa.c
++ 
++-$(OBJDIR)$Pssl_engine_default_rsavrfy$O: src$Pssl$Pssl_engine_default_rsavrfy.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_engine_default_rsavrfy$O: $(OBJDIR) src$Pssl$Pssl_engine_default_rsavrfy.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_engine_default_rsavrfy$O src$Pssl$Pssl_engine_default_rsavrfy.c
++ 
++-$(OBJDIR)$Pssl_hashes$O: src$Pssl$Pssl_hashes.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_hashes$O: $(OBJDIR) src$Pssl$Pssl_hashes.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_hashes$O src$Pssl$Pssl_hashes.c
++ 
++-$(OBJDIR)$Pssl_hs_client$O: src$Pssl$Pssl_hs_client.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_hs_client$O: $(OBJDIR) src$Pssl$Pssl_hs_client.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_hs_client$O src$Pssl$Pssl_hs_client.c
++ 
++-$(OBJDIR)$Pssl_hs_server$O: src$Pssl$Pssl_hs_server.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_hs_server$O: $(OBJDIR) src$Pssl$Pssl_hs_server.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_hs_server$O src$Pssl$Pssl_hs_server.c
++ 
++-$(OBJDIR)$Pssl_io$O: src$Pssl$Pssl_io.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_io$O: $(OBJDIR) src$Pssl$Pssl_io.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_io$O src$Pssl$Pssl_io.c
++ 
++-$(OBJDIR)$Pssl_keyexport$O: src$Pssl$Pssl_keyexport.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_keyexport$O: $(OBJDIR) src$Pssl$Pssl_keyexport.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_keyexport$O src$Pssl$Pssl_keyexport.c
++ 
++-$(OBJDIR)$Pssl_lru$O: src$Pssl$Pssl_lru.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_lru$O: $(OBJDIR) src$Pssl$Pssl_lru.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_lru$O src$Pssl$Pssl_lru.c
++ 
++-$(OBJDIR)$Pssl_rec_cbc$O: src$Pssl$Pssl_rec_cbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_rec_cbc$O: $(OBJDIR) src$Pssl$Pssl_rec_cbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_rec_cbc$O src$Pssl$Pssl_rec_cbc.c
++ 
++-$(OBJDIR)$Pssl_rec_ccm$O: src$Pssl$Pssl_rec_ccm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_rec_ccm$O: $(OBJDIR) src$Pssl$Pssl_rec_ccm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_rec_ccm$O src$Pssl$Pssl_rec_ccm.c
++ 
++-$(OBJDIR)$Pssl_rec_chapol$O: src$Pssl$Pssl_rec_chapol.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_rec_chapol$O: $(OBJDIR) src$Pssl$Pssl_rec_chapol.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_rec_chapol$O src$Pssl$Pssl_rec_chapol.c
++ 
++-$(OBJDIR)$Pssl_rec_gcm$O: src$Pssl$Pssl_rec_gcm.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_rec_gcm$O: $(OBJDIR) src$Pssl$Pssl_rec_gcm.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_rec_gcm$O src$Pssl$Pssl_rec_gcm.c
++ 
++-$(OBJDIR)$Pssl_scert_single_ec$O: src$Pssl$Pssl_scert_single_ec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_scert_single_ec$O: $(OBJDIR) src$Pssl$Pssl_scert_single_ec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_scert_single_ec$O src$Pssl$Pssl_scert_single_ec.c
++ 
++-$(OBJDIR)$Pssl_scert_single_rsa$O: src$Pssl$Pssl_scert_single_rsa.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_scert_single_rsa$O: $(OBJDIR) src$Pssl$Pssl_scert_single_rsa.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_scert_single_rsa$O src$Pssl$Pssl_scert_single_rsa.c
++ 
++-$(OBJDIR)$Pssl_server$O: src$Pssl$Pssl_server.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server$O: $(OBJDIR) src$Pssl$Pssl_server.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server$O src$Pssl$Pssl_server.c
++ 
++-$(OBJDIR)$Pssl_server_full_ec$O: src$Pssl$Pssl_server_full_ec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_full_ec$O: $(OBJDIR) src$Pssl$Pssl_server_full_ec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_full_ec$O src$Pssl$Pssl_server_full_ec.c
++ 
++-$(OBJDIR)$Pssl_server_full_rsa$O: src$Pssl$Pssl_server_full_rsa.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_full_rsa$O: $(OBJDIR) src$Pssl$Pssl_server_full_rsa.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_full_rsa$O src$Pssl$Pssl_server_full_rsa.c
++ 
++-$(OBJDIR)$Pssl_server_mine2c$O: src$Pssl$Pssl_server_mine2c.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_mine2c$O: $(OBJDIR) src$Pssl$Pssl_server_mine2c.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_mine2c$O src$Pssl$Pssl_server_mine2c.c
++ 
++-$(OBJDIR)$Pssl_server_mine2g$O: src$Pssl$Pssl_server_mine2g.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_mine2g$O: $(OBJDIR) src$Pssl$Pssl_server_mine2g.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_mine2g$O src$Pssl$Pssl_server_mine2g.c
++ 
++-$(OBJDIR)$Pssl_server_minf2c$O: src$Pssl$Pssl_server_minf2c.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_minf2c$O: $(OBJDIR) src$Pssl$Pssl_server_minf2c.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_minf2c$O src$Pssl$Pssl_server_minf2c.c
++ 
++-$(OBJDIR)$Pssl_server_minf2g$O: src$Pssl$Pssl_server_minf2g.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_minf2g$O: $(OBJDIR) src$Pssl$Pssl_server_minf2g.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_minf2g$O src$Pssl$Pssl_server_minf2g.c
++ 
++-$(OBJDIR)$Pssl_server_minr2g$O: src$Pssl$Pssl_server_minr2g.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_minr2g$O: $(OBJDIR) src$Pssl$Pssl_server_minr2g.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_minr2g$O src$Pssl$Pssl_server_minr2g.c
++ 
++-$(OBJDIR)$Pssl_server_minu2g$O: src$Pssl$Pssl_server_minu2g.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_minu2g$O: $(OBJDIR) src$Pssl$Pssl_server_minu2g.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_minu2g$O src$Pssl$Pssl_server_minu2g.c
++ 
++-$(OBJDIR)$Pssl_server_minv2g$O: src$Pssl$Pssl_server_minv2g.c $(HEADERSPRIV)
+++$(OBJDIR)$Pssl_server_minv2g$O: $(OBJDIR) src$Pssl$Pssl_server_minv2g.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pssl_server_minv2g$O src$Pssl$Pssl_server_minv2g.c
++ 
++-$(OBJDIR)$Paes_big_cbcdec$O: src$Psymcipher$Paes_big_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_big_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_cbcdec$O src$Psymcipher$Paes_big_cbcdec.c
++ 
++-$(OBJDIR)$Paes_big_cbcenc$O: src$Psymcipher$Paes_big_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_big_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_cbcenc$O src$Psymcipher$Paes_big_cbcenc.c
++ 
++-$(OBJDIR)$Paes_big_ctr$O: src$Psymcipher$Paes_big_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_ctr$O: $(OBJDIR) src$Psymcipher$Paes_big_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_ctr$O src$Psymcipher$Paes_big_ctr.c
++ 
++-$(OBJDIR)$Paes_big_ctrcbc$O: src$Psymcipher$Paes_big_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_big_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_ctrcbc$O src$Psymcipher$Paes_big_ctrcbc.c
++ 
++-$(OBJDIR)$Paes_big_dec$O: src$Psymcipher$Paes_big_dec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_dec$O: $(OBJDIR) src$Psymcipher$Paes_big_dec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_dec$O src$Psymcipher$Paes_big_dec.c
++ 
++-$(OBJDIR)$Paes_big_enc$O: src$Psymcipher$Paes_big_enc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_big_enc$O: $(OBJDIR) src$Psymcipher$Paes_big_enc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_big_enc$O src$Psymcipher$Paes_big_enc.c
++ 
++-$(OBJDIR)$Paes_common$O: src$Psymcipher$Paes_common.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_common$O: $(OBJDIR) src$Psymcipher$Paes_common.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_common$O src$Psymcipher$Paes_common.c
++ 
++-$(OBJDIR)$Paes_ct$O: src$Psymcipher$Paes_ct.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct$O: $(OBJDIR) src$Psymcipher$Paes_ct.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct$O src$Psymcipher$Paes_ct.c
++ 
++-$(OBJDIR)$Paes_ct64$O: src$Psymcipher$Paes_ct64.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64$O: $(OBJDIR) src$Psymcipher$Paes_ct64.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64$O src$Psymcipher$Paes_ct64.c
++ 
++-$(OBJDIR)$Paes_ct64_cbcdec$O: src$Psymcipher$Paes_ct64_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_ct64_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_cbcdec$O src$Psymcipher$Paes_ct64_cbcdec.c
++ 
++-$(OBJDIR)$Paes_ct64_cbcenc$O: src$Psymcipher$Paes_ct64_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_ct64_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_cbcenc$O src$Psymcipher$Paes_ct64_cbcenc.c
++ 
++-$(OBJDIR)$Paes_ct64_ctr$O: src$Psymcipher$Paes_ct64_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_ctr$O: $(OBJDIR) src$Psymcipher$Paes_ct64_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_ctr$O src$Psymcipher$Paes_ct64_ctr.c
++ 
++-$(OBJDIR)$Paes_ct64_ctrcbc$O: src$Psymcipher$Paes_ct64_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_ct64_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_ctrcbc$O src$Psymcipher$Paes_ct64_ctrcbc.c
++ 
++-$(OBJDIR)$Paes_ct64_dec$O: src$Psymcipher$Paes_ct64_dec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_dec$O: $(OBJDIR) src$Psymcipher$Paes_ct64_dec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_dec$O src$Psymcipher$Paes_ct64_dec.c
++ 
++-$(OBJDIR)$Paes_ct64_enc$O: src$Psymcipher$Paes_ct64_enc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct64_enc$O: $(OBJDIR) src$Psymcipher$Paes_ct64_enc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct64_enc$O src$Psymcipher$Paes_ct64_enc.c
++ 
++-$(OBJDIR)$Paes_ct_cbcdec$O: src$Psymcipher$Paes_ct_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_ct_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_cbcdec$O src$Psymcipher$Paes_ct_cbcdec.c
++ 
++-$(OBJDIR)$Paes_ct_cbcenc$O: src$Psymcipher$Paes_ct_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_ct_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_cbcenc$O src$Psymcipher$Paes_ct_cbcenc.c
++ 
++-$(OBJDIR)$Paes_ct_ctr$O: src$Psymcipher$Paes_ct_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_ctr$O: $(OBJDIR) src$Psymcipher$Paes_ct_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_ctr$O src$Psymcipher$Paes_ct_ctr.c
++ 
++-$(OBJDIR)$Paes_ct_ctrcbc$O: src$Psymcipher$Paes_ct_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_ct_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_ctrcbc$O src$Psymcipher$Paes_ct_ctrcbc.c
++ 
++-$(OBJDIR)$Paes_ct_dec$O: src$Psymcipher$Paes_ct_dec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_dec$O: $(OBJDIR) src$Psymcipher$Paes_ct_dec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_dec$O src$Psymcipher$Paes_ct_dec.c
++ 
++-$(OBJDIR)$Paes_ct_enc$O: src$Psymcipher$Paes_ct_enc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_ct_enc$O: $(OBJDIR) src$Psymcipher$Paes_ct_enc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_ct_enc$O src$Psymcipher$Paes_ct_enc.c
++ 
++-$(OBJDIR)$Paes_pwr8$O: src$Psymcipher$Paes_pwr8.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_pwr8$O: $(OBJDIR) src$Psymcipher$Paes_pwr8.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_pwr8$O src$Psymcipher$Paes_pwr8.c
++ 
++-$(OBJDIR)$Paes_pwr8_cbcdec$O: src$Psymcipher$Paes_pwr8_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_pwr8_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_pwr8_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_pwr8_cbcdec$O src$Psymcipher$Paes_pwr8_cbcdec.c
++ 
++-$(OBJDIR)$Paes_pwr8_cbcenc$O: src$Psymcipher$Paes_pwr8_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_pwr8_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_pwr8_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_pwr8_cbcenc$O src$Psymcipher$Paes_pwr8_cbcenc.c
++ 
++-$(OBJDIR)$Paes_pwr8_ctr$O: src$Psymcipher$Paes_pwr8_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_pwr8_ctr$O: $(OBJDIR) src$Psymcipher$Paes_pwr8_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_pwr8_ctr$O src$Psymcipher$Paes_pwr8_ctr.c
++ 
++-$(OBJDIR)$Paes_pwr8_ctrcbc$O: src$Psymcipher$Paes_pwr8_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_pwr8_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_pwr8_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_pwr8_ctrcbc$O src$Psymcipher$Paes_pwr8_ctrcbc.c
++ 
++-$(OBJDIR)$Paes_small_cbcdec$O: src$Psymcipher$Paes_small_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_small_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_cbcdec$O src$Psymcipher$Paes_small_cbcdec.c
++ 
++-$(OBJDIR)$Paes_small_cbcenc$O: src$Psymcipher$Paes_small_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_small_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_cbcenc$O src$Psymcipher$Paes_small_cbcenc.c
++ 
++-$(OBJDIR)$Paes_small_ctr$O: src$Psymcipher$Paes_small_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_ctr$O: $(OBJDIR) src$Psymcipher$Paes_small_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_ctr$O src$Psymcipher$Paes_small_ctr.c
++ 
++-$(OBJDIR)$Paes_small_ctrcbc$O: src$Psymcipher$Paes_small_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_small_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_ctrcbc$O src$Psymcipher$Paes_small_ctrcbc.c
++ 
++-$(OBJDIR)$Paes_small_dec$O: src$Psymcipher$Paes_small_dec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_dec$O: $(OBJDIR) src$Psymcipher$Paes_small_dec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_dec$O src$Psymcipher$Paes_small_dec.c
++ 
++-$(OBJDIR)$Paes_small_enc$O: src$Psymcipher$Paes_small_enc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_small_enc$O: $(OBJDIR) src$Psymcipher$Paes_small_enc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_small_enc$O src$Psymcipher$Paes_small_enc.c
++ 
++-$(OBJDIR)$Paes_x86ni$O: src$Psymcipher$Paes_x86ni.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_x86ni$O: $(OBJDIR) src$Psymcipher$Paes_x86ni.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_x86ni$O src$Psymcipher$Paes_x86ni.c
++ 
++-$(OBJDIR)$Paes_x86ni_cbcdec$O: src$Psymcipher$Paes_x86ni_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_x86ni_cbcdec$O: $(OBJDIR) src$Psymcipher$Paes_x86ni_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_x86ni_cbcdec$O src$Psymcipher$Paes_x86ni_cbcdec.c
++ 
++-$(OBJDIR)$Paes_x86ni_cbcenc$O: src$Psymcipher$Paes_x86ni_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_x86ni_cbcenc$O: $(OBJDIR) src$Psymcipher$Paes_x86ni_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_x86ni_cbcenc$O src$Psymcipher$Paes_x86ni_cbcenc.c
++ 
++-$(OBJDIR)$Paes_x86ni_ctr$O: src$Psymcipher$Paes_x86ni_ctr.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_x86ni_ctr$O: $(OBJDIR) src$Psymcipher$Paes_x86ni_ctr.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_x86ni_ctr$O src$Psymcipher$Paes_x86ni_ctr.c
++ 
++-$(OBJDIR)$Paes_x86ni_ctrcbc$O: src$Psymcipher$Paes_x86ni_ctrcbc.c $(HEADERSPRIV)
+++$(OBJDIR)$Paes_x86ni_ctrcbc$O: $(OBJDIR) src$Psymcipher$Paes_x86ni_ctrcbc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Paes_x86ni_ctrcbc$O src$Psymcipher$Paes_x86ni_ctrcbc.c
++ 
++-$(OBJDIR)$Pchacha20_ct$O: src$Psymcipher$Pchacha20_ct.c $(HEADERSPRIV)
+++$(OBJDIR)$Pchacha20_ct$O: $(OBJDIR) src$Psymcipher$Pchacha20_ct.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pchacha20_ct$O src$Psymcipher$Pchacha20_ct.c
++ 
++-$(OBJDIR)$Pchacha20_sse2$O: src$Psymcipher$Pchacha20_sse2.c $(HEADERSPRIV)
+++$(OBJDIR)$Pchacha20_sse2$O: $(OBJDIR) src$Psymcipher$Pchacha20_sse2.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pchacha20_sse2$O src$Psymcipher$Pchacha20_sse2.c
++ 
++-$(OBJDIR)$Pdes_ct$O: src$Psymcipher$Pdes_ct.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_ct$O: $(OBJDIR) src$Psymcipher$Pdes_ct.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_ct$O src$Psymcipher$Pdes_ct.c
++ 
++-$(OBJDIR)$Pdes_ct_cbcdec$O: src$Psymcipher$Pdes_ct_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_ct_cbcdec$O: $(OBJDIR) src$Psymcipher$Pdes_ct_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_ct_cbcdec$O src$Psymcipher$Pdes_ct_cbcdec.c
++ 
++-$(OBJDIR)$Pdes_ct_cbcenc$O: src$Psymcipher$Pdes_ct_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_ct_cbcenc$O: $(OBJDIR) src$Psymcipher$Pdes_ct_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_ct_cbcenc$O src$Psymcipher$Pdes_ct_cbcenc.c
++ 
++-$(OBJDIR)$Pdes_support$O: src$Psymcipher$Pdes_support.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_support$O: $(OBJDIR) src$Psymcipher$Pdes_support.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_support$O src$Psymcipher$Pdes_support.c
++ 
++-$(OBJDIR)$Pdes_tab$O: src$Psymcipher$Pdes_tab.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_tab$O: $(OBJDIR) src$Psymcipher$Pdes_tab.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_tab$O src$Psymcipher$Pdes_tab.c
++ 
++-$(OBJDIR)$Pdes_tab_cbcdec$O: src$Psymcipher$Pdes_tab_cbcdec.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_tab_cbcdec$O: $(OBJDIR) src$Psymcipher$Pdes_tab_cbcdec.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_tab_cbcdec$O src$Psymcipher$Pdes_tab_cbcdec.c
++ 
++-$(OBJDIR)$Pdes_tab_cbcenc$O: src$Psymcipher$Pdes_tab_cbcenc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pdes_tab_cbcenc$O: $(OBJDIR) src$Psymcipher$Pdes_tab_cbcenc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pdes_tab_cbcenc$O src$Psymcipher$Pdes_tab_cbcenc.c
++ 
++-$(OBJDIR)$Ppoly1305_ctmul$O: src$Psymcipher$Ppoly1305_ctmul.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppoly1305_ctmul$O: $(OBJDIR) src$Psymcipher$Ppoly1305_ctmul.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppoly1305_ctmul$O src$Psymcipher$Ppoly1305_ctmul.c
++ 
++-$(OBJDIR)$Ppoly1305_ctmul32$O: src$Psymcipher$Ppoly1305_ctmul32.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppoly1305_ctmul32$O: $(OBJDIR) src$Psymcipher$Ppoly1305_ctmul32.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppoly1305_ctmul32$O src$Psymcipher$Ppoly1305_ctmul32.c
++ 
++-$(OBJDIR)$Ppoly1305_ctmulq$O: src$Psymcipher$Ppoly1305_ctmulq.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppoly1305_ctmulq$O: $(OBJDIR) src$Psymcipher$Ppoly1305_ctmulq.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppoly1305_ctmulq$O src$Psymcipher$Ppoly1305_ctmulq.c
++ 
++-$(OBJDIR)$Ppoly1305_i15$O: src$Psymcipher$Ppoly1305_i15.c $(HEADERSPRIV)
+++$(OBJDIR)$Ppoly1305_i15$O: $(OBJDIR) src$Psymcipher$Ppoly1305_i15.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ppoly1305_i15$O src$Psymcipher$Ppoly1305_i15.c
++ 
++-$(OBJDIR)$Pasn1enc$O: src$Px509$Pasn1enc.c $(HEADERSPRIV)
+++$(OBJDIR)$Pasn1enc$O: $(OBJDIR) src$Px509$Pasn1enc.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pasn1enc$O src$Px509$Pasn1enc.c
++ 
++-$(OBJDIR)$Pencode_ec_pk8der$O: src$Px509$Pencode_ec_pk8der.c $(HEADERSPRIV)
+++$(OBJDIR)$Pencode_ec_pk8der$O: $(OBJDIR) src$Px509$Pencode_ec_pk8der.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pencode_ec_pk8der$O src$Px509$Pencode_ec_pk8der.c
++ 
++-$(OBJDIR)$Pencode_ec_rawder$O: src$Px509$Pencode_ec_rawder.c $(HEADERSPRIV)
+++$(OBJDIR)$Pencode_ec_rawder$O: $(OBJDIR) src$Px509$Pencode_ec_rawder.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pencode_ec_rawder$O src$Px509$Pencode_ec_rawder.c
++ 
++-$(OBJDIR)$Pencode_rsa_pk8der$O: src$Px509$Pencode_rsa_pk8der.c $(HEADERSPRIV)
+++$(OBJDIR)$Pencode_rsa_pk8der$O: $(OBJDIR) src$Px509$Pencode_rsa_pk8der.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pencode_rsa_pk8der$O src$Px509$Pencode_rsa_pk8der.c
++ 
++-$(OBJDIR)$Pencode_rsa_rawder$O: src$Px509$Pencode_rsa_rawder.c $(HEADERSPRIV)
+++$(OBJDIR)$Pencode_rsa_rawder$O: $(OBJDIR) src$Px509$Pencode_rsa_rawder.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pencode_rsa_rawder$O src$Px509$Pencode_rsa_rawder.c
++ 
++-$(OBJDIR)$Pskey_decoder$O: src$Px509$Pskey_decoder.c $(HEADERSPRIV)
+++$(OBJDIR)$Pskey_decoder$O: $(OBJDIR) src$Px509$Pskey_decoder.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pskey_decoder$O src$Px509$Pskey_decoder.c
++ 
++-$(OBJDIR)$Px509_decoder$O: src$Px509$Px509_decoder.c $(HEADERSPRIV)
+++$(OBJDIR)$Px509_decoder$O: $(OBJDIR) src$Px509$Px509_decoder.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Px509_decoder$O src$Px509$Px509_decoder.c
++ 
++-$(OBJDIR)$Px509_knownkey$O: src$Px509$Px509_knownkey.c $(HEADERSPRIV)
+++$(OBJDIR)$Px509_knownkey$O: $(OBJDIR) src$Px509$Px509_knownkey.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Px509_knownkey$O src$Px509$Px509_knownkey.c
++ 
++-$(OBJDIR)$Px509_minimal$O: src$Px509$Px509_minimal.c $(HEADERSPRIV)
+++$(OBJDIR)$Px509_minimal$O: $(OBJDIR) src$Px509$Px509_minimal.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Px509_minimal$O src$Px509$Px509_minimal.c
++ 
++-$(OBJDIR)$Px509_minimal_full$O: src$Px509$Px509_minimal_full.c $(HEADERSPRIV)
+++$(OBJDIR)$Px509_minimal_full$O: $(OBJDIR) src$Px509$Px509_minimal_full.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Px509_minimal_full$O src$Px509$Px509_minimal_full.c
++ 
++-$(OBJDIR)$Pbrssl$O: tools$Pbrssl.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pbrssl$O: $(OBJDIR) tools$Pbrssl.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pbrssl$O tools$Pbrssl.c
++ 
++-$(OBJDIR)$Pcerts$O: tools$Pcerts.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pcerts$O: $(OBJDIR) tools$Pcerts.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pcerts$O tools$Pcerts.c
++ 
++-$(OBJDIR)$Pchain$O: tools$Pchain.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pchain$O: $(OBJDIR) tools$Pchain.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pchain$O tools$Pchain.c
++ 
++-$(OBJDIR)$Pclient$O: tools$Pclient.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pclient$O: $(OBJDIR) tools$Pclient.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pclient$O tools$Pclient.c
++ 
++-$(OBJDIR)$Perrors$O: tools$Perrors.c $(HEADERSTOOLS)
+++$(OBJDIR)$Perrors$O: $(OBJDIR) tools$Perrors.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Perrors$O tools$Perrors.c
++ 
++-$(OBJDIR)$Pfiles$O: tools$Pfiles.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pfiles$O: $(OBJDIR) tools$Pfiles.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pfiles$O tools$Pfiles.c
++ 
++-$(OBJDIR)$Pimpl$O: tools$Pimpl.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pimpl$O: $(OBJDIR) tools$Pimpl.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pimpl$O tools$Pimpl.c
++ 
++-$(OBJDIR)$Pkeys$O: tools$Pkeys.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pkeys$O: $(OBJDIR) tools$Pkeys.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pkeys$O tools$Pkeys.c
++ 
++-$(OBJDIR)$Pnames$O: tools$Pnames.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pnames$O: $(OBJDIR) tools$Pnames.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pnames$O tools$Pnames.c
++ 
++-$(OBJDIR)$Pserver$O: tools$Pserver.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pserver$O: $(OBJDIR) tools$Pserver.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pserver$O tools$Pserver.c
++ 
++-$(OBJDIR)$Pskey$O: tools$Pskey.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pskey$O: $(OBJDIR) tools$Pskey.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pskey$O tools$Pskey.c
++ 
++-$(OBJDIR)$Psslio$O: tools$Psslio.c $(HEADERSTOOLS)
+++$(OBJDIR)$Psslio$O: $(OBJDIR) tools$Psslio.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Psslio$O tools$Psslio.c
++ 
++-$(OBJDIR)$Pta$O: tools$Pta.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pta$O: $(OBJDIR) tools$Pta.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pta$O tools$Pta.c
++ 
++-$(OBJDIR)$Ptwrch$O: tools$Ptwrch.c $(HEADERSTOOLS)
+++$(OBJDIR)$Ptwrch$O: $(OBJDIR) tools$Ptwrch.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ptwrch$O tools$Ptwrch.c
++ 
++-$(OBJDIR)$Pvector$O: tools$Pvector.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pvector$O: $(OBJDIR) tools$Pvector.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pvector$O tools$Pvector.c
++ 
++-$(OBJDIR)$Pverify$O: tools$Pverify.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pverify$O: $(OBJDIR) tools$Pverify.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pverify$O tools$Pverify.c
++ 
++-$(OBJDIR)$Pxmem$O: tools$Pxmem.c $(HEADERSTOOLS)
+++$(OBJDIR)$Pxmem$O: $(OBJDIR) tools$Pxmem.c $(HEADERSTOOLS)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Pxmem$O tools$Pxmem.c
++ 
++-$(OBJDIR)$Ptest_crypto$O: test$Ptest_crypto.c $(HEADERSPRIV)
+++$(OBJDIR)$Ptest_crypto$O: $(OBJDIR) test$Ptest_crypto.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ptest_crypto$O test$Ptest_crypto.c
++ 
++-$(OBJDIR)$Ptest_speed$O: test$Ptest_speed.c $(HEADERSPRIV)
+++$(OBJDIR)$Ptest_speed$O: $(OBJDIR) test$Ptest_speed.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$Ptest_speed$O test$Ptest_speed.c
++ 
++-$(OBJDIR)$Ptest_x509$O: test$Ptest_x509.c $(HEADERSPRIV)
+++$(OBJDIR)$Ptest_x509$O: $(OBJDIR) test$Ptest_x509.c $(HEADERSPRIV)
++ 	$(CC) $(CFLAGS) $(INCFLAGS) -DSRCDIRNAME=".." $(CCOUT)$(OBJDIR)$Ptest_x509$O test$Ptest_x509.c
++diff --git a/mk/mkrules.sh b/mk/mkrules.sh
++index eea159b..cce7564 100755
++--- a/mk/mkrules.sh
+++++ b/mk/mkrules.sh
++@@ -531,23 +531,23 @@ EOF
++ (for f in $coresrc ; do
++ 	b="$(basename "$f" .c)\$O"
++ 	g="$(escsep "$f")"
++-	printf '\n$(OBJDIR)$P%s: %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
+++	printf '\n$(OBJDIR)$P%s: $(OBJDIR) %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
++ done
++ 
++ for f in $toolssrc ; do
++ 	b="$(basename "$f" .c)\$O"
++ 	g="$(escsep "$f")"
++-	printf '\n$(OBJDIR)$P%s: %s $(HEADERSTOOLS)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
+++	printf '\n$(OBJDIR)$P%s: $(OBJDIR) %s $(HEADERSTOOLS)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
++ done
++ 
++ for f in $testcryptosrc $testspeedsrc ; do
++ 	b="$(basename "$f" .c)\$O"
++ 	g="$(escsep "$f")"
++-	printf '\n$(OBJDIR)$P%s: %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
+++	printf '\n$(OBJDIR)$P%s: $(OBJDIR) %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
++ done
++ 
++ for f in $testx509src ; do
++ 	b="$(basename "$f" .c)\$O"
++ 	g="$(escsep "$f")"
++-	printf '\n$(OBJDIR)$P%s: %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) -DSRCDIRNAME=".." $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
+++	printf '\n$(OBJDIR)$P%s: $(OBJDIR) %s $(HEADERSPRIV)\n\t$(CC) $(CFLAGS) $(INCFLAGS) -DSRCDIRNAME=".." $(CCOUT)$(OBJDIR)$P%s %s\n' "$b" "$g" "$b" "$g"
++ done) >> Rules.mk
++-- 
++2.34.1
++
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
