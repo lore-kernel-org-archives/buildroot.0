@@ -4,83 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED996C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 09:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F86CC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 09:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5691440880;
-	Mon, 12 Dec 2022 09:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5691440880
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE77440874;
+	Mon, 12 Dec 2022 09:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE77440874
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cLT3v3E9PGvx; Mon, 12 Dec 2022 09:51:13 +0000 (UTC)
+	with ESMTP id ZZ5peSAZXGkM; Mon, 12 Dec 2022 09:53:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F0AC40860;
-	Mon, 12 Dec 2022 09:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F0AC40860
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D50ED1BF2C0
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 09:51:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0FFE4086E;
+	Mon, 12 Dec 2022 09:53:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0FFE4086E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E28F81BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 09:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEFE540860
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 09:51:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEFE540860
+ by smtp3.osuosl.org (Postfix) with ESMTP id C9B6160706
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 09:53:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9B6160706
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zcbnH38VDUC9 for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 09:51:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QToYeHHkLLuT for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 09:53:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 847F14077D
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 847F14077D
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 09:51:00 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id gh17so26508535ejb.6
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 01:51:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EA01605A4
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
+ [IPv6:2607:f8b0:4864:20::102a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8EA01605A4
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 09:53:11 +0000 (UTC)
+Received: by mail-pj1-x102a.google.com with SMTP id
+ v13-20020a17090a6b0d00b00219c3be9830so11603517pjj.4
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 01:53:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=references:in-reply-to:message-id:date:subject:cc:to:from
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=otOYbfLGQVcPvh+ZfpmI1AP1a9EgLTaGKskpareF2q0=;
- b=KcE2ZXm/dJ0YqmwcoyFxxUI17J255GvvnJG6f8Y2hzsjyajlZLL1iT1UmNCGydexe3
- aRGXAmGxSD7fS8kNmsfIMA4D/KMk++TKJ/nWgkY3EZGDVtqcRjPY2LHW0GvkZUwwMJ0k
- rSPIKl9s0EgITYw0YObTb5lRuk+YLfJ+Lo7zpMueulNPTf8ilkJ2CqCuRFFPSY8s8vId
- /fdi5wEqeeO8pKn8ejsFWIni0j9VTYbh/vZXXFX6DFvR+bpr4h3qH+LX+URXxD1/QZMj
- jRfOqfkTUpw0cx0kmlnNTxakL0ITIOY0L3OtY1zhRSL0VtZ8e5CKLJxEL965mmTKyuIR
- 8kOA==
-X-Gm-Message-State: ANoB5pkTW/JEYFdu6A/fsHnW8f2v9VsqCASmWRFYevSDits5UZbV0FAW
- QnPAiMQ7CH8IN0VTK1n/ogPzk1bT8sU=
-X-Google-Smtp-Source: AA0mqf5rT0WoEmyQ7GetjSKVP3J9GpckcELqP34luTUfITZpZ7i7OhtKvxg+ph5k22uQZHifZICnGw==
-X-Received: by 2002:a17:907:3e14:b0:7c0:f719:838d with SMTP id
- hp20-20020a1709073e1400b007c0f719838dmr17208198ejc.36.1670838658497; 
- Mon, 12 Dec 2022 01:50:58 -0800 (PST)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- d7-20020a170906304700b00783f32d7eaesm3062154ejd.164.2022.12.12.01.50.57
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 12 Dec 2022 01:50:58 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 10:50:50 +0100
-Message-Id: <20221212095050.14950-2-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20221212095050.14950-1-yegorslists@googlemail.com>
-References: <20221212095050.14950-1-yegorslists@googlemail.com>
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=EHI8HkHJaJkYcVBAwXcUjBb1H6V+fULJgKop6MpJgTk=;
+ b=72JhNFZeQOHi+BH5k1JT/xHTOUvB7hZ1nGH9DdIKJWkN1itrnung4Ewqupc/OzGiNu
+ uVa3Tp/In3mnClynaFBRW9Myl/d3uwF94Vp70hZMqHqzexhQUD7VspS6hriiD4rcNVwu
+ NqvfYslsH1biRa3URv7GEEUodWJ4kiv/MDMpIEEVMsjkz0ep9o6s7NGsUliF+727Gr7m
+ CaZdd0+PVioYEiHaRdZhN/E8qG+6P0ueYR9k9hLeSDHvvO0C7UKv8cVv4M8d/fMhPHxA
+ CzSYCdtx2OIDbWqr1hmOa1zdwOOjT/YyuQMjUqlSl39qrOVZxuhZ7GzCd++Gss0kHJHI
+ 4gGA==
+X-Gm-Message-State: ANoB5plrGO+gghU1npEb8dfqFIRaqpBMOMnmesJgEyqtB8d4TkGGsP57
+ uadEWyOXykkv2EYh4scTxMf1CA4KpAbDZfxgPRA=
+X-Google-Smtp-Source: AA0mqf4JHBdHvl/OgQH4+hNnvevZoMJPNktk6XNlrPvgmIaaLKWBctlZeS3i59gwI8gR4A09Ohh0HVVxQGcJLiGNdYo=
+X-Received: by 2002:a17:90a:4894:b0:218:a96f:9eec with SMTP id
+ b20-20020a17090a489400b00218a96f9eecmr92831775pjh.159.1670838790972; Mon, 12
+ Dec 2022 01:53:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20221208133928.303101-1-heiko.thiery@gmail.com>
+ <20221208133928.303101-3-heiko.thiery@gmail.com>
+ <20221211144611.437eda70@windsurf>
+ <CAA3JqEceuWkLuDjCviOdHmi12X96+KMfPb0s2Us8a5WgwKa-rw@mail.gmail.com>
+ <20221212102949.5cb69b6c@windsurf>
+In-Reply-To: <20221212102949.5cb69b6c@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 12 Dec 2022 10:52:58 +0100
+Message-ID: <CAEyMn7YSey0TJE5eC+Rc1CFN+=NzOEDH2NQomfhe1cwtwM8jww@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
- :cc:subject:date:message-id:reply-to;
- bh=otOYbfLGQVcPvh+ZfpmI1AP1a9EgLTaGKskpareF2q0=;
- b=KnZXc8tE4OuYApZInVxERRQD/54u0NjdWM644DBmuiDV1CLNwim2zNFNVHaAai6265
- Kxk8i5Cc1TGxVpBsY7wfBuCrjvUlydxDoSx1PhzGnTeAisLXeC0z+2SAEu+U6IcZBtWv
- 1+lYfjJuzf0pP0gomJKagRgXdh6STI/aK1M73+O1u6MBkTdVymIApriyLTrqT/N+YzrF
- /oEC5R4XOoj9C5nCTXE46Bh+BVU+ROury0YlS7Qv2tilQDo/k3cnG3WWqx4M7JDQbdDr
- e0AiV7J86G/Dom5CinxM+OxZgdgSce6pjyNRAzRZqHmK/XHCiWo82VhPJvTDI+9nSodB
- C2WA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KnZXc8tE
-Subject: [Buildroot] [PATCH 2/2] support/testing: add test for python-munch
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=EHI8HkHJaJkYcVBAwXcUjBb1H6V+fULJgKop6MpJgTk=;
+ b=NoXxHSpWsjcAlNAsqkMo712EDMgBzAAFG6rzulZ6Bm8rzxH6le9PLdfBtunAT9Q6ti
+ xcgfBGVQuqJjY6CwExY+qsykZUl7UnXYVf9HhZoqxibyhNgxLEM/OK5aTyaI8UKYQz7/
+ XHPmjkQukVjuF2/LxVcKN8Wpau+7LXcvEiuj3MMVi8u6vto11eBCGkjjEOxRwsmw6+9y
+ TZzQPs0UNrUKfhtpy9e5NA+lNwIWUkHImUu8sI5iUb4Kfi9hGrFiXF0Cjcph3qE8d1NZ
+ 2v2vNF2wt/lnuBKHegtDFOmzz1G08gYWMT5gXzM2Af/RpkHiyjVHu2gmEi+HURfrOGdE
+ Zrhw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=NoXxHSpW
+Subject: Re: [Buildroot] [PATCH v2 3/3] package/modem-manager: bump version
+ to 1.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,91 +96,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Asaf Kahlon <asafka7@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- DEVELOPERS                                    |  2 ++
- .../tests/package/sample_python_munch.py      | 20 +++++++++++++++++++
- .../tests/package/test_python_munch.py        | 12 +++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_munch.py
- create mode 100644 support/testing/tests/package/test_python_munch.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f0dcc42de7..5432b19730 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3121,10 +3121,12 @@ F:	package/x11r7/xapp_xinput-calibrator/
- F:	package/zlog/
- F:	support/testing/tests/package/sample_python_dicttoxml2.py
- F:	support/testing/tests/package/sample_python_dtschema.py
-+F:	support/testing/tests/package/sample_python_munch.py
- F:	support/testing/tests/package/test_libftdi1.py
- F:	support/testing/tests/package/test_python_can.py
- F:	support/testing/tests/package/test_python_dicttoxml2.py
- F:	support/testing/tests/package/test_python_dtschema.py
-+F:	support/testing/tests/package/test_python_munch.py
- F:	utils/scanpypi
- 
- N:	Yunhao Tian <t123yh.xyz@gmail.com>
-diff --git a/support/testing/tests/package/sample_python_munch.py b/support/testing/tests/package/sample_python_munch.py
-new file mode 100644
-index 0000000000..b45bec7b7e
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_munch.py
-@@ -0,0 +1,20 @@
-+from munch import Munch
-+
-+b = Munch()
-+b.hello = 'world'
-+assert b.hello == 'world'
-+b['hello'] += "!"
-+assert b.hello == 'world!'
-+b.foo = Munch(lol=True)
-+assert b.foo.lol is True
-+assert b.foo is b['foo']
-+
-+assert sorted(b.keys()) == ['foo', 'hello']
-+
-+b.update({'ponies': 'are pretty!'}, hello=42)
-+assert b == Munch({'ponies': 'are pretty!', 'foo': Munch({'lol': True}), 'hello': 42})
-+
-+assert sorted([(k, b[k]) for k in b]) == [('foo', Munch({'lol': True})), ('hello', 42), ('ponies', 'are pretty!')]
-+
-+format_munch = Munch(knights='lolcats', ni='can haz')
-+assert "The {knights} who say {ni}!".format(**format_munch) == 'The lolcats who say can haz!'
-diff --git a/support/testing/tests/package/test_python_munch.py b/support/testing/tests/package/test_python_munch.py
-new file mode 100644
-index 0000000000..6853bbaac7
---- /dev/null
-+++ b/support/testing/tests/package/test_python_munch.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Munch(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_MUNCH=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_munch.py"]
-+    timeout = 40
--- 
-2.17.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLCBIaSBBbGVrc2FuZGVyLAoKQW0gTW8uLCAxMi4gRGV6LiAyMDIyIHVtIDEwOjI5
+IFVociBzY2hyaWViIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5j
+b20+Ogo+Cj4gT24gTW9uLCAxMiBEZWMgMjAyMiAxMDoxOTozMiArMDEwMAo+IEFsZWtzYW5kZXIg
+TW9yZ2FkbyA8YWxla3NhbmRlckBhbGVrc2FuZGVyLmVzPiB3cm90ZToKPgo+ID4gVGhlIGJ1aWxk
+LXRpbWUgZGVwZW5kZW5jeSBvbiBEQnVzIGlzIGV4Y2x1c2l2ZWx5IHRvIHJlYWQKPiA+ICJpbnRl
+cmZhY2VzX2RpciIgYW5kICJzeXN0ZW1fYnVzX3NlcnZpY2VzX2RpciIgZnJvbSB0aGUgcGtnLWNv
+bmZpZwo+ID4gKC91c3IvbGliL3BrZ2NvbmZpZy9kYnVzLTEucGMpIGZpbGUgaW5zdGFsbGVkLiBJ
+IGFncmVlIHRoaXMgaXMgbm90Cj4gPiB2ZXJ5IHByZXR0eSwgYXMgd2UgZG9uwrR0IHJlYWxseSBy
+ZXF1aXJlIGEgZnVsbCB3b3JraW5nIERCdXMsIGp1c3QgdGhlCj4gPiBwa2djb25maWcgZmlsZSA6
+Lwo+Cj4gQUNLIQo+Cj4gPiBObywgdWRldmRpciBpcyByZXF1aXJlZCBldmVuIGlmIC1EdWRldj1m
+YWxzZS4gVGhlIHJlYXNvbiBpcyB0aGF0Cj4gPiB1ZGV2ZGlyIGlzIHVzZWQgdG8gaW5zdGFsbCB0
+aGUgdWRldiBydWxlcyBmaWxlcywgYW5kIE1vZGVtTWFuYWdlciBoYXMKPiA+IGEgYnVpbHQtaW4g
+dWRldiBydWxlcyBwYXJzZXIgdXNlZCB3aGVuIHRoZSBkYWVtb24gaXMgYnVpbHQgd2l0aG91dAo+
+ID4gdWRldiBzdXBwb3J0IChlLmcuIGRlZmF1bHQgaW4gb3BlbndydCkuIFRoZSB1ZGV2IHJ1bGVz
+IHNwZWNpZnkgcG9ydAo+ID4gdHlwZSBoaW50cyBhbmQgb3RoZXIgdGhpbmdzLCBNTSB3b24ndCB3
+b3JrIGZpbmUgd2l0aG91dCB0aG9zZSBydWxlcy4KPgo+IE9LLCB0aGFua3MgZm9yIHRoZSBpbmZv
+cm1hdGlvbi4KPgo+IEhlaWtvOiB3aWxsIHlvdSBmb2xsb3ctdXAgd2l0aCBhbiB1cGRhdGVkIHBh
+dGNoPwoKSSB3aWxsIHVwZGF0ZSB0aGUgcGF0Y2ggdG8gY3JlYXRlIHRoZSBydW50aW1lIGRlcGVu
+ZGVuY3kgaW4KcGFja2FnZS9tb2RlbS1tYW5hZ2VyL0NvbmZpZy5pbi4KCi0tCkhlaWtvCgo+Cj4g
+VGhhbmtzIQo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQg
+Q0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQg
+dHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
