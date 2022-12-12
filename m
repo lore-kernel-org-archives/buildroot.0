@@ -4,135 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B95FC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 13:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22F40C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 14:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D1CB405EC;
-	Mon, 12 Dec 2022 13:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D1CB405EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id B27D340609;
+	Mon, 12 Dec 2022 14:28:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B27D340609
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0PI8mI2V_AHF; Mon, 12 Dec 2022 13:47:38 +0000 (UTC)
+	with ESMTP id OUh3EC55VOX2; Mon, 12 Dec 2022 14:28:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 387A1405E3;
-	Mon, 12 Dec 2022 13:47:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 387A1405E3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 302F51BF389
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 13:47:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8E43405F8;
+	Mon, 12 Dec 2022 14:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8E43405F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C9AB1BF390
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 14:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F03F960D94
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 13:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F03F960D94
+ by smtp1.osuosl.org (Postfix) with ESMTP id 545688131B
+ for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 14:28:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545688131B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R0eu0M2vClWQ for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 13:47:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DPBRJyZt6T09 for <buildroot@lists.busybox.net>;
+ Mon, 12 Dec 2022 14:28:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C06CC60D91
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C06CC60D91
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 13:47:33 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l1XZhcIo0L80GetKpKIJTW6aWTXdRqkbmcg3DPjl6i3Y1O4C5RG1yrJALPdlZet1WafiY/ODemgL7cQmRI2coTzRNp7tg9u3t8aUMsUGVKE0hDePuxD4vtPSuAoMa1i+C87dpZeIuX0lPUrnlMzhvs4CJY53JtCIKBnu8Zh+25tp4kgUH06QICvBGeZ9getzG7AWyWGR7KbdoS0hqFxDdFwBLCiAGaQUXKBxib2HhUxPV0i4/m9q7UMMh/8USV9+ZI8H2T834oKF8eE2ZardQ6CbgefXPpZr0fUsl3HLjPfno3ZhwTvfRMHFPIMyrrHM4pXx+j9HR7YFWsvhQGg4TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZE1D4M7G5l02RC7oFMJXi95P0u28Sz/mPl7JsvpSETk=;
- b=mIUdk9NzRDimLtCbLlKn7uCo026Cwq+cNZdYNI+PJPhrorwK51qGA9jcAGKAzvvwoUUPcQE2qm09OGtF1kC8y/OWiPVng6GOK3TBBlGxQGLe+bISIQFyqKEABZ6IjmPtD78BNUIlVH8yfyb17gw5SkoZaaFL4HL2C7HTk/LEPIf4OGrepZ/zsFBbaj7AEEfTiK9QoEuzIoW0FmhTk85d20o14/l9/V1Bt5MYKGSYG94W0btumD0tPyzqjFpuiw2Ui6j4NBXD1YAem0uUjRQAABe4TrsJNXL6dk+LIEB4v/7KXJ+wkpSse0yrZwewJAdixEn+aBsuzTfsJpGkuGytQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by PH8PR12MB6796.namprd12.prod.outlook.com (2603:10b6:510:1c7::8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 13:47:29 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::1a65:97e7:c0ee:f986]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::1a65:97e7:c0ee:f986%4]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 13:47:29 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
- fix linux dts name
-Thread-Index: AQHZCjpT0S0ONWlwlEyKRNS8isY6ba5o8I8AgAAMLwCAAU0LUA==
-Date: Mon, 12 Dec 2022 13:47:29 +0000
-Message-ID: <CH2PR12MB50045ED2EDE0ABD845FC8D8CF0E29@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20221207124855.1831-1-neal.frager@amd.com>
- <20221211180336.79ea5b05@windsurf>
- <CH2PR12MB5004CD2B62F990D72C7EDFFEF01E9@CH2PR12MB5004.namprd12.prod.outlook.com>
-In-Reply-To: <CH2PR12MB5004CD2B62F990D72C7EDFFEF01E9@CH2PR12MB5004.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|PH8PR12MB6796:EE_
-x-ms-office365-filtering-correlation-id: 0213e9af-c19e-4ccc-6519-08dadc476978
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mDKdms7KlxfkPsX+ULdExZWTOPEMyhDeZMMOFeHbawF1BOoAfmc3oLzYRDu9TaBPLnkOGGStxGwimho+nx8cStRccTYF2Af/2KgqJ356rEOxzC/BXOsdryLGCIuEOgkeqcwX0iE7FWB2L68rX3Vbhnj5xXFemwKy6ynY3gQK78MsbOihzUQXVEMXMO+VlqjwHrohBj7CL3uPfpntEbp0gFjn5RW06777PJvkmDim/2rrq94aQY/uZd9sFMGbhRJoPP30zdoDtGeMesEvC0E6wZ1v2i1GS2wYVTrHoKtNCtsrI9PD0YWGWc2qj6QFmKiG41HWXzjB2x9FMWnVFtIRwu/fylVVCCQJ1RQWDycKxE1qUPXYbBhjmWNua9ttpfjagtm+ju870ZjQJXgTLfgJAEbzjb7oN1YMjIBUXuHEYRN9HvVBiGl2we+7S79RtKPO3kuup18kRuzgCSonU27UnJP7yK0nkDGXDz2QDxNWdnRAkN+QURXjYLkLq5qoLX5W3lVRNGqkHDfLTTOsWGdR2qwe3xtv1iN6vJwqwpq+/okS5wx96ibhXq72kxQe14XHzHH7b1o9U0vYL4upe7TAqNYU7rXPmmVfCbgM3+Z1/2CVrJN0/+ObHe83YIhcLsoI9k82ZSEnjbmy/dDmDp1E0p3pnnw24Tm+j8MpjH/gk7GefJoRKTlgvQF09YWAWwuRprsTL+8ea/Ut2hR0hA5W2aWb9l15IZ7vhRTsMwqd6cupaPDkCLQ60HZN4k8oNoDkvLfB1AT/74FO3jwWs+uiHA==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(366004)(376002)(136003)(39860400002)(346002)(396003)(451199015)(316002)(19627235002)(110136005)(54906003)(7696005)(38070700005)(52536014)(8936002)(5660300002)(66946007)(8676002)(66556008)(66446008)(64756008)(66476007)(26005)(41300700001)(9686003)(76116006)(86362001)(4326008)(6506007)(83380400001)(186003)(33656002)(478600001)(966005)(71200400001)(2906002)(55016003)(122000001)(38100700002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NhuWEzAfWB/GPXjp3HchE7dnSVrTpxTycC+r5PMi5hMHAzGZpjs46lTki/k6?=
- =?us-ascii?Q?gSS6YwrkoslZ4XpxpZfiXWqvWeUtCrmuexat97hQtwaTSsy5VvwuZtYoVd6m?=
- =?us-ascii?Q?zDpk6sYRjsdWdEJNj/UAyJ8rE+LiWl74FSUg8arhqtwWlQXPr7yR+E/O2PxW?=
- =?us-ascii?Q?fyqkCMu4SfxXauHEvUTxWxGDQifayiZI+mG8K+GI/PkAcQdbYuEqWd9A8qVF?=
- =?us-ascii?Q?64qy3w0l/vPL6XVtBXitShszdsWTJWIn9DL6n2cDpDa1cZQLVWqCOfz9j2uv?=
- =?us-ascii?Q?C9wy5Z0c3sf2YslBQyyolVroGUWSimQPucsdomcULsSjNcfXhRjqsEQ2NoMM?=
- =?us-ascii?Q?VFIHyhRItBJd8ToSyHmeVFdDWKyDiVnomJdh8+jR8HFgOJduqw4bChLLE4Et?=
- =?us-ascii?Q?ncmti6Aakqu5sTdM3w6CPNswVF0RJp1OnElfOdP20FahNRrsiX0C4P29A8Nr?=
- =?us-ascii?Q?gAZgd62GXjRBasZvAmB9MGRySeQpdQM6/JayKMXRCNEa7edyLOOVpmC3Jb4d?=
- =?us-ascii?Q?k7AcCDmyIQvo9XBMDz7SnDDe+IeCw3a4ZHA5q7wx8hoBggvHpNtDZV/iBYkF?=
- =?us-ascii?Q?8xV+S3mB8aJ7Xx0Gr+gOvnmqjWSOGOaejQSk+jUkmiIIIUSs1f3/RMoVB5cJ?=
- =?us-ascii?Q?fJmCsb0CJlRxqtMuFhjSBVOYyqwTfWcGjrqlSa58lDadgXpOLl9VmkS1nw8L?=
- =?us-ascii?Q?NfX0JI9j3h5b4X25j9gQUtqQcce7rvI+miMmEN8OgjNfs6/zExUwNUy6bBwY?=
- =?us-ascii?Q?z932XnwxpkvhuGn7SmETH+dmXVSXLHMhb2bc/R48H1sKQk0EfND5eAnbTzIf?=
- =?us-ascii?Q?01Hqtbyn69+PMRXvoCq/NCP2910qWrBZ9ySJPByz8i3n3jtCerbys3q3ISpT?=
- =?us-ascii?Q?MG4tV068ecDi+JIFoDiBXgdnB1t+gMtzT6l1nanGAIL3CEKL9jAPVAexxnQu?=
- =?us-ascii?Q?w7XcRbMZO+jQhuKYswT/fEr1IOlSUIW+Z/D1DXD3BvxSaT/GbhCtWMHlNmk4?=
- =?us-ascii?Q?IT4YmTOezCScNCeGlYtc914AS+NAwAi73V2pQz+xz81b9g1rJflFKJ9Gz7D4?=
- =?us-ascii?Q?jDGayFu5cUGnK9zBNASwWKly6YZja8cFWKz3OQoqHeZHYSXmmEaz5byljJAT?=
- =?us-ascii?Q?BAfBJ3NJHY8k7/kGBzDOMd3ESaJdlDf5GBCBRoPXAiZPScPJkJ40rdkD6jT+?=
- =?us-ascii?Q?hBMOrg/ggVS+55UB3HQ406Y2QiH4ieCH1cR9+JIlkjTlVIlzvhnvPqngCmMN?=
- =?us-ascii?Q?Gxoa59aWF9YXkVSNuvC5hX90dTaydhIPqJexTtcquXoLJozoMg56yyv8wyBV?=
- =?us-ascii?Q?2RcretJyhgcN4PqLLKIhFGMOLxyOrWHip1QQwuS7Yz6qJKW+TZkoW72fuZXG?=
- =?us-ascii?Q?kdpLD1YcI2gPOyhQh9NT62CW80UHtDhLG5Mm22V4RiOzlKxBEhFBHWvgryXB?=
- =?us-ascii?Q?IdGWSH9i/K6AQ82f9LrEuhu7gZOMveWpXbwUroltYursvK8GVNonfbbnCPM9?=
- =?us-ascii?Q?5pr1v8ZdawUEXfWO2bdDiWqE654YVMyZNn8cson3VP2PPCu1Y/n9fQ6oPtlL?=
- =?us-ascii?Q?TiYvbphkEnd11Eosp28=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2856D81321
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2856D81321
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 14:28:11 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ p13-20020a05600c468d00b003cf8859ed1bso5334538wmo.1
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 06:28:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4Lcfvo/3H6yvUS6GBbvJRiRf4e+bgUGxRQD5XENNcaY=;
+ b=7okV27gyFcifcPIv0u7shYF8hstVXCqbcIFBIhka2QYX8qDWhTuaDjnMrZlOA9qTwe
+ gaZDU9EDysRGUjpSjBN+IFJNjgccHiaKHyD1mo5Q+r21ZlUZZmUVY8w9cG20All7atxH
+ 9xwtItAfG0m2u81aSO7q1whmcSs8mg2UCLzEt6IKgoNOQOQeV5FYPTe47W7qLpg4T293
+ X1VVvgdozB7qCp4OOq7W1iZEPCc/LhvC6wRGNckqhERbZsToPufJwNqmkw4ngQZnfjyS
+ tg4BLEyf46sp8zkNtNW8AJ2HEF1udfm25jYU6gAH7isdMY1qxMos0ZFUY+Y/1M5XhVgW
+ A9BA==
+X-Gm-Message-State: ANoB5plXkuvf3urDhnEFbvq5Tw0yxpdGH8VryaWuF/913WCbElRbWalK
+ cBBZYQ/67M3ec5Uczr1WwF4BDAtB/1Unsg==
+X-Google-Smtp-Source: AA0mqf6N9CxNv+2Jnx1ETHyjYJE/i79jA1tAHpBrXJwg/JA+NBkvtFHCb7jHHi6OdUIN7uiMEtENdg==
+X-Received: by 2002:a7b:c406:0:b0:3cf:a0f6:1942 with SMTP id
+ k6-20020a7bc406000000b003cfa0f61942mr13307234wmi.34.1670855288717; 
+ Mon, 12 Dec 2022 06:28:08 -0800 (PST)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ m27-20020a05600c3b1b00b003b47ff307e1sm10341742wms.31.2022.12.12.06.28.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 12 Dec 2022 06:28:08 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Dec 2022 15:28:02 +0100
+Message-Id: <20221212142802.1708779-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0213e9af-c19e-4ccc-6519-08dadc476978
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 13:47:29.6008 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s/tGytC/iGOCE/a7iVVLEaRRyO0SuyxFpYIHWNWhdwjLDapHMXpOXTtUW9ZWNPsO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6796
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZE1D4M7G5l02RC7oFMJXi95P0u28Sz/mPl7JsvpSETk=;
- b=dyITkHjkPNWT1IF4K5sS1NVf8BGSo4SB44PJZTqI4Z52iO7LAVtj2NbEUguPggl6u6SdQS6woJV15U+5LYwUCv6eduMFlivlrag8pR+K99B/1ejB9G8QG/4x6tTCWl1EDJjlb4O93afbrzzjzQFnLRWuhiBKnnG2JDrKtb7/EHQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=dyITkHjk
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
- fix linux dts name
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=4Lcfvo/3H6yvUS6GBbvJRiRf4e+bgUGxRQD5XENNcaY=;
+ b=o8pQ5CGq/Cate8gAOMyXS1dJZ74u27wRIM4i9uKgYXPhBcCPwvweXJMXormVB4cUO8
+ vE+gwqW6H9cCiCdUClBvaevx/UYSi1pOgEj6K0bSWh6wS0vdfBYZd6+aTzusyzc6B96w
+ tHA9y3kOeQrLDN+DDfSYdBpAwoo/0WxkvbNRx23nhJH/5Jc6gVvT4jg1twT0zm1Tyj86
+ 0NeQFtNMmKmrrh586wMbWnTfNFrB8yEMtCP8nnHr363auYzbgA+IxGzA5mCDD8/mi9Yc
+ KbCAiYDP91JIljo3QDvSESRAfrnWGUgqfwplaLMyqv0FYS9ZtadVw9fMp5uUHyNxsWeV
+ OTUQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=o8pQ5CGq
+Subject: [Buildroot] [PATCH 1/1] package/unifdef: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -144,46 +95,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>, "Simek,
- Michal" <michal.simek@amd.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+A small package that does "Selectively remove C preprocessor conditionals".
 
-> And in fact, it seems this patch is also broken: there is no Device Tree named zynqmp-smk-k26-revA-sck-kv-g-revB.dts:
+The package will be needed for the upcoming webkitgtk 2.40.0 release.
+I personally added it to get started with 2.39.2.
 
-> $ make zynqmp_kria_kv260_defconfig
-> $ make linux-patch
-> $ find output/build/linux-custom/ -name 'zynqmp-smk-k26-revA-sck-kv-g-revB.dts'
+See: https://github.com/WebKit/WebKit/commit/f76a7e30e5749af897b83cc75b2534b1afa32552
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ .../0001-Makefile-fix-error-on-install.patch  | 31 +++++++++++++++++++
+ package/unifdef/unifdef.hash                  |  3 ++
+ package/unifdef/unifdef.mk                    | 20 ++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 package/unifdef/0001-Makefile-fix-error-on-install.patch
+ create mode 100644 package/unifdef/unifdef.hash
+ create mode 100644 package/unifdef/unifdef.mk
 
-> I have done a full build and run test on all of these patches you have been committing, including this one.
-
-In case my last message was not absolutely clear, the mistake I made when updating the zynqmp_kria_kv260_defconfig from Xilinx 2022.1 to 2022.2 was not handling the device tree name change.
-
-2022.1 used smk-k26-revA-sck-kv-g-revB.dtb
-https://github.com/Xilinx/linux-xlnx/blob/xlnx_rebase_v5.15_2022.1/arch/arm64/boot/dts/xilinx/Makefile
-smk-k26-revA-sck-kv-g-revB-dtbs := zynqmp-smk-k26-revA.dtb zynqmp-sck-kv-g-revB.dtbo
-dtb-$(CONFIG_ARCH_ZYNQMP) += smk-k26-revA-sck-kv-g-revB.dtb
-
-2022.2 changed to zynqmp-smk-k26-revA-sck-kv-g-revB.dtb
-https://github.com/Xilinx/linux-xlnx/blob/xlnx_rebase_v5.15_2022.2/arch/arm64/boot/dts/xilinx/Makefile
-zynqmp-smk-k26-revA-sck-kv-g-revB-dtbs := zynqmp-smk-k26-revA.dtb zynqmp-sck-kv-g-revB.dtbo
-dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-smk-k26-revA-sck-kv-g-revB.dtb
-
-In both cases, the defconfig remains the default zynqmp xilinx_zynqmp_virt_defconfig which is used for all zynqmp builds.
-
-In the future, I will be more thorough to fully check and test the details before bumping to a new software version.  I have learned my lesson that assuming things will stay the same is a mistake.
-
-Please let me know if this is clear and if you have any questions.  Thank you for your understanding.
-
-Best regards,
-Neal Frager
-AMD
+diff --git a/package/unifdef/0001-Makefile-fix-error-on-install.patch b/package/unifdef/0001-Makefile-fix-error-on-install.patch
+new file mode 100644
+index 0000000000..c959a41c5a
+--- /dev/null
++++ b/package/unifdef/0001-Makefile-fix-error-on-install.patch
+@@ -0,0 +1,31 @@
++From b5e4229918c13bc0c11a523105cdb3a464337b37 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Mon, 12 Dec 2022 12:59:59 +0100
++Subject: [PATCH] Makefile: fix error on install
++
++ln: failed to create symbolic link '/home/thomas/Documents/buildroot/output/host/share/man/man1/unifdefall.1': File exists
++
++Seen while trying to add this package to buildroot.org.
++
++(upstream: https://github.com/fanf2/unifdef/pull/16)
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 36c7028..485927a 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -28,7 +28,7 @@ install: unifdef unifdefall.sh unifdef.1
++ 	: manual
++ 	install -m 755 -d  ${man1dest}
++ 	install -m 644 unifdef.1  ${man1dest}/
++-	ln -s unifdef.1  ${man1dest}/unifdefall.1
+++	ln -f -s unifdef.1  ${man1dest}/unifdefall.1
++ 
++ clean:
++ 	rm -f unifdef version.h
++-- 
++2.38.1
++
+diff --git a/package/unifdef/unifdef.hash b/package/unifdef/unifdef.hash
+new file mode 100644
+index 0000000000..989235ed00
+--- /dev/null
++++ b/package/unifdef/unifdef.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  37ed46a39446b15b08af418fda23b75c27a769d5aad236d817ee7522cc9caeee  COPYING
++sha256  fba564a24db7b97ebe9329713ac970627b902e5e9e8b14e19e024eb6e278d10b  unifdef-2.12.tar.gz
+diff --git a/package/unifdef/unifdef.mk b/package/unifdef/unifdef.mk
+new file mode 100644
+index 0000000000..55713d82ec
+--- /dev/null
++++ b/package/unifdef/unifdef.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# unifdef
++#
++################################################################################
++
++UNIFDEF_VERSION = 2.12
++UNIFDEF_SITE = https://dotat.at/prog/unifdef
++UNIFDEF_LICENSE = BSD-2-Clause
++UNIFDEF_LICENSE_FILES = COPYING
++
++define HOST_UNIFDEF_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define HOST_UNIFDEF_INSTALL_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HOME=$(HOST_DIR) install
++endef
++
++$(eval $(host-generic-package))
+-- 
+2.38.1
 
 _______________________________________________
 buildroot mailing list
