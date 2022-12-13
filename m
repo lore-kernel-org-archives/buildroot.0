@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 773EFC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 20:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B82C9C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 20:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10AE660FBE;
-	Tue, 13 Dec 2022 20:21:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10AE660FBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FFEE81E9D;
+	Tue, 13 Dec 2022 20:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FFEE81E9D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s1Pq2uKX0bpz; Tue, 13 Dec 2022 20:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lT4-OmqL78Ql; Tue, 13 Dec 2022 20:21:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62C0B60FA6;
-	Tue, 13 Dec 2022 20:21:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62C0B60FA6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 286F31BF301
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:21:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B61E381EA7;
+	Tue, 13 Dec 2022 20:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B61E381EA7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D7D91BF301
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11C2040235
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11C2040235
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDAA681EA7
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDAA681EA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RJaCy1HWI7go for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 20:21:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7-kjKxTRct2t for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 20:21:42 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3421440227
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3421440227
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 20:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E06381E9D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1E06381E9D
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 20:21:41 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 15578E0003;
- Tue, 13 Dec 2022 20:21:34 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 540AAFF802;
+ Tue, 13 Dec 2022 20:21:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p5BmQ-00H18p-0n; Tue, 13 Dec 2022 21:21:34 +0100
+ id 1p5BmV-00H190-GC; Tue, 13 Dec 2022 21:21:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 References: <20221212071747.2829022-1-peter@korsgaard.com>
-Date: Tue, 13 Dec 2022 21:21:33 +0100
-In-Reply-To: <20221212071747.2829022-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 12 Dec 2022 08:17:44 +0100")
-Message-ID: <877cyvvyuq.fsf@dell.be.48ers.dk>
+ <20221212071747.2829022-2-peter@korsgaard.com>
+Date: Tue, 13 Dec 2022 21:21:39 +0100
+In-Reply-To: <20221212071747.2829022-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 12 Dec 2022 08:17:45 +0100")
+Message-ID: <87359jvyuk.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/4] nezha_defconfig: bump u-boot to current
- top of d1-wip
+Subject: Re: [Buildroot] [PATCH 2/4] nezha_defconfig: use upstream OpenSBI
+ 1.1 release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,9 +73,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This is now based on U-Boot 2022.10 and has gained SPL support, so use that
- > instead of sun20-d1-spl.  With this we can also drop the u-boot patch and
- > patch directory.
+ > The D1 support is now upstream, so we can use the upstream 1.1 release
+ > instead of a custom version.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
