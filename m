@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E9EC10F1B
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 20:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E57C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 20:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 656DA402A8;
-	Tue, 13 Dec 2022 20:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 656DA402A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 353A660FD0;
+	Tue, 13 Dec 2022 20:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 353A660FD0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TxlC0craCJQG; Tue, 13 Dec 2022 20:24:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gQwrtElNG0l3; Tue, 13 Dec 2022 20:24:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B35F400CB;
-	Tue, 13 Dec 2022 20:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B35F400CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92CE460FCA;
+	Tue, 13 Dec 2022 20:24:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92CE460FCA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 80E901BF301
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:22:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 035B01BF301
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B47BD4179C
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B47BD4179C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 194C9417AD
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 194C9417AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RZRjKd2TU3WR for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 20:22:19 +0000 (UTC)
+ with ESMTP id 0hSG-4tb7rAN for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 20:22:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D73FD417AD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 795B941781
  for <buildroot@buildroot.org>; Tue, 13 Dec 2022 20:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D73FD417AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 795B941781
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C63928663B; Tue, 13 Dec 2022 20:22:18 +0000 (UTC)
+ id 667148663E; Tue, 13 Dec 2022 20:22:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 21:20:53 +0100
+Date: Tue, 13 Dec 2022 21:11:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e8d312418e7eb4b0b2c14fdb17560d185f0ea9b
-X-Git-Newrev: 0a3a7169d66b610c968128688b6475ffc333cc96
+X-Git-Oldrev: 148ae3338c70881cc2caebdd9b45cc6212362a2b
+X-Git-Newrev: a182f3a7edcaf771d350604abc132e157b47f7ee
 X-Patchwork-Hint: ignore
-Message-Id: <20221213202218.C63928663B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/sun20i-d1-spl: drop package
+Message-Id: <20221213202218.667148663E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.40.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,115 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a3a7169d66b610c968128688b6475ffc333cc96
+commit: https://git.buildroot.net/buildroot/commit/?id=a182f3a7edcaf771d350604abc132e157b47f7ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-U-Boot has now gained SPL support for D1, so this temporary bootloader is no
-longer supported.
+Release notes: https://sqlite.org/releaselog/3_40_0.html
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                      |  7 +++++++
- DEVELOPERS                            |  1 -
- boot/Config.in                        |  1 -
- boot/sun20i-d1-spl/Config.in          |  8 --------
- boot/sun20i-d1-spl/sun20i-d1-spl.hash |  2 --
- boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 23 -----------------------
- 6 files changed, 7 insertions(+), 35 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 28c6822689..852189f0ff 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 936f42e8e9..ea4e30a463 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f31d445b48e67e284cf206717cc170ab63cbe4fd7f79a82793b772285e78fdbb  sqlite-autoconf-3390400.tar.gz
++sha256  0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7  sqlite-autoconf-3400000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 4f4164c374..9d0b60ab59 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_TARGET_SUN20I_D1_SPL
-+	bool "sun20-d1-spl removed"
-+	select BR2_LEGACY
-+	help
-+	  U-Boot has gained SPL support for D1, so this temporary
-+	  bootloader is no longer supported.
-+
- config BR2_PACKAGE_PYTHON_M2R
- 	bool "python-m2r removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f0dcc42de7..831e60982e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2305,7 +2305,6 @@ F:	board/pandaboard/
- F:	board/roseapplepi/
- F:	board/visionfive/
- F:	boot/shim/
--F:	boot/sun20i-d1-spl/
- F:	configs/avenger96_defconfig
- F:	configs/beagleboneai_defconfig
- F:	configs/lafrite_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index ce17b2df6b..2d4d077632 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -20,7 +20,6 @@ source "boot/optee-os/Config.in"
- source "boot/opensbi/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
--source "boot/sun20i-d1-spl/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
-diff --git a/boot/sun20i-d1-spl/Config.in b/boot/sun20i-d1-spl/Config.in
-deleted file mode 100644
-index 9d94d87b1c..0000000000
---- a/boot/sun20i-d1-spl/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_TARGET_SUN20I_D1_SPL
--	bool "sun20-d1-spl"
--	depends on BR2_RISCV_64
--	help
--	  Allwinner D1 boot0 code with modifications to use as U-Boot
--	  SPL.
--
--	  https://github.com/smaeul/sun20i_d1_spl
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-deleted file mode 100644
-index 11d17a9a16..0000000000
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256  08e2d0574e58c99734cd1d9ea89b86464242bf2db4f6769b23803bf9dcdac3c4  sun20i-d1-spl-882671fcf53137aaafc3a94fa32e682cb7b921f1.tar.gz
-diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-deleted file mode 100644
-index 6bcea0fa96..0000000000
---- a/boot/sun20i-d1-spl/sun20i-d1-spl.mk
-+++ /dev/null
-@@ -1,23 +0,0 @@
--################################################################################
--#
--# sun20i-d1-spl
--#
--################################################################################
--
--# Commit on the 'mainline' branch
--SUN20I_D1_SPL_VERSION = 882671fcf53137aaafc3a94fa32e682cb7b921f1
--SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
--SUN20I_D1_SPL_INSTALL_TARGET = NO
--SUN20I_D1_SPL_INSTALL_IMAGES = YES
--SUN20I_D1_SPL_LICENSE = GPL-2.0+
--
--define SUN20I_D1_SPL_BUILD_CMDS
--	$(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)" p=sun20iw1p1 mmc
--endef
--
--define SUN20I_D1_SPL_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/nboot/boot0_sdcard_sun20iw1p1.bin \
--		$(BINARIES_DIR)/boot0_sdcard_sun20iw1p1.bin
--endef
--
--$(eval $(generic-package))
+-SQLITE_VERSION = 3.39.4
+-SQLITE_TAR_VERSION = 3390400
++SQLITE_VERSION = 3.40.0
++SQLITE_TAR_VERSION = 3400000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2022
+ SQLITE_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
