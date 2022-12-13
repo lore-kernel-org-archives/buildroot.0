@@ -4,63 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA22C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 11:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EAD2C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 12:13:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06751403E7;
-	Tue, 13 Dec 2022 11:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06751403E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id B14BA4059E;
+	Tue, 13 Dec 2022 12:13:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B14BA4059E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iW-bdG1YNmTJ; Tue, 13 Dec 2022 11:12:03 +0000 (UTC)
+	with ESMTP id vckGvTCsAqoB; Tue, 13 Dec 2022 12:13:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AE50409D9;
-	Tue, 13 Dec 2022 11:12:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AE50409D9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D0EF11BF2BC
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 11:12:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE6C440541;
+	Tue, 13 Dec 2022 12:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE6C440541
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 548541BF5B3
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 12:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7847416FD
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 11:12:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7847416FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B14281D7C
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 12:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B14281D7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ovhB47V7B5r for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 11:11:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A833416F6
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A833416F6
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 11:11:58 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3B49F60008;
- Tue, 13 Dec 2022 11:11:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 12:11:54 +0100
-Message-Id: <20221213111154.2491203-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YJT9-unJAZwY for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 12:13:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03F57813F1
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 03F57813F1
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 12:13:22 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id c7so2013478pfc.12
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 04:13:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Sb49ihZzGcyh98df7t6/xgifR5iyuWTrWISuFO4VfGU=;
+ b=CyAdevZL9RGp0vvG0cpimQki5XG/ViFoxs8xooyLRqmKtP+f8bGTGrXBJy6i7bvmlX
+ SMr1AEod1xBz5FxZOmeCkMeXgMz9ACuBU/dkRlCn1pmKB8Wk2UsUBPclulowLITnKAPK
+ zys3Y3kdaVqnQo5W4QsnOnqveL8Lxz1fCqJRkJDOVJqx3nK7rxSz6UWU1isKJ4p572XC
+ LYt7Ogt8evnXeT9QhsZyE1czWHTiBUf3MObXBa9UGOHLbc+c3Vo6dRQxIq8RQULQFyPl
+ +gZ5UZaLF8gCAJlSTorDDZLspLmnck5r2c0AkbBeovXVF2FC7CxpTJ/lR1NgT6tFxW9a
+ aWbA==
+X-Gm-Message-State: ANoB5pkz+HbX2Fn4h4cW+zMpjyv8cOZ726JPlPlqVavQZqV9nvb678o0
+ z2gJ0Dw12cj8mlCdZkCzFhi0KQx33iCxDwFqIWqpT6tD
+X-Google-Smtp-Source: AA0mqf6ziyu8PlIk/1wdhoNya0swJ5cFdhCku3OZMBY/qmmHO5e1hXnIYlsUPVgHLwI/Tmhrg3uXCkAWx88X5FNgGuw=
+X-Received: by 2002:a63:652:0:b0:478:bd3f:7021 with SMTP id
+ 79-20020a630652000000b00478bd3f7021mr17274299pgg.558.1670933601836; Tue, 13
+ Dec 2022 04:13:21 -0800 (PST)
 MIME-Version: 1.0
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Tue, 13 Dec 2022 13:13:10 +0100
+Message-ID: <CAMdwsN8LeLeqO8prGAdNhRC1u6+DRdD2FFCscvBquZW1rNe-qg@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670929915;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=2LLwE6E2ldfYy//dtAWPlCqlYpIbnyi0udEho24AO0Y=;
- b=bmL0E4j10/bMxsjDvSQUCFhnBOQZnbZLDOPZZJi82ZGbINySPV60U5d2NxFsxpamWdY2yz
- o5De+YmG+mWas4iCr4jIhOyzHSnl8PoSxQgRKDlv7pBRVKMBJR2bVr7edLl8GFfP0SdegZ
- dWPBAUUTGS0MH8FngkiI/RPADc/lOCffu24uDKm+C8C6LWUMHX2ZY/Z6g3af5tQObNh3I4
- 3zRAEo9Br9eBq99WnLw3p1aG/rE+UISWv08wfNSFcAB0YzlXv2RFKkl9LQg+7xIwdF0mmd
- NCt9U+KgE492l/1PY3fYOEmO2OBHHs6LhAuvLAu1Fkk1VABvI0vhEN4Iewc05A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bmL0E4j1
-Subject: [Buildroot] [PATCH] boot/optee-os: Add out-of-source OPTEE-OS
- device tree support
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=Sb49ihZzGcyh98df7t6/xgifR5iyuWTrWISuFO4VfGU=;
+ b=DsldrhQZuYEZp2e7RRlPXq+QH7GDADMGIXwzcVjFNFQWOo+NkYcCmCF3gkj9Y0AHvM
+ NY3UJiwZWk+oTJ5xwDOTzHAOaqCgRM76r3GElBNVyp+YOJHSRAHfA6pbNfTsayHR8ldY
+ xmcTEts37inVD9UHU7a7bl860K1DmYfszyBzcZafsoEe5kPTqJUFiG4GeKZ43AWkJtLn
+ qdINxz4h5my9+qOSRJw+OUPt1t6OEPZESkRnQ/1m1IW0zmg5cO846qbU5D7zEBSoCjhC
+ sU9u/NyJm4MVvSiM7Dg1QoJOIqQRVAtsMUlYr2yBouRRkvMPt2klxsrT4gfMN5YJJOVI
+ 8SBQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=DsldrhQZ
+Subject: [Buildroot] compile commands database with BR compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,77 +86,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-Cc: Kory Maincent <kory.maincent@bootlin.com>,
- Etienne Carriere <etienne.carriere@linaro.org>, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+Hello all,
 
-Similarly to Uboot, this patch adds the ability to copy in and build
-out-of-source device tree sources during an OPTEE-OS build.
-To build the external device tree source file, the OP-TEE OS configuration
-must refer to it with the CFG_EMBED_DTB_SOURCE_FILE option and no platform
-flavor need to be specified.
+A bit of a buildroot adjacent question, we are converting some of our
+software to CMake, and I wanted to take the opportunity to add some
+additional tooling like clang-tidy/cppcheck... with the exported
+compile commands.
+This however doesn't seem to really work, I'm presuming it doesn't
+play nice with the toolchain wrapper, adding -march and -mfloat-abi
+manually to the flags seems to resolve some issues but it still throws
+a bunch of errors as if it wouldn't be able to compile even though the
+application compiles just fine.
+Has anyone here gotten it working to use a compile_commands.json as
+input for other tooling that's generated with a BR compiler?
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- boot/optee-os/Config.in   | 11 +++++++++++
- boot/optee-os/optee-os.mk |  5 +++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 8bcce22306..10bbee45f8 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -130,6 +130,17 @@ config BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR
- 	  Value for the optional PLATFORM_FLAVOR build directive
- 	  provided to OP-TEE OS.
- 
-+config BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH
-+	string "Device Tree Source file paths"
-+	help
-+	  Space-separated list of paths to device tree source files
-+	  that will be copied to core/arch/arm/dts/ before starting the
-+	  build.
-+
-+	  To use this device tree source file, the OP-TEE OS configuration
-+	  must refer to it with the CFG_EMBED_DTB_SOURCE_FILE option and
-+	  no platform flavor need to be specified.
-+
- config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
- 	string "Additional build variables"
- 	help
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 38b0d367ef..33b4e2e1ab 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -84,6 +84,8 @@ endif
- 
- OPTEE_OS_IMAGE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CORE_IMAGES))
- 
-+OPTEE_OS_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH))
-+
- ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
- define OPTEE_OS_BUILD_CORE
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
-@@ -120,6 +122,9 @@ endef
- endif # BR2_TARGET_OPTEE_OS_SDK
- 
- define OPTEE_OS_BUILD_CMDS
-+	$(if $(OPTEE_OS_CUSTOM_DTS_PATH),
-+		cp -f $(OPTEE_OS_CUSTOM_DTS_PATH) $(@D)/core/arch/arm/dts/
-+	)
- 	$(OPTEE_OS_BUILD_CORE)
- 	$(OPTEE_OS_BUILD_SDK)
- endef
--- 
-2.25.1
-
+Regards,
+Jesse
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
