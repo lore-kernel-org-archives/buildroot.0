@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76F3C00145
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 01:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D666C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 01:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4527B40384;
-	Tue, 13 Dec 2022 01:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4527B40384
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DD6C408DE;
+	Tue, 13 Dec 2022 01:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DD6C408DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nawXU0QSJeVe; Tue, 13 Dec 2022 01:50:59 +0000 (UTC)
+	with ESMTP id YMjhsg3hmL_Q; Tue, 13 Dec 2022 01:51:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDAF3408DE;
-	Tue, 13 Dec 2022 01:50:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDAF3408DE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 195601BF2FB
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AD2541697;
+	Tue, 13 Dec 2022 01:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AD2541697
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 346411BF2FB
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5AD2408E9
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5AD2408E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D20381B53
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D20381B53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3GaxziopdaPY for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 01:50:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xlDLnzjXgdbT for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 01:50:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B97A4400DD
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B97A4400DD
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 01:50:19 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id h6so1003893iof.9
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:50:19 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 038FC8143B
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 038FC8143B
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 01:50:20 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id y2so4354159ily.5
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:50:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=sdgvrrrzVumFekp+nDBVAVc9++hXIk9sbTJEVw2/x0I=;
- b=7pT9EFvVEU1w7VCVdcLpGQ/HV410x9AsZ7bBlLSRMZjfBuOmsm6zQ+AtcK2hRIDeNz
- 4pr1JIhlhF856LL46T4V4WODamYnEIM7I1Hb5mUdKx7LqiBCjF5MygTmfhf5p3QPuclO
- qUEjGjdYBHxWwRxhbdPc8l/Y6TOX4jHn925jlghqJ3DdlUZOy5/+0tq7vp3r5U+YFF9t
- aLa0lI7rfPuTvDd0P/PKV4A4FMxpuqX0FHy9O+MESU42wh0zE3hhvjC86kacMe/CKqVo
- 3Gj5Env8gd9v6eOYv40V2g1S/GTjo3ELyzx4DPDpGkuMzj2Dp7GyR757st96L2OvQnhH
- XFDg==
-X-Gm-Message-State: ANoB5pmcw8LayjRyqlrqEhi2Kn8Hpf1z7moi0XDt1ba6QlJ6pKg2ybgO
- 9/oUafzFtA09LIfiAuTgeh8rVqIQWKPcrw==
-X-Google-Smtp-Source: AA0mqf5KWWNw/qD2Vb8K8uLVSKfqX98L8tlSkL/TZ/FRe4LhaohyLc0RJrJFiEAQSOBnJNJqeQ7H8A==
-X-Received: by 2002:a6b:4f08:0:b0:6e1:a62e:f658 with SMTP id
- d8-20020a6b4f08000000b006e1a62ef658mr11382855iob.18.1670896218674; 
- Mon, 12 Dec 2022 17:50:18 -0800 (PST)
+ bh=LUNnWl++3cnmrL+tLpJhzC5YFpimRNWCcUS2jY4qw7g=;
+ b=Km+8O46lYF8OmcwltExrYb5rfPgAuWjCg4YzhQJpJdLfq3sPox2Be4tC7qJaud2UcU
+ S3vv/QzrFvsJoiDQNb+uv62dCSWpPN3+Ybmiyp7gke1aK9mc6cF4oVIfTIjJ52FsFZPE
+ zIuMPIGUDxqLdna9m8lAGdmjKg8U4+6FOQi8ieQGxQiadnR+fK4ud6wJfxwd2JzrZvoZ
+ 3eA9Wu/BmPDPYlHPdrevbtBXEzNK3e8MnQUBPyJGlxFhD5xug9UktKz683NgTH9f65WB
+ vi6DfsEydCweGnuHEBpD9jPONSQ6HPCje0s4CPnjtIfJT4VqA794GFdpTOyEWfsU+gW8
+ /ZmQ==
+X-Gm-Message-State: ANoB5pnX8ol2i/rRx3C/jcesTWyNNjsZVAw8D9DadL2y8OKLZVNT8+Gg
+ UGWMCEsB8+gvtc7TinDvymXBf5XDptS87g==
+X-Google-Smtp-Source: AA0mqf5KPx8Mg5/kmmRCcnr2z+UZddtIjbSvzZ363yGKc46vb1KXmHRfg0PkZShahMGKF6E2JJpACQ==
+X-Received: by 2002:a92:ad0f:0:b0:303:913f:727a with SMTP id
+ w15-20020a92ad0f000000b00303913f727amr9554859ilh.24.1670896219858; 
+ Mon, 12 Dec 2022 17:50:19 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- y18-20020a027312000000b003760a908bfasm413354jab.169.2022.12.12.17.50.18
+ y18-20020a027312000000b003760a908bfasm413354jab.169.2022.12.12.17.50.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 12 Dec 2022 17:50:18 -0800 (PST)
+ Mon, 12 Dec 2022 17:50:19 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 18:49:59 -0700
-Message-Id: <20221213015001.4175808-5-james.hilliard1@gmail.com>
+Date: Mon, 12 Dec 2022 18:50:01 -0700
+Message-Id: <20221213015001.4175808-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221213015001.4175808-1-james.hilliard1@gmail.com>
 References: <20221213015001.4175808-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sdgvrrrzVumFekp+nDBVAVc9++hXIk9sbTJEVw2/x0I=;
- b=R8Ca7kE7oFs9lz5XM+fbhMVT6JOnO9eyAo0B+8PsKMSYttII9IO5MMGX6bqCiHdzAE
- wNlvaSN8MXQnak08RrXLoRBLC4upIuVOjM5Rr5EQhpQx0Sdy1RXeqbssilW0PXm5KvpS
- /a58SjPDXuG18PHl0UWxAxRMprP4hod1UtfqETY56Q+x3p1WR0DyTGmhfp0i+f7pj5uI
- SaPdWr64g9XhQRU4P8w9PhTTNgStN2XpptSSFxHHd4q9e3mWM1415EMQ6B+SPFjb8ICg
- dvauSikbu0yd8WYoueMgGynBAOBCIVIGYsdtDFFBas6oljA5XjsNMOEX8E8KPTgiLq3O
- GKYA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=LUNnWl++3cnmrL+tLpJhzC5YFpimRNWCcUS2jY4qw7g=;
+ b=qYD0AmJDQMDyFJVnyyxbNpl8cS5k7ycEU8zn/5ENzX+7kUO/NNkMI9kUnTk6CES0bx
+ ZrfKzPNajLnqf7BLSu5NivFz/P0+EgNHreHctHN6nGjlk3KacWo1GZsrLowhDc+r9XNh
+ hqwzZw6gzB+gVidOw9HyzvHsnAqGaaIYLZY9G2pWXGhcPOJrIdYDp+vffWFhCAec5vND
+ lliLQFSA8yLM2GmwUUI5kmZXu5GzBnbVpGFLJopEUjcDXmZHGXa2PDKTiCOHHl8p/Th0
+ Ck2aTRnQVK1Z2tVtCR01/LO8SgxfZgmYPby3y6xXVd9zfVeI1hTb/rXZ9/eWifjwLLbM
+ 4BlQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=R8Ca7kE7
-Subject: [Buildroot] [PATCH 5/7] package/python-wsproto: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=qYD0AmJD
+Subject: [Buildroot] [PATCH 7/7] package/python-selenium: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,82 +106,84 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-wsproto/Config.in           |  7 +++++++
- package/python-wsproto/python-wsproto.hash |  5 +++++
- package/python-wsproto/python-wsproto.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-wsproto/Config.in
- create mode 100644 package/python-wsproto/python-wsproto.hash
- create mode 100644 package/python-wsproto/python-wsproto.mk
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-selenium/Config.in            | 11 +++++++++++
+ package/python-selenium/python-selenium.hash |  3 +++
+ package/python-selenium/python-selenium.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-selenium/Config.in
+ create mode 100644 package/python-selenium/python-selenium.hash
+ create mode 100644 package/python-selenium/python-selenium.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 769cde7155..89d2a9a2c3 100644
+index a995f1d73f..391fe5e8f1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1401,6 +1401,7 @@ F:	package/python-trio/
- F:	package/python-typeguard/
- F:	package/python-typing-inspect/
- F:	package/python-weasyprint/
-+F:	package/python-wsproto/
- F:	package/python-yarl/
- F:	package/python-zopfli/
- F:	package/rtl8192eu/
+@@ -1391,6 +1391,7 @@ F:	package/python-pydyf/
+ F:	package/python-pypa-build/
+ F:	package/python-pyphen/
+ F:	package/python-rtoml/
++F:	package/python-selenium/
+ F:	package/python-snappy/
+ F:	package/python-sniffio/
+ F:	package/python-sockjs/
 diff --git a/package/Config.in b/package/Config.in
-index dbf705bbdd..cd22bc9935 100644
+index 5c9179a80c..b4b4bcb94d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1335,6 +1335,7 @@ menu "External python modules"
- 	source "package/python-wrapt/Config.in"
- 	source "package/python-ws4py/Config.in"
- 	source "package/python-wsaccel/Config.in"
-+	source "package/python-wsproto/Config.in"
- 	source "package/python-wtforms/Config.in"
- 	source "package/python-xlib/Config.in"
- 	source "package/python-xlrd/Config.in"
-diff --git a/package/python-wsproto/Config.in b/package/python-wsproto/Config.in
+@@ -1256,6 +1256,7 @@ menu "External python modules"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
++	source "package/python-selenium/Config.in"
+ 	source "package/python-semver/Config.in"
+ 	source "package/python-sentry-sdk/Config.in"
+ 	source "package/python-serial/Config.in"
+diff --git a/package/python-selenium/Config.in b/package/python-selenium/Config.in
 new file mode 100644
-index 0000000000..0610348b8d
+index 0000000000..30820f07f8
 --- /dev/null
-+++ b/package/python-wsproto/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_WSPROTO
-+	bool "python-wsproto"
-+	select BR2_PACKAGE_PYTHON_H11 # runtime
++++ b/package/python-selenium/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_SELENIUM
++	bool "python-selenium"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PYTHON_PYSOCKS # runtime
++	select BR2_PACKAGE_PYTHON_TRIO # runtime
++	select BR2_PACKAGE_PYTHON_TRIO_WEBSOCKET # runtime
++	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
 +	help
-+	  WebSockets state-machine based protocol implementation.
++	  Python language bindings for Selenium WebDriver.
 +
-+	  https://github.com/python-hyper/wsproto/
-diff --git a/package/python-wsproto/python-wsproto.hash b/package/python-wsproto/python-wsproto.hash
++	  https://www.selenium.dev
+diff --git a/package/python-selenium/python-selenium.hash b/package/python-selenium/python-selenium.hash
 new file mode 100644
-index 0000000000..4eb3195785
+index 0000000000..f320e2d0bb
 --- /dev/null
-+++ b/package/python-wsproto/python-wsproto.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/wsproto/json
-+md5  f64973434117e23d2079460ed64b05c3  wsproto-1.2.0.tar.gz
-+sha256  ad565f26ecb92588a3e43bc3d96164de84cd9902482b130d0ddbaa9664a85065  wsproto-1.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c0329a8dbf3437b095f7f5cf4257d6bb855e07120cae8786586073ff7a699959  LICENSE
-diff --git a/package/python-wsproto/python-wsproto.mk b/package/python-wsproto/python-wsproto.mk
++++ b/package/python-selenium/python-selenium.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/selenium/json
++md5  f3f853585dcdfbdde5a5d9e7d5e3f114  selenium-4.7.2.tar.gz
++sha256  3aefa14a28a42e520550c1cd0f29cf1d566328186ea63aa9a3e01fb265b5894d  selenium-4.7.2.tar.gz
+diff --git a/package/python-selenium/python-selenium.mk b/package/python-selenium/python-selenium.mk
 new file mode 100644
-index 0000000000..629f4431b4
+index 0000000000..a6fa95f352
 --- /dev/null
-+++ b/package/python-wsproto/python-wsproto.mk
++++ b/package/python-selenium/python-selenium.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-wsproto
++# python-selenium
 +#
 +################################################################################
 +
-+PYTHON_WSPROTO_VERSION = 1.2.0
-+PYTHON_WSPROTO_SOURCE = wsproto-$(PYTHON_WSPROTO_VERSION).tar.gz
-+PYTHON_WSPROTO_SITE = https://files.pythonhosted.org/packages/c9/4a/44d3c295350d776427904d73c189e10aeae66d7f555bb2feee16d1e4ba5a
-+PYTHON_WSPROTO_SETUP_TYPE = setuptools
-+PYTHON_WSPROTO_LICENSE = MIT
-+PYTHON_WSPROTO_LICENSE_FILES = LICENSE
++PYTHON_SELENIUM_VERSION = 4.7.2
++PYTHON_SELENIUM_SOURCE = selenium-$(PYTHON_SELENIUM_VERSION).tar.gz
++PYTHON_SELENIUM_SITE = https://files.pythonhosted.org/packages/3e/3f/69a34f8a83c77bba0ea13323c665ee27bf1b357a049c06c7c611dad10f75
++PYTHON_SELENIUM_SETUP_TYPE = setuptools
++PYTHON_SELENIUM_LICENSE = Apache-2.0
++PYTHON_SELENIUM_STRIP_COMPONENTS = 0
 +
 +$(eval $(python-package))
 -- 
