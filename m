@@ -1,83 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05077C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Dec 2022 22:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A146C00145
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 01:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7332B60BBD;
-	Mon, 12 Dec 2022 22:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7332B60BBD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AKEJTs-60P9s; Mon, 12 Dec 2022 22:35:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC93260C05;
-	Mon, 12 Dec 2022 22:35:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC93260C05
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A763E1BF2B6
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:35:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F5024023B
- for <buildroot@lists.busybox.net>; Mon, 12 Dec 2022 22:35:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F5024023B
+	by smtp2.osuosl.org (Postfix) with ESMTP id B69BD405FA;
+	Tue, 13 Dec 2022 01:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B69BD405FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XErkFGzvVQZA for <buildroot@lists.busybox.net>;
- Mon, 12 Dec 2022 22:35:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4048740002
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4048740002
- for <buildroot@buildroot.org>; Mon, 12 Dec 2022 22:35:53 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BCMZkje030890;
- Mon, 12 Dec 2022 16:35:46 -0600
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BCMZkcH026274
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 12 Dec 2022 16:35:46 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 12
- Dec 2022 16:35:45 -0600
-Received: from DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f]) by
- DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f%17]) with mapi id
- 15.01.2507.016; Mon, 12 Dec 2022 16:35:45 -0600
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?utf-8?B?RnJhbsOnb2lzIFBlcnJhZA==?= <francois.perrad@gadz.org>
-Thread-Topic: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
-Thread-Index: AQHZCZauh/Hy9PckcU+c+irWCzQtXq5pil+AgAAI14CAAAuKgIABQa9Q
-Date: Mon, 12 Dec 2022 22:35:45 +0000
-Message-ID: <d94714457a334901ba5caf994403f81f@ti.com>
-References: <20221206171719.747581-1-gadiyar@ti.com>
- <20221206171719.747581-3-gadiyar@ti.com>	<20221211210933.19fb5199@windsurf>
- <CAB0FRssQAoVA9syt1SM3mwafto722J3rxWXeHwiVRsWFmCyBPw@mail.gmail.com>
- <20221211222229.678a56dc@windsurf>
-In-Reply-To: <20221211222229.678a56dc@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.247.24.77]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fml3s32SCpSv; Tue, 13 Dec 2022 01:50:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3ECB40605;
+	Tue, 13 Dec 2022 01:50:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3ECB40605
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 58BCC1BF2FB
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33C7481B53
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 01:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C7481B53
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OvhvCvL7dAk8 for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 01:50:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B90D18143B
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B90D18143B
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 01:50:17 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id b192so1008050iof.8
+ for <buildroot@buildroot.org>; Mon, 12 Dec 2022 17:50:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=4LJiXwCwSFTfidxCX/k275Ix5hRKuSOPw6dhfgfPRZc=;
+ b=KsmvO51j4EAstS3Ij9o5xuHxK/4LdvS3zoVaJzu+yiD/8p7P1dpyzrPvTB3PxbJ2qA
+ mbPSk5U80AFHQzUkXEtQO8yFH+sz2PJuLVMGstfZjR4V8kOaUGEwhpajj1iXi2y0GSAd
+ 3raNomaomDIT8e97a2pqKw9NixCqgW4p7fJr+AhtdfOqNl9a4RBVAQB/1Ku1pRKC6QMx
+ ybS7Kb0ufimBcBSgylWrnsdIRXxSiwC7l74p1V3CKWwr+hh1XtSN10gELY4NRHcU/StG
+ MZD7DEJ0htYnsbVzNHi4wbNUF2JrH/XJQCS/71JVbHKNQIeuKviHLK+bblwZgxkepkZv
+ 2qvA==
+X-Gm-Message-State: ANoB5plULHSRroNXhmnxFipMUpZ0TE+VhrLzKfsBdTBWd+QBFCsP95Hj
+ 5heGPUlKxDqjFMORYi4/KU/WkX3NXw2a6Q==
+X-Google-Smtp-Source: AA0mqf7YsmiamOkfsz5H7bmO6u0BikNZXw2bkvvPHNCPLcm7Gl/m7R3RWohA08cclDTCgqh2/UHFcA==
+X-Received: by 2002:a5e:8c15:0:b0:6e2:e82c:435a with SMTP id
+ n21-20020a5e8c15000000b006e2e82c435amr5784419ioj.13.1670896216515; 
+ Mon, 12 Dec 2022 17:50:16 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ y18-20020a027312000000b003760a908bfasm413354jab.169.2022.12.12.17.50.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 12 Dec 2022 17:50:16 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Dec 2022 18:49:55 -0700
+Message-Id: <20221213015001.4175808-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1670884546;
- bh=OFwDvyTtyueznDtPyWJkIhU7hev63x1Syv3i4KpXagU=;
- h=From:To:CC:Subject:Date:References:In-Reply-To;
- b=JQR5e56y7dYUHJ/bve1cyeVsHF6wXlDl+orXallELCArYpGMf6eAO4rcItlFZchol
- GAYN+LwNOURnnumD0ItVfv0E8D5yxk0YpoqfUwkvWgxnlVPZHbtus/25/qyDWW59XR
- mLTjRYbrJuXKUzSocaAtDZsYFgnRXDuIBc1US1mQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=JQR5e56y
-Subject: Re: [Buildroot] [PATCH v7 2/3] boot/ti-k3-image-gen: add new package
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=4LJiXwCwSFTfidxCX/k275Ix5hRKuSOPw6dhfgfPRZc=;
+ b=b4YvMamJb18VDSaDvy7UywhKrwl/59vDN9MMcpoCDK2FyYHw3slEPBiWLvazmJ8bX5
+ EXufCLSbaLBO+Y8AZg1sNYQQptUqT17GjjVVq8N/9PNMZD9TdlqX6I540rKvZdsqGb0O
+ tBwtVA6a0ik3Wb+So4v7YAUzExv5/1z5UZ0JEQaR5e43EPuTy2TzYqFUmwo53OjqrjC9
+ V9+ZIXxuBynbUNGKf6hj19ys/tXx0kqEK7PD9JJwIa/zFmu09bA8EEOypg3VwAgSZz5d
+ jU17tzp8ggArNyy2i1o2PtToy8XIJ/cSXCgAbOIX1XOQuVCmSsT2EG2TS88djKVjenmF
+ TKSw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=b4YvMamJ
+Subject: [Buildroot] [PATCH 1/7] package/python-async-generator: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,30 +93,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Gadiyar, Anand via buildroot" <buildroot@buildroot.org>
-Reply-To: "Gadiyar, Anand" <gadiyar@ti.com>
-Cc: "Brattlof, Bryan" <bb@ti.com>, "Davis, Andrew" <afd@ti.com>,
- Xuanhao Shi <X15000177@gmail.com>,
- Anand Gadiyar via buildroot <buildroot@buildroot.org>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-PiBGcm9tOiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPg0K
-PiBTZW50OiBTdW5kYXksIERlY2VtYmVyIDExLCAyMDIyIDM6MjIgUE0NCj4gDQo+IE9uIFN1biwg
-MTEgRGVjIDIwMjIgMjE6NDE6MTEgKzAxMDANCj4gRnJhbsOnb2lzIFBlcnJhZCA8ZnJhbmNvaXMu
-cGVycmFkQGdhZHoub3JnPiB3cm90ZToNCj4gDQo+ID4gc2VlDQo+ID4NCj4gaHR0cHM6Ly9wYXRj
-aHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIyMTIxMTIwMzgyNi4z
-MTE3Nzg0LTEtZnJhbmNvaXMucGVycmFkQGdhZHoub3JnLw0KPiA+IHRoaXMgcGF0Y2ggZG9lcyB0
-aGlzIHJld29yay4NCj4gDQo+IFRoYW5rcywgYnV0IGl0IG5lZWRzIHRvIGJlIGludGVncmF0ZWQg
-aW4gYSB2OCBvZiB0aGUgcGF0Y2ggc2VyaWVzLg0KPiANCj4gVGhhbmtzIQ0KPiANCj4gVGhvbWFz
-DQoNClRoYW5rcyBmb3IgdGhlIGNvbW1lbnRzIFRob21hcyBhbmQgSSBhcG9sb2dpemUgZm9yIG5v
-dA0KY2F0Y2hpbmcgdGhlc2UgcG9pbnRzIGVhcmxpZXIuIFdlIGRpZCBidWlsZCBidXQgZGlkbid0
-IHJlYWQgdGhlDQpsb2cgbWVzc2FnZXMgb2J2aW91c2x5Lg0KDQpJIHdpbGwgcmV3b3JrIGFuZCBy
-ZXN1Ym1pdCB2OCBzaG9ydGx5Lg0KDQpCZXN0IFJlZ2FyZHMsDQpBbmFuZA0KDQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-async-generator/Config.in           |  6 ++++++
+ .../python-async-generator.hash                    |  7 +++++++
+ .../python-async-generator.mk                      | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-async-generator/Config.in
+ create mode 100644 package/python-async-generator/python-async-generator.hash
+ create mode 100644 package/python-async-generator/python-async-generator.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f0dcc42de7..4a4d7ffdcb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1360,6 +1360,7 @@ F:	package/python-aiosignal/
+ F:	package/python-aiozipkin/
+ F:	package/python-argon2-cffi/
+ F:	package/python-argon2-cffi-bindings/
++F:	package/python-async-generator/
+ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-bidict/
+diff --git a/package/Config.in b/package/Config.in
+index 914c3584e9..facd38dd1e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -959,6 +959,7 @@ menu "External python modules"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asgiref/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
++	source "package/python-async-generator/Config.in"
+ 	source "package/python-async-lru/Config.in"
+ 	source "package/python-async-timeout/Config.in"
+ 	source "package/python-attrs/Config.in"
+diff --git a/package/python-async-generator/Config.in b/package/python-async-generator/Config.in
+new file mode 100644
+index 0000000000..eb5720c652
+--- /dev/null
++++ b/package/python-async-generator/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_ASYNC_GENERATOR
++	bool "python-async-generator"
++	help
++	  Async generators and context managers for Python 3.5+.
++
++	  https://github.com/python-trio/async_generator
+diff --git a/package/python-async-generator/python-async-generator.hash b/package/python-async-generator/python-async-generator.hash
+new file mode 100644
+index 0000000000..3a94d5eb31
+--- /dev/null
++++ b/package/python-async-generator/python-async-generator.hash
+@@ -0,0 +1,7 @@
++# md5, sha256 from https://pypi.org/pypi/async_generator/json
++md5  078a29b4afb3d7f38c097a530f042a55  async_generator-1.10.tar.gz
++sha256  6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144  async_generator-1.10.tar.gz
++# Locally computed sha256 checksums
++sha256  b54d37617a67005623de975715952a2df062a2616c197bc3b6b451245b0c9265  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
++sha256  3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b  LICENSE.MIT
+diff --git a/package/python-async-generator/python-async-generator.mk b/package/python-async-generator/python-async-generator.mk
+new file mode 100644
+index 0000000000..d5e4f430fc
+--- /dev/null
++++ b/package/python-async-generator/python-async-generator.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-async-generator
++#
++################################################################################
++
++PYTHON_ASYNC_GENERATOR_VERSION = 1.10
++PYTHON_ASYNC_GENERATOR_SOURCE = async_generator-$(PYTHON_ASYNC_GENERATOR_VERSION).tar.gz
++PYTHON_ASYNC_GENERATOR_SITE = https://files.pythonhosted.org/packages/ce/b6/6fa6b3b598a03cba5e80f829e0dadbb49d7645f523d209b2fb7ea0bbb02a
++PYTHON_ASYNC_GENERATOR_SETUP_TYPE = setuptools
++PYTHON_ASYNC_GENERATOR_LICENSE = Apache-2.0 or MIT
++PYTHON_ASYNC_GENERATOR_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++
++$(eval $(python-package))
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
