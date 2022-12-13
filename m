@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 921B4C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 21:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AEFC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 21:56:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FA5360FB8;
-	Tue, 13 Dec 2022 21:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FA5360FB8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FB9F417C5;
+	Tue, 13 Dec 2022 21:56:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FB9F417C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JbXKJ_OW6f0B; Tue, 13 Dec 2022 21:39:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 58P5SvRbu_GR; Tue, 13 Dec 2022 21:56:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7943E60F49;
-	Tue, 13 Dec 2022 21:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7943E60F49
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6073B1BF4E4
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:39:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79CAC4181C;
+	Tue, 13 Dec 2022 21:56:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79CAC4181C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 574CA1BF4E4
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B6F281313
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B6F281313
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32E7D404E0
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:56:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32E7D404E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bo_RTlVCK01l for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 21:39:23 +0000 (UTC)
-X-Greylist: delayed 00:07:12 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A0D81248
-Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76A0D81248
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 21:39:22 +0000 (UTC)
-Date: Tue, 13 Dec 2022 21:32:00 +0000
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <-RGRUyu_Rb7y4OO0GtQmXCmLMASiD2ZbUenzbGaZW9I6aHZhcsiY3yriYTsZDz1ZkKvVLOHm8Q_aFcGL9kz2kSIDqQqZFFyUydO3WHPibGI=@troodon-software.com>
-In-Reply-To: <87pmcoy07y.fsf@dell.be.48ers.dk>
-References: <20221211201704.25858-1-indrek.kruusa@gmail.com>
- <87359lytkg.fsf@dell.be.48ers.dk>
- <_Xy-l8Ny6TGT7WRiixo_CPZYHzdUIuGYexyAlFzMnPCN0loQWU_ydtPGjnGDOAPHohUUzztFqL1rbhYa5bVk7cO2NN6fK_cUPe8cL4MiTMo=@troodon-software.com>
- <87pmcoy07y.fsf@dell.be.48ers.dk>
-Feedback-ID: 38965776:user:proton
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5mdrkdrDvgs0 for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 21:56:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BF3F40227
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
+ [IPv6:2607:f8b0:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9BF3F40227
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 21:56:12 +0000 (UTC)
+Received: by mail-pf1-x42f.google.com with SMTP id 21so3168062pfw.4
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 13:56:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=amZAl1aweMc2Uriu1f25wNgBArN2YWoyEYfNhvVSt8I=;
+ b=CwYbjDyHD55qp1PIGalWpTrEVnkjdkfMTC049ESi4sbCphctqoqOM9y/vixVyc6oKT
+ nMQyrs6pBQy2SM9zG5ggDcFCQLvoYp0kGkb8kv4bcUUkF8nUpU8CBVcNbxUq/AkN51sN
+ VLVXWaaZ4IGktm95+Tc5Ks7V2mbgeegkUqBqqs9zIyKfoNQnl2YzVBrTM3B78r3Q2maC
+ ZX9LeX0WtP3Ul7sJ12465+WiMLai8WIzvA1y84CZ8qw4quzDib/sXy6ZMgUjj1XYwqWa
+ kQe8MClTloA2rE27F0z+bGWmFXtqndk1B3WCTYEbZKGGuTvD0+J+PSzOQlyAh3W5rBiR
+ egcw==
+X-Gm-Message-State: ANoB5plgUtcfSJThihdXExJzMw07JTHIfmBtePZpE+cdp7PH7LnRjMcl
+ IQ53JCpzQzf5VdK0XV+j9+gDl9o233RQNw==
+X-Google-Smtp-Source: AA0mqf7IAWg3mw6Tl6PO85jjeY9+i6apEXQgHDozB4v/7JnfaSwyE5/DJWkCz9jaV5Knl7GFDm72qw==
+X-Received: by 2002:a62:ee14:0:b0:566:900d:6073 with SMTP id
+ e20-20020a62ee14000000b00566900d6073mr21200207pfi.24.1670968571762; 
+ Tue, 13 Dec 2022 13:56:11 -0800 (PST)
+Received: from localhost.localdomain ([199.119.84.5])
+ by smtp.gmail.com with ESMTPSA id
+ n27-20020aa7985b000000b0056d7cc80ea4sm8085071pfq.110.2022.12.13.13.56.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 13 Dec 2022 13:56:11 -0800 (PST)
+From: Lance Fredrickson <lancethepants@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 13 Dec 2022 14:56:06 -0700
+Message-Id: <20221213215607.17698-1-lancethepants@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=troodon-software.com; s=protonmail3; t=1670967127; x=1671226327;
- bh=cj6kL4V5/L6EXG/hJfiC04eAGbdkBQkDXrSnrcUfHgg=;
- h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
- Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
- Message-ID:BIMI-Selector;
- b=itNEhOOx4Oy0PrtKSqTj79bKaWMeMD828DHZNwaQDMWtE80yxEmDitq72Zi9EmOp7
- xJpwTw1JLl2XqvGz362Cfw/WvlmAgyySYGOeYYjBgvK14x8w0m+yFYAs5pKI/+Q3nj
- ab0zQTFJBCEWPhyDjTVuCFIO4hSVuSl8QHoBiFNbdPB4QxAhSSuu2Et3g36RBy/MmJ
- sJZizCYH699lqML4ncv5ha25yg/vS/7j34szzqYHXy6nQM94Xh4TFOGujdd0gremVf
- byY0qXj33eGLsHOpQF88hFN0QspGvSONLDbaTFpLvxhTQ4SdMn+hfABdWc1yfZtE+s
- 613SWzShijsMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=troodon-software.com header.i=@troodon-software.com
- header.a=rsa-sha256 header.s=protonmail3 header.b=itNEhOOx
-X-Mailman-Original-Authentication-Results: mail-4321.protonmail.ch;
- dkim=pass (2048-bit key) header.d=troodon-software.com
- header.i=@troodon-software.com header.b="itNEhOOx"
-Subject: Re: [Buildroot] [PATCH 1/5] configs/nezha_defconfig: bump versions
- for uboot, sbi and linux kernel
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=amZAl1aweMc2Uriu1f25wNgBArN2YWoyEYfNhvVSt8I=;
+ b=epEpZb+akAdJyL6TToZjVFNT3NSvR5glrN1mbBaCP3b0teyPTOOcvRKNwXjM7EpUcT
+ jJtRStqCcVAAkVKA1OC3dFnv84IkSxcBYwja9E0mRZgKe3ZgKuEkIPOki55QBulNeQAZ
+ NsXoI59muhgBhAN1m4BViOvcEN3vcDMsxnTt/8YdUuQYIU+QwtLXUJZsHbm/P6uDAyXV
+ GsPspjpCIsPFeMFPoEnisynqgSSmfcMCyipO46Xm87KOYK/ZrHR2mLlQCu8vVJUmGm8e
+ /uWrIa5LaMaxfxBkkg7kW1h34hOsujXzJRM3JHtPI+oM745SJXCKCxOgIaNCZqyhOY8r
+ ooUw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=epEpZb+a
+Subject: [Buildroot] [PATCH] package/linux-firmware: include firmware for
+ the Realtek RTL8125b variant.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +94,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Frank Hunleth via buildroot <buildroot@buildroot.org>
-Reply-To: Frank Hunleth <fhunleth@troodon-software.com>
-Cc: Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
+Cc: Lance Fredrickson <lancethepants@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, Indrek,
+Newer hardware revisions require different firmwares so include those as well.
+---
+ package/linux-firmware/linux-firmware.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-------- Original Message -------
-On Monday, December 12th, 2022 at 12:56 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> > Just in case it helps, I've been testing both the Korsgaard and Kruusa
->
-> > patches on a MangoPI MQ Pro. This board is close, but not exactly like
->
-> > the Nezha, so I expect differences.
->
-> > Using OpenSBI 1.1 results in a non-booting Linux kernel for me. Here's the error:
->
->
-> Just to be sure, is this with the 5.19 based kernel we used to use
-> (fe178cf0153d98b71cb01a46c8cc050826a17e77) or the "new" 6.1-rc3 based
-> one (ca67838d84af4c9f85d06311c9e98e1adf46308f)?
->
-> > Unhandled exception: Store/AMO access fault
->
-> > EPC: 000000005ff8f838 RA: 000000005ffb6346 TVAL: 0000000040040000
->
-> > EPC: 0000000042e01838 RA: 0000000042e28346 reloc adjusted
->
-> > Code: b383 0385 be03 0405 be83 0485 bf03 0505 (e110)
->
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 200b4ca564..2e6fc81340 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -584,6 +584,8 @@ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8107e-1.fw \
+ 	rtl_nic/rtl8107e-2.fw \
+ 	rtl_nic/rtl8125a-3.fw \
++	rtl_nic/rtl8125b-1.fw \
++	rtl_nic/rtl8125b-2.fw \
+ 	rtl_nic/rtl8168d-1.fw \
+ 	rtl_nic/rtl8168d-2.fw \
+ 	rtl_nic/rtl8168e-1.fw \
+-- 
+2.20.1
 
-I am able to run fine on a 512MB MangoPi MQ-Pro now. This is with the patches that were just merged and with the U-Boot defconfig and Linux DTS witched to the Mango Pi MQ-Pro options. 
-
-I don't have an understanding of the store/AMO access fault above. I had an unintended change to my Linux configuration that just happens to require a later version of OpenSBI. I just wanted to follow up in case anyone stumbles on this thread that the simple U-Boot defconfig and dts switch to the MangoPi versions works.
-
--Frank
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
