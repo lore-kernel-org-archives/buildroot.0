@@ -1,59 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607AEC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 17:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264A3C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 20:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAC1840A8E;
-	Tue, 13 Dec 2022 17:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAC1840A8E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86A8360FFC;
+	Tue, 13 Dec 2022 20:08:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86A8360FFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L2JK-S7aq3uh; Tue, 13 Dec 2022 17:11:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fDagdR87PMpA; Tue, 13 Dec 2022 20:08:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 04963405D9;
-	Tue, 13 Dec 2022 17:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04963405D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFA5C60FBE;
+	Tue, 13 Dec 2022 20:08:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFA5C60FBE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D96851BF275
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 17:11:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 77AC71BF301
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B44D060E8A
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 17:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B44D060E8A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6019360B0E
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 20:08:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6019360B0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IwVAEolzJ9FL for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 17:11:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 760E360BB9
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 760E360BB9
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 17:11:23 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout11.t-online.de (Postfix) with SMTP id 668F8204EE
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 18:11:08 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd80.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p58o4-1Hcl290; Tue, 13 Dec 2022 18:11:04 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58380)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p58o3-0005wK-2Z
- for buildroot@buildroot.org; Tue, 13 Dec 2022 18:11:03 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 18:11:03 +0100
-Message-Id: <20221213171103.684842-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id h1ZRqDFmjaj0 for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 20:07:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B92B60AA0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6B92B60AA0
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 20:07:59 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6892E1BF206;
+ Tue, 13 Dec 2022 20:07:57 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p5BZE-00Gzyk-Cu; Tue, 13 Dec 2022 21:07:56 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20221212203443.1542935-1-bernd.kuhls@t-online.de>
+Date: Tue, 13 Dec 2022 21:07:56 +0100
+In-Reply-To: <20221212203443.1542935-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 12 Dec 2022 21:34:43 +0100")
+Message-ID: <87a63rxe1v.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1670951464-C23211D1-B088CEB2/0/0 CLEAN NORMAL
-X-TOI-MSGID: b8661865-d537-4ef2-8780-0058116ec544
-Subject: [Buildroot] [PATCH 1/1] package/hddtemp: link to libintl when needed
+Subject: Re: [Buildroot] [PATCH 1/1] package/libbluray: bump version to 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +63,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/e84/e84b7131f996302301dd0a8fd47362c9f2eab0bf/
-http://autobuild.buildroot.net/results/524/52428940034d59887e0172fbd8481943d86db13b/
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/hddtemp/hddtemp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Changelog:
+ > https://code.videolan.org/videolan/libbluray/-/blob/1.3.4/ChangeLog
 
-diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
-index 7023e11e59..4f45647dff 100644
---- a/package/hddtemp/hddtemp.mk
-+++ b/package/hddtemp/hddtemp.mk
-@@ -15,7 +15,8 @@ HDDTEMP_GETTEXTIZE = YES
- 
- HDDTEMP_DB_PATH = /usr/share/misc/hddtemp.db
- HDDTEMP_CONF_OPTS = --with-db-path=$(HDDTEMP_DB_PATH)
--HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS)"
-+HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS) $(TARGET_NLS_LIBS)"
-+HDDTEMP_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
- HDDTEMP_DEPENDENCIES += libexecinfo
+ > Added a configure option to build without external libudfread introduced
+ > in version 1.3.4:
+ > https://code.videolan.org/videolan/libbluray/-/commit/2f10fb73b869337f2a2fb6fc8c8b45ef88383b78
+
+ > Using --with-external-libudfread is broken so this option was not added.
+ > Since the default to build with optional libudfread support was kept
+ > upstream there is no change in behaviour.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
