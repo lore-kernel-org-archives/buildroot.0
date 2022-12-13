@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AEFC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 21:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DA5C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 22:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FB9F417C5;
-	Tue, 13 Dec 2022 21:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FB9F417C5
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0DE7417A2;
+	Tue, 13 Dec 2022 22:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0DE7417A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 58P5SvRbu_GR; Tue, 13 Dec 2022 21:56:16 +0000 (UTC)
+	with ESMTP id eKavMpOr8xP8; Tue, 13 Dec 2022 22:12:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79CAC4181C;
-	Tue, 13 Dec 2022 21:56:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79CAC4181C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 574CA1BF4E4
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:56:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D27614179D;
+	Tue, 13 Dec 2022 22:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D27614179D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 674CC1BF405
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 22:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32E7D404E0
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 21:56:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32E7D404E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4958181EFA
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 22:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4958181EFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5mdrkdrDvgs0 for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 21:56:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wrFTxTUGPcVo for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 22:12:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BF3F40227
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9BF3F40227
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 21:56:12 +0000 (UTC)
-Received: by mail-pf1-x42f.google.com with SMTP id 21so3168062pfw.4
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 13:56:12 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4B0B81CEF
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A4B0B81CEF
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 22:12:15 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id d7so1331806pll.9
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 14:12:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=amZAl1aweMc2Uriu1f25wNgBArN2YWoyEYfNhvVSt8I=;
- b=CwYbjDyHD55qp1PIGalWpTrEVnkjdkfMTC049ESi4sbCphctqoqOM9y/vixVyc6oKT
- nMQyrs6pBQy2SM9zG5ggDcFCQLvoYp0kGkb8kv4bcUUkF8nUpU8CBVcNbxUq/AkN51sN
- VLVXWaaZ4IGktm95+Tc5Ks7V2mbgeegkUqBqqs9zIyKfoNQnl2YzVBrTM3B78r3Q2maC
- ZX9LeX0WtP3Ul7sJ12465+WiMLai8WIzvA1y84CZ8qw4quzDib/sXy6ZMgUjj1XYwqWa
- kQe8MClTloA2rE27F0z+bGWmFXtqndk1B3WCTYEbZKGGuTvD0+J+PSzOQlyAh3W5rBiR
- egcw==
-X-Gm-Message-State: ANoB5plgUtcfSJThihdXExJzMw07JTHIfmBtePZpE+cdp7PH7LnRjMcl
- IQ53JCpzQzf5VdK0XV+j9+gDl9o233RQNw==
-X-Google-Smtp-Source: AA0mqf7IAWg3mw6Tl6PO85jjeY9+i6apEXQgHDozB4v/7JnfaSwyE5/DJWkCz9jaV5Knl7GFDm72qw==
-X-Received: by 2002:a62:ee14:0:b0:566:900d:6073 with SMTP id
- e20-20020a62ee14000000b00566900d6073mr21200207pfi.24.1670968571762; 
- Tue, 13 Dec 2022 13:56:11 -0800 (PST)
+ bh=60fMgPk7WLAMOMuWtiYczRtHjvF9WNqCtfAJPlBaNlE=;
+ b=GThsmPZJot2sfwZl/b07hC+6X2nNtEEOnTPkiClDuxy/j49voSBGi5BkA8XfEu6otM
+ TATRLkDDDORcT5PWqvUXYkPX56mQdnsQRU9JbGm0kNv7yMXCvG1Bsk3zorCkmKV/44YS
+ rjHnva3PVpBwQKEJLnpdS8/9L0KHGYZQfUjQqLkuSKfxaNT6UVp1n/C9QtmSJLKNBTtW
+ 0i3UBeWVnq4M88vMku+jULG37C4+MYkTHS+W20lRDgu2kE2/Qlgl2sjrl1sbBRe+kVEw
+ h+Ceh4QxYYGcaqIdnnFyAOTRsTnQ2mfJ2MLZW0CMWXxCrnRTGnamFd9VZ35l8mznc6So
+ RD3g==
+X-Gm-Message-State: ANoB5plYG7cdnn+n6HFDwzV0C6EfwP7drZ+MeDV9kJMEbs6DJ4Xt3HwK
+ bqBOl7lwcU9Ttq/HGGlYdqVxpo2sFkbiKA==
+X-Google-Smtp-Source: AA0mqf58QYrGZ/1zJvv8OQ85nyfLbnbw6fVTk1WvRYdsHrgIO8pxydrpMWSbTekyJKP9lg3rGGm1xQ==
+X-Received: by 2002:a17:902:aa91:b0:189:b8a2:27ed with SMTP id
+ d17-20020a170902aa9100b00189b8a227edmr20868419plr.57.1670969534776; 
+ Tue, 13 Dec 2022 14:12:14 -0800 (PST)
 Received: from localhost.localdomain ([199.119.84.5])
  by smtp.gmail.com with ESMTPSA id
- n27-20020aa7985b000000b0056d7cc80ea4sm8085071pfq.110.2022.12.13.13.56.10
+ a11-20020a170902710b00b00174f7d10a03sm385604pll.86.2022.12.13.14.12.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Dec 2022 13:56:11 -0800 (PST)
+ Tue, 13 Dec 2022 14:12:14 -0800 (PST)
 From: Lance Fredrickson <lancethepants@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 14:56:06 -0700
-Message-Id: <20221213215607.17698-1-lancethepants@gmail.com>
+Date: Tue, 13 Dec 2022 15:12:10 -0700
+Message-Id: <20221213221210.29366-1-lancethepants@gmail.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=amZAl1aweMc2Uriu1f25wNgBArN2YWoyEYfNhvVSt8I=;
- b=epEpZb+akAdJyL6TToZjVFNT3NSvR5glrN1mbBaCP3b0teyPTOOcvRKNwXjM7EpUcT
- jJtRStqCcVAAkVKA1OC3dFnv84IkSxcBYwja9E0mRZgKe3ZgKuEkIPOki55QBulNeQAZ
- NsXoI59muhgBhAN1m4BViOvcEN3vcDMsxnTt/8YdUuQYIU+QwtLXUJZsHbm/P6uDAyXV
- GsPspjpCIsPFeMFPoEnisynqgSSmfcMCyipO46Xm87KOYK/ZrHR2mLlQCu8vVJUmGm8e
- /uWrIa5LaMaxfxBkkg7kW1h34hOsujXzJRM3JHtPI+oM745SJXCKCxOgIaNCZqyhOY8r
- ooUw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=60fMgPk7WLAMOMuWtiYczRtHjvF9WNqCtfAJPlBaNlE=;
+ b=U9tHhmmeq92Xu0QstBJbGqvEA2gCatV1oQun+pk4t/fG0xxkzxHTItc+sFe4bcy5ME
+ KOUOodHiFa7HfF3U/IK4jamvjJ0GOVIpa1mg++M6GyirylzuE81aG6F6eNcbCb9s56jM
+ Lw4vQC/JUWpcIU6Fuao1iHg7M3llQX/1HlBxMEK+nbSBdvbiv3VyMygwGftf1rCkk9dj
+ dmql0ntOFkS8SZnRe8/nIJlE2RLV2Wu5+boQ3z4zbnqZTxuHlvM+RJZK0WdWB860Ei+J
+ +jcjaX3PgJ4eRa3vgs88lWIVzHJ2a1Fp0RXYPS8SE4oqtTvuNRjkOVPFFaHGw/PtNqT5
+ zCsQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=epEpZb+a
+ header.a=rsa-sha256 header.s=20210112 header.b=U9tHhmme
 Subject: [Buildroot] [PATCH] package/linux-firmware: include firmware for
  the Realtek RTL8125b variant.
 X-BeenThere: buildroot@buildroot.org
@@ -102,6 +102,8 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Newer hardware revisions require different firmwares so include those as well.
+
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 ---
  package/linux-firmware/linux-firmware.mk | 2 ++
  1 file changed, 2 insertions(+)
