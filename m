@@ -1,76 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2861C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 08:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09D8BC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Dec 2022 09:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 737CF408F0;
-	Tue, 13 Dec 2022 08:39:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 737CF408F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DA95416D9;
+	Tue, 13 Dec 2022 09:22:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA95416D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6ZhFm-H4qm-d; Tue, 13 Dec 2022 08:39:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GQOVGPBNuW6e; Tue, 13 Dec 2022 09:22:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A411540105;
-	Tue, 13 Dec 2022 08:39:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A411540105
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA9C31BF3A4
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 08:39:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38BB5416ED;
+	Tue, 13 Dec 2022 09:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38BB5416ED
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C7AD81BF27E
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 09:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B62FB600C4
- for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 08:39:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B62FB600C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1028408A3
+ for <buildroot@lists.busybox.net>; Tue, 13 Dec 2022 09:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1028408A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kfe4qeXNjX9K for <buildroot@lists.busybox.net>;
- Tue, 13 Dec 2022 08:39:15 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 705B960B57
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 705B960B57
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 08:39:15 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 0BA3BD11C8
- for <buildroot@buildroot.org>; Tue, 13 Dec 2022 08:21:58 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E9C36FF80C;
- Tue, 13 Dec 2022 08:21:52 +0000 (UTC)
-Date: Tue, 13 Dec 2022 09:21:51 +0100
-To: "Maier, Brandon L                            Collins"
- <Brandon.Maier@collins.com>
-Message-ID: <20221213092151.74c1481c@booty>
-In-Reply-To: <BN0P110MB16733493900DDC40600F15A2EBE29@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
-References: <20221209194043.28673-1-brandon.maier@collins.com>
- <20221212103136.71c0a850@booty>
- <BN0P110MB16733493900DDC40600F15A2EBE29@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ESpyMC0Ntimr for <buildroot@lists.busybox.net>;
+ Tue, 13 Dec 2022 09:22:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4264140350
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4264140350
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 09:22:02 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id co23so14942867wrb.4
+ for <buildroot@buildroot.org>; Tue, 13 Dec 2022 01:22:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9+BTiZz718ni0k/Zj4oZnYvHlODmDvt4YNE47iImkJo=;
+ b=objgbT+BIwF85wQpPJb0yuZfguNKfTg5aMPwywZG5jQuMg9XRh2eX+Hf+3gn++O/+Y
+ NHz6X0hNge5/TcsjGFX9PLGDbfMNBofhpa3ZWxEAzfG5zbeQBCkaOvHY1+0q6Pwdjbot
+ RQrzCGRNp6w4yS5PzPEyvHXSc2V/Er9zrL6O94Pb9dU/d0bNtpoBykFCfIR1W1VvEggz
+ LNjAk5xXgnF9L/Vs8fEv0oRgsmdBZKVgJ4Fe0TKKEz/xnPdIlemjGh1JtZ4gcrg5aL5q
+ KiqNuoDKDQ3Wgp3JaXK/mrwSqDIPXj9UsnRobMv65RFkCIG3AHlAfopucQvjcdW1OUdm
+ CJIA==
+X-Gm-Message-State: ANoB5pl37bwjnNLcqA23pW6ESTBCrnGgrF2eM6/8XhHkpt/uah56MoH8
+ GGdnv2SFbpVtWu6UonS34iPgSan2BteBHRtb
+X-Google-Smtp-Source: AA0mqf6KsjjcqCASCWE58WjuptJSZKsTr92l/XGlv3Ac/UMITTP/NMdxOedAivF0ly43J69qfI2idQ==
+X-Received: by 2002:adf:d4c1:0:b0:242:6485:4cd7 with SMTP id
+ w1-20020adfd4c1000000b0024264854cd7mr11900294wrk.1.1670923320167; 
+ Tue, 13 Dec 2022 01:22:00 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.. (mob-5-90-141-116.net.vodafone.it.
+ [5.90.141.116]) by smtp.gmail.com with ESMTPSA id
+ n3-20020a056000170300b002368f6b56desm13502281wrc.18.2022.12.13.01.21.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 13 Dec 2022 01:21:59 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Tue, 13 Dec 2022 10:21:54 +0100
+Message-Id: <20221213092156.136389-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1670919713;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=B3WU0qnWdBH79oxhr2XSsUwqLrJIv+0aizebTPGDwig=;
- b=pbnraqubjEnPX10QfX4/LHGQ94LZkq9BaymLf9roWyAx+3r87ALLQeG7Bg5+WodHNTeyd+
- v7+6cM5xtcFJRdrqNtczD8/yavH5fLvS7aFrCKGBQnHbxiueRzEPSlTsnv3x0+1p6u2H9t
- 5PzQg//a8Jjl1zcexGDfcwNEHjbYk9gG9UpzeArxPB4R3lXNXSIh8Upf7S8qGELXjHjWRm
- 2K32gcFCiCKp7ioTGfR5PrBbVfHn5toc7iABG4lmkajbJ3Rr2nv59nO1PIoRAcYm7yuXu5
- Vv6opoEVr6/sNJ/X0qn1wHBjn5M9KzaVCB5JIJlG9cdCPkcHb5/4WTnDpnUCgg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pbnraqub
-Subject: Re: [Buildroot] [External] Re: [PATCH 1/1] boot/uboot/uboot.mk:
- support binary pm_cfg_obj
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9+BTiZz718ni0k/Zj4oZnYvHlODmDvt4YNE47iImkJo=;
+ b=EZerQDGZ1+omF6eVZISOLNIogWebIuEpt7COvFJLiFw4ELYaVv3gx0Eq/ZuCCdrMRz
+ YK6r6M42MqgaZGK8GNm8dlpEmY9CTqukLZlxCxfkHTHtUZB/Ie4TyatKkSinAcgzithG
+ dkzQOwe5gZ3bCncFuVXB71Yr2vlFS8fKOQ80E=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=EZerQDGZ
+Subject: [Buildroot] [PATCH v8 0/2] Add support for BSH smm s2 [pro] boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,58 +91,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Neal Frager <neal.frager@amd.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, thomas.petazzoni@bootlin.com,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+ giulio.benetti@benettiengineering.com,
+ Michael Trimarchi <michael@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brandon,
+The series adds support to BSH smm s2 [pro] boards.
 
-On Mon, 12 Dec 2022 15:41:27 +0000
-"Maier, Brandon L                            Collins"
-<Brandon.Maier@collins.com> wrote:
+Changes in v8:
+- Rebase on master and fix conflicts on DEVELOPERS file.
+- Set BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y,
 
-> Hello Luca,
-> 
-> > Can you describe a use case where this would be useful? While I
-> > intuitively understand there _might_ be some, I cannot find any good
-> > example based on my experience.
-> > 
-> > Building the pm_cfg_obj from source code is very easily done by
-> > Buildroot, unlike building the PMUFW. Additionally one PMUFW binary
-> > can be used on multiple zynqmp hardware, while the cfg obj is very
-> > likely to change across different projects, and a somewhat readable
-> > text file is way more understandable than a binary blob.  
->  
-> One of our developers was having issues getting their pm_cfg_obj.c to compile with zynqmp_pm_cfg_obj_convert.py, so they decided to compile it manually instead. This patch set was the result when they asked why Buildroot wouldn't accept their bin file. However for our team this patch is now moot, as I ported your U-Boot fix for building Vivado 2021.x to their U-Boot and that fixed the issue ;)
+Changes in v7:
+- Add Giulio Benetti Reviewed-by tag.
+- Add Heiko Thiery Reviewed-by tag.
 
-Ah, good that you found the fix! :-)
+Changes in v6:
+- Change offset in imx-boot partition of genimage.cfg from 33k to 32k.
 
-> I decided to send this patch anyway, as I already tested it and it seems like a reasonable thing to support anyway.
+Changes in v5:
+- Update the commit description.
+- Bump the kernel version to 5.19.7.
+- Remove the 0003-Revert-Revert-mtd-rawnand-gpmi-Fix-setting-busy-time.patch
+  patch.
+- Regenerate all added patches (Linux kernel and U-boot) so that they contain
+  the [PATCH] header without numbering.
+- Add patchwork link to U-boot patch.
 
-Sure, it's worth having it out, in case a real use case will emerge in
-the future we can revive it.
+Changes in v4:
+- Update the commit description.
+- Bump the kernel version to 5.18.19.
+- Shrink the Linux configuration.
+- Add 3 dashes to the kernel patches to avoid having the version history
+  to fall into the final commit log.
+- Add lore.kernel.org links to the submitted patches.
+- Apply the 0003-Revert-Revert-mtd-rawnand-gpmi-Fix-setting-busy-time.patch
+  to the kernel.
 
-> > > This mimics changes done to the ZYNQMP_PMUFW which had a similar  
-> > issue.
-> > 
-> > That is different: we now support two different binary formats, not
-> > binary-vs-source, and detection is based on the file extension.  
->  
-> I meant they are similar in the sense, they are both detecting based on file extension and then either preprocessing the file or passing it directly to U-Boot.
+Changes in v3:
+- Update the commit description.
+- Bump U-Boot to version 2022-07.
+- Remove U-Boot patches merged in version 2022-07.
+- Update the Linux patches.
 
-Ah, sure, indeed my point here was bogus. I replied to your email only
-after reading the whole thread and I probably mixed yours and Neal's
-arguments in my mind. Apologies for the noise.
+Changes in v2:
+- Drop the patch that added the 'uuu' package. It has been merged.
+- Patch 1/2: "configs/imx8mn_bsh_smm_s2_defconfig: new defconfig":
+  - Change commit subject and description.
+  - Update linux patch to version 4. It hasn't been merged yet but has
+    been reviewed. This is the most up-to-date version.
+  - Replace `Co-developed-by:' tag with `Co-authored-by'.
+  - Use the buildroot's output directory if the binaries directory is
+    not passed as a parameter to the `flash.sh' script.
+  - Replace the linux.config file with an architectural defconfig and
+    a config fragment for the changes.
+  - Remove useless and deprecated statements in nand-full.lst.
+  - Remove the buildroot configurations for ext2/ext4 filesystem creation.
+- Patch 2/2: "configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig":
+  - Change commit subject line.
+  - Use the buildroot's output directory if the binaries directory is
+    not passed as a parameter to the `flash.sh' script.
+  - Replace the linux.config file with an architectural defconfig and
+    a config fragment for the changes.
+
+Dario Binacchi (1):
+  configs/imx8mn_bsh_smm_s2_defconfig: new defconfig
+
+Michael Trimarchi (1):
+  configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig
+
+ DEVELOPERS                                    |   8 +
+ .../common/imx8mn-bsh-smm-s2/linux.fragment   | 895 ++++++++++++++++++
+ board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf |   4 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh      |  23 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg  |  17 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh |   7 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh |   3 +
+ board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt    |  73 ++
+ board/bsh/imx8mn-bsh-smm-s2/flash.sh          |  26 +
+ board/bsh/imx8mn-bsh-smm-s2/nand-full.lst     |  29 +
+ ...ine-mxs-use-platform_driver_register.patch |  45 +
+ ...2-dmaengine-mxs-fix-section-mismatch.patch |  39 +
+ ...Remove-rootwait-1-to-all-the-affecte.patch | 160 ++++
+ board/bsh/imx8mn-bsh-smm-s2/post-build.sh     |   4 +
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt        |  75 ++
+ configs/imx8mn_bsh_smm_s2_defconfig           |  41 +
+ configs/imx8mn_bsh_smm_s2_pro_defconfig       |  42 +
+ 17 files changed, 1491 insertions(+)
+ create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2/flash.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/nand-full.lst
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/linux/0001-dmaengine-mxs-use-platform_driver_register.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/linux/0002-dmaengine-mxs-fix-section-mismatch.patch
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0001-include-configs-Remove-rootwait-1-to-all-the-affecte.patch
+ create mode 100755 board/bsh/imx8mn-bsh-smm-s2/post-build.sh
+ create mode 100644 board/bsh/imx8mn-bsh-smm-s2/readme.txt
+ create mode 100644 configs/imx8mn_bsh_smm_s2_defconfig
+ create mode 100644 configs/imx8mn_bsh_smm_s2_pro_defconfig
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
