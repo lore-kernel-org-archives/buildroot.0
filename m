@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1883C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8388CC678D5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DD6C82357;
-	Mon, 20 Feb 2023 22:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DD6C82357
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A0CA82351;
+	Mon, 20 Feb 2023 22:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A0CA82351
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TWCLT1xwp2o6; Mon, 20 Feb 2023 22:56:44 +0000 (UTC)
+	with ESMTP id zOo6_SDT0p3P; Mon, 20 Feb 2023 22:56:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 337FF8235B;
-	Mon, 20 Feb 2023 22:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 337FF8235B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B40482365;
+	Mon, 20 Feb 2023 22:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B40482365
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9995B1BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A94991BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E2AC612A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1314612A5
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E2AC612A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1314612A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cPhaSEII0xio for <buildroot@lists.busybox.net>;
+ with ESMTP id 6GUxqlqT9bX8 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98C7B61227
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDC7D61185
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98C7B61227
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC7D61185
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9506C828C8; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id BC5C48648F; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Dec 2022 20:44:50 +0100
+Date: Tue, 13 Dec 2022 21:11:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f3b31a39fdffbf738789885f6e318131055e4b9b
-X-Git-Newrev: d3d1d5a2dab19a954915c807e90ac74708b7e9ce
+X-Git-Oldrev: c31087182fa545784d9a0a01f0b32715d78c3955
+X-Git-Newrev: 148ae3338c70881cc2caebdd9b45cc6212362a2b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205209.9506C828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] packaeg/libmbim: fix license
- files
+Message-Id: <20230220205209.BC5C48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php: bump version to
+ 8.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3d1d5a2dab19a954915c807e90ac74708b7e9ce
+commit: https://git.buildroot.net/buildroot/commit/?id=148ae3338c70881cc2caebdd9b45cc6212362a2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit i57bea338e95e49bf1f2405908462686306044825 forgot to update
-license files:
-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/bb3091e2c8d44caccfb868505a730a4ac5a48b44
+Release notes: https://news-web.php.net/php.announce/341
+Changelog: https://www.php.net/ChangeLog-8.php#8.1.13
 
-Fixes:
- - http://autobuild.buildroot.org/results/06cb9426d097657b669b7970994584592bac9868
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbim/libmbim.hash | 4 ++--
- package/libmbim/libmbim.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 2e2b46fcdb..8e7633cb94 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256  cf74682c56f4c34ca4aee86de3b8c425a89fc2c0782052815295faf6a8e0a9fb  libmbim-1.28.2.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index e728cf58f9..59f55a57bc 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -7,7 +7,8 @@
- LIBMBIM_VERSION = 1.28.2
- LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
- LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
--LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
-+LIBMBIM_LICENSE_FILES = \
-+	LICENSES/GPL-2.0-or-later.txt LICENSES/LGPL-2.1-or-later.txt
- LIBMBIM_CPE_ID_VENDOR = freedesktop
- LIBMBIM_INSTALL_STAGING = YES
+diff --git a/package/php/php.hash b/package/php/php.hash
+index bf81ebf3e8..461dc36031 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  08243359e2204d842082269eedc15f08d2eca726d0e65b93fb11f4bfc51bbbab  php-8.1.12.tar.xz
++sha256  b15ef0ccdd6760825604b3c4e3e73558dcf87c75ef1d68ef4289d8fd261ac856  php-8.1.13.tar.xz
  
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a400a38af7..1fdf5c68a2 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.1.12
++PHP_VERSION = 8.1.13
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
