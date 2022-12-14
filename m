@@ -1,58 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73528C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:04:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C7EC4167B
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2507C8196A;
-	Wed, 14 Dec 2022 19:04:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2507C8196A
+	by smtp2.osuosl.org (Postfix) with ESMTP id A357340BBE;
+	Wed, 14 Dec 2022 19:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A357340BBE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 45MV9RAkxKiZ; Wed, 14 Dec 2022 19:04:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aQJcKmX11nvU; Wed, 14 Dec 2022 19:04:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F021812AC;
-	Wed, 14 Dec 2022 19:04:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F021812AC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BCBC71BF312
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:03:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFF5C40BD5;
+	Wed, 14 Dec 2022 19:04:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFF5C40BD5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DA57A1BF947
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97D308125D
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97D308125D
+ by smtp2.osuosl.org (Postfix) with ESMTP id B631340BBC
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B631340BBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id syGsdwzI4olI for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 19:03:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD0FD80BFC
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AD0FD80BFC
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:03:57 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 293E9240007;
- Wed, 14 Dec 2022 19:03:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p5X2m-000WMg-SI; Wed, 14 Dec 2022 20:03:52 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NvICKYXtKMAh for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E27B440144
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E27B440144
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CF94C866AB; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Quentin Schulz <foss+buildroot@0leil.net>
-References: <20221213-cairo-cves-v1-0-b802b492d112@theobroma-systems.com>
- <20221213-cairo-cves-v1-1-b802b492d112@theobroma-systems.com>
-Date: Wed, 14 Dec 2022 20:03:52 +0100
-In-Reply-To: <20221213-cairo-cves-v1-1-b802b492d112@theobroma-systems.com>
- (Quentin Schulz's message of "Wed, 14 Dec 2022 12:16:01 +0100")
-Message-ID: <87h6xxu7s7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/cairo: fix CVE-2019-6462
+To: buildroot@buildroot.org
+Date: Wed, 14 Dec 2022 19:59:00 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b8881d4d7e4822337c222fadf4630a49eec1e9ce
+X-Git-Newrev: ee8d02ea6d76493324180e0131fea6c227d1d284
+X-Patchwork-Hint: ignore
+Message-Id: <20221214190427.CF94C866AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: bump to version 6.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Quentin" == Quentin Schulz <foss+buildroot@0leil.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8d02ea6d76493324180e0131fea6c227d1d284
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
- > Add an upstream patch to fix CVE-2019-6462:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > An issue was discovered in cairo 1.16.0. There is an infinite loop in
- > the function _arc_error_normalized in the file cairo-arc.c, related to
- > _arc_max_angle_for_tolerance_normalized.
-
- > Cc: Quentin Schulz <foss+buildroot@0leil.net>
- > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 45af05a200..9e8be43f2b 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  523139e9e72aec996374fa2de74be4c53d2dd05589488934d21ff97bae19580a  iproute2-6.0.0.tar.xz
++sha256  5ce12a0fec6b212725ef218735941b2dab76244db7e72646a76021b0537b43ab  iproute2-6.1.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 287c6b14e2..9792630f15 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 6.0.0
++IPROUTE2_VERSION = 6.1.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
