@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3527BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DFBC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEAFE4F002;
-	Mon, 20 Feb 2023 22:24:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEAFE4F002
+	by smtp4.osuosl.org (Postfix) with ESMTP id 132FF4086C;
+	Mon, 20 Feb 2023 22:24:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 132FF4086C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FkTUhBHQrLUw; Mon, 20 Feb 2023 22:24:04 +0000 (UTC)
+	with ESMTP id ICIfhYNIWwmR; Mon, 20 Feb 2023 22:24:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75D8E4EDEA;
-	Mon, 20 Feb 2023 22:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D8E4EDEA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0699F1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98CC44EBF7;
+	Mon, 20 Feb 2023 22:24:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98CC44EBF7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 587A71BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 123226117D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 123226117D
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0932416CE
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0932416CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1xjMDo7k-c1o for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jsa6-xDFcJ-y for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 553B461161
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 553B461161
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3F9B416D7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3F9B416D7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4688D8648F; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id DF57E86494; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:55 +0100
+Date: Wed, 14 Dec 2022 23:14:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 24d1bfa38d9f10785e8cd366c9680e9ca8905de6
-X-Git-Newrev: b7fa52b837cc3a39534ba675e913c9bae583988d
+X-Git-Oldrev: aa409d82fc64ee28e7ef9a649875fc577c33f01b
+X-Git-Newrev: f62d409cb8d1bcd015b9ca4aeca31b2d1c8dbf02
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.4688D8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pydal: bump to
- version 20221110.1
+Message-Id: <20230220205210.DF57E86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xhost: bump
+ version to 1.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7fa52b837cc3a39534ba675e913c9bae583988d
+commit: https://git.buildroot.net/buildroot/commit/?id=f62d409cb8d1bcd015b9ca4aeca31b2d1c8dbf02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-pydal/python-pydal.hash | 6 ++++--
- package/python-pydal/python-pydal.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-December/003301.html
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index 852e568ac5..c55a17a545 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
-@@ -1,3 +1,5 @@
--# sha256 locally computed
--sha256  0a2dbc5d61d37d2b59d441ed0aab48c1ec906ce66088eb5cee021b009601de02  python-pydal-20220916.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pydal/json
-+md5  eeaf44cdcdb6bd2040713c710a4a04be  pydal-20221110.1.tar.gz
-+sha256  7c3e891c70f8d8918e36276f210a1959bb7badf3b276f47191986ffcf5b6a390  pydal-20221110.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index a3df1ccff1..f55c7fc2c5 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -4,8 +4,9 @@
+Updated license hash due to copyright year bump:
+https://gitlab.freedesktop.org/xorg/app/xhost/-/commit/167ad7fa3a339da96798da49d05c3125045a87c2
+
+Switched tarball to xz, updated _SITE.
+
+Added optional support for gettext:
+https://gitlab.freedesktop.org/xorg/app/xhost/-/commit/167ad7fa3a339da96798da49d05c3125045a87c2
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xapp_xhost/xapp_xhost.hash | 10 ++++------
+ package/x11r7/xapp_xhost/xapp_xhost.mk   |  9 +++++----
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/package/x11r7/xapp_xhost/xapp_xhost.hash b/package/x11r7/xapp_xhost/xapp_xhost.hash
+index 71eabccc44..fea2588c6d 100644
+--- a/package/x11r7/xapp_xhost/xapp_xhost.hash
++++ b/package/x11r7/xapp_xhost/xapp_xhost.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002950.html
+-md5  a48c72954ae6665e0616f6653636da8c  xhost-1.0.8.tar.bz2
+-sha1  971670858a464d4f8eeb6f4e182f9fcd94149790  xhost-1.0.8.tar.bz2
+-sha256  a2dc3c579e13674947395ef8ccc1b3763f89012a216c2cc6277096489aadc396  xhost-1.0.8.tar.bz2
+-sha512  55581f9bc45a70a73b13fe718ca83c4cb0a6116d26addc0f07659ebeb5bf7d2379e84cab5a1702ae77a298a66f42ae03f41ddc7d5acd61c6f18448e58ad7cb6b  xhost-1.0.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003301.html
++sha256  ea86b531462035b19a2e5e01ef3d9a35cca7d984086645e2fc844d8f0e346645  xhost-1.0.9.tar.xz
++sha512  d281a0df0a036d693ce7dbe0d1d53839110d203f42454bf4d33a49fbfddec078149969b6ad76641e40e207ddc8317ea563088c59025fc57d8245e5ed27f79818  xhost-1.0.9.tar.xz
+ # Locally computed
+-sha256  7e69bed6fcfff05ecf454d7e4b29cd265172385833f1978f04b638f92f2cfecf  COPYING
++sha256  d3106697fb05dea4e9899b9e782ae7c3c17086d5b3dc7966494fc83fda9e468e  COPYING
+diff --git a/package/x11r7/xapp_xhost/xapp_xhost.mk b/package/x11r7/xapp_xhost/xapp_xhost.mk
+index e9fb155216..55f7ca5cc7 100644
+--- a/package/x11r7/xapp_xhost/xapp_xhost.mk
++++ b/package/x11r7/xapp_xhost/xapp_xhost.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYDAL_VERSION = 20220916.1
--PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
-+PYTHON_PYDAL_VERSION = 20221110.1
-+PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
-+PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/73/83/b904c464b6ab060e12b3f406f1fab7deb97bcd9d2021d8c87325e6225c2d
- PYTHON_PYDAL_LICENSE = BSD-3-Clause
- PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-XAPP_XHOST_VERSION = 1.0.8
+-XAPP_XHOST_SOURCE = xhost-$(XAPP_XHOST_VERSION).tar.bz2
+-XAPP_XHOST_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XHOST_VERSION = 1.0.9
++XAPP_XHOST_SOURCE = xhost-$(XAPP_XHOST_VERSION).tar.xz
++XAPP_XHOST_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XHOST_LICENSE = MIT
+ XAPP_XHOST_LICENSE_FILES = COPYING
+-XAPP_XHOST_DEPENDENCIES = xlib_libX11 xlib_libXmu
++XAPP_XHOST_DEPENDENCIES = xlib_libX11 xlib_libXmu $(TARGET_NLS_DEPENDENCIES)
++XAPP_XHOST_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
