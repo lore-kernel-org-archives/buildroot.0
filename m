@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B483CC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B3F6C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EC5D40BBE;
-	Wed, 14 Dec 2022 19:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EC5D40BBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EF5C40276;
+	Wed, 14 Dec 2022 19:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF5C40276
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QUs3-2fKWDz6; Wed, 14 Dec 2022 19:05:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QLoHHEBkedIE; Wed, 14 Dec 2022 19:05:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E0CF40BB7;
-	Wed, 14 Dec 2022 19:05:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E0CF40BB7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1314440332;
+	Wed, 14 Dec 2022 19:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1314440332
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 054511BF42C
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B14451BF42C
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF6FD60864
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF6FD60864
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3785607F4
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3785607F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yRODYRkHSdVP for <buildroot@lists.busybox.net>;
+ with ESMTP id sW_Bgifx7ufI for <buildroot@lists.busybox.net>;
  Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B95360AA0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01ADA60A9C
  for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B95360AA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01ADA60A9C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE4C4866A7; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
+ id E433A866AF; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 20:02:45 +0100
+Date: Wed, 14 Dec 2022 20:02:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b38286d7e5919693cad2dc5b19024b1c03d29c18
-X-Git-Newrev: 111ab56d840a6c82367b4a3306494faccd7f934b
+X-Git-Oldrev: e38d5190ea16a7fda9f3045ba9ba316e4da53f5c
+X-Git-Newrev: b38286d7e5919693cad2dc5b19024b1c03d29c18
 X-Patchwork-Hint: ignore
-Message-Id: <20221214190427.EE4C4866A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cairo: fix CVE-2020-35492
+Message-Id: <20221214190427.E433A866AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cairo: fix CVE-2019-6462
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,106 +62,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=111ab56d840a6c82367b4a3306494faccd7f934b
+commit: https://git.buildroot.net/buildroot/commit/?id=b38286d7e5919693cad2dc5b19024b1c03d29c18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream patch to fix CVE-2020-35492:
-A flaw was found in cairo's image-compositor.c in all versions prior to
-1.17.4. This flaw allows an attacker who can provide a crafted input
-file to cairo's image-compositor (for example, by convincing a user to
-open a file in an application using cairo, or if an application uses
-cairo on untrusted input) to cause a stack buffer overflow ->
-out-of-bounds WRITE. The highest impact from this vulnerability is to
-confidentiality, integrity, as well as system availability.
+Add an upstream patch to fix CVE-2019-6462:
 
-Important note: this is not the exact upstream patch. Indeed, the
-upstream patch[1] contains a png file which appears as a binary diff
-inside the patch. The `patch` tool which is used by Buildroot to apply
-patches does not handle that kind of diff. Since it is just a test, it
-shouldn't impact the quality of the CVE fix and all changes related to
-the test are removed from the patch.
+An issue was discovered in cairo 1.16.0. There is an infinite loop in
+the function _arc_error_normalized in the file cairo-arc.c, related to
+_arc_max_angle_for_tolerance_normalized.
 
-[1] https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
 Cc: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Fix-mask-usage-in-image-compositor.patch  | 56 ++++++++++++++++++++++
- package/cairo/cairo.mk                             |  2 +
- 2 files changed, 58 insertions(+)
+ ...gle_for_tolerance_normalized-fix-infinite.patch | 39 ++++++++++++++++++++++
+ package/cairo/cairo.mk                             |  2 ++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
+diff --git a/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
 new file mode 100644
-index 0000000000..54a95593c5
+index 0000000000..078e90fa42
 --- /dev/null
-+++ b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-@@ -0,0 +1,56 @@
-+From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
-+From: Heiko Lewin <heiko.lewin@worldiety.de>
-+Date: Tue, 15 Dec 2020 16:48:19 +0100
-+Subject: [PATCH] Fix mask usage in image-compositor
++++ b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+@@ -0,0 +1,39 @@
++From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
++From: Heiko Lewin <hlewin@gmx.de>
++Date: Sun, 1 Aug 2021 11:16:03 +0000
++Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
 +
-+[Retrieved from
-+https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
-+[Removed changes in test/ directory to remove binary diff so that the
-+patch can be applied by `patch` tool]
++[Retrieved from:
++https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
 +Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 +---
-+ src/cairo-image-compositor.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ src/cairo-arc.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
-+index bbf4cf228..2352c478e 100644
-+--- a/src/cairo-image-compositor.c
-++++ b/src/cairo-image-compositor.c
-+@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ 		    unsigned num_spans)
-+ {
-+     cairo_image_span_renderer_t *r = abstract_renderer;
-+-    uint8_t *m;
-++    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
-+     int x0;
++diff --git a/src/cairo-arc.c b/src/cairo-arc.c
++index 390397bae..1c891d1a0 100644
++--- a/src/cairo-arc.c
+++++ b/src/cairo-arc.c
++@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
++ 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
++     };
++     int table_size = ARRAY_LENGTH (table);
+++    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
 + 
-+     if (num_spans == 0)
-+ 	return CAIRO_STATUS_SUCCESS;
++     for (i = 0; i < table_size; i++)
++ 	if (table[i].error < tolerance)
++ 	    return table[i].angle;
 + 
-+     x0 = spans[0].x;
-+-    m = r->_buf;
-++    m = base;
++     ++i;
+++
 +     do {
-+ 	int len = spans[1].x - spans[0].x;
-+ 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
-+@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ 				      spans[0].x, y,
-+ 				      spans[1].x - spans[0].x, h);
++ 	angle = M_PI / i++;
++ 	error = _arc_error_normalized (angle);
++-    } while (error > tolerance);
+++    } while (error > tolerance && i < max_segments);
 + 
-+-	    m = r->_buf;
-++	    m = base;
-+ 	    x0 = spans[1].x;
-+ 	} else if (spans[0].coverage == 0x0) {
-+ 	    if (spans[0].x != x0) {
-+@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ #endif
-+ 	    }
-+ 
-+-	    m = r->_buf;
-++	    m = base;
-+ 	    x0 = spans[1].x;
-+ 	} else {
-+ 	    *m++ = spans[0].coverage;
++     return angle;
++ }
 +-- 
 +2.38.1
 +
 diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 8bb7ca121d..e8a704c7da 100644
+index f479aa252a..8bb7ca121d 100644
 --- a/package/cairo/cairo.mk
 +++ b/package/cairo/cairo.mk
-@@ -16,6 +16,8 @@ CAIRO_INSTALL_STAGING = YES
+@@ -14,6 +14,8 @@ CAIRO_INSTALL_STAGING = YES
+ 
+ # 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
  CAIRO_IGNORE_CVES += CVE-2018-19876
- # 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
- CAIRO_IGNORE_CVES += CVE-2019-6462
-+# 0004-Fix-mask-usage-in-image-compositor.patch
-+CAIRO_IGNORE_CVES += CVE-2020-35492
++# 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
++CAIRO_IGNORE_CVES += CVE-2019-6462
  
  CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
  
