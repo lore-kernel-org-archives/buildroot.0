@@ -1,51 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 732C7C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:15:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1531FC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26A7360F3A;
-	Wed, 14 Dec 2022 22:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A7360F3A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DD8540BE9;
+	Wed, 14 Dec 2022 22:15:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DD8540BE9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ig3yeD0weCNS; Wed, 14 Dec 2022 22:15:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C927D40BC4;
+	Wed, 14 Dec 2022 22:15:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C927D40BC4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 978941BF947
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:15:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72B7060F5D
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:15:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72B7060F5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lAB_oFWf8Rm4; Wed, 14 Dec 2022 22:15:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F12760EC4;
-	Wed, 14 Dec 2022 22:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F12760EC4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08A3A1BF425
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:14:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D811841681
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D811841681
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DNOmaQcyDgUC for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 22:14:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A02504161E
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 22:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A02504161E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88EB5866F5; Wed, 14 Dec 2022 22:14:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JzjHv85cwdlN for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 22:15:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6956260EC4
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6956260EC4
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 22:15:15 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id m18so47923403eji.5
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 14:15:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+dKmTxwXg/1MYw8M2H0u7VFDyizmBNgmFAyP9riy/u4=;
+ b=WSuoFNRGhxJPf7F2npNlyS8a6bdxGhhr5+PDE7gWpBfQqO0YWz/Ge4cE015Ga89BOU
+ v+v688nk/pfcb5KDwhIQXKnOMlebVwnWHF5W4RDoi/i9ZMTuGSL1BAKwn8cSKgTm1DLe
+ lLO16XN4v4To3cq2BQvmK1+a2hgVqfyVXj5WiJWdtTEVkBg1jGMGL5vg7RZMJMZYkVsO
+ y2L90EVfLrYxdKOvhNWJSg22Igzyuj5eDz7hm+i8ttSGiT6DvguZeyi8qujy8uOQer54
+ d3P3OTMYgb9zeao6YRH7U8EEXN5ehVaArni29PFu++Cll/Xrsk9pCbz/WQjKB1Qp4pU1
+ ZmbA==
+X-Gm-Message-State: ANoB5plXlPnf0M2p+4BxXq4XErHc90Ork3CyzcN3GCu6AIPo0P5jHw62
+ vj9oWcefE3UdG94ih+mMcUZ1jgHtjH+zLzaEoFU=
+X-Google-Smtp-Source: AA0mqf7MaT0kR9+WMEp69HLX0dkrtNUf2Jvs2NIjL4x2PiOkaonlXu666e3iNWiV1oxyNugtPrA+zw==
+X-Received: by 2002:a17:906:c348:b0:7c1:235d:2a2b with SMTP id
+ ci8-20020a170906c34800b007c1235d2a2bmr22367464ejb.24.1671056113269; 
+ Wed, 14 Dec 2022 14:15:13 -0800 (PST)
+Received: from angelo-ThinkPad-X270.. (host085115199111.static.fidoka.tech.
+ [85.115.199.111]) by smtp.gmail.com with ESMTPSA id
+ f13-20020a17090631cd00b0073c8d4c9f38sm6502684ejf.177.2022.12.14.14.15.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 14 Dec 2022 14:15:12 -0800 (PST)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 23:08:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f095f5a8bec8352ffa182f606c5c7349ec2d6dca
-X-Git-Newrev: f83377b7b30c82da363c7937f693fe979318f598
-X-Patchwork-Hint: ignore
-Message-Id: <20221214221445.88EB5866F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-microcode: security bump
- version to 20221108
+Date: Wed, 14 Dec 2022 23:15:04 +0100
+Message-Id: <20221214221506.43849-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+dKmTxwXg/1MYw8M2H0u7VFDyizmBNgmFAyP9riy/u4=;
+ b=QMClWfSyCcuR0tyDEIy5yMy42IONQISb1ba73yu6g3Ip3Hjhu35nR6Q9G4W6LFy1yG
+ hPOCTiQKNKlT17Nu8aX5C7gkbpuL+qk/klMotac4lYGkbxGcbihyXGIznBTWSEs/ZWyg
+ Fp6i9wiStJBRnbL73rkYJz2dCicdiZ3D/nvno=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=QMClWfSy
+Subject: [Buildroot] [PATCH v5 1/3] package/rtl8723ds-bt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,82 +91,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: indrek.kruusa@gmail.com, Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f83377b7b30c82da363c7937f693fe979318f598
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This package install the required firmware for enabling the
+Bluetooth device embedded in the RTL8723DS chip.
+The driver is included in Linux main tree and can be enabled
+with the BT_HCIUART_RTL symbol.
 
-Fixes the following security issues:
-
-- CVE-2021-0146: Hardware allows activation of test or debug logic at
-  runtime for some Intel(R) processors which may allow an unauthenticated
-  user to potentially enable escalation of privilege via physical access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00528.html
-
-- CVE-2021-0127: Insufficient control flow management in some Intel(R)
-  Processors may allow an authenticated user to potentially enable a denial
-  of service via local access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00532.html
-
-- CVE-2022-21151: Processor optimization removal or modification of
-  security-critical code for some Intel(R) Processors may allow an
-  authenticated user to potentially enable information disclosure via local
-  access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00617.html
-
-- CVE-2022-0005: Sensitive information accessible by physical probing of
-  JTAG interface for some Intel(R) Processors with SGX may allow an
-  unprivileged user to potentially enable information disclosure via
-  physical access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00614.html
-
-- CVE-2022-21233: Improper isolation of shared resources in some Intel(R)
-  Processors may allow a privileged user to potentially enable information
-  disclosure via local access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00657.html
-
-For more details, see the release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: extend commit message with security fix details]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v3:
+* Simplified package (Thomas, Yann)
+* Package now only installs firmware (Thomas, Yann)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 6687d4c0eb..56f0237277 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fd85b6b769efd029dec6a2c07106fd18fb4dcb548b7bc4cde09295a8344ef6d7  intel-microcode-20210608.tar.gz
-+sha256  8d14a914815f56c27b1f41be0fd699d1afcfdbc05432056427e455100798975e  intel-microcode-20221108.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index af7f6fa804..787537da78 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_MICROCODE_VERSION = 20210608
-+INTEL_MICROCODE_VERSION = 20221108
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+ package/Config.in                      |  1 +
+ package/rtl8723ds-bt/Config.in         |  6 ++++++
+ package/rtl8723ds-bt/rtl8723ds-bt.hash |  2 ++
+ package/rtl8723ds-bt/rtl8723ds-bt.mk   | 17 +++++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/rtl8723ds-bt/Config.in
+ create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.hash
+ create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 914c3584e9..999feae08a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -585,6 +585,7 @@ endmenu
+ 	source "package/rtl8192eu/Config.in"
+ 	source "package/rtl8723bu/Config.in"
+ 	source "package/rtl8723ds/Config.in"
++	source "package/rtl8723ds-bt/Config.in"
+ 	source "package/rtl8812au-aircrack-ng/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+diff --git a/package/rtl8723ds-bt/Config.in b/package/rtl8723ds-bt/Config.in
+new file mode 100644
+index 0000000000..0a604310c0
+--- /dev/null
++++ b/package/rtl8723ds-bt/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_RTL8723DS_BT
++	bool "rtl8723ds-bt"
++	help
++	  rtl8723ds UART attached Bluetooth module firmware.
++
++	  https://github.com/wsyco/RTL8723DS_BT_Linux
+diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.hash b/package/rtl8723ds-bt/rtl8723ds-bt.hash
+new file mode 100644
+index 0000000000..1ec4e350f9
+--- /dev/null
++++ b/package/rtl8723ds-bt/rtl8723ds-bt.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  9e70a981946abeeb6437d9a27d8437cea15aa4df72f8d56ded0ae28af484d2f4  rtl8723ds-bt-14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08.tar.gz
+diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.mk b/package/rtl8723ds-bt/rtl8723ds-bt.mk
+new file mode 100644
+index 0000000000..efd0a5bae9
+--- /dev/null
++++ b/package/rtl8723ds-bt/rtl8723ds-bt.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# rtl8723ds-bt
++#
++################################################################################
++
++RTL8723DS_BT_VERSION = 14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08
++RTL8723DS_BT_SITE = $(call github,wsyco,RTL8723DS_BT_Linux,$(RTL8723DS_BT_VERSION))
++RTL8723DS_BT_LICENSE = PROPRIETARY
++
++define RTL8723DS_BT_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/lib/firmware/rtl_bt/
++	cp $(@D)/8723D/rtl8723d_fw $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_fw.bin
++	cp $(@D)/8723D/rtl8723d_config $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_config.bin
++endef
++
++$(eval $(generic-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
