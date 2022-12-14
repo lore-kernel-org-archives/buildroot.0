@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4200C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64C60C001B2
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:17:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 660A340BBC;
-	Wed, 14 Dec 2022 19:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 660A340BBC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 177BC60ACD;
+	Wed, 14 Dec 2022 19:17:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177BC60ACD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id upRZWmbmjWwH; Wed, 14 Dec 2022 19:17:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7754E60A65;
+	Wed, 14 Dec 2022 19:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7754E60A65
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 983711BF42C
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:17:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 804EB40BB7
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 804EB40BB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TOUmswEXz9Ex; Wed, 14 Dec 2022 19:15:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAC1840144;
-	Wed, 14 Dec 2022 19:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAC1840144
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 902981BF42C
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:15:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 674CC41841
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:15:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 674CC41841
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cBcYpESe3b-4 for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 19:15:08 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TtnwFH_EF92C for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 19:17:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 421A341838
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 421A341838
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:15:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95B5D4013B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 95B5D4013B
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:17:47 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B19BFFF809;
- Wed, 14 Dec 2022 19:15:05 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17D35E0006;
+ Wed, 14 Dec 2022 19:17:43 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p5XDb-000WwA-Uf; Wed, 14 Dec 2022 20:15:03 +0100
+ id 1p5XGB-000X16-4Q; Wed, 14 Dec 2022 20:17:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-References: <20220917215300.1330070-1-james.hilliard1@gmail.com>
- <cca657ee-bbf2-2fcc-8e09-e7d7f6733694@theobroma-systems.com>
-Date: Wed, 14 Dec 2022 20:15:03 +0100
-In-Reply-To: <cca657ee-bbf2-2fcc-8e09-e7d7f6733694@theobroma-systems.com>
- (Quentin Schulz's message of "Mon, 12 Dec 2022 15:32:07 +0100")
-Message-ID: <878rj9u79k.fsf@dell.be.48ers.dk>
+To: Andrey Nechypurenko <andreynech@gmail.com>
+References: <CAOiXNkA3_5sO2ajKtvco8G6O_Qufz0N=i1javZjFbDMj+zDf5g@mail.gmail.com>
+ <877cytvmo3.fsf@dell.be.48ers.dk>
+ <CAOiXNkA74=14gXbkNwBFLrzonWtkGyQ2GnHuXG76C0z-LbrUBg@mail.gmail.com>
+Date: Wed, 14 Dec 2022 20:17:43 +0100
+In-Reply-To: <CAOiXNkA74=14gXbkNwBFLrzonWtkGyQ2GnHuXG76C0z-LbrUBg@mail.gmail.com>
+ (Andrey Nechypurenko's message of "Wed, 14 Dec 2022 20:06:31 +0100")
+Message-ID: <874jtxu754.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.21.0
+Subject: Re: [Buildroot] Confusion about 2022.11 release branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +65,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Quentin" == Quentin Schulz <quentin.schulz@theobroma-systems.com> writes:
+>>>>> "Andrey" == Andrey Nechypurenko <andreynech@gmail.com> writes:
 
-Hello,
+Hi,
 
- > Can this be merged back to 2022.02.x and 2022.08.x as a security fix please?
+ > Thank you Peter for the quick response and explanation!
 
- > Versions before 1.20.91 are vulnerable to
- > https://nvd.nist.gov/vuln/detail/CVE-2021-3782.
+You're welcome!
 
-Thanks for the heads up. 2022.08.x is now EOL, but we can do it for
-2022.02.x.
 
-What are the reverse dependencies? We're currently using 1.19.0 on
-2022.02.x, so perhaps it would be safer to instead just backport the
-fix:
+>> Anything specific you are missing from the 2022.11 release?
 
-https://gitlab.freedesktop.org/wayland/wayland/-/commit/b19488c7154b902354cb26a27f11415d7799b0b2
+ > Not really. I am including Buildroot as a submodule in my git repository. So
+ > I was wondering what tag or branch I have to check out to get the 2022.11
+ > release.
 
-Is this something you can do (and have a setup to verify on?)
+The '2022.11' tag.
 
 -- 
 Bye, Peter Korsgaard
