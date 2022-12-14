@@ -1,58 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED5ADC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 17:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CFFC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 18:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B99E40BBE;
-	Wed, 14 Dec 2022 17:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B99E40BBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 778EE81F33;
+	Wed, 14 Dec 2022 18:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 778EE81F33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CYYikjyPpfHY; Wed, 14 Dec 2022 17:18:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lng8aR2UloR4; Wed, 14 Dec 2022 18:00:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C53B40BCD;
-	Wed, 14 Dec 2022 17:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C53B40BCD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5ECA1BF45A
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 17:18:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D717F81F2E;
+	Wed, 14 Dec 2022 18:00:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D717F81F2E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B03681BF45A
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C8454173E
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 17:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C8454173E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B20160C19
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:00:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B20160C19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NzMqdBcQaTSe for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 17:18:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D10241740
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D10241740
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 17:18:07 +0000 (UTC)
-From: Paul Cercueil <paul@crapouillou.net>
-To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 18:17:54 +0100
-Message-Id: <20221214171754.178428-1-paul@crapouillou.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5gLl76I-xrYB for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 18:00:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BD4760A69
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com
+ [IPv6:2607:f8b0:4864:20::b2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BD4760A69
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 18:00:14 +0000 (UTC)
+Received: by mail-yb1-xb2e.google.com with SMTP id o127so665427yba.5
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 10:00:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Nsy7JylCFCtp6nmhOUX4WMN2PCKCRGsWvdE1uCKkCls=;
+ b=yzPKJcbO2nXNVI4ALhiEmGnJohdwlnMEsDKrwSer4lHllLbCinH24yZKdlcb+WHD7Z
+ bI4nlPRrlHFt3FgXvVZNDH+sOSEfRv5HSqBnvo4+iErmManyMXXw8gSHwghn2MO57m7G
+ fvWAP5qAaEohZ8aSrF+uZ6lXz8KO6Zp0fiplODUtmoibthGBL4RDfCl9dFOr2Q0oqtK2
+ ocuSvLPaco8F8f5TVFeLmaHov0I9P6iW3jS8z1U/dFDIQn9gr2tD+8C8du9msRwWD3v3
+ Jah/XT2deWYmUlmbAgaVvAMupv0kmVhzsbswP6HC4BY0ysJxaNZiH1p6z+CLyPjTz0lY
+ NppQ==
+X-Gm-Message-State: ANoB5pk/G972BriMPqe77Voo/NcH1t+2mAqr29CAxWPQS1bCB2kUgqM4
+ bbBXc7SDOhPOkuJj2dNg49NTJYbRxBvm63Oz8g1wyQf9MhI=
+X-Google-Smtp-Source: AA0mqf64p9hQ2SEgKkWzQAyuqjabp9PoUH6gHjEqa+GmO8P7qcj0/Z+YZZrkjXXzpkGJ3pGCMlgfvl5Ftql3faNnQtI=
+X-Received: by 2002:a25:dccb:0:b0:713:a3c8:7baf with SMTP id
+ y194-20020a25dccb000000b00713a3c87bafmr3724660ybe.641.1671040812863; Wed, 14
+ Dec 2022 10:00:12 -0800 (PST)
 MIME-Version: 1.0
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Wed, 14 Dec 2022 19:00:01 +0100
+Message-ID: <CAOiXNkA3_5sO2ajKtvco8G6O_Qufz0N=i1javZjFbDMj+zDf5g@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; 
- s=mail; t=1671038284; h=from:from:sender:reply-to:subject:subject:date:date:
- message-id:message-id:to:to:cc:cc:mime-version:mime-version:
- content-type:content-transfer-encoding:content-transfer-encoding:
- in-reply-to:references; bh=UwhR+5Nfrq2QPj+vW4M3pBH8txv5qReWRQ3dzZrlito=;
- b=kBDNE3QDHl6FB1wf2oj0Jli0w8VNtWKaQweidj0mp09zlY/XJQct07PI5I3m6l70/iyMca
- IfkTP9EMtb6RwnditdaKSKF/kHRiecGcIKkeam7RJUOrv0TcZ8vo91cD6CxrVq2/HKWPYh
- s1ab2e7FuSg3vqDUiRSrhz/aF8t7uDE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=kBDNE3QD
-Subject: [Buildroot] [PATCH] package/lightning: bump version to 2.2.0
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=Nsy7JylCFCtp6nmhOUX4WMN2PCKCRGsWvdE1uCKkCls=;
+ b=kCM2e7M9cVR832GbkEVY5dm9QK3JiPd92NpMQ5XiJgpY2cS6jQKBcGNVhGMMFUabPH
+ 2K2E3NnmWDSZpNagp7X6EUUWs9ogEnFd0uWIrE1Ym9NP0GMPf0gpQDG0E5SuAFn/jld9
+ tKjHR4y7qgrgBXy59xWEMK/pK9M40qg+xtWpzrUkmgQyzzTWiofiteLPOgQtCfwuqAgS
+ blM6zKxpxmNNA6oNwoQ8zvqU4XIUgweX8bLBkzSM3G5RPvXBhSVdCjVlHdZGqh5QtrNC
+ JaFvCONrVE/MRAEGaS6zV5KoKyo4/PMq16fEqhKO4+yzR+E7DejPtTgeOdvUY+XH6Vdf
+ OhLw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kCM2e7M9
+Subject: [Buildroot] Confusion about 2022.11 release branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,92 +86,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Notable changes in this new version include support for the Apple
-Aarch64 ABI, and compare-and-swap atomic instructions.
+Hello Buildroot Folks,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- ...e.am-don-t-install-lightning.h-twice.patch | 38 -------------------
- package/lightning/lightning.hash              |  2 +-
- package/lightning/lightning.mk                |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+I am currently trying to update to the latest stable 2022.11 release.  What
+surprises me is that there is no 2022.11.x branch as I would expect.
+Instead, it seems to me that the release is somehow related to the branch
+2012.11.x. It could be confirmed looking at this location:
+https://git.buildroot.net/buildroot/tag/?h=2022.11
+It says Release 2022.11 but the branch mentioned in the combo-box in the top
+right corner says it is the 2012.11.x branch.
 
-diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-deleted file mode 100644
-index fb5299c25f..0000000000
---- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 10 Oct 2019 20:36:46 +0200
--Subject: [PATCH] include/Makefile.am: don't install lightning.h twice
--
--Commit 17164ed32d8f3530153b9cad67a4399c65f24512 added lightning.h to
--nodist_include_HEADERS without removing it from include_HEADERS
--
--This raises the following error on one of the buildroot autobuilders:
--/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
--/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
--/usr/bin/install: cannot create regular file `/home/test/autobuild/run/instance-3/output-1/target/usr/include/lightning.h': File exists
--
--Fix this by removing lightning.h from include_HEADERS
--
--Fixes:
-- - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- include/Makefile.am | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/include/Makefile.am b/include/Makefile.am
--index e754dd3..8f91594 100644
----- a/include/Makefile.am
--+++ b/include/Makefile.am
--@@ -14,7 +14,6 @@
-- # License for more details.
-- #
-- 
---include_HEADERS = lightning.h
-- SUBDIRS =		\
-- 	lightning
-- 
---- 
--2.23.0
--
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 2840a97f91..998ae3743b 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9  lightning-2.1.3.tar.gz
-+sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index da8c07e61f..572f6d281d 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIGHTNING_VERSION = 2.1.3
-+LIGHTNING_VERSION = 2.2.0
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
--- 
-2.35.1
+So my question is whether it is intended like this or am I missing
+something?
 
+Thank you,
+Andrey.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
