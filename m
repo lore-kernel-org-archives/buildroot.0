@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ADA3C64ED9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919E7C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 944624F010;
-	Mon, 20 Feb 2023 22:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 944624F010
+	by smtp4.osuosl.org (Postfix) with ESMTP id 390794EF9F;
+	Mon, 20 Feb 2023 22:22:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 390794EF9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id unwUazk1hRA1; Mon, 20 Feb 2023 22:22:14 +0000 (UTC)
+	with ESMTP id RJmbNeANnM3s; Mon, 20 Feb 2023 22:22:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B7AC4F005;
-	Mon, 20 Feb 2023 22:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B7AC4F005
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B881A1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E00244F00A;
+	Mon, 20 Feb 2023 22:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E00244F00A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AD4511BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8B8261178
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8B8261178
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2647940C2C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2647940C2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OAXbXaRfVUNh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9j24fFYxkavX for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1ADD6115B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1ADD6115B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68B43416D6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68B43416D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1676828C8; Mon, 20 Feb 2023 20:52:02 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 650D386494; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:36 +0100
+Date: Wed, 14 Dec 2022 20:01:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 101272d1313827f655e247bab740783a7e6dee0f
-X-Git-Newrev: b9f06cbbbce135bb149681fa708650a140a12271
+X-Git-Oldrev: ee8d02ea6d76493324180e0131fea6c227d1d284
+X-Git-Newrev: e38d5190ea16a7fda9f3045ba9ba316e4da53f5c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205202.C1676828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pathspec: bump
- to version 0.10.3
+Message-Id: <20230220205210.650D386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-lxml: bump to
+ version 4.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9f06cbbbce135bb149681fa708650a140a12271
+commit: https://git.buildroot.net/buildroot/commit/?id=e38d5190ea16a7fda9f3045ba9ba316e4da53f5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pathspec/python-pathspec.hash | 4 ++--
- package/python-pathspec/python-pathspec.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
-index 91e4fb85b7..5eb76cb5f9 100644
---- a/package/python-pathspec/python-pathspec.hash
-+++ b/package/python-pathspec/python-pathspec.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index cd1943b0b4..72df6d0278 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathspec/json
--md5  6f4fde5e701d328a2846d206edb63aa9  pathspec-0.10.1.tar.gz
--sha256  7ace6161b621d31e7902eb6b5ae148d12cfd23f4a249b9ffb6b9fee12084323d  pathspec-0.10.1.tar.gz
-+md5  d89408b52aff020ac768a14c0ef1c7de  pathspec-0.10.3.tar.gz
-+sha256  56200de4077d9d0791465aa9095a01d421861e405b5096955051deefd697d6f6  pathspec-0.10.3.tar.gz
- # Locally computed sha256 checksums
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
-index ccb794cce9..e88bce231f 100644
---- a/package/python-pathspec/python-pathspec.mk
-+++ b/package/python-pathspec/python-pathspec.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256  fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f  lxml-4.9.1.tar.gz
++sha256  2455cfaeb7ac70338b3257f41e21f0724f4b5b0c0e7702da67ee6c3640835b67  lxml-4.9.2.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 050495c3f3..657622a962 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PATHSPEC_VERSION = 0.10.1
-+PYTHON_PATHSPEC_VERSION = 0.10.3
- PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
--PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/24/9f/a9ae1e6efa11992dba2c4727d94602bd2f6ee5f0dedc29ee2d5d572c20f7
-+PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/32/1a/6baf904503c3e943cae9605c9c88a43b964dea5b59785cf956091b341b08
- PYTHON_PATHSPEC_LICENSE = MPL-2.0
- PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
- PYTHON_PATHSPEC_SETUP_TYPE = setuptools
+-PYTHON_LXML_VERSION = 4.9.1
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/70/bb/7a2c7b4f8f434aa1ee801704bf08f1e53d7b5feba3d5313ab17003477808
++PYTHON_LXML_VERSION = 4.9.2
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/06/5a/e11cad7b79f2cf3dd2ff8f81fa8ca667e7591d3d8451768589996b65dec1
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
