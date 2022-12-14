@@ -1,57 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA7AC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 18:59:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5488EC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 18:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CE7E416E8;
-	Wed, 14 Dec 2022 18:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CE7E416E8
+	by smtp1.osuosl.org (Postfix) with ESMTP id E68C080BFC;
+	Wed, 14 Dec 2022 18:59:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E68C080BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4xcLvO1hJsMZ; Wed, 14 Dec 2022 18:59:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZOut5v22dDeG; Wed, 14 Dec 2022 18:59:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C4C141724;
-	Wed, 14 Dec 2022 18:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C4C141724
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D847A1BF312
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:58:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E3C280BDA;
+	Wed, 14 Dec 2022 18:59:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E3C280BDA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FBDE1BF275
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B40C040144
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B40C040144
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2979C80B19
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:59:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2979C80B19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2NZk9zoNF3Sy for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 18:58:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QAVhB_cw_c8E for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 18:59:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A759040127
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A759040127
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 18:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9670812F3
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9670812F3
+ for <buildroot@busybox.net>; Wed, 14 Dec 2022 18:59:10 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A34F9100004;
- Wed, 14 Dec 2022 18:58:52 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8AE94C0008;
+ Wed, 14 Dec 2022 18:59:06 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p5Wxv-000Vjz-RI; Wed, 14 Dec 2022 19:58:51 +0100
+ id 1p5WyA-000Vlw-6v; Wed, 14 Dec 2022 19:59:06 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221214182210.158323-1-bernd.kuhls@t-online.de>
-Date: Wed, 14 Dec 2022 19:58:51 +0100
-In-Reply-To: <20221214182210.158323-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 14 Dec 2022 19:22:10 +0100")
-Message-ID: <87359hvml0.fsf@dell.be.48ers.dk>
+To: Francois Perrad <fperrad@gmail.com>
+References: <20221214185018.3340110-1-francois.perrad@gadz.org>
+Date: Wed, 14 Dec 2022 19:59:06 +0100
+In-Reply-To: <20221214185018.3340110-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 14 Dec 2022 19:50:18 +0100")
+Message-ID: <87y1r9u805.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
- security bump version to 21.1.5
+Subject: Re: [Buildroot] [PATCH] package/iproute2: bump to version 6.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +63,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Release notes:
- > https://lists.x.org/archives/xorg-announce/2022-December/003303.html
-
- > Security advisory:
- > https://lists.x.org/archives/xorg-announce/2022-December/003302.html
-
- > Fixes CVE-2022-46340, CVE-2022-46341, CVE-2022-46342, CVE-2022-46343,
- > CVE-2022-46344 and CVE-2022-4283.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
