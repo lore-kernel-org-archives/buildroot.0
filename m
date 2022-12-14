@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E58AC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 14:30:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 984E1C10F31
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 14:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3568560B8D;
-	Wed, 14 Dec 2022 14:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3568560B8D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 350E340319;
+	Wed, 14 Dec 2022 14:34:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 350E340319
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g4l4eI6CRzFK; Wed, 14 Dec 2022 14:30:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4iXRmKexrmxS; Wed, 14 Dec 2022 14:34:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 777B960AB7;
-	Wed, 14 Dec 2022 14:30:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 777B960AB7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 175F44023C;
+	Wed, 14 Dec 2022 14:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 175F44023C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC9031BF470
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 14:30:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BFD101BF470
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 14:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96CE04088F
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 14:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96CE04088F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99530400F8
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 14:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99530400F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xoFHRqy4hUNU for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 14:30:00 +0000 (UTC)
+ with ESMTP id DbsK6xaE20qe for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 14:34:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C4F24077D
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3C4F24077D
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 14:30:00 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id d123so3457217iof.6
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 06:30:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8239440034
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8239440034
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 14:34:37 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id 3so3451020iou.12
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 06:34:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=P9aGpHAGkd/yJwMXJORTLZLouh2w5LtnDUXtHtUjyzo=;
- b=lEtJ5pNPXZ+nY5fQZ4dh1Ph/f+32hb88xi4yCBqZKtrU/SPm3VJppScl1tj6SpSEcn
- n3QyHqFcgYFGJC3VN1jxJY5lLadWYNxo3jrbPhEcWWnN+s31D8jo+F69HkYUHxA1ZnGf
- IhBirL6ARQZPoO7u+OMEAfiUyFgxnpLoK+SghDdW49zDIHLJ1/SBUrhpAa13i4ZVHgub
- HWnzwuu0u6titbK2YTNDuxxJeNss4sa2jncH95xdWBfsS5LDOLsJ4bmW4+3LYutmofTB
- soTnoQV+xM7d5YxMXYUsOb8fin/jA4CXzOcREReT7n9Am5n1sf8xtJEIR5jM/WIEggbL
- cP4A==
-X-Gm-Message-State: ANoB5plTgpWYGMikzR72ESuzMgQMBPd5n1NODcZAA7mhGLGGc0Yq+ITV
- biCEgaM/qszsMZ0NutTebakAu/LI7ASlQqsB
-X-Google-Smtp-Source: AA0mqf6Z1OL5SvNZDMG9L4MxXgf19LBxCX9DrkJnEHrWQpzAUFyr/BATLzFcAzC8Sme3WHUb17OcsA==
-X-Received: by 2002:a6b:4a07:0:b0:6df:619e:6589 with SMTP id
- w7-20020a6b4a07000000b006df619e6589mr12478677iob.19.1671028199059; 
- Wed, 14 Dec 2022 06:29:59 -0800 (PST)
+ bh=mPds235Rrxg+s70RDDsD5fEP8micDTD4jv/q3mm7lKU=;
+ b=fb/Wsklv2S0jPwcde4GtVEgoebpZOkG8HZOwHvpYjPlzyubCRfS4DHcFP7Ag2kP11Z
+ FgTPQdMLP4KET6BXCv3Iyxn3665qijsFdd+cAYVyBly9+xSi3Y6BPpsUGVAD28wEvdBt
+ j32dDCn1yKF1jTePsURTISzzTW8DhXA9sPzzzDGUpZDaOZVSYTaAqhWFYBB+esEl70zj
+ j849ICB93ot3L//rBBGGZNYchel8BIuQPxA0cu3O3yW33MEUO7wovvEJSuNvKZqZXDaC
+ NG2mQN37w2z+2SntYGy1rmlmRfzxWEYPjVuwa3TVNt4MaZPQaMN5p/d0u+Fe43Uut0My
+ Plag==
+X-Gm-Message-State: ANoB5plEq0TSJ9+/gvZb3SRE/TcKTkQXjkBGZ/Fx7yC7ghz/RK38el/2
+ Wnc1uKBRrb2OMsAsJEoYSvFnOJiV0XTzQcRc
+X-Google-Smtp-Source: AA0mqf6jXeClijZNyfM/Kpr+51TULm/KLJjMV/7Cn0CSBc40uQgdKLaLxB7Q/MMugV4y75dfvYREPA==
+X-Received: by 2002:a6b:620a:0:b0:6df:df0c:6ce1 with SMTP id
+ f10-20020a6b620a000000b006dfdf0c6ce1mr14296396iog.10.1671028476451; 
+ Wed, 14 Dec 2022 06:34:36 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- o7-20020a0566022e0700b006a49722dc6dsm6345900iow.11.2022.12.14.06.29.58
+ v12-20020a02b08c000000b0038ac4923addsm1176216jah.53.2022.12.14.06.34.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Dec 2022 06:29:58 -0800 (PST)
+ Wed, 14 Dec 2022 06:34:36 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 07:29:56 -0700
-Message-Id: <20221214142956.2961182-1-james.hilliard1@gmail.com>
+Date: Wed, 14 Dec 2022 07:34:33 -0700
+Message-Id: <20221214143433.2976474-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=P9aGpHAGkd/yJwMXJORTLZLouh2w5LtnDUXtHtUjyzo=;
- b=EDK0hwVKbrcklmwjFvKew5VfW/1cO502LoeC+tU0dZMbH4gc1PJ92v3WBnEkUCV2x9
- YUaeAb+jpYXohl6glmnsjVmnFOz3ILnf74VfGkckklXlSYdoFQnjgU278RVx/ewAG2tt
- +IrGv78zJR0UV7ytfIVsjL3qffsUnvEXZCdVv36s+VQdFfvgOH/Mx3qT/PmJ+V3d4dKp
- ukmKkagzD50M2Z3x5+qFY5XSlDl5nRQ1cIYNpEe8qR3/pTYrzT9gklz4Y413L59Qcavg
- j0dEJIR89nia8l8XoCJX/SQTVNQ49Q4PsS/ljIyJMbqyCTqMf50LpfHzMbyQEJui7srR
- EySA==
+ bh=mPds235Rrxg+s70RDDsD5fEP8micDTD4jv/q3mm7lKU=;
+ b=R8ZrVhqTi28q0w3AHJpY9X2FZLW+Sziv3Zb3ndL7pv8DU0N5AOoOP+raPRYKpDyBP6
+ rSKanPpFJ3f/4L3izWOSyp9IEVihOFdJFxB8csHf9Cb0Rzu7iKInvZfcSQc2Sjh2zrKU
+ VfgJWXsmMXm/tshbxnbtusHP6WdhPfau+dqxUZKyDbdZVAG7SnQpLOa9cjl02sPq3OHj
+ 2vOKziqSJCzB29Dcn/9lAfRz6/zG/xB5ssvM1JQyW2RW04JMZL/K05xCE+BFeUg7+plc
+ H/XZ9SdS4EOTcsk7O84M30tmTbNF3Kown1SRBUh9MKPQdrQSD9ACqCrG/oMiYVssDyYH
+ mWEw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EDK0hwVK
-Subject: [Buildroot] [PATCH 1/1] package/python-lxml: bump to verison 4.9.2
+ header.a=rsa-sha256 header.s=20210112 header.b=R8ZrVhqT
+Subject: [Buildroot] [PATCH 1/1] package/python-traitlets: bump to version
+ 5.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,36 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-traitlets/python-traitlets.hash | 4 ++--
+ package/python-traitlets/python-traitlets.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index cd1943b0b4..72df6d0278 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 3b48fb6ab8..0c68e04518 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f  lxml-4.9.1.tar.gz
-+sha256  2455cfaeb7ac70338b3257f41e21f0724f4b5b0c0e7702da67ee6c3640835b67  lxml-4.9.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 050495c3f3..657622a962 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
+-sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
++md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
++sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 71bb775a45..8cda56817f 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.9.1
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/70/bb/7a2c7b4f8f434aa1ee801704bf08f1e53d7b5feba3d5313ab17003477808
-+PYTHON_LXML_VERSION = 4.9.2
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/06/5a/e11cad7b79f2cf3dd2ff8f81fa8ca667e7591d3d8451768589996b65dec1
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-PYTHON_TRAITLETS_VERSION = 5.7.0
++PYTHON_TRAITLETS_VERSION = 5.7.1
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+ PYTHON_TRAITLETS_SETUP_TYPE = pep517
 -- 
 2.34.1
 
