@@ -1,80 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CFFC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 18:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8304C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 18:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 778EE81F33;
-	Wed, 14 Dec 2022 18:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 778EE81F33
+	by smtp4.osuosl.org (Postfix) with ESMTP id 398F741781;
+	Wed, 14 Dec 2022 18:22:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 398F741781
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lng8aR2UloR4; Wed, 14 Dec 2022 18:00:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IwTjhRIv9CMa; Wed, 14 Dec 2022 18:22:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D717F81F2E;
-	Wed, 14 Dec 2022 18:00:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D717F81F2E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B03681BF45A
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:00:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B726416B4;
+	Wed, 14 Dec 2022 18:22:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B726416B4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 100DC1BF312
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B20160C19
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B20160C19
+ by smtp4.osuosl.org (Postfix) with ESMTP id D66CA416B4
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 18:22:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D66CA416B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5gLl76I-xrYB for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 18:00:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BD4760A69
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com
- [IPv6:2607:f8b0:4864:20::b2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2BD4760A69
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 18:00:14 +0000 (UTC)
-Received: by mail-yb1-xb2e.google.com with SMTP id o127so665427yba.5
- for <buildroot@buildroot.org>; Wed, 14 Dec 2022 10:00:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Nsy7JylCFCtp6nmhOUX4WMN2PCKCRGsWvdE1uCKkCls=;
- b=yzPKJcbO2nXNVI4ALhiEmGnJohdwlnMEsDKrwSer4lHllLbCinH24yZKdlcb+WHD7Z
- bI4nlPRrlHFt3FgXvVZNDH+sOSEfRv5HSqBnvo4+iErmManyMXXw8gSHwghn2MO57m7G
- fvWAP5qAaEohZ8aSrF+uZ6lXz8KO6Zp0fiplODUtmoibthGBL4RDfCl9dFOr2Q0oqtK2
- ocuSvLPaco8F8f5TVFeLmaHov0I9P6iW3jS8z1U/dFDIQn9gr2tD+8C8du9msRwWD3v3
- Jah/XT2deWYmUlmbAgaVvAMupv0kmVhzsbswP6HC4BY0ysJxaNZiH1p6z+CLyPjTz0lY
- NppQ==
-X-Gm-Message-State: ANoB5pk/G972BriMPqe77Voo/NcH1t+2mAqr29CAxWPQS1bCB2kUgqM4
- bbBXc7SDOhPOkuJj2dNg49NTJYbRxBvm63Oz8g1wyQf9MhI=
-X-Google-Smtp-Source: AA0mqf64p9hQ2SEgKkWzQAyuqjabp9PoUH6gHjEqa+GmO8P7qcj0/Z+YZZrkjXXzpkGJ3pGCMlgfvl5Ftql3faNnQtI=
-X-Received: by 2002:a25:dccb:0:b0:713:a3c8:7baf with SMTP id
- y194-20020a25dccb000000b00713a3c87bafmr3724660ybe.641.1671040812863; Wed, 14
- Dec 2022 10:00:12 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VOuNFFhvy8_h for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 18:22:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BBB341681
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5BBB341681
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 18:22:14 +0000 (UTC)
+Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
+ by mailout04.t-online.de (Postfix) with SMTP id 5F3F214CA0
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:22:11 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.203.244]) by fwd86.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p5WOR-4TMITJ0; Wed, 14 Dec 2022 19:22:11 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33950)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p5WOQ-0002sw-28
+ for buildroot@buildroot.org; Wed, 14 Dec 2022 19:22:10 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Wed, 14 Dec 2022 19:22:10 +0100
+Message-Id: <20221214182210.158323-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Wed, 14 Dec 2022 19:00:01 +0100
-Message-ID: <CAOiXNkA3_5sO2ajKtvco8G6O_Qufz0N=i1javZjFbDMj+zDf5g@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=Nsy7JylCFCtp6nmhOUX4WMN2PCKCRGsWvdE1uCKkCls=;
- b=kCM2e7M9cVR832GbkEVY5dm9QK3JiPd92NpMQ5XiJgpY2cS6jQKBcGNVhGMMFUabPH
- 2K2E3NnmWDSZpNagp7X6EUUWs9ogEnFd0uWIrE1Ym9NP0GMPf0gpQDG0E5SuAFn/jld9
- tKjHR4y7qgrgBXy59xWEMK/pK9M40qg+xtWpzrUkmgQyzzTWiofiteLPOgQtCfwuqAgS
- blM6zKxpxmNNA6oNwoQ8zvqU4XIUgweX8bLBkzSM3G5RPvXBhSVdCjVlHdZGqh5QtrNC
- JaFvCONrVE/MRAEGaS6zV5KoKyo4/PMq16fEqhKO4+yzR+E7DejPtTgeOdvUY+XH6Vdf
- OhLw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kCM2e7M9
-Subject: [Buildroot] Confusion about 2022.11 release branch
+X-TOI-EXPURGATEID: 150726::1671042131-D9A4E9D3-74DBDB53/0/0 CLEAN NORMAL
+X-TOI-MSGID: ddffcac4-5420-4e7d-afd3-5c8ad76a8cdc
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: security
+ bump version to 21.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,21 +71,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Buildroot Folks,
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-December/003303.html
 
-I am currently trying to update to the latest stable 2022.11 release.  What
-surprises me is that there is no 2022.11.x branch as I would expect.
-Instead, it seems to me that the release is somehow related to the branch
-2012.11.x. It could be confirmed looking at this location:
-https://git.buildroot.net/buildroot/tag/?h=2022.11
-It says Release 2022.11 but the branch mentioned in the combo-box in the top
-right corner says it is the 2012.11.x branch.
+Security advisory:
+https://lists.x.org/archives/xorg-announce/2022-December/003302.html
 
-So my question is whether it is intended like this or am I missing
-something?
+Fixes CVE-2022-46340, CVE-2022-46341, CVE-2022-46342, CVE-2022-46343,
+CVE-2022-46344 and CVE-2022-4283.
 
-Thank you,
-Andrey.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++----
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 4b2090fa99..654552c8b6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
+-sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
+-sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
+-
++# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
++sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
++sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8dba9f1ed0..16b7438ee6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 21.1.4
++XSERVER_XORG_SERVER_VERSION = 21.1.5
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
