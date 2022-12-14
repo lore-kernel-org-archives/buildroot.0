@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A31C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 778F7C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6E3F822AE;
-	Mon, 20 Feb 2023 23:21:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6E3F822AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 269B7821BE;
+	Mon, 20 Feb 2023 23:21:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 269B7821BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zx2gvTrVVRBR; Mon, 20 Feb 2023 23:21:44 +0000 (UTC)
+	with ESMTP id Z-zPhrmRh1Mv; Mon, 20 Feb 2023 23:21:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D226E834F7;
-	Mon, 20 Feb 2023 23:21:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D226E834F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C2A6B1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 419A68354D;
+	Mon, 20 Feb 2023 23:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 419A68354D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 30AB01BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E08374171D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E08374171D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 723B2612A4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 723B2612A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kzdO6oXPnovq for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2HEWKa9jvzOU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13FAE40AA5
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13FAE40AA5
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABC43612A6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC43612A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1089B8648F; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A32818648F; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 09:33:22 +0100
+Date: Wed, 14 Dec 2022 20:30:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
-X-Git-Newrev: acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
+X-Git-Oldrev: 319d2735f99e95955c2a75c8fc6282ddf7de232a
+X-Git-Newrev: 4d05fa00fd07c3d0cd3f1b6ee676e6dd20c5430f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205222.1089B8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qemu: allow building
- only the tools
+Message-Id: <20230220205210.A32818648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wayland-protocols:
+ bump to version 1.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
+commit: https://git.buildroot.net/buildroot/commit/?id=4d05fa00fd07c3d0cd3f1b6ee676e6dd20c5430f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 44be514b21fd (package/qemu: refactor target emulator selection)
-mistakenly forced to always build at least user or system emulation but
-it should be possible to choose only the tools (e.g. for a guest VM
-image).
-
-Still, we don't want to configure qemu with neither system nor user
-emulation, nor the tools enabled; at least one lust be enabled.
-
-So, change the selection to force the tools to be enabled if neither the
-system nor the user emulations are enabled.
-
-Reinstate the the machine selection guard behind a dependency on whether
-at lesat system or user emulation is enabled.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-[yann.morin.1998@free.fr:
-  - ensure at least one of system, user, or tools
-  - guard the machine selection
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/wayland-protocols/wayland-protocols.hash | 6 +++---
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 0f9e353510..2bbc6a14c0 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_QEMU
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_QEMU_SYSTEM if !BR2_PACKAGE_QEMU_LINUX_USER
-+	select BR2_PACKAGE_QEMU_TOOLS if !BR2_PACKAGE_QEMU_SYSTEM && !BR2_PACKAGE_QEMU_LINUX_USER
- 	help
- 	  QEMU is a generic and open source machine emulator and
- 	  virtualizer.
-@@ -114,6 +114,7 @@ comment "Linux user-land emulation needs a glibc or uClibc toolchain"
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 8884babbc0..45c62a396b 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2022-November/042490.html
+-sha256  c7659fb6bf14905e68ef605f898de60d1c066bf66dbea92798573dddec1535b6  wayland-protocols-1.28.tar.xz
+-sha512  092454c6a7e5cc47729de49e9061fb91dfdc5610859e17c495642806ca14dcfb3850a5d3a7459ddb70b2adb08d2590d4b0f92c3a97600e48598682d59adb102f  wayland-protocols-1.28.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2022-November/042524.html
++sha256  a07fa722ed87676ec020d867714bc9a2f24c464da73912f39706eeef5219e238  wayland-protocols-1.31.tar.xz
++sha512  402ce1915300e29afe554d77965ee0a28a5f22fdb5b901c4c640e59b9f3a9c11094e1edae87eea1e76eea557f6faf0c34a0c28ee7f6babb4dc3719329c4e25bf  wayland-protocols-1.31.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 830136ce06..54f9ed8a3a 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
- 	bool "Select individual emulator targets"
-+	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
- 	help
- 	  By default, all targets (system and/or user, subject to the
- 	  corresponding options, above) are built. If you only need a
+-WAYLAND_PROTOCOLS_VERSION = 1.28
++WAYLAND_PROTOCOLS_VERSION = 1.31
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
