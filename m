@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B269DC46467
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B59E0C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C155403C4;
-	Wed, 14 Dec 2022 22:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C155403C4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4996A410D7;
+	Wed, 14 Dec 2022 22:07:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4996A410D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u_CH-eYrJo4i; Wed, 14 Dec 2022 22:06:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zE1JKMfbcGTM; Wed, 14 Dec 2022 22:07:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8427740132;
-	Wed, 14 Dec 2022 22:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8427740132
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E012B1BF425
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:06:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBE9841841;
+	Wed, 14 Dec 2022 22:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBE9841841
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E0AE81BF425
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBF9D81F64
- for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:06:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBF9D81F64
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7D4B41841
+ for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D4B41841
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2ZYrNuF60ZdW for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 22:06:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D914381260
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D914381260
- for <buildroot@busybox.net>; Wed, 14 Dec 2022 22:06:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B2F8860003;
- Wed, 14 Dec 2022 22:06:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p5ZtZ-000c4e-Rm; Wed, 14 Dec 2022 23:06:33 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V0n9QjlqomJE for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D28E410D7
+ for <buildroot@buildroot.org>; Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D28E410D7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 28909866E2; Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20221214194726.3341319-1-francois.perrad@gadz.org>
-Date: Wed, 14 Dec 2022 23:06:33 +0100
-In-Reply-To: <20221214194726.3341319-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Wed, 14 Dec 2022 20:47:26 +0100")
-Message-ID: <87len9skra.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/sudo: bump to version 1.9.12p1
+To: buildroot@buildroot.org
+Date: Wed, 14 Dec 2022 23:05:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4d05fa00fd07c3d0cd3f1b6ee676e6dd20c5430f
+X-Git-Newrev: 380341b249175382691f268de4b41d3843ff0acc
+X-Patchwork-Hint: ignore
+Message-Id: <20221214220706.28909866E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libarchive: bump to version 3.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +56,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=380341b249175382691f268de4b41d3843ff0acc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > remove merged patch
- > diff LICENSE.md
- > -    Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
- > +    Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler
- > -    Copyright (c) 2008-2018, Dave Benson and the protobuf-c authors.
- > +    Copyright (c) 2008-2022, Dave Benson and the protobuf-c authors.
+remove merged patch
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...libarchive-Handle-a-calloc-returning-NULL.patch | 38 ----------------------
+ package/libarchive/Config.in                       |  2 +-
+ package/libarchive/libarchive.hash                 |  2 +-
+ package/libarchive/libarchive.mk                   |  5 +--
+ 4 files changed, 3 insertions(+), 44 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
+deleted file mode 100644
+index 75ce6112fe..0000000000
+--- a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From bff38efe8c110469c5080d387bec62a6ca15b1a5 Mon Sep 17 00:00:00 2001
+-From: obiwac <obiwac@gmail.com>
+-Date: Fri, 22 Jul 2022 22:41:10 +0200
+-Subject: [PATCH] libarchive: Handle a `calloc` returning NULL (fixes #1754)
+-
+-[Retrieved from:
+-https://github.com/libarchive/libarchive/commit/bff38efe8c110469c5080d387bec62a6ca15b1a5]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- libarchive/archive_write.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/libarchive/archive_write.c b/libarchive/archive_write.c
+-index 66592e826..27626b541 100644
+---- a/libarchive/archive_write.c
+-+++ b/libarchive/archive_write.c
+-@@ -201,6 +201,10 @@ __archive_write_allocate_filter(struct archive *_a)
+- 	struct archive_write_filter *f;
+- 
+- 	f = calloc(1, sizeof(*f));
+-+
+-+	if (f == NULL)
+-+		return (NULL);
+-+
+- 	f->archive = _a;
+- 	f->state = ARCHIVE_WRITE_FILTER_STATE_NEW;
+- 	if (a->filter_first == NULL)
+-@@ -548,6 +552,10 @@ archive_write_open2(struct archive *_a, void *client_data,
+- 	a->client_data = client_data;
+- 
+- 	client_filter = __archive_write_allocate_filter(_a);
+-+
+-+	if (client_filter == NULL)
+-+		return (ARCHIVE_FATAL);
+-+
+- 	client_filter->open = archive_write_client_open;
+- 	client_filter->write = archive_write_client_write;
+- 	client_filter->close = archive_write_client_close;
+diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
+index fd429acb60..ffa4cff7b3 100644
+--- a/package/libarchive/Config.in
++++ b/package/libarchive/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBARCHIVE
+ 	  Libarchive is a reusable C library for reading and writing a
+ 	  variety of streaming archive formats.
+ 
+-	  http://www.libarchive.org/
++	  https://www.libarchive.org/
+ 
+ if BR2_PACKAGE_LIBARCHIVE
+ 
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index ca580b4977..b03bef3de5 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  5a411aceb978f43e626f0c2d1812ddd8807b645ed892453acabd532376c148e6  libarchive-3.6.1.tar.xz
++sha256  9e2c1b80d5fbe59b61308fdfab6c79b5021d7ff4ff2489fb12daf0a96a83551d  libarchive-3.6.2.tar.xz
+ # Locally computed:
+ sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 649b7dd4dc..cfc148d01d 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.6.1
++LIBARCHIVE_VERSION = 3.6.2
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+@@ -12,9 +12,6 @@ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
+ LIBARCHIVE_CPE_ID_VENDOR = libarchive
+ 
+-# 0001-libarchive-Handle-a-calloc-returning-NULL.patch
+-LIBARCHIVE_IGNORE_CVES += CVE-2022-36227
+-
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBARCHIVE_CONF_OPTS += --enable-bsdtar=static
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
