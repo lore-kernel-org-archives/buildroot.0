@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B59E0C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C75F0C001B2
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 22:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4996A410D7;
-	Wed, 14 Dec 2022 22:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4996A410D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60320401DD;
+	Wed, 14 Dec 2022 22:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60320401DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zE1JKMfbcGTM; Wed, 14 Dec 2022 22:07:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bcofNlLV6dve; Wed, 14 Dec 2022 22:07:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBE9841841;
-	Wed, 14 Dec 2022 22:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBE9841841
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0AE81BF425
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77C9C40132;
+	Wed, 14 Dec 2022 22:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C9C40132
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAE271BF947
  for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7D4B41841
+ by smtp2.osuosl.org (Postfix) with ESMTP id C642340132
  for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 22:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D4B41841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C642340132
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V0n9QjlqomJE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lv_V2XeT2m-6 for <buildroot@lists.busybox.net>;
  Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D28E410D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4592A400F6
  for <buildroot@buildroot.org>; Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D28E410D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4592A400F6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28909866E2; Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
+ id 33B0A866E3; Wed, 14 Dec 2022 22:07:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 23:05:31 +0100
+Date: Wed, 14 Dec 2022 23:06:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d05fa00fd07c3d0cd3f1b6ee676e6dd20c5430f
-X-Git-Newrev: 380341b249175382691f268de4b41d3843ff0acc
+X-Git-Oldrev: 380341b249175382691f268de4b41d3843ff0acc
+X-Git-Newrev: f095f5a8bec8352ffa182f606c5c7349ec2d6dca
 X-Patchwork-Hint: ignore
-Message-Id: <20221214220706.28909866E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libarchive: bump to version 3.6.2
+Message-Id: <20221214220706.33B0A866E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sudo: bump to version 1.9.12p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,110 +62,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=380341b249175382691f268de4b41d3843ff0acc
+commit: https://git.buildroot.net/buildroot/commit/?id=f095f5a8bec8352ffa182f606c5c7349ec2d6dca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 remove merged patch
 
+diff LICENSE.md
+-    Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
++    Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler
+-    Copyright (c) 2008-2018, Dave Benson and the protobuf-c authors.
++    Copyright (c) 2008-2022, Dave Benson and the protobuf-c authors.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...libarchive-Handle-a-calloc-returning-NULL.patch | 38 ----------------------
- package/libarchive/Config.in                       |  2 +-
- package/libarchive/libarchive.hash                 |  2 +-
- package/libarchive/libarchive.mk                   |  5 +--
- 4 files changed, 3 insertions(+), 44 deletions(-)
+ package/sudo/0001-Fix-CVE-2022-43995.patch | 53 ------------------------------
+ package/sudo/Config.in                     |  2 +-
+ package/sudo/sudo.hash                     |  6 ++--
+ package/sudo/sudo.mk                       |  7 ++--
+ 4 files changed, 6 insertions(+), 62 deletions(-)
 
-diff --git a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch b/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
+diff --git a/package/sudo/0001-Fix-CVE-2022-43995.patch b/package/sudo/0001-Fix-CVE-2022-43995.patch
 deleted file mode 100644
-index 75ce6112fe..0000000000
---- a/package/libarchive/0001-libarchive-Handle-a-calloc-returning-NULL.patch
+index 3f544dcf81..0000000000
+--- a/package/sudo/0001-Fix-CVE-2022-43995.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From bff38efe8c110469c5080d387bec62a6ca15b1a5 Mon Sep 17 00:00:00 2001
--From: obiwac <obiwac@gmail.com>
--Date: Fri, 22 Jul 2022 22:41:10 +0200
--Subject: [PATCH] libarchive: Handle a `calloc` returning NULL (fixes #1754)
+@@ -1,53 +0,0 @@
+-From bd209b9f16fcd1270c13db27ae3329c677d48050 Mon Sep 17 00:00:00 2001
+-From: "Todd C. Miller" <Todd.Miller@sudo.ws>
+-Date: Fri, 28 Oct 2022 07:29:55 -0600
+-Subject: [PATCH] Fix CVE-2022-43995, potential heap overflow for passwords < 8
+- characters. Starting with sudo 1.8.0 the plaintext password buffer is
+- dynamically sized so it is not safe to assume that it is at least 9 bytes in
+- size. Found by Hugo Lefeuvre (University of Manchester) with ConfFuzz.
 -
 -[Retrieved from:
--https://github.com/libarchive/libarchive/commit/bff38efe8c110469c5080d387bec62a6ca15b1a5]
+-https://github.com/sudo-project/sudo/commit/bd209b9f16fcd1270c13db27ae3329c677d48050]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- libarchive/archive_write.c | 8 ++++++++
-- 1 file changed, 8 insertions(+)
+- plugins/sudoers/auth/passwd.c | 11 +++++------
+- 1 file changed, 5 insertions(+), 6 deletions(-)
 -
--diff --git a/libarchive/archive_write.c b/libarchive/archive_write.c
--index 66592e826..27626b541 100644
----- a/libarchive/archive_write.c
--+++ b/libarchive/archive_write.c
--@@ -201,6 +201,10 @@ __archive_write_allocate_filter(struct archive *_a)
-- 	struct archive_write_filter *f;
+-diff --git a/plugins/sudoers/auth/passwd.c b/plugins/sudoers/auth/passwd.c
+-index b2046eca2..0416861e9 100644
+---- a/plugins/sudoers/auth/passwd.c
+-+++ b/plugins/sudoers/auth/passwd.c
+-@@ -63,7 +63,7 @@ sudo_passwd_init(struct passwd *pw, sudo_auth *auth)
+- int
+- sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_callback *callback)
+- {
+--    char sav, *epass;
+-+    char des_pass[9], *epass;
+-     char *pw_epasswd = auth->data;
+-     size_t pw_len;
+-     int matched = 0;
+-@@ -75,12 +75,12 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
 - 
-- 	f = calloc(1, sizeof(*f));
--+
--+	if (f == NULL)
--+		return (NULL);
--+
-- 	f->archive = _a;
-- 	f->state = ARCHIVE_WRITE_FILTER_STATE_NEW;
-- 	if (a->filter_first == NULL)
--@@ -548,6 +552,10 @@ archive_write_open2(struct archive *_a, void *client_data,
-- 	a->client_data = client_data;
+-     /*
+-      * Truncate to 8 chars if standard DES since not all crypt()'s do this.
+--     * If this turns out not to be safe we will have to use OS #ifdef's (sigh).
+-      */
+--    sav = pass[8];
+-     pw_len = strlen(pw_epasswd);
+--    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len))
+--	pass[8] = '\0';
+-+    if (pw_len == DESLEN || HAS_AGEINFO(pw_epasswd, pw_len)) {
+-+	strlcpy(des_pass, pass, sizeof(des_pass));
+-+	pass = des_pass;
+-+    }
 - 
-- 	client_filter = __archive_write_allocate_filter(_a);
--+
--+	if (client_filter == NULL)
--+		return (ARCHIVE_FATAL);
--+
-- 	client_filter->open = archive_write_client_open;
-- 	client_filter->write = archive_write_client_write;
-- 	client_filter->close = archive_write_client_close;
-diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
-index fd429acb60..ffa4cff7b3 100644
---- a/package/libarchive/Config.in
-+++ b/package/libarchive/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBARCHIVE
- 	  Libarchive is a reusable C library for reading and writing a
- 	  variety of streaming archive formats.
+-     /*
+-      * Normal UN*X password check.
+-@@ -88,7 +88,6 @@ sudo_passwd_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_c
+-      * only compare the first DESLEN characters in that case.
+-      */
+-     epass = (char *) crypt(pass, pw_epasswd);
+--    pass[8] = sav;
+-     if (epass != NULL) {
+- 	if (HAS_AGEINFO(pw_epasswd, pw_len) && strlen(epass) == DESLEN)
+- 	    matched = !strncmp(pw_epasswd, epass, DESLEN);
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index cbef15d67b..ee5ea542ab 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_SUDO
+ 	  basic philosophy is to give as few privileges as possible
+ 	  but still allow people to get their work done.
  
--	  http://www.libarchive.org/
-+	  https://www.libarchive.org/
- 
- if BR2_PACKAGE_LIBARCHIVE
- 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index ca580b4977..b03bef3de5 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
+-	  http://www.sudo.ws/sudo/
++	  https://www.sudo.ws/sudo/
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 63c98e2c4e..a3476df96b 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
 @@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  5a411aceb978f43e626f0c2d1812ddd8807b645ed892453acabd532376c148e6  libarchive-3.6.1.tar.xz
-+sha256  9e2c1b80d5fbe59b61308fdfab6c79b5021d7ff4ff2489fb12daf0a96a83551d  libarchive-3.6.2.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 649b7dd4dc..cfc148d01d 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
+-# From: http://www.sudo.ws/download.html
+-sha256  a21918eb9fc0063794f6887464fa2d924ab6d192e19063191a429605c22791d2  sudo-1.9.11p2.tar.gz
++# From: https://www.sudo.ws/getting/download/
++sha256  475a18a8eb3da8b2917ceab063a6baf51ea09128c3c47e3e0e33ab7497bab7d8  sudo-1.9.12p1.tar.gz
+ # Locally calculated
+-sha256  cf3a83366f9aabfd76d693ce03843106fcaaf6c76dfa97610f7c0b719a06e6bb  LICENSE.md
++sha256  d2f93a3b17ed5586fddd07be33ad767146c1a81a22682baa68bb4360a31d020a  LICENSE.md
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 8e237bd36a..a16b6863aa 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.6.1
-+LIBARCHIVE_VERSION = 3.6.2
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
-@@ -12,9 +12,6 @@ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
- LIBARCHIVE_CPE_ID_VENDOR = libarchive
+-SUDO_VERSION_MAJOR = 1.9.11
+-SUDO_VERSION_MINOR = p2
++SUDO_VERSION_MAJOR = 1.9.12
++SUDO_VERSION_MINOR = p1
+ SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+@@ -25,9 +25,6 @@ SUDO_CONF_OPTS = \
+ 	--without-interfaces \
+ 	--with-env-editor
  
--# 0001-libarchive-Handle-a-calloc-returning-NULL.patch
--LIBARCHIVE_IGNORE_CVES += CVE-2022-36227
+-# 0001-Fix-CVE-2022-43995.patch
+-SUDO_IGNORE_CVES += CVE-2022-43995
 -
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBARCHIVE_CONF_OPTS += --enable-bsdtar=static
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ define SUDO_INSTALL_PAM_CONF
+ 	$(INSTALL) -D -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
