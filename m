@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DE57C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 790A7C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Dec 2022 19:04:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46DA960A6B;
-	Wed, 14 Dec 2022 19:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46DA960A6B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 183F34021D;
+	Wed, 14 Dec 2022 19:04:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 183F34021D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ETSP0WZpizFn; Wed, 14 Dec 2022 19:04:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7hdFT45AWPLv; Wed, 14 Dec 2022 19:04:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7431060864;
-	Wed, 14 Dec 2022 19:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7431060864
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 137AC1BF42C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05539401FF;
+	Wed, 14 Dec 2022 19:04:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05539401FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B0371BF42C
  for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE34F607F4
+ by smtp1.osuosl.org (Postfix) with ESMTP id A53F980E42
  for <buildroot@lists.busybox.net>; Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE34F607F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A53F980E42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9BvZq00FfO60 for <buildroot@lists.busybox.net>;
- Wed, 14 Dec 2022 19:04:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iy8C0hU3kN48 for <buildroot@lists.busybox.net>;
+ Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC30560A6B
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8A5580FA1
  for <buildroot@buildroot.org>; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC30560A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A5580FA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA243866AC; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
+ id C5225866A7; Wed, 14 Dec 2022 19:04:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 20:01:56 +0100
+Date: Wed, 14 Dec 2022 19:57:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee8d02ea6d76493324180e0131fea6c227d1d284
-X-Git-Newrev: e38d5190ea16a7fda9f3045ba9ba316e4da53f5c
+X-Git-Oldrev: 0a3a7169d66b610c968128688b6475ffc333cc96
+X-Git-Newrev: b8881d4d7e4822337c222fadf4630a49eec1e9ce
 X-Patchwork-Hint: ignore
-Message-Id: <20221214190427.DA243866AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lxml: bump to version 4.9.2
+Message-Id: <20221214190427.C5225866A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
+ security bump version to 21.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e38d5190ea16a7fda9f3045ba9ba316e4da53f5c
+commit: https://git.buildroot.net/buildroot/commit/?id=b8881d4d7e4822337c222fadf4630a49eec1e9ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-December/003303.html
+
+Security advisory:
+https://lists.x.org/archives/xorg-announce/2022-December/003302.html
+
+Fixes CVE-2022-46340, CVE-2022-46341, CVE-2022-46342, CVE-2022-46343,
+CVE-2022-46344 and CVE-2022-4283.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++----
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index cd1943b0b4..72df6d0278 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3ff2c3f  lxml-4.9.1.tar.gz
-+sha256  2455cfaeb7ac70338b3257f41e21f0724f4b5b0c0e7702da67ee6c3640835b67  lxml-4.9.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 050495c3f3..657622a962 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 4b2090fa99..654552c8b6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
+-sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
+-sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
+-
++# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
++sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
++sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8dba9f1ed0..16b7438ee6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.9.1
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/70/bb/7a2c7b4f8f434aa1ee801704bf08f1e53d7b5feba3d5313ab17003477808
-+PYTHON_LXML_VERSION = 4.9.2
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/06/5a/e11cad7b79f2cf3dd2ff8f81fa8ca667e7591d3d8451768589996b65dec1
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-XSERVER_XORG_SERVER_VERSION = 21.1.4
++XSERVER_XORG_SERVER_VERSION = 21.1.5
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
