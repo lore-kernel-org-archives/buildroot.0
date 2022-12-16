@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28565C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 15:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30DB5C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 15:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0A4981F84;
-	Fri, 16 Dec 2022 15:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A4981F84
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC7C841A3C;
+	Fri, 16 Dec 2022 15:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC7C841A3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6b8FdRyaFB2p; Fri, 16 Dec 2022 15:05:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x91XneHFe-wr; Fri, 16 Dec 2022 15:06:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD6B781DEA;
-	Fri, 16 Dec 2022 15:05:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD6B781DEA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C9AF41A1C;
+	Fri, 16 Dec 2022 15:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C9AF41A1C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D0401BF342
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 15:05:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 36DD81BF342
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 15:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 354AC41A3E
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 15:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354AC41A3E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B1FA4150E
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 15:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B1FA4150E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ki0zo46svNbq for <buildroot@lists.busybox.net>;
- Fri, 16 Dec 2022 15:05:26 +0000 (UTC)
+ with ESMTP id eZ_kZ8AKzQ-Z for <buildroot@lists.busybox.net>;
+ Fri, 16 Dec 2022 15:06:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EC754150E
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 15:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EC754150E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09E77410C7
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 15:06:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09E77410C7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 865C986796; Fri, 16 Dec 2022 15:05:26 +0000 (UTC)
+ id E9BB58679A; Fri, 16 Dec 2022 15:06:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Dec 2022 16:04:26 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2d32b043a60c1a4400e90d7127fdf66a84e6b322
-X-Git-Newrev: f0b7ac81ba83f2b9b0fe42b6013d221ba6d2307d
+Date: Fri, 16 Dec 2022 16:04:11 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: d6943457c4afb2fb5103875243593d77c47ec552
+X-Git-Newrev: b85968ac06d3a5f1b99fade5bba8379d8dd5c54f
 X-Patchwork-Hint: ignore
-Message-Id: <20221216150526.865C986796@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libuwsc: fix
+Message-Id: <20221216150635.E9BB58679A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libuwsc: fix
  wolfssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0b7ac81ba83f2b9b0fe42b6013d221ba6d2307d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b85968ac06d3a5f1b99fade5bba8379d8dd5c54f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 libuwsc needs BR2_PACKAGE_WOLFSSL_ALL (which enables openssl compat
 layer) to avoid the following wolfssl build failure raised since the
