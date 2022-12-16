@@ -1,89 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5E01C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 08:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2358BC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 09:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 562FD41051;
-	Fri, 16 Dec 2022 08:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 562FD41051
+	by smtp3.osuosl.org (Postfix) with ESMTP id 869516110F;
+	Fri, 16 Dec 2022 09:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 869516110F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id koxe9XM7FJfM; Fri, 16 Dec 2022 08:05:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ThO1CZ03Yq3x; Fri, 16 Dec 2022 09:42:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1607E41040;
-	Fri, 16 Dec 2022 08:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1607E41040
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F003E1BF3B5
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFDB561113;
+	Fri, 16 Dec 2022 09:42:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFDB561113
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C383A1BF30B
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 09:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBC1340187
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBC1340187
+ by smtp1.osuosl.org (Postfix) with ESMTP id A7B368215F
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 09:42:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7B368215F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oPqrr-fLDqVi for <buildroot@lists.busybox.net>;
- Fri, 16 Dec 2022 08:04:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id glmGNipPBS6x for <buildroot@lists.busybox.net>;
+ Fri, 16 Dec 2022 09:42:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AA294047C
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8AA294047C
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 08:04:46 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id kw15so4261740ejc.10
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 00:04:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1BAD8213B
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A1BAD8213B
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 09:42:04 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id h11so1865202wrw.13
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 01:42:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=2fXatSOOn3FlYAM18YAAQlO/B5Gq0a+EqsLpjJrdz/U=;
- b=Ydy3hw80j44d8zm0xKy5+gIOlZvbJWRZQzyg2uAUYvuJ+trDNu+QW+DIs9QLsal8dd
- 5cR3BCariWC73wR81k1xYZI2XbWO32f8DeEWj6xdb1L7YUw8EVXjcin8btUCTcwqyU7D
- HrRHFBwAfLHRQh9HhQPZ7O87rrYIlewTV4BJEz/yKkeudGPpYClZ+wv2nQJyprcExF+d
- Nz2mH5V3NIsZZ8hlB5MK6Q0REi/U/eBfOdTsM3fSq2nD2RNZv+SlUfs+dEjdA0k5R1X9
- 1zgesk1fVowNOe0UoTKvYaoIns2uUBZ8P3N9Mtylj9iMCaOjH7d4lyvfkGz59tT3hU8+
- W3jw==
-X-Gm-Message-State: ANoB5pkr5XoXxjA8PImQQOlJscUuu8zkUgueie/eiFIGv9j+0XRDlOOy
- 95g5ngXRO5sN9bBJGxm2p9+HibKJjmPRuiRhxrk=
-X-Google-Smtp-Source: AA0mqf6oruHa+lXAu/URHutwDRtWE/E3UomB2XuRS9flNc/9DihzHBNu9aku4vMZ/n93HzUiqwHBMg==
-X-Received: by 2002:a17:907:a078:b0:7c0:f213:4485 with SMTP id
- ia24-20020a170907a07800b007c0f2134485mr27141418ejc.73.1671177884385; 
- Fri, 16 Dec 2022 00:04:44 -0800 (PST)
-Received: from angeloc.amarulasolutions.com
- (host085115199111.static.fidoka.tech. [85.115.199.111])
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=NJdeNgHt1glHtH0rBYnCrTMYB6c3SqIeTTsB+tpWiTQ=;
+ b=ivpGZ7YrnbMDZnVkWNEO8Upgr1rx6usYzdG04vUrk2/W+olyQFMJe96SPwvTT4OhgP
+ kHhOOzGa5bbXp5PVTeLzbQxo2/BXlq+sjDzQe9N2/0SYKwJ92j0k7f866AiNu/aFG97d
+ RxK1hMIkxIsKGgfYXwwZhgi1WSc0bKx3Ob3MqIUtG388wxwNvVvvqXP1rjBZ2xk8tDnz
+ O3mnF8LTzTaKfx82J4jnYWdIzT6JnFGPdYWQ3MvH4354hVzesgm/hEGW80XfR13SIrzA
+ ubRQuAfqOY/uKEqUoHWGhPhtDJDIUwtR+dcng5/I1cSuaWpoH7HbLL68A52tCJVba35d
+ nZzQ==
+X-Gm-Message-State: ANoB5pmX8M7FLpYCEgQ8U83HvDzYxptYf5TsYlawCLlF+XL5prKQxSjM
+ FhzdUcr1+1vWJy2e2/IZNIWUzq3hp6H9yA==
+X-Google-Smtp-Source: AA0mqf52IdCzp9Vqsy5AtYRhBu45rHDzvhXthogGn3HyMyQrDBoBoZ9ZAMpItKbKWRBU98Aw/eb3gg==
+X-Received: by 2002:a5d:55c7:0:b0:242:bef:809e with SMTP id
+ i7-20020a5d55c7000000b002420bef809emr18736374wrw.1.1671183722807; 
+ Fri, 16 Dec 2022 01:42:02 -0800 (PST)
+Received: from ?IPV6:2a02:8070:4182:37a0:64cb:8203:42ee:ef04?
+ ([2a02:8070:4182:37a0:64cb:8203:42ee:ef04])
  by smtp.gmail.com with ESMTPSA id
- o8-20020aa7dd48000000b0046a0096bfdfsm571762edw.52.2022.12.16.00.04.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Dec 2022 00:04:43 -0800 (PST)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 Dec 2022 09:04:33 +0100
-Message-Id: <20221216080433.1997432-3-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221216080433.1997432-1-angelo@amarulasolutions.com>
-References: <20221216080433.1997432-1-angelo@amarulasolutions.com>
+ n11-20020a056000170b00b0024258722a7fsm1861370wrc.37.2022.12.16.01.42.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 16 Dec 2022 01:42:02 -0800 (PST)
+Message-ID: <41c39dcc-95c8-d949-9fe1-f53882e680ac@gmail.com>
+Date: Fri, 16 Dec 2022 10:42:03 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Nicolas Carrier <Nicolas.Carrier@orolia.com>
+References: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
+ <20221205215558.GI2855@scaer>
+ <883c29be-2a05-00f6-76d6-cf894e497da5@gmail.com>
+ <AS4P251MB061200F650240CFFE6FEF439841D9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
+ <97b952a4-2e1b-363c-36f0-0fe2c0da26b7@gmail.com>
+ <AS4P251MB0612D4DF753A307318923B9A841C9@AS4P251MB0612.EURP251.PROD.OUTLOOK.COM>
+ <20221210082857.GP2855@scaer>
+Content-Language: en-US
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <20221210082857.GP2855@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=2fXatSOOn3FlYAM18YAAQlO/B5Gq0a+EqsLpjJrdz/U=;
- b=kvBxs1Xy03z9hugbLq+qRD+Yt3Ql3Gr60DKUMlzH55LKQOEkf+PH+eVw6J+AbGNJ4v
- Nfri4NJeThEtuxcn8Ni/A+6TeroF1TIUrw3+q0pvjWEisW3OVe7OuOvzfVDS9V+82eaH
- 5+3R29vXnmTPNNqM3I5ZBexnQtW3KiDDofIBI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=kvBxs1Xy
-Subject: [Buildroot] [PATCH v6 3/3] configs/lichee_rv_dock: new defconfig
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=NJdeNgHt1glHtH0rBYnCrTMYB6c3SqIeTTsB+tpWiTQ=;
+ b=C15iHGnrRmlHhutY/ukPKOrzRnWFqDme73w8RgCfL3zwPU7qneStTL/Ibl2UFyNeoF
+ VyS8IECQccRH4upaPGYujRnYtngI2AL9bU5rICfZhCZCFNAaCiQ49Q/EG8H9m8Pqtv+x
+ MrWFfaMh8zOwv1+T5Mpv11wOLnm/9n62SK1JmgslRs6rEH8pBpiiiqBRlC8XsxvCymyo
+ EFd+gsgomUnIFXGzuevYLa52ZiQoxbKfIHQKHOU3urOWnyE47XrT7iRqJ9mU9Csl3Qft
+ eybqgrrvb+tYfQBpA5YTmOsUd1aRJ9gGbSE/bFlOSNGm18BAl1w0YaXosk+ANt7ZMCpV
+ P1cQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=C15iHGnr
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,223 +106,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: indrek.kruusa@gmail.com, Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Lichee RV Dock is a RISC-V Linux development kits with high integration,
-small size and affordable price designed for opensource developer.
+Nicolas, All,
+I added your test and executed it, but I got an error:
 
-https://wiki.sipeed.com/hardware/en/lichee/RV/Dock.html
+======================================================================
+FAIL: test_usermod (tests.package.test_shadow.TestShadow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+   File "/tmp/buildroot/support/testing/tests/package/test_shadow.py", 
+line 53, in test_usermod
+     self.assertRunOk(f'test $(su {username} -c "echo $HOME") = {new_home}')
+   File "/tmp/buildroot/support/testing/infra/basetest.py", line 94, in 
+assertRunOk
+     self.assertEqual(exit_code, 0)
+AssertionError: 1 != 0
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
----
-v6:
-* Added me to the developers file
-* Fixing typos in readme (Indrek Kruusa)
-v5:
-* Fixing typos in readme (Indrek Kruusa)
-v4:
-* Bump to the latest kernel/uboot/opensbi as per nezha defconfig
-v3:
-* Use kernel config fragment to enable RTL8723DS-BT driver
-* Use mdev to let the system load device drivers modules at boot
-  (rtl8723ds wifi and bluetooth)
- DEVELOPERS                                    |  1 +
- board/sipeed/lichee_rv_dock/genimage.cfg      | 19 ++++++++
- board/sipeed/lichee_rv_dock/linux.fragment    |  7 +++
- .../overlay/etc/network/interfaces            |  6 +++
- .../overlay/etc/wpa_supplicant.conf           |  8 ++++
- board/sipeed/lichee_rv_dock/readme.txt        | 45 +++++++++++++++++++
- configs/sipeed_lichee_rv_dock_defconfig       | 41 +++++++++++++++++
- 7 files changed, 127 insertions(+)
- create mode 100644 board/sipeed/lichee_rv_dock/genimage.cfg
- create mode 100644 board/sipeed/lichee_rv_dock/linux.fragment
- create mode 100644 board/sipeed/lichee_rv_dock/overlay/etc/network/interfaces
- create mode 100644 board/sipeed/lichee_rv_dock/overlay/etc/wpa_supplicant.conf
- create mode 100644 board/sipeed/lichee_rv_dock/readme.txt
- create mode 100644 configs/sipeed_lichee_rv_dock_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2f27ddb110..b0f10148b5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -158,6 +158,7 @@ F:	package/rauc/
- 
- N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
- F:	board/sipeed/lichee_rv/
-+F:	board/sipeed/lichee_rv_dock/
- F:	configs/sipeed_lichee_rv*
- F:	package/apparmor/
- F:	package/corkscrew/
-diff --git a/board/sipeed/lichee_rv_dock/genimage.cfg b/board/sipeed/lichee_rv_dock/genimage.cfg
-new file mode 100644
-index 0000000000..38078f0ae3
---- /dev/null
-+++ b/board/sipeed/lichee_rv_dock/genimage.cfg
-@@ -0,0 +1,19 @@
-+# Minimal SD card image for the sipeed Lichee RV dock
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		bootable = "true"
-+		offset = 1M
-+	}
-+}
-diff --git a/board/sipeed/lichee_rv_dock/linux.fragment b/board/sipeed/lichee_rv_dock/linux.fragment
-new file mode 100644
-index 0000000000..10016889ab
---- /dev/null
-+++ b/board/sipeed/lichee_rv_dock/linux.fragment
-@@ -0,0 +1,7 @@
-+CONFIG_BT=y
-+CONFIG_BT_HCIUART=m
-+CONFIG_BT_HCIUART_SERDEV=y
-+CONFIG_BT_HCIUART_3WIRE=y
-+CONFIG_BT_HCIUART_RTL=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
-diff --git a/board/sipeed/lichee_rv_dock/overlay/etc/network/interfaces b/board/sipeed/lichee_rv_dock/overlay/etc/network/interfaces
-new file mode 100644
-index 0000000000..89e7d74aff
---- /dev/null
-+++ b/board/sipeed/lichee_rv_dock/overlay/etc/network/interfaces
-@@ -0,0 +1,6 @@
-+auto lo
-+iface lo inet loopback
-+
-+auto wlan0
-+iface wlan0 inet dhcp
-+wpa-conf /etc/wpa_supplicant.conf
-diff --git a/board/sipeed/lichee_rv_dock/overlay/etc/wpa_supplicant.conf b/board/sipeed/lichee_rv_dock/overlay/etc/wpa_supplicant.conf
-new file mode 100644
-index 0000000000..b43292b0a7
---- /dev/null
-+++ b/board/sipeed/lichee_rv_dock/overlay/etc/wpa_supplicant.conf
-@@ -0,0 +1,8 @@
-+ap_scan=1
-+
-+network={
-+        ssid="YOURSSID"
-+        scan_ssid=1
-+        key_mgmt=WPA-PSK
-+        psk="YOURPASSWD"
-+}
-diff --git a/board/sipeed/lichee_rv_dock/readme.txt b/board/sipeed/lichee_rv_dock/readme.txt
-new file mode 100644
-index 0000000000..048ba64d26
---- /dev/null
-+++ b/board/sipeed/lichee_rv_dock/readme.txt
-@@ -0,0 +1,45 @@
-+Lichee RV dock
-+===============
-+
-+Lichee RV Dock is a RISC-V Linux development kits with high integration, small
-+size and affordable price designed for opensource developer. It's equipped with
-+HDMI interface and it supports many screen by its screen convert board. It's
-+also equipped with many peripherals, including a UAB-A port, 2.4G Wifi-BT module,
-+an analog microphone and a speaker jack interface.
-+
-+How to build
-+============
-+
-+$ make sipeed_lichee_rv_dock_defconfig
-+$ make
-+
-+Wifi
-+==========
-+
-+Edit board/sipeed/lichee_rv_dock/overlay/etc/wpa_supplicant.conf or
-+/etc/wpa_supplicant.conf once connected to the board:
-+
-+* Replace YOURSSID with your AP ssid
-+* Replace YOURPASSWD with your AP password
-+
-+Bluetooth
-+==========
-+
-+To make the device discoverable and pairable, once connected to the board:
-+
-+* bluetoothctl power on
-+* bluetoothctl discoverable yes
-+* bluetoothctl pairable yes
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Connect a TTL UART to the debug connector, insert the microSD card and
-+plug in a USB-C cable to the PWR connector to boot the system.
-diff --git a/configs/sipeed_lichee_rv_dock_defconfig b/configs/sipeed_lichee_rv_dock_defconfig
-new file mode 100644
-index 0000000000..7c8c6788fa
---- /dev/null
-+++ b/configs/sipeed_lichee_rv_dock_defconfig
-@@ -0,0 +1,41 @@
-+BR2_riscv=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay board/sipeed/lichee_rv_dock/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv_dock/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,ca67838d84af4c9f85d06311c9e98e1adf46308f)/linux-ca67838d84af4c9f85d06311c9e98e1adf46308f.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv-dock"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/lichee_rv_dock/linux.fragment"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_RTL8723DS=y
-+BR2_PACKAGE_RTL8723DS_BT=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,528ae9bc6c55edd3ffe642734b4132a8246ea777)/uboot-528ae9bc6c55edd3ffe642734b4132a8246ea777.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="lichee_rv_dock"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_GENIMAGE=y
--- 
-2.25.1
+I used the following command:
+./support/testing/run-tests -d dl -o output_folder -k 
+tests.package.test_shadow.TestShadow
 
+Did I something wrong?
+
+
+Regards,
+Raphael Pavlidis
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
