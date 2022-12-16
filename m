@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43965C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 08:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81C88C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 08:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81BFA82039;
-	Fri, 16 Dec 2022 08:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81BFA82039
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HGqnBKZm-fiX; Fri, 16 Dec 2022 08:04:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C08538201B;
-	Fri, 16 Dec 2022 08:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08538201B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3E8601BF3B5
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19E3F404C2
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19E3F404C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A370404CA;
+	Fri, 16 Dec 2022 08:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A370404CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c2qysmfgcWSQ for <buildroot@lists.busybox.net>;
- Fri, 16 Dec 2022 08:04:44 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tkpCgDhbS5rs; Fri, 16 Dec 2022 08:05:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2786D4047C;
+	Fri, 16 Dec 2022 08:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2786D4047C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 096E01BF3B5
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4A04402BA
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4A04402BA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L-JwL2YE0qjC for <buildroot@lists.busybox.net>;
+ Fri, 16 Dec 2022 08:04:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0989140187
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0989140187
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 08:04:43 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id i15so2579601edf.2
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 00:04:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27F9B40296
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 27F9B40296
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 08:04:45 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id m18so4333604eji.5
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 00:04:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=HcYTUwljus9jqkMHo9v3P1jyOBc6Eagl7wiw27ps4hM=;
- b=Acx7C8biSPIHowWAA/PwkGc1EBlCu9/8M/rpo6Pv/09Ftpv8W6y3hfb03CdnWSVCGC
- 75rQHw2O2Qr5gk86srvoyTxrXI6heNj13dNvk0XAY0QUPfIqV9fc+oVAYutkuokV+ZoX
- YC9RYhpcit1l6/UVwrWd4SfjslfYIlNccQBcvY0PCh2zDg1j5ajW/liufhIUDszI+bQ5
- mWo0w6RjfAL1K0cefZy6eT2pedaFdI/CMvgU3ykn7hkt7R5Y32dDbw0sfQK1RVKDJx3Y
- UyWoNSp3vCwQMXxC+awJg2mrOq8UmMVcIlvFBdP74cxLnrSg6bmeUoz05DozXKlnYZTm
- rEkQ==
-X-Gm-Message-State: ANoB5plkJosbSS9gPvsaWeD5r7UhYbQj+3mm4uCXRQC+1k7WmTB5YgLW
- i7ZfwSsxF9A9+JvJJ/t2PKihyWFEBZbdmW1mT1M=
-X-Google-Smtp-Source: AA0mqf7SZFnnCtbgn2lCE90/gsA14ewizfAsKNHoUhvoa4ZIvE/QzCWyt5yX9DXOBA4SPwnUpEiZww==
-X-Received: by 2002:a05:6402:5303:b0:45c:834b:f2ad with SMTP id
- eo3-20020a056402530300b0045c834bf2admr26271735edb.42.1671177881771; 
- Fri, 16 Dec 2022 00:04:41 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=0XKzUBseUcmMEYOuKSCEHvTSWrsaxdSsp7xj/+zg3Ak=;
+ b=hHXiy0WQ4Nu86fIsreWA/AlU78AMiGpfFGyxY+g7KhS4OVhCCMiH1nEleAEDGW+8mr
+ tC8Cl8tnza9L54qq6jiQZGrhMz7wrkfNijFmXZzQFokgsPZokTnZnxBBlLqh7uaMVyq6
+ +6v5W1yXu/2FZF/uYqETducnWPdVYeptOPDUNNT8BEBvJfmx2nMN/gXUeThhswNb0kdV
+ GGTm8cYVRb1mQlD/qkOrjraz7gEt4VGRoiTG3zy+yres2xXC66QpRKen3/CeiPJMffrk
+ 8KWTnKJcOeLsB9vTf+0szz4kcrnIlmxjRqpNV1rwgcCyggfZNx/iIk9q2s48Nor+5nmE
+ X+fw==
+X-Gm-Message-State: ANoB5plHjSH15bNiI6br/LjK46I3owRuIHPwZZAeNVV0o/Ck1OMSqHGP
+ uiwBDK36gHIzjkpYpw/I40iKdfyPoYjnF02G49M=
+X-Google-Smtp-Source: AA0mqf5hExMUu6IEGazOtt/iopnKC4BXnr400aJX+/C13nqA9xyOpKIgUZTrU5CzH1iGBhBL11tlfQ==
+X-Received: by 2002:a17:906:f856:b0:7c0:b0f9:e360 with SMTP id
+ ks22-20020a170906f85600b007c0b0f9e360mr25720787ejb.16.1671177883069; 
+ Fri, 16 Dec 2022 00:04:43 -0800 (PST)
 Received: from angeloc.amarulasolutions.com
  (host085115199111.static.fidoka.tech. [85.115.199.111])
  by smtp.gmail.com with ESMTPSA id
- o8-20020aa7dd48000000b0046a0096bfdfsm571762edw.52.2022.12.16.00.04.40
+ o8-20020aa7dd48000000b0046a0096bfdfsm571762edw.52.2022.12.16.00.04.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Dec 2022 00:04:41 -0800 (PST)
+ Fri, 16 Dec 2022 00:04:42 -0800 (PST)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Dec 2022 09:04:31 +0100
-Message-Id: <20221216080433.1997432-1-angelo@amarulasolutions.com>
+Date: Fri, 16 Dec 2022 09:04:32 +0100
+Message-Id: <20221216080433.1997432-2-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221216080433.1997432-1-angelo@amarulasolutions.com>
+References: <20221216080433.1997432-1-angelo@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HcYTUwljus9jqkMHo9v3P1jyOBc6Eagl7wiw27ps4hM=;
- b=QKbnEyjnk3pIBV9aii+2sKgPXNWNAFH+ZfDkVaWduaMJNlgB7NHEKhvKJwWwY+PGfn
- FFpVolcw/I4584sIkTo3c3i1I2YbyhyjOzaELHL2fSSMI4MGEbPAS1ez1Gz2D2249gCc
- vIWjZu7YyILnor/iLg6DtRXUh6gjbA4sQOKLM=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0XKzUBseUcmMEYOuKSCEHvTSWrsaxdSsp7xj/+zg3Ak=;
+ b=XfKYy6hvU9P5xgKxjpE1vVHz2f9OMa9MQT5Y96Q0GGIPlWZF94xfBP5cwgmw/fg6iH
+ rQiPJOANEJolCPizGYGyUtdD9mHCVkoLjUr/3mYitJuBo7/LmlVl2Xj93Nd267fFOnWa
+ cUzdr2i+YY1ZyiwPETHX2fZgj1Qb6hN7AaHkc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=QKbnEyjn
-Subject: [Buildroot] [PATCH v6 1/3] package/rtl8723ds-bt: new package
+ header.b=XfKYy6hv
+Subject: [Buildroot] [PATCH v6 2/3] configs/lichee_rv: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,94 +101,155 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package install the required firmware for enabling the
-Bluetooth device embedded in the RTL8723DS chip.
-The driver is included in Linux main tree and can be enabled
-with the BT_HCIUART_RTL symbol.
+Lichee RV - Nezha CM is a compute module with modular design, equipped
+with Allwinner D1 chip (based on T-Head XuanTie C906 core), 512MB DDR3
+RAM.
+Board support is based on the nezha defconfig already available in
+buildroot.
+
+https://wiki.sipeed.com/hardware/en/lichee/RV/RV.html
+https://linux-sunxi.org/Sipeed_Lichee_RV
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Reviewed-by: Indrek Kruusa <indrek.kruusa@gmail.com>
 Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
 ---
 v6:
-* Added me to developers file
-
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/rtl8723ds-bt/Config.in         |  6 ++++++
- package/rtl8723ds-bt/rtl8723ds-bt.hash |  2 ++
- package/rtl8723ds-bt/rtl8723ds-bt.mk   | 17 +++++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/rtl8723ds-bt/Config.in
- create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.hash
- create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.mk
+* Added me to the developers file
+v5:
+* Fixing typos in readme (Indrek Kruusa)
+v4:
+* bump to latest kernel/uboot/opensbi as for the nezha defconfig
+ DEVELOPERS                                    |  2 ++
+ board/sipeed/lichee_rv/genimage.cfg           | 19 +++++++++++
+ .../overlay/boot/extlinux/extlinux.conf       |  4 +++
+ board/sipeed/lichee_rv/readme.txt             | 26 +++++++++++++++
+ configs/sipeed_lichee_rv_defconfig            | 33 +++++++++++++++++++
+ 5 files changed, 84 insertions(+)
+ create mode 100644 board/sipeed/lichee_rv/genimage.cfg
+ create mode 100644 board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/sipeed/lichee_rv/readme.txt
+ create mode 100644 configs/sipeed_lichee_rv_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3a0e3c14ab..b52a065dbc 100644
+index b52a065dbc..2f27ddb110 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -185,6 +185,7 @@ F:	package/qt5/qt5coap/
- F:	package/qt5/qt5knx/
- F:	package/qt5/qt5mqtt/
- F:	package/rtl8723ds/
-+F:	package/rtl8723ds-bt/
- F:	package/sam-ba/
- F:	package/sshguard/
- F:	package/sunwait/
-diff --git a/package/Config.in b/package/Config.in
-index 914c3584e9..999feae08a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -585,6 +585,7 @@ endmenu
- 	source "package/rtl8192eu/Config.in"
- 	source "package/rtl8723bu/Config.in"
- 	source "package/rtl8723ds/Config.in"
-+	source "package/rtl8723ds-bt/Config.in"
- 	source "package/rtl8812au-aircrack-ng/Config.in"
- 	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
-diff --git a/package/rtl8723ds-bt/Config.in b/package/rtl8723ds-bt/Config.in
+@@ -157,6 +157,8 @@ N:	Andrey Yurovsky <yurovsky@gmail.com>
+ F:	package/rauc/
+ 
+ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
++F:	board/sipeed/lichee_rv/
++F:	configs/sipeed_lichee_rv*
+ F:	package/apparmor/
+ F:	package/corkscrew/
+ F:	package/cups/
+diff --git a/board/sipeed/lichee_rv/genimage.cfg b/board/sipeed/lichee_rv/genimage.cfg
 new file mode 100644
-index 0000000000..0a604310c0
+index 0000000000..d5df41203d
 --- /dev/null
-+++ b/package/rtl8723ds-bt/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_RTL8723DS_BT
-+	bool "rtl8723ds-bt"
-+	help
-+	  rtl8723ds UART attached Bluetooth module firmware.
++++ b/board/sipeed/lichee_rv/genimage.cfg
+@@ -0,0 +1,19 @@
++# Minimal SD card image for the sipeed Lichee RV
 +
-+	  https://github.com/wsyco/RTL8723DS_BT_Linux
-diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.hash b/package/rtl8723ds-bt/rtl8723ds-bt.hash
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = false
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		bootable = "true"
++		offset = 1M
++	}
++}
+diff --git a/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf b/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf
 new file mode 100644
-index 0000000000..1ec4e350f9
+index 0000000000..91b2298628
 --- /dev/null
-+++ b/package/rtl8723ds-bt/rtl8723ds-bt.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  9e70a981946abeeb6437d9a27d8437cea15aa4df72f8d56ded0ae28af484d2f4  rtl8723ds-bt-14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08.tar.gz
-diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.mk b/package/rtl8723ds-bt/rtl8723ds-bt.mk
++++ b/board/sipeed/lichee_rv/overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /boot/Image
++  # use devicetree from u-boot
++  append console=ttyS0,115200 root=/dev/mmcblk0p1 ro rootwait
+diff --git a/board/sipeed/lichee_rv/readme.txt b/board/sipeed/lichee_rv/readme.txt
 new file mode 100644
-index 0000000000..efd0a5bae9
+index 0000000000..24e8141851
 --- /dev/null
-+++ b/package/rtl8723ds-bt/rtl8723ds-bt.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# rtl8723ds-bt
-+#
-+################################################################################
++++ b/board/sipeed/lichee_rv/readme.txt
+@@ -0,0 +1,26 @@
++Lichee RV
++===============
 +
-+RTL8723DS_BT_VERSION = 14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08
-+RTL8723DS_BT_SITE = $(call github,wsyco,RTL8723DS_BT_Linux,$(RTL8723DS_BT_VERSION))
-+RTL8723DS_BT_LICENSE = PROPRIETARY
++Lichee RV - Nezha CM is a compute module with modular design, equipped
++with Allwinner D1 chip (based on T-Head XuanTie C906 core), 512MB DDR3 RAM.
++It can boot from TF card or SD-NAND, uses two sets of M.2 b key 67 pin
++connectors to route all IO, making it convient for wide use and easy to replace.
 +
-+define RTL8723DS_BT_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/firmware/rtl_bt/
-+	cp $(@D)/8723D/rtl8723d_fw $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_fw.bin
-+	cp $(@D)/8723D/rtl8723d_config $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_config.bin
-+endef
++How to build
++============
 +
-+$(eval $(generic-package))
++$ make sipeed_lichee_rv_defconfig
++$ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Connect a TTL UART to the debug connector, insert the microSD card and
++plug in a USB-C cable to the PWR connector to boot the system.
+diff --git a/configs/sipeed_lichee_rv_defconfig b/configs/sipeed_lichee_rv_defconfig
+new file mode 100644
+index 0000000000..f9782f870b
+--- /dev/null
++++ b/configs/sipeed_lichee_rv_defconfig
+@@ -0,0 +1,33 @@
++BR2_riscv=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
++BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,ca67838d84af4c9f85d06311c9e98e1adf46308f)/linux-ca67838d84af4c9f85d06311c9e98e1adf46308f.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="nezha"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
++BR2_TARGET_OPENSBI_PLAT="generic"
++# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,528ae9bc6c55edd3ffe642734b4132a8246ea777)/uboot-528ae9bc6c55edd3ffe642734b4132a8246ea777.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="lichee_rv_dock"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.25.1
 
