@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A97BC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 14:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 440FBC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 14:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E37A641B64;
-	Fri, 16 Dec 2022 14:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E37A641B64
+	by smtp4.osuosl.org (Postfix) with ESMTP id D155041B83;
+	Fri, 16 Dec 2022 14:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D155041B83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Z2qNpvwhPjd; Fri, 16 Dec 2022 14:22:30 +0000 (UTC)
+	with ESMTP id PxiQDtAP-EMG; Fri, 16 Dec 2022 14:22:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED80241B62;
-	Fri, 16 Dec 2022 14:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED80241B62
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B2C5C1BF2A9
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 14:22:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4C7541B76;
+	Fri, 16 Dec 2022 14:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4C7541B76
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C48071BF2A9
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 14:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CBCA41B62
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 14:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CBCA41B62
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0A39404CF
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 14:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0A39404CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7JohtPF-g0xH for <buildroot@lists.busybox.net>;
- Fri, 16 Dec 2022 14:22:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 720A641B4F
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 720A641B4F
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 14:22:25 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 433B4E0004;
- Fri, 16 Dec 2022 14:22:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p6BbR-002B4D-BH; Fri, 16 Dec 2022 15:22:21 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yox0aN8ZI-D5 for <buildroot@lists.busybox.net>;
+ Fri, 16 Dec 2022 14:22:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D05C7403C6
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 14:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D05C7403C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BF14A86774; Fri, 16 Dec 2022 14:22:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221208204349.12391-1-fontaine.fabrice@gmail.com>
-Date: Fri, 16 Dec 2022 15:22:21 +0100
-In-Reply-To: <20221208204349.12391-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 8 Dec 2022 21:43:49 +0100")
-Message-ID: <87fsdfqvhe.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/connman: fix CVE-2022-3229{2, 3}
+To: buildroot@buildroot.org
+Date: Fri, 16 Dec 2022 15:16:43 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 30e9d1c7f6630f5c24ca17d00dfd6bf0669532d3
+X-Git-Newrev: 137a8dbee0599cb1bd7c9d7bf596f0e8bac7d9bd
+X-Patchwork-Hint: ignore
+Message-Id: <20221216142239.BF14A86774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/botan: fix mips64
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +57,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=137a8dbee0599cb1bd7c9d7bf596f0e8bac7d9bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix CVE-2022-32292: In ConnMan through 1.41, remote attackers able to
- > send HTTP requests to the gweb component are able to exploit a
- > heap-based buffer overflow in received_data to execute code.
+Disable cc-tests to avoid the following build failure on mips64:
 
- > Fix CVE-2022-32293: In ConnMan through 1.41, a man-in-the-middle attack
- > against a WISPR HTTP query could be used to trigger a use-after-free in
- > WISPR handling, leading to crashes or code execution.
+  ERROR: Configured target is mips64 but compiler probe indicates mips32
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c44f44f36686268479563afd879db588e15ede7d
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit fb9a422eba604cbdcd78826a6d520146c4fffad2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/botan/botan.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index c95e97dcc3..f56eebbb29 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -16,6 +16,7 @@ BOTAN_INSTALL_STAGING = YES
+ BOTAN_DEPENDENCIES = host-python3
+ BOTAN_CONF_OPTS = \
+ 	--cpu=$(BR2_ARCH) \
++	--disable-cc-tests \
+ 	--os=linux \
+ 	--cc=gcc \
+ 	--cc-bin="$(TARGET_CXX)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
