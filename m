@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 705B4C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 08:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E888C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 16 Dec 2022 12:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC22E60768;
-	Fri, 16 Dec 2022 08:19:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC22E60768
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF2BF4105D;
+	Fri, 16 Dec 2022 12:42:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF2BF4105D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ac0Xichysq5k; Fri, 16 Dec 2022 12:42:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19209404D1;
+	Fri, 16 Dec 2022 12:42:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19209404D1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1127D1BF400
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 12:42:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9CE961109
+ for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 12:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9CE961109
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wEopdktVFj84; Fri, 16 Dec 2022 08:19:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3284460644;
-	Fri, 16 Dec 2022 08:19:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3284460644
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E988B1BF3B5
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:19:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D15CE812C2
- for <buildroot@lists.busybox.net>; Fri, 16 Dec 2022 08:19:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D15CE812C2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id btDs2heLLurb for <buildroot@lists.busybox.net>;
- Fri, 16 Dec 2022 08:19:20 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EGDMDWWhwJS6 for <buildroot@lists.busybox.net>;
+ Fri, 16 Dec 2022 12:42:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CAF4A812AB
- for <buildroot@uclibc.org>; Fri, 16 Dec 2022 08:19:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAF4A812AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AA4861104
+ for <buildroot@uclibc.org>; Fri, 16 Dec 2022 12:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AA4861104
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B68F885D33; Fri, 16 Dec 2022 08:19:20 +0000 (UTC)
+ id 05CE0866CF; Fri, 16 Dec 2022 12:42:22 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 16 Dec 2022 08:19:20 +0000
+Date: Fri, 16 Dec 2022 12:42:21 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -54,15 +54,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15176-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15176-163-uOikrAxCbl@https.bugs.busybox.net/>
+In-Reply-To: <bug-15176-163@https.bugs.busybox.net/>
+References: <bug-15176-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15176] New: udisks-2.9.4 build fails with
- per-package
+Subject: [Buildroot] [Bug 15176] udisks-2.9.4 build fails with per-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,39 +80,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15176
 
-            Bug ID: 15176
-           Summary: udisks-2.9.4 build fails with per-package
-           Product: buildroot
-           Version: 2022.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: buildroot@heine.tech
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Michael Nosthoff <buildroot@heine.tech> ---
+I just realized the same is happening with gvfs for which some extra handlings
+is alread in the polkit.mk file.
 
-When using per-package build the build of udisks fails with the following error
-msg:
-
-
-cp org.freedesktop.UDisks2.conf.in org.freedesktop.UDisks2.conf
-  GEN      org.freedesktop.UDisks2.policy
-/build/buildroot/build/per-package/udisks/host/bin/msgfmt: cannot locate ITS
-rules for org.freedesktop.UDisks2.policy.in
-make[5]: *** [Makefile:924: org.freedesktop.UDisks2.policy] Error 1
-make[4]: *** [Makefile:632: all-recursive] Error 1
-make[3]: *** [Makefile:514: all-recursive] Error 1
-make[2]: *** [Makefile:446: all] Error 2
-make[1]: *** [package/pkg-generic.mk:293:
-/build/buildroot/build/build/udisks-2.9.4/.stamp_built] Error 2
-make: *** [Makefile:23: _all] Error 2
-
-I tried to figure out what dependency might be missing but wasn't successful.
-Any hints welcome!
+[88/263] Generating daemon/org.gtk.vfs.file-operations.policy with a custom
+command
+FAILED: daemon/org.gtk.vfs.file-operations.policy
+/build/buildroot/build/per-package/gvfs/host/bin/meson --internal msgfmthelper
+--msgfmt=/build/buildroot/build/per-package/gvfs/host/bin/msgfmt
+daemon/org.gtk.vfs.file-operations.policy.in
+daemon/org.gtk.vfs.file-operations.policy xml
+/build/buildroot/build/build/gvfs-1.48.1/po
+/build/buildroot/build/per-package/gvfs/host/bin/msgfmt: cannot locate ITS
+rules for daemon/org.gtk.vfs.file-operations.policy.in
+[113/263] Compiling C object
+common/libgvfscommon.so.p/meson-generated_.._gvfsdbus.c.o
+ninja: build stopped: subcommand failed.
 
 -- 
 You are receiving this mail because:
