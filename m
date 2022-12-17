@@ -1,89 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C281C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 17 Dec 2022 05:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF94C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 17 Dec 2022 05:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 637C9611A2;
-	Sat, 17 Dec 2022 05:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 637C9611A2
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED445404C3;
+	Sat, 17 Dec 2022 05:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED445404C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vpvsfZBTqiJO; Sat, 17 Dec 2022 05:13:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JsCmNLqzlkOC; Sat, 17 Dec 2022 05:13:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 874A060C08;
-	Sat, 17 Dec 2022 05:13:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 874A060C08
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1EC8040575;
+	Sat, 17 Dec 2022 05:13:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EC8040575
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9563D1BF38B
- for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 05:13:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 013661BF38B
+ for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 05:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DCCB821C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE85F81F47
  for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 05:13:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DCCB821C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE85F81F47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gDIm0c7ylIlE for <buildroot@lists.busybox.net>;
- Sat, 17 Dec 2022 05:13:41 +0000 (UTC)
+ with ESMTP id tjFlQVQk0pHR for <buildroot@lists.busybox.net>;
+ Sat, 17 Dec 2022 05:13:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0426A81F47
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0426A81F47
- for <buildroot@buildroot.org>; Sat, 17 Dec 2022 05:13:40 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id x11so4347488qtv.13
- for <buildroot@buildroot.org>; Fri, 16 Dec 2022 21:13:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 062AE821C2
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com
+ [IPv6:2607:f8b0:4864:20::82b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 062AE821C2
+ for <buildroot@buildroot.org>; Sat, 17 Dec 2022 05:13:41 +0000 (UTC)
+Received: by mail-qt1-x82b.google.com with SMTP id jr11so4375838qtb.7
+ for <buildroot@buildroot.org>; Fri, 16 Dec 2022 21:13:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7yRmyT5iSVJA5cwszEM0aOgXga5YUfmagc5bvaGwM/E=;
- b=fOj5wsWlVeuC9O9M7GxijRuY2Ah8j+03jkgYDf5iSVSF9IrfqFWLxfqCO43lDJZGd6
- Mcu9q4YF7fXhwEMj2HF0p1stnaHQdcBV+ilzyEZTfcZ1cY9Fqpx3JnDIiWu3zbuyPLPM
- /lW+A5h5cSxt47wAKZXTopJz0RpKV7+Fz/2Y4p2jDvrDQsmhl7naoAUV7d31HnnTQR5g
- JWcswGLe36RoEzUii0KffXQGUBl4Z12wLhUWWW/YRiMMEvV1z8wMdkTnBAu2X03SjCGb
- 7vdO/JRk31WHisOyyfaLRHW93PyfYmFYESjUcwqVO958BsomdvkMYd2SMhEIVZ+Rl+/s
- 1RjQ==
-X-Gm-Message-State: ANoB5pneO6Yan42idHchzlTwGZ7Ems1rDgb+Vtp4zfDjD9h+z2oiNxmR
- S281uATsyIAIZsuUrCqt++Ks8RfA4Tk=
-X-Google-Smtp-Source: AA0mqf5OTcD5PZcz486Da9I5/RudpDeyUN9vp6BffmQ8JOH4KhlAeBryZfTZWJxAykWIgpc/svSvgA==
-X-Received: by 2002:a05:622a:1e17:b0:3a5:977e:9c77 with SMTP id
- br23-20020a05622a1e1700b003a5977e9c77mr39383783qtb.20.1671254019325; 
- Fri, 16 Dec 2022 21:13:39 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Rcy+cb4y2iLXGxoif1/CnIf7DTPgwjm0SZsLIOBRkZ4=;
+ b=htNkV8knAsCaFMIAXtI23koxTi0IgPs023iuZ25YuWBuJn7Jimyl8KdbPpBS0gTiw8
+ DuFDO851IBEE54+XVgJ2mynCy57BUd5jAR0/3NrmyGXFrb5dfropuU4MM3EnNvbgPWl7
+ 1s68BozJzPB8pd4izs73hEX0Pi7u1fPZooWzuSFnJCrbtqyWVblg3BA09kAzccLO3LkO
+ +XeH64fPLLsmwEW4OG74tlcSp8Xjg05xwa0bqLSap32hdPzeeauKxnwPYYa8T0E2xsJx
+ wPzGCOscokD9TgZijTyxtS5UH91a2cMnNuHrx4IgobcPIyJTMRTZ9H3/9COlmcsq9KW1
+ EWYA==
+X-Gm-Message-State: AFqh2kpnw5jZG88ReNVh8dPqd4jKhtMDtWKjiB+e3AunkW4SYktM5XG1
+ uhcPcSaPVGrkSC4Z+oxw4i2TimoF8LI=
+X-Google-Smtp-Source: AMrXdXsouKv55a48ClhmjwA+ky5Gm0ebxUIuN83NdFL207NR5C4vzk9bwqLhNXc6YhO9FNCIm6oGvA==
+X-Received: by 2002:ac8:5842:0:b0:3a7:ea9b:5627 with SMTP id
+ h2-20020ac85842000000b003a7ea9b5627mr3724821qth.13.1671254020537; 
+ Fri, 16 Dec 2022 21:13:40 -0800 (PST)
 Received: from jesse-desktop.jtp-bos.lab
  (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
  by smtp.gmail.com with ESMTPSA id
- q17-20020ac87351000000b003a7fef41526sm2448854qtp.77.2022.12.16.21.13.38
+ q17-20020ac87351000000b003a7fef41526sm2448854qtp.77.2022.12.16.21.13.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Dec 2022 21:13:38 -0800 (PST)
+ Fri, 16 Dec 2022 21:13:40 -0800 (PST)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Dec 2022 00:13:33 -0500
-Message-Id: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
+Date: Sat, 17 Dec 2022 00:13:34 -0500
+Message-Id: <20221217051337.3778405-2-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
+References: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7yRmyT5iSVJA5cwszEM0aOgXga5YUfmagc5bvaGwM/E=;
- b=ExKEAGdP0iIry+x6bs6jvZV/Xv2xDyl5GbtduBinE3wQk08Cf7WvZDeB2XaS8rnAfN
- USplbKuvA/r9FmAQCwNm3k/piklrbH6/asxbI5rSmYc1ai0Uu/6VPhl3O+oOdoNoXXpL
- Ps1M4vIAY3Gxvx8f8MMghU82nv8nEWMxb3J9/+AUN9wh2+tfe9ZQmanfT5ev9UbKcjkT
- 0m2Ize6BP9RLQReZxROKgPnMhBcxP+RprrdtUk7/A3Raz5xmL9q5uNqV5GNXP7aMUxaC
- +Ca6knI2WWUGDLKbNn+hUJbZulHlXWiAKEVAxJC8ss+d0sXyuyOoxz88/QIILccvLV5Z
- qE5w==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Rcy+cb4y2iLXGxoif1/CnIf7DTPgwjm0SZsLIOBRkZ4=;
+ b=cjOyQV2WfGO5omEX3sO6OcT1julQLSe+oHF5S940bCzEdpUsh4ff23ZLQAr7sab74A
+ vvdXkLapD1eROgEW+bcxGwY62hKG3X9bQHqXzJkRZ89KZqBpvOYlFAryvL8stN5xQc9G
+ YHCyrB+Sep2qWZHLoH5qp4XvyIMlGzRUtEY+W4eiF2iUXiRzibHihSPRIekNOw5Wv6K7
+ PHF4rphykUDaIyPgiRjqT4czhX1D5m6zyKuKhPcen4HQT4Nfs8PqT++ELc9b5kzTwDdv
+ nMNx2pL1keheXPI6NlOgDHyQFnckVRrIrVy/xftotQpRYmyRRs4FybKvllfNA60VEHXM
+ HpAQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ExKEAGdP
-Subject: [Buildroot] [PATCH v2 0/4] Add RISC-V 32 NOMMU support
+ header.a=rsa-sha256 header.s=20210112 header.b=cjOyQV2W
+Subject: [Buildroot] [PATCH v2 1/4] package/elf2flt: add RISC-V 32-bits
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,58 +109,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch-set aims to add NOMMU support to RV32.
-Many people want to build simple emulators or HDL
-models of RISC-V this patch makes it posible to
-run linux on them.
+From: Yimin Gu <ustcymgu@gmail.com>
 
-Yimin Gu is the original author of this set.
-Submitted here:
-https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
+Enable selecting elf2flt for RISC-V 32-bits no MMU builds.
 
-Though Jesse T made the configs more concise.
-Aswell fixed the 1k line Dconf,
-and split into 3 distinct patches.
+Also modify the package Makefile.in file to add the -fPIC option to
+the target CFLAGS for RISC-V 32-bits no MMU builds.
 
-A couple things to note:
-- UcLibc seems to want __ARCH_WANT_TIME32_SYSCALLS
-for adjtimex, but Linux doesnt provide this for RV32.
-- Patch 2 adds __ARCH_WANT_STAT64,
-but I'm not sure if this is needed.
-- Busybox doesnt build umask or unset for NOMMU systems.
-I have seen this happen on STM32 aswell as I.MXRT
-
-[__ARCH_WANT_TIME32_SYSCALLS]:
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20190218210712.3503891-5-arnd@arndb.de/
-
-Jesse Taube (1):
-  configs/qemu_riscv32_nommu_virt_defconfig: New defconfig
-
-Yimin Gu (3):
-  package/elf2flt: add RISC-V 32-bits support
-  package/uclibc: Add RISC-V 32-bit support
-  arch: Enable support for RISC-V 32-bit NOMMU
-
- arch/Config.in.riscv                          |   2 -
- board/qemu/riscv32-virt/nommu/defconfig       |  16 ++
- .../riscv32-virt/nommu/patches/linux-headers  |   1 +
- ...nfig-Allow-RV32-to-build-with-no-MMU.patch |  43 ++++++
- ...le-stat64-and-time32-for-RV32-uclibc.patch |  40 +++++
- board/qemu/riscv32-virt/readme.txt            |   6 +-
- configs/qemu_riscv32_nommu_virt_defconfig     |  31 ++++
- package/Makefile.in                           |   4 +-
- .../0007-Added-RISC-V-32-bit-support.patch    |  87 +++++++++++
- .../uclibc/0001-RISC-V-32-bit-support.patch   | 145 ++++++++++++++++++
- package/uclibc/Config.in                      |   2 +
- 11 files changed, 372 insertions(+), 5 deletions(-)
- create mode 100644 board/qemu/riscv32-virt/nommu/defconfig
- create mode 120000 board/qemu/riscv32-virt/nommu/patches/linux-headers
- create mode 100644 board/qemu/riscv32-virt/nommu/patches/linux/6.0/0001-riscv-Kconfig-Allow-RV32-to-build-with-no-MMU.patch
- create mode 100644 board/qemu/riscv32-virt/nommu/patches/linux/6.0/0002-riscv-Enable-stat64-and-time32-for-RV32-uclibc.patch
- create mode 100644 configs/qemu_riscv32_nommu_virt_defconfig
+Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
+Cc: Jesse Taube <Mr.Bossman075@gmail.com>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+---
+ package/Makefile.in                           |  4 +-
+ .../0007-Added-RISC-V-32-bit-support.patch    | 87 +++++++++++++++++++
+ 2 files changed, 89 insertions(+), 2 deletions(-)
  create mode 100644 package/elf2flt/0007-Added-RISC-V-32-bit-support.patch
- create mode 100644 package/uclibc/0001-RISC-V-32-bit-support.patch
 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 43d214bcbe..4f554f48eb 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -41,7 +41,7 @@ GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+ 
+ # FLAT binary format needs uclinux, except RISC-V 64-bits which needs
+ # the regular linux name.
+-ifeq ($(BR2_BINFMT_FLAT):$(BR2_RISCV_64),y:)
++ifeq ($(BR2_BINFMT_FLAT):$(BR2_riscv),y:)
+ TARGET_OS = uclinux
+ else
+ TARGET_OS = linux
+@@ -174,7 +174,7 @@ TARGET_CXXFLAGS += -fno-dwarf2-cfi-asm
+ endif
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
+-ifeq ($(BR2_RISCV_64),y)
++ifeq ($(BR2_riscv),y)
+ TARGET_CFLAGS += -fPIC
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_ONE),y)
+diff --git a/package/elf2flt/0007-Added-RISC-V-32-bit-support.patch b/package/elf2flt/0007-Added-RISC-V-32-bit-support.patch
+new file mode 100644
+index 0000000000..93ee955552
+--- /dev/null
++++ b/package/elf2flt/0007-Added-RISC-V-32-bit-support.patch
+@@ -0,0 +1,87 @@
++From 4a4e8551b7f14ecd2092debbe256c667497a256d Mon Sep 17 00:00:00 2001
++From: Yimin Gu <ustcymgu@gmail.com>
++Date: Wed, 14 Dec 2022 06:49:46 -0500
++Subject: [PATCH] Added RISC-V 32-bit support
++
++Allow elf2flt to work with RISC-V 32-bit targets. With these changes, the
++uclibc toolchain and busybox can work fine for rv32 no MMU systems with
++no noticable problem.
++Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
++[Add more ELF relco types and edit commit message]
++Signed-off-by: Yimin Gu <ustcymgu@gmail.com>
++---
++ elf2flt.c    | 18 +++++++++++++++---
++ ld-elf2flt.c |  2 +-
++ 2 files changed, 16 insertions(+), 4 deletions(-)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 99ad2a8..23c9907 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -81,7 +81,7 @@ const char *elf2flt_progname;
++ #include <elf/v850.h>
++ #elif defined(TARGET_xtensa)
++ #include <elf/xtensa.h>
++-#elif defined(TARGET_riscv64)
+++#elif defined(TARGET_riscv64) || defined(TARGET_riscv32)
++ #include <elf/riscv.h>
++ #endif
++ 
++@@ -127,6 +127,8 @@ const char *elf2flt_progname;
++ #define ARCH	"xtensa"
++ #elif defined(TARGET_riscv64)
++ #define ARCH	"riscv64"
+++#elif defined(TARGET_riscv32)
+++#define ARCH	"riscv32"
++ #else
++ #error "Don't know how to support your CPU architecture??"
++ #endif
++@@ -351,7 +353,8 @@ ro_reloc_data_section_should_be_in_text(asection *s)
++ {
++   if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++       (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
++-#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
+++#if defined(TARGET_m68k) || defined(TARGET_riscv64) || \
+++      defined(TARGET_riscv32) || defined(TARGET_xtensa)
++     if (!strcmp(".eh_frame", s->name))
++       return false;
++ #endif
++@@ -851,12 +854,21 @@ output_relocs (
++ 					break;
++ 				default:
++ 					goto bad_resolved_reloc;
++-#elif defined(TARGET_riscv64)
+++#elif defined(TARGET_riscv64) || defined(TARGET_riscv32)
++ 				case R_RISCV_32_PCREL:
+++				case R_RISCV_ADD8:
+++				case R_RISCV_ADD16:
++ 				case R_RISCV_ADD32:
++ 				case R_RISCV_ADD64:
+++				case R_RISCV_SUB6:
+++				case R_RISCV_SUB8:
+++				case R_RISCV_SUB16:
++ 				case R_RISCV_SUB32:
++ 				case R_RISCV_SUB64:
+++				case R_RISCV_SET6:
+++				case R_RISCV_SET8:
+++				case R_RISCV_SET16:
+++				case R_RISCV_SET32:
++ 					continue;
++ 				case R_RISCV_32:
++ 				case R_RISCV_64:
++diff --git a/ld-elf2flt.c b/ld-elf2flt.c
++index 75ee1bb..68b2a4a 100644
++--- a/ld-elf2flt.c
+++++ b/ld-elf2flt.c
++@@ -327,7 +327,7 @@ static int do_final_link(void)
++ 	/* riscv adds a global pointer symbol to the linker file with the
++ 	   "RISCV_GP:" prefix. Remove the prefix for riscv64 architecture and
++ 	   the entire line for other architectures. */
++-	if (streq(TARGET_CPU, "riscv64"))
+++	if (streq(TARGET_CPU, "riscv64") || streq(TARGET_CPU, "riscv32"))
++ 		append_sed(&sed, "^RISCV_GP:", "");
++ 	else
++ 		append_sed(&sed, "^RISCV_GP:", NULL);
++-- 
++2.38.1
++
 -- 
 2.39.0
 
