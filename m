@@ -1,65 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62FEC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 17 Dec 2022 15:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17190C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 17 Dec 2022 15:37:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44F164052B;
-	Sat, 17 Dec 2022 15:09:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44F164052B
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0A0B81C20;
+	Sat, 17 Dec 2022 15:37:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A0B81C20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o47k61v1Kcn6; Sat, 17 Dec 2022 15:09:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HSMf4FjAt8MC; Sat, 17 Dec 2022 15:37:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8461D404EF;
-	Sat, 17 Dec 2022 15:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8461D404EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id EAAF181902;
+	Sat, 17 Dec 2022 15:37:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAAF181902
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5FF021BF2FC
- for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 15:09:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98B221BF2FC
+ for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 15:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B26B81397
- for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 15:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B26B81397
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E074818D7
+ for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 15:37:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E074818D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 03pTfI0YSmqS for <buildroot@lists.busybox.net>;
- Sat, 17 Dec 2022 15:09:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ACA78138E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0ACA78138E
- for <buildroot@buildroot.org>; Sat, 17 Dec 2022 15:09:23 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.170.170.20])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EEF7313F86E;
- Sat, 17 Dec 2022 16:09:18 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id EHDOH5eGAYXi for <buildroot@lists.busybox.net>;
+ Sat, 17 Dec 2022 15:37:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5711381902
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5711381902
+ for <buildroot@buildroot.org>; Sat, 17 Dec 2022 15:37:36 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ o5-20020a05600c510500b003d21f02fbaaso6001673wms.4
+ for <buildroot@buildroot.org>; Sat, 17 Dec 2022 07:37:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=P8Q+igVPhbj3kDyyMWpcdtcUAg/P1fZGJdMHN9CdfcU=;
+ b=0jXzkupNz+1FPdrREFrbHQr5Hg5Rqw3kPEdcWYDqi0YdLB4ETxpobjcyEPsEBmERM/
+ mEVDeFtkuB7LmTDBa8/ZxORCofLwYe+QapB2X10LZHv/9TU3BMqCEzilxSmHVPTtyZ1L
+ qbGEfL5W9WwT2yd5MiQNaoZtyGPd2fpNEpDxb2niwCBrTmZwV5ASLhEmRlSDoeOqvsMU
+ JMFHzmxwNb6D7EpXWXgwn13x+2PEJt0OLmdhLOdPCttfJUNTzxaSKSZHGHnkn3T2ypbi
+ xn3idvJPzhLjxzCk9bTmQiCLdRhRLej+J3+1Z3TlUU5W/c+wP+vr4vKQ9HEwC0QM/BdB
+ MSAQ==
+X-Gm-Message-State: ANoB5pnxC98AcivLHh165vjVly0ujNpfUsbrWJWJ0Ju2tCXEgWIWQVq8
+ QGyE7yv5V+OO8IPaEgM7AEoF/p7HvB4=
+X-Google-Smtp-Source: AA0mqf7AVyB//fQ0HefvoCdAd4eT6el6rtfidDEYq+xg5KJ9pPtmX8ZhOxRlAAoWuz+5D9BR65rsnA==
+X-Received: by 2002:a05:600c:540c:b0:3d0:57ea:319c with SMTP id
+ he12-20020a05600c540c00b003d057ea319cmr29680740wmb.13.1671291454306; 
+ Sat, 17 Dec 2022 07:37:34 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ 1-20020a05600c228100b003d23928b654sm12933957wmf.11.2022.12.17.07.37.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 17 Dec 2022 07:37:33 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Dec 2022 16:09:09 +0100
-Message-Id: <20221217150909.6494-1-ju.o@free.fr>
+Date: Sat, 17 Dec 2022 16:37:26 +0100
+Message-Id: <20221217153729.545952-1-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1671289760;
- bh=WCJqK7kslTgwePv7/h6ZwxhZR4dhOQbYletpF7a0fBA=;
- h=From:To:Cc:Subject:Date:From;
- b=kAa1GOVW6uUU8V7DoIqgc6wBetYfrAdALcHue/TohJfUbOcf4IUC5CkpFAwZnw5X5
- A+xF3y79HyFrfczOSb4ve2T8yrSBUqdT/fbZ7fx+SEr7QQASkjf4F2DgM6doSEhquZ
- XhzZ1vMOHHYFe0I46Ek968/dSt5U0oW+h+k5sGLgz7ywlcWry/bwA8hOOeaSrmQxiE
- K8rJplDhX5oTWaYAWha/Sbv++Kifx5BLTNHBRtt2c2HE1Mv5OzA9z9X+kh3Sw24Bi7
- lWZfahbMqp7xE2kFgxlO3qQkaCxjwgvFS3b3m5lTWAXyy3u9wRqShmI1BlF3NuTpXQ
- WVO/kxS9aui2A==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=P8Q+igVPhbj3kDyyMWpcdtcUAg/P1fZGJdMHN9CdfcU=;
+ b=LQtb99UFzS1Vv+K7m1I/V49ze7Rzip9rBEs1YFUnYhZwi6FaH6BneqiLJK5vnY7GL3
+ 9DhyQyNtTmIcSjKYFRdNhfcKkQGjSKA0LAmPdlSgXkJDabmRnvUtIiH1lf1LpAhksD1g
+ aYghZhki44xtrKUf82XNM8BZeJeHalqclmQh03+mfEU+gokMZZK5BRvhHyPwBg/O+1jD
+ w9Gtg09e+sS0VP3L9yPpz6spe1+wdq6M7YdXo8Nkg6LD6ptH6pB7UCWsXkK+oYUwtrw0
+ gWJH8pR0c5iw60xK4Y5bu+bPpMb6V2oDmP/YNgimz8Qo6YXCMPJK/5OQZJDatIyOsxhI
+ xrPw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kAa1GOVW
-Subject: [Buildroot] [PATCH 1/1] Revert "package/gperf: add _CPE_ID_VENDOR
- and _CPE_ID_PRODUCT"
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=LQtb99UF
+Subject: [Buildroot] [PATCH 1/4] package/slirp: add host variant for
+ host-qemu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,42 +97,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This reverts commit 3712e1dee7626b0c3262c054b5b9c2769fd2a61e.
+Qemu 7.2 removed the slirp submodule from their sources [1]
+so we have to provide slirp library as host package for
+host-qemu.
 
-gperf -- the GNU perfect hash function generator
-https://www.gnu.org/software/gperf/
+[1] https://wiki.qemu.org/ChangeLog/7.2#GIT_submodules
 
-and
-
-gperftools -- the Google Performance Tools
-https://github.com/gperftools/gperftools
-
-are two different and unrelated projects.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/gperf/gperf.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/slirp/slirp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index c2f042c464..4b928a0ebd 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -8,8 +8,6 @@ GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
--GPERF_CPE_ID_VENDOR = gperftools_project
--GPERF_CPE_ID_PRODUCT = gperftools
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index 10d367587d..2ad71f13d9 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -14,4 +14,7 @@ SLIRP_CPE_ID_PRODUCT = libslirp
+ SLIRP_INSTALL_STAGING = YES
+ SLIRP_DEPENDENCIES = libglib2
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++HOST_SLIRP_DEPENDENCIES = host-libglib2
++
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.38.1
 
