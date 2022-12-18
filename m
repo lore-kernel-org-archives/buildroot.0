@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 801E0C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 129D3C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39E9381453;
-	Mon, 20 Feb 2023 23:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39E9381453
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDD798282C;
+	Mon, 20 Feb 2023 23:05:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDD798282C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kH87HZ3oXRVO; Mon, 20 Feb 2023 23:05:41 +0000 (UTC)
+	with ESMTP id 7wZrJLnvAg3e; Mon, 20 Feb 2023 23:05:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8360E827A5;
-	Mon, 20 Feb 2023 23:05:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8360E827A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DE8FE1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05584827FA;
+	Mon, 20 Feb 2023 23:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05584827FA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86D631BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61AF3414F7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61AF3414F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id D70DC612BE
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D70DC612BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ID4Ry-f1JfQq for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s8B81pfflOyL for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0DBA4172A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0DBA4172A
+ by smtp3.osuosl.org (Postfix) with ESMTP id D40EA612BD
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D40EA612BD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E47C86495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+ id D19C08648F; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 23:07:03 +0100
+Date: Sun, 18 Dec 2022 14:48:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5fde4abc8d67ac2317b1de7a1b4cde8091f4e3c7
-X-Git-Newrev: 9a4e154c9c583e74846f7ec80ad01d78811722b0
+X-Git-Oldrev: 30bc9e5aef772432a9c2753296d89984e0097159
+X-Git-Newrev: b9c948df185f61131133d9d8a8cc39beae0ad299
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205225.9E47C86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/policycoreutils: drop
- bogus INSTALL_TARGET_LINUX_PAM_CONFS
+Message-Id: <20230220205211.D19C08648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXft:
+ bump version to 2.3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a4e154c9c583e74846f7ec80ad01d78811722b0
+commit: https://git.buildroot.net/buildroot/commit/?id=b9c948df185f61131133d9d8a8cc39beae0ad299
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "cb328f77f8 policycoreutils: new package" added a define that is
-never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
+Release notes:
+https://lists.x.org/archives/xorg/2022-November/061175.html
 
-The build system from the package already install these files to target.
-So just drop the bogus define.
-
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/policycoreutils/policycoreutils.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
+ package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 60575ac644..8505dbca3f 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- POLICYCOREUTILS_DEPENDENCIES += linux-pam
- POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
--define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
--	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
--	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
--endef
- endif
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index 484764be3d..5074365aed 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-September/003211.html
+-sha256  60a6e7319fc938bbb8d098c9bcc86031cc2327b5d086d3335fc5c76323c03022  libXft-2.3.6.tar.xz
+-sha512  732f8c635fcac6010012ba8c10c23d2dd6ec79b0f096d6bcc9b7e36d2ca0817387faa7ee5bb6f43cff02adc68e4234c1b8f95021ebc548f61c492e0b76836d90  libXft-2.3.6.tar.xz
++# From https://lists.x.org/archives/xorg/2022-November/061175.html
++sha256  79f0b37c45007381c371a790c2754644ad955166dbf2a48e3625032e9bdd4f71  libXft-2.3.7.tar.xz
++sha512  9df29d3c7b88a21952df1015604511e5d79856d721b2a61eb2c5a062a9abccf16318132432a7c86c0ef816bf174ae86842fa67dabbaa0b163dfa56d99022de19  libXft-2.3.7.tar.xz
+ # Locally computed
+ sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index a86501900c..845b612669 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_AUDIT),y)
+-XLIB_LIBXFT_VERSION = 2.3.6
++XLIB_LIBXFT_VERSION = 2.3.7
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
+ XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
