@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 831FBC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6713C3DA71
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:43:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15F7E60692;
-	Sun, 18 Dec 2022 13:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15F7E60692
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92C0960B5D;
+	Sun, 18 Dec 2022 13:43:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C0960B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZuzqYhd3O17z; Sun, 18 Dec 2022 13:43:14 +0000 (UTC)
+	with ESMTP id gckIz9rfj5Ds; Sun, 18 Dec 2022 13:43:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45AF560B0C;
-	Sun, 18 Dec 2022 13:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45AF560B0C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11F9F1BF5A7
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C21F860B0C;
+	Sun, 18 Dec 2022 13:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21F860B0C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B9E01BF5A7
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EED204015F
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EED204015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67A4460B1F
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67A4460B1F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i8Mxb4uQyGbt for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 13:43:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D66400D3
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 08D66400D3
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:43:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 17BBC20007;
- Sun, 18 Dec 2022 13:43:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p6twZ-003rzY-75; Sun, 18 Dec 2022 14:43:07 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UpjvruC6iPWt for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ADBB60692
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ADBB60692
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 791D0867C5; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Paul Cercueil <paul@crapouillou.net>
-References: <20221214171754.178428-1-paul@crapouillou.net>
-Date: Sun, 18 Dec 2022 14:43:07 +0100
-In-Reply-To: <20221214171754.178428-1-paul@crapouillou.net> (Paul Cercueil's
- message of "Wed, 14 Dec 2022 18:17:54 +0100")
-Message-ID: <87bko0omj8.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/lightning: bump version to 2.2.0
+To: buildroot@buildroot.org
+Date: Sun, 18 Dec 2022 14:40:24 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4b869587c6c88a15dc2ecf6c417896de18501a17
+X-Git-Newrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
+X-Patchwork-Hint: ignore
+Message-Id: <20221218134349.791D0867C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipdb: bump to version
+ 0.13.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +57,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7165965fe57725c32ce3a9c69274d1a4c2c54c80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Notable changes in this new version include support for the Apple
- > Aarch64 ABI, and compare-and-swap atomic instructions.
+Drop no longer required setuptools runtime dependency.
 
- > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
- > ---
- >  ...e.am-don-t-install-lightning.h-twice.patch | 38 -------------------
- >  package/lightning/lightning.hash              |  2 +-
- >  package/lightning/lightning.mk                |  2 +-
- >  3 files changed, 2 insertions(+), 40 deletions(-)
- >  delete mode 100644 package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-ipdb/Config.in        | 1 -
+ package/python-ipdb/python-ipdb.hash | 4 ++--
+ package/python-ipdb/python-ipdb.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
- > diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
- > deleted file mode 100644
- > index fb5299c25f..0000000000
- > --- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
- > +++ /dev/null
- > @@ -1,38 +0,0 @@
- > -From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
-
-You drop the patch tweaking include/Makefile.am ..
-
- > +++ b/package/lightning/lightning.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+diff --git a/package/python-ipdb/Config.in b/package/python-ipdb/Config.in
+index a9d6af1684..9259421c6a 100644
+--- a/package/python-ipdb/Config.in
++++ b/package/python-ipdb/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_IPDB
+ 	bool "python-ipdb"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_IPYTHON # runtime
+ 	help
+ 	  IPython-enabled pdb.
+diff --git a/package/python-ipdb/python-ipdb.hash b/package/python-ipdb/python-ipdb.hash
+index 7d483e1777..1e8a45fbd6 100644
+--- a/package/python-ipdb/python-ipdb.hash
++++ b/package/python-ipdb/python-ipdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ipdb/json
+-md5  4f5ffb71cd6551319acf8cbceabd8936  ipdb-0.13.9.tar.gz
+-sha256  951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5  ipdb-0.13.9.tar.gz
++md5  e624221cbc9261f68f412b748179d5e2  ipdb-0.13.11.tar.gz
++sha256  c23b6736f01fd4586cc2ecbebdf79a5eb454796853e1cd8f2ed3b7b91d4a3e93  ipdb-0.13.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4eeb49de04f4894f8ea1f69a04f500799041b750b3d554c06de5ca877258e734  COPYING.txt
+diff --git a/package/python-ipdb/python-ipdb.mk b/package/python-ipdb/python-ipdb.mk
+index 7828f83020..151a3d45a4 100644
+--- a/package/python-ipdb/python-ipdb.mk
++++ b/package/python-ipdb/python-ipdb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- > -LIGHTNING_VERSION = 2.1.3
- > +LIGHTNING_VERSION = 2.2.0
- >  LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- >  LIGHTNING_LICENSE = LGPL-3.0+
- >  LIGHTNING_LICENSE_FILES = COPYING.LESSER
-
-But you didn't remove LIGHTNING_AUTORECONF = YES
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+-PYTHON_IPDB_VERSION = 0.13.9
++PYTHON_IPDB_VERSION = 0.13.11
+ PYTHON_IPDB_SOURCE = ipdb-$(PYTHON_IPDB_VERSION).tar.gz
+-PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/fc/56/9f67dcd4a4b9960373173a31be1b8c47fe351a1c9385677a7bdd82810e57
++PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/23/b2/c972cc266b0ba8508b42dab7f5dea1be03ea32213258441bf1b00baca555
+ PYTHON_IPDB_SETUP_TYPE = setuptools
+ PYTHON_IPDB_LICENSE = BSD-3-Clause
+ PYTHON_IPDB_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
