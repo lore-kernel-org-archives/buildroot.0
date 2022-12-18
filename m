@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5360EC10F1E
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 11:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BD17C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 11:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E798160B2E;
-	Sun, 18 Dec 2022 11:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E798160B2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB37560B57;
+	Sun, 18 Dec 2022 11:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB37560B57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id itgFbMvHx0bq; Sun, 18 Dec 2022 11:22:32 +0000 (UTC)
+	with ESMTP id dHQ3RKs2qpWp; Sun, 18 Dec 2022 11:39:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36DC160B4C;
-	Sun, 18 Dec 2022 11:22:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36DC160B4C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 443411BF2A2
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:22:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED51B60B5D;
+	Sun, 18 Dec 2022 11:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED51B60B5D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81FC11BF2A2
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:39:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2235E817A5
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2235E817A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6851B403FF
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6851B403FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xWrkYt3Dtxpp for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 11:22:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFA398177A
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFA398177A
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 11:22:02 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout12.t-online.de (Postfix) with SMTP id 29EA417440;
- Sun, 18 Dec 2022 12:22:00 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd89.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p6rjz-36Rl8j0; Sun, 18 Dec 2022 12:21:59 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36510)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p6rjz-0007Ig-03;
- Sun, 18 Dec 2022 12:21:59 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x29GOs9SKWOt for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 11:39:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FBD7400D3
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1FBD7400D3
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 11:39:00 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id v7so4730720wmn.0
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 03:39:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gnhGYGTpQ/vA5C94i9tVMtA6NLM2Nq3VhtPimYO+3FI=;
+ b=xU7MwYH3ipSCDPVqq1rylSeoXtyVUlMQ+0mFX3i+2MLGPBx0nQ9mvtK+Ovd0/7NuCU
+ bjDmwhxLWu7HDYQl9Gtl/ApBgGIbmv/g/S5eFo2Jp94f7qYTdcL1mb27NKdVQBDdAB0C
+ DyZjso1UHoHgugDEo3JrGiQ07R2EXMzB7bsUpJkFXx4G3wyuX8V/2F7fakHlDjMHf+c6
+ Td3QeEf8RnQLQ7F1Gukp0YwfO2bDdn+saDqghlOuitbsPKYgJqjlYvuOvgV7fLUjbqdE
+ oI1yFAN1ozLRG8rjpDLxCGXvN45edpCH8MzX/BL8TWNPJWTTeuuEUT/e8iIaDd5T9nMY
+ rWZw==
+X-Gm-Message-State: ANoB5plYp0BbQOS0tYLJOom3FW0i2Tq8aHo7KvOsPgmfJNvPfK1JWbKY
+ E+zOenzVPlr/KDCrdNKZAGaTyC5GZxw=
+X-Google-Smtp-Source: AA0mqf7kOUxAsXgUCYRTgVX88Q/zv9gtg2M81SiRSfVL2DS3Hl/COK6Q4WtfgGiKUysvestcKc97UA==
+X-Received: by 2002:a05:600c:3d06:b0:3c6:e60f:3f55 with SMTP id
+ bh6-20020a05600c3d0600b003c6e60f3f55mr30089140wmb.12.1671363539027; 
+ Sun, 18 Dec 2022 03:38:59 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ z19-20020a05600c221300b003a3170a7af9sm8640498wml.4.2022.12.18.03.38.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 18 Dec 2022 03:38:58 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 12:21:57 +0100
-Message-Id: <20221218112158.18021-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221218112158.18021-1-bernd.kuhls@t-online.de>
-References: <20221218112158.18021-1-bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2022 12:38:56 +0100
+Message-Id: <20221218113856.217724-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671362519-F9452742-1A7422FC/0/0 CLEAN NORMAL
-X-TOI-MSGID: 1c096a70-6d3e-4f47-bee4-5d1f66258e87
-Subject: [Buildroot] [PATCH 2/3] {toolchain,
- linux-headers}: add support for 6.1 headers
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gnhGYGTpQ/vA5C94i9tVMtA6NLM2Nq3VhtPimYO+3FI=;
+ b=BYyj1s/wYUiiHrQ778XxSfMNfsYyyB0lAXkAjlmQkyLzr4aTcScByQzAVWuUH5bTRS
+ 0XrUF/ZClfqoIkUfVU2J/WC3+9LEfyz3HxfKnfb7Tl07gTEOvpWqgtmXdDwSoZvlE+6U
+ pnYUAi2sCrhsDNA1V2CKruLpH4AcWTYHBwYJtAnIfOL8UdB0Sfz5ZClEhpLt7eV0aYoe
+ CU9FnvdG0OzoOKTL0t65Qd/0Zn+c+OJOTSiIhWMvlpmTXrWitw/41iQbNA7GCmtKRU9A
+ kW6WE7FLKNFFl1wFOGrmsSr9ZgyjLlkd+e+qKz4GvbiSKzl9/l8i9EP2AIrDuKNct8WX
+ GdXA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=BYyj1s/w
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,122 +93,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/linux.hash                                    |  1 +
- package/linux-headers/Config.in.host                | 13 +++++++++++--
- toolchain/Config.in                                 |  5 +++++
- .../toolchain-external-custom/Config.in.options     |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
+https://github.com/domoticz/domoticz/blob/2022.2/History.txt
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9684dc5697..c7bbb6be99 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb  linux-6.1.tar.xz
- sha256  08d3118d6b755769f166de6babed54964393a7c0928029bef11bf55559a72da4  linux-6.0.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 93f443b78f..cd36c7c763 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_0
-+	default BR2_KERNEL_HEADERS_6_1
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -56,6 +56,10 @@ config BR2_KERNEL_HEADERS_5_15
- config BR2_KERNEL_HEADERS_6_0
- 	bool "Linux 6.0.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...e-EnOceanRawValue.h-include-stdarg.h.patch | 33 +++++++++++++++++++
+ package/domoticz/domoticz.hash                |  2 +-
+ package/domoticz/domoticz.mk                  |  2 +-
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+ create mode 100644 package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch
+
+diff --git a/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch b/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch
+new file mode 100644
+index 0000000000..bc3e60023d
+--- /dev/null
++++ b/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch
+@@ -0,0 +1,33 @@
++From 6296d7112089a0f3bfb3056f6d9637e13ce4ce83 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 18 Dec 2022 12:27:38 +0100
++Subject: [PATCH] hardware/EnOceanRawValue.h: include stdarg.h
 +
-+config BR2_KERNEL_HEADERS_6_1
-+	bool "Linux 6.1.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -133,8 +137,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1
-+	bool "6.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++Include stdarg.h to avoid the following build failure on uclibc:
 +
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0
--	bool "6.0.x or later"
-+	bool "6.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19
-@@ -395,6 +403,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.0.13"	if BR2_KERNEL_HEADERS_6_0
-+	default "6.1"		if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 4947ab3aae..544b423001 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -591,6 +591,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
++In file included from /home/fabrice/buildroot/output/build/domoticz-2022.2/hardware/EnOceanRawValue.cpp:2:
++/home/fabrice/buildroot/output/build/domoticz-2022.2/hardware/EnOceanRawValue.h:109:83: error: 'va_list' has not been declared
++  109 | uint32_t SetRawValuesNb(uint8_t * data, T_DATAFIELD * OffsetDes, int NbParameter, va_list value);
++      |                                                                                   ^~~~~~~
 +
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -604,6 +608,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	default "6.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	default "5.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
- 	default "5.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_18
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index a9cb61365f..1c39334ddd 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -127,8 +127,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_1
-+	bool "6.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/domoticz/domoticz/pull/5472]
++---
++ hardware/EnOceanRawValue.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_0
--	bool "6.0.x or later"
-+	bool "6.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
++diff --git a/hardware/EnOceanRawValue.h b/hardware/EnOceanRawValue.h
++index 84f38d17a..df858f27d 100644
++--- a/hardware/EnOceanRawValue.h
+++++ b/hardware/EnOceanRawValue.h
++@@ -1,6 +1,7 @@
++ #ifndef _SetGetRawValue
++ #define _SetGetRawValue
++ 
+++#include <stdarg.h>
++ #include <stdint.h>
++ #include <vector>
++ #include <stdio.h>
++-- 
++2.35.1
++
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 9de241015c..c439238800 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  8282cb71c924b6ef92503976d50f966f2c785eab8f8cffa1136ac133f0241157  domoticz-2022.1.tar.gz
++sha256  8f84098bb64bec12ff7aac5f1fb6b6230a88c5781c2b75bc89861caea73cbccf  domoticz-2022.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index bc4a2def41..451021150b 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_19
+-DOMOTICZ_VERSION = 2022.1
++DOMOTICZ_VERSION = 2022.2
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
