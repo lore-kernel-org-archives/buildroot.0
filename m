@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A73C2C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07318C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6120280D1D;
-	Sun, 18 Dec 2022 13:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6120280D1D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 545EC81355;
+	Sun, 18 Dec 2022 14:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545EC81355
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BnqGKVNm8vMI; Sun, 18 Dec 2022 13:59:16 +0000 (UTC)
+	with ESMTP id T5mKKy0xFBvh; Sun, 18 Dec 2022 14:23:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9666180B72;
-	Sun, 18 Dec 2022 13:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9666180B72
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DAAE01BF5A7
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:58:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 976E781332;
+	Sun, 18 Dec 2022 14:23:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 976E781332
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 018101BF3DC
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C38CB605D8
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:58:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C38CB605D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA72B4015F
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA72B4015F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iz2_xRP6hsZj for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 13:58:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA46E605BA
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:58:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA46E605BA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7931868D2; Sun, 18 Dec 2022 13:58:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fip3FJnV6D7S for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 14:23:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94887400D3
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94887400D3
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:23:23 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout01.t-online.de (Postfix) with SMTP id 613DDD83F;
+ Sun, 18 Dec 2022 15:23:20 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd75.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p6uZT-1hDxKL0; Sun, 18 Dec 2022 15:23:19 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37994)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p6uZS-00051S-2z;
+ Sun, 18 Dec 2022 15:23:18 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:56:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 298bcb0455d0cbf4231f4b87a8e132202120ac79
-X-Git-Newrev: 79bb1ab519448993dbd88e21ddf55b5cfc283115
-X-Patchwork-Hint: ignore
-Message-Id: <20221218135821.B7931868D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {toolchain,
- linux-headers}: add support for 6.1 headers
+Date: Sun, 18 Dec 2022 15:23:18 +0100
+Message-Id: <20221218142318.3223557-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1671373399-2F7FF535-804D44ED/0/0 CLEAN NORMAL
+X-TOI-MSGID: 3149af24-88fe-4cc7-abb3-031ae237fe59
+Subject: [Buildroot] [PATCH 1/1] package/supertuxkart: bump version to 1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,121 +65,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79bb1ab519448993dbd88e21ddf55b5cfc283115
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Changelog:
+https://github.com/supertuxkart/stk-code/blob/1.4/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
+ package/supertuxkart/supertuxkart.hash | 2 +-
+ package/supertuxkart/supertuxkart.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9684dc5697..c7bbb6be99 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb  linux-6.1.tar.xz
- sha256  08d3118d6b755769f166de6babed54964393a7c0928029bef11bf55559a72da4  linux-6.0.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 93f443b78f..cd36c7c763 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_0
-+	default BR2_KERNEL_HEADERS_6_1
- 	help
- 	  Select the kernel version to get headers from.
+diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
+index 6ae3fae82b..446a9de8ec 100644
+--- a/package/supertuxkart/supertuxkart.hash
++++ b/package/supertuxkart/supertuxkart.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  eeabeb0d9801688a218f6f0a76ea3546a46a322ccaca9a258148ecacfe083ffd  SuperTuxKart-1.3-src.tar.xz
++sha256  9890392419baf4715313f14d5ad60746f276eed36eb580636caf44e2532c0f03  SuperTuxKart-1.4-src.tar.xz
+ sha256  d27207a5213f746aac53893e9ecc18456e9595d3ffa662bd1ec9eb10787c214a  COPYING
+diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
+index 8ec366f792..1f9ad4102b 100644
+--- a/package/supertuxkart/supertuxkart.mk
++++ b/package/supertuxkart/supertuxkart.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -56,6 +56,10 @@ config BR2_KERNEL_HEADERS_5_15
- config BR2_KERNEL_HEADERS_6_0
- 	bool "Linux 6.0.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
-+
-+config BR2_KERNEL_HEADERS_6_1
-+	bool "Linux 6.1.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -133,8 +137,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1
-+	bool "6.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0
--	bool "6.0.x or later"
-+	bool "6.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19
-@@ -395,6 +403,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.0.13"	if BR2_KERNEL_HEADERS_6_0
-+	default "6.1"		if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 4947ab3aae..544b423001 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -591,6 +591,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -604,6 +608,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
- 	default "6.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 	default "5.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
- 	default "5.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_18
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index a9cb61365f..1c39334ddd 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -127,8 +127,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_1
-+	bool "6.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_0
--	bool "6.0.x or later"
-+	bool "6.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_19
+-SUPERTUXKART_VERSION = 1.3
++SUPERTUXKART_VERSION = 1.4
+ SUPERTUXKART_SOURCE = SuperTuxKart-$(SUPERTUXKART_VERSION)-src.tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
