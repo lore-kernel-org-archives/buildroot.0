@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCCF2C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC01C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FE3440396;
-	Sun, 18 Dec 2022 22:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FE3440396
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5947160AA5;
+	Sun, 18 Dec 2022 22:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5947160AA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4u1p-tkhDk99; Sun, 18 Dec 2022 22:22:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NxKQUuWlcqRq; Sun, 18 Dec 2022 22:29:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65E954038E;
-	Sun, 18 Dec 2022 22:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65E954038E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 022B21BF286
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:22:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A595560A4F;
+	Sun, 18 Dec 2022 22:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A595560A4F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A1451BF286
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D03F9408B0
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D03F9408B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75E5860A4F
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:29:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75E5860A4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 15BedOc6pADS for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 22:22:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Cw-PFX05gN4 for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 22:29:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50021408A6
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 50021408A6
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 22:22:53 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id i7so7063911wrv.8
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:22:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CBD56059E
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6CBD56059E
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 22:29:37 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id bx10so7142138wrb.0
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:29:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=uGOajdgGLuGo4q+vaUtpVAv1W3LQ7LNRm+5Yr8pM6v0=;
- b=XNu0VGrjRviqHW6SxR7TP0zBu9XN+kfyiM7Iz/ZAXr1LGE95BTZ77JjF35RyHcjgTi
- mW2dAjalVNVHlx/sntHni3iAyFu4Z6OET6UY1cU80t2WdyNj9QWgMWMZ62e2MgZcJCCc
- gkrOIyNzG0HfZQPEfPhe3U4vk9wpVMgl3han9xr5ViCxROCYOrRgMhBlxa7yjV+RmKa6
- 70yzxaqbUowOATeBaRqldew4fUadlGY9u6IU2yxlokhAISA3/TIp7ezV7tjQI0A1QdOV
- pDx5fA/3qXyFizS38dpbNvTQbExsg1n3t3/t6kQ2r8p8jWGOFaRwAm1ry4R+m95KALEV
- mWkw==
-X-Gm-Message-State: ANoB5pmumvHctZzLWiMYp9CeQgMZRysBYPKDlE7hNlew0du7P0A2qXAU
- TZdmUtvUZUfz5I9qAwC9g909h7wuSls=
-X-Google-Smtp-Source: AA0mqf4wzcKiyniLCUi7acUbLogpRe/J40NnPpfauXAyCBjMLMSWRIT8ZFvdx2uW2qPOuRy7UOxtZw==
-X-Received: by 2002:adf:fa89:0:b0:242:3ec:629a with SMTP id
- h9-20020adffa89000000b0024203ec629amr27866377wrr.69.1671402171261; 
- Sun, 18 Dec 2022 14:22:51 -0800 (PST)
+ bh=e+oOZQ/lCKXJl9P+kdxS4LSAJqjl4njaazLMANidwqQ=;
+ b=ryAfX2FWakWqGImMnNhSpla8T45OuFdS23xAWSdAumuDBYf3HQwTtUEaQzi7BlwIdh
+ N5jWvLfk8oRMFFmj+SuX5xcvnsmD0+eWAd0iNJqHb8C3+P7u6KMj81bPP3nG41eiBfP1
+ h9/Rvwc9aB5thBDzIzmAPBNKee4fuGAlah0bjgmXraYU1DnJgH0byv7RC3ssbZJC83mj
+ aB2k9yM7f2IN6g7WYXod+Enl6uKUh9SzsNiRmMm460XgyrWy+ThbZArdXT8BOTzRBD5N
+ KmJgko6FAovRXF4cBwwDA8hNNfFaEf3XevZbxvXDeYj2zXu7EJJIRQh/33ripXWsMJUw
+ QCvw==
+X-Gm-Message-State: ANoB5pl41bVBp047N6lx6GDyHhFueMC2uQpKhnS2Icka6JB+lL8Xelr8
+ rv3oG6VOIz6jqbRyZEfx7d10zVKbsX0=
+X-Google-Smtp-Source: AA0mqf5or9uVVZMAjoXIhEnbidgITrisWn3I8/IVo3cLMjGr0X38x3xyFgMCHbqPsVq2DKrzAB0xog==
+X-Received: by 2002:a5d:4012:0:b0:242:5878:2923 with SMTP id
+ n18-20020a5d4012000000b0024258782923mr23772516wrp.10.1671402575107; 
+ Sun, 18 Dec 2022 14:29:35 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- k17-20020adfd851000000b0024194bba380sm8357829wrl.22.2022.12.18.14.22.50
+ bo21-20020a056000069500b00228d52b935asm8309628wrb.71.2022.12.18.14.29.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Dec 2022 14:22:50 -0800 (PST)
+ Sun, 18 Dec 2022 14:29:34 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 23:22:47 +0100
-Message-Id: <20221218222247.61581-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Dec 2022 23:29:30 +0100
+Message-Id: <20221218222930.101076-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uGOajdgGLuGo4q+vaUtpVAv1W3LQ7LNRm+5Yr8pM6v0=;
- b=jgeWGissRWqnep21kBzEThJbZx62F/xwan8M/tcB8uew/c0MVtVpS1yCfnLlXhDUP4
- Eg0kZ64CtGJ6jWiTkutMGfRgO7/t8oMqmw2pQlZxFh0ZOGCP4H/VLP9/veds7zpm7M8h
- LPj8Wh/b2qH8vlxbP+VNretLb6iRc7PWPyhS60yC2jvQqvPggNiXuirOLUBZk2YGa1f/
- hKBeVzWaGnToGo8SzQw4hDJnB1jt81CdSkFkq8iMnU1whjnQNxt3yjziCEUI6EDXJmKy
- 0d7s0XMy4qhZe6JaJIZmuA0DbJXF+MPYSeg5ouT4h5o3rtCiAtHqS7oiooi2eGhLL/Qk
- gK4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=e+oOZQ/lCKXJl9P+kdxS4LSAJqjl4njaazLMANidwqQ=;
+ b=BBSzxX+k2Dx4Y1Fc1JD8L1uC1AGGaOZYWhBWRTNJUYOxvAs+AaEuX/QF3BggBsuhxP
+ fl5jI/58GQDY2wK1p5jy5cq1A1fgNpFlGqaIoKw9QK8VGRytxaixdUWPeU8Vop3VclFJ
+ y4O6WD7OhFF6EyQhFJnC/L04HxTMs/8VhF4UlEwKj+zQuq5KSH6w2p2iOezH7FPOVWDF
+ pPxIfrNDA4HntAwm9TPfHz4xilYL9hKkNKu4x42nJ5MqTnH2o+VmiB4dyuI3/l6A1AxJ
+ 3XaUOJXMzZpqqVhT02ex+WBS1RXGGeriGx4AG6P4VvMEGPT62Ku8/Z0e9VWmpQhB/qYr
+ 7njg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jgeWGiss
-Subject: [Buildroot] [PATCH 1/1] package/libcoap: bump to version 4.3.1
+ header.a=rsa-sha256 header.s=20210112 header.b=BBSzxX+k
+Subject: [Buildroot] [PATCH 1/1] package/mpfr: bump to version 4.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joris Lijssens <joris.lijssens@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update hash of LICENSE file (update in year:
-https://github.com/obgm/libcoap/commit/43bfbea924e0f5220c4121487df980afe7159346)
-
-https://github.com/obgm/libcoap/blob/v4.3.1/ChangeLog
+https://www.mpfr.org/mpfr-4.1.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcoap/libcoap.hash | 4 ++--
- package/libcoap/libcoap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpfr/mpfr.hash | 2 +-
+ package/mpfr/mpfr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 4a5bcaa7ff..e0006b62af 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
+index 35056f626a..4b0d14c9c2 100644
+--- a/package/mpfr/mpfr.hash
++++ b/package/mpfr/mpfr.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  1a195adacd6188d3b71c476e7b21706fef7f3663ab1fb138652e8da49a9ec556  libcoap-4.3.0.tar.gz
-+sha256  074a71deca01e06d3acb00a1416d0fbeb87d130f40a3c0f6fda3a5c711855dca  libcoap-4.3.1.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
--sha256  c5625e704d52deade1c9b2d7931ac8593be147ba63af62b53b8c7e309b7eaeb9  LICENSE
-+sha256  5711e8bf7e94b59fcf0681d0f73752111bc196563b60f8568f19dacd0213192b  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index edcc1bbef8..c0a941a0c8 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
+-sha256  0c98a3f1732ff6ca4ea690552079da9c597872d30e96ec28414ee23c95558a7f  mpfr-4.1.0.tar.xz
++sha256  ffd195bd567dbaffc3b98b23fd00aad0537680c9896171e44fe3ff79e28ac33d  mpfr-4.1.1.tar.xz
+ 
+ # Hash for license file
+ sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index cd558dae0e..8d12c7502b 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCOAP_VERSION = 4.3.0
-+LIBCOAP_VERSION = 4.3.1
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
+-MPFR_VERSION = 4.1.0
++MPFR_VERSION = 4.1.1
+ MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+ MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+ MPFR_LICENSE = LGPL-3.0+
 -- 
 2.35.1
 
