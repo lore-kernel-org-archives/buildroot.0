@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D1EC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0081C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48FED8233B;
-	Mon, 20 Feb 2023 23:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48FED8233B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8462A813DD;
+	Mon, 20 Feb 2023 23:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8462A813DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NHb9bOAij1fi; Mon, 20 Feb 2023 23:08:11 +0000 (UTC)
+	with ESMTP id TKaTwGSKrTdT; Mon, 20 Feb 2023 23:08:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80FA781332;
-	Mon, 20 Feb 2023 23:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80FA781332
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 34E231BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2CE3829DC;
+	Mon, 20 Feb 2023 23:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2CE3829DC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A1C6E1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8676E4172D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8676E4172D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 625AD6129D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 625AD6129D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K1OyMoQaVKsL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hIA5m6Sdclqw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACBF34172A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACBF34172A
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3805612C9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3805612C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C63C86495; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+ id 91E058648F; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 7 Jan 2023 20:23:27 +0100
+Date: Sun, 18 Dec 2022 15:32:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a0a428f135e1b220f8fc6043a7a1b8067f3bb8e2
-X-Git-Newrev: b39bd50e0a4cfb9cd5bba02c6ae913be72f3771a
+X-Git-Oldrev: 384b75098ba936277379fbaf6e9b78ad8e6fa25f
+X-Git-Newrev: d7c99eaa307d1417c8c8e222290df6512ee872ec
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205227.9C63C86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/nezha_defconfig: use
- OpenSBI 1.2
+Message-Id: <20230220205212.91E058648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hddtemp: link to
+ libintl when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b39bd50e0a4cfb9cd5bba02c6ae913be72f3771a
+commit: https://git.buildroot.net/buildroot/commit/?id=d7c99eaa307d1417c8c8e222290df6512ee872ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fixes:
+http://autobuild.buildroot.net/results/e84/e84b7131f996302301dd0a8fd47362c9f2eab0bf/
+http://autobuild.buildroot.net/results/524/52428940034d59887e0172fbd8481943d86db13b/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nezha_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/hddtemp/hddtemp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/nezha_defconfig b/configs/nezha_defconfig
-index 854392f929..dd94707905 100644
---- a/configs/nezha_defconfig
-+++ b/configs/nezha_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
--BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
- BR2_TARGET_OPENSBI_PLAT="generic"
- # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
- BR2_TARGET_UBOOT=y
+diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
+index 7023e11e59..4f45647dff 100644
+--- a/package/hddtemp/hddtemp.mk
++++ b/package/hddtemp/hddtemp.mk
+@@ -15,7 +15,8 @@ HDDTEMP_GETTEXTIZE = YES
+ 
+ HDDTEMP_DB_PATH = /usr/share/misc/hddtemp.db
+ HDDTEMP_CONF_OPTS = --with-db-path=$(HDDTEMP_DB_PATH)
+-HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS)"
++HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS) $(TARGET_NLS_LIBS)"
++HDDTEMP_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ HDDTEMP_DEPENDENCIES += libexecinfo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
