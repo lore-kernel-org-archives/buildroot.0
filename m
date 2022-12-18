@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06CCC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFECC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78E844ECC3;
-	Mon, 20 Feb 2023 22:29:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78E844ECC3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15F0A4F0AF;
+	Mon, 20 Feb 2023 22:29:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15F0A4F0AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FkwWk3Pmuzhd; Mon, 20 Feb 2023 22:29:34 +0000 (UTC)
+	with ESMTP id LX6wEZpGbTAP; Mon, 20 Feb 2023 22:29:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E46C4F0AF;
-	Mon, 20 Feb 2023 22:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E46C4F0AF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B7BB1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2C5D4F0B8;
+	Mon, 20 Feb 2023 22:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C5D4F0B8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B50DE1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E43B611BC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E43B611BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8077416E1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8077416E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SVqlBSewJeX7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q6Ib621jh2xK for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C50461161
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C50461161
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9A17416DB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A17416DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 38B518648F; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 9A45B86494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:43:22 +0100
+Date: Sun, 18 Dec 2022 14:42:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c38de8139abee58fb8d1cdc83d061c93aee7fd7f
-X-Git-Newrev: 1ea6eecb734ae04988e0f4d4a7ea0f5fb9420c89
+X-Git-Oldrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
+X-Git-Newrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205204.38B518648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pycares: bump
- to version 4.3.0
+Message-Id: <20230220205211.9A45B86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lightning: bump
+ version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ea6eecb734ae04988e0f4d4a7ea0f5fb9420c89
+commit: https://git.buildroot.net/buildroot/commit/?id=af6f7aa76db5aed1eada0b27bd0375610a2fc728
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Notable changes in this new version include support for the Apple
+Aarch64 ABI, and compare-and-swap atomic instructions.
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index 13f640b1c1..7cdd93dd93 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5  7706a01fdbfc593564b63ac0d71031d9  pycares-4.2.2.tar.gz
--sha256  e1f57a8004370080694bd6fb969a1ffc9171a59c6824d54f791c1b2e4d298385  pycares-4.2.2.tar.gz
-+md5  d11b196cebb45a38caa56e850f4a60d9  pycares-4.3.0.tar.gz
-+sha256  c542696f6dac978e9d99192384745a65f80a7d9450501151e4a7563e06010d45  pycares-4.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index 858adbf33b..b1c7dcef50 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[Peter: drop _AUTORECONF]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...kefile.am-don-t-install-lightning.h-twice.patch | 38 ----------------------
+ package/lightning/lightning.hash                   |  2 +-
+ package/lightning/lightning.mk                     |  4 +--
+ 3 files changed, 2 insertions(+), 42 deletions(-)
+
+diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+deleted file mode 100644
+index fb5299c25f..0000000000
+--- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 10 Oct 2019 20:36:46 +0200
+-Subject: [PATCH] include/Makefile.am: don't install lightning.h twice
+-
+-Commit 17164ed32d8f3530153b9cad67a4399c65f24512 added lightning.h to
+-nodist_include_HEADERS without removing it from include_HEADERS
+-
+-This raises the following error on one of the buildroot autobuilders:
+-/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
+-/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
+-/usr/bin/install: cannot create regular file `/home/test/autobuild/run/instance-3/output-1/target/usr/include/lightning.h': File exists
+-
+-Fix this by removing lightning.h from include_HEADERS
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/include/Makefile.am b/include/Makefile.am
+-index e754dd3..8f91594 100644
+---- a/include/Makefile.am
+-+++ b/include/Makefile.am
+-@@ -14,7 +14,6 @@
+- # License for more details.
+- #
+- 
+--include_HEADERS = lightning.h
+- SUBDIRS =		\
+- 	lightning
+- 
+--- 
+-2.23.0
+-
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 2840a97f91..998ae3743b 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9  lightning-2.1.3.tar.gz
++sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index da8c07e61f..8ab2ca1f9d 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 4.2.2
-+PYTHON_PYCARES_VERSION = 4.3.0
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/ac/a3/21594384c2398420dd7f6e8656aeb5a2c15128ddf2b85ef5f4403342e18d
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/01/50/e3015e6e03a3cf64113f509e8b86b71af37169b59ccedfcb182f3d031329
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-LIGHTNING_VERSION = 2.1.3
++LIGHTNING_VERSION = 2.2.0
+ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ LIGHTNING_LICENSE = LGPL-3.0+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
+ LIGHTNING_INSTALL_STAGING = YES
+ LIGHTNING_CPE_ID_VENDOR = gnu
+-# We're patching include/Makefile.am
+-LIGHTNING_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
+ LIGHTNING_DEPENDENCIES += binutils zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
