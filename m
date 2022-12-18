@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F017AC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C81C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 874234034B;
-	Sun, 18 Dec 2022 14:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 874234034B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07291401F8;
+	Sun, 18 Dec 2022 14:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07291401F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ZzlWcETP5-T; Sun, 18 Dec 2022 14:52:56 +0000 (UTC)
+	with ESMTP id F-U_7VCJ9zpr; Sun, 18 Dec 2022 14:54:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3A3F401F8;
-	Sun, 18 Dec 2022 14:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3A3F401F8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E53571BF3DC
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:52:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F5D040169;
+	Sun, 18 Dec 2022 14:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F5D040169
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DF8C1BF3DC
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD88481450
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD88481450
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3625240169
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:53:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3625240169
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IDKz29aCCEas for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 14:52:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aBeLxHi0tWgT for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 14:53:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B54A81451
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B54A81451
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 822E6400D3
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 822E6400D3
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:53:56 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 38B03FF803;
- Sun, 18 Dec 2022 14:52:48 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 50414C0005;
+ Sun, 18 Dec 2022 14:53:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p6v20-003wYZ-8e; Sun, 18 Dec 2022 15:52:48 +0100
+ id 1p6v32-003wdd-BT; Sun, 18 Dec 2022 15:53:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Angelo Compagnucci <angelo@amarulasolutions.com>
 References: <20221216080433.1997432-1-angelo@amarulasolutions.com>
-Date: Sun, 18 Dec 2022 15:52:48 +0100
-In-Reply-To: <20221216080433.1997432-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Fri, 16 Dec 2022 09:04:31 +0100")
-Message-ID: <87k02okblr.fsf@dell.be.48ers.dk>
+ <20221216080433.1997432-2-angelo@amarulasolutions.com>
+Date: Sun, 18 Dec 2022 15:53:52 +0100
+In-Reply-To: <20221216080433.1997432-2-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Fri, 16 Dec 2022 09:04:32 +0100")
+Message-ID: <87fsdckbjz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v6 1/3] package/rtl8723ds-bt: new package
+Subject: Re: [Buildroot] [PATCH v6 2/3] configs/lichee_rv: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,94 +72,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
- > This package install the required firmware for enabling the
- > Bluetooth device embedded in the RTL8723DS chip.
- > The driver is included in Linux main tree and can be enabled
- > with the BT_HCIUART_RTL symbol.
+ > Lichee RV - Nezha CM is a compute module with modular design, equipped
+ > with Allwinner D1 chip (based on T-Head XuanTie C906 core), 512MB DDR3
+ > RAM.
+ > Board support is based on the nezha defconfig already available in
+ > buildroot.
+
+ > https://wiki.sipeed.com/hardware/en/lichee/RV/RV.html
+ > https://linux-sunxi.org/Sipeed_Lichee_RV
 
  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Reviewed-by: Indrek Kruusa <indrek.kruusa@gmail.com>
  > Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
- > ---
- > v6:
- > * Added me to developers file
 
- >  DEVELOPERS                             |  1 +
- >  package/Config.in                      |  1 +
- >  package/rtl8723ds-bt/Config.in         |  6 ++++++
- >  package/rtl8723ds-bt/rtl8723ds-bt.hash |  2 ++
- >  package/rtl8723ds-bt/rtl8723ds-bt.mk   | 17 +++++++++++++++++
- >  5 files changed, 27 insertions(+)
- >  create mode 100644 package/rtl8723ds-bt/Config.in
- >  create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.hash
- >  create mode 100644 package/rtl8723ds-bt/rtl8723ds-bt.mk
-
- > diff --git a/DEVELOPERS b/DEVELOPERS
- > index 3a0e3c14ab..b52a065dbc 100644
- > --- a/DEVELOPERS
- > +++ b/DEVELOPERS
- > @@ -185,6 +185,7 @@ F:	package/qt5/qt5coap/
- >  F:	package/qt5/qt5knx/
- >  F:	package/qt5/qt5mqtt/
- >  F:	package/rtl8723ds/
- > +F:	package/rtl8723ds-bt/
- >  F:	package/sam-ba/
- >  F:	package/sshguard/
- >  F:	package/sunwait/
- > diff --git a/package/Config.in b/package/Config.in
- > index 914c3584e9..999feae08a 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -585,6 +585,7 @@ endmenu
- >  	source "package/rtl8192eu/Config.in"
- >  	source "package/rtl8723bu/Config.in"
- >  	source "package/rtl8723ds/Config.in"
- > +	source "package/rtl8723ds-bt/Config.in"
- >  	source "package/rtl8812au-aircrack-ng/Config.in"
- >  	source "package/rtl8821au/Config.in"
- >  	source "package/sane-backends/Config.in"
- > diff --git a/package/rtl8723ds-bt/Config.in b/package/rtl8723ds-bt/Config.in
- > new file mode 100644
- > index 0000000000..0a604310c0
- > --- /dev/null
- > +++ b/package/rtl8723ds-bt/Config.in
- > @@ -0,0 +1,6 @@
- > +config BR2_PACKAGE_RTL8723DS_BT
- > +	bool "rtl8723ds-bt"
- > +	help
- > +	  rtl8723ds UART attached Bluetooth module firmware.
- > +
- > +	  https://github.com/wsyco/RTL8723DS_BT_Linux
- > diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.hash b/package/rtl8723ds-bt/rtl8723ds-bt.hash
- > new file mode 100644
- > index 0000000000..1ec4e350f9
- > --- /dev/null
- > +++ b/package/rtl8723ds-bt/rtl8723ds-bt.hash
- > @@ -0,0 +1,2 @@
- > +# Locally computed
- > +sha256  9e70a981946abeeb6437d9a27d8437cea15aa4df72f8d56ded0ae28af484d2f4  rtl8723ds-bt-14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08.tar.gz
- > diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.mk b/package/rtl8723ds-bt/rtl8723ds-bt.mk
- > new file mode 100644
- > index 0000000000..efd0a5bae9
- > --- /dev/null
- > +++ b/package/rtl8723ds-bt/rtl8723ds-bt.mk
- > @@ -0,0 +1,17 @@
- > +################################################################################
- > +#
- > +# rtl8723ds-bt
- > +#
- > +################################################################################
- > +
- > +RTL8723DS_BT_VERSION = 14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08
- > +RTL8723DS_BT_SITE = $(call github,wsyco,RTL8723DS_BT_Linux,$(RTL8723DS_BT_VERSION))
- > +RTL8723DS_BT_LICENSE = PROPRIETARY
- > +
- > +define RTL8723DS_BT_INSTALL_TARGET_CMDS
- > +	mkdir -p $(TARGET_DIR)/lib/firmware/rtl_bt/
- > +	cp $(@D)/8723D/rtl8723d_fw $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_fw.bin
- > +	cp $(@D)/8723D/rtl8723d_config $(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_config.bin
-
-We normally use install -D to install files to control the
-permissions. Committed after changing that, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
