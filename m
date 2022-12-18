@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D386EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F199C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48047408FB;
-	Sun, 18 Dec 2022 13:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48047408FB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B385605A5;
+	Sun, 18 Dec 2022 13:44:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B385605A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zA2_-4xKdqJC; Sun, 18 Dec 2022 13:44:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sojJ3hEJntkR; Sun, 18 Dec 2022 13:44:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F99F408FF;
-	Sun, 18 Dec 2022 13:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F99F408FF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 984221BF852
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 474FA60593;
+	Sun, 18 Dec 2022 13:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 474FA60593
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 957551BF5A7
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E746409AE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C75160B5D
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E746409AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C75160B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Rnv_vazZmt2 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JERJ1QYZ4OQ8 for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B2CE408FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 946CD60B0C
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2CE408FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 946CD60B0C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66589867C3; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
+ id 829A2867C6; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:27:50 +0100
+Date: Sun, 18 Dec 2022 14:42:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a6105112e82e3ca5162a56aa3a47bf6b49af2e0b
-X-Git-Newrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
+X-Git-Oldrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
+X-Git-Newrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
 X-Patchwork-Hint: ignore
-Message-Id: <20221218134349.66589867C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-traitlets: bump to version
- 5.7.1
+Message-Id: <20221218134349.829A2867C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lightning: bump version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ebc1545b2f6f192d5abf2d61d9203c3f2095366
+commit: https://git.buildroot.net/buildroot/commit/?id=af6f7aa76db5aed1eada0b27bd0375610a2fc728
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Notable changes in this new version include support for the Apple
+Aarch64 ABI, and compare-and-swap atomic instructions.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[Peter: drop _AUTORECONF]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-traitlets/python-traitlets.hash | 4 ++--
- package/python-traitlets/python-traitlets.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...kefile.am-don-t-install-lightning.h-twice.patch | 38 ----------------------
+ package/lightning/lightning.hash                   |  2 +-
+ package/lightning/lightning.mk                     |  4 +--
+ 3 files changed, 2 insertions(+), 42 deletions(-)
 
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-index 3b48fb6ab8..0c68e04518 100644
---- a/package/python-traitlets/python-traitlets.hash
-+++ b/package/python-traitlets/python-traitlets.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/traitlets/json
--md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
--sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
-+md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
-+sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
- # Locally computed sha256 checksums
- sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index 71bb775a45..8cda56817f 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+deleted file mode 100644
+index fb5299c25f..0000000000
+--- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 10 Oct 2019 20:36:46 +0200
+-Subject: [PATCH] include/Makefile.am: don't install lightning.h twice
+-
+-Commit 17164ed32d8f3530153b9cad67a4399c65f24512 added lightning.h to
+-nodist_include_HEADERS without removing it from include_HEADERS
+-
+-This raises the following error on one of the buildroot autobuilders:
+-/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
+-/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
+-/usr/bin/install: cannot create regular file `/home/test/autobuild/run/instance-3/output-1/target/usr/include/lightning.h': File exists
+-
+-Fix this by removing lightning.h from include_HEADERS
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/include/Makefile.am b/include/Makefile.am
+-index e754dd3..8f91594 100644
+---- a/include/Makefile.am
+-+++ b/include/Makefile.am
+-@@ -14,7 +14,6 @@
+- # License for more details.
+- #
+- 
+--include_HEADERS = lightning.h
+- SUBDIRS =		\
+- 	lightning
+- 
+--- 
+-2.23.0
+-
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 2840a97f91..998ae3743b 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9  lightning-2.1.3.tar.gz
++sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index da8c07e61f..8ab2ca1f9d 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--PYTHON_TRAITLETS_VERSION = 5.7.0
-+PYTHON_TRAITLETS_VERSION = 5.7.1
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
--PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
-+PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
- PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
- PYTHON_TRAITLETS_SETUP_TYPE = pep517
+-LIGHTNING_VERSION = 2.1.3
++LIGHTNING_VERSION = 2.2.0
+ LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ LIGHTNING_LICENSE = LGPL-3.0+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
+ LIGHTNING_INSTALL_STAGING = YES
+ LIGHTNING_CPE_ID_VENDOR = gnu
+-# We're patching include/Makefile.am
+-LIGHTNING_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
+ LIGHTNING_DEPENDENCIES += binutils zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
