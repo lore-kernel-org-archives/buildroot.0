@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1B3DC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9A6C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4CE82792;
-	Mon, 20 Feb 2023 23:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4CE82792
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBC748274F;
+	Mon, 20 Feb 2023 23:05:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBC748274F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gVl5RA4Bv-I0; Mon, 20 Feb 2023 23:05:16 +0000 (UTC)
+	with ESMTP id N8Y-9V6LjdZs; Mon, 20 Feb 2023 23:05:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B21F6827AA;
-	Mon, 20 Feb 2023 23:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B21F6827AA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CEE971BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CAED81E93;
+	Mon, 20 Feb 2023 23:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CAED81E93
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 10B741BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FB4A414ED
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FB4A414ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id A92DE612CD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A92DE612CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aQwHvlym7GH0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Fm3pe2VSTVu for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 711AA41717
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 711AA41717
+ by smtp3.osuosl.org (Postfix) with ESMTP id D96AD612BE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D96AD612BE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E31386495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+ id C3DA8828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:55:58 +0100
+Date: Sun, 18 Dec 2022 14:48:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64
-X-Git-Newrev: ec6e8c632bf372c1fad7889ca6323166b90e1599
+X-Git-Oldrev: 4b879cfe0e2b03373bdedc7ae97b956aa102e486
+X-Git-Newrev: 30bc9e5aef772432a9c2753296d89984e0097159
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205225.6E31386495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
- drop bogus GOBJECT_INTROSPECTION_AUTORECONF
+Message-Id: <20230220205211.C3DA8828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/inih: bump version to
+ 56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec6e8c632bf372c1fad7889ca6323166b90e1599
+commit: https://git.buildroot.net/buildroot/commit/?id=30bc9e5aef772432a9c2753296d89984e0097159
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "7687a396e8 package/gobject-introspection: new package" added the
-package using the meson infra for both target and host variants.
+Release notes: https://github.com/benhoyt/inih/releases/tag/r56
 
-Meson infra does not support <pkg>_AUTORECONF.
-
-So drop the bogus symbol.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gobject-introspection/gobject-introspection.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/inih/inih.hash | 2 +-
+ package/inih/inih.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index c8ad9b3c72..0d8c666ba1 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -9,7 +9,6 @@ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
- GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
- GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
- GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
--GOBJECT_INTROSPECTION_AUTORECONF = YES
- GOBJECT_INTROSPECTION_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-2-Clause
- GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL giscanner/scannerlexer.l
+diff --git a/package/inih/inih.hash b/package/inih/inih.hash
+index af921b294d..e2ed923c7a 100644
+--- a/package/inih/inih.hash
++++ b/package/inih/inih.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ba55f8ae2a8caf0653f30f48567241e14ea916acfc13481f502d8a9c8f507f68  inih-55.tar.gz
++sha256  4f2ba6bd122d30281a8c7a4d5723b7af90b56aa828c0e88256d7fceda03a491a  inih-56.tar.gz
+ sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
+diff --git a/package/inih/inih.mk b/package/inih/inih.mk
+index 7f36175576..c43412894a 100644
+--- a/package/inih/inih.mk
++++ b/package/inih/inih.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-INIH_VERSION = 55
++INIH_VERSION = 56
+ INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
+ INIH_INSTALL_STAGING = YES
+ INIH_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
