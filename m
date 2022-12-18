@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70E2C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D32C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35E5060737;
-	Sun, 18 Dec 2022 22:03:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E5060737
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2F1B408A6;
+	Sun, 18 Dec 2022 22:08:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2F1B408A6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sqc_ryXbSqEx; Sun, 18 Dec 2022 22:08:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B77F74035A;
+	Sun, 18 Dec 2022 22:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B77F74035A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 10BD01BF286
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:08:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED60F60615
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:08:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED60F60615
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FDjv8Jagviv5; Sun, 18 Dec 2022 22:03:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7870460615;
-	Sun, 18 Dec 2022 22:03:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7870460615
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 23B5B1BF38E
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C9E840167
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C9E840167
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EkWTsbf0DS9b for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 22:03:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00BF040396
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00BF040396
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 22:03:24 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout10.t-online.de (Postfix) with SMTP id B78DC10775;
- Sun, 18 Dec 2022 23:03:22 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd80.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p71kc-0FudTl0; Sun, 18 Dec 2022 23:03:18 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36338)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p71kc-00019N-0N;
- Sun, 18 Dec 2022 23:03:18 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AP0GBa1pc-GZ for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 22:08:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA9FD60601
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA9FD60601
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 22:08:11 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id a17so5898135wrt.11
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:08:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YNEhpjFjPAWn0jl66rFLZ4YiH9vWN8Q0FIPLhZ0EsaM=;
+ b=5bPpQMGLLtCEEyI5eyv5YUnigosnZ6yuXRclG7B7ueWKbBW5R82iiey7sWqpPCQ1U2
+ sQloELA7uKZidE0c97w4tRl9uSbsVnyV/pk3rV4l8EAXib6gUEgvpRunPwQRuaKhc6Gb
+ XUmRl+yYI6PndHk+q/htPFAd7nFso+6MGcF9NQOb477aN0bxq7kaF9aEiTSSL/wnNvKT
+ BH6kQDQ8FfO+Y7FiJZY6n96osD0KVXMGOIEGzgpkef404L9mnxWGqz5jVcpO1eZ+fxfq
+ 8xxQ4jRtp1lq/meacsMywPPD5pavY3xnNloSgi7ykKtbX/d/ms13xB9knkrGzUaC8U2I
+ s0gw==
+X-Gm-Message-State: ANoB5plRD65yOgxxKx/NXXmOPp/lPPRrjXVVvQ6eKETrTQb1+dlpKRAl
+ mo0F5n9EM5t1cZ3lm+Bifly+nxTEydU=
+X-Google-Smtp-Source: AA0mqf5HNiq69hS/XyXNOwxZ/E20GYkXMcNRviw69VLr66HyILxrUSviqx44XpLRSEshRF8w7okCtw==
+X-Received: by 2002:a5d:55c7:0:b0:242:bef:809e with SMTP id
+ i7-20020a5d55c7000000b002420bef809emr23163945wrw.1.1671401289500; 
+ Sun, 18 Dec 2022 14:08:09 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ w12-20020adff9cc000000b0023c8026841csm8246111wrr.23.2022.12.18.14.08.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 18 Dec 2022 14:08:09 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 23:03:18 +0100
-Message-Id: <20221218220318.563479-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221218220318.563479-1-bernd.kuhls@t-online.de>
-References: <20221218220318.563479-1-bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2022 23:08:06 +0100
+Message-Id: <20221218220806.39245-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671400998-AA7FE1D1-3D49166A/0/0 CLEAN NORMAL
-X-TOI-MSGID: c1e66546-ba73-4316-b0a9-8e5c3bb06bc5
-Subject: [Buildroot] [PATCH 2/2] package/linux-firmware: bump to version
- 20221214
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YNEhpjFjPAWn0jl66rFLZ4YiH9vWN8Q0FIPLhZ0EsaM=;
+ b=gOLRs7TI2R5s2WdMigbeCICeEsGDaCw5NMIwzDYUGgTbDyhIf3w5UMZFPj7zvCrILd
+ ToDhjsNg+EYahC5pVUN2AqxyJh8on0pbSUYFpQHHbKTyyUkYp1JJXn1D47QWfCG0KfhQ
+ rJL0cN4WvRFJse541okqBttKWVrxp6fUo2DgyGLsusBcEa+QlWXAFKH9e84d1xEWk0vM
+ 1NAV7WSReR/WcHwehKGiV40KkTXSy+S870IE78i+7mSAp8PJTWiKnkym2uCkci4edNEg
+ ZtPBbn3omxCzxNA24X5v5PlTdvqHQFYs7qX09fUExMyL1fvceFJ++KJgdk4Vp+xZ0ANh
+ Nzyw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=gOLRs7TI
+Subject: [Buildroot] [PATCH 1/1] package/ipcalc: bump to version 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,55 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update WHENCE file hash due to date/firmware file updates:
-https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=32d8681d21f2eef052cadfdfafc47e02eed6c2b2
+https://gitlab.com/ipcalc/ipcalc/-/blob/1.0.2/NEWS
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-firmware/linux-firmware.hash | 4 ++--
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ipcalc/ipcalc.hash | 2 +-
+ package/ipcalc/ipcalc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 321436fb61..6bbc2f9c77 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
--sha256  c0ddffbbcf30f2e015bddd5c6d3ce1f13976b906aceabda4a57e3c41a3190701  linux-firmware-20221109.tar.xz
-+sha256  e793783e92acbde549965521462d1d1327827360664cf242dbda08f075654331  linux-firmware-20221214.tar.xz
- 
- # Hash for license files
- sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
-@@ -35,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
- sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
- sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
- sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
--sha256  3461a8c8bddaa7b77f489f339abf90e4930fc0cde27915324781d12bd0828f1c  WHENCE
-+sha256  744babd4eae138ccfb5bd343b1589912b9839274f8a794af0b6c9b451df73579  WHENCE
- sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
- sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 526e8c1c44..6990ef38ad 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
+diff --git a/package/ipcalc/ipcalc.hash b/package/ipcalc/ipcalc.hash
+index bf9b34a610..50d08239fa 100644
+--- a/package/ipcalc/ipcalc.hash
++++ b/package/ipcalc/ipcalc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dac080c0773cc14c1d6f818899351d2286cace85751dd9dc704944e54c2c3565  ipcalc-1.0.1.tar.bz2
++sha256  47c866941916800270fca23496acc9976ca9488ce9053aeaedc5f47c5929b772  ipcalc-1.0.2.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ipcalc/ipcalc.mk b/package/ipcalc/ipcalc.mk
+index dfe35e2cdc..e63e174ce2 100644
+--- a/package/ipcalc/ipcalc.mk
++++ b/package/ipcalc/ipcalc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_FIRMWARE_VERSION = 20221109
-+LINUX_FIRMWARE_VERSION = 20221214
- LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
- LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
- LINUX_FIRMWARE_INSTALL_IMAGES = YES
+-IPCALC_VERSION = 1.0.1
++IPCALC_VERSION = 1.0.2
+ IPCALC_SITE = $(call gitlab,ipcalc,ipcalc,$(IPCALC_VERSION))
+ IPCALC_SOURCE = ipcalc-$(IPCALC_VERSION).tar.bz2
+ IPCALC_LICENSE = GPL-2.0+
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
