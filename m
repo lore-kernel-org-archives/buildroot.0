@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A668C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16920C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEB7641749;
-	Mon, 20 Feb 2023 22:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEB7641749
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF30A4EBD4;
+	Mon, 20 Feb 2023 22:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF30A4EBD4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SY-pgrONUCKC; Mon, 20 Feb 2023 22:24:32 +0000 (UTC)
+	with ESMTP id LEkZc0GqXNXd; Mon, 20 Feb 2023 22:24:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77FDE40895;
-	Mon, 20 Feb 2023 22:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77FDE40895
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FFBE1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EFC64F01C;
+	Mon, 20 Feb 2023 22:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EFC64F01C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 680BF1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42DB56115F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42DB56115F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8B1A416DC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8B1A416DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SByS3qlDIdrB for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q83doMcT7O1j for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 791056116F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 791056116F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 083CC416C3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 083CC416C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 768018648F; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 04BAD828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:04 +0100
+Date: Sun, 18 Dec 2022 11:31:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c75ac80eeaa30b3888f20e0c32df7a3e5c9172b5
-X-Git-Newrev: 2733644c8947f8dafa1559bc12b3e67cee99ae6c
+X-Git-Oldrev: 9febd64bb01f0660a9ac877d2484525438955333
+X-Git-Newrev: c2baa583c350b9d594e87f9cab1db597789904df
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.768018648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
- bump to version 1.11.1
+Message-Id: <20230220205211.04BAD828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mbedtls: security bump
+ to version 2.28.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +58,153 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1423218947344086649=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2733644c8947f8dafa1559bc12b3e67cee99ae6c
+--===============1423218947344086649==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c2baa583c350b9d594e87f9cab1db597789904df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fix the following security issues:
+- Fix potential heap buffer overread and overwrite in DTLS if
+  MBEDTLS_SSL_DTLS_CONNECTION_ID is enabled and
+  MBEDTLS_SSL_CID_IN_LEN_MAX > 2 * MBEDTLS_SSL_CID_OUT_LEN_MAX.
+- An adversary with access to precise enough information about memory
+  accesses (typically, an untrusted operating system attacking a secure
+  enclave) could recover an RSA private key after observing the victim
+  performing a single private-key operation if the window size used for
+  the exponentiation was 3 or smaller.
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 729ffe94c4..2aa739f398 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  7f31bd0d6d968c711f8b1d928836eaaa  sentry-sdk-1.10.1.tar.gz
--sha256  105faf7bd7b7fa25653404619ee261527266b14103fe1389e0ce077bd23a9691  sentry-sdk-1.10.1.tar.gz
-+md5  4980e01dc73c6bcf794b0b7d3f3e08d7  sentry-sdk-1.11.1.tar.gz
-+sha256  675f6279b6bb1fea09fd61751061f9a90dca3b5929ef631dd50dc8b3aeb245e9  sentry-sdk-1.11.1.tar.gz
- # Locally computed sha256 checksums
- sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index d8e9e8a2c9..056a015952 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -4,9 +4,9 @@
+Drop patch (already in version:
+https://github.com/Mbed-TLS/mbedtls/commit/9d9d45c6b2aeaedfdfdadfec3d05d168db685968)
+
+https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ----------------------
+ package/mbedtls/mbedtls.hash                       |  4 +-
+ package/mbedtls/mbedtls.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 77 deletions(-)
+
+diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
+deleted file mode 100644
+index 60bf53f6e4..0000000000
+--- a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 27 Aug 2018 22:50:57 +0200
+-Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes #1910
+-
+-With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
+-assembly fails to build with GCC < 5 in PIC mode with the following error:
+-
+-include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
+-
+-This is because older GCC versions treated the x86 ebx register (which is
+-used for the GOT) as a fixed reserved register when building as PIC.
+-
+-This is fixed by an improved register allocator in GCC 5+.  From the release
+-notes:
+-
+-Register allocation improvements: Reuse of the PIC hard register, instead of
+-using a fixed register, was implemented on x86/x86-64 targets.  This
+-improves generated PIC code performance as more hard registers can be used.
+-
+-https://www.gnu.org/software/gcc/gcc-5/changes.html
+-
+-As a workaround, detect this situation and disable the inline assembly,
+-similar to the MULADDC_CANNOT_USE_R7 logic.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
+----
+- include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
+- 1 file changed, 17 insertions(+), 1 deletion(-)
+-
+-diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
+-index b587317d9..74a2d29be 100644
+---- a/include/mbedtls/bn_mul.h
+-+++ b/include/mbedtls/bn_mul.h
+-@@ -50,13 +50,29 @@
+- #if defined(__GNUC__) && \
+-     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
+- 
+-+/*
+-+ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
+-+ * fixed reserved register when building as PIC, leading to errors
+-+ * like: bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
+-+ *
+-+ * This is fixed by an improved register allocator in GCC 5+. From the
+-+ * release notes:
+-+ * Register allocation improvements: Reuse of the PIC hard register,
+-+ * instead of using a fixed register, was implemented on x86/x86-64
+-+ * targets. This improves generated PIC code performance as more hard
+-+ * registers can be used.
+-+ */
+-+#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
+-+#define MULADDC_CANNOT_USE_EBX
+-+#endif
+-+
+- /*
+-  * Disable use of the i386 assembly code below if option -O0, to disable all
+-  * compiler optimisations, is passed, detected with __OPTIMIZE__
+-  * This is done as the number of registers used in the assembly code doesn't
+-  * work with the -O0 option.
+-  */
+--#if defined(__i386__) && defined(__OPTIMIZE__)
+-+#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
+- 
+- #define MULADDC_INIT                        \
+-     asm(                                    \
+--- 
+-2.11.0
+-
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 38182fe119..876cd7b77e 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.1:
+-sha256  6797a7b6483ef589deeab8d33d401ed235d7be25eeecda1be8ddfed406d40ff4  mbedtls-2.28.1.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
++sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 49ea7886f6..7a605ac5b1 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 1.10.1
-+PYTHON_SENTRY_SDK_VERSION = 1.11.1
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/43/37/89598a56119199b69a3c4b13e2ce1b57ff69f68313ed393016086d6b487b
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/a3/d5/db26377e9817407ae8d7b65e15b3c3b8d817c301633be15bd2aef61f38a3
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-MBEDTLS_VERSION = 2.28.1
++MBEDTLS_VERSION = 2.28.2
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+
+--===============1423218947344086649==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1423218947344086649==--
