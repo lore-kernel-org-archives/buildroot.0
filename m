@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3B8C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADA2BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F380381764;
-	Sun, 18 Dec 2022 10:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F380381764
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LdAl47C2iF9p; Sun, 18 Dec 2022 10:44:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F92B81762;
-	Sun, 18 Dec 2022 10:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F92B81762
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5784E1BF853
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 340194011D
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 340194011D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 507AC4011D;
+	Sun, 18 Dec 2022 10:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 507AC4011D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iT2RxOnlb5p0 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q5vaDbr-RFeW; Sun, 18 Dec 2022 10:44:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABB81403F8;
+	Sun, 18 Dec 2022 10:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABB81403F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 841591BF5A9
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FCBE60A88
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FCBE60A88
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cdiY8sWhr3kY for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6478D400D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A3E360A6D
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6478D400D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A3E360A6D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 528C286712; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
+ id 7572E86709; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:32:08 +0100
+Date: Sun, 18 Dec 2022 11:33:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c2baa583c350b9d594e87f9cab1db597789904df
-X-Git-Newrev: 1975c531764828fbdaff673e4cf1f25ea009aa2c
+X-Git-Oldrev: de93736550f8443925dc218b04f82daedfc63c79
+X-Git-Newrev: 46686174e55c4f53d4fd680e65371ee8d227fbce
 X-Patchwork-Hint: ignore
-Message-Id: <20221218104346.528C286712@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/arp-scan: bump to version 1.10.0
+Message-Id: <20221218104346.7572E86709@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,62 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1975c531764828fbdaff673e4cf1f25ea009aa2c
+commit: https://git.buildroot.net/buildroot/commit/?id=46686174e55c4f53d4fd680e65371ee8d227fbce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Use official tarball and so drop autoreconf
-- libcap is an optional dependency since
-  https://github.com/royhills/arp-scan/commit/923f123a281139f1ec3daceb1db4bc7317ec6978
+Changelog: https://github.com/libgeos/geos/releases/tag/3.11.1
 
-https://github.com/royhills/arp-scan/releases/tag/1.10.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/arp-scan/arp-scan.hash |  2 +-
- package/arp-scan/arp-scan.mk   | 12 +++++++++---
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
-index b18c6ceb38..3a2977f906 100644
---- a/package/arp-scan/arp-scan.hash
-+++ b/package/arp-scan/arp-scan.hash
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 34b2b855d6..cd0a4e0330 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  b9b75ceaef6348f5951b06c773ec7a243a9e780e160eafebc369f9c27f6a7d3f  arp-scan-1.9.8.tar.gz
-+sha256  a078fe8711ecbb8b99121c3d8be26ae7e7f339f11010ef61318be4f33394d012  arp-scan-1.10.0.tar.gz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index 73d1b99bc7..89644be9d3 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -4,12 +4,11 @@
+-sha256  79ab8cabf4aa8604d161557b52e3e4d84575acdc0d08cb09ab3f7aaefa4d858a  geos-3.11.0.tar.bz2
++sha256  6d0eb3cfa9f92d947731cc75f1750356b3bdfc07ea020553daf6af1c768e0be2  geos-3.11.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 55c975eb4a..c6d470dc97 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARP_SCAN_VERSION = 1.9.8
--ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
-+ARP_SCAN_VERSION = 1.10.0
-+ARP_SCAN_SITE = https://github.com/royhills/arp-scan/releases/download/$(ARP_SCAN_VERSION)
- ARP_SCAN_LICENSE = GPL-3.0+
- ARP_SCAN_LICENSE_FILES = COPYING
- ARP_SCAN_DEPENDENCIES = libpcap
--ARP_SCAN_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- ARP_SCAN_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-@@ -17,4 +16,11 @@ endif
- 
- ARP_SCAN_CONF_ENV = pgac_cv_snprintf_long_long_int_format='%lld'
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+ARP_SCAN_DEPENDENCIES += libcap
-+ARP_SCAN_CONF_OPTS += --with-libcap
-+else
-+ARP_SCAN_CONF_OPTS += --without-libcap
-+endif
-+
- $(eval $(autotools-package))
+-LIBGEOS_VERSION = 3.11.0
++LIBGEOS_VERSION = 3.11.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
