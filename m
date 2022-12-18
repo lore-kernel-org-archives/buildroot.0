@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD13C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB7BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A48F8401F1;
-	Sun, 18 Dec 2022 13:49:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A48F8401F1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AB0F60B2D;
+	Sun, 18 Dec 2022 13:49:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AB0F60B2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0_Gk-EMVRh27; Sun, 18 Dec 2022 13:49:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9o70MgB8bJE2; Sun, 18 Dec 2022 13:49:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E75184015F;
-	Sun, 18 Dec 2022 13:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75184015F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE6981BF852
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C3C060687;
+	Sun, 18 Dec 2022 13:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C3C060687
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5471BF853
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97EA94015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BA69605D8
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97EA94015F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BA69605D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tm4AmvJVeShX for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q-u4oiUUGUeq for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB7D6400D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id D15C9605D6
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB7D6400D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15C9605D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A944386808; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
+ id BF5CD8680C; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:45:40 +0100
+Date: Sun, 18 Dec 2022 14:48:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d005917d7256c79b2f50010d48f36846333a457a
-X-Git-Newrev: 4b879cfe0e2b03373bdedc7ae97b956aa102e486
+X-Git-Oldrev: 30bc9e5aef772432a9c2753296d89984e0097159
+X-Git-Newrev: b9c948df185f61131133d9d8a8cc39beae0ad299
 X-Patchwork-Hint: ignore
-Message-Id: <20221218134918.A944386808@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfreeglut: bump version to 3.4.0
+Message-Id: <20221218134918.BF5CD8680C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXft: bump version to
+ 2.3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,51 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b879cfe0e2b03373bdedc7ae97b956aa102e486
+commit: https://git.buildroot.net/buildroot/commit/?id=b9c948df185f61131133d9d8a8cc39beae0ad299
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/FreeGLUTProject/freeglut/releases/tag/v3.4.0
-
-Upstream switched to github:
-https://freeglut.sourceforge.net/news.php
-https://sourceforge.net/p/freeglut/mailman/message/37622871/
+https://lists.x.org/archives/xorg/2022-November/061175.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfreeglut/libfreeglut.hash | 5 +----
- package/libfreeglut/libfreeglut.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
+ package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
-index ce9fb9e299..249a780f04 100644
---- a/package/libfreeglut/libfreeglut.hash
-+++ b/package/libfreeglut/libfreeglut.hash
-@@ -1,6 +1,3 @@
--# From http://sourceforge.net/projects/freeglut/files/freeglut/3.2.2/
--md5  485c1976165315fc42c0b0a1802816d9  freeglut-3.2.2.tar.gz
--sha1  8e53cc0251165d02cce8d6d5054159c310958b74  freeglut-3.2.2.tar.gz
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index 484764be3d..5074365aed 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-September/003211.html
+-sha256  60a6e7319fc938bbb8d098c9bcc86031cc2327b5d086d3335fc5c76323c03022  libXft-2.3.6.tar.xz
+-sha512  732f8c635fcac6010012ba8c10c23d2dd6ec79b0f096d6bcc9b7e36d2ca0817387faa7ee5bb6f43cff02adc68e4234c1b8f95021ebc548f61c492e0b76836d90  libXft-2.3.6.tar.xz
++# From https://lists.x.org/archives/xorg/2022-November/061175.html
++sha256  79f0b37c45007381c371a790c2754644ad955166dbf2a48e3625032e9bdd4f71  libXft-2.3.7.tar.xz
++sha512  9df29d3c7b88a21952df1015604511e5d79856d721b2a61eb2c5a062a9abccf16318132432a7c86c0ef816bf174ae86842fa67dabbaa0b163dfa56d99022de19  libXft-2.3.7.tar.xz
  # Locally computed
--sha256  c5944a082df0bba96b5756dddb1f75d0cd72ce27b5395c6c1dde85c2ff297a50  freeglut-3.2.2.tar.gz
-+sha256  3c0bcb915d9b180a97edaebd011b7a1de54583a838644dcd42bb0ea0c6f3eaec  freeglut-3.4.0.tar.gz
- sha256  b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275  COPYING
-diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
-index 484b0f4b97..09309aeceb 100644
---- a/package/libfreeglut/libfreeglut.mk
-+++ b/package/libfreeglut/libfreeglut.mk
-@@ -4,9 +4,9 @@
+ sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index a86501900c..845b612669 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFREEGLUT_VERSION = 3.2.2
-+LIBFREEGLUT_VERSION = 3.4.0
- LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
--LIBFREEGLUT_SITE = http://downloads.sourceforge.net/freeglut
-+LIBFREEGLUT_SITE = https://github.com/FreeGLUTProject/freeglut/releases/download/v$(LIBFREEGLUT_VERSION)
- LIBFREEGLUT_LICENSE = MIT
- LIBFREEGLUT_LICENSE_FILES = COPYING
- LIBFREEGLUT_INSTALL_STAGING = YES
+-XLIB_LIBXFT_VERSION = 2.3.6
++XLIB_LIBXFT_VERSION = 2.3.7
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
+ XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
