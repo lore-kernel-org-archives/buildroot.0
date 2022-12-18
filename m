@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8D53C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C15EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D39142CEC;
-	Mon, 20 Feb 2023 22:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D39142CEC
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEB254F0A3;
+	Mon, 20 Feb 2023 22:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEB254F0A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A9JT3eIQexhm; Mon, 20 Feb 2023 22:28:53 +0000 (UTC)
+	with ESMTP id j7eOH64YHYhJ; Mon, 20 Feb 2023 22:29:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BC664EED0;
-	Mon, 20 Feb 2023 22:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BC664EED0
+	by smtp4.osuosl.org (Postfix) with ESMTP id B71EF4F09E;
+	Mon, 20 Feb 2023 22:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B71EF4F09E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B4B5D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B21491BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 641D4416E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7969B416EA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 641D4416E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7969B416EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3RN8gpMWlykn for <buildroot@lists.busybox.net>;
+ with ESMTP id oZ9VQw2miaoz for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADAA9416E1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94359416DF
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADAA9416E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94359416DF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E28886494; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+ id 845A986495; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 15:33:35 +0100
+Date: Sun, 18 Dec 2022 14:57:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d7c99eaa307d1417c8c8e222290df6512ee872ec
-X-Git-Newrev: b9612601b037e6deb79af300e64e0557dda1be5c
+X-Git-Oldrev: 78504fca92c33cfd23beddd1c9b83fe58b9e0e9a
+X-Git-Newrev: 384b75098ba936277379fbaf6e9b78ad8e6fa25f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205212.9E28886494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ply: bump to version
- 2.3.0
+Message-Id: <20230220205212.845A986495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/domoticz: bump to
+ version 2022.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9612601b037e6deb79af300e64e0557dda1be5c
+commit: https://git.buildroot.net/buildroot/commit/?id=384b75098ba936277379fbaf6e9b78ad8e6fa25f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+https://github.com/domoticz/domoticz/blob/2022.2/History.txt
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ply/ply.hash | 2 +-
- package/ply/ply.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...rdware-EnOceanRawValue.h-include-stdarg.h.patch | 33 ++++++++++++++++++++++
+ package/domoticz/domoticz.hash                     |  2 +-
+ package/domoticz/domoticz.mk                       |  2 +-
+ 3 files changed, 35 insertions(+), 2 deletions(-)
 
-diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-index df01ae08e0..b6a56aa909 100644
---- a/package/ply/ply.hash
-+++ b/package/ply/ply.hash
+diff --git a/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch b/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch
+new file mode 100644
+index 0000000000..bc3e60023d
+--- /dev/null
++++ b/package/domoticz/0001-hardware-EnOceanRawValue.h-include-stdarg.h.patch
+@@ -0,0 +1,33 @@
++From 6296d7112089a0f3bfb3056f6d9637e13ce4ce83 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 18 Dec 2022 12:27:38 +0100
++Subject: [PATCH] hardware/EnOceanRawValue.h: include stdarg.h
++
++Include stdarg.h to avoid the following build failure on uclibc:
++
++In file included from /home/fabrice/buildroot/output/build/domoticz-2022.2/hardware/EnOceanRawValue.cpp:2:
++/home/fabrice/buildroot/output/build/domoticz-2022.2/hardware/EnOceanRawValue.h:109:83: error: 'va_list' has not been declared
++  109 | uint32_t SetRawValuesNb(uint8_t * data, T_DATAFIELD * OffsetDes, int NbParameter, va_list value);
++      |                                                                                   ^~~~~~~
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/domoticz/domoticz/pull/5472]
++---
++ hardware/EnOceanRawValue.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/hardware/EnOceanRawValue.h b/hardware/EnOceanRawValue.h
++index 84f38d17a..df858f27d 100644
++--- a/hardware/EnOceanRawValue.h
+++++ b/hardware/EnOceanRawValue.h
++@@ -1,6 +1,7 @@
++ #ifndef _SetGetRawValue
++ #define _SetGetRawValue
++ 
+++#include <stdarg.h>
++ #include <stdint.h>
++ #include <vector>
++ #include <stdio.h>
++-- 
++2.35.1
++
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 9de241015c..c439238800 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8cd92fc8784873fb0507bc11f3f62a31d0345c64914ddaadb958d8b2d6de0100  ply-2.2.0.tar.gz
-+sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index b3c56bd9a5..dc02fc5472 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
+ # Locally computed:
+-sha256  8282cb71c924b6ef92503976d50f966f2c785eab8f8cffa1136ac133f0241157  domoticz-2022.1.tar.gz
++sha256  8f84098bb64bec12ff7aac5f1fb6b6230a88c5781c2b75bc89861caea73cbccf  domoticz-2022.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index bc4a2def41..451021150b 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PLY_VERSION = 2.2.0
-+PLY_VERSION = 2.3.0
- PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
- PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
+-DOMOTICZ_VERSION = 2022.1
++DOMOTICZ_VERSION = 2022.2
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
