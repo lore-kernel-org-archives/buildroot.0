@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5CDC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF69DC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04E5C826EF;
-	Mon, 20 Feb 2023 23:04:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04E5C826EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E69E82560;
+	Mon, 20 Feb 2023 23:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E69E82560
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VNd6BCWpAa9k; Mon, 20 Feb 2023 23:04:39 +0000 (UTC)
+	with ESMTP id tfZABPSbPFZp; Mon, 20 Feb 2023 23:04:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01EC082560;
-	Mon, 20 Feb 2023 23:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01EC082560
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC5E71BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C97928276E;
+	Mon, 20 Feb 2023 23:04:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C97928276E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B3E4D1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F26154171C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F26154171C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A42CB612CA
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42CB612CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bo9SavJsrNIa for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6ccckkurgm5R for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2348C411A1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2348C411A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7C4C612BA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7C4C612BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10C5786495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+ id B495686495; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:37:45 +0100
+Date: Sun, 18 Dec 2022 14:45:40 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8ebb0f810a21103af0bd6d988a24645503e7d10e
-X-Git-Newrev: 98613ad592828a3626400f52a1504fe5234fc7f1
+X-Git-Oldrev: d005917d7256c79b2f50010d48f36846333a457a
+X-Git-Newrev: 4b879cfe0e2b03373bdedc7ae97b956aa102e486
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205225.10C5786495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
- bump version to 22.6.5
+Message-Id: <20230220205211.B495686495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfreeglut: bump
+ version to 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,83 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98613ad592828a3626400f52a1504fe5234fc7f1
+commit: https://git.buildroot.net/buildroot/commit/?id=4b879cfe0e2b03373bdedc7ae97b956aa102e486
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Removed patch included in upstream release.
+Release notes:
+https://github.com/FreeGLUTProject/freeglut/releases/tag/v3.4.0
+
+Upstream switched to github:
+https://freeglut.sourceforge.net/news.php
+https://sourceforge.net/p/freeglut/mailman/message/37622871/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-dont-include-va-dricommon-h.patch         | 36 ----------------------
- package/intel-mediadriver/intel-mediadriver.hash   |  2 +-
- package/intel-mediadriver/intel-mediadriver.mk     |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
+ package/libfreeglut/libfreeglut.hash | 5 +----
+ package/libfreeglut/libfreeglut.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch b/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
-deleted file mode 100644
-index 9d512f9c0b..0000000000
---- a/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1 Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Fri, 18 Nov 2022 22:44:52 +1100
--Subject: [PATCH] [Media Common] [VP] dont include va_dricommon.h
--
--<va/va_dricommon.h> is not in non-X11 libva 2.16.0
--The header "media_libva_putsurface_linux.h" is included
--
--Downloaded from upstream commit
--https://github.com/intel/media-driver/commit/e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1
--
--Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
--index 8695d6c86..6719c07b3 100644
----- a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
--+++ b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
--@@ -23,7 +23,6 @@
-- //! \file     ddi_vp_functions.cpp
-- //! \brief    ddi vp functions implementaion.
-- //!
---#include <va/va_dricommon.h>
-- #include "ddi_vp_functions.h"
-- #include "media_libva_util_next.h"
-- #include "media_libva_common_next.h"
--@@ -4700,4 +4699,4 @@ VAStatus DdiVpFunctions::PutSurfaceLinuxHW(
-- 
--     return VA_STATUS_SUCCESS;
-- }
---#endif // !defined(ANDROID) && defined(X11_FOUND)
--\ No newline at end of file
--+#endif // !defined(ANDROID) && defined(X11_FOUND)
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index a9b7c6407d..b2c45eb025 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
+index ce9fb9e299..249a780f04 100644
+--- a/package/libfreeglut/libfreeglut.hash
++++ b/package/libfreeglut/libfreeglut.hash
+@@ -1,6 +1,3 @@
+-# From http://sourceforge.net/projects/freeglut/files/freeglut/3.2.2/
+-md5  485c1976165315fc42c0b0a1802816d9  freeglut-3.2.2.tar.gz
+-sha1  8e53cc0251165d02cce8d6d5054159c310958b74  freeglut-3.2.2.tar.gz
  # Locally computed
--sha256  0c04b9d74b92de41fd409b62913ce4afd799236c0b6bc1983a496990764e5d90  intel-media-22.6.4.tar.gz
-+sha256  cbb6a514564f8c3349b1f78fc0906b636ea2074d7605cb0e820c5b727ce88cdc  intel-media-22.6.5.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index ff97445181..8d3fc09260 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+-sha256  c5944a082df0bba96b5756dddb1f75d0cd72ce27b5395c6c1dde85c2ff297a50  freeglut-3.2.2.tar.gz
++sha256  3c0bcb915d9b180a97edaebd011b7a1de54583a838644dcd42bb0ea0c6f3eaec  freeglut-3.4.0.tar.gz
+ sha256  b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275  COPYING
+diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
+index 484b0f4b97..09309aeceb 100644
+--- a/package/libfreeglut/libfreeglut.mk
++++ b/package/libfreeglut/libfreeglut.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.6.4
-+INTEL_MEDIADRIVER_VERSION = 22.6.5
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-LIBFREEGLUT_VERSION = 3.2.2
++LIBFREEGLUT_VERSION = 3.4.0
+ LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
+-LIBFREEGLUT_SITE = http://downloads.sourceforge.net/freeglut
++LIBFREEGLUT_SITE = https://github.com/FreeGLUTProject/freeglut/releases/download/v$(LIBFREEGLUT_VERSION)
+ LIBFREEGLUT_LICENSE = MIT
+ LIBFREEGLUT_LICENSE_FILES = COPYING
+ LIBFREEGLUT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
