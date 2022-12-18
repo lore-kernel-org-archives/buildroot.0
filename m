@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A5FC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CDBAC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 765D74ED91;
-	Mon, 20 Feb 2023 22:25:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 765D74ED91
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FC744F039;
+	Mon, 20 Feb 2023 22:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC744F039
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dZItZhzQW9uc; Mon, 20 Feb 2023 22:25:41 +0000 (UTC)
+	with ESMTP id r_GfqeFJ3BUA; Mon, 20 Feb 2023 22:25:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D8CC4F03A;
-	Mon, 20 Feb 2023 22:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D8CC4F03A
+	by smtp4.osuosl.org (Postfix) with ESMTP id E65E34F03A;
+	Mon, 20 Feb 2023 22:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65E34F03A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 92FC51BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13A2F1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40424416DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id A60DA416E0
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40424416DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A60DA416E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J72lkfvstMib for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ with ESMTP id Cw20FjqeQiy7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83C31416D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id E09CA416D1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83C31416D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E09CA416D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 728B086494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id DE52C86494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:27:50 +0100
+Date: Sun, 18 Dec 2022 14:48:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a6105112e82e3ca5162a56aa3a47bf6b49af2e0b
-X-Git-Newrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
+X-Git-Oldrev: b9c948df185f61131133d9d8a8cc39beae0ad299
+X-Git-Newrev: 10b329956a378f9f3806339355cd6df32133690c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.728B086494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-traitlets: bump
- to version 5.7.1
+Message-Id: <20230220205211.DE52C86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xkeyboard-config: bump version to 2.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ebc1545b2f6f192d5abf2d61d9203c3f2095366
+commit: https://git.buildroot.net/buildroot/commit/?id=10b329956a378f9f3806339355cd6df32133690c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Release notes:
+https://gitlab.freedesktop.org/xorg/data/xkeyboard-config/-/blob/master/NEWS
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-traitlets/python-traitlets.hash | 4 ++--
- package/python-traitlets/python-traitlets.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-index 3b48fb6ab8..0c68e04518 100644
---- a/package/python-traitlets/python-traitlets.hash
-+++ b/package/python-traitlets/python-traitlets.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/traitlets/json
--md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
--sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
-+md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
-+sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
- # Locally computed sha256 checksums
- sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index 71bb775a45..8cda56817f 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index e7e3765e59..08e36da1d0 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1f1bb1292a161d520a3485d378609277d108cd07cde0327c16811ff54c3e1595  xkeyboard-config-2.36.tar.xz
++sha256  eb1383a5ac4b6210d7c7302b9d6fab052abdf51c5d2c9b55f1f779997ba68c6c  xkeyboard-config-2.37.tar.xz
+ sha256  6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 0f45d9f74a..b82c15a23a 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_TRAITLETS_VERSION = 5.7.0
-+PYTHON_TRAITLETS_VERSION = 5.7.1
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
--PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
-+PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
- PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
- PYTHON_TRAITLETS_SETUP_TYPE = pep517
+-XKEYBOARD_CONFIG_VERSION = 2.36
++XKEYBOARD_CONFIG_VERSION = 2.37
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.xz
+ XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
