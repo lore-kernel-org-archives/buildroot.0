@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4096C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C21AC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47FE541D99;
-	Mon, 20 Feb 2023 22:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FE541D99
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D43242DA6;
+	Mon, 20 Feb 2023 22:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D43242DA6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ePVFEeMaQ40A; Mon, 20 Feb 2023 22:25:00 +0000 (UTC)
+	with ESMTP id NES29Nhbt9yW; Mon, 20 Feb 2023 22:25:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EDCC4F029;
-	Mon, 20 Feb 2023 22:24:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EDCC4F029
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F9C51BF94D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21A704F029;
+	Mon, 20 Feb 2023 22:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21A704F029
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 783E91BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D29C6117F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D29C6117F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1066A40C25
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1066A40C25
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9RQYl0LjbIIg for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C0VHfl6KYBG9 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E3386110A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E3386110A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AE574015F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AE574015F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EBA2828C8; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 3B38181979; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:29:59 +0100
+Date: Sun, 18 Dec 2022 11:33:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90817e547c54a26e6554819a545f6ef059ee479b
-X-Git-Newrev: e8a8ed95901a663fff43217b7c73530eff25d757
+X-Git-Oldrev: de93736550f8443925dc218b04f82daedfc63c79
+X-Git-Newrev: 46686174e55c4f53d4fd680e65371ee8d227fbce
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.5EBA2828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyphen: bump to
- version 0.13.2
+Message-Id: <20230220205211.3B38181979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgeos: bump version
+ to 3.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8a8ed95901a663fff43217b7c73530eff25d757
+commit: https://git.buildroot.net/buildroot/commit/?id=46686174e55c4f53d4fd680e65371ee8d227fbce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-pyphen/python-pyphen.hash | 4 ++--
- package/python-pyphen/python-pyphen.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog: https://github.com/libgeos/geos/releases/tag/3.11.1
 
-diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
-index 3a145e0f81..39af62e085 100644
---- a/package/python-pyphen/python-pyphen.hash
-+++ b/package/python-pyphen/python-pyphen.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/Pyphen/json
--md5  a2d6f69468684bbaa88d004b79c02128  pyphen-0.13.0.tar.gz
--sha256  06873cebffd65a8fca7c20c0e3dc032655c7ee8de0f552205cad3b574265c293  pyphen-0.13.0.tar.gz
-+md5  a5039d1a4d8d4bad784cb864927f83f8  pyphen-0.13.2.tar.gz
-+sha256  847f57a043a58408f24670ae0184ff6edfb5fd5731743208228c028ddc514438  pyphen-0.13.2.tar.gz
- # Locally computed sha256 checksums
- sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
- sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
-diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
-index d83eb79736..9ca064c293 100644
---- a/package/python-pyphen/python-pyphen.mk
-+++ b/package/python-pyphen/python-pyphen.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 34b2b855d6..cd0a4e0330 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  79ab8cabf4aa8604d161557b52e3e4d84575acdc0d08cb09ab3f7aaefa4d858a  geos-3.11.0.tar.bz2
++sha256  6d0eb3cfa9f92d947731cc75f1750356b3bdfc07ea020553daf6af1c768e0be2  geos-3.11.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 55c975eb4a..c6d470dc97 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYPHEN_VERSION = 0.13.0
-+PYTHON_PYPHEN_VERSION = 0.13.2
- PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
--PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/53/e7f212c87f91aab928bbf0de95ebc319c4d935e59bd5ed868f2c2bfc9465
-+PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/46/12/aeb28a1e1a3f3cede967cea98ef3a1da844418ab8296a4bb9513f232736c
- PYTHON_PYPHEN_SETUP_TYPE = flit
- PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
- PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
+-LIBGEOS_VERSION = 3.11.0
++LIBGEOS_VERSION = 3.11.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
