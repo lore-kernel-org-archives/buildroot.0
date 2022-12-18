@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9795C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:44:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3518FC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7557680DA5;
-	Sun, 18 Dec 2022 10:44:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7557680DA5
+	by smtp1.osuosl.org (Postfix) with ESMTP id D92DC80C48;
+	Sun, 18 Dec 2022 10:44:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D92DC80C48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ydt-hWeh5bQ2; Sun, 18 Dec 2022 10:44:40 +0000 (UTC)
+	with ESMTP id AruCPFtttrUG; Sun, 18 Dec 2022 10:44:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9487F812A9;
-	Sun, 18 Dec 2022 10:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9487F812A9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5FAE81BF852
+	by smtp1.osuosl.org (Postfix) with ESMTP id 136AD80B4F;
+	Sun, 18 Dec 2022 10:44:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 136AD80B4F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CA1441BF5A9
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46D7F40395
+ by smtp4.osuosl.org (Postfix) with ESMTP id 863C04094C
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D7F40395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 863C04094C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1aUy1UCDZwHY for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A3Ry7MC9Rgf5 for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C08640105
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9674640984
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C08640105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9674640984
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6768A86725; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
+ id 7F152866F4; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:33:11 +0100
+Date: Sun, 18 Dec 2022 11:37:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b382fb4a0467a329c22e01a3feafe8029dfe3811
-X-Git-Newrev: de93736550f8443925dc218b04f82daedfc63c79
+X-Git-Oldrev: 46686174e55c4f53d4fd680e65371ee8d227fbce
+X-Git-Newrev: 7aeb6c654e16863dc9d7f0d5b92414b52669299f
 X-Patchwork-Hint: ignore
-Message-Id: <20221218104346.6768A86725@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.8.3
+Message-Id: <20221218104346.7F152866F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "package/gperf: add _CPE_ID_VENDOR
+ and _CPE_ID_PRODUCT"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de93736550f8443925dc218b04f82daedfc63c79
+commit: https://git.buildroot.net/buildroot/commit/?id=7aeb6c654e16863dc9d7f0d5b92414b52669299f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003305.html
+This reverts commit 3712e1dee7626b0c3262c054b5b9c2769fd2a61e.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+gperf -- the GNU perfect hash function generator
+https://www.gnu.org/software/gperf/
+
+and
+
+gperftools -- the Google Performance Tools
+https://github.com/gperftools/gperftools
+
+are two different and unrelated projects.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gperf/gperf.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 4f5027d62d..62b67ad544 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003253.html
--sha256  ed91d573d570db83b8ae546f4890dccfcd0b9dfe1e50a1b401b63a74c152ed04  libX11-1.8.2.tar.xz
--sha512  662ee8043d9ba27df82f647515b701d6f302a52715f21afdaba391f3b70691753e3649e7ff8322e07858be4297df9cbb19227958d676ed6dea198cce64330d1d  libX11-1.8.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003305.html
-+sha256  e31565c84006b6b8e01dc9399c806085739710bc2db2e0930f1511ed9d6585bd  libX11-1.8.3.tar.xz
-+sha512  bc862338fed855986659e9ffa641db6b36c3ac9abced590d1b164e3cc24446671936e3688cdca18393129c4ea41777977eeb37e87d8edc14d6cc5d194a9c0325  libX11-1.8.3.tar.xz
- # Locally computed
- sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 26d4b4d306..3bb3fffce0 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index c2f042c464..4b928a0ebd 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -8,8 +8,6 @@ GPERF_VERSION = 3.1
+ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+ GPERF_LICENSE = GPL-3.0+
+ GPERF_LICENSE_FILES = COPYING
+-GPERF_CPE_ID_VENDOR = gperftools_project
+-GPERF_CPE_ID_PRODUCT = gperftools
  
--XLIB_LIBX11_VERSION = 1.8.2
-+XLIB_LIBX11_VERSION = 1.8.3
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
