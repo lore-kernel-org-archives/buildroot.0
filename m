@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 275EAC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D302C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B41A240933;
-	Sun, 18 Dec 2022 14:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B41A240933
+	by smtp4.osuosl.org (Postfix) with ESMTP id 324FC40946;
+	Sun, 18 Dec 2022 14:36:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 324FC40946
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zWAbBOxt7vhJ; Sun, 18 Dec 2022 14:35:52 +0000 (UTC)
+	with ESMTP id nftA9gc7f96z; Sun, 18 Dec 2022 14:36:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E32044092C;
-	Sun, 18 Dec 2022 14:35:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32044092C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29D2B40936;
+	Sun, 18 Dec 2022 14:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D2B40936
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C587E1BF3DC
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:35:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 39EC81BF3DC
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AED1E60615
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED1E60615
+ by smtp3.osuosl.org (Postfix) with ESMTP id 15FBC60692
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15FBC60692
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6E1GgtONJulS for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 14:35:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 847B7605C9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 847B7605C9
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:35:49 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 149901C0002;
- Sun, 18 Dec 2022 14:35:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p6ulW-003ugW-4q; Sun, 18 Dec 2022 15:35:46 +0100
+ with ESMTP id KZEAvd-PYwnc for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4583B60615
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4583B60615
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 32C6386903; Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221218142318.3223557-1-bernd.kuhls@t-online.de>
-Date: Sun, 18 Dec 2022 15:35:46 +0100
-In-Reply-To: <20221218142318.3223557-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 18 Dec 2022 15:23:18 +0100")
-Message-ID: <87o7s0kce5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/supertuxkart: bump version to
- 1.4
+To: buildroot@buildroot.org
+Date: Sun, 18 Dec 2022 15:33:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d7c99eaa307d1417c8c8e222290df6512ee872ec
+X-Git-Newrev: b9612601b037e6deb79af300e64e0557dda1be5c
+X-Patchwork-Hint: ignore
+Message-Id: <20221218143632.32C6386903@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ply: bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9612601b037e6deb79af300e64e0557dda1be5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog:
- > https://github.com/supertuxkart/stk-code/blob/1.4/CHANGELOG.md
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ply/ply.hash | 2 +-
+ package/ply/ply.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ply/ply.hash b/package/ply/ply.hash
+index df01ae08e0..b6a56aa909 100644
+--- a/package/ply/ply.hash
++++ b/package/ply/ply.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8cd92fc8784873fb0507bc11f3f62a31d0345c64914ddaadb958d8b2d6de0100  ply-2.2.0.tar.gz
++sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ply/ply.mk b/package/ply/ply.mk
+index b3c56bd9a5..dc02fc5472 100644
+--- a/package/ply/ply.mk
++++ b/package/ply/ply.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PLY_VERSION = 2.2.0
++PLY_VERSION = 2.3.0
+ PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
+ PLY_AUTORECONF = YES
+ PLY_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
