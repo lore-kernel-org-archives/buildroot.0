@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E481C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69456C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40C508269C;
-	Mon, 20 Feb 2023 23:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40C508269C
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF2F4826FF;
+	Mon, 20 Feb 2023 23:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF2F4826FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BdOAyAyfFBuD; Mon, 20 Feb 2023 23:04:14 +0000 (UTC)
+	with ESMTP id m7rP3xmlab2i; Mon, 20 Feb 2023 23:04:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F94B8276B;
-	Mon, 20 Feb 2023 23:04:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F94B8276B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC3111BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A07582572;
+	Mon, 20 Feb 2023 23:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A07582572
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B149E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F0ED41729
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F0ED41729
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79779612C5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79779612C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xx-xVCbKjGxh for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xtDaCDYE4nsr for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B49E74171C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B49E74171C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9A97612B9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9A97612B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4E1F828C8; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+ id A6C36828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:29:01 +0100
+Date: Sun, 18 Dec 2022 14:44:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3e41117c64cada4a06fcb20fd17517354a42e948
-X-Git-Newrev: 34f28a9399477f8fceff54976f838b4d9ff6fb22
+X-Git-Oldrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
+X-Git-Newrev: d005917d7256c79b2f50010d48f36846333a457a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.A4E1F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/flare-{engine,
- game}: bump to version 1.14
+Message-Id: <20230220205211.A6C36828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xutil_makedepend: bump version to 1.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,93 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34f28a9399477f8fceff54976f838b4d9ff6fb22
+commit: https://git.buildroot.net/buildroot/commit/?id=d005917d7256c79b2f50010d48f36846333a457a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See:
-https://flarerpg.org/2022/01/31/flare-1-13/
-https://flarerpg.org/2022/12/10/flare-1-14/
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-December/003300.html
 
-While at it, change URL to use https.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flare-engine/Config.in         | 2 +-
- package/flare-engine/flare-engine.hash | 2 +-
- package/flare-engine/flare-engine.mk   | 2 +-
- package/flare-game/Config.in           | 2 +-
- package/flare-game/flare-game.hash     | 2 +-
- package/flare-game/flare-game.mk       | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xutil_makedepend/xutil_makedepend.hash | 6 +++---
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
-index 9c997c2b9a..136cae707e 100644
---- a/package/flare-engine/Config.in
-+++ b/package/flare-engine/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_FLARE_ENGINE
- 	  Flare is not a reimplementation of an existing game or engine.
- 	  It is a tribute to and exploration of the action RPG genre.
- 
--	  http://flarerpg.org
-+	  https://flarerpg.org
- 
- comment "flare-engine needs a toolchain w/ C++, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-diff --git a/package/flare-engine/flare-engine.hash b/package/flare-engine/flare-engine.hash
-index 7f6169381c..2e1f87b237 100644
---- a/package/flare-engine/flare-engine.hash
-+++ b/package/flare-engine/flare-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  287a08532972fa3ac56ce7cb213d21be8be35b529339f61d4eeadbd501c78a8e  flare-engine-1.12.tar.gz
-+sha256  2c1bafeaa5ac26c10449bfcb7151b06e8a22547aa7364d2a39bbcb135aa50a09  flare-engine-1.14.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index cbb7add4bb..e5fa947272 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.hash b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
+index 3a7496e1a4..e2fe117f10 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.hash
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-October/003243.html
+-sha256  a729cfd3c0f4e16c0db1da351e7f53335222e058e3434e84f91251fd6d407065  makedepend-1.0.7.tar.xz
+-sha512  fd575de737aa56ef8e475d1ddb7b2392e730ee1b23c0b853bbb21975b757c3fc56f94d57ecc5a784dceed2be653feb10909e86fd96fdc074b50fbbd0e27a19db  makedepend-1.0.7.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-December/003300.html
++sha256  bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b  makedepend-1.0.8.tar.xz
++sha512  6707b1107c07d4ffbcf008181e877d18a0bcc4aea03860ee1158f5630c7fdce4cf9ad7bee3b38ee420c3a44819ed4b56a6f2428a5b695c0dbd17fb3e60825a6d  makedepend-1.0.8.tar.xz
+ # Locally computed
+ sha256  0530078db78c47ae978dc2bd77f4f427e6cd97df868672c95b1ef284113c8cb7  COPYING
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index b16bbe0978..0c4a32c006 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FLARE_ENGINE_VERSION = 1.12
-+FLARE_ENGINE_VERSION = 1.14
- FLARE_ENGINE_SITE = $(call github,flareteam,flare-engine,v$(FLARE_ENGINE_VERSION))
- FLARE_ENGINE_LICENSE = GPL-3.0+
- FLARE_ENGINE_LICENSE_FILES = COPYING
-diff --git a/package/flare-game/Config.in b/package/flare-game/Config.in
-index ca68d19a69..535a9b18a2 100644
---- a/package/flare-game/Config.in
-+++ b/package/flare-game/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_FLARE_GAME
- 	  game engine itself is part of a separate package,
- 	  flame-engine.
- 
--	  http://flarerpg.org
-+	  https://flarerpg.org
-diff --git a/package/flare-game/flare-game.hash b/package/flare-game/flare-game.hash
-index 3d6d678c94..9ae88c6daa 100644
---- a/package/flare-game/flare-game.hash
-+++ b/package/flare-game/flare-game.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  19a909f2c6e0868baae823bb491e8840d5fb3e0454f00201de8da119772e5160  flare-game-1.12.tar.gz
-+sha256  65758462070aa88842084f8ee69083d8226e93cfbf83481663276d8307494b8e  flare-game-1.14.tar.gz
- sha256  3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f  LICENSE.txt
-diff --git a/package/flare-game/flare-game.mk b/package/flare-game/flare-game.mk
-index 41f02bec93..a1a0a5944a 100644
---- a/package/flare-game/flare-game.mk
-+++ b/package/flare-game/flare-game.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLARE_GAME_VERSION = 1.12
-+FLARE_GAME_VERSION = 1.14
- FLARE_GAME_SITE = $(call github,flareteam,flare-game,v$(FLARE_GAME_VERSION))
- FLARE_GAME_LICENSE = CC-BY-SA-3.0 (data files), GPL-2.0 (GNU Unifont), \
- 	OFL-1.1 (Liberation Sans)
+-XUTIL_MAKEDEPEND_VERSION = 1.0.7
++XUTIL_MAKEDEPEND_VERSION = 1.0.8
+ XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.xz
+ XUTIL_MAKEDEPEND_SITE = https://xorg.freedesktop.org/archive/individual/util
+ XUTIL_MAKEDEPEND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
