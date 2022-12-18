@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D302C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E7B9C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:36:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 324FC40946;
-	Sun, 18 Dec 2022 14:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 324FC40946
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DF218134D;
+	Sun, 18 Dec 2022 14:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF218134D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0BeAAC847dlA; Sun, 18 Dec 2022 14:36:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80E2281335;
+	Sun, 18 Dec 2022 14:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E2281335
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4381C1BF852
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E75540936
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E75540936
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nftA9gc7f96z; Sun, 18 Dec 2022 14:36:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29D2B40936;
-	Sun, 18 Dec 2022 14:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D2B40936
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39EC81BF3DC
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15FBC60692
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15FBC60692
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KZEAvd-PYwnc for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bhsKkfVvawzM for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4583B60615
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E7914092D
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4583B60615
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E7914092D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32C6386903; Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
+ id 2836886902; Sun, 18 Dec 2022 14:36:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 15:33:35 +0100
+Date: Sun, 18 Dec 2022 15:32:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7c99eaa307d1417c8c8e222290df6512ee872ec
-X-Git-Newrev: b9612601b037e6deb79af300e64e0557dda1be5c
+X-Git-Oldrev: 384b75098ba936277379fbaf6e9b78ad8e6fa25f
+X-Git-Newrev: d7c99eaa307d1417c8c8e222290df6512ee872ec
 X-Patchwork-Hint: ignore
-Message-Id: <20221218143632.32C6386903@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ply: bump to version 2.3.0
+Message-Id: <20221218143632.2836886902@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hddtemp: link to libintl when
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9612601b037e6deb79af300e64e0557dda1be5c
+commit: https://git.buildroot.net/buildroot/commit/?id=d7c99eaa307d1417c8c8e222290df6512ee872ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+Fixes:
+http://autobuild.buildroot.net/results/e84/e84b7131f996302301dd0a8fd47362c9f2eab0bf/
+http://autobuild.buildroot.net/results/524/52428940034d59887e0172fbd8481943d86db13b/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ply/ply.hash | 2 +-
- package/ply/ply.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hddtemp/hddtemp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-index df01ae08e0..b6a56aa909 100644
---- a/package/ply/ply.hash
-+++ b/package/ply/ply.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8cd92fc8784873fb0507bc11f3f62a31d0345c64914ddaadb958d8b2d6de0100  ply-2.2.0.tar.gz
-+sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index b3c56bd9a5..dc02fc5472 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
+index 7023e11e59..4f45647dff 100644
+--- a/package/hddtemp/hddtemp.mk
++++ b/package/hddtemp/hddtemp.mk
+@@ -15,7 +15,8 @@ HDDTEMP_GETTEXTIZE = YES
  
--PLY_VERSION = 2.2.0
-+PLY_VERSION = 2.3.0
- PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
- PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
+ HDDTEMP_DB_PATH = /usr/share/misc/hddtemp.db
+ HDDTEMP_CONF_OPTS = --with-db-path=$(HDDTEMP_DB_PATH)
+-HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS)"
++HDDTEMP_CONF_ENV = LIBS="$(HDDTEMP_LIBS) $(TARGET_NLS_LIBS)"
++HDDTEMP_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ HDDTEMP_DEPENDENCIES += libexecinfo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
