@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFECC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D60C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15F0A4F0AF;
-	Mon, 20 Feb 2023 22:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15F0A4F0AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5722A4F0CA;
+	Mon, 20 Feb 2023 22:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5722A4F0CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LX6wEZpGbTAP; Mon, 20 Feb 2023 22:29:50 +0000 (UTC)
+	with ESMTP id SHm4xQ4Sa01q; Mon, 20 Feb 2023 22:30:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2C5D4F0B8;
-	Mon, 20 Feb 2023 22:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C5D4F0B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36FDF4F0C6;
+	Mon, 20 Feb 2023 22:30:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36FDF4F0C6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B50DE1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0CEB91BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8077416E1
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC622416E9
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8077416E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC622416E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q6Ib621jh2xK for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ with ESMTP id Wpqy8XJuyRzw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9A17416DB
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A17416DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A1DA416E4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1DA416E4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A45B86494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 07A9486495; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:42:49 +0100
+Date: Sun, 18 Dec 2022 16:48:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
-X-Git-Newrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
+X-Git-Oldrev: f9ad317507cf8564200b88dda2463406d0171122
+X-Git-Newrev: 66c2d6d4b43776d4afb62b985a082bf2d75cb708
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.9A45B86494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lightning: bump
- version to 2.2.0
+Message-Id: <20230220205213.07A9486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vuejs-router: fix
+ license hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,94 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af6f7aa76db5aed1eada0b27bd0375610a2fc728
+commit: https://git.buildroot.net/buildroot/commit/?id=66c2d6d4b43776d4afb62b985a082bf2d75cb708
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Notable changes in this new version include support for the Apple
-Aarch64 ABI, and compare-and-swap atomic instructions.
+Commit 2fce36d928082685d7f77c3587e15b7827ce0b42 forgot to update LICENSE
+hash (update in year:
+https://github.com/vuejs/router/commit/ed238db64b2a605f785ee4e2f847a6788c06a2ea)
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-[Peter: drop _AUTORECONF]
+Fixes:
+ - http://autobuild.buildroot.org/results/beac411246342a9445495bc7c8f6a7e7369b9c53
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...kefile.am-don-t-install-lightning.h-twice.patch | 38 ----------------------
- package/lightning/lightning.hash                   |  2 +-
- package/lightning/lightning.mk                     |  4 +--
- 3 files changed, 2 insertions(+), 42 deletions(-)
+ package/vuejs-router/vuejs-router.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-deleted file mode 100644
-index fb5299c25f..0000000000
---- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 10 Oct 2019 20:36:46 +0200
--Subject: [PATCH] include/Makefile.am: don't install lightning.h twice
--
--Commit 17164ed32d8f3530153b9cad67a4399c65f24512 added lightning.h to
--nodist_include_HEADERS without removing it from include_HEADERS
--
--This raises the following error on one of the buildroot autobuilders:
--/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
--/usr/bin/install -c -m 644 lightning.h '/home/test/autobuild/run/instance-3/output-1/target/usr/include'
--/usr/bin/install: cannot create regular file `/home/test/autobuild/run/instance-3/output-1/target/usr/include/lightning.h': File exists
--
--Fix this by removing lightning.h from include_HEADERS
--
--Fixes:
-- - http://autobuild.buildroot.org/results/05ebc75598627d2a08e08e194f51cb8464f97b95
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- include/Makefile.am | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/include/Makefile.am b/include/Makefile.am
--index e754dd3..8f91594 100644
----- a/include/Makefile.am
--+++ b/include/Makefile.am
--@@ -14,7 +14,6 @@
-- # License for more details.
-- #
-- 
---include_HEADERS = lightning.h
-- SUBDIRS =		\
-- 	lightning
-- 
---- 
--2.23.0
--
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 2840a97f91..998ae3743b 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
+diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
+index 147e730f20..b48e59ef48 100644
+--- a/package/vuejs-router/vuejs-router.hash
++++ b/package/vuejs-router/vuejs-router.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  ed856b866dc6f68678dc1151579118fab1c65fad687cf847fc2d94ca045efdc9  lightning-2.1.3.tar.gz
-+sha256  4e3984ff1ccf0ba30a985211d40fc5c06b25f014ebdf3d80d0fe3d0c80dd7c0e  lightning-2.2.0.tar.gz
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index da8c07e61f..8ab2ca1f9d 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--LIGHTNING_VERSION = 2.1.3
-+LIGHTNING_VERSION = 2.2.0
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
- LIGHTNING_INSTALL_STAGING = YES
- LIGHTNING_CPE_ID_VENDOR = gnu
--# We're patching include/Makefile.am
--LIGHTNING_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
- LIGHTNING_DEPENDENCIES += binutils zlib
+ sha256  437558a84b99d0d89743d4897ec16a90a96a1d3a6786e697a8808a044bcb9b8f  vue-router-4.1.6.tgz
+-sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
++sha256  91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
