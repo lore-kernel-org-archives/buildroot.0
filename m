@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84CC8C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:49:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD13C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B70B60692;
-	Sun, 18 Dec 2022 13:49:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B70B60692
+	by smtp2.osuosl.org (Postfix) with ESMTP id A48F8401F1;
+	Sun, 18 Dec 2022 13:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A48F8401F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DCle_iJV0LGs; Sun, 18 Dec 2022 13:49:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0_Gk-EMVRh27; Sun, 18 Dec 2022 13:49:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83D57605D8;
-	Sun, 18 Dec 2022 13:49:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83D57605D8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A083B1BF5A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E75184015F;
+	Sun, 18 Dec 2022 13:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75184015F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE6981BF852
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89A9880D1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97EA94015F
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89A9880D1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97EA94015F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id inwmJhhowu3p for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tm4AmvJVeShX for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B3CD080BED
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB7D6400D3
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3CD080BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB7D6400D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F87C86807; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
+ id A944386808; Sun, 18 Dec 2022 13:49:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:44:02 +0100
+Date: Sun, 18 Dec 2022 14:45:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
-X-Git-Newrev: d005917d7256c79b2f50010d48f36846333a457a
+X-Git-Oldrev: d005917d7256c79b2f50010d48f36846333a457a
+X-Git-Newrev: 4b879cfe0e2b03373bdedc7ae97b956aa102e486
 X-Patchwork-Hint: ignore
-Message-Id: <20221218134918.9F87C86807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xutil_makedepend: bump
- version to 1.0.8
+Message-Id: <20221218134918.A944386808@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfreeglut: bump version to 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +62,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d005917d7256c79b2f50010d48f36846333a457a
+commit: https://git.buildroot.net/buildroot/commit/?id=4b879cfe0e2b03373bdedc7ae97b956aa102e486
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003300.html
+https://github.com/FreeGLUTProject/freeglut/releases/tag/v3.4.0
+
+Upstream switched to github:
+https://freeglut.sourceforge.net/news.php
+https://sourceforge.net/p/freeglut/mailman/message/37622871/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.hash | 6 +++---
- package/x11r7/xutil_makedepend/xutil_makedepend.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libfreeglut/libfreeglut.hash | 5 +----
+ package/libfreeglut/libfreeglut.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.hash b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-index 3a7496e1a4..e2fe117f10 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-October/003243.html
--sha256  a729cfd3c0f4e16c0db1da351e7f53335222e058e3434e84f91251fd6d407065  makedepend-1.0.7.tar.xz
--sha512  fd575de737aa56ef8e475d1ddb7b2392e730ee1b23c0b853bbb21975b757c3fc56f94d57ecc5a784dceed2be653feb10909e86fd96fdc074b50fbbd0e27a19db  makedepend-1.0.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003300.html
-+sha256  bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b  makedepend-1.0.8.tar.xz
-+sha512  6707b1107c07d4ffbcf008181e877d18a0bcc4aea03860ee1158f5630c7fdce4cf9ad7bee3b38ee420c3a44819ed4b56a6f2428a5b695c0dbd17fb3e60825a6d  makedepend-1.0.8.tar.xz
+diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
+index ce9fb9e299..249a780f04 100644
+--- a/package/libfreeglut/libfreeglut.hash
++++ b/package/libfreeglut/libfreeglut.hash
+@@ -1,6 +1,3 @@
+-# From http://sourceforge.net/projects/freeglut/files/freeglut/3.2.2/
+-md5  485c1976165315fc42c0b0a1802816d9  freeglut-3.2.2.tar.gz
+-sha1  8e53cc0251165d02cce8d6d5054159c310958b74  freeglut-3.2.2.tar.gz
  # Locally computed
- sha256  0530078db78c47ae978dc2bd77f4f427e6cd97df868672c95b1ef284113c8cb7  COPYING
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index b16bbe0978..0c4a32c006 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -4,7 +4,7 @@
+-sha256  c5944a082df0bba96b5756dddb1f75d0cd72ce27b5395c6c1dde85c2ff297a50  freeglut-3.2.2.tar.gz
++sha256  3c0bcb915d9b180a97edaebd011b7a1de54583a838644dcd42bb0ea0c6f3eaec  freeglut-3.4.0.tar.gz
+ sha256  b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275  COPYING
+diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
+index 484b0f4b97..09309aeceb 100644
+--- a/package/libfreeglut/libfreeglut.mk
++++ b/package/libfreeglut/libfreeglut.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XUTIL_MAKEDEPEND_VERSION = 1.0.7
-+XUTIL_MAKEDEPEND_VERSION = 1.0.8
- XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.xz
- XUTIL_MAKEDEPEND_SITE = https://xorg.freedesktop.org/archive/individual/util
- XUTIL_MAKEDEPEND_LICENSE = MIT
+-LIBFREEGLUT_VERSION = 3.2.2
++LIBFREEGLUT_VERSION = 3.4.0
+ LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
+-LIBFREEGLUT_SITE = http://downloads.sourceforge.net/freeglut
++LIBFREEGLUT_SITE = https://github.com/FreeGLUTProject/freeglut/releases/download/v$(LIBFREEGLUT_VERSION)
+ LIBFREEGLUT_LICENSE = MIT
+ LIBFREEGLUT_LICENSE_FILES = COPYING
+ LIBFREEGLUT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
