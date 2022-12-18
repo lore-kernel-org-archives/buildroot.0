@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 862D8C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 275EAC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 14:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2875A81322;
-	Sun, 18 Dec 2022 14:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2875A81322
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jwfwy1rpkprV; Sun, 18 Dec 2022 14:35:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 743EA81309;
-	Sun, 18 Dec 2022 14:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 743EA81309
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 62B161BF3DC
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:34:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D6F84047D
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:34:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D6F84047D
+	by smtp4.osuosl.org (Postfix) with ESMTP id B41A240933;
+	Sun, 18 Dec 2022 14:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B41A240933
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id shGD2no4CVoD for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 14:34:58 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zWAbBOxt7vhJ; Sun, 18 Dec 2022 14:35:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E32044092C;
+	Sun, 18 Dec 2022 14:35:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32044092C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C587E1BF3DC
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:35:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AED1E60615
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 14:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED1E60615
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6E1GgtONJulS for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 14:35:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 225B64046D
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 225B64046D
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 847B7605C9
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 847B7605C9
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 14:35:49 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1F1C640004;
- Sun, 18 Dec 2022 14:34:55 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 149901C0002;
+ Sun, 18 Dec 2022 14:35:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p6ukh-003uaS-7G; Sun, 18 Dec 2022 15:34:55 +0100
+ id 1p6ulW-003ugW-4q; Sun, 18 Dec 2022 15:35:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20221214215232.596291-1-giulio.benetti@benettiengineering.com>
-Date: Sun, 18 Dec 2022 15:34:55 +0100
-In-Reply-To: <20221214215232.596291-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Wed, 14 Dec 2022 22:52:32 +0100")
-Message-ID: <87sfhckcfk.fsf@dell.be.48ers.dk>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20221218142318.3223557-1-bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2022 15:35:46 +0100
+In-Reply-To: <20221218142318.3223557-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 18 Dec 2022 15:23:18 +0100")
+Message-ID: <87o7s0kce5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: bump to 2022-10-30
- version to fix build failure with Linux up to 6.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/supertuxkart: bump version to
+ 1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,22 +64,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Drop local patch that has been upstreamed[0] and drop the endianness
- > handling too since from this commit[1] on it's handled by using Linux
- > macro __LITTLE_ENDIAN.
+ > Changelog:
+ > https://github.com/supertuxkart/stk-code/blob/1.4/CHANGELOG.md
 
- > [0]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/4a555ffb77a5947814b6c7f330968318e265c496
- > [1]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/b3da33576da5359d85c7cfe82716c9a08a592aff
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
