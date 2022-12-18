@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 872ADC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6502C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30B174EC66;
-	Mon, 20 Feb 2023 22:28:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B174EC66
+	by smtp4.osuosl.org (Postfix) with ESMTP id 489D04F086;
+	Mon, 20 Feb 2023 22:28:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 489D04F086
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HFQEg_AI4fPV; Mon, 20 Feb 2023 22:28:12 +0000 (UTC)
+	with ESMTP id ykFToaFEyjUd; Mon, 20 Feb 2023 22:28:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 039634F081;
-	Mon, 20 Feb 2023 22:28:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 039634F081
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3115C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EC0E4F08D;
+	Mon, 20 Feb 2023 22:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EC0E4F08D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B21F31BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D92586112C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D92586112C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EC0B41151
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EC0B41151
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NXCDO-uSMcdi for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e_VZP1XAvmIf for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EE576117C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EE576117C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 798BA416D6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 798BA416D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AF07828C8; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 76B1986494; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:27 +0100
+Date: Sun, 18 Dec 2022 14:57:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e6e04028825a8cfdf952553d89363d2c85b69746
-X-Git-Newrev: ca8d70086d31d1f54c31dcbc2bab307d97066910
+X-Git-Oldrev: 79bb1ab519448993dbd88e21ddf55b5cfc283115
+X-Git-Newrev: 78504fca92c33cfd23beddd1c9b83fe58b9e0e9a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205204.0AF07828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-yarl: bump to
- version 1.8.2
+Message-Id: <20230220205212.76B1986494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: bump
+ _KERNEL_LATEST_VERSION to 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca8d70086d31d1f54c31dcbc2bab307d97066910
+commit: https://git.buildroot.net/buildroot/commit/?id=78504fca92c33cfd23beddd1c9b83fe58b9e0e9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index b4e411cbdf..9725e0058b 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  ff8f2843481cd11c3c674ce4f6fa167b  yarl-1.8.1.tar.gz
--sha256  af887845b8c2e060eb5605ff72b6f2dd2aab7a761379373fd89d314f4752abbf  yarl-1.8.1.tar.gz
-+md5  57c82725b9f4895eecee45faf5e61a54  yarl-1.8.2.tar.gz
-+sha256  49d43402c6e3013ad0978602bf6bf5328535c48d192304b91b97a3c6790b1562  yarl-1.8.2.tar.gz
- # Locally computed sha256 checksums
- sha256  56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 55bfbab53e..77e0c91383 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index fba3d90e6b..1bca082cbf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,8 +28,8 @@ choice
+ 	prompt "Kernel version"
  
--PYTHON_YARL_VERSION = 1.8.1
-+PYTHON_YARL_VERSION = 1.8.2
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/d6/04/255c68974ec47fa754564c4abba8f61f9ed68b869bbbb854198d6259c4f7
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/c4/1e/1b204050c601d5cd82b45d5c8f439cb6f744a2ce0c0a6f83be0ddf0dc7b2
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (6.0)"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0 if BR2_KERNEL_HEADERS_AS_KERNEL
++	bool "Latest version (6.1)"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.145-cip17)"
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
