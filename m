@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C5EC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 071E2C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F16A401F8;
-	Sun, 18 Dec 2022 13:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F16A401F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 390B1404F0;
+	Sun, 18 Dec 2022 13:54:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 390B1404F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O8PzFpo4Wj41; Sun, 18 Dec 2022 13:54:26 +0000 (UTC)
+	with ESMTP id ViB-N5CIGgKd; Sun, 18 Dec 2022 13:54:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C68E340169;
-	Sun, 18 Dec 2022 13:54:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C68E340169
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7674840169;
+	Sun, 18 Dec 2022 13:54:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7674840169
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF7D31BF853
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:53:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F25FF1BF5A7
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA719605D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id D832960687
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA719605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D832960687
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CFdHCoHMTI1N for <buildroot@lists.busybox.net>;
+ with ESMTP id 8MZgiZC-KxkR for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 13:53:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 041FF60087
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 041FF60087
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D1C5605D6
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D1C5605D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E64E686894; Sun, 18 Dec 2022 13:53:57 +0000 (UTC)
+ id EFFE986896; Sun, 18 Dec 2022 13:53:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:52:32 +0100
+Date: Sun, 18 Dec 2022 14:53:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15f7b944df8be0f20e88f1d2b50534700030981e
-X-Git-Newrev: 63cd5db50914536910b67a0a06e05c22ddcc5a22
+X-Git-Oldrev: 63cd5db50914536910b67a0a06e05c22ddcc5a22
+X-Git-Newrev: d4c41ac00c7d144f8aed1644a1b80eca8470d01d
 X-Patchwork-Hint: ignore
-Message-Id: <20221218135357.E64E686894@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-maturin: bump to version
- 0.14.5
+Message-Id: <20221218135357.EFFE986896@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtd: add lsmtd option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +62,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63cd5db50914536910b67a0a06e05c22ddcc5a22
+commit: https://git.buildroot.net/buildroot/commit/?id=d4c41ac00c7d144f8aed1644a1b80eca8470d01d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+lsmtd is a new utility added in v2.1.0[1].
+
+[1] http://git.infradead.org/mtd-utils.git/commit/c26ce774a7209012c0505ee841d54898c6665e20
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mtd/Config.in | 3 +++
+ package/mtd/mtd.mk    | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index d642119786..9d68751c03 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  dd1ee5cd1bb76c434319f305cd30873be2f8221e310168fc376b53b7d0e166ff  maturin-0.14.4.tar.gz
-+sha256  383f60977a330ec8699a51c37ea9c5175ee7e95fc36b06d9415e0eec1f3acaf0  maturin-0.14.5.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index ea055ffcf6..4570ad4535 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index c45dd1e2b7..3ba48da645 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -71,6 +71,9 @@ config BR2_PACKAGE_MTD_JFFS2DUMP
+ 	bool "jffs2dump"
+ 	select BR2_PACKAGE_MTD_JFFS_UTILS
  
--PYTHON_MATURIN_VERSION = 0.14.4
-+PYTHON_MATURIN_VERSION = 0.14.5
- PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/7c/51/36749c1a0881a4292e4f334bd9ddb0865e0991a83070834d1aaa1af7443f
-+PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/36/83/2bdec738921e253d774ab8b9e99f4540a406ad0d8a1442c84575e5506686
- PYTHON_MATURIN_SETUP_TYPE = setuptools
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
++config BR2_PACKAGE_MTD_LSMTD
++	bool "lsmtd"
++
+ config BR2_PACKAGE_MTD_MKFSJFFS2
+ 	bool "mkfs.jffs2"
+ 	select BR2_PACKAGE_MTD_JFFS_UTILS
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 6e266a8760..db2b104586 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -94,6 +94,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK)	+= flash_unlock
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK)	+= ftl_check
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT)	+= ftl_format
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS2DUMP)	+= jffs2dump
++MTD_TARGETS_$(BR2_PACKAGE_MTD_LSMTD)		+= lsmtd
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS2)	+= mkfs.jffs2
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_MTD_DEBUG)	+= mtd_debug
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_MTDPART)		+= mtdpart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
