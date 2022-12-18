@@ -1,87 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA92C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 11:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9FDC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 11:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DF8F40395;
-	Sun, 18 Dec 2022 11:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DF8F40395
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EFBB817A5;
+	Sun, 18 Dec 2022 11:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EFBB817A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 87pV9aX9BRbU; Sun, 18 Dec 2022 11:13:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vxBsytU2sKq0; Sun, 18 Dec 2022 11:22:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8692D40420;
-	Sun, 18 Dec 2022 11:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8692D40420
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 698ED1BF2A2
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:13:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EADB817A8;
+	Sun, 18 Dec 2022 11:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EADB817A8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F141F1BF2A2
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E24460692
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E24460692
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4795409AE
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 11:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4795409AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hsm_3C1LLAEV for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 11:13:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6C516068D
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C6C516068D
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 11:13:51 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id h11so6249457wrw.13
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 03:13:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zcD6gzeGbq56d1frj+ag8fyfh1/THxEutpAQdHFITeM=;
- b=BqF9aQYH7O6t9D3qU1EPpu5KgZpPRzr5mc9/2mVFuClR3WjXl08IOm8UHMRR7wlIcK
- h6fsMU8lwstZIq1iSQkPo01lmQ/xc/z/a+mwEjh8urZfKaEfUjnfbq7eIUY7uRxxE9uU
- rDbtF72kY8XV8h1WNEbttOR7TWWVGzTyMaLs/Kjxtn6Ejm/rDPm9C6ZQM9h3eIJoE83x
- 9449JWM0BFR3YwGTL/hw9/ADgWO8bQQbISJIESCjPQCCFtRSsdVAZyXRMxTIwYgXJxF9
- E+kMfH8q7TIC5eVW/mUxuT6nD5aF3JIWxdLGZ8JxNaPmaQPnWD3kglGzsja9/mlBNxcT
- DxhQ==
-X-Gm-Message-State: ANoB5pk8cFz2bKaQoh165q5blTRJEwHMgIj2YF0nsWDKMkxioMAcqQte
- MuRFzhRMGVKN+ZE53pzwqRe0E9FC6MY=
-X-Google-Smtp-Source: AA0mqf5kfqt6gcYaQwb5eyVWuPg2Qis0ZHQ0WBiaFgQgbc+niGozuGOd4ybAtAfz3GzTikwr4I/Qww==
-X-Received: by 2002:a5d:4e03:0:b0:242:37e3:1747 with SMTP id
- p3-20020a5d4e03000000b0024237e31747mr22790061wrt.21.1671362029600; 
- Sun, 18 Dec 2022 03:13:49 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- cl4-20020a5d5f04000000b00242209dd1ffsm7144613wrb.41.2022.12.18.03.13.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Dec 2022 03:13:49 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rCVW_h7tUeKt for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 11:22:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81259409AB
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 81259409AB
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 11:22:02 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout07.t-online.de (Postfix) with SMTP id A24A122A7B;
+ Sun, 18 Dec 2022 12:21:59 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd72.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p6rjz-3RY7qD0; Sun, 18 Dec 2022 12:21:59 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36510)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p6rjz-0007Ig-0O;
+ Sun, 18 Dec 2022 12:21:59 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 12:13:47 +0100
-Message-Id: <20221218111347.21289-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sun, 18 Dec 2022 12:21:58 +0100
+Message-Id: <20221218112158.18021-3-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221218112158.18021-1-bernd.kuhls@t-online.de>
+References: <20221218112158.18021-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zcD6gzeGbq56d1frj+ag8fyfh1/THxEutpAQdHFITeM=;
- b=YblFq5FP/jh0H8SSs8CUGxfPda2YgVwt6123kVNq6HYa0lva0sG3+ScueyB4jv571F
- rCaL8y2Ow35X8TIKaM4Oh/WG6TqafgdGuvxQHSOdzbw8VqSZbWbfly60U2hq3TlPMOYR
- yTAvdIj0jBb9ceuFhQ8nQNgLlYnMQOgGHBhCMliuPYnhsLVaAz6I/0Dw2On/u+jHG1lx
- fIwyi8mg4YBRTjbWjt5T7NssXeilC8mYbXn89J36GLrxdjjxxSIxY1QhfkIiwKTUYJQO
- xZHYip/o99QrZQcuS2B3zNENsuvSEjheDycxuCUW6og8Zmtw91GBIZhHxLoGevWsc4iS
- bePA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YblFq5FP
-Subject: [Buildroot] [PATCH 1/1] package/motion: bump to version 4.5.1
+X-TOI-EXPURGATEID: 150726::1671362519-69DEC991-BBB44D73/0/0 CLEAN NORMAL
+X-TOI-MSGID: f2f76ab5-a2bd-4f3c-951d-f2f5f8ca1151
+Subject: [Buildroot] [PATCH 3/3] linux: bump _KERNEL_LATEST_VERSION to 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +67,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/Motion-Project/motion/releases/tag/release-4.5.1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/motion/motion.hash | 2 +-
- package/motion/motion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 9b99256864..21f74b481f 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  42320a1c7b54a3f0b5a49cecf34a5d752760b28383bc573b3ca1240581786fe5  motion-4.5.0.tar.gz
-+sha256  0c824276bb23565b7cf10409ebdcb46b85fb1f6abca957252e52290bb1fe473e  motion-4.5.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index 18fe0eb630..4e9ccdc3f7 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index fba3d90e6b..1bca082cbf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,8 +28,8 @@ choice
+ 	prompt "Kernel version"
  
--MOTION_VERSION = 4.5.0
-+MOTION_VERSION = 4.5.1
- MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
- MOTION_LICENSE = GPL-2.0
- MOTION_LICENSE_FILES = LICENSE
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (6.0)"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0 if BR2_KERNEL_HEADERS_AS_KERNEL
++	bool "Latest version (6.1)"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.145-cip17)"
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
