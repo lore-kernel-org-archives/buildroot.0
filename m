@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C896C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9392C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBCAB826E5;
-	Mon, 20 Feb 2023 23:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBCAB826E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6EE7822E2;
+	Mon, 20 Feb 2023 23:04:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6EE7822E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WBLJs2nhRSez; Mon, 20 Feb 2023 23:03:48 +0000 (UTC)
+	with ESMTP id 6ynO4pD0zbXW; Mon, 20 Feb 2023 23:04:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEA2826C1;
-	Mon, 20 Feb 2023 23:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FEA2826C1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9C7B21BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C065826EA;
+	Mon, 20 Feb 2023 23:03:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C065826EA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A18071BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29F8041728
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29F8041728
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E758612C8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E758612C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qDX9vd2M11b5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZkzabWnvHc24 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7997541717
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7997541717
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E5316128E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E5316128E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6951986495; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+ id 8D81581979; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:25:38 +0100
+Date: Sun, 18 Dec 2022 14:40:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f6e88fff91dd4702c725f47fb4fdd1a00b228f64
-X-Git-Newrev: f1f5e9f15063443bae1b80af072c7a5b0ab91d24
+X-Git-Oldrev: 4b869587c6c88a15dc2ecf6c417896de18501a17
+X-Git-Newrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.6951986495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/readline: bump to
- version 8.2
+Message-Id: <20230220205211.8D81581979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-ipdb: bump to
+ version 0.13.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1f5e9f15063443bae1b80af072c7a5b0ab91d24
+commit: https://git.buildroot.net/buildroot/commit/?id=7165965fe57725c32ce3a9c69274d1a4c2c54c80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Drop no longer required setuptools runtime dependency.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/readline/readline.hash | 4 ++--
- package/readline/readline.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-ipdb/Config.in        | 1 -
+ package/python-ipdb/python-ipdb.hash | 4 ++--
+ package/python-ipdb/python-ipdb.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/readline/readline.hash b/package/readline/readline.hash
-index b0530a2d72..627746d821 100644
---- a/package/readline/readline.hash
-+++ b/package/readline/readline.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature from
--# https://ftp.gnu.org/gnu/readline/readline-8.1.2.tar.gz.sig
--sha256  7589a2381a8419e68654a47623ce7dfcb756815c8fee726b98f90bf668af7bc6  readline-8.1.2.tar.gz
-+# https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz.sig
-+sha256  3feb7171f16a84ee82ca18a36d7b9be109a52c04f492a053331d7d1095007c35  readline-8.2.tar.gz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index b1fd181b78..66812dee77 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-ipdb/Config.in b/package/python-ipdb/Config.in
+index a9d6af1684..9259421c6a 100644
+--- a/package/python-ipdb/Config.in
++++ b/package/python-ipdb/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_IPDB
+ 	bool "python-ipdb"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_IPYTHON # runtime
+ 	help
+ 	  IPython-enabled pdb.
+diff --git a/package/python-ipdb/python-ipdb.hash b/package/python-ipdb/python-ipdb.hash
+index 7d483e1777..1e8a45fbd6 100644
+--- a/package/python-ipdb/python-ipdb.hash
++++ b/package/python-ipdb/python-ipdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ipdb/json
+-md5  4f5ffb71cd6551319acf8cbceabd8936  ipdb-0.13.9.tar.gz
+-sha256  951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5  ipdb-0.13.9.tar.gz
++md5  e624221cbc9261f68f412b748179d5e2  ipdb-0.13.11.tar.gz
++sha256  c23b6736f01fd4586cc2ecbebdf79a5eb454796853e1cd8f2ed3b7b91d4a3e93  ipdb-0.13.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4eeb49de04f4894f8ea1f69a04f500799041b750b3d554c06de5ca877258e734  COPYING.txt
+diff --git a/package/python-ipdb/python-ipdb.mk b/package/python-ipdb/python-ipdb.mk
+index 7828f83020..151a3d45a4 100644
+--- a/package/python-ipdb/python-ipdb.mk
++++ b/package/python-ipdb/python-ipdb.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--READLINE_VERSION = 8.1.2
-+READLINE_VERSION = 8.2
- READLINE_SITE = $(BR2_GNU_MIRROR)/readline
- READLINE_INSTALL_STAGING = YES
- READLINE_DEPENDENCIES = ncurses host-autoconf
+-PYTHON_IPDB_VERSION = 0.13.9
++PYTHON_IPDB_VERSION = 0.13.11
+ PYTHON_IPDB_SOURCE = ipdb-$(PYTHON_IPDB_VERSION).tar.gz
+-PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/fc/56/9f67dcd4a4b9960373173a31be1b8c47fe351a1c9385677a7bdd82810e57
++PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/23/b2/c972cc266b0ba8508b42dab7f5dea1be03ea32213258441bf1b00baca555
+ PYTHON_IPDB_SETUP_TYPE = setuptools
+ PYTHON_IPDB_LICENSE = BSD-3-Clause
+ PYTHON_IPDB_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
