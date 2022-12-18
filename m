@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51757C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A5FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA07A40986;
-	Mon, 20 Feb 2023 22:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA07A40986
+	by smtp4.osuosl.org (Postfix) with ESMTP id 765D74ED91;
+	Mon, 20 Feb 2023 22:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 765D74ED91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4wWR8CrgoIRc; Mon, 20 Feb 2023 22:25:27 +0000 (UTC)
+	with ESMTP id dZItZhzQW9uc; Mon, 20 Feb 2023 22:25:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBD374EDEA;
-	Mon, 20 Feb 2023 22:25:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBD374EDEA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 41C0C1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D8CC4F03A;
+	Mon, 20 Feb 2023 22:25:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D8CC4F03A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 92FC51BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7146C6116F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7146C6116F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40424416DE
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40424416DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vaUt93K1rJx1 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J72lkfvstMib for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A11E361171
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A11E361171
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83C31416D6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83C31416D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 996C48648F; Mon, 20 Feb 2023 20:52:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 728B086494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 09:30:10 +0100
+Date: Sun, 18 Dec 2022 14:27:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 55113b2e487b69d6f6c3e703ea9ef9cce1cc0075
-X-Git-Newrev: cd7d4548cb434c2ed999ed62224d4aaad091c11b
+X-Git-Oldrev: a6105112e82e3ca5162a56aa3a47bf6b49af2e0b
+X-Git-Newrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205203.996C48648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-termcolor: bump
- to version 2.1.1
+Message-Id: <20230220205211.728B086494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-traitlets: bump
+ to version 5.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd7d4548cb434c2ed999ed62224d4aaad091c11b
+commit: https://git.buildroot.net/buildroot/commit/?id=5ebc1545b2f6f192d5abf2d61d9203c3f2095366
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-termcolor/python-termcolor.hash | 4 ++--
- package/python-termcolor/python-termcolor.mk   | 4 ++--
+ package/python-traitlets/python-traitlets.hash | 4 ++--
+ package/python-traitlets/python-traitlets.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
-index 9e0324ed64..73fb9129ed 100644
---- a/package/python-termcolor/python-termcolor.hash
-+++ b/package/python-termcolor/python-termcolor.hash
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 3b48fb6ab8..0c68e04518 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/termcolor/json
--md5  04e4981838535169d19d26a14a76af17  termcolor-2.1.0.tar.gz
--sha256  b80df54667ce4f48c03fe35df194f052dc27a541ebbf2544e4d6b47b5d6949c4  termcolor-2.1.0.tar.gz
-+md5  f7f59efd147dd1ec2a25e667616e8a52  termcolor-2.1.1.tar.gz
-+sha256  67cee2009adc6449c650f6bcf3bdeed00c8ba53a8cda5362733c53e0a39fb70b  termcolor-2.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
+-sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
++md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
++sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
  # Locally computed sha256 checksums
- sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
-diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
-index 8731032fec..d7511d692f 100644
---- a/package/python-termcolor/python-termcolor.mk
-+++ b/package/python-termcolor/python-termcolor.mk
+ sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 71bb775a45..8cda56817f 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TERMCOLOR_VERSION = 2.1.0
-+PYTHON_TERMCOLOR_VERSION = 2.1.1
- PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
--PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/62/1a/e78a930f70dd576f2a7250a98263ac973a80d6f1a395d89328844881a0c0
-+PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/19/da/ff1f0906818a5bd2e69e773d88801ca3c9e92d0d7caa99db1665658819ea
- PYTHON_TERMCOLOR_SETUP_TYPE = pep517
- PYTHON_TERMCOLOR_LICENSE = MIT
- PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
+-PYTHON_TRAITLETS_VERSION = 5.7.0
++PYTHON_TRAITLETS_VERSION = 5.7.1
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+ PYTHON_TRAITLETS_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
