@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 269D3C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:10:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4EBDC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCD4082CAC;
-	Mon, 20 Feb 2023 23:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD4082CAC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72A8282CA5;
+	Mon, 20 Feb 2023 23:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A8282CA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WVTkbsneaQHC; Mon, 20 Feb 2023 23:10:41 +0000 (UTC)
+	with ESMTP id DKigWDbsiZuk; Mon, 20 Feb 2023 23:10:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0C6082C8E;
-	Mon, 20 Feb 2023 23:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C6082C8E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E8D51BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88E1F824CB;
+	Mon, 20 Feb 2023 23:10:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88E1F824CB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AB9291BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE54B4172F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE54B4172F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FBD8612DB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FBD8612DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MnY2JSL0ZrBp for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5cLQ5fm7aRXP for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE5F441730
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE5F441730
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBB37612CF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB37612CF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC01686495; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id D73578648F; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jan 2023 17:58:05 +0100
+Date: Sun, 18 Dec 2022 15:51:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75519b19c8d0763fc02647c6df55c67fbe3ac89e
-X-Git-Newrev: ac2b26fba2ad06fadf14244505319dc5c272906c
+X-Git-Oldrev: f51e1f9522393864ea1543e581e485f2e7c1e683
+X-Git-Newrev: 2a2db09451371d317ee119d742a62817d5f41c5f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205228.DC01686495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/download: fix cargo
- vendoring
+Message-Id: <20230220205212.D73578648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl8723ds-bt: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,97 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac2b26fba2ad06fadf14244505319dc5c272906c
+commit: https://git.buildroot.net/buildroot/commit/?id=2a2db09451371d317ee119d742a62817d5f41c5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit de4cf253752d (package/{rust, rust-bin}: bump to version 1.66.0)
-forgot, despite the big comment above the version strings, to confirm
-that the vendoring was still working.
+This package install the required firmware for enabling the
+Bluetooth device embedded in the RTL8723DS chip.
+The driver is included in Linux main tree and can be enabled
+with the BT_HCIUART_RTL symbol.
 
-Previously, we were adding the vendoring equivalence manually, but in
-commit 04154a651729 (support/download/cargo-post-process: cargo output
-for vendor config), we switched to using the output of "cargo vendor"
-(on stdout) to support cases were the vendoring equivalence would be
-more complex (e.g. when using crates not hosted on crates.io).
-
-With rust until and including 1.65.0, "cargo vendor" would output (for
-crates.io crates) the same output as our manual fixups, except it was
-preceded by an empty line. So, to avoid recompting all our hashes, we
-added a tweak to strip away the leading empty line in 04154a651729.
-
-But rust 1.66.0 includes [0] which changes the output (on stdout) of
-"cargo vendor", where the first empty line is no longer emitted.
-
-This means that our tweak for rust 1.65.0 now strips out an important
-part of the cargo vendor output, which renders the archives invalid, and
-thus generates different archives, which fail to validate against our
-hashes.
-
-Fix this by doing what the comment in the post-process helper states,
-and just keep the whole output of "cargo vendor", by just removing the
-"tail --lines=+2". Since that comment is no longer meaningful, we drop
-it too.
-
-Now, all our 6 cargo-based packages, as well as our 5 python packages
-that have rust code, can be vendored again, without changing our hashes,
-but most importantly, with valid archives.
-
-Still, we keep the comment above the versions strings, in the hope that
-a future bumper will notice and be more careful at validating the
-vendoring.
-
-[0] https://github.com/rust-lang/cargo/pull/11273
-
-Fixes:
-    http://autobuild.buildroot.org/results/bea/beac7674bbc9fd2f8777b5861f65afee9c485753/  (bat)
-    http://autobuild.buildroot.org/results/d1e/d1ec1ebbde115628a4b8b9099544347242a97c1c/  (dust)
-    http://autobuild.buildroot.org/results/f96/f968be895be9ca98b314fdd688ef8d3bdf4e5dfb/  (hyerfine)
-    http://autobuild.buildroot.org/results/a0c/a0cdb6cc9493f5248d98f98b13da854e12adc2be/  (ripgrep)
-    ... and so many others...
-
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Simon Richter <simon.richter@ptwdosimetry.com>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Tested-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
+[Peter: use install -D]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/cargo-post-process | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/rtl8723ds-bt/Config.in         |  6 ++++++
+ package/rtl8723ds-bt/rtl8723ds-bt.hash |  2 ++
+ package/rtl8723ds-bt/rtl8723ds-bt.mk   | 18 ++++++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-index 186e9eb69b..21a6be8dbe 100755
---- a/support/download/cargo-post-process
-+++ b/support/download/cargo-post-process
-@@ -25,25 +25,11 @@ post_process_unpack "${base_name}" "${output}"
- pushd "${base_name}" > /dev/null
- 
- # Create the local .cargo/config with vendor info
--#
--# The first line of the output to stdout is empty.
--# So skip it to have the file start with the vendoring
--# configuration (`tail --lines=+2`).
--#
--# NOTE:
--#   There is  a patch for cargo to remove the first empty line:
--#   See: https://github.com/rust-lang/cargo/pull/11273
--#
--#   The patch already landed in +nightly and will end up
--#   in +stable soon.
--#
--# ->  When updating rust/cargo, the call to `tail` must be removed.
--#
- mkdir -p .cargo/
- cargo vendor \
-     --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
-     --locked VENDOR \
--    | tail --lines=+2 | tee .cargo/config
-+    | tee .cargo/config
- 
- popd > /dev/null
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3a0e3c14ab..b52a065dbc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -185,6 +185,7 @@ F:	package/qt5/qt5coap/
+ F:	package/qt5/qt5knx/
+ F:	package/qt5/qt5mqtt/
+ F:	package/rtl8723ds/
++F:	package/rtl8723ds-bt/
+ F:	package/sam-ba/
+ F:	package/sshguard/
+ F:	package/sunwait/
+diff --git a/package/Config.in b/package/Config.in
+index 914c3584e9..999feae08a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -585,6 +585,7 @@ endmenu
+ 	source "package/rtl8192eu/Config.in"
+ 	source "package/rtl8723bu/Config.in"
+ 	source "package/rtl8723ds/Config.in"
++	source "package/rtl8723ds-bt/Config.in"
+ 	source "package/rtl8812au-aircrack-ng/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+diff --git a/package/rtl8723ds-bt/Config.in b/package/rtl8723ds-bt/Config.in
+new file mode 100644
+index 0000000000..0a604310c0
+--- /dev/null
++++ b/package/rtl8723ds-bt/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_RTL8723DS_BT
++	bool "rtl8723ds-bt"
++	help
++	  rtl8723ds UART attached Bluetooth module firmware.
++
++	  https://github.com/wsyco/RTL8723DS_BT_Linux
+diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.hash b/package/rtl8723ds-bt/rtl8723ds-bt.hash
+new file mode 100644
+index 0000000000..1ec4e350f9
+--- /dev/null
++++ b/package/rtl8723ds-bt/rtl8723ds-bt.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  9e70a981946abeeb6437d9a27d8437cea15aa4df72f8d56ded0ae28af484d2f4  rtl8723ds-bt-14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08.tar.gz
+diff --git a/package/rtl8723ds-bt/rtl8723ds-bt.mk b/package/rtl8723ds-bt/rtl8723ds-bt.mk
+new file mode 100644
+index 0000000000..423ad74df5
+--- /dev/null
++++ b/package/rtl8723ds-bt/rtl8723ds-bt.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# rtl8723ds-bt
++#
++################################################################################
++
++RTL8723DS_BT_VERSION = 14cedf3a9fec1aa8c500fa52f3e3acc433cbcf08
++RTL8723DS_BT_SITE = $(call github,wsyco,RTL8723DS_BT_Linux,$(RTL8723DS_BT_VERSION))
++RTL8723DS_BT_LICENSE = PROPRIETARY
++
++define RTL8723DS_BT_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 -D $(@D)/8723D/rtl8723d_fw \
++		$(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_fw.bin
++	$(INSTALL) -m 644 -D $(@D)/8723D/rtl8723d_config \
++		$(TARGET_DIR)/lib/firmware/rtl_bt/rtl8723ds_config.bin
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
