@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9787EC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A15C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33139812D8;
-	Mon, 20 Feb 2023 23:03:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33139812D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAF5B822EE;
+	Mon, 20 Feb 2023 23:03:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAF5B822EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9u7cN4I6BDAn; Mon, 20 Feb 2023 23:03:24 +0000 (UTC)
+	with ESMTP id bYnVc0JP_LN1; Mon, 20 Feb 2023 23:03:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE3E812F4;
-	Mon, 20 Feb 2023 23:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE3E812F4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 99DCE1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5E0D8269C;
+	Mon, 20 Feb 2023 23:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5E0D8269C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 915881BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D29EB41727
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D29EB41727
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A2536129F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A2536129F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NmO-B2N1ycUE for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hiJzF4GRNNvZ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35F40411A1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35F40411A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81461612B7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81461612B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30F5D86495; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+ id 7F937828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:23:14 +0100
+Date: Sun, 18 Dec 2022 14:40:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6bee8635d90f3f9e3d04e03a9db2f37a387e077c
-X-Git-Newrev: 848450f32bd3b877a7529f72e23c1d967f717552
+X-Git-Oldrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
+X-Git-Newrev: 4b869587c6c88a15dc2ecf6c417896de18501a17
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.30F5D86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lsof: bump to version
- 4.96.5
+Message-Id: <20230220205211.7F937828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pip: bump to
+ version 22.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=848450f32bd3b877a7529f72e23c1d967f717552
+commit: https://git.buildroot.net/buildroot/commit/?id=4b869587c6c88a15dc2ecf6c417896de18501a17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lsof/lsof.hash | 2 +-
- package/lsof/lsof.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-index 9649e24f7f..29cf443a24 100644
---- a/package/lsof/lsof.hash
-+++ b/package/lsof/lsof.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2753fc01452a3d2ee665e8365afdac0e9683197f3ec06231aa684a48b286d11c  lsof-4.96.3.tar.gz
-+sha256  e9030af1123ff052ab69e12ef55b8a17dc47ac4bccfba85ee1ca1f31acf29607  lsof-4.96.5.tar.gz
- sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 8c8c46c4ed..fd5887141b 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index d1442ca39d..b41ce47d4c 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5  f0dd02265e7ccd2f8758c840fba64810  pip-22.3.tar.gz
+-sha256  8182aec21dad6c0a49a2a3d121a87cd524b950e0b6092b181625f07ebdde7530  pip-22.3.tar.gz
++md5  996f58a94fe0b8b82b6795c42bd171ba  pip-22.3.1.tar.gz
++sha256  65fd48317359f3af8e593943e6ae1506b66325085ea64b706a998c6e83eeaf38  pip-22.3.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 0f2c5d8e02..8cf3aaa3ec 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LSOF_VERSION = 4.96.3
-+LSOF_VERSION = 4.96.5
- LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
- LSOF_LICENSE = lsof license
- # License is repeated in each file, this is a relatively small one.
+-PYTHON_PIP_VERSION = 22.3
++PYTHON_PIP_VERSION = 22.3.1
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/f8/08/7f92782ff571c7c7cb6c5eeb8ebbb1f68cb02bdb24e55c5de4dd9ce98bc3
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/a3/50/c4d2727b99052780aad92c7297465af5fe6eec2dbae490aa9763273ffdc1
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
