@@ -1,60 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91E56C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70E2C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 22:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0D64408B6;
-	Sun, 18 Dec 2022 22:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0D64408B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E5060737;
+	Sun, 18 Dec 2022 22:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E5060737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6PJUyJfMWH47; Sun, 18 Dec 2022 22:03:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FDjv8Jagviv5; Sun, 18 Dec 2022 22:03:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1774340340;
-	Sun, 18 Dec 2022 22:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1774340340
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7870460615;
+	Sun, 18 Dec 2022 22:03:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7870460615
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ADF2B1BF38E
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 23B5B1BF38E
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89A1C403B7
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89A1C403B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C9E840167
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 22:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C9E840167
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rOsNa0Umscho for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 22:03:24 +0000 (UTC)
+ with ESMTP id EkWTsbf0DS9b for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 22:03:25 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59E6540167
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59E6540167
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00BF040396
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 00BF040396
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 22:03:24 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout08.t-online.de (Postfix) with SMTP id 5D938116A;
- Sun, 18 Dec 2022 23:03:20 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd75.t-online.de
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout10.t-online.de (Postfix) with SMTP id B78DC10775;
+ Sun, 18 Dec 2022 23:03:22 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p71kc-2cvCYz0; Sun, 18 Dec 2022 23:03:18 +0100
+ esmtp id 1p71kc-0FudTl0; Sun, 18 Dec 2022 23:03:18 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36338)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p71kc-00019N-0F;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p71kc-00019N-0N;
  Sun, 18 Dec 2022 23:03:18 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 23:03:17 +0100
-Message-Id: <20221218220318.563479-1-bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2022 23:03:18 +0100
+Message-Id: <20221218220318.563479-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221218220318.563479-1-bernd.kuhls@t-online.de>
+References: <20221218220318.563479-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671400998-2FFFE535-244EBA9A/0/0 CLEAN NORMAL
-X-TOI-MSGID: 16cefb9d-3cf1-4d35-932b-094db1ee0b17
-Subject: [Buildroot] [PATCH 1/2] package/linux-firmware: add RTL8125B NIC
- firmware
+X-TOI-EXPURGATEID: 150726::1671400998-AA7FE1D1-3D49166A/0/0 CLEAN NORMAL
+X-TOI-MSGID: c1e66546-ba73-4316-b0a9-8e5c3bb06bc5
+Subject: [Buildroot] [PATCH 2/2] package/linux-firmware: bump to version
+ 20221214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,26 +74,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed due to kernel commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0439297be95111cf9ef5ece2091af16d140ce2ef
+Update WHENCE file hash due to date/firmware file updates:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=32d8681d21f2eef052cadfdfafc47e02eed6c2b2
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-firmware/linux-firmware.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 321436fb61..6bbc2f9c77 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  c0ddffbbcf30f2e015bddd5c6d3ce1f13976b906aceabda4a57e3c41a3190701  linux-firmware-20221109.tar.xz
++sha256  e793783e92acbde549965521462d1d1327827360664cf242dbda08f075654331  linux-firmware-20221214.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -35,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  3461a8c8bddaa7b77f489f339abf90e4930fc0cde27915324781d12bd0828f1c  WHENCE
++sha256  744babd4eae138ccfb5bd343b1589912b9839274f8a794af0b6c9b451df73579  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 200b4ca564..526e8c1c44 100644
+index 526e8c1c44..6990ef38ad 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -584,6 +584,7 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8107e-1.fw \
- 	rtl_nic/rtl8107e-2.fw \
- 	rtl_nic/rtl8125a-3.fw \
-+	rtl_nic/rtl8125b-2.fw \
- 	rtl_nic/rtl8168d-1.fw \
- 	rtl_nic/rtl8168d-2.fw \
- 	rtl_nic/rtl8168e-1.fw \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20221109
++LINUX_FIRMWARE_VERSION = 20221214
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 -- 
 2.34.1
 
