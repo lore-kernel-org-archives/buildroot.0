@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6713C3DA71
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D386EC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92C0960B5D;
-	Sun, 18 Dec 2022 13:43:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C0960B5D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48047408FB;
+	Sun, 18 Dec 2022 13:44:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48047408FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gckIz9rfj5Ds; Sun, 18 Dec 2022 13:43:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zA2_-4xKdqJC; Sun, 18 Dec 2022 13:44:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C21F860B0C;
-	Sun, 18 Dec 2022 13:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21F860B0C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B9E01BF5A7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F99F408FF;
+	Sun, 18 Dec 2022 13:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F99F408FF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 984221BF852
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67A4460B1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E746409AE
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67A4460B1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E746409AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UpjvruC6iPWt for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Rnv_vazZmt2 for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8ADBB60692
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B2CE408FB
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ADBB60692
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2CE408FB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 791D0867C5; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
+ id 66589867C3; Sun, 18 Dec 2022 13:43:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:40:24 +0100
+Date: Sun, 18 Dec 2022 14:27:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b869587c6c88a15dc2ecf6c417896de18501a17
-X-Git-Newrev: 7165965fe57725c32ce3a9c69274d1a4c2c54c80
+X-Git-Oldrev: a6105112e82e3ca5162a56aa3a47bf6b49af2e0b
+X-Git-Newrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
 X-Patchwork-Hint: ignore
-Message-Id: <20221218134349.791D0867C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ipdb: bump to version
- 0.13.11
+Message-Id: <20221218134349.66589867C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-traitlets: bump to version
+ 5.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7165965fe57725c32ce3a9c69274d1a4c2c54c80
+commit: https://git.buildroot.net/buildroot/commit/?id=5ebc1545b2f6f192d5abf2d61d9203c3f2095366
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop no longer required setuptools runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipdb/Config.in        | 1 -
- package/python-ipdb/python-ipdb.hash | 4 ++--
- package/python-ipdb/python-ipdb.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-traitlets/python-traitlets.hash | 4 ++--
+ package/python-traitlets/python-traitlets.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipdb/Config.in b/package/python-ipdb/Config.in
-index a9d6af1684..9259421c6a 100644
---- a/package/python-ipdb/Config.in
-+++ b/package/python-ipdb/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_IPDB
- 	bool "python-ipdb"
--	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_IPYTHON # runtime
- 	help
- 	  IPython-enabled pdb.
-diff --git a/package/python-ipdb/python-ipdb.hash b/package/python-ipdb/python-ipdb.hash
-index 7d483e1777..1e8a45fbd6 100644
---- a/package/python-ipdb/python-ipdb.hash
-+++ b/package/python-ipdb/python-ipdb.hash
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+index 3b48fb6ab8..0c68e04518 100644
+--- a/package/python-traitlets/python-traitlets.hash
++++ b/package/python-traitlets/python-traitlets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ipdb/json
--md5  4f5ffb71cd6551319acf8cbceabd8936  ipdb-0.13.9.tar.gz
--sha256  951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5  ipdb-0.13.9.tar.gz
-+md5  e624221cbc9261f68f412b748179d5e2  ipdb-0.13.11.tar.gz
-+sha256  c23b6736f01fd4586cc2ecbebdf79a5eb454796853e1cd8f2ed3b7b91d4a3e93  ipdb-0.13.11.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/traitlets/json
+-md5  bae965c0e6ab468079f233e8a9caf581  traitlets-5.7.0.tar.gz
+-sha256  bd0fca5c890a09bf66b33cce67ca14156b080429bc39c7ef26b075a4bd4f9fc3  traitlets-5.7.0.tar.gz
++md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
++sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
  # Locally computed sha256 checksums
- sha256  4eeb49de04f4894f8ea1f69a04f500799041b750b3d554c06de5ca877258e734  COPYING.txt
-diff --git a/package/python-ipdb/python-ipdb.mk b/package/python-ipdb/python-ipdb.mk
-index 7828f83020..151a3d45a4 100644
---- a/package/python-ipdb/python-ipdb.mk
-+++ b/package/python-ipdb/python-ipdb.mk
+ sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+index 71bb775a45..8cda56817f 100644
+--- a/package/python-traitlets/python-traitlets.mk
++++ b/package/python-traitlets/python-traitlets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPDB_VERSION = 0.13.9
-+PYTHON_IPDB_VERSION = 0.13.11
- PYTHON_IPDB_SOURCE = ipdb-$(PYTHON_IPDB_VERSION).tar.gz
--PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/fc/56/9f67dcd4a4b9960373173a31be1b8c47fe351a1c9385677a7bdd82810e57
-+PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/23/b2/c972cc266b0ba8508b42dab7f5dea1be03ea32213258441bf1b00baca555
- PYTHON_IPDB_SETUP_TYPE = setuptools
- PYTHON_IPDB_LICENSE = BSD-3-Clause
- PYTHON_IPDB_LICENSE_FILES = COPYING.txt
+-PYTHON_TRAITLETS_VERSION = 5.7.0
++PYTHON_TRAITLETS_VERSION = 5.7.1
+ PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+-PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/a2/88/5b2a191dd0287b45b933405d951ebfc490a9dfee2494442e5977653ec43b
++PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
+ PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
+ PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
+ PYTHON_TRAITLETS_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
