@@ -1,58 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D858C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DEB0C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 129CE60687;
-	Sun, 18 Dec 2022 13:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 129CE60687
+	by smtp1.osuosl.org (Postfix) with ESMTP id B881881767;
+	Sun, 18 Dec 2022 13:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B881881767
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EpvuqyDnw6BO; Sun, 18 Dec 2022 13:52:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MKJ2Bfgl9BkB; Sun, 18 Dec 2022 13:53:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63EA1605D6;
-	Sun, 18 Dec 2022 13:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63EA1605D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3931D1BF5A7
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:52:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0ABD081499;
+	Sun, 18 Dec 2022 13:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ABD081499
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F07C1BF5A7
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:53:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11A54404ED
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11A54404ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67B28401F1
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67B28401F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wbAAJNClUZdH for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 13:52:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oT3zdbivoc2A for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 13:53:42 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FCDB403C8
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2FCDB403C8
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 024CA400D3
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 024CA400D3
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:53:41 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C1ED41C0007;
- Sun, 18 Dec 2022 13:52:35 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E0F861BF205;
+ Sun, 18 Dec 2022 13:53:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p6u5i-003sf5-UL; Sun, 18 Dec 2022 14:52:34 +0100
+ id 1p6u6l-003slP-13; Sun, 18 Dec 2022 14:53:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20221212144400.2417899-1-james.hilliard1@gmail.com>
-Date: Sun, 18 Dec 2022 14:52:34 +0100
-In-Reply-To: <20221212144400.2417899-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Mon, 12 Dec 2022 07:44:00 -0700")
-Message-ID: <874jtsn7j1.fsf@dell.be.48ers.dk>
+To: Brandon Maier via buildroot <buildroot@buildroot.org>
+References: <20221212184925.11578-1-brandon.maier@collins.com>
+Date: Sun, 18 Dec 2022 14:53:39 +0100
+In-Reply-To: <20221212184925.11578-1-brandon.maier@collins.com> (Brandon Maier
+ via buildroot's message of "Mon, 12 Dec 2022 12:49:25 -0600")
+Message-ID: <87zgbklsws.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 0.14.5
+Subject: Re: [Buildroot] [PATCH 1/1] package/mtd: add lsmtd option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,15 +63,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Brandon" == Brandon Maier via buildroot <buildroot@buildroot.org> writes:
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > lsmtd is a new utility added in v2.1.0[1].
+ > [1] http://git.infradead.org/mtd-utils.git/commit/c26ce774a7209012c0505ee841d54898c6665e20
+
+ > Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 
 Committed, thanks.
 
