@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73BABC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B0EC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 329FF81263;
-	Mon, 20 Feb 2023 23:02:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 329FF81263
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD7D282628;
+	Mon, 20 Feb 2023 23:02:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD7D282628
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OsqpBy-xWC5n; Mon, 20 Feb 2023 23:02:07 +0000 (UTC)
+	with ESMTP id dQk8cA-aBzCI; Mon, 20 Feb 2023 23:02:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E33682310;
-	Mon, 20 Feb 2023 23:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E33682310
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB2558266A;
+	Mon, 20 Feb 2023 23:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB2558266A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 79AB71BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C5AB1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1742B612C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EF6961023
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1742B612C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EF6961023
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o_Ux6Eh3M763 for <buildroot@lists.busybox.net>;
+ with ESMTP id BoosfPlCaG6c for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B03F6129D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3030B6128C
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B03F6129D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3030B6128C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E8D5828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 1DBCC86494; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:33:11 +0100
+Date: Sun, 18 Dec 2022 11:32:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b382fb4a0467a329c22e01a3feafe8029dfe3811
-X-Git-Newrev: de93736550f8443925dc218b04f82daedfc63c79
+X-Git-Oldrev: 1975c531764828fbdaff673e4cf1f25ea009aa2c
+X-Git-Newrev: b382fb4a0467a329c22e01a3feafe8029dfe3811
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.2E8D5828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libX11:
- bump version to 1.8.3
+Message-Id: <20230220205211.1DBCC86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de93736550f8443925dc218b04f82daedfc63c79
+commit: https://git.buildroot.net/buildroot/commit/?id=b382fb4a0467a329c22e01a3feafe8029dfe3811
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003305.html
+https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 4f5027d62d..62b67ad544 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d33d492ba7..e5988cad5e 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.0
++MESA3D_HEADERS_VERSION = 22.3.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 77223676ea..613ebce89f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003253.html
--sha256  ed91d573d570db83b8ae546f4890dccfcd0b9dfe1e50a1b401b63a74c152ed04  libX11-1.8.2.tar.xz
--sha512  662ee8043d9ba27df82f647515b701d6f302a52715f21afdaba391f3b70691753e3649e7ff8322e07858be4297df9cbb19227958d676ed6dea198cce64330d1d  libX11-1.8.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003305.html
-+sha256  e31565c84006b6b8e01dc9399c806085739710bc2db2e0930f1511ed9d6585bd  libX11-1.8.3.tar.xz
-+sha512  bc862338fed855986659e9ffa641db6b36c3ac9abced590d1b164e3cc24446671936e3688cdca18393129c4ea41777977eeb37e87d8edc14d6cc5d194a9c0325  libX11-1.8.3.tar.xz
- # Locally computed
- sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 26d4b4d306..3bb3fffce0 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-November/000695.html
+-sha256  644bf936584548c2b88762111ad58b4aa3e4688874200e5a4eb74e53ce301746  mesa-22.3.0.tar.xz
+-sha512  bf4d344459f97d266a5943b33aecf062b0825e13c1617afdab71c4ba6a87a201440761c9a32a6e0060910a0917122e3f4d29f666d6b94a38a71c94b9ff3ab9da  mesa-22.3.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
++sha256  3c9cd611c0859d307aba0659833386abdca4c86162d3c275ba5be62d16cf31eb  mesa-22.3.1.tar.xz
++sha512  8a7aee67f6351de293d23425229eb7c42d6918fe9ffb46c6e5df9609f79633c98ab78e892507fe48055c51fa88bf103d7b7baa58e826b1758f66067048baed5b  mesa-22.3.1.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c3bd44c2fa..b6f1214102 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.8.2
-+XLIB_LIBX11_VERSION = 1.8.3
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.0
++MESA3D_VERSION = 22.3.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
