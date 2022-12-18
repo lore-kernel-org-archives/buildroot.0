@@ -1,57 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1970C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:40:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 831FBC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 13:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7867481497;
-	Sun, 18 Dec 2022 13:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7867481497
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a2LJPuVMNzf5; Sun, 18 Dec 2022 13:40:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0E4281493;
-	Sun, 18 Dec 2022 13:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0E4281493
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B14701BF5A7
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:40:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9ACE360B0C
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ACE360B0C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15F7E60692;
+	Sun, 18 Dec 2022 13:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15F7E60692
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GSFVkQFiJ_lB for <buildroot@lists.busybox.net>;
- Sun, 18 Dec 2022 13:40:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZuzqYhd3O17z; Sun, 18 Dec 2022 13:43:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45AF560B0C;
+	Sun, 18 Dec 2022 13:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45AF560B0C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11F9F1BF5A7
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EED204015F
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 13:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EED204015F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i8Mxb4uQyGbt for <buildroot@lists.busybox.net>;
+ Sun, 18 Dec 2022 13:43:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD54860692
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD54860692
- for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D66400D3
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08D66400D3
+ for <buildroot@buildroot.org>; Sun, 18 Dec 2022 13:43:10 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8DD1B240005;
- Sun, 18 Dec 2022 13:40:41 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17BBC20007;
+ Sun, 18 Dec 2022 13:43:07 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p6tuC-003riW-BG; Sun, 18 Dec 2022 14:40:40 +0100
+ id 1p6twZ-003rzY-75; Sun, 18 Dec 2022 14:43:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20221214144244.2996965-1-james.hilliard1@gmail.com>
-Date: Sun, 18 Dec 2022 14:40:40 +0100
-In-Reply-To: <20221214144244.2996965-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Wed, 14 Dec 2022 07:42:44 -0700")
-Message-ID: <87fsdcomnb.fsf@dell.be.48ers.dk>
+To: Paul Cercueil <paul@crapouillou.net>
+References: <20221214171754.178428-1-paul@crapouillou.net>
+Date: Sun, 18 Dec 2022 14:43:07 +0100
+In-Reply-To: <20221214171754.178428-1-paul@crapouillou.net> (Paul Cercueil's
+ message of "Wed, 14 Dec 2022 18:17:54 +0100")
+Message-ID: <87bko0omj8.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ipdb: bump to version
- 0.13.11
+Subject: Re: [Buildroot] [PATCH] package/lightning: bump version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,18 +63,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
 
- > Drop no longer required setuptools runtime dependency.
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Notable changes in this new version include support for the Apple
+ > Aarch64 ABI, and compare-and-swap atomic instructions.
 
-Committed, thanks.
+ > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+ > ---
+ >  ...e.am-don-t-install-lightning.h-twice.patch | 38 -------------------
+ >  package/lightning/lightning.hash              |  2 +-
+ >  package/lightning/lightning.mk                |  2 +-
+ >  3 files changed, 2 insertions(+), 40 deletions(-)
+ >  delete mode 100644 package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+
+ > diff --git a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch b/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+ > deleted file mode 100644
+ > index fb5299c25f..0000000000
+ > --- a/package/lightning/0001-include-Makefile.am-don-t-install-lightning.h-twice.patch
+ > +++ /dev/null
+ > @@ -1,38 +0,0 @@
+ > -From 604c931bc673c507254a84c0f423c9ec8ce6e3a1 Mon Sep 17 00:00:00 2001
+
+You drop the patch tweaking include/Makefile.am ..
+
+ > +++ b/package/lightning/lightning.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIGHTNING_VERSION = 2.1.3
+ > +LIGHTNING_VERSION = 2.2.0
+ >  LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
+ >  LIGHTNING_LICENSE = LGPL-3.0+
+ >  LIGHTNING_LICENSE_FILES = COPYING.LESSER
+
+But you didn't remove LIGHTNING_AUTORECONF = YES
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
