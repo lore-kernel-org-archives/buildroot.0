@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E502DC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 981BFC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 18 Dec 2022 10:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97C4F81839;
-	Sun, 18 Dec 2022 10:45:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97C4F81839
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43230817EB;
+	Sun, 18 Dec 2022 10:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43230817EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E03I3sfAZXS4; Sun, 18 Dec 2022 10:45:05 +0000 (UTC)
+	with ESMTP id ZrQQmU1J7Bks; Sun, 18 Dec 2022 10:45:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF3DD817ED;
-	Sun, 18 Dec 2022 10:45:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF3DD817ED
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08A251BF5A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50A77818A7;
+	Sun, 18 Dec 2022 10:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50A77818A7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D8221BF5A9
  for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C1874098A
- for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C1874098A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E58681761
+ for <buildroot@lists.busybox.net>; Sun, 18 Dec 2022 10:43:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E58681761
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id egicpq9J73Hu for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OiBGmRgt3I-o for <buildroot@lists.busybox.net>;
  Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C68040983
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F1F281765
  for <buildroot@buildroot.org>; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C68040983
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F1F281765
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 495FB8670A; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
+ id 5D43386724; Sun, 18 Dec 2022 10:43:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:31:23 +0100
+Date: Sun, 18 Dec 2022 11:32:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9febd64bb01f0660a9ac877d2484525438955333
-X-Git-Newrev: c2baa583c350b9d594e87f9cab1db597789904df
+X-Git-Oldrev: 1975c531764828fbdaff673e4cf1f25ea009aa2c
+X-Git-Newrev: b382fb4a0467a329c22e01a3feafe8029dfe3811
 X-Patchwork-Hint: ignore
-Message-Id: <20221218104346.495FB8670A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
- 2.28.2
+Message-Id: <20221218104346.5D43386724@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,153 +58,65 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6663638091686059983=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6663638091686059983==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c2baa583c350b9d594e87f9cab1db597789904df
+commit: https://git.buildroot.net/buildroot/commit/?id=b382fb4a0467a329c22e01a3feafe8029dfe3811
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following security issues:
-- Fix potential heap buffer overread and overwrite in DTLS if
-  MBEDTLS_SSL_DTLS_CONNECTION_ID is enabled and
-  MBEDTLS_SSL_CID_IN_LEN_MAX > 2 * MBEDTLS_SSL_CID_OUT_LEN_MAX.
-- An adversary with access to precise enough information about memory
-  accesses (typically, an untrusted operating system attacking a secure
-  enclave) could recover an RSA private key after observing the victim
-  performing a single private-key operation if the window size used for
-  the exponentiation was 3 or smaller.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
 
-Drop patch (already in version:
-https://github.com/Mbed-TLS/mbedtls/commit/9d9d45c6b2aeaedfdfdadfec3d05d168db685968)
-
-https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ----------------------
- package/mbedtls/mbedtls.hash                       |  4 +-
- package/mbedtls/mbedtls.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 77 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-deleted file mode 100644
-index 60bf53f6e4..0000000000
---- a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Mon, 27 Aug 2018 22:50:57 +0200
--Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes #1910
--
--With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
--assembly fails to build with GCC < 5 in PIC mode with the following error:
--
--include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
--
--This is because older GCC versions treated the x86 ebx register (which is
--used for the GOT) as a fixed reserved register when building as PIC.
--
--This is fixed by an improved register allocator in GCC 5+.  From the release
--notes:
--
--Register allocation improvements: Reuse of the PIC hard register, instead of
--using a fixed register, was implemented on x86/x86-64 targets.  This
--improves generated PIC code performance as more hard registers can be used.
--
--https://www.gnu.org/software/gcc/gcc-5/changes.html
--
--As a workaround, detect this situation and disable the inline assembly,
--similar to the MULADDC_CANNOT_USE_R7 logic.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-----
-- include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
-- 1 file changed, 17 insertions(+), 1 deletion(-)
--
--diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
--index b587317d9..74a2d29be 100644
----- a/include/mbedtls/bn_mul.h
--+++ b/include/mbedtls/bn_mul.h
--@@ -50,13 +50,29 @@
-- #if defined(__GNUC__) && \
--     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
-- 
--+/*
--+ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
--+ * fixed reserved register when building as PIC, leading to errors
--+ * like: bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
--+ *
--+ * This is fixed by an improved register allocator in GCC 5+. From the
--+ * release notes:
--+ * Register allocation improvements: Reuse of the PIC hard register,
--+ * instead of using a fixed register, was implemented on x86/x86-64
--+ * targets. This improves generated PIC code performance as more hard
--+ * registers can be used.
--+ */
--+#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
--+#define MULADDC_CANNOT_USE_EBX
--+#endif
--+
-- /*
--  * Disable use of the i386 assembly code below if option -O0, to disable all
--  * compiler optimisations, is passed, detected with __OPTIMIZE__
--  * This is done as the number of registers used in the assembly code doesn't
--  * work with the -O0 option.
--  */
---#if defined(__i386__) && defined(__OPTIMIZE__)
--+#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
-- 
-- #define MULADDC_INIT                        \
--     asm(                                    \
---- 
--2.11.0
--
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 38182fe119..876cd7b77e 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.1:
--sha256  6797a7b6483ef589deeab8d33d401ed235d7be25eeecda1be8ddfed406d40ff4  mbedtls-2.28.1.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
-+sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 49ea7886f6..7a605ac5b1 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d33d492ba7..e5988cad5e 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.0
++MESA3D_HEADERS_VERSION = 22.3.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 77223676ea..613ebce89f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-November/000695.html
+-sha256  644bf936584548c2b88762111ad58b4aa3e4688874200e5a4eb74e53ce301746  mesa-22.3.0.tar.xz
+-sha512  bf4d344459f97d266a5943b33aecf062b0825e13c1617afdab71c4ba6a87a201440761c9a32a6e0060910a0917122e3f4d29f666d6b94a38a71c94b9ff3ab9da  mesa-22.3.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
++sha256  3c9cd611c0859d307aba0659833386abdca4c86162d3c275ba5be62d16cf31eb  mesa-22.3.1.tar.xz
++sha512  8a7aee67f6351de293d23425229eb7c42d6918fe9ffb46c6e5df9609f79633c98ab78e892507fe48055c51fa88bf103d7b7baa58e826b1758f66067048baed5b  mesa-22.3.1.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c3bd44c2fa..b6f1214102 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MBEDTLS_VERSION = 2.28.1
-+MBEDTLS_VERSION = 2.28.2
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-
---===============6663638091686059983==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.0
++MESA3D_VERSION = 22.3.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6663638091686059983==--
