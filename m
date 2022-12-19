@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C5F9C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57158C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35DFD433BC;
-	Mon, 20 Feb 2023 22:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35DFD433BC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 029A74F0D1;
+	Mon, 20 Feb 2023 22:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 029A74F0D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PyN2-7oqHUJC; Mon, 20 Feb 2023 22:30:17 +0000 (UTC)
+	with ESMTP id 2lowJ0OF6N9m; Mon, 20 Feb 2023 22:30:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 029264F0CD;
-	Mon, 20 Feb 2023 22:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 029264F0CD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70BDB1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6C664F0DF;
+	Mon, 20 Feb 2023 22:30:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6C664F0DF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CDA41BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FF1A611BD
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF1A611BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2585416EB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2585416EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yoqwQShrioMC for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QuoUjCjY2TXx for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75B5B61185
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75B5B61185
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28E024015F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28E024015F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70FE68648F; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+ id 24CF786494; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:25:18 +0100
+Date: Mon, 19 Dec 2022 09:59:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bec9e5f7852f6fefb234877dff45916d921c4b18
-X-Git-Newrev: b55dfdb286ddb7fb4f35c20b731a4c93bd3ff201
+X-Git-Oldrev: 3d923d5f7e61b36f7deee32e1e09b279efd5dcd3
+X-Git-Newrev: 163f933692f616c1b73d060aa03bd8323956692f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205204.70FE68648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
- support for Intel 6/6E WiFi firmware
+Message-Id: <20230220205213.24CF786494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcoap: bump to
+ version 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b55dfdb286ddb7fb4f35c20b731a4c93bd3ff201
+commit: https://git.buildroot.net/buildroot/commit/?id=163f933692f616c1b73d060aa03bd8323956692f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 11 insertions(+)
+Update hash of LICENSE file (update in year:
+https://github.com/obgm/libcoap/commit/43bfbea924e0f5220c4121487df980afe7159346)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 8ce71140da..4b415a7da2 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -268,6 +268,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_9XXX
- 	  Firmware files for the Intel Wifi 9xxx devices supported by
- 	  the iwlwifi kernel driver.
+https://github.com/obgm/libcoap/blob/v4.3.1/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcoap/libcoap.hash | 4 ++--
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 4a5bcaa7ff..e0006b62af 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  1a195adacd6188d3b71c476e7b21706fef7f3663ab1fb138652e8da49a9ec556  libcoap-4.3.0.tar.gz
++sha256  074a71deca01e06d3acb00a1416d0fbeb87d130f40a3c0f6fda3a5c711855dca  libcoap-4.3.1.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  c5625e704d52deade1c9b2d7931ac8593be147ba63af62b53b8c7e309b7eaeb9  LICENSE
++sha256  5711e8bf7e94b59fcf0681d0f73752111bc196563b60f8568f19dacd0213192b  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index edcc1bbef8..c0a941a0c8 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6E
-+	bool "Intel iwlwifi 6/6E"
-+	help
-+	  Firmware files for the Intel Wi-Fi 6 and Wi-Fi 6E devices
-+	  supported by the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
- 	bool "Libertas SD 8686 v8"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 672a536c4a..200b4ca564 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -514,6 +514,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-9???-*.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6E),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-so-a0-gf-a0*.{ucode,pnvm}
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BROADCOM_TIGON3),y)
- LINUX_FIRMWARE_FILES += tigon/*
- # No license file; the license is in the file WHENCE
+-LIBCOAP_VERSION = 4.3.0
++LIBCOAP_VERSION = 4.3.1
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
