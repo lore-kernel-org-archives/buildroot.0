@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2189C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57AE4C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96ACE82EAD;
-	Mon, 20 Feb 2023 23:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96ACE82EAD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01C7E82ECF;
+	Mon, 20 Feb 2023 23:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01C7E82ECF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id capOx9Oy1Yu9; Mon, 20 Feb 2023 23:12:08 +0000 (UTC)
+	with ESMTP id G6HAUUQprEas; Mon, 20 Feb 2023 23:12:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB54282EDB;
-	Mon, 20 Feb 2023 23:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB54282EDB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 835DC1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 399F982F37;
+	Mon, 20 Feb 2023 23:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 399F982F37
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BC411BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92D5541734
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92D5541734
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B4D5612DF
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B4D5612DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s3_wS-nxesFG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5dXucqYQ6JBZ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D886A41730
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D886A41730
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B30C612D8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B30C612D8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5EA286495; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+ id 68EAF828C8; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:10:38 +0100
+Date: Mon, 19 Dec 2022 22:25:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e35750b5246e1cd7bce0c53b6e32cca592c4f3ca
-X-Git-Newrev: 6e69d76aae479ab2d5f15baa79f25fd480e12eab
+X-Git-Oldrev: dfbe4215cd19cfe95922ba8536b61f44a6ce8140
+X-Git-Newrev: 73125c7412d4c73eb69d237f059718a1d1ba0bd8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205229.C5EA286495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-http-daemon: bump
- version to 6.14
+Message-Id: <20230220205213.68EAF828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/sipeed_licheee_rv_defconfig: use 6.1 kernel headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e69d76aae479ab2d5f15baa79f25fd480e12eab
+commit: https://git.buildroot.net/buildroot/commit/?id=73125c7412d4c73eb69d237f059718a1d1ba0bd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Updated license hash due to typo/whitespace-only fixes in license file:
-https://github.com/libwww-perl/HTTP-Daemon/commit/605bc6efdabf39d2c9f9c7f613bf88d497454e5a#diff-b4668a52683f65fbc0528f6590ba160c9c64c88c302b6262c506266eb1d35180
+The kernel used is based on 6.1-rc3, so use the recently introduced 6.1
+kernel headers version to fix a build issue:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Incorrect selection of kernel headers: expected 6.0.x, got 6.1.x
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
- package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/sipeed_lichee_rv_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
-index f8272a4fce..c19b3b9558 100644
---- a/package/perl-http-daemon/perl-http-daemon.hash
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
--sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
-+md5  3111b0081d08d8b225f52884033de349  HTTP-Daemon-6.14.tar.gz
-+sha256  f0767e7f3cbb80b21313c761f07ad8ed253bce9fa2d0ba806b3fb72d309b2e1d  HTTP-Daemon-6.14.tar.gz
- 
- # computed by scancpan
--sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
-+sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENCE
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
-index e475072628..fe50c768bf 100644
---- a/package/perl-http-daemon/perl-http-daemon.mk
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_HTTP_DAEMON_VERSION = 6.12
-+PERL_HTTP_DAEMON_VERSION = 6.14
- PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
- PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+diff --git a/configs/sipeed_lichee_rv_defconfig b/configs/sipeed_lichee_rv_defconfig
+index f9782f870b..f03a6b4f69 100644
+--- a/configs/sipeed_lichee_rv_defconfig
++++ b/configs/sipeed_lichee_rv_defconfig
+@@ -1,5 +1,5 @@
+ BR2_riscv=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
