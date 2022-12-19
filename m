@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C235C001B2
-	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 22:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47845C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 22:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD98760E51;
-	Mon, 19 Dec 2022 22:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD98760E51
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lm0nSbpmMLso; Mon, 19 Dec 2022 22:13:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 417AA60BF8;
-	Mon, 19 Dec 2022 22:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 417AA60BF8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D4F01BF348
- for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 22:13:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3812441554
- for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 22:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3812441554
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA5CE4155F;
+	Mon, 19 Dec 2022 22:13:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA5CE4155F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3YRjoPbUpx1W for <buildroot@lists.busybox.net>;
- Mon, 19 Dec 2022 22:13:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 293BE40A02
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 293BE40A02
- for <buildroot@buildroot.org>; Mon, 19 Dec 2022 22:13:28 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BC913E0004;
- Mon, 19 Dec 2022 22:13:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p7ONx-008K6d-Rg; Mon, 19 Dec 2022 23:13:25 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8wi-_P930PuF; Mon, 19 Dec 2022 22:13:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF47741295;
+	Mon, 19 Dec 2022 22:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF47741295
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E7361BF348
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 22:13:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1700E60E7B
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 22:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1700E60E7B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yv5a4tdQS2ct for <buildroot@lists.busybox.net>;
+ Mon, 19 Dec 2022 22:13:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4546060BF8
+ for <buildroot@buildroot.org>; Mon, 19 Dec 2022 22:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4546060BF8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3006486A0B; Mon, 19 Dec 2022 22:13:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?K=C3=B6ry?= Maincent <kory.maincent@bootlin.com>
-References: <20221219133930.231407-1-kory.maincent@bootlin.com>
-Date: Mon, 19 Dec 2022 23:13:25 +0100
-In-Reply-To: <20221219133930.231407-1-kory.maincent@bootlin.com>
- (=?utf-8?Q?=22K=C3=B6ry?=
- Maincent"'s message of "Mon, 19 Dec 2022 14:39:30 +0100")
-Message-ID: <87len3ghyy.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/gcnano-binaries: bump version to
- 6.4.9
+To: buildroot@buildroot.org
+Date: Mon, 19 Dec 2022 22:25:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 704c62bbc5d30df80002fdd1f6a63bebc0e1842d
+X-Git-Newrev: bed9b6cd02cf26a8d9b26f876f3f46a7352e6542
+X-Patchwork-Hint: ignore
+Message-Id: <20221219221348.3006486A0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/nezha_defconfig: use 6.1 kernel
+ headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jens Kleintje <scooby22@web.de>, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkvDtnJ5IiA9PSBLw7ZyeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNv
-bT4gd3JpdGVzOgoKID4gRnJvbTogS29yeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGlu
-LmNvbT4KID4gVXBkYXRlIHRvIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiB0aGUgZ2NuYW5vLWJpbmFy
-aWVzIGJsb2JzLCB3aGljaCBhcmUKID4gY29tcGF0aWJsZSB3aXRoIHRoZSBsYXN0IHY1LjE1LXN0
-bTMybXAtcjIga2VybmVsIGZyb20gdGhlCiA+IFNUTWljcm9lbGVjdHJvbmljcyBCU1AuCgogPiBU
-aGUgbWFuYWdlbWVudCBvZiBsaWJyYXJpZXMgbGlua3MgaGF2ZSBub3cgY2hhbmdlZC4gV2UgbW92
-ZWQgb24gZnJvbQogPiBhIHZlcnNpb24gd2l0aCBzZXZlcmFsIGxpbmtzIHByZXNlbnQgYnV0IGZl
-dyBvZiB0aGVtIG1pc3NpbmcgdG8gbm8gbGlua3MKID4gYXQgYWxsLiBOb3csIGFsbCB0aGUgbGlu
-a3MgYXJlIG1hZGUgYnkgdGhlIGJ1aWxkIHN5c3RlbS4gVGhlIGxvb3AKID4gbWVjaGFuaXNtIHRv
-IG1ha2UgdGhlbSBhcmUgaW1wb3J0ZWQgZnJvbSB0aGUgU1QgWW9jdG8gbGF5ZXIuCgogPiBUaGUg
-cGFja2FnZWNvbmZpZyBoYXZlIGFsc28gY2hhbmdlZCwgbm8gbmVlZCB0byB1cGRhdGUgcHJlZml4
-IGFuZCB2ZXJzaW9uCiA+IHZhbHVlIGFueW1vcmUuCgogPiBTaWduZWQtb2ZmLWJ5OiBLb3J5IE1h
-aW5jZW50IDxrb3J5Lm1haW5jZW50QGJvb3RsaW4uY29tPgogPiAtLS0KCiA+IE5vdGVzOgogPiAg
-ICAgQ2hhbmdlIG9uIFYyOiB1cGRhdGUgdGhlIGNvbW1taXQgbWVzc2FnZSB0byBleHBsYWluIHRo
-ZSBjaGFuZ2VzCgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=bed9b6cd02cf26a8d9b26f876f3f46a7352e6542
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The kernel used is based on 6.1-rc3, so use the recently introduced 6.1
+kernel headers version to fix a build issue:
+
+Incorrect selection of kernel headers: expected 6.0.x, got 6.1.x
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/nezha_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/nezha_defconfig b/configs/nezha_defconfig
+index 2936746c49..854392f929 100644
+--- a/configs/nezha_defconfig
++++ b/configs/nezha_defconfig
+@@ -1,5 +1,5 @@
+ BR2_riscv=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/nezha/overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
