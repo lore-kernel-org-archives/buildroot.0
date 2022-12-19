@@ -4,65 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2929EC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 17 Dec 2022 07:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA305C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 20:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E91D82178;
-	Sat, 17 Dec 2022 07:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E91D82178
+	by smtp1.osuosl.org (Postfix) with ESMTP id 308448187F;
+	Mon, 19 Dec 2022 20:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 308448187F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jiIw1i88rNKF; Sat, 17 Dec 2022 07:56:43 +0000 (UTC)
+	with ESMTP id Q7xl8LQ-LGMk; Mon, 19 Dec 2022 20:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9928682175;
-	Sat, 17 Dec 2022 07:56:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9928682175
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF8611BF2BB
- for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 07:56:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 706458146B;
+	Mon, 19 Dec 2022 20:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706458146B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6131B1BF369
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 20:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9D8460B77
- for <buildroot@lists.busybox.net>; Sat, 17 Dec 2022 07:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9D8460B77
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C3BC8146B
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 20:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C3BC8146B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z0FEQEB_54ng for <buildroot@lists.busybox.net>;
- Sat, 17 Dec 2022 07:56:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D371660797
- for <buildroot@uclibc.org>; Sat, 17 Dec 2022 07:56:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D371660797
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id BB9BF83BE5; Sat, 17 Dec 2022 07:56:40 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Sat, 17 Dec 2022 07:56:40 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02.8
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dmrauh@posteo.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15181-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vuUpSU-8gGye for <buildroot@lists.busybox.net>;
+ Mon, 19 Dec 2022 20:23:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6959680C58
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6959680C58
+ for <buildroot@buildroot.org>; Mon, 19 Dec 2022 20:23:16 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ n65-20020a17090a2cc700b0021bc5ef7a14so10044982pjd.0
+ for <buildroot@buildroot.org>; Mon, 19 Dec 2022 12:23:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8GzEICf1JvUA7jivkQA+NceUlMjKxGTBoCIqESs+0Yo=;
+ b=2Oe92BCPay/RoRzmFBUR+SCgk40ybqV6dll2Dwt3TrkA8Xa0j1F3gsYTJ8k8OO+4Vu
+ j2JPj7pnSjPf5Pwos80UbEmqgWj24L9Bd8jTeHhXpsk7a1FEhLrR8vhY/jbfbjWa+lnW
+ uwInksWyk++Ynq7lVK4d5fBuKHGVDX7kc/4xenLySNzUwuQDhQ7TEHk4BF1IMuVRAwSk
+ mMjNu5SosCs3uNhdZ0qugaZQCEkEQwoxiVbfeQTvdHg5V9mNy7mopU+0lQD9fVOR3G5k
+ L6zLqLWpVu52cZ6gkIY7w3e3YKB4u08YPJYhS6XQ9qvZ8JCzhmvr6nvOaGc2BHcd9CnH
+ lGaQ==
+X-Gm-Message-State: AFqh2kpZ8vpm1dqTPkDfikJZ2X6dfabYtI8ayHXiiooG+/SuDGvZkwAe
+ /oDIRI2+5nM5U2Iye7sffFEJHeWZId/6Rg==
+X-Google-Smtp-Source: AMrXdXuKRURxQYjtseGiJDxIX9T/RYMtSZIzd7fRfBtThrScDoqwODDM14UR2fiMMuWljexAS7GruQ==
+X-Received: by 2002:a17:902:e54b:b0:190:f536:e4a0 with SMTP id
+ n11-20020a170902e54b00b00190f536e4a0mr28429282plf.20.1671481395412; 
+ Mon, 19 Dec 2022 12:23:15 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+ by smtp.gmail.com with ESMTPSA id
+ e11-20020a170902ed8b00b00191152c4c6esm4291404plj.152.2022.12.19.12.23.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Dec 2022 12:23:14 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 19 Dec 2022 12:23:08 -0800
+Message-Id: <20221219202308.2597300-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15181] New: Building libcurl fails due to faulty
- package definition
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8GzEICf1JvUA7jivkQA+NceUlMjKxGTBoCIqESs+0Yo=;
+ b=MK/lCkU+qibEnlwRPd1AbHr9qYvYi1p5D0mngBBRKegvPVkxsoaN9KG1XInCmmuQQQ
+ rWU/EHOxHF173FKBygyV8Vw/btGDqkbeqtV0IPBW2h8BdejF1cCcmM+Iz1PDgIelcVAr
+ hCWSFoRlDK5ZSbf3gbWgBFMxrmk0tnREZf6r/++PK+Bw7Bn2Z6CrHWNyzf6qzkwa3AZY
+ XCnlSxfEQ4Cgg8qq5ml3rwtMUsKdCKnq4i0Ozb7/AvLMcQWbmgOUHgkAbT3VzliBIOsF
+ zM33Xp5IXVs8tB4KY9d+ccl/tAy0n0ExXrcit/NDaXTqEmq1G8TV1N1I/+hCPDBt7qre
+ g3zw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=MK/lCkU+
+Subject: [Buildroot] [PATCH] package/libgpg-error: Disable support for non-C
+ languages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,107 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com,
+ Florian Fainelli <f.fainelli@gmail.com>, mmayer@broadcom.com,
+ yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com,
+ fontaine.fabrice@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15181
+The only other language supported is CL (Common Lisp) which buildroot does not
+package yet. This saves 52KB in the final root filesystem.
 
-            Bug ID: 15181
-           Summary: Building libcurl fails due to faulty package
-                    definition
-           Product: buildroot
-           Version: 2022.02.8
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: dmrauh@posteo.de
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ package/libgpg-error/libgpg-error.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Hi all,
-
-I'm trying to compile "libcurl" using Buildroot 2022.02.8 with the following
-relevant options in my .config:
-
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_LIBCURL_OPENSSL=y
-BR2_PACKAGE_OPENSSL=y
-
-
-Unfortunately the build is reproducibly failing during "libcurl-configure" with
-the following symptoms:
-
-...
-configure: PKG_CONFIG_LIBDIR will be set to
-"/home/rauhdomi/build/out/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig"
-checking for openssl options with pkg-config... found
-configure: pkg-config: SSL_LIBS: "-lssl -lcrypto "
-configure: pkg-config: SSL_LDFLAGS: "-L/usr/lib64 "
-configure: pkg-config: SSL_CPPFLAGS: "-I/usr/include "
-checking for HMAC_Update in -lcrypto... no
-checking for HMAC_Init_ex in -lcrypto... no
-checking OpenSSL linking with -ldl... no
-checking OpenSSL linking with -ldl and -lpthread... no
-configure: OPT_OPENSSL:
-/home/rauhdomi/build/out/host/x86_64-buildroot-linux-gnu/sysroot/usr
-configure: OPENSSL_ENABLED: 
-configure: error: --with-openssl was given but OpenSSL could not be detected
-make[1]: *** [package/pkg-generic.mk:283:
-/home/rauhdomi/build/out/build/libcurl-7.84.0/.stamp_configured] Error 1
-make: *** [Makefile:40: _all] Error 2
-
-After poking around for a bit I narrowed it down to the following part of
-libcurl's package definition in Buildroot "libcurl.mk":
-
-# configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
-# native stuff during the rest of configure when target == host.
-# Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
-# are found first.
-LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if
-$(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
-
-Since on my build system "pkgconf" is also installed through my distro's
-package manager (in version 1.8.0), its "libpkgconf.so.3" is used instead of
-the one part of "$(HOST_DIR)/lib", when building "libcurl". Apparently this has
-never been a problem before because the versions were semantically compatible,
-which isn't the case any longer.
-
-I guess this bug has the potential to affect any user having "pkgconf" already
-installed on their system.
-
-My proposal on how to fix the bug would be as follows:
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e241bd1c88..f6f5501f83 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -46,7 +46,7 @@ LIBCURL_DEPENDENCIES += openssl
- # native stuff during the rest of configure when target == host.
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
- # are found first.
--LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if
-$(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)/lib:/usr/lib
-+LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$(if
-$(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)$(HOST_DIR)/lib:/lib:/usr/lib
- LIBCURL_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr \
-        --with-ca-path=/etc/ssl/certs
- else
-
-This way we always make sure that libs part of the SDK generated by Buildroot
-take precedence over the ones coming from the build system.
-
-Best regards,
-Dominik
-
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 86dea6ad2acd..0b7b8df389f9 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -14,7 +14,8 @@ LIBGPG_ERROR_INSTALL_STAGING = YES
+ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+ LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ LIBGPG_ERROR_CONF_OPTS = --disable-tests \
+-		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
++		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
++		--disable-languages
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBGPG_ERROR_CONF_OPTS += --enable-threads
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
