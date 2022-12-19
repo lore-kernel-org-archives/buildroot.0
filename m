@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4FA5C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 09:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FE4C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 09:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CAEA408F7;
-	Mon, 19 Dec 2022 09:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CAEA408F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9AECB40181;
+	Mon, 19 Dec 2022 09:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AECB40181
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y-MKT6OGJD0v; Mon, 19 Dec 2022 09:00:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XV_C_ugPNI2f; Mon, 19 Dec 2022 09:01:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AC684034A;
-	Mon, 19 Dec 2022 09:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC684034A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 58B581BF31B
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6AB94012E;
+	Mon, 19 Dec 2022 09:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6AB94012E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7721C1BF855
  for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 09:00:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 342ED8139D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52CA54012E
  for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 09:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 342ED8139D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52CA54012E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K98P8a170wcq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zSskddE7Au5N for <buildroot@lists.busybox.net>;
  Mon, 19 Dec 2022 09:00:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70AC481280
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7825640147
  for <buildroot@buildroot.org>; Mon, 19 Dec 2022 09:00:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70AC481280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7825640147
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BB298699D; Mon, 19 Dec 2022 09:00:54 +0000 (UTC)
+ id 65F908699E; Mon, 19 Dec 2022 09:00:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Dec 2022 09:59:18 +0100
+Date: Mon, 19 Dec 2022 09:59:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66c2d6d4b43776d4afb62b985a082bf2d75cb708
-X-Git-Newrev: 3d923d5f7e61b36f7deee32e1e09b279efd5dcd3
+X-Git-Oldrev: 3d923d5f7e61b36f7deee32e1e09b279efd5dcd3
+X-Git-Newrev: 163f933692f616c1b73d060aa03bd8323956692f
 X-Patchwork-Hint: ignore
-Message-Id: <20221219090054.5BB298699D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ipcalc: bump to version 1.0.2
+Message-Id: <20221219090054.65F908699E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcoap: bump to version 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d923d5f7e61b36f7deee32e1e09b279efd5dcd3
+commit: https://git.buildroot.net/buildroot/commit/?id=163f933692f616c1b73d060aa03bd8323956692f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.com/ipcalc/ipcalc/-/blob/1.0.2/NEWS
+Update hash of LICENSE file (update in year:
+https://github.com/obgm/libcoap/commit/43bfbea924e0f5220c4121487df980afe7159346)
+
+https://github.com/obgm/libcoap/blob/v4.3.1/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipcalc/ipcalc.hash | 2 +-
- package/ipcalc/ipcalc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcoap/libcoap.hash | 4 ++--
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ipcalc/ipcalc.hash b/package/ipcalc/ipcalc.hash
-index bf9b34a610..50d08239fa 100644
---- a/package/ipcalc/ipcalc.hash
-+++ b/package/ipcalc/ipcalc.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 4a5bcaa7ff..e0006b62af 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  dac080c0773cc14c1d6f818899351d2286cace85751dd9dc704944e54c2c3565  ipcalc-1.0.1.tar.bz2
-+sha256  47c866941916800270fca23496acc9976ca9488ce9053aeaedc5f47c5929b772  ipcalc-1.0.2.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ipcalc/ipcalc.mk b/package/ipcalc/ipcalc.mk
-index dfe35e2cdc..e63e174ce2 100644
---- a/package/ipcalc/ipcalc.mk
-+++ b/package/ipcalc/ipcalc.mk
+-sha256  1a195adacd6188d3b71c476e7b21706fef7f3663ab1fb138652e8da49a9ec556  libcoap-4.3.0.tar.gz
++sha256  074a71deca01e06d3acb00a1416d0fbeb87d130f40a3c0f6fda3a5c711855dca  libcoap-4.3.1.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  c5625e704d52deade1c9b2d7931ac8593be147ba63af62b53b8c7e309b7eaeb9  LICENSE
++sha256  5711e8bf7e94b59fcf0681d0f73752111bc196563b60f8568f19dacd0213192b  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index edcc1bbef8..c0a941a0c8 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPCALC_VERSION = 1.0.1
-+IPCALC_VERSION = 1.0.2
- IPCALC_SITE = $(call gitlab,ipcalc,ipcalc,$(IPCALC_VERSION))
- IPCALC_SOURCE = ipcalc-$(IPCALC_VERSION).tar.bz2
- IPCALC_LICENSE = GPL-2.0+
+-LIBCOAP_VERSION = 4.3.0
++LIBCOAP_VERSION = 4.3.1
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
