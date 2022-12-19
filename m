@@ -1,66 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DB06C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 13:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E48C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 19 Dec 2022 17:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70A59401A1;
-	Mon, 19 Dec 2022 13:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70A59401A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id D295E60A7D;
+	Mon, 19 Dec 2022 17:06:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D295E60A7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ng1Ma56Tnxtl; Mon, 19 Dec 2022 13:39:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yqf9xwTimqPt; Mon, 19 Dec 2022 17:06:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EB1040148;
-	Mon, 19 Dec 2022 13:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EB1040148
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE581BF2C5
- for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 13:39:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0546660E45;
+	Mon, 19 Dec 2022 17:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0546660E45
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F8131BF293
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 17:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FAFA4038D
- for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 13:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FAFA4038D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F34581911
+ for <buildroot@lists.busybox.net>; Mon, 19 Dec 2022 17:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F34581911
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3K8C3ocOPYM3 for <buildroot@lists.busybox.net>;
- Mon, 19 Dec 2022 13:39:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AFB740116
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1AFB740116
- for <buildroot@buildroot.org>; Mon, 19 Dec 2022 13:39:34 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A5BC260005;
- Mon, 19 Dec 2022 13:39:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 19 Dec 2022 14:39:30 +0100
-Message-Id: <20221219133930.231407-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Otv9XQDaR4LP for <buildroot@lists.busybox.net>;
+ Mon, 19 Dec 2022 17:06:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6B4681493
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A6B4681493
+ for <buildroot@buildroot.org>; Mon, 19 Dec 2022 17:06:04 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A22EDE0011;
+ Mon, 19 Dec 2022 17:06:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p7JaS-006tx9-IS; Mon, 19 Dec 2022 18:06:00 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: John Lemonovich <lemonoje@gmail.com>
+References: <CABBCHidJG84Y_tpnSAE7t2qksEj4izv_TRMRLxfNcbADDUw05A@mail.gmail.com>
+ <87sfhcomp4.fsf@dell.be.48ers.dk>
+ <CABBCHifyTV7PV20P8krtmnRaRtwBrLDPuDBej37=AbUmgi-mNg@mail.gmail.com>
+Date: Mon, 19 Dec 2022 18:06:00 +0100
+In-Reply-To: <CABBCHifyTV7PV20P8krtmnRaRtwBrLDPuDBej37=AbUmgi-mNg@mail.gmail.com>
+ (John Lemonovich's message of "Mon, 19 Dec 2022 11:31:34 -0500")
+Message-ID: <877cyniarr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1671457172;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=Oulhsn58j33LyOqvleijzA+tS8jKxLpRRa3n56fMbvQ=;
- b=MI9npuZVVwT2lHOIQU1fGeY8FF5oBk2t5vv7JhOjXJ9F09HpqTQ96MDazp+HKj4v/TL6m3
- xfkJPkZXQ74GdCEHO2lklzrd/M7Nugp8saqkUynnsC+/UYlWWSvh0S20lHbL4oekDHAAHr
- 690WxIdo7mI8B8K2bgWppo4xVjWePbY4SwVYuN6Z7zsj+MsXbLm6qUARfxKkpxzew09WlY
- 1s5ndSrMrly6cY8hbzgS6Fnn43kaVM/ghkKSl8vKKlzAdvXulmxoc1x7DXC3b5i5asV/0/
- NRCAaCGldSp2vCFYmlcqIu95PFyBt3fDWiuzH63AmZvftad3W1LNLaL0yFxplA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MI9npuZV
-Subject: [Buildroot] [PATCH v2] package/gcnano-binaries: bump version to
- 6.4.9
+Subject: Re: [Buildroot] error - machine `ARM-buildroot' not recognized for
+ libpcap
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,110 +66,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, Jens Kleintje <scooby22@web.de>,
- thomas.petazzoni@bootlin.com
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+>>>>> "John" == John Lemonovich <lemonoje@gmail.com> writes:
 
-Update to the latest version of the gcnano-binaries blobs, which are
-compatible with the last v5.15-stm32mp-r2 kernel from the
-STMicroelectronics BSP.
+Hello,
 
-The management of libraries links have now changed. We moved on from
-a version with several links present but few of them missing to no links
-at all. Now, all the links are made by the build system. The loop
-mechanism to make them are imported from the ST Yocto layer.
+ > Peter,
+ > Thank you for the reply!  I'm not very familiar with the process so I'm
+ > relying on the Beginner's Guide and Intel FPGA documentation.  I have built
+ > the rootfs successfully for my Arria10 device in the past using buildroot
+ > and busybox, but it's been several years since the last time.
 
-The packageconfig have also changed, no need to update prefix and version
-value anymore.
+ > I am getting the upper case ARM from the Intel FPGA documentation - all
+ > through their guides it shows it as upper case:  (see building the root
+ > filesystem tab of this link for example)
+ > https://www.rocketboards.org/foswiki/Documentation/EmbeddedLinuxBeginnerSGuide
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
+ > Nonetheless, the upper case is apparently incorrect, and I have tried to
+ > build with no ARCH specified, which, should default to just 'ARCH=arm',
+ > correct?
 
-Notes:
-    Change on V2: update the commmit message to explain the changes
+Yes, you should not define ARCH=<something> (or export it in your
+environment) when you use Buildroot. The architecture is specified by
+running make menuconfig.
 
- package/gcnano-binaries/gcnano-binaries.hash |  2 +-
- package/gcnano-binaries/gcnano-binaries.mk   | 30 ++++++++------------
- 2 files changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/package/gcnano-binaries/gcnano-binaries.hash b/package/gcnano-binaries/gcnano-binaries.hash
-index 1ed66e3753..7bb942e6da 100644
---- a/package/gcnano-binaries/gcnano-binaries.hash
-+++ b/package/gcnano-binaries/gcnano-binaries.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d3aebbc87ca27e743fdd21d71025cdf0761af748907bbdd7b193262eb48ab3c7  gcnano-binaries-a20611434ef048d3d0c04f55b6cd7d75a2156d43.tar.gz
-+sha256  b122a0cd7a1bd2cee8c6117b259ef977a765d24e48655f639694cbef471da99b  gcnano-binaries-0ac1a89d7a59d040a69745a85f0da7e98644cc4b.tar.gz
- sha256  7d209718473d18f69f75adb7caf9cb5d4b0a31da068756aa011bea617de3dc57  EULA
-diff --git a/package/gcnano-binaries/gcnano-binaries.mk b/package/gcnano-binaries/gcnano-binaries.mk
-index d9c47bf64e..83261f3b7c 100644
---- a/package/gcnano-binaries/gcnano-binaries.mk
-+++ b/package/gcnano-binaries/gcnano-binaries.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--GCNANO_BINARIES_LIB_VERSION = 6.4.7
-+GCNANO_BINARIES_LIB_VERSION = 6.4.9
- GCNANO_BINARIES_DRIVER_VERSION = $(GCNANO_BINARIES_LIB_VERSION)
--GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION)-20220524
--GCNANO_BINARIES_VERSION = a20611434ef048d3d0c04f55b6cd7d75a2156d43
-+GCNANO_BINARIES_USERLAND_VERSION = $(GCNANO_BINARIES_LIB_VERSION)-20221206
-+GCNANO_BINARIES_VERSION = 0ac1a89d7a59d040a69745a85f0da7e98644cc4b
- GCNANO_BINARIES_SITE = $(call github,STMicroelectronics,gcnano-binaries,$(GCNANO_BINARIES_VERSION))
- 
- GCNANO_BINARIES_LICENSE = MIT, Vivante End User Software License Terms
-@@ -38,31 +38,25 @@ GCNANO_BINARIES_POST_EXTRACT_HOOKS += GCNANO_BINARIES_EXTRACT_HELPER
- 
- GCNANO_BINARIES_MODULE_MAKE_OPTS = \
- 	KERNEL_DIR=$(LINUX_DIR) \
--	SOC_PLATFORM=st-st \
-+	SOC_PLATFORM=st-mp1 \
- 	AQROOT=$(@D) \
- 	DEBUG=0
- 
- GCNANO_BINARIES_USERLAND_SUBDIR = gcnano-userland-multi-$(GCNANO_BINARIES_USERLAND_VERSION)
- 
--# This creates:
--#   libGLESv2.so.2    -> libGLESv2.so
--#   libGLESv1_CM.so.1 -> libGLESv1_CM.so
--# symlinks, as most OpenGL implementations have them, and they are
--# expected by some users such as libepoxy.
- define GCNANO_BINARIES_INSTALL
- 	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/drivers/ ; \
- 	find . -type f -exec $(INSTALL) -D -m 0755 {} $(1)/usr/lib/{} \; ; \
--	find . -type l -exec cp -a {} $(1)/usr/lib \;
--	ln -sf libGLESv2.so $(1)/usr/lib/libGLESv2.so.2
--	ln -sf libGLESv1_CM.so $(1)/usr/lib/libGLESv1_CM.so.1
-+	for sharelib in *.so.*; do \
-+		dev_lib_name=`echo $${sharelib} | awk -F'.so' '{print $$1}'`.so ; \
-+		link_name=`$(TARGET_OBJDUMP) -x $${sharelib} 2>/dev/null | grep SONAME | sed 's/.* //'` ; \
-+		ln -sf $${sharelib} $(1)/usr/lib/$${dev_lib_name} ; \
-+		ln -sf $${sharelib} $(1)/usr/lib/$${link_name} ; \
-+	done
- 	mkdir -p $(1)/usr/include
- 	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/release/include/* $(1)/usr/include/
--	ln -sf gbm/gbm.h $(1)/usr/include/gbm.h
--	cd $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/pkgconfig/ ; \
--	for file in *.pc ; do \
--		sed -e "s|#PREFIX#|/usr|" -e "s|#VERSION#|21.1.1|" $$file > $$file.temp ; \
--		$(INSTALL) -D -m 0644 $$file.temp $(1)/usr/lib/pkgconfig/$$file ; \
--	done
-+	mkdir -p $(1)/usr/lib/pkgconfig/
-+	cp -a $(@D)/$(GCNANO_BINARIES_USERLAND_SUBDIR)/pkgconfig/*  $(1)/usr/lib/pkgconfig/
- endef
- 
- define GCNANO_BINARIES_INSTALL_TARGET_CMDS
+ > I am selecting external toolchain as
+ > :gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf
+ > My kernel is 5.4.13  from Linux-socfpga
+
+ > I just did a fresh checkout of 2022.02.7  , added a few networking
+ > utilities and options, selected external toolchain and prefix and now I get
+ > this error:
+ > Incorrect selection of kernel headers: expected 5.4.x, got 4.10.x
+
+Your runtime kernel may be 5.4.13, but the Linaro toolchain you mention
+above has been built against a 4.10.3 kernel:
+
+cat gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/include/linux/version.h
+#define LINUX_VERSION_CODE 264707
+#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
+
+printf '0x%x\n' 264707
+0x40a03
+
+So you need to configure 'External toolchain kernel headers series' as
+4.10.x (or alternatively use one of the newer preconfigured toolchains).
+
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
