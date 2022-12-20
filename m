@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5B1C10F1E
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 07:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63B2C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 07:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D20AD818BE;
-	Tue, 20 Dec 2022 07:21:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D20AD818BE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9278640134;
+	Tue, 20 Dec 2022 07:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9278640134
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hn9NGfGOEwFi; Tue, 20 Dec 2022 07:21:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WfHdgKhLPUrM; Tue, 20 Dec 2022 07:23:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34009818A1;
-	Tue, 20 Dec 2022 07:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34009818A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 100C61BF300
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:21:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 039FF40133;
+	Tue, 20 Dec 2022 07:23:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 039FF40133
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CFF671BF300
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7D83408EE
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7D83408EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABA19605EA
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABA19605EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sbazoh6CvcL8 for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 07:21:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KHc7beXWnkDw for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 07:23:21 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C87740889
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8C87740889
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 07:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D05D2607F4
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D05D2607F4
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 07:23:20 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6758920009;
- Tue, 20 Dec 2022 07:21:40 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8A35E240005;
+ Tue, 20 Dec 2022 07:23:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p7WwV-008c9N-EA; Tue, 20 Dec 2022 08:21:39 +0100
+ id 1p7Wy3-008cDu-TS; Tue, 20 Dec 2022 08:23:15 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221212211428.2036144-1-bernd.kuhls@t-online.de>
-Date: Tue, 20 Dec 2022 08:21:39 +0100
-In-Reply-To: <20221212211428.2036144-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 12 Dec 2022 22:14:28 +0100")
-Message-ID: <878rj2h75o.fsf@dell.be.48ers.dk>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20221213203236.171656-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 20 Dec 2022 08:23:15 +0100
+In-Reply-To: <20221213203236.171656-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 13 Dec 2022 21:32:36 +0100")
+Message-ID: <874jtqh730.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1]
- package/x11r7/xdriver_xf86-input-keyboard: remove package
+Subject: Re: [Buildroot] [PATCH v2] package/rtl8192eu: fix build failure on
+ Big Endian architectures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +64,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > According to the upstream release notes of version 2.0.0:
- > https://lists.x.org/archives/xorg-announce/2022-July/003180.html
+ > Let's disable the CONFIG_PLATFORM_I386_PC that is set to y by default
+ > involving the endianness to be set to little. This way we can set the
+ > CFLAGS according to architecture with some default define like:
+ > -DCONFIG_IOCTL_CFG80211
+ > -DRTW_USE_CFG80211_STA_EVENT
+ > -Wno-error
 
- > "This keyboard driver is primarily used with BSD, GNU Hurd, illumos, &
- >  Solaris systems. Linux systems should instead use either xf86-input-
- >  libinput or xf86-input-evdev.
+ > Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
- >  While versions 1.9.0 and earlier had rudimentary support for Linux as
- >  well, that has been removed in this release."
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  Config.in.legacy                                  |  5 +++++
- >  package/x11r7/Config.in                           |  1 -
- >  .../x11r7/xdriver_xf86-input-keyboard/Config.in   |  5 -----
- >  .../xdriver_xf86-input-keyboard.hash              |  4 ----
- >  .../xdriver_xf86-input-keyboard.mk                | 15 ---------------
- >  5 files changed, 5 insertions(+), 25 deletions(-)
- >  delete mode 100644 package/x11r7/xdriver_xf86-input-keyboard/Config.in
- >  delete mode 100644 package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
- >  delete mode 100644 package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-
- > diff --git a/Config.in.legacy b/Config.in.legacy
- > index 28c6822689..b70d4c7206 100644
- > --- a/Config.in.legacy
- > +++ b/Config.in.legacy
- > @@ -146,6 +146,11 @@ endif
- 
- >  comment "Legacy options removed in 2023.02"
- 
- > +config BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
- > +	bool "xf86-input-keyboard removed"
- > +	help
- > +	  The X.org keyboard input driver does not support linux.
-
-I've reworded this to say "no longer support Linux" and committed,
-thanks.
-
-Does the same not apply for the input-mouse driver?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
