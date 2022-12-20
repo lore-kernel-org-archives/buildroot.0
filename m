@@ -1,94 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C5AC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 19:00:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 790FEC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 19:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7961360F96;
-	Tue, 20 Dec 2022 19:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7961360F96
+	by smtp2.osuosl.org (Postfix) with ESMTP id D725C40432;
+	Tue, 20 Dec 2022 19:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D725C40432
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xDDQdeGWbqM5; Tue, 20 Dec 2022 19:00:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M5_aH3-kmLOr; Tue, 20 Dec 2022 19:30:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D14DA60BD8;
-	Tue, 20 Dec 2022 19:00:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D14DA60BD8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80D431BF36A
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:00:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 294B940518;
+	Tue, 20 Dec 2022 19:30:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 294B940518
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 388861BF59B
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C2B860BD8
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:00:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C2B860BD8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13CA940377
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13CA940377
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ej-kLwv6465R for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 19:00:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E36607B4
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
- [IPv6:2607:f8b0:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0E36607B4
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 19:00:30 +0000 (UTC)
-Received: by mail-pg1-x532.google.com with SMTP id f9so8933576pgf.7
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 11:00:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=6D/tK7uqX+JiJt1i8TIa5FNfbp/HmUd/D4vvcJKlVQg=;
- b=pwl1FcRhWWsa2aLjshCTwUpaHvNNPFCgRkbN6AuxG57Y440ddKWXHoyLC+qt2rktGA
- 7Q/eRc3jXNdhlqjSfANtbPlveyf6D4FgrlzvPKz14qL9q49zECNeNPSQoHh/tCHg+Rsd
- muQCVtUCw/aFCdR+ha0YRBhCTVBO3XPxybLaVGA/pxqhMCbp2j7UXl5QxFyFVmffgbs9
- WiiqBIs5K896753HRwn1U+vLgVL+qzdtxGT42h3F0AklhcMmRJg4vjkJfiurUXB77/7q
- 59AFUkcQEjL774bagiV4BDZkVMt3e+QzuEJ743OLthNyIkbvfmsT4O3qcjhNxtyuSAP0
- PGZA==
-X-Gm-Message-State: AFqh2kpvmRUX/c7bfhGZ6wWQXt/gYPnK5GBzq3/wv9K0M7Qyqz9tW/RF
- YjN0yQ8jeWHIhGPLXdxBPMA=
-X-Google-Smtp-Source: AMrXdXuzNw+y1uqueQOIp/hioupVxuQuaPBIdcbZCLkfRQ6nFPJc0n80UMZ7EXDzxdLkLCMDCIABtg==
-X-Received: by 2002:a05:6a00:813:b0:577:9182:19a7 with SMTP id
- m19-20020a056a00081300b00577918219a7mr20228038pfk.29.1671562830068; 
- Tue, 20 Dec 2022 11:00:30 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
- by smtp.googlemail.com with ESMTPSA id
- a22-20020aa795b6000000b0056c3a0dc65fsm8968654pfk.71.2022.12.20.11.00.28
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 20 Dec 2022 11:00:29 -0800 (PST)
-Message-ID: <c6c980f5-c722-fb4a-5440-b8afb088d995@gmail.com>
-Date: Tue, 20 Dec 2022 11:00:27 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sL71TDWGmXHp for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 19:30:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1924402CE
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C1924402CE
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 19:30:01 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BKJTvYt066154;
+ Tue, 20 Dec 2022 13:29:57 -0600
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BKJTvbF048059
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Tue, 20 Dec 2022 13:29:57 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 20
+ Dec 2022 13:29:57 -0600
+Received: from DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f]) by
+ DFLE111.ent.ti.com ([fe80::6c89:b1ca:ee8f:1a6f%17]) with mapi id
+ 15.01.2507.016; Tue, 20 Dec 2022 13:29:56 -0600
+To: Julien Olivain <ju.o@free.fr>
+Thread-Topic: [Buildroot] [PATCH v7 3/3] board/ti/am64x_sk: add new board
+Thread-Index: AQHZCZal2qR/5Fguz0SpJcRpAwsBqq52LrQAgAEPruA=
+Date: Tue, 20 Dec 2022 19:29:56 +0000
+Message-ID: <70cc5213bb4d4e4d8e4b21b1c7122daf@ti.com>
+References: <20221206171719.747581-1-gadiyar@ti.com>
+ <20221206171719.747581-4-gadiyar@ti.com>
+ <b88bb3e12f131de1038887a94211a64d@free.fr>
+In-Reply-To: <b88bb3e12f131de1038887a94211a64d@free.fr>
+Accept-Language: en-US
 Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20221219230802.2602798-1-f.fainelli@gmail.com>
- <20221220083106.GD2909@scaer>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221220083106.GD2909@scaer>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.249.34.68]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=6D/tK7uqX+JiJt1i8TIa5FNfbp/HmUd/D4vvcJKlVQg=;
- b=m/awyodPcDkTqm1b+CtF00WIQWo6suxVZ9JwcAse7zq/MMuC9Fw1BZwBN0PJl4ppAs
- FIgjotPSp8gyj0cfs6nu5LnAjvLs4iv8qrFL5qyTvSqhMso6mXCX7KvT4ezTlAaQE928
- aTR6Vo4Upeh61V5lAg/79r2GdmpSZ6+e+FPvir76fRIJgepGUPAOsVWxBriB3YUvp7+s
- 3y2uwNtzSHzfViHwp4sCOWc1gTU0IBGzCqkZggdGff5w9oO8XcIB09m3giUh34n0Tdiq
- G8Sh8hPvzIzU88+bn7mrdYvmWlRZ4wDr+7EN7V+8beLG67GUJAFuwSo3tsY3+TJKroko
- G39Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=m/awyodP
-Subject: Re: [Buildroot] [PATCH v2] package/libgpg-error: Disable unused
- files installation
+ d=ti.com; s=ti-com-17Q1; t=1671564597;
+ bh=n0LMF4wgL3RaL4Q3M7EQl4rWwhsyLYpD2qGj6vsXkbg=;
+ h=From:To:CC:Subject:Date:References:In-Reply-To;
+ b=VHA8ajNnYVM1N8QTDDQGcQZ/r9b7w8Io/XSDRDzAec3tMIYCFap/FRhwbbbkbKhRV
+ 2XJtvD710dvf/2Qm2oKvFmRptPk+zDF1HtMoIe893aaQIiWTsZ4zOOrGrbPdx5uHqs
+ dATe+67+6PAew4xE29HFO+HE0qy/HAVSzHV2GSJY=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=VHA8ajNn
+Subject: Re: [Buildroot] [PATCH v7 3/3] board/ti/am64x_sk: add new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,37 +88,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, mmayer@broadcom.com,
- thomas.petazzoni@bootlin.com, buildroot@buildroot.org,
- fontaine.fabrice@gmail.com
+From: "Gadiyar, Anand via buildroot" <buildroot@buildroot.org>
+Reply-To: "Gadiyar, Anand" <gadiyar@ti.com>
+Cc: "Brattlof, Bryan" <bb@ti.com>, "Davis, Andrew" <afd@ti.com>,
+ Xuanhao Shi <X15000177@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/20/22 00:31, Yann E. MORIN wrote:
-> Florian, All,
-> 
-> On 2022-12-19 15:08 -0800, Florian Fainelli spake thusly:
->> Disable a number of unused files that were being installed into the root
->> filesystem and thus inflating its size needlessly:
->>
->> * Disable the building of documentation
->>
->> * Disable support for other languages which is comprised of Common Lisp that
->>    buildroot has no package for
->>
->> * Only install binaries and shared/static libraries, remove libtool archive
-> 
-> As Baruch mentioned in his review, disabling the documentation and
-> removing headers and libtool archives whould already be handled by the
-> package infra.
+> From: Julien Olivain <ju.o@free.fr>
 
-It does, I was looking at the target/ folder instead of the actual root 
-filesystem, my bad, thanks and happy holidays.
--- 
-Florian
 
+> > +
+> > +These configurations will build a complete image and
+> > +device tree blobs for the the TI AM64x_sk board.
+> 
+> To avoid confusion between SK-AM64 and SK-AM64B, I suggest:
+> 
+> 1. to add the board url in this readme.txt, for example,
+> using the same comment as in the commit log:
+> """
+> More information about the board can be found at:
+> https://www.ti.com/tool/SK-AM64
+> """
+> 
+> 2. add a note that:
+> This configuration is for SK-AM64 only, since it's including:
+> BR2_TARGET_TI_K3_IMAGE_GEN_SOC_TYPE="gp"
+> The SK-AM64B [2] is not supported, as it would require "hs-fs".
+> 
+> [2] https://www.ti.com/tool/SK-AM64B
+> 
+
+Thanks for the review Julien!
+
+The SK-AM64B wasn't around when we submitted the first patchset.
+I expected a follow on patch to add the hs-fs support properly.
+
+I'll clarify in the next revision that this series is for GP only. We'll need
+some work to get the SK-AM64B supported and tested, and I'll try and
+get that enabled after this initial series is merged.
+
+I'll post a new series shortly with changes addressing review comments
+from you and Thomas
+
+- Anand
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
