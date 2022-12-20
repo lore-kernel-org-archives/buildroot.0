@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 404CFC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 07:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42113C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 07:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BABBA409DB;
-	Tue, 20 Dec 2022 07:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BABBA409DB
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7DA7607F4;
+	Tue, 20 Dec 2022 07:47:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7DA7607F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ttw6WQztYs8k; Tue, 20 Dec 2022 07:46:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hybdqRd1cy2u; Tue, 20 Dec 2022 07:47:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 915B6410A0;
-	Tue, 20 Dec 2022 07:46:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915B6410A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1150E60A6A;
+	Tue, 20 Dec 2022 07:47:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1150E60A6A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B46F21BF300
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:46:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 47F171BF300
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D255818C2
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D255818C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A528818C2
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 07:47:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A528818C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id McL4AH01Hdz8 for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 07:46:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A744E81463
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 07:46:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A744E81463
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95D8086A70; Tue, 20 Dec 2022 07:46:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 20 Dec 2022 08:44:03 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: b85968ac06d3a5f1b99fade5bba8379d8dd5c54f
-X-Git-Newrev: 8932807e5fabd822ad79d78079744ba1f910186f
-X-Patchwork-Hint: ignore
-Message-Id: <20221220074654.95D8086A70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libftdi1: fix
- static build with libusb and -latomic
+ with ESMTP id p35aKk0gBxbR for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 07:47:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93A1C81463
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93A1C81463
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 07:47:34 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 22C416000D;
+ Tue, 20 Dec 2022 07:47:31 +0000 (UTC)
+Date: Tue, 20 Dec 2022 08:47:30 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221220084730.5acd395d@booty>
+In-Reply-To: <20221216100044.54270-1-neal.frager@amd.com>
+References: <20221216100044.54270-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1671522452;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1G79OY26QTwEGNBiGp9zp0zOvlOWq5W94tULpZ6qrw4=;
+ b=A1BhjXmSjqwgnEtbE7OeU7qDSAeSl8m4k/vl59M1beykje3ujgNuAHYbtV0LCjb6WXhaiZ
+ KaALoN32baKY7SLe70/Sai2TfUCsy0nPO9rauD9FBvdrTN4/Obcwxot+vcfwyps99S2u+7
+ Nh6ez4PNIn9BlnNplaiUmdmnRegaHQKJ+83OMsDQIxdSCQkRSvjGsTQ/87ANiIZZpo2HA7
+ ftbN3Yi+1g54cGNtyE9YbpRhviGiy9VnLh6DGR4dEhSnh9YIuR7Z8gSgIdwtPVvIuZ49PP
+ davmdS/j6LTAixhGrWTfu1xRng105g8kDiFMRu6n9P0NquPaDgxSTjsaA7so5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=A1BhjXmS
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kv260_defconfig:
+ use CONFIG_MULTI_DTB_FIT work around
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,101 +77,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: michal.simek@amd.com, thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8932807e5fabd822ad79d78079744ba1f910186f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+Hello Neal,
 
-Use pkg-config to retrieve libusb dependencies such as -latomic and
-avoid the following static build failure raised since bump of libusb to
-version 1.0.25 in commit aad609936fc83acfe1eac6ffc86d29ac35dcf54e:
+On Fri, 16 Dec 2022 10:00:44 +0000
+Neal Frager <neal.frager@amd.com> wrote:
 
-/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
-/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
+> Change work around for kv260 u-boot.itb. Uses CONFIG_MULTI_DTB_FIT for fit-dtb.blob generation.
+> Adds a delay between fit-dtb.blob generation and building the u-boot.itb due to a build issue
+> when using the buildroot compiler.
+> 
+> This work around will eventually be replaced when Xilinx u-boot migrates to binman.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  board/zynqmp/kria/kv260/kv260.sh              |  2 +-
+>  ...ile-add-delay-for-buildroot-compiler.patch | 33 +++++++++++++++++++
+>  board/zynqmp/kria/uboot.fragment              |  1 +
+>  configs/zynqmp_kria_kv260_defconfig           |  1 +
+>  4 files changed, 36 insertions(+), 1 deletion(-)
+>  create mode 100644 board/zynqmp/kria/patches/uboot/v1-0001-Makefile-add-delay-for-buildroot-compiler.patch
+> 
+> diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
+> index e891852009..e3467f3068 100755
+> --- a/board/zynqmp/kria/kv260/kv260.sh
+> +++ b/board/zynqmp/kria/kv260/kv260.sh
+> @@ -8,5 +8,5 @@
+>  
+>  UBOOT_DIR=$4
+>  
+> -fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
+> +fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
+>  ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
+> diff --git a/board/zynqmp/kria/patches/uboot/v1-0001-Makefile-add-delay-for-buildroot-compiler.patch b/board/zynqmp/kria/patches/uboot/v1-0001-Makefile-add-delay-for-buildroot-compiler.patch
+> new file mode 100644
+> index 0000000000..391fa861bd
+> --- /dev/null
+> +++ b/board/zynqmp/kria/patches/uboot/v1-0001-Makefile-add-delay-for-buildroot-compiler.patch
+> @@ -0,0 +1,33 @@
+> +From 582b52bef69219df678ed04771eb643117cd094a Mon Sep 17 00:00:00 2001
+> +From: Neal Frager <neal.frager@amd.com>
+> +Date: Fri, 16 Dec 2022 08:35:41 +0000
+> +Subject: [PATCH v1 1/1] Makefile: add delay for buildroot compiler
+> +
+> +When using the buildroot compiler, it builds the u-boot.itb immediately
+> +after building the fit-dtb.blob.  This causes a build failure when using
+> +the CONFIG_MULTI_DTB_FIT build configuration.  This patch forces a minimal
+> +delay before building the u-boot.itb which works around the problem.
+> +
+> +This patch has not been submitted to u-boot mainline as it is a work around
+> +and not a proper solution.
+> +
+> +Signed-off-by: Neal Frager <neal.frager@amd.com>
+> +---
+> + Makefile | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index b96e2ffa15..0d3e33704d 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1426,6 +1426,7 @@ ifdef U_BOOT_ITS
+> + u-boot.itb: u-boot-nodtb.bin \
+> + 		$(if $(CONFIG_OF_SEPARATE)$(CONFIG_OF_EMBED)$(CONFIG_SANDBOX),dts/dt.dtb) \
+> + 		$(U_BOOT_ITS) FORCE
+> ++	sleep 1
+> + 	$(call if_changed,mkfitimage)
+> + 	$(BOARD_SIZE_CHECK)
+> + endif
 
-Fixes:
- - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
+I didn't study the current source code to understand the issue, however
+the 'sleep 1' here seems a pretty bad hack and not necessarily solving
+the problem in all cases.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit de82d57b56dd895c7eb56948c631fa30c4935a2a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...txt-fix-static-build-with-libusb-and-lato.patch | 47 ++++++++++++++++++++++
- package/libftdi1/libftdi1.mk                       |  2 +-
- 2 files changed, 48 insertions(+), 1 deletion(-)
+As Michal wrote, dependencies must be enforced via makefile rules. Any
+reason this cannot be done in this situation?
 
-diff --git a/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
-new file mode 100644
-index 0000000000..c818c58d68
---- /dev/null
-+++ b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
-@@ -0,0 +1,47 @@
-+From b5b8fab6063ad90bb5ef05a72708ecde1796bc81 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 13 May 2022 18:11:50 +0200
-+Subject: [PATCH] CMakeLists.txt: fix static build with libusb and -latomic
-+
-+Use pkg-config to retrieve libusb dependencies such as -latomic and
-+avoid the following static build failure:
-+
-+/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
-+/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+http://developer.intra2net.com/git/?p=libftdi;a=commit;h=b5b8fab6063ad90bb5ef05a72708ecde1796bc81]
-+---
-+ CMakeLists.txt |   12 ++++++++++--
-+ 1 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 58f664a..d20aa94 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -25,8 +25,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
-+ endif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
-+ 
-+ # find libusb
-+-find_package ( USB1 REQUIRED )
-+-include_directories ( ${LIBUSB_INCLUDE_DIR} )
-++find_package( PkgConfig )
-++if (PkgConfig_FOUND)
-++  pkg_check_modules( LIBUSB libusb-1.0 )
-++  if (LIBUSB_FOUND)
-++    include_directories ( ${LIBUSB_INCLUDE_DIRS} )
-++  else()
-++    find_package ( USB1 REQUIRED )
-++    include_directories ( ${LIBUSB_INCLUDE_DIR} )
-++  endif()
-++endif()
-+ 
-+ # Find Boost
-+ if (FTDIPP OR BUILD_TESTS)
-+-- 
-+1.7.1
-+
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index d2e3f42e14..66798addc4 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -8,7 +8,7 @@ LIBFTDI1_VERSION = 1.5
- LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
- LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI1_INSTALL_STAGING = YES
--LIBFTDI1_DEPENDENCIES = libusb
-+LIBFTDI1_DEPENDENCIES = host-pkgconf libusb
- LIBFTDI1_LICENSE = LGPL-2.1 (libftdi1), MIT (libftdi1)
- LIBFTDI1_LICENSE_FILES = LICENSE COPYING.LIB
- LIBFTDI1_CONFIG_SCRIPTS = libftdi1-config
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
