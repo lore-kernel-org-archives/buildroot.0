@@ -1,85 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD8CC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 18:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C5AC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 19:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EED54161F;
-	Tue, 20 Dec 2022 18:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EED54161F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7961360F96;
+	Tue, 20 Dec 2022 19:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7961360F96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rn3lsU6YNez2; Tue, 20 Dec 2022 18:03:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xDDQdeGWbqM5; Tue, 20 Dec 2022 19:00:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 929EE416B1;
-	Tue, 20 Dec 2022 18:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 929EE416B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id D14DA60BD8;
+	Tue, 20 Dec 2022 19:00:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D14DA60BD8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F22211BF2AA
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 18:03:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80D431BF36A
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C7A8E60F91
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 18:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A8E60F91
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C2B860BD8
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 19:00:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C2B860BD8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JzaSIxY2ecmg for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 18:03:09 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5096260F66
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5096260F66
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 18:03:09 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.208.184]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N6KYl-1onLt53y4f-016drr for <buildroot@buildroot.org>; Tue, 20 Dec 2022
- 19:03:07 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Tue, 20 Dec 2022 19:03:06 +0100
-Message-Id: <20221220180306.17253-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.39.0
+ with ESMTP id ej-kLwv6465R for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 19:00:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E36607B4
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
+ [IPv6:2607:f8b0:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C0E36607B4
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 19:00:30 +0000 (UTC)
+Received: by mail-pg1-x532.google.com with SMTP id f9so8933576pgf.7
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 11:00:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=6D/tK7uqX+JiJt1i8TIa5FNfbp/HmUd/D4vvcJKlVQg=;
+ b=pwl1FcRhWWsa2aLjshCTwUpaHvNNPFCgRkbN6AuxG57Y440ddKWXHoyLC+qt2rktGA
+ 7Q/eRc3jXNdhlqjSfANtbPlveyf6D4FgrlzvPKz14qL9q49zECNeNPSQoHh/tCHg+Rsd
+ muQCVtUCw/aFCdR+ha0YRBhCTVBO3XPxybLaVGA/pxqhMCbp2j7UXl5QxFyFVmffgbs9
+ WiiqBIs5K896753HRwn1U+vLgVL+qzdtxGT42h3F0AklhcMmRJg4vjkJfiurUXB77/7q
+ 59AFUkcQEjL774bagiV4BDZkVMt3e+QzuEJ743OLthNyIkbvfmsT4O3qcjhNxtyuSAP0
+ PGZA==
+X-Gm-Message-State: AFqh2kpvmRUX/c7bfhGZ6wWQXt/gYPnK5GBzq3/wv9K0M7Qyqz9tW/RF
+ YjN0yQ8jeWHIhGPLXdxBPMA=
+X-Google-Smtp-Source: AMrXdXuzNw+y1uqueQOIp/hioupVxuQuaPBIdcbZCLkfRQ6nFPJc0n80UMZ7EXDzxdLkLCMDCIABtg==
+X-Received: by 2002:a05:6a00:813:b0:577:9182:19a7 with SMTP id
+ m19-20020a056a00081300b00577918219a7mr20228038pfk.29.1671562830068; 
+ Tue, 20 Dec 2022 11:00:30 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+ by smtp.googlemail.com with ESMTPSA id
+ a22-20020aa795b6000000b0056c3a0dc65fsm8968654pfk.71.2022.12.20.11.00.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 20 Dec 2022 11:00:29 -0800 (PST)
+Message-ID: <c6c980f5-c722-fb4a-5440-b8afb088d995@gmail.com>
+Date: Tue, 20 Dec 2022 11:00:27 -0800
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:UbD+jY/F/kHQoPvJAlN/CrP7DUWIm4sIDXZMBP0IkM1XbDAOBIx
- +hiGnxeBjppGyr3dOwgbj/4xy8n7UZeRU41HkSpytfOfXtJcvJ2rLChUgAGKH4TFCk/rTTN
- wx9HloJySYCacSHrmrlKLI5SiTaejwKcqrgwTjoPxvPWv/VfaY17kuuSuVyovwmRck0hBFQ
- X9bHzqio3EgQafdF5SXnw==
-UI-OutboundReport: notjunk:1;M01:P0:qdMyOGpVFhQ=;7Rw8uXk0bLlsshFWrMotLPKCmit
- 1meqjjtsoKaEHuvhoIm/nlQ5crd0VntjFHtO3z0K16K0tmxp2aBZLLriAbb40cVKSZkeYZO/B
- I/9aqo77iNVNtiMI2JociH41VulkXpXt4W8gDM+HQ+sDHvOcMAJrjnPYMwQhdebDmTHpGsYYH
- wYkEN+z4tT3ZVprQcHVfXmtG9RMsSK9ULCqU0GFqab1S2ToADXA1WnUaX7V0YLqoNA7I8vTQv
- YBtT3o2fi5z449OMWfANyLP2264uS+0RWSwG+FOilDHRav5hFOZdRhQGSE2RRBaP++oNNBk49
- MtVxjP+12jYNmHTzNB0JVXryZbPrtA++eEj52Xfe+gezwflcjNdW86Ql68PdNZ2py346ieRRz
- yxPl/st4SKHOjhw40z2DGbowpEQe0MpscDMVEK/MmDxzM3GCPUZIMz0A5RMqjTTAoPEZ/QCve
- /+V4SuD42O4A1Fzv88zQIAIoy8yB/uc+RZyaQz9aFImVnlE1NHCS1nO8VJSyD6d4WOqG4Sc7D
- AtDGwakBGmSfgElU4b/KRD0gOLDBmq8BW1l+4erTyzguJ7QfFDhnYC9A7QSHpducQblCHvJZX
- vF0PGJKrQyWF1X2B4fS9W5BsUbzf3+GO5qjodk9Y6xPjTWEHPgxk+Yg/llwkOiNBBqznelazs
- g+QvaBj5qIZpqp/1ZjKn8NM2yeqff8aytYNbuReww9FCR91ZJ9zzTwX8uOOYIJ3c6/fi9a3Qs
- jNNv9ZveIxIRN9KcFGHOzuB7kg8myqvgQXHv9mCN+Hj7TdbvyvTg7jpMNkzIhxW/ytsEOx/le
- +CRLsmEU6DZ0z6teGYExrxVqzC9A2Zmbky7prQPElcJF4mrXKRWI0gFxffHqzajRPeGdDw0/O
- UoQGyIGz6fhRxiN0YaMqq8ZVGRimW4E7H/Rcx86F497gKzRQP65BgOzmbYblA+NXeG5yhHtIw
- VlHTQw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1671559387; bh=5sL2wNOcYjH5eIgpTv0D38nrM+LnxsazJQgR1dXwc4o=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=PjQRZKCmqelvARJYsHOU1+6imH6lZk1DzfCWd7X47jwzeDZRd5U6owXErGgwiys9W
- jy+V1m22wBA6SLAgesfhoDh3whfZszsyfM5rMUWZ9d3dmAFqAovCs7o6JyCRcrfsNu
- zbgjCvRFPEUlwcC1dyV/J5qp/rm9tKtaFWEZPVXdriLj42ZjDNXUPJI+oDw0XUhxGO
- jbAa4m2kRjtrTdWhu9er6CeK6ZhnTHsJl+hHNrCQ6J6iPgXNIw1t8qPOn6VPgELzyy
- DONoRHivc9BLWlAi3eCUVR5DyqT0vrX5WUH7uHuvUFVde+eOzh6+oviGCCpADlhpuo
- XMfi8IBOdIYAA==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20221219230802.2602798-1-f.fainelli@gmail.com>
+ <20221220083106.GD2909@scaer>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221220083106.GD2909@scaer>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=6D/tK7uqX+JiJt1i8TIa5FNfbp/HmUd/D4vvcJKlVQg=;
+ b=m/awyodPcDkTqm1b+CtF00WIQWo6suxVZ9JwcAse7zq/MMuC9Fw1BZwBN0PJl4ppAs
+ FIgjotPSp8gyj0cfs6nu5LnAjvLs4iv8qrFL5qyTvSqhMso6mXCX7KvT4ezTlAaQE928
+ aTR6Vo4Upeh61V5lAg/79r2GdmpSZ6+e+FPvir76fRIJgepGUPAOsVWxBriB3YUvp7+s
+ 3y2uwNtzSHzfViHwp4sCOWc1gTU0IBGzCqkZggdGff5w9oO8XcIB09m3giUh34n0Tdiq
+ G8Sh8hPvzIzU88+bn7mrdYvmWlRZ4wDr+7EN7V+8beLG67GUJAFuwSo3tsY3+TJKroko
+ G39Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=PjQRZKCm
-Subject: [Buildroot] [PATCH v1] Config.in: update default BR2_CPAN_MIRROR
- URL from http to https
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=m/awyodP
+Subject: Re: [Buildroot] [PATCH v2] package/libgpg-error: Disable unused
+ files installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,43 +100,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, mmayer@broadcom.com,
+ thomas.petazzoni@bootlin.com, buildroot@buildroot.org,
+ fontaine.fabrice@gmail.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Notes:
+On 12/20/22 00:31, Yann E. MORIN wrote:
+> Florian, All,
+> 
+> On 2022-12-19 15:08 -0800, Florian Fainelli spake thusly:
+>> Disable a number of unused files that were being installed into the root
+>> filesystem and thus inflating its size needlessly:
+>>
+>> * Disable the building of documentation
+>>
+>> * Disable support for other languages which is comprised of Common Lisp that
+>>    buildroot has no package for
+>>
+>> * Only install binaries and shared/static libraries, remove libtool archive
+> 
+> As Baruch mentioned in his review, disabling the documentation and
+> removing headers and libtool archives whould already be handled by the
+> package infra.
 
-- the mirror list URL http://search.cpan.org/mirror seems outdated
-  (re-directed to https://metacpan.org/mirrors aka 'Not Found - The
-  resource you requested could not be found.').
-
-  The closest matching URLs I found are:
-
-  https://www.cpan.org/SITES.html
-  http://mirrors.cpan.org/map.html
-  http://mirrors.cpan.org/
----
- Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Config.in b/Config.in
-index 3c57c591a8..c318223d1d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -287,7 +287,7 @@ config BR2_LUAROCKS_MIRROR
- 
- config BR2_CPAN_MIRROR
- 	string "CPAN mirror (Perl packages)"
--	default "http://cpan.metacpan.org"
-+	default "https://cpan.metacpan.org"
- 	help
- 	  CPAN (Comprehensive Perl Archive Network) is a repository of
- 	  Perl packages. It has multiple software mirrors scattered
+It does, I was looking at the target/ folder instead of the actual root 
+filesystem, my bad, thanks and happy holidays.
 -- 
-2.39.0
+Florian
 
 _______________________________________________
 buildroot mailing list
