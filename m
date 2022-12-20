@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 839CDC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7144AC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 248A14ECBF;
-	Mon, 20 Feb 2023 22:32:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 248A14ECBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 174424EE2A;
+	Mon, 20 Feb 2023 22:32:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 174424EE2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vsT-UM5LKJVv; Mon, 20 Feb 2023 22:32:36 +0000 (UTC)
+	with ESMTP id jgyFx7_1oFmC; Mon, 20 Feb 2023 22:32:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CF954EF94;
-	Mon, 20 Feb 2023 22:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CF954EF94
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF4B31BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF0284F0BC;
+	Mon, 20 Feb 2023 22:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF0284F0BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 612811BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95D5D61171
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95D5D61171
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B9EC416E5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B9EC416E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3IIHM5JQ6VpO for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PwQnRcVolga7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAF446116B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF446116B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85F95416E8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85F95416E8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAE348648F; Mon, 20 Feb 2023 20:52:04 +0000 (UTC)
+ id 836F086494; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:35:52 +0100
+Date: Tue, 20 Dec 2022 08:16:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 994113674adf46a3059d3378708a2aed4cce0c80
-X-Git-Newrev: 1576b09b5c52b746256ca5b4b313eab9bf068b09
+X-Git-Oldrev: 3ddf15854deb5f03a4c98afa6c86f9f3b4d6893c
+X-Git-Newrev: 7dbe844bae38aba8e6080da3b650b89f702c0f1c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205204.CAE348648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-compose: bump
- to version 2.14.0
+Message-Id: <20230220205213.836F086494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/unifdef: add new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1576b09b5c52b746256ca5b4b313eab9bf068b09
+commit: https://git.buildroot.net/buildroot/commit/?id=7dbe844bae38aba8e6080da3b650b89f702c0f1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/docker/compose/releases/tag/v2.14.0
+A small package that does "Selectively remove C preprocessor conditionals".
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The package will be needed for the upcoming webkitgtk 2.40.0 release.
+I personally added it to get started with 2.39.2.
+
+See: https://github.com/WebKit/WebKit/commit/f76a7e30e5749af897b83cc75b2534b1afa32552
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+[Peter: use prefix=]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-compose/docker-compose.hash | 2 +-
- package/docker-compose/docker-compose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Makefile-fix-error-on-install.patch       | 31 ++++++++++++++++++++++
+ package/unifdef/unifdef.hash                       |  3 +++
+ package/unifdef/unifdef.mk                         | 20 ++++++++++++++
+ 3 files changed, 54 insertions(+)
 
-diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
-index 39f98523b8..7a7ab5f110 100644
---- a/package/docker-compose/docker-compose.hash
-+++ b/package/docker-compose/docker-compose.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  69d7d0311ac34ed4543f9a694995fbc4e2b785976a5a710015c20f0d04c204cb  docker-compose-2.11.2.tar.gz
-+sha256  5cbf6cd1dd8ce98c5e2d62ca7f622e96abce444979b8e8852b033213a98e2049  docker-compose-2.14.0.tar.gz
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
-index bc88d8df88..ef9ee97196 100644
---- a/package/docker-compose/docker-compose.mk
-+++ b/package/docker-compose/docker-compose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_COMPOSE_VERSION = 2.11.2
-+DOCKER_COMPOSE_VERSION = 2.14.0
- DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
- DOCKER_COMPOSE_LICENSE = Apache-2.0
- DOCKER_COMPOSE_LICENSE_FILES = LICENSE
+diff --git a/package/unifdef/0001-Makefile-fix-error-on-install.patch b/package/unifdef/0001-Makefile-fix-error-on-install.patch
+new file mode 100644
+index 0000000000..c959a41c5a
+--- /dev/null
++++ b/package/unifdef/0001-Makefile-fix-error-on-install.patch
+@@ -0,0 +1,31 @@
++From b5e4229918c13bc0c11a523105cdb3a464337b37 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Mon, 12 Dec 2022 12:59:59 +0100
++Subject: [PATCH] Makefile: fix error on install
++
++ln: failed to create symbolic link '/home/thomas/Documents/buildroot/output/host/share/man/man1/unifdefall.1': File exists
++
++Seen while trying to add this package to buildroot.org.
++
++(upstream: https://github.com/fanf2/unifdef/pull/16)
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 36c7028..485927a 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -28,7 +28,7 @@ install: unifdef unifdefall.sh unifdef.1
++ 	: manual
++ 	install -m 755 -d  ${man1dest}
++ 	install -m 644 unifdef.1  ${man1dest}/
++-	ln -s unifdef.1  ${man1dest}/unifdefall.1
+++	ln -f -s unifdef.1  ${man1dest}/unifdefall.1
++ 
++ clean:
++ 	rm -f unifdef version.h
++-- 
++2.38.1
++
+diff --git a/package/unifdef/unifdef.hash b/package/unifdef/unifdef.hash
+new file mode 100644
+index 0000000000..c3a6b7465c
+--- /dev/null
++++ b/package/unifdef/unifdef.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  fba564a24db7b97ebe9329713ac970627b902e5e9e8b14e19e024eb6e278d10b  unifdef-2.12.tar.gz
++sha256  37ed46a39446b15b08af418fda23b75c27a769d5aad236d817ee7522cc9caeee  COPYING
+diff --git a/package/unifdef/unifdef.mk b/package/unifdef/unifdef.mk
+new file mode 100644
+index 0000000000..7d10595d1b
+--- /dev/null
++++ b/package/unifdef/unifdef.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# unifdef
++#
++################################################################################
++
++UNIFDEF_VERSION = 2.12
++UNIFDEF_SITE = https://dotat.at/prog/unifdef
++UNIFDEF_LICENSE = BSD-2-Clause
++UNIFDEF_LICENSE_FILES = COPYING
++
++define HOST_UNIFDEF_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define HOST_UNIFDEF_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
++endef
++
++$(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
