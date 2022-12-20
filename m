@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4BD2C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 12:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB088C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 12:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70AAE81D5F;
-	Tue, 20 Dec 2022 12:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70AAE81D5F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3948E410BE;
+	Tue, 20 Dec 2022 12:13:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3948E410BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jq8EEGHj-cv; Tue, 20 Dec 2022 12:12:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KnAUZjyvPkjq; Tue, 20 Dec 2022 12:13:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A76DE81D2D;
-	Tue, 20 Dec 2022 12:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A76DE81D2D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B7711BF3FC
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 12:12:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33FB3410CB;
+	Tue, 20 Dec 2022 12:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33FB3410CB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D67CC1BF3FC
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 12:13:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4409781D2D
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 12:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4409781D2D
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFAA060BC6
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 12:13:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFAA060BC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qSQ0Ze0j0rGp for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 12:12:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4259681D24
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4259681D24
- for <buildroot@busybox.net>; Tue, 20 Dec 2022 12:12:51 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4A7A84000B;
- Tue, 20 Dec 2022 12:12:49 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p7bUC-008q1o-BK; Tue, 20 Dec 2022 13:12:44 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eo_IHAg0QV3j for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 12:13:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC8D6605A3
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 12:13:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC8D6605A3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C793386AC9; Tue, 20 Dec 2022 12:13:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20221210095435.3050998-1-francois.perrad@gadz.org>
-Date: Tue, 20 Dec 2022 13:12:44 +0100
-In-Reply-To: <20221210095435.3050998-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Sat, 10 Dec 2022 10:54:35 +0100")
-Message-ID: <87ili6ff43.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/ruby: security bump to version 3.1.3
+To: buildroot@buildroot.org
+Date: Tue, 20 Dec 2022 13:12:19 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: b072663e2535a4dfd8cf932bd7aea2094c348797
+X-Git-Newrev: c463cfc0fbf9c0acbf7464eb70f421a9e3fc4ec2
+X-Patchwork-Hint: ignore
+Message-Id: <20221220121300.C793386AC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ruby: security
+ bump to version 3.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,23 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c463cfc0fbf9c0acbf7464eb70f421a9e3fc4ec2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > fix CVE-2021-33621: HTTP response splitting in CGI
- > see https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
+fix CVE-2021-33621: HTTP response splitting in CGI
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+see https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 20f7ed86aa9f2a65af9b44a599f7d1b10075f158)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index da6221ec50..42d8a2497f 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2022/04/12/ruby-3-1-2-released/
+-sha512  4a74e9efc6ea4b3eff4fec7534eb1fff4794d021531defc2e9937e53c6668db8ecdc0fff2bc23d5e6602d0df344a2caa85b31c5414309541e3d5313ec82b6e21  ruby-3.1.2.tar.xz
++# https://www.ruby-lang.org/en/news/2022/11/24/ruby-3-1-3-released/
++sha512  4b0fd334ae56132ba98b8a69adad54bdcf7f7aeabd5eba5b0f0399a3868e2054f9026ca1b1cb2dbb197a9e9b0610b263481949c0623a62071546bc5adff8ca69  ruby-3.1.3.tar.xz
+ 
+ # License files, Locally calculated
+ sha256  794c384f94396ab07e3e6f53a9f8be093facb7eb4193266024302b93b29e12dc  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index cbdfa4b826..28b1ec13ef 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 3.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+ RUBY_VERSION_EXT = 3.1.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
