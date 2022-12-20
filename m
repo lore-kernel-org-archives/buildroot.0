@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3871C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 08:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21B98C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 08:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EA658130A;
-	Tue, 20 Dec 2022 08:29:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EA658130A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4F2381971;
+	Tue, 20 Dec 2022 08:29:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4F2381971
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qPICt6gGo2_x; Tue, 20 Dec 2022 08:29:41 +0000 (UTC)
+	with ESMTP id NyLeXbqwgrcB; Tue, 20 Dec 2022 08:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA73D812F5;
-	Tue, 20 Dec 2022 08:29:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA73D812F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F5778151E;
+	Tue, 20 Dec 2022 08:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F5778151E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B6801BF28C
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 08:29:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B3A0A1BF28C
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 08:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7712440133
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 08:29:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7712440133
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BAB340133
+ for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 08:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BAB340133
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJ5QNvYgPfgb for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 08:29:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E627400D9
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 08:29:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E627400D9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A3A986A7B; Tue, 20 Dec 2022 08:29:37 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 20 Dec 2022 09:27:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 447abe169af7e69a82a3e0218670006a42914053
-X-Git-Newrev: 9abb21ab314cb5d5000334fd9399521104d64043
-X-Patchwork-Hint: ignore
-Message-Id: <20221220082937.7A3A986A7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpg-error: Disable support for
+ with ESMTP id DHesTpg8iEfN for <buildroot@lists.busybox.net>;
+ Tue, 20 Dec 2022 08:29:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AAC4400D9
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4AAC4400D9
+ for <buildroot@buildroot.org>; Tue, 20 Dec 2022 08:29:46 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:cf59:3d28:f63b:149b])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 90AC75FFAE;
+ Tue, 20 Dec 2022 09:29:34 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 20 Dec 2022 09:29:34 +0100
+Date: Tue, 20 Dec 2022 09:29:34 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <20221220082934.GC2909@scaer>
+References: <20221219202308.2597300-1-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221219202308.2597300-1-f.fainelli@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1671524983;
+ bh=lnaGum4Tl3kFpvU5YnaLqetOxfz3EAGIQlQqLT3PwKc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=cBjfss4gX+Neqbv1oR8p59awBEqGCFKVRleQ4Fg2a26VCH0ebK1J9emK8DYkznMDM
+ hz3NGIMiR7YUWbV5Rdl3B/d9abarFlg8i/1Vu5Gzpk820amcm+Rk/zIjofAG6bwD+A
+ glyacAP61Lne1HUGpStJ7xIYe9xVPUw+AwFqqbXK27UbM+jlhBfOe6qguV5WTRqogR
+ xoSx4WzVB5zH4mQcRA4WrDeeapHISwL8ofVlAwiUkEXtVhr2VYDbTYaP+nR+ZdSZdn
+ Xz8YnyyWPezAkfwf474SkNmd+//YyGi7fgHAf3NXA7RgHqxVJ0aSONFJ6fSDW3Leip
+ mNkvr/Z1OuHoQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cBjfss4g
+Subject: Re: [Buildroot] [PATCH] package/libgpg-error: Disable support for
  non-C languages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,42 +77,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, mmayer@broadcom.com,
+ thomas.petazzoni@bootlin.com, buildroot@buildroot.org,
+ fontaine.fabrice@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9abb21ab314cb5d5000334fd9399521104d64043
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Florian, All,
 
-The only other language supported is CL (Common Lisp) which buildroot
-does not package yet. This saves 52KB in the final root filesystem.
+On 2022-12-19 12:23 -0800, Florian Fainelli spake thusly:
+> The only other language supported is CL (Common Lisp) which buildroot does not
+> package yet. This saves 52KB in the final root filesystem.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-[yann.morin.1998@free.fr: reformat for one-option per-line]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libgpg-error/libgpg-error.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 86dea6ad2a..252d95ac7f 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -13,8 +13,10 @@ LIBGPG_ERROR_CPE_ID_VENDOR = gnupg
- LIBGPG_ERROR_INSTALL_STAGING = YES
- LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
- LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--LIBGPG_ERROR_CONF_OPTS = --disable-tests \
--		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
-+LIBGPG_ERROR_CONF_OPTS = \
-+	--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
-+	--disable-tests \
-+	--disable-languages
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBGPG_ERROR_CONF_OPTS += --enable-threads
+> ---
+>  package/libgpg-error/libgpg-error.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+> index 86dea6ad2acd..0b7b8df389f9 100644
+> --- a/package/libgpg-error/libgpg-error.mk
+> +++ b/package/libgpg-error/libgpg-error.mk
+> @@ -14,7 +14,8 @@ LIBGPG_ERROR_INSTALL_STAGING = YES
+>  LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+>  LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>  LIBGPG_ERROR_CONF_OPTS = --disable-tests \
+> -		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
+> +		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
+> +		--disable-languages
+
+I also took the oportunity to reformat that to more closely match the
+(unwritten) rule of one-option-per-line.
+
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  LIBGPG_ERROR_CONF_OPTS += --enable-threads
+> -- 
+> 2.34.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
