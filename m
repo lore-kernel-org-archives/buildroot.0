@@ -1,71 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FEBC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE14C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B57840382;
-	Wed, 21 Dec 2022 13:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B57840382
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EA2F81EE3;
+	Wed, 21 Dec 2022 13:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EA2F81EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id avMrsKGF_fzP; Wed, 21 Dec 2022 13:07:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wib2DCORbdxI; Wed, 21 Dec 2022 13:10:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC14740441;
-	Wed, 21 Dec 2022 13:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC14740441
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E6BA1BF284
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:07:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DDF1281FEE;
+	Wed, 21 Dec 2022 13:10:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDF1281FEE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C9E71BF284
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:10:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5875E41687
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5875E41687
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2838D81FEE
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:10:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2838D81FEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cNLL3D5TgFig for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 13:06:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5301641685
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5301641685
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 13:06:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:a2ac:472c:b44e:1236])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id F37C3780368;
- Wed, 21 Dec 2022 14:06:53 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 21 Dec 2022 14:06:53 +0100
-Date: Wed, 21 Dec 2022 14:06:53 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20221221130653.GM2909@scaer>
-References: <20221220180306.17253-1-ps.report@gmx.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HY0SwCSyOMyF for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 13:10:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF88E81EE3
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EF88E81EE3
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 13:10:12 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D94BE240011;
+ Wed, 21 Dec 2022 13:10:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p7yrI-000XAB-PO; Wed, 21 Dec 2022 14:10:08 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221208202721.5592-1-fontaine.fabrice@gmail.com>
+Date: Wed, 21 Dec 2022 14:10:08 +0100
+In-Reply-To: <20221208202721.5592-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 8 Dec 2022 21:27:21 +0100")
+Message-ID: <87sfh8rjgv.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221220180306.17253-1-ps.report@gmx.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1671628016;
- bh=lnFy9rewhbD/fdNzKwwRCB9tlPbjm+jQ3TrIoUsnWOU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=JNmHIoup8omVhpPPSLJZ9puFtyPjqxBEWNg7JLv6P3V9dxY5BiIv3FJwUbZFaJ6Ia
- UkxNIwGCUlcyn6dC9HPkpRLtTGeDZB3R2HZVL5U5N00FV/BBgig2RBTdBgd3B/gWyo
- TY09npfimhsyGJSAIjwLrFAzaTcJg3PE/fazfaCoNeNHvUagjMWS0bjlPk8yeAuahd
- 7C9sXTp7bh6H8wpkVzcTn3GGRC0dCCOhE+pv1iXbM+8lJEY6KSqb/LL01mZasqerm9
- +NZpmNphA7I5DS03RLRJVcg0iEIXFPzLZEk3vRFJbMPsxbd9OQxzyBq1fPct129zhA
- kUNxos/dLAFcQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JNmHIoup
-Subject: Re: [Buildroot] [PATCH v1] Config.in: update default
- BR2_CPAN_MIRROR URL from http to https
+Subject: Re: [Buildroot] [PATCH 1/1] package/lttng-tools: bump to version
+ 2.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,70 +63,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2022-12-20 19:03 +0100, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
-> 
-> - the mirror list URL http://search.cpan.org/mirror seems outdated
->   (re-directed to https://metacpan.org/mirrors aka 'Not Found - The
->   resource you requested could not be found.').
-> 
->   The closest matching URLs I found are:
-> 
->   https://www.cpan.org/SITES.html
->   http://mirrors.cpan.org/map.html
->   http://mirrors.cpan.org/
+ > This bump will fix the following build failure without NPTL thanks to
+ > https://github.com/lttng/lttng-tools/commit/27f2b8400c9db484cd195c4240c379e845b1413d
+ > which is raised since bump to version 2.13.2 in commit
+ > 8e5f2d0f8e8c04e98f8761f3cba683c56bbefc8c and
+ > https://github.com/lttng/lttng-tools/commit/014d7d3b5e9d69989bf776cffb6c21ff7e1d36ff:
 
-I've updated the help text with those last two URLs (table and map),
-extended the commit log with your good explanations above, and a few
-additions.
+ > In file included from thread.c:10:
+ > ../../src/common/compat/pthread.h: In function 'lttng_pthread_setname_np':
+ > ../../src/common/compat/pthread.h:63:27: error: 'LTTNG_UST_ABI_PROCNAME_LEN' undeclared (first use in this function)
+ >    63 |         if (strnlen(name, LTTNG_UST_ABI_PROCNAME_LEN) >= LTTNG_UST_ABI_PROCNAME_LEN) {
+ >       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Applied to master, thanks.
+ > https://github.com/lttng/lttng-tools/blob/v2.13.8/ChangeLog
 
-Regards,
-Yann E. MORIN.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/bbc8d6621822bb5da7513331e69799ca25a03f66
 
-> ---
->  Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 3c57c591a8..c318223d1d 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -287,7 +287,7 @@ config BR2_LUAROCKS_MIRROR
->  
->  config BR2_CPAN_MIRROR
->  	string "CPAN mirror (Perl packages)"
-> -	default "http://cpan.metacpan.org"
-> +	default "https://cpan.metacpan.org"
->  	help
->  	  CPAN (Comprehensive Perl Archive Network) is a repository of
->  	  Perl packages. It has multiple software mirrors scattered
-> -- 
-> 2.39.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
