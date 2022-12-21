@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D36B5C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB2CC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 844F261089;
-	Wed, 21 Dec 2022 18:07:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 844F261089
+	by smtp3.osuosl.org (Postfix) with ESMTP id E79AA61096;
+	Wed, 21 Dec 2022 18:08:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E79AA61096
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wAK2MRCVIbAg; Wed, 21 Dec 2022 18:07:24 +0000 (UTC)
+	with ESMTP id iyuh2xTwsiC6; Wed, 21 Dec 2022 18:08:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99F3960BD0;
-	Wed, 21 Dec 2022 18:07:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99F3960BD0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C9E4B1BF3A6
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:07:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5147560BD0;
+	Wed, 21 Dec 2022 18:08:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5147560BD0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B01401BF3A6
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A43DC40ACE
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A43DC40ACE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88E7341893
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:08:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88E7341893
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hnPj8GNieXFZ for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 18:07:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A73F440523
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A73F440523
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9792886C8B; Wed, 21 Dec 2022 18:07:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C2HB0YHvb_QR for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 18:08:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68A564186B
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68A564186B
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:08:25 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6C8C3100003;
+ Wed, 21 Dec 2022 18:08:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p83Vp-0029z4-GG; Wed, 21 Dec 2022 19:08:17 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 19:04:54 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: a15a4c66a86f6fcce4d16f81551e0ecc7e64a676
-X-Git-Newrev: 2f817f53ffc9387438b0974fc24f57fe1a12410a
-X-Patchwork-Hint: ignore
-Message-Id: <20221221180708.9792886C8B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] {linux,
- linux-headers}: bump 4.{9, 14, 19}.x / 5.{4, 10, 15}.x / 6.0.x series
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20221213203236.171656-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 21 Dec 2022 19:08:17 +0100
+In-Reply-To: <20221213203236.171656-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 13 Dec 2022 21:32:36 +0100")
+Message-ID: <87zgbgmxym.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2] package/rtl8192eu: fix build failure on
+ Big Endian architectures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,90 +64,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f817f53ffc9387438b0974fc24f57fe1a12410a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 298bcb0455d0cbf4231f4b87a8e132202120ac79)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ > Let's disable the CONFIG_PLATFORM_I386_PC that is set to y by default
+ > involving the endianness to be set to little. This way we can set the
+ > CFLAGS according to architecture with some default define like:
+ > -DCONFIG_IOCTL_CFG80211
+ > -DRTW_USE_CFG80211_STA_EVENT
+ > -Wno-error
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c1c690f4cc..fba3d90e6b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.0.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8739da4f75..dd211c7f1b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,14 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  89b730edf8942b49e02f9894244205886c9a214d629b35b88c4ff06ee9304f01  linux-6.0.12.tar.xz
-+sha256  08d3118d6b755769f166de6babed54964393a7c0928029bef11bf55559a72da4  linux-6.0.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c93bb384a97ad1f0a4f18e442ce0291242722f78023eca658b22344541f09489  linux-5.19.17.tar.xz
--sha256  fceef6bb79bac494663ccde34453521fc616cd94272fd30564752b3742381b65  linux-5.15.82.tar.xz
--sha256  1e0a24bb5510caa18b3601b25e12cc2a1ce123948de551f4f2cdbb40aea707e7  linux-5.10.158.tar.xz
--sha256  0c1f552a1d2f63b3ecd4d33189f0003bc91fb8ff79967a7e295d015c280c9a44  linux-5.4.226.tar.xz
-+sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
-+sha256  1ba9bf57b6bf36d76447d5044b80b746cb5fd61d981c811603dc763b7789cea7  linux-5.10.159.tar.xz
-+sha256  5eefc5037415f31c942d3cfa430b96c2a273246cf7e51db1e51b1d89887f0593  linux-5.4.227.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  ed4fd861fe9f6cd09f409f00dcccfa691e6d1a61c585723e587575dcb60aeb29  linux-4.9.335.tar.xz
--sha256  acd2ee8e03da098fe9f7e52871dd0790850fc32b78657606bdf65bdd94bbf99b  linux-4.14.301.tar.xz
--sha256  219bce1ac3f542d06fc606ae6bcb10f8ab1940a46c7903113be59afc486c204f  linux-4.19.268.tar.xz
-+sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
-+sha256  e32a230d71072a4ee50bd4386aa23ca4e617b8ad07b6f9fb223b65bf004c4c80  linux-4.14.302.tar.xz
-+sha256  6e0ba5d224ab216b7b938cc9ff2478be7882a884bbdf15374149bade4d58b20a  linux-4.19.269.tar.xz
- # Locally computed
- sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
- sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 24f51418e6..86cce61bc8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -392,14 +392,14 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.9.335"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.301"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.268"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.226"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.158"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.82"	if BR2_KERNEL_HEADERS_5_15
-+	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.227"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
- 	default "5.19.17"	if BR2_KERNEL_HEADERS_5_19
--	default "6.0.12"	if BR2_KERNEL_HEADERS_6_0
-+	default "6.0.13"	if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ > Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed to 2022.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
