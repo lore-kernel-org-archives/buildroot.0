@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 335DDC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D00CDC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C807340BC3;
-	Wed, 21 Dec 2022 18:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C807340BC3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 649FF61093;
+	Wed, 21 Dec 2022 18:02:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 649FF61093
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zBh89fezICZx; Wed, 21 Dec 2022 18:02:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jCuT7DbtTUhp; Wed, 21 Dec 2022 18:02:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAAE040BC1;
-	Wed, 21 Dec 2022 18:02:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAAE040BC1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFD561BF8C7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE9FF61089;
+	Wed, 21 Dec 2022 18:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE9FF61089
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AFF21BF94D
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBAE582019
+ by smtp3.osuosl.org (Postfix) with ESMTP id E810A61089
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBAE582019
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E810A61089
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P52EaS6gFJ1l for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dS-8JlPqBIlO for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA96181EE3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07BA760BD0
  for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA96181EE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07BA760BD0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6EF386C5B; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
+ id EA58E86C5D; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 18:56:59 +0100
+Date: Wed, 21 Dec 2022 18:58:34 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 2dcbce7be1605ba8301661c6fe950755e5ad1517
-X-Git-Newrev: 205885d0e9640095830d0baf84fc38dfbc38a071
+X-Git-Oldrev: fed0532cb8be5cee9f4c929fee6a49ffc4258847
+X-Git-Newrev: e16a6a0dfa030c7cd7e93648862edcd3aa30cbfe
 X-Patchwork-Hint: ignore
-Message-Id: <20221221180153.D6EF386C5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/cairo: fix
- CVE-2019-6462
+Message-Id: <20221221180153.EA58E86C5D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/intel-microcode:
+ security bump version to 20221108
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,83 +63,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=205885d0e9640095830d0baf84fc38dfbc38a071
+commit: https://git.buildroot.net/buildroot/commit/?id=e16a6a0dfa030c7cd7e93648862edcd3aa30cbfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Add an upstream patch to fix CVE-2019-6462:
+Fixes the following security issues:
 
-An issue was discovered in cairo 1.16.0. There is an infinite loop in
-the function _arc_error_normalized in the file cairo-arc.c, related to
-_arc_max_angle_for_tolerance_normalized.
+- CVE-2021-0146: Hardware allows activation of test or debug logic at
+  runtime for some Intel(R) processors which may allow an unauthenticated
+  user to potentially enable escalation of privilege via physical access.
 
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00528.html
+
+- CVE-2021-0127: Insufficient control flow management in some Intel(R)
+  Processors may allow an authenticated user to potentially enable a denial
+  of service via local access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00532.html
+
+- CVE-2022-21151: Processor optimization removal or modification of
+  security-critical code for some Intel(R) Processors may allow an
+  authenticated user to potentially enable information disclosure via local
+  access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00617.html
+
+- CVE-2022-0005: Sensitive information accessible by physical probing of
+  JTAG interface for some Intel(R) Processors with SGX may allow an
+  unprivileged user to potentially enable information disclosure via
+  physical access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00614.html
+
+- CVE-2022-21233: Improper isolation of shared resources in some Intel(R)
+  Processors may allow a privileged user to potentially enable information
+  disclosure via local access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00657.html
+
+For more details, see the release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: extend commit message with security fix details]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b38286d7e5919693cad2dc5b19024b1c03d29c18)
+(cherry picked from commit f83377b7b30c82da363c7937f693fe979318f598)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...gle_for_tolerance_normalized-fix-infinite.patch | 39 ++++++++++++++++++++++
- package/cairo/cairo.mk                             |  2 ++
- 2 files changed, 41 insertions(+)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
-new file mode 100644
-index 0000000000..078e90fa42
---- /dev/null
-+++ b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
-@@ -0,0 +1,39 @@
-+From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
-+From: Heiko Lewin <hlewin@gmx.de>
-+Date: Sun, 1 Aug 2021 11:16:03 +0000
-+Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
-+
-+[Retrieved from:
-+https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/cairo-arc.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/cairo-arc.c b/src/cairo-arc.c
-+index 390397bae..1c891d1a0 100644
-+--- a/src/cairo-arc.c
-++++ b/src/cairo-arc.c
-+@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
-+ 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
-+     };
-+     int table_size = ARRAY_LENGTH (table);
-++    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
-+ 
-+     for (i = 0; i < table_size; i++)
-+ 	if (table[i].error < tolerance)
-+ 	    return table[i].angle;
-+ 
-+     ++i;
-++
-+     do {
-+ 	angle = M_PI / i++;
-+ 	error = _arc_error_normalized (angle);
-+-    } while (error > tolerance);
-++    } while (error > tolerance && i < max_segments);
-+ 
-+     return angle;
-+ }
-+-- 
-+2.38.1
-+
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index f479aa252a..8bb7ca121d 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -14,6 +14,8 @@ CAIRO_INSTALL_STAGING = YES
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 6687d4c0eb..56f0237277 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fd85b6b769efd029dec6a2c07106fd18fb4dcb548b7bc4cde09295a8344ef6d7  intel-microcode-20210608.tar.gz
++sha256  8d14a914815f56c27b1f41be0fd699d1afcfdbc05432056427e455100798975e  intel-microcode-20221108.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index af7f6fa804..787537da78 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
- CAIRO_IGNORE_CVES += CVE-2018-19876
-+# 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
-+CAIRO_IGNORE_CVES += CVE-2019-6462
- 
- CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
- 
+-INTEL_MICROCODE_VERSION = 20210608
++INTEL_MICROCODE_VERSION = 20221108
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
