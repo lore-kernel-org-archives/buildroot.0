@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDCE3C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 11:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE06C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D15B81422;
-	Wed, 21 Dec 2022 11:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D15B81422
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42BDB41687;
+	Wed, 21 Dec 2022 13:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42BDB41687
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aCaDFGXIfK3o; Wed, 21 Dec 2022 11:25:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id egcyngFMpmnv; Wed, 21 Dec 2022 13:11:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFABF81448;
-	Wed, 21 Dec 2022 11:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFABF81448
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4727D417BC;
+	Wed, 21 Dec 2022 13:11:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4727D417BC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 43C0D1BF616
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 11:25:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0B2051BF284
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:10:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29EFF409B1
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 11:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29EFF409B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9A3A40225
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:10:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9A3A40225
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PIjD8CXjWnVr for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 11:25:28 +0000 (UTC)
+ with ESMTP id Mz7G6ffJT43c for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 13:10:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FB444030F
- for <buildroot@uclibc.org>; Wed, 21 Dec 2022 11:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FB444030F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7D7A401FD
+ for <buildroot@uclibc.org>; Wed, 21 Dec 2022 13:10:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7D7A401FD
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4B26886A8F; Wed, 21 Dec 2022 11:25:28 +0000 (UTC)
+ id 93D4386A21; Wed, 21 Dec 2022 13:10:16 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 21 Dec 2022 11:25:28 +0000
+Date: Wed, 21 Dec 2022 13:10:16 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.08.3
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: mats.webjorn@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15196-163-ud94HvA0Im@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc bug_status resolution
+Message-ID: <bug-15196-163-jh0TSYfj8V@https.bugs.busybox.net/>
 In-Reply-To: <bug-15196-163@https.bugs.busybox.net/>
 References: <bug-15196-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,9 +81,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15196
 
---- Comment #1 from mats.webjorn@gmail.com ---
-It turns out that output/images/rpi-firmware/config.txt hasn't updated with
-content from xxx/boot/config.txt
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998@free.fr
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
+
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Mats, All,
+
+> output/images/rpi-firmware/config.txt hasn't updated with
+> content from xxx/boot/config.txt
+
+config.txt is instaleld by the rpi-firmware package, so when you change it
+(or change BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE to point to another file),
+then you need to instruct Buildroot to reinstall the package:
+
+    $ make rpi-firmware-reinstall
+
+Otherwise, when changing the configuration (like changing
+BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE is), Buildroot only guarantees that
+it is entorely taken into account on a full rebuild:
+
+    $ make clean; make
+
+See the manual:
+
+    https://buildroot.org/downloads/manual/manual.html#_full_rebuild
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
