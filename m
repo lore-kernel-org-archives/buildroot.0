@@ -1,59 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9189C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 20 Dec 2022 20:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42B52C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 01:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78F0E81F37;
-	Tue, 20 Dec 2022 20:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78F0E81F37
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9776440AB4;
+	Wed, 21 Dec 2022 01:23:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9776440AB4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1chjV5qM1_oz; Tue, 20 Dec 2022 20:21:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UYqNPceci9tN; Wed, 21 Dec 2022 01:23:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB37181F10;
-	Tue, 20 Dec 2022 20:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB37181F10
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B4A951BF2C9
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 20:21:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFE8640A6D;
+	Wed, 21 Dec 2022 01:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE8640A6D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F1E41BF304
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 01:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ED67417B4
- for <buildroot@lists.busybox.net>; Tue, 20 Dec 2022 20:21:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ED67417B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6375C40A6D
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 01:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6375C40A6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fLRyJriNzUfc for <buildroot@lists.busybox.net>;
- Tue, 20 Dec 2022 20:20:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wh2I1ikKIvm0 for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 01:23:22 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F4F6417B3
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F4F6417B3
- for <buildroot@buildroot.org>; Tue, 20 Dec 2022 20:20:59 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout05.t-online.de (Postfix) with SMTP id 67E1E16E9B;
- Tue, 20 Dec 2022 21:20:51 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd71.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p7j6X-1SXUOX0; Tue, 20 Dec 2022 21:20:49 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54580)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p7j6X-0004zF-1F;
- Tue, 20 Dec 2022 21:20:49 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96FD64013F
+Received: from m1391.mail.163.com (m1391.mail.163.com [220.181.13.91])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96FD64013F
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 01:23:21 +0000 (UTC)
+Received: from tianyuanhao3$163.com ( [39.152.157.120] ) by
+ ajax-webmail-wmsvr91 (Coremail) ; Wed, 21 Dec 2022 09:23:08 +0800 (CST)
+X-Originating-IP: [39.152.157.120]
+Date: Wed, 21 Dec 2022 09:23:08 +0800 (CST)
+From: tianyuanhao3  <tianyuanhao3@163.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Dec 2022 21:20:48 +0100
-Message-Id: <20221220202049.3292021-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220708(c4627114)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <20221006140754.46144-1-tianyuanhao3@163.com>
+References: <20221006140754.46144-1-tianyuanhao3@163.com>
+X-NTES-SC: AL_QuycA/mTuk8j7ieQY+kXmU0Ugec2WcO4vP8u1IRSOZE0pirU+QYRZlBFG2Pv/eSvGzmUnzelVhdxzeNcfa5BR4cklpwtcuAtcBUkuiQwxwJt
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671567649-F2FF5ECF-F56B65BD/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0c09703a-a32c-4a63-b3b6-da6b1d1de214
-Subject: [Buildroot] [PATCH 1/2] package/python-glslang: add new host package
+Message-ID: <2e134c1e.118c.1853246f376.Coremail.tianyuanhao3@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: W8GowAAHdxT8X6JjlAScAQ--.21920W
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiGhDejVaEDzwnzAABsS
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=163.com; 
+ s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+ Message-ID; bh=fetB/l6PwOFuHn6WqieigOY8nyRz1KzTguc111lyb0U=; b=a
+ 3/kD79JGg/2sO+/Ty/1CrTQhDASLPoMK/eKSY31p3zBjKbpU5vQsm3PZkhHEQn+h
+ +zEglLmCDN/t+wYRDukpiegsy3j8au9OjG5qUHLHqdNlB4lqIprCoSRRDd52yrtI
+ y7NmLuwDO8h7nmg5vRjHqn69r4R5W+Lhz77mX5uOTk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
+ header.a=rsa-sha256 header.s=s110527 header.b=a3/kD79J
+Subject: Re: [Buildroot] [PATCH 1/1] package/crun: support crun as runtime
+ in containerd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,68 +76,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3829486624221717056=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed for mesa3d 22.3.x.
+--===============3829486624221717056==
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_16545_1930238197.1671585788790"
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- DEVELOPERS                                 |  1 +
- package/python-glslang/python-glslang.hash |  3 +++
- package/python-glslang/python-glslang.mk   | 13 +++++++++++++
- 3 files changed, 17 insertions(+)
- create mode 100644 package/python-glslang/python-glslang.hash
- create mode 100644 package/python-glslang/python-glslang.mk
+------=_Part_16545_1930238197.1671585788790
+Content-Type: text/plain; charset=GBK
+Content-Transfer-Encoding: base64
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f5e13d99cc..05bc773cca 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -448,6 +448,7 @@ F:	package/pound/
- F:	package/pure-ftpd/
- F:	package/python-couchdb/
- F:	package/python-cssutils/
-+F:	package/python-glslang/
- F:	package/python-mwclient/
- F:	package/python-mwscrape/
- F:	package/python-mwscrape2slob/
-diff --git a/package/python-glslang/python-glslang.hash b/package/python-glslang/python-glslang.hash
-new file mode 100644
-index 0000000000..df9127939e
---- /dev/null
-+++ b/package/python-glslang/python-glslang.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  592c98aeb03b3e81597ddaf83633c4e63068d14b18a766fd11033bad73127162  python-glslang-11.13.0.tar.gz
-+sha256  adb783e734e906d1f46db5df29991dbde84bdb0ceab502ac2febb44fe3c2b5f4  LICENSE.txt
-diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
-new file mode 100644
-index 0000000000..94f480e30a
---- /dev/null
-+++ b/package/python-glslang/python-glslang.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-glslang
-+#
-+################################################################################
-+
-+PYTHON_GLSLANG_VERSION = 11.13.0
-+PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
-+PYTHON_GLSLANG_LICENSE = BSD-3-Clause
-+PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
-+PYTHON_GLSLANG_DEPENDENCIES = host-python3
-+
-+$(eval $(host-cmake-package))
--- 
-2.34.1
+SGkgYWxsLAoKCgoKSSBob3BlIHRoaXMgcGF0Y2ggd2lsbCBiZSBtZXJnZWQgYmVmb3JlIDIwMjMu
+MDIuCgoKClRoYW5rcyEKQXQgMjAyMi0xMC0wNiAyMjowNzo1NCwgIlRJQU4gWXVhbmhhbyIgPHRp
+YW55dWFuaGFvM0AxNjMuY29tPiB3cm90ZToKPkNyZWF0ZSBydW5jIHN5bWxpbmsgdG8gY3J1biB3
+aGVuIHJ1bmMgaXMgbWlzc2luZy4KPgo+U2VlOiBodHRwczovL2dpdGh1Yi5jb20vY29udGFpbmVy
+ZC9jb250YWluZXJkL2Rpc2N1c3Npb25zLzYxNjIKPgo+U2lnbmVkLW9mZi1ieTogVElBTiBZdWFu
+aGFvIDx0aWFueXVhbmhhbzNAMTYzLmNvbT4KPi0tLQo+IHBhY2thZ2UvY29udGFpbmVyZC9Db25m
+aWcuaW4gfCAyICstCj4gcGFja2FnZS9jcnVuL2NydW4ubWsgICAgICAgICB8IDcgKysrKysrKwo+
+IDIgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4KPmRpZmYg
+LS1naXQgYS9wYWNrYWdlL2NvbnRhaW5lcmQvQ29uZmlnLmluIGIvcGFja2FnZS9jb250YWluZXJk
+L0NvbmZpZy5pbgo+aW5kZXggMGUzYTU1ZWYzOS4uZTY5ZGQ2NzY4YSAxMDA2NDQKPi0tLSBhL3Bh
+Y2thZ2UvY29udGFpbmVyZC9Db25maWcuaW4KPisrKyBiL3BhY2thZ2UvY29udGFpbmVyZC9Db25m
+aWcuaW4KPkBAIC01LDcgKzUsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfQ09OVEFJTkVSRAo+IAlk
+ZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiAJZGVwZW5kcyBvbiAhQlIyX1RP
+T0xDSEFJTl9VU0VTX1VDTElCQyAjIHJ1bmMKPiAJZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIHV0
+aWwtbGludXgKPi0Jc2VsZWN0IEJSMl9QQUNLQUdFX1JVTkMgIyBydW50aW1lIGRlcGVuZGVuY3kK
+PisJc2VsZWN0IEJSMl9QQUNLQUdFX1JVTkMgaWYgIUJSMl9QQUNLQUdFX0NSVU4gIyBydW50aW1l
+IGRlcGVuZGVuY3kKPiAJc2VsZWN0IEJSMl9QQUNLQUdFX1VUSUxfTElOVVggIyBydW50aW1lIGRl
+cGVuZGVuY3kKPiAJc2VsZWN0IEJSMl9QQUNLQUdFX1VUSUxfTElOVVhfQklOQVJJRVMKPiAJc2Vs
+ZWN0IEJSMl9QQUNLQUdFX1VUSUxfTElOVVhfUElWT1RfUk9PVAo+ZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvY3J1bi9jcnVuLm1rIGIvcGFja2FnZS9jcnVuL2NydW4ubWsKPmluZGV4IDRhMGMxNTA1OTQu
+LjE5ZGRhNzFhOWYgMTAwNjQ0Cj4tLS0gYS9wYWNrYWdlL2NydW4vY3J1bi5tawo+KysrIGIvcGFj
+a2FnZS9jcnVuL2NydW4ubWsKPkBAIC0zNiw0ICszNiwxMSBAQCBlbHNlCj4gQ1JVTl9DT05GX09Q
+VFMgKz0gLS1kaXNhYmxlLXN5c3RlbWQKPiBlbmRpZgo+IAo+K2lmZXEgKCQoQlIyX1BBQ0tBR0Vf
+UlVOQyksKQo+K2RlZmluZSBDUlVOX0NSRUFURV9TWU1MSU5LCj4rCWxuIC1zZiBjcnVuICQoVEFS
+R0VUX0RJUikvdXNyL2Jpbi9ydW5jCj4rZW5kZWYKPitDUlVOX1BPU1RfSU5TVEFMTF9UQVJHRVRf
+SE9PS1MgKz0gQ1JVTl9DUkVBVEVfU1lNTElOSwo+K2VuZGlmCj4rCj4gJChldmFsICQoYXV0b3Rv
+b2xzLXBhY2thZ2UpKQo+LS0gCj4yLjI1LjEK
+------=_Part_16545_1930238197.1671585788790
+Content-Type: text/html; charset=GBK
+Content-Transfer-Encoding: base64
+
+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS43O2NvbG9yOiMwMDAwMDA7Zm9udC1zaXplOjE0cHg7
+Zm9udC1mYW1pbHk6QXJpYWwiPjxwIHN0eWxlPSJtYXJnaW46IDA7Ij48c3BhbiBzdHlsZT0iZm9u
+dC1mYW1pbHk6IEhlbHZldGljYSwgJnF1b3Q7TWljcm9zb2Z0IFlhaGVpJnF1b3Q7LCB2ZXJkYW5h
+OyI+SGkgYWxsLDwvc3Bhbj48L3A+PHAgc3R5bGU9Im1hcmdpbjogMDsiPjxicj48L3A+PHAgc3R5
+bGU9Im1hcmdpbjogMDsiPkkgaG9wZSB0aGlzIHBhdGNoIHdpbGwgYmUgbWVyZ2VkIGJlZm9yZSAy
+MDIzLjAyLjwvcD48ZGl2IHN0eWxlPSJtYXJnaW46IDA7Ij48YnI+PC9kaXY+PGRpdiBzdHlsZT0i
+bWFyZ2luOiAwOyI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiBIZWx2ZXRpY2EsICZxdW90O01p
+Y3Jvc29mdCBZYWhlaSZxdW90OywgdmVyZGFuYTsiPlRoYW5rcyE8L3NwYW4+PC9kaXY+PHByZT5B
+dCAyMDIyLTEwLTA2IDIyOjA3OjU0LCAiVElBTiBZdWFuaGFvIiAmbHQ7dGlhbnl1YW5oYW8zQDE2
+My5jb20mZ3Q7IHdyb3RlOgomZ3Q7Q3JlYXRlIHJ1bmMgc3ltbGluayB0byBjcnVuIHdoZW4gcnVu
+YyBpcyBtaXNzaW5nLgomZ3Q7CiZndDtTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9jb250YWluZXJk
+L2NvbnRhaW5lcmQvZGlzY3Vzc2lvbnMvNjE2MgomZ3Q7CiZndDtTaWduZWQtb2ZmLWJ5OiBUSUFO
+IFl1YW5oYW8gJmx0O3RpYW55dWFuaGFvM0AxNjMuY29tJmd0OwomZ3Q7LS0tCiZndDsgcGFja2Fn
+ZS9jb250YWluZXJkL0NvbmZpZy5pbiB8IDIgKy0KJmd0OyBwYWNrYWdlL2NydW4vY3J1bi5tayAg
+ICAgICAgIHwgNyArKysrKysrCiZndDsgMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyks
+IDEgZGVsZXRpb24oLSkKJmd0OwomZ3Q7ZGlmZiAtLWdpdCBhL3BhY2thZ2UvY29udGFpbmVyZC9D
+b25maWcuaW4gYi9wYWNrYWdlL2NvbnRhaW5lcmQvQ29uZmlnLmluCiZndDtpbmRleCAwZTNhNTVl
+ZjM5Li5lNjlkZDY3NjhhIDEwMDY0NAomZ3Q7LS0tIGEvcGFja2FnZS9jb250YWluZXJkL0NvbmZp
+Zy5pbgomZ3Q7KysrIGIvcGFja2FnZS9jb250YWluZXJkL0NvbmZpZy5pbgomZ3Q7QEAgLTUsNyAr
+NSw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9DT05UQUlORVJECiZndDsgCWRlcGVuZHMgb24gQlIy
+X1RPT0xDSEFJTl9IQVNfVEhSRUFEUwomZ3Q7IAlkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX1VT
+RVNfVUNMSUJDICMgcnVuYwomZ3Q7IAlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgdXRpbC1saW51
+eAomZ3Q7LQlzZWxlY3QgQlIyX1BBQ0tBR0VfUlVOQyAjIHJ1bnRpbWUgZGVwZW5kZW5jeQomZ3Q7
+KwlzZWxlY3QgQlIyX1BBQ0tBR0VfUlVOQyBpZiAhQlIyX1BBQ0tBR0VfQ1JVTiAjIHJ1bnRpbWUg
+ZGVwZW5kZW5jeQomZ3Q7IAlzZWxlY3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWCAjIHJ1bnRpbWUg
+ZGVwZW5kZW5jeQomZ3Q7IAlzZWxlY3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWF9CSU5BUklFUwom
+Z3Q7IAlzZWxlY3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWF9QSVZPVF9ST09UCiZndDtkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9jcnVuL2NydW4ubWsgYi9wYWNrYWdlL2NydW4vY3J1bi5tawomZ3Q7aW5k
+ZXggNGEwYzE1MDU5NC4uMTlkZGE3MWE5ZiAxMDA2NDQKJmd0Oy0tLSBhL3BhY2thZ2UvY3J1bi9j
+cnVuLm1rCiZndDsrKysgYi9wYWNrYWdlL2NydW4vY3J1bi5tawomZ3Q7QEAgLTM2LDQgKzM2LDEx
+IEBAIGVsc2UKJmd0OyBDUlVOX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtc3lzdGVtZAomZ3Q7IGVu
+ZGlmCiZndDsgCiZndDsraWZlcSAoJChCUjJfUEFDS0FHRV9SVU5DKSwpCiZndDsrZGVmaW5lIENS
+VU5fQ1JFQVRFX1NZTUxJTksKJmd0OysJbG4gLXNmIGNydW4gJChUQVJHRVRfRElSKS91c3IvYmlu
+L3J1bmMKJmd0OytlbmRlZgomZ3Q7K0NSVU5fUE9TVF9JTlNUQUxMX1RBUkdFVF9IT09LUyArPSBD
+UlVOX0NSRUFURV9TWU1MSU5LCiZndDsrZW5kaWYKJmd0OysKJmd0OyAkKGV2YWwgJChhdXRvdG9v
+bHMtcGFja2FnZSkpCiZndDstLSAKJmd0OzIuMjUuMQo8L3ByZT48L2Rpdj4=
+------=_Part_16545_1930238197.1671585788790--
+
+
+--===============3829486624221717056==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3829486624221717056==--
+
