@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ECDAC10F1B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 12:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FEBC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6E3581EE5;
-	Wed, 21 Dec 2022 12:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6E3581EE5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B57840382;
+	Wed, 21 Dec 2022 13:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B57840382
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ofulONg5lst3; Wed, 21 Dec 2022 12:50:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id avMrsKGF_fzP; Wed, 21 Dec 2022 13:07:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2851381EDE;
-	Wed, 21 Dec 2022 12:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2851381EDE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB67C1BF3F0
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 12:50:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC14740441;
+	Wed, 21 Dec 2022 13:07:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC14740441
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E6BA1BF284
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 943EA60A7B
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 12:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 943EA60A7B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5875E41687
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:07:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5875E41687
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c16XIMXWpDYo for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 12:50:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C65976080A
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 12:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C65976080A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B33F086B95; Wed, 21 Dec 2022 12:50:10 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 13:47:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cbef389f3e10d1cbdcd9961fb128dfd9b85debf
-X-Git-Newrev: af1f90cc07e1b74cbda92402926bbcb88a722a93
-X-Patchwork-Hint: ignore
-Message-Id: <20221221125010.B33F086B95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lightning; fix build
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cNLL3D5TgFig for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 13:06:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5301641685
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5301641685
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 13:06:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a2ac:472c:b44e:1236])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id F37C3780368;
+ Wed, 21 Dec 2022 14:06:53 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 21 Dec 2022 14:06:53 +0100
+Date: Wed, 21 Dec 2022 14:06:53 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20221221130653.GM2909@scaer>
+References: <20221220180306.17253-1-ps.report@gmx.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221220180306.17253-1-ps.report@gmx.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1671628016;
+ bh=lnFy9rewhbD/fdNzKwwRCB9tlPbjm+jQ3TrIoUsnWOU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JNmHIoup8omVhpPPSLJZ9puFtyPjqxBEWNg7JLv6P3V9dxY5BiIv3FJwUbZFaJ6Ia
+ UkxNIwGCUlcyn6dC9HPkpRLtTGeDZB3R2HZVL5U5N00FV/BBgig2RBTdBgd3B/gWyo
+ TY09npfimhsyGJSAIjwLrFAzaTcJg3PE/fazfaCoNeNHvUagjMWS0bjlPk8yeAuahd
+ 7C9sXTp7bh6H8wpkVzcTn3GGRC0dCCOhE+pv1iXbM+8lJEY6KSqb/LL01mZasqerm9
+ +NZpmNphA7I5DS03RLRJVcg0iEIXFPzLZEk3vRFJbMPsxbd9OQxzyBq1fPct129zhA
+ kUNxos/dLAFcQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JNmHIoup
+Subject: Re: [Buildroot] [PATCH v1] Config.in: update default
+ BR2_CPAN_MIRROR URL from http to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,84 +77,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af1f90cc07e1b74cbda92402926bbcb88a722a93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Fix the following build failure raised since bump to version 2.2.0 in
-commit af6f7aa76db5aed1eada0b27bd0375610a2fc728 and
-http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
+On 2022-12-20 19:03 +0100, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Notes:
+> 
+> - the mirror list URL http://search.cpan.org/mirror seems outdated
+>   (re-directed to https://metacpan.org/mirrors aka 'Not Found - The
+>   resource you requested could not be found.').
+> 
+>   The closest matching URLs I found are:
+> 
+>   https://www.cpan.org/SITES.html
+>   http://mirrors.cpan.org/map.html
+>   http://mirrors.cpan.org/
 
-jit_disasm.c: In function 'fprintf_styled':
-jit_disasm.c:57:27: error: parameter name omitted
-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-      |                           ^~~~~~
-jit_disasm.c:57:35: error: parameter name omitted
-   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+I've updated the help text with those last two URLs (table and map),
+extended the commit log with your good explanations above, and a few
+additions.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-lib-jit_disasm.c-fix-build.patch          | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/lightning/0001-lib-jit_disasm.c-fix-build.patch b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-new file mode 100644
-index 0000000000..9e79be91a0
---- /dev/null
-+++ b/package/lightning/0001-lib-jit_disasm.c-fix-build.patch
-@@ -0,0 +1,42 @@
-+From 0d828c96c373c34b201ca7ea37b61c1e3b0485cd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 19 Dec 2022 23:55:31 +0100
-+Subject: [PATCH] lib/jit_disasm.c: fix build
-+
-+Fix the following build failure raised since
-+http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=837c7a1e8d08fb9294578dc84694077f4d6106f9:
-+
-+jit_disasm.c: In function 'fprintf_styled':
-+jit_disasm.c:57:27: error: parameter name omitted
-+   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-+      |                           ^~~~~~
-+jit_disasm.c:57:35: error: parameter name omitted
-+   57 | static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e15e01e98e0d8c873efd3f512b671d98e4daf6c0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[yann.morin.1998@free.fr: make it a backport now it's applied upstream]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ lib/jit_disasm.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
-+index 58a269b..68c966d 100644
-+--- a/lib/jit_disasm.c
-++++ b/lib/jit_disasm.c
-+@@ -54,7 +54,7 @@ static FILE			 *disasm_stream;
-+ #endif
-+ 
-+ #if BINUTILS_2_38
-+-static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
-++static int fprintf_styled(void * stream, enum disassembler_style style, const char* fmt, ...)
-+ {
-+   va_list args;
-+   int r;
-+-- 
-+2.25.1
-+
+> ---
+>  Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index 3c57c591a8..c318223d1d 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -287,7 +287,7 @@ config BR2_LUAROCKS_MIRROR
+>  
+>  config BR2_CPAN_MIRROR
+>  	string "CPAN mirror (Perl packages)"
+> -	default "http://cpan.metacpan.org"
+> +	default "https://cpan.metacpan.org"
+>  	help
+>  	  CPAN (Comprehensive Perl Archive Network) is a repository of
+>  	  Perl packages. It has multiple software mirrors scattered
+> -- 
+> 2.39.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
