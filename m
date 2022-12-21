@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06DDFC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B821C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CA1D4F157;
-	Mon, 20 Feb 2023 22:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CA1D4F157
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEC844F151;
+	Mon, 20 Feb 2023 22:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC844F151
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r9dXLC6TxWQK; Mon, 20 Feb 2023 22:35:35 +0000 (UTC)
+	with ESMTP id 72bGTDksH3bv; Mon, 20 Feb 2023 22:35:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70AB64F153;
-	Mon, 20 Feb 2023 22:35:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70AB64F153
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C2DC21BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0BC4F15A;
+	Mon, 20 Feb 2023 22:35:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B0BC4F15A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 28AB81BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A20F611BE
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A20F611BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB511416F5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB511416F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VLh0Z1lYc61q for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QY_w6Pdvx0VV for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71EC2611C1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71EC2611C1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A1A2416EF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1A2416EF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61C6D828C8; Mon, 20 Feb 2023 20:52:05 +0000 (UTC)
+ id 0340F86494; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 11:45:59 +0100
+Date: Wed, 21 Dec 2022 22:10:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 260924e239627cbe1379cfc752939245d53a06e0
-X-Git-Newrev: c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
+X-Git-Oldrev: ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
+X-Git-Newrev: 8cbfbe487ac6fb00c037475ed8aaca3d89899769
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205205.61C6D828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/autoconf-archive: bump
- to version 2022.09.03
+Message-Id: <20230220205214.0340F86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/skeleton-systemd:
+ systemd-ify mounting /var tmpfs with ro rootfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1946239472797324489=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5a009920f0a79ecfcfa2778a61e4a49cdd4d6b3
+--===============1946239472797324489==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8cbfbe487ac6fb00c037475ed8aaca3d89899769
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/autoconf-archive/autoconf-archive.hash | 2 +-
- package/autoconf-archive/autoconf-archive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+To mount our /var tmpfs when the rootfs is mounted read-only (really,
+not remounted read-write), we use an entry in fstab.
 
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 79ee5ff68a..ff7710dc2b 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,4 +1,4 @@
- # Computed locally
--sha256  e8a6eb9d28ddcba8ffef3fa211653239e9bf239aba6a01a6b7cfc7ceaec69cbd  autoconf-archive-2021.02.19.tar.xz
-+sha256  e07454f00d8cae7907bed42d0747798927809947684d94c37207a4d63a32f423  autoconf-archive-2022.09.03.tar.xz
- sha256  e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
- sha256  23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index bd4a09d96d..0ffdf61ddf 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+However, /etc could also be a tmpfs (for full state-less systems, or
+easy factory-reset, see [0]). It also prevents easily ordering other
+systemd units until after /var is mounted (not impossible, but less
+easy).
+
+So, we register /var as a systemd mount unit, so that we can also have
+the /var factory populated and functional even when /etc is empty. The
+var.mount unit is heavily modelled after systemd's own tmp.mount one, so
+we carry the same license for that file (in case that may apply).
+
+This has two side effects:
+  - as hinted previously, it simplifies writing other systemd units to
+    order them after /var is mounted
+  - user can easily replace it with their own, which mounts an actual
+    filesystem
+
+[0] http://0pointer.de/blog/projects/stateless.html
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
+[yann.morin.1998@free.fr:
+  - split original patch in two
+  - this one only handles converting /var mounting into a systemd unit
+  - adapt commit log accordingly
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Norbert Lange <nolange79@gmail.com>
+[yann.morin.1998@free.fr (as suggested by Norbert):
+  - fix Before= dependencies
+  - drop [Install] section
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/skeleton-init-systemd/skeleton-init-systemd.mk |  3 ++-
+ package/skeleton-init-systemd/var.mount                | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index ec908b4fac..ff8bc528c0 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -30,7 +30,6 @@ else
+ # back there by the tmpfiles.d mechanism.
+ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+ 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+-	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
+ endef
  
--AUTOCONF_ARCHIVE_VERSION = 2021.02.19
-+AUTOCONF_ARCHIVE_VERSION = 2022.09.03
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
+ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+@@ -52,6 +51,8 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 			|| exit 1; \
+ 		fi; \
+ 	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
++	$(INSTALL) -D -m 0644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/var.mount \
++		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 
+diff --git a/package/skeleton-init-systemd/var.mount b/package/skeleton-init-systemd/var.mount
+new file mode 100644
+index 0000000000..e97accef93
+--- /dev/null
++++ b/package/skeleton-init-systemd/var.mount
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: LGPL-2.1-or-later
++# Modelled after systemd's tmp.mount
++
++[Unit]
++Description=Buildroot /var tmpfs
++DefaultDependencies=no
++Conflicts=umount.target
++Before=local-fs.target umount.target
++After=swap.target
++
++[Mount]
++What=tmpfs
++Where=/var
++Type=tmpfs
++Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
+
+--===============1946239472797324489==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1946239472797324489==--
