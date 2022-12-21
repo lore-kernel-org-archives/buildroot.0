@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 997FBC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D49C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C845417BB;
-	Wed, 21 Dec 2022 14:17:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C845417BB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 425C060B8A;
+	Wed, 21 Dec 2022 14:19:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 425C060B8A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Aw6pquXON5H9; Wed, 21 Dec 2022 14:19:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C4E560899;
+	Wed, 21 Dec 2022 14:19:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C4E560899
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAEA71BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:19:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8459A417B4
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:19:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8459A417B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DXP_m7vYdbsD; Wed, 21 Dec 2022 14:17:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18F7C417C9;
-	Wed, 21 Dec 2022 14:17:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F7C417C9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D3E901BF5D7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:17:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7ED181ED7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:17:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7ED181ED7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gsg89-0dwJOV for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBA2781E6E
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA2781E6E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB92186BC2; Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id emmSWcO8nrA4 for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 14:19:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 403D6417AC
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 403D6417AC
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:19:20 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EB9F4E0014;
+ Wed, 21 Dec 2022 14:19:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p7zwC-0024VT-R7; Wed, 21 Dec 2022 15:19:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 14:31:43 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: ca73cd87c885af2e0ded07a0736f5745ba326435
-X-Git-Newrev: b912c01a7d804291fca3c4e2cb7b09b45631a253
-X-Patchwork-Hint: ignore
-Message-Id: <20221221141727.BB92186BC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/containerd:
- security bump to version 1.6.12
+To: Christian Stewart <christian@paral.in>
+References: <20221208212215.4109073-1-christian@paral.in>
+Date: Wed, 21 Dec 2022 15:19:16 +0100
+In-Reply-To: <20221208212215.4109073-1-christian@paral.in> (Christian
+ Stewart's message of "Thu, 8 Dec 2022 13:22:14 -0800")
+Message-ID: <87k02krg9n.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/docker-engine: security bump to
+ version 20.10.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +64,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b912c01a7d804291fca3c4e2cb7b09b45631a253
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-CVE-2022-23471: https://github.com/advisories/GHSA-2qjp-425j-52j9
+ > Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
+ > https://github.com/moby/moby/releases/tag/v20.10.21
 
-and other bugfixes, see:
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-https://github.com/containerd/containerd/releases/tag/v1.6.12
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4634a22cf70ec957ceabbb0dcd9611c824bc7a60)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 285519441a..04a29949d7 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  f5f938513c28377f64f85e84f2750d39f26b01262f3a062b7e8ce35b560ca407  containerd-1.6.8.tar.gz
-+sha256  b86e5c42f58b8348422c972513ff49783c0d505ed84e498d0d0245c5992e4320  containerd-1.6.12.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 89bbbf5c03..192175800c 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONTAINERD_VERSION = 1.6.8
-+CONTAINERD_VERSION = 1.6.12
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
