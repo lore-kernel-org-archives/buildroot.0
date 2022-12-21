@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 672B6C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 16:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4030FC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 16:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE7624191F;
-	Wed, 21 Dec 2022 16:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7624191F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1A9B4193A;
+	Wed, 21 Dec 2022 16:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1A9B4193A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VXT1_lI49IVh; Wed, 21 Dec 2022 16:02:41 +0000 (UTC)
+	with ESMTP id 7_J0jRcRBFPs; Wed, 21 Dec 2022 16:02:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CE194191B;
-	Wed, 21 Dec 2022 16:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CE194191B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A26711BF23C
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC7EF4191B;
+	Wed, 21 Dec 2022 16:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC7EF4191B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A2C21BF23C
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A0D981F70
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A0D981F70
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82B0D60BB6
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82B0D60BB6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LT5o6I0tqLcG for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 16:02:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D3AF81F69
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D3AF81F69
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 16:02:37 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6A37F24000A;
- Wed, 21 Dec 2022 16:02:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p81Y9-0026Tg-FS; Wed, 21 Dec 2022 17:02:33 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sCQHnkTGmpxm for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 16:02:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCE8E60BB1
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 16:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCE8E60BB1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AA9F686BCA; Wed, 21 Dec 2022 16:02:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20221211202900.DA415865CA@busybox.osuosl.org>
-Date: Wed, 21 Dec 2022 17:02:33 +0100
-In-Reply-To: <20221211202900.DA415865CA@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Sun, 11 Dec 2022 21:25:29 +0100")
-Message-ID: <87k02kpwx2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] DEVELOPERS: add Thomas Claveirole to
- package vuejs
+To: buildroot@buildroot.org
+Date: Wed, 21 Dec 2022 17:02:08 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 914c6fd93a461a376244c48b9e298c566608a543
+X-Git-Newrev: 3ecd8dca4c2ed0332720d4c7d882743ef6eb2a9a
+X-Patchwork-Hint: ignore
+Message-Id: <20221221160248.AA9F686BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: add Thomas
+ Claveirole to package vuejs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +57,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3ecd8dca4c2ed0332720d4c7d882743ef6eb2a9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=ba7b0bf52bf3a749fc280d4ad5b743b5ee180828
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ba7b0bf52bf3a749fc280d4ad5b743b5ee180828)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 113d7f5ca4..25f70967d7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2654,6 +2654,7 @@ F:	package/x265/
+ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+ F:	package/openlayers/
++F:	package/vuejs/
+ F:	package/vuejs-router/
+ 
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
