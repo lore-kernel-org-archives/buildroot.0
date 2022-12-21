@@ -1,60 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F0E1C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 15:54:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 672B6C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 16:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A49326108A;
-	Wed, 21 Dec 2022 15:54:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A49326108A
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE7624191F;
+	Wed, 21 Dec 2022 16:02:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7624191F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IBTUWSxwwygt; Wed, 21 Dec 2022 15:54:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VXT1_lI49IVh; Wed, 21 Dec 2022 16:02:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDEEB61084;
-	Wed, 21 Dec 2022 15:54:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDEEB61084
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CE194191B;
+	Wed, 21 Dec 2022 16:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CE194191B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B1A71BF232
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 15:54:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A26711BF23C
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04BCC80BEB
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 15:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04BCC80BEB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A0D981F70
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 16:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A0D981F70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id syDnLCMFRNuO for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 15:54:16 +0000 (UTC)
+ with ESMTP id LT5o6I0tqLcG for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 16:02:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3965480C42
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3965480C42
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 15:54:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D3AF81F69
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5D3AF81F69
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 16:02:37 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8743B240004;
- Wed, 21 Dec 2022 15:54:13 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6A37F24000A;
+ Wed, 21 Dec 2022 16:02:34 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p81Pz-0026JI-KJ; Wed, 21 Dec 2022 16:54:07 +0100
+ id 1p81Y9-0026Tg-FS; Wed, 21 Dec 2022 17:02:33 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20221207122133.14860-1-neal.frager@amd.com>
- <20221207122133.14860-2-neal.frager@amd.com>
- <20221211175808.533b3ba2@windsurf>
-Date: Wed, 21 Dec 2022 16:54:07 +0100
-In-Reply-To: <20221211175808.533b3ba2@windsurf> (Thomas Petazzoni via
- buildroot's message of "Sun, 11 Dec 2022 17:58:08 +0100")
-Message-ID: <87o7rwpxb4.fsf@dell.be.48ers.dk>
+References: <20221211202900.DA415865CA@busybox.osuosl.org>
+Date: Wed, 21 Dec 2022 17:02:33 +0100
+In-Reply-To: <20221211202900.DA415865CA@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Sun, 11 Dec 2022 21:25:29 +0100")
+Message-ID: <87k02kpwx2.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 2/2] board/zynqmp/kria/patches: remove
- patch
+Subject: Re: [Buildroot] [git commit] DEVELOPERS: add Thomas Claveirole to
+ package vuejs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,9 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michal.simek@amd.com, luca.ceresoli@bootlin.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Neal Frager <neal.frager@amd.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,22 +72,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > On Wed, 7 Dec 2022 05:21:33 -0700
- > Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=ba7b0bf52bf3a749fc280d4ad5b743b5ee180828
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> The 0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch
- >> is already committed in the Xilinx 2022.2 u-boot release tag.
- >> 
- >> Signed-off-by: Neal Frager <neal.frager@amd.com>
- >> ---
- >> ...qmp-sm-k26-revA-Fix-DP-PLL-configura.patch | 39 -------------------
- >> configs/zynqmp_kria_kv260_defconfig           |  1 -
- >> 2 files changed, 40 deletions(-)
- >> delete mode 100644 board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch
+ > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > Also applied with an improved commit log. Thanks!
-
-Committed to 2022.11.x, thanks.
+Committed to 2022.11.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
